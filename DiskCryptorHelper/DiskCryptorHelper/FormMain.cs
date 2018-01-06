@@ -88,7 +88,7 @@ namespace DiskCryptorHelper
                     else
                     {
                         //Poll drives
-                        Debug.WriteLine("WndProc: DBT_DEVNODES_CHANGED");
+                        Debug.WriteLine("WndProc: DBT_DEVNODES_CHANGED"); 
                         ReloadDriveData(0);
                     }
                 }
@@ -119,7 +119,7 @@ namespace DiskCryptorHelper
             else if(e.CloseReason == CloseReason.UserClosing) //user clicked close button
             {
                 System.Windows.MessageBoxResult res = PopUp.MessageBox(
-                    "Cancel, Hide or Exit?", "Close Application",
+                    "Cancel(C), Hide(H) or Exit(X)?", "Close Application",
                     System.Windows.MessageBoxImage.Question, 
                     System.Windows.TextAlignment.Center, 
                     System.Windows.MessageBoxButton.YesNoCancel,

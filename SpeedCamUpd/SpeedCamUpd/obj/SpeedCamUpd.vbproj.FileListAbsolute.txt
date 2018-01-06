@@ -1,4 +1,0 @@
-C:\Downloads\GPS\SpeedCamUpd\SpeedCamUpd\obj\Debug\ResolveAssemblyReference.cache
-C:\Downloads\GPS\SpeedCamUpd\SpeedCamUpd\obj\Debug\SpeedCamUpd.Form1.resources
-C:\Downloads\GPS\SpeedCamUpd\SpeedCamUpd\obj\Debug\SpeedCamUpd.Resources.resources
-C:\Downloads\GPS\SpeedCamUpd\SpeedCamUpd\obj\Debug\SpeedCamUpd.vbproj.GenerateResource.Cache
