@@ -1,0 +1,9 @@
+D:\Programs\.NET\DeadPixelTest\bin\Debug\DeadPixelTest.exe
+D:\Programs\.NET\DeadPixelTest\bin\Debug\DeadPixelTest.pdb
+D:\Programs\.NET\DeadPixelTest\obj\Debug\ResolveAssemblyReference.cache
+D:\Programs\.NET\DeadPixelTest\obj\Debug\DeadPixelTest.FormMain.resources
+D:\Programs\.NET\DeadPixelTest\obj\Debug\DeadPixelTest.Properties.Resources.resources
+D:\Programs\.NET\DeadPixelTest\obj\Debug\DeadPixelTest.csproj.GenerateResource.Cache
+D:\Programs\.NET\DeadPixelTest\obj\Debug\DeadPixelTest.exe
+D:\Programs\.NET\DeadPixelTest\obj\Debug\DeadPixelTest.pdb
+D:\Programs\.NET\DeadPixelTest\obj\Debug\DeadPixelTest.FormAbout.resources

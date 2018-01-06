@@ -1,0 +1,107 @@
+<Configuration>
+  <SettingsComponent>
+    <string />
+    <integer />
+    <boolean>
+      <setting name="livetemplates.csharp.usevar">True</setting>
+      <setting name="SolutionAnalysisEnabled">False</setting>
+    </boolean>
+  </SettingsComponent>
+  <CompletionStatisticsManager>
+    <ItemStatistics item="Default">
+      <Item value="string" priority="2" />
+      <Item value="sLine" priority="2" />
+      <Item value="Convert`0" priority="0" />
+      <Item value="svValues" priority="0" />
+      <Item value="public" priority="0" />
+      <Item value="enum" priority="0" />
+      <Item value="if" priority="4" />
+      <Item value="File`0" priority="1" />
+      <Item value="return" priority="1" />
+      <Item value="else" priority="1" />
+      <Item value="list" priority="0" />
+      <Item value="spud`0" priority="0" />
+      <Item value="listSpeedCam" priority="0" />
+      <Item value="sFileName" priority="0" />
+      <Item value="foreach" priority="0" />
+      <Item value="const" priority="0" />
+      <Item value="continue" priority="0" />
+      <Item value="pt" priority="3" />
+      <Item value="m_lblPos" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.String">
+      <Item value="Split`0" priority="0" />
+      <Item value="EndsWith`0" priority="0" />
+      <Item value="ToLower`0" priority="0" />
+      <Item value="StartsWith`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.Convert">
+      <Item value="ToDouble`0" priority="0" />
+      <Item value="ToByte`0" priority="0" />
+      <Item value="ToInt32`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@SPUD.SpeedCam+RecordTypes">
+      <Item value="New" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@SPUD.SpeedCam+CSVOrderFields">
+      <Item value="TYPE" priority="0" />
+      <Item value="SPEED" priority="0" />
+      <Item value="DIRECTION" priority="0" />
+      <Item value="DIRTYPE" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.IO.File">
+      <Item value="Exists`0" priority="0" />
+      <Item value="ReadAllLines`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@SPUD.SpeedCam">
+      <Item value="ReadCSV`0" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Drawing.Point">
+      <Item value="X" priority="2" />
+      <Item value="Y" priority="2" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Windows.Forms.LinkLabel">
+      <Item value="Text" priority="1" />
+    </ItemStatistics>
+  </CompletionStatisticsManager>
+  <RecentFiles>
+    <RecentFiles>
+      <File id="A4FBBA4C-A120-4F99-B571-F2741575A9A4/f:PoiData.cs" caret="904" fromTop="14" />
+      <File id="F6921846-17EF-4E73-B899-73FC7E81149D/f:Program.cs" caret="0" fromTop="0" />
+      <File id="F6921846-17EF-4E73-B899-73FC7E81149D/f:SpeedCam.cs" caret="711" fromTop="9" />
+      <File id="F6921846-17EF-4E73-B899-73FC7E81149D/f:FormMain.Designer.cs" caret="0" fromTop="0" />
+      <File id="F6921846-17EF-4E73-B899-73FC7E81149D/f:FormMain.cs" caret="1752" fromTop="15" />
+      <File id="F6921846-17EF-4E73-B899-73FC7E81149D/f:FormMain.resx" caret="26374" fromTop="17" />
+      <File id="F6921846-17EF-4E73-B899-73FC7E81149D/f:spud.cs" caret="1376" fromTop="17" />
+    </RecentFiles>
+    <RecentEdits>
+      <File id="F6921846-17EF-4E73-B899-73FC7E81149D/f:SpeedCam.cs" caret="6447" fromTop="31" />
+      <File id="F6921846-17EF-4E73-B899-73FC7E81149D/f:SpeedCam.cs" caret="4340" fromTop="7" />
+      <File id="F6921846-17EF-4E73-B899-73FC7E81149D/f:SpeedCam.cs" caret="6387" fromTop="12" />
+      <File id="F6921846-17EF-4E73-B899-73FC7E81149D/f:SpeedCam.cs" caret="5658" fromTop="12" />
+      <File id="F6921846-17EF-4E73-B899-73FC7E81149D/f:SpeedCam.cs" caret="6340" fromTop="22" />
+      <File id="F6921846-17EF-4E73-B899-73FC7E81149D/f:SpeedCam.cs" caret="6318" fromTop="22" />
+      <File id="F6921846-17EF-4E73-B899-73FC7E81149D/f:SpeedCam.cs" caret="6180" fromTop="20" />
+      <File id="F6921846-17EF-4E73-B899-73FC7E81149D/f:FormMain.cs" caret="12041" fromTop="17" />
+      <File id="F6921846-17EF-4E73-B899-73FC7E81149D/f:FormMain.cs" caret="12041" fromTop="17" />
+      <File id="F6921846-17EF-4E73-B899-73FC7E81149D/f:spud.cs" caret="1693" fromTop="25" />
+      <File id="F6921846-17EF-4E73-B899-73FC7E81149D/f:spud.cs" caret="1656" fromTop="27" />
+      <File id="F6921846-17EF-4E73-B899-73FC7E81149D/f:spud.cs" caret="1556" fromTop="26" />
+      <File id="F6921846-17EF-4E73-B899-73FC7E81149D/f:FormMain.cs" caret="12041" fromTop="23" />
+      <File id="F6921846-17EF-4E73-B899-73FC7E81149D/f:FormMain.cs" caret="9061" fromTop="23" />
+      <File id="F6921846-17EF-4E73-B899-73FC7E81149D/f:FormMain.cs" caret="8479" fromTop="14" />
+      <File id="F6921846-17EF-4E73-B899-73FC7E81149D/f:FormMain.resx" caret="26374" fromTop="17" />
+    </RecentEdits>
+  </RecentFiles>
+  <NAntValidationSettings>
+    <NAntPath value="" />
+  </NAntValidationSettings>
+  <UnitTestRunner>
+    <Providers />
+  </UnitTestRunner>
+  <UnitTestRunnerNUnit>
+    <NUnitInstallDir IsNull="False">
+    </NUnitInstallDir>
+    <UseAddins>Never</UseAddins>
+  </UnitTestRunnerNUnit>
+</Configuration>

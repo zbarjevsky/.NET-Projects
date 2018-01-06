@@ -1,0 +1,11 @@
+﻿
+http://www.escortradarforum.com/forums/showthread.php?p=12090
+
+load exception: System.UnauthorizedAccessException: Acces to the path 'C:\Program Files (x86)\Escort\DetectorTools\CalData - 16005887.dat is denied.
+at System.IO._Error.WinIOError(Int32 errorCode,String maybeFullPatah)
+at System.IO.FileStream.Init(String path, FileMode mode, FileAccess access, Int32 rights, Boolean useRights, FIleShare share, Int32 bufferSize, FileOptions options, SECURITY_ATTRIBUTES secAttrs, String msgPath, Boolean bFromProxy)
+at Detector_Tools.FileEncryption.Encrypt(Byte[]Data,String fileOut, String Password)
+at Detector_Tools.ToolsMainForm.SaveCalibratinData()
+at Detector_Tools.ToolsMainForm.UpdateProcessors(Obje ct sender, DoWorkEventArgs e)
+at System.ComponentModel.BackgroundWorker.OnDoWork(Do WorkEventARgs e)
+at System.ComponentModel.BackgroundWorker.WorkerThrea dStart(Object argument)
