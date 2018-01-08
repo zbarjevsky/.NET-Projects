@@ -24,7 +24,7 @@ namespace DiskCryptorHelper
 {
     public partial class FormMain : Form
     {
-        public const string TITLE = "DiskCryptor Helper";
+        public const string TITLE = "DiskCryptor Commands";
 
         private DiskCryptor _diskCryptor = new DiskCryptor();
 
@@ -99,6 +99,7 @@ namespace DiskCryptorHelper
 
         private void FormMain_Load(object sender, EventArgs e)
         {
+            _diskCryptor.ExecuteVersion();
             ReloadDriveData(0);
             m_listDrives_SelectedIndexChanged(sender, e);
             m_sysIcon.Text = "XaXa";
@@ -194,6 +195,7 @@ namespace DiskCryptorHelper
                     if (vol == null || vol.Disks.Count == 0)
                         continue;
 
+                    //if already has this volume
                     if (removable_volumes.FirstOrDefault(v => v.Disks[0].FriendlyName == vol.Disks[0].FriendlyName) != null)
                         continue;
 
@@ -358,9 +360,8 @@ namespace DiskCryptorHelper
             if (m_listDrives.SelectedIndices.Count <= 0)
                 return;
 
+            m_cmbAvailableDriveLetters_SelectedIndexChanged(sender, e);
             DiskCryptor.DriveInfo drive = m_listDrives.SelectedItems[0].Tag as DiskCryptor.DriveInfo;
-            if (!string.IsNullOrWhiteSpace(drive.mount_point))
-                m_btnMount.Text = "Mount As " + drive.mount_point;
 
             m_lblSelected.Text = "Selected: " + drive.volume + ", MP: " + drive.mount_point;
             m_btnMount.Enabled = drive.volume.StartsWith("pt") && drive.status.StartsWith("unmounted");
@@ -411,7 +412,7 @@ namespace DiskCryptorHelper
 
         private void m_cmbAvailableDriveLetters_SelectedIndexChanged(object sender, EventArgs e)
         {
-            m_btnMount.Text = "Mount As: " + m_cmbAvailableDriveLetters.SelectedItem.ToString();
+            m_btnMount.Text = "Mount As: " + m_cmbAvailableDriveLetters.SelectedItem;
             if (m_listDrives.SelectedIndices.Count <= 0)
                 return;
 

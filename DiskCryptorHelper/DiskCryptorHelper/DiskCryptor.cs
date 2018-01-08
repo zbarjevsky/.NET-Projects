@@ -157,7 +157,8 @@ namespace DiskCryptorHelper
             public string size = "";
             public string status = "";
 
-            public bool IsValidInfo { get { return volume.StartsWith("pt"); } }
+            public bool IsValidInfo { get; }
+            public bool HasInfo { get; private set; }
 
             public DriveInfo(string report_line)
             {
@@ -169,6 +170,9 @@ namespace DiskCryptorHelper
                     size = (line[2].Trim());
                     status = (line[3].Trim());
                 }
+
+                HasInfo = line.Length == 4 || report_line.Contains("-------");
+                IsValidInfo = volume.StartsWith("pt");
             }
 
             public override string ToString()
@@ -176,8 +180,6 @@ namespace DiskCryptorHelper
                 return volume + " | " + mount_point + " | " + status;
             }
         }
-
-        private bool _appendToLog = true;
 
         public Error LastError = new Error();
         public List<DriveInfo> DriveList = new List<DriveInfo>(10);
@@ -188,6 +190,11 @@ namespace DiskCryptorHelper
         public void ExecuteEnum()
         {
             ExecuteDiskCryptorCommanLine("-enum");
+        }
+
+        public void ExecuteVersion()
+        {
+            ExecuteDiskCryptorCommanLine("-version");
         }
 
         public void ExecuteMount(DriveInfo drive, string driveLetter, string pwd)
@@ -249,11 +256,9 @@ namespace DiskCryptorHelper
 
         private void ExecuteDiskCryptorCommanLine(string args)
         {
-            _appendToLog = (args != "-enum");
-            if(!_appendToLog) //if enum command
+            if(args == "-enum") //if enum command
                 DriveList.Clear();
 
-            string retMessage = String.Empty;
             ProcessStartInfo startInfo = new ProcessStartInfo();
             Process p = new Process();
 
@@ -279,20 +284,25 @@ namespace DiskCryptorHelper
         {
             if (e != null && e.Data != null)
             {
-                if (_appendToLog)
+                Debug.WriteLine("Console data: "+e.Data);
+                DiskCryptor.Error error = new DiskCryptor.Error(e.Data);
+                if (error.ErrorCode != DiskCryptor.ErrorCode.ST_OK)
                 {
-                    Log.Append(e.Data);
-                    DiskCryptor.Error error = new DiskCryptor.Error(e.Data);
-                    if (error.ErrorCode != DiskCryptor.ErrorCode.ST_OK)
-                        Log.Append(" (" + error.ErrorDesc + ")");
-
-                    Log.AppendLine();
+                    Log.AppendLine(" (" + error.ErrorDesc + ")");
                 }
-
-                DiskCryptor.DriveInfo newDrive = new DiskCryptor.DriveInfo(e.Data);
-                if (DriveList.FirstOrDefault((drv) => drv.volume == newDrive.volume) == null)
-                    DriveList.Add(newDrive);
-
+                else
+                {
+                    DiskCryptor.DriveInfo newDrive = new DiskCryptor.DriveInfo(e.Data);
+                    if (newDrive.HasInfo)
+                    {
+                        if (newDrive.IsValidInfo && DriveList.FirstOrDefault((drv) => drv.volume == newDrive.volume) == null)
+                            DriveList.Add(newDrive);
+                    }
+                    else
+                    {
+                        Log.AppendLine(e.Data);
+                    }
+                }
                 OnDataReceived();
             }
         }
