@@ -65,6 +65,8 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.m_status1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.m_status2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.m_mnuOptions = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuOptionsHideWhenMinimized = new System.Windows.Forms.ToolStripMenuItem();
             this.m_sysIconMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitMain)).BeginInit();
             this.m_splitMain.Panel1.SuspendLayout();
@@ -369,7 +371,8 @@
             // m_menuStripMain
             // 
             this.m_menuStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.m_mnuFile});
+            this.m_mnuFile,
+            this.m_mnuOptions});
             this.m_menuStripMain.Location = new System.Drawing.Point(0, 0);
             this.m_menuStripMain.Name = "m_menuStripMain";
             this.m_menuStripMain.Size = new System.Drawing.Size(833, 24);
@@ -406,6 +409,21 @@
             this.m_status2.Spring = true;
             this.m_status2.Text = "...";
             // 
+            // m_mnuOptions
+            // 
+            this.m_mnuOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.m_mnuOptionsHideWhenMinimized});
+            this.m_mnuOptions.Name = "m_mnuOptions";
+            this.m_mnuOptions.Size = new System.Drawing.Size(61, 20);
+            this.m_mnuOptions.Text = "Options";
+            // 
+            // m_mnuOptionsHideWhenMinimized
+            // 
+            this.m_mnuOptionsHideWhenMinimized.Name = "m_mnuOptionsHideWhenMinimized";
+            this.m_mnuOptionsHideWhenMinimized.Size = new System.Drawing.Size(192, 22);
+            this.m_mnuOptionsHideWhenMinimized.Text = "Hide When Minimized";
+            this.m_mnuOptionsHideWhenMinimized.Click += new System.EventHandler(this.m_mnuOptionsHideWhenMinimized_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -423,6 +441,7 @@
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormMain_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormMain_FormClosed);
             this.Load += new System.EventHandler(this.FormMain_Load);
+            this.SizeChanged += new System.EventHandler(this.FormMain_SizeChanged);
             this.m_sysIconMenu.ResumeLayout(false);
             this.m_splitMain.Panel1.ResumeLayout(false);
             this.m_splitMain.Panel1.PerformLayout();
@@ -475,6 +494,8 @@
         private System.Windows.Forms.ToolStripStatusLabel m_status1;
         private System.Windows.Forms.ToolStripStatusLabel m_status2;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuOptions;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuOptionsHideWhenMinimized;
     }
 }
 

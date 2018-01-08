@@ -16,6 +16,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
+using DiskCryptorHelper.Properties;
 using sD.WPF.MessageBox;
 using Application = System.Windows.Forms.Application;
 using MessageBox = System.Windows.Forms.MessageBox;
@@ -105,6 +106,7 @@ namespace DiskCryptorHelper
             m_sysIcon.Text = "XaXa";
 
             m_mnuFile.DropDown = m_sysIconMenu;
+            m_mnuOptionsHideWhenMinimized.Checked = Settings.Default.HideWhenMinimized;
         }
 
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
@@ -119,19 +121,19 @@ namespace DiskCryptorHelper
             }
             else if(e.CloseReason == CloseReason.UserClosing) //user clicked close button
             {
-                System.Windows.MessageBoxResult res = PopUp.MessageBox(
-                    "Cancel(C), Hide(H) or Exit(X)?", "Close Application",
-                    System.Windows.MessageBoxImage.Question, 
-                    System.Windows.TextAlignment.Center, 
-                    System.Windows.MessageBoxButton.YesNoCancel,
-                    "E_xit", "_Hide");
+                //System.Windows.MessageBoxResult res = PopUp.MessageBox(
+                //    "Cancel(C), Hide(H) or Exit(X)?", "Close Application",
+                //    System.Windows.MessageBoxImage.Question, 
+                //    System.Windows.TextAlignment.Center, 
+                //    System.Windows.MessageBoxButton.YesNoCancel,
+                //    "E_xit", "_Hide");
 
-                if (res != System.Windows.MessageBoxResult.Yes)
-                {
-                    e.Cancel = true;
-                    if(res == System.Windows.MessageBoxResult.No)
-                        this.Visible = false; //hide
-                }
+                //if (res != System.Windows.MessageBoxResult.Yes)
+                //{
+                //    e.Cancel = true;
+                //    if(res == System.Windows.MessageBoxResult.No)
+                //        this.Visible = false; //hide
+                //}
             }
             else if (e.CloseReason == CloseReason.ApplicationExitCall)
             {
@@ -496,6 +498,21 @@ namespace DiskCryptorHelper
         private void m_sysIcon_MouseDoubleClick(object sender, MouseEventArgs e)
         {
             m_mnuShow_Click(sender, e);
+        }
+
+        private void m_mnuOptionsHideWhenMinimized_Click(object sender, EventArgs e)
+        {
+            m_mnuOptionsHideWhenMinimized.Checked = !m_mnuOptionsHideWhenMinimized.Checked;
+            Settings.Default.HideWhenMinimized = m_mnuOptionsHideWhenMinimized.Checked;
+            Settings.Default.Save();
+        }
+
+        private void FormMain_SizeChanged(object sender, EventArgs e)
+        {
+            if (WindowState == FormWindowState.Minimized && Settings.Default.HideWhenMinimized)
+            {
+                Visible = false; //hide
+            }
         }
     }
 }

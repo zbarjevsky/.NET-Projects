@@ -22,5 +22,17 @@ namespace DiskCryptorHelper.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool HideWhenMinimized {
+            get {
+                return ((bool)(this["HideWhenMinimized"]));
+            }
+            set {
+                this["HideWhenMinimized"] = value;
+            }
+        }
     }
 }
