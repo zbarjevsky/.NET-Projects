@@ -88,7 +88,7 @@ namespace DiskCryptorHelper
                     else
                     {
                         //Poll drives
-                        Debug.WriteLine("WndProc: DBT_DEVNODES_CHANGED"); 
+                        Debug.WriteLine("WndProc: DBT_DEVNODES_CHANGED");
                         ReloadDriveData(0);
                     }
                 }
