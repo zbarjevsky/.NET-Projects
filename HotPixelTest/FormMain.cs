@@ -41,7 +41,7 @@ namespace HotPixelTest
 			m_btnTest.Enabled = bEnable;
 			m_btnOpen.Enabled = bEnable;
 			m_btnSave.Enabled = bEnable;
-			m_numMinimum.Enabled = bEnable;
+			m_numMinimum.Enabled = bEnable; 
 			
 			m_btnStop.Enabled = !bEnable;
 			m_bStop = !m_btnStop.Enabled;
