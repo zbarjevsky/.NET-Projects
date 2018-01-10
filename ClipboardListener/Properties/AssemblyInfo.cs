@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Clipboard Manager")]
 [assembly: AssemblyDescription("Remember Last Clipboard Operations")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("*****")]
+[assembly: AssemblyCompany("Zbarjevsky")]
 [assembly: AssemblyProduct("Clipboard Manager")]
 [assembly: AssemblyCopyright("Copyright © Mark Z. 2006")]
 [assembly: AssemblyTrademark("")]

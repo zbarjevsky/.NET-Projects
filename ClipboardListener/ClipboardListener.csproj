@@ -45,6 +45,7 @@
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -122,6 +123,7 @@
     <Compile Include="DesktopUtil\DesktopRegistry.cs" />
     <Compile Include="DesktopUtil\Storage.cs" />
     <Compile Include="DesktopUtil\Win32.cs" />
+    <Compile Include="SingleInstanceHelper.cs" />
     <Compile Include="Zip\DotNetZip.cs" />
     <Compile Include="Encodings.cs" />
     <Compile Include="FormAbout.cs">

@@ -6,9 +6,10 @@ using System.Runtime.InteropServices;
 
 namespace ClipboardManager
 {
-	using HWND = IntPtr;
+    using System.Drawing;
+    using HWND = IntPtr;
 
-	public class NativeWIN32
+    public class NativeWIN32
 	{
 		[StructLayout(LayoutKind.Sequential)] 
 		public struct RECT
@@ -60,8 +61,13 @@ namespace ClipboardManager
 		//flash window several times
 		[DllImport("user32.dll")]
 		public extern static bool FlashWindow(HWND hwnd, bool bInvert);
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern IntPtr FindWindow(string strClassName, string strWindowName);
 
-		[DllImport("user32.dll")]
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr FindWindowEx(IntPtr parentHandle, IntPtr childAfter, string className, IntPtr windowTitle);
+
+        [DllImport("user32.dll")]
 		public extern static IntPtr GetForegroundWindow();
 
 		[DllImport("user32.dll")]
@@ -570,4 +576,25 @@ namespace ClipboardManager
 			}
 		}
 	}//end class ForegroundWindow
+
+    public class SystemTray
+    {
+
+        public static IntPtr GetTrayHandle()
+        {
+            IntPtr taskBarHandle = NativeWIN32.FindWindow("Shell_TrayWnd", null);
+            if (!taskBarHandle.Equals(IntPtr.Zero))
+            {
+                return NativeWIN32.FindWindowEx(taskBarHandle, IntPtr.Zero, "TrayNotifyWnd", IntPtr.Zero);
+            }
+            return IntPtr.Zero;
+        }
+
+        public static NativeWIN32.RECT GetTrayRectangle()
+        {
+            NativeWIN32.RECT rect;
+            NativeWIN32.GetWindowRect(GetTrayHandle(), out rect);
+            return rect;
+        }
+    }
 }//end namespace ClipboardListener

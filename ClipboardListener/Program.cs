@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Diagnostics;
 using System.Windows.Forms;
 using System.Globalization;
+using ClipboardManager.Properties;
 
 namespace ClipboardManager
 {
@@ -54,21 +55,31 @@ RunAgain:
                 m_Log.Close();
 		}//end Main
 
-		static bool SingleInstance()
-		{
-			try
-			{
-				bool createdNew = false;
-				m_SingleInstance = new Mutex(true, AppName, out createdNew);
-                LogEventNfo("Started successfully");
-				return createdNew;
-			}//end try
-			catch ( Exception err )
-			{
-                LogEventErr("Failure to start: " + err.Message);
-                return false; 
-			}//end catch
-		}//end SingleInstance
+        private static bool SingleInstance()
+        {
+            return !(SingleInstanceHelper.GlobalShowWindow(FormClipboard.TITLE));
+
+            //try
+            //{
+            //    bool createdNew = false;
+            //    m_SingleInstance = new Mutex(true, AppName, out createdNew);
+            //    LogEventNfo("Started successfully");
+            //    return createdNew;
+            //}//end try
+            //catch (Exception err)
+            //{
+            //    LogEventErr("Failure to start: " + err.Message);
+            //    return false;
+            //}//end catch
+        }//end SingleInstance
+
+        public static string GetUserPath()
+        {
+            string path = null; // Settings.Default.UserPath;
+            if (string.IsNullOrEmpty(path))
+                path = Application.UserAppDataPath;
+            return path;
+        }
 
         static void LogEventNfo(string msg)
         {
@@ -98,12 +109,13 @@ RunAgain:
         {
             try
             {
+                string path = Application.LocalUserAppDataPath;
                 string sFileName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\" + AppName;
-                string sLogFile = sFileName+".log";
+                string sLogFile = Path.Combine(path, AppName+".log");
 
                 FileInfo fi = new FileInfo(sLogFile);
                 //restrict log size to 1M
-                if ( fi.Exists && fi.Length > 1048576 )
+                if ( fi.Exists && fi.Length > 1024*1024 )
                 {
                     string sBackupFile = sFileName+".1.log";
                     if ( File.Exists(sBackupFile) )

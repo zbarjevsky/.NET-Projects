@@ -36,15 +36,28 @@ namespace ClipboardManager
 		private System.Windows.Forms.Timer m_TimerReconnect = new System.Windows.Forms.Timer();
 		private DateTime m_TimeStamp					= DateTime.Now;
         private const int TIMEOUT                       = 1000000; //~ 15 min
-		
+
+        public static string TITLE = "Clipboard Manager";
+
+        static FormClipboard()
+        {
+#if DEBUG
+            TITLE += "(Debug)";
+#endif
+        }
+
         public FormClipboard()
 		{
 			InitializeComponent();
 
 			m_This = this; //for trace purpose
+            m_notifyIconCoodClip.Visible = false;
 
-			//copy edit menu items
-			CopyMenuStripItem(m_ToolStripMenuItem_Edit_Cut, m_contextMenuStrip_RichTextBox_Cut, m_ToolStripMenuItem_Edit_Cut_Click);
+            this.Text = TITLE;
+            m_notifyIconCoodClip.Text = this.Text;
+            
+            //copy edit menu items
+            CopyMenuStripItem(m_ToolStripMenuItem_Edit_Cut, m_contextMenuStrip_RichTextBox_Cut, m_ToolStripMenuItem_Edit_Cut_Click);
 			CopyMenuStripItem(m_ToolStripMenuItem_Edit_Copy, m_contextMenuStrip_RichTextBox_Copy, m_ToolStripMenuItem_Edit_Copy_Click);
 			CopyMenuStripItem(m_ToolStripMenuItem_Edit_Paste, m_contextMenuStrip_RichTextBox_Paste, m_ToolStripMenuItem_Edit_Paste_Click);
 
@@ -53,7 +66,9 @@ namespace ClipboardManager
 			m_ClipboardListMain = new ClipboardList("Main", m_imageListClipboardTypes);
 			m_ClipboardListFavorites = new ClipboardList("Favorites", m_imageListClipboardTypes);
 
-			m_sFileName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\" + m_sFileName;
+            string appDataFolder = Application.LocalUserAppDataPath;
+
+            m_sFileName = Path.Combine(appDataFolder, m_sFileName);
 			TraceLnEx(true, "FormClipboard", "C-tor", "Settings file: {0}", m_sFileName);
 
 			this.SetupSystemMenu();
@@ -201,10 +216,6 @@ namespace ClipboardManager
 
 		private void FormClipboard_Load(object sender, EventArgs e)
 		{
-#if DEBUG
-			this.Text += "(Debug)";
-			m_notifyIconCoodClip.Text = this.Text;
-#endif
 			m_Settings.Load(m_sFileName, this, m_ClipboardListMain, m_ClipboardListFavorites, this.Icon.ToBitmap());
 			m_NextClipboardViewer = (IntPtr)NativeWIN32.SetClipboardViewer((int)this.Handle);
 			bool success = m_Settings.m_HotKey.RegisterHotKey();
@@ -226,7 +237,9 @@ namespace ClipboardManager
 			m_TimerReconnect.Interval = TIMEOUT; //~15 min
 			if ( m_Settings.m_AutoReconnect ) 
 				m_TimerReconnect.Start();
-			this.Hide();
+
+            m_notifyIconCoodClip.Visible = true;
+            this.Hide();
 		}//end FormClipboard_Load
 
 		//sometimes after long time of no action it stoppes to receive events, need to reconnect
@@ -488,7 +501,7 @@ namespace ClipboardManager
 			}//end GetCenterPos
 		}//end class Pos
 
-		private void ProcessHotkey(Pos ctrl)
+		private void ProcessHotkey(Pos rectangle)
 		{
 			m_hWndToRestore = ForegroundWindow.Instance.Handle;
 			NativeWIN32.RECT rc = NativeWIN32.GetWindowRect(m_hWndToRestore);
@@ -532,10 +545,10 @@ namespace ClipboardManager
 			//fix - show system tray icon
 			m_notifyIconCoodClip.Visible = true;
 
-			if ( ctrl == null )
-				ctrl = new Pos(rc);
+			if ( rectangle == null )
+				rectangle = new Pos(rc);
 
-			m_contextMenuStripClipboard.Show(ctrl.GetCenterPos(m_contextMenuStripClipboard.Size, false));
+			m_contextMenuStripClipboard.Show(rectangle.GetCenterPos(m_contextMenuStripClipboard.Size, false));
 		}//end ProcessHotkey
 
 		//build main clipboard history menu
@@ -976,8 +989,19 @@ namespace ClipboardManager
 		private void m_notifyIconCoodClip_MouseClick(object sender, MouseEventArgs e)
 		{
 			TraceLn("m_notifyIconCoodClip_MouseClick", "m_notifyIconCoodClip 1 clicks: {0}", e.Clicks);
-			if ( e.Button == MouseButtons.Left )
-				ProcessHotkey(new Pos(SystemInformation.MaxWindowTrackSize));
+            if (e.Button == MouseButtons.Left)
+            {
+                //calculate rigth - lower quater of main screen
+                //Rectangle r = Screen.PrimaryScreen.Bounds;
+                //NativeWIN32.RECT rc = new NativeWIN32.RECT();
+                //rc.Left = r.X + (int)(0.8 * r.Width);
+                //rc.Top = r.Y + (int)(0.8 * r.Height);
+                //rc.Right = r.X + r.Width;
+                //rc.Bottom = r.Y + r.Height;
+                NativeWIN32.RECT rc = SystemTray.GetTrayRectangle();
+
+                ProcessHotkey(new Pos(rc));
+            }
 		}//end m_notifyIconCoodClip_MouseClick
 
 		private void m_notifyIconCoodClip_MouseDoubleClick(object sender, MouseEventArgs e)
