@@ -5,3 +5,9 @@ obj
 /DiskCryptorHelper/DiskCryptorHelper/bin/Debug/sD.WPF.MessageBox.pdb
 bin
 *.suo
+/ClipboardListener/_ReSharper.ClipboardListener/ProjectModel/ProjectModel.dat
+/ClipboardListener/_ReSharper.ClipboardListener
+/ClipboardListener/_UpgradeReport_Files/UpgradeReport_Plus.gif
+/ClipboardListener/_UpgradeReport_Files/UpgradeReport_Minus.gif
+/ClipboardListener/_UpgradeReport_Files/UpgradeReport.xslt
+/ClipboardListener/_UpgradeReport_Files/UpgradeReport.css
