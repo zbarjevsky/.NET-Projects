@@ -5,6 +5,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.Xml;
 using System.IO;
 using ClipboardManager.Zip;
@@ -494,7 +495,8 @@ namespace ClipboardManager
 			{
 				m_EmptyEntry = clp; 
 				m_EmptyEntry._ownerType = m_sListType;
-				return false; //not added
+
+                return false; //not added
 			}//end if
 
             m_bClipboardIsEmpty = false;
@@ -527,13 +529,13 @@ namespace ClipboardManager
 			return m_vData[idx];
 		}//end GetEntry
 
-		public ClipboardEntry GetLastEntry()
+		public ClipboardEntry GetCurrentEntry()
 		{
-			if ( m_bClipboardIsEmpty || m_vData == null || m_vData.Count == 0 )
-				return m_EmptyEntry;
+		    if (m_bClipboardIsEmpty || m_vData == null || m_vData.Count == 0)
+		        return m_EmptyEntry;
 
 			return m_vData[0];
-		}//end GetLastEntry
+		}//end GetCurrentEntry
 
 		public int FindEntry(ClipboardEntry clp)
 		{

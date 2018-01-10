@@ -8,6 +8,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Collections;
+using System.Diagnostics;
 using System.Xml;
 using System.Threading;
 using System.Reflection;
@@ -34,7 +35,7 @@ namespace ClipboardManager
 
 		//timer data for automatic reconnect
 		private System.Windows.Forms.Timer m_TimerReconnect = new System.Windows.Forms.Timer();
-		private DateTime m_TimeStamp					= DateTime.Now;
+		private DateTime m_TimeStamp					= DateTime.Now.AddSeconds(-1); //for first time update
         private const int TIMEOUT                       = 1000000; //~ 15 min
 
         public static string TITLE = "Clipboard Manager";
@@ -217,7 +218,7 @@ namespace ClipboardManager
 		private void FormClipboard_Load(object sender, EventArgs e)
 		{
 			m_Settings.Load(m_sFileName, this, m_ClipboardListMain, m_ClipboardListFavorites, this.Icon.ToBitmap());
-			m_NextClipboardViewer = (IntPtr)NativeWIN32.SetClipboardViewer((int)this.Handle);
+            m_NextClipboardViewer = (IntPtr)NativeWIN32.SetClipboardViewer((int)this.Handle);
 			bool success = m_Settings.m_HotKey.RegisterHotKey();
 			
 			m_richTextBoxClipboard_SelectionChanged(null, null); //to enable copy/paste
@@ -385,17 +386,17 @@ namespace ClipboardManager
                         m_bModified = true;
 				}//end if
 
-				FillFormatsCombo(m_ClipboardListMain.GetLastEntry()._dataType);
+				FillFormatsCombo(m_ClipboardListMain.GetCurrentEntry()._dataType);
 
 				SetFontSize(-1); //reset font size menu
-				m_ClipboardListMain.GetLastEntry().SetRichText(m_richTextBoxClipboard, m_icoClipboardApp, m_lblClipboardType);
+				m_ClipboardListMain.GetCurrentEntry().SetRichText(m_richTextBoxClipboard, m_icoClipboardApp, m_lblClipboardType);
 				if ( !m_bCopyFromSnapShot )
-					m_ClipboardListMain.GetLastEntry().SetRichText(m_richTextBoxSnapShot, m_icoSnapShotApp, m_lblSnapShotType);
+					m_ClipboardListMain.GetCurrentEntry().SetRichText(m_richTextBoxSnapShot, m_icoSnapShotApp, m_lblSnapShotType);
 
 				TraceLn("ProcessClipboardData", "Clipboard change: {0}",
-					m_ClipboardListMain.GetLastEntry().ShortDesc());
+					m_ClipboardListMain.GetCurrentEntry().ShortDesc());
 
-				m_toolStripStatusLabel1.Image = m_ClipboardListMain.GetLastEntry()._icoAppFrom;
+				m_toolStripStatusLabel1.Image = m_ClipboardListMain.GetCurrentEntry()._icoAppFrom;
 				m_toolStripStatusLabel1.Text = "From: " + sAppTitle;
 			}//end try
 			catch ( Exception e )
@@ -515,7 +516,7 @@ namespace ClipboardManager
 			while ( m_contextMenuStripClipboard.Items.Count > 4 )
 				m_contextMenuStripClipboard.Items.RemoveAt(4);
 
-			ClipboardList.ClipboardEntry clp = m_ClipboardListMain.GetLastEntry();
+			ClipboardList.ClipboardEntry clp = m_ClipboardListMain.GetCurrentEntry();
 			m_contextMenuStripClipboard_Current.Text = clp.ShortDesc();
             if ( m_contextMenuStripClipboard_Current.Text != clp.ToString() )
                 m_contextMenuStripClipboard_Current.ToolTipText = clp.ShortDesc(400, false);
@@ -752,7 +753,7 @@ namespace ClipboardManager
 			try
 			{
 				ClipboardList.ClipboardEntry clp = (ClipboardList.ClipboardEntry)itm.Tag;
-				ClipboardList.ClipboardEntry last = m_ClipboardListMain.GetLastEntry();
+				ClipboardList.ClipboardEntry last = m_ClipboardListMain.GetCurrentEntry();
 
 				//special threatment for last entry click
 				//for main list only
@@ -819,7 +820,7 @@ namespace ClipboardManager
 
 		private void m_ToolStripMenuItem_File_Save_Click(object sender, EventArgs e)
 		{
-			ClipboardList.ClipboardEntry clp = m_ClipboardListMain.GetLastEntry();
+			ClipboardList.ClipboardEntry clp = m_ClipboardListMain.GetCurrentEntry();
 
 			m_SaveFileDialog.FileName = "Clipboard";
 			m_SaveFileDialog.Filter = clp.FileFilter();
@@ -969,7 +970,7 @@ namespace ClipboardManager
 
 		private void m_contextMenuStripTrayIcon_Show_Click(object sender, EventArgs e)
 		{
-			m_ClipboardListMain.GetLastEntry().SetRichText(m_richTextBoxSnapShot, m_icoSnapShotApp, m_lblSnapShotType);
+			m_ClipboardListMain.GetCurrentEntry().SetRichText(m_richTextBoxSnapShot, m_icoSnapShotApp, m_lblSnapShotType);
 
 			this.Visible = true;
 
@@ -1093,7 +1094,7 @@ namespace ClipboardManager
 
 		private void m_ToolStripMenuItem_Favorites_Add_Click(object sender, EventArgs e)
 		{
-			m_ClipboardListFavorites.AddEntry(m_ClipboardListMain.GetLastEntry());
+			m_ClipboardListFavorites.AddEntry(m_ClipboardListMain.GetCurrentEntry());
 		}//end m_ToolStripMenuItem_Favorites_Add_Click
 
 		private void m_ToolStripMenuItem_Favorites_Organize_Click(object sender, EventArgs e)
@@ -1119,7 +1120,7 @@ namespace ClipboardManager
 
 			this.m_ToolStripMenuItem_Edit_Cut.Enabled = !bReadOnly && bHasSelection;
 			this.m_ToolStripMenuItem_Edit_Copy.Enabled = bHasSelection;
-			this.m_ToolStripMenuItem_Edit_Paste.Enabled = !bReadOnly && !m_ClipboardListMain.GetLastEntry().IsEmpty;
+			this.m_ToolStripMenuItem_Edit_Paste.Enabled = !bReadOnly && !m_ClipboardListMain.GetCurrentEntry().IsEmpty;
 
 			this.m_contextMenuStrip_RichTextBox_Cut.Enabled = this.m_ToolStripMenuItem_Edit_Cut.Enabled;
 			this.m_contextMenuStrip_RichTextBox_Copy.Enabled = this.m_ToolStripMenuItem_Edit_Copy.Enabled;
@@ -1460,6 +1461,11 @@ namespace ClipboardManager
             {
                 MsgBoxErr("UAC_Click: " + err.Message);
             }
+        }
+
+        private void m_tbbtnDataFolder_Click(object sender, EventArgs e)
+        {
+            Process.Start(Application.LocalUserAppDataPath);
         }
 
         private void m_contextMenuStripTrayIcon_About_Click(object sender, EventArgs e)

@@ -12,16 +12,16 @@ namespace ClipboardManager
 {
 	static class Program
 	{
-		static Mutex m_SingleInstance = null;
+		//static Mutex m_SingleInstance = null;
 		static int m_iFailCount = 0;
         static StreamWriter m_Log = null;
         public static bool m_bWriteLog = true;
 
-#if (DEBUG)
-		static string AppName = "ClipboardManager(Debug)";
-#else
-		static string AppName = "ClipboardManager";
-#endif
+//#if (DEBUG)
+//		static string AppName = "ClipboardManager(Debug)";
+//#else
+//		static string AppName = "ClipboardManager";
+//#endif
 
 		/// <summary>
 		/// The main entry point for the application.
@@ -95,13 +95,13 @@ RunAgain:
         {
             try
             {
-                EventLog.WriteEntry(AppName, msg, type);
+                EventLog.WriteEntry(FormClipboard.TITLE, msg, type);
             }//end try
             catch (Exception)
             {
                 MessageBoxIcon icn = type == EventLogEntryType.Information ? 
                     MessageBoxIcon.Information : MessageBoxIcon.Error;
-                MessageBox.Show(msg, AppName, MessageBoxButtons.OK, icn);
+                MessageBox.Show(msg, FormClipboard.TITLE, MessageBoxButtons.OK, icn);
             }//end catch
         }//end LogEvent
 
@@ -109,9 +109,8 @@ RunAgain:
         {
             try
             {
-                string path = Application.LocalUserAppDataPath;
-                string sFileName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) + "\\" + AppName;
-                string sLogFile = Path.Combine(path, AppName+".log");
+                string sFileName = Path.Combine(Application.LocalUserAppDataPath, FormClipboard.TITLE);
+                string sLogFile = sFileName + ".log";
 
                 FileInfo fi = new FileInfo(sLogFile);
                 //restrict log size to 1M
@@ -130,7 +129,7 @@ RunAgain:
             catch ( Exception err )
             {
                 m_Log = null;
-				System.Diagnostics.EventLog.WriteEntry(AppName,
+				System.Diagnostics.EventLog.WriteEntry(FormClipboard.TITLE,
                     "Exception creating log: " + err.Message + "\n",
 					System.Diagnostics.EventLogEntryType.Error);
             }//end catch
