@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="ClipboardListener">
+</Property><Property Name="Solution File" Value="D:\Programs\.NET\ClipboardListener\ClipboardListener.sln">
+</Property><Property Name="User Options File" Value="D:\Programs\.NET\ClipboardListener\ClipboardListener.suo">
+</Property><Property Name="Date" Value="Sunday, February 10, 2013">
+</Property><Property Name="Time" Value="6:23 AM">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="ClipboardListener.sln" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\ClipboardListener.sln">
+</Event><Event ErrorLevel="0" Project="" Source="ClipboardListener.suo" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\ClipboardListener.suo">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="ClipboardListener.csproj" Description="Project file successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\ClipboardListener.csproj">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="ClipboardListener.csproj.user" Description="Project user file successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\ClipboardListener.csproj.user">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="AnimEffect.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\AnimEffect.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="ClipboardList.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\ClipboardList.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="ClipboardMessageFilter.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\ClipboardMessageFilter.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="CustomRichTextBox.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\CustomRichTextBox.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Zip\DotNetZip.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Zip\DotNetZip.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Encodings.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Encodings.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="FormAbout.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\FormAbout.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="FormAbout.Designer.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\FormAbout.Designer.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="FormEncodings.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\FormEncodings.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="FormEncodings.Designer.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\FormEncodings.Designer.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="FormFavorites.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\FormFavorites.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="FormFavorites.Designer.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\FormFavorites.Designer.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="FormSpyWindow.Designer.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\FormSpyWindow.Designer.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="ImagesUtil.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\ImagesUtil.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="FormClipboard.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\FormClipboard.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="FormClipboard.Designer.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\FormClipboard.Designer.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="FormSettings.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\FormSettings.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="FormSettings.Designer.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\FormSettings.Designer.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="HotKeyTranslator.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\HotKeyTranslator.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Zip\JavaZip.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Zip\JavaZip.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="MsgBox.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\MsgBox.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="NativeWIN32.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\NativeWIN32.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Program.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Program.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Properties\AssemblyInfo.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Properties\AssemblyInfo.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Properties\Resources.Designer.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Properties\Resources.Designer.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Properties\Settings.Designer.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Properties\Settings.Designer.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="PropertySorter.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\PropertySorter.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="SettingsXml.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\SettingsXml.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="FormSpyWindow.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\FormSpyWindow.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="WindowHighlighter.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\WindowHighlighter.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="WindowsMessages.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\WindowsMessages.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="XmlUtil.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\XmlUtil.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Zip\IZip.cs" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Zip\IZip.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Properties\Settings.settings" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Properties\Settings.settings">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="History32.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\History32.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\AdobeStockPhotos.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\AdobeStockPhotos.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\arrow-back_16.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\arrow-back_16.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\arrow-down_16.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\arrow-down_16.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\arrow-forward_16.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\arrow-forward_16.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\arrow-up_16.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\arrow-up_16.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\Cancel.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\Cancel.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\Cat.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\Cat.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\Civic32x32.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\Civic32x32.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\Clear.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\Clear.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\Copy.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\Copy.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\Cut.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\Cut.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\Edit.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\Edit.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\Exit.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\Exit.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\Favorites.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\Favorites.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\File.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\File.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\FileCopy.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\FileCopy.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\FileCut.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\FileCut.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\FilesCopy.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\FilesCopy.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\FilesCut.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\FilesCut.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\Hide.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\Hide.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\History.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\History.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\History16.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\History16.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\History32.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\History32.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\Honda16x16.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\Honda16x16.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\Honda32x32.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\Honda32x32.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\Mail.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\Mail.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\Ok.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\Ok.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\Paste.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\Paste.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\Picture.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\Picture.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\Print.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\Print.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\RedX.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\RedX.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\RichText.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\RichText.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\RightArrow.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\RightArrow.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\Save.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\Save.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\Settings.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\Settings.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\Show.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\Show.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\SmallX.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\SmallX.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\Test.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\Test.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\Text.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\Text.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\TextSize.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\TextSize.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\Undo.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\Undo.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\Unicode.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\Unicode.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\Wrap.ico" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\Wrap.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="FormAbout.resx" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\FormAbout.resx">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="FormClipboard.resx" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\FormClipboard.resx">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="FormEncodings.resx" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\FormEncodings.resx">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="FormFavorites.resx" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\FormFavorites.resx">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="FormSettings.resx" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\FormSettings.resx">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Properties\Resources.resx" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Properties\Resources.resx">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="FormSpyWindow.resx" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\FormSpyWindow.resx">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\Spy\Finder.cur" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\Spy\Finder.cur">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\Spy\FinderHome.bmp" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\Spy\FinderHome.bmp">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="Images\Spy\FinderGone.bmp" Description="File successfully backed up as D:\Programs\.NET\ClipboardListener\Backup\Images\Spy\FinderGone.bmp">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="ClipboardListener.csproj" Description="The project file does not require conversion.">
+</Event><Event ErrorLevel="3" Project="ClipboardListener" Source="ClipboardListener.csproj" Description="No Conversion Required">
+</Event><Event ErrorLevel="0" Project="" Source="ClipboardListener.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="ClipboardListener.sln" Description="Converted">
+</Event></UpgradeLog>

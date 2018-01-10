@@ -1,0 +1,64 @@
+<Configuration>
+  <SettingsComponent>
+    <string />
+    <integer />
+    <boolean>
+      <setting name="SolutionAnalysisEnabled">False</setting>
+    </boolean>
+  </SettingsComponent>
+  <NAntValidationSettings>
+    <NAntPath value="" />
+  </NAntValidationSettings>
+  <CompletionStatisticsManager>
+    <ItemStatistics item="Default">
+      <Item value="override" priority="0" />
+      <Item value="if" priority="0" />
+      <Item value="ProcessWindowsMessage" priority="0" />
+      <Item value="ref" priority="0" />
+      <Item value="int" priority="0" />
+      <Item value="partial" priority="0" />
+      <Item value="Resources" priority="2" />
+      <Item value="new" priority="1" />
+      <Item value="Cursor" priority="2" />
+      <Item value="typeof" priority="0" />
+      <Item value="MemoryStream" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@ClipboardManager.Properties.Resources">
+      <Item value="FinderHome" priority="0" />
+      <Item value="FinderGone" priority="0" />
+      <Item value="Finder" priority="1" />
+    </ItemStatistics>
+  </CompletionStatisticsManager>
+  <RecentFiles>
+    <RecentFiles>
+      <File id="C5C9C052-8924-42E9-9658-8380640F0464/f:WindowsMessages.cs" caret="7736" fromTop="24" />
+      <File id="C5C9C052-8924-42E9-9658-8380640F0464/f:Program.cs" caret="972" fromTop="13" />
+      <File id="C5C9C052-8924-42E9-9658-8380640F0464/f:FormClipboard.Designer.cs" caret="380" fromTop="13" />
+      <File id="C5C9C052-8924-42E9-9658-8380640F0464/f:FormSpyWindow.cs" caret="3437" fromTop="0" />
+      <File id="d:&amp;/f:FormSpyWindow.Designer.cs/l:P!?Downloads?MarkZ?ClipboardListener?FormSpyWindow.Designer.cs" caret="513" fromTop="17" />
+      <File id="d:&amp;/f:PropertySorter.cs/l:P!?Downloads?MarkZ?ClipboardListener?PropertySorter.cs" caret="0" fromTop="0" />
+      <File id="C5C9C052-8924-42E9-9658-8380640F0464/f:ClipboardMessageFilter.cs" caret="528" fromTop="21" />
+      <File id="C5C9C052-8924-42E9-9658-8380640F0464/f:FormClipboard.cs" caret="12085" fromTop="14" />
+    </RecentFiles>
+    <RecentEdits>
+      <File id="C5C9C052-8924-42E9-9658-8380640F0464/f:FormClipboard.cs" caret="50990" fromTop="7" />
+      <File id="C5C9C052-8924-42E9-9658-8380640F0464/f:ClipboardMessageFilter.cs" caret="596" fromTop="22" />
+      <File id="C5C9C052-8924-42E9-9658-8380640F0464/f:FormClipboard.cs" caret="11238" fromTop="4" />
+      <File id="C5C9C052-8924-42E9-9658-8380640F0464/f:WindowsMessages.cs" caret="7735" fromTop="24" />
+      <File id="C5C9C052-8924-42E9-9658-8380640F0464/f:FormClipboard.cs" caret="11499" fromTop="10" />
+      <File id="C5C9C052-8924-42E9-9658-8380640F0464/f:FormSpyWindow.cs" caret="420" fromTop="9" />
+      <File id="C5C9C052-8924-42E9-9658-8380640F0464/f:FormSpyWindow.cs" caret="1968" fromTop="0" />
+      <File id="d:&amp;/f:FormSpyWindow.Designer.cs/l:P!?Downloads?MarkZ?ClipboardListener?FormSpyWindow.Designer.cs" caret="18393" fromTop="29" />
+      <File id="C5C9C052-8924-42E9-9658-8380640F0464/f:FormSpyWindow.cs" caret="1900" fromTop="16" />
+      <File id="d:&amp;/f:FormSpyWindow.Designer.cs/l:P!?Downloads?MarkZ?ClipboardListener?FormSpyWindow.Designer.cs" caret="245" fromTop="11" />
+      <File id="d:&amp;/f:FormSpyWindow.Designer.cs/l:P!?Downloads?MarkZ?ClipboardListener?FormSpyWindow.Designer.cs" caret="513" fromTop="17" />
+      <File id="C5C9C052-8924-42E9-9658-8380640F0464/f:FormSpyWindow.cs" caret="1537" fromTop="14" />
+      <File id="d:&amp;/f:PropertySorter.cs/l:P!?Downloads?MarkZ?ClipboardListener?PropertySorter.cs" caret="129" fromTop="7" />
+      <File id="d:&amp;/f:PropertySorter.cs/l:P!?Downloads?MarkZ?ClipboardListener?PropertySorter.cs" caret="3895" fromTop="125" />
+      <File id="d:&amp;/f:PropertySorter.cs/l:P!?Downloads?MarkZ?ClipboardListener?PropertySorter.cs" caret="0" fromTop="0" />
+    </RecentEdits>
+  </RecentFiles>
+  <UnitTestRunner>
+    <Providers />
+  </UnitTestRunner>
+</Configuration>
