@@ -1,0 +1,127 @@
+<Configuration>
+  <SettingsComponent>
+    <string />
+    <integer />
+    <boolean>
+      <setting name="livetemplates.csharp.usevar">False</setting>
+      <setting name="SolutionAnalysisEnabled">False</setting>
+    </boolean>
+  </SettingsComponent>
+  <NAntValidationSettings>
+    <NAntPath value="" />
+  </NAntValidationSettings>
+  <RecentFiles>
+    <RecentFiles>
+      <File id="16302474-7E1D-49ED-A589-AC29F89EC40F/f:OptionsSerializer.cs" caret="565" fromTop="18" />
+      <File id="16302474-7E1D-49ED-A589-AC29F89EC40F/f:AudioPlayerControl.cs" caret="530" fromTop="18" />
+      <File id="16302474-7E1D-49ED-A589-AC29F89EC40F/f:AudioPlayerControl.Designer.cs" caret="19747" fromTop="19" />
+      <File id="16302474-7E1D-49ED-A589-AC29F89EC40F/f:FormStopWatch.cs" caret="7681" fromTop="17" />
+    </RecentFiles>
+    <RecentEdits>
+      <File id="16302474-7E1D-49ED-A589-AC29F89EC40F/f:OptionsSerializer.cs" caret="3276" fromTop="8" />
+      <File id="16302474-7E1D-49ED-A589-AC29F89EC40F/f:FormStopWatch.cs" caret="0" fromTop="0" />
+      <File id="16302474-7E1D-49ED-A589-AC29F89EC40F/f:FormStopWatch.cs" caret="7484" fromTop="15" />
+      <File id="16302474-7E1D-49ED-A589-AC29F89EC40F/f:FormStopWatch.cs" caret="4076" fromTop="21" />
+      <File id="16302474-7E1D-49ED-A589-AC29F89EC40F/f:FormStopWatch.cs" caret="3937" fromTop="16" />
+      <File id="16302474-7E1D-49ED-A589-AC29F89EC40F/f:FormStopWatch.cs" caret="3420" fromTop="29" />
+      <File id="16302474-7E1D-49ED-A589-AC29F89EC40F/f:FormStopWatch.cs" caret="587" fromTop="8" />
+      <File id="16302474-7E1D-49ED-A589-AC29F89EC40F/f:FormStopWatch.cs" caret="2937" fromTop="18" />
+      <File id="16302474-7E1D-49ED-A589-AC29F89EC40F/f:FormStopWatch.cs" caret="7090" fromTop="25" />
+      <File id="16302474-7E1D-49ED-A589-AC29F89EC40F/f:FormStopWatch.cs" caret="2862" fromTop="17" />
+      <File id="16302474-7E1D-49ED-A589-AC29F89EC40F/f:FormStopWatch.cs" caret="2793" fromTop="16" />
+      <File id="16302474-7E1D-49ED-A589-AC29F89EC40F/f:FormStopWatch.cs" caret="6932" fromTop="15" />
+      <File id="16302474-7E1D-49ED-A589-AC29F89EC40F/f:FormStopWatch.cs" caret="3374" fromTop="12" />
+      <File id="16302474-7E1D-49ED-A589-AC29F89EC40F/f:FormStopWatch.cs" caret="7484" fromTop="28" />
+      <File id="16302474-7E1D-49ED-A589-AC29F89EC40F/f:FormStopWatch.cs" caret="6826" fromTop="20" />
+      <File id="16302474-7E1D-49ED-A589-AC29F89EC40F/f:FormStopWatch.cs" caret="7125" fromTop="24" />
+      <File id="16302474-7E1D-49ED-A589-AC29F89EC40F/f:FormStopWatch.cs" caret="7470" fromTop="16" />
+      <File id="16302474-7E1D-49ED-A589-AC29F89EC40F/f:AudioPlayerControl.cs" caret="0" fromTop="0" />
+      <File id="16302474-7E1D-49ED-A589-AC29F89EC40F/f:AudioPlayerControl.Designer.cs" caret="19747" fromTop="19" />
+      <File id="16302474-7E1D-49ED-A589-AC29F89EC40F/f:FormStopWatch.cs" caret="1634" fromTop="19" />
+      <File id="16302474-7E1D-49ED-A589-AC29F89EC40F/f:FormStopWatch.cs" caret="1388" fromTop="33" />
+      <File id="16302474-7E1D-49ED-A589-AC29F89EC40F/f:FormStopWatch.cs" caret="7794" fromTop="33" />
+      <File id="16302474-7E1D-49ED-A589-AC29F89EC40F/f:FormStopWatch.cs" caret="3109" fromTop="21" />
+      <File id="16302474-7E1D-49ED-A589-AC29F89EC40F/f:FormStopWatch.cs" caret="7679" fromTop="17" />
+    </RecentEdits>
+  </RecentFiles>
+  <UnitTestRunner>
+    <Providers />
+  </UnitTestRunner>
+  <CompletionStatisticsManager>
+    <ItemStatistics item="Default">
+      <Item value="private" priority="2" />
+      <Item value="FileInfo" priority="3" />
+      <Item value="new" priority="3" />
+      <Item value="m_openFileDialog" priority="0" />
+      <Item value="DirectoryInfo" priority="1" />
+      <Item value="ImageInfo" priority="6" />
+      <Item value="void" priority="1" />
+      <Item value="string" priority="1" />
+      <Item value="return" priority="1" />
+      <Item value="List&lt;FileInfo&gt;" priority="0" />
+      <Item value="int" priority="1" />
+      <Item value="AllImages" priority="9" />
+      <Item value="m_lblImageDesc" priority="0" />
+      <Item value="idx" priority="4" />
+      <Item value="if" priority="4" />
+      <Item value="OpenImage" priority="0" />
+      <Item value="for" priority="1" />
+      <Item value="i" priority="0" />
+      <Item value="image" priority="0" />
+      <Item value="m_btnSlideShow" priority="0" />
+      <Item value="m_btnNextImage" priority="0" />
+      <Item value="m_btnNextImage_Click" priority="0" />
+      <Item value="sender" priority="0" />
+      <Item value="e" priority="1" />
+      <Item value="ListViewItem" priority="0" />
+      <Item value="m_listThumbnails" priority="0" />
+      <Item value="foreach" priority="0" />
+      <Item value="m_imageListThumbnails" priority="0" />
+      <Item value="Image" priority="0" />
+      <Item value="info" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Windows.Forms.OpenFileDialog">
+      <Item value="FileName" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.IO.FileInfo">
+      <Item value="Directory" priority="0" />
+      <Item value="FullName" priority="5" />
+      <Item value="Name" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.IO.DirectoryInfo">
+      <Item value="GetFiles" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Collections.Generic.IList`1">
+      <Item value="IndexOf" priority="0" />
+      <Item value="Count" priority="4" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Windows.Forms.ToolStripLabel">
+      <Item value="Text" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.String">
+      <Item value="Format" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Windows.Forms.ToolStripButton">
+      <Item value="Checked" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Windows.Forms.RetrieveVirtualItemEventArgs">
+      <Item value="Item" priority="0" />
+      <Item value="ItemIndex" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:MeditationStopWatch.ImageFileUtil">
+      <Item value="AllImages" priority="2" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Windows.Forms.ListView">
+      <Item value="VirtualListSize" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Windows.Forms.ImageList">
+      <Item value="Images" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Windows.Forms.ImageList+ImageCollection">
+      <Item value="Add" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.Drawing.Image">
+      <Item value="FromFile" priority="0" />
+    </ItemStatistics>
+  </CompletionStatisticsManager>
+</Configuration>

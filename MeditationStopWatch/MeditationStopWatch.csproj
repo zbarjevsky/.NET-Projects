@@ -1,0 +1,235 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{16302474-7E1D-49ED-A589-AC29F89EC40F}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MeditationStopWatch</RootNamespace>
+    <AssemblyName>MeditationStopWatch</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ApplicationIcon>Yin-Yang.ico</ApplicationIcon>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <PublishUrl>http://localhost/MeditationStopWatch/</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml" />
+    <Reference Include="UIAutomationProvider" />
+    <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AnalogClock.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="AudioPlayerControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="AudioPlayerControl.Designer.cs">
+      <DependentUpon>AudioPlayerControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DigitalClockCtrl.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="DigitalClockCtrl.Designer.cs">
+      <DependentUpon>DigitalClockCtrl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ExifExtractor.cs" />
+    <Compile Include="FormAbout.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAbout.Designer.cs">
+      <DependentUpon>FormAbout.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormOptions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormStopWatch.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormStopWatch.Designer.cs">
+      <DependentUpon>FormStopWatch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ImageFileUtil.cs" />
+    <Compile Include="MCIPLayer.cs" />
+    <Compile Include="Mp3Player.cs">
+    </Compile>
+    <Compile Include="Options.cs" />
+    <Compile Include="OptionsSerializer.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="AnalogClock.resx">
+      <DependentUpon>AnalogClock.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AudioPlayerControl.resx">
+      <DependentUpon>AudioPlayerControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DigitalClockCtrl.resx">
+      <DependentUpon>DigitalClockCtrl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormAbout.resx">
+      <DependentUpon>FormAbout.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormOptions.resx">
+      <DependentUpon>FormOptions.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormStopWatch.resx">
+      <DependentUpon>FormStopWatch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="ReikiProgressBar.xaml.cs">
+      <DependentUpon>ReikiProgressBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="ScreenSaver.cs" />
+    <Compile Include="ThumbnailCache.cs" />
+    <Compile Include="ToolStripSpringTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ToolStripTrackBar.cs" />
+    <Compile Include="ExifTools.cs" />
+    <Compile Include="TransparentLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="ImageListViewDemo.csproj" />
+    <Content Include="Images\yin-yang %281%29.ico" />
+    <Content Include="Images\Yin-Yang.ico" />
+    <Content Include="Yin-Yang.ico" />
+    <Resource Include="Sounds\gong.wav" />
+    <Resource Include="Sounds\onhold.wav" />
+    <Resource Include="Images\arrow-back_16.ico" />
+    <Resource Include="Images\arrow-down_16.ico" />
+    <Resource Include="Images\arrow-forward_16.ico" />
+    <Resource Include="Images\arrow-up_16.ico" />
+    <Resource Include="Images\Cancel.ico" />
+    <Resource Include="Images\Favorites.ico" />
+    <Resource Include="Images\Favorites1.ico" />
+    <Resource Include="Images\Ok.ico" />
+    <Resource Include="Images\Remove.ico" />
+    <Resource Include="Images\Save.ico" />
+    <Content Include="Reconnect.ico" />
+    <Content Include="Res\FitWindow.ico" />
+    <Content Include="Res\next_off.PNG" />
+    <Content Include="Res\next_on.PNG" />
+    <Content Include="Res\OriginalSize.ico" />
+    <Content Include="Res\pause_off.PNG" />
+    <Content Include="Res\pause_on.PNG" />
+    <Content Include="Res\play_off.PNG" />
+    <Content Include="Res\play_on.PNG" />
+    <Content Include="Res\previus_off.PNG" />
+    <Content Include="Res\previus_on.PNG" />
+    <Content Include="Res\selected.PNG" />
+    <Content Include="Res\selected_off.PNG" />
+    <Content Include="Res\stop_off.PNG" />
+    <Content Include="Res\stop_on.PNG" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="ReikiProgressBar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
