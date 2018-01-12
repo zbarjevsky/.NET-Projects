@@ -46,6 +46,7 @@ namespace ClipboardManager
 			m_numHistoryLen.Text			= m_Settings.m_iHistoryLen.ToString();
 			m_numHistoryLen.Value			= m_Settings.m_iHistoryLen;
 			m_chkStartWithWindows.Checked	= LoadWithWindows;
+		    m_chkAutoUAC.Checked            = m_Settings.m_bAutoUAC;
 			
 			m_HotKey.UnregisterHotKey(); //to allow change or reset
 
@@ -64,7 +65,8 @@ namespace ClipboardManager
 
 			m_Settings.m_AutoReconnect = m_chkReconnect.Checked;
             m_Settings.WriteLogFile  = m_chkLog.Checked;
-        }//end m_btnOK_Click
+		    m_Settings.m_bAutoUAC = m_chkAutoUAC.Checked;
+		}//end m_btnOK_Click
 
 		private void m_btnCancel_Click(object sender, EventArgs e)
 		{

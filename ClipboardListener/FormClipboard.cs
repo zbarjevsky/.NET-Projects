@@ -117,6 +117,7 @@ namespace ClipboardManager
 			public Encodings m_Encodings		= new Encodings();
 			public bool m_AutoReconnect         = true;
             private bool m_WriteLogFile         = false;
+            public bool m_bAutoUAC              = false;
 
             public bool WriteLogFile
             {
@@ -151,6 +152,7 @@ namespace ClipboardManager
 					XmlUtil.AddNewNode(root, "ShowDebugWindow", m_bShowDebug.ToString());
 					XmlUtil.AddNewNode(root, "AutoReconnect", m_AutoReconnect.ToString());
                     XmlUtil.AddNewNode(root, "WriteLogFile", m_WriteLogFile.ToString());
+					XmlUtil.AddNewNode(root, "AutoUAC", m_bAutoUAC.ToString());
 					m_Encodings.Save(root);
 					listMain.Save(root, zip, Path.GetDirectoryName(sFileName));
 					listFavorites.Save(root, zip, Path.GetDirectoryName(sFileName));
@@ -196,6 +198,7 @@ namespace ClipboardManager
 					m_bShowDebug = XmlUtil.GetBool(root, "ShowDebugWindow", m_bShowDebug);
 					m_AutoReconnect = XmlUtil.GetBool(root, "AutoReconnect", m_AutoReconnect);
                     WriteLogFile = XmlUtil.GetBool(root, "WriteLogFile", m_WriteLogFile);
+                    m_bAutoUAC = XmlUtil.GetBool(root, "AutoUAC", m_bAutoUAC);
 					m_Encodings.Load(root);
 					listMain.Load(doc, icoDefault);
 					listFavorites.Load(doc, icoDefault);
@@ -1438,21 +1441,28 @@ namespace ClipboardManager
             try
             {
                 bool writable = true;
+                bool bUserClick = (sender != null);
                 const string REG_KEY = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System";
                 Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(REG_KEY, writable);
                 int val = (int)key.GetValue("EnableLUA");
                 if(val != 0)
                 {
-                    if( DialogResult.Yes == MessageBox.Show(
-                        "User Account Control Enabled\n  Disable?", 
-                        "EnableLUA",
-                        MessageBoxButtons.YesNo, MessageBoxIcon.Question,
-                        MessageBoxDefaultButton.Button1, MessageBoxOptions.ServiceNotification))
+                    bool reset = m_Settings.m_bAutoUAC;
+                    if ((bUserClick || !m_Settings.m_bAutoUAC)) //show question if user clicked or not Automatic UAC
+                    {
+                        reset = (DialogResult.Yes == MessageBox.Show(
+                            "User Account Control Enabled\n  Disable?",
+                            "EnableLUA",
+                            MessageBoxButtons.YesNo, MessageBoxIcon.Question,
+                            MessageBoxDefaultButton.Button1, MessageBoxOptions.ServiceNotification));
+                    }
+
+                    if (reset)
                     {
                         key.SetValue("EnableLUA", 0);
                     }
                 }
-                else if (sender != null) //comes from user
+                else if (bUserClick) //comes from user
                 {
                     MsgBoxIfo("UAC disabled");
                 }

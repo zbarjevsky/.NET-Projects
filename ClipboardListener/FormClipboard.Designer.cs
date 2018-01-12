@@ -131,6 +131,8 @@ namespace ClipboardManager
             this.m_toolStripButton_FontSize_0 = new System.Windows.Forms.ToolStripMenuItem();
             this.m_toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.m_toolStripButton_Wordwrap = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.m_tbbtnDataFolder = new System.Windows.Forms.ToolStripButton();
             this.m_contextMenuStripClipboard = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.m_contextMenuStripClipboard_Current = new System.Windows.Forms.ToolStripMenuItem();
             this.m_contextMenuStripClipboard_Sep1 = new System.Windows.Forms.ToolStripSeparator();
@@ -144,8 +146,6 @@ namespace ClipboardManager
             this.m_contextMenuStrip_ClipboardEntry_Remove = new System.Windows.Forms.ToolStripMenuItem();
             this.m_ToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.m_SaveFileDialog = new System.Windows.Forms.SaveFileDialog();
-            this.m_tbbtnDataFolder = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.m_contextMenuStripTrayIcon.SuspendLayout();
             this.m_menuStripMain.SuspendLayout();
             this.m_statusStrip.SuspendLayout();
@@ -196,7 +196,7 @@ namespace ClipboardManager
             this.m_contextMenuStripTrayIcon_Sep1,
             this.m_contextMenuStripTrayIcon_Exit});
             this.m_contextMenuStripTrayIcon.Name = "m_contextMenuStripTrayIcon";
-            this.m_contextMenuStripTrayIcon.Size = new System.Drawing.Size(217, 256);
+            this.m_contextMenuStripTrayIcon.Size = new System.Drawing.Size(217, 278);
             this.m_contextMenuStripTrayIcon.Text = "Clipboard History Tray Menu";
             // 
             // m_contextMenuStripTrayIcon_Show
@@ -277,7 +277,7 @@ namespace ClipboardManager
             this.m_contextMenuStripTrayIcon_Settings.Image = ((System.Drawing.Image)(resources.GetObject("m_contextMenuStripTrayIcon_Settings.Image")));
             this.m_contextMenuStripTrayIcon_Settings.Name = "m_contextMenuStripTrayIcon_Settings";
             this.m_contextMenuStripTrayIcon_Settings.Size = new System.Drawing.Size(216, 26);
-            this.m_contextMenuStripTrayIcon_Settings.Text = "&Properties";
+            this.m_contextMenuStripTrayIcon_Settings.Text = "&Settings";
             this.m_contextMenuStripTrayIcon_Settings.Click += new System.EventHandler(this.m_contextMenuStripTrayIcon_Settings_Click);
             // 
             // m_contextMenuStripTrayIcon_About
@@ -335,7 +335,7 @@ namespace ClipboardManager
             // 
             this.m_ToolStripMenuItem_File_ShowHistory.Image = ((System.Drawing.Image)(resources.GetObject("m_ToolStripMenuItem_File_ShowHistory.Image")));
             this.m_ToolStripMenuItem_File_ShowHistory.Name = "m_ToolStripMenuItem_File_ShowHistory";
-            this.m_ToolStripMenuItem_File_ShowHistory.Size = new System.Drawing.Size(163, 22);
+            this.m_ToolStripMenuItem_File_ShowHistory.Size = new System.Drawing.Size(167, 26);
             this.m_ToolStripMenuItem_File_ShowHistory.Text = "S&how History";
             this.m_ToolStripMenuItem_File_ShowHistory.Click += new System.EventHandler(this.m_ToolStripMenuItem_File_ShowHistory_Click);
             // 
@@ -343,7 +343,7 @@ namespace ClipboardManager
             // 
             this.m_ToolStripMenuItem_File_Save.Image = ((System.Drawing.Image)(resources.GetObject("m_ToolStripMenuItem_File_Save.Image")));
             this.m_ToolStripMenuItem_File_Save.Name = "m_ToolStripMenuItem_File_Save";
-            this.m_ToolStripMenuItem_File_Save.Size = new System.Drawing.Size(163, 22);
+            this.m_ToolStripMenuItem_File_Save.Size = new System.Drawing.Size(167, 26);
             this.m_ToolStripMenuItem_File_Save.Text = "&Save As...";
             this.m_ToolStripMenuItem_File_Save.Click += new System.EventHandler(this.m_ToolStripMenuItem_File_Save_Click);
             // 
@@ -351,7 +351,7 @@ namespace ClipboardManager
             // 
             this.m_ToolStripMenuItem_File_ClearHistory.Image = ((System.Drawing.Image)(resources.GetObject("m_ToolStripMenuItem_File_ClearHistory.Image")));
             this.m_ToolStripMenuItem_File_ClearHistory.Name = "m_ToolStripMenuItem_File_ClearHistory";
-            this.m_ToolStripMenuItem_File_ClearHistory.Size = new System.Drawing.Size(163, 22);
+            this.m_ToolStripMenuItem_File_ClearHistory.Size = new System.Drawing.Size(167, 26);
             this.m_ToolStripMenuItem_File_ClearHistory.Text = "&Clear History";
             this.m_ToolStripMenuItem_File_ClearHistory.Click += new System.EventHandler(this.m_ToolStripMenuItem_File_ClearHistory_Click);
             // 
@@ -359,20 +359,20 @@ namespace ClipboardManager
             // 
             this.m_ToolStripMenuItem_File_ClearLast.Image = ((System.Drawing.Image)(resources.GetObject("m_ToolStripMenuItem_File_ClearLast.Image")));
             this.m_ToolStripMenuItem_File_ClearLast.Name = "m_ToolStripMenuItem_File_ClearLast";
-            this.m_ToolStripMenuItem_File_ClearLast.Size = new System.Drawing.Size(163, 22);
+            this.m_ToolStripMenuItem_File_ClearLast.Size = new System.Drawing.Size(167, 26);
             this.m_ToolStripMenuItem_File_ClearLast.Text = "Clear Clipboard";
             this.m_ToolStripMenuItem_File_ClearLast.Click += new System.EventHandler(this.m_ToolStripMenuItem_File_ClearLast_Click);
             // 
             // m_ToolStripMenuItem_File_Sep1
             // 
             this.m_ToolStripMenuItem_File_Sep1.Name = "m_ToolStripMenuItem_File_Sep1";
-            this.m_ToolStripMenuItem_File_Sep1.Size = new System.Drawing.Size(160, 6);
+            this.m_ToolStripMenuItem_File_Sep1.Size = new System.Drawing.Size(164, 6);
             // 
             // m_ToolStripMenuItem_File_Hide
             // 
             this.m_ToolStripMenuItem_File_Hide.Image = ((System.Drawing.Image)(resources.GetObject("m_ToolStripMenuItem_File_Hide.Image")));
             this.m_ToolStripMenuItem_File_Hide.Name = "m_ToolStripMenuItem_File_Hide";
-            this.m_ToolStripMenuItem_File_Hide.Size = new System.Drawing.Size(163, 22);
+            this.m_ToolStripMenuItem_File_Hide.Size = new System.Drawing.Size(167, 26);
             this.m_ToolStripMenuItem_File_Hide.Text = "&Minimize to Tray";
             this.m_ToolStripMenuItem_File_Hide.Click += new System.EventHandler(this.m_ToolStripMenuItem_File_Hide_Click);
             // 
@@ -381,7 +381,7 @@ namespace ClipboardManager
             this.m_ToolStripMenuItem_File_Exit.Image = ((System.Drawing.Image)(resources.GetObject("m_ToolStripMenuItem_File_Exit.Image")));
             this.m_ToolStripMenuItem_File_Exit.Name = "m_ToolStripMenuItem_File_Exit";
             this.m_ToolStripMenuItem_File_Exit.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Alt | System.Windows.Forms.Keys.X)));
-            this.m_ToolStripMenuItem_File_Exit.Size = new System.Drawing.Size(163, 22);
+            this.m_ToolStripMenuItem_File_Exit.Size = new System.Drawing.Size(167, 26);
             this.m_ToolStripMenuItem_File_Exit.Text = "E&xit";
             this.m_ToolStripMenuItem_File_Exit.Click += new System.EventHandler(this.m_ToolStripMenuItem_File_Exit_Click);
             // 
@@ -513,19 +513,19 @@ namespace ClipboardManager
             // 
             this.m_ToolStripMenuItem_Tools_Settings.Image = ((System.Drawing.Image)(resources.GetObject("m_ToolStripMenuItem_Tools_Settings.Image")));
             this.m_ToolStripMenuItem_Tools_Settings.Name = "m_ToolStripMenuItem_Tools_Settings";
-            this.m_ToolStripMenuItem_Tools_Settings.Size = new System.Drawing.Size(177, 22);
+            this.m_ToolStripMenuItem_Tools_Settings.Size = new System.Drawing.Size(181, 26);
             this.m_ToolStripMenuItem_Tools_Settings.Text = "&Properties";
             this.m_ToolStripMenuItem_Tools_Settings.Click += new System.EventHandler(this.m_ToolStripMenuItem_Tools_Settings_Click);
             // 
             // m_ToolStripMenuItem_Tools_Sep1
             // 
             this.m_ToolStripMenuItem_Tools_Sep1.Name = "m_ToolStripMenuItem_Tools_Sep1";
-            this.m_ToolStripMenuItem_Tools_Sep1.Size = new System.Drawing.Size(174, 6);
+            this.m_ToolStripMenuItem_Tools_Sep1.Size = new System.Drawing.Size(178, 6);
             // 
             // m_ToolStripMenuItem_Tools_ReverseChars
             // 
             this.m_ToolStripMenuItem_Tools_ReverseChars.Name = "m_ToolStripMenuItem_Tools_ReverseChars";
-            this.m_ToolStripMenuItem_Tools_ReverseChars.Size = new System.Drawing.Size(177, 22);
+            this.m_ToolStripMenuItem_Tools_ReverseChars.Size = new System.Drawing.Size(181, 26);
             this.m_ToolStripMenuItem_Tools_ReverseChars.Text = "&Reverese char order";
             this.m_ToolStripMenuItem_Tools_ReverseChars.Click += new System.EventHandler(this.m_ToolStripMenuItem_Tools_ReverseChars_Click);
             // 
@@ -534,7 +534,7 @@ namespace ClipboardManager
             this.m_ToolStripMenuItem_Tools_Convert.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_ToolStripMenuItem_Tools_UnescapeURI});
             this.m_ToolStripMenuItem_Tools_Convert.Name = "m_ToolStripMenuItem_Tools_Convert";
-            this.m_ToolStripMenuItem_Tools_Convert.Size = new System.Drawing.Size(177, 22);
+            this.m_ToolStripMenuItem_Tools_Convert.Size = new System.Drawing.Size(181, 26);
             this.m_ToolStripMenuItem_Tools_Convert.Text = "Text Convert";
             // 
             // m_ToolStripMenuItem_Tools_UnescapeURI
@@ -550,7 +550,7 @@ namespace ClipboardManager
             this.m_ToolStripMenuItem_Tools_Encoding_Config,
             this.m_ToolStripMenuItem_Tools_Encoding_Sep1});
             this.m_ToolStripMenuItem_Tools_Encoding.Name = "m_ToolStripMenuItem_Tools_Encoding";
-            this.m_ToolStripMenuItem_Tools_Encoding.Size = new System.Drawing.Size(177, 22);
+            this.m_ToolStripMenuItem_Tools_Encoding.Size = new System.Drawing.Size(181, 26);
             this.m_ToolStripMenuItem_Tools_Encoding.Text = "&Encoding";
             // 
             // m_ToolStripMenuItem_Tools_Encoding_Config
@@ -949,7 +949,7 @@ namespace ClipboardManager
             this.m_tbbtnDataFolder});
             this.m_toolStrip.Location = new System.Drawing.Point(3, 0);
             this.m_toolStrip.Name = "m_toolStrip";
-            this.m_toolStrip.Size = new System.Drawing.Size(680, 29);
+            this.m_toolStrip.Size = new System.Drawing.Size(649, 29);
             this.m_toolStrip.TabIndex = 0;
             // 
             // m_toolStripButton_History
@@ -1142,6 +1142,20 @@ namespace ClipboardManager
             this.m_toolStripButton_Wordwrap.ToolTipText = "Word Wrap";
             this.m_toolStripButton_Wordwrap.Click += new System.EventHandler(this.m_toolStripButton_Wordwrap_Click);
             // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 29);
+            // 
+            // m_tbbtnDataFolder
+            // 
+            this.m_tbbtnDataFolder.Image = ((System.Drawing.Image)(resources.GetObject("m_tbbtnDataFolder.Image")));
+            this.m_tbbtnDataFolder.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.m_tbbtnDataFolder.Name = "m_tbbtnDataFolder";
+            this.m_tbbtnDataFolder.Size = new System.Drawing.Size(132, 26);
+            this.m_tbbtnDataFolder.Text = "Open Data Folder...";
+            this.m_tbbtnDataFolder.Click += new System.EventHandler(this.m_tbbtnDataFolder_Click);
+            // 
             // m_contextMenuStripClipboard
             // 
             this.m_contextMenuStripClipboard.ImageScalingSize = new System.Drawing.Size(33, 16);
@@ -1248,20 +1262,6 @@ namespace ClipboardManager
             // 
             this.m_SaveFileDialog.FileName = "Clipboard";
             this.m_SaveFileDialog.RestoreDirectory = true;
-            // 
-            // m_tbbtnDataFolder
-            // 
-            this.m_tbbtnDataFolder.Image = ((System.Drawing.Image)(resources.GetObject("m_tbbtnDataFolder.Image")));
-            this.m_tbbtnDataFolder.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.m_tbbtnDataFolder.Name = "m_tbbtnDataFolder";
-            this.m_tbbtnDataFolder.Size = new System.Drawing.Size(132, 26);
-            this.m_tbbtnDataFolder.Text = "Open Data Folder...";
-            this.m_tbbtnDataFolder.Click += new System.EventHandler(this.m_tbbtnDataFolder_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 29);
             // 
             // FormClipboard
             // 
