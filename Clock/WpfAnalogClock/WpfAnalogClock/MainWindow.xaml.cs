@@ -24,5 +24,22 @@ namespace WpfAnalogClock
         {
             InitializeComponent();
         }
+
+        private void ClockGrid_OnMouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (WindowStyle == WindowStyle.None && e.ChangedButton == MouseButton.Left)
+                this.DragMove();
+        }
+
+        private void MainWindow_OnMouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if(Width + e.Delta < 200)
+                return;
+            if(Height + e.Delta < 200)
+                return;
+
+            this.Width += e.Delta;
+            this.Height += e.Delta;
+        }
     }
 }

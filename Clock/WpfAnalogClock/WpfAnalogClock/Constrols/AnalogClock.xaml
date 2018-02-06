@@ -4,17 +4,47 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WpfAnalogClock.Constrols"
+             xmlns:main="clr-namespace:WpfAnalogClock"
+             Background="Transparent"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <Grid>
-        <Image Source="/Images/StoneRoundClock1.jpg" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Image Grid.Row="0" Grid.Column="0" Source="/Images/MinuteHand1.png" HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Image.RenderTransform>
-                <ScaleTransform ScaleX="1" ScaleY="1"/>
-            </Image.RenderTransform>
+    <Grid x:Name="clockGrid">
+        <Grid.Background>
+            <ImageBrush ImageSource="/Images/StoneRoundClock1.png" Stretch="Uniform"/>
+        </Grid.Background>
+        <Image Grid.Row="0" Grid.Column="0" 
+               Source="/Images/HourHand1.png" 
+               Width="{Binding Path=ActualWidth, ElementName=clockGrid, Converter={main:PercentageConverter}, ConverterParameter='0.8'}"
+               Height="{Binding Path=ActualHeight, ElementName=clockGrid, Converter={main:PercentageConverter}, ConverterParameter='0.8'}"
+               HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Fill">
             <Image.LayoutTransform>
                 <TransformGroup>
-                    <RotateTransform x:Name="rotateMinute" Angle="10" CenterX="10" CenterY="300" />
+                    <ScaleTransform/>
+                    <RotateTransform x:Name="rotateHour" Angle="100" />
+                </TransformGroup>
+            </Image.LayoutTransform>
+        </Image>
+        <Image Grid.Row="0" Grid.Column="0" 
+               Source="/Images/MinuteHand1.png" 
+               Width="{Binding Path=ActualWidth, ElementName=clockGrid, Converter={main:PercentageConverter}, ConverterParameter='0.8'}"
+               Height="{Binding Path=ActualHeight, ElementName=clockGrid, Converter={main:PercentageConverter}, ConverterParameter='0.8'}"
+               HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Fill">
+            <Image.LayoutTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <RotateTransform x:Name="rotateMinute" Angle="45" />
+                </TransformGroup>
+            </Image.LayoutTransform>
+        </Image>
+        <Image Grid.Row="0" Grid.Column="0" 
+               Source="/Images/SecondHand1.png" 
+               Width="{Binding Path=ActualWidth, ElementName=clockGrid, Converter={main:PercentageConverter}, ConverterParameter='0.6'}"
+               Height="{Binding Path=ActualHeight, ElementName=clockGrid, Converter={main:PercentageConverter}, ConverterParameter='0.8'}"
+               HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Fill">
+            <Image.LayoutTransform>
+                <TransformGroup>
+                    <ScaleTransform/>
+                    <RotateTransform x:Name="rotateSecond" Angle="0" />
                 </TransformGroup>
             </Image.LayoutTransform>
         </Image>

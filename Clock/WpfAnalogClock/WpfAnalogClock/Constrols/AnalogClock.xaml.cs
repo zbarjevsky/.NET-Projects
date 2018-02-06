@@ -21,15 +21,13 @@ namespace WpfAnalogClock.Constrols
     /// </summary>
     public partial class AnalogClock : UserControl
     {
-        DispatcherTimer dispatcherTimer;
-
         public AnalogClock()
         {
             InitializeComponent();
 
-            dispatcherTimer = new DispatcherTimer();
-            dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
+            DispatcherTimer dispatcherTimer = new DispatcherTimer();
+            dispatcherTimer.Tick += dispatcherTimer_Tick;
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 120);
 
             dispatcherTimer.Start();
         }
@@ -37,7 +35,17 @@ namespace WpfAnalogClock.Constrols
         private void dispatcherTimer_Tick(object sender, EventArgs e)
         {
             DateTime now = DateTime.Now;
-            rotateMinute.Angle = now.Second * 6;// / Math.PI;
+            double secondAngle = 6.0 * now.Second;
+            if (secondAngle != rotateSecond.Angle)
+                rotateSecond.Angle = secondAngle;
+
+            double minuteAngle = 6.0 * (now.Minute + (now.Second / 60.0));
+            if (minuteAngle != rotateMinute.Angle)
+                rotateMinute.Angle = minuteAngle;
+
+            double hourAngle = 30.0 * ((now.Hour % 12) + (now.Minute / 60.0));
+            if (hourAngle != rotateHour.Angle)
+                rotateHour.Angle = hourAngle;
         }
     }
 }
