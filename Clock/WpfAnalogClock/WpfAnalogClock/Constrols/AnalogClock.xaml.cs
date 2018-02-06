@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace WpfAnalogClock.Constrols
 {
@@ -20,11 +21,23 @@ namespace WpfAnalogClock.Constrols
     /// </summary>
     public partial class AnalogClock : UserControl
     {
+        DispatcherTimer dispatcherTimer;
+
         public AnalogClock()
         {
             InitializeComponent();
 
-            this.DataContext = this;
+            dispatcherTimer = new DispatcherTimer();
+            dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
+            dispatcherTimer.Interval = new TimeSpan(0, 0, 1);
+
+            dispatcherTimer.Start();
+        }
+
+        private void dispatcherTimer_Tick(object sender, EventArgs e)
+        {
+            DateTime now = DateTime.Now;
+            rotateMinute.Angle = now.Second * 6;// / Math.PI;
         }
     }
 }

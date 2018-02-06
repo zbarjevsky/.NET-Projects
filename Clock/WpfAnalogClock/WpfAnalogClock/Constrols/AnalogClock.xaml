@@ -7,8 +7,16 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <Image Source="./Images/StoneRoundClock1.jpg">
-            
+        <Image Source="/Images/StoneRoundClock1.jpg" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        <Image Grid.Row="0" Grid.Column="0" Source="/Images/MinuteHand1.png" HorizontalAlignment="Center" VerticalAlignment="Center">
+            <Image.RenderTransform>
+                <ScaleTransform ScaleX="1" ScaleY="1"/>
+            </Image.RenderTransform>
+            <Image.LayoutTransform>
+                <TransformGroup>
+                    <RotateTransform x:Name="rotateMinute" Angle="10" CenterX="10" CenterY="300" />
+                </TransformGroup>
+            </Image.LayoutTransform>
         </Image>
     </Grid>
 </UserControl>
