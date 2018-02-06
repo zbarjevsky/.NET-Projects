@@ -25,6 +25,8 @@ namespace WpfAnalogClock.Constrols
         {
             InitializeComponent();
 
+            dispatcherTimer_Tick(this, null);
+
             DispatcherTimer dispatcherTimer = new DispatcherTimer();
             dispatcherTimer.Tick += dispatcherTimer_Tick;
             dispatcherTimer.Interval = new TimeSpan(0, 0, 0, 0, 120);
@@ -46,6 +48,8 @@ namespace WpfAnalogClock.Constrols
             double hourAngle = 30.0 * ((now.Hour % 12) + (now.Minute / 60.0));
             if (hourAngle != rotateHour.Angle)
                 rotateHour.Angle = hourAngle;
+
+            txtTime.Text = now.ToString("T");
         }
     }
 }

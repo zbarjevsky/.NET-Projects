@@ -48,5 +48,10 @@
                 </TransformGroup>
             </Image.LayoutTransform>
         </Image>
+        <TextBlock Grid.Row="0" Grid.Column="0" x:Name="txtTime"
+                   FontWeight="Bold" Foreground="Red"
+                   FontSize="{Binding Path=ActualWidth, ElementName=clockGrid, Converter={main:PercentageConverter}, ConverterParameter='0.08'}"
+                   Text="12:22:01"
+                   VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
     </Grid>
 </UserControl>
