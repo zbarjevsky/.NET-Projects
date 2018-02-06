@@ -25,7 +25,7 @@ namespace DiskCryptorHelper
 {
     public partial class FormMain : Form
     {
-        public const string TITLE = "DiskCryptor Commands";
+        public const string TITLE = "DiskCryptor Commander";
 
         private DiskCryptor _diskCryptor = new DiskCryptor();
 
@@ -103,7 +103,7 @@ namespace DiskCryptorHelper
             _diskCryptor.ExecuteVersion();
             ReloadDriveData(0);
             m_listDrives_SelectedIndexChanged(sender, e);
-            m_sysIcon.Text = "XaXa";
+            m_sysIcon.Text = TITLE;
 
             m_mnuFile.DropDown = m_sysIconMenu;
             m_mnuOptionsHideWhenMinimized.Checked = Settings.Default.HideWhenMinimized;
