@@ -104,24 +104,26 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\StoneRoundClock1.jpg">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-    <Resource Include="Images\StoneRoundClock2.jpg" />
+    <Resource Include="Images\MinuteHand1.png" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\MinuteHand1.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Images\StoneRoundClock1.png">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Resource>
+    <Resource Include="Images\StoneRoundClock1.png" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\HourHand1.png" />
     <Resource Include="Images\SecondHand1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\SecondHand2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\HourHand2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\MinuteHand2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\StoneRoundClock2.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

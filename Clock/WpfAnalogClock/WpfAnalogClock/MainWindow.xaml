@@ -12,5 +12,9 @@
         Title="Clock" Height="350" Width="350"> 
     <Grid Background="Transparent" MouseDown="ClockGrid_OnMouseDown">
         <Constrols:AnalogClock HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        <Button Content="X" 
+                VerticalAlignment="Top" HorizontalAlignment="Right" 
+                Width="32" Height="32" FontSize="20"
+                Background="HotPink" Click="Button_Click"/>
     </Grid>
 </Window>

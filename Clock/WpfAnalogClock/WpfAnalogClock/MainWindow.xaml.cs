@@ -41,5 +41,10 @@ namespace WpfAnalogClock
             this.Width += e.Delta;
             this.Height += e.Delta;
         }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }
