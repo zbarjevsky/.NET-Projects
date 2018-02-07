@@ -13,10 +13,16 @@
         Title="WPF Clock" 
         Height="350" Width="350"> 
     <Grid Background="Transparent" MouseDown="ClockGrid_OnMouseDown">
-        <Constrols:AnalogClock HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        <Button Content="X" 
+        <Constrols:AnalogClock Grid.Row="0" Grid.Column="0" x:Name="clock" 
+                               HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        
+        <Button Content="C" x:Name="btnOptions" Margin="40,0"
                 VerticalAlignment="Top" HorizontalAlignment="Right" 
                 Width="32" Height="32" FontSize="20"
-                Background="HotPink" Click="Button_Click"/>
+                Background="HotPink" Click="Options_Click"/>
+        <Button Content="X" x:Name="btnClose"
+                VerticalAlignment="Top" HorizontalAlignment="Right" 
+                Width="32" Height="32" FontSize="20"
+                Background="HotPink" Click="Close_Click"/>
     </Grid>
 </Window>

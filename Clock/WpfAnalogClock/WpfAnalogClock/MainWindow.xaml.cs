@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using WpfAnalogClock.Tools;
 
 namespace WpfAnalogClock
 {
@@ -23,6 +24,8 @@ namespace WpfAnalogClock
         public MainWindow()
         {
             InitializeComponent();
+
+            OptionsData.Instance.OnPropertyChange = (prop) => { UpdateOptions(false); };
         }
 
         private void ClockGrid_OnMouseDown(object sender, MouseButtonEventArgs e)
@@ -42,9 +45,32 @@ namespace WpfAnalogClock
             this.Height += e.Delta;
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void Close_Click(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void UpdateOptions(bool fromControls)
+        {
+            if (fromControls)
+            {
+                OptionsData.Instance.DigitalClockColor = clock.DigitalClockColor.ToWinformsColor();
+                OptionsData.Instance.OptionsButtonColor = btnOptions.Background.ToWinformsColor();
+                OptionsData.Instance.CloseButtonColor = btnClose.Background.ToWinformsColor();
+            }
+            else
+            {
+                clock.DigitalClockColor = OptionsData.Instance.DigitalClockColor.ToWpfBrush();
+                btnOptions.Background = OptionsData.Instance.OptionsButtonColor.ToWpfBrush();
+                btnClose.Background = OptionsData.Instance.CloseButtonColor.ToWpfBrush();
+            }
+        }
+
+        private void Options_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateOptions(true);
+            OptionsData.Instance.ShowOptions(this);
+            UpdateOptions(false);
         }
     }
 }

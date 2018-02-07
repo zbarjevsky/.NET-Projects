@@ -21,6 +21,13 @@ namespace WpfAnalogClock.Constrols
     /// </summary>
     public partial class AnalogClock : UserControl
     {
+
+        public Brush DigitalClockColor
+        {
+            get { return txtTime.Foreground; }
+            set { txtTime.Foreground = value; }
+        }
+
         public AnalogClock()
         {
             InitializeComponent();
