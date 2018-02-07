@@ -10,7 +10,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid x:Name="clockGrid">
         <Grid.Background>
-            <ImageBrush ImageSource="pack://application:,,,/Images/StoneRoundClock2.png" Stretch="Uniform"/>
+            <ImageBrush ImageSource="pack://application:,,,/Images/StoneRoundClock3.png" Stretch="Uniform"/>
         </Grid.Background>
         <Image Grid.Row="0" Grid.Column="0" 
                Source="pack://application:,,,/Images/HourHand2.png" 

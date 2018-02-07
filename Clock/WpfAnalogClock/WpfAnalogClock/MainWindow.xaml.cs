@@ -33,9 +33,9 @@ namespace WpfAnalogClock
 
         private void MainWindow_OnMouseWheel(object sender, MouseWheelEventArgs e)
         {
-            if(Width + e.Delta < 200)
+            if(Width + e.Delta < 200 || Width + e.Delta > 1600)
                 return;
-            if(Height + e.Delta < 200)
+            if(Height + e.Delta < 200 || Height + e.Delta > 1000)
                 return;
 
             this.Width += e.Delta;

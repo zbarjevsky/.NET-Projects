@@ -8,8 +8,10 @@
         AllowsTransparency="True"
         Background="Transparent"
         WindowStyle="None"
+        Icon="Clock.ico"
         MouseWheel="MainWindow_OnMouseWheel"
-        Title="Clock" Height="350" Width="350"> 
+        Title="WPF Clock" 
+        Height="350" Width="350"> 
     <Grid Background="Transparent" MouseDown="ClockGrid_OnMouseDown">
         <Constrols:AnalogClock HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         <Button Content="X" 
