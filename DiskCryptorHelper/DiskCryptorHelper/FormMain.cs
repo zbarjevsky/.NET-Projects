@@ -18,6 +18,7 @@ using System.Windows;
 using System.Windows.Forms;
 using DiskCryptorHelper.Properties;
 using sD.WPF.MessageBox;
+using VhdApiExample;
 using Application = System.Windows.Forms.Application;
 using MessageBox = System.Windows.Forms.MessageBox;
 
@@ -513,6 +514,12 @@ namespace DiskCryptorHelper
             {
                 Visible = false; //hide
             }
+        }
+
+        private void m_mnuOptionsVHD_Click(object sender, EventArgs e)
+        {
+            VHD_MainForm frm = new VHD_MainForm();
+            frm.ShowDialog(this);
         }
     }
 }

@@ -62,11 +62,12 @@
             this.label1 = new System.Windows.Forms.Label();
             this.m_menuStripMain = new System.Windows.Forms.MenuStrip();
             this.m_mnuFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuOptions = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuOptionsHideWhenMinimized = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.m_status1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.m_status2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.m_mnuOptions = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_mnuOptionsHideWhenMinimized = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuOptionsVHD = new System.Windows.Forms.ToolStripMenuItem();
             this.m_sysIconMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitMain)).BeginInit();
             this.m_splitMain.Panel1.SuspendLayout();
@@ -385,6 +386,22 @@
             this.m_mnuFile.Size = new System.Drawing.Size(37, 20);
             this.m_mnuFile.Text = "&File";
             // 
+            // m_mnuOptions
+            // 
+            this.m_mnuOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.m_mnuOptionsHideWhenMinimized,
+            this.m_mnuOptionsVHD});
+            this.m_mnuOptions.Name = "m_mnuOptions";
+            this.m_mnuOptions.Size = new System.Drawing.Size(61, 20);
+            this.m_mnuOptions.Text = "Options";
+            // 
+            // m_mnuOptionsHideWhenMinimized
+            // 
+            this.m_mnuOptionsHideWhenMinimized.Name = "m_mnuOptionsHideWhenMinimized";
+            this.m_mnuOptionsHideWhenMinimized.Size = new System.Drawing.Size(192, 22);
+            this.m_mnuOptionsHideWhenMinimized.Text = "Hide When Minimized";
+            this.m_mnuOptionsHideWhenMinimized.Click += new System.EventHandler(this.m_mnuOptionsHideWhenMinimized_Click);
+            // 
             // statusStrip1
             // 
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -409,20 +426,12 @@
             this.m_status2.Spring = true;
             this.m_status2.Text = "...";
             // 
-            // m_mnuOptions
+            // m_mnuOptionsVHD
             // 
-            this.m_mnuOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.m_mnuOptionsHideWhenMinimized});
-            this.m_mnuOptions.Name = "m_mnuOptions";
-            this.m_mnuOptions.Size = new System.Drawing.Size(61, 20);
-            this.m_mnuOptions.Text = "Options";
-            // 
-            // m_mnuOptionsHideWhenMinimized
-            // 
-            this.m_mnuOptionsHideWhenMinimized.Name = "m_mnuOptionsHideWhenMinimized";
-            this.m_mnuOptionsHideWhenMinimized.Size = new System.Drawing.Size(192, 22);
-            this.m_mnuOptionsHideWhenMinimized.Text = "Hide When Minimized";
-            this.m_mnuOptionsHideWhenMinimized.Click += new System.EventHandler(this.m_mnuOptionsHideWhenMinimized_Click);
+            this.m_mnuOptionsVHD.Name = "m_mnuOptionsVHD";
+            this.m_mnuOptionsVHD.Size = new System.Drawing.Size(192, 22);
+            this.m_mnuOptionsVHD.Text = "VHD";
+            this.m_mnuOptionsVHD.Click += new System.EventHandler(this.m_mnuOptionsVHD_Click);
             // 
             // FormMain
             // 
@@ -496,6 +505,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ToolStripMenuItem m_mnuOptions;
         private System.Windows.Forms.ToolStripMenuItem m_mnuOptionsHideWhenMinimized;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuOptionsVHD;
     }
 }
 
