@@ -10,10 +10,10 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid x:Name="clockGrid">
         <Grid.Background>
-            <ImageBrush ImageSource="pack://application:,,,/Images/StoneRoundClock3.png" Stretch="Uniform"/>
+            <ImageBrush ImageSource="pack://application:,,,/Images/StoneRoundClock1.png" Stretch="Uniform"/>
         </Grid.Background>
         <Image Grid.Row="0" Grid.Column="0" 
-               Source="pack://application:,,,/Images/HourHand2.png" 
+               Source="pack://application:,,,/Images/HourHand1.png" 
                Width="{Binding Path=ActualWidth, ElementName=clockGrid, Converter={main:PercentageConverter}, ConverterParameter='0.8'}"
                Height="{Binding Path=ActualHeight, ElementName=clockGrid, Converter={main:PercentageConverter}, ConverterParameter='0.8'}"
                HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Fill">
@@ -25,7 +25,7 @@
             </Image.LayoutTransform>
         </Image>
         <Image Grid.Row="0" Grid.Column="0" 
-               Source="pack://application:,,,/Images/MinuteHand2.png" 
+               Source="pack://application:,,,/Images/MinuteHand1.png" 
                Width="{Binding Path=ActualWidth, ElementName=clockGrid, Converter={main:PercentageConverter}, ConverterParameter='0.8'}"
                Height="{Binding Path=ActualHeight, ElementName=clockGrid, Converter={main:PercentageConverter}, ConverterParameter='0.8'}"
                HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Fill">
@@ -37,7 +37,7 @@
             </Image.LayoutTransform>
         </Image>
         <Image Grid.Row="0" Grid.Column="0" 
-               Source="pack://application:,,,/Images/SecondHand2.png" 
+               Source="pack://application:,,,/Images/SecondHand1.png" 
                Width="{Binding Path=ActualWidth, ElementName=clockGrid, Converter={main:PercentageConverter}, ConverterParameter='0.6'}"
                Height="{Binding Path=ActualHeight, ElementName=clockGrid, Converter={main:PercentageConverter}, ConverterParameter='0.8'}"
                HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Fill">

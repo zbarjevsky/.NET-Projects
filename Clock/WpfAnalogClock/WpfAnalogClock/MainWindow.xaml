@@ -15,11 +15,18 @@
     <Grid Background="Transparent" MouseDown="ClockGrid_OnMouseDown">
         <Constrols:AnalogClock Grid.Row="0" Grid.Column="0" x:Name="clock" 
                                HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
-        
-        <Button Content="C" x:Name="btnOptions" Margin="40,0"
+
+        <Button x:Name="btnOptions" 
+                Style="{x:Null}"
+                Margin="40,0"
                 VerticalAlignment="Top" HorizontalAlignment="Right" 
                 Width="32" Height="32" FontSize="20"
-                Background="HotPink" Click="Options_Click"/>
+                Click="Options_Click">
+            <Button.Background>
+                <SolidColorBrush Color="Gray" Opacity="0.1" />
+            </Button.Background>
+            <Image Source="pack://application:,,,/Images/Config.png"/>
+        </Button>
         <Button Content="X" x:Name="btnClose"
                 VerticalAlignment="Top" HorizontalAlignment="Right" 
                 Width="32" Height="32" FontSize="20"
