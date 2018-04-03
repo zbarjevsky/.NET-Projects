@@ -1,5 +1,5 @@
 ﻿namespace VhdApiExample {
-    partial class CreateForm {
+    partial class VHD_CreateForm {
         /// <summary>
         /// Required designer variable.
         /// </summary>

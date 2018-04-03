@@ -29,7 +29,7 @@ namespace VhdApiExample {
 
         private void mnuCreate_Click(object sender, EventArgs e) {
             if (this._disk != null) { this._disk.Close(); }
-            using (var frm = new CreateForm()) {
+            using (var frm = new VHD_CreateForm()) {
                 if (frm.ShowDialog(this) == DialogResult.OK) {
                     this._disk = frm.Disk;
                     UpdateData();

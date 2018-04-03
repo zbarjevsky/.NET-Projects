@@ -53,10 +53,18 @@
             this.m_mnuPlaceholder = new System.Windows.Forms.ToolStripMenuItem();
             this.m_mnuUnmountAll = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.m_mnuFileAttachVHD = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuFileOpenVHD_File = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuFileCreateVHD = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.m_mnuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.m_btnUnmountAllandBSOD = new System.Windows.Forms.Button();
             this.m_btnEject = new System.Windows.Forms.Button();
             this.m_splitMain = new System.Windows.Forms.SplitContainer();
+            this.m_btnHideDrive = new System.Windows.Forms.CheckBox();
+            this.m_lblVHD_File = new System.Windows.Forms.Label();
+            this.m_txtVHD_FileName = new System.Windows.Forms.TextBox();
+            this.m_btnAttachVHD = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
             this.m_treeDrives = new System.Windows.Forms.TreeView();
             this.label1 = new System.Windows.Forms.Label();
@@ -64,10 +72,11 @@
             this.m_mnuFile = new System.Windows.Forms.ToolStripMenuItem();
             this.m_mnuOptions = new System.Windows.Forms.ToolStripMenuItem();
             this.m_mnuOptionsHideWhenMinimized = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuOptionsVHD = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.m_status1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.m_status2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.m_mnuOptionsVHD = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_chkPermanent = new System.Windows.Forms.CheckBox();
             this.m_sysIconMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitMain)).BeginInit();
             this.m_splitMain.Panel1.SuspendLayout();
@@ -201,10 +210,10 @@
             | System.Windows.Forms.AnchorStyles.Left)));
             this.m_txtLog.BackColor = System.Drawing.SystemColors.Info;
             this.m_txtLog.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.m_txtLog.Location = new System.Drawing.Point(9, 259);
+            this.m_txtLog.Location = new System.Drawing.Point(9, 286);
             this.m_txtLog.Name = "m_txtLog";
             this.m_txtLog.ReadOnly = true;
-            this.m_txtLog.Size = new System.Drawing.Size(535, 107);
+            this.m_txtLog.Size = new System.Drawing.Size(532, 80);
             this.m_txtLog.TabIndex = 11;
             this.m_txtLog.Text = "";
             this.m_txtLog.WordWrap = false;
@@ -235,9 +244,12 @@
             this.m_mnuEject,
             this.m_mnuUnmountAll,
             this.toolStripMenuItem1,
+            this.m_mnuFileAttachVHD,
+            this.m_mnuFileCreateVHD,
+            this.toolStripMenuItem3,
             this.m_mnuExit});
             this.m_sysIconMenu.Name = "m_sysIconMenu";
-            this.m_sysIconMenu.Size = new System.Drawing.Size(177, 104);
+            this.m_sysIconMenu.Size = new System.Drawing.Size(177, 154);
             // 
             // m_mnuShow
             // 
@@ -276,6 +288,33 @@
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(173, 6);
+            // 
+            // m_mnuFileAttachVHD
+            // 
+            this.m_mnuFileAttachVHD.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.m_mnuFileOpenVHD_File});
+            this.m_mnuFileAttachVHD.Name = "m_mnuFileAttachVHD";
+            this.m_mnuFileAttachVHD.Size = new System.Drawing.Size(176, 22);
+            this.m_mnuFileAttachVHD.Text = "Attach VHD";
+            // 
+            // m_mnuFileOpenVHD_File
+            // 
+            this.m_mnuFileOpenVHD_File.Name = "m_mnuFileOpenVHD_File";
+            this.m_mnuFileOpenVHD_File.Size = new System.Drawing.Size(133, 22);
+            this.m_mnuFileOpenVHD_File.Text = "Open File...";
+            this.m_mnuFileOpenVHD_File.Click += new System.EventHandler(this.m_mnuFileOpenVHD_File_Click);
+            // 
+            // m_mnuFileCreateVHD
+            // 
+            this.m_mnuFileCreateVHD.Name = "m_mnuFileCreateVHD";
+            this.m_mnuFileCreateVHD.Size = new System.Drawing.Size(176, 22);
+            this.m_mnuFileCreateVHD.Text = "Create VHD";
+            this.m_mnuFileCreateVHD.Click += new System.EventHandler(this.m_mnuFileCreateVHD_Click);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(173, 6);
             // 
             // m_mnuExit
             // 
@@ -317,6 +356,11 @@
             // 
             // m_splitMain.Panel1
             // 
+            this.m_splitMain.Panel1.Controls.Add(this.m_chkPermanent);
+            this.m_splitMain.Panel1.Controls.Add(this.m_btnHideDrive);
+            this.m_splitMain.Panel1.Controls.Add(this.m_lblVHD_File);
+            this.m_splitMain.Panel1.Controls.Add(this.m_txtVHD_FileName);
+            this.m_splitMain.Panel1.Controls.Add(this.m_btnAttachVHD);
             this.m_splitMain.Panel1.Controls.Add(this.m_listDrives);
             this.m_splitMain.Panel1.Controls.Add(this.m_btnMountAll);
             this.m_splitMain.Panel1.Controls.Add(this.m_btnUnmoutAll);
@@ -338,6 +382,42 @@
             this.m_splitMain.Size = new System.Drawing.Size(833, 380);
             this.m_splitMain.SplitterDistance = 550;
             this.m_splitMain.TabIndex = 16;
+            // 
+            // m_btnHideDrive
+            // 
+            this.m_btnHideDrive.Location = new System.Drawing.Point(337, 222);
+            this.m_btnHideDrive.Name = "m_btnHideDrive";
+            this.m_btnHideDrive.Size = new System.Drawing.Size(101, 23);
+            this.m_btnHideDrive.TabIndex = 15;
+            this.m_btnHideDrive.Text = "Hide Drive";
+            this.m_btnHideDrive.UseVisualStyleBackColor = true;
+            this.m_btnHideDrive.CheckedChanged += new System.EventHandler(this.m_btnHideDrive_CheckedChanged);
+            // 
+            // m_lblVHD_File
+            // 
+            this.m_lblVHD_File.AutoSize = true;
+            this.m_lblVHD_File.Location = new System.Drawing.Point(10, 256);
+            this.m_lblVHD_File.Name = "m_lblVHD_File";
+            this.m_lblVHD_File.Size = new System.Drawing.Size(55, 13);
+            this.m_lblVHD_File.TabIndex = 12;
+            this.m_lblVHD_File.Text = "VHD File: ";
+            // 
+            // m_txtVHD_FileName
+            // 
+            this.m_txtVHD_FileName.Location = new System.Drawing.Point(75, 253);
+            this.m_txtVHD_FileName.Name = "m_txtVHD_FileName";
+            this.m_txtVHD_FileName.Size = new System.Drawing.Size(252, 20);
+            this.m_txtVHD_FileName.TabIndex = 13;
+            // 
+            // m_btnAttachVHD
+            // 
+            this.m_btnAttachVHD.Location = new System.Drawing.Point(333, 251);
+            this.m_btnAttachVHD.Name = "m_btnAttachVHD";
+            this.m_btnAttachVHD.Size = new System.Drawing.Size(105, 23);
+            this.m_btnAttachVHD.TabIndex = 14;
+            this.m_btnAttachVHD.Text = "Attach && Mount";
+            this.m_btnAttachVHD.UseVisualStyleBackColor = true;
+            this.m_btnAttachVHD.Click += new System.EventHandler(this.m_btnAttachVHD_Click);
             // 
             // panel1
             // 
@@ -398,9 +478,16 @@
             // m_mnuOptionsHideWhenMinimized
             // 
             this.m_mnuOptionsHideWhenMinimized.Name = "m_mnuOptionsHideWhenMinimized";
-            this.m_mnuOptionsHideWhenMinimized.Size = new System.Drawing.Size(192, 22);
+            this.m_mnuOptionsHideWhenMinimized.Size = new System.Drawing.Size(202, 22);
             this.m_mnuOptionsHideWhenMinimized.Text = "Hide When Minimized";
             this.m_mnuOptionsHideWhenMinimized.Click += new System.EventHandler(this.m_mnuOptionsHideWhenMinimized_Click);
+            // 
+            // m_mnuOptionsVHD
+            // 
+            this.m_mnuOptionsVHD.Name = "m_mnuOptionsVHD";
+            this.m_mnuOptionsVHD.Size = new System.Drawing.Size(202, 22);
+            this.m_mnuOptionsVHD.Text = "Virtual Hard Drive (VHD)";
+            this.m_mnuOptionsVHD.Click += new System.EventHandler(this.m_mnuOptionsVHD_Click);
             // 
             // statusStrip1
             // 
@@ -426,12 +513,14 @@
             this.m_status2.Spring = true;
             this.m_status2.Text = "...";
             // 
-            // m_mnuOptionsVHD
+            // m_chkPermanent
             // 
-            this.m_mnuOptionsVHD.Name = "m_mnuOptionsVHD";
-            this.m_mnuOptionsVHD.Size = new System.Drawing.Size(192, 22);
-            this.m_mnuOptionsVHD.Text = "VHD";
-            this.m_mnuOptionsVHD.Click += new System.EventHandler(this.m_mnuOptionsVHD_Click);
+            this.m_chkPermanent.Location = new System.Drawing.Point(444, 252);
+            this.m_chkPermanent.Name = "m_chkPermanent";
+            this.m_chkPermanent.Size = new System.Drawing.Size(93, 23);
+            this.m_chkPermanent.TabIndex = 16;
+            this.m_chkPermanent.Text = "Permanent";
+            this.m_chkPermanent.UseVisualStyleBackColor = true;
             // 
             // FormMain
             // 
@@ -506,6 +595,15 @@
         private System.Windows.Forms.ToolStripMenuItem m_mnuOptions;
         private System.Windows.Forms.ToolStripMenuItem m_mnuOptionsHideWhenMinimized;
         private System.Windows.Forms.ToolStripMenuItem m_mnuOptionsVHD;
+        private System.Windows.Forms.Label m_lblVHD_File;
+        private System.Windows.Forms.TextBox m_txtVHD_FileName;
+        private System.Windows.Forms.Button m_btnAttachVHD;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuFileAttachVHD;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuFileOpenVHD_File;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuFileCreateVHD;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
+        private System.Windows.Forms.CheckBox m_btnHideDrive;
+        private System.Windows.Forms.CheckBox m_chkPermanent;
     }
 }
 

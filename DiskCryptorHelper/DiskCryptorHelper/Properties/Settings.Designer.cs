@@ -34,5 +34,29 @@ namespace DiskCryptorHelper.Properties {
                 this["HideWhenMinimized"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string VHD_FileName1 {
+            get {
+                return ((string)(this["VHD_FileName1"]));
+            }
+            set {
+                this["VHD_FileName1"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string VHD_FileName2 {
+            get {
+                return ((string)(this["VHD_FileName2"]));
+            }
+            set {
+                this["VHD_FileName2"] = value;
+            }
+        }
     }
 }

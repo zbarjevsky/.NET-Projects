@@ -7,6 +7,7 @@
 
 
 using System;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -248,7 +249,7 @@ namespace Medo.IO {
             } else if (res == NativeMethods.ERROR_PRIVILEGE_NOT_HELD) {
                 throw new System.UnauthorizedAccessException("A required privilege is not held by the client.");
             } else {
-                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Native error {0}.", res));
+                throw new Win32Exception(res);//, "Attach()");//new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Native error {0}.", res));
             }
         }
 
@@ -272,7 +273,7 @@ namespace Medo.IO {
             } else if (res == NativeMethods.ERROR_DEV_NOT_EXIST) {
                 throw new IOException("Device could not be accessed.");
             } else {
-                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Native error {0}.", res));
+                throw new Win32Exception(res);//, "GetAttachedPath()");//new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Native error {0}.", res));
             }
         }
 
@@ -289,7 +290,7 @@ namespace Medo.IO {
             } else if (res == NativeMethods.ERROR_NOT_FOUND) {
                 throw new System.NotSupportedException("Element not found.");
             } else {
-                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Native error {0}.", res));
+                throw new Win32Exception(res);//, "Detach()");//new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Native error {0}.", res));
             }
         }
 

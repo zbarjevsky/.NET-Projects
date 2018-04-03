@@ -187,6 +187,8 @@ namespace DiskCryptorHelper
 
         public Action OnDataReceived = () => { };
 
+        public Action<DriveInfo> OnDisksAdded = (driveInfo) => { Debug.WriteLine("Disk Added: "+driveInfo.Description()); };
+
         public void ExecuteEnum()
         {
             ExecuteDiskCryptorCommanLine("-enum");
@@ -296,7 +298,10 @@ namespace DiskCryptorHelper
                     if (newDrive.HasInfo)
                     {
                         if (newDrive.IsValidInfo && DriveList.FirstOrDefault((drv) => drv.volume == newDrive.volume) == null)
+                        {
                             DriveList.Add(newDrive);
+                            OnDisksAdded(newDrive);
+                        }
                     }
                     else
                     {

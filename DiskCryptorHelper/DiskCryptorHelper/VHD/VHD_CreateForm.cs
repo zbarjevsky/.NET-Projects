@@ -8,10 +8,10 @@ using System.Windows.Forms;
 using System.IO;
 
 namespace VhdApiExample {
-    public partial class CreateForm : Form {
+    public partial class VHD_CreateForm : Form {
         public Medo.IO.VirtualDisk Disk;
 
-        public CreateForm() {
+        public VHD_CreateForm() {
             InitializeComponent();
             this.Font = SystemFonts.MessageBoxFont;
         }
