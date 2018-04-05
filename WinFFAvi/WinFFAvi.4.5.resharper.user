@@ -1,0 +1,96 @@
+<Configuration>
+  <SettingsComponent>
+    <string />
+    <integer />
+    <boolean>
+      <setting name="SolutionAnalysisEnabled">False</setting>
+    </boolean>
+  </SettingsComponent>
+  <NAntValidationSettings>
+    <NAntPath value="" />
+  </NAntValidationSettings>
+  <RecentFiles>
+    <RecentFiles>
+      <File id="4C9F844B-6D33-4B65-8F04-A6B18CC014C3/f:FormWinFF.Designer.cs" caret="0" fromTop="0" />
+      <File id="4C9F844B-6D33-4B65-8F04-A6B18CC014C3/f:ProgramPreferences.cs" caret="0" fromTop="0" />
+      <File id="4C9F844B-6D33-4B65-8F04-A6B18CC014C3/f:FormWinFF.cs" caret="14966" fromTop="22" />
+      <File id="4C9F844B-6D33-4B65-8F04-A6B18CC014C3/f:AspectRatio.cs" caret="923" fromTop="23" />
+    </RecentFiles>
+    <RecentEdits>
+      <File id="4C9F844B-6D33-4B65-8F04-A6B18CC014C3/f:FormWinFF.cs" caret="14609" fromTop="22" />
+      <File id="4C9F844B-6D33-4B65-8F04-A6B18CC014C3/f:FormWinFF.cs" caret="15184" fromTop="30" />
+      <File id="4C9F844B-6D33-4B65-8F04-A6B18CC014C3/f:FormWinFF.cs" caret="9451" fromTop="10" />
+      <File id="4C9F844B-6D33-4B65-8F04-A6B18CC014C3/f:FormWinFF.cs" caret="9505" fromTop="12" />
+      <File id="4C9F844B-6D33-4B65-8F04-A6B18CC014C3/f:FormWinFF.cs" caret="9597" fromTop="21" />
+      <File id="4C9F844B-6D33-4B65-8F04-A6B18CC014C3/f:FormWinFF.cs" caret="9612" fromTop="18" />
+      <File id="4C9F844B-6D33-4B65-8F04-A6B18CC014C3/f:FormWinFF.cs" caret="15960" fromTop="3" />
+      <File id="4C9F844B-6D33-4B65-8F04-A6B18CC014C3/f:FormWinFF.cs" caret="15960" fromTop="21" />
+      <File id="4C9F844B-6D33-4B65-8F04-A6B18CC014C3/f:FormWinFF.cs" caret="14872" fromTop="0" />
+      <File id="4C9F844B-6D33-4B65-8F04-A6B18CC014C3/f:FormWinFF.cs" caret="15773" fromTop="30" />
+      <File id="4C9F844B-6D33-4B65-8F04-A6B18CC014C3/f:FormWinFF.cs" caret="15768" fromTop="28" />
+      <File id="4C9F844B-6D33-4B65-8F04-A6B18CC014C3/f:FormWinFF.cs" caret="15768" fromTop="19" />
+      <File id="4C9F844B-6D33-4B65-8F04-A6B18CC014C3/f:FormWinFF.cs" caret="15768" fromTop="14" />
+      <File id="4C9F844B-6D33-4B65-8F04-A6B18CC014C3/f:FormWinFF.cs" caret="15960" fromTop="36" />
+      <File id="4C9F844B-6D33-4B65-8F04-A6B18CC014C3/f:FormWinFF.Designer.cs" caret="27483" fromTop="16" />
+      <File id="4C9F844B-6D33-4B65-8F04-A6B18CC014C3/f:FormWinFF.Designer.cs" caret="27483" fromTop="4" />
+      <File id="4C9F844B-6D33-4B65-8F04-A6B18CC014C3/f:FormWinFF.cs" caret="15768" fromTop="6" />
+      <File id="4C9F844B-6D33-4B65-8F04-A6B18CC014C3/f:FormWinFF.cs" caret="15768" fromTop="17" />
+      <File id="4C9F844B-6D33-4B65-8F04-A6B18CC014C3/f:FormWinFF.cs" caret="15768" fromTop="23" />
+      <File id="4C9F844B-6D33-4B65-8F04-A6B18CC014C3/f:FormWinFF.cs" caret="15768" fromTop="8" />
+      <File id="4C9F844B-6D33-4B65-8F04-A6B18CC014C3/f:FormWinFF.cs" caret="15180" fromTop="14" />
+      <File id="4C9F844B-6D33-4B65-8F04-A6B18CC014C3/f:FormWinFF.Designer.cs" caret="0" fromTop="0" />
+      <File id="4C9F844B-6D33-4B65-8F04-A6B18CC014C3/f:AspectRatio.cs" caret="923" fromTop="23" />
+    </RecentEdits>
+  </RecentFiles>
+  <UnitTestRunner>
+    <Providers />
+  </UnitTestRunner>
+  <CompletionStatisticsManager>
+    <ItemStatistics item="Default">
+      <Item value="m_cmbAspect" priority="2" />
+      <Item value="m_chkAspect" priority="0" />
+      <Item value="string" priority="5" />
+      <Item value="m_cmbOutSize" priority="0" />
+      <Item value="if" priority="4" />
+      <Item value="sender" priority="0" />
+      <Item value="e" priority="0" />
+      <Item value="else" priority="1" />
+      <Item value="sResolution" priority="0" />
+      <Item value="sv" priority="3" />
+      <Item value="Length" priority="0" />
+      <Item value="int" priority="2" />
+      <Item value="Convert" priority="0" />
+      <Item value="private" priority="0" />
+      <Item value="bool" priority="0" />
+      <Item value="x" priority="2" />
+      <Item value="return" priority="4" />
+      <Item value="true" priority="0" />
+      <Item value="Is4x3" priority="0" />
+      <Item value="Is16x9" priority="0" />
+      <Item value="static" priority="2" />
+      <Item value="public" priority="2" />
+      <Item value="const" priority="0" />
+      <Item value="void" priority="0" />
+      <Item value="SHA512" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.Windows.Forms.ComboBox">
+      <Item value="Text" priority="2" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:System.String">
+      <Item value="Split" priority="0" />
+      <Item value="Length" priority="1" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.Convert">
+      <Item value="ToInt32" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@WinFFAvi.AspectRatio">
+      <Item value="ConvertResolutionToAspect" priority="0" />
+      <Item value="ASPECT_4x3" priority="0" />
+      <Item value="ASPECT_16x9" priority="0" />
+      <Item value="ASPECT_16x10" priority="0" />
+    </ItemStatistics>
+    <ItemStatistics item="Qualified:@System.Security.Cryptography.SHA512">
+      <Item value="Create" priority="0" />
+    </ItemStatistics>
+  </CompletionStatisticsManager>
+</Configuration>

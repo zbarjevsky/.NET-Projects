@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="DUMeterMZ">
+</Property><Property Name="Solution File" Value="D:\Programs\.NET\DUMeterMZ\DUMeterMZ.sln">
+</Property><Property Name="User Options File" Value="D:\Programs\.NET\DUMeterMZ\DUMeterMZ.suo">
+</Property><Property Name="Date" Value="יום שני 13 אפריל 2009">
+</Property><Property Name="Time" Value="09:36">
+</Property><Property Name="Log Number" Value="2">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="DUMeterMZ.sln" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\DUMeterMZ.sln">
+</Event><Event ErrorLevel="0" Project="" Source="DUMeterMZ.suo" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\DUMeterMZ.suo">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="DUMeterMZ.csproj" Description="Project file successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\DUMeterMZ.csproj">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="DUMeterMZ.csproj.user" Description="Project user file successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\DUMeterMZ.csproj.user">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="AssemblyInfo.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\AssemblyInfo.cs">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="Options.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\Options.cs">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="FormAbout.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\FormAbout.cs">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="FormAbout.Designer.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\FormAbout.Designer.cs">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="Log.Designer.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\Log.Designer.cs">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="FormLoadGraph.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\FormLoadGraph.cs">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="FormProperties.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\FormProperties.cs">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="OptionsSerializer.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\OptionsSerializer.cs">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="OrientedTextLabel.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\OrientedTextLabel.cs">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="PingWrapper.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\PingWrapper.cs">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="Properties\Resources.Designer.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\Properties\Resources.Designer.cs">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="ReportForm.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ReportForm.cs">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="TrayIconList.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\TrayIconList.cs">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\1 hour.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\1 hour.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\3 hours.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\3 hours.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\6 hours.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\6 hours.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\12 hours.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\12 hours.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\24 hours.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\24 hours.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="DUMeterMZ_TemporaryKey.pfx" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\DUMeterMZ_TemporaryKey.pfx">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="Log.xsc" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\Log.xsc">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="Log.xss" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\Log.xss">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\Help.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\Help.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\screen.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\screen.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\settings.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\settings.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="Log.xsx" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\Log.xsx">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="app.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\app.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="Log.xsd" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\Log.xsd">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\bmp\bbabort.bmp" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\bmp\bbabort.bmp">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\bmp\bball.bmp" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\bmp\bball.bmp">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\bmp\bbcancel.bmp" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\bmp\bbcancel.bmp">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\bmp\bbclose.bmp" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\bmp\bbclose.bmp">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\bmp\bbhelp.bmp" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\bmp\bbhelp.bmp">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\bmp\bbignore.bmp" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\bmp\bbignore.bmp">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\bmp\bbno.bmp" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\bmp\bbno.bmp">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\bmp\bbok.bmp" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\bmp\bbok.bmp">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\bmp\bbretry.bmp" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\bmp\bbretry.bmp">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\bmp\bbyes.bmp" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\bmp\bbyes.bmp">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\bmp\bmp_acti.bmp" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\bmp\bmp_acti.bmp">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\bmp\cdrom.bmp" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\bmp\cdrom.bmp">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\bmp\closedfo.bmp" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\bmp\closedfo.bmp">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\bmp\currentf.bmp" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\bmp\currentf.bmp">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\bmp\executab.bmp" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\bmp\executab.bmp">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\bmp\floppy.bmp" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\bmp\floppy.bmp">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\bmp\hard.bmp" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\bmp\hard.bmp">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\bmp\knownfil.bmp" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\bmp\knownfil.bmp">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\bmp\network.bmp" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\bmp\network.bmp">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\bmp\openfold.bmp" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\bmp\openfold.bmp">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\bmp\previewg.bmp" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\bmp\previewg.bmp">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\bmp\ram.bmp" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\bmp\ram.bmp">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\bmp\rxspindo.bmp" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\bmp\rxspindo.bmp">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\bmp\rxspinup.bmp" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\bmp\rxspinup.bmp">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\bmp\unknownf.bmp" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\bmp\unknownf.bmp">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\cur\cur32761.cur" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\cur\cur32761.cur">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\cur\cur32762.cur" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\cur\cur32762.cur">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\cur\cur32763.cur" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\cur\cur32763.cur">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\cur\cur32764.cur" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\cur\cur32764.cur">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\cur\cur32765.cur" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\cur\cur32765.cur">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\cur\cur32766.cur" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\cur\cur32766.cur">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\cur\cur32767.cur" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\cur\cur32767.cur">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\cur\rx_dragc.cur" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\cur\rx_dragc.cur">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\cur\rx_handc.cur" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\cur\rx_handc.cur">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\3 days.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\3 days.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\Calculator.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\Calculator.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\Camera.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\Camera.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\Chart.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\Chart.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\close.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\close.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\exit.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\exit.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\Globus.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\Globus.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\go.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\go.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\Graph.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\Graph.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\Hide Detail.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\Hide Detail.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\IconMain.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\IconMain.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\ico_dume.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\ico_dume.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\MSN.ICO" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\MSN.ICO">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\ok.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\ok.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\Ok1.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\Ok1.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\Options.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\Options.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\Precize.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\Precize.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\Properties.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\Properties.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\refresh.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\refresh.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\Show Detail.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\Show Detail.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\Synchronize.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\Synchronize.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\Text.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\Text.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\Tools.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\Tools.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\unavailable.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\unavailable.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\Web.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\Web.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\Web1.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\Web1.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="FormAbout.resx" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\FormAbout.resx">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="log.mdb" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\log.mdb">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="FormLoadGraph.resx" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\FormLoadGraph.resx">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="FormProperties.resx" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\FormProperties.resx">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="Properties\Resources.resx" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\Properties\Resources.resx">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="ReportForm.resx" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ReportForm.resx">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\ico_both.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\ico_both.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\ico_dl.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\ico_dl.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\ico_off.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\ico_off.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="res\ico\ico_ul.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\res\ico\ico_ul.ico">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="Properties\app.manifest" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\Properties\app.manifest">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="DUMeterMZ.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="DUMeterMZ" Source="DUMeterMZ.csproj" Description="Converted">
+</Event><Event ErrorLevel="1" Project="DiskMeter" Source="..\DiskMeterMZ\DiskMeter.csproj" Description="Warning: The project file is being backed up to a relative path that differs from the original solution relative path.  The difference in folder hierarchy may create problems in opening or building the backed up solution and project.">
+</Event><Event ErrorLevel="0" Project="DiskMeter" Source="..\DiskMeterMZ\DiskMeter.csproj" Description="Project file successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\DiskMeter\DiskMeter.csproj">
+</Event><Event ErrorLevel="0" Project="DiskMeter" Source="..\DiskMeterMZ\DiskMeter.csproj.user" Description="Project user file successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\DiskMeter\DiskMeter.csproj.user">
+</Event><Event ErrorLevel="0" Project="DiskMeter" Source="..\DiskMeterMZ\AssemblyInfo.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\DiskMeter\AssemblyInfo.cs">
+</Event><Event ErrorLevel="0" Project="DiskMeter" Source="..\DiskMeterMZ\FormDiskMeter.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\DiskMeter\FormDiskMeter.cs">
+</Event><Event ErrorLevel="0" Project="DiskMeter" Source="..\DiskMeterMZ\IconList.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\DiskMeter\IconList.cs">
+</Event><Event ErrorLevel="0" Project="DiskMeter" Source="..\DiskMeterMZ\Properties\Resources.Designer.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\DiskMeter\Properties\Resources.Designer.cs">
+</Event><Event ErrorLevel="0" Project="DiskMeter" Source="..\DiskMeterMZ\App.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\DiskMeter\App.ico">
+</Event><Event ErrorLevel="0" Project="DiskMeter" Source="..\DiskMeterMZ\FormDiskMeter.resx" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\DiskMeter\FormDiskMeter.resx">
+</Event><Event ErrorLevel="0" Project="DiskMeter" Source="..\DiskMeterMZ\Properties\Resources.resx" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\DiskMeter\Properties\Resources.resx">
+</Event><Event ErrorLevel="0" Project="DiskMeter" Source="..\DiskMeterMZ\res\both.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\DiskMeter\res\both.ico">
+</Event><Event ErrorLevel="0" Project="DiskMeter" Source="..\DiskMeterMZ\res\Disk.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\DiskMeter\res\Disk.ico">
+</Event><Event ErrorLevel="0" Project="DiskMeter" Source="..\DiskMeterMZ\res\DiskRead.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\DiskMeter\res\DiskRead.ico">
+</Event><Event ErrorLevel="0" Project="DiskMeter" Source="..\DiskMeterMZ\res\DiskReadWrite.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\DiskMeter\res\DiskReadWrite.ico">
+</Event><Event ErrorLevel="0" Project="DiskMeter" Source="..\DiskMeterMZ\res\DiskWrite.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\DiskMeter\res\DiskWrite.ico">
+</Event><Event ErrorLevel="0" Project="DiskMeter" Source="..\DiskMeterMZ\res\Idle.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\DiskMeter\res\Idle.ico">
+</Event><Event ErrorLevel="0" Project="DiskMeter" Source="..\DiskMeterMZ\res\Read.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\DiskMeter\res\Read.ico">
+</Event><Event ErrorLevel="0" Project="DiskMeter" Source="..\DiskMeterMZ\res\Write.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\DiskMeter\res\Write.ico">
+</Event><Event ErrorLevel="0" Project="DiskMeter" Source="..\DiskMeterMZ\DiskMeter.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="DiskMeter" Source="..\DiskMeterMZ\DiskMeter.csproj" Description="Converted">
+</Event><Event ErrorLevel="1" Project="ClipboardListener" Source="..\ClipboardListener\ClipboardListener.csproj" Description="Warning: The project file is being backed up to a relative path that differs from the original solution relative path.  The difference in folder hierarchy may create problems in opening or building the backed up solution and project.">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\ClipboardListener.csproj" Description="Project file successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\ClipboardListener.csproj">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\ClipboardListener.csproj.user" Description="Project user file successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\ClipboardListener.csproj.user">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\AnimEffect.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\AnimEffect.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\ClipboardList.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\ClipboardList.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\CustomRichTextBox.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\CustomRichTextBox.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\EmbeddedResources.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\EmbeddedResources.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Encodings.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Encodings.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\FormAbout.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\FormAbout.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\FormAbout.Designer.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\FormAbout.Designer.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\FormEncodings.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\FormEncodings.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\FormEncodings.Designer.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\FormEncodings.Designer.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\FormFavorites.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\FormFavorites.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\FormFavorites.Designer.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\FormFavorites.Designer.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\ImagesUtil.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\ImagesUtil.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\FormClipboard.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\FormClipboard.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\FormClipboard.Designer.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\FormClipboard.Designer.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\FormSettings.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\FormSettings.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\FormSettings.Designer.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\FormSettings.Designer.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\HotKeyTranslator.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\HotKeyTranslator.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\JavaZip.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\JavaZip.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\MsgBox.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\MsgBox.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\NativeWIN32.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\NativeWIN32.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Program.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Program.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Properties\AssemblyInfo.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Properties\AssemblyInfo.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Properties\Resources.Designer.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Properties\Resources.Designer.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Properties\Settings.Designer.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Properties\Settings.Designer.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\SettingsXml.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\SettingsXml.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\FormSpyWindow.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\FormSpyWindow.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\WindowHighlighter.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\WindowHighlighter.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\XmlUtil.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\XmlUtil.cs">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Properties\Settings.settings" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Properties\Settings.settings">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\History32.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\History32.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\AdobeStockPhotos.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\AdobeStockPhotos.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\arrow-back_16.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\arrow-back_16.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\arrow-down_16.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\arrow-down_16.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\arrow-forward_16.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\arrow-forward_16.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\arrow-up_16.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\arrow-up_16.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\Cancel.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\Cancel.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\Cat.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\Cat.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\Civic32x32.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\Civic32x32.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\Clear.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\Clear.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\Copy.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\Copy.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\Cut.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\Cut.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\Edit.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\Edit.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\Exit.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\Exit.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\Favorites.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\Favorites.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\File.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\File.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\FileCopy.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\FileCopy.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\FileCut.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\FileCut.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\FilesCopy.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\FilesCopy.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\FilesCut.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\FilesCut.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\Hide.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\Hide.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\History.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\History.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\History16.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\History16.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\History32.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\History32.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\Honda16x16.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\Honda16x16.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\Honda32x32.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\Honda32x32.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\Mail.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\Mail.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\Ok.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\Ok.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\Paste.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\Paste.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\Picture.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\Picture.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\Print.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\Print.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\RedX.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\RedX.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\RichText.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\RichText.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\RightArrow.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\RightArrow.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\Save.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\Save.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\Settings.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\Settings.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\Show.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\Show.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\SmallX.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\SmallX.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\Test.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\Test.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\Text.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\Text.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\TextSize.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\TextSize.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\Undo.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\Undo.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\Unicode.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\Unicode.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\Wrap.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\Wrap.ico">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\FormAbout.resx" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\FormAbout.resx">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\FormClipboard.resx" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\FormClipboard.resx">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\FormEncodings.resx" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\FormEncodings.resx">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\FormFavorites.resx" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\FormFavorites.resx">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\FormSettings.resx" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\FormSettings.resx">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Properties\Resources.resx" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Properties\Resources.resx">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\FormSpyWindow.resx" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\FormSpyWindow.resx">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\Spy\Finder.cur" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\Spy\Finder.cur">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\Spy\FinderHome.bmp" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\Spy\FinderHome.bmp">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\Images\Spy\FinderGone.bmp" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardListener\Images\Spy\FinderGone.bmp">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\ClipboardListener.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="ClipboardListener" Source="..\ClipboardListener\ClipboardListener.csproj" Description="Converted">
+</Event><Event ErrorLevel="1" Project="ClipboardManagerSetup" Source="..\ClipboardListener\Installer\ClipboardManagerSetup\ClipboardManagerSetup.vdproj" Description="Warning: The project file is being backed up to a relative path that differs from the original solution relative path.  The difference in folder hierarchy may create problems in opening or building the backed up solution and project.">
+</Event><Event ErrorLevel="0" Project="ClipboardManagerSetup.vdproj" Source="..\ClipboardListener\Installer\ClipboardManagerSetup\ClipboardManagerSetup.vdproj" Description="Project file successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\ClipboardManagerSetup\ClipboardManagerSetup.vdproj">
+</Event><Event ErrorLevel="1" Project="SharpRemoteControl" Source="..\SharpRemoteControl\SharpRemoteControl.csproj" Description="Warning: The project file is being backed up to a relative path that differs from the original solution relative path.  The difference in folder hierarchy may create problems in opening or building the backed up solution and project.">
+</Event><Event ErrorLevel="0" Project="SharpRemoteControl" Source="..\SharpRemoteControl\SharpRemoteControl.csproj" Description="Project file successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\SharpRemoteControl\SharpRemoteControl.csproj">
+</Event><Event ErrorLevel="0" Project="SharpRemoteControl" Source="..\SharpRemoteControl\FormRemoteControl.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\SharpRemoteControl\FormRemoteControl.cs">
+</Event><Event ErrorLevel="0" Project="SharpRemoteControl" Source="..\SharpRemoteControl\FormRemoteControl.Designer.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\SharpRemoteControl\FormRemoteControl.Designer.cs">
+</Event><Event ErrorLevel="0" Project="SharpRemoteControl" Source="..\SharpRemoteControl\Command.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\SharpRemoteControl\Command.cs">
+</Event><Event ErrorLevel="0" Project="SharpRemoteControl" Source="..\SharpRemoteControl\Program.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\SharpRemoteControl\Program.cs">
+</Event><Event ErrorLevel="0" Project="SharpRemoteControl" Source="..\SharpRemoteControl\Properties\AssemblyInfo.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\SharpRemoteControl\Properties\AssemblyInfo.cs">
+</Event><Event ErrorLevel="0" Project="SharpRemoteControl" Source="..\SharpRemoteControl\Properties\Resources.Designer.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\SharpRemoteControl\Properties\Resources.Designer.cs">
+</Event><Event ErrorLevel="0" Project="SharpRemoteControl" Source="..\SharpRemoteControl\Properties\Settings.Designer.cs" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\SharpRemoteControl\Properties\Settings.Designer.cs">
+</Event><Event ErrorLevel="0" Project="SharpRemoteControl" Source="..\SharpRemoteControl\Properties\Settings.settings" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\SharpRemoteControl\Properties\Settings.settings">
+</Event><Event ErrorLevel="0" Project="SharpRemoteControl" Source="..\SharpRemoteControl\TV.ico" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\SharpRemoteControl\TV.ico">
+</Event><Event ErrorLevel="0" Project="SharpRemoteControl" Source="..\SharpRemoteControl\FormRemoteControl.resx" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\SharpRemoteControl\FormRemoteControl.resx">
+</Event><Event ErrorLevel="0" Project="SharpRemoteControl" Source="..\SharpRemoteControl\Properties\Resources.resx" Description="File successfully backed up as D:\Programs\.NET\DUMeterMZ\Backup\SharpRemoteControl\Properties\Resources.resx">
+</Event><Event ErrorLevel="0" Project="SharpRemoteControl" Source="..\SharpRemoteControl\SharpRemoteControl.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="SharpRemoteControl" Source="..\SharpRemoteControl\SharpRemoteControl.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="" Source="DUMeterMZ.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="DUMeterMZ.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="DUMeterMZ" Source="DUMeterMZ.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="DiskMeter" Source="..\DiskMeterMZ\DiskMeter.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="ClipboardListener" Source="..\ClipboardListener\ClipboardListener.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event><Event ErrorLevel="0" Project="SharpRemoteControl" Source="..\SharpRemoteControl\SharpRemoteControl.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="DUMeterMZ">
+</Property><Property Name="Solution File" Value="D:\Programs\.NET\DUMeterMZ\DUMeterMZ.sln">
+</Property><Property Name="Date" Value="Wednesday, January 31, 2007">
+</Property><Property Name="Time" Value="20:17:02 PM">
+</Property></Properties><Event ErrorLevel="0" Project="CodeReflection.ScreenCapturingDemo" Source="..\Screen_Capturing_src\Taking Screen Captures\CodeReflection.ScreenCapturingDemo.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="CodeReflection.ScreenCapturingDemo" Source="..\Screen_Capturing_src\Taking Screen Captures\CodeReflection.ScreenCapturingDemo.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="CodeReflection.ScreenCapturingDemo" Source="..\Screen_Capturing_src\Taking Screen Captures\CodeReflection.ScreenCapturingDemo.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>

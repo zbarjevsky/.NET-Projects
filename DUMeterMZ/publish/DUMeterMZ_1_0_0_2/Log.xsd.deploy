@@ -1,0 +1,22 @@
+<?xml version="1.0" standalone="yes"?>
+<xs:schema id="Log" targetNamespace="http://www.tempuri.org/Log.xsd" xmlns:mstns="http://www.tempuri.org/Log.xsd" xmlns="http://www.tempuri.org/Log.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:element name="Log" msdata:IsDataSet="true" msdata:Locale="en-ZA">
+    <xs:complexType>
+      <xs:choice maxOccurs="unbounded">
+        <xs:element name="RateLog">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="ID" type="xs:dateTime" />
+              <xs:element name="Recv" type="xs:float" minOccurs="0" />
+              <xs:element name="Send" type="xs:float" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:RateLog" />
+      <xs:field xpath="mstns:ID" />
+    </xs:unique>
+  </xs:element>
+</xs:schema>

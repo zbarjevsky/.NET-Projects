@@ -1,0 +1,2 @@
+ResGen.exe /compile MainForm.resx ReportForm.resx OptionForm.resx
+csc /out:MyDUMeter.exe /nologo /debug /target:winexe /resource:MainForm.resources,MyDUMeter.MainForm.resources /resource:OptionForm.resources,MyDUMeter.OptionForm.resources /resource:ReportForm.resources,MyDUMeter.ReportForm.resources /win32icon:app.ico *.cs /resource:log.mdb,MyDUMeter.log.mdb
