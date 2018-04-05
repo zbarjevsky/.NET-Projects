@@ -70,6 +70,7 @@
     <Compile Include="HideDriveLetterControl.Designer.cs">
       <DependentUpon>HideDriveLetterControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="NetResourceEnumerator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SingleInstanceHelper.cs" />

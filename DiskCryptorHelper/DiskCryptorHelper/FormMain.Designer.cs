@@ -61,12 +61,14 @@
             this.m_btnUnmountAllandBSOD = new System.Windows.Forms.Button();
             this.m_btnEject = new System.Windows.Forms.Button();
             this.m_splitMain = new System.Windows.Forms.SplitContainer();
+            this.m_btnOpenVHD = new System.Windows.Forms.Button();
             this.m_btnDetach = new System.Windows.Forms.Button();
             this.m_chkPermanent = new System.Windows.Forms.CheckBox();
             this.m_lblVHD_File = new System.Windows.Forms.Label();
             this.m_txtVHD_FileName = new System.Windows.Forms.TextBox();
             this.m_btnAttachVHD = new System.Windows.Forms.Button();
             this.m_splitDisks = new System.Windows.Forms.SplitContainer();
+            this.hideDriveLetterControl1 = new DiskCryptorHelper.HideDriveLetterControl();
             this.panel1 = new System.Windows.Forms.Panel();
             this.m_treeDrives = new System.Windows.Forms.TreeView();
             this.label1 = new System.Windows.Forms.Label();
@@ -78,8 +80,6 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.m_status1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.m_status2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.hideDriveLetterControl1 = new DiskCryptorHelper.HideDriveLetterControl();
-            this.m_btnOpenVHD = new System.Windows.Forms.Button();
             this.m_sysIconMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitMain)).BeginInit();
             this.m_splitMain.Panel1.SuspendLayout();
@@ -389,6 +389,16 @@
             this.m_splitMain.SplitterDistance = 550;
             this.m_splitMain.TabIndex = 1;
             // 
+            // m_btnOpenVHD
+            // 
+            this.m_btnOpenVHD.Location = new System.Drawing.Point(410, 251);
+            this.m_btnOpenVHD.Name = "m_btnOpenVHD";
+            this.m_btnOpenVHD.Size = new System.Drawing.Size(28, 23);
+            this.m_btnOpenVHD.TabIndex = 9;
+            this.m_btnOpenVHD.Text = "...";
+            this.m_btnOpenVHD.UseVisualStyleBackColor = true;
+            this.m_btnOpenVHD.Click += new System.EventHandler(this.m_btnOpenVHD_Click);
+            // 
             // m_btnDetach
             // 
             this.m_btnDetach.Location = new System.Drawing.Point(319, 277);
@@ -401,6 +411,8 @@
             // 
             // m_chkPermanent
             // 
+            this.m_chkPermanent.Checked = true;
+            this.m_chkPermanent.CheckState = System.Windows.Forms.CheckState.Checked;
             this.m_chkPermanent.Location = new System.Drawing.Point(75, 278);
             this.m_chkPermanent.Name = "m_chkPermanent";
             this.m_chkPermanent.Size = new System.Drawing.Size(93, 23);
@@ -454,6 +466,14 @@
             this.m_splitDisks.Size = new System.Drawing.Size(428, 514);
             this.m_splitDisks.SplitterDistance = 105;
             this.m_splitDisks.TabIndex = 2;
+            // 
+            // hideDriveLetterControl1
+            // 
+            this.hideDriveLetterControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.hideDriveLetterControl1.Location = new System.Drawing.Point(0, 0);
+            this.hideDriveLetterControl1.Name = "hideDriveLetterControl1";
+            this.hideDriveLetterControl1.Size = new System.Drawing.Size(101, 510);
+            this.hideDriveLetterControl1.TabIndex = 0;
             // 
             // panel1
             // 
@@ -549,24 +569,6 @@
             this.m_status2.Spring = true;
             this.m_status2.Text = "...";
             // 
-            // hideDriveLetterControl1
-            // 
-            this.hideDriveLetterControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hideDriveLetterControl1.Location = new System.Drawing.Point(0, 0);
-            this.hideDriveLetterControl1.Name = "hideDriveLetterControl1";
-            this.hideDriveLetterControl1.Size = new System.Drawing.Size(101, 510);
-            this.hideDriveLetterControl1.TabIndex = 0;
-            // 
-            // m_btnOpenVHD
-            // 
-            this.m_btnOpenVHD.Location = new System.Drawing.Point(410, 251);
-            this.m_btnOpenVHD.Name = "m_btnOpenVHD";
-            this.m_btnOpenVHD.Size = new System.Drawing.Size(28, 23);
-            this.m_btnOpenVHD.TabIndex = 9;
-            this.m_btnOpenVHD.Text = "...";
-            this.m_btnOpenVHD.UseVisualStyleBackColor = true;
-            this.m_btnOpenVHD.Click += new System.EventHandler(this.m_btnOpenVHD_Click);
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -577,7 +579,7 @@
             this.Controls.Add(this.statusStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.m_menuStripMain;
-            this.MinimumSize = new System.Drawing.Size(800, 400);
+            this.MinimumSize = new System.Drawing.Size(800, 450);
             this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DiskCryptor Helper";

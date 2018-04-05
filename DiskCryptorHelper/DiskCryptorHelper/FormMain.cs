@@ -19,6 +19,7 @@ using System.Windows.Forms;
 using DiskCryptorHelper.Properties;
 using sD.WPF.MessageBox;
 using VhdApiExample;
+using System.Reflection;
 
 namespace DiskCryptorHelper
 {
@@ -28,11 +29,13 @@ namespace DiskCryptorHelper
         private string _selectedDriveLetter = "";
         private DiskCryptor _diskCryptor = new DiskCryptor();
 
-        public FormMain()
+        public FormMain(string [] cmd_line = null)
         {
             InitializeComponent();
 
             Text = TITLE;
+
+            ProcessCommanLine(cmd_line);
 
             _diskCryptor.OnDataReceived = () =>
             {
@@ -173,6 +176,29 @@ namespace DiskCryptorHelper
             File.AppendAllText("C:\\Temp\\Log11.txt", DateTime.Now.ToString("u") + " - Session end: " + e.Reason + "\n");
         }
 
+        private void ProcessCommanLine(string[] cmd_line)
+        {
+            if (cmd_line == null || cmd_line.Length == 0)
+                return;
+
+            PopUp.MessageBox(cmd_line[0], "ProcessCommanLine");
+
+            string vhd = cmd_line[0];
+            string exe = Path.GetFileName(Assembly.GetExecutingAssembly().Location).ToLower();
+            string file = Path.GetFileName(vhd).ToLower();
+            if (exe == file)
+            {
+                if (cmd_line.Length == 1) //only this exe file in command line
+                    return;
+                vhd = cmd_line[1];
+            }
+
+            if (!File.Exists(vhd))
+                return;
+
+            Properties.Settings.Default.VHD_FileName1 = vhd;
+        }
+
         private void m_btnReload_Click(object sender, EventArgs e)
         {
             ReloadDriveData(0);
@@ -289,6 +315,10 @@ namespace DiskCryptorHelper
             for (int i = 65; i < 91; i++) // increment from ASCII values for A-Z
                 driveLetters.Add(Convert.ToChar(i)); // Add uppercase letters to possible drive letters
 
+            var res = NetResourceEnumerator.WNetResource(); //find disconnected/remembered network drives
+            foreach (string key in res.Keys)
+                driveLetters.Remove(key[0]);
+
             string[] drives = Directory.GetLogicalDrives();
             foreach (string drive in drives)
                 driveLetters.Remove(drive[0]); // removed used drive letters from possible drive letters
@@ -379,6 +409,7 @@ namespace DiskCryptorHelper
             m_lblSelected.Text = "Selected: ???";
             m_btnMount.Enabled = false;
             m_btnUnmount.Enabled = false;
+            m_btnUnmount.Text = "UnMount";
             if (m_listDrives.SelectedIndices.Count <= 0)
                 return;
 
@@ -388,6 +419,7 @@ namespace DiskCryptorHelper
             m_lblSelected.Text = "Selected: " + drive.volume + ", MP: " + drive.mount_point;
             m_btnMount.Enabled = drive.volume.StartsWith("pt") && drive.status.StartsWith("unmounted");
             m_btnUnmount.Enabled = drive.volume.StartsWith("pt") && drive.status.StartsWith("mounted");
+            m_btnUnmount.Text = "UnMount: " + drive.volume;
         }
 
         private void SmartSelectFirstAvailableDrive()
@@ -437,6 +469,7 @@ namespace DiskCryptorHelper
             _selectedDriveLetter = m_cmbAvailableDriveLetters.SelectedItem.ToString();
 
             m_btnMount.Text = "Mount As: " + _selectedDriveLetter;
+            m_btnAttachVHD.Text = "Attach && Mount As: " + _selectedDriveLetter;
             if (m_listDrives.SelectedIndices.Count <= 0)
                 return;
 
@@ -597,12 +630,21 @@ namespace DiskCryptorHelper
         {
             if (string.IsNullOrWhiteSpace(m_txtPwd.Text))
             {
-                PopUp.MessageBox("Password is empty", "Password", MessageBoxImage.Warning);
+                PopUp.MessageBox("Password is empty", "Password", MessageBoxImage.Error);
+                return;
+            }
+
+            FileInfo fi = new FileInfo(m_txtVHD_FileName.Text);
+            if (!fi.Exists)
+            {
+                PopUp.MessageBox("File does not exist: "+fi.FullName, "VHD File Name", MessageBoxImage.Error);
                 return;
             }
 
             ExecuteClickAction(() =>
             {
+                fi.IsReadOnly = false; //unlock file to enable load
+
                 _cachedDriveInfo = new List<DiskCryptor.DriveInfo>(_diskCryptor.DriveList);
 
                 if (_virtualDisk != null)
@@ -610,7 +652,7 @@ namespace DiskCryptorHelper
                     _virtualDisk.Close();
                 }
 
-                _virtualDisk = new Medo.IO.VirtualDisk(m_txtVHD_FileName.Text);
+                _virtualDisk = new Medo.IO.VirtualDisk(fi.FullName);
                 _virtualDisk.Open();
                 try { _virtualDisk.Detach(); } catch (Exception err) { Debug.WriteLine("Cannot detach: "+err.Message); }
                 _diskCryptor.OnDisksAdded += OnDiskAdded; //mount DiskCryptor disk
@@ -619,6 +661,8 @@ namespace DiskCryptorHelper
                 if (m_chkPermanent.Checked)
                     options |= Medo.IO.VirtualDiskAttachOptions.PermanentLifetime;
                 _virtualDisk.Attach(options);
+
+                fi.IsReadOnly = true; //lock file to improve security
             }, sender);
         }
 
@@ -645,7 +689,7 @@ namespace DiskCryptorHelper
         {
             if (!File.Exists(m_txtVHD_FileName.Text))
             {
-                PopUp.MessageBox("File not exists: "+m_txtVHD_FileName.Text, "Detach Error", MessageBoxImage.Asterisk);
+                PopUp.MessageBox("File does not exist: "+m_txtVHD_FileName.Text, "Detach Error", MessageBoxImage.Asterisk);
                 return;
             }
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using sD.WPF.MessageBox;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -12,14 +13,14 @@ namespace DiskCryptorHelper
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] cmd_line)
         {
             if(SingleInstanceHelper.GlobalShowWindow(FormMain.TITLE))
                 return;
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormMain());
+            Application.Run(new FormMain(cmd_line));
         }
     }
 }
