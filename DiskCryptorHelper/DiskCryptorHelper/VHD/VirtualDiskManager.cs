@@ -70,7 +70,7 @@ namespace Medo.IO {
                 } else if (res == NativeMethods.ERROR_FILE_CORRUPT) {
                     throw new System.IO.InvalidDataException("File format not recognized.");
                 } else {
-                    throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Native error {0}.", res));
+                    throw new Win32Exception(res);//new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Native error {0}.", res));
                 }
             }
         }
@@ -194,7 +194,7 @@ namespace Medo.IO {
                 } else if (res == NativeMethods.ERROR_INVALID_PARAMETER) {
                     throw new System.ArgumentException("Invalid parameter.", "size");
                 } else {
-                    throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Native error {0}.", res));
+                    throw new Win32Exception(res);//new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Native error {0}.", res));
                 }
             }
         }
@@ -224,11 +224,11 @@ namespace Medo.IO {
                     } else if (res == NativeMethods.ERROR_FILE_EXISTS) {
                         throw new System.IO.IOException("File already exists.");
                     } else {
-                        throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Native error {0}.", res));
+                        throw new Win32Exception(res);//new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Native error {0}.", res));
                     }
                 }
             } else {
-                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Native error {0}.", res));
+                throw new Win32Exception(res);//new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, "Native error {0}.", res));
             }
         }
 

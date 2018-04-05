@@ -435,9 +435,7 @@ namespace DiskCryptorHelper
         private void m_cmbAvailableDriveLetters_SelectedIndexChanged(object sender, EventArgs e)
         {
             _selectedDriveLetter = m_cmbAvailableDriveLetters.SelectedItem.ToString();
-            m_btnHideDrive.Checked = HideDriveLetter.IsDriveHidden(_selectedDriveLetter[0]);
 
-            m_btnHideDrive.Enabled = false;
             m_btnMount.Text = "Mount As: " + _selectedDriveLetter;
             if (m_listDrives.SelectedIndices.Count <= 0)
                 return;
@@ -445,10 +443,6 @@ namespace DiskCryptorHelper
             DiskCryptor.DriveInfo drive = m_listDrives.SelectedItems[0].Tag as DiskCryptor.DriveInfo;
             if (!string.IsNullOrWhiteSpace(drive.mount_point))
                 m_btnMount.Text = "Mount As " + drive.mount_point;
-
-
-            m_btnHideDrive.Text = "Hide Drive: " + _selectedDriveLetter;
-            m_btnHideDrive.Enabled = true;
 
         }
 
@@ -571,6 +565,9 @@ namespace DiskCryptorHelper
                 Filter = "Virtual Disks(*.vhd)|*.vhd|All files (*.*)|*.*"
             };
 
+            if (File.Exists(m_txtVHD_FileName.Text))
+                open.FileName = m_txtVHD_FileName.Text;
+
             if (open.ShowDialog(this) != DialogResult.OK)
                 return;
 
@@ -582,6 +579,11 @@ namespace DiskCryptorHelper
             Properties.Settings.Default.Save();
         }
 
+        private void m_btnOpenVHD_Click(object sender, EventArgs e)
+        {
+            m_mnuFileOpenVHD_File_Click(sender, e);
+        }
+
         private void OpenRecentVHD_Click(object sender, EventArgs e)
         {
             m_txtVHD_FileName.Text = (sender as ToolStripMenuItem).Text;
@@ -589,13 +591,13 @@ namespace DiskCryptorHelper
             Properties.Settings.Default.Save();
         }
 
-        private Medo.IO.VirtualDisk _disk;
+        private Medo.IO.VirtualDisk _virtualDisk;
         private List<DiskCryptor.DriveInfo> _cachedDriveInfo; 
         private void m_btnAttachVHD_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(m_txtPwd.Text))
             {
-                PopUp.MessageBox("Password is empty", "Error");
+                PopUp.MessageBox("Password is empty", "Password", MessageBoxImage.Warning);
                 return;
             }
 
@@ -603,21 +605,20 @@ namespace DiskCryptorHelper
             {
                 _cachedDriveInfo = new List<DiskCryptor.DriveInfo>(_diskCryptor.DriveList);
 
-                if (this._disk != null)
+                if (_virtualDisk != null)
                 {
-                    this._disk.Close();
+                    _virtualDisk.Close();
                 }
 
-                this._disk = new Medo.IO.VirtualDisk(m_txtVHD_FileName.Text);
-                this._disk.Open();
-                try { this._disk.Detach(); } catch (Exception err) { PopUp.MessageBox(err.Message, "Detach Error"); }
+                _virtualDisk = new Medo.IO.VirtualDisk(m_txtVHD_FileName.Text);
+                _virtualDisk.Open();
+                try { _virtualDisk.Detach(); } catch (Exception err) { Debug.WriteLine("Cannot detach: "+err.Message); }
                 _diskCryptor.OnDisksAdded += OnDiskAdded; //mount DiskCryptor disk
 
                 Medo.IO.VirtualDiskAttachOptions options = Medo.IO.VirtualDiskAttachOptions.NoDriveLetter;
                 if (m_chkPermanent.Checked)
                     options |= Medo.IO.VirtualDiskAttachOptions.PermanentLifetime;
-                this._disk.Attach(options);
-
+                _virtualDisk.Attach(options);
             }, sender);
         }
 
@@ -636,13 +637,37 @@ namespace DiskCryptorHelper
 
                 _diskCryptor.ExecuteMount(driveInfo, _selectedDriveLetter, m_txtPwd.Text);
 
-                Utils.ExecuteOnUIThread(() => { ReloadDriveData(); } , this);
+                Utils.ExecuteOnUIThread(() => { ReloadDriveData(1000); } , this);
             }
         }
 
-        private void m_btnHideDrive_CheckedChanged(object sender, EventArgs e)
+        private void m_btnDetach_Click(object sender, EventArgs e)
         {
-            HideDriveLetter.Hide(_selectedDriveLetter[0], m_btnHideDrive.Checked);
+            if (!File.Exists(m_txtVHD_FileName.Text))
+            {
+                PopUp.MessageBox("File not exists: "+m_txtVHD_FileName.Text, "Detach Error", MessageBoxImage.Asterisk);
+                return;
+            }
+
+            ExecuteClickAction(() =>
+            {
+                if (_virtualDisk != null && _virtualDisk.FileName.CompareTo(m_txtVHD_FileName.Text) != 0)
+                { 
+                    _virtualDisk.Close();
+                    _virtualDisk = null;
+                }
+
+                if(_virtualDisk == null)
+                {
+                    _virtualDisk = new Medo.IO.VirtualDisk(m_txtVHD_FileName.Text);
+                    _virtualDisk.Open();
+                }
+
+                string path = _virtualDisk.GetAttachedPath();
+                _virtualDisk.Detach();
+                _virtualDisk.Close();
+                _virtualDisk = null;
+            }, sender);
         }
     }
 }
