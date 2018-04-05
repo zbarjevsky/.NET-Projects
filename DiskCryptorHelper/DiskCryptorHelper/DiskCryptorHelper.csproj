@@ -73,6 +73,7 @@
     <Compile Include="NetResourceEnumerator.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RecentFilesList.cs" />
     <Compile Include="SingleInstanceHelper.cs" />
     <Compile Include="UsbEject\Device.cs" />
     <Compile Include="UsbEject\DeviceCapabilities.cs" />

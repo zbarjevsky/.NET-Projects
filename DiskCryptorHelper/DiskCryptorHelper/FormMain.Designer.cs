@@ -65,7 +65,7 @@
             this.m_btnDetach = new System.Windows.Forms.Button();
             this.m_chkPermanent = new System.Windows.Forms.CheckBox();
             this.m_lblVHD_File = new System.Windows.Forms.Label();
-            this.m_txtVHD_FileName = new System.Windows.Forms.TextBox();
+            this.m_cmbVHD_FileName = new System.Windows.Forms.ComboBox();
             this.m_btnAttachVHD = new System.Windows.Forms.Button();
             this.m_splitDisks = new System.Windows.Forms.SplitContainer();
             this.hideDriveLetterControl1 = new DiskCryptorHelper.HideDriveLetterControl();
@@ -367,7 +367,7 @@
             this.m_splitMain.Panel1.Controls.Add(this.m_btnDetach);
             this.m_splitMain.Panel1.Controls.Add(this.m_chkPermanent);
             this.m_splitMain.Panel1.Controls.Add(this.m_lblVHD_File);
-            this.m_splitMain.Panel1.Controls.Add(this.m_txtVHD_FileName);
+            this.m_splitMain.Panel1.Controls.Add(this.m_cmbVHD_FileName);
             this.m_splitMain.Panel1.Controls.Add(this.m_btnAttachVHD);
             this.m_splitMain.Panel1.Controls.Add(this.m_listDrives);
             this.m_splitMain.Panel1.Controls.Add(this.m_btnMountAll);
@@ -429,12 +429,12 @@
             this.m_lblVHD_File.TabIndex = 7;
             this.m_lblVHD_File.Text = "VHD File: ";
             // 
-            // m_txtVHD_FileName
+            // m_cmbVHD_FileName
             // 
-            this.m_txtVHD_FileName.Location = new System.Drawing.Point(75, 253);
-            this.m_txtVHD_FileName.Name = "m_txtVHD_FileName";
-            this.m_txtVHD_FileName.Size = new System.Drawing.Size(329, 20);
-            this.m_txtVHD_FileName.TabIndex = 8;
+            this.m_cmbVHD_FileName.Location = new System.Drawing.Point(75, 253);
+            this.m_cmbVHD_FileName.Name = "m_cmbVHD_FileName";
+            this.m_cmbVHD_FileName.Size = new System.Drawing.Size(329, 20);
+            this.m_cmbVHD_FileName.TabIndex = 8;
             // 
             // m_btnAttachVHD
             // 
@@ -647,7 +647,7 @@
         private System.Windows.Forms.ToolStripMenuItem m_mnuOptionsHideWhenMinimized;
         private System.Windows.Forms.ToolStripMenuItem m_mnuOptionsVHD;
         private System.Windows.Forms.Label m_lblVHD_File;
-        private System.Windows.Forms.TextBox m_txtVHD_FileName;
+        private System.Windows.Forms.ComboBox m_cmbVHD_FileName;
         private System.Windows.Forms.Button m_btnAttachVHD;
         private System.Windows.Forms.ToolStripMenuItem m_mnuFileAttachVHD;
         private System.Windows.Forms.ToolStripMenuItem m_mnuFileOpenVHD_File;

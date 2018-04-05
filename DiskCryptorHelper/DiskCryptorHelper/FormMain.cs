@@ -27,6 +27,7 @@ namespace DiskCryptorHelper
     {
         public const string TITLE = "DiskCryptor Commander";
         private string _selectedDriveLetter = "";
+        private RecentFilesList _recentFiles = new RecentFilesList();
         private DiskCryptor _diskCryptor = new DiskCryptor();
 
         public FormMain(string [] cmd_line = null)
@@ -110,26 +111,7 @@ namespace DiskCryptorHelper
             m_mnuFile.DropDown = m_sysIconMenu;
             m_mnuOptionsHideWhenMinimized.Checked = Settings.Default.HideWhenMinimized;
 
-            m_txtVHD_FileName.Text = Properties.Settings.Default.VHD_FileName1;
-
-            UpdateOpenVHDMenu(Properties.Settings.Default.VHD_FileName1);
-            UpdateOpenVHDMenu(Properties.Settings.Default.VHD_FileName2);
-        }
-
-        private bool UpdateOpenVHDMenu(string fileName)
-        {
-            if (!string.IsNullOrWhiteSpace(fileName) && File.Exists(fileName))
-            {
-                ToolStripItem [] items = m_mnuFileAttachVHD.DropDown.Items.Find(fileName, true);
-                if (items == null || items.Length == 0)
-                {
-                    ToolStripMenuItem item = new ToolStripMenuItem(Properties.Settings.Default.VHD_FileName1);
-                    item.Click += new System.EventHandler(OpenRecentVHD_Click);
-                    m_mnuFileAttachVHD.DropDown.Items.Add(item);
-                    return true;
-                }
-            }
-            return false;
+            _recentFiles.Update(m_mnuFileAttachVHD.DropDown, m_cmbVHD_FileName);
         }
 
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
@@ -196,7 +178,7 @@ namespace DiskCryptorHelper
             if (!File.Exists(vhd))
                 return;
 
-            Properties.Settings.Default.VHD_FileName1 = vhd;
+            _recentFiles.AddRecent(vhd, m_mnuFileAttachVHD.DropDown, m_cmbVHD_FileName);
         }
 
         private void m_btnReload_Click(object sender, EventArgs e)
@@ -598,18 +580,13 @@ namespace DiskCryptorHelper
                 Filter = "Virtual Disks(*.vhd)|*.vhd|All files (*.*)|*.*"
             };
 
-            if (File.Exists(m_txtVHD_FileName.Text))
-                open.FileName = m_txtVHD_FileName.Text;
+            if (File.Exists(m_cmbVHD_FileName.Text))
+                open.FileName = m_cmbVHD_FileName.Text;
 
             if (open.ShowDialog(this) != DialogResult.OK)
                 return;
 
-            m_txtVHD_FileName.Text = open.FileName;
-            Properties.Settings.Default.VHD_FileName1 = m_txtVHD_FileName.Text;
-
-            UpdateOpenVHDMenu(Properties.Settings.Default.VHD_FileName1);
-            UpdateOpenVHDMenu(Properties.Settings.Default.VHD_FileName2);
-            Properties.Settings.Default.Save();
+            _recentFiles.AddRecent(open.FileName, m_mnuFileAttachVHD.DropDown, m_cmbVHD_FileName);
         }
 
         private void m_btnOpenVHD_Click(object sender, EventArgs e)
@@ -619,9 +596,8 @@ namespace DiskCryptorHelper
 
         private void OpenRecentVHD_Click(object sender, EventArgs e)
         {
-            m_txtVHD_FileName.Text = (sender as ToolStripMenuItem).Text;
-            Properties.Settings.Default.VHD_FileName1 = m_txtVHD_FileName.Text;
-            Properties.Settings.Default.Save();
+            string fileName = (sender as ToolStripMenuItem).Text;
+            _recentFiles.AddRecent(fileName, m_mnuFileAttachVHD.DropDown, m_cmbVHD_FileName);
         }
 
         private Medo.IO.VirtualDisk _virtualDisk;
@@ -634,7 +610,7 @@ namespace DiskCryptorHelper
                 return;
             }
 
-            FileInfo fi = new FileInfo(m_txtVHD_FileName.Text);
+            FileInfo fi = new FileInfo(m_cmbVHD_FileName.Text);
             if (!fi.Exists)
             {
                 PopUp.MessageBox("File does not exist: "+fi.FullName, "VHD File Name", MessageBoxImage.Error);
@@ -643,6 +619,8 @@ namespace DiskCryptorHelper
 
             ExecuteClickAction(() =>
             {
+                _recentFiles.AddRecent(m_cmbVHD_FileName.Text, m_mnuFileAttachVHD.DropDown, m_cmbVHD_FileName);
+
                 fi.IsReadOnly = false; //unlock file to enable load
 
                 _cachedDriveInfo = new List<DiskCryptor.DriveInfo>(_diskCryptor.DriveList);
@@ -687,15 +665,15 @@ namespace DiskCryptorHelper
 
         private void m_btnDetach_Click(object sender, EventArgs e)
         {
-            if (!File.Exists(m_txtVHD_FileName.Text))
+            if (!File.Exists(m_cmbVHD_FileName.Text))
             {
-                PopUp.MessageBox("File does not exist: "+m_txtVHD_FileName.Text, "Detach Error", MessageBoxImage.Asterisk);
+                PopUp.MessageBox("File does not exist: "+m_cmbVHD_FileName.Text, "Detach Error", MessageBoxImage.Asterisk);
                 return;
             }
 
             ExecuteClickAction(() =>
             {
-                if (_virtualDisk != null && _virtualDisk.FileName.CompareTo(m_txtVHD_FileName.Text) != 0)
+                if (_virtualDisk != null && _virtualDisk.FileName.CompareTo(m_cmbVHD_FileName.Text) != 0)
                 { 
                     _virtualDisk.Close();
                     _virtualDisk = null;
@@ -703,7 +681,7 @@ namespace DiskCryptorHelper
 
                 if(_virtualDisk == null)
                 {
-                    _virtualDisk = new Medo.IO.VirtualDisk(m_txtVHD_FileName.Text);
+                    _virtualDisk = new Medo.IO.VirtualDisk(m_cmbVHD_FileName.Text);
                     _virtualDisk.Open();
                 }
 

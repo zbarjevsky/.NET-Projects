@@ -38,24 +38,12 @@ namespace DiskCryptorHelper.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string VHD_FileName1 {
+        public string VHD_FileNames {
             get {
-                return ((string)(this["VHD_FileName1"]));
+                return ((string)(this["VHD_FileNames"]));
             }
             set {
-                this["VHD_FileName1"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string VHD_FileName2 {
-            get {
-                return ((string)(this["VHD_FileName2"]));
-            }
-            set {
-                this["VHD_FileName2"] = value;
+                this["VHD_FileNames"] = value;
             }
         }
     }
