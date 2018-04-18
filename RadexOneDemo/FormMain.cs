@@ -25,6 +25,8 @@ namespace RadexOneDemo
         private Task _connectionCheckTask;
         //private Color _bkColor = Color.Green;
 
+        private readonly List<ChartPoint> _history = new List<ChartPoint>(2048);
+
         public FormMain()
         {
             LogReader.Test();
@@ -386,11 +388,16 @@ namespace RadexOneDemo
                 UpdateMaxRecord(true);
             }
 
+            ChartPoint pt = new ChartPoint() {CPM = cmd.CPM, DOSE = cmd.DOSE};
+            _history.Add(pt);
+            if(_history.Count > 1024 * 1024) //max size 1M
+                _history.RemoveAt(0);
+
             m_lblVal.Text = cmd.DOSE.ToString("0.00");
             m_lblWarn.Text = cmd.CPM.ToString();
 
-            ChartHelper.AddPoint(m_chart1, "SeriesCPM", cmd.CPM);
-            ChartHelper.AddPoint(m_chart1, "SeriesDOSE", cmd.DOSE);
+            ChartHelper.AddPointXY(m_chart1, "SeriesCPM", pt.CPM, pt.date);
+            ChartHelper.AddPointXY(m_chart1, "SeriesDOSE", pt.DOSE, pt.date);
 
             int progress = (int)((100 * cmd.CPM) / (2 * m_numMaxCPM.Value));
             if (progress > 100) progress = 100;
@@ -446,8 +453,14 @@ namespace RadexOneDemo
             if (_maxLive == 0.0 || _maxCPM == 0)
                 return "";
 
-            return string.Format("Max: {0} µSv/h,\t\tMax CPM: {1} min-1\r\n{2}\t{3}\n",
+            return string.Format("Max: {0} µSv/h,\t\tMax Rate: {1} pt/min\r\n{2}\t{3}\n",
                 _maxLive, _maxCPM, _maxTimeDOSE.ToString(DATE_FMT), _maxTimeCPM.ToString(DATE_FMT));
+        }
+
+        private void m_btnHistory_Click(object sender, EventArgs e)
+        {
+            FormHistory frm = new FormHistory(_history);
+            frm.ShowDialog(this);
         }
 
         private DateTime _lastUpdateRecord = DateTime.MinValue;

@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.m_txtLog = new System.Windows.Forms.RichTextBox();
             this.m_btnRequest = new System.Windows.Forms.Button();
             this.m_chkConnect = new System.Windows.Forms.CheckBox();
@@ -52,6 +52,7 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.m_splitContainerTools = new System.Windows.Forms.SplitContainer();
             this.m_picYellowLight = new System.Windows.Forms.PictureBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.m_txtRecords = new System.Windows.Forms.RichTextBox();
             this.m_lblInterval = new System.Windows.Forms.Label();
             this.m_numInterval = new System.Windows.Forms.NumericUpDown();
@@ -59,6 +60,7 @@
             this.m_lblCPM = new System.Windows.Forms.Label();
             this.m_lblDose = new System.Windows.Forms.Label();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.m_btnHistory = new System.Windows.Forms.Button();
             this.m_chkAutoConnect = new System.Windows.Forms.CheckBox();
             this.m_btnTest = new System.Windows.Forms.Button();
             this.m_chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
@@ -371,6 +373,15 @@
             this.m_picYellowLight.TabIndex = 0;
             this.m_picYellowLight.TabStop = false;
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(3, 8);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(138, 13);
+            this.label1.TabIndex = 26;
+            this.label1.Text = "Records(+) and Warnings(*)";
+            // 
             // m_txtRecords
             // 
             this.m_txtRecords.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -466,6 +477,7 @@
             // 
             // splitContainer2.Panel1
             // 
+            this.splitContainer2.Panel1.Controls.Add(this.m_btnHistory);
             this.splitContainer2.Panel1.Controls.Add(this.m_chkAutoConnect);
             this.splitContainer2.Panel1.Controls.Add(this.m_btnTest);
             this.splitContainer2.Panel1.Controls.Add(this.m_chart1);
@@ -491,6 +503,19 @@
             this.splitContainer2.Size = new System.Drawing.Size(854, 716);
             this.splitContainer2.SplitterDistance = 593;
             this.splitContainer2.TabIndex = 0;
+            // 
+            // m_btnHistory
+            // 
+            this.m_btnHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnHistory.Image = ((System.Drawing.Image)(resources.GetObject("m_btnHistory.Image")));
+            this.m_btnHistory.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.m_btnHistory.Location = new System.Drawing.Point(737, 49);
+            this.m_btnHistory.Name = "m_btnHistory";
+            this.m_btnHistory.Size = new System.Drawing.Size(103, 27);
+            this.m_btnHistory.TabIndex = 26;
+            this.m_btnHistory.Text = "&History";
+            this.m_btnHistory.UseVisualStyleBackColor = true;
+            this.m_btnHistory.Click += new System.EventHandler(this.m_btnHistory_Click);
             // 
             // m_chkAutoConnect
             // 
@@ -767,6 +792,7 @@
         private System.Windows.Forms.SplitContainer m_splitContainerTools;
         private System.Windows.Forms.RichTextBox m_txtRecords;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Button m_btnHistory;
     }
 }
 
