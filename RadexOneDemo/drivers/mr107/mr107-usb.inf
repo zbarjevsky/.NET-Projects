@@ -1,0 +1,55 @@
+; MR107-usb.inf
+;
+; INF file to directly attach MR107 via usb as virtual com port
+;
+
+[Version]
+Signature               = "$Windows NT$"
+Class                   = Ports
+ClassGuid               = {4D36E978-E325-11CE-BFC1-08002BE10318}
+Provider                = %MYCORP%
+LayoutFile              = layout.inf
+DriverVer               = 08/30/2016,1.1.0000.0000
+CatalogFile.NTx86       = MR107-usb-x86.cat
+CatalogFile.NTAMD64     = MR107-usb-amd64.cat
+
+[Manufacturer]
+%MYCORP%                = QUARTA,NTx86,NTamd64
+
+[QUARTA.NTx86]
+%MR107%                 = MR107,USB\VID_ABBA&PID_A004
+
+[QUARTA.NTamd64]
+%MR107%                 = MR107,USB\VID_ABBA&PID_A004
+
+[DestinationDirs] 
+FakeModemCopyFileSection = 12 
+DefaultDestDir           = 12
+
+[MR107]
+include                 = mdmcpq.inf
+CopyFiles               = FakeModemCopyFileSection
+AddReg                  = LowerFilterAddReg, MR107.AddReg
+
+[MR107.AddReg]
+HKR,,EnumPropPages32,,"MsPorts.dll,SerialPortPropPageProvider"
+HKR,,PortSubClass,1,01
+HKR,,"UpperFilters",0x00010000,"serenum"
+
+[MR107.Services]
+include                 = mdmcpq.inf
+AddService              = usbser, 0x00000002, LowerFilter_Service_Inst
+AddService              = Serenum,,Serenum_Service_Inst
+
+[Serenum_Service_Inst]
+DisplayName             = %Serenum.SVCDESC%
+ServiceType             = 1               ; SERVICE_KERNEL_DRIVER
+StartType               = 3               ; SERVICE_DEMAND_START
+ErrorControl            = 1               ; SERVICE_ERROR_NORMAL
+ServiceBinary           = %12%\serenum.sys
+LoadOrderGroup          = PNP Filter
+
+[Strings] 
+MYCORP                  = "QUARTA-RAD LTD"
+MR107                   = "MR107"   
+Serenum.SVCDESC         = "Serenum Filter Driver"

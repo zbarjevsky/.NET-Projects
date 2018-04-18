@@ -7,6 +7,12 @@ using System.Windows.Forms.DataVisualization.Charting;
 
 namespace RadexOneDemo
 {
+    public class ChartPoint
+    {
+        public DateTime date = DateTime.Now;
+        public double CPM, DOSE;
+    }
+
     public class ChartHelper
     {
         private static DateTime _start = DateTime.Now;
@@ -20,15 +26,15 @@ namespace RadexOneDemo
         //chrtMain.ChartAreas[0].AxisY2.Enabled = AxisEnabled.True;
         //chrtMain.ChartAreas[0].AxisY2.IsStartedFromZero = chrtMain.ChartAreas[0].AxisY.IsStartedFromZero;
 
-        public static void AddPoint(Chart c, string series, double valueY)
+        public static void AddPointXY(Chart c, string series, double valueY, DateTime time, int maxCount = 1000)
         {
             //double timeSeconds = (DateTime.Now - _start).TotalSeconds;
 
-            c.Series[series].Points.AddXY(DateTime.Now, valueY);
+            c.Series[series].Points.AddXY(time, valueY);
             //if (timeSeconds > 100.0)
             {
                 //double min = timeSeconds - 100;
-                while(/*c.Series[series].Points[0].XValue < min || */c.Series[series].Points.Count > 1000)
+                while(/*c.Series[series].Points[0].XValue < min || */c.Series[series].Points.Count > maxCount)
                     c.Series[series].Points.RemoveAt(0);
                 c.ResetAutoValues();
             }

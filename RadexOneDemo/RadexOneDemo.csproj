@@ -70,6 +70,12 @@
     <Compile Include="FormAboutLevels.Designer.cs">
       <DependentUpon>FormAboutLevels.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormHistory.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormHistory.Designer.cs">
+      <DependentUpon>FormHistory.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -86,6 +92,9 @@
     </Compile>
     <EmbeddedResource Include="FormAboutLevels.resx">
       <DependentUpon>FormAboutLevels.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormHistory.resx">
+      <DependentUpon>FormHistory.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
@@ -133,7 +142,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="AppIcon.ico" />
-    <Content Include="Docs\Capture.PNG" />
     <Content Include="Images\AboutRadiationLevels.jpg" />
     <Content Include="Images\UsbConnect1.gif" />
     <Content Include="Images\UsbConnect2.png" />
