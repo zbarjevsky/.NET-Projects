@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Reflection;
+using System.Diagnostics;
 
 namespace MindLamp
 {
@@ -26,30 +27,32 @@ namespace MindLamp
 		{
 			try
 			{
-				int ver = PsyleronApi.PsyREGAPIVersion();
+                m_btnStart.Enabled = false;
+
+                int ver = PsyleronApi.PsyREGAPIVersion();
 				ulong build = PsyleronApi.PsyREGAPIBuild();
 
 				uint sources = PsyleronApi.PsyREGEnumerateSources();
 				uint count = PsyleronApi.PsyREGGetSourceCount();
 
-				for (int i = 0; i < 1; i++)
-				{
-					int source = PsyleronApi.PsyREGGetSource(i);
+                for (int i = 0; i < 1; i++)
+                {
+                    int source = PsyleronApi.PsyREGGetSource(i);
 
-					string id = PsyleronApi.PsyREGGetDeviceIdBSTR(source);
-					string type = PsyleronApi.PsyREGGetDeviceTypeBSTR(source);
+                    //string id = PsyleronApi.PsyREGGetDeviceIdBSTR(source);
+                    //string type = PsyleronApi.PsyREGGetDeviceTypeBSTR(source);
 
-					m_cmbDevice.Items.Add(id);
-				}
+                    //m_cmbDevice.Items.Add(id);
+                }
 
-				m_cmbDevice.SelectedIndex = 0;
+                //m_cmbDevice.SelectedIndex = 0;
 
-				m_btnStart.Enabled = m_cmbDevice.Text == "RGZD715";
-
-				int ok = PsyleronApi.PsyREGOpen(0);
-
-				
-			}
+                int ok = PsyleronApi.PsyREGOpen(0);
+                if(ok == 1)
+                    m_btnStart.Enabled = true; // m_cmbDevice.Text == "RGZD715";
+                else
+                    MessageBox.Show("Cannot connect to device!");
+            }
 			catch (Exception err)
 			{
 				MessageBox.Show(err.Message);
@@ -58,21 +61,28 @@ namespace MindLamp
 
 		private void m_timer_Tick(object sender, EventArgs e)
 		{
-			int ok = PsyleronApi.PsyREGOpened(0);
-			if (ok != 1)
-				return;
+            try
+            {
+                int ok = PsyleronApi.PsyREGOpened(0);
+                if (ok != 1)
+                    return;
 
-			//restrict size
-			if (m_queue.Count > 800000)
-				m_queue.RemoveRange(0, 400000);
+                //restrict size
+                if (m_queue.Count > 800000)
+                    m_queue.RemoveRange(0, 400000);
 
-			byte[] pucBuf = PsyleronApi.PsyREGGetBytes(0);
-			m_queue.AddRange(pucBuf);
-			
-			CalculateDeviation();
+                byte[] pucBuf = PsyleronApi.PsyREGGetBytes(0);
+                m_queue.AddRange(pucBuf);
 
-			m_lblBuffer.Text = "Buffer: (" + m_trackBuffer.Value + "/" + m_queue.Count + ")";
-		}
+                CalculateDeviation();
+
+                m_lblBuffer.Text = "Buffer: (" + m_trackBuffer.Value + "/" + m_queue.Count + ")";
+            }
+            catch (Exception err)
+            {
+                Debug.Write("Error in timer: "+err.ToString());
+            }
+        }
 
 		private void CalculateDeviation()
 		{
@@ -96,7 +106,11 @@ namespace MindLamp
 			int current = (even - odd);
 			double result = (double)current / (double)(even + odd);
 
-			m_picCurrent.BackColor = result > 0 ? Color.Red : Color.Blue;
+
+            m_chartValues.Series[0].Points.Add(current);
+
+
+            m_picCurrent.BackColor = result > 0 ? Color.Red : Color.Blue;
 
 			sb.Insert(0, "\t");
 			sb.Insert(0, result);
@@ -168,7 +182,13 @@ namespace MindLamp
 
 		private void FormMain_FormClosed(object sender, FormClosedEventArgs e)
 		{
-			PsyleronApi.PsyREGClose(0);
+            try
+            {
+    			PsyleronApi.PsyREGClose(0);
+            }
+            catch (Exception)
+            {
+            }
 		}
 
 		private void m_btnStart_Click(object sender, EventArgs e)
@@ -176,13 +196,13 @@ namespace MindLamp
 			if (m_timer.Enabled)
 			{
 				m_timer.Stop();
-				m_btnStart.Text = ("> Play");
+				m_btnStart.Text = ("Start >");
 			}
 			else
 			{
 				m_timer.Interval = 1000 / m_trackFrequency.Value;
 				m_timer.Start();
-				m_btnStart.Text = ("> Stop");
+				m_btnStart.Text = ("[] Stop");
 			}
 		}
 

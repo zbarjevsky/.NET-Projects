@@ -10,58 +10,60 @@ namespace MindLamp
 	using bs_status = System.UInt32;
 	using DataSource = System.Int32;
 
-	//http://www.psyleron.com/reg1_sdk_vbsample.aspx
-	public class PsyleronApi
+    //http://www.psyleron.com/reg1_sdk_vbsample.aspx
+    public class PsyleronApi
 	{
-		[DllImport("PsyREG.dll")]
+        public const string PsyREG = "PsyREG.dll";
+
+		[DllImport(PsyREG)]
 		public static extern int PsyREGAPIVersion();
 
-		[DllImport("PsyREG.dll")]
+		[DllImport(PsyREG)]
 		public static extern uint PsyREGAPIBuild();
 
-		[DllImport("PsyREG.dll")]
+		[DllImport(PsyREG)]
 		public static extern uint PsyREGEnumerateSources();
 
-		[DllImport("PsyREG.dll")]
+		[DllImport(PsyREG)]
 		public static extern uint PsyREGGetSourceCount();
 
-		[DllImport("PsyREG.dll")]
+		[DllImport(PsyREG)]
 		public static extern void PsyREGClearSources ();
 
-		[DllImport("PsyREG.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGGetSource")]
+		[DllImport(PsyREG, CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGGetSource")]
 		public static extern DataSource PsyREGGetSource (int uiIndex);
 
-		[DllImport("PsyREG.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGReleaseSource")]
+		[DllImport(PsyREG, CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGReleaseSource")]
 		public static extern void PsyREGReleaseSource (DataSource source);
 
-		[DllImport("PsyREG.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGOpen")]
+		[DllImport(PsyREG, CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGOpen")]
 		public static extern BOOL PsyREGOpen (DataSource source);
 
-		[DllImport("PsyREG.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGClose")]
+		[DllImport(PsyREG, CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGClose")]
 		public static extern void PsyREGClose (DataSource source);
 
-		[DllImport("PsyREG.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGReset")]
+		[DllImport(PsyREG, CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGReset")]
 		public static extern void PsyREGReset (DataSource source);
 
-		[DllImport("PsyREG.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGOpened")]
+		[DllImport(PsyREG, CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGOpened")]
 		public static extern BOOL PsyREGOpened (DataSource source);
 
-		[DllImport("PsyREG.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGGetStatus")]
+		[DllImport(PsyREG, CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGGetStatus")]
 		public static extern bs_status PsyREGGetStatus (DataSource source);
 
-		[DllImport("PsyREG.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGGetDeviceType")]
+		[DllImport(PsyREG, CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGGetDeviceType")]
 		public static extern string PsyREGGetDeviceType (DataSource source, StringBuilder szBuf);
 
-		[DllImport("PsyREG.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGGetDeviceTypeBSTR")]
+		[DllImport(PsyREG, CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGGetDeviceTypeBSTR")]
 		public static extern string PsyREGGetDeviceTypeBSTR (DataSource source);
 
-		[DllImport("PsyREG.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGGetDeviceId")]
+		[DllImport(PsyREG, CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGGetDeviceId")]
 		public static extern string PsyREGGetDeviceId (DataSource source, StringBuilder szBuf);
 
-		[DllImport("PsyREG.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGGetDeviceIdBSTR")]
+		[DllImport(PsyREG, CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGGetDeviceIdBSTR")]
 		public static extern string PsyREGGetDeviceIdBSTR(DataSource source);
 
-		[DllImport("PsyREG.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGGetBit")]
+		[DllImport(PsyREG, CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGGetBit")]
 		public static extern BOOL PsyREGGetBit(DataSource source, /*[MarshalAs(UnmanagedType.LPArray)]*/ byte[] pucBuf);
 
 		public static byte PsyREGGetBit(DataSource source)
@@ -71,7 +73,7 @@ namespace MindLamp
 			return pucBuf[0];
 		}
 
-		[DllImport("PsyREG.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGGetByte")]
+		[DllImport(PsyREG, CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGGetByte")]
 		public static extern BOOL PsyREGGetByte (DataSource source, /*[MarshalAs(UnmanagedType.LPArray)]*/ byte[] pucBuf);
 
 		public static byte PsyREGGetByte(DataSource source)
@@ -81,7 +83,7 @@ namespace MindLamp
 			return pucBuf[0];
 		}
 
-		[DllImport("PsyREG.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGGetBits")]
+		[DllImport(PsyREG, CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGGetBits")]
 		public static extern int  PsyREGGetBits (DataSource source, /*[MarshalAs(UnmanagedType.LPArray)]*/ byte[] pucBuf, int iMaxBits, BOOL bBlock);
 
 		public static byte[] PsyREGGetBits(DataSource source)
@@ -91,7 +93,7 @@ namespace MindLamp
 			return pucBuf;
 		}
 
-		[DllImport("PsyREG.dll", CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGGetBytes")]
+		[DllImport(PsyREG, CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGGetBytes")]
 		public static extern int PsyREGGetBytes(DataSource source, /*[MarshalAs(UnmanagedType.LPArray)]*/ byte[]  pucBuf, int iMaxBytes, BOOL bBlock);
 
 		public static byte[] PsyREGGetBytes(DataSource source)
