@@ -11,7 +11,7 @@ namespace MindLamp
 		public static Color[] m_Colors = new Color[10] 
         {
 			Color.White,
-			Color.Red, Color.Orange, Color.Yellow, Color.Green, 
+			Color.Red, Color.Orange, Color.Yellow, Color.LimeGreen, 
 			Color.Cyan, Color.Blue, Color.Violet, Color.Magenta,
 			Color.Black
 		};
