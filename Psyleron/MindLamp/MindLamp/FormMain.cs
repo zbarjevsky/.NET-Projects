@@ -14,16 +14,21 @@ namespace MindLamp
 	public partial class FormMain : Form
 	{
 
-		private List<byte> m_queue = new List<byte>(300000);
-		private int m_total, m_total1 = 0, m_maxCurrent = 0;
-		private WhiteToColor m_WhiteToColor = new WhiteToColor();
+        Algorithms _alg = new Algorithms();
+
+        private int m_total, m_total1 = 0, m_maxCurrent = 0;
+		private ColorFromValues m_WhiteToColor = new ColorFromValues();
 
 		public FormMain()
 		{
 			InitializeComponent();
-		}
 
-		private void FormMain_Load(object sender, EventArgs e)
+            m_numRange.Minimum = m_trackRange.Minimum;
+            m_numRange.Maximum = m_trackRange.Maximum;
+            m_numRange.Value = m_trackRange.Value;
+        }
+
+        private void FormMain_Load(object sender, EventArgs e)
 		{
 			try
 			{
@@ -67,16 +72,10 @@ namespace MindLamp
                 if (ok != 1)
                     return;
 
-                //restrict size
-                if (m_queue.Count > 800000)
-                    m_queue.RemoveRange(0, 400000);
+                byte[] pucBuf = PsyleronApi.PsyREGGetBytes(0, 10);
+                CalculateDeviation(pucBuf);
 
-                byte[] pucBuf = PsyleronApi.PsyREGGetBytes(0);
-                m_queue.AddRange(pucBuf);
-
-                CalculateDeviation();
-
-                m_lblBuffer.Text = "Buffer: (" + m_trackBuffer.Value + "/" + m_queue.Count + ")";
+                m_lblBuffer.Text = "Buffer: (" + m_trackBuffer.Value + "/" + _alg.m_queue.Count + ")";
             }
             catch (Exception err)
             {
@@ -84,46 +83,35 @@ namespace MindLamp
             }
         }
 
-		private void CalculateDeviation()
+		private void CalculateDeviation(byte[] data)
 		{
 			int countFromEnd = m_trackBuffer.Value;
+            _alg.AddRange(data);
+            _alg.CalculateDeviation(m_trackBuffer.Value);
 
-			int odd = 0;
-			int even = 0;
-			StringBuilder sb = new StringBuilder(3 * countFromEnd);
-			for (int i = m_queue.Count - 1; i >= 0 && i > m_queue.Count - countFromEnd; i--)
-			{
-				byte item = m_queue[i];
-				sb.Append(item);
-				sb.Append("\t");
+            m_chartValues.Series[0].Points.Add(_alg.m_relative);
+            m_chartValues.Series[1].Points.Add(0.0);
+            while (m_chartValues.Series[0].Points.Count > countFromEnd)
+            {
+                m_chartValues.Series[0].Points.RemoveAt(0);
+                m_chartValues.Series[1].Points.RemoveAt(0);
+            }
+            m_chartValues.ResetAutoValues();
 
-				if (item % 2 == 0)
-					even++;
-				else
-					odd++;
-			}
+            m_picCurrent.BackColor = _alg.m_relative > 0 ? Color.Red : Color.Blue;
 
-			int current = (even - odd);
-			double result = (double)current / (double)(even + odd);
-
-
-            m_chartValues.Series[0].Points.Add(current);
-
-
-            m_picCurrent.BackColor = result > 0 ? Color.Red : Color.Blue;
-
-			sb.Insert(0, "\t");
-			sb.Insert(0, result);
+			//sb.Insert(0, "\t");
+			//sb.Insert(0, _alg.m_result);
 
 			m_total = 0;
-			foreach (var item in m_queue)
+			foreach (var item in _alg.m_queue)
 			{
 				if (item % 2 == 0)
 					m_total++;
 				else
 					m_total--;
 			}
-			m_total1 += (even - odd);
+			m_total1 += _alg.m_absolute;
 
 			//double index = (1000 / m_trackBuffer.Value);
 			//double min = -0.1 * index;
@@ -133,11 +121,11 @@ namespace MindLamp
 			int colorIdx = 0;
 			if (m_tabMode.SelectedIndex == 0)
 			{
-				m_pic.BackColor = m_WhiteToColor.GetWhiteToColor(current, m_trackBuffer.Value, out colorIdx);
+				m_pic.BackColor = ColorFromValues.GetWhiteToColor(_alg.m_relative, out colorIdx);
 			}
 			else
 			{
-				m_pic.BackColor = m_WhiteToColor.GetRainbowColor(current, m_trackBuffer.Value, out colorIdx);
+				m_pic.BackColor = ColorFromValues.GetRainbowColor(_alg.m_relative, out colorIdx);
 			}
 
 			if (colorIdx > 0)
@@ -153,15 +141,15 @@ namespace MindLamp
 					case 7: TextPlusPlus(ref label7); break;
 					case 8: TextPlusPlus(ref label8); break;
 				}
-				m_lblCurrenColor.BackColor = m_WhiteToColor.m_Colors[colorIdx];
+				m_lblCurrenColor.BackColor = ColorFromValues.m_Colors[colorIdx];
 			}
 
-			if (Math.Abs(current) > m_maxCurrent)
-				m_maxCurrent = Math.Abs(current);
+			if (Math.Abs(_alg.m_absolute) > m_maxCurrent)
+				m_maxCurrent = Math.Abs(_alg.m_absolute);
 
 			//System.Diagnostics.Debug.WriteLine("BUFF: " + sb.ToString());
 			string status = string.Format("Value: {0:0.00}({1}), Current: {2}/Max: {3}, Total: {4}/{5}",
-				result, m_trackRange.Value, (current), m_maxCurrent, m_total, m_total1);
+                _alg.m_relative, m_trackRange.Value, (_alg.m_absolute), m_maxCurrent, m_total, m_total1);
 			
 			System.Diagnostics.Debug.WriteLine(status);
 			m_lblStatus.Text = status;
@@ -209,7 +197,8 @@ namespace MindLamp
 		private void m_trackRange_ValueChanged(object sender, EventArgs e)
 		{
 			m_pic.BackColor = WavelengthColors.GetColorFromWaveLength(m_trackRange.Value);
-		}
+            m_numRange.Value = m_trackRange.Value;
+        }
 
 		private void m_trackFrequency_ValueChanged(object sender, EventArgs e)
 		{
@@ -220,16 +209,25 @@ namespace MindLamp
 			m_timer.Start();
 		}
 
-		private void m_trackBuffer_ValueChanged(object sender, EventArgs e)
+        private void m_trackRange_Scroll(object sender, EventArgs e)
+        {
+
+        }
+
+        private void m_numLuminosity_ValueChanged(object sender, EventArgs e)
+        {
+            ColorHSL hsv = new ColorHSL(Color.Red);
+            hsv.Luminosity = (double)m_numLuminosity.Value;
+            m_picCurrent.BackColor = hsv;
+        }
+
+        private void m_trackBuffer_ValueChanged(object sender, EventArgs e)
 		{
 			m_lblBuffer.Text = "Buffer: (" + m_trackBuffer.Value + ")";
 		}
 
 		private void m_trackBar_ValueChanged(object sender, EventArgs e)
 		{
-			ColorHSL hsv = new ColorHSL(Color.Red);
-			hsv.Luminosity = m_trackBar.Value;
-			m_picCurrent.BackColor = hsv;
 		}
 	}
 }

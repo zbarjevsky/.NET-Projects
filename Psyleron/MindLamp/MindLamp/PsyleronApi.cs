@@ -96,9 +96,9 @@ namespace MindLamp
 		[DllImport(PsyREG, CallingConvention = CallingConvention.Cdecl, EntryPoint = "PsyREGGetBytes")]
 		public static extern int PsyREGGetBytes(DataSource source, /*[MarshalAs(UnmanagedType.LPArray)]*/ byte[]  pucBuf, int iMaxBytes, BOOL bBlock);
 
-		public static byte[] PsyREGGetBytes(DataSource source)
+		public static byte[] PsyREGGetBytes(DataSource source, int count = 10)
 		{
-			byte[] pucBuf = new byte[10];
+			byte[] pucBuf = new byte[count];
 			int size = PsyleronApi.PsyREGGetBytes(0, pucBuf, pucBuf.Length, 0);
 			return pucBuf;
 		}

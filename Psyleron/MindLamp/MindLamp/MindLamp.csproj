@@ -50,7 +50,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ColorHSV.cs" />
+    <Compile Include="Algorithms.cs" />
+    <Compile Include="ColorMixer.cs" />
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -62,7 +63,7 @@
     <Compile Include="PsyleronApi.cs" />
     <Compile Include="Test.cs" />
     <Compile Include="WavelengthColors.cs" />
-    <Compile Include="WhiteToColor.cs" />
+    <Compile Include="ColorFromValues.cs" />
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
