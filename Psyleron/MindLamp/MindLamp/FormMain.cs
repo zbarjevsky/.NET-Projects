@@ -18,8 +18,10 @@ namespace MindLamp
 
         private int m_total, m_total1 = 0, m_maxCurrent = 0;
 		private ColorFromValues m_WhiteToColor = new ColorFromValues();
+	    private bool _isHW_Avalable = false;
+        private Random _random = new Random(DateTime.Now.Second);
 
-		public FormMain()
+        public FormMain()
 		{
 			InitializeComponent();
 
@@ -33,6 +35,7 @@ namespace MindLamp
 			try
 			{
                 m_btnStart.Enabled = false;
+			    this.Visible = true;
 
                 int ver = PsyleronApi.PsyREGAPIVersion();
 				ulong build = PsyleronApi.PsyREGAPIBuild();
@@ -53,14 +56,19 @@ namespace MindLamp
                 //m_cmbDevice.SelectedIndex = 0;
 
                 int ok = PsyleronApi.PsyREGOpen(0);
-                if(ok == 1)
-                    m_btnStart.Enabled = true; // m_cmbDevice.Text == "RGZD715";
-                else
-                    MessageBox.Show("Cannot connect to device!");
+			    if (ok == 1)
+			    {
+			        m_btnStart.Enabled = true; // m_cmbDevice.Text == "RGZD715";
+			        _isHW_Avalable = true;
+			    }
+			    else
+			    {
+                    MessageBox.Show(this, "Cannot connect to device!");
+			    }
             }
 			catch (Exception err)
 			{
-				MessageBox.Show(err.Message);
+				MessageBox.Show(this, err.Message);
 			}
 		}
 
@@ -68,12 +76,20 @@ namespace MindLamp
 		{
             try
             {
-                int ok = PsyleronApi.PsyREGOpened(0);
-                if (ok != 1)
-                    return;
+                if (m_chkSW_RG.Checked)
+                {
+                    byte[] pucBuf = GetRandomBytes(10);
+                    CalculateDeviation(pucBuf);
+                }
+                else
+                {
+                    int ok = PsyleronApi.PsyREGOpened(0);
+                    if (ok != 1)
+                        return;
 
-                byte[] pucBuf = PsyleronApi.PsyREGGetBytes(0, 10);
-                CalculateDeviation(pucBuf);
+                    byte[] pucBuf = PsyleronApi.PsyREGGetBytes(0, 10);
+                    CalculateDeviation(pucBuf);
+                }
 
                 m_lblBuffer.Text = "Buffer: (" + m_trackBuffer.Value + "/" + _alg.m_queue.Count + ")";
             }
@@ -83,7 +99,14 @@ namespace MindLamp
             }
         }
 
-		private void CalculateDeviation(byte[] data)
+	    private byte[] GetRandomBytes(int count)
+	    {
+	        byte [] data = new byte[count];
+            _random.NextBytes(data);
+            return data;
+	    }
+
+	    private void CalculateDeviation(byte[] data)
 		{
 			int countFromEnd = m_trackBuffer.Value;
             _alg.AddRange(data);
@@ -188,7 +211,7 @@ namespace MindLamp
 			}
 			else
 			{
-				m_timer.Interval = 1000 / m_trackFrequency.Value;
+				m_timer.Interval = m_trackInterval.Value;
 				m_timer.Start();
 				m_btnStart.Text = ("[] Stop");
 			}
@@ -200,13 +223,17 @@ namespace MindLamp
             m_numRange.Value = m_trackRange.Value;
         }
 
-		private void m_trackFrequency_ValueChanged(object sender, EventArgs e)
+		private void m_trackInterval_ValueChanged(object sender, EventArgs e)
 		{
-			m_lblTFreq.Text = "Frequency: (" + m_trackFrequency.Value + " Hz)";
+			m_lblTInterval.Text = string.Format("Interval: ({0:##,###} ms), {1:0.00} Hz", 
+                m_trackInterval.Value, (1000.0 / (double)m_trackInterval.Value));
 
-			m_timer.Stop();
-			m_timer.Interval = 1000 / m_trackFrequency.Value;
-			m_timer.Start();
+		    if (m_btnStart.Enabled)
+		    {
+		        m_timer.Stop();
+		        m_timer.Interval = m_trackInterval.Value;
+		        m_timer.Start();
+		    }
 		}
 
         private void m_trackRange_Scroll(object sender, EventArgs e)
@@ -221,13 +248,19 @@ namespace MindLamp
             m_picCurrent.BackColor = hsv;
         }
 
+        private void m_trackInterval_Scroll(object sender, EventArgs e)
+        {
+
+        }
+
+        private void m_chkSW_RG_CheckedChanged(object sender, EventArgs e)
+        {
+            m_btnStart.Enabled = _isHW_Avalable || m_chkSW_RG.Checked;
+        }
+
         private void m_trackBuffer_ValueChanged(object sender, EventArgs e)
 		{
 			m_lblBuffer.Text = "Buffer: (" + m_trackBuffer.Value + ")";
-		}
-
-		private void m_trackBar_ValueChanged(object sender, EventArgs e)
-		{
 		}
 	}
 }
