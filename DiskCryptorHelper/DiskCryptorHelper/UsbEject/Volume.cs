@@ -127,7 +127,12 @@ namespace UsbEject.Library
                         Console.WriteLine("Finding disk extents for volume: " + LogicalDrive);
                         IntPtr hFile = Native.CreateFile(@"\\.\" + LogicalDrive, 0, Native.FILE_SHARE_READ | Native.FILE_SHARE_WRITE, IntPtr.Zero, Native.OPEN_EXISTING, 0, IntPtr.Zero);
                         if (hFile.ToInt32() == Native.INVALID_HANDLE_VALUE)
-                            throw new Win32Exception(Marshal.GetLastWin32Error());
+                        {
+                            //throw new Win32Exception(Marshal.GetLastWin32Error());
+                            string error = new Win32Exception(Marshal.GetLastWin32Error()).Message;
+                            Console.WriteLine("Cannot find disk extents for volume {0}, error: {1}", LogicalDrive, error);
+                            return null;
+                        }
 
                         int size = 0x400; // some big size
                         IntPtr buffer = Marshal.AllocHGlobal(size);
