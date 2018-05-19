@@ -63,6 +63,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ScreenSaver.cs" />
     <Compile Include="Tools\ColorConverter.cs" />
     <Compile Include="Tools\XmlObjectSerializer.cs" />
     <Page Include="Constrols\AnalogClock.xaml">

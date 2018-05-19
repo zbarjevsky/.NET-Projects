@@ -25,5 +25,8 @@ namespace WpfAnalogClock
 
         [Category("Colors")]
         public System.Drawing.Color OptionsButtonColor { get; set; }
+
+        [Category("Common")]
+        public bool DisableScreenSaver { get; set; }
     }
 }

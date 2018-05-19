@@ -63,6 +63,8 @@ namespace WpfAnalogClock
                 clock.DigitalClockColor = OptionsData.Instance.DigitalClockColor.ToWpfBrush();
                 btnOptions.Background = OptionsData.Instance.OptionsButtonColor.ToWpfBrush();
                 btnClose.Background = OptionsData.Instance.CloseButtonColor.ToWpfBrush();
+
+                ScreenSaver.ResetIdleTimer(OptionsData.Instance.DisableScreenSaver);
             }
         }
 
@@ -71,6 +73,11 @@ namespace WpfAnalogClock
             UpdateOptions(true);
             OptionsData.Instance.ShowOptions(this);
             UpdateOptions(false);
+        }
+
+        private void txtOptions_TextInput(object sender, TextCompositionEventArgs e)
+        {
+
         }
     }
 }

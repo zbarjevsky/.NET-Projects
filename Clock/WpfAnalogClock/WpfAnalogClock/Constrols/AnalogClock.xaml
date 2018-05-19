@@ -8,12 +8,20 @@
              Background="Transparent"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <BitmapImage x:Key="Clock" UriSource="pack://application:,,,/WpfAnalogClock;component/Images/StoneRoundClock1.png" />
+            <BitmapImage x:Key="HourHand" UriSource="pack://application:,,,/WpfAnalogClock;component/Images/HourHand1.png" />
+            <BitmapImage x:Key="MinuteHand" UriSource="pack://application:,,,/WpfAnalogClock;component/Images/MinuteHand1.png" />
+            <BitmapImage x:Key="SecondHand" UriSource="pack://application:,,,/WpfAnalogClock;component/Images/SecondHand1.png" />
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid x:Name="clockGrid">
         <Grid.Background>
-            <ImageBrush ImageSource="pack://application:,,,/Images/StoneRoundClock1.png" Stretch="Uniform"/>
+            <ImageBrush ImageSource="{StaticResource Clock}" Stretch="Uniform"/>
         </Grid.Background>
         <Image Grid.Row="0" Grid.Column="0" 
-               Source="pack://application:,,,/Images/HourHand1.png" 
+               Source="{StaticResource HourHand}" 
                Width="{Binding Path=ActualWidth, ElementName=clockGrid, Converter={main:PercentageConverter}, ConverterParameter='0.8'}"
                Height="{Binding Path=ActualHeight, ElementName=clockGrid, Converter={main:PercentageConverter}, ConverterParameter='0.8'}"
                HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Fill">
@@ -25,7 +33,7 @@
             </Image.LayoutTransform>
         </Image>
         <Image Grid.Row="0" Grid.Column="0" 
-               Source="pack://application:,,,/Images/MinuteHand1.png" 
+               Source="{StaticResource MinuteHand}" 
                Width="{Binding Path=ActualWidth, ElementName=clockGrid, Converter={main:PercentageConverter}, ConverterParameter='0.8'}"
                Height="{Binding Path=ActualHeight, ElementName=clockGrid, Converter={main:PercentageConverter}, ConverterParameter='0.8'}"
                HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Fill">
@@ -37,7 +45,7 @@
             </Image.LayoutTransform>
         </Image>
         <Image Grid.Row="0" Grid.Column="0" 
-               Source="pack://application:,,,/Images/SecondHand1.png" 
+               Source="{StaticResource SecondHand}" 
                Width="{Binding Path=ActualWidth, ElementName=clockGrid, Converter={main:PercentageConverter}, ConverterParameter='0.6'}"
                Height="{Binding Path=ActualHeight, ElementName=clockGrid, Converter={main:PercentageConverter}, ConverterParameter='0.8'}"
                HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Fill">
@@ -51,7 +59,7 @@
         <TextBlock Grid.Row="0" Grid.Column="0" x:Name="txtTime"
                    FontWeight="Bold" Foreground="HotPink"  
                    FontSize="{Binding Path=ActualWidth, ElementName=clockGrid, Converter={main:PercentageConverter}, ConverterParameter='0.08'}"
-                   Text="(::)=)(="
+                   Text="15:22:88"
                    VerticalAlignment="Bottom" HorizontalAlignment="Left"/>
     </Grid>
 </UserControl>
