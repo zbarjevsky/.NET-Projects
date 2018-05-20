@@ -65,6 +65,7 @@ namespace WpfAnalogClock
                 btnClose.Background = OptionsData.Instance.CloseButtonColor.ToWpfBrush();
 
                 ScreenSaver.ResetIdleTimer(OptionsData.Instance.DisableScreenSaver);
+                clock.DisableScreensaver = OptionsData.Instance.DisableScreenSaver;
             }
         }
 

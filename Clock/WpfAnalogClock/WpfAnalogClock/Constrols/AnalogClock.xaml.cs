@@ -28,6 +28,12 @@ namespace WpfAnalogClock.Constrols
             set { txtTime.Foreground = value; }
         }
 
+        public bool DisableScreensaver
+        {
+            get;
+            set;
+        }
+
         public AnalogClock()
         {
             InitializeComponent();
@@ -57,6 +63,9 @@ namespace WpfAnalogClock.Constrols
                 rotateHour.Angle = hourAngle;
 
             txtTime.Text = now.ToString("T");
+
+            if(DisableScreensaver)
+                ScreenSaver.ResetIdleTimer(DisableScreensaver); 
         }
     }
 }
