@@ -12,19 +12,21 @@
         MouseWheel="MainWindow_OnMouseWheel"
         Title="WPF Clock" 
         Height="350" Width="350"> 
-    <Grid Background="Transparent" MouseDown="ClockGrid_OnMouseDown">
+    <Grid Background="Transparent" MouseDown="ClockGrid_OnMouseDown" MouseMove="ClockGrid_MouseMove">
         <Constrols:AnalogClock 
             Grid.Row="0" Grid.Column="0" x:Name="clock" 
             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 
         <TextBox x:Name="txtOptions" 
                 Margin="80,0"
+                 Visibility="{Binding BtnVisibility}"
                 VerticalAlignment="Top" HorizontalAlignment="Right" 
                 Width="32" Height="32" FontSize="20"
-                TextInput="txtOptions_TextInput">
+                TextChanged="txtOptions_TextChanged">
         </TextBox>
         <Button x:Name="btnOptions" 
                 Margin="40,0"
+                 Visibility="{Binding BtnVisibility}"
                 VerticalAlignment="Top" HorizontalAlignment="Right" 
                 Width="32" Height="32" FontSize="20"
                 Click="Options_Click">
@@ -34,6 +36,7 @@
             <Image Source="pack://application:,,,/Images/Config.png"/>
         </Button>
         <Button Content="X" x:Name="btnClose"
+                 Visibility="{Binding BtnVisibility }"
                 VerticalAlignment="Top" HorizontalAlignment="Right" 
                 Width="32" Height="32" FontSize="20"
                 Background="HotPink" Click="Close_Click"/>

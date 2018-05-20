@@ -34,6 +34,12 @@ namespace WpfAnalogClock.Constrols
             set;
         }
 
+        public Visibility DigitalClockVisibility
+        {
+            get { return txtTime.Visibility; }
+            set { txtTime.Visibility = value; }
+        }
+
         public AnalogClock()
         {
             InitializeComponent();

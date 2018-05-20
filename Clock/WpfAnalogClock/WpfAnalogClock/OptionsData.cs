@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Windows;
 
 namespace WpfAnalogClock
 {
@@ -28,5 +29,8 @@ namespace WpfAnalogClock
 
         [Category("Common")]
         public bool DisableScreenSaver { get; set; }
+
+        [Category("Common")]
+        public Visibility DigitalClockVisibility { get; set; }
     }
 }
