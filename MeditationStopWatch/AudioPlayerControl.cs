@@ -212,7 +212,7 @@ namespace MeditationStopWatch
 		private void UpdateInfo()
 		{
 			string sStatus = m_Mp3Player.StatusMode;
-			m_lblStatus.Text = sStatus;
+			m_lblStatus.Text = sStatus + ": " + m_Mp3Player.FileName;
 			UpdateButtonsState(sStatus);
 			DisableScreenSaver();
 			UpdatePlayingFile();

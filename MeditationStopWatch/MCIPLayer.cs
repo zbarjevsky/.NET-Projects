@@ -25,6 +25,8 @@ namespace MeditationStopWatch
         [DllImport("winmm.dll")]
         public static extern int mciGetErrorString(int errCode, StringBuilder errMsg, int buflen);
 
+        public string FileName {  get { return _file; } }
+
 		private bool Command(string cmd, params object [] args)
 		{
 			if (_file == string.Empty)
