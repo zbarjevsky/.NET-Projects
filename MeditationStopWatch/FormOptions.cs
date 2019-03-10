@@ -16,7 +16,9 @@ namespace MeditationStopWatch
 		private Panel m_pnlMain;
 		private System.Windows.Forms.PropertyGrid m_PropertyGrid;
 
-		private void InitializeComponent()
+        private Action<string> OnPropertyChange = (propertyName) => { };
+
+        private void InitializeComponent()
 		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormOptions));
 			this.m_PropertyGrid = new System.Windows.Forms.PropertyGrid();
@@ -114,12 +116,15 @@ namespace MeditationStopWatch
 
 		}//end InitializeComponent
 
-		public FormOptions(Options propclass)
+		public FormOptions(Options propclass, Action<string> onPropertyChange = null)
 		{
 			InitializeComponent();
 			
 			m_PropertyGrid.SelectedObject = propclass;
 			m_PropertyGrid.HelpBackColor = propclass.Background;
+
+            if (onPropertyChange != null)
+                OnPropertyChange = onPropertyChange;
 		}//end constructor
 
 		private void OptionForm_Load(object sender, EventArgs e)
@@ -131,7 +136,9 @@ namespace MeditationStopWatch
 		private void m_PropertyGrid_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
 		{
 			m_PropertyGrid.HelpBackColor = ((Options)m_PropertyGrid.SelectedObject).Background;
-		}
+            string propertyName = e == null ? "" : e.ChangedItem.Label;
+            OnPropertyChange(propertyName);
+        }
 
 		private void m_PropertyGrid_SelectedGridItemChanged(object sender, SelectedGridItemChangedEventArgs e)
 		{

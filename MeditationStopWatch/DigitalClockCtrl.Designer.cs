@@ -41,6 +41,8 @@
             // 
             // DigitalClockCtrl
             // 
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(192)))), ((int)(((byte)(128)))));
+            this.Size = new System.Drawing.Size(150, 50);
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.DigitalClockCtrl_Paint);
             ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
             this.ResumeLayout(false);

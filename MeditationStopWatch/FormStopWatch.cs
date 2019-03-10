@@ -208,7 +208,7 @@ namespace MeditationStopWatch
 			m_Options.Volume = m_audioPlayerControl.Volume;
 			m_Options.Loop = m_audioPlayerControl.Loop;
 			
-			FormOptions frm = new FormOptions(m_Options);
+			FormOptions frm = new FormOptions(m_Options, (propertyName) => { ApplyOptions(); });
 			frm.ShowDialog(this);
 			
 			ApplyOptions();

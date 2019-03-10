@@ -125,7 +125,7 @@
             // 
             this.m_splitContainerMain.Panel2.Controls.Add(this.m_splitContainer);
             this.m_splitContainerMain.Size = new System.Drawing.Size(792, 498);
-            this.m_splitContainerMain.SplitterDistance = 449;
+            this.m_splitContainerMain.SplitterDistance = 442;
             this.m_splitContainerMain.TabIndex = 2;
             // 
             // m_splitContainerImage
@@ -146,7 +146,7 @@
             // 
             this.m_splitContainerImage.Panel2.Controls.Add(this.m_listThumbnails);
             this.m_splitContainerImage.Panel2MinSize = 0;
-            this.m_splitContainerImage.Size = new System.Drawing.Size(449, 498);
+            this.m_splitContainerImage.Size = new System.Drawing.Size(442, 498);
             this.m_splitContainerImage.SplitterDistance = 338;
             this.m_splitContainerImage.TabIndex = 1;
             // 
@@ -160,7 +160,7 @@
             // m_toolStripContainerPictureInfo.ContentPanel
             // 
             this.m_toolStripContainerPictureInfo.ContentPanel.Controls.Add(this.m_pictureBox1);
-            this.m_toolStripContainerPictureInfo.ContentPanel.Size = new System.Drawing.Size(445, 284);
+            this.m_toolStripContainerPictureInfo.ContentPanel.Size = new System.Drawing.Size(438, 284);
             this.m_toolStripContainerPictureInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             // 
             // m_toolStripContainerPictureInfo.LeftToolStripPanel
@@ -174,7 +174,7 @@
             // 
             this.m_toolStripContainerPictureInfo.RightToolStripPanel.Enabled = false;
             this.m_toolStripContainerPictureInfo.RightToolStripPanelVisible = false;
-            this.m_toolStripContainerPictureInfo.Size = new System.Drawing.Size(445, 334);
+            this.m_toolStripContainerPictureInfo.Size = new System.Drawing.Size(438, 334);
             this.m_toolStripContainerPictureInfo.TabIndex = 2;
             this.m_toolStripContainerPictureInfo.Text = "toolStripContainer1";
             // 
@@ -186,7 +186,7 @@
             this.m_toolStrip_Picture.Location = new System.Drawing.Point(0, 0);
             this.m_toolStrip_Picture.Name = "m_toolStrip_Picture";
             this.m_toolStrip_Picture.Padding = new System.Windows.Forms.Padding(0, 2, 1, 0);
-            this.m_toolStrip_Picture.Size = new System.Drawing.Size(445, 25);
+            this.m_toolStrip_Picture.Size = new System.Drawing.Size(438, 25);
             this.m_toolStrip_Picture.Stretch = true;
             this.m_toolStrip_Picture.TabIndex = 0;
             // 
@@ -198,7 +198,7 @@
             this.m_tsTxt_FileName.Name = "m_tsTxt_FileName";
             this.m_tsTxt_FileName.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
             this.m_tsTxt_FileName.ReadOnly = true;
-            this.m_tsTxt_FileName.Size = new System.Drawing.Size(402, 23);
+            this.m_tsTxt_FileName.Size = new System.Drawing.Size(395, 23);
             this.m_tsTxt_FileName.Text = "Hello I am here";
             // 
             // m_pictureBox1
@@ -207,7 +207,7 @@
             this.m_pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.m_pictureBox1.Name = "m_pictureBox1";
-            this.m_pictureBox1.Size = new System.Drawing.Size(445, 284);
+            this.m_pictureBox1.Size = new System.Drawing.Size(438, 284);
             this.m_pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.m_pictureBox1.TabIndex = 0;
             this.m_pictureBox1.TabStop = false;
@@ -225,7 +225,7 @@
             this.m_listThumbnails.Location = new System.Drawing.Point(0, 0);
             this.m_listThumbnails.MultiSelect = false;
             this.m_listThumbnails.Name = "m_listThumbnails";
-            this.m_listThumbnails.Size = new System.Drawing.Size(445, 152);
+            this.m_listThumbnails.Size = new System.Drawing.Size(438, 152);
             this.m_listThumbnails.SmallImageList = this.m_imageListThumbnails;
             this.m_listThumbnails.TabIndex = 0;
             this.m_listThumbnails.UseCompatibleStateImageBehavior = false;
@@ -257,7 +257,7 @@
             // m_splitContainer.Panel2
             // 
             this.m_splitContainer.Panel2.Controls.Add(this.m_audioPlayerControl);
-            this.m_splitContainer.Size = new System.Drawing.Size(339, 498);
+            this.m_splitContainer.Size = new System.Drawing.Size(346, 498);
             this.m_splitContainer.SplitterDistance = 283;
             this.m_splitContainer.TabIndex = 1;
             // 
@@ -272,7 +272,7 @@
             this.m_analogClock.MinuteHandColor = System.Drawing.Color.Goldenrod;
             this.m_analogClock.Name = "m_analogClock";
             this.m_analogClock.SecondHandColor = System.Drawing.Color.Red;
-            this.m_analogClock.Size = new System.Drawing.Size(335, 229);
+            this.m_analogClock.Size = new System.Drawing.Size(342, 230);
             this.m_analogClock.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.m_analogClock.TabIndex = 0;
             this.m_analogClock.TabStop = false;
@@ -283,9 +283,9 @@
             this.digitalClockCtrl1.BackColor = System.Drawing.Color.Black;
             this.digitalClockCtrl1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.digitalClockCtrl1.ForeColor = System.Drawing.Color.LimeGreen;
-            this.digitalClockCtrl1.Location = new System.Drawing.Point(0, 229);
+            this.digitalClockCtrl1.Location = new System.Drawing.Point(0, 230);
             this.digitalClockCtrl1.Name = "digitalClockCtrl1";
-            this.digitalClockCtrl1.Size = new System.Drawing.Size(335, 50);
+            this.digitalClockCtrl1.Size = new System.Drawing.Size(342, 49);
             this.digitalClockCtrl1.TabIndex = 1;
             this.digitalClockCtrl1.TabStop = false;
             // 
@@ -297,7 +297,7 @@
             this.m_audioPlayerControl.Location = new System.Drawing.Point(0, 0);
             this.m_audioPlayerControl.Loop = true;
             this.m_audioPlayerControl.Name = "m_audioPlayerControl";
-            this.m_audioPlayerControl.Size = new System.Drawing.Size(335, 207);
+            this.m_audioPlayerControl.Size = new System.Drawing.Size(342, 207);
             this.m_audioPlayerControl.TabIndex = 0;
             this.m_audioPlayerControl.Volume = 300;
             // 
