@@ -1,0 +1,136 @@
+﻿<Window x:Class="sD.WPF.MessageBox.MessageWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:messageBox="clr-namespace:sD.WPF.MessageBox"
+        mc:Ignorable="d"
+        Topmost="False"
+        WindowStartupLocation="CenterOwner"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        Loaded="MessageWindow_OnLoaded"
+        MinHeight="200" MinWidth="450"
+        Title="MessageWindow" Height="200" Width="500" x:ClassModifier="internal">
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0" ResizeBorderThickness="6" />
+    </WindowChrome.WindowChrome>
+    <Window.InputBindings>
+        <KeyBinding Key="F6" Command="{Binding F6Command}"/>
+        <KeyBinding Key="Enter" Command="{Binding DefaultCommand}"/>
+        <KeyBinding Key="F5" Command="{Binding F5Command}"/>
+        <KeyBinding Key="Escape" Command="{Binding EscapeCommand}"/>
+        <KeyBinding Key="C" Modifiers="Ctrl" Command="{Binding CopyCommand}"/>
+    </Window.InputBindings>
+    <!--<Window.Effect>
+        <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2"/>
+    </Window.Effect>-->
+    <Border x:Name="borderMain" CornerRadius="5" BorderBrush="Gray" BorderThickness="1" 
+            MouseDown="BorderMain_OnMouseDown">
+        <Border.Background>
+            <SolidColorBrush Opacity="0.4" Color="{Binding ElementName=borderMain, Path=BorderBrush.Color}"/>
+        </Border.Background>
+        <Grid Margin="4" Background="LightGray">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="44"/>
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.Background>
+                    <LinearGradientBrush EndPoint="0.5,1.5" StartPoint="0.5,0">
+                        <GradientStop x:Name="colorTitle" Color="DarkGray" Offset="0"/>
+                        <GradientStop Color="WhiteSmoke" Offset="0.567"/>
+                    </LinearGradientBrush>
+                </Grid.Background>
+
+                <Border x:Name="borderImage" Margin="2" BorderThickness="1" CornerRadius="5" BorderBrush="DarkBlue" Background="GhostWhite">
+                    <Image x:Name="img" Width="30" Height="30" Source="./Images/MSGBOX03.ICO"
+                        VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                </Border>
+
+                <TextBlock x:Name="txtTitle" Grid.Row="0" Grid.Column="1" Padding="3"
+                        Height="36" 
+                        Foreground="Black" Background="Transparent" FontSize="20" FontWeight="Bold"
+                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch" 
+                        TextAlignment="Center" >Title</TextBlock>
+
+                <StackPanel Grid.Row="0"  Grid.Column="2" Orientation="Horizontal">
+                    <Button Margin="5" Padding="3" Click="Copy_Click" ToolTip="Copy Text &#x0a;(Ctrl+C)">
+                        <Button.Content>
+                            <Image x:Name="imgCopy" Source="/Images/copy.png" />
+                        </Button.Content>
+                    </Button>
+                    <Button x:Name="btnClose"
+                        Background="OrangeRed" Foreground="DarkBlue" FontWeight ="Bold" 
+                        Content="X" FontSize="20"  ToolTip="Close &#x0a;(Esc/Foot Pedal: Left/F5)"
+                        Width="30" Height="30" 
+                        VerticalAlignment="Center" HorizontalAlignment="Center" 
+                        Margin="0,4,6,4" Padding="0,-1,0,3"
+                        Click="CloseBtn_OnClick"/>
+                </StackPanel>
+            </Grid>
+
+            <Border x:Name="borderMsg" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Margin="0,4,0,0"
+                    BorderThickness="1" BorderBrush="Chartreuse">
+                <ScrollViewer x:Name ="scrlMessage" Padding="3"
+                                VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto"
+                                BorderThickness="0" Background="GhostWhite">
+                    <TextBox x:Name="txtMessage" Background="Transparent" Padding="0"
+                                IsInactiveSelectionHighlightEnabled="True" SelectionOpacity="0.3" SelectionBrush="Gray"
+                                FontSize="20" FontFamily="Courier New" IsReadOnly="True" BorderThickness="0"
+                                VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden"
+                                HorizontalAlignment="Stretch" VerticalAlignment="Center" TextWrapping="NoWrap"
+                                TextAlignment="Center" Text="Message" >
+                        <!--<TextBox.Resources>
+                            <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Yellow" />
+                            <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
+                        </TextBox.Resources>-->
+
+                    </TextBox>
+                </ScrollViewer>
+            </Border>
+
+            <Button x:Name="btn1" Grid.Row="2" Grid.Column="0" Content="_Cancel" ToolTip="Cancel\n(Escape)"
+                    MinWidth="120" Margin="4,4,10,4" Padding="4,0,4,4"  FontSize="20" FontWeight="DemiBold"
+                    Click="btn1_Click"/>
+
+            <StackPanel Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="btnF5" MinWidth="120" Margin="0,4,10,4"  FontSize="20" FontWeight="DemiBold"
+                        Content="_No" ToolTip="(Foot Pedal: Left/F5)" Click="btnF5_Click" >
+                    <Button.ContentTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal" >
+                                <messageBox:UserControlFootSwitchIcon OrangeIconVisibility="Visible" Margin="3,3,10,3" />
+                                <AccessText Margin="4,0,4,4" Text="{Binding}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </Button.ContentTemplate>
+                </Button>
+                <Button x:Name="btnF6" MinWidth="120" Margin="0,4,4,4" FontSize="20" FontWeight="DemiBold" 
+                        Content="_Yes" ToolTip="(Foot Pedal: Right/F6)" Click="btnF6_Click">
+                    <Button.ContentTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <messageBox:UserControlFootSwitchIcon GreenIconVisibility="Visible" Margin="3,3,10,3" />
+                                <AccessText Margin="4,0,4,4" Text="{Binding}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </Button.ContentTemplate>
+                </Button>
+            </StackPanel>
+        </Grid>
+    </Border>
+</Window>
