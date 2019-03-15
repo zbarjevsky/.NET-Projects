@@ -22,8 +22,10 @@ namespace Wizard
         private TimeSpan m_ElapsedTime = TimeSpan.FromSeconds(0);
         private bool m_bPaused = false;
         private bool m_bSoundPlayed;
-        private SoundPlayer m_SoundPlayer;
-		private Options m_Options;
+        //private SoundPlayer m_SoundPlayer;
+        private MCIPLayer m_SoundPlayer = new MCIPLayer();
+        private string m_sExePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        private Options m_Options;
 
         public ReikiProgressBar()
         {
@@ -36,28 +38,52 @@ namespace Wizard
             m_Timer.Elapsed += m_Timer_Elapsed;
         }
 
-        public SoundPlayer SoundPlayer
+        //public SoundPlayer SoundPlayer
+        //{
+        //    get
+        //    {
+        //        if (m_SoundPlayer == null)
+        //        {
+        //            ////string assName = Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().Location);
+        //            //string uri = string.Format(@"pack://application:,,,/{0}", @"Sounds/onhold.wav");
+        //            //var info = Application.GetResourceStream(new Uri(uri));
+        //            //if (info != null)
+        //            //{
+        //            //    m_SoundPlayer = new SoundPlayer(info.Stream);
+        //            //}
+        //        }
+        //        return m_SoundPlayer;
+        //    }
+        //}
+
+        public void PlayDing()
         {
-            get
-            {
-                if (m_SoundPlayer == null)
-                {
-                    //string assName = Path.GetFileNameWithoutExtension(Assembly.GetExecutingAssembly().Location);
-                    string uri = string.Format(@"pack://application:,,,/{0}", @"Sounds/onhold.wav");
-                    var info = Application.GetResourceStream(new Uri(uri));
-                    if (info != null)
-                    {
-                        m_SoundPlayer = new SoundPlayer(info.Stream);
-                    }
-                }
-                return m_SoundPlayer;
-            }
+            string sName = Path.Combine(m_sExePath, "Sounds", "ding.mp3");
+            m_SoundPlayer.Play(sName, "ding");
+            m_SoundPlayer.SetVolume(m_Options.Volume);
         }
 
-		void m_Timer_Elapsed(object sender, ElapsedEventArgs e)
+        private void UpdateTooltip(double secondsLeft)
         {
+            this.Dispatcher.BeginInvoke((Action)(() =>
+            {
+                const string FMT = @"m\:ss"; // @"hh\:mm\:ss"
+
+                string interval = TimeSpan.FromSeconds(m_Options.ProgressInterval).ToString(FMT);
+                string value = TimeSpan.FromSeconds(secondsLeft).ToString(FMT);
+
+                this.ToolTip = string.Format("{0}: {1:0} of {2:0}",
+                    m_Options.BellAtTheEnd ? "On" : "Off", value, interval);
+            }));
+        }
+
+		private void m_Timer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            m_Timer.Stop();
+
             DateTime now = DateTime.Now;
-            if (!m_bPaused) m_ElapsedTime += (now - m_LastTime);
+            if (!m_bPaused)
+                m_ElapsedTime += (now - m_LastTime);
             m_LastTime = now;
 
 			Value = m_ElapsedTime.TotalSeconds % Max;
@@ -65,9 +91,15 @@ namespace Wizard
 			if (m_Options.BellAtTheEnd && Max - Value < 2 && !m_bSoundPlayed)
             {
                 m_bSoundPlayed = true;
-                SoundPlayer.Play();
+                PlayDing();
             }
-			if (Max - Value > 5) m_bSoundPlayed = false;
+
+			if (Max - Value > 5)
+                m_bSoundPlayed = false;
+
+            UpdateTooltip(Max - Value);
+
+            m_Timer.Start();
         }
 
         private double _value;
@@ -116,7 +148,7 @@ namespace Wizard
         public void Pause()
         {
             m_bPaused = true;
-            SoundPlayer.Play();
+            PlayDing();
         }
 
         public void Resume()
