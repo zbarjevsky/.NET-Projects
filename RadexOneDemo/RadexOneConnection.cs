@@ -57,16 +57,16 @@ namespace sD
 
         public RadexOneConnection()
         {
-            _commands.DataReceived = (cmd) =>
+            _commands.DataReceived = (data) =>
             {
-                _alertManager.AnalyseSignal(cmd);
+                _alertManager.AnalyseSignal(data);
 
-                DataReceived(cmd);
+                DataReceived(data);
             };
 
             _commands.VerReceived = (cmd) => { VerReceived(cmd); };
 
-            _commands.CfgReceived = (cmd) => { CfgReceived(cmd); };
+            _commands.CfgReceived = (cfg) => { CfgReceived(cfg); };
 
             _alertManager.LightOn = () => { LightOn(); };
 
@@ -98,37 +98,37 @@ namespace sD
             OnDisconnected("");
         }
 
-        public void RequestData()
+        public void SendRequestData()
         {
-            Request(new CommandGetData());
+            SendRequest(new CommandGetData());
         }
 
-        internal void RequestVer()
+        internal void SendRequestVer()
         {
-            Request(new CommandGetVersion());
+            SendRequest(new CommandGetVersion());
         }
 
-        internal void RequestSettings0()
+        internal void SendRequestGetSettings()
         {
-            Request(new CommandGetSettings());
+            SendRequest(new CommandGetSettings());
         }
 
-        internal void RequestSetSettings(bool snd, bool vbr, double max)
+        internal void SendRequestSetSettings(bool snd, bool vbr, double max)
         {
-            Request(new CommandConfigure(snd, vbr, max));
+            SendRequest(new CommandConfigure(snd, vbr, max));
         }
 
         internal void RequestResetDose()
         {
-            Request(new CommandAAFF());
+            SendRequest(new CommandAAFF());
         }
 
         internal void RequestTestCmd()
         {
-            Request(new CommandTest());
+            SendRequest(new CommandTest());
         }
 
-        private void Request(RadexCommandBase cmd)
+        private void SendRequest(RadexCommandBase cmd)
         {
             _commands.AddCommand(cmd);
 
@@ -158,7 +158,7 @@ namespace sD
                         {
                             try
                             {
-                                RequestData();
+                                SendRequestData();
                             }
                             catch (Exception err)
                             {
@@ -186,7 +186,7 @@ namespace sD
             {
                 byte[] data = _radexPort.GetReceivedData();
                 if(data != null)
-                    _commands.SetResponce(data);
+                    _commands.ProcessResponce(data);
             }
             catch (Exception err)
             {

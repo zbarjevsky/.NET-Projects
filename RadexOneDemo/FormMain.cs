@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -103,18 +104,29 @@ namespace RadexOneDemo
 
             _connectionCheckTask = Task.Run(() =>
             {
-                while (_checkConnected)
+                while (!_cancel)
                 {
-                    ConnectIfAvailable();
+                    try
+                    {
+                        UpdateStatus();
+                        _radexPorts = RadexComPort.RadexPortInfos();
+                        ConnectIfAvailable();
+                    }
+                    catch (Exception err)
+                    {
+                        Debug.WriteLine(err.ToString());
+                    }
                     Thread.Sleep(1000);
                 }
             });
         }
 
-        private bool _checkConnected = true;
+        private volatile bool _cancel = false;
         private void FormMain_FormClosed(object sender, FormClosedEventArgs e)
         {
-            _checkConnected = false;
+            this.Cursor = Cursors.WaitCursor;
+
+            _cancel = true;
             _connectionCheckTask.Wait(2000);
 
             //save settings/config
@@ -129,6 +141,12 @@ namespace RadexOneDemo
 
         private void m_chkConnect_CheckedChanged(object sender, EventArgs e)
         {
+            if (_radexPorts.Count == 0)
+            {
+                MessageBox.Show("No Device connected", "Connect()", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             try
             {
                 if (m_chkConnect.Checked)
@@ -149,6 +167,8 @@ namespace RadexOneDemo
 
             m_btnRequest.Enabled = m_chkConnect.Checked;
         }
+
+        private List<string> _radexPorts = new List<string>();
 
         private void ConnectIfAvailable()
         {
@@ -194,8 +214,6 @@ namespace RadexOneDemo
                     m_chkConnect.Checked = false;
                     m_chkConnect.Enabled = false;
                 }
-
-                UpdateStatus();
             });
         }
 
@@ -203,11 +221,10 @@ namespace RadexOneDemo
         {
             Utils.ExecuteOnUiThreadBeginInvoke(this, () =>
             {
-                List<string> radexPorts = RadexComPort.RadexPortInfos();
-                UpdateCmbPorts(radexPorts);
-                if (radexPorts.Count > 0)
+                UpdateCmbPorts(_radexPorts);
+                if (_radexPorts != null && _radexPorts.Count > 0)
                 {
-                    UpdateIfChanged(m_status1, "Device in: " + radexPorts[0]);
+                    UpdateIfChanged(m_status1, "Device in: " + _radexPorts[0]);
                 }
                 else
                 {
@@ -289,7 +306,7 @@ namespace RadexOneDemo
         {
             try
             {
-                _radex.RequestData();
+                _radex.SendRequestData();
             }
             catch (Exception err)
             {
@@ -301,7 +318,7 @@ namespace RadexOneDemo
         {
             try
             {
-                _radex.RequestVer();
+                _radex.SendRequestVer();
             }
             catch (Exception err)
             {
@@ -313,7 +330,7 @@ namespace RadexOneDemo
         {
             try
             {
-                _radex.RequestSettings0();
+                _radex.SendRequestGetSettings();
             }
             catch (Exception err)
             {
@@ -325,7 +342,7 @@ namespace RadexOneDemo
         {
             try
             {
-                _radex.RequestSetSettings(m_chkSnd.Checked, m_chkVib.Checked, (double)(m_numLimit.Value));
+                _radex.SendRequestSetSettings(m_chkSnd.Checked, m_chkVib.Checked, (double)(m_numLimit.Value));
             }
             catch (Exception err)
             {
@@ -461,6 +478,11 @@ namespace RadexOneDemo
         {
             FormHistory frm = new FormHistory(_history);
             frm.ShowDialog(this);
+        }
+
+        private void connectToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("Not Implemented");
         }
 
         private DateTime _lastUpdateRecord = DateTime.MinValue;

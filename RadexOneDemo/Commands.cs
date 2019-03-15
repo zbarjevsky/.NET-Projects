@@ -14,9 +14,9 @@ namespace RadexOneDemo
 
         private RadexCommandBase [] commands = new RadexCommandBase[MAX_CMD];
 
-        public Action<CommandGetData> DataReceived = null;
-        public Action<CommandGetVersion> VerReceived = null;
-        public Action<CommandGetSettings> CfgReceived = null;
+        public Action<CommandGetData> DataReceived = (data) => { };
+        public Action<CommandGetVersion> VerReceived = (ver) => { };
+        public Action<CommandGetSettings> CfgReceived = (set) => { };
 
         private string _logFileName = string.Format(@"C:\Temp\Radex{0}.log", DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss"));
 
@@ -27,7 +27,7 @@ namespace RadexOneDemo
         }
 
         private byte [] responce = new byte[512];
-        public void SetResponce(byte[] data)
+        public void ProcessResponce(byte[] data)
         {
             int offset = 0;
             while (offset < data.Length)
@@ -52,18 +52,15 @@ namespace RadexOneDemo
 
                     if (cmd is CommandGetData)
                     {
-                        if (DataReceived != null)
-                            DataReceived(cmd as CommandGetData);
+                        DataReceived(cmd as CommandGetData);
                     }
                     if (cmd is CommandGetVersion)
                     {
-                        if (VerReceived != null)
-                            VerReceived(cmd as CommandGetVersion);
+                        VerReceived(cmd as CommandGetVersion);
                     }
                     if (cmd is CommandGetSettings)
                     {
-                        if (CfgReceived != null)
-                            CfgReceived(cmd as CommandGetSettings);
+                        CfgReceived(cmd as CommandGetSettings);
                     }
                 }
                 else //wrong input

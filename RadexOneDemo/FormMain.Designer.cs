@@ -78,6 +78,7 @@
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.m_progressMain = new RadexOneDemo.VerticalProgressBar();
+            this.label2 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.m_numLimit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_numMaxCPM)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -124,6 +125,7 @@
             // 
             this.m_chkConnect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_chkConnect.AutoSize = true;
+            this.m_chkConnect.Enabled = false;
             this.m_chkConnect.Location = new System.Drawing.Point(657, 10);
             this.m_chkConnect.Name = "m_chkConnect";
             this.m_chkConnect.Size = new System.Drawing.Size(66, 17);
@@ -191,7 +193,7 @@
             // 
             // m_btnSet
             // 
-            this.m_btnSet.Location = new System.Drawing.Point(232, 178);
+            this.m_btnSet.Location = new System.Drawing.Point(299, 145);
             this.m_btnSet.Name = "m_btnSet";
             this.m_btnSet.Size = new System.Drawing.Size(133, 23);
             this.m_btnSet.TabIndex = 11;
@@ -258,7 +260,7 @@
             0,
             0,
             65536});
-            this.m_numLimit.Location = new System.Drawing.Point(150, 181);
+            this.m_numLimit.Location = new System.Drawing.Point(240, 181);
             this.m_numLimit.Maximum = new decimal(new int[] {
             10,
             0,
@@ -477,6 +479,7 @@
             // 
             // splitContainer2.Panel1
             // 
+            this.splitContainer2.Panel1.Controls.Add(this.label2);
             this.splitContainer2.Panel1.Controls.Add(this.m_btnHistory);
             this.splitContainer2.Panel1.Controls.Add(this.m_chkAutoConnect);
             this.splitContainer2.Panel1.Controls.Add(this.m_btnTest);
@@ -543,7 +546,6 @@
             this.m_chart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_chart1.BackColor = System.Drawing.SystemColors.Control;
             this.m_chart1.BorderlineColor = System.Drawing.Color.Empty;
             this.m_chart1.BorderSkin.BorderColor = System.Drawing.Color.Empty;
             this.m_chart1.BorderSkin.PageColor = System.Drawing.SystemColors.Control;
@@ -555,8 +557,8 @@
             chartArea1.AxisY2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.True;
             chartArea1.AxisY2.LabelStyle.ForeColor = System.Drawing.Color.DarkOrange;
             chartArea1.AxisY2.MajorGrid.Enabled = false;
-            chartArea1.BackColor = System.Drawing.SystemColors.Control;
-            chartArea1.BackSecondaryColor = System.Drawing.SystemColors.Control;
+            chartArea1.BackColor = System.Drawing.Color.White;
+            chartArea1.BackSecondaryColor = System.Drawing.Color.White;
             chartArea1.Name = "ChartArea1";
             this.m_chart1.ChartAreas.Add(chartArea1);
             legend1.Name = "Legend1";
@@ -670,11 +672,12 @@
             this.connectToolStripMenuItem.Name = "connectToolStripMenuItem";
             this.connectToolStripMenuItem.Size = new System.Drawing.Size(119, 22);
             this.connectToolStripMenuItem.Text = "&Connect";
+            this.connectToolStripMenuItem.Click += new System.EventHandler(this.connectToolStripMenuItem_Click);
             // 
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.toolsToolStripMenuItem.Text = "&Tools";
             // 
             // helpToolStripMenuItem
@@ -702,6 +705,15 @@
             this.m_progressMain.Size = new System.Drawing.Size(13, 152);
             this.m_progressMain.TabIndex = 8;
             this.m_progressMain.Value = 33;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(179, 183);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(55, 13);
+            this.label2.TabIndex = 27;
+            this.label2.Text = "Alert Limit:";
             // 
             // FormMain
             // 
@@ -793,6 +805,7 @@
         private System.Windows.Forms.RichTextBox m_txtRecords;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button m_btnHistory;
+        private System.Windows.Forms.Label label2;
     }
 }
 
