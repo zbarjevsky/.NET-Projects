@@ -167,6 +167,10 @@
     <Content Include="ImageListViewDemo.csproj" />
     <Content Include="Images\yin-yang %281%29.ico" />
     <Content Include="Images\Yin-Yang.ico" />
+    <Content Include="Sounds\ding.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Resource Include="Sounds\ding.wav" />
     <Content Include="Yin-Yang.ico" />
     <Resource Include="Sounds\gong.wav" />
     <Resource Include="Sounds\onhold.wav" />

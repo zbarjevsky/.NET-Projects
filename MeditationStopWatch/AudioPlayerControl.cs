@@ -409,6 +409,7 @@ namespace MeditationStopWatch
 
 		private void m_toolStripTrackBarVolume_ValueChanged(object sender, EventArgs e)
 		{
+            m_Options.Volume = Volume;
 			m_Mp3Player.SetVolume(Volume);
 			UpdateInfo();
 		}
