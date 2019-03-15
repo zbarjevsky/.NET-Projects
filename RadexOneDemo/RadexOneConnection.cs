@@ -203,6 +203,25 @@ namespace sD
         }
     }
 
+    public class RadexComPortDesc
+    {
+        public const string RADEX_ONE = "RADEX ONE";
+
+        public string Desc;
+        public string Port;
+
+        public RadexComPortDesc(string OS_desc)
+        {
+            Desc = OS_desc;
+            Port = OS_desc.Substring(RADEX_ONE.Length).Trim(')', '(', ' ');
+        }
+
+        public override string ToString()
+        {
+            return Desc;
+        }
+    }
+
     public class RadexComPort
     {
         public readonly SerialPort Port = new SerialPort();
@@ -319,47 +338,65 @@ namespace sD
 
         #region Connected Port Info
 
-        public static List<string> RadexPortInfos()
+        public static List<RadexComPortDesc> RadexPortInfos()
         {
-            List<string> radexPorts = new List<string>();
-            List<string> portDescriptions = GetPortDescriptions();
-            foreach (string s in portDescriptions)
+            List<string> descriptions = PortNames(RadexComPortDesc.RADEX_ONE);
+            List<RadexComPortDesc> radex_names = new List<RadexComPortDesc>();
+            foreach (string desc in descriptions)
             {
-                if (s.Contains("RADEX ONE"))
-                    radexPorts.Add(s);
+                radex_names.Add(new RadexComPortDesc(desc));
             }
-            return radexPorts;
+            return radex_names;
         }
 
         private static string RadexPortInfo(int idx)
         {
-            List<string> radexPorts = RadexPortInfos();
+            List<RadexComPortDesc> radexPorts = RadexPortInfos();
             if (idx < radexPorts.Count)
-                return radexPorts[idx].Substring(0, 5).Trim();
+                return radexPorts[idx].Port;
             return null;
         }
 
         private static bool RadexPortExists(string comPort)
         {
-            List<string> radexPorts = RadexPortInfos();
-            foreach (string radexPort in radexPorts)
+            List<RadexComPortDesc> radexPorts = RadexPortInfos();
+            foreach (RadexComPortDesc radexPort in radexPorts)
             {
-                string com = radexPort.Substring(0, 5).Trim();
-                if (com == comPort)
+                if (radexPort.Port == comPort)
                     return true;
             }
             return false;
         }
 
-        private static List<string> GetPortDescriptions()
+        //private static List<string> GetPortDescriptions()
+        //{
+        //    using (var searcher = new ManagementObjectSearcher("SELECT * FROM WIN32_SerialPort"))
+        //    {
+        //        string[] portnames = SerialPort.GetPortNames();
+        //        SerialPort p1 = new SerialPort(portnames[3]);
+        //        var ports = searcher.Get().Cast<ManagementBaseObject>().ToList();
+        //        var tList = (from comX in portnames join p in ports on comX equals p["DeviceID"].ToString() select comX + " - " + p["Caption"]).ToList();
+        //        return tList;
+        //    }
+        //}
+
+        public static List<string> PortNames(string name)
         {
-            using (var searcher = new ManagementObjectSearcher("SELECT * FROM WIN32_SerialPort"))
+            string[] portNames = SerialPort.GetPortNames();
+            string sInstanceName = string.Empty;
+            string sPortName = string.Empty;
+
+            List<string> names = new List<string>();
+
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher(@"root\CIMV2", "SELECT * FROM Win32_PnPEntity");
+            var list = searcher.Get();
+            foreach (ManagementObject queryObj in list)
             {
-                string[] portnames = SerialPort.GetPortNames();
-                var ports = searcher.Get().Cast<ManagementBaseObject>().ToList();
-                var tList = (from comX in portnames join p in ports on comX equals p["DeviceID"].ToString() select comX + " - " + p["Caption"]).ToList();
-                return tList;
+                sInstanceName = queryObj["Caption"].ToString();
+                names.Add(sInstanceName);
             }
+
+            return names.Where(n => n.Contains(name)).ToList();
         }
 
         #endregion

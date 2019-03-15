@@ -44,6 +44,7 @@
     <ApplicationIcon>AppIcon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -58,6 +59,7 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ChartHelper.cs" />
@@ -145,6 +147,10 @@
     <Content Include="Images\AboutRadiationLevels.jpg" />
     <Content Include="Images\UsbConnect1.gif" />
     <Content Include="Images\UsbConnect2.png" />
+    <EmbeddedResource Include="Sounds\Tornado_Siren_II-Delilah.wav" />
+    <None Include="Sounds\Tornado_Siren_II-Delilah.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Images\UsbConnect3.png" />
     <None Include="Images\Emoticons Images2.jpg" />
     <None Include="Images\Emoticons Images2%281%29.png" />

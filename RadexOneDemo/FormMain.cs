@@ -47,7 +47,7 @@ namespace RadexOneDemo
             m_chkAutoConnect.Checked = Properties.Settings.Default.AutoConnect;
             m_numInterval.Value = Properties.Settings.Default.Interval;
 
-            player = new PlaySound();
+            player = new PlaySound(this);
         }
 
         private void FormMain_Load(object sender, EventArgs e)
@@ -168,7 +168,7 @@ namespace RadexOneDemo
             m_btnRequest.Enabled = m_chkConnect.Checked;
         }
 
-        private List<string> _radexPorts = new List<string>();
+        private List<RadexComPortDesc> _radexPorts = new List<RadexComPortDesc>();
 
         private void ConnectIfAvailable()
         {
@@ -180,8 +180,8 @@ namespace RadexOneDemo
                 if (m_cmbDevices.SelectedItem != null)
                 {
                     m_chkConnect.Enabled = true;
-                    string device = m_cmbDevices.SelectedItem.ToString();
-                    string comPort = device.Substring(0, 5).Trim();
+                    RadexComPortDesc device = m_cmbDevices.SelectedItem as RadexComPortDesc;
+                    string comPort = device.Port;
 
                     //reconnect
                     if (_radex.RadexPort != comPort || (!_radex.IsOpen && m_chkAutoConnect.Checked))
@@ -276,14 +276,15 @@ namespace RadexOneDemo
             txt.Text = text;
         }
 
-        private void UpdateCmbPorts(List<string> radexPorts)
+        private void UpdateCmbPorts(List<RadexComPortDesc> radexPorts)
         {
             bool bUpdated = false;
             if (radexPorts.Count == m_cmbDevices.Items.Count)
             {
                 for (int i = 0; i < radexPorts.Count; i++)
                 {
-                    if (string.CompareOrdinal(radexPorts[i], m_cmbDevices.Items[i].ToString()) != 0)
+                    RadexComPortDesc desc = m_cmbDevices.Items[i] as RadexComPortDesc;
+                    if (string.CompareOrdinal(radexPorts[i].Port, desc.Port) != 0)
                     {
                         m_cmbDevices.Items[i] = radexPorts[i];
                         bUpdated = true;
