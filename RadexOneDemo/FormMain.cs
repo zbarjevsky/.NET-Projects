@@ -19,12 +19,13 @@ namespace RadexOneDemo
     {
         private double _maxCPM = 0;
         private double _maxLive = 0;
-        private DateTime _maxTimeCPM, _maxTimeDOSE;
+        private DateTime _maxCPMTime, _maxDOSETime;
         private readonly RadexOneConnection _radex = new RadexOneConnection();
         private readonly Image _radiationOn, _radiationOff, _radiationWarning, _connectUsb;
-        private readonly PlaySound player;
+        private readonly PlaySound _player;
         private Task _connectionCheckTask;
         //private Color _bkColor = Color.Green;
+        private readonly AlertManager _alertManager = new AlertManager();
 
         private readonly List<ChartPoint> _history = new List<ChartPoint>(2048);
 
@@ -39,7 +40,7 @@ namespace RadexOneDemo
             _radiationWarning = Properties.Resources.WarningEmoji;
             _connectUsb = Properties.Resources.UsbConnect3;
 
-            m_picYellowLight.Image = _connectUsb;
+            m_picRadiationStatus.Image = _connectUsb;
 
             m_chkPause.Checked = _radex.Pause;
 
@@ -47,22 +48,14 @@ namespace RadexOneDemo
             m_chkAutoConnect.Checked = Properties.Settings.Default.AutoConnect;
             m_numInterval.Value = Properties.Settings.Default.Interval;
 
-            player = new PlaySound(this);
+            _player = new PlaySound(this);
+            m_trackAlertVolume.Value = _player.Volume;
+
+            _alertManager.OnStateChanged = UpdateAlertState;
         }
 
         private void FormMain_Load(object sender, EventArgs e)
         {
-            _radex.LightOn = () =>
-            {
-                m_picYellowLight.Image = _radiationOn;
-                player.Play();
-            };
-
-            _radex.LightOff = () =>
-            {
-                m_picYellowLight.Image = _radiationOff;
-                player.Stop();
-            };
 
             _radex.DataReceived = (cmd) =>
             {
@@ -94,11 +87,8 @@ namespace RadexOneDemo
             {
                 Utils.ExecuteOnUiThreadBeginInvoke(this, () =>
                 {
-                    m_picYellowLight.Image = _connectUsb;
-                    UpdateStatus();
-                    //if (!string.IsNullOrWhiteSpace(reason))
-                    //    MessageBox.Show(this, "Disconnected\n" + reason, "Connection error",
-                    //        MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    m_picRadiationStatus.Image = _connectUsb;
+                    UpdateStatusBar();
                 });
             };
 
@@ -108,8 +98,8 @@ namespace RadexOneDemo
                 {
                     try
                     {
-                        UpdateStatus();
-                        _radexPorts = RadexComPort.RadexPortInfos();
+                        UpdateStatusBar();
+                        _radexPorts = RadexComPortDesc.RadexPortInfos();
                         ConnectIfAvailable();
                     }
                     catch (Exception err)
@@ -131,7 +121,7 @@ namespace RadexOneDemo
 
             //save settings/config
             Properties.Settings.Default.Interval = m_numInterval.Value;
-            Properties.Settings.Default.MaxCPM = _radex.AlertCPM;
+            Properties.Settings.Default.MaxCPM = _alertManager.AlertCPM;
             Properties.Settings.Default.AutoConnect = m_chkAutoConnect.Checked;
             Properties.Settings.Default.Save();
 
@@ -180,15 +170,14 @@ namespace RadexOneDemo
                 if (m_cmbDevices.SelectedItem != null)
                 {
                     m_chkConnect.Enabled = true;
-                    RadexComPortDesc device = m_cmbDevices.SelectedItem as RadexComPortDesc;
-                    string comPort = device.Port;
+                    RadexComPortDesc selectedDevice = m_cmbDevices.SelectedItem as RadexComPortDesc;
 
                     //reconnect
-                    if (_radex.RadexPort != comPort || (!_radex.IsOpen && m_chkAutoConnect.Checked))
+                    if (_radex.PortName != selectedDevice.Port || (!_radex.IsOpen && m_chkAutoConnect.Checked))
                     {
                         try
                         {
-                            _radex.Open(comPort);
+                            _radex.Open(selectedDevice.Port);
 
                             m_btnRequest_Click(this, null);
                             m_btnGetVer_Click(this, null);
@@ -197,14 +186,14 @@ namespace RadexOneDemo
                             m_chkConnect.Text = "Opened";
                             m_chkConnect.Checked = true;
 
-                            m_picYellowLight.Image = Properties.Resources.OkEmoji;
+                            m_picRadiationStatus.Image = Properties.Resources.OkEmoji;
                         }
                         catch (Exception err)
                         {
                             Log.WriteLine("Open exception: "+err.Message);
                             m_chkConnect.Checked = false;
                             m_chkConnect.Text = err.Message;
-                            m_picYellowLight.Image = _connectUsb;
+                            m_picRadiationStatus.Image = _connectUsb;
                         }
                     }
                 }
@@ -217,7 +206,7 @@ namespace RadexOneDemo
             });
         }
 
-        private void UpdateStatus()
+        private void UpdateStatusBar()
         {
             Utils.ExecuteOnUiThreadBeginInvoke(this, () =>
             {
@@ -231,7 +220,7 @@ namespace RadexOneDemo
                     UpdateIfChanged(m_status1, "No Radex device plugged in.");
                 }
 
-                string port = _radex.RadexPort;
+                string port = _radex.PortName;
                 if (port != null)
                 {
                     EnableCommands(_radex.IsOpen);
@@ -239,11 +228,50 @@ namespace RadexOneDemo
                 }
                 else
                 {
-                    m_picYellowLight.Image = _connectUsb;
+                    m_picRadiationStatus.Image = _connectUsb;
                     EnableCommands(false);
                     UpdateIfChanged(m_status2, "...");
                 }
             });
+        }
+
+        private void UpdateAlertState(AlertManager.AlertState state)
+        {
+            if (state == AlertManager.AlertState.Good)
+            {
+                m_progressMain.SetState(ModifyProgressBarColor.State.Green);
+
+                m_lblVal.BackColor = Color.Chartreuse;
+                m_lblCPM.BackColor = Color.LightGray;
+
+                m_picRadiationStatus.Image = _radiationOff;
+
+                _player.Stop();
+            }
+            else if (state == AlertManager.AlertState.Warning || state == AlertManager.AlertState.CoolingDown)
+            {
+                m_progressMain.SetState(ModifyProgressBarColor.State.Yellow);
+
+                m_lblVal.BackColor = Color.Chartreuse;
+                m_lblCPM.BackColor = Color.Yellow;
+
+                m_picRadiationStatus.Image = _radiationWarning;
+
+                _player.Stop();
+            }
+            else //if(state == AlertManager.AlertState.Alert)
+            {
+                UpdateMaxRecord(false); //record alert value
+
+                m_progressMain.SetState(ModifyProgressBarColor.State.Red);
+
+                m_lblVal.BackColor = Color.OrangeRed;
+                m_lblCPM.BackColor = Color.OrangeRed;
+
+                m_picRadiationStatus.Image = _radiationOn;
+
+                _player.Play();
+            }
         }
 
         private void EnableCommands(bool bEnable = true)
@@ -264,7 +292,7 @@ namespace RadexOneDemo
             if (bEnable == false)
             {
                 m_progressMain.Value = 0;
-                m_picYellowLight.BackColor = SystemColors.Control;
+                m_picRadiationStatus.BackColor = SystemColors.Control;
                 m_splitContainerTools.Panel1.BackColor = SystemColors.Control;
             }
         }
@@ -378,7 +406,7 @@ namespace RadexOneDemo
 
         private void m_numMaxCPM_ValueChanged(object sender, EventArgs e)
         {
-            _radex.AlertCPM = (int) m_numMaxCPM.Value;
+            _alertManager.AlertCPM = (int) m_numMaxCPM.Value;
         }
 
         private void m_numInterval_ValueChanged(object sender, EventArgs e)
@@ -393,7 +421,7 @@ namespace RadexOneDemo
             if (cmd.CPM > _maxCPM)
             {
                 _maxCPM = cmd.CPM;
-                _maxTimeCPM = DateTime.Now;
+                _maxCPMTime = DateTime.Now;
 
                 UpdateMaxRecord(true);
             }
@@ -401,7 +429,7 @@ namespace RadexOneDemo
             if (cmd.DOSE > _maxLive)
             {
                 _maxLive = cmd.DOSE;
-                _maxTimeDOSE = DateTime.Now;
+                _maxDOSETime = DateTime.Now;
 
                 UpdateMaxRecord(true);
             }
@@ -412,7 +440,7 @@ namespace RadexOneDemo
                 _history.RemoveAt(0);
 
             m_lblVal.Text = cmd.DOSE.ToString("0.00");
-            m_lblWarn.Text = cmd.CPM.ToString();
+            m_lblCPM.Text = cmd.CPM.ToString();
 
             ChartHelper.AddPointXY(m_chart1, "SeriesCPM", pt.CPM, pt.date);
             ChartHelper.AddPointXY(m_chart1, "SeriesDOSE", pt.DOSE, pt.date);
@@ -422,39 +450,18 @@ namespace RadexOneDemo
             if (progress < 1) progress = 1;
             m_progressMain.Value = progress;
 
-            m_picYellowLight.BackColor = Utils.GetBlendedColor(100 - progress);
-            m_splitContainerTools.Panel1.BackColor = m_picYellowLight.BackColor;
+            m_picRadiationStatus.BackColor = Utils.GetBlendedColor(100 - progress);
+            m_splitContainerTools.Panel1.BackColor = m_picRadiationStatus.BackColor;
 
-            if (cmd.CPM < (int)m_numMaxCPM.Value)
-            {
-                m_lblVal.BackColor = Color.Chartreuse;
-                m_lblWarn.BackColor = Color.LightGray;
-                m_picYellowLight.Image = _radiationOff;
-                m_progressMain.SetState(ModifyProgressBarColor.State.Green);
-            }
-            else
-            {
-                UpdateMaxRecord(false);
-
-                m_lblVal.BackColor = Color.Yellow;
-                m_lblWarn.BackColor = m_lblWarn.BackColor == Color.Yellow ? Color.Gray : Color.Yellow;
-
-                if (m_progressMain.Value < 75)
-                {
-                    m_progressMain.SetState(ModifyProgressBarColor.State.Yellow);
-                    m_picYellowLight.Image = _radiationWarning;
-                }
-                else
-                {
-                    m_progressMain.SetState(ModifyProgressBarColor.State.Red);
-                }
-            }
+            _alertManager.AnalyseSignal(cmd);
 
             string stat = string.Format("{0:0000}. DOSE: {1:0.00} µSv/h, CPM: {2} min−1, Accumulated: {3:0.0} µSv, Alert: {4}\r\n",
-                cmd.cmdId, cmd.DOSE, cmd.CPM, cmd.SUM, _radex.IsAlertOn);
+                cmd.cmdId, cmd.DOSE, cmd.CPM, cmd.SUM, _alertManager.AlertInfo);
+
             m_txtStatus.Text = stat;
             m_txtStatus.Text += FormatMaxRecord(); 
 
+            //trim log
             if (m_chkShowLog.Checked)
             {
                 stat += m_txtLog.Text;
@@ -472,7 +479,7 @@ namespace RadexOneDemo
                 return "";
 
             return string.Format("Max: {0} µSv/h,\t\tMax Rate: {1} pt/min\r\n{2}\t{3}\n",
-                _maxLive, _maxCPM, _maxTimeDOSE.ToString(DATE_FMT), _maxTimeCPM.ToString(DATE_FMT));
+                _maxLive, _maxCPM, _maxDOSETime.ToString(DATE_FMT), _maxCPMTime.ToString(DATE_FMT));
         }
 
         private void m_btnHistory_Click(object sender, EventArgs e)
@@ -484,6 +491,12 @@ namespace RadexOneDemo
         private void connectToolStripMenuItem_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Not Implemented");
+        }
+
+        private void m_trackAlertVolume_ValueChanged(object sender, EventArgs e)
+        {
+            _player.Volume = m_trackAlertVolume.Value;
+            m_lblAlertVolume.Text = m_trackAlertVolume.Value + "%";
         }
 
         private DateTime _lastUpdateRecord = DateTime.MinValue;

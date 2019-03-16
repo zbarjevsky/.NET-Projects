@@ -15,25 +15,15 @@ namespace sD
     public class RadexOneConnection
     {
         private readonly RadexCommands _commands = new RadexCommands();
-        private readonly RadexComPort _radexPort = new RadexComPort();
-        private readonly AlertManager _alertManager = new AlertManager();
+        private readonly ComPortHelper _radexPort = new ComPortHelper();
 
         public Action<CommandGetData> DataReceived = (cmd) => { };
         public Action<CommandGetVersion> VerReceived = (cmd) => { };
         public Action<CommandGetSettings> CfgReceived = (cmd) => { };
 
-        public Action LightOn = () => { };
-        public Action LightOff = () => { };
-        public bool IsAlertOn { get { return _alertManager.Alert; } }
-
         public bool IsOpen { get { return _radexPort.IsOpen; } }
 
         public Action<string> DisconnectEvent = (reason) => { };
-
-        public int AlertCPM {
-            get { return _alertManager.AlertCPM; }
-            set { _alertManager.AlertCPM = value; }
-        }
 
         public bool Pause = false;
 
@@ -59,8 +49,6 @@ namespace sD
         {
             _commands.DataReceived = (data) =>
             {
-                _alertManager.AnalyseSignal(data);
-
                 DataReceived(data);
             };
 
@@ -68,22 +56,18 @@ namespace sD
 
             _commands.CfgReceived = (cfg) => { CfgReceived(cfg); };
 
-            _alertManager.LightOn = () => { LightOn(); };
-
-            _alertManager.LightOff = () => { LightOff(); };
-
             _radexPort.Port.DataReceived += ComPort_DataReceived;
         }
 
-        public string RadexPort
+        public string PortName
         {
-            get { return _radexPort.RadexPortName; }
+            get { return _radexPort.PortName; }
         }
 
         public string Open(string comPort)
         {
-            if (_radexPort.IsOpen && _radexPort.RadexPortName == comPort)
-                return _radexPort.RadexPortName;
+            if (_radexPort.IsOpen && _radexPort.PortName == comPort)
+                return _radexPort.PortName;
 
             string port = _radexPort.Open(comPort);
             StartConnectionThread(true);
@@ -220,20 +204,68 @@ namespace sD
         {
             return Desc;
         }
+
+        #region Connected Port Info
+
+        public static List<RadexComPortDesc> RadexPortInfos()
+        {
+            List<string> descriptions = PortNames(RadexComPortDesc.RADEX_ONE);
+            List<RadexComPortDesc> radex_names = new List<RadexComPortDesc>();
+            foreach (string desc in descriptions)
+            {
+                radex_names.Add(new RadexComPortDesc(desc));
+            }
+            return radex_names;
+        }
+
+        private static string RadexPortInfo(int idx)
+        {
+            List<RadexComPortDesc> radexPorts = RadexPortInfos();
+            if (idx < radexPorts.Count)
+                return radexPorts[idx].Port;
+            return null;
+        }
+
+        private static bool RadexPortExists(string comPort)
+        {
+            List<RadexComPortDesc> radexPorts = RadexPortInfos();
+            foreach (RadexComPortDesc radexPort in radexPorts)
+            {
+                if (radexPort.Port == comPort)
+                    return true;
+            }
+            return false;
+        }
+
+        private static List<string> PortNames(string name)
+        {
+            string[] portNames = SerialPort.GetPortNames();
+            string sInstanceName = string.Empty;
+            string sPortName = string.Empty;
+
+            List<string> names = new List<string>();
+
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher(@"root\CIMV2", "SELECT * FROM Win32_PnPEntity");
+            var list = searcher.Get();
+            foreach (ManagementObject queryObj in list)
+            {
+                sInstanceName = queryObj["Caption"].ToString();
+                names.Add(sInstanceName);
+            }
+
+            return names.Where(n => n.Contains(name)).ToList();
+        }
+
+        #endregion
     }
 
-    public class RadexComPort
+    public class ComPortHelper
     {
         public readonly SerialPort Port = new SerialPort();
 
-        public string RadexPortName { get; private set; }
+        public string PortName { get; private set; }
 
         public bool IsOpen { get { return Port.IsOpen; } }
-
-        public string OpenFirstConnected()
-        {
-            return Open(RadexPortInfo(0));
-        }
 
         public string Open(string comPort)
         {
@@ -241,19 +273,19 @@ namespace sD
             {
                 try
                 {
-                    if (!RadexPortExists(comPort))
-                        throw new Exception("Device not connected: RADEX ONE");
+                    //if (!RadexComPortDesc.RadexPortExists(comPort))
+                    //    throw new Exception("Device not connected: RADEX ONE");
 
-                    RadexPortName = comPort;
+                    PortName = comPort;
                     if (Port.IsOpen)
                     {
-                        if (Port.PortName != RadexPortName)
+                        if (Port.PortName != PortName)
                             Port.Close();
                         else
-                            return RadexPortName; //already open
+                            return PortName; //already open
                     }
 
-                    Port.PortName = RadexPortName;
+                    Port.PortName = PortName;
                     Port.BaudRate = 9600;
                     Port.DataBits = 8;
                     Port.StopBits = StopBits.One;
@@ -262,7 +294,7 @@ namespace sD
 
                     Port.Open();
 
-                    return RadexPortName;
+                    return PortName;
                 }
                 catch (Exception err)
                 {
@@ -335,105 +367,75 @@ namespace sD
                 return ret;
             }
         }
-
-        #region Connected Port Info
-
-        public static List<RadexComPortDesc> RadexPortInfos()
-        {
-            List<string> descriptions = PortNames(RadexComPortDesc.RADEX_ONE);
-            List<RadexComPortDesc> radex_names = new List<RadexComPortDesc>();
-            foreach (string desc in descriptions)
-            {
-                radex_names.Add(new RadexComPortDesc(desc));
-            }
-            return radex_names;
-        }
-
-        private static string RadexPortInfo(int idx)
-        {
-            List<RadexComPortDesc> radexPorts = RadexPortInfos();
-            if (idx < radexPorts.Count)
-                return radexPorts[idx].Port;
-            return null;
-        }
-
-        private static bool RadexPortExists(string comPort)
-        {
-            List<RadexComPortDesc> radexPorts = RadexPortInfos();
-            foreach (RadexComPortDesc radexPort in radexPorts)
-            {
-                if (radexPort.Port == comPort)
-                    return true;
-            }
-            return false;
-        }
-
-        //private static List<string> GetPortDescriptions()
-        //{
-        //    using (var searcher = new ManagementObjectSearcher("SELECT * FROM WIN32_SerialPort"))
-        //    {
-        //        string[] portnames = SerialPort.GetPortNames();
-        //        SerialPort p1 = new SerialPort(portnames[3]);
-        //        var ports = searcher.Get().Cast<ManagementBaseObject>().ToList();
-        //        var tList = (from comX in portnames join p in ports on comX equals p["DeviceID"].ToString() select comX + " - " + p["Caption"]).ToList();
-        //        return tList;
-        //    }
-        //}
-
-        public static List<string> PortNames(string name)
-        {
-            string[] portNames = SerialPort.GetPortNames();
-            string sInstanceName = string.Empty;
-            string sPortName = string.Empty;
-
-            List<string> names = new List<string>();
-
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher(@"root\CIMV2", "SELECT * FROM Win32_PnPEntity");
-            var list = searcher.Get();
-            foreach (ManagementObject queryObj in list)
-            {
-                sInstanceName = queryObj["Caption"].ToString();
-                names.Add(sInstanceName);
-            }
-
-            return names.Where(n => n.Contains(name)).ToList();
-        }
-
-        #endregion
     }
 
     public class AlertManager
     {
-        public Action LightOn = () => { };
-        public Action LightOff = () => { };
+        public enum AlertState
+        {
+            CoolingDown = 0,
+            Good = 1,
+            Warning = 2,
+            Alert = 3
+        }
+
+        public Action<AlertState> OnStateChanged = (state) => { };
 
         public int AlertCPM = 60;
 
-        private bool _lightOn = false;
+        private AlertState _alertState = AlertState.Good;
         private double _lastDose = 1000.0;
         private uint _lastCPM = 10;
 
-        public bool Alert { get { return _lightOn; } }
+        public AlertState AlertInfo { get { return _alertState; } }
 
         public void AnalyseSignal(CommandGetData cmd)
         {
-            if (_lightOn == false)
-            {
-                if (cmd.CPM > AlertCPM && cmd.CPM >= (_lastCPM + (AlertCPM/10))) //CPM increasing significally
-                {
-                    _lightOn = true;
-                    LightOn();
-                }
-            }
-            else if (_lightOn == true)
+            if (_alertState == AlertState.Alert)
             {
                 //if DOSE decreasing OR CPM cross threshold
-                if (cmd.DOSE < (_lastDose-(_lastDose/10.0)) || cmd.CPM < (AlertCPM-5))
+                if (cmd.DOSE < (_lastDose - (_lastDose/10.0)) || cmd.CPM < AlertCPM)
                 {
-                    _lightOn = false;
-                    LightOff();
+                    _alertState = AlertState.CoolingDown;
+                    if (cmd.CPM < AlertCPM)
+                        _alertState = AlertState.Good;
+
+                    OnStateChanged(_alertState);
                 }
             }
+
+            if (_alertState == AlertState.Good)
+            {
+                if (cmd.CPM >= AlertCPM * 0.75)
+                {
+                    _alertState = AlertState.Warning;
+                    OnStateChanged(_alertState);
+                }
+            }
+
+            if (_alertState == AlertState.CoolingDown)
+            {
+                if(cmd.DOSE >= (_lastDose * 0.9))
+                {
+                    _alertState = AlertState.Warning;
+                    OnStateChanged(_alertState);
+                }
+            }
+
+            if (_alertState == AlertState.Warning) //just changed or was
+            {
+                if (cmd.CPM >= AlertCPM)
+                {
+                    _alertState = AlertState.Alert;
+                    OnStateChanged(_alertState);
+                }
+                if (cmd.CPM < AlertCPM * 0.75)
+                {
+                    _alertState = AlertState.Good;
+                    OnStateChanged(_alertState);
+                }
+            }
+
             _lastCPM = cmd.CPM;
             _lastDose = cmd.DOSE;
         }

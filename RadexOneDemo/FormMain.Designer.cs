@@ -46,20 +46,24 @@
             this.m_lblSN = new System.Windows.Forms.Label();
             this.m_chkSnd = new System.Windows.Forms.CheckBox();
             this.m_chkVib = new System.Windows.Forms.CheckBox();
-            this.m_lblWarn = new System.Windows.Forms.Label();
+            this.m_lblCPM = new System.Windows.Forms.Label();
             this.m_numLimit = new System.Windows.Forms.NumericUpDown();
             this.m_numMaxCPM = new System.Windows.Forms.NumericUpDown();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.m_splitContainerTools = new System.Windows.Forms.SplitContainer();
-            this.m_picYellowLight = new System.Windows.Forms.PictureBox();
+            this.m_trackAlertVolume = new System.Windows.Forms.TrackBar();
+            this.m_picRadiationStatus = new System.Windows.Forms.PictureBox();
+            this.m_progressMain = new RadexOneDemo.VerticalProgressBar();
             this.label1 = new System.Windows.Forms.Label();
             this.m_txtRecords = new System.Windows.Forms.RichTextBox();
             this.m_lblInterval = new System.Windows.Forms.Label();
             this.m_numInterval = new System.Windows.Forms.NumericUpDown();
             this.m_lblMaxCPM = new System.Windows.Forms.Label();
-            this.m_lblCPM = new System.Windows.Forms.Label();
+            this.label22 = new System.Windows.Forms.Label();
             this.m_lblDose = new System.Windows.Forms.Label();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.m_btnHistory = new System.Windows.Forms.Button();
             this.m_chkAutoConnect = new System.Windows.Forms.CheckBox();
             this.m_btnTest = new System.Windows.Forms.Button();
@@ -77,8 +81,7 @@
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_progressMain = new RadexOneDemo.VerticalProgressBar();
-            this.label2 = new System.Windows.Forms.Label();
+            this.m_lblAlertVolume = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.m_numLimit)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_numMaxCPM)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -89,7 +92,8 @@
             this.m_splitContainerTools.Panel1.SuspendLayout();
             this.m_splitContainerTools.Panel2.SuspendLayout();
             this.m_splitContainerTools.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.m_picYellowLight)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.m_trackAlertVolume)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.m_picRadiationStatus)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_numInterval)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
@@ -126,7 +130,7 @@
             this.m_chkConnect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_chkConnect.AutoSize = true;
             this.m_chkConnect.Enabled = false;
-            this.m_chkConnect.Location = new System.Drawing.Point(657, 10);
+            this.m_chkConnect.Location = new System.Drawing.Point(652, 12);
             this.m_chkConnect.Name = "m_chkConnect";
             this.m_chkConnect.Size = new System.Drawing.Size(66, 17);
             this.m_chkConnect.TabIndex = 3;
@@ -138,7 +142,7 @@
             // 
             this.m_chkPause.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_chkPause.AutoSize = true;
-            this.m_chkPause.Location = new System.Drawing.Point(785, 10);
+            this.m_chkPause.Location = new System.Drawing.Point(759, 12);
             this.m_chkPause.Name = "m_chkPause";
             this.m_chkPause.Size = new System.Drawing.Size(56, 17);
             this.m_chkPause.TabIndex = 4;
@@ -240,17 +244,17 @@
             this.m_chkVib.Text = "Vibr";
             this.m_chkVib.UseVisualStyleBackColor = true;
             // 
-            // m_lblWarn
+            // m_lblCPM
             // 
-            this.m_lblWarn.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_lblWarn.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.m_lblWarn.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.m_lblWarn.Location = new System.Drawing.Point(242, 450);
-            this.m_lblWarn.Name = "m_lblWarn";
-            this.m_lblWarn.Size = new System.Drawing.Size(73, 68);
-            this.m_lblWarn.TabIndex = 17;
-            this.m_lblWarn.Text = "100";
-            this.m_lblWarn.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.m_lblCPM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_lblCPM.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.m_lblCPM.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.m_lblCPM.Location = new System.Drawing.Point(242, 450);
+            this.m_lblCPM.Name = "m_lblCPM";
+            this.m_lblCPM.Size = new System.Drawing.Size(73, 68);
+            this.m_lblCPM.TabIndex = 17;
+            this.m_lblCPM.Text = "100";
+            this.m_lblCPM.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // m_numLimit
             // 
@@ -296,7 +300,7 @@
             0,
             0});
             this.m_numMaxCPM.Minimum = new decimal(new int[] {
-            10,
+            1,
             0,
             0,
             0});
@@ -342,7 +346,9 @@
             // m_splitContainerTools.Panel1
             // 
             this.m_splitContainerTools.Panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
-            this.m_splitContainerTools.Panel1.Controls.Add(this.m_picYellowLight);
+            this.m_splitContainerTools.Panel1.Controls.Add(this.m_lblAlertVolume);
+            this.m_splitContainerTools.Panel1.Controls.Add(this.m_trackAlertVolume);
+            this.m_splitContainerTools.Panel1.Controls.Add(this.m_picRadiationStatus);
             this.m_splitContainerTools.Panel1.Controls.Add(this.m_progressMain);
             // 
             // m_splitContainerTools.Panel2
@@ -354,26 +360,53 @@
             this.m_splitContainerTools.Panel2.Controls.Add(this.m_numInterval);
             this.m_splitContainerTools.Panel2.Controls.Add(this.m_lblVal);
             this.m_splitContainerTools.Panel2.Controls.Add(this.m_lblMaxCPM);
-            this.m_splitContainerTools.Panel2.Controls.Add(this.m_lblWarn);
             this.m_splitContainerTools.Panel2.Controls.Add(this.m_lblCPM);
+            this.m_splitContainerTools.Panel2.Controls.Add(this.label22);
             this.m_splitContainerTools.Panel2.Controls.Add(this.m_lblDose);
             this.m_splitContainerTools.Size = new System.Drawing.Size(326, 716);
             this.m_splitContainerTools.SplitterDistance = 181;
             this.m_splitContainerTools.TabIndex = 25;
             // 
-            // m_picYellowLight
+            // m_trackAlertVolume
             // 
-            this.m_picYellowLight.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.m_trackAlertVolume.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_trackAlertVolume.LargeChange = 10;
+            this.m_trackAlertVolume.Location = new System.Drawing.Point(270, 13);
+            this.m_trackAlertVolume.Maximum = 100;
+            this.m_trackAlertVolume.Name = "m_trackAlertVolume";
+            this.m_trackAlertVolume.Orientation = System.Windows.Forms.Orientation.Vertical;
+            this.m_trackAlertVolume.Size = new System.Drawing.Size(45, 130);
+            this.m_trackAlertVolume.TabIndex = 9;
+            this.m_trackAlertVolume.TickFrequency = 10;
+            this.m_trackAlertVolume.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+            this.m_trackAlertVolume.Value = 50;
+            this.m_trackAlertVolume.ValueChanged += new System.EventHandler(this.m_trackAlertVolume_ValueChanged);
+            // 
+            // m_picRadiationStatus
+            // 
+            this.m_picRadiationStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_picYellowLight.BackColor = System.Drawing.SystemColors.Control;
-            this.m_picYellowLight.Image = global::RadexOneDemo.Properties.Resources.radiation_symbol;
-            this.m_picYellowLight.Location = new System.Drawing.Point(11, 13);
-            this.m_picYellowLight.Name = "m_picYellowLight";
-            this.m_picYellowLight.Size = new System.Drawing.Size(273, 152);
-            this.m_picYellowLight.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.m_picYellowLight.TabIndex = 0;
-            this.m_picYellowLight.TabStop = false;
+            this.m_picRadiationStatus.BackColor = System.Drawing.SystemColors.Control;
+            this.m_picRadiationStatus.Image = global::RadexOneDemo.Properties.Resources.radiation_symbol;
+            this.m_picRadiationStatus.Location = new System.Drawing.Point(11, 13);
+            this.m_picRadiationStatus.Name = "m_picRadiationStatus";
+            this.m_picRadiationStatus.Size = new System.Drawing.Size(225, 152);
+            this.m_picRadiationStatus.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.m_picRadiationStatus.TabIndex = 0;
+            this.m_picRadiationStatus.TabStop = false;
+            // 
+            // m_progressMain
+            // 
+            this.m_progressMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_progressMain.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.m_progressMain.Location = new System.Drawing.Point(242, 12);
+            this.m_progressMain.Name = "m_progressMain";
+            this.m_progressMain.Size = new System.Drawing.Size(13, 152);
+            this.m_progressMain.TabIndex = 8;
+            this.m_progressMain.Value = 33;
             // 
             // label1
             // 
@@ -448,15 +481,15 @@
             this.m_lblMaxCPM.TabIndex = 22;
             this.m_lblMaxCPM.Text = "Max CPM";
             // 
-            // m_lblCPM
+            // label22
             // 
-            this.m_lblCPM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_lblCPM.AutoSize = true;
-            this.m_lblCPM.Location = new System.Drawing.Point(206, 452);
-            this.m_lblCPM.Name = "m_lblCPM";
-            this.m_lblCPM.Size = new System.Drawing.Size(30, 13);
-            this.m_lblCPM.TabIndex = 21;
-            this.m_lblCPM.Text = "CPM";
+            this.label22.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.label22.AutoSize = true;
+            this.label22.Location = new System.Drawing.Point(206, 452);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(30, 13);
+            this.label22.TabIndex = 21;
+            this.label22.Text = "CPM";
             // 
             // m_lblDose
             // 
@@ -479,6 +512,7 @@
             // 
             // splitContainer2.Panel1
             // 
+            this.splitContainer2.Panel1.Controls.Add(this.label3);
             this.splitContainer2.Panel1.Controls.Add(this.label2);
             this.splitContainer2.Panel1.Controls.Add(this.m_btnHistory);
             this.splitContainer2.Panel1.Controls.Add(this.m_chkAutoConnect);
@@ -507,6 +541,24 @@
             this.splitContainer2.SplitterDistance = 593;
             this.splitContainer2.TabIndex = 0;
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(17, 13);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(89, 13);
+            this.label3.TabIndex = 28;
+            this.label3.Text = "Select COM Port:";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(179, 183);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(55, 13);
+            this.label2.TabIndex = 27;
+            this.label2.Text = "Alert Limit:";
+            // 
             // m_btnHistory
             // 
             this.m_btnHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -523,7 +575,7 @@
             // m_chkAutoConnect
             // 
             this.m_chkAutoConnect.AutoSize = true;
-            this.m_chkAutoConnect.Location = new System.Drawing.Point(286, 10);
+            this.m_chkAutoConnect.Location = new System.Drawing.Point(125, 12);
             this.m_chkAutoConnect.Name = "m_chkAutoConnect";
             this.m_chkAutoConnect.Size = new System.Drawing.Size(131, 17);
             this.m_chkAutoConnect.TabIndex = 25;
@@ -587,11 +639,11 @@
             // m_cmbDevices
             // 
             this.m_cmbDevices.BackColor = System.Drawing.SystemColors.Info;
-            this.m_cmbDevices.DropDownStyle = System.Windows.Forms.ComboBoxStyle.Simple;
+            this.m_cmbDevices.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.m_cmbDevices.FormattingEnabled = true;
-            this.m_cmbDevices.Location = new System.Drawing.Point(9, 8);
+            this.m_cmbDevices.Location = new System.Drawing.Point(7, 36);
             this.m_cmbDevices.Name = "m_cmbDevices";
-            this.m_cmbDevices.Size = new System.Drawing.Size(271, 73);
+            this.m_cmbDevices.Size = new System.Drawing.Size(271, 21);
             this.m_cmbDevices.TabIndex = 22;
             // 
             // m_chkShowLog
@@ -677,7 +729,7 @@
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "&Tools";
             // 
             // helpToolStripMenuItem
@@ -695,25 +747,15 @@
             this.aboutToolStripMenuItem.Text = "&About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
-            // m_progressMain
+            // m_lblAlertVolume
             // 
-            this.m_progressMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_progressMain.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.m_progressMain.Location = new System.Drawing.Point(302, 13);
-            this.m_progressMain.Name = "m_progressMain";
-            this.m_progressMain.Size = new System.Drawing.Size(13, 152);
-            this.m_progressMain.TabIndex = 8;
-            this.m_progressMain.Value = 33;
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(179, 183);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(55, 13);
-            this.label2.TabIndex = 27;
-            this.label2.Text = "Alert Limit:";
+            this.m_lblAlertVolume.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_lblAlertVolume.AutoSize = true;
+            this.m_lblAlertVolume.Location = new System.Drawing.Point(271, 150);
+            this.m_lblAlertVolume.Name = "m_lblAlertVolume";
+            this.m_lblAlertVolume.Size = new System.Drawing.Size(33, 13);
+            this.m_lblAlertVolume.TabIndex = 10;
+            this.m_lblAlertVolume.Text = "100%";
             // 
             // FormMain
             // 
@@ -737,11 +779,13 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.m_splitContainerTools.Panel1.ResumeLayout(false);
+            this.m_splitContainerTools.Panel1.PerformLayout();
             this.m_splitContainerTools.Panel2.ResumeLayout(false);
             this.m_splitContainerTools.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitContainerTools)).EndInit();
             this.m_splitContainerTools.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.m_picYellowLight)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.m_trackAlertVolume)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.m_picRadiationStatus)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_numInterval)).EndInit();
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel1.PerformLayout();
@@ -774,14 +818,14 @@
         private System.Windows.Forms.Label m_lblSN;
         private System.Windows.Forms.CheckBox m_chkSnd;
         private System.Windows.Forms.CheckBox m_chkVib;
-        private System.Windows.Forms.Label m_lblWarn;
+        private System.Windows.Forms.Label m_lblCPM;
         private System.Windows.Forms.NumericUpDown m_numLimit;
         private System.Windows.Forms.NumericUpDown m_numMaxCPM;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
-        private System.Windows.Forms.PictureBox m_picYellowLight;
+        private System.Windows.Forms.PictureBox m_picRadiationStatus;
         private System.Windows.Forms.Button m_btnResetDose;
-        private System.Windows.Forms.Label m_lblCPM;
+        private System.Windows.Forms.Label label22;
         private System.Windows.Forms.Label m_lblDose;
         private System.Windows.Forms.Label m_lblInterval;
         private System.Windows.Forms.NumericUpDown m_numInterval;
@@ -806,6 +850,9 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button m_btnHistory;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TrackBar m_trackAlertVolume;
+        private System.Windows.Forms.Label m_lblAlertVolume;
     }
 }
 
