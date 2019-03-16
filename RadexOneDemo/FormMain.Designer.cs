@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea3 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend3 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.m_txtLog = new System.Windows.Forms.RichTextBox();
             this.m_btnRequest = new System.Windows.Forms.Button();
             this.m_chkConnect = new System.Windows.Forms.CheckBox();
@@ -171,7 +171,6 @@
             this.m_lblVal.Name = "m_lblVal";
             this.m_lblVal.Size = new System.Drawing.Size(73, 68);
             this.m_lblVal.TabIndex = 7;
-            this.m_lblVal.Text = "100";
             this.m_lblVal.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // m_btnClear
@@ -253,7 +252,6 @@
             this.m_lblCPM.Name = "m_lblCPM";
             this.m_lblCPM.Size = new System.Drawing.Size(73, 68);
             this.m_lblCPM.TabIndex = 17;
-            this.m_lblCPM.Text = "100";
             this.m_lblCPM.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // m_numLimit
@@ -379,7 +377,7 @@
             this.m_trackAlertVolume.Size = new System.Drawing.Size(45, 130);
             this.m_trackAlertVolume.TabIndex = 9;
             this.m_trackAlertVolume.TickFrequency = 10;
-            this.m_trackAlertVolume.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+            this.m_trackAlertVolume.TickStyle = System.Windows.Forms.TickStyle.Both;
             this.m_trackAlertVolume.Value = 50;
             this.m_trackAlertVolume.ValueChanged += new System.EventHandler(this.m_trackAlertVolume_ValueChanged);
             // 
@@ -602,36 +600,36 @@
             this.m_chart1.BorderSkin.BorderColor = System.Drawing.Color.Empty;
             this.m_chart1.BorderSkin.PageColor = System.Drawing.SystemColors.Control;
             this.m_chart1.BorderSkin.SkinStyle = System.Windows.Forms.DataVisualization.Charting.BorderSkinStyle.Sunken;
-            chartArea1.AxisX.LabelStyle.Format = "HH:mm:ss";
-            chartArea1.AxisX.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
-            chartArea1.AxisY.LabelStyle.ForeColor = System.Drawing.Color.DodgerBlue;
-            chartArea1.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
-            chartArea1.AxisY2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.True;
-            chartArea1.AxisY2.LabelStyle.ForeColor = System.Drawing.Color.DarkOrange;
-            chartArea1.AxisY2.MajorGrid.Enabled = false;
-            chartArea1.BackColor = System.Drawing.Color.White;
-            chartArea1.BackSecondaryColor = System.Drawing.Color.White;
-            chartArea1.Name = "ChartArea1";
-            this.m_chart1.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.m_chart1.Legends.Add(legend1);
+            chartArea3.AxisX.LabelStyle.Format = "HH:mm:ss";
+            chartArea3.AxisX.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
+            chartArea3.AxisY.LabelStyle.ForeColor = System.Drawing.Color.DodgerBlue;
+            chartArea3.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
+            chartArea3.AxisY2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.True;
+            chartArea3.AxisY2.LabelStyle.ForeColor = System.Drawing.Color.DarkOrange;
+            chartArea3.AxisY2.MajorGrid.Enabled = false;
+            chartArea3.BackColor = System.Drawing.Color.White;
+            chartArea3.BackSecondaryColor = System.Drawing.Color.White;
+            chartArea3.Name = "ChartArea1";
+            this.m_chart1.ChartAreas.Add(chartArea3);
+            legend3.Name = "Legend1";
+            this.m_chart1.Legends.Add(legend3);
             this.m_chart1.Location = new System.Drawing.Point(9, 214);
             this.m_chart1.Name = "m_chart1";
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.StepLine;
-            series1.Legend = "Legend1";
-            series1.LegendText = "DOSE µSv/h";
-            series1.Name = "SeriesDOSE";
-            series1.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.DateTime;
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.StepLine;
-            series2.Legend = "Legend1";
-            series2.LegendText = "CPM";
-            series2.Name = "SeriesCPM";
-            series2.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.DateTime;
-            series2.YAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
-            this.m_chart1.Series.Add(series1);
-            this.m_chart1.Series.Add(series2);
+            series5.ChartArea = "ChartArea1";
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.StepLine;
+            series5.Legend = "Legend1";
+            series5.LegendText = "DOSE µSv/h";
+            series5.Name = "SeriesDOSE";
+            series5.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.DateTime;
+            series6.ChartArea = "ChartArea1";
+            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.StepLine;
+            series6.Legend = "Legend1";
+            series6.LegendText = "CPM";
+            series6.Name = "SeriesCPM";
+            series6.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.DateTime;
+            series6.YAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
+            this.m_chart1.Series.Add(series5);
+            this.m_chart1.Series.Add(series6);
             this.m_chart1.Size = new System.Drawing.Size(831, 343);
             this.m_chart1.TabIndex = 23;
             this.m_chart1.Text = "chart1";
@@ -751,7 +749,7 @@
             // 
             this.m_lblAlertVolume.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.m_lblAlertVolume.AutoSize = true;
-            this.m_lblAlertVolume.Location = new System.Drawing.Point(271, 150);
+            this.m_lblAlertVolume.Location = new System.Drawing.Point(273, 150);
             this.m_lblAlertVolume.Name = "m_lblAlertVolume";
             this.m_lblAlertVolume.Size = new System.Drawing.Size(33, 13);
             this.m_lblAlertVolume.TabIndex = 10;
