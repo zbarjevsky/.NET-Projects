@@ -13,15 +13,20 @@ namespace RadexOneDemo
 {
     public class Utils
     {
-        public static void ExecuteOnUiThreadBeginInvoke(Form app, Action action)
+        public static void ExecuteOnUiThreadInvoke(Form app, Action action)
+        {
+            ExecuteOnUiThreadInvoke(app, () => { action(); return 0; });
+        }
+
+        public static TResult ExecuteOnUiThreadInvoke<TResult>(Form app, Func<TResult> func)
         {
             if (app.InvokeRequired)
             {
-                app.BeginInvoke(action);
+                return (TResult)app.Invoke(func);
             }
             else
             {
-                action();
+                return func();
             }
         }
 

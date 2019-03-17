@@ -20,7 +20,10 @@ namespace RadexOneDemo
         private double _maxCPM = 0;
         private double _maxLive = 0;
         private DateTime _maxCPMTime, _maxDOSETime;
-        private readonly RadexOneConnection _radex = new RadexOneConnection();
+
+        private readonly RadexOneConnection _radexDevice = new RadexOneConnection();
+        private List<RadexComPortDesc> _radexPorts = new List<RadexComPortDesc>();
+
         private readonly Image _radiationOn, _radiationOff, _radiationWarning, _connectUsb;
         private readonly PlaySound _player;
         private Task _connectionCheckTask;
@@ -42,7 +45,7 @@ namespace RadexOneDemo
 
             m_picRadiationStatus.Image = _connectUsb;
 
-            m_chkPause.Checked = _radex.Pause;
+            m_chkAutoRequestData.Checked = !_radexDevice.Pause;
 
             m_numMaxCPM.Value = Properties.Settings.Default.MaxCPM;// _radex.AlertCPM;
             m_chkAutoConnect.Checked = Properties.Settings.Default.AutoConnect;
@@ -52,30 +55,32 @@ namespace RadexOneDemo
             m_trackAlertVolume.Value = _player.Volume;
 
             _alertManager.OnStateChanged = UpdateAlertState;
+
+            propertyGrid1.SelectedObject = new RadexOneConfig();
         }
 
         private void FormMain_Load(object sender, EventArgs e)
         {
 
-            _radex.DataReceived = (cmd) =>
+            _radexDevice.DataReceived = (cmd) =>
             {
-                Utils.ExecuteOnUiThreadBeginInvoke(this, () =>
+                Utils.ExecuteOnUiThreadInvoke(this, () =>
                 {
                     OnDataReceived(cmd);
                 });
             };
 
-            _radex.VerReceived = (cmd) =>
+            _radexDevice.VerReceived = (cmd) =>
             {
-                Utils.ExecuteOnUiThreadBeginInvoke(this, () =>
+                Utils.ExecuteOnUiThreadInvoke(this, () =>
                 {
                     m_lblSN.Text = cmd.SerialNumber;
                 });
             };
 
-            _radex.CfgReceived = (cmd) =>
+            _radexDevice.CfgReceived = (cmd) =>
             {
-                Utils.ExecuteOnUiThreadBeginInvoke(this, () =>
+                Utils.ExecuteOnUiThreadInvoke(this, () =>
                 {
                     m_chkSnd.Checked = cmd.Sound;
                     m_chkVib.Checked = cmd.Vibrate;
@@ -83,9 +88,9 @@ namespace RadexOneDemo
                 });
             };
 
-            _radex.DisconnectEvent = (reason) =>
+            _radexDevice.DisconnectEvent = (reason) =>
             {
-                Utils.ExecuteOnUiThreadBeginInvoke(this, () =>
+                Utils.ExecuteOnUiThreadInvoke(this, () =>
                 {
                     m_picRadiationStatus.Image = _connectUsb;
                     UpdateStatusBar();
@@ -99,8 +104,12 @@ namespace RadexOneDemo
                     try
                     {
                         UpdateStatusBar();
+
                         _radexPorts = RadexComPortDesc.RadexPortInfos();
-                        ConnectIfAvailable();
+
+                        bool autoConnect = Utils.ExecuteOnUiThreadInvoke(this, () => { return m_chkAutoConnect.Checked; });
+                        if(autoConnect)
+                            ConnectToSelectedPort();
                     }
                     catch (Exception err)
                     {
@@ -125,90 +134,82 @@ namespace RadexOneDemo
             Properties.Settings.Default.AutoConnect = m_chkAutoConnect.Checked;
             Properties.Settings.Default.Save();
 
-            _radex.Close();
+            _radexDevice.Close();
             Log.Close();
         }
 
-        private void m_chkConnect_CheckedChanged(object sender, EventArgs e)
+        private void m_btnConnect_Click(object sender, EventArgs e)
         {
-            if (_radexPorts.Count == 0)
-            {
-                MessageBox.Show("No Device connected", "Connect()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            try
-            {
-                if (m_chkConnect.Checked)
-                {
-                    ConnectIfAvailable();
-                }
-                else
-                {
-                    _radex.Close();
-                    m_chkConnect.Text = "Closed";
-                }
-            }
-            catch (Exception err)
-            {
-                m_chkConnect.Checked = false;
-                MessageBox.Show(err.Message, "Connect()", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
-
-            m_btnRequest.Enabled = m_chkConnect.Checked;
+            ConnectToSelectedPort();
         }
 
-        private List<RadexComPortDesc> _radexPorts = new List<RadexComPortDesc>();
-
-        private void ConnectIfAvailable()
+        private void m_btnDisconnect_Click(object sender, EventArgs e)
         {
-            if (_radex.IsOpen)
+            m_chkAutoConnect.Checked = false;
+            _radexDevice.Close();
+            m_lblConnectStatus.Text = "Device Disconnected";
+        }
+
+        private void m_chkAutoConnect_CheckedChanged(object sender, EventArgs e)
+        {
+
+        }
+        private void m_cmbDevices_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            if (m_cmbDevices.SelectedItem == null)
                 return;
 
-            Utils.ExecuteOnUiThreadBeginInvoke(this, () =>
+            RadexComPortDesc selectedDevice = m_cmbDevices.SelectedItem as RadexComPortDesc;
+            if (selectedDevice == null)
+                return;
+
+            if (_radexDevice.IsOpen && _radexDevice.PortName != selectedDevice.Port)
+            {
+
+            }
+        }
+
+        private void ConnectToSelectedPort()
+        {
+            Utils.ExecuteOnUiThreadInvoke(this, () =>
             {
                 if (m_cmbDevices.SelectedItem != null)
                 {
-                    m_chkConnect.Enabled = true;
+                    m_lblConnectStatus.Enabled = true;
                     RadexComPortDesc selectedDevice = m_cmbDevices.SelectedItem as RadexComPortDesc;
 
-                    //reconnect
-                    if (_radex.PortName != selectedDevice.Port || (!_radex.IsOpen && m_chkAutoConnect.Checked))
+                    if (_radexDevice.IsOpen && selectedDevice.Port == _radexDevice.PortName)
+                        return;
+
+                    try
                     {
-                        try
-                        {
-                            _radex.Open(selectedDevice.Port);
+                        _radexDevice.Open(selectedDevice.Port);
 
-                            m_btnRequest_Click(this, null);
-                            m_btnGetVer_Click(this, null);
-                            m_btnGetSett_Click(this, null);
+                        m_btnRequest_Click(this, null);
+                        m_btnGetVer_Click(this, null);
+                        m_btnGetSett_Click(this, null);
 
-                            m_chkConnect.Text = "Opened";
-                            m_chkConnect.Checked = true;
+                        m_lblConnectStatus.Text = "Connected Device: " + selectedDevice.Desc;
 
-                            m_picRadiationStatus.Image = Properties.Resources.OkEmoji;
-                        }
-                        catch (Exception err)
-                        {
-                            Log.WriteLine("Open exception: "+err.Message);
-                            m_chkConnect.Checked = false;
-                            m_chkConnect.Text = err.Message;
-                            m_picRadiationStatus.Image = _connectUsb;
-                        }
+                        m_picRadiationStatus.Image = Properties.Resources.OkEmoji;
+                    }
+                    catch (Exception err)
+                    {
+                        Log.WriteLine("Open exception: " + err.Message);
+                        m_lblConnectStatus.Text = "Error: " + err.Message;
+                        m_picRadiationStatus.Image = _connectUsb;
                     }
                 }
                 else
                 {
-                    m_chkConnect.Text = "Unavailable";
-                    m_chkConnect.Checked = false;
-                    m_chkConnect.Enabled = false;
+                    m_lblConnectStatus.Text = "Device Not Connected";
                 }
             });
         }
 
         private void UpdateStatusBar()
         {
-            Utils.ExecuteOnUiThreadBeginInvoke(this, () =>
+            Utils.ExecuteOnUiThreadInvoke(this, () =>
             {
                 UpdateCmbPorts(_radexPorts);
                 if (_radexPorts != null && _radexPorts.Count > 0)
@@ -220,11 +221,11 @@ namespace RadexOneDemo
                     UpdateIfChanged(m_status1, "No Radex device plugged in.");
                 }
 
-                string port = _radex.PortName;
+                string port = _radexDevice.PortName;
                 if (port != null)
                 {
-                    EnableCommands(_radex.IsOpen);
-                    UpdateIfChanged(m_status2, _radex.IsOpen ? " - Connected." : " - Disconnected.");
+                    EnableCommands(_radexDevice.IsOpen);
+                    UpdateIfChanged(m_status2, _radexDevice.IsOpen ? " - Connected." : " - Disconnected.");
                 }
                 else
                 {
@@ -277,10 +278,10 @@ namespace RadexOneDemo
         private void EnableCommands(bool bEnable = true)
         {
             m_btnVer.Enabled = bEnable;
-            m_btnVer2.Enabled = bEnable;
-            m_btnRequest.Enabled = bEnable;
+            m_btnReadConfig.Enabled = bEnable;
+            m_btnRequestData.Enabled = bEnable;
             m_btnResetDose.Enabled = bEnable;
-            m_btnSet.Enabled = bEnable;
+            m_btnWriteConfig.Enabled = bEnable;
             m_btnTest.Enabled = bEnable;
             m_chkSnd.Enabled = bEnable;
             m_chkVib.Enabled = bEnable;
@@ -288,6 +289,11 @@ namespace RadexOneDemo
             m_progressMain.Enabled = bEnable;
             m_chart1.Enabled = bEnable;
             m_lblSN.Enabled = bEnable;
+
+            m_cmbDevices.Enabled = !bEnable; //disable when connected
+
+            m_btnConnect.Enabled = !bEnable && m_cmbDevices.SelectedItem != null;
+            m_btnDisconnect.Enabled = bEnable;
 
             if (bEnable == false)
             {
@@ -335,7 +341,7 @@ namespace RadexOneDemo
         {
             try
             {
-                _radex.SendRequestData();
+                _radexDevice.SendRequestData();
             }
             catch (Exception err)
             {
@@ -347,7 +353,7 @@ namespace RadexOneDemo
         {
             try
             {
-                _radex.SendRequestVer();
+                _radexDevice.SendRequestVer();
             }
             catch (Exception err)
             {
@@ -359,7 +365,7 @@ namespace RadexOneDemo
         {
             try
             {
-                _radex.SendRequestGetSettings();
+                _radexDevice.SendRequestGetSettings();
             }
             catch (Exception err)
             {
@@ -371,7 +377,7 @@ namespace RadexOneDemo
         {
             try
             {
-                _radex.SendRequestSetSettings(m_chkSnd.Checked, m_chkVib.Checked, (double)(m_numLimit.Value));
+                _radexDevice.SendRequestSetSettings(m_chkSnd.Checked, m_chkVib.Checked, (double)(m_numLimit.Value));
             }
             catch (Exception err)
             {
@@ -383,7 +389,7 @@ namespace RadexOneDemo
         {
             try
             {
-                _radex.RequestResetDose();
+                _radexDevice.RequestResetDose();
             }
             catch (Exception err)
             {
@@ -393,7 +399,7 @@ namespace RadexOneDemo
 
         private void m_chkAuto_CheckedChanged(object sender, EventArgs e)
         {
-            _radex.Pause = m_chkPause.Checked;
+            _radexDevice.Pause = !m_chkAutoRequestData.Checked;
         }
 
         private void m_btnClear_Click(object sender, EventArgs e)
@@ -411,9 +417,9 @@ namespace RadexOneDemo
 
         private void m_numInterval_ValueChanged(object sender, EventArgs e)
         {
-            _radex.Interval = (int)(m_numInterval.Value * 1000);
+            _radexDevice.Interval = (int)(m_numInterval.Value * 1000);
             //ensure valid
-            m_numInterval.Value = (decimal)(_radex.Interval / 1000.0);
+            m_numInterval.Value = (decimal)(_radexDevice.Interval / 1000.0);
         }
 
         private void OnDataReceived(CommandGetData cmd)
@@ -455,7 +461,7 @@ namespace RadexOneDemo
 
             _alertManager.AnalyseSignal(cmd);
 
-            string stat = string.Format("{0:0000}. DOSE: {1:0.00} µSv/h, CPM: {2} min−1, Accumulated: {3:0.0} µSv, Alert: {4}\r\n",
+            string stat = string.Format("{0:0000}. DOSE: {1:0.00} µSv/h, CPM: {2} min−1, Accumulated: {3:0.0} µSv, State: {4}\r\n",
                 cmd.cmdId, cmd.DOSE, cmd.CPM, cmd.SUM, _alertManager.AlertInfo);
 
             m_txtStatus.Text = stat;
@@ -499,6 +505,7 @@ namespace RadexOneDemo
             m_lblAlertVolume.Text = m_trackAlertVolume.Value + "%";
         }
 
+
         private DateTime _lastUpdateRecord = DateTime.MinValue;
         private void UpdateMaxRecord(bool isRecord) //new record or exceeded limit
         {
@@ -519,7 +526,7 @@ namespace RadexOneDemo
         {
             try
             {
-                _radex.RequestTestCmd();
+                _radexDevice.RequestTestCmd();
             }
             catch (Exception err)
             {

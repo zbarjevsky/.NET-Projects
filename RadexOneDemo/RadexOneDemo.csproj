@@ -87,6 +87,7 @@
     <Compile Include="PlaySound.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RadexOneConfig.cs" />
     <Compile Include="RadexOneConnection.cs" />
     <Compile Include="Utils.cs" />
     <Compile Include="VerticalProgressBar.cs">

@@ -61,13 +61,13 @@ namespace sD
 
         public string PortName
         {
-            get { return _radexPort.PortName; }
+            get { return _radexPort.Port.PortName; }
         }
 
         public string Open(string comPort)
         {
-            if (_radexPort.IsOpen && _radexPort.PortName == comPort)
-                return _radexPort.PortName;
+            if (_radexPort.IsOpen && _radexPort.Port.PortName == comPort)
+                return _radexPort.Port.PortName;
 
             string port = _radexPort.Open(comPort);
             StartConnectionThread(true);
@@ -263,29 +263,30 @@ namespace sD
     {
         public readonly SerialPort Port = new SerialPort();
 
-        public string PortName { get; private set; }
+        //public string PortName { get; private set; }
 
-        public bool IsOpen { get { return Port.IsOpen; } }
+        public volatile bool IsOpen = false;
 
         public string Open(string comPort)
         {
-            lock (this)
+            lock (Port)
             {
                 try
                 {
                     //if (!RadexComPortDesc.RadexPortExists(comPort))
                     //    throw new Exception("Device not connected: RADEX ONE");
 
-                    PortName = comPort;
+                    //PortName = comPort;
                     if (Port.IsOpen)
                     {
-                        if (Port.PortName != PortName)
-                            Port.Close();
-                        else
-                            return PortName; //already open
+                        if (Port.PortName == comPort)
+                            return Port.PortName; //already open
+
+                        Port.Close();
+                        IsOpen = false;
                     }
 
-                    Port.PortName = PortName;
+                    Port.PortName = comPort;
                     Port.BaudRate = 9600;
                     Port.DataBits = 8;
                     Port.StopBits = StopBits.One;
@@ -294,7 +295,8 @@ namespace sD
 
                     Port.Open();
 
-                    return PortName;
+                    IsOpen = true;
+                    return comPort;
                 }
                 catch (Exception err)
                 {
@@ -305,12 +307,14 @@ namespace sD
 
         public void Close()
         {
-            if (Port.IsOpen)
+            if (IsOpen)
             {
+                IsOpen = false;
+
                 //should be closed in thread to avoid dead lock
                 Task.Run(() =>
                 {
-                    lock (this)
+                    lock (Port)
                     {
                         try
                         {
@@ -328,7 +332,7 @@ namespace sD
 
         public void Write(byte [] data, int offset, int count)
         {
-            lock (this)
+            lock (Port)
             {
                 Port.Write(data, offset, count);
             }
@@ -337,7 +341,7 @@ namespace sD
         public byte[] GetReceivedData()
         {
             Thread.Sleep(10);
-            lock (this)
+            lock (Port)
             {
                 int offset = 0;
                 byte[] recv = new byte[512];

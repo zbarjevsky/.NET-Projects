@@ -49,7 +49,7 @@ namespace RadexOneDemo
         public void Play()
         {
             //player.PlayLooping();
-            Utils.ExecuteOnUiThreadBeginInvoke(_app, () =>
+            Utils.ExecuteOnUiThreadInvoke(_app, () =>
             {
                 try
                 {
@@ -63,7 +63,7 @@ namespace RadexOneDemo
 
         public void Stop()
         {
-            Utils.ExecuteOnUiThreadBeginInvoke(_app, () =>
+            Utils.ExecuteOnUiThreadInvoke(_app, () =>
             {
                 try
                 {
