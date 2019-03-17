@@ -23,6 +23,7 @@ namespace RadexOneDemo
 
         private readonly RadexOneConnection _radexDevice = new RadexOneConnection();
         private List<RadexComPortDesc> _radexPorts = new List<RadexComPortDesc>();
+        private readonly RadexOneConfig _radexConfig = new RadexOneConfig();
 
         private readonly Image _radiationOn, _radiationOff, _radiationWarning, _connectUsb;
         private readonly PlaySound _player;
@@ -50,13 +51,15 @@ namespace RadexOneDemo
             m_numMaxCPM.Value = Properties.Settings.Default.MaxCPM;// _radex.AlertCPM;
             m_chkAutoConnect.Checked = Properties.Settings.Default.AutoConnect;
             m_numInterval.Value = Properties.Settings.Default.Interval;
+            m_trackAlertVolume.Value = Properties.Settings.Default.Volume;
 
-            _player = new PlaySound(this);
-            m_trackAlertVolume.Value = _player.Volume;
+            _player = new PlaySound(this, m_trackAlertVolume.Value, m_trackAlertVolume.Maximum);
 
             _alertManager.OnStateChanged = UpdateAlertState;
 
-            propertyGrid1.SelectedObject = new RadexOneConfig();
+            richTextBox1.Rtf = Properties.Resources.How_much_is_dangerous;
+
+            _radexConfig.PropertyChanged += RadexConfig_PropertyChanged;
         }
 
         private void FormMain_Load(object sender, EventArgs e)
@@ -74,7 +77,8 @@ namespace RadexOneDemo
             {
                 Utils.ExecuteOnUiThreadInvoke(this, () =>
                 {
-                    m_lblSN.Text = cmd.SerialNumber;
+                    _radexConfig.Set(cmd);
+                    m_lblSN.Text = _radexConfig.SerialNumber;
                 });
             };
 
@@ -82,9 +86,8 @@ namespace RadexOneDemo
             {
                 Utils.ExecuteOnUiThreadInvoke(this, () =>
                 {
-                    m_chkSnd.Checked = cmd.Sound;
-                    m_chkVib.Checked = cmd.Vibrate;
-                    m_numLimit.Value = (decimal)cmd.Threshold;
+                    _radexConfig.Set(cmd);
+                    _isSettingsChanged = false;
                 });
             };
 
@@ -132,6 +135,8 @@ namespace RadexOneDemo
             Properties.Settings.Default.Interval = m_numInterval.Value;
             Properties.Settings.Default.MaxCPM = _alertManager.AlertCPM;
             Properties.Settings.Default.AutoConnect = m_chkAutoConnect.Checked;
+            Properties.Settings.Default.Volume = m_trackAlertVolume.Value;
+
             Properties.Settings.Default.Save();
 
             _radexDevice.Close();
@@ -224,13 +229,13 @@ namespace RadexOneDemo
                 string port = _radexDevice.PortName;
                 if (port != null)
                 {
-                    EnableCommands(_radexDevice.IsOpen);
+                    UpdateUI(_radexDevice.IsOpen);
                     UpdateIfChanged(m_status2, _radexDevice.IsOpen ? " - Connected." : " - Disconnected.");
                 }
                 else
                 {
                     m_picRadiationStatus.Image = _connectUsb;
-                    EnableCommands(false);
+                    UpdateUI(false);
                     UpdateIfChanged(m_status2, "...");
                 }
             });
@@ -275,27 +280,29 @@ namespace RadexOneDemo
             }
         }
 
-        private void EnableCommands(bool bEnable = true)
+        private void UpdateUI(bool isDeviceConnected = true)
         {
-            m_btnVer.Enabled = bEnable;
-            m_btnReadConfig.Enabled = bEnable;
-            m_btnRequestData.Enabled = bEnable;
-            m_btnResetDose.Enabled = bEnable;
-            m_btnWriteConfig.Enabled = bEnable;
-            m_btnTest.Enabled = bEnable;
-            m_chkSnd.Enabled = bEnable;
-            m_chkVib.Enabled = bEnable;
-            m_numLimit.Enabled = bEnable;
-            m_progressMain.Enabled = bEnable;
-            m_chart1.Enabled = bEnable;
-            m_lblSN.Enabled = bEnable;
+            m_btnVer.Enabled = isDeviceConnected;
+            m_btnReadConfig.Enabled = isDeviceConnected;
+            m_btnRequestData.Enabled = isDeviceConnected;
+            m_btnResetDose.Enabled = isDeviceConnected;
+            m_btnTest.Enabled = isDeviceConnected;
+            m_progressMain.Enabled = isDeviceConnected;
+            m_chart1.Enabled = isDeviceConnected;
+            m_lblSN.Enabled = isDeviceConnected;
 
-            m_cmbDevices.Enabled = !bEnable; //disable when connected
+            m_cmbDevices.Enabled = !isDeviceConnected; //disable when connected
 
-            m_btnConnect.Enabled = !bEnable && m_cmbDevices.SelectedItem != null;
-            m_btnDisconnect.Enabled = bEnable;
+            m_btnConnect.Enabled = !isDeviceConnected && m_cmbDevices.SelectedItem != null;
+            m_btnDisconnect.Enabled = isDeviceConnected;
+            m_btnDeviceConfig.Enabled = isDeviceConnected;
+            m_mnuDeviceConfiguration.Enabled = isDeviceConnected;
 
-            if (bEnable == false)
+            propertyGrid1.Enabled = isDeviceConnected;
+
+            m_btnWriteConfig.Enabled = isDeviceConnected && _isSettingsChanged;
+
+            if (isDeviceConnected == false)
             {
                 m_progressMain.Value = 0;
                 m_picRadiationStatus.BackColor = SystemColors.Control;
@@ -337,6 +344,17 @@ namespace RadexOneDemo
                 m_cmbDevices.SelectedIndex = 0;
         }
 
+        private bool _isSettingsChanged = false;
+        private void propertyGrid1_PropertyValueChanged(object s, PropertyValueChangedEventArgs e)
+        {
+            _isSettingsChanged = true;
+        }
+
+        private void RadexConfig_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            propertyGrid1.SelectedObject = _radexConfig;
+        }
+
         private void m_btnRequest_Click(object sender, EventArgs e)
         {
             try
@@ -361,6 +379,14 @@ namespace RadexOneDemo
             }
         }
 
+        private void m_mnuDeviceConfiguration_Click(object sender, EventArgs e)
+        {
+            if (!_radexDevice.IsOpen)
+                return;
+
+            FormRadexOneConfig.ShowConfig(this, _radexDevice, _radexConfig);
+        }
+
         private void m_btnGetSett_Click(object sender, EventArgs e)
         {
             try
@@ -377,7 +403,7 @@ namespace RadexOneDemo
         {
             try
             {
-                _radexDevice.SendRequestSetSettings(m_chkSnd.Checked, m_chkVib.Checked, (double)(m_numLimit.Value));
+                _radexDevice.SendRequestSetSettings(_radexConfig.Sound, _radexConfig.Vibrate, _radexConfig.Threshold);
             }
             catch (Exception err)
             {
@@ -448,6 +474,8 @@ namespace RadexOneDemo
             m_lblVal.Text = cmd.DOSE.ToString("0.00");
             m_lblCPM.Text = cmd.CPM.ToString();
 
+            _radexConfig.Dose = cmd.SUM;
+
             ChartHelper.AddPointXY(m_chart1, "SeriesCPM", pt.CPM, pt.date);
             ChartHelper.AddPointXY(m_chart1, "SeriesDOSE", pt.DOSE, pt.date);
 
@@ -501,10 +529,10 @@ namespace RadexOneDemo
 
         private void m_trackAlertVolume_ValueChanged(object sender, EventArgs e)
         {
-            _player.Volume = m_trackAlertVolume.Value;
-            m_lblAlertVolume.Text = m_trackAlertVolume.Value + "%";
+            m_lblAlertVolume.Text = string.Format("{0:0.0}%", m_trackAlertVolume.Value / 10.0);
+            if (_player != null)
+                _player.Volume = m_trackAlertVolume.Value;
         }
-
 
         private DateTime _lastUpdateRecord = DateTime.MinValue;
         private void UpdateMaxRecord(bool isRecord) //new record or exceeded limit

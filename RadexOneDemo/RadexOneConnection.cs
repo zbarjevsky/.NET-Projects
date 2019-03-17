@@ -97,14 +97,14 @@ namespace sD
             SendRequest(new CommandGetSettings());
         }
 
-        internal void SendRequestSetSettings(bool snd, bool vbr, double max)
+        internal void SendRequestSetSettings(bool snd, bool vbr, double threshold)
         {
-            SendRequest(new CommandConfigure(snd, vbr, max));
+            SendRequest(new CommandConfigure(snd, vbr, threshold));
         }
 
         internal void RequestResetDose()
         {
-            SendRequest(new CommandAAFF());
+            SendRequest(new CommandRestDose());
         }
 
         internal void RequestTestCmd()

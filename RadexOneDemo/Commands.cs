@@ -197,9 +197,9 @@ namespace RadexOneDemo
 
     public class CommandConfigure : RadexCommandBase //request set config
     {
-        public CommandConfigure(bool snd, bool vbr, double max)
+        public CommandConfigure(bool snd, bool vbr, double threshold)
         {
-            request = new RequestConfigure(cmdId, snd, vbr, max);
+            request = new RequestConfigure(cmdId, snd, vbr, threshold);
         }
 
         public override int ResponseSizeExpected { get { return 18; } }
@@ -210,9 +210,9 @@ namespace RadexOneDemo
         }
     }
 
-    public class CommandAAFF : RadexCommandBase //request reset dose
+    public class CommandRestDose : RadexCommandBase //request reset dose
     {
-        public CommandAAFF()
+        public CommandRestDose()
         {
             request = new RequestFBF7(cmdId);
         }

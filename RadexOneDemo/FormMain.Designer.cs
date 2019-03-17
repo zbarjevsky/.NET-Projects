@@ -44,14 +44,10 @@
             this.m_btnWriteConfig = new System.Windows.Forms.Button();
             this.m_btnReadConfig = new System.Windows.Forms.Button();
             this.m_lblSN = new System.Windows.Forms.Label();
-            this.m_chkSnd = new System.Windows.Forms.CheckBox();
-            this.m_chkVib = new System.Windows.Forms.CheckBox();
             this.m_lblCPM = new System.Windows.Forms.Label();
-            this.m_numLimit = new System.Windows.Forms.NumericUpDown();
             this.m_numMaxCPM = new System.Windows.Forms.NumericUpDown();
             this.m_splitContainerTools = new System.Windows.Forms.SplitContainer();
             this.m_picRadiationStatus = new System.Windows.Forms.PictureBox();
-            this.m_progressMain = new RadexOneDemo.VerticalProgressBar();
             this.label1 = new System.Windows.Forms.Label();
             this.m_txtRecords = new System.Windows.Forms.RichTextBox();
             this.label22 = new System.Windows.Forms.Label();
@@ -67,7 +63,6 @@
             this.m_btnDisconnect = new System.Windows.Forms.Button();
             this.m_btnConnect = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.m_btnHistory = new System.Windows.Forms.Button();
             this.m_chkAutoConnect = new System.Windows.Forms.CheckBox();
             this.m_btnTest = new System.Windows.Forms.Button();
@@ -81,18 +76,21 @@
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.connectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuDeviceConfiguration = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.m_tabControlAll = new System.Windows.Forms.TabControl();
             this.m_tabPage1_Device = new System.Windows.Forms.TabPage();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
+            this.m_tabPage3_About = new System.Windows.Forms.TabPage();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.m_tabPage2_Settings = new System.Windows.Forms.TabPage();
-            this.m_grpConfig = new System.Windows.Forms.GroupBox();
+            this.m_btnDeviceConfig = new System.Windows.Forms.Button();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             this.m_splitMain = new System.Windows.Forms.SplitContainer();
             this.m_pnlTools = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.m_numLimit)).BeginInit();
+            this.m_progressMain = new RadexOneDemo.VerticalProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.m_numMaxCPM)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitContainerTools)).BeginInit();
             this.m_splitContainerTools.Panel1.SuspendLayout();
@@ -113,8 +111,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
             this.splitContainer3.Panel1.SuspendLayout();
             this.splitContainer3.SuspendLayout();
+            this.m_tabPage3_About.SuspendLayout();
             this.m_tabPage2_Settings.SuspendLayout();
-            this.m_grpConfig.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitMain)).BeginInit();
             this.m_splitMain.Panel1.SuspendLayout();
             this.m_splitMain.Panel2.SuspendLayout();
@@ -210,7 +208,8 @@
             // 
             // m_btnWriteConfig
             // 
-            this.m_btnWriteConfig.Location = new System.Drawing.Point(182, 57);
+            this.m_btnWriteConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnWriteConfig.Location = new System.Drawing.Point(481, 125);
             this.m_btnWriteConfig.Name = "m_btnWriteConfig";
             this.m_btnWriteConfig.Size = new System.Drawing.Size(133, 23);
             this.m_btnWriteConfig.TabIndex = 5;
@@ -220,7 +219,8 @@
             // 
             // m_btnReadConfig
             // 
-            this.m_btnReadConfig.Location = new System.Drawing.Point(182, 28);
+            this.m_btnReadConfig.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnReadConfig.Location = new System.Drawing.Point(481, 96);
             this.m_btnReadConfig.Name = "m_btnReadConfig";
             this.m_btnReadConfig.Size = new System.Drawing.Size(133, 23);
             this.m_btnReadConfig.TabIndex = 4;
@@ -238,26 +238,6 @@
             this.m_lblSN.TabIndex = 1;
             this.m_lblSN.Text = "S/N: ?";
             // 
-            // m_chkSnd
-            // 
-            this.m_chkSnd.AutoSize = true;
-            this.m_chkSnd.Location = new System.Drawing.Point(15, 34);
-            this.m_chkSnd.Name = "m_chkSnd";
-            this.m_chkSnd.Size = new System.Drawing.Size(57, 17);
-            this.m_chkSnd.TabIndex = 0;
-            this.m_chkSnd.Text = "Sound";
-            this.m_chkSnd.UseVisualStyleBackColor = true;
-            // 
-            // m_chkVib
-            // 
-            this.m_chkVib.AutoSize = true;
-            this.m_chkVib.Location = new System.Drawing.Point(15, 57);
-            this.m_chkVib.Name = "m_chkVib";
-            this.m_chkVib.Size = new System.Drawing.Size(67, 17);
-            this.m_chkVib.TabIndex = 1;
-            this.m_chkVib.Text = "Vibration";
-            this.m_chkVib.UseVisualStyleBackColor = true;
-            // 
             // m_lblCPM
             // 
             this.m_lblCPM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -268,35 +248,6 @@
             this.m_lblCPM.Size = new System.Drawing.Size(73, 68);
             this.m_lblCPM.TabIndex = 3;
             this.m_lblCPM.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // m_numLimit
-            // 
-            this.m_numLimit.DecimalPlaces = 1;
-            this.m_numLimit.Increment = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.m_numLimit.Location = new System.Drawing.Point(15, 96);
-            this.m_numLimit.Maximum = new decimal(new int[] {
-            10,
-            0,
-            0,
-            65536});
-            this.m_numLimit.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
-            this.m_numLimit.Name = "m_numLimit";
-            this.m_numLimit.Size = new System.Drawing.Size(71, 20);
-            this.m_numLimit.TabIndex = 3;
-            this.m_numLimit.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.m_numLimit.Value = new decimal(new int[] {
-            1,
-            0,
-            0,
-            65536});
             // 
             // m_numMaxCPM
             // 
@@ -367,17 +318,6 @@
             this.m_picRadiationStatus.TabIndex = 0;
             this.m_picRadiationStatus.TabStop = false;
             // 
-            // m_progressMain
-            // 
-            this.m_progressMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_progressMain.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.m_progressMain.Location = new System.Drawing.Point(276, 13);
-            this.m_progressMain.Name = "m_progressMain";
-            this.m_progressMain.Size = new System.Drawing.Size(13, 206);
-            this.m_progressMain.TabIndex = 0;
-            this.m_progressMain.Value = 33;
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -433,15 +373,16 @@
             // 
             this.m_trackAlertVolume.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_trackAlertVolume.LargeChange = 10;
+            this.m_trackAlertVolume.LargeChange = 100;
             this.m_trackAlertVolume.Location = new System.Drawing.Point(835, 3);
-            this.m_trackAlertVolume.Maximum = 100;
+            this.m_trackAlertVolume.Maximum = 1000;
             this.m_trackAlertVolume.Name = "m_trackAlertVolume";
             this.m_trackAlertVolume.Size = new System.Drawing.Size(130, 45);
+            this.m_trackAlertVolume.SmallChange = 2;
             this.m_trackAlertVolume.TabIndex = 6;
-            this.m_trackAlertVolume.TickFrequency = 10;
+            this.m_trackAlertVolume.TickFrequency = 100;
             this.m_trackAlertVolume.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
-            this.m_trackAlertVolume.Value = 50;
+            this.m_trackAlertVolume.Value = 200;
             this.m_trackAlertVolume.ValueChanged += new System.EventHandler(this.m_trackAlertVolume_ValueChanged);
             // 
             // m_lblInterval
@@ -546,14 +487,16 @@
             this.m_chart1.Legends.Add(legend1);
             this.m_chart1.Location = new System.Drawing.Point(9, 137);
             this.m_chart1.Name = "m_chart1";
+            series1.BorderWidth = 2;
             series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.StepLine;
+            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
             series1.Legend = "Legend1";
             series1.LegendText = "DOSE µSv/h";
             series1.Name = "SeriesDOSE";
             series1.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.DateTime;
+            series2.BorderWidth = 2;
             series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.StepLine;
+            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
             series2.Legend = "Legend1";
             series2.LegendText = "CPM";
             series2.Name = "SeriesCPM";
@@ -607,15 +550,6 @@
             this.label3.TabIndex = 0;
             this.label3.Text = "Select COM Port:";
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 80);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(93, 13);
-            this.label2.TabIndex = 2;
-            this.label2.Text = "Threshold (µSv/h)";
-            // 
             // m_btnHistory
             // 
             this.m_btnHistory.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -642,7 +576,8 @@
             // 
             // m_btnTest
             // 
-            this.m_btnTest.Location = new System.Drawing.Point(342, 412);
+            this.m_btnTest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnTest.Location = new System.Drawing.Point(481, 310);
             this.m_btnTest.Name = "m_btnTest";
             this.m_btnTest.Size = new System.Drawing.Size(133, 23);
             this.m_btnTest.TabIndex = 4;
@@ -663,7 +598,8 @@
             // 
             // m_btnResetDose
             // 
-            this.m_btnResetDose.Location = new System.Drawing.Point(183, 86);
+            this.m_btnResetDose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnResetDose.Location = new System.Drawing.Point(481, 206);
             this.m_btnResetDose.Name = "m_btnResetDose";
             this.m_btnResetDose.Size = new System.Drawing.Size(133, 23);
             this.m_btnResetDose.TabIndex = 6;
@@ -729,9 +665,18 @@
             // 
             // toolsToolStripMenuItem
             // 
+            this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.m_mnuDeviceConfiguration});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "&Tools";
+            // 
+            // m_mnuDeviceConfiguration
+            // 
+            this.m_mnuDeviceConfiguration.Name = "m_mnuDeviceConfiguration";
+            this.m_mnuDeviceConfiguration.Size = new System.Drawing.Size(195, 22);
+            this.m_mnuDeviceConfiguration.Text = "Device Configuration...";
+            this.m_mnuDeviceConfiguration.Click += new System.EventHandler(this.m_mnuDeviceConfiguration_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -751,6 +696,7 @@
             // m_tabControlAll
             // 
             this.m_tabControlAll.Controls.Add(this.m_tabPage1_Device);
+            this.m_tabControlAll.Controls.Add(this.m_tabPage3_About);
             this.m_tabControlAll.Controls.Add(this.m_tabPage2_Settings);
             this.m_tabControlAll.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_tabControlAll.Location = new System.Drawing.Point(0, 0);
@@ -767,7 +713,7 @@
             this.m_tabPage1_Device.Padding = new System.Windows.Forms.Padding(3);
             this.m_tabPage1_Device.Size = new System.Drawing.Size(867, 649);
             this.m_tabPage1_Device.TabIndex = 0;
-            this.m_tabPage1_Device.Text = "Device";
+            this.m_tabPage1_Device.Text = "Dashboard";
             this.m_tabPage1_Device.UseVisualStyleBackColor = true;
             // 
             // splitContainer3
@@ -785,9 +731,36 @@
             this.splitContainer3.SplitterDistance = 698;
             this.splitContainer3.TabIndex = 0;
             // 
+            // m_tabPage3_About
+            // 
+            this.m_tabPage3_About.Controls.Add(this.richTextBox1);
+            this.m_tabPage3_About.Location = new System.Drawing.Point(4, 22);
+            this.m_tabPage3_About.Name = "m_tabPage3_About";
+            this.m_tabPage3_About.Size = new System.Drawing.Size(867, 649);
+            this.m_tabPage3_About.TabIndex = 3;
+            this.m_tabPage3_About.Text = "About Radiation";
+            this.m_tabPage3_About.UseVisualStyleBackColor = true;
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.richTextBox1.BackColor = System.Drawing.SystemColors.Info;
+            this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.richTextBox1.Location = new System.Drawing.Point(184, 24);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.ReadOnly = true;
+            this.richTextBox1.Size = new System.Drawing.Size(542, 602);
+            this.richTextBox1.TabIndex = 0;
+            this.richTextBox1.Text = "";
+            // 
             // m_tabPage2_Settings
             // 
-            this.m_tabPage2_Settings.Controls.Add(this.m_grpConfig);
+            this.m_tabPage2_Settings.Controls.Add(this.m_btnReadConfig);
+            this.m_tabPage2_Settings.Controls.Add(this.m_btnDeviceConfig);
+            this.m_tabPage2_Settings.Controls.Add(this.m_btnWriteConfig);
+            this.m_tabPage2_Settings.Controls.Add(this.m_btnResetDose);
             this.m_tabPage2_Settings.Controls.Add(this.m_lblSN);
             this.m_tabPage2_Settings.Controls.Add(this.m_btnTest);
             this.m_tabPage2_Settings.Controls.Add(this.propertyGrid1);
@@ -799,28 +772,26 @@
             this.m_tabPage2_Settings.Text = "Device Configuration";
             this.m_tabPage2_Settings.UseVisualStyleBackColor = true;
             // 
-            // m_grpConfig
+            // m_btnDeviceConfig
             // 
-            this.m_grpConfig.Controls.Add(this.m_btnReadConfig);
-            this.m_grpConfig.Controls.Add(this.m_btnResetDose);
-            this.m_grpConfig.Controls.Add(this.m_numLimit);
-            this.m_grpConfig.Controls.Add(this.label2);
-            this.m_grpConfig.Controls.Add(this.m_btnWriteConfig);
-            this.m_grpConfig.Controls.Add(this.m_chkVib);
-            this.m_grpConfig.Controls.Add(this.m_chkSnd);
-            this.m_grpConfig.Location = new System.Drawing.Point(26, 85);
-            this.m_grpConfig.Name = "m_grpConfig";
-            this.m_grpConfig.Size = new System.Drawing.Size(326, 137);
-            this.m_grpConfig.TabIndex = 2;
-            this.m_grpConfig.TabStop = false;
-            this.m_grpConfig.Text = "Configuration";
+            this.m_btnDeviceConfig.Location = new System.Drawing.Point(23, 57);
+            this.m_btnDeviceConfig.Name = "m_btnDeviceConfig";
+            this.m_btnDeviceConfig.Size = new System.Drawing.Size(139, 23);
+            this.m_btnDeviceConfig.TabIndex = 8;
+            this.m_btnDeviceConfig.Text = "Device Configuration...";
+            this.m_btnDeviceConfig.UseVisualStyleBackColor = true;
+            this.m_btnDeviceConfig.Click += new System.EventHandler(this.m_mnuDeviceConfiguration_Click);
             // 
             // propertyGrid1
             // 
-            this.propertyGrid1.Location = new System.Drawing.Point(568, 68);
+            this.propertyGrid1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.propertyGrid1.Location = new System.Drawing.Point(23, 96);
             this.propertyGrid1.Name = "propertyGrid1";
-            this.propertyGrid1.Size = new System.Drawing.Size(264, 196);
+            this.propertyGrid1.PropertySort = System.Windows.Forms.PropertySort.Categorized;
+            this.propertyGrid1.Size = new System.Drawing.Size(439, 238);
             this.propertyGrid1.TabIndex = 3;
+            this.propertyGrid1.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propertyGrid1_PropertyValueChanged);
             // 
             // m_splitMain
             // 
@@ -866,6 +837,17 @@
             this.label4.TabIndex = 5;
             this.label4.Text = "Alert Volume:";
             // 
+            // m_progressMain
+            // 
+            this.m_progressMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_progressMain.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.m_progressMain.Location = new System.Drawing.Point(276, 13);
+            this.m_progressMain.Name = "m_progressMain";
+            this.m_progressMain.Size = new System.Drawing.Size(13, 206);
+            this.m_progressMain.TabIndex = 0;
+            this.m_progressMain.Value = 33;
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -882,7 +864,6 @@
             this.Text = "Radex Demo";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormMain_FormClosed);
             this.Load += new System.EventHandler(this.FormMain_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.m_numLimit)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_numMaxCPM)).EndInit();
             this.m_splitContainerTools.Panel1.ResumeLayout(false);
             this.m_splitContainerTools.Panel2.ResumeLayout(false);
@@ -907,10 +888,9 @@
             this.splitContainer3.Panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
             this.splitContainer3.ResumeLayout(false);
+            this.m_tabPage3_About.ResumeLayout(false);
             this.m_tabPage2_Settings.ResumeLayout(false);
             this.m_tabPage2_Settings.PerformLayout();
-            this.m_grpConfig.ResumeLayout(false);
-            this.m_grpConfig.PerformLayout();
             this.m_splitMain.Panel1.ResumeLayout(false);
             this.m_splitMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.m_splitMain)).EndInit();
@@ -936,10 +916,7 @@
         private System.Windows.Forms.Button m_btnWriteConfig;
         private System.Windows.Forms.Button m_btnReadConfig;
         private System.Windows.Forms.Label m_lblSN;
-        private System.Windows.Forms.CheckBox m_chkSnd;
-        private System.Windows.Forms.CheckBox m_chkVib;
         private System.Windows.Forms.Label m_lblCPM;
-        private System.Windows.Forms.NumericUpDown m_numLimit;
         private System.Windows.Forms.NumericUpDown m_numMaxCPM;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.PictureBox m_picRadiationStatus;
@@ -968,7 +945,6 @@
         private System.Windows.Forms.RichTextBox m_txtRecords;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button m_btnHistory;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TrackBar m_trackAlertVolume;
         private System.Windows.Forms.Label m_lblAlertVolume;
@@ -982,7 +958,10 @@
         private System.Windows.Forms.PropertyGrid propertyGrid1;
         private System.Windows.Forms.Panel m_pnlTools;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.GroupBox m_grpConfig;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuDeviceConfiguration;
+        private System.Windows.Forms.Button m_btnDeviceConfig;
+        private System.Windows.Forms.TabPage m_tabPage3_About;
+        private System.Windows.Forms.RichTextBox richTextBox1;
     }
 }
 

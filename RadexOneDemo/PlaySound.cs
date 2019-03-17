@@ -14,19 +14,26 @@ namespace RadexOneDemo
 {
     public class PlaySound
     {
+        private double _maxVolume = 100.0;
         private MediaPlayer m_mediaPlayer;
         private Form _app;
 
         public int Volume
         {
-            get { return (int)(m_mediaPlayer.Volume * 100.0); }
-            set { m_mediaPlayer.Volume = value / 100.0; }
+            get { return (int)(m_mediaPlayer.Volume * _maxVolume); }
+            set { m_mediaPlayer.Volume = value / _maxVolume; }
+        }
+
+        public string VolumeToString()
+        {
+            return string.Format("{0:0.0}%", 100.0 * m_mediaPlayer.Volume);
         }
 
         public bool Loop { get; set; }
 
-        public PlaySound(Form app)
+        public PlaySound(Form app, int volume, double maxVolume)
         {
+            _maxVolume = maxVolume;
             _app = app;
 
             string basePath = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -34,7 +41,9 @@ namespace RadexOneDemo
 
             m_mediaPlayer = new MediaPlayer();
             m_mediaPlayer.Open(new Uri(fileName));
-            m_mediaPlayer.Volume = 0.2;
+
+            Volume = volume;
+
             Loop = true;
 
             m_mediaPlayer.MediaEnded += MediaPlayer_MediaEnded;

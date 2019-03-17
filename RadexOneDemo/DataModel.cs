@@ -180,12 +180,12 @@ namespace RadexOneDemo
 
     public class RequestConfigure : RequestBase
     {
-        public RequestConfigure(uint cmdId, bool snd, bool vbr, double max) //EB9D - set settings
+        public RequestConfigure(uint cmdId, bool snd, bool vbr, double threshold) //EB9D - set settings
              : base(cmdId, MAX_SET)
         {
-            if (max < 0.1)
-                max = 0.1;
-            max *= 100;
+            if (threshold < 0.1)
+                threshold = 0.1;
+            threshold *= 100;
 
             //"7BFF 20 00 0C 00 1C000000 3C00 
             request.o03_b3 = 0x0C;
@@ -196,7 +196,7 @@ namespace RadexOneDemo
             request.o10_b1 = 0;
             request.o10_b2 = 0;
             request.o11_b1 = Get(snd, vbr); //02
-            request.o11_b2 = (byte) max; 
+            request.o11_b2 = (byte) threshold; 
             request.o12_b1 = (byte) (237 - request.o11_b1); //0xED - o11_b1
             request.o12_b2 = (byte) (247 - request.o11_b2); //0xF7 - o11_b2
 

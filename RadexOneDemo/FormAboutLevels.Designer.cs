@@ -63,6 +63,7 @@
             this.Name = "FormAboutLevels";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "About Radiation Levels";
+            this.Load += new System.EventHandler(this.FormAboutLevels_Load);
             this.ResumeLayout(false);
 
         }

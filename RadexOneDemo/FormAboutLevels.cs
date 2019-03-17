@@ -18,5 +18,10 @@ namespace RadexOneDemo
 
             richTextBox1.Rtf = Properties.Resources.How_much_is_dangerous;
         }
+
+        private void FormAboutLevels_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
