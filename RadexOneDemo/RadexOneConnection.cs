@@ -398,7 +398,7 @@ namespace sD
             if (_alertState == AlertState.Alert)
             {
                 //if DOSE decreasing OR CPM cross threshold
-                if (cmd.DOSE < (_lastDose - (_lastDose/10.0)) || cmd.CPM < AlertCPM)
+                if (cmd.RATE < (_lastDose - (_lastDose/10.0)) || cmd.CPM < AlertCPM)
                 {
                     _alertState = AlertState.CoolingDown;
                     if (cmd.CPM < AlertCPM)
@@ -419,7 +419,7 @@ namespace sD
 
             if (_alertState == AlertState.CoolingDown)
             {
-                if(cmd.DOSE >= (_lastDose * 0.9))
+                if(cmd.RATE >= (_lastDose * 0.9))
                 {
                     _alertState = AlertState.Warning;
                     OnStateChanged(_alertState);
@@ -441,7 +441,7 @@ namespace sD
             }
 
             _lastCPM = cmd.CPM;
-            _lastDose = cmd.DOSE;
+            _lastDose = cmd.RATE;
         }
     }
 }

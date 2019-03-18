@@ -95,6 +95,12 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RadexOneConfig.cs" />
     <Compile Include="RadexOneConnection.cs" />
+    <Compile Include="RadiationConverterControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="RadiationConverterControl.Designer.cs">
+      <DependentUpon>RadiationConverterControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utils.cs" />
     <Compile Include="VerticalProgressBar.cs">
       <SubType>Component</SubType>
@@ -157,6 +163,9 @@
     <Content Include="Images\AboutRadiationLevels.jpg" />
     <Content Include="Images\UsbConnect1.gif" />
     <Content Include="Images\UsbConnect2.png" />
+    <EmbeddedResource Include="RadiationConverterControl.resx">
+      <DependentUpon>RadiationConverterControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Sounds\Tornado_Siren_II-Delilah.wav" />
     <None Include="Sounds\Tornado_Siren_II-Delilah.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

@@ -118,8 +118,8 @@ namespace RadexOneDemo
             return cmdId.ToString("0000") + " -- Data  -- " + request;
         }
 
-        public double DOSE { get { return responce.GetUInt32(20) / 100.0; } }
-        public double SUM { get { return responce.GetUInt32(24) / 100.0; } }
+        public double RATE { get { return responce.GetUInt32(20) / 100.0; } }
+        public double DOSE { get { return responce.GetUInt32(24) / 100.0; } }
         public uint CPM {  get { return responce.GetUInt32(28); } }
     }
 

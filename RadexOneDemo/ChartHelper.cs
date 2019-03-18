@@ -10,7 +10,7 @@ namespace RadexOneDemo
     public class ChartPoint
     {
         public DateTime date = DateTime.Now;
-        public double CPM, DOSE;
+        public double CPM, RATE;
     }
 
     public class ChartHelper

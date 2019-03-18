@@ -458,26 +458,29 @@ namespace RadexOneDemo
                 UpdateMaxRecord(true);
             }
 
-            if (cmd.DOSE > _maxLive)
+            if (cmd.RATE > _maxLive)
             {
-                _maxLive = cmd.DOSE;
+                _maxLive = cmd.RATE;
                 _maxDOSETime = DateTime.Now;
 
                 UpdateMaxRecord(true);
             }
 
-            ChartPoint pt = new ChartPoint() {CPM = cmd.CPM, DOSE = cmd.DOSE};
+            ChartPoint pt = new ChartPoint() {CPM = cmd.CPM, RATE = cmd.RATE};
             _history.Add(pt);
             if(_history.Count > 1024 * 1024) //max size 1M
                 _history.RemoveAt(0);
 
-            m_lblVal.Text = cmd.DOSE.ToString("0.00");
+            m_lblVal.Text = cmd.RATE.ToString("0.00");
             m_lblCPM.Text = cmd.CPM.ToString();
 
-            _radexConfig.Dose = cmd.SUM;
+            if (m_chkUseConverter.Checked)
+                radiationConverterControl1.ValueFrom = cmd.RATE;
+
+            _radexConfig.Dose = cmd.DOSE;
 
             ChartHelper.AddPointXY(m_chart1, "SeriesCPM", pt.CPM, pt.date);
-            ChartHelper.AddPointXY(m_chart1, "SeriesDOSE", pt.DOSE, pt.date);
+            ChartHelper.AddPointXY(m_chart1, "SeriesDOSE", pt.RATE, pt.date);
 
             int progress = (int)((100 * cmd.CPM) / (2 * m_numMaxCPM.Value));
             if (progress > 100) progress = 100;
@@ -490,7 +493,7 @@ namespace RadexOneDemo
             _alertManager.AnalyseSignal(cmd);
 
             string stat = string.Format("{0:0000}. DOSE: {1:0.00} µSv/h, CPM: {2} min−1, Accumulated: {3:0.0} µSv, State: {4}\r\n",
-                cmd.cmdId, cmd.DOSE, cmd.CPM, cmd.SUM, _alertManager.AlertInfo);
+                cmd.cmdId, cmd.RATE, cmd.CPM, cmd.DOSE, _alertManager.AlertInfo);
 
             m_txtStatus.Text = stat;
             m_txtStatus.Text += FormatMaxRecord(); 

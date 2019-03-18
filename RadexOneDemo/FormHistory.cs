@@ -50,7 +50,7 @@ namespace RadexOneDemo
             for (i = 0; i < history.Length && !_cancel; i++)
             {
                 ChartHelper.AddPointXY(m_chart1, "SeriesCPM", history[i].CPM, history[i].date, maxHistory);
-                ChartHelper.AddPointXY(m_chart1, "SeriesDOSE", history[i].DOSE, history[i].date, maxHistory);
+                ChartHelper.AddPointXY(m_chart1, "SeriesDOSE", history[i].RATE, history[i].date, maxHistory);
 
                 if (history.Length<1000 || i % 100 == 0)
                 {

@@ -83,6 +83,7 @@
             this.m_tabPage1_Device = new System.Windows.Forms.TabPage();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.m_tabPage3_About = new System.Windows.Forms.TabPage();
+            this.m_chkUseConverter = new System.Windows.Forms.CheckBox();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.m_tabPage2_Settings = new System.Windows.Forms.TabPage();
             this.m_btnDeviceConfig = new System.Windows.Forms.Button();
@@ -91,6 +92,7 @@
             this.m_pnlTools = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
             this.m_progressMain = new RadexOneDemo.VerticalProgressBar();
+            this.radiationConverterControl1 = new RadexOneDemo.RadiationConverterControl();
             ((System.ComponentModel.ISupportInitialize)(this.m_numMaxCPM)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitContainerTools)).BeginInit();
             this.m_splitContainerTools.Panel1.SuspendLayout();
@@ -733,6 +735,8 @@
             // 
             // m_tabPage3_About
             // 
+            this.m_tabPage3_About.Controls.Add(this.m_chkUseConverter);
+            this.m_tabPage3_About.Controls.Add(this.radiationConverterControl1);
             this.m_tabPage3_About.Controls.Add(this.richTextBox1);
             this.m_tabPage3_About.Location = new System.Drawing.Point(4, 22);
             this.m_tabPage3_About.Name = "m_tabPage3_About";
@@ -741,19 +745,31 @@
             this.m_tabPage3_About.Text = "About Radiation";
             this.m_tabPage3_About.UseVisualStyleBackColor = true;
             // 
+            // m_chkUseConverter
+            // 
+            this.m_chkUseConverter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.m_chkUseConverter.AutoSize = true;
+            this.m_chkUseConverter.Location = new System.Drawing.Point(544, 493);
+            this.m_chkUseConverter.Name = "m_chkUseConverter";
+            this.m_chkUseConverter.Size = new System.Drawing.Size(138, 17);
+            this.m_chkUseConverter.TabIndex = 2;
+            this.m_chkUseConverter.Text = "Use Current Rate Value";
+            this.m_chkUseConverter.UseVisualStyleBackColor = true;
+            // 
             // richTextBox1
             // 
             this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBox1.BackColor = System.Drawing.SystemColors.Info;
-            this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.richTextBox1.Location = new System.Drawing.Point(184, 24);
+            this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.richTextBox1.Location = new System.Drawing.Point(16, 16);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(542, 602);
+            this.richTextBox1.Size = new System.Drawing.Size(495, 617);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "";
+            this.richTextBox1.WordWrap = false;
             // 
             // m_tabPage2_Settings
             // 
@@ -848,6 +864,17 @@
             this.m_progressMain.TabIndex = 0;
             this.m_progressMain.Value = 33;
             // 
+            // radiationConverterControl1
+            // 
+            this.radiationConverterControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.radiationConverterControl1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.radiationConverterControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.radiationConverterControl1.Location = new System.Drawing.Point(404, 529);
+            this.radiationConverterControl1.Margin = new System.Windows.Forms.Padding(7);
+            this.radiationConverterControl1.Name = "radiationConverterControl1";
+            this.radiationConverterControl1.Size = new System.Drawing.Size(451, 63);
+            this.radiationConverterControl1.TabIndex = 1;
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -889,6 +916,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
             this.splitContainer3.ResumeLayout(false);
             this.m_tabPage3_About.ResumeLayout(false);
+            this.m_tabPage3_About.PerformLayout();
             this.m_tabPage2_Settings.ResumeLayout(false);
             this.m_tabPage2_Settings.PerformLayout();
             this.m_splitMain.Panel1.ResumeLayout(false);
@@ -962,6 +990,8 @@
         private System.Windows.Forms.Button m_btnDeviceConfig;
         private System.Windows.Forms.TabPage m_tabPage3_About;
         private System.Windows.Forms.RichTextBox richTextBox1;
+        private RadiationConverterControl radiationConverterControl1;
+        private System.Windows.Forms.CheckBox m_chkUseConverter;
     }
 }
 
