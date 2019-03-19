@@ -446,6 +446,7 @@
             // 
             // splitContainer2.Panel1
             // 
+            this.splitContainer2.Panel1.BackColor = System.Drawing.SystemColors.Control;
             this.splitContainer2.Panel1.Controls.Add(this.m_lblInterval);
             this.splitContainer2.Panel1.Controls.Add(this.m_numMaxCPM);
             this.splitContainer2.Panel1.Controls.Add(this.m_chart1);
@@ -709,6 +710,7 @@
             // 
             // m_tabPage1_Device
             // 
+            this.m_tabPage1_Device.BackColor = System.Drawing.SystemColors.Control;
             this.m_tabPage1_Device.Controls.Add(this.splitContainer3);
             this.m_tabPage1_Device.Location = new System.Drawing.Point(4, 22);
             this.m_tabPage1_Device.Name = "m_tabPage1_Device";
@@ -716,7 +718,6 @@
             this.m_tabPage1_Device.Size = new System.Drawing.Size(867, 649);
             this.m_tabPage1_Device.TabIndex = 0;
             this.m_tabPage1_Device.Text = "Dashboard";
-            this.m_tabPage1_Device.UseVisualStyleBackColor = true;
             // 
             // splitContainer3
             // 
@@ -735,6 +736,7 @@
             // 
             // m_tabPage3_About
             // 
+            this.m_tabPage3_About.BackColor = System.Drawing.SystemColors.Info;
             this.m_tabPage3_About.Controls.Add(this.m_chkUseConverter);
             this.m_tabPage3_About.Controls.Add(this.radiationConverterControl1);
             this.m_tabPage3_About.Controls.Add(this.richTextBox1);
@@ -743,7 +745,6 @@
             this.m_tabPage3_About.Size = new System.Drawing.Size(867, 649);
             this.m_tabPage3_About.TabIndex = 3;
             this.m_tabPage3_About.Text = "About Radiation";
-            this.m_tabPage3_About.UseVisualStyleBackColor = true;
             // 
             // m_chkUseConverter
             // 
@@ -773,6 +774,7 @@
             // 
             // m_tabPage2_Settings
             // 
+            this.m_tabPage2_Settings.BackColor = System.Drawing.SystemColors.Control;
             this.m_tabPage2_Settings.Controls.Add(this.m_btnReadConfig);
             this.m_tabPage2_Settings.Controls.Add(this.m_btnDeviceConfig);
             this.m_tabPage2_Settings.Controls.Add(this.m_btnWriteConfig);
@@ -786,7 +788,6 @@
             this.m_tabPage2_Settings.Size = new System.Drawing.Size(867, 649);
             this.m_tabPage2_Settings.TabIndex = 2;
             this.m_tabPage2_Settings.Text = "Device Configuration";
-            this.m_tabPage2_Settings.UseVisualStyleBackColor = true;
             // 
             // m_btnDeviceConfig
             // 

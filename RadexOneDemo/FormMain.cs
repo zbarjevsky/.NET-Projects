@@ -492,7 +492,7 @@ namespace RadexOneDemo
 
             _alertManager.AnalyseSignal(cmd);
 
-            string stat = string.Format("{0:0000}. DOSE: {1:0.00} µSv/h, CPM: {2} min−1, Accumulated: {3:0.0} µSv, State: {4}\r\n",
+            string stat = string.Format("{0:0000}. Rate: {1:0.00} µSv/h, CPM: {2} min−1, Accumulated: {3:0.0} µSv, State: {4}\r\n",
                 cmd.cmdId, cmd.RATE, cmd.CPM, cmd.DOSE, _alertManager.AlertInfo);
 
             m_txtStatus.Text = stat;
@@ -515,7 +515,7 @@ namespace RadexOneDemo
             if (_maxLive == 0.0 || _maxCPM == 0)
                 return "";
 
-            return string.Format("Max: {0} µSv/h,\t\tMax Rate: {1} pt/min\r\n{2}\t{3}\n",
+            return string.Format("Max: {0} µSv/h,\t\tMax Rate: {1} CPM\r\n{2}\t{3}\n",
                 _maxLive, _maxCPM, _maxDOSETime.ToString(DATE_FMT), _maxCPMTime.ToString(DATE_FMT));
         }
 
