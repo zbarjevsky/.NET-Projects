@@ -492,8 +492,10 @@ namespace RadexOneDemo
 
             _alertManager.AnalyseSignal(cmd);
 
-            string stat = string.Format("{0:0000}. Rate: {1:0.00} µSv/h, CPM: {2} min−1, Accumulated: {3:0.0} µSv, State: {4}\r\n",
+            string stat = string.Format("{0:0000}. Rate: {1:0.00} µSv/h, CPM: {2} min−1, Dose: {3:0.0} µSv, State: {4}\r\n",
                 cmd.cmdId, cmd.RATE, cmd.CPM, cmd.DOSE, _alertManager.AlertInfo);
+
+            m_notifyIconSysTray.Text = string.Format("Rate: {0:0.00} µSv/h, CPM: {1}", cmd.RATE, cmd.CPM);
 
             m_txtStatus.Text = stat;
             m_txtStatus.Text += FormatMaxRecord(); 
@@ -515,7 +517,7 @@ namespace RadexOneDemo
             if (_maxLive == 0.0 || _maxCPM == 0)
                 return "";
 
-            return string.Format("Max: {0} µSv/h,\t\tMax Rate: {1} CPM\r\n{2}\t{3}\n",
+            return string.Format("Max Rate: {0} µSv/h,\t\tMax CPM: {1}\r\n{2}\t{3}\n",
                 _maxLive, _maxCPM, _maxDOSETime.ToString(DATE_FMT), _maxCPMTime.ToString(DATE_FMT));
         }
 
@@ -535,6 +537,17 @@ namespace RadexOneDemo
             m_lblAlertVolume.Text = string.Format("{0:0.0}%", m_trackAlertVolume.Value / 10.0);
             if (_player != null)
                 _player.Volume = m_trackAlertVolume.Value;
+        }
+
+        private void m_mnuExit_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void m_mnuShow_Click(object sender, EventArgs e)
+        {
+            if(this.WindowState == FormWindowState.Minimized)
+                this.WindowState = FormWindowState.Normal;
         }
 
         private DateTime _lastUpdateRecord = DateTime.MinValue;

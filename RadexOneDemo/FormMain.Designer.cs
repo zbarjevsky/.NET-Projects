@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
             System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
@@ -91,6 +92,13 @@
             this.m_splitMain = new System.Windows.Forms.SplitContainer();
             this.m_pnlTools = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
+            this.m_notifyIconSysTray = new System.Windows.Forms.NotifyIcon(this.components);
+            this.m_ctxMenuSysTray = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.m_mnuExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.m_mnuShow = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuExit1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_pnlConfig = new System.Windows.Forms.Panel();
             this.m_progressMain = new RadexOneDemo.VerticalProgressBar();
             this.radiationConverterControl1 = new RadexOneDemo.RadiationConverterControl();
             ((System.ComponentModel.ISupportInitialize)(this.m_numMaxCPM)).BeginInit();
@@ -120,6 +128,8 @@
             this.m_splitMain.Panel2.SuspendLayout();
             this.m_splitMain.SuspendLayout();
             this.m_pnlTools.SuspendLayout();
+            this.m_ctxMenuSysTray.SuspendLayout();
+            this.m_pnlConfig.SuspendLayout();
             this.SuspendLayout();
             // 
             // m_txtLog
@@ -654,7 +664,8 @@
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.connectToolStripMenuItem});
+            this.connectToolStripMenuItem,
+            this.m_mnuExit1});
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
             this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.fileToolStripMenuItem.Text = "&File";
@@ -737,8 +748,8 @@
             // m_tabPage3_About
             // 
             this.m_tabPage3_About.BackColor = System.Drawing.SystemColors.Info;
-            this.m_tabPage3_About.Controls.Add(this.m_chkUseConverter);
             this.m_tabPage3_About.Controls.Add(this.radiationConverterControl1);
+            this.m_tabPage3_About.Controls.Add(this.m_chkUseConverter);
             this.m_tabPage3_About.Controls.Add(this.richTextBox1);
             this.m_tabPage3_About.Location = new System.Drawing.Point(4, 22);
             this.m_tabPage3_About.Name = "m_tabPage3_About";
@@ -775,13 +786,13 @@
             // m_tabPage2_Settings
             // 
             this.m_tabPage2_Settings.BackColor = System.Drawing.SystemColors.Control;
+            this.m_tabPage2_Settings.Controls.Add(this.m_pnlConfig);
             this.m_tabPage2_Settings.Controls.Add(this.m_btnReadConfig);
             this.m_tabPage2_Settings.Controls.Add(this.m_btnDeviceConfig);
             this.m_tabPage2_Settings.Controls.Add(this.m_btnWriteConfig);
             this.m_tabPage2_Settings.Controls.Add(this.m_btnResetDose);
             this.m_tabPage2_Settings.Controls.Add(this.m_lblSN);
             this.m_tabPage2_Settings.Controls.Add(this.m_btnTest);
-            this.m_tabPage2_Settings.Controls.Add(this.propertyGrid1);
             this.m_tabPage2_Settings.Controls.Add(this.m_btnVer);
             this.m_tabPage2_Settings.Location = new System.Drawing.Point(4, 22);
             this.m_tabPage2_Settings.Name = "m_tabPage2_Settings";
@@ -801,12 +812,13 @@
             // 
             // propertyGrid1
             // 
-            this.propertyGrid1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.propertyGrid1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.propertyGrid1.Location = new System.Drawing.Point(23, 96);
+            this.propertyGrid1.Location = new System.Drawing.Point(6, 5);
             this.propertyGrid1.Name = "propertyGrid1";
             this.propertyGrid1.PropertySort = System.Windows.Forms.PropertySort.Categorized;
-            this.propertyGrid1.Size = new System.Drawing.Size(439, 238);
+            this.propertyGrid1.Size = new System.Drawing.Size(430, 223);
             this.propertyGrid1.TabIndex = 3;
             this.propertyGrid1.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propertyGrid1_PropertyValueChanged);
             // 
@@ -853,6 +865,60 @@
             this.label4.Size = new System.Drawing.Size(69, 13);
             this.label4.TabIndex = 5;
             this.label4.Text = "Alert Volume:";
+            // 
+            // m_notifyIconSysTray
+            // 
+            this.m_notifyIconSysTray.BalloonTipText = "aa";
+            this.m_notifyIconSysTray.BalloonTipTitle = "bb";
+            this.m_notifyIconSysTray.ContextMenuStrip = this.m_ctxMenuSysTray;
+            this.m_notifyIconSysTray.Icon = ((System.Drawing.Icon)(resources.GetObject("m_notifyIconSysTray.Icon")));
+            this.m_notifyIconSysTray.Text = "Radex Demo";
+            this.m_notifyIconSysTray.Visible = true;
+            // 
+            // m_ctxMenuSysTray
+            // 
+            this.m_ctxMenuSysTray.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.m_mnuShow,
+            this.toolStripMenuItem1,
+            this.m_mnuExit});
+            this.m_ctxMenuSysTray.Name = "m_ctxMenuSysTray";
+            this.m_ctxMenuSysTray.Size = new System.Drawing.Size(104, 54);
+            // 
+            // m_mnuExit
+            // 
+            this.m_mnuExit.Name = "m_mnuExit";
+            this.m_mnuExit.Size = new System.Drawing.Size(103, 22);
+            this.m_mnuExit.Text = "E&xit";
+            this.m_mnuExit.Click += new System.EventHandler(this.m_mnuExit_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(100, 6);
+            // 
+            // m_mnuShow
+            // 
+            this.m_mnuShow.Name = "m_mnuShow";
+            this.m_mnuShow.Size = new System.Drawing.Size(103, 22);
+            this.m_mnuShow.Text = "&Show";
+            this.m_mnuShow.Click += new System.EventHandler(this.m_mnuShow_Click);
+            // 
+            // m_mnuExit1
+            // 
+            this.m_mnuExit1.Name = "m_mnuExit1";
+            this.m_mnuExit1.Size = new System.Drawing.Size(119, 22);
+            this.m_mnuExit1.Text = "E&xit";
+            this.m_mnuExit1.Click += new System.EventHandler(this.m_mnuExit_Click);
+            // 
+            // m_pnlConfig
+            // 
+            this.m_pnlConfig.BackColor = System.Drawing.Color.Silver;
+            this.m_pnlConfig.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.m_pnlConfig.Controls.Add(this.propertyGrid1);
+            this.m_pnlConfig.Location = new System.Drawing.Point(20, 96);
+            this.m_pnlConfig.Name = "m_pnlConfig";
+            this.m_pnlConfig.Size = new System.Drawing.Size(446, 237);
+            this.m_pnlConfig.TabIndex = 9;
             // 
             // m_progressMain
             // 
@@ -926,6 +992,8 @@
             this.m_splitMain.ResumeLayout(false);
             this.m_pnlTools.ResumeLayout(false);
             this.m_pnlTools.PerformLayout();
+            this.m_ctxMenuSysTray.ResumeLayout(false);
+            this.m_pnlConfig.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -993,6 +1061,13 @@
         private System.Windows.Forms.RichTextBox richTextBox1;
         private RadiationConverterControl radiationConverterControl1;
         private System.Windows.Forms.CheckBox m_chkUseConverter;
+        private System.Windows.Forms.NotifyIcon m_notifyIconSysTray;
+        private System.Windows.Forms.ContextMenuStrip m_ctxMenuSysTray;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuShow;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuExit;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuExit1;
+        private System.Windows.Forms.Panel m_pnlConfig;
     }
 }
 
