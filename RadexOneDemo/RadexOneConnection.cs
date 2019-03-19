@@ -239,18 +239,16 @@ namespace sD
 
         private static List<string> PortNames(string name)
         {
-            string[] portNames = SerialPort.GetPortNames();
-            string sInstanceName = string.Empty;
-            string sPortName = string.Empty;
-
             List<string> names = new List<string>();
 
             ManagementObjectSearcher searcher = new ManagementObjectSearcher(@"root\CIMV2", "SELECT * FROM Win32_PnPEntity");
             var list = searcher.Get();
             foreach (ManagementObject queryObj in list)
             {
-                sInstanceName = queryObj["Caption"].ToString();
-                names.Add(sInstanceName);
+                object caption = queryObj["Caption"];
+                if(caption == null)
+                    continue;
+                names.Add(caption.ToString());
             }
 
             return names.Where(n => n.Contains(name)).ToList();
