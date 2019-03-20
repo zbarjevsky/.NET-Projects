@@ -76,6 +76,7 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.connectToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuExit1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.m_mnuDeviceConfiguration = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -87,18 +88,17 @@
             this.m_chkUseConverter = new System.Windows.Forms.CheckBox();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.m_tabPage2_Settings = new System.Windows.Forms.TabPage();
-            this.m_btnDeviceConfig = new System.Windows.Forms.Button();
+            this.m_pnlConfig = new System.Windows.Forms.Panel();
             this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
+            this.m_btnDeviceConfig = new System.Windows.Forms.Button();
             this.m_splitMain = new System.Windows.Forms.SplitContainer();
             this.m_pnlTools = new System.Windows.Forms.Panel();
             this.label4 = new System.Windows.Forms.Label();
             this.m_notifyIconSysTray = new System.Windows.Forms.NotifyIcon(this.components);
             this.m_ctxMenuSysTray = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.m_mnuExit = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.m_mnuShow = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_mnuExit1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_pnlConfig = new System.Windows.Forms.Panel();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.m_mnuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.m_progressMain = new RadexOneDemo.VerticalProgressBar();
             this.radiationConverterControl1 = new RadexOneDemo.RadiationConverterControl();
             ((System.ComponentModel.ISupportInitialize)(this.m_numMaxCPM)).BeginInit();
@@ -123,13 +123,13 @@
             this.splitContainer3.SuspendLayout();
             this.m_tabPage3_About.SuspendLayout();
             this.m_tabPage2_Settings.SuspendLayout();
+            this.m_pnlConfig.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitMain)).BeginInit();
             this.m_splitMain.Panel1.SuspendLayout();
             this.m_splitMain.Panel2.SuspendLayout();
             this.m_splitMain.SuspendLayout();
             this.m_pnlTools.SuspendLayout();
             this.m_ctxMenuSysTray.SuspendLayout();
-            this.m_pnlConfig.SuspendLayout();
             this.SuspendLayout();
             // 
             // m_txtLog
@@ -677,12 +677,19 @@
             this.connectToolStripMenuItem.Text = "&Connect";
             this.connectToolStripMenuItem.Click += new System.EventHandler(this.connectToolStripMenuItem_Click);
             // 
+            // m_mnuExit1
+            // 
+            this.m_mnuExit1.Name = "m_mnuExit1";
+            this.m_mnuExit1.Size = new System.Drawing.Size(119, 22);
+            this.m_mnuExit1.Text = "E&xit";
+            this.m_mnuExit1.Click += new System.EventHandler(this.m_mnuExit_Click);
+            // 
             // toolsToolStripMenuItem
             // 
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_mnuDeviceConfiguration});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
             this.toolsToolStripMenuItem.Text = "&Tools";
             // 
             // m_mnuDeviceConfiguration
@@ -747,7 +754,7 @@
             // 
             // m_tabPage3_About
             // 
-            this.m_tabPage3_About.BackColor = System.Drawing.SystemColors.Info;
+            this.m_tabPage3_About.BackColor = System.Drawing.SystemColors.Control;
             this.m_tabPage3_About.Controls.Add(this.radiationConverterControl1);
             this.m_tabPage3_About.Controls.Add(this.m_chkUseConverter);
             this.m_tabPage3_About.Controls.Add(this.richTextBox1);
@@ -759,7 +766,7 @@
             // 
             // m_chkUseConverter
             // 
-            this.m_chkUseConverter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.m_chkUseConverter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.m_chkUseConverter.AutoSize = true;
             this.m_chkUseConverter.Location = new System.Drawing.Point(544, 493);
             this.m_chkUseConverter.Name = "m_chkUseConverter";
@@ -770,9 +777,8 @@
             // 
             // richTextBox1
             // 
-            this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
+            this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left)));
             this.richTextBox1.BackColor = System.Drawing.SystemColors.Info;
             this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.richTextBox1.Location = new System.Drawing.Point(16, 16);
@@ -800,15 +806,15 @@
             this.m_tabPage2_Settings.TabIndex = 2;
             this.m_tabPage2_Settings.Text = "Device Configuration";
             // 
-            // m_btnDeviceConfig
+            // m_pnlConfig
             // 
-            this.m_btnDeviceConfig.Location = new System.Drawing.Point(23, 57);
-            this.m_btnDeviceConfig.Name = "m_btnDeviceConfig";
-            this.m_btnDeviceConfig.Size = new System.Drawing.Size(139, 23);
-            this.m_btnDeviceConfig.TabIndex = 8;
-            this.m_btnDeviceConfig.Text = "Device Configuration...";
-            this.m_btnDeviceConfig.UseVisualStyleBackColor = true;
-            this.m_btnDeviceConfig.Click += new System.EventHandler(this.m_mnuDeviceConfiguration_Click);
+            this.m_pnlConfig.BackColor = System.Drawing.Color.Silver;
+            this.m_pnlConfig.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.m_pnlConfig.Controls.Add(this.propertyGrid1);
+            this.m_pnlConfig.Location = new System.Drawing.Point(20, 96);
+            this.m_pnlConfig.Name = "m_pnlConfig";
+            this.m_pnlConfig.Size = new System.Drawing.Size(446, 237);
+            this.m_pnlConfig.TabIndex = 9;
             // 
             // propertyGrid1
             // 
@@ -821,6 +827,16 @@
             this.propertyGrid1.Size = new System.Drawing.Size(430, 223);
             this.propertyGrid1.TabIndex = 3;
             this.propertyGrid1.PropertyValueChanged += new System.Windows.Forms.PropertyValueChangedEventHandler(this.propertyGrid1_PropertyValueChanged);
+            // 
+            // m_btnDeviceConfig
+            // 
+            this.m_btnDeviceConfig.Location = new System.Drawing.Point(23, 57);
+            this.m_btnDeviceConfig.Name = "m_btnDeviceConfig";
+            this.m_btnDeviceConfig.Size = new System.Drawing.Size(139, 23);
+            this.m_btnDeviceConfig.TabIndex = 8;
+            this.m_btnDeviceConfig.Text = "Device Configuration...";
+            this.m_btnDeviceConfig.UseVisualStyleBackColor = true;
+            this.m_btnDeviceConfig.Click += new System.EventHandler(this.m_mnuDeviceConfiguration_Click);
             // 
             // m_splitMain
             // 
@@ -884,18 +900,6 @@
             this.m_ctxMenuSysTray.Name = "m_ctxMenuSysTray";
             this.m_ctxMenuSysTray.Size = new System.Drawing.Size(104, 54);
             // 
-            // m_mnuExit
-            // 
-            this.m_mnuExit.Name = "m_mnuExit";
-            this.m_mnuExit.Size = new System.Drawing.Size(103, 22);
-            this.m_mnuExit.Text = "E&xit";
-            this.m_mnuExit.Click += new System.EventHandler(this.m_mnuExit_Click);
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(100, 6);
-            // 
             // m_mnuShow
             // 
             this.m_mnuShow.Name = "m_mnuShow";
@@ -903,22 +907,17 @@
             this.m_mnuShow.Text = "&Show";
             this.m_mnuShow.Click += new System.EventHandler(this.m_mnuShow_Click);
             // 
-            // m_mnuExit1
+            // toolStripMenuItem1
             // 
-            this.m_mnuExit1.Name = "m_mnuExit1";
-            this.m_mnuExit1.Size = new System.Drawing.Size(119, 22);
-            this.m_mnuExit1.Text = "E&xit";
-            this.m_mnuExit1.Click += new System.EventHandler(this.m_mnuExit_Click);
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(100, 6);
             // 
-            // m_pnlConfig
+            // m_mnuExit
             // 
-            this.m_pnlConfig.BackColor = System.Drawing.Color.Silver;
-            this.m_pnlConfig.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.m_pnlConfig.Controls.Add(this.propertyGrid1);
-            this.m_pnlConfig.Location = new System.Drawing.Point(20, 96);
-            this.m_pnlConfig.Name = "m_pnlConfig";
-            this.m_pnlConfig.Size = new System.Drawing.Size(446, 237);
-            this.m_pnlConfig.TabIndex = 9;
+            this.m_mnuExit.Name = "m_mnuExit";
+            this.m_mnuExit.Size = new System.Drawing.Size(103, 22);
+            this.m_mnuExit.Text = "E&xit";
+            this.m_mnuExit.Click += new System.EventHandler(this.m_mnuExit_Click);
             // 
             // m_progressMain
             // 
@@ -933,7 +932,7 @@
             // 
             // radiationConverterControl1
             // 
-            this.radiationConverterControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.radiationConverterControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.radiationConverterControl1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.radiationConverterControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
             this.radiationConverterControl1.Location = new System.Drawing.Point(404, 529);
@@ -986,6 +985,7 @@
             this.m_tabPage3_About.PerformLayout();
             this.m_tabPage2_Settings.ResumeLayout(false);
             this.m_tabPage2_Settings.PerformLayout();
+            this.m_pnlConfig.ResumeLayout(false);
             this.m_splitMain.Panel1.ResumeLayout(false);
             this.m_splitMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.m_splitMain)).EndInit();
@@ -993,7 +993,6 @@
             this.m_pnlTools.ResumeLayout(false);
             this.m_pnlTools.PerformLayout();
             this.m_ctxMenuSysTray.ResumeLayout(false);
-            this.m_pnlConfig.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -166,16 +166,19 @@ namespace sD
 
         private void ComPort_DataReceived(object sender, SerialDataReceivedEventArgs e)
         {
-            try
+            Task.Run(() =>
             {
-                byte[] data = _radexPort.GetReceivedData();
-                if(data != null)
-                    _commands.ProcessResponce(data);
-            }
-            catch (Exception err)
-            {
-                OnDisconnected("Response error: "+err.Message);
-            }
+                try
+                {
+                    byte[] data = _radexPort.GetReceivedData();
+                    if (data != null)
+                        _commands.ProcessResponce(data);
+                }
+                catch (Exception err)
+                {
+                    OnDisconnected("Response error: " + err.Message);
+                }
+            });
         }
 
         private void OnDisconnected(string message)
@@ -275,13 +278,12 @@ namespace sD
                     //    throw new Exception("Device not connected: RADEX ONE");
 
                     //PortName = comPort;
-                    if (Port.IsOpen)
+                    if (IsOpen)
                     {
                         if (Port.PortName == comPort)
                             return Port.PortName; //already open
 
-                        Port.Close();
-                        IsOpen = false;
+                        Close();
                     }
 
                     Port.PortName = comPort;
@@ -298,7 +300,7 @@ namespace sD
                 }
                 catch (Exception err)
                 {
-                    throw err;
+                    throw;
                 }
             }
         }

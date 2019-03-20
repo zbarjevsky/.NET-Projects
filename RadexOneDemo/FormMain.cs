@@ -492,7 +492,7 @@ namespace RadexOneDemo
 
             _alertManager.AnalyseSignal(cmd);
 
-            string stat = string.Format("{0:0000}. Rate: {1:0.00} µSv/h, CPM: {2} min−1, Dose: {3:0.0} µSv, State: {4}\r\n",
+            string stat = string.Format("{0:0000}. Rate: {1:0.00} µSv/h, CPM: {2}, Dose: {3:0.00} µSv, State: {4}\r\n",
                 cmd.cmdId, cmd.RATE, cmd.CPM, cmd.DOSE, _alertManager.AlertInfo);
 
             m_notifyIconSysTray.Text = string.Format("Rate: {0:0.00} µSv/h, CPM: {1}", cmd.RATE, cmd.CPM);
