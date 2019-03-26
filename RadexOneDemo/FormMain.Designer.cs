@@ -29,10 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.m_txtLog = new System.Windows.Forms.RichTextBox();
             this.m_btnRequestData = new System.Windows.Forms.Button();
@@ -49,6 +45,7 @@
             this.m_numMaxCPM = new System.Windows.Forms.NumericUpDown();
             this.m_splitContainerTools = new System.Windows.Forms.SplitContainer();
             this.m_picRadiationStatus = new System.Windows.Forms.PictureBox();
+            this.m_progressMain = new RadexOneDemo.VerticalProgressBar();
             this.label1 = new System.Windows.Forms.Label();
             this.m_txtRecords = new System.Windows.Forms.RichTextBox();
             this.label22 = new System.Windows.Forms.Label();
@@ -59,7 +56,7 @@
             this.m_numInterval = new System.Windows.Forms.NumericUpDown();
             this.m_lblMaxCPM = new System.Windows.Forms.Label();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.m_chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.m_chart1 = new RadexOneDemo.RadiationGraphControl();
             this.m_chkShowLog = new System.Windows.Forms.CheckBox();
             this.m_btnDisconnect = new System.Windows.Forms.Button();
             this.m_btnConnect = new System.Windows.Forms.Button();
@@ -85,6 +82,7 @@
             this.m_tabPage1_Device = new System.Windows.Forms.TabPage();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.m_tabPage3_About = new System.Windows.Forms.TabPage();
+            this.radiationConverterControl1 = new RadexOneDemo.RadiationConverterControl();
             this.m_chkUseConverter = new System.Windows.Forms.CheckBox();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.m_tabPage2_Settings = new System.Windows.Forms.TabPage();
@@ -99,8 +97,6 @@
             this.m_mnuShow = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.m_mnuExit = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_progressMain = new RadexOneDemo.VerticalProgressBar();
-            this.radiationConverterControl1 = new RadexOneDemo.RadiationConverterControl();
             ((System.ComponentModel.ISupportInitialize)(this.m_numMaxCPM)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitContainerTools)).BeginInit();
             this.m_splitContainerTools.Panel1.SuspendLayout();
@@ -113,7 +109,6 @@
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.m_chart1)).BeginInit();
             this.m_statusStripMain.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.m_tabControlAll.SuspendLayout();
@@ -145,7 +140,7 @@
             // m_btnRequestData
             // 
             this.m_btnRequestData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnRequestData.Location = new System.Drawing.Point(553, 490);
+            this.m_btnRequestData.Location = new System.Drawing.Point(547, 490);
             this.m_btnRequestData.Name = "m_btnRequestData";
             this.m_btnRequestData.Size = new System.Drawing.Size(150, 23);
             this.m_btnRequestData.TabIndex = 9;
@@ -200,7 +195,7 @@
             // m_btnClear
             // 
             this.m_btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnClear.Location = new System.Drawing.Point(706, 490);
+            this.m_btnClear.Location = new System.Drawing.Point(700, 490);
             this.m_btnClear.Name = "m_btnClear";
             this.m_btnClear.Size = new System.Drawing.Size(150, 23);
             this.m_btnClear.TabIndex = 10;
@@ -329,6 +324,17 @@
             this.m_picRadiationStatus.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.m_picRadiationStatus.TabIndex = 0;
             this.m_picRadiationStatus.TabStop = false;
+            // 
+            // m_progressMain
+            // 
+            this.m_progressMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_progressMain.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.m_progressMain.Location = new System.Drawing.Point(276, 13);
+            this.m_progressMain.Name = "m_progressMain";
+            this.m_progressMain.Size = new System.Drawing.Size(13, 206);
+            this.m_progressMain.TabIndex = 0;
+            this.m_progressMain.Value = 33;
             // 
             // label1
             // 
@@ -481,45 +487,11 @@
             this.m_chart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_chart1.BorderlineColor = System.Drawing.Color.Empty;
-            this.m_chart1.BorderSkin.BorderColor = System.Drawing.Color.Empty;
-            this.m_chart1.BorderSkin.PageColor = System.Drawing.SystemColors.Control;
-            this.m_chart1.BorderSkin.SkinStyle = System.Windows.Forms.DataVisualization.Charting.BorderSkinStyle.Sunken;
-            chartArea1.AxisX.LabelStyle.Format = "HH:mm:ss";
-            chartArea1.AxisX.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
-            chartArea1.AxisY.LabelStyle.ForeColor = System.Drawing.Color.DodgerBlue;
-            chartArea1.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
-            chartArea1.AxisY2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.True;
-            chartArea1.AxisY2.LabelStyle.ForeColor = System.Drawing.Color.DarkOrange;
-            chartArea1.AxisY2.MajorGrid.Enabled = false;
-            chartArea1.BackColor = System.Drawing.Color.White;
-            chartArea1.BackSecondaryColor = System.Drawing.Color.White;
-            chartArea1.Name = "ChartArea1";
-            this.m_chart1.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.m_chart1.Legends.Add(legend1);
-            this.m_chart1.Location = new System.Drawing.Point(9, 137);
+            this.m_chart1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.m_chart1.Location = new System.Drawing.Point(9, 131);
             this.m_chart1.Name = "m_chart1";
-            series1.BorderWidth = 2;
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
-            series1.Legend = "Legend1";
-            series1.LegendText = "DOSE µSv/h";
-            series1.Name = "SeriesDOSE";
-            series1.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.DateTime;
-            series2.BorderWidth = 2;
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.FastLine;
-            series2.Legend = "Legend1";
-            series2.LegendText = "CPM";
-            series2.Name = "SeriesCPM";
-            series2.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.DateTime;
-            series2.YAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
-            this.m_chart1.Series.Add(series1);
-            this.m_chart1.Series.Add(series2);
-            this.m_chart1.Size = new System.Drawing.Size(838, 347);
+            this.m_chart1.Size = new System.Drawing.Size(841, 353);
             this.m_chart1.TabIndex = 7;
-            this.m_chart1.Text = "chart1";
             // 
             // m_chkShowLog
             // 
@@ -527,7 +499,7 @@
             this.m_chkShowLog.AutoSize = true;
             this.m_chkShowLog.Checked = true;
             this.m_chkShowLog.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.m_chkShowLog.Location = new System.Drawing.Point(3, 496);
+            this.m_chkShowLog.Location = new System.Drawing.Point(9, 496);
             this.m_chkShowLog.Name = "m_chkShowLog";
             this.m_chkShowLog.Size = new System.Drawing.Size(78, 17);
             this.m_chkShowLog.TabIndex = 8;
@@ -764,6 +736,17 @@
             this.m_tabPage3_About.TabIndex = 3;
             this.m_tabPage3_About.Text = "About Radiation";
             // 
+            // radiationConverterControl1
+            // 
+            this.radiationConverterControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.radiationConverterControl1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.radiationConverterControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.radiationConverterControl1.Location = new System.Drawing.Point(404, 529);
+            this.radiationConverterControl1.Margin = new System.Windows.Forms.Padding(7);
+            this.radiationConverterControl1.Name = "radiationConverterControl1";
+            this.radiationConverterControl1.Size = new System.Drawing.Size(451, 63);
+            this.radiationConverterControl1.TabIndex = 1;
+            // 
             // m_chkUseConverter
             // 
             this.m_chkUseConverter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -919,28 +902,6 @@
             this.m_mnuExit.Text = "E&xit";
             this.m_mnuExit.Click += new System.EventHandler(this.m_mnuExit_Click);
             // 
-            // m_progressMain
-            // 
-            this.m_progressMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_progressMain.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.m_progressMain.Location = new System.Drawing.Point(276, 13);
-            this.m_progressMain.Name = "m_progressMain";
-            this.m_progressMain.Size = new System.Drawing.Size(13, 206);
-            this.m_progressMain.TabIndex = 0;
-            this.m_progressMain.Value = 33;
-            // 
-            // radiationConverterControl1
-            // 
-            this.radiationConverterControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.radiationConverterControl1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.radiationConverterControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.radiationConverterControl1.Location = new System.Drawing.Point(404, 529);
-            this.radiationConverterControl1.Margin = new System.Windows.Forms.Padding(7);
-            this.radiationConverterControl1.Name = "radiationConverterControl1";
-            this.radiationConverterControl1.Size = new System.Drawing.Size(451, 63);
-            this.radiationConverterControl1.TabIndex = 1;
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -971,7 +932,6 @@
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.m_chart1)).EndInit();
             this.m_statusStripMain.ResumeLayout(false);
             this.m_statusStripMain.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
@@ -1034,7 +994,7 @@
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripProgressBar m_ProgressBarStatus;
         private System.Windows.Forms.ComboBox m_cmbDevices;
-        private System.Windows.Forms.DataVisualization.Charting.Chart m_chart1;
+        private RadiationGraphControl m_chart1;
         private System.Windows.Forms.Button m_btnTest;
         private System.Windows.Forms.CheckBox m_chkAutoConnect;
         private System.Windows.Forms.SplitContainer m_splitContainerTools;

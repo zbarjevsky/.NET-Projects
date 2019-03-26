@@ -28,13 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormHistory));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.m_chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
+            this.m_chart1 = new RadexOneDemo.RadiationGraphControl();
             this.m_btnOpen = new System.Windows.Forms.Button();
             this.m_btnSave = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -43,12 +39,14 @@
             this.m_btnStop1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.m_saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.m_openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.m_numMaxCPM = new System.Windows.Forms.NumericUpDown();
+            this.m_lblMaxCPM = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.m_chart1)).BeginInit();
             this.statusStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.m_numMaxCPM)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -65,53 +63,23 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.m_numMaxCPM);
+            this.splitContainer1.Panel2.Controls.Add(this.m_lblMaxCPM);
             this.splitContainer1.Panel2.Controls.Add(this.m_btnOpen);
             this.splitContainer1.Panel2.Controls.Add(this.m_btnSave);
-            this.splitContainer1.Size = new System.Drawing.Size(1031, 360);
-            this.splitContainer1.SplitterDistance = 928;
+            this.splitContainer1.Panel2MinSize = 100;
+            this.splitContainer1.Size = new System.Drawing.Size(1090, 474);
+            this.splitContainer1.SplitterDistance = 958;
             this.splitContainer1.TabIndex = 0;
             // 
             // m_chart1
             // 
             this.m_chart1.BackColor = System.Drawing.SystemColors.Control;
-            this.m_chart1.BorderlineColor = System.Drawing.Color.Empty;
-            this.m_chart1.BorderSkin.BorderColor = System.Drawing.Color.Empty;
-            this.m_chart1.BorderSkin.PageColor = System.Drawing.SystemColors.Control;
-            this.m_chart1.BorderSkin.SkinStyle = System.Windows.Forms.DataVisualization.Charting.BorderSkinStyle.Sunken;
-            chartArea1.AxisX.LabelStyle.Format = "HH:mm:ss";
-            chartArea1.AxisX.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
-            chartArea1.AxisY.LabelStyle.ForeColor = System.Drawing.Color.DodgerBlue;
-            chartArea1.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
-            chartArea1.AxisY2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.True;
-            chartArea1.AxisY2.LabelStyle.ForeColor = System.Drawing.Color.DarkOrange;
-            chartArea1.AxisY2.MajorGrid.Enabled = false;
-            chartArea1.BackColor = System.Drawing.SystemColors.Control;
-            chartArea1.BackSecondaryColor = System.Drawing.SystemColors.Control;
-            chartArea1.Name = "ChartArea1";
-            this.m_chart1.ChartAreas.Add(chartArea1);
             this.m_chart1.Dock = System.Windows.Forms.DockStyle.Fill;
-            legend1.Name = "Legend1";
-            this.m_chart1.Legends.Add(legend1);
             this.m_chart1.Location = new System.Drawing.Point(0, 0);
             this.m_chart1.Name = "m_chart1";
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.StepLine;
-            series1.Legend = "Legend1";
-            series1.LegendText = "DOSE µSv/h";
-            series1.Name = "SeriesDOSE";
-            series1.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.DateTime;
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.StepLine;
-            series2.Legend = "Legend1";
-            series2.LegendText = "CPM";
-            series2.Name = "SeriesCPM";
-            series2.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.DateTime;
-            series2.YAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
-            this.m_chart1.Series.Add(series1);
-            this.m_chart1.Series.Add(series2);
-            this.m_chart1.Size = new System.Drawing.Size(924, 356);
+            this.m_chart1.Size = new System.Drawing.Size(954, 470);
             this.m_chart1.TabIndex = 24;
-            this.m_chart1.Text = "chart1";
             // 
             // m_btnOpen
             // 
@@ -139,9 +107,9 @@
             this.m_status1,
             this.toolStripProgressBar1,
             this.m_btnStop1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 360);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 474);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1031, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1090, 22);
             this.statusStrip1.TabIndex = 25;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -181,11 +149,49 @@
             this.m_openFileDialog.Filter = "History file(*.hist)|*.hist";
             this.m_openFileDialog.InitialDirectory = "C:\\Temp\\Radex\\";
             // 
+            // m_numMaxCPM
+            // 
+            this.m_numMaxCPM.Increment = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.m_numMaxCPM.Location = new System.Drawing.Point(12, 97);
+            this.m_numMaxCPM.Maximum = new decimal(new int[] {
+            1000,
+            0,
+            0,
+            0});
+            this.m_numMaxCPM.Minimum = new decimal(new int[] {
+            1,
+            0,
+            0,
+            0});
+            this.m_numMaxCPM.Name = "m_numMaxCPM";
+            this.m_numMaxCPM.Size = new System.Drawing.Size(73, 20);
+            this.m_numMaxCPM.TabIndex = 9;
+            this.m_numMaxCPM.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.m_numMaxCPM.Value = new decimal(new int[] {
+            30,
+            0,
+            0,
+            0});
+            this.m_numMaxCPM.ValueChanged += new System.EventHandler(this.m_numMaxCPM_ValueChanged);
+            // 
+            // m_lblMaxCPM
+            // 
+            this.m_lblMaxCPM.AutoSize = true;
+            this.m_lblMaxCPM.Location = new System.Drawing.Point(2, 81);
+            this.m_lblMaxCPM.Name = "m_lblMaxCPM";
+            this.m_lblMaxCPM.Size = new System.Drawing.Size(104, 13);
+            this.m_lblMaxCPM.TabIndex = 8;
+            this.m_lblMaxCPM.Text = "Alert Threshold CPM";
+            // 
             // FormHistory
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1031, 382);
+            this.ClientSize = new System.Drawing.Size(1090, 496);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.statusStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -196,11 +202,12 @@
             this.Load += new System.EventHandler(this.FormHistory_Load);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
+            this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.m_chart1)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.m_numMaxCPM)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -209,7 +216,7 @@
         #endregion
 
         private System.Windows.Forms.SplitContainer splitContainer1;
-        private System.Windows.Forms.DataVisualization.Charting.Chart m_chart1;
+        private RadiationGraphControl m_chart1;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
         private System.Windows.Forms.ToolStripStatusLabel m_status1;
@@ -218,5 +225,7 @@
         private System.Windows.Forms.SaveFileDialog m_saveFileDialog;
         private System.Windows.Forms.Button m_btnOpen;
         private System.Windows.Forms.OpenFileDialog m_openFileDialog;
+        private System.Windows.Forms.NumericUpDown m_numMaxCPM;
+        private System.Windows.Forms.Label m_lblMaxCPM;
     }
 }

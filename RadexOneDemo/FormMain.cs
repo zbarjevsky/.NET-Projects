@@ -433,7 +433,7 @@ namespace RadexOneDemo
             m_txtLog.Text = "";
             _maxCPM = 0;
             _maxLive = 0;
-            ChartHelper.ClearChart(m_chart1);
+            m_chart1.ClearChart();
         }
 
         private void m_numMaxCPM_ValueChanged(object sender, EventArgs e)
@@ -479,8 +479,7 @@ namespace RadexOneDemo
 
             _radexConfig.Dose = cmd.DOSE;
 
-            ChartHelper.AddPointXY(m_chart1, "SeriesCPM", pt.CPM, pt.date);
-            ChartHelper.AddPointXY(m_chart1, "SeriesDOSE", pt.RATE, pt.date);
+            m_chart1.AddPointXY(pt, (double) m_numMaxCPM.Value);
 
             int progress = (int)((100 * cmd.CPM) / (2 * m_numMaxCPM.Value));
             if (progress > 100) progress = 100;

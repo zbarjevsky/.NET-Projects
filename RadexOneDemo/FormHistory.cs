@@ -43,14 +43,12 @@ namespace RadexOneDemo
             m_btnStop1.Enabled = true;
             m_chart1.SuspendLayout();
 
-            m_chart1.Series[0].Points.Clear();
-            m_chart1.Series[1].Points.Clear();
+            m_chart1.ClearChart();
 
             int i;
             for (i = 0; i < history.Length && !_cancel; i++)
             {
-                ChartHelper.AddPointXY(m_chart1, "SeriesCPM", history[i].CPM, history[i].date, maxHistory);
-                ChartHelper.AddPointXY(m_chart1, "SeriesDOSE", history[i].RATE, history[i].date, maxHistory);
+                m_chart1.AddPointXY(history[i], (double) m_numMaxCPM.Value);
 
                 if (history.Length<1000 || i % 100 == 0)
                 {
@@ -185,6 +183,11 @@ namespace RadexOneDemo
             Cursor = Cursors.WaitCursor;
             XmlHelper.Save(fileName, _history);
             Cursor = Cursors.Arrow;
+        }
+
+        private void m_numMaxCPM_ValueChanged(object sender, EventArgs e)
+        {
+
         }
     }
 

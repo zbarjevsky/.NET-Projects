@@ -101,6 +101,12 @@
     <Compile Include="RadiationConverterControl.Designer.cs">
       <DependentUpon>RadiationConverterControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="RadiationGraphControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="RadiationGraphControl.Designer.cs">
+      <DependentUpon>RadiationGraphControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utils.cs" />
     <Compile Include="VerticalProgressBar.cs">
       <SubType>Component</SubType>
@@ -165,6 +171,9 @@
     <Content Include="Images\UsbConnect2.png" />
     <EmbeddedResource Include="RadiationConverterControl.resx">
       <DependentUpon>RadiationConverterControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="RadiationGraphControl.resx">
+      <DependentUpon>RadiationGraphControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Sounds\Tornado_Siren_II-Delilah.wav" />
     <None Include="Sounds\Tornado_Siren_II-Delilah.mp3">
