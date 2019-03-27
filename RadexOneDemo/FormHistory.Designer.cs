@@ -30,7 +30,8 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormHistory));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.m_chart1 = new RadexOneDemo.RadiationGraphControl();
+            this.m_numMaxCPM = new System.Windows.Forms.NumericUpDown();
+            this.m_lblMaxCPM = new System.Windows.Forms.Label();
             this.m_btnOpen = new System.Windows.Forms.Button();
             this.m_btnSave = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -39,14 +40,19 @@
             this.m_btnStop1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.m_saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.m_openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.m_numMaxCPM = new System.Windows.Forms.NumericUpDown();
-            this.m_lblMaxCPM = new System.Windows.Forms.Label();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.m_txtLog = new System.Windows.Forms.RichTextBox();
+            this.m_chart1 = new RadexOneDemo.RadiationGraphControl();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_numMaxCPM)).BeginInit();
+            this.statusStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -59,7 +65,7 @@
             // 
             // splitContainer1.Panel1
             // 
-            this.splitContainer1.Panel1.Controls.Add(this.m_chart1);
+            this.splitContainer1.Panel1.Controls.Add(this.splitContainer2);
             // 
             // splitContainer1.Panel2
             // 
@@ -68,86 +74,9 @@
             this.splitContainer1.Panel2.Controls.Add(this.m_btnOpen);
             this.splitContainer1.Panel2.Controls.Add(this.m_btnSave);
             this.splitContainer1.Panel2MinSize = 100;
-            this.splitContainer1.Size = new System.Drawing.Size(1090, 474);
-            this.splitContainer1.SplitterDistance = 958;
+            this.splitContainer1.Size = new System.Drawing.Size(1184, 540);
+            this.splitContainer1.SplitterDistance = 1052;
             this.splitContainer1.TabIndex = 0;
-            // 
-            // m_chart1
-            // 
-            this.m_chart1.BackColor = System.Drawing.SystemColors.Control;
-            this.m_chart1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_chart1.Location = new System.Drawing.Point(0, 0);
-            this.m_chart1.Name = "m_chart1";
-            this.m_chart1.Size = new System.Drawing.Size(954, 470);
-            this.m_chart1.TabIndex = 24;
-            // 
-            // m_btnOpen
-            // 
-            this.m_btnOpen.Location = new System.Drawing.Point(10, 10);
-            this.m_btnOpen.Name = "m_btnOpen";
-            this.m_btnOpen.Size = new System.Drawing.Size(75, 23);
-            this.m_btnOpen.TabIndex = 1;
-            this.m_btnOpen.Text = "&Open...";
-            this.m_btnOpen.UseVisualStyleBackColor = true;
-            this.m_btnOpen.Click += new System.EventHandler(this.m_btnOpen_Click);
-            // 
-            // m_btnSave
-            // 
-            this.m_btnSave.Location = new System.Drawing.Point(10, 40);
-            this.m_btnSave.Name = "m_btnSave";
-            this.m_btnSave.Size = new System.Drawing.Size(75, 23);
-            this.m_btnSave.TabIndex = 0;
-            this.m_btnSave.Text = "&Save As...";
-            this.m_btnSave.UseVisualStyleBackColor = true;
-            this.m_btnSave.Click += new System.EventHandler(this.m_btnSave_Click);
-            // 
-            // statusStrip1
-            // 
-            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.m_status1,
-            this.toolStripProgressBar1,
-            this.m_btnStop1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 474);
-            this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(1090, 22);
-            this.statusStrip1.TabIndex = 25;
-            this.statusStrip1.Text = "statusStrip1";
-            // 
-            // m_status1
-            // 
-            this.m_status1.Name = "m_status1";
-            this.m_status1.Size = new System.Drawing.Size(59, 17);
-            this.m_status1.Text = "Loading...";
-            // 
-            // toolStripProgressBar1
-            // 
-            this.toolStripProgressBar1.Name = "toolStripProgressBar1";
-            this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 16);
-            // 
-            // m_btnStop1
-            // 
-            this.m_btnStop1.Image = ((System.Drawing.Image)(resources.GetObject("m_btnStop1.Image")));
-            this.m_btnStop1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.m_btnStop1.Name = "m_btnStop1";
-            this.m_btnStop1.ShowDropDownArrow = false;
-            this.m_btnStop1.Size = new System.Drawing.Size(51, 20);
-            this.m_btnStop1.Text = "Stop";
-            this.m_btnStop1.Click += new System.EventHandler(this.m_btnStop1_Click);
-            // 
-            // m_saveFileDialog
-            // 
-            this.m_saveFileDialog.DefaultExt = "hist";
-            this.m_saveFileDialog.FileName = "History1";
-            this.m_saveFileDialog.Filter = "History file(*.hist)|*.hist";
-            this.m_saveFileDialog.InitialDirectory = "C:\\Temp\\Radex\\";
-            this.m_saveFileDialog.Title = "Save history to:";
-            // 
-            // m_openFileDialog
-            // 
-            this.m_openFileDialog.DefaultExt = "hist";
-            this.m_openFileDialog.FileName = "*.hist";
-            this.m_openFileDialog.Filter = "History file(*.hist)|*.hist";
-            this.m_openFileDialog.InitialDirectory = "C:\\Temp\\Radex\\";
             // 
             // m_numMaxCPM
             // 
@@ -187,14 +116,124 @@
             this.m_lblMaxCPM.TabIndex = 8;
             this.m_lblMaxCPM.Text = "Alert Threshold CPM";
             // 
+            // m_btnOpen
+            // 
+            this.m_btnOpen.Location = new System.Drawing.Point(10, 10);
+            this.m_btnOpen.Name = "m_btnOpen";
+            this.m_btnOpen.Size = new System.Drawing.Size(75, 23);
+            this.m_btnOpen.TabIndex = 1;
+            this.m_btnOpen.Text = "&Open...";
+            this.m_btnOpen.UseVisualStyleBackColor = true;
+            this.m_btnOpen.Click += new System.EventHandler(this.m_btnOpen_Click);
+            // 
+            // m_btnSave
+            // 
+            this.m_btnSave.Location = new System.Drawing.Point(10, 40);
+            this.m_btnSave.Name = "m_btnSave";
+            this.m_btnSave.Size = new System.Drawing.Size(75, 23);
+            this.m_btnSave.TabIndex = 0;
+            this.m_btnSave.Text = "&Save As...";
+            this.m_btnSave.UseVisualStyleBackColor = true;
+            this.m_btnSave.Click += new System.EventHandler(this.m_btnSave_Click);
+            // 
+            // statusStrip1
+            // 
+            this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.m_status1,
+            this.toolStripProgressBar1,
+            this.m_btnStop1});
+            this.statusStrip1.Location = new System.Drawing.Point(0, 540);
+            this.statusStrip1.Name = "statusStrip1";
+            this.statusStrip1.Size = new System.Drawing.Size(1184, 22);
+            this.statusStrip1.TabIndex = 25;
+            this.statusStrip1.Text = "statusStrip1";
+            // 
+            // m_status1
+            // 
+            this.m_status1.Name = "m_status1";
+            this.m_status1.Size = new System.Drawing.Size(59, 17);
+            this.m_status1.Text = "Loading...";
+            // 
+            // toolStripProgressBar1
+            // 
+            this.toolStripProgressBar1.Name = "toolStripProgressBar1";
+            this.toolStripProgressBar1.Size = new System.Drawing.Size(100, 16);
+            // 
+            // m_btnStop1
+            // 
+            this.m_btnStop1.Image = ((System.Drawing.Image)(resources.GetObject("m_btnStop1.Image")));
+            this.m_btnStop1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.m_btnStop1.Name = "m_btnStop1";
+            this.m_btnStop1.ShowDropDownArrow = false;
+            this.m_btnStop1.Size = new System.Drawing.Size(51, 20);
+            this.m_btnStop1.Text = "Stop";
+            this.m_btnStop1.Click += new System.EventHandler(this.m_btnStop1_Click);
+            // 
+            // m_saveFileDialog
+            // 
+            this.m_saveFileDialog.DefaultExt = "hist";
+            this.m_saveFileDialog.FileName = "History1";
+            this.m_saveFileDialog.Filter = "History file(*.hist)|*.hist";
+            this.m_saveFileDialog.InitialDirectory = "C:\\Temp\\Radex\\";
+            this.m_saveFileDialog.Title = "Save history to:";
+            // 
+            // m_openFileDialog
+            // 
+            this.m_openFileDialog.DefaultExt = "hist";
+            this.m_openFileDialog.FileName = "*.hist";
+            this.m_openFileDialog.Filter = "History file(*.hist)|*.hist";
+            this.m_openFileDialog.InitialDirectory = "C:\\Temp\\Radex\\";
+            // 
+            // splitContainer2
+            // 
+            this.splitContainer2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer2.Name = "splitContainer2";
+            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.m_chart1);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.m_txtLog);
+            this.splitContainer2.Size = new System.Drawing.Size(1052, 540);
+            this.splitContainer2.SplitterDistance = 400;
+            this.splitContainer2.TabIndex = 25;
+            // 
+            // m_txtLog
+            // 
+            this.m_txtLog.BackColor = System.Drawing.SystemColors.Info;
+            this.m_txtLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.m_txtLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_txtLog.Location = new System.Drawing.Point(0, 0);
+            this.m_txtLog.Name = "m_txtLog";
+            this.m_txtLog.ReadOnly = true;
+            this.m_txtLog.Size = new System.Drawing.Size(1048, 132);
+            this.m_txtLog.TabIndex = 0;
+            this.m_txtLog.Text = "";
+            this.m_txtLog.WordWrap = false;
+            // 
+            // m_chart1
+            // 
+            this.m_chart1.BackColor = System.Drawing.SystemColors.Control;
+            this.m_chart1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_chart1.Location = new System.Drawing.Point(0, 0);
+            this.m_chart1.Name = "m_chart1";
+            this.m_chart1.Size = new System.Drawing.Size(1048, 396);
+            this.m_chart1.TabIndex = 24;
+            // 
             // FormHistory
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1090, 496);
+            this.ClientSize = new System.Drawing.Size(1184, 562);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.statusStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(600, 400);
             this.Name = "FormHistory";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -205,9 +244,13 @@
             this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.m_numMaxCPM)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.m_numMaxCPM)).EndInit();
+            this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
+            this.splitContainer2.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -227,5 +270,7 @@
         private System.Windows.Forms.OpenFileDialog m_openFileDialog;
         private System.Windows.Forms.NumericUpDown m_numMaxCPM;
         private System.Windows.Forms.Label m_lblMaxCPM;
+        private System.Windows.Forms.SplitContainer splitContainer2;
+        private System.Windows.Forms.RichTextBox m_txtLog;
     }
 }

@@ -48,7 +48,11 @@ namespace RadexOneDemo
             int i;
             for (i = 0; i < history.Length && !_cancel; i++)
             {
-                m_chart1.AddPointXY(history[i], (double) m_numMaxCPM.Value);
+                if (history[i].CPM == 0 || history[i].RATE == 0)
+                    continue;
+
+                m_chart1.AddPointXY(history[i], (double) m_numMaxCPM.Value, history.Length);
+                m_txtLog.AppendText(history[i].ToString() + Environment.NewLine);
 
                 if (history.Length<1000 || i % 100 == 0)
                 {
@@ -187,7 +191,7 @@ namespace RadexOneDemo
 
         private void m_numMaxCPM_ValueChanged(object sender, EventArgs e)
         {
-
+            m_chart1.UpdateThreshold((double)m_numMaxCPM.Value);
         }
     }
 

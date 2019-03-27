@@ -450,6 +450,9 @@ namespace RadexOneDemo
 
         private void OnDataReceived(CommandGetData cmd)
         {
+            if (cmd.CPM == 0 || cmd.RATE == 0)
+                return;
+
             if (cmd.CPM > _maxCPM)
             {
                 _maxCPM = cmd.CPM;
@@ -479,7 +482,7 @@ namespace RadexOneDemo
 
             _radexConfig.Dose = cmd.DOSE;
 
-            m_chart1.AddPointXY(pt, (double) m_numMaxCPM.Value);
+            m_chart1.AddPointXY(pt, (double) m_numMaxCPM.Value, 2000);
 
             int progress = (int)((100 * cmd.CPM) / (2 * m_numMaxCPM.Value));
             if (progress > 100) progress = 100;

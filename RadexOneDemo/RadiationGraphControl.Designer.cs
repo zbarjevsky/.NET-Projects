@@ -44,19 +44,22 @@
             this.m_pnlTools.Dock = System.Windows.Forms.DockStyle.Top;
             this.m_pnlTools.Location = new System.Drawing.Point(0, 0);
             this.m_pnlTools.Name = "m_pnlTools";
-            this.m_pnlTools.Size = new System.Drawing.Size(872, 24);
+            this.m_pnlTools.Size = new System.Drawing.Size(600, 24);
             this.m_pnlTools.TabIndex = 0;
             // 
             // m_pnlStatus
             // 
             this.m_pnlStatus.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.m_pnlStatus.Location = new System.Drawing.Point(0, 488);
+            this.m_pnlStatus.Location = new System.Drawing.Point(0, 371);
             this.m_pnlStatus.Name = "m_pnlStatus";
-            this.m_pnlStatus.Size = new System.Drawing.Size(872, 29);
+            this.m_pnlStatus.Size = new System.Drawing.Size(600, 29);
             this.m_pnlStatus.TabIndex = 1;
             // 
             // m_chart1
             // 
+            this.m_chart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.m_chart1.BorderlineColor = System.Drawing.Color.Empty;
             this.m_chart1.BorderSkin.BorderColor = System.Drawing.Color.Empty;
             this.m_chart1.BorderSkin.PageColor = System.Drawing.SystemColors.Control;
@@ -72,10 +75,9 @@
             chartArea1.BackSecondaryColor = System.Drawing.Color.White;
             chartArea1.Name = "ChartArea1";
             this.m_chart1.ChartAreas.Add(chartArea1);
-            this.m_chart1.Dock = System.Windows.Forms.DockStyle.Fill;
             legend1.Name = "Legend1";
             this.m_chart1.Legends.Add(legend1);
-            this.m_chart1.Location = new System.Drawing.Point(0, 24);
+            this.m_chart1.Location = new System.Drawing.Point(6, 24);
             this.m_chart1.Name = "m_chart1";
             series1.BorderWidth = 2;
             series1.ChartArea = "ChartArea1";
@@ -92,6 +94,7 @@
             series2.Name = "SeriesCPM";
             series2.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.DateTime;
             series2.YAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
+            series3.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
             series3.BorderWidth = 2;
             series3.ChartArea = "ChartArea1";
             series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
@@ -103,7 +106,7 @@
             this.m_chart1.Series.Add(series1);
             this.m_chart1.Series.Add(series2);
             this.m_chart1.Series.Add(series3);
-            this.m_chart1.Size = new System.Drawing.Size(872, 464);
+            this.m_chart1.Size = new System.Drawing.Size(591, 349);
             this.m_chart1.TabIndex = 8;
             this.m_chart1.Text = "chart1";
             // 
@@ -115,7 +118,7 @@
             this.Controls.Add(this.m_pnlStatus);
             this.Controls.Add(this.m_pnlTools);
             this.Name = "RadiationGraphControl";
-            this.Size = new System.Drawing.Size(872, 517);
+            this.Size = new System.Drawing.Size(600, 400);
             this.Load += new System.EventHandler(this.RadiationGraphControl_Load);
             ((System.ComponentModel.ISupportInitialize)(this.m_chart1)).EndInit();
             this.ResumeLayout(false);
