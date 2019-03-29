@@ -30,6 +30,7 @@ namespace RadexOneDemo
         public double ValueFrom
         {
             set { m_numFrom.Value = (decimal)value; m_cmbFrom.SelectedIndex = 2; } //µSv 
+            get { return (double)m_numFrom.Value; }
         }
 
         public RadiationConverterControl()

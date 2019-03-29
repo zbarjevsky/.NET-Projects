@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.m_numFrom = new SpecialNumericUpDown();
-            this.m_numTo = new SpecialNumericUpDown();
+            this.m_numFrom = new RadexOneDemo.SpecialNumericUpDown();
+            this.m_numTo = new RadexOneDemo.SpecialNumericUpDown();
             this.m_cmbFrom = new System.Windows.Forms.ComboBox();
             this.m_cmbTo = new System.Windows.Forms.ComboBox();
             this.m_lblFrom = new System.Windows.Forms.Label();
@@ -40,7 +40,8 @@
             // 
             // m_numFrom
             // 
-            this.m_numFrom.DecimalPlaces = 6;
+            this.m_numFrom.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_numFrom.DecimalPlaces = 1;
             this.m_numFrom.Location = new System.Drawing.Point(55, 0);
             this.m_numFrom.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_numFrom.Maximum = new decimal(new int[] {
@@ -58,7 +59,8 @@
             // 
             // m_numTo
             // 
-            this.m_numTo.DecimalPlaces = 6;
+            this.m_numTo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_numTo.DecimalPlaces = 1;
             this.m_numTo.Location = new System.Drawing.Point(55, 33);
             this.m_numTo.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_numTo.Maximum = new decimal(new int[] {
@@ -76,6 +78,7 @@
             // 
             // m_cmbFrom
             // 
+            this.m_cmbFrom.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.m_cmbFrom.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.m_cmbFrom.FormattingEnabled = true;
             this.m_cmbFrom.Items.AddRange(new object[] {
@@ -93,6 +96,7 @@
             // 
             // m_cmbTo
             // 
+            this.m_cmbTo.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.m_cmbTo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.m_cmbTo.FormattingEnabled = true;
             this.m_cmbTo.Items.AddRange(new object[] {
@@ -110,6 +114,7 @@
             // 
             // m_lblFrom
             // 
+            this.m_lblFrom.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.m_lblFrom.AutoSize = true;
             this.m_lblFrom.Location = new System.Drawing.Point(1, 3);
             this.m_lblFrom.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
@@ -120,6 +125,7 @@
             // 
             // m_lblTo
             // 
+            this.m_lblTo.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.m_lblTo.AutoSize = true;
             this.m_lblTo.Location = new System.Drawing.Point(1, 37);
             this.m_lblTo.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
