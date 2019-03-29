@@ -14,7 +14,7 @@ namespace RadexOneDemo
 
         public override string ToString()
         {
-            return string.Format("{0} Rate: {1:0.00} µSv/h, CPM: {2}", date.ToString("s"), RATE, CPM);
+            return string.Format("{0} - Rate: {1:0.00} µSv/h, CPM: {2}", date.ToString("s"), RATE, CPM);
         }
     }
 
@@ -31,7 +31,7 @@ namespace RadexOneDemo
         //chrtMain.ChartAreas[0].AxisY2.Enabled = AxisEnabled.True;
         //chrtMain.ChartAreas[0].AxisY2.IsStartedFromZero = chrtMain.ChartAreas[0].AxisY.IsStartedFromZero;
 
-        public static void AddPointXY(Chart c, string series, double valueY, DateTime time, int maxCount = 1000)
+        public static void AddPointXY(Chart c, string series, double valueY, DateTime time, int maxCount)
         {
             c.Series[series].Points.AddXY(time, valueY);
 
@@ -43,11 +43,44 @@ namespace RadexOneDemo
             c.ResetAutoValues();
         }
 
+        public static void AddPointXY(Chart c, string series, double valueY, DateTime time, TimeSpan interval, bool resetAutoValues)
+        {
+            c.Series[series].Points.AddXY(time, valueY);
+
+            RemovePreviousIdenticalPoints(c.Series[series].Points);
+
+            DateTime startTime = time - interval;
+            while (DateTime.FromOADate(c.Series[series].Points.First().XValue) < startTime)
+            {
+                if (CanRemoveFirst(c.Series[series].Points, startTime, interval))
+                {
+                    c.Series[series].Points.RemoveAt(0);
+                }
+                else //move point time to start time
+                {
+                    c.Series[series].Points[0].XValue = startTime.ToOADate();
+                    break;
+                }
+            }
+
+            if(resetAutoValues)
+                c.ResetAutoValues();
+        }
+
+        private static bool CanRemoveFirst(DataPointCollection points, DateTime startTime, TimeSpan interval)
+        {
+            DateTime time = DateTime.FromOADate(points[1].XValue);
+            TimeSpan diff = time - startTime;
+
+            //if distance to next point is less than 10% of interval
+            return (diff.TotalMilliseconds < interval.TotalMilliseconds / 10);
+        }
+
         //remove identical points in the middle - improve line performance
         private static void RemovePreviousIdenticalPoints(DataPointCollection points)
         {
             int count = points.Count;
-            if (count < 3)
+            if (count < 10)
                 return;
 
             DataPoint pt1 = points[count - 1];

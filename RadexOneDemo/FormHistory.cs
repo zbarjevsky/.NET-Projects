@@ -41,9 +41,11 @@ namespace RadexOneDemo
 
             _cancel = false;
             m_btnStop1.Enabled = true;
-            m_chart1.SuspendLayout();
+            m_chart1.EnableRedraw(false);
 
             m_chart1.ClearChart();
+
+            TimeSpan interval = TimeSpan.FromDays(300);
 
             int i;
             for (i = 0; i < history.Length && !_cancel; i++)
@@ -51,7 +53,7 @@ namespace RadexOneDemo
                 if (history[i].CPM == 0 || history[i].RATE == 0)
                     continue;
 
-                m_chart1.AddPointXY(history[i], (double) m_numMaxCPM.Value, history.Length);
+                m_chart1.AddPointXY(history[i], (double) m_numMaxCPM.Value, interval, false);
                 m_txtLog.AppendText(history[i].ToString() + Environment.NewLine);
 
                 if (history.Length<1000 || i % 100 == 0)
@@ -64,7 +66,7 @@ namespace RadexOneDemo
 
             m_status1.Text = Status(":");
 
-            m_chart1.ResumeLayout();
+            m_chart1.EnableRedraw(true);
             toolStripProgressBar1.Value = 0;
             m_btnStop1.Enabled = false;
         }

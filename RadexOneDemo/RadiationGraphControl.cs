@@ -25,21 +25,29 @@ namespace RadexOneDemo
             m_chart1.ChartAreas[0].AxisX.LabelStyle.Format = "HH:mm";
         }
 
+        public void EnableRedraw(bool bEnable)
+        {
+            if (bEnable)
+                m_chart1.EndInit();
+            else
+                m_chart1.BeginInit();
+        }
+
         public void ClearChart()
         {
             _firstPoint = null;
             ChartHelper.ClearChart(m_chart1);
         }
 
-        public void AddPointXY(ChartPoint pt, double threshold, int maxCount)
+        public void AddPointXY(ChartPoint pt, double threshold, TimeSpan interval, bool resetAutoValues)
         {
             if (_firstPoint == null)
                 _firstPoint = pt;
 
 
-            ChartHelper.AddPointXY(m_chart1, "SeriesCPM", pt.CPM, pt.date, maxCount);
-            ChartHelper.AddPointXY(m_chart1, "SeriesDOSE", pt.RATE, pt.date, maxCount);
-            ChartHelper.AddPointXY(m_chart1, "SeriesThreshold", threshold, pt.date, maxCount);
+            ChartHelper.AddPointXY(m_chart1, "SeriesCPM", pt.CPM, pt.date, interval, resetAutoValues);
+            ChartHelper.AddPointXY(m_chart1, "SeriesDOSE", pt.RATE, pt.date, interval, resetAutoValues);
+            ChartHelper.AddPointXY(m_chart1, "SeriesThreshold", threshold, pt.date, interval, resetAutoValues);
 
             double minutes = (pt.date - _firstPoint.date).TotalMinutes;
             if (minutes < 15)
@@ -62,6 +70,27 @@ namespace RadexOneDemo
             {
                 pt.YValues[0] = threshold;
             }
+            m_chart1.ResetAutoValues();
+            m_chart1.Refresh();
+        }
+
+        private void m_chkRate_CheckedChanged(object sender, EventArgs e)
+        {
+            m_chart1.Series[0].Enabled = m_chkRate.Checked;
+            m_chart1.ResetAutoValues();
+            m_chart1.Refresh();
+        }
+
+        private void m_chkCPM_CheckedChanged(object sender, EventArgs e)
+        {
+            m_chart1.Series[1].Enabled = m_chkCPM.Checked;
+            m_chart1.ResetAutoValues();
+            m_chart1.Refresh();
+        }
+
+        private void m_chkAlert_CheckedChanged(object sender, EventArgs e)
+        {
+            m_chart1.Series[2].Enabled = m_chkAlert.Checked;
             m_chart1.ResetAutoValues();
             m_chart1.Refresh();
         }

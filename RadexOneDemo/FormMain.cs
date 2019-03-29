@@ -448,6 +448,7 @@ namespace RadexOneDemo
             m_numInterval.Value = (decimal)(_radexDevice.Interval / 1000.0);
         }
 
+        TimeSpan _interval = TimeSpan.FromMinutes(40);
         private void OnDataReceived(CommandGetData cmd)
         {
             if (cmd.CPM == 0 || cmd.RATE == 0)
@@ -482,7 +483,7 @@ namespace RadexOneDemo
 
             _radexConfig.Dose = cmd.DOSE;
 
-            m_chart1.AddPointXY(pt, (double) m_numMaxCPM.Value, 2000);
+            m_chart1.AddPointXY(pt, (double) m_numMaxCPM.Value, _interval, true);
 
             int progress = (int)((100 * cmd.CPM) / (2 * m_numMaxCPM.Value));
             if (progress > 100) progress = 100;
@@ -494,8 +495,8 @@ namespace RadexOneDemo
 
             _alertManager.AnalyseSignal(cmd);
 
-            string stat = string.Format("{0:0000}. Rate: {1:0.00} µSv/h, CPM: {2}, Dose: {3:0.00} µSv, State: {4}\r\n",
-                cmd.cmdId, cmd.RATE, cmd.CPM, cmd.DOSE, _alertManager.AlertInfo);
+            string stat = string.Format("{0}  - {1:0000}. Rate: {2:0.00} µSv/h, CPM: {3}, Dose: {4:0.00} µSv, Level: {5}\r\n",
+                pt.date.ToString("s"), cmd.cmdId, cmd.RATE, cmd.CPM, cmd.DOSE, _alertManager.AlertInfo);
 
             m_notifyIconSysTray.Text = string.Format("Rate: {0:0.00} µSv/h, CPM: {1}", cmd.RATE, cmd.CPM);
 
@@ -519,7 +520,7 @@ namespace RadexOneDemo
             if (_maxLive == 0.0 || _maxCPM == 0)
                 return "";
 
-            return string.Format("Max Rate: {0} µSv/h,\t\tMax CPM: {1}\r\n{2}\t{3}\n",
+            return string.Format("Max Rate: {0} µSv/h,\t\tMax CPM: {1}\r\n{2}\t\t{3}\n",
                 _maxLive, _maxCPM, _maxDOSETime.ToString(DATE_FMT), _maxCPMTime.ToString(DATE_FMT));
         }
 
