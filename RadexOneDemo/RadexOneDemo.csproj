@@ -167,6 +167,7 @@
   <ItemGroup>
     <Content Include="AppIcon.ico" />
     <Content Include="Images\AboutRadiationLevels.jpg" />
+    <EmbeddedResource Include="Images\PainLevelsScale.png" />
     <Content Include="Images\UsbConnect1.gif" />
     <Content Include="Images\UsbConnect2.png" />
     <EmbeddedResource Include="RadiationConverterControl.resx">

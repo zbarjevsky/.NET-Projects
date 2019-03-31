@@ -16,7 +16,7 @@ namespace RadexOneDemo
         {
             InitializeComponent();
 
-            richTextBox1.Rtf = Properties.Resources.How_much_is_dangerous;
+            m_txtAbouLevels.Rtf = Properties.Resources.How_much_is_dangerous;
         }
 
         private void FormAboutLevels_Load(object sender, EventArgs e)
