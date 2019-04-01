@@ -18,7 +18,7 @@ namespace RadexOneDemo
         }
     }
 
-    public class ChartHelper
+    public class RadiationGraphControlChartHelper
     {
         private static DateTime _start = DateTime.Now;
 
@@ -31,19 +31,19 @@ namespace RadexOneDemo
         //chrtMain.ChartAreas[0].AxisY2.Enabled = AxisEnabled.True;
         //chrtMain.ChartAreas[0].AxisY2.IsStartedFromZero = chrtMain.ChartAreas[0].AxisY.IsStartedFromZero;
 
-        public static void AddPointXY(Chart c, string series, double valueY, DateTime time, int maxCount)
-        {
-            c.Series[series].Points.AddXY(time, valueY);
+        //public static void AddPointXY(Chart c, string series, double valueY, DateTime time, int maxCount)
+        //{
+        //    c.Series[series].Points.AddXY(time, valueY);
 
-            RemovePreviousIdenticalPoints(c.Series[series].Points);
+        //    RemovePreviousIdenticalPoints(c.Series[series].Points);
 
-            while (c.Series[series].Points.Count > maxCount)
-                c.Series[series].Points.RemoveAt(0);
+        //    while (c.Series[series].Points.Count > maxCount)
+        //        c.Series[series].Points.RemoveAt(0);
 
-            c.ResetAutoValues();
-        }
+        //    c.ResetAutoValues();
+        //}
 
-        public static void AddPointXY(Chart c, string series, double valueY, DateTime time, TimeSpan interval, bool resetAutoValues)
+        public static void AddPointXY(Chart c, int series, double valueY, DateTime time, TimeSpan interval, bool resetAutoValues)
         {
             c.Series[series].Points.AddXY(time, valueY);
 

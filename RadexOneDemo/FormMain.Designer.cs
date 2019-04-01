@@ -263,7 +263,7 @@
             0,
             0,
             0});
-            this.m_numMaxCPM.Location = new System.Drawing.Point(440, 46);
+            this.m_numMaxCPM.Location = new System.Drawing.Point(450, 46);
             this.m_numMaxCPM.Maximum = new decimal(new int[] {
             1000,
             0,
@@ -447,9 +447,9 @@
             this.m_lblMaxCPM.AutoSize = true;
             this.m_lblMaxCPM.Location = new System.Drawing.Point(334, 48);
             this.m_lblMaxCPM.Name = "m_lblMaxCPM";
-            this.m_lblMaxCPM.Size = new System.Drawing.Size(104, 13);
+            this.m_lblMaxCPM.Size = new System.Drawing.Size(113, 13);
             this.m_lblMaxCPM.TabIndex = 4;
-            this.m_lblMaxCPM.Text = "Alert Threshold CPM";
+            this.m_lblMaxCPM.Text = "Alert (CPM Threshold):";
             // 
             // splitContainer2
             // 
@@ -490,6 +490,8 @@
             this.m_chart1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.m_chart1.Location = new System.Drawing.Point(9, 131);
             this.m_chart1.Name = "m_chart1";
+            this.m_chart1.Series3Color = System.Drawing.Color.DarkOrange;
+            this.m_chart1.Series3LegendText = "CPM Threshold";
             this.m_chart1.Size = new System.Drawing.Size(841, 353);
             this.m_chart1.TabIndex = 7;
             // 
@@ -661,7 +663,7 @@
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_mnuDeviceConfiguration});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
             this.toolsToolStripMenuItem.Text = "&Tools";
             // 
             // m_mnuDeviceConfiguration
@@ -746,6 +748,7 @@
             this.radiationConverterControl1.Name = "radiationConverterControl1";
             this.radiationConverterControl1.Size = new System.Drawing.Size(451, 63);
             this.radiationConverterControl1.TabIndex = 1;
+            this.radiationConverterControl1.ValueFrom = 0D;
             // 
             // m_chkUseConverter
             // 

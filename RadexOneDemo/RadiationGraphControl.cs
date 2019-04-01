@@ -15,6 +15,18 @@ namespace RadexOneDemo
     {
         private ChartPoint _firstPoint = null;
 
+        public string Series3LegendText
+        {
+            get { return m_chart1.Series[2].LegendText; }
+            set { m_chart1.Series[2].LegendText = value; }
+        }
+
+        public Color Series3Color
+        {
+            get { return m_chart1.Series[2].Color; }
+            set { m_chart1.Series[2].Color = value; }
+        }
+
         public RadiationGraphControl()
         {
             InitializeComponent();
@@ -36,7 +48,7 @@ namespace RadexOneDemo
         public void ClearChart()
         {
             _firstPoint = null;
-            ChartHelper.ClearChart(m_chart1);
+            RadiationGraphControlChartHelper.ClearChart(m_chart1);
         }
 
         public void AddPointXY(ChartPoint pt, double threshold, TimeSpan interval, bool resetAutoValues)
@@ -44,10 +56,9 @@ namespace RadexOneDemo
             if (_firstPoint == null)
                 _firstPoint = pt;
 
-
-            ChartHelper.AddPointXY(m_chart1, "SeriesCPM", pt.CPM, pt.date, interval, resetAutoValues);
-            ChartHelper.AddPointXY(m_chart1, "SeriesDOSE", pt.RATE, pt.date, interval, resetAutoValues);
-            ChartHelper.AddPointXY(m_chart1, "SeriesThreshold", threshold, pt.date, interval, resetAutoValues);
+            RadiationGraphControlChartHelper.AddPointXY(m_chart1, 0, pt.RATE, pt.date, interval, resetAutoValues);
+            RadiationGraphControlChartHelper.AddPointXY(m_chart1, 1, pt.CPM, pt.date, interval, resetAutoValues);
+            RadiationGraphControlChartHelper.AddPointXY(m_chart1, 2, threshold, pt.date, interval, resetAutoValues);
 
             double minutes = (pt.date - _firstPoint.date).TotalMinutes;
             if (minutes < 15)

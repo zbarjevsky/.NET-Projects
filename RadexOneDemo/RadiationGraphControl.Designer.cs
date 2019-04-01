@@ -35,10 +35,10 @@
             System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.m_pnlTools = new System.Windows.Forms.Panel();
             this.m_pnlStatus = new System.Windows.Forms.Panel();
-            this.m_chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
-            this.m_chkRate = new System.Windows.Forms.CheckBox();
-            this.m_chkCPM = new System.Windows.Forms.CheckBox();
             this.m_chkAlert = new System.Windows.Forms.CheckBox();
+            this.m_chkCPM = new System.Windows.Forms.CheckBox();
+            this.m_chkRate = new System.Windows.Forms.CheckBox();
+            this.m_chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.m_pnlStatus.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_chart1)).BeginInit();
             this.SuspendLayout();
@@ -61,6 +61,48 @@
             this.m_pnlStatus.Name = "m_pnlStatus";
             this.m_pnlStatus.Size = new System.Drawing.Size(600, 29);
             this.m_pnlStatus.TabIndex = 1;
+            // 
+            // m_chkAlert
+            // 
+            this.m_chkAlert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_chkAlert.AutoSize = true;
+            this.m_chkAlert.Checked = true;
+            this.m_chkAlert.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.m_chkAlert.Location = new System.Drawing.Point(532, 5);
+            this.m_chkAlert.Name = "m_chkAlert";
+            this.m_chkAlert.Size = new System.Drawing.Size(47, 17);
+            this.m_chkAlert.TabIndex = 2;
+            this.m_chkAlert.Text = "Alert";
+            this.m_chkAlert.UseVisualStyleBackColor = true;
+            this.m_chkAlert.CheckedChanged += new System.EventHandler(this.m_chkAlert_CheckedChanged);
+            // 
+            // m_chkCPM
+            // 
+            this.m_chkCPM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_chkCPM.AutoSize = true;
+            this.m_chkCPM.Checked = true;
+            this.m_chkCPM.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.m_chkCPM.Location = new System.Drawing.Point(464, 5);
+            this.m_chkCPM.Name = "m_chkCPM";
+            this.m_chkCPM.Size = new System.Drawing.Size(49, 17);
+            this.m_chkCPM.TabIndex = 1;
+            this.m_chkCPM.Text = "CPM";
+            this.m_chkCPM.UseVisualStyleBackColor = true;
+            this.m_chkCPM.CheckedChanged += new System.EventHandler(this.m_chkCPM_CheckedChanged);
+            // 
+            // m_chkRate
+            // 
+            this.m_chkRate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_chkRate.AutoSize = true;
+            this.m_chkRate.Checked = true;
+            this.m_chkRate.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.m_chkRate.Location = new System.Drawing.Point(392, 5);
+            this.m_chkRate.Name = "m_chkRate";
+            this.m_chkRate.Size = new System.Drawing.Size(49, 17);
+            this.m_chkRate.TabIndex = 0;
+            this.m_chkRate.Text = "Rate";
+            this.m_chkRate.UseVisualStyleBackColor = true;
+            this.m_chkRate.CheckedChanged += new System.EventHandler(this.m_chkRate_CheckedChanged);
             // 
             // m_chart1
             // 
@@ -89,6 +131,7 @@
             series1.BorderWidth = 2;
             series1.ChartArea = "ChartArea1";
             series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series1.Color = System.Drawing.Color.DodgerBlue;
             series1.Legend = "Legend1";
             series1.LegendText = "Rate µSv/h";
             series1.Name = "SeriesDOSE";
@@ -96,15 +139,17 @@
             series2.BorderWidth = 2;
             series2.ChartArea = "ChartArea1";
             series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series2.Color = System.Drawing.Color.Orange;
             series2.Legend = "Legend1";
             series2.LegendText = "CPM";
             series2.Name = "SeriesCPM";
             series2.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.DateTime;
             series2.YAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
-            series3.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dash;
+            series3.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
             series3.BorderWidth = 2;
             series3.ChartArea = "ChartArea1";
             series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series3.Color = System.Drawing.Color.Orange;
             series3.Legend = "Legend1";
             series3.LegendText = "Alert Threshold";
             series3.Name = "SeriesThreshold";
@@ -116,48 +161,6 @@
             this.m_chart1.Size = new System.Drawing.Size(591, 349);
             this.m_chart1.TabIndex = 8;
             this.m_chart1.Text = "chart1";
-            // 
-            // m_chkRate
-            // 
-            this.m_chkRate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_chkRate.AutoSize = true;
-            this.m_chkRate.Checked = true;
-            this.m_chkRate.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.m_chkRate.Location = new System.Drawing.Point(392, 5);
-            this.m_chkRate.Name = "m_chkRate";
-            this.m_chkRate.Size = new System.Drawing.Size(49, 17);
-            this.m_chkRate.TabIndex = 0;
-            this.m_chkRate.Text = "Rate";
-            this.m_chkRate.UseVisualStyleBackColor = true;
-            this.m_chkRate.CheckedChanged += new System.EventHandler(this.m_chkRate_CheckedChanged);
-            // 
-            // m_chkCPM
-            // 
-            this.m_chkCPM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_chkCPM.AutoSize = true;
-            this.m_chkCPM.Checked = true;
-            this.m_chkCPM.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.m_chkCPM.Location = new System.Drawing.Point(464, 5);
-            this.m_chkCPM.Name = "m_chkCPM";
-            this.m_chkCPM.Size = new System.Drawing.Size(49, 17);
-            this.m_chkCPM.TabIndex = 1;
-            this.m_chkCPM.Text = "CPM";
-            this.m_chkCPM.UseVisualStyleBackColor = true;
-            this.m_chkCPM.CheckedChanged += new System.EventHandler(this.m_chkCPM_CheckedChanged);
-            // 
-            // m_chkAlert
-            // 
-            this.m_chkAlert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_chkAlert.AutoSize = true;
-            this.m_chkAlert.Checked = true;
-            this.m_chkAlert.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.m_chkAlert.Location = new System.Drawing.Point(532, 5);
-            this.m_chkAlert.Name = "m_chkAlert";
-            this.m_chkAlert.Size = new System.Drawing.Size(47, 17);
-            this.m_chkAlert.TabIndex = 2;
-            this.m_chkAlert.Text = "Alert";
-            this.m_chkAlert.UseVisualStyleBackColor = true;
-            this.m_chkAlert.CheckedChanged += new System.EventHandler(this.m_chkAlert_CheckedChanged);
             // 
             // RadiationGraphControl
             // 

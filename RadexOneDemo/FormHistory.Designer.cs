@@ -30,6 +30,9 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormHistory));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.m_txtLog = new System.Windows.Forms.RichTextBox();
+            this.m_btnReload = new System.Windows.Forms.Button();
             this.m_numMaxCPM = new System.Windows.Forms.NumericUpDown();
             this.m_lblMaxCPM = new System.Windows.Forms.Label();
             this.m_btnOpen = new System.Windows.Forms.Button();
@@ -40,19 +43,17 @@
             this.m_btnStop1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.m_saveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.m_openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.m_txtLog = new System.Windows.Forms.RichTextBox();
             this.m_chart1 = new RadexOneDemo.RadiationGraphControl();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.m_numMaxCPM)).BeginInit();
-            this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.m_numMaxCPM)).BeginInit();
+            this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -69,6 +70,7 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.m_btnReload);
             this.splitContainer1.Panel2.Controls.Add(this.m_numMaxCPM);
             this.splitContainer1.Panel2.Controls.Add(this.m_lblMaxCPM);
             this.splitContainer1.Panel2.Controls.Add(this.m_btnOpen);
@@ -78,10 +80,55 @@
             this.splitContainer1.SplitterDistance = 1052;
             this.splitContainer1.TabIndex = 0;
             // 
+            // splitContainer2
+            // 
+            this.splitContainer2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer2.Name = "splitContainer2";
+            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.m_chart1);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.m_txtLog);
+            this.splitContainer2.Size = new System.Drawing.Size(1052, 540);
+            this.splitContainer2.SplitterDistance = 400;
+            this.splitContainer2.TabIndex = 25;
+            // 
+            // m_txtLog
+            // 
+            this.m_txtLog.BackColor = System.Drawing.SystemColors.Info;
+            this.m_txtLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.m_txtLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_txtLog.Location = new System.Drawing.Point(0, 0);
+            this.m_txtLog.Name = "m_txtLog";
+            this.m_txtLog.ReadOnly = true;
+            this.m_txtLog.Size = new System.Drawing.Size(1048, 132);
+            this.m_txtLog.TabIndex = 0;
+            this.m_txtLog.Text = "";
+            this.m_txtLog.WordWrap = false;
+            // 
+            // m_btnReload
+            // 
+            this.m_btnReload.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.m_btnReload.Image = ((System.Drawing.Image)(resources.GetObject("m_btnReload.Image")));
+            this.m_btnReload.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.m_btnReload.Location = new System.Drawing.Point(12, 338);
+            this.m_btnReload.Name = "m_btnReload";
+            this.m_btnReload.Size = new System.Drawing.Size(94, 23);
+            this.m_btnReload.TabIndex = 10;
+            this.m_btnReload.Text = "&Reload";
+            this.m_btnReload.UseVisualStyleBackColor = true;
+            this.m_btnReload.Click += new System.EventHandler(this.m_btnReload_Click);
+            // 
             // m_numMaxCPM
             // 
             this.m_numMaxCPM.Increment = new decimal(new int[] {
-            10,
+            5,
             0,
             0,
             0});
@@ -97,11 +144,11 @@
             0,
             0});
             this.m_numMaxCPM.Name = "m_numMaxCPM";
-            this.m_numMaxCPM.Size = new System.Drawing.Size(73, 20);
+            this.m_numMaxCPM.Size = new System.Drawing.Size(86, 20);
             this.m_numMaxCPM.TabIndex = 9;
             this.m_numMaxCPM.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.m_numMaxCPM.Value = new decimal(new int[] {
-            30,
+            35,
             0,
             0,
             0});
@@ -110,17 +157,17 @@
             // m_lblMaxCPM
             // 
             this.m_lblMaxCPM.AutoSize = true;
-            this.m_lblMaxCPM.Location = new System.Drawing.Point(2, 81);
+            this.m_lblMaxCPM.Location = new System.Drawing.Point(11, 81);
             this.m_lblMaxCPM.Name = "m_lblMaxCPM";
-            this.m_lblMaxCPM.Size = new System.Drawing.Size(104, 13);
+            this.m_lblMaxCPM.Size = new System.Drawing.Size(86, 13);
             this.m_lblMaxCPM.TabIndex = 8;
-            this.m_lblMaxCPM.Text = "Alert Threshold CPM";
+            this.m_lblMaxCPM.Text = "CPM Reference:";
             // 
             // m_btnOpen
             // 
             this.m_btnOpen.Location = new System.Drawing.Point(10, 10);
             this.m_btnOpen.Name = "m_btnOpen";
-            this.m_btnOpen.Size = new System.Drawing.Size(75, 23);
+            this.m_btnOpen.Size = new System.Drawing.Size(96, 23);
             this.m_btnOpen.TabIndex = 1;
             this.m_btnOpen.Text = "&Open...";
             this.m_btnOpen.UseVisualStyleBackColor = true;
@@ -130,7 +177,7 @@
             // 
             this.m_btnSave.Location = new System.Drawing.Point(10, 40);
             this.m_btnSave.Name = "m_btnSave";
-            this.m_btnSave.Size = new System.Drawing.Size(75, 23);
+            this.m_btnSave.Size = new System.Drawing.Size(96, 23);
             this.m_btnSave.TabIndex = 0;
             this.m_btnSave.Text = "&Save As...";
             this.m_btnSave.UseVisualStyleBackColor = true;
@@ -184,44 +231,14 @@
             this.m_openFileDialog.Filter = "History file(*.hist)|*.hist";
             this.m_openFileDialog.InitialDirectory = "C:\\Temp\\Radex\\";
             // 
-            // splitContainer2
-            // 
-            this.splitContainer2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer2.Name = "splitContainer2";
-            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainer2.Panel1
-            // 
-            this.splitContainer2.Panel1.Controls.Add(this.m_chart1);
-            // 
-            // splitContainer2.Panel2
-            // 
-            this.splitContainer2.Panel2.Controls.Add(this.m_txtLog);
-            this.splitContainer2.Size = new System.Drawing.Size(1052, 540);
-            this.splitContainer2.SplitterDistance = 400;
-            this.splitContainer2.TabIndex = 25;
-            // 
-            // m_txtLog
-            // 
-            this.m_txtLog.BackColor = System.Drawing.SystemColors.Info;
-            this.m_txtLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.m_txtLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_txtLog.Location = new System.Drawing.Point(0, 0);
-            this.m_txtLog.Name = "m_txtLog";
-            this.m_txtLog.ReadOnly = true;
-            this.m_txtLog.Size = new System.Drawing.Size(1048, 132);
-            this.m_txtLog.TabIndex = 0;
-            this.m_txtLog.Text = "";
-            this.m_txtLog.WordWrap = false;
-            // 
             // m_chart1
             // 
             this.m_chart1.BackColor = System.Drawing.SystemColors.Control;
             this.m_chart1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_chart1.Location = new System.Drawing.Point(0, 0);
             this.m_chart1.Name = "m_chart1";
+            this.m_chart1.Series3Color = System.Drawing.Color.Orange;
+            this.m_chart1.Series3LegendText = "CPM Reference";
             this.m_chart1.Size = new System.Drawing.Size(1048, 396);
             this.m_chart1.TabIndex = 24;
             // 
@@ -244,13 +261,13 @@
             this.splitContainer1.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.m_numMaxCPM)).EndInit();
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.m_numMaxCPM)).EndInit();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -272,5 +289,6 @@
         private System.Windows.Forms.Label m_lblMaxCPM;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.RichTextBox m_txtLog;
+        private System.Windows.Forms.Button m_btnReload;
     }
 }

@@ -62,7 +62,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ChartHelper.cs" />
+    <Compile Include="RadiationGraphControlChartHelper.cs" />
     <Compile Include="Commands.cs" />
     <Compile Include="DataModel.cs" />
     <Compile Include="Docs\LogReader.cs" />

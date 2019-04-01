@@ -14,12 +14,12 @@ namespace RadexOneDemo
 {
     public partial class FormHistory : Form
     {
-        private ChartPoint[] _history;
+        private ChartPoint[] _historyCached;
+        private List<ChartPoint> _historyRef;
 
         public FormHistory(List<ChartPoint> history)
         {
-            _history = new ChartPoint[history.Count];
-            history.CopyTo(_history);
+            _historyRef = history;
 
             InitializeComponent();
 
@@ -28,7 +28,15 @@ namespace RadexOneDemo
 
         private void FormHistory_Load(object sender, EventArgs e)
         {
-            ChartPoint[] history = CompactHistory(_history);
+            m_btnReload_Click(sender, e);
+        }
+
+        private void m_btnReload_Click(object sender, EventArgs e)
+        {
+            _historyCached = new ChartPoint[_historyRef.Count];
+            _historyRef.CopyTo(_historyCached);
+
+            ChartPoint[] history = CompactHistory(_historyCached);
             LoadHistory(history);
         }
 
@@ -74,8 +82,8 @@ namespace RadexOneDemo
         private string Status(string sep)
         {
             string dateFmt = string.Format("yyyy-MM-dd HH{0}mm{0}ss", sep);
-            return string.Format("Total{0} {1}, From{2} {3}, To{4} {5}", sep, _history.Length, 
-                sep, _history.First().date.ToString(dateFmt), sep, _history.Last().date.ToString(dateFmt));
+            return string.Format("Total{0} {1}, From{2} {3}, To{4} {5}", sep, _historyCached.Length, 
+                sep, _historyCached.First().date.ToString(dateFmt), sep, _historyCached.Last().date.ToString(dateFmt));
         }
 
         //Dillute - create one point per minute
@@ -178,8 +186,8 @@ namespace RadexOneDemo
         private void Open(string fileName)
         {
             Cursor = Cursors.WaitCursor;
-            _history = XmlHelper.Open<ChartPoint[]>(fileName);
-            ChartPoint[] history = CompactHistory(_history);
+            _historyCached = XmlHelper.Open<ChartPoint[]>(fileName);
+            ChartPoint[] history = CompactHistory(_historyCached);
             LoadHistory(history);
             Cursor = Cursors.Arrow;
         }
@@ -187,7 +195,7 @@ namespace RadexOneDemo
         public void Save(string fileName)
         {
             Cursor = Cursors.WaitCursor;
-            XmlHelper.Save(fileName, _history);
+            XmlHelper.Save(fileName, _historyCached);
             Cursor = Cursors.Arrow;
         }
 
