@@ -300,6 +300,7 @@ namespace sD
                 }
                 catch (Exception err)
                 {
+                    Debug.WriteLine(err.ToString());
                     throw;
                 }
             }

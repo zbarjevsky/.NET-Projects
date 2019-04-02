@@ -9,6 +9,7 @@ using System.IO;
 using System.Windows.Media;
 using System.Reflection;
 using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace RadexOneDemo
 {
@@ -66,6 +67,7 @@ namespace RadexOneDemo
                 }
                 catch (Exception err)
                 {
+                    Debug.WriteLine(err.ToString());
                 }
             });
         }
@@ -81,6 +83,7 @@ namespace RadexOneDemo
                 }
                 catch (Exception err)
                 {
+                    Debug.WriteLine(err.ToString());
                 }
             });
         }

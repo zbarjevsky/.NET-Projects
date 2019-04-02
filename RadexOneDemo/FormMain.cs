@@ -470,7 +470,14 @@ namespace RadexOneDemo
                 UpdateMaxRecord(true);
             }
 
-            ChartPoint pt = new ChartPoint() {CPM = cmd.CPM, RATE = cmd.RATE};
+            ChartPoint pt = new ChartPoint()
+            {
+                CPM = cmd.CPM,
+                RATE = cmd.RATE,
+                DOSE = cmd.DOSE,
+                Threshold = (double)m_numMaxCPM.Value
+            };
+
             _history.Add(pt);
             if(_history.Count > 1024 * 1024) //max size 1M
                 _history.RemoveAt(0);
@@ -483,7 +490,7 @@ namespace RadexOneDemo
 
             _radexConfig.Dose = cmd.DOSE;
 
-            m_chart1.AddPointXY(pt, (double) m_numMaxCPM.Value, _interval, true);
+            m_chart1.AddPointXY(pt, true);
 
             int progress = (int)((100 * cmd.CPM) / (2 * m_numMaxCPM.Value));
             if (progress > 100) progress = 100;

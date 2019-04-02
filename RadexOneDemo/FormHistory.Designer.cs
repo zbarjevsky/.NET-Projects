@@ -32,6 +32,8 @@
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.m_txtLog = new System.Windows.Forms.RichTextBox();
+            this.m_lblZoom = new System.Windows.Forms.Label();
+            this.m_trackBarZoom = new System.Windows.Forms.TrackBar();
             this.m_btnReload = new System.Windows.Forms.Button();
             this.m_numMaxCPM = new System.Windows.Forms.NumericUpDown();
             this.m_lblMaxCPM = new System.Windows.Forms.Label();
@@ -52,6 +54,7 @@
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.m_trackBarZoom)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_numMaxCPM)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -70,6 +73,8 @@
             // 
             // splitContainer1.Panel2
             // 
+            this.splitContainer1.Panel2.Controls.Add(this.m_lblZoom);
+            this.splitContainer1.Panel2.Controls.Add(this.m_trackBarZoom);
             this.splitContainer1.Panel2.Controls.Add(this.m_btnReload);
             this.splitContainer1.Panel2.Controls.Add(this.m_numMaxCPM);
             this.splitContainer1.Panel2.Controls.Add(this.m_lblMaxCPM);
@@ -84,6 +89,7 @@
             // 
             this.splitContainer2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainer2.Location = new System.Drawing.Point(0, 0);
             this.splitContainer2.Name = "splitContainer2";
             this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
@@ -112,9 +118,27 @@
             this.m_txtLog.Text = "";
             this.m_txtLog.WordWrap = false;
             // 
+            // m_lblZoom
+            // 
+            this.m_lblZoom.AutoSize = true;
+            this.m_lblZoom.Location = new System.Drawing.Point(14, 146);
+            this.m_lblZoom.Name = "m_lblZoom";
+            this.m_lblZoom.Size = new System.Drawing.Size(71, 13);
+            this.m_lblZoom.TabIndex = 12;
+            this.m_lblZoom.Text = "Zoom Out: x1";
+            // 
+            // m_trackBarZoom
+            // 
+            this.m_trackBarZoom.Location = new System.Drawing.Point(32, 177);
+            this.m_trackBarZoom.Name = "m_trackBarZoom";
+            this.m_trackBarZoom.Orientation = System.Windows.Forms.Orientation.Vertical;
+            this.m_trackBarZoom.Size = new System.Drawing.Size(45, 104);
+            this.m_trackBarZoom.TabIndex = 11;
+            this.m_trackBarZoom.TickStyle = System.Windows.Forms.TickStyle.Both;
+            this.m_trackBarZoom.ValueChanged += new System.EventHandler(this.m_trackBarZoom_ValueChanged);
+            // 
             // m_btnReload
             // 
-            this.m_btnReload.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.m_btnReload.Image = ((System.Drawing.Image)(resources.GetObject("m_btnReload.Image")));
             this.m_btnReload.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.m_btnReload.Location = new System.Drawing.Point(12, 338);
@@ -237,6 +261,7 @@
             this.m_chart1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_chart1.Location = new System.Drawing.Point(0, 0);
             this.m_chart1.Name = "m_chart1";
+            this.m_chart1.ScrollPosition = 10;
             this.m_chart1.Series3Color = System.Drawing.Color.Orange;
             this.m_chart1.Series3LegendText = "CPM Reference";
             this.m_chart1.Size = new System.Drawing.Size(1048, 396);
@@ -265,6 +290,7 @@
             this.splitContainer2.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.m_trackBarZoom)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_numMaxCPM)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
@@ -290,5 +316,7 @@
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.RichTextBox m_txtLog;
         private System.Windows.Forms.Button m_btnReload;
+        private System.Windows.Forms.Label m_lblZoom;
+        private System.Windows.Forms.TrackBar m_trackBarZoom;
     }
 }

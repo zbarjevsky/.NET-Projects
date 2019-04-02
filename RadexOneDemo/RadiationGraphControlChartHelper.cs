@@ -10,11 +10,12 @@ namespace RadexOneDemo
     public class ChartPoint
     {
         public DateTime date = DateTime.Now;
-        public double CPM, RATE;
+        public double CPM, RATE, DOSE, Threshold;
 
         public override string ToString()
         {
-            return string.Format("{0} - Rate: {1:0.00} µSv/h, CPM: {2}", date.ToString("s"), RATE, CPM);
+            return string.Format("{0} - Rate: {1:0.00} µSv/h, CPM: {2} Dose: {3} Threshold: {4}", 
+                date.ToString("s"), RATE, CPM, DOSE, Threshold);
         }
     }
 
@@ -31,17 +32,12 @@ namespace RadexOneDemo
         //chrtMain.ChartAreas[0].AxisY2.Enabled = AxisEnabled.True;
         //chrtMain.ChartAreas[0].AxisY2.IsStartedFromZero = chrtMain.ChartAreas[0].AxisY.IsStartedFromZero;
 
-        //public static void AddPointXY(Chart c, string series, double valueY, DateTime time, int maxCount)
-        //{
-        //    c.Series[series].Points.AddXY(time, valueY);
+        public static void AddPointXY(Chart c, int series, double valueY, DateTime time)
+        {
+            c.Series[series].Points.AddXY(time, valueY);
 
-        //    RemovePreviousIdenticalPoints(c.Series[series].Points);
-
-        //    while (c.Series[series].Points.Count > maxCount)
-        //        c.Series[series].Points.RemoveAt(0);
-
-        //    c.ResetAutoValues();
-        //}
+            RemovePreviousIdenticalPoints(c.Series[series].Points);
+        }
 
         public static void AddPointXY(Chart c, int series, double valueY, DateTime time, TimeSpan interval, bool resetAutoValues)
         {

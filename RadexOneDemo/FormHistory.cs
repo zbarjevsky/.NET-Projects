@@ -14,8 +14,9 @@ namespace RadexOneDemo
 {
     public partial class FormHistory : Form
     {
-        private ChartPoint[] _historyCached;
-        private List<ChartPoint> _historyRef;
+        private List<ChartPoint> _historyCached;
+        private List<ChartPoint> _historyRef; //reference to Main
+        //private List<ChartPoint> _historyBuf; //currently displayed buffer
 
         public FormHistory(List<ChartPoint> history)
         {
@@ -33,64 +34,51 @@ namespace RadexOneDemo
 
         private void m_btnReload_Click(object sender, EventArgs e)
         {
-            _historyCached = new ChartPoint[_historyRef.Count];
-            _historyRef.CopyTo(_historyCached);
+            _historyCached = new List<ChartPoint>(_historyRef);
 
-            ChartPoint[] history = CompactHistory(_historyCached);
-            LoadHistory(history);
+            LoadBuffer(_historyCached, true);
         }
 
-        private void LoadHistory(ChartPoint[] history)
+        private void LoadBuffer(List<ChartPoint> history, bool scrollToLastBuffer)
         { 
-            const int maxHistory = 1000000;
-
             toolStripProgressBar1.Value = 0;
             this.Visible = true;
 
             _cancel = false;
             m_btnStop1.Enabled = true;
-            m_chart1.EnableRedraw(false);
 
-            m_chart1.ClearChart();
+            m_chart1.Set(history, scrollToLastBuffer, true);
 
-            TimeSpan interval = TimeSpan.FromDays(300);
-
-            int i;
-            for (i = 0; i < history.Length && !_cancel; i++)
-            {
-                if (history[i].CPM == 0 || history[i].RATE == 0)
-                    continue;
-
-                m_chart1.AddPointXY(history[i], (double) m_numMaxCPM.Value, interval, false);
-                m_txtLog.AppendText(history[i].ToString() + Environment.NewLine);
-
-                if (history.Length<1000 || i % 100 == 0)
-                {
-                    m_status1.Text = "Loading " + i + " of " + history.Length;
-                    toolStripProgressBar1.Value = 100 * i / history.Length;
-                    Application.DoEvents();
-                }
-            }
+            UpdateLogText(history);
 
             m_status1.Text = Status(":");
 
-            m_chart1.EnableRedraw(true);
             toolStripProgressBar1.Value = 0;
             m_btnStop1.Enabled = false;
+        }
+
+        private void UpdateLogText(List<ChartPoint> history)
+        {
+            m_txtLog.Text = "";
+            StringBuilder sb = new StringBuilder();
+            foreach (ChartPoint pt in history)
+            {
+                sb.AppendLine(pt.ToString());
+            }
+            m_txtLog.AppendText(sb.ToString());
         }
 
         private string Status(string sep)
         {
             string dateFmt = string.Format("yyyy-MM-dd HH{0}mm{0}ss", sep);
-            return string.Format("Total{0} {1}, From{2} {3}, To{4} {5}", sep, _historyCached.Length, 
+            return string.Format("Total{0} {1}, From{2} {3}, To{4} {5}", sep, _historyCached.Count, 
                 sep, _historyCached.First().date.ToString(dateFmt), sep, _historyCached.Last().date.ToString(dateFmt));
         }
 
         //Dillute - create one point per minute
-        private static ChartPoint[] CompactHistory(ChartPoint[] input)
+        private static List<ChartPoint> CompactHistoryByTime(List<ChartPoint> input, int maxPoints)
         {
-            const int max = 5000;
-            if (input.Length < max)
+            if (input.Count <= maxPoints)
                 return input;
 
             List<ChartPoint> history = new List<ChartPoint>();
@@ -99,10 +87,10 @@ namespace RadexOneDemo
             List<ChartPoint> bucket = new List<ChartPoint>();
 
             TimeSpan range = input.Last().date - input.First().date;
-            TimeSpan delta = TimeSpan.FromMinutes(range.TotalMinutes / max); //ensure has max buckets
+            TimeSpan delta = TimeSpan.FromMinutes(range.TotalMinutes / maxPoints); //ensure has max buckets
 
             pt.date = input.First().date;
-            for (int i = 0; i < input.Length; i++)
+            for (int i = 0; i < input.Count; i++)
             {
                 if (!IsInTimeInterval(input[i].date, pt.date, delta))
                 {
@@ -121,7 +109,38 @@ namespace RadexOneDemo
             if (bucket.Count > 0) //last one
                 history.Add(MaxCPM_Point(bucket));
 
-            return history.ToArray();
+            return history;
+        }
+
+        //Dillute - create one point per minute
+        private static List<ChartPoint> CompactHistoryByPoints(List<ChartPoint> input, int divider)
+        {
+            int maxPoints = (int)(input.Count / (double)divider);
+            if (input.Count <= maxPoints)
+                return input;
+
+            List<ChartPoint> history = new List<ChartPoint>(maxPoints);
+
+            List<ChartPoint> bucket = new List<ChartPoint>();
+
+            for (int i = 0; i < input.Count; i++)
+            {
+                if (bucket.Count >= divider)
+                {
+                    if (bucket.Count > 0)
+                    {
+                        history.Add(MaxCPM_Point(bucket));
+                        bucket.Clear();
+                    }
+                }
+
+                bucket.Add(input[i]);
+            }
+
+            if (bucket.Count > 0) //last one
+                history.Add(MaxCPM_Point(bucket));
+
+            return history;
         }
 
         private static ChartPoint MaxCPM_Point(List<ChartPoint> history)
@@ -135,21 +154,6 @@ namespace RadexOneDemo
 
             return pt;
         }
-
-        //private ChartPoint AveragePoint(List<ChartPoint> history)
-        //{
-        //    ChartPoint pt = new ChartPoint();
-        //    foreach (ChartPoint point in history)
-        //    {
-        //        pt.date = point.date;
-        //        pt.CPM += point.CPM;
-        //        pt.DOSE += point.DOSE;
-        //    }
-        //    pt.CPM /= history.Count;
-        //    pt.DOSE /= history.Count;
-
-        //    return pt;
-        //}
 
         private static bool IsInTimeInterval(DateTime t1, DateTime t2, TimeSpan delta)
         {
@@ -186,9 +190,8 @@ namespace RadexOneDemo
         private void Open(string fileName)
         {
             Cursor = Cursors.WaitCursor;
-            _historyCached = XmlHelper.Open<ChartPoint[]>(fileName);
-            ChartPoint[] history = CompactHistory(_historyCached);
-            LoadHistory(history);
+            _historyCached = new List<ChartPoint>(XmlHelper.Open<ChartPoint[]>(fileName));
+            LoadBuffer(_historyCached, true);
             Cursor = Cursors.Arrow;
         }
 
@@ -202,6 +205,15 @@ namespace RadexOneDemo
         private void m_numMaxCPM_ValueChanged(object sender, EventArgs e)
         {
             m_chart1.UpdateThreshold((double)m_numMaxCPM.Value);
+        }
+
+        private void m_trackBarZoom_ValueChanged(object sender, EventArgs e)
+        {
+            int zoom = (int)Math.Pow(2, m_trackBarZoom.Value);
+            m_lblZoom.Text = "Zoom Out: x" + zoom;
+
+            List<ChartPoint> history = CompactHistoryByPoints(_historyCached, zoom);
+            LoadBuffer(history, false);
         }
     }
 
