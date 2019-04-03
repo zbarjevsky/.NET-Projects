@@ -215,5 +215,75 @@ namespace RadexOneDemo
                 return;
             UpdateChart();
         }
+
+        private void m_chart1_Click(object sender, EventArgs e)
+        {
+            Point pos = m_chart1.PointToClient(MousePosition);
+            ShowToolTipWithValue(pos);
+        }
+
+        private void m_chart1_MouseMove(object sender, MouseEventArgs e)
+        {
+            //ShowToolTipWithValue(e.Location);
+        }
+
+        Point? _prevPosition = null;
+        ToolTip _tooltip = new ToolTip();
+
+        private void ShowToolTipWithValue(Point pos)
+        {
+            if (_prevPosition.HasValue && pos == _prevPosition.Value)
+                return;
+
+            _tooltip.RemoveAll();
+            _prevPosition = pos;
+            HitTestResult [] results = m_chart1.HitTest(pos.X, pos.Y, false, ChartElementType.DataPoint);
+            DataPoint prop = FindClosestPoint(results, pos);
+            if(prop != null)
+            { 
+                DateTime dt = DateTime.FromOADate(prop.XValue);
+                string txt = string.Format("{0} - {1}: {2}", 
+                    dt.ToString("MMM, dd HH:mm:ss"), 
+                    prop.LegendText,
+                    prop.YValues[0]);
+                _tooltip.Show(txt, this.m_chart1, pos.X, pos.Y + 20, 5000);
+            }
+        }
+
+        private DataPoint FindClosestPoint(HitTestResult[] results, Point pos, double maxDistance = 10.0)
+        {
+            double min = 10000;
+            DataPoint data = null;
+            foreach (HitTestResult result in results)
+            {
+                if (result.ChartElementType == ChartElementType.DataPoint)
+                {
+                    DataPoint prop = result.Object as DataPoint;
+                    if (prop != null)
+                    {
+                        var pointXPixel = result.ChartArea.AxisX.ValueToPixelPosition(prop.XValue);
+                        var pointYPixel = result.ChartArea.AxisY.ValueToPixelPosition(prop.YValues[0]);
+                        if (result.Series.YAxisType == AxisType.Secondary)
+                            pointYPixel = result.ChartArea.AxisY2.ValueToPixelPosition(prop.YValues[0]);
+
+                        double distance = Length(pos.X - pointXPixel, pos.Y - pointYPixel);
+                        if(distance < min)
+                        {
+                            min = distance;
+                            data = prop;
+                        }
+                    }
+                }
+            }
+
+            if(min<=maxDistance)
+                return data;
+            return null;
+        }
+
+        private double Length(double X, double Y)
+        {
+            return Math.Sqrt(X * X + Y * Y);
+        }
     }
 }
