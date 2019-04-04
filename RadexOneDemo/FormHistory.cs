@@ -36,6 +36,11 @@ namespace RadexOneDemo
         {
             _historyCached = new List<ChartPoint>(_historyRef);
 
+            m_chart1.ClearChart();
+            m_trackBarZoom.Value = 0;
+            if(_historyCached.Count > 0)
+                m_numMaxCPM.Value = (decimal)_historyCached.Last().Threshold;
+
             LoadBuffer(_historyCached, true);
         }
 
