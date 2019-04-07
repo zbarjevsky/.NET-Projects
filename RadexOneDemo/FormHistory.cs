@@ -38,10 +38,15 @@ namespace RadexOneDemo
 
             m_chart1.ClearChart();
             m_trackBarZoom.Value = 0;
-            if(_historyCached.Count > 0)
+            if (_historyCached.Count > 0)
+            {
                 m_numMaxCPM.Value = (decimal)_historyCached.Last().Threshold;
 
-            LoadBuffer(_historyCached, true);
+                //calculate zoom value to show whole history
+                m_trackBarZoom.Value = (int)Math.Ceiling(Math.Log(1 + _historyCached.Count / m_chart1.GraphWidth, 2));
+            }
+
+            m_trackBarZoom_ValueChanged(this, null);
         }
 
         private void LoadBuffer(List<ChartPoint> history, bool scrollToLastBuffer)
@@ -195,8 +200,8 @@ namespace RadexOneDemo
         private void Open(string fileName)
         {
             Cursor = Cursors.WaitCursor;
-            _historyCached = new List<ChartPoint>(XmlHelper.Open<ChartPoint[]>(fileName));
-            LoadBuffer(_historyCached, true);
+            _historyRef = new List<ChartPoint>(XmlHelper.Open<ChartPoint[]>(fileName));
+            m_btnReload_Click(this, null);
             Cursor = Cursors.Arrow;
         }
 

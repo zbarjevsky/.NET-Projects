@@ -10,7 +10,7 @@ namespace RadexOneDemo
     public class ChartPoint
     {
         public DateTime date = DateTime.Now;
-        public double CPM, RATE, DOSE, Threshold;
+        public double CPM, RATE, DOSE, Threshold = 80;
 
         public override string ToString()
         {

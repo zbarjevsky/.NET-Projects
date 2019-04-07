@@ -35,6 +35,8 @@ namespace RadexOneDemo
             set { m_hScrollBarZoom.Value = value; }
         }
 
+        public int GraphWidth {  get { return m_hScrollBarZoom.Width; } }
+
         public RadiationGraphControl()
         {
             InitializeComponent();
@@ -103,16 +105,18 @@ namespace RadexOneDemo
 
         private void UpdateTimeLabelsFormat()
         {
-            double minutes = (_history.Last().date - _history[0].date).TotalMinutes;
+            DateTime first = _history[0].date;
+            DateTime last = _history.Last().date;
+            double minutes = (last - first).TotalMinutes;
             if (minutes < 3)
             {
                 m_chart1.ChartAreas[0].AxisX.LabelStyle.Format = "HH:mm:ss";
             }
-            else if (minutes >= 3 && minutes < 24 * 60)
+            else if (first.DayOfYear == last.DayOfYear)//same day
             {
                 m_chart1.ChartAreas[0].AxisX.LabelStyle.Format = "HH:mm";
             }
-            else
+            else //different day
             {
                 m_chart1.ChartAreas[0].AxisX.LabelStyle.Format = "MMM dd, HH:mm";
             }
