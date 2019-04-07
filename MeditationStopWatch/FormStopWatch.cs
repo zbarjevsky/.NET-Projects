@@ -286,8 +286,11 @@ namespace MeditationStopWatch
 
 		private void m_mnuFavorites_Add_Click(object sender, EventArgs e)
 		{
-			if (m_audioPlayerControl.PlayingFile == null)
-				return;
+            if (m_audioPlayerControl.PlayingFile == null)
+            {
+                MessageBox.Show(this, "No file is playing..", "Favorities", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                return;
+            }
 
 			string add_name = m_audioPlayerControl.PlayingFile.FullName;
 
@@ -303,10 +306,10 @@ namespace MeditationStopWatch
 
 		private void m_mnuFavorites_Organize_Click(object sender, EventArgs e)
 		{
+            MessageBox.Show(this, "Not Implemented...", "Favorities", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+        }
 
-		}
-
-		private void m_pictureBox1_Click(object sender, EventArgs e)
+        private void m_pictureBox1_Click(object sender, EventArgs e)
 		{
 			m_audioPlayerControl.Pause();
 			m_pictureBox1.Focus();

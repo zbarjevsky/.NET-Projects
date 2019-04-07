@@ -22,9 +22,11 @@ namespace MeditationStopWatch
 
 			m_richTextBoxAbout.Text = "";
             m_richTextBoxAbout.AppendText("10 Sep 2010: Created\n");
-		}//end FormAbout_Load
+            m_richTextBoxAbout.AppendText("10 Jan 2018: Added to GitHub\n");
+            m_richTextBoxAbout.AppendText("6 Apr 2019:  Minor Changes\n");
+        }//end FormAbout_Load
 
-		private void m_btnOK_Click(object sender, EventArgs e)
+        private void m_btnOK_Click(object sender, EventArgs e)
 		{
 
 		}//end m_btnOK_Click

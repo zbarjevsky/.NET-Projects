@@ -229,7 +229,7 @@ namespace MeditationStopWatch
 				//string.Format("V({0})", Volume);
 
 			this.m_toolTip1.SetToolTip(this.m_toolStripTrackBarVolume.TrackBar,
-				string.Format("V({0})", Volume));
+				string.Format("V({0})\nMouseScroll", Volume));
 
 			this.m_toolTip1.SetToolTip(this.m_trackBarPosition,
 				string.Format("P({0})", TimeString(tsPos)));

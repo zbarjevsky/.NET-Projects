@@ -125,7 +125,6 @@ namespace MeditationStopWatch
 			set;
 		}
 
-
 		[Category("3. Clock Color Options")]
 		[DisplayName("Digital Clock Text Color")]
 		[Description("Digital Clock Text Color")]
@@ -159,13 +158,13 @@ namespace MeditationStopWatch
 
 		[Category("4. Position")]
 		[DisplayName("Picture Size")]
-		[Description("Picture Size")]
+		[Description("Picture Size - Splitter Position")]
 		[DefaultValue(450)]
 		public int PictureWidth { get; set; }
 
 		[Category("4. Position")]
 		[DisplayName("Clock Height")]
-		[Description("Clock Height")]
+		[Description("Clock Height - Splitter Position")]
 		[DefaultValue(250)]
 		public int ClockHeight { get; set; }
 
@@ -182,7 +181,7 @@ namespace MeditationStopWatch
         public Rectangle AppRectangle { get; set; }
 
         [Category("5. Color Options")]
-        [Description("Background color")]
+        [Description("Options Description Background color")]
         [DefaultValue(typeof(Color), "Info")]
         public Color Background
         {

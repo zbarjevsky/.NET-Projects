@@ -268,7 +268,7 @@ namespace sD
 
         public volatile bool IsOpen = false;
 
-        public string Open(string comPort)
+        public string Open(string comPortName)
         {
             lock (Port)
             {
@@ -280,13 +280,13 @@ namespace sD
                     //PortName = comPort;
                     if (IsOpen)
                     {
-                        if (Port.PortName == comPort)
+                        if (Port.PortName == comPortName)
                             return Port.PortName; //already open
 
                         Close();
                     }
 
-                    Port.PortName = comPort;
+                    Port.PortName = comPortName;
                     Port.BaudRate = 9600;
                     Port.DataBits = 8;
                     Port.StopBits = StopBits.One;
@@ -296,10 +296,11 @@ namespace sD
                     Port.Open();
 
                     IsOpen = true;
-                    return comPort;
+                    return comPortName;
                 }
                 catch (Exception err)
                 {
+                    //possible need to repair driver
                     Debug.WriteLine(err.ToString());
                     throw;
                 }
