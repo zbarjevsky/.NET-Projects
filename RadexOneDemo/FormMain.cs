@@ -66,6 +66,7 @@ namespace RadexOneDemo
         {
             _history.Load();
             m_chart1.Set(_history.Log, true, true);
+            m_listLog.UpdateLog(_history.Log);
 
             _radexDevice.DataReceived = (cmd) =>
             {
@@ -434,7 +435,7 @@ namespace RadexOneDemo
 
         private void m_btnClear_Click(object sender, EventArgs e)
         {
-            m_txtLog.Text = "";
+            m_listLog.Clear();
             _maxCPM = 0;
             _maxLive = 0;
             _history.Clear();
@@ -495,7 +496,7 @@ namespace RadexOneDemo
 
             _radexConfig.Dose = cmd.DOSE;
 
-            m_chart1.AddPointXY(pt, true);
+            m_chart1.Set(_history.Log, true, true);
 
             int progress = (int)((100 * cmd.CPM) / (2 * m_numMaxCPM.Value));
             if (progress > 100) progress = 100;
@@ -515,14 +516,7 @@ namespace RadexOneDemo
             m_txtStatus.Text = stat;
             m_txtStatus.Text += FormatMaxRecord(); 
 
-            //trim log
-            if (m_chkShowLog.Checked)
-            {
-                stat += m_txtLog.Text;
-                if (stat.Length > 4000)
-                    stat = stat.Substring(0, 4000);
-                m_txtLog.Text = stat;
-            }
+            m_listLog.UpdateLog(_history.Log, m_chkAutoUpdateLog.Checked);
         }
 
         private string FormatMaxRecord()

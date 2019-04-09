@@ -107,6 +107,9 @@
     <Compile Include="RadiationGraphControl.Designer.cs">
       <DependentUpon>RadiationGraphControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="RadiationLogListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Utils.cs" />
     <Compile Include="VerticalProgressBar.cs">
       <SubType>Component</SubType>

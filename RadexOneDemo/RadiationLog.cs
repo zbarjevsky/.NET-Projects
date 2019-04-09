@@ -15,7 +15,7 @@ namespace RadexOneDemo
 
         public override string ToString()
         {
-            return string.Format("{0} - Rate: {1:0.00} µSv/h, CPM: {2} Dose: {3} Threshold: {4}", 
+            return string.Format("{0} - Rate: {1:0.00} µSv/h, CPM: {2}, Dose: {3:##0.00} µSv, Threshold: {4} CPM", 
                 date.ToString("s"), RATE, CPM, DOSE, Threshold);
         }
     }

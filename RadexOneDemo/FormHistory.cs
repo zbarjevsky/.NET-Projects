@@ -69,13 +69,7 @@ namespace RadexOneDemo
 
         private void UpdateLogText(List<RadiationDataPoint> history)
         {
-            m_txtLog.Text = "";
-            StringBuilder sb = new StringBuilder();
-            foreach (RadiationDataPoint pt in history)
-            {
-                sb.AppendLine(pt.ToString());
-            }
-            m_txtLog.AppendText(sb.ToString());
+            m_listLog.UpdateLog(history);
         }
 
         private string Status(string sep)

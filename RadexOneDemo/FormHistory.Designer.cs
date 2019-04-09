@@ -31,7 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormHistory));
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.m_txtLog = new System.Windows.Forms.RichTextBox();
+            this.m_listLog = new RadiationLogListView();
             this.m_lblZoom = new System.Windows.Forms.Label();
             this.m_trackBarZoom = new System.Windows.Forms.TrackBar();
             this.m_btnReload = new System.Windows.Forms.Button();
@@ -100,23 +100,20 @@
             // 
             // splitContainer2.Panel2
             // 
-            this.splitContainer2.Panel2.Controls.Add(this.m_txtLog);
+            this.splitContainer2.Panel2.Controls.Add(this.m_listLog);
             this.splitContainer2.Size = new System.Drawing.Size(1052, 540);
             this.splitContainer2.SplitterDistance = 400;
             this.splitContainer2.TabIndex = 25;
             // 
-            // m_txtLog
+            // m_listLog
             // 
-            this.m_txtLog.BackColor = System.Drawing.SystemColors.Info;
-            this.m_txtLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.m_txtLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_txtLog.Location = new System.Drawing.Point(0, 0);
-            this.m_txtLog.Name = "m_txtLog";
-            this.m_txtLog.ReadOnly = true;
-            this.m_txtLog.Size = new System.Drawing.Size(1048, 132);
-            this.m_txtLog.TabIndex = 0;
-            this.m_txtLog.Text = "";
-            this.m_txtLog.WordWrap = false;
+            this.m_listLog.BackColor = System.Drawing.SystemColors.Info;
+            this.m_listLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.m_listLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_listLog.Location = new System.Drawing.Point(0, 0);
+            this.m_listLog.Name = "m_listLog";
+            this.m_listLog.Size = new System.Drawing.Size(1048, 132);
+            this.m_listLog.TabIndex = 0;
             // 
             // m_lblZoom
             // 
@@ -314,7 +311,7 @@
         private System.Windows.Forms.NumericUpDown m_numMaxCPM;
         private System.Windows.Forms.Label m_lblMaxCPM;
         private System.Windows.Forms.SplitContainer splitContainer2;
-        private System.Windows.Forms.RichTextBox m_txtLog;
+        private RadiationLogListView m_listLog;
         private System.Windows.Forms.Button m_btnReload;
         private System.Windows.Forms.Label m_lblZoom;
         private System.Windows.Forms.TrackBar m_trackBarZoom;

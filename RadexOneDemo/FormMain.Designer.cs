@@ -30,7 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
-            this.m_txtLog = new System.Windows.Forms.RichTextBox();
             this.m_btnRequestData = new System.Windows.Forms.Button();
             this.m_lblConnectStatus = new System.Windows.Forms.Label();
             this.m_chkAutoRequestData = new System.Windows.Forms.CheckBox();
@@ -45,7 +44,6 @@
             this.m_numMaxCPM = new System.Windows.Forms.NumericUpDown();
             this.m_splitContainerTools = new System.Windows.Forms.SplitContainer();
             this.m_picRadiationStatus = new System.Windows.Forms.PictureBox();
-            this.m_progressMain = new RadexOneDemo.VerticalProgressBar();
             this.label1 = new System.Windows.Forms.Label();
             this.m_txtRecords = new System.Windows.Forms.RichTextBox();
             this.label22 = new System.Windows.Forms.Label();
@@ -56,8 +54,7 @@
             this.m_numInterval = new System.Windows.Forms.NumericUpDown();
             this.m_lblMaxCPM = new System.Windows.Forms.Label();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.m_chart1 = new RadexOneDemo.RadiationGraphControl();
-            this.m_chkShowLog = new System.Windows.Forms.CheckBox();
+            this.m_chkAutoUpdateLog = new System.Windows.Forms.CheckBox();
             this.m_btnDisconnect = new System.Windows.Forms.Button();
             this.m_btnConnect = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
@@ -82,7 +79,6 @@
             this.m_tabPage1_Device = new System.Windows.Forms.TabPage();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.m_tabPage3_About = new System.Windows.Forms.TabPage();
-            this.radiationConverterControl1 = new RadexOneDemo.RadiationConverterControl();
             this.m_chkUseConverter = new System.Windows.Forms.CheckBox();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.m_tabPage2_Settings = new System.Windows.Forms.TabPage();
@@ -97,6 +93,10 @@
             this.m_mnuShow = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.m_mnuExit = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_progressMain = new RadexOneDemo.VerticalProgressBar();
+            this.m_chart1 = new RadexOneDemo.RadiationGraphControl();
+            this.m_listLog = new RadexOneDemo.RadiationLogListView();
+            this.radiationConverterControl1 = new RadexOneDemo.RadiationConverterControl();
             ((System.ComponentModel.ISupportInitialize)(this.m_numMaxCPM)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitContainerTools)).BeginInit();
             this.m_splitContainerTools.Panel1.SuspendLayout();
@@ -126,16 +126,6 @@
             this.m_pnlTools.SuspendLayout();
             this.m_ctxMenuSysTray.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // m_txtLog
-            // 
-            this.m_txtLog.BackColor = System.Drawing.SystemColors.Info;
-            this.m_txtLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_txtLog.Location = new System.Drawing.Point(0, 0);
-            this.m_txtLog.Name = "m_txtLog";
-            this.m_txtLog.Size = new System.Drawing.Size(859, 117);
-            this.m_txtLog.TabIndex = 0;
-            this.m_txtLog.Text = "";
             // 
             // m_btnRequestData
             // 
@@ -325,17 +315,6 @@
             this.m_picRadiationStatus.TabIndex = 0;
             this.m_picRadiationStatus.TabStop = false;
             // 
-            // m_progressMain
-            // 
-            this.m_progressMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_progressMain.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
-            this.m_progressMain.Location = new System.Drawing.Point(276, 13);
-            this.m_progressMain.Name = "m_progressMain";
-            this.m_progressMain.Size = new System.Drawing.Size(13, 206);
-            this.m_progressMain.TabIndex = 0;
-            this.m_progressMain.Value = 33;
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -467,7 +446,7 @@
             this.splitContainer2.Panel1.Controls.Add(this.m_numMaxCPM);
             this.splitContainer2.Panel1.Controls.Add(this.m_chart1);
             this.splitContainer2.Panel1.Controls.Add(this.m_numInterval);
-            this.splitContainer2.Panel1.Controls.Add(this.m_chkShowLog);
+            this.splitContainer2.Panel1.Controls.Add(this.m_chkAutoUpdateLog);
             this.splitContainer2.Panel1.Controls.Add(this.m_lblMaxCPM);
             this.splitContainer2.Panel1.Controls.Add(this.m_lblConnectStatus);
             this.splitContainer2.Panel1.Controls.Add(this.m_chkAutoRequestData);
@@ -477,36 +456,23 @@
             // 
             // splitContainer2.Panel2
             // 
-            this.splitContainer2.Panel2.Controls.Add(this.m_txtLog);
+            this.splitContainer2.Panel2.Controls.Add(this.m_listLog);
             this.splitContainer2.Size = new System.Drawing.Size(861, 643);
             this.splitContainer2.SplitterDistance = 520;
             this.splitContainer2.TabIndex = 0;
             // 
-            // m_chart1
+            // m_chkAutoUpdateLog
             // 
-            this.m_chart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_chart1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.m_chart1.Location = new System.Drawing.Point(9, 131);
-            this.m_chart1.Name = "m_chart1";
-            this.m_chart1.Series3Color = System.Drawing.Color.DarkOrange;
-            this.m_chart1.Series3LegendText = "CPM Threshold";
-            this.m_chart1.Size = new System.Drawing.Size(841, 353);
-            this.m_chart1.TabIndex = 7;
-            // 
-            // m_chkShowLog
-            // 
-            this.m_chkShowLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.m_chkShowLog.AutoSize = true;
-            this.m_chkShowLog.Checked = true;
-            this.m_chkShowLog.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.m_chkShowLog.Location = new System.Drawing.Point(9, 496);
-            this.m_chkShowLog.Name = "m_chkShowLog";
-            this.m_chkShowLog.Size = new System.Drawing.Size(78, 17);
-            this.m_chkShowLog.TabIndex = 8;
-            this.m_chkShowLog.Text = "Show LOG";
-            this.m_chkShowLog.UseVisualStyleBackColor = true;
+            this.m_chkAutoUpdateLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.m_chkAutoUpdateLog.AutoSize = true;
+            this.m_chkAutoUpdateLog.Checked = true;
+            this.m_chkAutoUpdateLog.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.m_chkAutoUpdateLog.Location = new System.Drawing.Point(9, 496);
+            this.m_chkAutoUpdateLog.Name = "m_chkAutoUpdateLog";
+            this.m_chkAutoUpdateLog.Size = new System.Drawing.Size(86, 17);
+            this.m_chkAutoUpdateLog.TabIndex = 8;
+            this.m_chkAutoUpdateLog.Text = "Update LOG";
+            this.m_chkAutoUpdateLog.UseVisualStyleBackColor = true;
             // 
             // m_btnDisconnect
             // 
@@ -738,18 +704,6 @@
             this.m_tabPage3_About.TabIndex = 3;
             this.m_tabPage3_About.Text = "About Radiation";
             // 
-            // radiationConverterControl1
-            // 
-            this.radiationConverterControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.radiationConverterControl1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.radiationConverterControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.radiationConverterControl1.Location = new System.Drawing.Point(404, 529);
-            this.radiationConverterControl1.Margin = new System.Windows.Forms.Padding(7);
-            this.radiationConverterControl1.Name = "radiationConverterControl1";
-            this.radiationConverterControl1.Size = new System.Drawing.Size(451, 63);
-            this.radiationConverterControl1.TabIndex = 1;
-            this.radiationConverterControl1.ValueFrom = 0D;
-            // 
             // m_chkUseConverter
             // 
             this.m_chkUseConverter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -905,6 +859,59 @@
             this.m_mnuExit.Text = "E&xit";
             this.m_mnuExit.Click += new System.EventHandler(this.m_mnuExit_Click);
             // 
+            // m_progressMain
+            // 
+            this.m_progressMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_progressMain.BackColor = System.Drawing.SystemColors.ActiveCaptionText;
+            this.m_progressMain.Location = new System.Drawing.Point(276, 13);
+            this.m_progressMain.Name = "m_progressMain";
+            this.m_progressMain.Size = new System.Drawing.Size(13, 206);
+            this.m_progressMain.TabIndex = 0;
+            this.m_progressMain.Value = 33;
+            // 
+            // m_chart1
+            // 
+            this.m_chart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_chart1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.m_chart1.Location = new System.Drawing.Point(9, 131);
+            this.m_chart1.Name = "m_chart1";
+            this.m_chart1.ScrollPosition = 10;
+            this.m_chart1.Series3Color = System.Drawing.Color.DarkOrange;
+            this.m_chart1.Series3LegendText = "CPM Threshold";
+            this.m_chart1.Size = new System.Drawing.Size(841, 353);
+            this.m_chart1.TabIndex = 7;
+            // 
+            // m_listLog
+            // 
+            this.m_listLog.BackColor = System.Drawing.SystemColors.Info;
+            this.m_listLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_listLog.FullRowSelect = true;
+            this.m_listLog.GridLines = true;
+            this.m_listLog.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.m_listLog.HideSelection = false;
+            this.m_listLog.Location = new System.Drawing.Point(0, 0);
+            this.m_listLog.Name = "m_listLog";
+            this.m_listLog.Size = new System.Drawing.Size(859, 117);
+            this.m_listLog.TabIndex = 0;
+            this.m_listLog.UseCompatibleStateImageBehavior = false;
+            this.m_listLog.View = System.Windows.Forms.View.Details;
+            this.m_listLog.VirtualMode = true;
+            // 
+            // radiationConverterControl1
+            // 
+            this.radiationConverterControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.radiationConverterControl1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.radiationConverterControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.radiationConverterControl1.Location = new System.Drawing.Point(404, 529);
+            this.radiationConverterControl1.Margin = new System.Windows.Forms.Padding(7);
+            this.radiationConverterControl1.Name = "radiationConverterControl1";
+            this.radiationConverterControl1.Size = new System.Drawing.Size(451, 63);
+            this.radiationConverterControl1.TabIndex = 1;
+            this.radiationConverterControl1.ValueFrom = 0D;
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -963,7 +970,7 @@
 
         #endregion
 
-        private System.Windows.Forms.RichTextBox m_txtLog;
+        private RadiationLogListView m_listLog;
         private System.Windows.Forms.Button m_btnRequestData;
         private System.Windows.Forms.Label m_lblConnectStatus;
         private System.Windows.Forms.CheckBox m_chkAutoRequestData;
@@ -985,7 +992,7 @@
         private System.Windows.Forms.Label m_lblInterval;
         private System.Windows.Forms.NumericUpDown m_numInterval;
         private System.Windows.Forms.Label m_lblMaxCPM;
-        private System.Windows.Forms.CheckBox m_chkShowLog;
+        private System.Windows.Forms.CheckBox m_chkAutoUpdateLog;
         private System.Windows.Forms.StatusStrip m_statusStripMain;
         private System.Windows.Forms.ToolStripStatusLabel m_status1;
         private System.Windows.Forms.ToolStripStatusLabel m_status2;

@@ -58,7 +58,7 @@ namespace RadexOneDemo
         public void ClearChart()
         {
             _history.Clear();
-            RadiationGraphControlChartHelper.ClearChart(m_chart1);
+            ChartHelper.ClearChart(m_chart1);
         }
 
         public void Set(List<RadiationDataPoint> points, bool scrollToLastBuffer, bool resetAutoValues)
@@ -144,7 +144,7 @@ namespace RadexOneDemo
 
         private void UpdateChart()
         {
-            List<RadiationDataPoint> buffer = GetSubBuffer(_history, m_hScrollBarZoom.Value, m_hScrollBarZoom.Width);
+            List<RadiationDataPoint> buffer = ChartHelper.GetSubBuffer(_history, m_hScrollBarZoom.Value, m_hScrollBarZoom.Width);
             InternalSet(buffer);
         }
 
@@ -152,37 +152,15 @@ namespace RadexOneDemo
         {
             EnableRedraw(false);
 
-            RadiationGraphControlChartHelper.ClearChart(m_chart1);
+            ChartHelper.ClearChart(m_chart1);
             foreach (RadiationDataPoint pt in points)
             {
-                RadiationGraphControlChartHelper.AddPointXY(m_chart1, 0, pt.RATE, pt.date);
-                RadiationGraphControlChartHelper.AddPointXY(m_chart1, 1, pt.CPM, pt.date);
-                RadiationGraphControlChartHelper.AddPointXY(m_chart1, 2, pt.Threshold, pt.date);
+                ChartHelper.AddPointXY(m_chart1, 0, pt.RATE, pt.date);
+                ChartHelper.AddPointXY(m_chart1, 1, pt.CPM, pt.date);
+                ChartHelper.AddPointXY(m_chart1, 2, pt.Threshold, pt.date);
             }
 
             EnableRedraw(true);
-        }
-
-        private List<RadiationDataPoint> GetSubBuffer(List<RadiationDataPoint> history, int startIdx, int count)
-        {
-            if (count > history.Count)
-            {
-                count = history.Count;
-                startIdx = 0;
-            }
-            else if (startIdx + count > history.Count)
-            {
-                startIdx = history.Count - count;
-            }
-
-            List<RadiationDataPoint> buffer = new List<RadiationDataPoint>(count);
-
-            for (int i = startIdx; i < (startIdx + count); i++)
-            {
-                buffer.Add(history[i]);
-            }
-
-            return buffer;
         }
 
         internal void UpdateThreshold(double threshold)
@@ -245,7 +223,7 @@ namespace RadexOneDemo
             _tooltip.RemoveAll();
             _prevPosition = pos;
             HitTestResult [] results = m_chart1.HitTest(pos.X, pos.Y, false, ChartElementType.DataPoint);
-            DataPoint prop = FindClosestPoint(results, pos);
+            DataPoint prop = ChartHelper.FindClosestPoint(results, pos);
             if(prop != null)
             { 
                 DateTime dt = DateTime.FromOADate(prop.XValue);
@@ -257,96 +235,16 @@ namespace RadexOneDemo
             }
         }
 
-        private DataPoint FindClosestPoint(HitTestResult[] results, Point pos, double maxDistance = 10.0)
+        public static class ChartHelper
         {
-            double min = 10000;
-            DataPoint data = null;
-            foreach (HitTestResult result in results)
-            {
-                if (result.ChartElementType == ChartElementType.DataPoint)
-                {
-                    DataPoint prop = result.Object as DataPoint;
-                    if (prop != null)
-                    {
-                        var pointXPixel = result.ChartArea.AxisX.ValueToPixelPosition(prop.XValue);
-                        var pointYPixel = result.ChartArea.AxisY.ValueToPixelPosition(prop.YValues[0]);
-                        if (result.Series.YAxisType == AxisType.Secondary)
-                            pointYPixel = result.ChartArea.AxisY2.ValueToPixelPosition(prop.YValues[0]);
-
-                        double distance = Length(pos.X - pointXPixel, pos.Y - pointYPixel);
-                        if(distance < min)
-                        {
-                            min = distance;
-                            data = prop;
-                        }
-                    }
-                }
-            }
-
-            if(min<=maxDistance)
-                return data;
-            return null;
-        }
-
-        private double Length(double X, double Y)
-        {
-            return Math.Sqrt(X * X + Y * Y);
-        }
-
-        public class RadiationGraphControlChartHelper
-        {
-            private static DateTime _start = DateTime.Now;
-
             //http://stackoverflow.com/questions/3458791/ms-chart-control-two-y-axis
-            //chrtMain.Series[0].YAxisType = AxisType.Primary;
-            //chrtMain.Series[1].YAxisType = AxisType.Secondary;
-
-            //chrtMain.ChartAreas[0].AxisY2.LineColor = Color.Transparent;
-            //chrtMain.ChartAreas[0].AxisY2.MajorGrid.Enabled = false;
-            //chrtMain.ChartAreas[0].AxisY2.Enabled = AxisEnabled.True;
-            //chrtMain.ChartAreas[0].AxisY2.IsStartedFromZero = chrtMain.ChartAreas[0].AxisY.IsStartedFromZero;
 
             public static void AddPointXY(Chart c, int series, double valueY, DateTime time)
             {
                 c.Series[series].Points.AddXY(time, valueY);
-
                 RemovePreviousIdenticalPoints(c.Series[series].Points);
             }
 
-            public static void AddPointXY(Chart c, int series, double valueY, DateTime time, TimeSpan interval, bool resetAutoValues)
-            {
-                c.Series[series].Points.AddXY(time, valueY);
-
-                RemovePreviousIdenticalPoints(c.Series[series].Points);
-
-                DateTime startTime = time - interval;
-                while (DateTime.FromOADate(c.Series[series].Points.First().XValue) < startTime)
-                {
-                    if (CanRemoveFirst(c.Series[series].Points, startTime, interval))
-                    {
-                        c.Series[series].Points.RemoveAt(0);
-                    }
-                    else //move point time to start time
-                    {
-                        c.Series[series].Points[0].XValue = startTime.ToOADate();
-                        break;
-                    }
-                }
-
-                if (resetAutoValues)
-                    c.ResetAutoValues();
-            }
-
-            private static bool CanRemoveFirst(DataPointCollection points, DateTime startTime, TimeSpan interval)
-            {
-                DateTime time = DateTime.FromOADate(points[1].XValue);
-                TimeSpan diff = time - startTime;
-
-                //if distance to next point is less than 10% of interval
-                return (diff.TotalMilliseconds < interval.TotalMilliseconds / 10);
-            }
-
-            //remove identical points in the middle - improve line performance
             private static void RemovePreviousIdenticalPoints(DataPointCollection points)
             {
                 int count = points.Count;
@@ -368,6 +266,64 @@ namespace RadexOneDemo
                     s.Points.Clear();
                 }
                 c.ResetAutoValues();
+            }
+
+            public static DataPoint FindClosestPoint(HitTestResult[] results, Point pos, double maxDistance = 10.0)
+            {
+                double min = 10000;
+                DataPoint data = null;
+                foreach (HitTestResult result in results)
+                {
+                    if (result.ChartElementType == ChartElementType.DataPoint)
+                    {
+                        DataPoint prop = result.Object as DataPoint;
+                        if (prop != null)
+                        {
+                            var pointXPixel = result.ChartArea.AxisX.ValueToPixelPosition(prop.XValue);
+                            var pointYPixel = result.ChartArea.AxisY.ValueToPixelPosition(prop.YValues[0]);
+                            if (result.Series.YAxisType == AxisType.Secondary)
+                                pointYPixel = result.ChartArea.AxisY2.ValueToPixelPosition(prop.YValues[0]);
+
+                            double distance = Length(pos.X - pointXPixel, pos.Y - pointYPixel);
+                            if (distance < min)
+                            {
+                                min = distance;
+                                data = prop;
+                            }
+                        }
+                    }
+                }
+
+                if (min <= maxDistance)
+                    return data;
+                return null;
+            }
+
+            private static double Length(double X, double Y)
+            {
+                return Math.Sqrt(X * X + Y * Y);
+            }
+
+            public static List<RadiationDataPoint> GetSubBuffer(List<RadiationDataPoint> history, int startIdx, int count)
+            {
+                if (count > history.Count)
+                {
+                    count = history.Count;
+                    startIdx = 0;
+                }
+                else if (startIdx + count > history.Count)
+                {
+                    startIdx = history.Count - count;
+                }
+
+                List<RadiationDataPoint> buffer = new List<RadiationDataPoint>(count);
+
+                for (int i = startIdx; i < (startIdx + count); i++)
+                {
+                    buffer.Add(history[i]);
+                }
+
+                return buffer;
             }
         }
     }
