@@ -11,7 +11,7 @@ namespace RadexOneDemo
     public class RadexOneConfig : INotifyPropertyChanged
     {
         [Category("1. Version"), ReadOnly(true)]
-        public string SerialNumber { get; set; }
+        public RadexSerialNumber SerialNumber { get; set; }
 
         [Category("2. Data"), ReadOnly(true)]
         public double Dose { get; set; }

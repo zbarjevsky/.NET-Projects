@@ -14,11 +14,11 @@ namespace RadexOneDemo
 {
     public partial class FormHistory : Form
     {
-        private List<ChartPoint> _historyCached;
-        private List<ChartPoint> _historyRef; //reference to Main
+        private List<RadiationDataPoint> _historyCached;
+        private RadiationLog _historyRef; //reference to Main
         //private List<ChartPoint> _historyBuf; //currently displayed buffer
 
-        public FormHistory(List<ChartPoint> history)
+        public FormHistory(RadiationLog history)
         {
             _historyRef = history;
 
@@ -34,7 +34,7 @@ namespace RadexOneDemo
 
         private void m_btnReload_Click(object sender, EventArgs e)
         {
-            _historyCached = new List<ChartPoint>(_historyRef);
+            _historyCached = new List<RadiationDataPoint>(_historyRef.Log);
 
             m_chart1.ClearChart();
             m_trackBarZoom.Value = 0;
@@ -49,7 +49,7 @@ namespace RadexOneDemo
             m_trackBarZoom_ValueChanged(this, null);
         }
 
-        private void LoadBuffer(List<ChartPoint> history, bool scrollToLastBuffer)
+        private void LoadBuffer(List<RadiationDataPoint> history, bool scrollToLastBuffer)
         { 
             toolStripProgressBar1.Value = 0;
             this.Visible = true;
@@ -67,11 +67,11 @@ namespace RadexOneDemo
             m_btnStop1.Enabled = false;
         }
 
-        private void UpdateLogText(List<ChartPoint> history)
+        private void UpdateLogText(List<RadiationDataPoint> history)
         {
             m_txtLog.Text = "";
             StringBuilder sb = new StringBuilder();
-            foreach (ChartPoint pt in history)
+            foreach (RadiationDataPoint pt in history)
             {
                 sb.AppendLine(pt.ToString());
             }
@@ -86,15 +86,15 @@ namespace RadexOneDemo
         }
 
         //Dillute - create one point per minute
-        private static List<ChartPoint> CompactHistoryByTime(List<ChartPoint> input, int maxPoints)
+        private static List<RadiationDataPoint> CompactHistoryByTime(List<RadiationDataPoint> input, int maxPoints)
         {
             if (input.Count <= maxPoints)
                 return input;
 
-            List<ChartPoint> history = new List<ChartPoint>();
+            List<RadiationDataPoint> history = new List<RadiationDataPoint>();
 
-            ChartPoint pt = new ChartPoint();
-            List<ChartPoint> bucket = new List<ChartPoint>();
+            RadiationDataPoint pt = new RadiationDataPoint();
+            List<RadiationDataPoint> bucket = new List<RadiationDataPoint>();
 
             TimeSpan range = input.Last().date - input.First().date;
             TimeSpan delta = TimeSpan.FromMinutes(range.TotalMinutes / maxPoints); //ensure has max buckets
@@ -123,15 +123,15 @@ namespace RadexOneDemo
         }
 
         //Dillute - create one point per minute
-        private static List<ChartPoint> CompactHistoryByPoints(List<ChartPoint> input, int divider)
+        private static List<RadiationDataPoint> CompactHistoryByPoints(List<RadiationDataPoint> input, int divider)
         {
             int maxPoints = (int)(input.Count / (double)divider);
             if (input.Count <= maxPoints)
                 return input;
 
-            List<ChartPoint> history = new List<ChartPoint>(maxPoints);
+            List<RadiationDataPoint> history = new List<RadiationDataPoint>(maxPoints);
 
-            List<ChartPoint> bucket = new List<ChartPoint>();
+            List<RadiationDataPoint> bucket = new List<RadiationDataPoint>();
 
             for (int i = 0; i < input.Count; i++)
             {
@@ -153,10 +153,10 @@ namespace RadexOneDemo
             return history;
         }
 
-        private static ChartPoint MaxCPM_Point(List<ChartPoint> history)
+        private static RadiationDataPoint MaxCPM_Point(List<RadiationDataPoint> history)
         {
-            ChartPoint pt = new ChartPoint();
-            foreach (ChartPoint point in history)
+            RadiationDataPoint pt = new RadiationDataPoint();
+            foreach (RadiationDataPoint point in history)
             {
                 if(point.CPM>pt.CPM)
                     pt = point;
@@ -200,7 +200,7 @@ namespace RadexOneDemo
         private void Open(string fileName)
         {
             Cursor = Cursors.WaitCursor;
-            _historyRef = new List<ChartPoint>(XmlHelper.Open<ChartPoint[]>(fileName));
+            _historyRef = XmlHelper.Open<RadiationLog>(fileName);
             m_btnReload_Click(this, null);
             Cursor = Cursors.Arrow;
         }
@@ -208,7 +208,7 @@ namespace RadexOneDemo
         public void Save(string fileName)
         {
             Cursor = Cursors.WaitCursor;
-            XmlHelper.Save(fileName, _historyCached);
+            XmlHelper.Save(fileName, _historyRef);
             Cursor = Cursors.Arrow;
         }
 
@@ -222,7 +222,7 @@ namespace RadexOneDemo
             int zoom = (int)Math.Pow(2, m_trackBarZoom.Value);
             m_lblZoom.Text = "Zoom Out: x" + zoom;
 
-            List<ChartPoint> history = CompactHistoryByPoints(_historyCached, zoom);
+            List<RadiationDataPoint> history = CompactHistoryByPoints(_historyCached, zoom);
             LoadBuffer(history, false);
         }
     }

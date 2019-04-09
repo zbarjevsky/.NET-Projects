@@ -137,23 +137,25 @@ namespace RadexOneDemo
             return cmdId.ToString("0000") + " --Version-- " + request.ToString();
         }
 
-        public string SerialNumber
+        public RadexSerialNumber SerialNumber
         {
             get
             {
-                uint year = responce.GetUInt16(28);
-                uint month = responce.GetUInt8(30);
-                uint day = responce.GetUInt8(31);
+                //uint year = responce.GetUInt16(28);
+                //uint month = responce.GetUInt8(30);
+                //uint day = responce.GetUInt8(31);
 
-                uint verMajor = responce.GetUInt8(32);
-                uint verMinor = responce.GetUInt8(33);
+                //uint verMajor = responce.GetUInt8(32);
+                //uint verMinor = responce.GetUInt8(33);
 
-                string sn1 = string.Format("{0:D2}{1:D2}{2:D2}", day, month, year);
+                //string sn1 = string.Format("{0:D2}{1:D2}{2:D2}", day, month, year);
 
-                uint sn2 = responce.GetUInt16(34);
-                uint sn3 = responce.GetUInt32(24);
+                //uint sn2 = responce.GetUInt16(34);
+                //uint sn3 = responce.GetUInt32(24);
 
-                return string.Format("S/N {0}-{1:D4}-{2:D6}  v. {3}.{4}", sn1, sn2, sn3, verMajor, verMinor);
+                //return string.Format("S/N {0}-{1:D4}-{2:D6}  v. {3}.{4}", sn1, sn2, sn3, verMajor, verMinor);
+                RadexSerialNumber sn = RadexSerialNumber.ParseResponse(responce);
+                return sn;
             }
         }
     }
@@ -210,11 +212,11 @@ namespace RadexOneDemo
         }
     }
 
-    public class CommandRestDose : RadexCommandBase //request reset dose
+    public class CommandResetDose : RadexCommandBase //request reset dose
     {
-        public CommandRestDose()
+        public CommandResetDose()
         {
-            request = new RequestFBF7(cmdId);
+            request = new RequestResetDose(cmdId);
         }
 
         public override int ResponseSizeExpected { get { return 18; } }

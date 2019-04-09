@@ -104,7 +104,7 @@ namespace sD
 
         internal void RequestResetDose()
         {
-            SendRequest(new CommandRestDose());
+            SendRequest(new CommandResetDose());
         }
 
         internal void RequestTestCmd()

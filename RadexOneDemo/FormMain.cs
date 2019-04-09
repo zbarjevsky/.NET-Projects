@@ -31,7 +31,7 @@ namespace RadexOneDemo
         //private Color _bkColor = Color.Green;
         private readonly AlertManager _alertManager = new AlertManager();
 
-        private readonly List<ChartPoint> _history = new List<ChartPoint>(2048);
+        private readonly RadiationLog _history = new RadiationLog();
 
         public FormMain()
         {
@@ -64,6 +64,8 @@ namespace RadexOneDemo
 
         private void FormMain_Load(object sender, EventArgs e)
         {
+            _history.Load();
+            m_chart1.Set(_history.Log, true, true);
 
             _radexDevice.DataReceived = (cmd) =>
             {
@@ -78,7 +80,8 @@ namespace RadexOneDemo
                 Utils.ExecuteOnUiThreadInvoke(this, () =>
                 {
                     _radexConfig.Set(cmd);
-                    m_lblSN.Text = _radexConfig.SerialNumber;
+                    _history.UpdateSerialNumber(cmd.SerialNumber);
+                    m_lblSN.Text = _radexConfig.SerialNumber.ToString();
                 });
             };
 
@@ -140,6 +143,7 @@ namespace RadexOneDemo
             Properties.Settings.Default.Save();
 
             _radexDevice.Close();
+            _history.Save();
             Log.Close();
         }
 
@@ -433,6 +437,7 @@ namespace RadexOneDemo
             m_txtLog.Text = "";
             _maxCPM = 0;
             _maxLive = 0;
+            _history.Clear();
             m_chart1.ClearChart();
         }
 
@@ -470,7 +475,7 @@ namespace RadexOneDemo
                 UpdateMaxRecord(true);
             }
 
-            ChartPoint pt = new ChartPoint()
+            RadiationDataPoint pt = new RadiationDataPoint()
             {
                 CPM = cmd.CPM,
                 RATE = cmd.RATE,
@@ -478,9 +483,9 @@ namespace RadexOneDemo
                 Threshold = (double)m_numMaxCPM.Value
             };
 
-            _history.Add(pt);
-            if(_history.Count > 1024 * 1024) //max size 1M
-                _history.RemoveAt(0);
+            _history.Log.Add(pt);
+            if(_history.Log.Count > 1024 * 1024) //max size 1M
+                _history.Log.RemoveAt(0);
 
             m_lblVal.Text = cmd.RATE.ToString("0.00");
             m_lblCPM.Text = cmd.CPM.ToString();

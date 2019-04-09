@@ -13,9 +13,9 @@ namespace RadexOneDemo
 {
     public partial class RadiationGraphControl : UserControl
     {
-        private List<ChartPoint> _history = new List<ChartPoint>(); //initial buffer
+        private List<RadiationDataPoint> _history = new List<RadiationDataPoint>(); //initial buffer
 
-        public List<ChartPoint> History { get { return _history; } }
+        public List<RadiationDataPoint> History { get { return _history; } }
 
         public string Series3LegendText
         {
@@ -61,13 +61,13 @@ namespace RadexOneDemo
             RadiationGraphControlChartHelper.ClearChart(m_chart1);
         }
 
-        public void Set(List<ChartPoint> points, bool scrollToLastBuffer, bool resetAutoValues)
+        public void Set(List<RadiationDataPoint> points, bool scrollToLastBuffer, bool resetAutoValues)
         {
-            _history = new List<ChartPoint>(points); //copy
+            _history = new List<RadiationDataPoint>(points); //copy
             Update(scrollToLastBuffer, resetAutoValues);
         }
 
-        public void AddPointXY(ChartPoint pt, bool resetAutoValues)
+        public void AddPointXY(RadiationDataPoint pt, bool resetAutoValues)
         {
             _history.Add(pt);
             Update(true, resetAutoValues);
@@ -105,6 +105,9 @@ namespace RadexOneDemo
 
         private void UpdateTimeLabelsFormat()
         {
+            if (_history.Count == 0)
+                return;
+
             DateTime first = _history[0].date;
             DateTime last = _history.Last().date;
             double minutes = (last - first).TotalMinutes;
@@ -141,16 +144,16 @@ namespace RadexOneDemo
 
         private void UpdateChart()
         {
-            List<ChartPoint> buffer = GetSubBuffer(_history, m_hScrollBarZoom.Value, m_hScrollBarZoom.Width);
+            List<RadiationDataPoint> buffer = GetSubBuffer(_history, m_hScrollBarZoom.Value, m_hScrollBarZoom.Width);
             InternalSet(buffer);
         }
 
-        private void InternalSet(List<ChartPoint> points)
+        private void InternalSet(List<RadiationDataPoint> points)
         {
             EnableRedraw(false);
 
             RadiationGraphControlChartHelper.ClearChart(m_chart1);
-            foreach (ChartPoint pt in points)
+            foreach (RadiationDataPoint pt in points)
             {
                 RadiationGraphControlChartHelper.AddPointXY(m_chart1, 0, pt.RATE, pt.date);
                 RadiationGraphControlChartHelper.AddPointXY(m_chart1, 1, pt.CPM, pt.date);
@@ -160,7 +163,7 @@ namespace RadexOneDemo
             EnableRedraw(true);
         }
 
-        private List<ChartPoint> GetSubBuffer(List<ChartPoint> history, int startIdx, int count)
+        private List<RadiationDataPoint> GetSubBuffer(List<RadiationDataPoint> history, int startIdx, int count)
         {
             if (count > history.Count)
             {
@@ -172,7 +175,7 @@ namespace RadexOneDemo
                 startIdx = history.Count - count;
             }
 
-            List<ChartPoint> buffer = new List<ChartPoint>(count);
+            List<RadiationDataPoint> buffer = new List<RadiationDataPoint>(count);
 
             for (int i = startIdx; i < (startIdx + count); i++)
             {
@@ -288,6 +291,84 @@ namespace RadexOneDemo
         private double Length(double X, double Y)
         {
             return Math.Sqrt(X * X + Y * Y);
+        }
+
+        public class RadiationGraphControlChartHelper
+        {
+            private static DateTime _start = DateTime.Now;
+
+            //http://stackoverflow.com/questions/3458791/ms-chart-control-two-y-axis
+            //chrtMain.Series[0].YAxisType = AxisType.Primary;
+            //chrtMain.Series[1].YAxisType = AxisType.Secondary;
+
+            //chrtMain.ChartAreas[0].AxisY2.LineColor = Color.Transparent;
+            //chrtMain.ChartAreas[0].AxisY2.MajorGrid.Enabled = false;
+            //chrtMain.ChartAreas[0].AxisY2.Enabled = AxisEnabled.True;
+            //chrtMain.ChartAreas[0].AxisY2.IsStartedFromZero = chrtMain.ChartAreas[0].AxisY.IsStartedFromZero;
+
+            public static void AddPointXY(Chart c, int series, double valueY, DateTime time)
+            {
+                c.Series[series].Points.AddXY(time, valueY);
+
+                RemovePreviousIdenticalPoints(c.Series[series].Points);
+            }
+
+            public static void AddPointXY(Chart c, int series, double valueY, DateTime time, TimeSpan interval, bool resetAutoValues)
+            {
+                c.Series[series].Points.AddXY(time, valueY);
+
+                RemovePreviousIdenticalPoints(c.Series[series].Points);
+
+                DateTime startTime = time - interval;
+                while (DateTime.FromOADate(c.Series[series].Points.First().XValue) < startTime)
+                {
+                    if (CanRemoveFirst(c.Series[series].Points, startTime, interval))
+                    {
+                        c.Series[series].Points.RemoveAt(0);
+                    }
+                    else //move point time to start time
+                    {
+                        c.Series[series].Points[0].XValue = startTime.ToOADate();
+                        break;
+                    }
+                }
+
+                if (resetAutoValues)
+                    c.ResetAutoValues();
+            }
+
+            private static bool CanRemoveFirst(DataPointCollection points, DateTime startTime, TimeSpan interval)
+            {
+                DateTime time = DateTime.FromOADate(points[1].XValue);
+                TimeSpan diff = time - startTime;
+
+                //if distance to next point is less than 10% of interval
+                return (diff.TotalMilliseconds < interval.TotalMilliseconds / 10);
+            }
+
+            //remove identical points in the middle - improve line performance
+            private static void RemovePreviousIdenticalPoints(DataPointCollection points)
+            {
+                int count = points.Count;
+                if (count < 10)
+                    return;
+
+                DataPoint pt1 = points[count - 1];
+                DataPoint pt2 = points[count - 2];
+                DataPoint pt3 = points[count - 3];
+
+                if (pt1.YValues[0] == pt2.YValues[0] && pt2.YValues[0] == pt3.YValues[0])
+                    points.RemoveAt(count - 2);
+            }
+
+            public static void ClearChart(Chart c)
+            {
+                foreach (var s in c.Series)
+                {
+                    s.Points.Clear();
+                }
+                c.ResetAutoValues();
+            }
         }
     }
 }

@@ -33,7 +33,8 @@ namespace RadexOneDemo
 
             InitializeComponent();
 
-            SerialNumber = radexConfig.SerialNumber;
+            SerialNumber = radexConfig.SerialNumber.ToString();
+
             Sound = radexConfig.Sound;
             Vibrate = radexConfig.Vibrate;
             Threshold = radexConfig.Threshold;
