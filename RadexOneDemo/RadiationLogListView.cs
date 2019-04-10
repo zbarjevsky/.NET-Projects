@@ -43,7 +43,8 @@ namespace RadexOneDemo
                 _radiationLog = new List<RadiationDataPoint>(log);
                 this.VirtualListSize = log.Count;
                 this.SelectedIndices.Clear();
-                this.EnsureVisible(0);
+                if(_radiationLog.Count > 0)
+                    this.EnsureVisible(0);
             }
         }
 
