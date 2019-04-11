@@ -43,6 +43,7 @@ namespace MeditationStopWatch
             {
                 TabPage tab = new TabPage(opt.PlayListCollection[i].Name);
                 tab.Tag = opt.PlayListCollection[i];
+                tab.BackColor = SystemColors.Control;
                 m_tabPlayLists.TabPages.Add(tab);
             }
 
@@ -67,6 +68,7 @@ namespace MeditationStopWatch
         {
             PlayList newList = new PlayList() { Name = "List"+m_tabPlayLists.TabPages.Count };
             TabPage newPage = new TabPage(newList.Name) { Tag = newList };
+            newPage.BackColor = SystemColors.Control;
 
             m_tabPlayLists.TabPages.Add(newPage);
             m_Options.PlayListCollection.Add(newList);

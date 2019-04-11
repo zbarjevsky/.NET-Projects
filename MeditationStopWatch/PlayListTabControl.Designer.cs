@@ -36,8 +36,8 @@
             this.m_tabPlayLists = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.m_pnlTabs = new System.Windows.Forms.Panel();
-            this.m_mp3List = new MeditationStopWatch.FileListControl();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.m_mp3List = new MeditationStopWatch.FileListControl();
             this.m_tabPlayLists.SuspendLayout();
             this.m_pnlTabs.SuspendLayout();
             this.SuspendLayout();
@@ -86,19 +86,19 @@
             this.m_tabPlayLists.Location = new System.Drawing.Point(0, 0);
             this.m_tabPlayLists.Name = "m_tabPlayLists";
             this.m_tabPlayLists.SelectedIndex = 0;
-            this.m_tabPlayLists.Size = new System.Drawing.Size(294, 29);
+            this.m_tabPlayLists.Size = new System.Drawing.Size(294, 37);
             this.m_tabPlayLists.TabIndex = 9;
             this.m_tabPlayLists.SelectedIndexChanged += new System.EventHandler(this.m_tabPlayLists_SelectedIndexChanged);
             // 
             // tabPage1
             // 
+            this.tabPage1.BackColor = System.Drawing.SystemColors.Control;
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(286, 3);
+            this.tabPage1.Size = new System.Drawing.Size(286, 11);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Music";
-            this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // m_pnlTabs
             // 

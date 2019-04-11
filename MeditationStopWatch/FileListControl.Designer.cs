@@ -77,7 +77,7 @@
             this.m_listFiles.Location = new System.Drawing.Point(0, 25);
             this.m_listFiles.Name = "m_listFiles";
             this.m_listFiles.ShowItemToolTips = true;
-            this.m_listFiles.Size = new System.Drawing.Size(346, 124);
+            this.m_listFiles.Size = new System.Drawing.Size(400, 124);
             this.m_listFiles.TabIndex = 5;
             this.m_listFiles.UseCompatibleStateImageBehavior = false;
             this.m_listFiles.View = System.Windows.Forms.View.Details;
@@ -87,7 +87,7 @@
             // m_clmnFileName
             // 
             this.m_clmnFileName.Text = "File name";
-            this.m_clmnFileName.Width = 150;
+            this.m_clmnFileName.Width = 220;
             // 
             // m_clmnDuration
             // 
@@ -116,13 +116,13 @@
             this.m_mnuUp,
             this.m_mnuDown});
             this.m_contextMenuStrip1.Name = "m_contextMenuStrip1";
-            this.m_contextMenuStrip1.Size = new System.Drawing.Size(153, 264);
+            this.m_contextMenuStrip1.Size = new System.Drawing.Size(135, 242);
             // 
             // m_mnuPlay
             // 
             this.m_mnuPlay.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuPlay.Image")));
             this.m_mnuPlay.Name = "m_mnuPlay";
-            this.m_mnuPlay.Size = new System.Drawing.Size(152, 22);
+            this.m_mnuPlay.Size = new System.Drawing.Size(134, 22);
             this.m_mnuPlay.Text = "Play";
             this.m_mnuPlay.Click += new System.EventHandler(this.m_mnuPlay_Click);
             // 
@@ -130,7 +130,7 @@
             // 
             this.m_mnuPause.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuPause.Image")));
             this.m_mnuPause.Name = "m_mnuPause";
-            this.m_mnuPause.Size = new System.Drawing.Size(152, 22);
+            this.m_mnuPause.Size = new System.Drawing.Size(134, 22);
             this.m_mnuPause.Text = "Pause";
             this.m_mnuPause.Click += new System.EventHandler(this.m_mnuPause_Click);
             // 
@@ -138,20 +138,20 @@
             // 
             this.m_mnuStop.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuStop.Image")));
             this.m_mnuStop.Name = "m_mnuStop";
-            this.m_mnuStop.Size = new System.Drawing.Size(152, 22);
+            this.m_mnuStop.Size = new System.Drawing.Size(134, 22);
             this.m_mnuStop.Text = "Stop";
             this.m_mnuStop.Click += new System.EventHandler(this.m_mnuStop_Click);
             // 
             // m_toolStripMenuSep1
             // 
             this.m_toolStripMenuSep1.Name = "m_toolStripMenuSep1";
-            this.m_toolStripMenuSep1.Size = new System.Drawing.Size(149, 6);
+            this.m_toolStripMenuSep1.Size = new System.Drawing.Size(131, 6);
             // 
             // m_mnuPrev
             // 
             this.m_mnuPrev.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuPrev.Image")));
             this.m_mnuPrev.Name = "m_mnuPrev";
-            this.m_mnuPrev.Size = new System.Drawing.Size(152, 22);
+            this.m_mnuPrev.Size = new System.Drawing.Size(134, 22);
             this.m_mnuPrev.Text = "Previous";
             this.m_mnuPrev.Click += new System.EventHandler(this.m_mnuPrev_Click);
             // 
@@ -159,52 +159,52 @@
             // 
             this.m_mnuNext.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuNext.Image")));
             this.m_mnuNext.Name = "m_mnuNext";
-            this.m_mnuNext.Size = new System.Drawing.Size(152, 22);
+            this.m_mnuNext.Size = new System.Drawing.Size(134, 22);
             this.m_mnuNext.Text = "Next";
             this.m_mnuNext.Click += new System.EventHandler(this.m_mnuNext_Click);
             // 
             // m_toolStripMenuSep2
             // 
             this.m_toolStripMenuSep2.Name = "m_toolStripMenuSep2";
-            this.m_toolStripMenuSep2.Size = new System.Drawing.Size(149, 6);
+            this.m_toolStripMenuSep2.Size = new System.Drawing.Size(131, 6);
             // 
             // m_mnuAdd
             // 
             this.m_mnuAdd.Name = "m_mnuAdd";
-            this.m_mnuAdd.Size = new System.Drawing.Size(152, 22);
+            this.m_mnuAdd.Size = new System.Drawing.Size(134, 22);
             this.m_mnuAdd.Text = "Add Files";
             this.m_mnuAdd.Click += new System.EventHandler(this.m_toolStripButton_AddFiles_Click);
             // 
             // m_mnuRemove
             // 
             this.m_mnuRemove.Name = "m_mnuRemove";
-            this.m_mnuRemove.Size = new System.Drawing.Size(152, 22);
+            this.m_mnuRemove.Size = new System.Drawing.Size(134, 22);
             this.m_mnuRemove.Text = "Remove";
             this.m_mnuRemove.Click += new System.EventHandler(this.m_toolStripButton_Remove_Click);
             // 
             // m_mnuRemoveAll
             // 
             this.m_mnuRemoveAll.Name = "m_mnuRemoveAll";
-            this.m_mnuRemoveAll.Size = new System.Drawing.Size(152, 22);
+            this.m_mnuRemoveAll.Size = new System.Drawing.Size(134, 22);
             this.m_mnuRemoveAll.Text = "Remove All";
             this.m_mnuRemoveAll.Click += new System.EventHandler(this.m_toolStripButton_RemoveAll_Click);
             // 
             // m_toolStripMenuSep3
             // 
             this.m_toolStripMenuSep3.Name = "m_toolStripMenuSep3";
-            this.m_toolStripMenuSep3.Size = new System.Drawing.Size(149, 6);
+            this.m_toolStripMenuSep3.Size = new System.Drawing.Size(131, 6);
             // 
             // m_mnuUp
             // 
             this.m_mnuUp.Name = "m_mnuUp";
-            this.m_mnuUp.Size = new System.Drawing.Size(152, 22);
+            this.m_mnuUp.Size = new System.Drawing.Size(134, 22);
             this.m_mnuUp.Text = "Up";
             this.m_mnuUp.Click += new System.EventHandler(this.m_toolStripButton_Up_Click);
             // 
             // m_mnuDown
             // 
             this.m_mnuDown.Name = "m_mnuDown";
-            this.m_mnuDown.Size = new System.Drawing.Size(152, 22);
+            this.m_mnuDown.Size = new System.Drawing.Size(134, 22);
             this.m_mnuDown.Text = "Down";
             this.m_mnuDown.Click += new System.EventHandler(this.m_toolStripButton_Down_Click);
             // 
@@ -220,7 +220,7 @@
             this.m_toolStripButton_Down});
             this.m_toolbarPlayer.Location = new System.Drawing.Point(0, 0);
             this.m_toolbarPlayer.Name = "m_toolbarPlayer";
-            this.m_toolbarPlayer.Size = new System.Drawing.Size(346, 25);
+            this.m_toolbarPlayer.Size = new System.Drawing.Size(400, 25);
             this.m_toolbarPlayer.TabIndex = 4;
             this.m_toolbarPlayer.Text = "toolStrip1";
             // 
@@ -294,7 +294,7 @@
             this.Controls.Add(this.m_listFiles);
             this.Controls.Add(this.m_toolbarPlayer);
             this.Name = "FileListControl";
-            this.Size = new System.Drawing.Size(346, 149);
+            this.Size = new System.Drawing.Size(400, 149);
             this.Load += new System.EventHandler(this.FileListControl_Load);
             this.m_contextMenuStrip1.ResumeLayout(false);
             this.m_toolbarPlayer.ResumeLayout(false);
