@@ -26,7 +26,7 @@ namespace MeditationStopWatch
             string time = DateTime.Now.ToString("HH:mm:ss");
 
             SizeF size = e.Graphics.MeasureString(time, Font);
-            PointF location = new PointF((Width-size.Width)/2, (Height-size.Height)/2);
+            PointF location = new PointF((Width - size.Width) / 2.0f, 3 + (Height-size.Height)/2.0f);
 
             e.Graphics.DrawString(time, Font, new SolidBrush(ForeColor), location);
         }
