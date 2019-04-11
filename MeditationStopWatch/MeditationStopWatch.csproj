@@ -80,6 +80,12 @@
     <Compile Include="AudioPlayerControl.Designer.cs">
       <DependentUpon>AudioPlayerControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="FileListControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="FileListControl.Designer.cs">
+      <DependentUpon>FileListControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="DigitalClockCtrl.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -108,6 +114,12 @@
     </Compile>
     <Compile Include="Options.cs" />
     <Compile Include="OptionsSerializer.cs" />
+    <Compile Include="PlayListTabControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="PlayListTabControl.Designer.cs">
+      <DependentUpon>PlayListTabControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AnalogClock.resx">
@@ -115,6 +127,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="AudioPlayerControl.resx">
       <DependentUpon>AudioPlayerControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FileListControl.resx">
+      <DependentUpon>FileListControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="DigitalClockCtrl.resx">
       <DependentUpon>DigitalClockCtrl.cs</DependentUpon>
@@ -129,6 +144,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormStopWatch.resx">
       <DependentUpon>FormStopWatch.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PlayListTabControl.resx">
+      <DependentUpon>PlayListTabControl.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

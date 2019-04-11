@@ -101,7 +101,6 @@ namespace MeditationStopWatch
 			this.Visible = true;
 			OpenImageDirectory(m_Options.LastImageFile);
 
-			m_audioPlayerControl.AddToFileList(m_Options.PlayList, false);
 			m_audioPlayerControl.ValueChanged += m_audioPlayerControl_ValueChanged;
 		}
 
@@ -235,15 +234,14 @@ namespace MeditationStopWatch
             digitalClockCtrl1.BackColor = m_Options.DigitalClockBackColor;
             digitalClockCtrl1.Font = m_Options.DigitalClockFont;
 
-
-            m_audioPlayerControl.Options = m_Options;
+            m_audioPlayerControl.InitializeOptions(m_Options);
 		}
 
 		private void SaveOptions()
 		{
 			m_Options.FavoritesList = m_FavoritesList.ToArray<string>();
-			m_Options.PlayList = m_audioPlayerControl.PlayList;
-			m_Options.Volume = m_audioPlayerControl.Volume;
+            //m_Options.PlayList = m_audioPlayerControl.PlayList;
+            m_Options.Volume = m_audioPlayerControl.Volume;
 			m_Options.Loop = m_audioPlayerControl.Loop;
 
 			if (WindowState != FormWindowState.Minimized)

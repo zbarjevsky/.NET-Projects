@@ -3,121 +3,187 @@ using System.Reflection;
 using System.Xml;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Xml.Serialization;
 
 namespace MeditationStopWatch
 {
-	public class OptionsSerializer
-	{
-		private OptionsSerializer() { }
+    public class XmlHelper
+    {
+        public static T Open<T>(string fileName)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(T));
+            using (StreamReader streamReader = new StreamReader(fileName))
+            {
+                return (T)serializer.Deserialize(streamReader);
+            }
+        }
 
-		public static void Save(string filename, object options)
-		{
-			Byte[] buffer = new Byte[80];
-			MemoryStream ms;
-			BinaryFormatter bf = new BinaryFormatter();
+        public static void Save<T>(string fileName, T o)
+        {
+            using (StreamWriter streamReader = new StreamWriter(fileName))
+            {
+                XmlSerializer serializer = new XmlSerializer(typeof(T));
+                serializer.Serialize(streamReader, o);
+            }
+        }
+    }
 
-			System.Xml.XmlTextWriter xmlwriter =
-			   new XmlTextWriter(filename, System.Text.Encoding.UTF8);
+    public class SerializerHelper
+    {
+        public static T Open<T>(string fileName) where T : class, new()
+        {
+            try
+            {
+                return XmlHelper.Open<T>(fileName);
+            }
+            catch (Exception err)
+            {
+                System.Diagnostics.Debug.WriteLine(err);
+                return new T();
+            }
+        }
 
-			xmlwriter.Formatting = Formatting.Indented;
-			xmlwriter.WriteStartDocument();
+        public static void Save<T>(string fileName, T o)
+        {
+            try
+            {
+                XmlHelper.Save(fileName, o);
+            }
+            catch (Exception err)
+            {
+                System.Diagnostics.Debug.WriteLine(err);
+            }
+        }
+    }
 
-			xmlwriter.WriteComment("Option File. Do not edit! zbarjevsky@gmail.com");
-			xmlwriter.WriteStartElement(options.ToString());
+    public class OptionsSerializer
+    {
+        private OptionsSerializer() { }
 
-			PropertyInfo[] props = options.GetType().GetProperties(
-			   BindingFlags.Public |
-			   BindingFlags.Instance |
-			   BindingFlags.SetField);
+        public static void Save(string filename, object options)
+        {
+            try
+            {
+                Byte[] buffer = new Byte[80];
+                MemoryStream ms;
+                BinaryFormatter bf = new BinaryFormatter();
 
-			foreach ( PropertyInfo prop in props )
-			{
-				xmlwriter.WriteStartElement(prop.Name);
+                System.Xml.XmlTextWriter xmlwriter =
+                   new XmlTextWriter(filename, System.Text.Encoding.UTF8);
 
-				object da = prop.GetValue(options, null);
+                xmlwriter.Formatting = Formatting.Indented;
+                xmlwriter.WriteStartDocument();
 
-				if ( da != null )
-				{
-					xmlwriter.WriteAttributeString("Value", da.ToString());
+                xmlwriter.WriteComment("Options File. Do not edit! zbarjevsky@gmail.com");
+                xmlwriter.WriteStartElement(options.ToString());
 
-					ms = new MemoryStream();
-					try
-					{
-						bf.Serialize(ms, da);
-						ms.Position = 0;
-						int count = 0;
-						do
-						{
-							count = ms.Read(buffer, 0, buffer.Length);
-							xmlwriter.WriteBase64(buffer, 0, count);
-						}while ( count == buffer.Length );
-					}//end try
-					catch ( System.Runtime.Serialization.SerializationException )
-					{
-						System.Diagnostics.Trace.WriteLine("SERIALIZATION FAILED: {0}", prop.Name);
-					}//end catch
+                PropertyInfo[] props = options.GetType().GetProperties(
+                   BindingFlags.Public |
+                   BindingFlags.Instance |
+                   BindingFlags.SetField);
 
-				}//end if
-				else xmlwriter.WriteAttributeString("Value", "null");
+                foreach (PropertyInfo prop in props)
+                {
+                    xmlwriter.WriteStartElement(prop.Name);
 
-				xmlwriter.WriteEndElement();
-			}//end foreach
-			xmlwriter.WriteEndElement();
-			xmlwriter.WriteEndDocument();
-			xmlwriter.Flush();
-			xmlwriter.Close();
-		}//end Save
+                    object da = prop.GetValue(options, null);
 
-		public static void Load(string filename, object options)
-		{
-			Byte[] buffer = new Byte[80];
-			MemoryStream ms;
-			BinaryFormatter bf = new BinaryFormatter();
+                    if (da != null)
+                    {
+                        xmlwriter.WriteAttributeString("Value", da.ToString());
 
-			System.Xml.XmlTextReader reader = new XmlTextReader(filename);
+                        ms = new MemoryStream();
+                        try
+                        {
+                            bf.Serialize(ms, da);
+                            ms.Position = 0;
+                            int count = 0;
+                            do
+                            {
+                                count = ms.Read(buffer, 0, buffer.Length);
+                                xmlwriter.WriteBase64(buffer, 0, count);
+                            } while (count == buffer.Length);
+                        }//end try
+                        catch (System.Runtime.Serialization.SerializationException err)
+                        {
+                            System.Diagnostics.Trace.WriteLine(string.Format("SERIALIZATION FAILED: {0}\n {1}", 
+                                prop.Name, err));
+                        }//end catch
 
-			while ( reader.Read() )
-			{
-				switch ( reader.NodeType )
-				{
-					case XmlNodeType.Element:
+                    }//end if
+                    else xmlwriter.WriteAttributeString("Value", "null");
 
-						if ( reader.HasAttributes )
-						{
-							string name = reader.Name;
-							string val = reader.GetAttribute("Value");
+                    xmlwriter.WriteEndElement();
+                }//end foreach
+                xmlwriter.WriteEndElement();
+                xmlwriter.WriteEndDocument();
+                xmlwriter.Flush();
+                xmlwriter.Close();
 
-							ms = new MemoryStream();
+            }
+            catch (Exception err)
+            {
+                System.Diagnostics.Debug.WriteLine(err);
+            }
+        }//end Save
 
-							int count = 0;
-							do
-							{
-								count = reader.ReadBase64(buffer, 0, buffer.Length);
-								ms.Write(buffer, 0, count);
-							}while ( count == buffer.Length );
+        public static void Load<T>(string filename, T options) where T : new()
+        {
+            try
+            {
+                Byte[] buffer = new Byte[80];
+                MemoryStream ms;
+                BinaryFormatter bf = new BinaryFormatter();
 
-							ms.Position = 0;
+                System.Xml.XmlTextReader reader = new XmlTextReader(filename);
 
-							if ( val != "null" )
-							{
-								try
-								{
-									object da = bf.Deserialize(ms);
+                while (reader.Read())
+                {
+                    switch (reader.NodeType)
+                    {
+                        case XmlNodeType.Element:
 
-									System.Diagnostics.Trace.Write("Loading: '" + name + "'...");
-									options.GetType().GetProperty(name).SetValue(options, da, null);
-									System.Diagnostics.Trace.WriteLine("OK");
-								}//end try
-								catch ( System.Runtime.Serialization.SerializationException err )
-								{
-									System.Diagnostics.Trace.WriteLine("Failed: " + err.Message);
-								}//end catch
-							}//end if
-						}//end if
-						break;
-				}//end switch
-			}//end while
-			reader.Close();
-		}//end Load
-	}//end class Options
+                            if (reader.HasAttributes)
+                            {
+                                string name = reader.Name;
+                                string val = reader.GetAttribute("Value");
+
+                                ms = new MemoryStream();
+
+                                int count = 0;
+                                do
+                                {
+                                    count = reader.ReadBase64(buffer, 0, buffer.Length);
+                                    ms.Write(buffer, 0, count);
+                                } while (count == buffer.Length);
+
+                                ms.Position = 0;
+
+                                if (val != "null")
+                                {
+                                    try
+                                    {
+                                        object da = bf.Deserialize(ms);
+
+                                        System.Diagnostics.Trace.Write("Loading: '" + name + "'...");
+                                        options.GetType().GetProperty(name).SetValue(options, da, null);
+                                        System.Diagnostics.Trace.WriteLine("OK");
+                                    }//end try
+                                    catch (System.Runtime.Serialization.SerializationException err)
+                                    {
+                                        System.Diagnostics.Trace.WriteLine("Failed: " + err.Message);
+                                    }//end catch
+                                }//end if
+                            }//end if
+                            break;
+                    }//end switch
+                }//end while
+                reader.Close();
+            }
+            catch (Exception err)
+            {
+                System.Diagnostics.Debug.WriteLine(err);
+            }
+        }//end Load
+    }//end class OptionsSerializer
 }//end namespace DUMeterMZ

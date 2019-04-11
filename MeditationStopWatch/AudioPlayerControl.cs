@@ -15,45 +15,21 @@ namespace MeditationStopWatch
 		//private List<FileInfo> m_vSongsList = new List<FileInfo>();
 		private MCIPLayer m_Mp3Player = new MCIPLayer();
 		private TimeSpan _tsLength;
-		private int _playingIdx = -1;
 		private Options m_Options;
 		//private bool _bScreenSaverActive = false;
 	
 		public AudioPlayerControl()
 		{
 			InitializeComponent();
-
-			m_mnuPlay.Image = m_tbbtnPlay.Image;
-			m_mnuPause.Image = m_tbbtnPause.Image;
-			m_mnuStop.Image = m_tbbtnStop.Image;
-			m_mnuPrev.Image = m_tbbtnPrev.Image;
-			m_mnuNext.Image = m_tbbtnNext.Image;
-
-			m_mnuUp.Image = m_toolStripButton_Up.Image;
-			m_mnuDown.Image = m_toolStripButton_Down.Image;
-			
-			m_mnuAdd.Image = m_toolStripButton_AddFiles.Image;
-			m_mnuRemove.Image = m_toolStripButton_Remove.Image;
-			m_mnuRemoveAll.Image = m_toolStripButton_RemoveAll.Image;
 		}
+
 		public event EventHandler ValueChanged;
-		public void Pause() 
-        { 
-            m_Mp3Player.Pause(); 
-            if ( m_Mp3Player.Paused ) 
-                m_progrReiKi.Pause(); 
-            else 
-                m_progrReiKi.Resume();
-            UpdateInfo();
-        }
-		public int Count { get { return m_listFiles.Items.Count; } }
-		public bool HasSelected { get { return m_listFiles.SelectedIndices.Count > 0; } }
+		public int Count { get { return m_playLists.PL.Count; } }
 		public FileInfo PlayingFile 
 		{ 
 			get 
 			{
-				if (_playingIdx < 0) return null;
-				return (m_listFiles.Items[_playingIdx].Tag as FileInfo); 
+				return m_playLists.PL.PlayingFile; 
 			} 
 		}
 
@@ -61,74 +37,22 @@ namespace MeditationStopWatch
 		{
 			get
 			{
-				string[] playList = new string[Count];
-				for (int i = 0; i < Count; i++)
+				string[] playList = new string[m_Options.PlayListCollection[0].List.Count];
+				for (int i = 0; i < m_Options.PlayListCollection[0].List.Count; i++)
 				{
-					playList[i] = (m_listFiles.Items[i].Tag as FileInfo).FullName;
+					playList[i] = m_Options.PlayListCollection[0].List[i];
 				}
 				return playList;
 			}
 		}
 
-		public void AddToFileList(string[] files, bool bPlayFirst)
-		{
-			if (files == null || files.Length == 0)
-				return;
+        public void AddToFileList(string[] files, bool bPlayFirst)
+        {
+            m_playLists.PL.AddToFileList(files, bPlayFirst);
+            m_playLists.PL.OP.OnListChanged();
+        }
 
-			int iFirstIdx = -1;
-			foreach (string s in files)
-			{
-				FileInfo f = new FileInfo(s);
-				if (!f.Exists)
-					continue;
-
-				if (f.Extension.ToLower() != ".mp3")
-					continue;
-
-				int idx = IndexOf(s);
-				if (idx >= 0)
-				{
-					if (iFirstIdx < 0) iFirstIdx = idx;
-					continue;
-				}
-
-				ListViewItem i = m_listFiles.Items.Add(f.Name);
-				i.ToolTipText = f.FullName;
-				i.SubItems.Add(" --:-- ");
-				i.SubItems.Add(string.Format("{0:N} MB", f.Length / (1024.0*1024.0)));
-				i.Tag = f;
-				if (iFirstIdx < 0) iFirstIdx = i.Index;
-			}
-			if (bPlayFirst) Play(iFirstIdx);
-			UpdateInfo();
-		}
-
-		public void RemoveSelectedFiles()
-		{
-			for (int i = m_listFiles.SelectedIndices.Count - 1; i >= 0; i--)
-			{
-				int idx = m_listFiles.SelectedIndices[i];
-				if (idx == _playingIdx)
-				{
-					m_Mp3Player.Close();
-					_playingIdx = -1;
-				}
-				m_listFiles.SelectedItems[i].Remove();
-			}
-			_playingIdx = -1;
-			UpdateInfo();
-		}
-
-		public void RemoveAll()
-		{
-			m_Mp3Player.Close();
-			_playingIdx = -1;
-
-			m_listFiles.Items.Clear();
-			UpdateInfo();
-		}
-
-		public bool Loop
+        public bool Loop
 		{
 			get { if(DesignMode) return true; return m_Options.Loop; }
 			set 
@@ -150,44 +74,24 @@ namespace MeditationStopWatch
 			}
 		}
 
-		public Options Options
+		public void InitializeOptions(Options opt)
 		{
-			set { m_Options = value; Volume = m_Options.Volume; m_progrReiKi.Options = value; }
+            m_Options = opt;
+            Volume = m_Options.Volume;
+            m_progrReiKi.Options = m_Options;
+            m_playLists.Initialize(m_Options);
 		}
-
-		private int IndexOf(string sFileName)
-		{
-			for (int i = 0; i < m_listFiles.Items.Count; i++)
-			{
-				FileInfo f = m_listFiles.Items[i].Tag as FileInfo;
-				if (f.FullName.ToLower() == sFileName.ToLower())
-					return i;
-			}
-			return -1;
-		}
-
-		//private void FillDisplayFileList()
-		//{
-		//    m_listFiles.Items.Clear();
-		//    foreach (FileInfo f in m_vSongsList)
-		//    {
-		//        ListViewItem i = m_listFiles.Items.Add(f.FullName);
-		//        i.SubItems.Add(" --:-- ");
-		//        i.SubItems.Add(string.Format("{0:N} KB", f.Length / 1024.0));
-		//        i.Tag = f;
-		//    }
-		//    UpdateInfo();
-		//}
 
 		private void AudioPlayerControl_Load(object sender, EventArgs e)
 		{
 			UpdateInfo();
-		}
-
-		private void m_listFiles_DoubleClick(object sender, System.EventArgs e)
-		{
-			m_tbbtnPlay_Click(sender, e);
-		}
+            m_playLists.PL.OP.OnListChanged += () => { UpdateInfo(); };
+            m_playLists.PL.OP.PlayAction += (selectedIdx) => { PlaySelected(selectedIdx); };
+            m_playLists.PL.OP.PauseAction += () => { Pause(); };
+            m_playLists.PL.OP.StopAction += () => { Stop(); };
+            m_playLists.PL.OP.NextAction += () => { Next(); };
+            m_playLists.PL.OP.PrevAction += () => { Prev(); };
+        }
 
 		private void m_trackBarPosition_Scroll(object sender, EventArgs e)
 		{
@@ -201,7 +105,7 @@ namespace MeditationStopWatch
 				return;
 
 			if (Loop && m_Mp3Player.IsStopped() && m_trackBarPosition.Value == m_trackBarPosition.Maximum)
-				m_tbbtnNext_Click(sender, e);
+				Play(m_playLists.PL.NextIdx());
 
 			if (ValueChanged != null) 
 				ValueChanged(sender, e);
@@ -252,11 +156,7 @@ namespace MeditationStopWatch
 
 		private void UpdatePlayingFile()
 		{
-			foreach (ListViewItem item in m_listFiles.Items)
-			{
-				Color crText = item.Index == _playingIdx ? Color.Red : SystemColors.WindowText;
-				item.ForeColor = crText;
-			}
+            m_playLists.PL.UpdatePlayingFile();
 		}
 
 		private void UpdateButtonsState(string status)
@@ -265,33 +165,32 @@ namespace MeditationStopWatch
 			switch (status)
 			{
 				case "playing":
-					UpdateButtonsState(false, true, true, true, true, true);
-					UpdateButtonsState(true, true, false, false, false, false);
+					UpdatePlayerButtonsState(false, true, true, true, true, true);
+					UpdatePlayerButtonsState(true, true, false, false, false, false);
 					break;
 				case "paused":
-					UpdateButtonsState(false, true, true, true, true, true);
-					UpdateButtonsState(true, false, true, false, false, false);
+					UpdatePlayerButtonsState(false, true, true, true, true, true);
+					UpdatePlayerButtonsState(true, false, true, false, false, false);
 					break;
 				case "open":
-					UpdateButtonsState(false, true, true, true, true, true);
-					UpdateButtonsState(true, false, false, false, false, false);
+					UpdatePlayerButtonsState(false, true, true, true, true, true);
+					UpdatePlayerButtonsState(true, false, false, false, false, false);
 					break;
 				case "stopped":
-					UpdateButtonsState(false, true, true, true, true, true);
-					UpdateButtonsState(true, false, false, true, false, false);
+					UpdatePlayerButtonsState(false, true, true, true, true, true);
+					UpdatePlayerButtonsState(true, false, false, true, false, false);
 					break;
 				default:
-					UpdateButtonsState(false, true, false, false, true, true);
-					UpdateButtonsState(true, false, false, false, false, false);
+					UpdatePlayerButtonsState(false, true, false, false, true, true);
+					UpdatePlayerButtonsState(true, false, false, false, false, false);
 					break;
 			}
 		}
 
-		private void UpdateButtonsState(bool bCheckState, bool bPlay, bool bPause, bool bStop, bool bPrev, bool bNext)
+		private void UpdatePlayerButtonsState(bool bUpdateCheckedState, bool bPlay, bool bPause, bool bStop, bool bPrev, bool bNext)
 		{
-			bool bHasFiles = Count > 0;
 
-			if (bCheckState)
+			if (bUpdateCheckedState)
 			{
 				m_tbbtnPlay.Checked = bPlay;
 				m_tbbtnPause.Checked = bPause;
@@ -301,66 +200,44 @@ namespace MeditationStopWatch
 			}
 			else
 			{
-				m_tbbtnPlay.Enabled = bPlay && bHasFiles;
+                bool bHasFiles = Count > 0;
+                m_tbbtnPlay.Enabled = bPlay && bHasFiles;
 				m_tbbtnPause.Enabled = bPause && bHasFiles;
 				m_tbbtnStop.Enabled = bStop && bHasFiles;
 				m_tbbtnPrev.Enabled = bPrev && Count>1;
 				m_tbbtnNext.Enabled = bNext && Count>1;
 			}
 
-			m_toolStripButton_Up.Enabled = EnableUp();
-			m_toolStripButton_Down.Enabled = EnableDown();
-
-			m_toolStripButton_Remove.Enabled = HasSelected;
-			m_toolStripButton_RemoveAll.Enabled = bHasFiles;
-
-			m_mnuPlay.Enabled = m_tbbtnPlay.Enabled;
-			m_mnuPause.Enabled = m_tbbtnPause.Enabled;
-			m_mnuStop.Enabled = m_tbbtnStop.Enabled;
-			m_mnuPrev.Enabled = m_tbbtnPrev.Enabled;
-			m_mnuNext.Enabled = m_tbbtnNext.Enabled;
-
-			m_mnuUp.Enabled = m_toolStripButton_Up.Enabled;
-			m_mnuDown.Enabled = m_toolStripButton_Down.Enabled;
-
-			m_mnuAdd.Enabled = m_toolStripButton_AddFiles.Enabled;
-			m_mnuRemove.Enabled = m_toolStripButton_Remove.Enabled;
-			m_mnuRemoveAll.Enabled = m_toolStripButton_RemoveAll.Enabled;
+            m_playLists.PL.UpdatePlayerMenusState(bUpdateCheckedState, bPlay, bPause, bStop, bPrev, bNext);
 		}
 
 		//return first if not selected
 		private int GetSelectedFile()
 		{
-			if (m_listFiles.Items.Count == 0)
-				return -1;
-
-			if (m_listFiles.SelectedIndices.Count == 0)
-			{
-				return 0;
-			}
-
-			return m_listFiles.SelectedIndices[0];
+			return m_playLists.PL.GetSelectedFile();
 		}
 
 		private void m_tbbtnPlay_Click(object sender, EventArgs e)
 		{
-			int idx = GetSelectedFile();
-			if (idx < 0)
-			{
-				//m_prgr3Minute.Value = 0;
-                m_progrReiKi.Stop();
-				return;
-			}
-			
-			Play(idx);
-
-            m_progrReiKi.Start();
+            PlaySelected(GetSelectedFile());
 		}
 
-		private void Play(int idx)
+        private void PlaySelected(int selectedIndex = -1)
+        {
+            if (selectedIndex < 0)
+            {
+                //m_prgr3Minute.Value = 0;
+                m_progrReiKi.Stop();
+                return;
+            }
+
+            Play(selectedIndex);
+            m_progrReiKi.Start();
+        }
+
+        private void Play(int idx)
 		{
-			_playingIdx = idx;
-			FileInfo fiMP3 = m_listFiles.Items[idx].Tag as FileInfo;
+            FileInfo fiMP3 = m_playLists.PL.SelectPlayFile(idx);
 
 			//m_Mp3Player.Open(fiMP3.FullName, fiMP3.Name);
 			m_Mp3Player.Play(fiMP3.FullName, fiMP3.Name);
@@ -368,43 +245,64 @@ namespace MeditationStopWatch
 
 			m_trackBarPosition.Maximum = m_Mp3Player.GetSongLenght() / 1000;
 			_tsLength = TimeSpan.FromSeconds(m_trackBarPosition.Maximum);
-			m_listFiles.Items[idx].SubItems[1].Text = TimeString(_tsLength);
+			m_playLists.PL.UpdateFileTime(idx, TimeString(_tsLength));
 
 			UpdateInfo();
 		}
 
-		private void m_tbbtnPause_Click(object sender, EventArgs e)
+        public void Pause()
+        {
+            m_Mp3Player.Pause();
+            if (m_Mp3Player.Paused)
+                m_progrReiKi.Pause();
+            else
+                m_progrReiKi.Resume();
+            UpdateInfo();
+        }
+
+        public void Stop()
+        {
+            m_Mp3Player.Stop();
+            m_Mp3Player.SetPosition(0);
+            m_progrReiKi.Stop();
+            //m_Mp3Player.Close();
+            UpdateInfo();
+        }
+
+        private void Next()
+        {
+            if (Count == 0)
+                return;
+
+            PlaySelected(m_playLists.PL.NextIdx());
+        }
+
+        private void Prev()
+        {
+            if (Count == 0)
+                return;
+
+            PlaySelected(m_playLists.PL.PrevIdx());
+        }
+
+        private void m_tbbtnPause_Click(object sender, EventArgs e)
 		{
 			Pause();
 		}
 
 		private void m_tbbtnStop_Click(object sender, EventArgs e)
 		{
-			m_Mp3Player.Stop();
-			m_Mp3Player.SetPosition(0);
-            m_progrReiKi.Stop();
-			//m_Mp3Player.Close();
-			UpdateInfo();
-		}
-
-		private void m_tbbtnPrev_Click(object sender, EventArgs e)
-		{
-			if (m_listFiles.Items.Count == 0) 
-				return;
-
-			int idx = _playingIdx - 1;
-			if (idx < 0) idx = m_listFiles.Items.Count - 1;
-			Play(idx);
+            Stop();
 		}
 
 		private void m_tbbtnNext_Click(object sender, EventArgs e)
 		{
-			if (m_listFiles.Items.Count == 0)
-				return;
+            Next();
+		}
 
-			int idx = _playingIdx+1;
-			if (idx >= m_listFiles.Items.Count) idx = 0;
-			Play(idx);
+		private void m_tbbtnPrev_Click(object sender, EventArgs e)
+		{
+            Prev();
 		}
 
 		private void m_toolStripTrackBarVolume_ValueChanged(object sender, EventArgs e)
@@ -418,70 +316,5 @@ namespace MeditationStopWatch
 		{
 			Loop = !Loop;
 		}
-
-		private void m_toolStripButton_AddFiles_Click(object sender, EventArgs e)
-		{
-			if (DialogResult.OK != m_openFileDialog.ShowDialog(this))
-				return;
-
-			AddToFileList(m_openFileDialog.FileNames, true);
-		}
-
-		private void m_toolStripButton_RemoveAll_Click(object sender, EventArgs e)
-		{
-			RemoveAll();
-		}
-
-		private void m_toolStripButton_Remove_Click(object sender, EventArgs e)
-		{
-			RemoveSelectedFiles();
-		}
-
-		private void m_listFiles_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			UpdateInfo();
-		}
-
-		private bool EnableUp()
-		{
-			if (m_listFiles.SelectedIndices.Count != 1)
-				return false;
-			if (m_listFiles.SelectedIndices[0] < 1)
-				return false;
-			return true;
-		}
-
-		private void m_toolStripButton_Up_Click(object sender, EventArgs e)
-		{
-			if (!EnableUp())
-				return;
-
-			int idx = m_listFiles.SelectedIndices[0];
-			ListViewItem itm = m_listFiles.SelectedItems[0];
-			m_listFiles.Items.RemoveAt(idx);
-			m_listFiles.Items.Insert(idx - 1, itm);
-			if (_playingIdx == idx) _playingIdx = idx - 1;
-		}
-
-		private bool EnableDown()
-		{
-			if (m_listFiles.SelectedIndices.Count != 1)
-				return false;
-			if (m_listFiles.SelectedIndices[0] > m_listFiles.Items.Count - 2)
-				return false;
-			return true;
-		}
-
-		private void m_toolStripButton_Down_Click(object sender, EventArgs e)
-		{
-			if (!EnableDown())
-				return;
-
-			int idx = m_listFiles.SelectedIndices[0];
-			ListViewItem itm = m_listFiles.SelectedItems[0];
-			m_listFiles.Items.RemoveAt(idx);
-			m_listFiles.Items.Insert(idx + 1, itm);
-			if (_playingIdx == idx) _playingIdx = idx + 1;
-		}
-	}
+    }
 }

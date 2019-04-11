@@ -49,37 +49,15 @@
             this.m_toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.m_chkLoop = new System.Windows.Forms.ToolStripButton();
             this.m_imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.m_listFiles = new System.Windows.Forms.ListView();
-            this.m_clmnFileName = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.m_clmnDuration = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.m_clmnSize = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.m_contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.m_mnuPlay = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_mnuPause = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_mnuStop = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_toolStripMenuSep1 = new System.Windows.Forms.ToolStripSeparator();
-            this.m_mnuPrev = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_mnuNext = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_toolStripMenuSep2 = new System.Windows.Forms.ToolStripSeparator();
-            this.m_mnuAdd = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_mnuRemove = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_mnuRemoveAll = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_toolStripMenuSep3 = new System.Windows.Forms.ToolStripSeparator();
-            this.m_mnuUp = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_mnuDown = new System.Windows.Forms.ToolStripMenuItem();
             this.m_timer1 = new System.Windows.Forms.Timer(this.components);
-            this.m_toolbarPlayer = new System.Windows.Forms.ToolStrip();
-            this.m_toolStripButton_AddFiles = new System.Windows.Forms.ToolStripButton();
-            this.m_toolStripButton_Remove = new System.Windows.Forms.ToolStripButton();
-            this.m_toolStripButton_RemoveAll = new System.Windows.Forms.ToolStripButton();
-            this.m_toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.m_toolStripButton_Up = new System.Windows.Forms.ToolStripButton();
-            this.m_toolStripButton_Down = new System.Windows.Forms.ToolStripButton();
             this.m_openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.m_toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.m_pnl4Progress = new System.Windows.Forms.Panel();
             this.m_reiKi = new System.Windows.Forms.Integration.ElementHost();
             this.m_progrReiKi = new Wizard.ReikiProgressBar();
+            this.m_imageListTab = new System.Windows.Forms.ImageList(this.components);
+            this.m_pnlMain = new System.Windows.Forms.Panel();
+            this.m_splitFiles = new System.Windows.Forms.SplitContainer();
+            this.m_playLists = new MeditationStopWatch.PlayListTabControl();
             this.m_pnlControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitInfo)).BeginInit();
             this.m_splitInfo.Panel1.SuspendLayout();
@@ -88,9 +66,11 @@
             this.m_pnlButtons.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_trackBarPosition)).BeginInit();
             this.m_toolStripPlayer.SuspendLayout();
-            this.m_contextMenuStrip1.SuspendLayout();
-            this.m_toolbarPlayer.SuspendLayout();
-            this.m_pnl4Progress.SuspendLayout();
+            this.m_pnlMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.m_splitFiles)).BeginInit();
+            this.m_splitFiles.Panel1.SuspendLayout();
+            this.m_splitFiles.Panel2.SuspendLayout();
+            this.m_splitFiles.SuspendLayout();
             this.SuspendLayout();
             // 
             // m_pnlControls
@@ -100,9 +80,9 @@
             this.m_pnlControls.Controls.Add(this.m_splitInfo);
             this.m_pnlControls.Controls.Add(this.m_pnlButtons);
             this.m_pnlControls.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.m_pnlControls.Location = new System.Drawing.Point(0, 244);
+            this.m_pnlControls.Location = new System.Drawing.Point(0, 377);
             this.m_pnlControls.Name = "m_pnlControls";
-            this.m_pnlControls.Size = new System.Drawing.Size(312, 107);
+            this.m_pnlControls.Size = new System.Drawing.Size(509, 107);
             this.m_pnlControls.TabIndex = 0;
             // 
             // m_splitInfo
@@ -121,8 +101,8 @@
             // m_splitInfo.Panel2
             // 
             this.m_splitInfo.Panel2.Controls.Add(this.m_lblTime);
-            this.m_splitInfo.Size = new System.Drawing.Size(308, 31);
-            this.m_splitInfo.SplitterDistance = 139;
+            this.m_splitInfo.Size = new System.Drawing.Size(505, 31);
+            this.m_splitInfo.SplitterDistance = 336;
             this.m_splitInfo.TabIndex = 2;
             // 
             // m_lblStatus
@@ -132,7 +112,7 @@
             this.m_lblStatus.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.m_lblStatus.Location = new System.Drawing.Point(0, 0);
             this.m_lblStatus.Name = "m_lblStatus";
-            this.m_lblStatus.Size = new System.Drawing.Size(137, 29);
+            this.m_lblStatus.Size = new System.Drawing.Size(334, 29);
             this.m_lblStatus.TabIndex = 0;
             this.m_lblStatus.Text = "Ready";
             this.m_lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -157,7 +137,7 @@
             this.m_pnlButtons.Dock = System.Windows.Forms.DockStyle.Top;
             this.m_pnlButtons.Location = new System.Drawing.Point(0, 0);
             this.m_pnlButtons.Name = "m_pnlButtons";
-            this.m_pnlButtons.Size = new System.Drawing.Size(308, 72);
+            this.m_pnlButtons.Size = new System.Drawing.Size(505, 72);
             this.m_pnlButtons.TabIndex = 3;
             // 
             // m_trackBarPosition
@@ -168,7 +148,7 @@
             this.m_trackBarPosition.Location = new System.Drawing.Point(0, 0);
             this.m_trackBarPosition.Maximum = 300;
             this.m_trackBarPosition.Name = "m_trackBarPosition";
-            this.m_trackBarPosition.Size = new System.Drawing.Size(308, 40);
+            this.m_trackBarPosition.Size = new System.Drawing.Size(505, 40);
             this.m_trackBarPosition.SmallChange = 10;
             this.m_trackBarPosition.TabIndex = 0;
             this.m_trackBarPosition.TickFrequency = 180;
@@ -193,7 +173,7 @@
             this.m_chkLoop});
             this.m_toolStripPlayer.Location = new System.Drawing.Point(0, 40);
             this.m_toolStripPlayer.Name = "m_toolStripPlayer";
-            this.m_toolStripPlayer.Size = new System.Drawing.Size(308, 32);
+            this.m_toolStripPlayer.Size = new System.Drawing.Size(505, 32);
             this.m_toolStripPlayer.TabIndex = 1;
             this.m_toolStripPlayer.Text = "Tools";
             // 
@@ -306,223 +286,11 @@
             this.m_imageList1.Images.SetKeyName(10, "selected.PNG");
             this.m_imageList1.Images.SetKeyName(11, "selected_off.PNG");
             // 
-            // m_listFiles
-            // 
-            this.m_listFiles.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.m_clmnFileName,
-            this.m_clmnDuration,
-            this.m_clmnSize});
-            this.m_listFiles.ContextMenuStrip = this.m_contextMenuStrip1;
-            this.m_listFiles.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_listFiles.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.m_listFiles.FullRowSelect = true;
-            this.m_listFiles.GridLines = true;
-            this.m_listFiles.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.m_listFiles.HideSelection = false;
-            this.m_listFiles.Location = new System.Drawing.Point(0, 25);
-            this.m_listFiles.Name = "m_listFiles";
-            this.m_listFiles.ShowItemToolTips = true;
-            this.m_listFiles.Size = new System.Drawing.Size(312, 199);
-            this.m_listFiles.TabIndex = 1;
-            this.m_listFiles.UseCompatibleStateImageBehavior = false;
-            this.m_listFiles.View = System.Windows.Forms.View.Details;
-            this.m_listFiles.SelectedIndexChanged += new System.EventHandler(this.m_listFiles_SelectedIndexChanged);
-            this.m_listFiles.DoubleClick += new System.EventHandler(this.m_listFiles_DoubleClick);
-            // 
-            // m_clmnFileName
-            // 
-            this.m_clmnFileName.Text = "File name";
-            this.m_clmnFileName.Width = 150;
-            // 
-            // m_clmnDuration
-            // 
-            this.m_clmnDuration.Text = "Duration";
-            this.m_clmnDuration.Width = 70;
-            // 
-            // m_clmnSize
-            // 
-            this.m_clmnSize.Text = "Size";
-            this.m_clmnSize.Width = 70;
-            // 
-            // m_contextMenuStrip1
-            // 
-            this.m_contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.m_mnuPlay,
-            this.m_mnuPause,
-            this.m_mnuStop,
-            this.m_toolStripMenuSep1,
-            this.m_mnuPrev,
-            this.m_mnuNext,
-            this.m_toolStripMenuSep2,
-            this.m_mnuAdd,
-            this.m_mnuRemove,
-            this.m_mnuRemoveAll,
-            this.m_toolStripMenuSep3,
-            this.m_mnuUp,
-            this.m_mnuDown});
-            this.m_contextMenuStrip1.Name = "m_contextMenuStrip1";
-            this.m_contextMenuStrip1.Size = new System.Drawing.Size(135, 242);
-            // 
-            // m_mnuPlay
-            // 
-            this.m_mnuPlay.Name = "m_mnuPlay";
-            this.m_mnuPlay.Size = new System.Drawing.Size(134, 22);
-            this.m_mnuPlay.Text = "Play";
-            this.m_mnuPlay.Click += new System.EventHandler(this.m_tbbtnPlay_Click);
-            // 
-            // m_mnuPause
-            // 
-            this.m_mnuPause.Name = "m_mnuPause";
-            this.m_mnuPause.Size = new System.Drawing.Size(134, 22);
-            this.m_mnuPause.Text = "Pause";
-            this.m_mnuPause.Click += new System.EventHandler(this.m_tbbtnPause_Click);
-            // 
-            // m_mnuStop
-            // 
-            this.m_mnuStop.Name = "m_mnuStop";
-            this.m_mnuStop.Size = new System.Drawing.Size(134, 22);
-            this.m_mnuStop.Text = "Stop";
-            this.m_mnuStop.Click += new System.EventHandler(this.m_tbbtnStop_Click);
-            // 
-            // m_toolStripMenuSep1
-            // 
-            this.m_toolStripMenuSep1.Name = "m_toolStripMenuSep1";
-            this.m_toolStripMenuSep1.Size = new System.Drawing.Size(131, 6);
-            // 
-            // m_mnuPrev
-            // 
-            this.m_mnuPrev.Name = "m_mnuPrev";
-            this.m_mnuPrev.Size = new System.Drawing.Size(134, 22);
-            this.m_mnuPrev.Text = "Previous";
-            this.m_mnuPrev.Click += new System.EventHandler(this.m_tbbtnPrev_Click);
-            // 
-            // m_mnuNext
-            // 
-            this.m_mnuNext.Name = "m_mnuNext";
-            this.m_mnuNext.Size = new System.Drawing.Size(134, 22);
-            this.m_mnuNext.Text = "Next";
-            this.m_mnuNext.Click += new System.EventHandler(this.m_tbbtnNext_Click);
-            // 
-            // m_toolStripMenuSep2
-            // 
-            this.m_toolStripMenuSep2.Name = "m_toolStripMenuSep2";
-            this.m_toolStripMenuSep2.Size = new System.Drawing.Size(131, 6);
-            // 
-            // m_mnuAdd
-            // 
-            this.m_mnuAdd.Name = "m_mnuAdd";
-            this.m_mnuAdd.Size = new System.Drawing.Size(134, 22);
-            this.m_mnuAdd.Text = "Add Files";
-            this.m_mnuAdd.Click += new System.EventHandler(this.m_toolStripButton_AddFiles_Click);
-            // 
-            // m_mnuRemove
-            // 
-            this.m_mnuRemove.Name = "m_mnuRemove";
-            this.m_mnuRemove.Size = new System.Drawing.Size(134, 22);
-            this.m_mnuRemove.Text = "Remove";
-            this.m_mnuRemove.Click += new System.EventHandler(this.m_toolStripButton_Remove_Click);
-            // 
-            // m_mnuRemoveAll
-            // 
-            this.m_mnuRemoveAll.Name = "m_mnuRemoveAll";
-            this.m_mnuRemoveAll.Size = new System.Drawing.Size(134, 22);
-            this.m_mnuRemoveAll.Text = "Remove All";
-            this.m_mnuRemoveAll.Click += new System.EventHandler(this.m_toolStripButton_RemoveAll_Click);
-            // 
-            // m_toolStripMenuSep3
-            // 
-            this.m_toolStripMenuSep3.Name = "m_toolStripMenuSep3";
-            this.m_toolStripMenuSep3.Size = new System.Drawing.Size(131, 6);
-            // 
-            // m_mnuUp
-            // 
-            this.m_mnuUp.Name = "m_mnuUp";
-            this.m_mnuUp.Size = new System.Drawing.Size(134, 22);
-            this.m_mnuUp.Text = "Up";
-            this.m_mnuUp.Click += new System.EventHandler(this.m_toolStripButton_Up_Click);
-            // 
-            // m_mnuDown
-            // 
-            this.m_mnuDown.Name = "m_mnuDown";
-            this.m_mnuDown.Size = new System.Drawing.Size(134, 22);
-            this.m_mnuDown.Text = "Down";
-            this.m_mnuDown.Click += new System.EventHandler(this.m_toolStripButton_Down_Click);
-            // 
             // m_timer1
             // 
             this.m_timer1.Enabled = true;
             this.m_timer1.Interval = 1000;
             this.m_timer1.Tick += new System.EventHandler(this.m_timer1_Tick);
-            // 
-            // m_toolbarPlayer
-            // 
-            this.m_toolbarPlayer.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
-            this.m_toolbarPlayer.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.m_toolStripButton_AddFiles,
-            this.m_toolStripButton_Remove,
-            this.m_toolStripButton_RemoveAll,
-            this.m_toolStripSeparator4,
-            this.m_toolStripButton_Up,
-            this.m_toolStripButton_Down});
-            this.m_toolbarPlayer.Location = new System.Drawing.Point(0, 0);
-            this.m_toolbarPlayer.Name = "m_toolbarPlayer";
-            this.m_toolbarPlayer.Size = new System.Drawing.Size(312, 25);
-            this.m_toolbarPlayer.TabIndex = 0;
-            this.m_toolbarPlayer.Text = "toolStrip1";
-            // 
-            // m_toolStripButton_AddFiles
-            // 
-            this.m_toolStripButton_AddFiles.Image = ((System.Drawing.Image)(resources.GetObject("m_toolStripButton_AddFiles.Image")));
-            this.m_toolStripButton_AddFiles.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.m_toolStripButton_AddFiles.Name = "m_toolStripButton_AddFiles";
-            this.m_toolStripButton_AddFiles.Size = new System.Drawing.Size(75, 22);
-            this.m_toolStripButton_AddFiles.Text = "Add Files";
-            this.m_toolStripButton_AddFiles.ToolTipText = "Add Files (Ins)";
-            this.m_toolStripButton_AddFiles.Click += new System.EventHandler(this.m_toolStripButton_AddFiles_Click);
-            // 
-            // m_toolStripButton_Remove
-            // 
-            this.m_toolStripButton_Remove.Image = ((System.Drawing.Image)(resources.GetObject("m_toolStripButton_Remove.Image")));
-            this.m_toolStripButton_Remove.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.m_toolStripButton_Remove.Name = "m_toolStripButton_Remove";
-            this.m_toolStripButton_Remove.Size = new System.Drawing.Size(70, 22);
-            this.m_toolStripButton_Remove.Text = "Remove";
-            this.m_toolStripButton_Remove.ToolTipText = "Remove (Del)";
-            this.m_toolStripButton_Remove.Click += new System.EventHandler(this.m_toolStripButton_Remove_Click);
-            // 
-            // m_toolStripButton_RemoveAll
-            // 
-            this.m_toolStripButton_RemoveAll.Image = ((System.Drawing.Image)(resources.GetObject("m_toolStripButton_RemoveAll.Image")));
-            this.m_toolStripButton_RemoveAll.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.m_toolStripButton_RemoveAll.Name = "m_toolStripButton_RemoveAll";
-            this.m_toolStripButton_RemoveAll.Size = new System.Drawing.Size(87, 22);
-            this.m_toolStripButton_RemoveAll.Text = "Remove All";
-            this.m_toolStripButton_RemoveAll.Click += new System.EventHandler(this.m_toolStripButton_RemoveAll_Click);
-            // 
-            // m_toolStripSeparator4
-            // 
-            this.m_toolStripSeparator4.Name = "m_toolStripSeparator4";
-            this.m_toolStripSeparator4.Size = new System.Drawing.Size(6, 25);
-            // 
-            // m_toolStripButton_Up
-            // 
-            this.m_toolStripButton_Up.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.m_toolStripButton_Up.Image = ((System.Drawing.Image)(resources.GetObject("m_toolStripButton_Up.Image")));
-            this.m_toolStripButton_Up.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.m_toolStripButton_Up.Name = "m_toolStripButton_Up";
-            this.m_toolStripButton_Up.Size = new System.Drawing.Size(23, 22);
-            this.m_toolStripButton_Up.Text = "toolStripButton1";
-            this.m_toolStripButton_Up.Click += new System.EventHandler(this.m_toolStripButton_Up_Click);
-            // 
-            // m_toolStripButton_Down
-            // 
-            this.m_toolStripButton_Down.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.m_toolStripButton_Down.Image = ((System.Drawing.Image)(resources.GetObject("m_toolStripButton_Down.Image")));
-            this.m_toolStripButton_Down.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.m_toolStripButton_Down.Name = "m_toolStripButton_Down";
-            this.m_toolStripButton_Down.Size = new System.Drawing.Size(23, 22);
-            this.m_toolStripButton_Down.Text = "Down";
-            this.m_toolStripButton_Down.Click += new System.EventHandler(this.m_toolStripButton_Down_Click);
             // 
             // m_openFileDialog
             // 
@@ -533,27 +301,62 @@
             this.m_openFileDialog.Multiselect = true;
             this.m_openFileDialog.ValidateNames = false;
             // 
-            // m_pnl4Progress
-            // 
-            this.m_pnl4Progress.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.m_pnl4Progress.Controls.Add(this.m_reiKi);
-            this.m_pnl4Progress.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.m_pnl4Progress.Location = new System.Drawing.Point(0, 224);
-            this.m_pnl4Progress.Name = "m_pnl4Progress";
-            this.m_pnl4Progress.Size = new System.Drawing.Size(312, 20);
-            this.m_pnl4Progress.TabIndex = 4;
-            // 
             // m_reiKi
             // 
-            this.m_reiKi.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_reiKi.Location = new System.Drawing.Point(3, 1);
+            this.m_reiKi.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_reiKi.Location = new System.Drawing.Point(0, 0);
             this.m_reiKi.Name = "m_reiKi";
-            this.m_reiKi.Size = new System.Drawing.Size(302, 14);
+            this.m_reiKi.Size = new System.Drawing.Size(505, 14);
             this.m_reiKi.TabIndex = 4;
             this.m_reiKi.Text = "elementHost1";
             this.m_reiKi.Child = this.m_progrReiKi;
+            // 
+            // m_imageListTab
+            // 
+            this.m_imageListTab.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_imageListTab.ImageStream")));
+            this.m_imageListTab.TransparentColor = System.Drawing.Color.Transparent;
+            this.m_imageListTab.Images.SetKeyName(0, "Show Detail.ico");
+            this.m_imageListTab.Images.SetKeyName(1, "Hide Detail.ico");
+            // 
+            // m_pnlMain
+            // 
+            this.m_pnlMain.Controls.Add(this.m_splitFiles);
+            this.m_pnlMain.Controls.Add(this.m_pnlControls);
+            this.m_pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_pnlMain.Location = new System.Drawing.Point(0, 0);
+            this.m_pnlMain.Name = "m_pnlMain";
+            this.m_pnlMain.Size = new System.Drawing.Size(509, 484);
+            this.m_pnlMain.TabIndex = 6;
+            // 
+            // m_splitFiles
+            // 
+            this.m_splitFiles.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.m_splitFiles.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_splitFiles.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+            this.m_splitFiles.Location = new System.Drawing.Point(0, 0);
+            this.m_splitFiles.Name = "m_splitFiles";
+            this.m_splitFiles.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // m_splitFiles.Panel1
+            // 
+            this.m_splitFiles.Panel1.Controls.Add(this.m_playLists);
+            this.m_splitFiles.Panel1MinSize = 55;
+            // 
+            // m_splitFiles.Panel2
+            // 
+            this.m_splitFiles.Panel2.Controls.Add(this.m_reiKi);
+            this.m_splitFiles.Panel2MinSize = 10;
+            this.m_splitFiles.Size = new System.Drawing.Size(509, 377);
+            this.m_splitFiles.SplitterDistance = 355;
+            this.m_splitFiles.TabIndex = 5;
+            // 
+            // m_playLists
+            // 
+            this.m_playLists.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_playLists.Location = new System.Drawing.Point(0, 0);
+            this.m_playLists.Name = "m_playLists";
+            this.m_playLists.Size = new System.Drawing.Size(505, 351);
+            this.m_playLists.TabIndex = 0;
             // 
             // AudioPlayerControl
             // 
@@ -561,12 +364,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.AutoScrollMinSize = new System.Drawing.Size(310, 0);
-            this.Controls.Add(this.m_listFiles);
-            this.Controls.Add(this.m_pnl4Progress);
-            this.Controls.Add(this.m_toolbarPlayer);
-            this.Controls.Add(this.m_pnlControls);
+            this.Controls.Add(this.m_pnlMain);
             this.Name = "AudioPlayerControl";
-            this.Size = new System.Drawing.Size(312, 351);
+            this.Size = new System.Drawing.Size(509, 484);
             this.Load += new System.EventHandler(this.AudioPlayerControl_Load);
             this.m_pnlControls.ResumeLayout(false);
             this.m_splitInfo.Panel1.ResumeLayout(false);
@@ -578,21 +378,18 @@
             ((System.ComponentModel.ISupportInitialize)(this.m_trackBarPosition)).EndInit();
             this.m_toolStripPlayer.ResumeLayout(false);
             this.m_toolStripPlayer.PerformLayout();
-            this.m_contextMenuStrip1.ResumeLayout(false);
-            this.m_toolbarPlayer.ResumeLayout(false);
-            this.m_toolbarPlayer.PerformLayout();
-            this.m_pnl4Progress.ResumeLayout(false);
+            this.m_pnlMain.ResumeLayout(false);
+            this.m_splitFiles.Panel1.ResumeLayout(false);
+            this.m_splitFiles.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.m_splitFiles)).EndInit();
+            this.m_splitFiles.ResumeLayout(false);
             this.ResumeLayout(false);
-            this.PerformLayout();
 
 		}
 
 		#endregion
 
 		private System.Windows.Forms.Panel m_pnlControls;
-		private System.Windows.Forms.ListView m_listFiles;
-		private System.Windows.Forms.ColumnHeader m_clmnFileName;
-		private System.Windows.Forms.ColumnHeader m_clmnDuration;
 		private System.Windows.Forms.TrackBar m_trackBarPosition;
 		private System.Windows.Forms.Timer m_timer1;
 		private System.Windows.Forms.Label m_lblTime;
@@ -607,36 +404,17 @@
 		private System.Windows.Forms.ToolStripSeparator m_toolStripSeparator2;
 		private ToolStripTrackBar m_toolStripTrackBarVolume;
 		private System.Windows.Forms.Label m_lblStatus;
-		private System.Windows.Forms.ColumnHeader m_clmnSize;
 		private System.Windows.Forms.ToolStripSeparator m_toolStripSeparator3;
 		private System.Windows.Forms.ToolStripButton m_chkLoop;
-		private System.Windows.Forms.ToolStrip m_toolbarPlayer;
-		private System.Windows.Forms.ToolStripButton m_toolStripButton_AddFiles;
-		private System.Windows.Forms.ToolStripButton m_toolStripButton_Remove;
-		private System.Windows.Forms.ToolStripButton m_toolStripButton_RemoveAll;
 		private System.Windows.Forms.OpenFileDialog m_openFileDialog;
-		private System.Windows.Forms.ToolStripSeparator m_toolStripSeparator4;
-		private System.Windows.Forms.ToolStripButton m_toolStripButton_Up;
-		private System.Windows.Forms.ToolStripButton m_toolStripButton_Down;
-		private System.Windows.Forms.ContextMenuStrip m_contextMenuStrip1;
-		private System.Windows.Forms.ToolStripMenuItem m_mnuPlay;
-		private System.Windows.Forms.ToolStripMenuItem m_mnuPause;
-		private System.Windows.Forms.ToolStripMenuItem m_mnuStop;
-		private System.Windows.Forms.ToolStripSeparator m_toolStripMenuSep1;
-		private System.Windows.Forms.ToolStripMenuItem m_mnuPrev;
-		private System.Windows.Forms.ToolStripMenuItem m_mnuNext;
-		private System.Windows.Forms.ToolStripSeparator m_toolStripMenuSep2;
-		private System.Windows.Forms.ToolStripMenuItem m_mnuAdd;
-		private System.Windows.Forms.ToolStripMenuItem m_mnuRemove;
-		private System.Windows.Forms.ToolStripMenuItem m_mnuRemoveAll;
-		private System.Windows.Forms.ToolStripSeparator m_toolStripMenuSep3;
-		private System.Windows.Forms.ToolStripMenuItem m_mnuUp;
-		private System.Windows.Forms.ToolStripMenuItem m_mnuDown;
         private System.Windows.Forms.ToolTip m_toolTip1;
-        private System.Windows.Forms.Panel m_pnl4Progress;
         private System.Windows.Forms.Integration.ElementHost m_reiKi;
         private Wizard.ReikiProgressBar m_progrReiKi;
 		private System.Windows.Forms.SplitContainer m_splitInfo;
 		private System.Windows.Forms.Panel m_pnlButtons;
-	}
+        private System.Windows.Forms.Panel m_pnlMain;
+        private System.Windows.Forms.SplitContainer m_splitFiles;
+        private System.Windows.Forms.ImageList m_imageListTab;
+        private PlayListTabControl m_playLists;
+    }
 }

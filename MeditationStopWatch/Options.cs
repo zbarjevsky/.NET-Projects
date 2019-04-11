@@ -7,9 +7,22 @@ using System.Drawing;
 using System.ComponentModel;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
 
 namespace MeditationStopWatch
 {
+    [Serializable]
+    public class PlayList
+    {
+        public string Name { get; set; } = "Music";
+        public List<string> List { get; set; } = new List<string>();
+
+        public override string ToString()
+        {
+            return Name;
+        }
+    }
+
 	[DefaultProperty("Interface")] //will show this property as selected value
 	public class Options
 	{
@@ -35,13 +48,18 @@ namespace MeditationStopWatch
 		[DefaultValue(new string[] { })]
 		public string[] PlayList { get; set; }
 
-		[Category("1. Play List")]
-		[DisplayName("Favorites List")]
-		[Description("Favorites List")]
-		[DefaultValue(new string[] { })]
-		public string[] FavoritesList { get; set; }
+        [Category("1. Play List")]
+        [DisplayName("Favorites List")]
+        [Description("Favorites List")]
+        [DefaultValue(new string[] { })]
+        public string[] FavoritesList { get; set; }
 
-		[Category("2. Misc")]
+        [Category("1. Play List")]
+        [DisplayName("Play List Collection")]
+        [Description("Last Play List Collections")]
+        public List<PlayList> PlayListCollection { get; set; } = new List<PlayList>() { new PlayList() };
+
+        [Category("2. Misc")]
 		[DisplayName("Last Image")]
 		[Description("Image")]
 		public string LastImageFile { get; set; }
@@ -79,84 +97,52 @@ namespace MeditationStopWatch
 		[DisplayName("Clock Hour Hand Color")]
 		[Description("Clock Hour Hand Color")]
 		[DefaultValue(typeof(Color), "DarkGoldenrod")]
-		public Color HourHandColor
-		{
-			get;
-			set;
-		}
+		public Color HourHandColor { get; set; }
 
-		[Category("3. Clock Color Options")]
+        [Category("3. Clock Color Options")]
 		[DisplayName("Clock Minute Hand Color")]
 		[Description("Clock Minute Hand Color")]
 		[DefaultValue(typeof(Color), "Goldenrod")]
-		public Color MinuteHandColor
-		{
-			get;
-			set;
-		}
+		public Color MinuteHandColor { get; set; }
 
-		[Category("3. Clock Color Options")]
+        [Category("3. Clock Color Options")]
 		[DisplayName("Clock Second Hand Color")]
 		[Description("Clock Second Hand Color")]
 		[DefaultValue(typeof(Color), "Red")]
-		public Color SecondHandColor
-		{
-			get;
-			set;
-		}
+		public Color SecondHandColor { get; set; }
 
-		[Category("3. Clock Color Options")]
+        [Category("3. Clock Color Options")]
 		[DisplayName("Clock Ticks Color")]
 		[Description("Clock Ticks Color")]
 		[DefaultValue(typeof(Color), "Sienna")]
-		public Color TicksColor
-		{
-			get;
-			set;
-		}
+		public Color TicksColor { get; set; }
 
-		[Category("3. Clock Color Options")]
+        [Category("3. Clock Color Options")]
 		[DisplayName("Clock Clock Background")]
 		[Description("Clock Clock Background")]
 		[DefaultValue(typeof(Color), "Control")]
-		public Color ClockBackground
-		{
-			get;
-			set;
-		}
+		public Color ClockBackground { get; set; }
 
-		[Category("3. Clock Color Options")]
+        [Category("3. Clock Color Options")]
 		[DisplayName("Digital Clock Text Color")]
 		[Description("Digital Clock Text Color")]
 		[DefaultValue(typeof(Color), "Red")]
-		public Color DigitalClockTextColor
-		{
-			get;
-			set;
-		}
+		public Color DigitalClockTextColor { get; set; }
 
-		[Category("3. Clock Color Options")]
+        [Category("3. Clock Color Options")]
 		[DisplayName("Digital Clock Back Color")]
 		[Description("Digital Clock Back Color")]
 		[DefaultValue(typeof(Color), "DimGray")]
-		public Color DigitalClockBackColor
-		{
-			get;
-			set;
-		}
+		public Color DigitalClockBackColor { get; set; }
 
         [Category("3. Clock Color Options")]
         [Description("Digital Clock Font")]
         [DefaultValue(typeof(Font), "Control.DefaultFont")]
-        public Font DigitalClockFont
-        {
-            get;
-            set;
-        }
+        public Font DigitalClockFont { get; set; }
 
-		#endregion
+        #endregion
 
-		[Category("4. Position")]
+        [Category("4. Position")]
 		[DisplayName("Picture Size")]
 		[Description("Picture Size - Splitter Position")]
 		[DefaultValue(450)]
@@ -183,10 +169,6 @@ namespace MeditationStopWatch
         [Category("5. Color Options")]
         [Description("Options Description Background color")]
         [DefaultValue(typeof(Color), "Info")]
-        public Color Background
-        {
-            get;
-            set;
-        }
+        public Color Background { get; set; }
     }
 }
