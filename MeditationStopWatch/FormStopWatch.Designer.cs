@@ -37,9 +37,11 @@
             this.m_toolStrip_Picture = new System.Windows.Forms.ToolStrip();
             this.m_tsTxt_FileName = new ToolStripSpringTextBox();
             this.m_pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.m_btnHideSumbnails = new System.Windows.Forms.Button();
             this.m_listThumbnails = new System.Windows.Forms.ListView();
             this.m_imageListThumbnails = new System.Windows.Forms.ImageList(this.components);
-            this.m_splitContainer = new System.Windows.Forms.SplitContainer();
+            this.m_splitContainerTools = new System.Windows.Forms.SplitContainer();
+            this.m_splitClocks = new System.Windows.Forms.SplitContainer();
             this.m_analogClock = new AnalogClockControl.AnalogClock();
             this.digitalClockCtrl1 = new MeditationStopWatch.DigitalClockCtrl();
             this.m_audioPlayerControl = new MeditationStopWatch.AudioPlayerControl();
@@ -75,6 +77,7 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.m_btnSlideShow = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.m_imageListBtnHide = new System.Windows.Forms.ImageList(this.components);
             this.m_pnlMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitContainerMain)).BeginInit();
             this.m_splitContainerMain.Panel1.SuspendLayout();
@@ -89,10 +92,14 @@
             this.m_toolStripContainerPictureInfo.SuspendLayout();
             this.m_toolStrip_Picture.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.m_splitContainer)).BeginInit();
-            this.m_splitContainer.Panel1.SuspendLayout();
-            this.m_splitContainer.Panel2.SuspendLayout();
-            this.m_splitContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.m_splitContainerTools)).BeginInit();
+            this.m_splitContainerTools.Panel1.SuspendLayout();
+            this.m_splitContainerTools.Panel2.SuspendLayout();
+            this.m_splitContainerTools.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.m_splitClocks)).BeginInit();
+            this.m_splitClocks.Panel1.SuspendLayout();
+            this.m_splitClocks.Panel2.SuspendLayout();
+            this.m_splitClocks.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_analogClock)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.digitalClockCtrl1)).BeginInit();
             this.m_menuMain.SuspendLayout();
@@ -123,7 +130,7 @@
             // 
             // m_splitContainerMain.Panel2
             // 
-            this.m_splitContainerMain.Panel2.Controls.Add(this.m_splitContainer);
+            this.m_splitContainerMain.Panel2.Controls.Add(this.m_splitContainerTools);
             this.m_splitContainerMain.Size = new System.Drawing.Size(792, 498);
             this.m_splitContainerMain.SplitterDistance = 442;
             this.m_splitContainerMain.TabIndex = 2;
@@ -159,6 +166,7 @@
             // 
             // m_toolStripContainerPictureInfo.ContentPanel
             // 
+            this.m_toolStripContainerPictureInfo.ContentPanel.Controls.Add(this.m_btnHideSumbnails);
             this.m_toolStripContainerPictureInfo.ContentPanel.Controls.Add(this.m_pictureBox1);
             this.m_toolStripContainerPictureInfo.ContentPanel.Size = new System.Drawing.Size(438, 284);
             this.m_toolStripContainerPictureInfo.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -213,6 +221,21 @@
             this.m_pictureBox1.TabStop = false;
             this.m_pictureBox1.Click += new System.EventHandler(this.m_pictureBox1_Click);
             // 
+            // m_btnHideSumbnails
+            // 
+            this.m_btnHideSumbnails.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.m_btnHideSumbnails.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.m_btnHideSumbnails.ImageIndex = 0;
+            this.m_btnHideSumbnails.ImageList = this.m_imageListBtnHide;
+            this.m_btnHideSumbnails.Location = new System.Drawing.Point(3, 261);
+            this.m_btnHideSumbnails.Name = "m_btnHideSumbnails";
+            this.m_btnHideSumbnails.Size = new System.Drawing.Size(52, 23);
+            this.m_btnHideSumbnails.TabIndex = 1;
+            this.m_btnHideSumbnails.Text = "Hide";
+            this.m_btnHideSumbnails.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.m_btnHideSumbnails.UseVisualStyleBackColor = true;
+            this.m_btnHideSumbnails.Click += new System.EventHandler(this.m_btnHideSumbnails_Click);
+            // 
             // m_listThumbnails
             // 
             this.m_listThumbnails.Alignment = System.Windows.Forms.ListViewAlignment.Left;
@@ -239,27 +262,46 @@
             this.m_imageListThumbnails.ImageSize = new System.Drawing.Size(96, 96);
             this.m_imageListThumbnails.TransparentColor = System.Drawing.Color.Transparent;
             // 
-            // m_splitContainer
+            // m_splitContainerTools
             // 
-            this.m_splitContainer.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.m_splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_splitContainer.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-            this.m_splitContainer.Location = new System.Drawing.Point(0, 0);
-            this.m_splitContainer.Name = "m_splitContainer";
-            this.m_splitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.m_splitContainerTools.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.m_splitContainerTools.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_splitContainerTools.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
+            this.m_splitContainerTools.Location = new System.Drawing.Point(0, 0);
+            this.m_splitContainerTools.Name = "m_splitContainerTools";
+            this.m_splitContainerTools.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
-            // m_splitContainer.Panel1
+            // m_splitContainerTools.Panel1
             // 
-            this.m_splitContainer.Panel1.Controls.Add(this.m_analogClock);
-            this.m_splitContainer.Panel1.Controls.Add(this.digitalClockCtrl1);
-            this.m_splitContainer.Panel1MinSize = 120;
+            this.m_splitContainerTools.Panel1.Controls.Add(this.m_splitClocks);
+            this.m_splitContainerTools.Panel1MinSize = 120;
             // 
-            // m_splitContainer.Panel2
+            // m_splitContainerTools.Panel2
             // 
-            this.m_splitContainer.Panel2.Controls.Add(this.m_audioPlayerControl);
-            this.m_splitContainer.Size = new System.Drawing.Size(346, 498);
-            this.m_splitContainer.SplitterDistance = 283;
-            this.m_splitContainer.TabIndex = 1;
+            this.m_splitContainerTools.Panel2.Controls.Add(this.m_audioPlayerControl);
+            this.m_splitContainerTools.Size = new System.Drawing.Size(346, 498);
+            this.m_splitContainerTools.SplitterDistance = 283;
+            this.m_splitContainerTools.TabIndex = 1;
+            // 
+            // m_splitClocks
+            // 
+            this.m_splitClocks.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.m_splitClocks.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_splitClocks.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
+            this.m_splitClocks.Location = new System.Drawing.Point(0, 0);
+            this.m_splitClocks.Name = "m_splitClocks";
+            this.m_splitClocks.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // m_splitClocks.Panel1
+            // 
+            this.m_splitClocks.Panel1.Controls.Add(this.m_analogClock);
+            // 
+            // m_splitClocks.Panel2
+            // 
+            this.m_splitClocks.Panel2.Controls.Add(this.digitalClockCtrl1);
+            this.m_splitClocks.Size = new System.Drawing.Size(346, 283);
+            this.m_splitClocks.SplitterDistance = 219;
+            this.m_splitClocks.TabIndex = 1;
             // 
             // m_analogClock
             // 
@@ -272,7 +314,7 @@
             this.m_analogClock.MinuteHandColor = System.Drawing.Color.Goldenrod;
             this.m_analogClock.Name = "m_analogClock";
             this.m_analogClock.SecondHandColor = System.Drawing.Color.Red;
-            this.m_analogClock.Size = new System.Drawing.Size(342, 230);
+            this.m_analogClock.Size = new System.Drawing.Size(342, 215);
             this.m_analogClock.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.m_analogClock.TabIndex = 0;
             this.m_analogClock.TabStop = false;
@@ -281,11 +323,11 @@
             // digitalClockCtrl1
             // 
             this.digitalClockCtrl1.BackColor = System.Drawing.Color.Black;
-            this.digitalClockCtrl1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.digitalClockCtrl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.digitalClockCtrl1.ForeColor = System.Drawing.Color.LimeGreen;
-            this.digitalClockCtrl1.Location = new System.Drawing.Point(0, 230);
+            this.digitalClockCtrl1.Location = new System.Drawing.Point(0, 0);
             this.digitalClockCtrl1.Name = "digitalClockCtrl1";
-            this.digitalClockCtrl1.Size = new System.Drawing.Size(342, 49);
+            this.digitalClockCtrl1.Size = new System.Drawing.Size(342, 56);
             this.digitalClockCtrl1.TabIndex = 1;
             this.digitalClockCtrl1.TabStop = false;
             // 
@@ -567,6 +609,13 @@
             this.toolStripButton1.Size = new System.Drawing.Size(23, 23);
             this.toolStripButton1.Text = "toolStripButton1";
             // 
+            // m_imageListBtnHide
+            // 
+            this.m_imageListBtnHide.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_imageListBtnHide.ImageStream")));
+            this.m_imageListBtnHide.TransparentColor = System.Drawing.Color.Transparent;
+            this.m_imageListBtnHide.Images.SetKeyName(0, "arrow-down_16.ico");
+            this.m_imageListBtnHide.Images.SetKeyName(1, "arrow-up_16.ico");
+            // 
             // FormStopWatch
             // 
             this.AllowDrop = true;
@@ -604,10 +653,14 @@
             this.m_toolStrip_Picture.ResumeLayout(false);
             this.m_toolStrip_Picture.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_pictureBox1)).EndInit();
-            this.m_splitContainer.Panel1.ResumeLayout(false);
-            this.m_splitContainer.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.m_splitContainer)).EndInit();
-            this.m_splitContainer.ResumeLayout(false);
+            this.m_splitContainerTools.Panel1.ResumeLayout(false);
+            this.m_splitContainerTools.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.m_splitContainerTools)).EndInit();
+            this.m_splitContainerTools.ResumeLayout(false);
+            this.m_splitClocks.Panel1.ResumeLayout(false);
+            this.m_splitClocks.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.m_splitClocks)).EndInit();
+            this.m_splitClocks.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.m_analogClock)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.digitalClockCtrl1)).EndInit();
             this.m_menuMain.ResumeLayout(false);
@@ -627,7 +680,7 @@
 		private System.Windows.Forms.Panel m_pnlMain;
 		private System.Windows.Forms.MenuStrip m_menuMain;
 		private System.Windows.Forms.StatusStrip m_statusBar;
-		private System.Windows.Forms.SplitContainer m_splitContainer;
+		private System.Windows.Forms.SplitContainer m_splitContainerTools;
 		private AudioPlayerControl m_audioPlayerControl;
 		private System.Windows.Forms.SplitContainer m_splitContainerMain;
 		private System.Windows.Forms.PictureBox m_pictureBox1;
@@ -668,6 +721,9 @@
 		private System.Windows.Forms.ToolStrip m_toolStrip_Picture;
 		private ToolStripSpringTextBox m_tsTxt_FileName;
         private DigitalClockCtrl digitalClockCtrl1;
+        private System.Windows.Forms.SplitContainer m_splitClocks;
+        private System.Windows.Forms.Button m_btnHideSumbnails;
+        private System.Windows.Forms.ImageList m_imageListBtnHide;
     }
 }
 

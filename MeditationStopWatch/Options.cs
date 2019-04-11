@@ -137,7 +137,7 @@ namespace MeditationStopWatch
 
         [Category("3. Clock Color Options")]
         [Description("Digital Clock Font")]
-        [DefaultValue(typeof(Font), "Control.DefaultFont")]
+        [DefaultValue(typeof(Font), "Imprint MT Shadow, 36pt, style=Bold")]
         public Font DigitalClockFont { get; set; }
 
         #endregion

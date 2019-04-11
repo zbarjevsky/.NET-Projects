@@ -83,7 +83,7 @@
             this.m_tabPlayLists.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_tabPlayLists.Controls.Add(this.tabPage1);
-            this.m_tabPlayLists.Location = new System.Drawing.Point(0, 0);
+            this.m_tabPlayLists.Location = new System.Drawing.Point(0, 8);
             this.m_tabPlayLists.Name = "m_tabPlayLists";
             this.m_tabPlayLists.SelectedIndex = 0;
             this.m_tabPlayLists.Size = new System.Drawing.Size(294, 37);
@@ -92,7 +92,7 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.BackColor = System.Drawing.SystemColors.Control;
+            this.tabPage1.BackColor = System.Drawing.Color.WhiteSmoke;
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);

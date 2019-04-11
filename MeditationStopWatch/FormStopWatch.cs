@@ -96,7 +96,7 @@ namespace MeditationStopWatch
 				m_splitContainerMain.SplitterDistance = m_Options.PictureWidth;
 
 			if (m_Options.ClockHeight > 25)
-				m_splitContainer.SplitterDistance = m_Options.ClockHeight;
+				m_splitContainerTools.SplitterDistance = m_Options.ClockHeight;
 			
 			this.Visible = true;
 			OpenImageDirectory(m_Options.LastImageFile);
@@ -252,7 +252,7 @@ namespace MeditationStopWatch
             m_Options.AppRectangle = new Rectangle(this.Location, this.Size);
 
 			m_Options.PictureWidth = m_splitContainerMain.SplitterDistance;
-			m_Options.ClockHeight = m_splitContainer.SplitterDistance;
+			m_Options.ClockHeight = m_splitContainerTools.SplitterDistance;
 
             OptionsSerializer.Save(m_sSettingsFile, m_Options);
 		}
@@ -424,5 +424,12 @@ namespace MeditationStopWatch
 			{
 			}
 		}
-	}
+
+        private void m_btnHideSumbnails_Click(object sender, EventArgs e)
+        {
+            m_splitContainerImage.Panel2Collapsed = !m_splitContainerImage.Panel2Collapsed;
+            m_btnHideSumbnails.Text = m_splitContainerImage.Panel2Collapsed ? "Show" : "Hide";
+            m_btnHideSumbnails.ImageIndex = m_splitContainerImage.Panel2Collapsed ? 1 : 0;
+        }
+    }
 }
