@@ -102,6 +102,8 @@ namespace MeditationStopWatch
 			OpenImageDirectory(m_Options.LastImageFile);
 
 			m_audioPlayerControl.ValueChanged += m_audioPlayerControl_ValueChanged;
+
+            AutoCloseThumbnailsPanel();
 		}
 
 		private void FormStopWatch_FormClosing(object sender, FormClosingEventArgs e)
@@ -117,7 +119,20 @@ namespace MeditationStopWatch
 		{
 		}
 
-		private int _iImageTimeoutCount = 0;
+        private void AutoCloseThumbnailsPanel(int delayMs = 2000)
+        {
+            //auto collapse thumbnails panel after 'delayMs' msec
+            System.Windows.Forms.Timer timer = new System.Windows.Forms.Timer();
+            timer.Interval = 1200;
+            timer.Tick += (s, a) => {
+                timer.Stop();
+                if (!m_splitContainerImage.Panel2Collapsed)
+                    m_btnHideSumbnails_Click(s, a);
+            };
+            timer.Start();
+        }
+
+        private int _iImageTimeoutCount = 0;
 		private void m_audioPlayerControl_ValueChanged(object sender, EventArgs e)
 		{
 			//m_lblTime.Text = DateTime.Now.ToString("HH:mm:ss");
