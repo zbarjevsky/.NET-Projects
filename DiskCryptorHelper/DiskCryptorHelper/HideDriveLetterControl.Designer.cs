@@ -30,6 +30,7 @@
         {
             this.m_listDriveLetters = new System.Windows.Forms.ListView();
             this.m_clmnDriveLetter = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.m_clmnDescription = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
@@ -37,7 +38,8 @@
             // 
             this.m_listDriveLetters.CheckBoxes = true;
             this.m_listDriveLetters.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.m_clmnDriveLetter});
+            this.m_clmnDriveLetter,
+            this.m_clmnDescription});
             this.m_listDriveLetters.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_listDriveLetters.FullRowSelect = true;
             this.m_listDriveLetters.GridLines = true;
@@ -53,7 +55,12 @@
             // m_clmnDriveLetter
             // 
             this.m_clmnDriveLetter.Text = "Drive:";
-            this.m_clmnDriveLetter.Width = 65;
+            this.m_clmnDriveLetter.Width = 40;
+            // 
+            // m_clmnDescription
+            // 
+            this.m_clmnDescription.Text = "Description";
+            this.m_clmnDescription.Width = 200;
             // 
             // label2
             // 
@@ -83,5 +90,6 @@
         private System.Windows.Forms.ListView m_listDriveLetters;
         private System.Windows.Forms.ColumnHeader m_clmnDriveLetter;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.ColumnHeader m_clmnDescription;
     }
 }

@@ -29,6 +29,7 @@ namespace DiskCryptorHelper
         private string _selectedDriveLetter = "";
         private RecentFilesList _recentFiles = new RecentFilesList();
         private DiskCryptor _diskCryptor = new DiskCryptor();
+        private uint _shutdownReason = 0;
 
         public FormMain(string [] cmd_line = null)
         {
@@ -71,6 +72,11 @@ namespace DiskCryptorHelper
         const int DBT_DEVNODES_CHANGED = 0x0007; //device changed
         const int DBT_DEVTYP_VOLUME = 0x00000002; // logical volume
 
+        const int WM_QUERYENDSESSION = 0x11;
+        const int ENDSESSION_CLOSEAPP = 0x00000001; //the system is being serviced, or system resources are exhausted
+        const int ENDSESSION_CRITICAL = 0x40000000; //the application is forced to shut down
+        const uint ENDSESSION_LOGOFF = 0x80000000; //the user is logging off
+
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m)
         {
@@ -97,6 +103,10 @@ namespace DiskCryptorHelper
                     }
                 }
             }
+            else if (m.Msg == WM_QUERYENDSESSION)
+            {
+                _shutdownReason = (uint)m.LParam;
+            }
 
             base.WndProc(ref m);
         }
@@ -110,19 +120,36 @@ namespace DiskCryptorHelper
 
             m_mnuFile.DropDown = m_sysIconMenu;
             m_mnuOptionsHideWhenMinimized.Checked = Settings.Default.HideWhenMinimized;
+            m_chkPreventShutdown.Checked = Settings.Default.PreventShutdown;
+            ShutdownHandler.AbortShutdownIfScheduled = m_chkPreventShutdown.Checked;
 
             _recentFiles.Update(m_mnuFileAttachVHD.DropDown, m_cmbVHD_FileName);
         }
 
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if(_shutdownReason != 0)
+            {
+                if (System.Windows.Forms.MessageBox.Show(
+                    "Shutdown in Process: WM_QUERYENDSESSION\nCancel Shutdown?", Text,
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1,
+                    System.Windows.Forms.MessageBoxOptions.ServiceNotification) == DialogResult.Yes)
+                {
+                    e.Cancel = true; //abort
+                }
+
+                if (_shutdownReason == ENDSESSION_LOGOFF)
+                {
+                }
+
+            }
 
             if (e.CloseReason == CloseReason.WindowsShutDown || 
                 e.CloseReason == CloseReason.TaskManagerClosing)
             {
                 _diskCryptor.ExecuteUnMountAll();
 
-                File.AppendAllText("C:\\Temp\\Log11.txt", DateTime.Now.ToString("u") + " - Close for: " + e.CloseReason + "\r\n");
+                File.AppendAllText("C:\\Temp\\Log11.txt", DateTime.Now.ToString("u") + " - FormMain_FormClosing: " + e.CloseReason + "\r\n");
             }
             else if(e.CloseReason == CloseReason.UserClosing) //user clicked close button
             {
@@ -149,13 +176,25 @@ namespace DiskCryptorHelper
         private void FormMain_FormClosed(object sender, FormClosedEventArgs e)
         {
             m_sysIcon.Visible = false;
+
+            ShutdownHandler.ExitMonitoringShutdown = true;
+
+            SystemEvents.SessionEnding -= SessionEndingEvtHandler;
         }
 
         private void SessionEndingEvtHandler(object sender, SessionEndingEventArgs e)
         {
-            _diskCryptor.ExecuteUnMountAll();
+            File.AppendAllText("C:\\Temp\\Log11.txt", DateTime.Now.ToString("u") + " - Session end EVENT: " + e.Reason + "\n");
 
-            File.AppendAllText("C:\\Temp\\Log11.txt", DateTime.Now.ToString("u") + " - Session end: " + e.Reason + "\n");
+            if(Settings.Default.PreventShutdown)
+            {
+                //ShutdownHandler.AbortSystemShutdown();
+            }
+            else
+            {
+
+            }
+            _diskCryptor.ExecuteUnMountAll();
         }
 
         private void ProcessCommanLine(string[] cmd_line)
@@ -215,6 +254,8 @@ namespace DiskCryptorHelper
                 m_treeDrives.Nodes.Clear();
                 m_mnuEject.DropDownItems.Clear();
                 m_btnEject.Enabled = false;
+
+                hideDriveLetterControl1.ReloadList();
 
                 foreach (UsbEject.Library.Device drive in list)
                 {
@@ -690,6 +731,13 @@ namespace DiskCryptorHelper
                 _virtualDisk.Close();
                 _virtualDisk = null;
             }, sender);
+        }
+
+        private void m_chkPreventShutdown_CheckedChanged(object sender, EventArgs e)
+        {
+            ShutdownHandler.AbortShutdownIfScheduled = m_chkPreventShutdown.Checked;
+            Settings.Default.PreventShutdown = m_chkPreventShutdown.Checked;
+            Settings.Default.Save();
         }
     }
 }

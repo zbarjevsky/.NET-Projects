@@ -46,5 +46,17 @@ namespace DiskCryptorHelper.Properties {
                 this["VHD_FileNames"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool PreventShutdown {
+            get {
+                return ((bool)(this["PreventShutdown"]));
+            }
+            set {
+                this["PreventShutdown"] = value;
+            }
+        }
     }
 }

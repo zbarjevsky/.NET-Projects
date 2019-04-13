@@ -61,6 +61,7 @@
             this.m_btnUnmountAllandBSOD = new System.Windows.Forms.Button();
             this.m_btnEject = new System.Windows.Forms.Button();
             this.m_splitMain = new System.Windows.Forms.SplitContainer();
+            this.m_chkPreventShutdown = new System.Windows.Forms.CheckBox();
             this.m_btnOpenVHD = new System.Windows.Forms.Button();
             this.m_btnDetach = new System.Windows.Forms.Button();
             this.m_chkPermanent = new System.Windows.Forms.CheckBox();
@@ -68,7 +69,6 @@
             this.m_cmbVHD_FileName = new System.Windows.Forms.ComboBox();
             this.m_btnAttachVHD = new System.Windows.Forms.Button();
             this.m_splitDisks = new System.Windows.Forms.SplitContainer();
-            this.hideDriveLetterControl1 = new DiskCryptorHelper.HideDriveLetterControl();
             this.panel1 = new System.Windows.Forms.Panel();
             this.m_treeDrives = new System.Windows.Forms.TreeView();
             this.label1 = new System.Windows.Forms.Label();
@@ -80,6 +80,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.m_status1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.m_status2 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.hideDriveLetterControl1 = new DiskCryptorHelper.HideDriveLetterControl();
             this.m_sysIconMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitMain)).BeginInit();
             this.m_splitMain.Panel1.SuspendLayout();
@@ -334,7 +335,7 @@
             // 
             this.m_btnUnmountAllandBSOD.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("m_btnUnmountAllandBSOD.BackgroundImage")));
             this.m_btnUnmountAllandBSOD.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.m_btnUnmountAllandBSOD.Location = new System.Drawing.Point(448, 60);
+            this.m_btnUnmountAllandBSOD.Location = new System.Drawing.Point(448, 46);
             this.m_btnUnmountAllandBSOD.Name = "m_btnUnmountAllandBSOD";
             this.m_btnUnmountAllandBSOD.Size = new System.Drawing.Size(89, 96);
             this.m_btnUnmountAllandBSOD.TabIndex = 14;
@@ -347,7 +348,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnEject.Location = new System.Drawing.Point(3, 3);
             this.m_btnEject.Name = "m_btnEject";
-            this.m_btnEject.Size = new System.Drawing.Size(309, 23);
+            this.m_btnEject.Size = new System.Drawing.Size(352, 23);
             this.m_btnEject.TabIndex = 0;
             this.m_btnEject.Text = "UnMount and Eject";
             this.m_btnEject.UseVisualStyleBackColor = true;
@@ -363,6 +364,7 @@
             // 
             // m_splitMain.Panel1
             // 
+            this.m_splitMain.Panel1.Controls.Add(this.m_chkPreventShutdown);
             this.m_splitMain.Panel1.Controls.Add(this.m_btnOpenVHD);
             this.m_splitMain.Panel1.Controls.Add(this.m_btnDetach);
             this.m_splitMain.Panel1.Controls.Add(this.m_chkPermanent);
@@ -385,9 +387,20 @@
             // m_splitMain.Panel2
             // 
             this.m_splitMain.Panel2.Controls.Add(this.m_splitDisks);
-            this.m_splitMain.Size = new System.Drawing.Size(984, 516);
+            this.m_splitMain.Size = new System.Drawing.Size(1084, 516);
             this.m_splitMain.SplitterDistance = 550;
             this.m_splitMain.TabIndex = 1;
+            // 
+            // m_chkPreventShutdown
+            // 
+            this.m_chkPreventShutdown.AutoSize = true;
+            this.m_chkPreventShutdown.Location = new System.Drawing.Point(456, 153);
+            this.m_chkPreventShutdown.Name = "m_chkPreventShutdown";
+            this.m_chkPreventShutdown.Size = new System.Drawing.Size(74, 30);
+            this.m_chkPreventShutdown.TabIndex = 18;
+            this.m_chkPreventShutdown.Text = "Prevent\r\nShutdown";
+            this.m_chkPreventShutdown.UseVisualStyleBackColor = true;
+            this.m_chkPreventShutdown.CheckedChanged += new System.EventHandler(this.m_chkPreventShutdown_CheckedChanged);
             // 
             // m_btnOpenVHD
             // 
@@ -433,7 +446,7 @@
             // 
             this.m_cmbVHD_FileName.Location = new System.Drawing.Point(75, 253);
             this.m_cmbVHD_FileName.Name = "m_cmbVHD_FileName";
-            this.m_cmbVHD_FileName.Size = new System.Drawing.Size(329, 20);
+            this.m_cmbVHD_FileName.Size = new System.Drawing.Size(329, 21);
             this.m_cmbVHD_FileName.TabIndex = 8;
             // 
             // m_btnAttachVHD
@@ -463,17 +476,9 @@
             this.m_splitDisks.Panel2.Controls.Add(this.panel1);
             this.m_splitDisks.Panel2.Controls.Add(this.m_treeDrives);
             this.m_splitDisks.Panel2.Controls.Add(this.label1);
-            this.m_splitDisks.Size = new System.Drawing.Size(428, 514);
-            this.m_splitDisks.SplitterDistance = 105;
+            this.m_splitDisks.Size = new System.Drawing.Size(528, 514);
+            this.m_splitDisks.SplitterDistance = 162;
             this.m_splitDisks.TabIndex = 2;
-            // 
-            // hideDriveLetterControl1
-            // 
-            this.hideDriveLetterControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hideDriveLetterControl1.Location = new System.Drawing.Point(0, 0);
-            this.hideDriveLetterControl1.Name = "hideDriveLetterControl1";
-            this.hideDriveLetterControl1.Size = new System.Drawing.Size(101, 510);
-            this.hideDriveLetterControl1.TabIndex = 0;
             // 
             // panel1
             // 
@@ -481,7 +486,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 187);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(315, 323);
+            this.panel1.Size = new System.Drawing.Size(358, 323);
             this.panel1.TabIndex = 3;
             // 
             // m_treeDrives
@@ -491,7 +496,7 @@
             this.m_treeDrives.HideSelection = false;
             this.m_treeDrives.Location = new System.Drawing.Point(0, 18);
             this.m_treeDrives.Name = "m_treeDrives";
-            this.m_treeDrives.Size = new System.Drawing.Size(315, 169);
+            this.m_treeDrives.Size = new System.Drawing.Size(358, 169);
             this.m_treeDrives.TabIndex = 1;
             this.m_treeDrives.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.m_treeDrives_AfterSelect);
             // 
@@ -500,7 +505,7 @@
             this.label1.Dock = System.Windows.Forms.DockStyle.Top;
             this.label1.Location = new System.Drawing.Point(0, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(315, 18);
+            this.label1.Size = new System.Drawing.Size(358, 18);
             this.label1.TabIndex = 0;
             this.label1.Text = "Plugged USB Drives:";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -512,7 +517,7 @@
             this.m_mnuOptions});
             this.m_menuStripMain.Location = new System.Drawing.Point(0, 0);
             this.m_menuStripMain.Name = "m_menuStripMain";
-            this.m_menuStripMain.Size = new System.Drawing.Size(984, 24);
+            this.m_menuStripMain.Size = new System.Drawing.Size(1084, 24);
             this.m_menuStripMain.TabIndex = 0;
             this.m_menuStripMain.Text = "menuStrip1";
             // 
@@ -552,7 +557,7 @@
             this.m_status2});
             this.statusStrip1.Location = new System.Drawing.Point(0, 540);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(984, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(1084, 22);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -565,15 +570,23 @@
             // m_status2
             // 
             this.m_status2.Name = "m_status2";
-            this.m_status2.Size = new System.Drawing.Size(930, 17);
+            this.m_status2.Size = new System.Drawing.Size(1030, 17);
             this.m_status2.Spring = true;
             this.m_status2.Text = "...";
+            // 
+            // hideDriveLetterControl1
+            // 
+            this.hideDriveLetterControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.hideDriveLetterControl1.Location = new System.Drawing.Point(0, 0);
+            this.hideDriveLetterControl1.Name = "hideDriveLetterControl1";
+            this.hideDriveLetterControl1.Size = new System.Drawing.Size(158, 510);
+            this.hideDriveLetterControl1.TabIndex = 0;
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(984, 562);
+            this.ClientSize = new System.Drawing.Size(1084, 562);
             this.Controls.Add(this.m_splitMain);
             this.Controls.Add(this.m_menuStripMain);
             this.Controls.Add(this.statusStrip1);
@@ -658,6 +671,7 @@
         private HideDriveLetterControl hideDriveLetterControl1;
         private System.Windows.Forms.Button m_btnDetach;
         private System.Windows.Forms.Button m_btnOpenVHD;
+        public System.Windows.Forms.CheckBox m_chkPreventShutdown;
     }
 }
 

@@ -1,6 +1,9 @@
-﻿using sD.WPF.MessageBox;
+﻿using DiskCryptorHelper.Properties;
+using Microsoft.Win32;
+using sD.WPF.MessageBox;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -20,7 +23,18 @@ namespace DiskCryptorHelper
 
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormMain(cmd_line));
+
+            try
+            {
+                Application.Run(new FormMain(cmd_line));
+            }
+            catch (Exception err)
+            {
+                Debug.WriteLine(err);
+            }
+            finally
+            {
+            }
         }
     }
 }
