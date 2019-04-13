@@ -35,6 +35,9 @@ namespace DiskCryptorHelper
                 {
                     if (AbortShutdownIfScheduled)
                     {
+                        //will return non 0 if succeded
+                        //if error - do nothing - no event log entry recorded
+                        //do no use 'InitiateShutdown' it writes event log entry
                         if (AbortSystemShutdown(null) != 0) //shutdown aborted
                         {
                             File.AppendAllText("C:\\Temp\\Log11.txt",

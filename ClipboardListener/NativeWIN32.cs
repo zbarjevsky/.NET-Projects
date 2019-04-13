@@ -471,11 +471,13 @@ namespace ClipboardManager
 			WM_USER = 0x0400,
 			WM_REFLECT = WM_USER + 0x1c00
 		}//end enum WindowMessages
-		#endregion Windows - user32.dll
+        #endregion Windows - user32.dll
 
-		#region Spy
+        #region Spy
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern uint GetWindowThreadProcessId(IntPtr hWnd, out uint processId);
 
-		[DllImport("User32.dll")]
+        [DllImport("User32.dll")]
 		public static extern int GetClassName(HWND hWnd, StringBuilder lpClassName, int nMaxCount);
 
 		[DllImport("user32.dll")]

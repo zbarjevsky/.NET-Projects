@@ -29,28 +29,6 @@ namespace ClipboardManager
 		private Cursor _cursorFinder;
 		private IntPtr _hPreviousWindow;
 
-		private Button m_btnOK;
-		private Button m_btnCancel;
-		private PictureBox m_picFinder;
-		private Label m_lblFinder;
-		private Label m_lblDescription;
-		private TextBox m_txtRect;
-		private TextBox m_txtStyle;
-		private Label m_lblRect;
-		private Label m_lblStyle;
-		private Label m_lblCaption;
-		private TextBox m_txtHandle;
-		private TextBox m_txtClass;
-		private Label m_lblHandle;
-		private TextBox m_txtCaption;
-		private Label m_lblClass;
-		private Button m_btnAdvanced;
-		private ImageList m_imageList_btnAdvanced;
-		private Panel m_pnlAdvanced;
-		private Panel m_pnlMain;
-		private CheckBox m_chkOnTop;
-		private TrackBar m_sliderTransparency;
-
 		/// <summary>
 		/// Initializes a new instance of the SpyWindow class
 		/// </summary>
@@ -189,7 +167,9 @@ namespace ClipboardManager
 					// save the window we're over
 					_hPreviousWindow = hWnd;
 
-					m_txtHandle.Text = string.Format("{0}", hWnd.ToInt32().ToString());
+                    m_txtProcess.Text = GetProcessPath(hWnd);
+
+                    m_txtHandle.Text = string.Format("{0}", hWnd.ToInt32().ToString());
 
 					m_txtClass.Text = this.GetClassName(hWnd);
 
@@ -258,5 +238,22 @@ namespace ClipboardManager
 			this.Opacity = m_sliderTransparency.Value / 100F;
 		}
 
-	}//end class FormSpyWindow
+        private void m_btBrowseProcess_Click(object sender, EventArgs e)
+        {
+            Process.Start(Path.GetDirectoryName(m_txtProcess.Text));
+        }
+
+        private string GetProcessPath(IntPtr hWnd)
+        {
+            Process process = GetWindowProcess(hWnd);
+            return process.MainModule.FileName;
+        }
+
+        private Process GetWindowProcess(IntPtr hWnd)
+        {
+            uint processId;
+            NativeWIN32.GetWindowThreadProcessId(hWnd, out processId);
+            return Process.GetProcessById((int)processId);
+        }
+    }//end class FormSpyWindow
 }//end namespace ClipboardListener
