@@ -15,6 +15,7 @@ namespace MeditationStopWatch
     public class PlayList
     {
         public string Name { get; set; } = "Music";
+
         public List<string> List { get; set; } = new List<string>();
 
         public override string ToString()
@@ -23,7 +24,36 @@ namespace MeditationStopWatch
         }
     }
 
-	[DefaultProperty("Interface")] //will show this property as selected value
+    [Serializable]
+    public class PlayLists
+    {
+        public List<PlayList> Collection { get; set; } = new List<PlayList>();
+
+        public PlayLists()
+        {
+            Collection.Add(new PlayList());
+        }
+
+        public int Count { get { return Collection.Count; } }
+
+        public PlayList this[int idx] { get { return Collection[idx]; } }
+
+        public void Add(PlayList list) { Collection.Add(list); }
+
+        public void RemoveAt(int idx) { Collection.RemoveAt(idx); }
+
+        public override string ToString()
+        {
+            string txt = "O: ";
+            foreach (PlayList list in Collection)
+            {
+                txt += list.Name + ", ";
+            }
+            return txt;
+        }
+    }
+
+    [DefaultProperty("Interface")] //will show this property as selected value
 	public class Options
 	{
 		public Options()
@@ -42,11 +72,11 @@ namespace MeditationStopWatch
 			}
 		}
 
-		[Category("1. Play List")]
-		[DisplayName("Play List")]
-		[Description("Last Play List")]
-		[DefaultValue(new string[] { })]
-		public string[] PlayList { get; set; }
+		//[Category("1. Play List")]
+		//[DisplayName("Play List")]
+		//[Description("Last Play List")]
+		//[DefaultValue(new string[] { })]
+		//public string[] PlayList { get; set; }
 
         [Category("1. Play List")]
         [DisplayName("Favorites List")]
@@ -57,7 +87,8 @@ namespace MeditationStopWatch
         [Category("1. Play List")]
         [DisplayName("Play List Collection")]
         [Description("Last Play List Collections")]
-        public List<PlayList> PlayListCollection { get; set; } = new List<PlayList>() { new PlayList() };
+        [TypeConverter(typeof(PlayListsTypeConverter))]
+        public PlayLists PlayListCollection { get; set; } = new PlayLists();
 
         [Category("2. Misc")]
 		[DisplayName("Last Image")]
@@ -170,5 +201,78 @@ namespace MeditationStopWatch
         [Description("Options Description Background color")]
         [DefaultValue(typeof(Color), "Info")]
         public Color Background { get; set; }
+    }
+
+    public class PlayListsTypeConverter : TypeConverter
+    {
+        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        {
+            if (destinationType == typeof(string))
+            {
+                if (value is PlayList)
+                {
+                    PlayList list = value as PlayList;
+                    return list.Name + ": " + list.List.Count;
+                }
+
+                if (value is PlayLists)
+                {
+                    PlayLists collection = value as PlayLists;
+                    return collection.ToString();
+                }
+            }
+
+            return base.ConvertTo(context, culture, value, destinationType);
+        }
+
+        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
+        {
+            return true;
+        }
+
+        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
+        {
+            List<PropertyDescriptor> list = new List<PropertyDescriptor>();
+            //if (value is PlayList)
+            //{
+            //    PlayList play_list = value as PlayList;
+            //    foreach (string file in play_list.List)
+            //    {
+            //        list.Add(new PlayListPropertyDescriptor());
+            //    }
+            //}
+
+            if (value is PlayLists)
+            {
+                PlayLists collection = value as PlayLists;
+                foreach (PlayList i in collection.Collection)
+                {
+                    list.Add(new PlayListPropertyDescriptor(i));
+                }
+            }
+
+            return new PropertyDescriptorCollection(list.ToArray());
+        }
+
+        private class PlayListPropertyDescriptor : SimplePropertyDescriptor
+        {
+            public PlayListPropertyDescriptor(PlayList play_list)
+                : base(play_list.GetType(), play_list.ToString(), typeof(string))
+            {
+                PlayList = play_list;
+            }
+
+            public PlayList PlayList { get; private set; }
+
+            public override object GetValue(object component)
+            {
+                return PlayList.Name;
+            }
+
+            public override void SetValue(object component, object value)
+            {
+                PlayList.Name = (string)value;
+            }
+        }
     }
 }
