@@ -17,32 +17,32 @@ namespace AnalogClockControl
 	/// </summary>
 	public class AnalogClock : PictureBox
 	{
-		const float PI=3.141592654F;
+        const double DEGREE_TO_RAD = Math.PI / 180.0;
+        const double DEGREE90_TO_RAD = Math.PI / 2;
 
-		DateTime dateTime;
+        DateTime dateTime;
 
-		float fRadius;
-		float fCenterX;
-		float fCenterY;
-		float fCenterCircleRadius;
+		float _fRadius;
+        PointF _Center;
+		float _fCenterCircleRadius;
 
-		float fHourLength;
-		float fMinLength;
-		float fSecLength;
+		float _fHourLength;
+		float _fMinLength;
+		float _fSecLength;
 
-		float fHourThickness;
-		float fMinThickness;
-		float fSecThickness;
-		float fTicksThickness;
+		float _fHourThickness;
+		float _fMinThickness;
+		float _fSecThickness;
+		float _fTicksThickness;
 
-		bool bDraw5MinuteTicks=true;
-		bool bDraw1MinuteTicks=true;
+		bool _bDraw5MinuteTicks=true;
+		bool _bDraw1MinuteTicks=true;
 
-		Color hrColor=Color.DarkMagenta ;
-		Color minColor=Color.Green ;
-		Color secColor=Color.Red ;
-		Color circleColor=Color.Red;
-		Color ticksColor=Color.Black;
+		Color _hrColor=Color.DarkMagenta ;
+		Color _minColor=Color.Green ;
+		Color _secColor=Color.Red ;
+		Color _circleColor=Color.Red;
+		Color _ticksColor=Color.Black;
 
 		private System.Windows.Forms.Timer timer1;
 		private System.ComponentModel.IContainer components;
@@ -127,65 +127,74 @@ namespace AnalogClockControl
 			timer1.Enabled=false;
 		}
 
-		private void DrawLine(float fThickness, float fLength, Color color, float fRadians, System.Windows.Forms.PaintEventArgs e)
+		private void DrawLine(float fThickness, float fLength, Color color, double fRadians, System.Windows.Forms.PaintEventArgs e)
 		{
 			e.Graphics.DrawLine(new Pen( color, fThickness ),
-				fCenterX - (float)(fLength/9*System.Math.Sin(fRadians)), 
-				fCenterY + (float)(fLength/9*System.Math.Cos(fRadians)), 
-				fCenterX + (float)(fLength*System.Math.Sin(fRadians)), 
-				fCenterY - (float)(fLength*System.Math.Cos(fRadians)));
+				_Center.X - (float)(fLength/9*System.Math.Sin(fRadians)), 
+				_Center.Y + (float)(fLength/9*System.Math.Cos(fRadians)), 
+				_Center.X + (float)(fLength*System.Math.Sin(fRadians)), 
+				_Center.Y - (float)(fLength*System.Math.Cos(fRadians)));
 		}
 
 		private void DrawTicsLine(Graphics g, int minute, float f1, float f2)
 		{
-			g.DrawLine(new Pen(ticksColor, fTicksThickness),
-				fCenterX + (float)(this.fRadius / f1 * System.Math.Sin(minute * 6 * PI / 180)),
-				fCenterY - (float)(this.fRadius / f1 * System.Math.Cos(minute * 6 * PI / 180)),
-				fCenterX + (float)(this.fRadius / f2 * System.Math.Sin(minute * 6 * PI / 180)),
-				fCenterY - (float)(this.fRadius / f2 * System.Math.Cos(minute * 6 * PI / 180)));
+			g.DrawLine(new Pen(_ticksColor, _fTicksThickness),
+				_Center.X + (float)(this._fRadius / f1 * System.Math.Sin(minute * 6 * DEGREE_TO_RAD)),
+				_Center.Y - (float)(this._fRadius / f1 * System.Math.Cos(minute * 6 * DEGREE_TO_RAD)),
+				_Center.X + (float)(this._fRadius / f2 * System.Math.Sin(minute * 6 * DEGREE_TO_RAD)),
+				_Center.Y - (float)(this._fRadius / f2 * System.Math.Cos(minute * 6 * DEGREE_TO_RAD)));
 		}
 
-		private void DrawPolygon(float fThickness, float fLength, Color color, float fRadians, System.Windows.Forms.PaintEventArgs e)
+		private void DrawAngledClockHand(float fThickness, float fLength, Color color, double fAngle, System.Windows.Forms.PaintEventArgs e)
 		{
+			PointF bottom = new PointF( (float)(_Center.X - fThickness * 4 * System.Math.Sin(fAngle)), 
+				                 (float)(_Center.Y + fThickness * 4 * System.Math.Cos(fAngle) ));
+			PointF bottomRight = new PointF( (float)(_Center.X + fThickness * 2 * System.Math.Sin(fAngle + DEGREE90_TO_RAD)), 
+				                 (float)(_Center.Y - fThickness * 2 * System.Math.Cos(fAngle + DEGREE90_TO_RAD)) );
+			PointF bottomLeft = new PointF( (float)(_Center.X + fThickness * 2 * System.Math.Sin(fAngle - DEGREE90_TO_RAD)),
+				                 (float)(_Center.Y - fThickness * 2 * System.Math.Cos(fAngle - DEGREE90_TO_RAD)) );
 
-			PointF A=new PointF( (float)(fCenterX+ fThickness*2*System.Math.Sin(fRadians+PI/2)), 
-				(float)(fCenterY - fThickness*2*System.Math.Cos(fRadians+PI/2)) );
-			PointF B=new PointF( (float)(fCenterX+ fThickness*2*System.Math.Sin(fRadians-PI/2)),
-				(float)(fCenterY - fThickness*2*System.Math.Cos(fRadians-PI/2)) );
-			PointF C=new PointF( (float)(fCenterX+ fLength*System.Math.Sin(fRadians)), 
-				(float) (fCenterY - fLength*System.Math.Cos(fRadians)) );
-			PointF D=new PointF( (float)(fCenterX- fThickness*4*System.Math.Sin(fRadians)), 
-				(float)(fCenterY + fThickness*4*System.Math.Cos(fRadians) ));
-			PointF[] points={A,D,B,C};
-			e.Graphics.FillPolygon( new SolidBrush(color), points );
+            PointF top = new PointF((float)(_Center.X + fLength * System.Math.Sin(fAngle)),
+                                    (float)(_Center.Y - fLength * System.Math.Cos(fAngle)));
+
+            PointF topCenter = new PointF((float)(_Center.X + (fLength - fThickness) * System.Math.Sin(fAngle)),
+                                          (float)(_Center.Y - (fLength - fThickness) * System.Math.Cos(fAngle)));
+            PointF topRight = new PointF((float)(topCenter.X + fThickness * System.Math.Sin(fAngle + DEGREE90_TO_RAD)),
+                                         (float)(topCenter.Y - fThickness * System.Math.Cos(fAngle + DEGREE90_TO_RAD)));
+            PointF topLeft = new PointF((float)(topCenter.X + fThickness * System.Math.Sin(fAngle - DEGREE90_TO_RAD)),
+                                        (float)(topCenter.Y - fThickness * System.Math.Cos(fAngle - DEGREE90_TO_RAD)));
+
+            PointF[] points={bottomRight,bottom,bottomLeft,topLeft, top, topRight};
+
+            e.Graphics.FillPolygon( new SolidBrush(color), points );
 		}
 
 		private void AnalogClock_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
 		{
-			float fRadHr=(dateTime.Hour%12+dateTime.Minute/60F) *30*PI/180;
-			float fRadMin=(dateTime.Minute)*6*PI/180;
-			float fRadSec=(dateTime.Second)*6*PI/180;
+			double fRadHr=(dateTime.Hour%12+dateTime.Minute/60F) * 30 * DEGREE_TO_RAD;
+            double fRadMin =(dateTime.Minute + dateTime.Second/60F) * 6 * DEGREE_TO_RAD;
+            double fRadSec =(dateTime.Second) * 6 * DEGREE_TO_RAD;
 
 			e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
 
 			for(int i=0;i<60;i++)
 			{
-				if ( this.bDraw5MinuteTicks==true && i%5==0 ) // Draw 5 minute ticks
+				if ( this._bDraw5MinuteTicks==true && i%5==0 ) // Draw 5 minute ticks
 				{
 					DrawTicsLine(e.Graphics, i, 1.00F, 1.25F);
 				}
-				else if ( this.bDraw1MinuteTicks==true ) // draw 1 minute ticks
+				else if ( this._bDraw1MinuteTicks==true ) // draw 1 minute ticks
 				{
 					DrawTicsLine(e.Graphics, i, 1.0F, 1.05F);
 				}
 			}
 
-			DrawPolygon(this.fHourThickness, this.fHourLength, hrColor, fRadHr, e);
-			DrawPolygon(this.fMinThickness, this.fMinLength, minColor, fRadMin, e);
-			DrawLine(this.fSecThickness, this.fSecLength, secColor, fRadSec, e);
+			DrawAngledClockHand(this._fHourThickness, this._fHourLength, _hrColor, fRadHr, e);
+            DrawAngledClockHand(this._fMinThickness, this._fMinLength, _minColor, fRadMin, e);
+			DrawLine(this._fSecThickness, this._fSecLength, _secColor, fRadSec, e);
 
 			//draw circle at center
-			e.Graphics.FillEllipse( new SolidBrush( circleColor ), fCenterX-fCenterCircleRadius/2, fCenterY-fCenterCircleRadius/2, fCenterCircleRadius, fCenterCircleRadius);
+			e.Graphics.FillEllipse( new SolidBrush( _circleColor ), _Center.X-_fCenterCircleRadius/2, _Center.Y-_fCenterCircleRadius/2, _fCenterCircleRadius, _fCenterCircleRadius);
 		}
 
 		private void AnalogClock_Resize(object sender, System.EventArgs e)
@@ -193,56 +202,56 @@ namespace AnalogClockControl
             //this.Width = this.Height;
             float diameter = Math.Min(Width, Height) - this.Margin.Left;
 
-			this.fRadius = diameter / 2;
-			this.fCenterX = this.ClientSize.Width/2;
-			this.fCenterY = this.ClientSize.Height/2;
-			this.fHourLength = (float)diameter / 2/1.65F;
-			this.fMinLength = (float)diameter / 2/1.20F;
-			this.fSecLength = (float)diameter / 2/1.05F;
-			this.fHourThickness = (float)diameter / 100;
-			this.fMinThickness = (float)diameter / 150;
-			this.fSecThickness = (float)diameter / 200;
-			this.fTicksThickness = fSecThickness;
-			this.fCenterCircleRadius = diameter / 50;
+			this._fRadius = diameter / 2F;
+			this._Center.X = this.ClientSize.Width/2F;
+			this._Center.Y = this.ClientSize.Height/2F;
+			this._fHourLength = _fRadius * 0.65F;
+			this._fMinLength = _fRadius * 0.93F;
+			this._fSecLength = _fRadius * 0.95F;
+            this._fHourThickness = diameter / 100F;
+			this._fMinThickness = diameter / 150F;
+			this._fSecThickness = diameter / 200F;
+			this._fTicksThickness = _fSecThickness;
+			this._fCenterCircleRadius = diameter / 50F;
 
 			this.Refresh();
 		}
 	
 		public Color HourHandColor
 		{
-			get { return this.hrColor; }
-			set { this.hrColor=value; }
+			get { return this._hrColor; }
+			set { this._hrColor=value; }
 		}
 
 		public Color MinuteHandColor
 		{
-			get { return this.minColor; }
-			set { this.minColor=value; }
+			get { return this._minColor; }
+			set { this._minColor=value; }
 		}
 
 		public Color SecondHandColor
 		{
-			get { return this.secColor; }
-			set { this.secColor=value;
-				  this.circleColor=value; }
+			get { return this._secColor; }
+			set { this._secColor=value;
+				  this._circleColor=value; }
 		}
 
 		public Color TicksColor
 		{
-			get { return this.ticksColor; }
-			set { this.ticksColor=value; }
+			get { return this._ticksColor; }
+			set { this._ticksColor=value; }
 		}
 
 		public bool Draw1MinuteTicks
 		{
-			get { return this.bDraw1MinuteTicks; }
-			set { this.bDraw1MinuteTicks=value; }
+			get { return this._bDraw1MinuteTicks; }
+			set { this._bDraw1MinuteTicks=value; }
 		}
 
 		public bool Draw5MinuteTicks
 		{
-			get { return this.bDraw5MinuteTicks; }
-			set { this.bDraw5MinuteTicks=value; }
+			get { return this._bDraw5MinuteTicks; }
+			set { this._bDraw5MinuteTicks=value; }
 		}
 
 	}
