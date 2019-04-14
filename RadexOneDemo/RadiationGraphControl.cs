@@ -97,7 +97,7 @@ namespace RadexOneDemo
                 }
                 else
                 {
-                    int newPos = (int)(m_hScrollBarZoom.Maximum * oldPos / (double)oldMax);
+                    int newPos = (int)(m_hScrollBarZoom.Maximum * (oldPos / (double)oldMax));
                     m_hScrollBarZoom.Value = newPos; //restore pos
                 }
             }
