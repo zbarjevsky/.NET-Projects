@@ -40,8 +40,7 @@ namespace DiskCryptorHelper
                         //do no use 'InitiateShutdown' it writes event log entry
                         if (AbortSystemShutdown(null) != 0) //shutdown aborted
                         {
-                            File.AppendAllText("C:\\Temp\\Log11.txt",
-                                DateTime.Now.ToString("u") + " - Shutdown schedule was detected and aborted!!!\r\n");
+                            Log.WriteLine("Shutdown schedule was detected and aborted!!!\r\n");
                         }
                     }
 
@@ -50,7 +49,7 @@ namespace DiskCryptorHelper
                 catch (Exception err)
                 {
                     Win32Exception error = new Win32Exception(Marshal.GetLastWin32Error());
-                    Debug.WriteLine("ShutdownMonitoring: " + err.ToString());
+                    Log.WriteLine("ShutdownMonitoring exception: " + err.ToString());
                 }
             }
         }
@@ -71,14 +70,12 @@ namespace DiskCryptorHelper
             else if (error_code == ERROR_SHUTDOWN_IS_SCHEDULED) //this is what I am expecting to abort
             {
                 AbortSystemShutdown(null);
-                File.AppendAllText("C:\\Temp\\Log11.txt",
-                    DateTime.Now.ToString("u") + " - Shutdown schedule was detected and aborted!!!\r\n");
+                Log.WriteLine("Shutdown schedule was detected and aborted!!!\r\n");
             }
             else
             {
                 Win32Exception e = new Win32Exception(error_code);
-                File.AppendAllText("C:\\Temp\\Log11.txt", 
-                    DateTime.Now.ToString("u") + " - Error Detecting Shutdown: " + e.Message + "\r\n");
+                Log.WriteLine("Error Detecting Shutdown: " + e.Message + "\r\n");
             }
         }
 

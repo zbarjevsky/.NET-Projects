@@ -106,6 +106,8 @@ namespace DiskCryptorHelper
             else if (m.Msg == WM_QUERYENDSESSION)
             {
                 _shutdownReason = (uint)m.LParam;
+                Log.WriteLine("WndProc: WM_QUERYENDSESSION, LParam:" + _shutdownReason);
+                if (_shutdownReason == 0) _shutdownReason = ENDSESSION_CLOSEAPP;
             }
 
             base.WndProc(ref m);
@@ -130,18 +132,27 @@ namespace DiskCryptorHelper
         {
             if(_shutdownReason != 0)
             {
+                if (_shutdownReason == ENDSESSION_LOGOFF)
+                {
+                    Log.WriteLine("FormMain_FormClosing: LParam: ENDSESSION_LOGOFF");
+                }
+                else if (_shutdownReason == ENDSESSION_CRITICAL)
+                {
+                    Log.WriteLine("FormMain_FormClosing: LParam: ENDSESSION_CRITICAL");
+                }
+                else if (_shutdownReason == ENDSESSION_CLOSEAPP)
+                {
+                    Log.WriteLine("FormMain_FormClosing: LParam: ENDSESSION_CLOSEAPP");
+                }
+
                 if (System.Windows.Forms.MessageBox.Show(
                     "Shutdown in Process: WM_QUERYENDSESSION\nCancel Shutdown?", Text,
                     MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1,
                     System.Windows.Forms.MessageBoxOptions.ServiceNotification) == DialogResult.Yes)
                 {
                     e.Cancel = true; //abort
+                    ShutdownHandler.AbortSystemShutdown("");
                 }
-
-                if (_shutdownReason == ENDSESSION_LOGOFF)
-                {
-                }
-
             }
 
             if (e.CloseReason == CloseReason.WindowsShutDown || 
@@ -149,7 +160,7 @@ namespace DiskCryptorHelper
             {
                 _diskCryptor.ExecuteUnMountAll();
 
-                File.AppendAllText("C:\\Temp\\Log11.txt", DateTime.Now.ToString("u") + " - FormMain_FormClosing: " + e.CloseReason + "\r\n");
+                Log.WriteLine("FormMain_FormClosing: " + e.CloseReason);
             }
             else if(e.CloseReason == CloseReason.UserClosing) //user clicked close button
             {
@@ -184,7 +195,7 @@ namespace DiskCryptorHelper
 
         private void SessionEndingEvtHandler(object sender, SessionEndingEventArgs e)
         {
-            File.AppendAllText("C:\\Temp\\Log11.txt", DateTime.Now.ToString("u") + " - Session end EVENT: " + e.Reason + "\n");
+            Log.WriteLine("Session end EVENT: " + e.Reason);
 
             if(Settings.Default.PreventShutdown)
             {
