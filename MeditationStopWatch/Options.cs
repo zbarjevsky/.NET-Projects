@@ -8,10 +8,14 @@ using System.ComponentModel;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
+using System.Drawing.Design;
+using System.IO;
+using System.Reflection;
 
 namespace MeditationStopWatch
 {
     [Serializable]
+    [TypeConverter(typeof(PlayListTypeConverter))]
     public class PlayList
     {
         public string Name { get; set; } = "Music";
@@ -21,6 +25,86 @@ namespace MeditationStopWatch
         public override string ToString()
         {
             return Name;
+        }
+
+        internal class PlayListTypeConverter : ExpandableObjectConverter
+        {
+            public override object ConvertTo(ITypeDescriptorContext context,
+                                             CultureInfo culture,
+                                             object value,
+                                             Type destinationType)
+            {
+
+                if (destinationType == typeof(string) && value != null)
+                {
+                    return value.ToString();
+                }
+                return base.ConvertTo(context, culture, value, destinationType);
+            }
+
+            public override bool GetPropertiesSupported(ITypeDescriptorContext context)
+            {
+                return true;
+            }
+
+            public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
+            {
+                List<PropertyDescriptor> list = new List<PropertyDescriptor>();
+                if (value is PlayList)
+                {
+                    PlayList play_list = value as PlayList;
+                    for (int i = 0; i < play_list.List.Count; i++)
+                    {
+                        list.Add(new PlayListPropertyDescriptor(play_list, i));
+                    }
+                }
+
+                return new PropertyDescriptorCollection(list.ToArray());
+            }
+
+            private class PlayListPropertyDescriptor : PropertyDescriptor
+            {
+                private PlayList _play_list = null;
+                private int _idx = -1;
+
+                public PlayListPropertyDescriptor(PlayList play_list, int idx)
+                    : base("#" + idx, null)
+                {
+                    _play_list = play_list;
+                    _idx = idx;
+                }
+
+                public override string Name
+                {
+                    get { return "#" + _idx + ". " + _play_list.Name; }
+                }
+
+                public override Type ComponentType { get { return null; } }
+
+                public override string DisplayName
+                {
+                    get
+                    {
+                        return string.Format("File {0}", _idx+1);
+                    }
+                }
+
+                public override string Description { get { return "Music File"; } }
+
+                public override bool CanResetValue(object component) { return true; }
+
+                public override object GetValue(object component) { return this._play_list.List[_idx]; }
+
+                public override void ResetValue(object component) { }
+
+                public override void SetValue(object component, object value) { this._play_list.List[_idx] = (string)value; }
+
+                public override bool ShouldSerializeValue(object component) { return true; }
+
+                public override bool IsReadOnly { get { return false; } }
+
+                public override Type PropertyType { get { return this._play_list.List[_idx].GetType(); } }
+            }
         }
     }
 
@@ -72,12 +156,6 @@ namespace MeditationStopWatch
 			}
 		}
 
-		//[Category("1. Play List")]
-		//[DisplayName("Play List")]
-		//[Description("Last Play List")]
-		//[DefaultValue(new string[] { })]
-		//public string[] PlayList { get; set; }
-
         [Category("1. Play List")]
         [DisplayName("Favorites List")]
         [Description("Favorites List")]
@@ -93,7 +171,10 @@ namespace MeditationStopWatch
         [Category("2. Misc")]
 		[DisplayName("Last Image")]
 		[Description("Image")]
-		public string LastImageFile { get; set; }
+        [System.ComponentModel.Editor(
+            typeof(System.Windows.Forms.Design.FileNameEditor), 
+            typeof(System.Drawing.Design.UITypeEditor))]
+        public string LastImageFile { get; set; }
 
 		[Category("2. Misc")]
 		[Description("Start up sound Voulume")]
@@ -233,45 +314,148 @@ namespace MeditationStopWatch
         public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
         {
             List<PropertyDescriptor> list = new List<PropertyDescriptor>();
-            //if (value is PlayList)
-            //{
-            //    PlayList play_list = value as PlayList;
-            //    foreach (string file in play_list.List)
-            //    {
-            //        list.Add(new PlayListPropertyDescriptor());
-            //    }
-            //}
-
             if (value is PlayLists)
             {
                 PlayLists collection = value as PlayLists;
-                foreach (PlayList i in collection.Collection)
+                for(int i = 0; i<collection.Count; i++)
                 {
-                    list.Add(new PlayListPropertyDescriptor(i));
+                    list.Add(new PlayListsPropertyDescriptor(collection, i));
                 }
             }
 
             return new PropertyDescriptorCollection(list.ToArray());
         }
 
-        private class PlayListPropertyDescriptor : SimplePropertyDescriptor
+        private class PlayListsPropertyDescriptor : PropertyDescriptor
         {
-            public PlayListPropertyDescriptor(PlayList play_list)
-                : base(play_list.GetType(), play_list.ToString(), typeof(string))
+            private PlayLists _collection = null;
+            private int _idx = -1;
+
+            public PlayListsPropertyDescriptor(PlayLists collection, int idx)
+                : base("#" + idx, null)
             {
-                PlayList = play_list;
+                _collection = collection;
+                _idx = idx;
             }
 
-            public PlayList PlayList { get; private set; }
-
-            public override object GetValue(object component)
+            public override string Name
             {
-                return PlayList.Name;
+                get { return "#" + _idx + ". " + _collection[_idx].Name; }
             }
 
-            public override void SetValue(object component, object value)
+            public override Type ComponentType { get { return null; } }
+
+            public override string DisplayName
             {
-                PlayList.Name = (string)value;
+                get
+                {
+                    PlayList list = this._collection[_idx];
+                    return string.Format("{0} ({1})", list.Name, list.List.Count);
+                }
+            }
+
+            public override string Description { get { return "mp3 File List"; } }
+
+            public override bool CanResetValue(object component) { return true; }
+
+            public override object GetValue(object component) { return this._collection[_idx]; }
+
+            public override void ResetValue(object component){ }
+
+            public override void SetValue(object component, object value) { }
+
+            public override bool ShouldSerializeValue(object component) {  return true; }
+
+            public override bool IsReadOnly { get { return false; } }
+
+            public override Type PropertyType { get { return this._collection[_idx].GetType(); } }
+        }
+    }
+    public static class PropertyGridExtensions
+    {
+        /// <summary>
+        /// Gets the (private) PropertyGridView instance.
+        /// </summary>
+        /// <param name="propertyGrid">The property grid.</param>
+        /// <returns>The PropertyGridView instance.</returns>
+        private static object GetPropertyGridView(PropertyGrid propertyGrid)
+        {
+            //private PropertyGridView GetPropertyGridView();
+            //PropertyGridView is an internal class...
+            Type type = typeof(PropertyGrid);
+            BindingFlags flags = BindingFlags.GetField | BindingFlags.NonPublic | BindingFlags.Instance;
+            object propertyGridView = type.InvokeMember("gridView", flags, null, propertyGrid, null);
+            return propertyGridView;
+        }
+
+        /// <summary>
+        /// Gets the width of the left column.
+        /// </summary>
+        /// <param name="propertyGrid">The property grid.</param>
+        /// <returns>
+        /// The width of the left column.
+        /// </returns>
+        public static int GetInternalLabelWidth(this PropertyGrid propertyGrid)
+        {
+            //System.Windows.Forms.PropertyGridInternal.PropertyGridView
+            object gridView = GetPropertyGridView(propertyGrid);
+
+            const BindingFlags flags = BindingFlags.GetField | BindingFlags.NonPublic | BindingFlags.Instance;
+
+            //protected int InternalLabelWidth
+            PropertyInfo prop = gridView.GetType().GetProperty("InternalLabelWidth", flags);
+            object internalLabelWidth = prop.GetValue(gridView, BindingFlags.GetProperty, null, null, null);
+            return (int)internalLabelWidth;
+        }
+
+        /// <summary>
+        /// Moves the splitter to the supplied horizontal position.
+        /// </summary>
+        /// <param name="propertyGrid">The property grid.</param>
+        /// <param name="xpos">The horizontal position.</param>
+        public static void MoveSplitterTo(this PropertyGrid propertyGrid, int xpos)
+        {
+            //System.Windows.Forms.PropertyGridInternal.PropertyGridView
+            object gridView = GetPropertyGridView(propertyGrid);
+
+            //private void MoveSplitterTo(int xpos);
+            const BindingFlags flags = BindingFlags.InvokeMethod | BindingFlags.NonPublic | BindingFlags.Instance;
+            Type type = gridView.GetType();
+            MethodInfo method = type.GetMethod("MoveSplitterTo", flags);
+
+            method.Invoke(gridView, new Object[] { xpos });
+        }
+
+        public static IEnumerable<GridItem> EnumerateAllItems(this PropertyGrid grid)
+        {
+            if (grid == null)
+                yield break;
+
+            // get to root item
+            GridItem start = grid.SelectedGridItem;
+            while (start.Parent != null)
+            {
+                start = start.Parent;
+            }
+
+            foreach (GridItem item in start.EnumerateAllItems())
+            {
+                yield return item;
+            }
+        }
+
+        public static IEnumerable<GridItem> EnumerateAllItems(this GridItem item)
+        {
+            if (item == null)
+                yield break;
+
+            yield return item;
+            foreach (GridItem child in item.GridItems)
+            {
+                foreach (GridItem gc in child.EnumerateAllItems())
+                {
+                    yield return gc;
+                }
             }
         }
     }
