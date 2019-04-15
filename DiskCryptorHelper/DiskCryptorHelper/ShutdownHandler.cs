@@ -27,6 +27,11 @@ namespace DiskCryptorHelper
             SetPrivilege("SeShutdownPrivilege", 2);
         }
 
+        public static int AbortSystemShutdown(string lpMachineName = "")
+        {
+            return Win32_Shutdown.AbortSystemShutdown(lpMachineName);
+        }
+
         private static void MonitoringShutdownEvent()
         {
             while (!ExitMonitoringShutdown)
@@ -40,7 +45,7 @@ namespace DiskCryptorHelper
                         //do no use 'InitiateShutdown' it writes event log entry
                         if (AbortSystemShutdown(null) != 0) //shutdown aborted
                         {
-                            Log.WriteLine("Shutdown schedule was detected and aborted!!!\r\n");
+                            Log.WriteLine("Shutdown schedule was detected and aborted!!!");
                         }
                     }
 
@@ -56,33 +61,85 @@ namespace DiskCryptorHelper
 
         private static void ProcessShutdownIfDetected()
         {
-            int error_code =  (int)InitiateShutdown(null, "Testing for Shutdown", 
+            int error_code =  (int)Win32_Shutdown.InitiateShutdown(null, "Testing for Shutdown", 
                 1024 * 1024,
-                ShutdownFlags.SHUTDOWN_RESTARTAPPS,
-                ShutdownReasons.SHTDN_REASON_MAJOR_APPLICATION |
-                ShutdownReasons.SHTDN_REASON_MINOR_INSTALLATION |
-                ShutdownReasons.SHTDN_REASON_FLAG_PLANNED);
+                Win32_Shutdown.ShutdownFlags.SHUTDOWN_RESTARTAPPS,
+                Win32_Shutdown.ShutdownReasons.SHTDN_REASON_MAJOR_APPLICATION |
+                Win32_Shutdown.ShutdownReasons.SHTDN_REASON_MINOR_INSTALLATION |
+                Win32_Shutdown.ShutdownReasons.SHTDN_REASON_FLAG_PLANNED);
 
             if (error_code == 0) //succeded to schedule shutdown - abort and continue
             {
                 AbortSystemShutdown(null);
             }
-            else if (error_code == ERROR_SHUTDOWN_IS_SCHEDULED) //this is what I am expecting to abort
+            else if (error_code == Win32_Shutdown.ERROR_SHUTDOWN_IS_SCHEDULED) //this is what I am expecting to abort
             {
                 AbortSystemShutdown(null);
-                Log.WriteLine("Shutdown schedule was detected and aborted!!!\r\n");
+                Log.WriteLine("Shutdown schedule was detected and aborted!!!");
             }
             else
             {
                 Win32Exception e = new Win32Exception(error_code);
-                Log.WriteLine("Error Detecting Shutdown: " + e.Message + "\r\n");
+                Log.WriteLine("Error Detecting Shutdown: " + e.Message);
             }
         }
 
-        private const int ERROR_SHUTDOWN_IS_SCHEDULED = 1190;
+        private static void SetPrivilege(String privilegeName, Int32 state)
+        {
+            Assembly asm = Assembly.GetAssembly(typeof(System.Diagnostics.Process));
+            if (asm == null) return;
+
+            Type t = asm.GetType("System.Diagnostics.Process");
+            if (t == null) return;
+
+            MethodInfo mi = t.GetMethod("SetPrivilege", BindingFlags.Static | BindingFlags.NonPublic);
+            if (mi == null) return;
+
+            Object[] parameters = { privilegeName, state };
+            mi.Invoke(null, parameters);
+        }
+    }
+
+    //https://www.meziantou.net/2014/12/29/prevent-windows-shutdown-or-session-ending-in-net
+    public class Win32_Shutdown
+    {
+        public const int ERROR_SHUTDOWN_IS_SCHEDULED = 1190;
+
+        public enum eMsg : int
+        {
+            WM_QUERYENDSESSION = 0x0011,
+            WM_ENDSESSION = 0x0016,
+        }
+
+        public enum eLParam : uint
+        {
+            NONE = 0,
+            ENDSESSION_CLOSEAPP = 0x00000001, //the system is being serviced, or system resources are exhausted
+            ENDSESSION_CRITICAL = 0x40000000, //the application is forced to shut down
+            ENDSESSION_LOGOFF = 0x80000000, //the user is logging off
+        }
+
+        public const uint SHUTDOWN_NORETRY = 0x00000001;
+
+        //Indicates that the system cannot be shut down and sets a reason string to be displayed to the user 
+        //if system shutdown is initiated
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool ShutdownBlockReasonCreate(IntPtr hWnd, [MarshalAs(UnmanagedType.LPWStr)] string reason);
+
+        //Indicates that the system can be shut down
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool ShutdownBlockReasonDestroy(IntPtr hWnd);
+
+        //This function sets a shutdown order for a process relative to the other processes in the system
+        //method determines the order in which Windows sends the WM_ENDSESSION and WM_QUERYENDSESSION messages to the applications.
+        //This is used in the case where an application A depends on an application B. 
+        //The application A wishes to be informed before the application B that the machine is stopping 
+        //to potentially block this stop. Thus application B remains alive as application A blocks the shutdown.
+        [DllImport("kernel32.dll")]
+        public static extern bool SetProcessShutdownParameters(uint dwLevel, uint dwFlags);
 
         [DllImport("advapi32.dll", EntryPoint = "InitiateShutdown", SetLastError = true)]
-        static extern UInt32 InitiateShutdown(
+        public static extern UInt32 InitiateShutdown(
             string lpMachineName, //The name of the computer to be shut down. If the value of this parameter is NULL, the local computer is shut down.
             string lpMessage, //The message to be displayed in the interactive shutdown dialog box.
             UInt32 dwGracePeriod, //The number of seconds to wait before shutting down the computer.
@@ -121,24 +178,9 @@ namespace DiskCryptorHelper
             SHTDN_REASON_MINOR_INSTALLATION = 0x00000002,
 
             SHTDN_REASON_FLAG_USER_DEFINED = 0x40000000, //The reason code is defined by the user. For more information, see Defining a Custom Reason Code. 
-                                                            //If this flag is not present, the reason code is defined by the system.
+                                                         //If this flag is not present, the reason code is defined by the system.
             SHTDN_REASON_FLAG_PLANNED = 0x80000000, //The shutdown was planned. The system generates a System State Data (SSD) file. This file contains system state information such as the processes, threads, memory usage, and configuration. 
                                                     //If this flag is not present, the shutdown was unplanned. Notification and reporting options are controlled by a set of policies. For example, after logging in, the system displays a dialog box reporting the unplanned shutdown if the policy has been enabled. An SSD file is created only if the SSD policy is enabled on the system. The administrator can use Windows Error Reporting to send the SSD data to a central location, or to Microsoft.        
-        }
-
-        private static void SetPrivilege(String privilegeName, Int32 state)
-        {
-            Assembly asm = Assembly.GetAssembly(typeof(System.Diagnostics.Process));
-            if (asm == null) return;
-
-            Type t = asm.GetType("System.Diagnostics.Process");
-            if (t == null) return;
-
-            MethodInfo mi = t.GetMethod("SetPrivilege", BindingFlags.Static | BindingFlags.NonPublic);
-            if (mi == null) return;
-
-            Object[] parameters = { privilegeName, state };
-            mi.Invoke(null, parameters);
         }
     }
 }

@@ -69,6 +69,7 @@
             this.m_cmbVHD_FileName = new System.Windows.Forms.ComboBox();
             this.m_btnAttachVHD = new System.Windows.Forms.Button();
             this.m_splitDisks = new System.Windows.Forms.SplitContainer();
+            this.hideDriveLetterControl1 = new DiskCryptorHelper.HideDriveLetterControl();
             this.panel1 = new System.Windows.Forms.Panel();
             this.m_treeDrives = new System.Windows.Forms.TreeView();
             this.label1 = new System.Windows.Forms.Label();
@@ -80,7 +81,8 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.m_status1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.m_status2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.hideDriveLetterControl1 = new DiskCryptorHelper.HideDriveLetterControl();
+            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
+            this.m_mnuBlockShutdown = new System.Windows.Forms.ToolStripMenuItem();
             this.m_sysIconMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitMain)).BeginInit();
             this.m_splitMain.Panel1.SuspendLayout();
@@ -255,9 +257,11 @@
             this.m_mnuFileAttachVHD,
             this.m_mnuFileCreateVHD,
             this.toolStripMenuItem3,
+            this.m_mnuBlockShutdown,
+            this.toolStripMenuItem4,
             this.m_mnuExit});
             this.m_sysIconMenu.Name = "m_sysIconMenu";
-            this.m_sysIconMenu.Size = new System.Drawing.Size(177, 154);
+            this.m_sysIconMenu.Size = new System.Drawing.Size(177, 204);
             // 
             // m_mnuShow
             // 
@@ -308,7 +312,7 @@
             // m_mnuFileOpenVHD_File
             // 
             this.m_mnuFileOpenVHD_File.Name = "m_mnuFileOpenVHD_File";
-            this.m_mnuFileOpenVHD_File.Size = new System.Drawing.Size(133, 22);
+            this.m_mnuFileOpenVHD_File.Size = new System.Drawing.Size(152, 22);
             this.m_mnuFileOpenVHD_File.Text = "Open File...";
             this.m_mnuFileOpenVHD_File.Click += new System.EventHandler(this.m_mnuFileOpenVHD_File_Click);
             // 
@@ -335,7 +339,7 @@
             // 
             this.m_btnUnmountAllandBSOD.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("m_btnUnmountAllandBSOD.BackgroundImage")));
             this.m_btnUnmountAllandBSOD.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.m_btnUnmountAllandBSOD.Location = new System.Drawing.Point(448, 46);
+            this.m_btnUnmountAllandBSOD.Location = new System.Drawing.Point(448, 34);
             this.m_btnUnmountAllandBSOD.Name = "m_btnUnmountAllandBSOD";
             this.m_btnUnmountAllandBSOD.Size = new System.Drawing.Size(89, 96);
             this.m_btnUnmountAllandBSOD.TabIndex = 14;
@@ -394,11 +398,11 @@
             // m_chkPreventShutdown
             // 
             this.m_chkPreventShutdown.AutoSize = true;
-            this.m_chkPreventShutdown.Location = new System.Drawing.Point(456, 153);
+            this.m_chkPreventShutdown.Location = new System.Drawing.Point(453, 140);
             this.m_chkPreventShutdown.Name = "m_chkPreventShutdown";
-            this.m_chkPreventShutdown.Size = new System.Drawing.Size(74, 30);
+            this.m_chkPreventShutdown.Size = new System.Drawing.Size(84, 43);
             this.m_chkPreventShutdown.TabIndex = 18;
-            this.m_chkPreventShutdown.Text = "Prevent\r\nShutdown";
+            this.m_chkPreventShutdown.Text = "Abort\r\nUnexpected\r\nShutdown";
             this.m_chkPreventShutdown.UseVisualStyleBackColor = true;
             this.m_chkPreventShutdown.CheckedChanged += new System.EventHandler(this.m_chkPreventShutdown_CheckedChanged);
             // 
@@ -479,6 +483,14 @@
             this.m_splitDisks.Size = new System.Drawing.Size(528, 514);
             this.m_splitDisks.SplitterDistance = 162;
             this.m_splitDisks.TabIndex = 2;
+            // 
+            // hideDriveLetterControl1
+            // 
+            this.hideDriveLetterControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.hideDriveLetterControl1.Location = new System.Drawing.Point(0, 0);
+            this.hideDriveLetterControl1.Name = "hideDriveLetterControl1";
+            this.hideDriveLetterControl1.Size = new System.Drawing.Size(158, 510);
+            this.hideDriveLetterControl1.TabIndex = 0;
             // 
             // panel1
             // 
@@ -574,13 +586,18 @@
             this.m_status2.Spring = true;
             this.m_status2.Text = "...";
             // 
-            // hideDriveLetterControl1
+            // toolStripMenuItem4
             // 
-            this.hideDriveLetterControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hideDriveLetterControl1.Location = new System.Drawing.Point(0, 0);
-            this.hideDriveLetterControl1.Name = "hideDriveLetterControl1";
-            this.hideDriveLetterControl1.Size = new System.Drawing.Size(158, 510);
-            this.hideDriveLetterControl1.TabIndex = 0;
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(173, 6);
+            // 
+            // m_mnuBlockShutdown
+            // 
+            this.m_mnuBlockShutdown.CheckOnClick = true;
+            this.m_mnuBlockShutdown.Name = "m_mnuBlockShutdown";
+            this.m_mnuBlockShutdown.Size = new System.Drawing.Size(176, 22);
+            this.m_mnuBlockShutdown.Text = "&Block Shutdown";
+            this.m_mnuBlockShutdown.Click += new System.EventHandler(this.m_chkPreventShutdown_CheckedChanged);
             // 
             // FormMain
             // 
@@ -672,6 +689,8 @@
         private System.Windows.Forms.Button m_btnDetach;
         private System.Windows.Forms.Button m_btnOpenVHD;
         public System.Windows.Forms.CheckBox m_chkPreventShutdown;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuBlockShutdown;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
     }
 }
 

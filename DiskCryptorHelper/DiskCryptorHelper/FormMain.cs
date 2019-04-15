@@ -29,7 +29,6 @@ namespace DiskCryptorHelper
         private string _selectedDriveLetter = "";
         private RecentFilesList _recentFiles = new RecentFilesList();
         private DiskCryptor _diskCryptor = new DiskCryptor();
-        private uint _shutdownReason = 0;
 
         public FormMain(string [] cmd_line = null)
         {
@@ -63,7 +62,8 @@ namespace DiskCryptorHelper
                 }, this);
             };
 
-            SystemEvents.SessionEnding += SessionEndingEvtHandler;
+            // Define the priority of the application (0x3FF = The higher priority)
+            Win32_Shutdown.SetProcessShutdownParameters(0x3FF, Win32_Shutdown.SHUTDOWN_NORETRY);
         }
 
         const int WM_DEVICECHANGE = 0x0219;
@@ -71,11 +71,6 @@ namespace DiskCryptorHelper
         const int DBT_DEVICEREMOVECOMPLETE = 0x8004; //device was removed
         const int DBT_DEVNODES_CHANGED = 0x0007; //device changed
         const int DBT_DEVTYP_VOLUME = 0x00000002; // logical volume
-
-        const int WM_QUERYENDSESSION = 0x11;
-        const int ENDSESSION_CLOSEAPP = 0x00000001; //the system is being serviced, or system resources are exhausted
-        const int ENDSESSION_CRITICAL = 0x40000000; //the application is forced to shut down
-        const uint ENDSESSION_LOGOFF = 0x80000000; //the user is logging off
 
         [SecurityPermission(SecurityAction.LinkDemand, Flags = SecurityPermissionFlag.UnmanagedCode)]
         protected override void WndProc(ref Message m)
@@ -103,11 +98,14 @@ namespace DiskCryptorHelper
                     }
                 }
             }
-            else if (m.Msg == WM_QUERYENDSESSION)
+            else if (m.Msg == (int)Win32_Shutdown.eMsg.WM_QUERYENDSESSION || m.Msg == (int)Win32_Shutdown.eMsg.WM_ENDSESSION)
             {
-                _shutdownReason = (uint)m.LParam;
-                Log.WriteLine("WndProc: WM_QUERYENDSESSION, LParam:" + _shutdownReason);
-                if (_shutdownReason == 0) _shutdownReason = ENDSESSION_CLOSEAPP;
+                Win32_Shutdown.eMsg msg = (Win32_Shutdown.eMsg)m.Msg;
+                Win32_Shutdown.eLParam lParam = (Win32_Shutdown.eLParam)m.LParam;
+                Log.WriteLine("WndProc: {0}, LParam: {1}", msg, lParam);
+
+                if (ProcessShutdownMessage(lParam))
+                    return;
             }
 
             base.WndProc(ref m);
@@ -115,6 +113,8 @@ namespace DiskCryptorHelper
 
         private void FormMain_Load(object sender, EventArgs e)
         {
+            Log.WriteLine("FormMain_Load");
+
             _diskCryptor.ExecuteVersion();
             ReloadDriveData(0);
             m_listDrives_SelectedIndexChanged(sender, e);
@@ -122,45 +122,18 @@ namespace DiskCryptorHelper
 
             m_mnuFile.DropDown = m_sysIconMenu;
             m_mnuOptionsHideWhenMinimized.Checked = Settings.Default.HideWhenMinimized;
-            m_chkPreventShutdown.Checked = Settings.Default.PreventShutdown;
-            ShutdownHandler.AbortShutdownIfScheduled = m_chkPreventShutdown.Checked;
+            m_chkPreventShutdown_CheckedChanged(sender, e);
 
             _recentFiles.Update(m_mnuFileAttachVHD.DropDown, m_cmbVHD_FileName);
         }
 
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if(_shutdownReason != 0)
-            {
-                if (_shutdownReason == ENDSESSION_LOGOFF)
-                {
-                    Log.WriteLine("FormMain_FormClosing: LParam: ENDSESSION_LOGOFF");
-                }
-                else if (_shutdownReason == ENDSESSION_CRITICAL)
-                {
-                    Log.WriteLine("FormMain_FormClosing: LParam: ENDSESSION_CRITICAL");
-                }
-                else if (_shutdownReason == ENDSESSION_CLOSEAPP)
-                {
-                    Log.WriteLine("FormMain_FormClosing: LParam: ENDSESSION_CLOSEAPP");
-                }
-
-                if (System.Windows.Forms.MessageBox.Show(
-                    "Shutdown in Process: WM_QUERYENDSESSION\nCancel Shutdown?", Text,
-                    MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1,
-                    System.Windows.Forms.MessageBoxOptions.ServiceNotification) == DialogResult.Yes)
-                {
-                    e.Cancel = true; //abort
-                    ShutdownHandler.AbortSystemShutdown("");
-                }
-            }
-
             if (e.CloseReason == CloseReason.WindowsShutDown || 
                 e.CloseReason == CloseReason.TaskManagerClosing)
             {
-                _diskCryptor.ExecuteUnMountAll();
-
                 Log.WriteLine("FormMain_FormClosing: " + e.CloseReason);
+                _diskCryptor.ExecuteUnMountAll();
             }
             else if(e.CloseReason == CloseReason.UserClosing) //user clicked close button
             {
@@ -180,7 +153,7 @@ namespace DiskCryptorHelper
             }
             else if (e.CloseReason == CloseReason.ApplicationExitCall)
             {
-
+                Log.WriteLine("FormMain_FormClosing: " + e.CloseReason);
             }
         }
 
@@ -189,23 +162,29 @@ namespace DiskCryptorHelper
             m_sysIcon.Visible = false;
 
             ShutdownHandler.ExitMonitoringShutdown = true;
-
-            SystemEvents.SessionEnding -= SessionEndingEvtHandler;
         }
 
-        private void SessionEndingEvtHandler(object sender, SessionEndingEventArgs e)
+        private bool ProcessShutdownMessage(Win32_Shutdown.eLParam shutdownReason)
         {
-            Log.WriteLine("Session end EVENT: " + e.Reason);
+            Log.WriteLine("ProcessShutdownMessage: LParam: {0}", shutdownReason);
 
-            if(Settings.Default.PreventShutdown)
+            if (Settings.Default.PreventShutdown && shutdownReason != Win32_Shutdown.eLParam.ENDSESSION_CRITICAL)
             {
-                //ShutdownHandler.AbortSystemShutdown();
+                Win32_Shutdown.ShutdownBlockReasonCreate(this.Handle, "Block Unexpected Shutdown!");
+                return true;
             }
-            else
+
+            if(shutdownReason == Win32_Shutdown.eLParam.ENDSESSION_CRITICAL)
             {
+                Log.WriteLine("ProcessShutdownMessage: ExecuteUnMountAll()");
+                _diskCryptor.ExecuteUnMountAll();
+
+                //Allow Windows to shutdown
+                Win32_Shutdown.ShutdownBlockReasonDestroy(this.Handle);
 
             }
-            _diskCryptor.ExecuteUnMountAll();
+
+            return false;
         }
 
         private void ProcessCommanLine(string[] cmd_line)
@@ -746,8 +725,18 @@ namespace DiskCryptorHelper
 
         private void m_chkPreventShutdown_CheckedChanged(object sender, EventArgs e)
         {
-            ShutdownHandler.AbortShutdownIfScheduled = m_chkPreventShutdown.Checked;
-            Settings.Default.PreventShutdown = m_chkPreventShutdown.Checked;
+            if(sender == m_mnuBlockShutdown)
+            {
+                Settings.Default.PreventShutdown = m_mnuBlockShutdown.Checked;
+            }
+            else if(sender == m_chkPreventShutdown)
+            {
+                Settings.Default.PreventShutdown = m_chkPreventShutdown.Checked;
+            }
+
+            m_mnuBlockShutdown.Checked = m_chkPreventShutdown.Checked = Settings.Default.PreventShutdown;
+
+            ShutdownHandler.AbortShutdownIfScheduled = Settings.Default.PreventShutdown;
             Settings.Default.Save();
         }
     }
