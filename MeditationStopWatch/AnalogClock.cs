@@ -154,11 +154,11 @@ namespace AnalogClockControl
 			PointF bottomLeft = new PointF( (float)(_Center.X + fThickness * 2 * System.Math.Sin(fAngle - DEGREE90_TO_RAD)),
 				                 (float)(_Center.Y - fThickness * 2 * System.Math.Cos(fAngle - DEGREE90_TO_RAD)) );
 
-            PointF top = new PointF((float)(_Center.X + fLength * System.Math.Sin(fAngle)),
-                                    (float)(_Center.Y - fLength * System.Math.Cos(fAngle)));
-
             PointF topCenter = new PointF((float)(_Center.X + (fLength - fThickness) * System.Math.Sin(fAngle)),
                                           (float)(_Center.Y - (fLength - fThickness) * System.Math.Cos(fAngle)));
+
+            PointF top = new PointF((float)(topCenter.X + 2 * fThickness * System.Math.Sin(fAngle)),
+                                    (float)(topCenter.Y - 2 * fThickness * System.Math.Cos(fAngle)));
             PointF topRight = new PointF((float)(topCenter.X + fThickness * System.Math.Sin(fAngle + DEGREE90_TO_RAD)),
                                          (float)(topCenter.Y - fThickness * System.Math.Cos(fAngle + DEGREE90_TO_RAD)));
             PointF topLeft = new PointF((float)(topCenter.X + fThickness * System.Math.Sin(fAngle - DEGREE90_TO_RAD)),
@@ -206,8 +206,8 @@ namespace AnalogClockControl
 			this._Center.X = this.ClientSize.Width/2F;
 			this._Center.Y = this.ClientSize.Height/2F;
 			this._fHourLength = _fRadius * 0.65F;
-			this._fMinLength = _fRadius * 0.93F;
-			this._fSecLength = _fRadius * 0.95F;
+			this._fMinLength = _fRadius * 0.90F;
+			this._fSecLength = _fRadius * 0.93F;
             this._fHourThickness = diameter / 100F;
 			this._fMinThickness = diameter / 150F;
 			this._fSecThickness = diameter / 200F;
@@ -220,38 +220,38 @@ namespace AnalogClockControl
 		public Color HourHandColor
 		{
 			get { return this._hrColor; }
-			set { this._hrColor=value; }
+			set { this._hrColor = value; }
 		}
 
 		public Color MinuteHandColor
 		{
 			get { return this._minColor; }
-			set { this._minColor=value; }
+			set { this._minColor = value; }
 		}
 
 		public Color SecondHandColor
 		{
 			get { return this._secColor; }
-			set { this._secColor=value;
-				  this._circleColor=value; }
+			set { this._secColor = value;
+				  this._circleColor = value; }
 		}
 
 		public Color TicksColor
 		{
 			get { return this._ticksColor; }
-			set { this._ticksColor=value; }
+			set { this._ticksColor = value; }
 		}
 
 		public bool Draw1MinuteTicks
 		{
 			get { return this._bDraw1MinuteTicks; }
-			set { this._bDraw1MinuteTicks=value; }
+			set { this._bDraw1MinuteTicks = value; }
 		}
 
 		public bool Draw5MinuteTicks
 		{
 			get { return this._bDraw5MinuteTicks; }
-			set { this._bDraw5MinuteTicks=value; }
+			set { this._bDraw5MinuteTicks = value; }
 		}
 
 	}
