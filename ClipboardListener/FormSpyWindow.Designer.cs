@@ -58,12 +58,14 @@ namespace ClipboardManager
             this.m_btnAdvanced = new System.Windows.Forms.Button();
             this.m_imageList_btnAdvanced = new System.Windows.Forms.ImageList(this.components);
             this.m_pnlAdvanced = new System.Windows.Forms.Panel();
+            this.m_btBrowseProcess = new System.Windows.Forms.Button();
+            this.m_txtProcess = new System.Windows.Forms.TextBox();
+            this.m_lblProcess = new System.Windows.Forms.Label();
             this.m_pnlMain = new System.Windows.Forms.Panel();
             this.m_sliderTransparency = new System.Windows.Forms.TrackBar();
             this.m_chkOnTop = new System.Windows.Forms.CheckBox();
-            this.m_txtProcess = new System.Windows.Forms.TextBox();
-            this.m_lblProcess = new System.Windows.Forms.Label();
-            this.m_btBrowseProcess = new System.Windows.Forms.Button();
+            this.m_btnKillProcess = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.m_picFinder)).BeginInit();
             this.m_pnlAdvanced.SuspendLayout();
             this.m_pnlMain.SuspendLayout();
@@ -249,6 +251,7 @@ namespace ClipboardManager
             // 
             // m_pnlAdvanced
             // 
+            this.m_pnlAdvanced.Controls.Add(this.m_btnKillProcess);
             this.m_pnlAdvanced.Controls.Add(this.m_btBrowseProcess);
             this.m_pnlAdvanced.Controls.Add(this.m_txtProcess);
             this.m_pnlAdvanced.Controls.Add(this.m_lblProcess);
@@ -265,6 +268,38 @@ namespace ClipboardManager
             this.m_pnlAdvanced.Name = "m_pnlAdvanced";
             this.m_pnlAdvanced.Size = new System.Drawing.Size(409, 152);
             this.m_pnlAdvanced.TabIndex = 1;
+            // 
+            // m_btBrowseProcess
+            // 
+            this.m_btBrowseProcess.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btBrowseProcess.Location = new System.Drawing.Point(348, 12);
+            this.m_btBrowseProcess.Name = "m_btBrowseProcess";
+            this.m_btBrowseProcess.Size = new System.Drawing.Size(23, 23);
+            this.m_btBrowseProcess.TabIndex = 10;
+            this.m_btBrowseProcess.Text = "...";
+            this.toolTip1.SetToolTip(this.m_btBrowseProcess, "Open Process Location");
+            this.m_btBrowseProcess.UseVisualStyleBackColor = true;
+            this.m_btBrowseProcess.Click += new System.EventHandler(this.m_btBrowseProcess_Click);
+            // 
+            // m_txtProcess
+            // 
+            this.m_txtProcess.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_txtProcess.BackColor = System.Drawing.SystemColors.Window;
+            this.m_txtProcess.Location = new System.Drawing.Point(64, 14);
+            this.m_txtProcess.Name = "m_txtProcess";
+            this.m_txtProcess.ReadOnly = true;
+            this.m_txtProcess.Size = new System.Drawing.Size(281, 20);
+            this.m_txtProcess.TabIndex = 9;
+            // 
+            // m_lblProcess
+            // 
+            this.m_lblProcess.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.m_lblProcess.Location = new System.Drawing.Point(8, 14);
+            this.m_lblProcess.Name = "m_lblProcess";
+            this.m_lblProcess.Size = new System.Drawing.Size(55, 20);
+            this.m_lblProcess.TabIndex = 8;
+            this.m_lblProcess.Text = "Process:";
             // 
             // m_pnlMain
             // 
@@ -314,36 +349,17 @@ namespace ClipboardManager
             this.m_chkOnTop.UseVisualStyleBackColor = true;
             this.m_chkOnTop.CheckedChanged += new System.EventHandler(this.m_chkOnTop_CheckedChanged);
             // 
-            // m_txtProcess
+            // m_btnKillProcess
             // 
-            this.m_txtProcess.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_txtProcess.BackColor = System.Drawing.SystemColors.Window;
-            this.m_txtProcess.Location = new System.Drawing.Point(64, 14);
-            this.m_txtProcess.Name = "m_txtProcess";
-            this.m_txtProcess.ReadOnly = true;
-            this.m_txtProcess.Size = new System.Drawing.Size(303, 20);
-            this.m_txtProcess.TabIndex = 9;
-            // 
-            // m_lblProcess
-            // 
-            this.m_lblProcess.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.m_lblProcess.Location = new System.Drawing.Point(8, 14);
-            this.m_lblProcess.Name = "m_lblProcess";
-            this.m_lblProcess.Size = new System.Drawing.Size(55, 20);
-            this.m_lblProcess.TabIndex = 8;
-            this.m_lblProcess.Text = "Process:";
-            // 
-            // m_btBrowseProcess
-            // 
-            this.m_btBrowseProcess.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btBrowseProcess.Location = new System.Drawing.Point(373, 12);
-            this.m_btBrowseProcess.Name = "m_btBrowseProcess";
-            this.m_btBrowseProcess.Size = new System.Drawing.Size(23, 23);
-            this.m_btBrowseProcess.TabIndex = 10;
-            this.m_btBrowseProcess.Text = "...";
-            this.m_btBrowseProcess.UseVisualStyleBackColor = true;
-            this.m_btBrowseProcess.Click += new System.EventHandler(this.m_btBrowseProcess_Click);
+            this.m_btnKillProcess.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnKillProcess.Image = ((System.Drawing.Image)(resources.GetObject("m_btnKillProcess.Image")));
+            this.m_btnKillProcess.Location = new System.Drawing.Point(372, 12);
+            this.m_btnKillProcess.Name = "m_btnKillProcess";
+            this.m_btnKillProcess.Size = new System.Drawing.Size(23, 23);
+            this.m_btnKillProcess.TabIndex = 11;
+            this.toolTip1.SetToolTip(this.m_btnKillProcess, "Kill the Process");
+            this.m_btnKillProcess.UseVisualStyleBackColor = true;
+            this.m_btnKillProcess.Click += new System.EventHandler(this.m_btnKillProcess_Click);
             // 
             // FormSpyWindow
             // 
@@ -399,5 +415,7 @@ namespace ClipboardManager
         private System.Windows.Forms.TextBox m_txtProcess;
         private System.Windows.Forms.Label m_lblProcess;
         private System.Windows.Forms.Button m_btBrowseProcess;
+        private Button m_btnKillProcess;
+        private ToolTip toolTip1;
     }
 }

@@ -28,6 +28,7 @@ namespace ClipboardManager
 		private Cursor _cursorDefault;
 		private Cursor _cursorFinder;
 		private IntPtr _hPreviousWindow;
+        private HWND _hCurrentWindow = IntPtr.Zero;
 
 		/// <summary>
 		/// Initializes a new instance of the SpyWindow class
@@ -146,15 +147,15 @@ namespace ClipboardManager
 											
 			try
 			{
-				// capture the window under the cursor's position
-				HWND hWnd = NativeWIN32.WindowFromPoint(Cursor.Position);
+                // capture the window under the cursor's position
+                _hCurrentWindow = NativeWIN32.WindowFromPoint(Cursor.Position);
 
 				// if the window we're over, is not the same as the one before, and we had one before, refresh it
-				if (_hPreviousWindow != IntPtr.Zero && _hPreviousWindow != hWnd)
+				if (_hPreviousWindow != IntPtr.Zero && _hPreviousWindow != _hCurrentWindow)
 					WindowHighlighter.Refresh(_hPreviousWindow);
 
 				// if we didn't find a window.. that's pretty hard to imagine. lol
-				if (hWnd == IntPtr.Zero)
+				if (_hCurrentWindow == IntPtr.Zero)
 				{
 					m_txtHandle.Text = "";
 					m_txtClass.Text = "";
@@ -165,23 +166,23 @@ namespace ClipboardManager
 				else
 				{
 					// save the window we're over
-					_hPreviousWindow = hWnd;
+					_hPreviousWindow = _hCurrentWindow;
 
-                    m_txtProcess.Text = GetProcessPath(hWnd);
+                    m_txtProcess.Text = GetProcessPath(_hCurrentWindow);
 
-                    m_txtHandle.Text = string.Format("{0}", hWnd.ToInt32().ToString());
+                    m_txtHandle.Text = string.Format("{0}", _hCurrentWindow.ToInt32().ToString());
 
-					m_txtClass.Text = this.GetClassName(hWnd);
+					m_txtClass.Text = this.GetClassName(_hCurrentWindow);
 
-					m_txtCaption.Text = NativeWIN32.GetWindowText(hWnd);
+					m_txtCaption.Text = NativeWIN32.GetWindowText(_hCurrentWindow);
 
 					if ( m_txtClass.Text == "Edit" || m_txtCaption.Text == "" )
 					{
-						m_txtCaption.Text = NativeWIN32.GetText(hWnd);
+						m_txtCaption.Text = NativeWIN32.GetText(_hCurrentWindow);
 					}//end if
 
-					NativeWIN32.RECT rc = NativeWIN32.GetWindowRect(hWnd);
-					NativeWIN32.EnumChildWindows(hWnd, m_txtCaption.Text);
+					NativeWIN32.RECT rc = NativeWIN32.GetWindowRect(_hCurrentWindow);
+					NativeWIN32.EnumChildWindows(_hCurrentWindow, m_txtCaption.Text);
 						
 					// rect
 					m_txtRect.Text = string.Format(
@@ -189,7 +190,7 @@ namespace ClipboardManager
 						rc.Right - rc.Left, rc.Bottom - rc.Top, rc.ToString());
 
 					// highlight the window
-					WindowHighlighter.Highlight(hWnd);
+					WindowHighlighter.Highlight(_hCurrentWindow);
 				}//end else
 			}//end try
 			catch(Exception err)
@@ -241,6 +242,16 @@ namespace ClipboardManager
         private void m_btBrowseProcess_Click(object sender, EventArgs e)
         {
             Process.Start(Path.GetDirectoryName(m_txtProcess.Text));
+        }
+
+        private void m_btnKillProcess_Click(object sender, EventArgs e)
+        {
+            if (_hCurrentWindow != IntPtr.Zero)
+            {
+                Process p = GetWindowProcess(_hCurrentWindow);
+                if (p != null)
+                    p.Kill();
+            }
         }
 
         private string GetProcessPath(IntPtr hWnd)
