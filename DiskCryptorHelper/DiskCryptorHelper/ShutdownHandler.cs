@@ -113,7 +113,7 @@ namespace DiskCryptorHelper
 
         public enum eLParam : uint
         {
-            NONE = 0,
+            ENDSESSION_NORMAL = 0,
             ENDSESSION_CLOSEAPP = 0x00000001, //the system is being serviced, or system resources are exhausted
             ENDSESSION_CRITICAL = 0x40000000, //the application is forced to shut down
             ENDSESSION_LOGOFF = 0x80000000, //the user is logging off

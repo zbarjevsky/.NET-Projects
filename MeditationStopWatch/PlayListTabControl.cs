@@ -66,12 +66,16 @@ namespace MeditationStopWatch
 
         private void m_btnAddTab_Click(object sender, EventArgs e)
         {
-            PlayList newList = new PlayList() { Name = "List"+m_tabPlayLists.TabPages.Count };
+            PlayList newList = new PlayList() { Name = "Play List "+(m_tabPlayLists.TabPages.Count+1) };
             TabPage newPage = new TabPage(newList.Name) { Tag = newList };
             newPage.BackColor = Color.WhiteSmoke;
 
             m_tabPlayLists.TabPages.Add(newPage);
             m_Options.PlayListCollection.Add(newList);
+
+            //select new page
+            m_tabPlayLists.SelectedTab = newPage;
+            m_btnEditTab_Click(sender, e);
         }
 
         private void m_btnDelTab_Click(object sender, EventArgs e)

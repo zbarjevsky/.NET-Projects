@@ -102,7 +102,7 @@ namespace DiskCryptorHelper
             {
                 Win32_Shutdown.eMsg msg = (Win32_Shutdown.eMsg)m.Msg;
                 Win32_Shutdown.eLParam lParam = (Win32_Shutdown.eLParam)m.LParam;
-                Log.WriteLine("WndProc: {0}, LParam: {1}", msg, lParam);
+                Log.WriteLine("WndProc: {0}, LParam: 0x{1:X8}", msg, m.LParam);
 
                 if (ProcessShutdownMessage(lParam))
                     return;
@@ -164,25 +164,22 @@ namespace DiskCryptorHelper
             ShutdownHandler.ExitMonitoringShutdown = true;
         }
 
+        //https://www.microsoftpressstore.com/articles/article.aspx?p=2201310&seqNum=3
         private bool ProcessShutdownMessage(Win32_Shutdown.eLParam shutdownReason)
         {
-            Log.WriteLine("ProcessShutdownMessage: LParam: {0}", shutdownReason);
-
-            if (Settings.Default.PreventShutdown && shutdownReason != Win32_Shutdown.eLParam.ENDSESSION_CRITICAL)
+            bool isCritical = (shutdownReason & Win32_Shutdown.eLParam.ENDSESSION_CRITICAL) != 0;
+            if (Settings.Default.PreventShutdown)
             {
+                Log.WriteLine("ProcessShutdownMessage: ShutdownBlockReasonCreate()");
                 Win32_Shutdown.ShutdownBlockReasonCreate(this.Handle, "Block Unexpected Shutdown!");
                 return true;
             }
 
-            if(shutdownReason == Win32_Shutdown.eLParam.ENDSESSION_CRITICAL)
-            {
-                Log.WriteLine("ProcessShutdownMessage: ExecuteUnMountAll()");
-                _diskCryptor.ExecuteUnMountAll();
+            Log.WriteLine("ProcessShutdownMessage: ExecuteUnMountAll()");
+            _diskCryptor.ExecuteUnMountAll();
 
-                //Allow Windows to shutdown
-                Win32_Shutdown.ShutdownBlockReasonDestroy(this.Handle);
-
-            }
+            //Allow Windows to shutdown
+            Win32_Shutdown.ShutdownBlockReasonDestroy(this.Handle);
 
             return false;
         }
