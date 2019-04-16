@@ -7,12 +7,12 @@ using System.Runtime.InteropServices;
 
 namespace Utils
 {
-	public class MessageBoxEx1
+    //Centered MessageBox - relatively to owner window
+	public class CenteredMessageBox
 	{
 		static IWin32Window _owner;
 		private static HookProc _hookProc;
 		private static IntPtr _hHook;
-
 
 		public static DialogResult Show(string text)
 		{
@@ -192,7 +192,7 @@ namespace Utils
 		} ;
 
 
-		static MessageBoxEx1()
+		static CenteredMessageBox()
 		{
 			_hookProc = new HookProc(MessageBoxHookProc);
 			_hHook = IntPtr.Zero;

@@ -22,7 +22,7 @@ namespace ClipboardManager
 			IntPtr hDC = NativeWIN32.GetWindowDC(hWnd);
 			if (hDC != IntPtr.Zero)
 			{
-				using (Pen pen = new Pen(Color.Black, penWidth))
+				using (Pen pen = new Pen(Color.Lime, penWidth))
 				{
 					using (Graphics g = Graphics.FromHdc(hDC))
 					{

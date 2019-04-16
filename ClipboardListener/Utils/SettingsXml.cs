@@ -8,15 +8,15 @@ using System.Drawing;
 
 namespace ClipboardManager
 {
-	class SettingsXml
+	public class SettingsXml
 	{
-		public static void Load(ClipboardList list, FormClipboard.Settings sett, string sFileName)
+		public static void Load(ClipboardList list, Utils.Settings sett, string sFileName)
 		{
 		}//end Load
 
 		//save only Text or Rtf
 		//file type save as Text only - as file path
-		public static void Save(ClipboardList list, FormClipboard.Settings sett, string sFileName)
+		public static void Save(ClipboardList list, Utils.Settings sett, string sFileName)
 		{
 		}//end Save
 

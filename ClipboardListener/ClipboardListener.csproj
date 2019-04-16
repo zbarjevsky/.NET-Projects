@@ -123,9 +123,12 @@
     <Compile Include="DesktopUtil\DesktopRegistry.cs" />
     <Compile Include="DesktopUtil\Storage.cs" />
     <Compile Include="DesktopUtil\Win32.cs" />
-    <Compile Include="SingleInstanceHelper.cs" />
+    <Compile Include="Utils\ShutdownHandler.cs" />
+    <Compile Include="Utils\SingleInstanceHelper.cs" />
+    <Compile Include="Utils\Log.cs" />
+    <Compile Include="Utils\Settings.cs" />
     <Compile Include="Zip\DotNetZip.cs" />
-    <Compile Include="Encodings.cs" />
+    <Compile Include="Utils\Encodings.cs" />
     <Compile Include="FormAbout.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -147,7 +150,7 @@
     <Compile Include="FormSpyWindow.Designer.cs">
       <DependentUpon>FormSpyWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="ImagesUtil.cs" />
+    <Compile Include="Utils\ImagesUtil.cs" />
     <Compile Include="FormClipboard.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -160,10 +163,10 @@
     <Compile Include="FormSettings.Designer.cs">
       <DependentUpon>FormSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="HotKeyTranslator.cs" />
+    <Compile Include="Utils\HotKeyTranslator.cs" />
     <Compile Include="Zip\JavaZip.cs" />
-    <Compile Include="MsgBox.cs" />
-    <Compile Include="NativeWIN32.cs" />
+    <Compile Include="Utils\CenteredMessageBox.cs" />
+    <Compile Include="Utils\NativeWIN32.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FormAbout.resx">
@@ -210,14 +213,14 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="PropertySorter.cs" />
-    <Compile Include="SettingsXml.cs" />
+    <Compile Include="Utils\PropertySorter.cs" />
+    <Compile Include="Utils\SettingsXml.cs" />
     <Compile Include="FormSpyWindow.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="WindowHighlighter.cs" />
-    <Compile Include="WindowsMessages.cs" />
-    <Compile Include="XmlUtil.cs" />
+    <Compile Include="Utils\WindowHighlighter.cs" />
+    <Compile Include="Utils\WindowsMessages.cs" />
+    <Compile Include="Utils\XmlUtil.cs" />
     <Compile Include="Zip\IZip.cs" />
   </ItemGroup>
   <ItemGroup>

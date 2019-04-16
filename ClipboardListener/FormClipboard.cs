@@ -28,7 +28,7 @@ namespace ClipboardManager
 		private volatile bool m_bPasteFromThis			= false; //to prevent loop
 		private volatile bool m_bCopyFromSnapShot		= false;
 		public static FormClipboard m_This				= null;
-		public static Settings m_Settings				= new Settings();
+		public static Utils.Settings m_Settings			= new Utils.Settings();
 		private bool m_bModified						= false;
 		private int m_iAboutId							= 32164;
 		private int m_iExitId							= 32165;
@@ -106,117 +106,6 @@ namespace ClipboardManager
 			dst.ToolTipText		= src.ToolTipText;
 			dst.Click			+= onClick;
 		}//end CopyMenuStripItem
-
-		public class Settings
-		{
-			public HotKeyTranslator	m_HotKey	= null;
-			public int m_iHistoryLen			= 20;
-			public bool m_bShowSnapShot         = true;
-			public bool m_bShowDebug            = true;
-			private int m_iHotKeyAppId          = new Random().Next(100, 500);
-			public Encodings m_Encodings		= new Encodings();
-			public bool m_AutoReconnect         = true;
-            private bool m_WriteLogFile         = false;
-            public bool m_bAutoUAC              = false;
-
-            public bool WriteLogFile
-            {
-                get { return m_WriteLogFile; }
-                set { m_WriteLogFile = value; Program.m_bWriteLog = value;  }
-            }//end WriteLogFile
-
-			public Settings()
-			{
-				System.Diagnostics.Trace.WriteLine("HotKeyAppId: " + m_iHotKeyAppId);
-			}//end constructor
-
-			public void Save(string sFileName, ClipboardList listMain, ClipboardList listFavorites)
-			{
-				try
-				{
-					IZip zip = null;
-					try { zip = new DotNetZip(GetZipFilePath(sFileName), true); }
-					catch ( Exception err )
-					{
-						FormClipboard.TraceLn(true, "Settings", "Save",
-							"Create Zip: {0} Error: {1}", sFileName, err.Message);
-					}//end catch
-
-					XmlDocument doc = new XmlDocument();
-					XmlNode root = doc.CreateNode(XmlNodeType.Element, "Settings", "");
-					root = doc.AppendChild(root);
-
-					m_HotKey.Save(root);
-					XmlUtil.AddNewNode(root, "HistoryLength", m_iHistoryLen.ToString());
-					XmlUtil.AddNewNode(root, "ShowSnapShot", m_bShowSnapShot.ToString());
-					XmlUtil.AddNewNode(root, "ShowDebugWindow", m_bShowDebug.ToString());
-					XmlUtil.AddNewNode(root, "AutoReconnect", m_AutoReconnect.ToString());
-                    XmlUtil.AddNewNode(root, "WriteLogFile", m_WriteLogFile.ToString());
-					XmlUtil.AddNewNode(root, "AutoUAC", m_bAutoUAC.ToString());
-					m_Encodings.Save(root);
-					listMain.Save(root, zip, Path.GetDirectoryName(sFileName));
-					listFavorites.Save(root, zip, Path.GetDirectoryName(sFileName));
-
-					doc.PreserveWhitespace = true;
-					doc.Save(sFileName);
-
-					zip.Add(sFileName);
-					zip.Close();
-					File.Delete(sFileName);
-				}//end try
-				catch ( Exception err )
-				{
-					FormClipboard.TraceLn(true, "Settings", "Save", "Exception: {0}", err.Message);
-				}//end catch
-			}//end save
-
-			public void Load(string sFileName, Form parent, ClipboardList listMain, ClipboardList listFavorites, Image icoDefault)
-			{
-                try
-                {
-                    m_HotKey = new HotKeyTranslator(parent, m_iHotKeyAppId);
-
-                    try
-                    {
-						DotNetZip.UnZipFiles(GetZipFilePath(sFileName), Path.GetDirectoryName(GetZipFilePath(sFileName)));
-						//JavaUnZip unzip = new JavaUnZip(GetZipFilePath(sFileName));
-						//unzip.ExtractFiles(Path.GetDirectoryName(GetZipFilePath(sFileName)));
-                    }//end try
-                    catch ( Exception err)
-                    {
-                        FormClipboard.TraceLn(true, "Settings", "Load",
-                            "Unzip: {0} Error: {1}", sFileName, err.Message);
-                    }//end catch
-				
-                    XmlDocument doc = new XmlDocument();
-					doc.Load(sFileName);
-					XmlNode root = doc.SelectSingleNode("Settings");
-
-					m_HotKey.Load(root);
-					m_iHistoryLen = XmlUtil.GetInt(root, "HistoryLength", m_iHistoryLen);
-					m_bShowSnapShot = XmlUtil.GetBool(root, "ShowSnapShot", m_bShowSnapShot);
-					m_bShowDebug = XmlUtil.GetBool(root, "ShowDebugWindow", m_bShowDebug);
-					m_AutoReconnect = XmlUtil.GetBool(root, "AutoReconnect", m_AutoReconnect);
-                    WriteLogFile = XmlUtil.GetBool(root, "WriteLogFile", m_WriteLogFile);
-                    m_bAutoUAC = XmlUtil.GetBool(root, "AutoUAC", m_bAutoUAC);
-					m_Encodings.Load(root);
-					listMain.Load(doc, icoDefault);
-					listFavorites.Load(doc, icoDefault);
-
-					File.Delete(sFileName);
-				}//end try
-				catch ( Exception err )
-				{
-					FormClipboard.TraceLn(true, "Settings", "Load",
-						"{0} Error: {1}", sFileName, err.Message);
-				}//end catch
-			}//end Load
-
-			private string GetZipFilePath(string sFileName)
-			{
-				return Path.ChangeExtension(sFileName, ".mzconfig");
-			}//end GetZipFilePath
-		}//end class Settings
 
 		private void FormClipboard_Load(object sender, EventArgs e)
 		{
@@ -566,9 +455,9 @@ namespace ClipboardManager
 				list[idx - startIdx].Text = clp.ShortDesc();
                 if ( list[idx - startIdx].Text != clp.ToString() )
                     list[idx - startIdx].ToolTipText = clp.ShortDesc(400, false);
-				list[idx - startIdx].MouseDown += new MouseEventHandler(this.m_contextMenuStrip_ClipboardEntry_MouseDown);
-				list[idx - startIdx].MouseUp += new MouseEventHandler(this.m_contextMenuStrip_ClipboardEntry_MouseUp);
-				list[idx - startIdx].Click += new EventHandler(this.m_contextMenuStrip_ClipboardEntry_Click);
+				list[idx - startIdx].MouseDown += (this.m_contextMenuStrip_ClipboardEntry_MouseDown);
+				list[idx - startIdx].MouseUp += (this.m_contextMenuStrip_ClipboardEntry_MouseUp);
+				list[idx - startIdx].Click += (this.m_contextMenuStrip_ClipboardEntry_Click);
 				list[idx - startIdx].Image = clp.GetCombinedIcon(true);
 				list[idx - startIdx].Tag = clp;
 				//list[idx - startIdx].DropDownItems.Add(m_ClipboardMenuItem_CreateSubMenu(clp));
@@ -587,7 +476,7 @@ namespace ClipboardManager
                 if ( list[idx].Text != clp.ToString() )
                     list[idx].ToolTipText = clp.ToString();
                 //list[idx].MouseUp += new MouseEventHandler(this.m_contextMenuStripClipboard_Favorites_Entry_MouseUp);
-				list[idx].Click += new EventHandler(this.m_contextMenuStrip_ClipboardEntry_LeftClick);
+				list[idx].Click += (this.m_contextMenuStrip_ClipboardEntry_LeftClick);
 				list[idx].Image = clp.GetCombinedIcon(bTwinImage);
 				list[idx].Tag = clp;
 			}//end for
@@ -1073,7 +962,7 @@ namespace ClipboardManager
 		private void m_ToolStripMenuItem_Edit_Test_Click(object sender, EventArgs e)
 		{
             //flush the log file
-            Program.Log("", "", true);
+            Utils.Log.FlushLog();
 
 			TraceLn("m_ToolStripMenuItem_Edit_Test_Click", "Click...");
 			AnimEffect.AnimEffect eff = new AnimEffect.AnimEffect();
@@ -1275,14 +1164,14 @@ namespace ClipboardManager
 
 				if ( this.InvokeRequired )
 				{
-                    Program.Log("{0} : ", "Before invoke: "+sMessage, bAlways);
+                    Utils.Log.Write(bAlways, "{0} : ", "Before invoke: "+sMessage);
 					TraceLnExCallback trace = new TraceLnExCallback(TraceLnEx);
 					this.Invoke(trace, new object[] { bAlways, sModule, sMethod, sFormat, args });
 					return;
 				}//end if
 
                 //add date into beginning of the message
-                sMessage = Program.Log("{0} : ", sMessage, bAlways) + sMessage;
+                sMessage = Utils.Log.Write(bAlways, "{0} : ", sMessage) + sMessage;
 				System.Diagnostics.Trace.Write("@@: "+sMessage);
 				
 				//only if debug window is open
@@ -1305,7 +1194,7 @@ namespace ClipboardManager
 			}//end try
 			catch ( Exception err )
 			{
-                Program.Log("{0} : ", "Problem in TraceLnEx: "+err.ToString(), true);
+                Utils.Log.WriteLineF("Problem in TraceLnEx: "+err.ToString());
 				System.Diagnostics.Trace.WriteLine("Problem in debug window: " + err.Message);
 			}//end catch
 		}//end TraceLnEx

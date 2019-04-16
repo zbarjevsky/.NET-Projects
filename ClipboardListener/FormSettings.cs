@@ -10,10 +10,10 @@ namespace ClipboardManager
 {
 	public partial class FormSettings : Form
 	{
-		private FormClipboard.Settings m_Settings = null;
+		private Utils.Settings m_Settings = null;
 		private HotKeyTranslator m_HotKey = null;
 
-		public FormSettings(FormClipboard.Settings sett)
+		public FormSettings(Utils.Settings sett)
 		{
 			this.m_Settings = sett;
 			
