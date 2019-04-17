@@ -132,6 +132,8 @@ namespace ClipboardManager
 			if ( m_Settings.m_AutoReconnect ) 
 				m_TimerReconnect.Start();
 
+            ShutdownHandler.AbortShutdownIfScheduled = m_Settings.m_bAbortShutdown;
+
             m_notifyIconCoodClip.Visible = true;
             this.Hide();
 		}//end FormClipboard_Load
@@ -845,6 +847,8 @@ namespace ClipboardManager
 					m_TimerReconnect.Start();
 				else
 					m_TimerReconnect.Stop();
+
+                ShutdownHandler.AbortShutdownIfScheduled = m_Settings.m_bAbortShutdown;
 			}//end try
 			catch ( Exception err )
 			{
@@ -911,7 +915,8 @@ namespace ClipboardManager
 
 		private void m_contextMenuStripTrayIcon_History_Click(object sender, EventArgs e)
 		{
-			ProcessHotkey(new Pos(SystemInformation.MaxWindowTrackSize));
+            Point location = m_contextMenuStripTrayIcon.PointToScreen(new Point());
+            ProcessHotkey(new Pos(new Size(location)));
 		}//end m_contextMenuStripTrayIcon_History_Click
 
 		private void m_contextMenuStripTrayIcon_Settings_Click(object sender, EventArgs e)

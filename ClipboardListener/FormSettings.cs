@@ -14,9 +14,9 @@ namespace ClipboardManager
 		private Utils.Settings m_Settings = null;
 		private HotKeyTranslator m_HotKey = null;
 
-		public FormSettings(Utils.Settings sett)
+		public FormSettings(Utils.Settings settings)
 		{
-			this.m_Settings = sett;
+			this.m_Settings = settings;
 			
 			//remember old settings - to reset on cancel
 			m_HotKey = m_Settings.m_HotKey.Clone();
@@ -48,8 +48,10 @@ namespace ClipboardManager
 			m_numHistoryLen.Value			= m_Settings.m_iHistoryLen;
 			m_chkStartWithWindows.Checked	= LoadWithWindows;
 		    m_chkAutoUAC.Checked            = m_Settings.m_bAutoUAC;
-			
-			m_HotKey.UnregisterHotKey(); //to allow change or reset
+            m_chkAbortShutdown.Checked      = m_Settings.m_bAbortShutdown;
+
+
+            m_HotKey.UnregisterHotKey(); //to allow change or reset
 
             m_chkReconnect.Checked			= m_Settings.m_AutoReconnect;
             m_chkLog.Checked    			= m_Settings.WriteLogFile;
@@ -67,6 +69,7 @@ namespace ClipboardManager
 			m_Settings.m_AutoReconnect = m_chkReconnect.Checked;
             m_Settings.WriteLogFile  = m_chkLog.Checked;
 		    m_Settings.m_bAutoUAC = m_chkAutoUAC.Checked;
+		    m_Settings.m_bAbortShutdown = m_chkAbortShutdown.Checked;
 		}//end m_btnOK_Click
 
 		private void m_btnCancel_Click(object sender, EventArgs e)
