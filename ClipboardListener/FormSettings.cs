@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using Utils;
 
 namespace ClipboardManager
 {
@@ -84,7 +85,7 @@ namespace ClipboardManager
             }
             catch (Exception err)
             {
-                FormClipboard.MsgBoxErr(err.Message);
+                CenteredMessageBox.MsgBoxErr(err.Message);
                 return null;
             }
         }

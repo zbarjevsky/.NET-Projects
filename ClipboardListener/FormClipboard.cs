@@ -15,6 +15,7 @@ using System.Reflection;
 using ClipboardManager.Zip;
 using ClipboardManager.DesktopUtil;
 using Microsoft.Win32;
+using Utils;
 
 namespace ClipboardManager
 {
@@ -70,7 +71,7 @@ namespace ClipboardManager
             string appDataFolder = Application.LocalUserAppDataPath;
 
             m_sFileName = Path.Combine(appDataFolder, m_sFileName);
-			TraceLnEx(true, "FormClipboard", "C-tor", "Settings file: {0}", m_sFileName);
+			LogMethodEx(true, "FormClipboard", "C-tor", "Settings file: {0}", m_sFileName);
 
 			this.SetupSystemMenu();
 			Application.AddMessageFilter(new ClipboardMessageFilter(this));
@@ -150,21 +151,21 @@ namespace ClipboardManager
 
                 if ( m_bModified )
 				{
-                    TraceLnEx(true, "FormClipboard", "m_TimerReconnect_Tick", "SaveInThread()");
+                    LogMethodEx(true, "FormClipboard", "m_TimerReconnect_Tick", "SaveInThread()");
 					m_Settings.m_bShowSnapShot = m_ToolStripMenuItem_View_SnapShot.Checked;
 					Thread thr = new Thread(new ThreadStart(Save));
                     thr.IsBackground = false;
 					thr.Start();
 				}//end if
                 
-				TraceLnEx(true, "FormClipboard", "m_TimerReconnect_Tick", "*** Reconnect={0}, {1}",
+				LogMethodEx(true, "FormClipboard", "m_TimerReconnect_Tick", "*** Reconnect={0}, {1}",
                     bReconnect, sp.TotalMilliseconds);
 
 				GC.Collect();
 			}//end try
 			catch ( Exception err ) 
 			{
-				TraceLnEx(true, "Settings", "m_TimerReconnect_Tick", 
+				LogMethodEx(true, "Settings", "m_TimerReconnect_Tick", 
 					"Error: {0}", err.Message);
 			}//end catch		
 		}//end m_TimerReconnect_Tick
@@ -193,13 +194,13 @@ namespace ClipboardManager
 
 			try
 			{
-                TraceLn("Save", "Saving: {0}", m_sFileName);
+                LogMethod("Save", "Saving: {0}", m_sFileName);
 				m_Settings.Save(m_sFileName, m_ClipboardListMain, m_ClipboardListFavorites);
 				m_bModified = false;
 			}//end try
 			catch ( Exception err )
 			{
-				TraceLn("Save", "Error: {0}", err.ToString());
+				LogMethod("Save", "Error: {0}", err.ToString());
 			}//end catch
 		}//end Save
 
@@ -259,7 +260,7 @@ namespace ClipboardManager
                 if (ts.TotalSeconds < 1.0)
                     return false; //to avoid infinite loop
 
-				TraceLn("ProcessClipboardData", "past from this={0} snapshot: {1}",
+				LogMethod("ProcessClipboardData", "past from this={0} snapshot: {1}",
 					m_bPasteFromThis, m_bCopyFromSnapShot);
 
 				//remember last time received data
@@ -285,7 +286,7 @@ namespace ClipboardManager
 				if ( !m_bCopyFromSnapShot )
 					m_ClipboardListMain.GetCurrentEntry().SetRichText(m_richTextBoxSnapShot, m_icoSnapShotApp, m_lblSnapShotType);
 
-				TraceLn("ProcessClipboardData", "Clipboard change: {0}",
+				LogMethod("ProcessClipboardData", "Clipboard change: {0}",
 					m_ClipboardListMain.GetCurrentEntry().ShortDesc());
 
 				m_toolStripStatusLabel1.Image = m_ClipboardListMain.GetCurrentEntry()._icoAppFrom;
@@ -293,7 +294,7 @@ namespace ClipboardManager
 			}//end try
 			catch ( Exception e )
 			{
-				TraceLn("ProcessClipboardData", "Clipboard error: {0}", e.ToString());
+				LogMethod("ProcessClipboardData", "Clipboard error: {0}", e.ToString());
 				m_toolStripStatusLabel1.Image = m_imageListClipboardTypes.Images[5];
 				m_toolStripStatusLabel1.Text = "Clipboard error: " + e.ToString();
 				//MessageBox.Show(e.ToString());
@@ -321,11 +322,11 @@ namespace ClipboardManager
 			{
 				string sFormat = m_ToolStripComboBox_CFormats.Text;
 				object data = Clipboard.GetData(sFormat);
-				TraceLn("CFormats_SelectedIndexChanged", "DataType: {0}", data==null?"null":data.ToString());
+				LogMethod("CFormats_SelectedIndexChanged", "DataType: {0}", data==null?"null":data.ToString());
 			}//end try
 			catch ( Exception err)
 			{
-				TraceLn("CFormats_SelectedIndexChanged", "Error: {0}", err.ToString());
+				LogMethod("CFormats_SelectedIndexChanged", "Error: {0}", err.ToString());
 			}//end catch
 		}//end m_ToolStripComboBox_CFormats_SelectedIndexChanged
 
@@ -340,7 +341,7 @@ namespace ClipboardManager
 			const int ICON_BIG			= 1;
 			
 			string sTitle = NativeWIN32.GetWindowText(hWnd);
-			TraceLn("GetIconFromHWnd", "Caption(ico): {0}", sTitle);
+			LogMethod("GetIconFromHWnd", "Caption(ico): {0}", sTitle);
 			if (hWnd == this.Handle || sTitle.Trim().Length == 0 )
 				return this.Icon.ToBitmap();
 
@@ -398,8 +399,8 @@ namespace ClipboardManager
 		{
 			m_hWndToRestore = ForegroundWindow.Instance.Handle;
 			NativeWIN32.RECT rc = NativeWIN32.GetWindowRect(m_hWndToRestore);
-			TraceLn("ProcessHotkey", "Parent rc: {0}",  rc);
-			TraceLn("ProcessHotkey", "Caption(HotKey): {0}", NativeWIN32.GetWindowText(m_hWndToRestore));
+			LogMethod("ProcessHotkey", "Parent rc: {0}",  rc);
+			LogMethod("ProcessHotkey", "Caption(HotKey): {0}", NativeWIN32.GetWindowText(m_hWndToRestore));
 
 			//redbuild menu without flickering
 			m_contextMenuStripClipboard.Visible = false;
@@ -559,7 +560,7 @@ namespace ClipboardManager
 			m_bLeaveContextMenuOpened = false;
 
 			IntPtr hWndCurr = ForegroundWindow.Instance.Handle;
-			TraceLn("ClipboardEntry_Closed", "Caption3: {0} Text: {1}", 
+			LogMethod("ClipboardEntry_Closed", "Caption3: {0} Text: {1}", 
 				hWndCurr, NativeWIN32.GetWindowText(hWndCurr));
 
 			//restore color of selected item
@@ -582,7 +583,7 @@ namespace ClipboardManager
 			try
 			{
 				ClipboardList.ClipboardEntry clp = (ClipboardList.ClipboardEntry)itm.Tag;
-				TraceLn("ClipboardEntry_AddToFavorites_Click", "Add tofavorites: {0}", clp.ShortDesc());
+				LogMethod("ClipboardEntry_AddToFavorites_Click", "Add tofavorites: {0}", clp.ShortDesc());
 
 				m_ClipboardListFavorites.AddEntry(clp);
 
@@ -618,7 +619,7 @@ namespace ClipboardManager
 			try
 			{
 				ClipboardList.ClipboardEntry clp = (ClipboardList.ClipboardEntry)itm.Tag;
-				TraceLn("ClipboardEntry_Remove_Click", "Delete: {0}", clp.ShortDesc());
+				LogMethod("ClipboardEntry_Remove_Click", "Delete: {0}", clp.ShortDesc());
 				int idx = m_ClipboardListMain.FindEntry(clp);
 				if (idx > 0) //cannot remove last entry
 					m_ClipboardListMain.RemoveAt(idx);
@@ -667,7 +668,7 @@ namespace ClipboardManager
             }//end try
 			catch ( Exception err )
 			{
-				TraceLn("m_contextMenuStrip_ClipboardEntry_LeftClick()", 
+				LogMethod("m_contextMenuStrip_ClipboardEntry_LeftClick()", 
 					"Error: ", err.Message);
 			}//end catch
 			finally
@@ -687,8 +688,8 @@ namespace ClipboardManager
 			//restore previous active window - if still foreground
 			IntPtr hWndCurr = ForegroundWindow.Instance.Handle;
 
-			TraceLn("m_contextMenuStripClipboard_Closed", "Caption1: {0}", NativeWIN32.GetWindowText(hWndCurr));
-			TraceLn("m_contextMenuStripClipboard_Closed", "Caption2: {0}", NativeWIN32.GetWindowText(m_hWndToRestore));
+			LogMethod("m_contextMenuStripClipboard_Closed", "Caption1: {0}", NativeWIN32.GetWindowText(hWndCurr));
+			LogMethod("m_contextMenuStripClipboard_Closed", "Caption2: {0}", NativeWIN32.GetWindowText(m_hWndToRestore));
 
 			//close menu - clear screen
 			m_contextMenuStripClipboard.Close(ToolStripDropDownCloseReason.AppFocusChange);
@@ -811,18 +812,18 @@ namespace ClipboardManager
 		private void m_ToolStripMenuItem_Edit_Cut_Click(object sender, EventArgs e)
 		{
 			m_bCopyFromSnapShot = true;
-			TraceLn("m_ToolStripMenuItem_Edit_Cut_Click", "Cut1");
+			LogMethod("m_ToolStripMenuItem_Edit_Cut_Click", "Cut1");
 			GetRichTextBoxInFocus(sender).Cut();
-			TraceLn("m_ToolStripMenuItem_Edit_Cut_Click", "Cut2");
+			LogMethod("m_ToolStripMenuItem_Edit_Cut_Click", "Cut2");
 			//m_bCopyFromSnapShot = false;
 		}//end m_ToolStripMenuItem_Edit_Cut_Click
 
 		private void m_ToolStripMenuItem_Edit_Copy_Click(object sender, EventArgs e)
 		{
 			m_bCopyFromSnapShot = true;
-			TraceLn("m_ToolStripMenuItem_Edit_Copy_Click", "Copy1");
+			LogMethod("m_ToolStripMenuItem_Edit_Copy_Click", "Copy1");
 			GetRichTextBoxInFocus(sender).Copy();
-			TraceLn("m_ToolStripMenuItem_Edit_Copy_Click", "Copy2");
+			LogMethod("m_ToolStripMenuItem_Edit_Copy_Click", "Copy2");
 			//m_bCopyFromSnapShot = false;
 		}//end m_ToolStripMenuItem_Edit_Copy_Click
 
@@ -847,7 +848,7 @@ namespace ClipboardManager
 			}//end try
 			catch ( Exception err )
 			{
-				MsgBoxErr("Error in options: {0}", err.ToString());
+                CenteredMessageBox.MsgBoxErr("Error in options: {0}", err.ToString());
 			}//end catch
 		}//end m_ToolStripMenuItem_Tools_Settings_Click
 
@@ -881,7 +882,7 @@ namespace ClipboardManager
 
 		private void m_notifyIconCoodClip_MouseClick(object sender, MouseEventArgs e)
 		{
-			TraceLn("m_notifyIconCoodClip_MouseClick", "m_notifyIconCoodClip 1 clicks: {0}", e.Clicks);
+			LogMethod("m_notifyIconCoodClip_MouseClick", "m_notifyIconCoodClip 1 clicks: {0}", e.Clicks);
             if (e.Button == MouseButtons.Left)
             {
                 //calculate rigth - lower quater of main screen
@@ -899,7 +900,7 @@ namespace ClipboardManager
 
 		private void m_notifyIconCoodClip_MouseDoubleClick(object sender, MouseEventArgs e)
 		{
-			TraceLn("m_notifyIconCoodClip_MouseDoubleClick", "m_notifyIconCoodClip 2 clicks: {0}", e.Clicks);
+			LogMethod("m_notifyIconCoodClip_MouseDoubleClick", "m_notifyIconCoodClip 2 clicks: {0}", e.Clicks);
 			
 			//hide menu if opened
 			//m_contextMenuStripClipboard.Visible = false;
@@ -964,7 +965,7 @@ namespace ClipboardManager
             //flush the log file
             Utils.Log.FlushLog();
 
-			TraceLn("m_ToolStripMenuItem_Edit_Test_Click", "Click...");
+			LogMethod("m_ToolStripMenuItem_Edit_Test_Click", "Click...");
 			AnimEffect.AnimEffect eff = new AnimEffect.AnimEffect();
 			eff.Play(this.Bounds, Color.Black, true);
 			eff.Play(this.Bounds, Color.Black, false);
@@ -1121,85 +1122,65 @@ namespace ClipboardManager
 		{
 			SetFontSize(4);
 		}//end m_toolStripButton_FontSize_4_Click
-
-		public static void MsgBox(MessageBoxIcon icn, string sTitle, string sFormat, params object[] args)
-		{
-			MessageBox.Show(string.Format(sFormat, args),
-				sTitle,
-				MessageBoxButtons.OK,
-				icn, 
-                MessageBoxDefaultButton.Button1, MessageBoxOptions.ServiceNotification);
-		}//end MsgBox
-
-		public static void MsgBoxErr(string sFormat, params object[] args)
-		{
-			MsgBox(MessageBoxIcon.Error, "Clipboard Manager", sFormat, args);
-		}//end MsgBoxErr
-
-		public static void MsgBoxIfo(string sFormat, params object[] args)
-		{
-			MsgBox(MessageBoxIcon.Information, "Clipboard Manager", sFormat, args);
-		}//end MsgBoxErr
-
 		public static void TraceLn(bool bAlways, string sModule, string sMethod, string sFormat, params object[] args)
 		{
 			if ( m_This == null )
 				return;
 
-			m_This.TraceLnEx(bAlways, sModule, sMethod, sFormat, args);
+			m_This.LogMethodEx(bAlways, sModule, sMethod, sFormat, args);
 		}//end TraceLnEx
 		
-		private void TraceLn(string sMethod, string sFormat, params object[] args)
+		private void LogMethod(string sMethod, string sFormat, params object[] args)
 		{
-			TraceLnEx(false, "FormClipboard", sMethod, sFormat, args);
+			LogMethodEx(false, "FormClipboard", sMethod, sFormat, args);
 		}//end TraceLn
 
 		delegate void TraceLnExCallback(bool bAlways, string sModule, string sMethod, string sFormat, params object[] args);
-		private void TraceLnEx(bool bAlways, string sModule, string sMethod, string sFormat, params object[] args)
+		private void LogMethodEx(bool bAlwaysAddToDebugWindow, string sModule, string sMethod, string sFormat, params object[] args)
 		{
 			try
 			{
-				string sMessage = string.Format("[{0}][{1}] : {2}\n",
-					sModule, sMethod, string.Format(sFormat, args));
+                string sMessage = Utils.Log.WriteLineF(bAlwaysAddToDebugWindow, 
+                    "[{0}][{1}] : {2}", sModule, sMethod, string.Format(sFormat, args));
 
-				if ( this.InvokeRequired )
-				{
-                    Utils.Log.Write(bAlways, "{0} : ", "Before invoke: "+sMessage);
-					TraceLnExCallback trace = new TraceLnExCallback(TraceLnEx);
-					this.Invoke(trace, new object[] { bAlways, sModule, sMethod, sFormat, args });
-					return;
-				}//end if
-
-                //add date into beginning of the message
-                sMessage = Utils.Log.Write(bAlways, "{0} : ", sMessage) + sMessage;
-				System.Diagnostics.Trace.Write("@@: "+sMessage);
-				
-				//only if debug window is open
-				if ( !bAlways )
-				{
-					if ( !m_ToolStripMenuItem_View_Debug.Checked )
-						return;
-
-					if ( !m_richTextBoxDebug.Visible )
-						return;
-				}//end if
-
-				System.Diagnostics.Trace.Write("##: "+sMessage);
-				
-				m_richTextBoxDebug.AppendText(sMessage);
-				bool bScroll = m_btnDebugScroll.ImageIndex == 0;
-				if ( bScroll )
-					m_richTextBoxDebug.ScrollToCaret();
-
+                //only if debug window is open
+                AppendTextToDebugWindow(bAlwaysAddToDebugWindow, sMessage);
 			}//end try
 			catch ( Exception err )
 			{
-                Utils.Log.WriteLineF("Problem in TraceLnEx: "+err.ToString());
-				System.Diagnostics.Trace.WriteLine("Problem in debug window: " + err.Message);
+                Utils.Log.WriteLineF("Problem in LogMethodEx: " + err.ToString());
 			}//end catch
 		}//end TraceLnEx
 
-		private void m_btnDebugClear_Click(object sender, EventArgs e)
+        private void AppendTextToDebugWindow(bool bAlwaysAddToDebugWindow, string sMessage)
+        {
+            if (this.InvokeRequired)
+            {
+                Utils.Log.WriteLineF(bAlwaysAddToDebugWindow, "Before invoke: " + sMessage);
+                this.BeginInvoke(new MethodInvoker(() => {
+                    AppendTextToDebugWindow(bAlwaysAddToDebugWindow, sMessage);
+                }));
+
+                return;
+            }//end if
+
+            //only if debug window is open
+            if (!bAlwaysAddToDebugWindow)
+            {
+                if (!m_ToolStripMenuItem_View_Debug.Checked)
+                    return;
+
+                if (!m_richTextBoxDebug.Visible)
+                    return;
+            }//end if
+
+            m_richTextBoxDebug.AppendText(sMessage);
+            bool bScroll = m_btnDebugScroll.ImageIndex == 0;
+            if (bScroll)
+                m_richTextBoxDebug.ScrollToCaret();
+        }
+
+        private void m_btnDebugClear_Click(object sender, EventArgs e)
 		{
 			m_richTextBoxDebug.Text = "";
 		}//end m_btnDebugClear_Click
@@ -1242,7 +1223,7 @@ namespace ClipboardManager
 			string s = m_richTextBoxClipboard.SelectedText;
 			if ( s == null || s.Length == 0 )
 			{
-				MsgBoxIfo("No text selected");
+                CenteredMessageBox.MsgBoxIfo("No text selected");
 				return;
 			}//end if
 			StringBuilder sb = new StringBuilder(s.Length);
@@ -1294,7 +1275,7 @@ namespace ClipboardManager
             }//end try
             catch (Exception err)
             {
-                TraceLn("m_contextMenuStripTrayIcon_Reconnect_Click()", "Error: {0}", err.ToString());
+                LogMethod("m_contextMenuStripTrayIcon_Reconnect_Click()", "Error: {0}", err.ToString());
             }//end catch
             finally { m_bModified = bOldModified; }
 		}//end m_contextMenuStripTrayIcon_Reconnect_Click
@@ -1308,7 +1289,7 @@ namespace ClipboardManager
             }
             catch (Exception err)
             {
-                MsgBoxErr("DesktopSave_Click: " + err.Message);
+                CenteredMessageBox.MsgBoxErr("DesktopSave_Click: " + err.Message);
             }
         }
 
@@ -1321,7 +1302,7 @@ namespace ClipboardManager
             }
             catch (Exception err)
             {
-                MsgBoxErr("DesktopRestore_Click: " + err.Message);
+                CenteredMessageBox.MsgBoxErr("DesktopRestore_Click: " + err.Message);
             }
         }
 
@@ -1353,12 +1334,12 @@ namespace ClipboardManager
                 }
                 else if (bUserClick) //comes from user
                 {
-                    MsgBoxIfo("UAC disabled");
+                    CenteredMessageBox.MsgBoxIfo("UAC disabled");
                 }
             }
             catch (Exception err)
             {
-                MsgBoxErr("UAC_Click: " + err.Message);
+                CenteredMessageBox.MsgBoxErr("UAC_Click: " + err.Message);
             }
         }
 

@@ -112,7 +112,7 @@
     <Compile Include="AnimEffect.cs" />
     <Compile Include="ClipboardList.cs" />
     <Compile Include="ClipboardMessageFilter.cs" />
-    <Compile Include="CustomRichTextBox.cs">
+    <Compile Include="Utils\CustomRichTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="DesktopUtil\DelegateCommand.cs" />

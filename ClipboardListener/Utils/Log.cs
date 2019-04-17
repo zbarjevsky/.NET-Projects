@@ -62,7 +62,7 @@ namespace ClipboardManager.Utils
 
                 m_Log = new StreamWriter(sLogFile, true, Encoding.UTF8);
                 WriteLine("\n=========================");
-                WriteLine("[Main] Log file: " + sFileName);
+                WriteLine("[Log][CreateLog] - Log file: " + sLogFile);
 
                 return true;
             }//end try
@@ -81,7 +81,7 @@ namespace ClipboardManager.Utils
         {
             if (m_Log != null)
             {
-                m_Log.FlushAsync();
+                m_Log.Flush();
                 m_Log.Close();
             }
             m_Log = null;
@@ -95,55 +95,33 @@ namespace ClipboardManager.Utils
             }
         }
 
-        public static string GetFormattedDate()
+        private static string GetFormattedDate()
         {
             return DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo);
         }
 
-        //if sDateFmt contains {0} parameter - date will be added
-        //if sMessage is empty and bFlush - do flush only
-        //if sMessage is empty and bFlush is false - return formatted date only
-        public static string Write(bool bFlush, string sDateFmt, string sMessage)
+        public static string Write(string format, params object[] p)
         {
-            string sDate = DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo);
-
-            if (m_Log == null)
-                return sDate;
-
-            if (m_bWriteLog)
-            {
-                if (!string.IsNullOrEmpty(sMessage))
-                {
-                    string sLog = sMessage;
-                    try { sLog = string.Format(sDateFmt, sDate) + sMessage; }
-                    catch { sLog = "Bad date format: " + sDateFmt + "\n" + sMessage; }
-                    m_Log.Write(sLog);
-                }//end if
-
-                if (bFlush)
-                    m_Log.Flush();
-            }//end if
-
-            return sDate;
-        }//end Write
-
-        public static void Write(string format, params object[] p)
-        {
-            WriteLog(false, false, format, p);
+            return WriteLog(false, false, format, p);
         }
 
-        public static void WriteLine(string format, params object[] p)
+        public static string WriteLine(string format, params object[] p)
         {
-            WriteLog(false, true, format, p);
+            return WriteLog(false, true, format, p);
         }
 
         //write log line line and flush
-        public static void WriteLineF(string format, params object[] p)
+        public static string WriteLineF(string format, params object[] p)
         {
-            WriteLog(true, true, format, p);
+            return WriteLog(true, true, format, p);
         }
 
-        private static void WriteLog(bool bFlush, bool addNewLine, string format, params object[] p)
+        public static string WriteLineF(bool bFlush, string format, params object[] p)
+        {
+            return WriteLog(bFlush, true, format, p);
+        }
+
+        private static string WriteLog(bool bFlush, bool addNewLine, string format, params object[] p)
         {
             try
             {
@@ -158,11 +136,18 @@ namespace ClipboardManager.Utils
 
                     if (bFlush)
                         m_Log.Flush();
+
+                    Debug.Write(log);
+                    return log;
                 }
+                return "Log Not Initialized";
             }
             catch (Exception err)
             {
-                File.AppendAllText(@"C:\Temp\ClipboardManagerLog11.txt", Environment.NewLine + err.ToString());
+                string msg = Environment.NewLine + "WriteLog Exception: " + err.ToString();
+                Debug.Write(msg);
+                File.AppendAllText(@"C:\Temp\ClipboardManagerLog11.txt", msg);
+                return "WriteLog Exception: " + err.Message;
             }
         }
     }

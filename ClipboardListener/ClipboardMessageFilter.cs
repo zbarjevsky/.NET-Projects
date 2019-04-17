@@ -20,8 +20,8 @@ namespace ClipboardManager
 		int count = 0;
 		public bool PreFilterMessage(ref Message m)
 		{
-			System.Diagnostics.Debug.WriteLine(string.Format("{0}. FILTER: PreFilterMessage({1}-{2})",
-				count++, m.Msg, WindowsMessages.Message(m.Msg)));
+			//System.Diagnostics.Debug.WriteLine(string.Format("{0}. FILTER: PreFilterMessage({1}-{2})",
+			//	count++, m.Msg, WindowsMessages.Message(m.Msg)));
 			return _frm.ProcessWindowsMessage(ref m);
 		}
 	}

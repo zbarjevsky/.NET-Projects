@@ -51,7 +51,6 @@ namespace Utils
 			return MessageBox.Show(text, caption, buttons, icon, defButton);
 		}
 
-
 		public static DialogResult Show(string text, string caption,
 			MessageBoxButtons buttons, 
 			MessageBoxIcon icon, 
@@ -62,7 +61,6 @@ namespace Utils
 			return MessageBox.Show(text, caption, buttons, icon, defButton, options);
 		}
 
-
 		public static DialogResult Show(IWin32Window owner, string text)
 		{
 			_owner = owner;
@@ -70,14 +68,12 @@ namespace Utils
 			return MessageBox.Show(owner, text);
 		}
 
-
 		public static DialogResult Show(IWin32Window owner, string text, string caption)
 		{
 			_owner = owner;
 			Initialize();
 			return MessageBox.Show(owner, text, caption);
 		}
-
 
 		public static DialogResult Show(IWin32Window owner, string text, 
 			string caption, MessageBoxButtons buttons)
@@ -87,7 +83,6 @@ namespace Utils
 			return MessageBox.Show(owner, text, caption, buttons);
 		}
 
-
 		public static DialogResult Show(IWin32Window owner, string text,
 			string caption, MessageBoxButtons buttons, MessageBoxIcon icon)
 		{
@@ -95,7 +90,6 @@ namespace Utils
 			Initialize();
 			return MessageBox.Show(owner, text, caption, buttons, icon);
 		}
-
 
 		public static DialogResult Show(IWin32Window owner, string text,
 			string caption, MessageBoxButtons buttons, MessageBoxIcon icon,
@@ -106,8 +100,7 @@ namespace Utils
 			return MessageBox.Show(owner, text, caption, buttons, icon, defButton);
 		}
 
-
-		public static DialogResult Show(IWin32Window owner, string text,
+        public static DialogResult Show(IWin32Window owner, string text,
 			string caption, MessageBoxButtons buttons, MessageBoxIcon icon,
 			MessageBoxDefaultButton defButton, MessageBoxOptions options)
 		{
@@ -116,11 +109,29 @@ namespace Utils
 			return MessageBox.Show(owner, text, caption, buttons, icon, defButton, options);
 		}
 
+        public static void MsgBox(MessageBoxIcon icn, string sTitle, string sFormat, params object[] args)
+        {
+            Show(string.Format(sFormat, args),
+                sTitle,
+                MessageBoxButtons.OK,
+                icn,
+                MessageBoxDefaultButton.Button1, MessageBoxOptions.ServiceNotification);
+        }//end MsgBox
 
-		public delegate IntPtr HookProc(int nCode, IntPtr wParam, IntPtr lParam);
+        public static void MsgBoxErr(string sFormat, params object[] args)
+        {
+            MsgBox(MessageBoxIcon.Error, "Clipboard Manager", sFormat, args);
+        }//end MsgBoxErr
+
+        public static void MsgBoxIfo(string sFormat, params object[] args)
+        {
+            MsgBox(MessageBoxIcon.Information, "Clipboard Manager", sFormat, args);
+        }//end MsgBoxErr
+
+        private delegate IntPtr HookProc(int nCode, IntPtr wParam, IntPtr lParam);
 
 
-		public delegate void TimerProc(IntPtr hWnd, uint uMsg, UIntPtr nIDEvent, uint dwTime);
+		private delegate void TimerProc(IntPtr hWnd, uint uMsg, UIntPtr nIDEvent, uint dwTime);
 
 
 		public const int WH_CALLWNDPROCRET = 12;
@@ -150,7 +161,7 @@ namespace Utils
 
 
 		[DllImport("User32.dll")]
-		public static extern UIntPtr SetTimer(IntPtr hWnd, UIntPtr nIDEvent, uint uElapse, TimerProc lpTimerFunc);
+		private static extern UIntPtr SetTimer(IntPtr hWnd, UIntPtr nIDEvent, uint uElapse, TimerProc lpTimerFunc);
 
 
 		[DllImport("User32.dll")]
@@ -158,7 +169,7 @@ namespace Utils
 
 
 		[DllImport("user32.dll")]
-		public static extern IntPtr SetWindowsHookEx(int idHook, HookProc lpfn, IntPtr hInstance, int threadId);
+		private static extern IntPtr SetWindowsHookEx(int idHook, HookProc lpfn, IntPtr hInstance, int threadId);
 
 
 		[DllImport("user32.dll")]
