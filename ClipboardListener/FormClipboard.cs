@@ -68,7 +68,7 @@ namespace ClipboardManager
 			m_ClipboardListMain = new ClipboardList("Main", m_imageListClipboardTypes);
 			m_ClipboardListFavorites = new ClipboardList("Favorites", m_imageListClipboardTypes);
 
-            string appDataFolder = Application.LocalUserAppDataPath;
+            string appDataFolder = Path.GetDirectoryName(Application.LocalUserAppDataPath); //exclude version
 
             m_sFileName = Path.Combine(appDataFolder, m_sFileName);
 			LogMethodEx(true, "FormClipboard", "C-tor", "Settings file: {0}", m_sFileName);
@@ -292,7 +292,8 @@ namespace ClipboardManager
                         m_bModified = true;
 				}//end if
 
-				FillFormatsCombo(m_ClipboardListMain.GetCurrentEntry()._dataType);
+                m_listHistory.UpdateHistoryList(m_ClipboardListMain);
+                FillFormatsCombo(m_ClipboardListMain.GetCurrentEntry()._dataType);
 
 				SetFontSize(-1); //reset font size menu
 				m_ClipboardListMain.GetCurrentEntry().SetRichText(m_richTextBoxClipboard, m_icoClipboardApp, m_lblClipboardType);
@@ -1329,10 +1330,9 @@ namespace ClipboardManager
         {
             try
             {
-                bool writable = true;
                 bool bUserClick = (sender != null);
                 const string REG_KEY = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System";
-                Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(REG_KEY, writable);
+                Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(REG_KEY, writable: true);
                 int val = (int)key.GetValue("EnableLUA");
                 if(val != 0)
                 {
@@ -1340,8 +1340,7 @@ namespace ClipboardManager
                     if ((bUserClick || !m_Settings.m_bAutoUAC)) //show question if user clicked or not Automatic UAC
                     {
                         reset = (DialogResult.Yes == MessageBox.Show(
-                            "User Account Control Enabled\n  Disable?",
-                            "EnableLUA",
+                            @"User Account Control Enabled\n  Disable?", @"EnableLUA",
                             MessageBoxButtons.YesNo, MessageBoxIcon.Question,
                             MessageBoxDefaultButton.Button1, MessageBoxOptions.ServiceNotification));
                     }
@@ -1365,6 +1364,12 @@ namespace ClipboardManager
         private void m_tbbtnDataFolder_Click(object sender, EventArgs e)
         {
             Process.Start(Application.LocalUserAppDataPath);
+        }
+
+        private void m_mnuToolsOpenLogFolder_Click(object sender, EventArgs e)
+        {
+            if(!string.IsNullOrWhiteSpace(m_sFileName))
+                Process.Start(Path.GetDirectoryName(m_sFileName));
         }
 
         private void m_contextMenuStripTrayIcon_About_Click(object sender, EventArgs e)

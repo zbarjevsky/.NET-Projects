@@ -112,6 +112,9 @@
     <Compile Include="AnimEffect.cs" />
     <Compile Include="ClipboardList.cs" />
     <Compile Include="ClipboardMessageFilter.cs" />
+    <Compile Include="Utils\ClipboardHistoryListView.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Utils\CustomRichTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
