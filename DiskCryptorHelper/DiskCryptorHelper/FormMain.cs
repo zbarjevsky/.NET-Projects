@@ -61,9 +61,6 @@ namespace DiskCryptorHelper
                     SmartSelectFirstAvailableDrive();
                 }, this);
             };
-
-            // Define the priority of the application (0x3FF = The higher priority)
-            Win32_Shutdown.SetProcessShutdownParameters(0x3FF, Win32_Shutdown.SHUTDOWN_NORETRY);
         }
 
         const int WM_DEVICECHANGE = 0x0219;
@@ -97,15 +94,6 @@ namespace DiskCryptorHelper
                         ReloadDriveData(0);
                     }
                 }
-            }
-            else if (m.Msg == (int)Win32_Shutdown.eMsg.WM_QUERYENDSESSION || m.Msg == (int)Win32_Shutdown.eMsg.WM_ENDSESSION)
-            {
-                Win32_Shutdown.eMsg msg = (Win32_Shutdown.eMsg)m.Msg;
-                Win32_Shutdown.eLParam lParam = (Win32_Shutdown.eLParam)m.LParam;
-                Log.WriteLine("WndProc: {0}, LParam: 0x{1:X8}", msg, m.LParam);
-
-                if (ProcessShutdownMessage(lParam))
-                    return;
             }
 
             base.WndProc(ref m);
@@ -160,28 +148,6 @@ namespace DiskCryptorHelper
         private void FormMain_FormClosed(object sender, FormClosedEventArgs e)
         {
             m_sysIcon.Visible = false;
-
-            ShutdownHandler.ExitMonitoringShutdown = true;
-        }
-
-        //https://www.microsoftpressstore.com/articles/article.aspx?p=2201310&seqNum=3
-        private bool ProcessShutdownMessage(Win32_Shutdown.eLParam shutdownReason)
-        {
-            bool isCritical = (shutdownReason & Win32_Shutdown.eLParam.ENDSESSION_CRITICAL) != 0;
-            if (Settings.Default.PreventShutdown)
-            {
-                Log.WriteLine("ProcessShutdownMessage: ShutdownBlockReasonCreate()");
-                Win32_Shutdown.ShutdownBlockReasonCreate(this.Handle, "Block Unexpected Shutdown!");
-                return true;
-            }
-
-            Log.WriteLine("ProcessShutdownMessage: ExecuteUnMountAll()");
-            _diskCryptor.ExecuteUnMountAll();
-
-            //Allow Windows to shutdown
-            Win32_Shutdown.ShutdownBlockReasonDestroy(this.Handle);
-
-            return false;
         }
 
         private void ProcessCommanLine(string[] cmd_line)
@@ -733,7 +699,6 @@ namespace DiskCryptorHelper
 
             m_mnuBlockShutdown.Checked = m_chkPreventShutdown.Checked = Settings.Default.PreventShutdown;
 
-            ShutdownHandler.AbortShutdownIfScheduled = Settings.Default.PreventShutdown;
             Settings.Default.Save();
         }
     }

@@ -36,6 +36,7 @@ namespace ClipboardManager
         public static void CancelMonitoringShutdown() { _bExitMonitoringShutdown = true; Thread.Sleep(33); }
 
         //return true to avoid base.WndProc
+        //https://www.microsoftpressstore.com/articles/article.aspx?p=2201310&seqNum=3
         public static bool ProcessShutdownMessage(IntPtr hWnd, ref Message m)
         {
             ParseAndLogShutdownParameters(ref m);
