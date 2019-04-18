@@ -1363,7 +1363,7 @@ namespace ClipboardManager
 
         private void m_tbbtnDataFolder_Click(object sender, EventArgs e)
         {
-            Process.Start(Application.LocalUserAppDataPath);
+            m_mnuToolsOpenLogFolder_Click(sender, e);
         }
 
         private void m_mnuToolsOpenLogFolder_Click(object sender, EventArgs e)
