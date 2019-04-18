@@ -9,13 +9,14 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace ClipboardManager
 {
     public static class ShutdownHandler
     {
-        public static volatile bool AbortShutdownIfScheduled = false;
-        public static volatile bool ExitMonitoringShutdown = false;
+        public static bool AbortShutdownIfScheduled { get; set; } = false;
+        private static volatile bool _bExitMonitoringShutdown = false;
 
         static ShutdownHandler()
         {
@@ -32,9 +33,38 @@ namespace ClipboardManager
             return Win32_Shutdown.AbortSystemShutdown(lpMachineName);
         }
 
+        public static void CancelMonitoringShutdown() { _bExitMonitoringShutdown = true; Thread.Sleep(33); }
+
+        //return true to avoid base.WndProc
+        public static bool ProcessShutdownMessage(IntPtr hWnd, ref Message m)
+        {
+            ParseAndLogShutdownParameters(ref m);
+
+            if (AbortShutdownIfScheduled && m.Msg == (int)Win32_Shutdown.eMsg.WM_QUERYENDSESSION)
+            {
+                Win32_Shutdown.ShutdownBlockReasonCreate(hWnd, "Block Unexpected Shutdown!");
+                Utils.Log.WriteLineF("ProcessShutdownMessage: ShutdownBlockReasonCreate(hWnd = 0x{0:X8})", (uint)hWnd);
+
+                DialogResult res = MessageBox.Show("Allow Windows Shutdown/Reboot/Log off?", "...", 
+                    MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, 
+                    MessageBoxDefaultButton.Button2, MessageBoxOptions.ServiceNotification);
+
+                if (res == DialogResult.Yes)
+                {
+                    Utils.Log.WriteLineF("Allow Windows Shutdown/Reboot/Log off...");
+                    Win32_Shutdown.ShutdownBlockReasonDestroy(hWnd);
+                    return false; //Allow Windows to shutdown
+                }
+
+                return AbortShutdownIfScheduled; //don't call base.WndProc if aborting
+            }
+
+            return false; //Allow Windows to shutdown
+        }
+
         private static void MonitoringShutdownEvent()
         {
-            while (!ExitMonitoringShutdown)
+            while (!_bExitMonitoringShutdown)
             {
                 try
                 {
@@ -75,13 +105,33 @@ namespace ClipboardManager
             else if (error_code == Win32_Shutdown.ERROR_SHUTDOWN_IS_SCHEDULED) //this is what I am expecting to abort
             {
                 AbortSystemShutdown(null);
-                Utils.Log.Write("{0}", "Shutdown schedule was detected and aborted!!!", true);
+                Utils.Log.WriteLineF("Shutdown schedule was detected and aborted!!!");
             }
             else
             {
                 Win32Exception e = new Win32Exception(error_code);
-                Utils.Log.Write("{0}", "Error Detecting Shutdown: " + e.Message, true);
+                Utils.Log.WriteLineF("Error Detecting Shutdown: " + e.Message);
             }
+        }
+
+        private static void ParseAndLogShutdownParameters(ref Message m)
+        {
+            string msg = "WndProc: ";
+            if (m.Msg == (int)Win32_Shutdown.eMsg.WM_QUERYENDSESSION)
+                msg += "WM_QUERYENDSESSION";
+            else if (m.Msg == (int)Win32_Shutdown.eMsg.WM_ENDSESSION)
+                msg += "WM_ENDSESSION";
+            msg += string.Format(", LParam: 0x{0:X8}", (uint)m.LParam);
+            if ((uint)m.LParam == 0) //
+                msg += ", NORMAL";
+            if (((uint)m.LParam & (uint)Win32_Shutdown.eLParam.ENDSESSION_CLOSEAPP) != 0)
+                msg += ", ENDSESSION_CLOSEAPP";
+            if (((uint)m.LParam & (uint)Win32_Shutdown.eLParam.ENDSESSION_CRITICAL) != 0)
+                msg += ", ENDSESSION_CRITICAL";
+            if (((uint)m.LParam & (uint)Win32_Shutdown.eLParam.ENDSESSION_LOGOFF) != 0)
+                msg += ", ENDSESSION_LOGOFF";
+
+            Utils.Log.WriteLineF(msg);
         }
 
         private static void SetPrivilege(String privilegeName, Int32 state)

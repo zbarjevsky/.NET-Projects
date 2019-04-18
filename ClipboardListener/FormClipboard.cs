@@ -75,7 +75,113 @@ namespace ClipboardManager
 
 			this.SetupSystemMenu();
 			Application.AddMessageFilter(new ClipboardMessageFilter(this));
-		}//end constructor
+
+            // Define the priority of the application (0x3FF = The higher priority)
+            Win32_Shutdown.SetProcessShutdownParameters(0x3FF, Win32_Shutdown.SHUTDOWN_NORETRY);
+        }//end constructor
+
+        private int count = 0;
+        protected override void WndProc(ref Message m)
+        {
+            System.Diagnostics.Debug.WriteLine(string.Format("{0}. MAINF: PreFilterMessage({1}-{2})",
+            count++, m.Msg, WindowsMessages.Message(m.Msg)));
+            
+            if (!ProcessWindowsMessage(ref m))
+                base.WndProc(ref m);
+        }
+
+        //return true if processed
+		public bool ProcessWindowsMessage(ref Message m)
+		{
+			// defined in winuser.h
+			const int WM_HOTKEY			= 0x0312;
+			const int WM_DRAWCLIPBOARD	= 0x308;
+			const int WM_CHANGECBCHAIN	= 0x030D;
+			const int WM_SYSCOMMAND		= 0x112;
+            const int WM_ENDSESSION     = 0x0016;
+            const int WM_QUERYENDSESSION = 0x0011;
+
+			switch (m.Msg)
+			{
+				case WM_HOTKEY:
+					ProcessHotkey(null);
+					return true;
+
+				case WM_DRAWCLIPBOARD:
+					if (ProcessClipboardData())
+						NativeWIN32.SendMessage(m_NextClipboardViewer, m.Msg, m.WParam, m.LParam);
+					return true;
+
+				case WM_CHANGECBCHAIN:
+					if (m.WParam == m_NextClipboardViewer)
+						m_NextClipboardViewer = m.LParam;
+					else if ( m_NextClipboardViewer != IntPtr.Zero )
+						NativeWIN32.SendMessage(m_NextClipboardViewer, m.Msg, m.WParam, m.LParam);
+					return true;
+
+				case WM_SYSCOMMAND: //respond to About & Exit
+					if ( m.WParam.ToInt32() == m_iAboutId )
+						m_ToolStripMenuItem_Help_About_Click(null, null);
+					if ( m.WParam.ToInt32() == m_iExitId )
+						m_ToolStripMenuItem_File_Exit_Click(null, null);
+					return false;
+
+                case WM_QUERYENDSESSION:
+                case WM_ENDSESSION:
+                    return ShutdownHandler.ProcessShutdownMessage(this.Handle, ref m);
+
+                default:
+					return false;
+			}//end switch
+		}//end ProcessWindowsMessage
+
+		private void FormClipboard_Load(object sender, EventArgs e)
+		{
+			m_Settings.Load(m_sFileName, this, m_ClipboardListMain, m_ClipboardListFavorites, this.Icon.ToBitmap());
+            m_NextClipboardViewer = (IntPtr)NativeWIN32.SetClipboardViewer((int)this.Handle);
+			bool success = m_Settings.m_HotKey.RegisterHotKey();
+			
+			m_richTextBoxClipboard_SelectionChanged(null, null); //to enable copy/paste
+			
+			m_ToolStripMenuItem_View_SnapShot.Checked = m_Settings.m_bShowSnapShot;
+			m_splitContainerClipboard.Panel2Collapsed = !m_Settings.m_bShowSnapShot;
+
+			m_ToolStripMenuItem_View_Debug.Checked = m_Settings.m_bShowDebug;
+			m_ToolStripMenuItem_View_Debug_Click(sender, e);
+
+			m_Settings.m_Encodings.CreateEncodingsMenuItems(
+				m_ToolStripMenuItem_Tools_Encoding.DropDownItems,
+				m_richTextBoxSnapShot,
+				m_richTextBoxClipboard);
+
+			m_TimerReconnect.Tick += new EventHandler(m_TimerReconnect_Tick);
+			m_TimerReconnect.Interval = TIMEOUT; //~15 min
+			if ( m_Settings.m_AutoReconnect ) 
+				m_TimerReconnect.Start();
+
+            ShutdownHandler.AbortShutdownIfScheduled = m_Settings.m_bAbortShutdown;
+
+            m_notifyIconCoodClip.Visible = true;
+            this.Hide();
+		}//end FormClipboard_Load
+
+		private void FormClipboard_FormClosing(object sender, FormClosingEventArgs e)
+		{
+			if ( e.CloseReason == CloseReason.UserClosing )
+			{
+				e.Cancel = true;
+				this.Hide();
+				return;
+			}//end if
+
+			m_notifyIconCoodClip.Visible = false;
+			m_Settings.m_HotKey.UnregisterHotKey();
+            ShutdownHandler.CancelMonitoringShutdown();
+
+			NativeWIN32.ChangeClipboardChain(this.Handle, m_NextClipboardViewer);
+
+			Save();
+		}//end FormClipboard_FormClosing
 
 		private Bitmap m_bmpExit, m_bmpClose, m_bmpAbout;
 		private void SetupSystemMenu()
@@ -108,36 +214,6 @@ namespace ClipboardManager
 			dst.Click			+= onClick;
 		}//end CopyMenuStripItem
 
-		private void FormClipboard_Load(object sender, EventArgs e)
-		{
-			m_Settings.Load(m_sFileName, this, m_ClipboardListMain, m_ClipboardListFavorites, this.Icon.ToBitmap());
-            m_NextClipboardViewer = (IntPtr)NativeWIN32.SetClipboardViewer((int)this.Handle);
-			bool success = m_Settings.m_HotKey.RegisterHotKey();
-			
-			m_richTextBoxClipboard_SelectionChanged(null, null); //to enable copy/paste
-			
-			m_ToolStripMenuItem_View_SnapShot.Checked = m_Settings.m_bShowSnapShot;
-			m_splitContainerClipboard.Panel2Collapsed = !m_Settings.m_bShowSnapShot;
-
-			m_ToolStripMenuItem_View_Debug.Checked = m_Settings.m_bShowDebug;
-			m_ToolStripMenuItem_View_Debug_Click(sender, e);
-
-			m_Settings.m_Encodings.CreateEncodingsMenuItems(
-				m_ToolStripMenuItem_Tools_Encoding.DropDownItems,
-				m_richTextBoxSnapShot,
-				m_richTextBoxClipboard);
-
-			m_TimerReconnect.Tick += new EventHandler(m_TimerReconnect_Tick);
-			m_TimerReconnect.Interval = TIMEOUT; //~15 min
-			if ( m_Settings.m_AutoReconnect ) 
-				m_TimerReconnect.Start();
-
-            ShutdownHandler.AbortShutdownIfScheduled = m_Settings.m_bAbortShutdown;
-
-            m_notifyIconCoodClip.Visible = true;
-            this.Hide();
-		}//end FormClipboard_Load
-
 		//sometimes after long time of no action it stoppes to receive events, need to reconnect
 		private void m_TimerReconnect_Tick(object sender, EventArgs e)
 		{
@@ -160,7 +236,7 @@ namespace ClipboardManager
 					thr.Start();
 				}//end if
                 
-				LogMethodEx(true, "FormClipboard", "m_TimerReconnect_Tick", "*** Reconnect={0}, {1}",
+				LogMethodEx(true, "FormClipboard", "m_TimerReconnect_Tick", "*** Reconnect Active =={0}, {1} ms",
                     bReconnect, sp.TotalMilliseconds);
 
 				GC.Collect();
@@ -171,23 +247,6 @@ namespace ClipboardManager
 					"Error: {0}", err.Message);
 			}//end catch		
 		}//end m_TimerReconnect_Tick
-
-		private void FormClipboard_FormClosing(object sender, FormClosingEventArgs e)
-		{
-			if ( e.CloseReason == CloseReason.UserClosing )
-			{
-				e.Cancel = true;
-				this.Hide();
-				return;
-			}//end if
-
-			m_notifyIconCoodClip.Visible = false;
-			m_Settings.m_HotKey.UnregisterHotKey();
-
-			NativeWIN32.ChangeClipboardChain(this.Handle, m_NextClipboardViewer);
-
-			Save();
-		}//end FormClipboard_FormClosing
 
 		private void Save()
 		{
@@ -205,54 +264,6 @@ namespace ClipboardManager
 				LogMethod("Save", "Error: {0}", err.ToString());
 			}//end catch
 		}//end Save
-
-	    private int count = 0;
-        protected override void WndProc(ref Message m)
-        {
-            System.Diagnostics.Debug.WriteLine(string.Format("{0}. MAINF: PreFilterMessage({1}-{2})",
-            count++, m.Msg, WindowsMessages.Message(m.Msg)));
-            
-            if (!ProcessWindowsMessage(ref m))
-                base.WndProc(ref m);
-        }
-
-		public bool ProcessWindowsMessage(ref Message m)
-		{
-			// defined in winuser.h
-			const int WM_HOTKEY			= 0x0312;
-			const int WM_DRAWCLIPBOARD	= 0x308;
-			const int WM_CHANGECBCHAIN	= 0x030D;
-			const int WM_SYSCOMMAND		= 0x112;
-
-			switch (m.Msg)
-			{
-				case WM_HOTKEY:
-					ProcessHotkey(null);
-					return true;
-
-				case WM_DRAWCLIPBOARD:
-					if (ProcessClipboardData())
-						NativeWIN32.SendMessage(m_NextClipboardViewer, m.Msg, m.WParam, m.LParam);
-					return true;
-
-				case WM_CHANGECBCHAIN:
-					if (m.WParam == m_NextClipboardViewer)
-						m_NextClipboardViewer = m.LParam;
-					else if ( m_NextClipboardViewer != IntPtr.Zero )
-						NativeWIN32.SendMessage(m_NextClipboardViewer, m.Msg, m.WParam, m.LParam);
-					return true;
-
-				case WM_SYSCOMMAND: //respond to About & Exit
-					if ( m.WParam.ToInt32() == m_iAboutId )
-						m_ToolStripMenuItem_Help_About_Click(null, null);
-					if ( m.WParam.ToInt32() == m_iExitId )
-						m_ToolStripMenuItem_File_Exit_Click(null, null);
-					return false;
-
-				default:
-					return false;
-			}//end switch
-		}//end ProcessWindowsMessage
 
 		private bool ProcessClipboardData()
 		{
@@ -288,7 +299,7 @@ namespace ClipboardManager
 				if ( !m_bCopyFromSnapShot )
 					m_ClipboardListMain.GetCurrentEntry().SetRichText(m_richTextBoxSnapShot, m_icoSnapShotApp, m_lblSnapShotType);
 
-				LogMethod("ProcessClipboardData", "Clipboard change: {0}",
+				LogMethod("ProcessClipboardData", "Clipboard Current Entry: {0}",
 					m_ClipboardListMain.GetCurrentEntry().ShortDesc());
 
 				m_toolStripStatusLabel1.Image = m_ClipboardListMain.GetCurrentEntry()._icoAppFrom;

@@ -61,7 +61,7 @@ namespace ClipboardManager.Utils
                 }//end if
 
                 m_Log = new StreamWriter(sLogFile, true, Encoding.UTF8);
-                WriteLine("\n=========================");
+                WriteLine("=========================");
                 WriteLine("[Log][CreateLog] - Log file: " + sLogFile);
 
                 return true;
@@ -97,7 +97,7 @@ namespace ClipboardManager.Utils
 
         private static string GetFormattedDate()
         {
-            return DateTime.Now.ToString("yyyy/MM/dd HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo);
+            return DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff", DateTimeFormatInfo.InvariantInfo);
         }
 
         public static string Write(string format, params object[] p)
