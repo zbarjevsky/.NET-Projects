@@ -236,8 +236,8 @@ namespace ClipboardManager
 					thr.Start();
 				}//end if
                 
-				LogMethodEx(true, "FormClipboard", "m_TimerReconnect_Tick", "*** Reconnect Active =={0}, {1} ms",
-                    bReconnect, sp.TotalMilliseconds);
+				LogMethodEx(true, "FormClipboard", "m_TimerReconnect_Tick", "*** Reconnect is Active == {0}, Timeout: {1}",
+                    bReconnect, sp.ToString());
 
 				GC.Collect();
 			}//end try
@@ -335,7 +335,10 @@ namespace ClipboardManager
 			{
 				string sFormat = m_ToolStripComboBox_CFormats.Text;
 				object data = Clipboard.GetData(sFormat);
-				LogMethod("CFormats_SelectedIndexChanged", "DataType: {0}", data==null?"null":data.ToString());
+                string sData = data == null ? "null" : data.ToString();
+                if (sData.Length > 1024)
+                    sData = sData.Substring(0, 1024) + " ...";
+				LogMethod("CFormats_SelectedIndexChanged", "Clipboard Format: '{0}', Data: {1}", sFormat, sData);
 			}//end try
 			catch ( Exception err)
 			{

@@ -57,6 +57,8 @@
             this.m_mnuFileOpenVHD_File = new System.Windows.Forms.ToolStripMenuItem();
             this.m_mnuFileCreateVHD = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+            this.m_mnuBlockShutdown = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
             this.m_mnuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.m_btnUnmountAllandBSOD = new System.Windows.Forms.Button();
             this.m_btnEject = new System.Windows.Forms.Button();
@@ -81,8 +83,6 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.m_status1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.m_status2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
-            this.m_mnuBlockShutdown = new System.Windows.Forms.ToolStripMenuItem();
             this.m_sysIconMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitMain)).BeginInit();
             this.m_splitMain.Panel1.SuspendLayout();
@@ -312,7 +312,7 @@
             // m_mnuFileOpenVHD_File
             // 
             this.m_mnuFileOpenVHD_File.Name = "m_mnuFileOpenVHD_File";
-            this.m_mnuFileOpenVHD_File.Size = new System.Drawing.Size(152, 22);
+            this.m_mnuFileOpenVHD_File.Size = new System.Drawing.Size(133, 22);
             this.m_mnuFileOpenVHD_File.Text = "Open File...";
             this.m_mnuFileOpenVHD_File.Click += new System.EventHandler(this.m_mnuFileOpenVHD_File_Click);
             // 
@@ -327,6 +327,20 @@
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
             this.toolStripMenuItem3.Size = new System.Drawing.Size(173, 6);
+            // 
+            // m_mnuBlockShutdown
+            // 
+            this.m_mnuBlockShutdown.CheckOnClick = true;
+            this.m_mnuBlockShutdown.Enabled = false;
+            this.m_mnuBlockShutdown.Name = "m_mnuBlockShutdown";
+            this.m_mnuBlockShutdown.Size = new System.Drawing.Size(176, 22);
+            this.m_mnuBlockShutdown.Text = "&Block Shutdown";
+            this.m_mnuBlockShutdown.Click += new System.EventHandler(this.m_chkPreventShutdown_CheckedChanged);
+            // 
+            // toolStripMenuItem4
+            // 
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(173, 6);
             // 
             // m_mnuExit
             // 
@@ -398,6 +412,7 @@
             // m_chkPreventShutdown
             // 
             this.m_chkPreventShutdown.AutoSize = true;
+            this.m_chkPreventShutdown.Enabled = false;
             this.m_chkPreventShutdown.Location = new System.Drawing.Point(453, 140);
             this.m_chkPreventShutdown.Name = "m_chkPreventShutdown";
             this.m_chkPreventShutdown.Size = new System.Drawing.Size(84, 43);
@@ -585,19 +600,6 @@
             this.m_status2.Size = new System.Drawing.Size(1030, 17);
             this.m_status2.Spring = true;
             this.m_status2.Text = "...";
-            // 
-            // toolStripMenuItem4
-            // 
-            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(173, 6);
-            // 
-            // m_mnuBlockShutdown
-            // 
-            this.m_mnuBlockShutdown.CheckOnClick = true;
-            this.m_mnuBlockShutdown.Name = "m_mnuBlockShutdown";
-            this.m_mnuBlockShutdown.Size = new System.Drawing.Size(176, 22);
-            this.m_mnuBlockShutdown.Text = "&Block Shutdown";
-            this.m_mnuBlockShutdown.Click += new System.EventHandler(this.m_chkPreventShutdown_CheckedChanged);
             // 
             // FormMain
             // 
