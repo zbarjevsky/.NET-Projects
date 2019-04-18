@@ -265,7 +265,7 @@
             this.m_toolStripButton_Up.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.m_toolStripButton_Up.Name = "m_toolStripButton_Up";
             this.m_toolStripButton_Up.Size = new System.Drawing.Size(23, 22);
-            this.m_toolStripButton_Up.Text = "toolStripButton1";
+            this.m_toolStripButton_Up.Text = "Move file up in list";
             this.m_toolStripButton_Up.Click += new System.EventHandler(this.m_toolStripButton_Up_Click);
             // 
             // m_toolStripButton_Down
@@ -275,7 +275,7 @@
             this.m_toolStripButton_Down.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.m_toolStripButton_Down.Name = "m_toolStripButton_Down";
             this.m_toolStripButton_Down.Size = new System.Drawing.Size(23, 22);
-            this.m_toolStripButton_Down.Text = "Down";
+            this.m_toolStripButton_Down.Text = "Move file down in list";
             this.m_toolStripButton_Down.Click += new System.EventHandler(this.m_toolStripButton_Down_Click);
             // 
             // m_openFileDialog
