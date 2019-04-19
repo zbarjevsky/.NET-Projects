@@ -22,16 +22,22 @@ namespace ClipboardManager.Utils
             this.LabelEdit = false;
             this.ShowItemToolTips = true;
 
-            ColumnHeader columnHeader1 = new ColumnHeader();
-            columnHeader1.Text = @"Size";
-            columnHeader1.Width = 60;
-            columnHeader1.TextAlign = HorizontalAlignment.Right;
-            this.Columns.Add(columnHeader1);
+            //ColumnHeader columnHeader1 = new ColumnHeader();
+            //columnHeader1.Text = @"...";
+            //columnHeader1.Width = 30;
+            //columnHeader1.TextAlign = HorizontalAlignment.Right;
+            //this.Columns.Add(columnHeader1);
 
-            ColumnHeader columnHeader2 = new ColumnHeader();
-            columnHeader2.Text = @"Clipboard History";
-            columnHeader2.Width = 400;
-            this.Columns.Add(columnHeader2);
+            //ColumnHeader columnHeader2 = new ColumnHeader();
+            //columnHeader2.Text = @"Size";
+            //columnHeader2.Width = 60;
+            //columnHeader2.TextAlign = HorizontalAlignment.Right;
+            //this.Columns.Add(columnHeader2);
+
+            //ColumnHeader columnHeader3 = new ColumnHeader();
+            //columnHeader3.Text = @"Clipboard History";
+            //columnHeader3.Width = 400;
+            //this.Columns.Add(columnHeader3);
 
             this.HeaderStyle = ColumnHeaderStyle.Nonclickable;
 
@@ -49,7 +55,8 @@ namespace ClipboardManager.Utils
 
         private void ClipboardHistoryListView_SizeChanged(object sender, EventArgs e)
         {
-            this.Columns[1].Width = -1; //this.Width - 30 - this.Columns[0].Width;
+            if(this.Columns.Count > 2)
+                this.Columns[2].Width = -1; 
         }
 
         public void UpdateHistoryList(ClipboardList log, bool update = true)
@@ -67,7 +74,7 @@ namespace ClipboardManager.Utils
                 if (_history.Count > 0)
                     this.EnsureVisible(0);
 
-                this.Columns[1].Width = -1;
+                this.Columns[2].Width = -1;
                 this.Refresh();
             }
         }
@@ -77,8 +84,10 @@ namespace ClipboardManager.Utils
             if (e.ItemIndex < _history.Count)
             {
                 string text = _history[e.ItemIndex].ToString();
-                e.Item = new ListViewItem(text.Length.ToString(), _history[e.ItemIndex]._icoItemType);
-                e.Item.SubItems.Add(text);
+                e.Item = new ListViewItem("", _history[e.ItemIndex]._icoItemType);
+                e.Item.SubItems.Add(text.Length.ToString());
+                e.Item.SubItems.Add(text.Trim().Replace("\\n", " ").Replace("\\r", ""));
+                e.Item.ToolTipText = text;
             }
         }
     }

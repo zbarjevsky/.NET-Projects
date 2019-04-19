@@ -47,7 +47,7 @@ namespace ClipboardManager.Utils
 
             try
             {
-                string sFileName = Path.Combine(Application.LocalUserAppDataPath, FormClipboard.TITLE);
+                string sFileName = Path.Combine(Path.GetDirectoryName(Application.LocalUserAppDataPath), FormClipboard.TITLE);
                 string sLogFile = sFileName + ".log";
 
                 FileInfo fi = new FileInfo(sLogFile);
