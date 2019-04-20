@@ -160,6 +160,7 @@ namespace ClipboardManager
 				m_TimerReconnect.Start();
 
             ShutdownHandler.AbortShutdownIfScheduled = m_Settings.m_bAbortShutdown;
+            Utils.ServiceManipulator.Start();
 
             m_notifyIconCoodClip.Visible = true;
             this.Hide();
@@ -177,8 +178,9 @@ namespace ClipboardManager
 			m_notifyIconCoodClip.Visible = false;
 			m_Settings.m_HotKey.UnregisterHotKey();
             ShutdownHandler.CancelMonitoringShutdown();
+            Utils.ServiceManipulator.Stop();
 
-			NativeWIN32.ChangeClipboardChain(this.Handle, m_NextClipboardViewer);
+            NativeWIN32.ChangeClipboardChain(this.Handle, m_NextClipboardViewer);
 
 			Save();
 		}//end FormClipboard_FormClosing

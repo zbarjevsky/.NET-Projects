@@ -421,8 +421,10 @@ namespace MeditationStopWatch
 
 		private void m_btnFitWindow_Click(object sender, EventArgs e)
 		{
-
-		}
+            FormFullScreenImage frm = new FormFullScreenImage();
+            frm.Picture = m_pictureBox1.Image;
+            frm.ShowDialog(this);
+        }
 
 		private void m_btnOrigSize_Click(object sender, EventArgs e)
 		{
