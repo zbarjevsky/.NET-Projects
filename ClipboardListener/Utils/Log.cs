@@ -121,7 +121,7 @@ namespace ClipboardManager.Utils
             return WriteLog(bFlush, true, format, p);
         }
 
-        private static string WriteLog(bool bFlush, bool addNewLine, string format, params object[] p)
+        public static string WriteLog(bool bFlush, bool addNewLine, string format, params object[] p)
         {
             try
             {

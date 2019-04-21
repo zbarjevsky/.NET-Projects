@@ -31,20 +31,15 @@ namespace ClipboardManager.Utils
         }
     }
 
-    public static class ServiceManipulator
+    public static class ServicesManipulator
     {
         private static Task _task;
 
-        public static volatile bool StopMonitoringServices = false;
-        public static volatile bool PauseMonitoringServices = false;
+        private static volatile bool StopMonitoringServices = false;
+        public static volatile bool ContinuousMonitoringServices = false;
 
         public static Dictionary<string, ServiceController> ServicesList = 
             new Dictionary<string, ServiceController>() { { "SMS Agent Host", null } };
-
-        static ServiceManipulator()
-        {
-            //Start();
-        }
 
         public static bool Start()
         {
@@ -78,7 +73,7 @@ namespace ClipboardManager.Utils
         {
             while(!StopMonitoringServices)
             {
-                if (!PauseMonitoringServices)
+                if (ContinuousMonitoringServices)
                 {
                     try
                     {
@@ -87,22 +82,38 @@ namespace ClipboardManager.Utils
                         {
                             if (ServicesList.ContainsKey(service.DisplayName))
                             {
-                                ServiceControllerStatus oldStatus = 0;
                                 if (ServicesList[service.DisplayName] != null)
-                                    oldStatus = ServicesList[service.DisplayName].Status;
-
-                                ServicesList[service.DisplayName] = service;
-                                if (service.Status != oldStatus)
                                 {
-                                    Utils.Log.WriteLine("[MonitorServicesStatus] Service: '{0}', Status: '{1}', Start Type: '{2}'", 
+                                    if (service.Status != ServicesList[service.DisplayName].Status)
+                                    {
+                                        Utils.Log.WriteLineF("[ServiceManipulator][MonitorServicesStatus] Service Status Change: '{0}', Status: '{1}', Start Type: '{2}'",
+                                            service.DisplayName, service.Status, service.StartType);
+                                    }
+                                    if (service.StartType != ServicesList[service.DisplayName].StartType)
+                                    {
+                                        Utils.Log.WriteLineF("[ServiceManipulator][MonitorServicesStatus] Service Type Changed: '{0}', Status: '{1}', Start Type: '{2}'",
+                                            service.DisplayName, service.Status, service.StartType);
+                                    }
+                                }
+                                else
+                                {
+                                    Utils.Log.WriteLineF("[ServiceManipulator][MonitorServicesStatus] Service Info Initialized: '{0}', Status: '{1}', Start Type: '{2}'",
                                         service.DisplayName, service.Status, service.StartType);
                                 }
-                            }
+                                ServicesList[service.DisplayName] = service;
+
+                                if (service.Status == ServiceControllerStatus.Running)
+                                {
+                                    Utils.Log.WriteLineF("[ServiceManipulator][MonitorServicesStatus] Service Is Running and will be stopped: '{0}', Status: '{1}', Start Type: '{2}'",
+                                       service.DisplayName, service.Status, service.StartType);
+                                    service.Stop();
+                                }
+                           }
                         }
                     }
                     catch (Exception err)
                     {
-                        Utils.Log.WriteLine("Exception in MonitorServicesStatus: {0}", err.ToString());
+                        Utils.Log.WriteLine("[ServiceManipulator][MonitorServicesStatus] Exception: {0}", err.ToString());
                     }
                 }
 

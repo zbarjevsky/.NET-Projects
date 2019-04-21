@@ -127,7 +127,7 @@
     <Compile Include="DesktopUtil\DesktopRegistry.cs" />
     <Compile Include="DesktopUtil\Storage.cs" />
     <Compile Include="DesktopUtil\Win32.cs" />
-    <Compile Include="Utils\ServiceManipulator.cs" />
+    <Compile Include="Utils\ServicesManipulator.cs" />
     <Compile Include="Utils\ShutdownHandler.cs" />
     <Compile Include="Utils\SingleInstanceHelper.cs" />
     <Compile Include="Utils\Log.cs" />

@@ -23,6 +23,7 @@ namespace ClipboardManager.Utils
         private bool m_WriteLogFile = false;
         public bool m_bAutoUAC = false;
         public bool m_bAbortShutdown = false;
+        public bool m_bStopServices = false;
 
         public bool WriteLogFile
         {
@@ -59,6 +60,7 @@ namespace ClipboardManager.Utils
                 XmlUtil.AddNewNode(root, "WriteLogFile", m_WriteLogFile.ToString());
                 XmlUtil.AddNewNode(root, "AutoUAC", m_bAutoUAC.ToString());
                 XmlUtil.AddNewNode(root, "AbortShutdown", m_bAbortShutdown.ToString());
+                XmlUtil.AddNewNode(root, "StopServices", m_bStopServices.ToString());
                 m_Encodings.Save(root);
                 listMain.Save(root, zip, Path.GetDirectoryName(sFileName));
                 listFavorites.Save(root, zip, Path.GetDirectoryName(sFileName));
@@ -106,6 +108,7 @@ namespace ClipboardManager.Utils
                 WriteLogFile = XmlUtil.GetBool(root, "WriteLogFile", m_WriteLogFile);
                 m_bAutoUAC = XmlUtil.GetBool(root, "AutoUAC", m_bAutoUAC);
                 m_bAbortShutdown = XmlUtil.GetBool(root, "AbortShutdown", m_bAbortShutdown);
+                m_bStopServices = XmlUtil.GetBool(root, "StopServices", m_bStopServices);
                 m_Encodings.Load(root);
                 listMain.Load(doc, icoDefault);
                 listFavorites.Load(doc, icoDefault);

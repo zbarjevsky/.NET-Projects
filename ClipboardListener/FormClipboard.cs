@@ -160,7 +160,9 @@ namespace ClipboardManager
 				m_TimerReconnect.Start();
 
             ShutdownHandler.AbortShutdownIfScheduled = m_Settings.m_bAbortShutdown;
-            Utils.ServiceManipulator.Start();
+
+            Utils.ServicesManipulator.ContinuousMonitoringServices = m_Settings.m_bStopServices;
+            Utils.ServicesManipulator.Start();
 
             m_notifyIconCoodClip.Visible = true;
             this.Hide();
@@ -178,7 +180,7 @@ namespace ClipboardManager
 			m_notifyIconCoodClip.Visible = false;
 			m_Settings.m_HotKey.UnregisterHotKey();
             ShutdownHandler.CancelMonitoringShutdown();
-            Utils.ServiceManipulator.Stop();
+            Utils.ServicesManipulator.Stop();
 
             NativeWIN32.ChangeClipboardChain(this.Handle, m_NextClipboardViewer);
 
@@ -866,8 +868,9 @@ namespace ClipboardManager
 					m_TimerReconnect.Stop();
 
                 ShutdownHandler.AbortShutdownIfScheduled = m_Settings.m_bAbortShutdown;
-			}//end try
-			catch ( Exception err )
+                Utils.ServicesManipulator.ContinuousMonitoringServices = m_Settings.m_bStopServices;
+            }//end try
+            catch ( Exception err )
 			{
                 CenteredMessageBox.MsgBoxErr("Error in options: {0}", err.ToString());
 			}//end catch
@@ -1178,7 +1181,9 @@ namespace ClipboardManager
         {
             if (this.InvokeRequired)
             {
-                Utils.Log.WriteLineF(bAlwaysAddToDebugWindow, "Before invoke: " + sMessage);
+                Utils.Log.WriteLog(bAlwaysAddToDebugWindow, false, 
+                    "[AppendTextToDebugWindow][Invoke Required] : " + sMessage);
+
                 this.BeginInvoke(new MethodInvoker(() => {
                     AppendTextToDebugWindow(bAlwaysAddToDebugWindow, sMessage);
                 }));

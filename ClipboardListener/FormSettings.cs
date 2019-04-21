@@ -49,6 +49,7 @@ namespace ClipboardManager
 			m_chkStartWithWindows.Checked	= LoadWithWindows;
 		    m_chkAutoUAC.Checked            = m_Settings.m_bAutoUAC;
             m_chkAbortShutdown.Checked      = m_Settings.m_bAbortShutdown;
+            m_chkStopServices.Checked      = m_Settings.m_bStopServices;
 
 
             m_HotKey.UnregisterHotKey(); //to allow change or reset
@@ -70,6 +71,7 @@ namespace ClipboardManager
             m_Settings.WriteLogFile  = m_chkLog.Checked;
 		    m_Settings.m_bAutoUAC = m_chkAutoUAC.Checked;
 		    m_Settings.m_bAbortShutdown = m_chkAbortShutdown.Checked;
+		    m_Settings.m_bStopServices = m_chkStopServices.Checked;
 		}//end m_btnOK_Click
 
 		private void m_btnCancel_Click(object sender, EventArgs e)

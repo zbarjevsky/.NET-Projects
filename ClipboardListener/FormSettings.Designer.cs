@@ -42,6 +42,7 @@ namespace ClipboardManager
             this.m_chkLog = new System.Windows.Forms.CheckBox();
             this.m_chkAutoUAC = new System.Windows.Forms.CheckBox();
             this.m_chkAbortShutdown = new System.Windows.Forms.CheckBox();
+            this.m_chkStopServices = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.m_numHistoryLen)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_Logo)).BeginInit();
             this.SuspendLayout();
@@ -65,7 +66,7 @@ namespace ClipboardManager
             this.m_btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.m_btnOK.Image = ((System.Drawing.Image)(resources.GetObject("m_btnOK.Image")));
             this.m_btnOK.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.m_btnOK.Location = new System.Drawing.Point(248, 144);
+            this.m_btnOK.Location = new System.Drawing.Point(248, 160);
             this.m_btnOK.Name = "m_btnOK";
             this.m_btnOK.Size = new System.Drawing.Size(75, 23);
             this.m_btnOK.TabIndex = 9;
@@ -79,7 +80,7 @@ namespace ClipboardManager
             this.m_btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.m_btnCancel.Image = ((System.Drawing.Image)(resources.GetObject("m_btnCancel.Image")));
             this.m_btnCancel.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.m_btnCancel.Location = new System.Drawing.Point(248, 175);
+            this.m_btnCancel.Location = new System.Drawing.Point(248, 191);
             this.m_btnCancel.Name = "m_btnCancel";
             this.m_btnCancel.Size = new System.Drawing.Size(75, 23);
             this.m_btnCancel.TabIndex = 10;
@@ -148,7 +149,7 @@ namespace ClipboardManager
             // 
             this.m_chkStartWithWindows.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.m_chkStartWithWindows.AutoSize = true;
-            this.m_chkStartWithWindows.Location = new System.Drawing.Point(12, 111);
+            this.m_chkStartWithWindows.Location = new System.Drawing.Point(12, 112);
             this.m_chkStartWithWindows.Name = "m_chkStartWithWindows";
             this.m_chkStartWithWindows.Size = new System.Drawing.Size(119, 17);
             this.m_chkStartWithWindows.TabIndex = 6;
@@ -159,7 +160,7 @@ namespace ClipboardManager
             // 
             this.m_chkReconnect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.m_chkReconnect.AutoSize = true;
-            this.m_chkReconnect.Location = new System.Drawing.Point(12, 88);
+            this.m_chkReconnect.Location = new System.Drawing.Point(12, 90);
             this.m_chkReconnect.Name = "m_chkReconnect";
             this.m_chkReconnect.Size = new System.Drawing.Size(124, 17);
             this.m_chkReconnect.TabIndex = 5;
@@ -194,7 +195,7 @@ namespace ClipboardManager
             // 
             this.m_chkAutoUAC.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.m_chkAutoUAC.AutoSize = true;
-            this.m_chkAutoUAC.Location = new System.Drawing.Point(12, 157);
+            this.m_chkAutoUAC.Location = new System.Drawing.Point(12, 156);
             this.m_chkAutoUAC.Name = "m_chkAutoUAC";
             this.m_chkAutoUAC.Size = new System.Drawing.Size(98, 17);
             this.m_chkAutoUAC.TabIndex = 8;
@@ -205,12 +206,23 @@ namespace ClipboardManager
             // 
             this.m_chkAbortShutdown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.m_chkAbortShutdown.AutoSize = true;
-            this.m_chkAbortShutdown.Location = new System.Drawing.Point(12, 180);
+            this.m_chkAbortShutdown.Location = new System.Drawing.Point(12, 178);
             this.m_chkAbortShutdown.Name = "m_chkAbortShutdown";
             this.m_chkAbortShutdown.Size = new System.Drawing.Size(150, 17);
             this.m_chkAbortShutdown.TabIndex = 11;
             this.m_chkAbortShutdown.Text = "Abort Unexpected Reboot";
             this.m_chkAbortShutdown.UseVisualStyleBackColor = true;
+            // 
+            // m_chkStopServices
+            // 
+            this.m_chkStopServices.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.m_chkStopServices.AutoSize = true;
+            this.m_chkStopServices.Location = new System.Drawing.Point(12, 200);
+            this.m_chkStopServices.Name = "m_chkStopServices";
+            this.m_chkStopServices.Size = new System.Drawing.Size(170, 17);
+            this.m_chkStopServices.TabIndex = 12;
+            this.m_chkStopServices.Text = "Stop Service if Running (SMS)";
+            this.m_chkStopServices.UseVisualStyleBackColor = true;
             // 
             // FormSettings
             // 
@@ -218,7 +230,8 @@ namespace ClipboardManager
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.m_btnCancel;
-            this.ClientSize = new System.Drawing.Size(335, 210);
+            this.ClientSize = new System.Drawing.Size(335, 226);
+            this.Controls.Add(this.m_chkStopServices);
             this.Controls.Add(this.m_chkAbortShutdown);
             this.Controls.Add(this.m_chkAutoUAC);
             this.Controls.Add(this.m_chkLog);
@@ -265,5 +278,6 @@ namespace ClipboardManager
         private System.Windows.Forms.CheckBox m_chkLog;
         private System.Windows.Forms.CheckBox m_chkAutoUAC;
         private System.Windows.Forms.CheckBox m_chkAbortShutdown;
+        private System.Windows.Forms.CheckBox m_chkStopServices;
     }
 }
