@@ -445,7 +445,7 @@ namespace MeditationStopWatch
         private void m_btnHideSumbnails_Click(object sender, EventArgs e)
         {
             m_splitContainerImage.Panel2Collapsed = !m_splitContainerImage.Panel2Collapsed;
-            m_btnHideSumbnails.Text = m_splitContainerImage.Panel2Collapsed ? "Show" : "Hide";
+            m_btnHideSumbnails.Text = m_splitContainerImage.Panel2Collapsed ? "Show Thumbnails" : "Hide Thumbnails";
             m_btnHideSumbnails.ImageIndex = m_splitContainerImage.Panel2Collapsed ? 1 : 0;
         }
     }
