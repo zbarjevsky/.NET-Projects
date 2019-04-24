@@ -94,6 +94,9 @@ namespace ClipboardManager.Utils
                                         Utils.Log.WriteLineF("[ServiceManipulator][MonitorServicesStatus] Service Type Changed: '{0}', Status: '{1}', Start Type: '{2}'",
                                             service.DisplayName, service.Status, service.StartType);
                                     }
+                                    //release previous instance
+                                    ServicesList[service.DisplayName].Dispose();
+                                    ServicesList[service.DisplayName] = null;
                                 }
                                 else
                                 {
@@ -108,7 +111,11 @@ namespace ClipboardManager.Utils
                                        service.DisplayName, service.Status, service.StartType);
                                     service.Stop();
                                 }
-                           }
+                            }
+                            else //service is not monitored
+                            {
+                                service.Dispose();
+                            }
                         }
                     }
                     catch (Exception err)

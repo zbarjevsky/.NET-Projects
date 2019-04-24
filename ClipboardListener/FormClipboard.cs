@@ -85,13 +85,13 @@ namespace ClipboardManager
         {
             System.Diagnostics.Debug.WriteLine(string.Format("{0}. MAINF: PreFilterMessage({1}-{2})",
             count++, m.Msg, WindowsMessages.Message(m.Msg)));
-            
+
             if (!ProcessWindowsMessage(ref m))
                 base.WndProc(ref m);
         }
 
         //return true if processed
-		public bool ProcessWindowsMessage(ref Message m)
+        public bool ProcessWindowsMessage(ref Message m)
 		{
 			// defined in winuser.h
 			const int WM_HOTKEY			= 0x0312;
@@ -277,7 +277,7 @@ namespace ClipboardManager
                 if (ts.TotalSeconds < 1.0)
                     return false; //to avoid infinite loop
 
-				LogMethod("ProcessClipboardData", "past from this={0} snapshot: {1}",
+				LogMethod("ProcessClipboardData", "past from this = {0} snapshot: {1}",
 					m_bPasteFromThis, m_bCopyFromSnapShot);
 
 				//remember last time received data
