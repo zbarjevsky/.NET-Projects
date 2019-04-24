@@ -14,6 +14,7 @@ namespace ClipboardManager.Utils
     {
         static StreamWriter m_Log = null;
         public static bool m_bWriteLog = true;
+        private static object _cs = new object();
 
         public static void LogEventNfo(string msg)
         {
@@ -40,7 +41,7 @@ namespace ClipboardManager.Utils
             }//end catch
         }//end LogEvent
 
-        public static bool CreateLog()
+        private static bool CreateLog()
         {
             if (m_Log != null)
                 return true;
@@ -79,20 +80,22 @@ namespace ClipboardManager.Utils
 
         public static void CloseLog()
         {
-            if (m_Log != null)
+            lock (_cs)
             {
-                m_Log.Flush();
-                m_Log.Close();
+                if (m_Log != null)
+                {
+                    m_Log.Flush();
+                    m_Log.Close();
+                }
+                m_Log = null;
             }
-            m_Log = null;
         }
 
         public static void FlushLog(bool bFlush = true)
         {
-            if (m_Log != null && bFlush)
-            {
-                m_Log.FlushAsync();
-            }
+            lock (_cs)
+                if (m_Log != null && bFlush)
+                    m_Log.Flush();
         }
 
         private static string GetFormattedDate()
@@ -123,32 +126,35 @@ namespace ClipboardManager.Utils
 
         public static string WriteLog(bool bFlush, bool addNewLine, string format, params object[] p)
         {
-            try
+            lock (_cs)
             {
-                if (CreateLog())
+                try
                 {
-                    string msg = string.Format(format, p);
-                    string log = GetFormattedDate() + " - " + msg;
-                    if (addNewLine)
-                        log += Environment.NewLine;
+                    if (CreateLog())
+                    {
+                        string msg = string.Format(format, p);
+                        string log = GetFormattedDate() + " - " + msg;
+                        if (addNewLine)
+                            log += Environment.NewLine;
 
-                    m_Log.Write(log);
+                        m_Log.Write(log);
 
-                    if (bFlush)
-                        m_Log.Flush();
+                        if (bFlush)
+                            m_Log.Flush();
 
-                    Debug.Write(log);
-                    return log;
+                        Debug.Write(log);
+                        return log;
+                    }
+                    return "Log Not Initialized";
                 }
-                return "Log Not Initialized";
-            }
-            catch (Exception err)
-            {
-                string msg = Environment.NewLine + "WriteLog Exception: " + err.ToString();
-                Debug.Write(msg);
-                File.AppendAllText(@"C:\Temp\ClipboardManagerLog11.txt", msg);
-                return "WriteLog Exception: " + err.Message;
-            }
+                catch (Exception err)
+                {
+                    string msg = Environment.NewLine + "WriteLog Exception: " + err.ToString();
+                    Debug.Write(msg);
+                    File.AppendAllText(@"C:\Temp\ClipboardManagerLog11.txt", msg);
+                    return "WriteLog Exception: " + err.Message;
+                }
+            }//end lock
         }
     }
 }

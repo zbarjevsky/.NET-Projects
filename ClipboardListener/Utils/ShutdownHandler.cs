@@ -65,11 +65,12 @@ namespace ClipboardManager
 
         private static void MonitoringShutdownEvent()
         {
+            ulong count = 0;
             while (!_bExitMonitoringShutdown)
             {
                 try
                 {
-                    if (AbortShutdownIfScheduled)
+                    if (((count++) % 10) == 0 && AbortShutdownIfScheduled) //every 3 seconds
                     {
                         //will return non 0 if succeded
                         //if error - do nothing - no event log entry recorded
@@ -79,8 +80,7 @@ namespace ClipboardManager
                             Utils.Log.WriteLineF("Shutdown schedule was detected and aborted!!!");
                         }
                     }
-
-                    Thread.Sleep(33);
+                    Thread.Sleep(30);
                 }
                 catch (Exception err)
                 {
