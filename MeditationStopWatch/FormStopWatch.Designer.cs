@@ -36,8 +36,9 @@
             this.m_toolStripContainerPictureInfo = new System.Windows.Forms.ToolStripContainer();
             this.m_toolStrip_Picture = new System.Windows.Forms.ToolStrip();
             this.m_tsTxt_FileName = new ToolStripSpringTextBox();
-            this.m_pictureBox1 = new System.Windows.Forms.PictureBox();
             this.m_btnHideSumbnails = new System.Windows.Forms.Button();
+            this.m_imageListBtnHide = new System.Windows.Forms.ImageList(this.components);
+            this.m_pictureBox1 = new System.Windows.Forms.PictureBox();
             this.m_listThumbnails = new System.Windows.Forms.ListView();
             this.m_imageListThumbnails = new System.Windows.Forms.ImageList(this.components);
             this.m_splitContainerTools = new System.Windows.Forms.SplitContainer();
@@ -77,7 +78,6 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.m_btnSlideShow = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-            this.m_imageListBtnHide = new System.Windows.Forms.ImageList(this.components);
             this.m_pnlMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitContainerMain)).BeginInit();
             this.m_splitContainerMain.Panel1.SuspendLayout();
@@ -209,6 +209,28 @@
             this.m_tsTxt_FileName.Size = new System.Drawing.Size(395, 23);
             this.m_tsTxt_FileName.Text = "Hello I am here";
             // 
+            // m_btnHideSumbnails
+            // 
+            this.m_btnHideSumbnails.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.m_btnHideSumbnails.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.m_btnHideSumbnails.ImageIndex = 0;
+            this.m_btnHideSumbnails.ImageList = this.m_imageListBtnHide;
+            this.m_btnHideSumbnails.Location = new System.Drawing.Point(3, 261);
+            this.m_btnHideSumbnails.Name = "m_btnHideSumbnails";
+            this.m_btnHideSumbnails.Size = new System.Drawing.Size(111, 23);
+            this.m_btnHideSumbnails.TabIndex = 1;
+            this.m_btnHideSumbnails.Text = "Hide Thumbnails";
+            this.m_btnHideSumbnails.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.m_btnHideSumbnails.UseVisualStyleBackColor = true;
+            this.m_btnHideSumbnails.Click += new System.EventHandler(this.m_btnHideSumbnails_Click);
+            // 
+            // m_imageListBtnHide
+            // 
+            this.m_imageListBtnHide.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_imageListBtnHide.ImageStream")));
+            this.m_imageListBtnHide.TransparentColor = System.Drawing.Color.Transparent;
+            this.m_imageListBtnHide.Images.SetKeyName(0, "arrow-down_16.ico");
+            this.m_imageListBtnHide.Images.SetKeyName(1, "arrow-up_16.ico");
+            // 
             // m_pictureBox1
             // 
             this.m_pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
@@ -220,21 +242,6 @@
             this.m_pictureBox1.TabIndex = 0;
             this.m_pictureBox1.TabStop = false;
             this.m_pictureBox1.Click += new System.EventHandler(this.m_pictureBox1_Click);
-            // 
-            // m_btnHideSumbnails
-            // 
-            this.m_btnHideSumbnails.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.m_btnHideSumbnails.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.m_btnHideSumbnails.ImageIndex = 0;
-            this.m_btnHideSumbnails.ImageList = this.m_imageListBtnHide;
-            this.m_btnHideSumbnails.Location = new System.Drawing.Point(3, 261);
-            this.m_btnHideSumbnails.Name = "m_btnHideSumbnails";
-            this.m_btnHideSumbnails.Size = new System.Drawing.Size(52, 23);
-            this.m_btnHideSumbnails.TabIndex = 1;
-            this.m_btnHideSumbnails.Text = "Hide";
-            this.m_btnHideSumbnails.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnHideSumbnails.UseVisualStyleBackColor = true;
-            this.m_btnHideSumbnails.Click += new System.EventHandler(this.m_btnHideSumbnails_Click);
             // 
             // m_listThumbnails
             // 
@@ -429,7 +436,7 @@
             this.m_mnuTools.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_mnuTools_Options});
             this.m_mnuTools.Name = "m_mnuTools";
-            this.m_mnuTools.Size = new System.Drawing.Size(48, 20);
+            this.m_mnuTools.Size = new System.Drawing.Size(47, 20);
             this.m_mnuTools.Text = "&Tools";
             // 
             // m_mnuTools_Options
@@ -608,13 +615,6 @@
             this.toolStripButton1.Name = "toolStripButton1";
             this.toolStripButton1.Size = new System.Drawing.Size(23, 23);
             this.toolStripButton1.Text = "toolStripButton1";
-            // 
-            // m_imageListBtnHide
-            // 
-            this.m_imageListBtnHide.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_imageListBtnHide.ImageStream")));
-            this.m_imageListBtnHide.TransparentColor = System.Drawing.Color.Transparent;
-            this.m_imageListBtnHide.Images.SetKeyName(0, "arrow-down_16.ico");
-            this.m_imageListBtnHide.Images.SetKeyName(1, "arrow-up_16.ico");
             // 
             // FormStopWatch
             // 
