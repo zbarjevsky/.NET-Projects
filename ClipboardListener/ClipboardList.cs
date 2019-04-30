@@ -172,8 +172,14 @@ namespace ClipboardManager
 				_icoAppFrom = new Bitmap(16, 16);
 			}//end constructor
 
-			//constructor for unicode text
-			private void UnicodeTextInit()
+            internal void Clear()
+            {
+                _icoAppFrom.Dispose();
+                _icoAppFrom = null;
+            }
+
+            //constructor for unicode text
+            private void UnicodeTextInit()
 			{
 				if ( !Clipboard.ContainsText(TextDataFormat.UnicodeText) )
 					return;
@@ -394,12 +400,20 @@ namespace ClipboardManager
 			}//end Clone
 
 			public int _icoItemType		= 5;
-			public Image _icoAppFrom	= null;
+			public Image _icoAppFrom { get; private set; } = null;
 			public string _dataType		= DataFormats.Text;
 			public object _data			= null;
 			public string _ownerType	= "";
 			private string _desc		= "--empty--";
-		}//end class ClipboardEntry
+
+            internal void SetAppIcon(Image icoAppFrom)
+            {
+                if (_icoAppFrom != null)
+                    _icoAppFrom.Dispose();
+
+                _icoAppFrom = (Image)icoAppFrom.Clone();
+            }
+        }//end class ClipboardEntry
 
 		public bool m_bClipboardIsEmpty = true;
 		private List<ClipboardEntry> m_vData = new List<ClipboardEntry>();
@@ -415,8 +429,11 @@ namespace ClipboardManager
 
 		internal void Clear()
 		{
-			while ( m_vData.Count > 1 )
-				m_vData.RemoveAt(1);
+            while (m_vData.Count > 1)
+            {
+                m_vData[1].Clear();
+                m_vData.RemoveAt(1);
+            }
 		}//end Clear
 
 		public int Count
@@ -480,7 +497,7 @@ namespace ClipboardManager
 				File.Delete(sImageFileName);
 				return ico; 
 			}//end try
-			catch { return icoDefault; }
+			catch { return (Image)icoDefault.Clone(); }
 		}//end LoadImage
 
 		public bool AddEntry(Image ico)
@@ -502,14 +519,15 @@ namespace ClipboardManager
             m_bClipboardIsEmpty = false;
             
             int idx = FindEntry(clp);
-            if ( idx == 0 ) //last entry
+            if ( idx == 0 ) //latest entry - already in
                 return false; //not added
 
 			if ( idx > 0 ) //if exist - remove earlier
 			{
 				//restore first app ico - problems with first loading when clipboard not empty
-				clp._icoAppFrom = GetEntry(idx)._icoAppFrom;
-				m_vData.RemoveAt(idx);
+				clp.SetAppIcon(GetEntry(idx)._icoAppFrom);
+                m_vData[idx].Clear();
+                m_vData.RemoveAt(idx);
 			}//end if
 
 			ClipboardEntry c = clp.Clone();
@@ -517,8 +535,11 @@ namespace ClipboardManager
 			m_vData.Insert(0, c);
 
 			int max = FormClipboard.m_Settings.m_iHistoryLen;
-			while (m_vData.Count > max) //if too big - remove from the end
-				m_vData.RemoveAt(max);
+            while (m_vData.Count > max) //if too big - remove from the end
+            {
+                m_vData[max].Clear();
+                m_vData.RemoveAt(max);
+            }
 			m_vData.TrimExcess();
 
             return true;

@@ -426,9 +426,14 @@ namespace ClipboardManager
 			//redbuild menu without flickering
 			m_contextMenuStripClipboard.Visible = false;
 			m_contextMenuStripClipboard.SuspendLayout();
-			
-			while ( m_contextMenuStripClipboard.Items.Count > 4 )
-				m_contextMenuStripClipboard.Items.RemoveAt(4);
+
+            //
+            while (m_contextMenuStripClipboard.Items.Count > 4)
+            {
+                if(m_contextMenuStripClipboard.Items[4].Image != null)
+                    m_contextMenuStripClipboard.Items[4].Image.Dispose();
+                m_contextMenuStripClipboard.Items.RemoveAt(4);
+            }
 
 			ClipboardList.ClipboardEntry clp = m_ClipboardListMain.GetCurrentEntry();
 			m_contextMenuStripClipboard_Current.Text = clp.ShortDesc();
@@ -437,7 +442,12 @@ namespace ClipboardManager
             m_contextMenuStripClipboard_Current.Image = clp.GetCombinedIcon(true);
 			m_contextMenuStripClipboard_Current.Tag = clp;
 
-			m_contextMenuStripClipboard_Favorites.DropDownItems.Clear();
+            while (m_contextMenuStripClipboard_Favorites.DropDownItems.Count > 0)
+            {
+                m_contextMenuStripClipboard_Favorites.DropDownItems[0].Image.Dispose();
+                m_contextMenuStripClipboard_Favorites.DropDownItems.RemoveAt(0);
+            }
+            m_contextMenuStripClipboard_Favorites.DropDownItems.Clear();
 			m_contextMenuStripClipboard_Favorites.DropDownItems.AddRange(BuildFavoritesList(true));
 			m_contextMenuStripClipboard_Favorites.Image = ImagesUtil.Combine(m_ImageListSysMenu.Images[0], m_ImageListSysMenu.Images[0]);
 
@@ -667,18 +677,18 @@ namespace ClipboardManager
 			try
 			{
 				ClipboardList.ClipboardEntry clp = (ClipboardList.ClipboardEntry)itm.Tag;
-				ClipboardList.ClipboardEntry last = m_ClipboardListMain.GetCurrentEntry();
+				ClipboardList.ClipboardEntry latest = m_ClipboardListMain.GetCurrentEntry();
 
 				//special threatment for last entry click
 				//for main list only
-				if ( clp._ownerType == m_ClipboardListMain.m_sListType && last.Equals(clp) ) 
+				if ( clp._ownerType == m_ClipboardListMain.m_sListType && latest.Equals(clp) ) 
 				{
 					m_contextMenuStripTrayIcon_Show_Click(sender, e);
                 }//end if
 				else
 				{
 					//make this item first and preserve original icon
-					m_ClipboardListMain.AddEntry(clp);
+					m_ClipboardListMain.AddEntry(clp.Clone());
 
 					m_bPasteFromThis = true;
 					clp.Put();

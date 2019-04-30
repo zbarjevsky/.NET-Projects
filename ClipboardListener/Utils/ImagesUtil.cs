@@ -7,9 +7,9 @@ using System.IO;
 
 namespace ClipboardManager
 {
-	class ImagesUtil
+	public static class ImagesUtil
 	{
-		public static Image get(int idx1, int idx2, ImageList list)
+		public static Image GetTwinImage(this ImageList list, int idx1, int idx2)
 		{
 			Image ico1 = list.Images[idx1];
 			Image ico2 = list.Images[idx2];
@@ -19,14 +19,14 @@ namespace ClipboardManager
 
 		public static Image Combine(Image ico1, Image ico2)
 		{
-			Bitmap NewBitmap = new Bitmap(33, 16);
-			using (Graphics oGraphics = Graphics.FromImage(NewBitmap))
+			Bitmap bmp = new Bitmap(33, 16);
+			using (Graphics oGraphics = Graphics.FromImage(bmp))
 			{
 				oGraphics.DrawImage(ico1, 0, 0, 16, 16);
 				oGraphics.DrawImage(ico2, 17, 0, 16, 16);
 			}//end using
 
-			return NewBitmap;
+			return bmp;
 		}//end Combine
 	}//end class ImagesUtil
 }//end namespace ClipboardListener
