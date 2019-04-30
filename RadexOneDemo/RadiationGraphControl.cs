@@ -103,15 +103,15 @@ namespace RadexOneDemo
             }
         }
 
-        private void UpdateTimeLabelsFormat()
+        private void UpdateTimeLabelsFormat(List<RadiationDataPoint> points)
         {
-            if (_history.Count == 0)
+            if (points.Count == 0)
                 return;
 
-            DateTime first = _history[0].date;
-            DateTime last = _history.Last().date;
-            double minutes = (last - first).TotalMinutes;
-            if (minutes < 3)
+            DateTime first = points[0].date;
+            DateTime last = points.Last().date;
+            TimeSpan ts = (last - first);
+            if (ts.TotalMinutes < 3)
             {
                 m_chart1.ChartAreas[0].AxisX.LabelStyle.Format = "HH:mm:ss";
             }
@@ -119,9 +119,13 @@ namespace RadexOneDemo
             {
                 m_chart1.ChartAreas[0].AxisX.LabelStyle.Format = "HH:mm";
             }
-            else //different day
+            else if(ts.TotalDays < 3)//different day
             {
                 m_chart1.ChartAreas[0].AxisX.LabelStyle.Format = "MMM dd, HH:mm";
+            }
+            else
+            {
+                m_chart1.ChartAreas[0].AxisX.LabelStyle.Format = "MMM dd";
             }
         }
 
@@ -132,7 +136,6 @@ namespace RadexOneDemo
                 return;
             _inUpdate = true;
 
-            UpdateTimeLabelsFormat();
             UpdateScrollBar(scrollToLastBuffer);
             UpdateChart();
 
@@ -159,6 +162,8 @@ namespace RadexOneDemo
                 ChartHelper.AddPointXY(m_chart1, 1, pt.CPM, pt.date);
                 ChartHelper.AddPointXY(m_chart1, 2, pt.Threshold, pt.date);
             }
+
+            UpdateTimeLabelsFormat(points);
 
             EnableRedraw(true);
         }
