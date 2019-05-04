@@ -334,17 +334,19 @@ namespace MeditationStopWatch
 			base.OnMouseWheel(e);
 		}
 
-		private void AdjustVolume(int delta)
+		private void AdjustVolume(double delta)
 		{
-			delta = delta / 120;
+			delta /= Math.Abs(delta);
 
 			int vol = m_audioPlayerControl.Volume;
-			if (vol > 100) delta *= 40;
-			else delta *= 20;
-			vol += delta;
+            delta *= (1 + vol/10.0);
+
+			vol += (int)delta;
+
 			if (vol < 0) vol = 0;
 			if (vol > 1000) vol = 1000;
-			System.Diagnostics.Trace.WriteLine("Delta: " + delta + " Vol: " + vol);
+
+            System.Diagnostics.Trace.WriteLine("Delta: " + delta + " Vol: " + vol);
 			m_audioPlayerControl.Volume = vol;
 		}
 

@@ -570,7 +570,8 @@ namespace ClipboardManager
 
 		internal void RemoveAt(int idx)
 		{
-			m_vData.RemoveAt(idx);
+            m_vData[idx].Clear();
+            m_vData.RemoveAt(idx);
 		}//end RemoveAt
 
 		internal void Insert(int idx, ClipboardEntry entry)
