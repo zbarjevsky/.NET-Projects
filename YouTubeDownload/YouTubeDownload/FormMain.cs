@@ -78,5 +78,10 @@ namespace YouTubeDownload
                 }
             }
         }
+
+        private void m_btnUpdate_Click(object sender, EventArgs e)
+        {
+            YouTube_DL.Update();
+        }
     }
 }
