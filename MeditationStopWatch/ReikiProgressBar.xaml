@@ -6,10 +6,15 @@
              xmlns:l="clr-namespace:Wizard"
              mc:Ignorable="d" 
              x:Name="ReiKi"
+             MouseDoubleClick="ReiKi_MouseDoubleClick"
+             SizeChanged="ReiKi_SizeChanged"
              FocusManager.FocusedElement="{Binding RelativeSource={x:Static RelativeSource.Self}, Mode=OneTime}"
-             d:DesignHeight="30" d:DesignWidth="400">
+             d:DesignHeight="80" d:DesignWidth="400">
     <UserControl.Resources>
         <ResourceDictionary>
+            <SolidColorBrush x:Key="LineColor0">DarkGoldenrod</SolidColorBrush>
+            <SolidColorBrush x:Key="LineColor1">Black</SolidColorBrush>
+            
             <Style x:Name="xxx" x:Key="{x:Type ProgressBar}" TargetType="{x:Type ProgressBar}">
                 <Setter Property="Template">
                     <Setter.Value>
@@ -38,7 +43,6 @@
     </UserControl.Resources>
 
     <Grid ContextMenuService.ShowOnDisabled="True">
-        
         <Grid.ContextMenu>
             <ContextMenu DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type l:ReikiProgressBar}}, Path=PlacementTarget.DataContext}">
                 <MenuItem Header="Start" Click="OnStart">
@@ -52,19 +56,20 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator />
-                <MenuItem x:Name="chkBellOnOff" Header="ThinkerBell ON/OFF" Click="OnBellOnOffClicked">
-                </MenuItem>
+                <MenuItem x:Name="chkBellOnOff" Header="ThinkerBell at the end" Click="OnBellOnOffClicked"/>
                 <Separator />
-                <MenuItem x:Name="mnuInterval" Header="Interval">
-                    <MenuItem x:Name="chkBell2min" Header="ThinkerBell 2 Min" Click="OnBellIntervalClicked"/>
-                    <MenuItem x:Name="chkBell3min" Header="ThinkerBell 3 Min" Click="OnBellIntervalClicked"/>
-                    <MenuItem x:Name="chkBell4min" Header="ThinkerBell 4 Min" Click="OnBellIntervalClicked"/>
-                    <MenuItem x:Name="chkBell5min" Header="ThinkerBell 5 Min" Click="OnBellIntervalClicked"/>
-                </MenuItem>
+                <MenuItem x:Name="chkNoProgress" Header="None" Click="OnBellIntervalClicked"/>
+                <MenuItem x:Name="chkBell1min" Header="1 Min" Click="OnBellIntervalClicked"/>
+                <MenuItem x:Name="chkBell2min" Header="2 Min" Click="OnBellIntervalClicked"/>
+                <MenuItem x:Name="chkBell3min" Header="3 Min" Click="OnBellIntervalClicked"/>
+                <MenuItem x:Name="chkBell4min" Header="4 Min" Click="OnBellIntervalClicked"/>
+                <MenuItem x:Name="chkBell5min" Header="5 Min" Click="OnBellIntervalClicked"/>
             </ContextMenu>
         </Grid.ContextMenu>
         <ProgressBar Value="{Binding Value, Mode=OneWay, ElementName=ReiKi}" Maximum="{Binding Max, ElementName=ReiKi}">
             <ProgressBar.BorderThickness >0</ProgressBar.BorderThickness>
         </ProgressBar>
+        <Canvas x:Name="_canvas">
+        </Canvas>
     </Grid>
 </UserControl>
