@@ -44,17 +44,19 @@
             // 
             this.m_txtUrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_txtUrl.Location = new System.Drawing.Point(23, 27);
+            this.m_txtUrl.Location = new System.Drawing.Point(0, 24);
+            this.m_txtUrl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_txtUrl.Name = "m_txtUrl";
-            this.m_txtUrl.Size = new System.Drawing.Size(641, 20);
+            this.m_txtUrl.Size = new System.Drawing.Size(840, 26);
             this.m_txtUrl.TabIndex = 0;
             // 
             // m_btnDownload
             // 
             this.m_btnDownload.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnDownload.Location = new System.Drawing.Point(681, 23);
+            this.m_btnDownload.Location = new System.Drawing.Point(848, 24);
+            this.m_btnDownload.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnDownload.Name = "m_btnDownload";
-            this.m_btnDownload.Size = new System.Drawing.Size(91, 23);
+            this.m_btnDownload.Size = new System.Drawing.Size(136, 35);
             this.m_btnDownload.TabIndex = 1;
             this.m_btnDownload.Text = "Download...";
             this.m_btnDownload.UseVisualStyleBackColor = true;
@@ -63,9 +65,10 @@
             // m_btnOpenFolder
             // 
             this.m_btnOpenFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnOpenFolder.Location = new System.Drawing.Point(681, 66);
+            this.m_btnOpenFolder.Location = new System.Drawing.Point(848, 69);
+            this.m_btnOpenFolder.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnOpenFolder.Name = "m_btnOpenFolder";
-            this.m_btnOpenFolder.Size = new System.Drawing.Size(91, 23);
+            this.m_btnOpenFolder.Size = new System.Drawing.Size(136, 35);
             this.m_btnOpenFolder.TabIndex = 2;
             this.m_btnOpenFolder.Text = "Open Folder...";
             this.m_btnOpenFolder.UseVisualStyleBackColor = true;
@@ -78,13 +81,14 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_txtOutput.BackColor = System.Drawing.Color.Black;
             this.m_txtOutput.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.m_txtOutput.ForeColor = System.Drawing.Color.Magenta;
-            this.m_txtOutput.Location = new System.Drawing.Point(23, 66);
+            this.m_txtOutput.ForeColor = System.Drawing.Color.Pink;
+            this.m_txtOutput.Location = new System.Drawing.Point(-2, 60);
+            this.m_txtOutput.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_txtOutput.Name = "m_txtOutput";
             this.m_txtOutput.ReadOnly = true;
-            this.m_txtOutput.Size = new System.Drawing.Size(641, 253);
+            this.m_txtOutput.Size = new System.Drawing.Size(842, 366);
             this.m_txtOutput.TabIndex = 3;
-            this.m_txtOutput.Text = "";
+            this.m_txtOutput.Text = "Output";
             this.m_txtOutput.WordWrap = false;
             // 
             // m_statusStrip
@@ -93,41 +97,45 @@
             this.m_Status1,
             this.m_Status2,
             this.m_StatusProgress});
-            this.m_statusStrip.Location = new System.Drawing.Point(0, 340);
+            this.m_statusStrip.Location = new System.Drawing.Point(0, 431);
             this.m_statusStrip.Name = "m_statusStrip";
-            this.m_statusStrip.Size = new System.Drawing.Size(784, 22);
+            this.m_statusStrip.Padding = new System.Windows.Forms.Padding(2, 0, 21, 0);
+            this.m_statusStrip.Size = new System.Drawing.Size(984, 31);
             this.m_statusStrip.TabIndex = 4;
             this.m_statusStrip.Text = ".";
             // 
             // m_Status1
             // 
             this.m_Status1.Name = "m_Status1";
-            this.m_Status1.Size = new System.Drawing.Size(42, 17);
+            this.m_Status1.Size = new System.Drawing.Size(42, 26);
             this.m_Status1.Text = "Ready.";
             // 
             // m_Status2
             // 
             this.m_Status2.Name = "m_Status2";
-            this.m_Status2.Size = new System.Drawing.Size(625, 17);
+            this.m_Status2.Size = new System.Drawing.Size(767, 26);
             this.m_Status2.Spring = true;
             this.m_Status2.Text = "...";
             // 
             // m_StatusProgress
             // 
             this.m_StatusProgress.Name = "m_StatusProgress";
-            this.m_StatusProgress.Size = new System.Drawing.Size(100, 16);
+            this.m_StatusProgress.Size = new System.Drawing.Size(150, 25);
             // 
             // FormMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(784, 362);
+            this.ClientSize = new System.Drawing.Size(984, 462);
             this.Controls.Add(this.m_statusStrip);
             this.Controls.Add(this.m_txtOutput);
             this.Controls.Add(this.m_btnOpenFolder);
             this.Controls.Add(this.m_btnDownload);
             this.Controls.Add(this.m_txtUrl);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.MinimumSize = new System.Drawing.Size(600, 300);
             this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "YouTube - Download";

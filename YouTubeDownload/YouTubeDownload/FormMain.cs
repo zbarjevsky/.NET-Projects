@@ -32,9 +32,13 @@ namespace YouTubeDownload
             Process _process = YouTube_DL.Create(
                 string.Format(" \"{0}\" --no-playlist -o \"{1}\\%(title)s-%(id)s.%(ext)s\"", url, _folderName));
 
+            m_txtOutput.Text = "";
+
             _process.OutputDataReceived += DL_Process_OutputDataReceived;
             _process.Start();
             _process.BeginOutputReadLine();
+
+            this.Cursor = Cursors.WaitCursor;
         }
 
         private void DL_Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
@@ -50,7 +54,10 @@ namespace YouTubeDownload
 
         private void UpdateOutput(string line)
         {
-            m_txtOutput.AppendText(line + "\n");
+            this.Cursor = Cursors.Arrow;
+
+            m_txtOutput.Text = (line + "\n") + m_txtOutput.Text;
+
             m_Status2.Text = line;
 
             //parse
