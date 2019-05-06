@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using YouTubeDownload.Extensions;
 
 namespace YouTubeDownload
@@ -12,7 +14,7 @@ namespace YouTubeDownload
     //https://github.com/ytdl-org/youtube-dl/blob/master/README.md#readme
     public class YouTube_DL
     {
-        const string DL = @"Dependencies/youtube-dl.exe";
+        public const string DL = @"Dependencies/youtube-dl.exe";
 
         internal static async Task Update()
         {
@@ -39,6 +41,21 @@ namespace YouTubeDownload
                     RedirectStandardError = true
                 }
             };
+        }
+
+        public static string GetVersion()
+        {
+            try
+            {
+                string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, DL);
+                //Version ver = AssemblyName.GetAssemblyName(path).Version;
+                var versionInfo = FileVersionInfo.GetVersionInfo(path);
+                return versionInfo.ProductName + " ver: " + versionInfo.ProductVersion;
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
         }
     }
 }

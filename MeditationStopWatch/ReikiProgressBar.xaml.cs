@@ -252,7 +252,7 @@ namespace Wizard
                 double delta = odd ? bigDelta : smallDelta;
 
                 Line line = new Line();
-                line.Stroke = System.Windows.Media.Brushes.Navy;
+                line.Stroke = System.Windows.Media.Brushes.Green;
                 line.StrokeThickness = thickness;
                 line.X1 = 1 + i * line_offset;
                 line.X2 = line.X1;
