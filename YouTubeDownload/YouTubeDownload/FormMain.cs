@@ -24,31 +24,95 @@ namespace YouTubeDownload
 
         private void FormMain_Load(object sender, EventArgs e)
         {
+            m_DownloaderUserControl.OutputDataReceived = DL_Process_OutputDataReceived;
+            m_DownloaderUserControl.ProcessExited = DL_Process_Exited;
+
             _folderName = Properties.Settings.Default.OutputFolder;
             m_lblOutputFolder.Text = "Download To: " + _folderName;
         }
 
-        private void m_btnDownload_Click(object sender, EventArgs e)
+        private void m_btnAddUrl_Click(object sender, EventArgs e)
         {
-            m_DownloaderUserControl.OutputDataReceived = DL_Process_OutputDataReceived;
-            m_DownloaderUserControl.ProcessExited = DL_Process_Exited;
+            if (FindDataInList(m_txtUrl.Text) >= 0)
+            {
+                MessageBox.Show(this, "Url already in list", Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
-            m_DownloaderUserControl.Start(m_chkNoPlayList.Checked, _folderName, m_txtUrl.Text);
+            DownloadData data = new DownloadData()
+            {
+                State = DownloadState.InQueue,
+                NoPlayList = m_chkNoPlayList.Checked,
+                OutputFolder = _folderName,
+                Url = m_txtUrl.Text
+            };
 
-            m_btnDownload.Enabled = false;
-            m_chkNoPlayList.Enabled = false;
-            this.Cursor = Cursors.WaitCursor;
+            ListViewItem item = new ListViewItem(data.State.ToString());
+            item.SubItems.Add(data.FileName);
+            item.SubItems.Add(data.Url);
+            item.Tag = data;
+
+            m_listUrls.Items.Add(item);
+            m_txtUrl.Text = "";
+            StartDownloadNext();
+        }
+
+        private bool StartDownloadNext()
+        {
+            if (m_DownloaderUserControl.State == DownloadState.Working)
+                return false;
+
+            foreach (ListViewItem item in m_listUrls.Items)
+            {
+                DownloadData data = item.Tag as DownloadData;
+                if(data.State == DownloadState.InQueue)
+                {
+                    this.Cursor = Cursors.AppStarting;
+                    m_DownloaderUserControl.Start(data);
+                    UpdateUrlList();
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private void UpdateUrlList()
+        {
+            foreach (ListViewItem item in m_listUrls.Items)
+            {
+                DownloadData data = item.Tag as DownloadData;
+                item.SubItems[0].Text = data.State.ToString();
+                item.SubItems[1].Text = Path.GetFileName(data.FileName.Trim('"'));
+                item.SubItems[2].Text = data.Url;
+            }
+        }
+
+        private int FindDataInList(string url)
+        {
+            for (int i = 0; i < m_listUrls.Items.Count; i++)
+            {
+                ListViewItem item = (ListViewItem)m_listUrls.Items[i];
+                DownloadData data = item.Tag as DownloadData;
+                if (data.Url == url)
+                    return i;
+            }
+            return -1;
         }
 
         private void DL_Process_Exited()
         {
-            m_btnDownload.Enabled = true;
             m_chkNoPlayList.Enabled = true;
             Cursor = Cursors.Arrow;
             m_StatusProgress.Value = 0;
             m_Status1.Text = "Done";
 
-            MessageBox.Show(this, "Operation Finished!", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            UpdateUrlList();
+            if (!StartDownloadNext())
+            {
+                this.Cursor = Cursors.Arrow;
+                MessageBox.Show(this, "Operation Finished!", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
         }
 
         private void DL_Process_OutputDataReceived(string line)
@@ -69,6 +133,8 @@ namespace YouTubeDownload
 
             m_StatusProgress.Value = (int)m_DownloaderUserControl.Progress;
             m_Status1.Text = m_DownloaderUserControl.Description;
+
+            UpdateUrlList();
         }
 
         private void m_btnUpdate_Click(object sender, EventArgs e)
@@ -108,6 +174,11 @@ namespace YouTubeDownload
                 Properties.Settings.Default.Save();
                 m_lblOutputFolder.Text = "Download To: " + _folderName;
             }
+        }
+
+        private void m_btnClearList_Click(object sender, EventArgs e)
+        {
+            m_listUrls.Items.Clear();
         }
     }
 }

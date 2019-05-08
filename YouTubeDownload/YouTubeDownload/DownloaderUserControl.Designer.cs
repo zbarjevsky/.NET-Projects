@@ -65,7 +65,7 @@
             this.m_lnkDestination.Size = new System.Drawing.Size(438, 13);
             this.m_lnkDestination.TabIndex = 5;
             this.m_lnkDestination.TabStop = true;
-            this.m_lnkDestination.Text = "Destination";
+            this.m_lnkDestination.Text = "Destination: N/A";
             this.m_lnkDestination.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.m_lnkDestination_LinkClicked);
             // 
             // m_ProgressBar
@@ -86,7 +86,7 @@
             this.m_lnkOutputFolder.Size = new System.Drawing.Size(438, 13);
             this.m_lnkOutputFolder.TabIndex = 7;
             this.m_lnkOutputFolder.TabStop = true;
-            this.m_lnkOutputFolder.Text = "Output Folder";
+            this.m_lnkOutputFolder.Text = "Output Folder: N/A";
             this.m_lnkOutputFolder.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.m_lnkOutputFolder_LinkClicked);
             // 
             // m_lblStatus
@@ -97,7 +97,7 @@
             this.m_lblStatus.Name = "m_lblStatus";
             this.m_lblStatus.Size = new System.Drawing.Size(438, 13);
             this.m_lblStatus.TabIndex = 8;
-            this.m_lblStatus.Text = "Status";
+            this.m_lblStatus.Text = "Status: N/A";
             // 
             // m_pnlOutput
             // 

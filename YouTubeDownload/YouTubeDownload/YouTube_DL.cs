@@ -11,30 +11,43 @@ using YouTubeDownload.Extensions;
 
 namespace YouTubeDownload
 {
+    public enum DownloadState
+    {
+        None,
+        InQueue,
+        Working,
+        Done,
+    }
+
+    public class DownloadData
+    {
+        public DownloadState State { get; set; } = DownloadState.None;
+        public string OutputFolder { get; set; } = "";
+        public string FileName { get; set; } = "";
+        public bool NoPlayList { get; set; } = true;
+        public string Url { get; set; } = "";
+        public double Progress { get; set; } = 0;
+    }
+
     //https://github.com/ytdl-org/youtube-dl/blob/master/README.md#readme
     public class YouTube_DL
     {
         public const string DL = @"Dependencies/youtube-dl.exe";
 
-        public string Description { get; private set; } = "";
-        public double Progress { get; private set; } = 0;
-        public bool NoPlayList { get; private set; } = true;
-        public string Url { get; private set; } = "";
-        public string OutputFolder { get; private set; } = "";
+        public DownloadData Data = new DownloadData();
 
         public Action<string> OutputDataReceived = (OutputData) => { };
         public Action ProcessExited = () => { };
 
-        public void Start(bool noPlayList, string outputFolder, string url)
+        public void Start(DownloadData data)
         {
-            NoPlayList = noPlayList;
-            OutputFolder = outputFolder;
-            Url = url;
+            Data = data;
+            Data.State = DownloadState.Working;
 
-            string sNoPlayList = noPlayList ? "--no-playlist" : "";
+            string sNoPlayList = Data.NoPlayList ? "--no-playlist" : "";
             Process p = YouTube_DL.Create(
                 string.Format(" \"{0}\" {1} -o \"{2}\\%(title)s-%(id)s.%(ext)s\"",
-                url, sNoPlayList, outputFolder));
+                Data.Url, sNoPlayList, Data.OutputFolder));
 
             p.OutputDataReceived += DL_Process_OutputDataReceived;
             p.Exited += DL_Process_Exited;
@@ -62,14 +75,14 @@ namespace YouTubeDownload
             int pos1 = line.IndexOf(DST1);
             if (pos1 >= 0)
             {
-                Description = line.Substring(pos1 + DST1.Length);
+                Data.FileName = line.Substring(pos1 + DST1.Length);
             }
 
             const string DST2 = "[ffmpeg] Merging formats into ";
             pos1 = line.IndexOf(DST2);
             if (pos1 >= 0)
             {
-                Description = line.Substring(pos1 + DST2.Length);
+                Data.FileName = line.Substring(pos1 + DST2.Length);
             }
         }
 
@@ -82,7 +95,7 @@ namespace YouTubeDownload
                 if (pos2 > 0)
                 {
                     string sPercent = line.Substring(pos1 + 10, pos2 - (pos1 + 10)).Trim();
-                    Progress = double.Parse(sPercent);
+                    Data.Progress = double.Parse(sPercent);
                 }
             }
         }
@@ -96,7 +109,8 @@ namespace YouTubeDownload
                 p.Exited -= DL_Process_Exited;
             }
 
-            Progress = 0;
+            Data.Progress = 0;
+            Data.State = DownloadState.Done;
 
             ProcessExited();
         }
