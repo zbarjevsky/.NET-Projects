@@ -36,7 +36,7 @@ namespace YouTubeDownload
 
         private void m_lnkDestination_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            if(State != DownloadState.Done)
+            if(State != DownloadState.Succsess)
             {
                 MessageBox.Show(this, "Not Ready", Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -83,7 +83,7 @@ namespace YouTubeDownload
         {
             this.BeginInvoke(new MethodInvoker(() =>
             {
-                State = DownloadState.Done;
+                State = DownloadState.Succsess;
                 m_ProgressBar.Value = (int)_youTube_DL.Data.Progress;
 
                 ProcessExited();

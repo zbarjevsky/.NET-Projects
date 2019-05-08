@@ -162,7 +162,7 @@
             this.toolStripMenuItem2,
             this.m_mnuToolsOutputFolder});
             this.m_mnuTools.Name = "m_mnuTools";
-            this.m_mnuTools.Size = new System.Drawing.Size(48, 20);
+            this.m_mnuTools.Size = new System.Drawing.Size(47, 20);
             this.m_mnuTools.Text = "&Tools";
             // 
             // m_mnuToolsSettings
@@ -219,7 +219,10 @@
             this.columnHeader2,
             this.columnHeader3});
             this.m_listUrls.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_listUrls.FullRowSelect = true;
             this.m_listUrls.GridLines = true;
+            this.m_listUrls.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.m_listUrls.HideSelection = false;
             this.m_listUrls.Location = new System.Drawing.Point(0, 0);
             this.m_listUrls.Name = "m_listUrls";
             this.m_listUrls.Size = new System.Drawing.Size(986, 155);

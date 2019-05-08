@@ -16,7 +16,9 @@ namespace YouTubeDownload
         None,
         InQueue,
         Working,
-        Done,
+        Skipped,
+        Succsess,
+        Failed
     }
 
     public class DownloadData
@@ -65,6 +67,7 @@ namespace YouTubeDownload
             //parse
             ParseDestination(line);
             ParseProgress(line);
+            ParseStatus(line);
 
             OutputDataReceived(e.Data);
         }
@@ -85,6 +88,18 @@ namespace YouTubeDownload
                 Data.FileName = line.Substring(pos1 + DST2.Length);
             }
         }
+
+        private void ParseStatus(string line)
+        {
+            const string SUFFIX = "has already been downloaded and merged";
+            int pos = line.IndexOf(SUFFIX);
+            if (pos > 0)
+            {
+                Data.State = DownloadState.Skipped;
+                Data.FileName = line.Substring(11, line.Length - SUFFIX.Length - 11);
+            }
+        }
+
 
         private void ParseProgress(string line)
         {
@@ -110,7 +125,8 @@ namespace YouTubeDownload
             }
 
             Data.Progress = 0;
-            Data.State = DownloadState.Done;
+            if(Data.State == DownloadState.Working)
+                Data.State = DownloadState.Succsess;
 
             ProcessExited();
         }
