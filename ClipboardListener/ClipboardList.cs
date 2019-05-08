@@ -534,11 +534,11 @@ namespace ClipboardManager
 			c._ownerType = this.m_sListType;
 			m_vData.Insert(0, c);
 
-			int max = FormClipboard.m_Settings.m_iHistoryLen;
-            while (m_vData.Count > max) //if too big - remove from the end
+		    const int MAX_HISTORY = 1000;
+            while (m_vData.Count > MAX_HISTORY) //if too big - remove from the end
             {
-                m_vData[max].Clear();
-                m_vData.RemoveAt(max);
+                m_vData[MAX_HISTORY].Clear();
+                m_vData.RemoveAt(MAX_HISTORY);
             }
 			m_vData.TrimExcess();
 

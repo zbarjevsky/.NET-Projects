@@ -49,7 +49,7 @@ namespace ClipboardManager
 			m_chkStartWithWindows.Checked	= LoadWithWindows;
 		    m_chkAutoUAC.Checked            = m_Settings.m_bAutoUAC;
             m_chkAbortShutdown.Checked      = m_Settings.m_bAbortShutdown;
-            m_chkStopServices.Checked      = m_Settings.m_bStopServices;
+            m_chkStopServices.Checked       = m_Settings.m_bStopServices;
 
 
             m_HotKey.UnregisterHotKey(); //to allow change or reset

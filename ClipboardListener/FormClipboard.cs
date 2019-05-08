@@ -479,8 +479,11 @@ namespace ClipboardManager
 		//build main clipboard history menu
 		private ToolStripMenuItem[] BuildMainClipboardList(int startIdx)
 		{
-			ToolStripMenuItem[] list = new ToolStripMenuItem[m_ClipboardListMain.Count - startIdx];
-			for (int idx = startIdx; idx < m_ClipboardListMain.Count; idx++)
+		    int count = Math.Min(m_ClipboardListMain.Count, m_Settings.m_iHistoryLen);
+
+			ToolStripMenuItem[] list = new ToolStripMenuItem[count - startIdx];
+            //load last items up to m_Settings.m_iHistoryLen
+            for (int idx = startIdx; idx < count; idx++)
 			{
 				ClipboardList.ClipboardEntry clp = m_ClipboardListMain.GetEntry(idx);
 				list[idx - startIdx] = new System.Windows.Forms.ToolStripMenuItem();
@@ -499,8 +502,11 @@ namespace ClipboardManager
 
 		private ToolStripMenuItem[] BuildFavoritesList(bool bTwinImage)
 		{
-			ToolStripMenuItem[] list = new ToolStripMenuItem[m_ClipboardListFavorites.Count];
-			for (int idx = 0; idx < m_ClipboardListFavorites.Count; idx++)
+            int count = Math.Min(m_ClipboardListFavorites.Count, m_Settings.m_iHistoryLen);
+
+            ToolStripMenuItem[] list = new ToolStripMenuItem[count];
+            //load last items up to m_Settings.m_iHistoryLen
+            for (int idx = 0; idx < count; idx++)
 			{
 				ClipboardList.ClipboardEntry clp = m_ClipboardListFavorites.GetEntry(idx);
 				list[idx] = new System.Windows.Forms.ToolStripMenuItem();

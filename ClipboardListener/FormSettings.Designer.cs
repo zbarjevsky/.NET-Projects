@@ -93,9 +93,9 @@ namespace ClipboardManager
             this.m_lblHistory1.AutoSize = true;
             this.m_lblHistory1.Location = new System.Drawing.Point(9, 49);
             this.m_lblHistory1.Name = "m_lblHistory1";
-            this.m_lblHistory1.Size = new System.Drawing.Size(81, 13);
+            this.m_lblHistory1.Size = new System.Drawing.Size(79, 13);
             this.m_lblHistory1.TabIndex = 2;
-            this.m_lblHistory1.Text = "Remember Last";
+            this.m_lblHistory1.Text = "Menu List Size:";
             // 
             // m_chkUseHotKey
             // 
