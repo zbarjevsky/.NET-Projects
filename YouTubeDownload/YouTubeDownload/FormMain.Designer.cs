@@ -55,9 +55,9 @@
             this.m_btnClearList = new System.Windows.Forms.Button();
             this.m_lblUrl = new System.Windows.Forms.Label();
             this.m_lnkOutputFolder = new System.Windows.Forms.LinkLabel();
-            this.m_DownloaderUserControl = new YouTubeDownload.DownloaderUserControl();
             this.m_btnPause = new System.Windows.Forms.Button();
             this.m_btnRemove = new System.Windows.Forms.Button();
+            this.m_DownloaderUserControl = new YouTubeDownload.DownloaderUserControl();
             this.m_statusStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_spliMain)).BeginInit();
@@ -110,6 +110,8 @@
             // m_btnUpdate
             // 
             this.m_btnUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnUpdate.Image = ((System.Drawing.Image)(resources.GetObject("m_btnUpdate.Image")));
+            this.m_btnUpdate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.m_btnUpdate.Location = new System.Drawing.Point(1023, 476);
             this.m_btnUpdate.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnUpdate.Name = "m_btnUpdate";
@@ -223,6 +225,7 @@
             this.m_listUrls.TabIndex = 12;
             this.m_listUrls.UseCompatibleStateImageBehavior = false;
             this.m_listUrls.View = System.Windows.Forms.View.Details;
+            this.m_listUrls.SelectedIndexChanged += new System.EventHandler(this.m_listUrls_SelectedIndexChanged);
             // 
             // columnHeader1
             // 
@@ -242,12 +245,15 @@
             // m_btnAddUrl
             // 
             this.m_btnAddUrl.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnAddUrl.Image = ((System.Drawing.Image)(resources.GetObject("m_btnAddUrl.Image")));
+            this.m_btnAddUrl.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.m_btnAddUrl.Location = new System.Drawing.Point(1023, 31);
             this.m_btnAddUrl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnAddUrl.Name = "m_btnAddUrl";
             this.m_btnAddUrl.Size = new System.Drawing.Size(136, 35);
             this.m_btnAddUrl.TabIndex = 13;
             this.m_btnAddUrl.Text = "Add To Queue";
+            this.m_btnAddUrl.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.m_btnAddUrl.UseVisualStyleBackColor = true;
             this.m_btnAddUrl.Click += new System.EventHandler(this.m_btnAddUrl_Click);
             // 
@@ -275,12 +281,15 @@
             // m_btnClearList
             // 
             this.m_btnClearList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnClearList.Image = ((System.Drawing.Image)(resources.GetObject("m_btnClearList.Image")));
+            this.m_btnClearList.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.m_btnClearList.Location = new System.Drawing.Point(1023, 202);
             this.m_btnClearList.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnClearList.Name = "m_btnClearList";
             this.m_btnClearList.Size = new System.Drawing.Size(136, 35);
             this.m_btnClearList.TabIndex = 15;
             this.m_btnClearList.Text = "Remove All";
+            this.m_btnClearList.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.m_btnClearList.UseVisualStyleBackColor = true;
             this.m_btnClearList.Click += new System.EventHandler(this.m_btnClearList_Click);
             // 
@@ -304,6 +313,35 @@
             this.m_lnkOutputFolder.Text = "Output Folder";
             this.m_lnkOutputFolder.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.m_lnkOutputFolder_LinkClicked);
             // 
+            // m_btnPause
+            // 
+            this.m_btnPause.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnPause.Image = ((System.Drawing.Image)(resources.GetObject("m_btnPause.Image")));
+            this.m_btnPause.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.m_btnPause.Location = new System.Drawing.Point(1023, 105);
+            this.m_btnPause.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.m_btnPause.Name = "m_btnPause";
+            this.m_btnPause.Size = new System.Drawing.Size(136, 35);
+            this.m_btnPause.TabIndex = 18;
+            this.m_btnPause.Text = "Start";
+            this.m_btnPause.UseVisualStyleBackColor = true;
+            this.m_btnPause.Click += new System.EventHandler(this.m_btnPause_Click);
+            // 
+            // m_btnRemove
+            // 
+            this.m_btnRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnRemove.Image = ((System.Drawing.Image)(resources.GetObject("m_btnRemove.Image")));
+            this.m_btnRemove.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.m_btnRemove.Location = new System.Drawing.Point(1023, 161);
+            this.m_btnRemove.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.m_btnRemove.Name = "m_btnRemove";
+            this.m_btnRemove.Size = new System.Drawing.Size(136, 35);
+            this.m_btnRemove.TabIndex = 19;
+            this.m_btnRemove.Text = "Remove Sel";
+            this.m_btnRemove.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.m_btnRemove.UseVisualStyleBackColor = true;
+            this.m_btnRemove.Click += new System.EventHandler(this.m_btnRemove_Click);
+            // 
             // m_DownloaderUserControl
             // 
             this.m_DownloaderUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -311,28 +349,6 @@
             this.m_DownloaderUserControl.Name = "m_DownloaderUserControl";
             this.m_DownloaderUserControl.Size = new System.Drawing.Size(986, 254);
             this.m_DownloaderUserControl.TabIndex = 11;
-            // 
-            // m_btnPause
-            // 
-            this.m_btnPause.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnPause.Location = new System.Drawing.Point(1023, 105);
-            this.m_btnPause.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.m_btnPause.Name = "m_btnPause";
-            this.m_btnPause.Size = new System.Drawing.Size(136, 35);
-            this.m_btnPause.TabIndex = 18;
-            this.m_btnPause.Text = "Pause/Resume";
-            this.m_btnPause.UseVisualStyleBackColor = true;
-            // 
-            // m_btnRemove
-            // 
-            this.m_btnRemove.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnRemove.Location = new System.Drawing.Point(1023, 161);
-            this.m_btnRemove.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.m_btnRemove.Name = "m_btnRemove";
-            this.m_btnRemove.Size = new System.Drawing.Size(136, 35);
-            this.m_btnRemove.TabIndex = 19;
-            this.m_btnRemove.Text = "Remove Sel";
-            this.m_btnRemove.UseVisualStyleBackColor = true;
             // 
             // FormMain
             // 

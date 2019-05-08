@@ -31,6 +31,8 @@ namespace YouTubeDownload
             _folderName = Properties.Settings.Default.OutputFolder;
             m_lnkOutputFolder.Text = DNL_PREFIX + _folderName;
             m_lnkOutputFolder.LinkArea = new LinkArea(DNL_PREFIX.Length, _folderName.Length);
+
+            UpdateButtonsState();
         }
 
         private void m_btnAddUrl_Click(object sender, EventArgs e)
@@ -88,6 +90,21 @@ namespace YouTubeDownload
                 item.SubItems[1].Text = Path.GetFileName(data.FileName.Trim('"'));
                 item.SubItems[2].Text = data.Url;
             }
+            UpdateButtonsState();
+        }
+
+        private void UpdateButtonsState()
+        {
+            bool bHasSelection = m_listUrls.SelectedItems.Count > 0;
+
+            m_btnUpdate.Enabled = m_DownloaderUserControl.State != DownloadState.Working;
+
+            m_btnAddUrl.Enabled = !string.IsNullOrWhiteSpace(m_txtUrl.Text.Trim());
+            m_btnRemove.Enabled = bHasSelection;
+            m_btnClearList.Enabled = m_listUrls.Items.Count > 0;
+
+            m_btnPause.Enabled = m_listUrls.Items.Count > 0;
+            m_btnPause.Text = m_DownloaderUserControl.State == DownloadState.Working ? "Pause" : "Start";
         }
 
         private int FindDataInList(string url)
@@ -104,7 +121,6 @@ namespace YouTubeDownload
 
         private void DL_Process_Exited()
         {
-            m_chkNoPlayList.Enabled = true;
             Cursor = Cursors.Arrow;
             m_StatusProgress.Value = 0;
             m_Status1.Text = "Done";
@@ -187,6 +203,25 @@ namespace YouTubeDownload
         private void m_btnClearList_Click(object sender, EventArgs e)
         {
             m_listUrls.Items.Clear();
+        }
+
+        private void m_btnPause_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void m_btnRemove_Click(object sender, EventArgs e)
+        {
+            if (m_listUrls.SelectedItems.Count == 0)
+                return;
+
+            m_listUrls.SelectedItems[0].Remove();
+            UpdateUrlList();
+        }
+
+        private void m_listUrls_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateButtonsState();
         }
     }
 }
