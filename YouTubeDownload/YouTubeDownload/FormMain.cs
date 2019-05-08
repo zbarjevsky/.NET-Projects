@@ -15,6 +15,7 @@ namespace YouTubeDownload
 {
     public partial class FormMain : Form
     {
+        const string DNL_PREFIX = "Download to: ";
         string _folderName = "C:\\Temp\\YouTube2";
 
         public FormMain()
@@ -28,7 +29,8 @@ namespace YouTubeDownload
             m_DownloaderUserControl.ProcessExited = DL_Process_Exited;
 
             _folderName = Properties.Settings.Default.OutputFolder;
-            m_lblOutputFolder.Text = "Download To: " + _folderName;
+            m_lnkOutputFolder.Text = DNL_PREFIX + _folderName;
+            m_lnkOutputFolder.LinkArea = new LinkArea(DNL_PREFIX.Length, _folderName.Length);
         }
 
         private void m_btnAddUrl_Click(object sender, EventArgs e)
@@ -125,6 +127,11 @@ namespace YouTubeDownload
             Process.Start(_folderName);
         }
 
+        private void m_lnkOutputFolder_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start(_folderName);
+        }
+
         private void UpdateOutput(string line)
         {
             this.Cursor = Cursors.AppStarting;
@@ -172,7 +179,8 @@ namespace YouTubeDownload
                 _folderName = dlg.SelectedPath;
                 Properties.Settings.Default.OutputFolder = _folderName;
                 Properties.Settings.Default.Save();
-                m_lblOutputFolder.Text = "Download To: " + _folderName;
+                m_lnkOutputFolder.Text = DNL_PREFIX + _folderName;
+                m_lnkOutputFolder.LinkArea = new LinkArea(DNL_PREFIX.Length, _folderName.Length);
             }
         }
 
