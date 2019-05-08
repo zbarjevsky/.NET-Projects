@@ -223,5 +223,10 @@ namespace YouTubeDownload
         {
             UpdateButtonsState();
         }
+
+        private void m_txtUrl_TextChanged(object sender, EventArgs e)
+        {
+            UpdateButtonsState();
+        }
     }
 }

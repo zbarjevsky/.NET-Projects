@@ -52,12 +52,12 @@
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.m_btnAddUrl = new System.Windows.Forms.Button();
             this.m_spliMain = new System.Windows.Forms.SplitContainer();
+            this.m_DownloaderUserControl = new YouTubeDownload.DownloaderUserControl();
             this.m_btnClearList = new System.Windows.Forms.Button();
             this.m_lblUrl = new System.Windows.Forms.Label();
             this.m_lnkOutputFolder = new System.Windows.Forms.LinkLabel();
             this.m_btnPause = new System.Windows.Forms.Button();
             this.m_btnRemove = new System.Windows.Forms.Button();
-            this.m_DownloaderUserControl = new YouTubeDownload.DownloaderUserControl();
             this.m_statusStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_spliMain)).BeginInit();
@@ -75,6 +75,7 @@
             this.m_txtUrl.Name = "m_txtUrl";
             this.m_txtUrl.Size = new System.Drawing.Size(742, 26);
             this.m_txtUrl.TabIndex = 0;
+            this.m_txtUrl.TextChanged += new System.EventHandler(this.m_txtUrl_TextChanged);
             // 
             // m_statusStrip
             // 
@@ -278,6 +279,14 @@
             this.m_spliMain.SplitterDistance = 159;
             this.m_spliMain.TabIndex = 14;
             // 
+            // m_DownloaderUserControl
+            // 
+            this.m_DownloaderUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_DownloaderUserControl.Location = new System.Drawing.Point(0, 0);
+            this.m_DownloaderUserControl.Name = "m_DownloaderUserControl";
+            this.m_DownloaderUserControl.Size = new System.Drawing.Size(986, 254);
+            this.m_DownloaderUserControl.TabIndex = 11;
+            // 
             // m_btnClearList
             // 
             this.m_btnClearList.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -341,14 +350,6 @@
             this.m_btnRemove.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.m_btnRemove.UseVisualStyleBackColor = true;
             this.m_btnRemove.Click += new System.EventHandler(this.m_btnRemove_Click);
-            // 
-            // m_DownloaderUserControl
-            // 
-            this.m_DownloaderUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_DownloaderUserControl.Location = new System.Drawing.Point(0, 0);
-            this.m_DownloaderUserControl.Name = "m_DownloaderUserControl";
-            this.m_DownloaderUserControl.Size = new System.Drawing.Size(986, 254);
-            this.m_DownloaderUserControl.TabIndex = 11;
             // 
             // FormMain
             // 
