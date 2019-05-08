@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="OutputFolder" Type="System.String" Scope="User">
-      <Value Profile="(Default)">"C:\\Temp\\YouTube"</Value>
+      <Value Profile="(Default)">"C:\Temp\YouTube"</Value>
     </Setting>
   </Settings>
 </SettingsFile>

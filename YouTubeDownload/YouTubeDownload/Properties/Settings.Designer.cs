@@ -25,7 +25,7 @@ namespace YouTubeDownload.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\"C:\\\\Temp\\\\YouTube\"")]
+        [global::System.Configuration.DefaultSettingValueAttribute("\"C:\\Temp\\YouTube\"")]
         public string OutputFolder {
             get {
                 return ((string)(this["OutputFolder"]));

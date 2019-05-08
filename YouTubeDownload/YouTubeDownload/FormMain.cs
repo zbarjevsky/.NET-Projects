@@ -25,49 +25,35 @@ namespace YouTubeDownload
         private void FormMain_Load(object sender, EventArgs e)
         {
             _folderName = Properties.Settings.Default.OutputFolder;
+            m_lblOutputFolder.Text = "Download To: " + _folderName;
         }
 
         private void m_btnDownload_Click(object sender, EventArgs e)
         {
-            string url = m_txtUrl.Text;
-            Process p = YouTube_DL.Create(
-                string.Format(" \"{0}\" --no-playlist -o \"{1}\\%(title)s-%(id)s.%(ext)s\"", url, _folderName));
+            m_DownloaderUserControl.OutputDataReceived = DL_Process_OutputDataReceived;
+            m_DownloaderUserControl.ProcessExited = DL_Process_Exited;
 
-            m_txtOutput.Text = "";
-
-            p.OutputDataReceived += DL_Process_OutputDataReceived;
-            p.Exited += DL_Process_Exited;
-            p.Start();
-            p.BeginOutputReadLine();
+            m_DownloaderUserControl.Start(m_chkNoPlayList.Checked, _folderName, m_txtUrl.Text);
 
             m_btnDownload.Enabled = false;
+            m_chkNoPlayList.Enabled = false;
             this.Cursor = Cursors.WaitCursor;
         }
 
-        private void DL_Process_Exited(object sender, EventArgs e)
+        private void DL_Process_Exited()
         {
-            Process p = sender as Process;
-            if (p != null)
-            {
-                p.OutputDataReceived -= DL_Process_OutputDataReceived;
-                p.Exited -= DL_Process_Exited;
-            }
+            m_btnDownload.Enabled = true;
+            m_chkNoPlayList.Enabled = true;
+            Cursor = Cursors.Arrow;
+            m_StatusProgress.Value = 0;
+            m_Status1.Text = "Done";
 
-            this.BeginInvoke(new MethodInvoker(() => 
-            {
-                m_btnDownload.Enabled = true;
-                Cursor = Cursors.Arrow;
-                m_StatusProgress.Value = 0;
-                m_Status1.Text = "Done";
-
-                MessageBox.Show(this, "Operation Finished!", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }));
+            MessageBox.Show(this, "Operation Finished!", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void DL_Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
+        private void DL_Process_OutputDataReceived(string line)
         {
-            if(e != null && e.Data != null)
-                this.BeginInvoke(new MethodInvoker(() => UpdateOutput(e.Data)));
+            UpdateOutput(line);
         }
 
         private void m_btnOpenFolder_Click(object sender, EventArgs e)
@@ -79,27 +65,10 @@ namespace YouTubeDownload
         {
             this.Cursor = Cursors.AppStarting;
 
-            m_txtOutput.Text = (line + "\n") + m_txtOutput.Text;
-
             m_Status2.Text = line;
 
-            //parse
-            int pos1 = line.IndexOf("[download]");
-            if(pos1 >= 0)
-            {
-                int pos2 = line.IndexOf("% of ", pos1 + 10);
-                if(pos2 > 0)
-                {
-                    string sPercent = line.Substring(pos1 + 10, pos2 - (pos1 + 10)).Trim();
-                    double percent = double.Parse(sPercent);
-                    m_StatusProgress.Value = (int)percent;
-                    m_Status1.Text = sPercent;
-                }
-                else
-                {
-                    m_Status1.Text = "Done.";
-                }
-            }
+            m_StatusProgress.Value = (int)m_DownloaderUserControl.Progress;
+            m_Status1.Text = m_DownloaderUserControl.Description;
         }
 
         private void m_btnUpdate_Click(object sender, EventArgs e)
@@ -127,8 +96,9 @@ namespace YouTubeDownload
         {
             FolderBrowserDialog dlg = new FolderBrowserDialog()
             {
+                RootFolder = Environment.SpecialFolder.MyComputer,
                 SelectedPath = _folderName,
-                RootFolder = Environment.SpecialFolder.MyComputer
+                Description = "Select Folder to Download to:"
             };
 
             if(dlg.ShowDialog(this) == DialogResult.OK)
@@ -136,6 +106,7 @@ namespace YouTubeDownload
                 _folderName = dlg.SelectedPath;
                 Properties.Settings.Default.OutputFolder = _folderName;
                 Properties.Settings.Default.Save();
+                m_lblOutputFolder.Text = "Download To: " + _folderName;
             }
         }
     }
