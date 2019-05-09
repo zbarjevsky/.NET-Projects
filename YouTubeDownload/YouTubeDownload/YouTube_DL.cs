@@ -18,7 +18,8 @@ namespace YouTubeDownload
         Working,
         Skipped,
         Succsess,
-        Failed
+        Failed,
+        Stopped,
     }
 
     public class DownloadData
@@ -42,20 +43,28 @@ namespace YouTubeDownload
         public Action<string> OutputDataReceived = (OutputData) => { };
         public Action ProcessExited = () => { };
 
+        private Process _DL_Process = null;
+
         public void Start(DownloadData data)
         {
             Data = data;
             Data.State = DownloadState.Working;
 
             string sNoPlayList = Data.NoPlayList ? "--no-playlist" : "";
-            Process p = YouTube_DL.Create(
+            _DL_Process = YouTube_DL.Create(
                 string.Format(" \"{0}\" {1} -o \"{2}\\%(title)s-%(id)s.%(ext)s\"",
                 Data.Url, sNoPlayList, Data.OutputFolder));
 
-            p.OutputDataReceived += DL_Process_OutputDataReceived;
-            p.Exited += DL_Process_Exited;
-            p.Start();
-            p.BeginOutputReadLine();
+            _DL_Process.OutputDataReceived += DL_Process_OutputDataReceived;
+            _DL_Process.Exited += DL_Process_Exited;
+            _DL_Process.Start();
+            _DL_Process.BeginOutputReadLine();
+        }
+
+        public void Stop()
+        {
+            if(_DL_Process != null && !_DL_Process.HasExited)
+                _DL_Process.Kill();
         }
 
         private void DL_Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
@@ -71,6 +80,28 @@ namespace YouTubeDownload
             ParseStatus(line);
 
             OutputDataReceived(e.Data);
+        }
+
+        private void DL_Process_Exited(object sender, EventArgs e)
+        {
+            int exitCode = -1;
+            if (_DL_Process != null)
+            {
+                _DL_Process.OutputDataReceived -= DL_Process_OutputDataReceived;
+                _DL_Process.Exited -= DL_Process_Exited;
+                exitCode = _DL_Process.ExitCode;
+            }
+
+            Data.Progress = 0;
+            if (Data.State == DownloadState.Working)
+            {
+                if (exitCode == 0)
+                    Data.State = DownloadState.Succsess;
+                else
+                    Data.State = DownloadState.Failed;
+            }
+
+            ProcessExited();
         }
 
         private void ParseDestination(string line)
@@ -114,22 +145,6 @@ namespace YouTubeDownload
                     Data.Progress = double.Parse(sPercent);
                 }
             }
-        }
-
-        private void DL_Process_Exited(object sender, EventArgs e)
-        {
-            Process p = sender as Process;
-            if (p != null)
-            {
-                p.OutputDataReceived -= DL_Process_OutputDataReceived;
-                p.Exited -= DL_Process_Exited;
-            }
-
-            Data.Progress = 0;
-            if(Data.State == DownloadState.Working)
-                Data.State = DownloadState.Succsess;
-
-            ProcessExited();
         }
 
         private static Process Create(string arguments)

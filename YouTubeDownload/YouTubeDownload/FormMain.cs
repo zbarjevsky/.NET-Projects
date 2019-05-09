@@ -18,6 +18,8 @@ namespace YouTubeDownload
         const string DNL_PREFIX = "Download to: ";
         string _folderName = "C:\\Temp\\YouTube2";
 
+        private bool _pause = false;
+
         public FormMain()
         {
             InitializeComponent();
@@ -33,6 +35,22 @@ namespace YouTubeDownload
             m_lnkOutputFolder.LinkArea = new LinkArea(DNL_PREFIX.Length, _folderName.Length);
 
             UpdateButtonsState();
+        }
+
+        private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (m_DownloaderUserControl.State == DownloadState.Working)
+            {
+               DialogResult res = MessageBox.Show(this, "Download in progress, Terminate?", "Closing...", 
+                   MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                if (res == DialogResult.Cancel)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+            }
+
+            m_DownloaderUserControl.Stop();
         }
 
         private void m_btnAddUrl_Click(object sender, EventArgs e)
@@ -65,6 +83,8 @@ namespace YouTubeDownload
         {
             if (m_DownloaderUserControl.State == DownloadState.Working)
                 return false;
+            if (_pause)
+                return false;
 
             foreach (ListViewItem item in m_listUrls.Items)
             {
@@ -78,6 +98,7 @@ namespace YouTubeDownload
                 }
             }
 
+            UpdateButtonsState();
             return false;
         }
 
@@ -103,8 +124,13 @@ namespace YouTubeDownload
             m_btnRemove.Enabled = bHasSelection;
             m_btnClearList.Enabled = m_listUrls.Items.Count > 0;
 
-            m_btnPause.Enabled = m_listUrls.Items.Count > 0;
-            m_btnPause.Text = m_DownloaderUserControl.State == DownloadState.Working ? "Pause" : "Start";
+            int queueIdx = FindStateInList(DownloadState.InQueue);
+            int workIdx = FindStateInList(DownloadState.Working);
+            m_btnPause.Enabled = queueIdx >= 0 || workIdx >= 0; //there are items in queue
+            if (queueIdx < 0 && workIdx < 0)
+                m_btnPause.Text = "...";
+            else
+                m_btnPause.Text = _pause ? "Start" : "Pause";
         }
 
         private int FindDataInList(string url)
@@ -119,11 +145,25 @@ namespace YouTubeDownload
             return -1;
         }
 
+        private int FindStateInList(DownloadState state)
+        {
+            for (int i = 0; i < m_listUrls.Items.Count; i++)
+            {
+                ListViewItem item = (ListViewItem)m_listUrls.Items[i];
+                DownloadData data = item.Tag as DownloadData;
+                if (data.State == state)
+                    return i;
+            }
+            return -1;
+        }
+
         private void DL_Process_Exited()
         {
             Cursor = Cursors.Arrow;
             m_StatusProgress.Value = 0;
             m_Status1.Text = "Done";
+
+            if(m_DownloaderUserControl.State == DownloadState.Failed)
 
             UpdateUrlList();
             if (!StartDownloadNext())
@@ -136,11 +176,6 @@ namespace YouTubeDownload
         private void DL_Process_OutputDataReceived(string line)
         {
             UpdateOutput(line);
-        }
-
-        private void m_btnOpenFolder_Click(object sender, EventArgs e)
-        {
-            Process.Start(_folderName);
         }
 
         private void m_lnkOutputFolder_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -207,7 +242,14 @@ namespace YouTubeDownload
 
         private void m_btnPause_Click(object sender, EventArgs e)
         {
+            _pause = !_pause;
+            if (_pause)
+            {
+                m_DownloaderUserControl.Stop();
+            }
 
+            UpdateButtonsState();
+            StartDownloadNext();
         }
 
         private void m_btnRemove_Click(object sender, EventArgs e)

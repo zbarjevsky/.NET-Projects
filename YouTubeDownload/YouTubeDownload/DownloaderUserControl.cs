@@ -79,11 +79,19 @@ namespace YouTubeDownload
             m_lnkOutputFolder.LinkArea = new LinkArea(PREFIX.Length, data.OutputFolder.Length);
         }
 
+        public void Stop()
+        {
+            State = DownloadState.Stopped;
+            _youTube_DL.Stop();
+        }
+
         private void DL_Process_Exited()
         {
             this.BeginInvoke(new MethodInvoker(() =>
             {
-                State = DownloadState.Succsess;
+                if(State == DownloadState.Working)
+                    State = DownloadState.Succsess;
+
                 m_ProgressBar.Value = (int)_youTube_DL.Data.Progress;
 
                 ProcessExited();
