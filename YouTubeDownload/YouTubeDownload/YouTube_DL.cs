@@ -35,6 +35,7 @@ namespace YouTubeDownload
     public class YouTube_DL
     {
         public const string DL = @"Dependencies/youtube-dl.exe";
+        public const string FF = @"Dependencies/ffmpeg.exe";
 
         public DownloadData Data = new DownloadData();
 
@@ -163,6 +164,20 @@ namespace YouTubeDownload
             try
             {
                 string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, DL);
+                FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(path);
+                return versionInfo.ProductName + " ver: " + versionInfo.ProductVersion;
+            }
+            catch (Exception e)
+            {
+                return e.Message;
+            }
+        }
+
+        internal static string GetVersionFFMpeg()
+        {
+            try
+            {
+                string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, FF);
                 FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(path);
                 return versionInfo.ProductName + " ver: " + versionInfo.ProductVersion;
             }

@@ -177,8 +177,8 @@ namespace YouTubeDownload
 
         private void m_mnuHelpAbout_Click(object sender, EventArgs e)
         {
-            string ver1 = Assembly.GetEntryAssembly().GetName().Version.ToString();
-            MessageBox.Show("YouTube Download\nMain ver: "+ver1+"\n" + YouTube_DL.GetVersion().ToString());
+            FormAbout about = new FormAbout();
+            about.ShowDialog(this);
         }
 
         private void m_mnuToolsOutputFolder_Click(object sender, EventArgs e)
