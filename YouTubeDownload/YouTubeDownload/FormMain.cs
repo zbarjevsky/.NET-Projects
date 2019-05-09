@@ -8,6 +8,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -15,7 +16,7 @@ namespace YouTubeDownload
 {
     public partial class FormMain : Form
     {
-        const string DNL_PREFIX = "Download to: ";
+        const string DNL_PREFIX = "Output Folder: ";
         string _folderName = "C:\\Temp\\YouTube2";
 
         private bool _pause = false;
@@ -30,9 +31,7 @@ namespace YouTubeDownload
             m_DownloaderUserControl.OutputDataReceived = DL_Process_OutputDataReceived;
             m_DownloaderUserControl.ProcessExited = DL_Process_Exited;
 
-            _folderName = Properties.Settings.Default.OutputFolder;
-            m_lnkOutputFolder.Text = DNL_PREFIX + _folderName;
-            m_lnkOutputFolder.LinkArea = new LinkArea(DNL_PREFIX.Length, _folderName.Length);
+            UpdateOutputFolder(Properties.Settings.Default.OutputFolder);
 
             m_chkNoPlayList.Checked = Properties.Settings.Default.NoPlayList;
 
@@ -249,14 +248,32 @@ namespace YouTubeDownload
                 Description = "Select Folder to Download to:"
             };
 
-            if(dlg.ShowDialog(this) == DialogResult.OK)
+            //select current folder
+            Task.Factory.StartNew(() =>
             {
-                _folderName = dlg.SelectedPath;
-                Properties.Settings.Default.OutputFolder = _folderName;
-                Properties.Settings.Default.Save();
-                m_lnkOutputFolder.Text = DNL_PREFIX + _folderName;
-                m_lnkOutputFolder.LinkArea = new LinkArea(DNL_PREFIX.Length, _folderName.Length);
+                Thread.Sleep(100);
+                this.Invoke(new MethodInvoker(() => SendKeys.Send("{TAB}{TAB}{DOWN}{DOWN}{UP}{UP}")));
+            });
+
+            if (dlg.ShowDialog(this) == DialogResult.OK)
+            {
+                UpdateOutputFolder(dlg.SelectedPath);
             }
+        }
+
+        private void UpdateOutputFolder(string newFolder)
+        {
+            _folderName = newFolder;
+            Properties.Settings.Default.OutputFolder = _folderName;
+            Properties.Settings.Default.Save();
+
+            m_lnkOutputFolder.Text = DNL_PREFIX + _folderName;
+            m_lnkOutputFolder.LinkArea = new LinkArea(DNL_PREFIX.Length, _folderName.Length);
+        }
+
+        private void m_btnBrowseForFolder_Click(object sender, EventArgs e)
+        {
+            m_mnuToolsOutputFolder_Click(sender, e);
         }
 
         private void m_btnClearList_Click(object sender, EventArgs e)

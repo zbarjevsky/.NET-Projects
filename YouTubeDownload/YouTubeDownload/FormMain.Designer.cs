@@ -60,6 +60,7 @@
             this.m_imageListStartStop = new System.Windows.Forms.ImageList(this.components);
             this.m_btnRemove = new System.Windows.Forms.Button();
             this.m_chkAudioOnly = new System.Windows.Forms.CheckBox();
+            this.m_btnBrowseForFolder = new System.Windows.Forms.Button();
             this.m_DownloaderUserControl = new YouTubeDownload.DownloaderUserControl();
             this.m_statusStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -77,7 +78,7 @@
             this.m_txtUrl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_txtUrl.Name = "m_txtUrl";
             this.m_txtUrl.Size = new System.Drawing.Size(742, 26);
-            this.m_txtUrl.TabIndex = 0;
+            this.m_txtUrl.TabIndex = 2;
             this.m_txtUrl.TextChanged += new System.EventHandler(this.m_txtUrl_TextChanged);
             // 
             // m_statusStrip
@@ -90,7 +91,7 @@
             this.m_statusStrip.Name = "m_statusStrip";
             this.m_statusStrip.Padding = new System.Windows.Forms.Padding(2, 0, 21, 0);
             this.m_statusStrip.Size = new System.Drawing.Size(1184, 31);
-            this.m_statusStrip.TabIndex = 4;
+            this.m_statusStrip.TabIndex = 13;
             this.m_statusStrip.Text = ".";
             // 
             // m_Status1
@@ -120,7 +121,7 @@
             this.m_btnUpdate.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnUpdate.Name = "m_btnUpdate";
             this.m_btnUpdate.Size = new System.Drawing.Size(136, 35);
-            this.m_btnUpdate.TabIndex = 5;
+            this.m_btnUpdate.TabIndex = 12;
             this.m_btnUpdate.Text = "Update DL";
             this.m_btnUpdate.UseVisualStyleBackColor = true;
             this.m_btnUpdate.Click += new System.EventHandler(this.m_btnUpdate_Click);
@@ -134,7 +135,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1184, 24);
-            this.menuStrip1.TabIndex = 6;
+            this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
             // m_mnuFile
@@ -171,19 +172,19 @@
             // m_mnuToolsSettings
             // 
             this.m_mnuToolsSettings.Name = "m_mnuToolsSettings";
-            this.m_mnuToolsSettings.Size = new System.Drawing.Size(157, 22);
+            this.m_mnuToolsSettings.Size = new System.Drawing.Size(180, 22);
             this.m_mnuToolsSettings.Text = "&Settings";
             this.m_mnuToolsSettings.Click += new System.EventHandler(this.m_mnuToolsSettings_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(154, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(177, 6);
             // 
             // m_mnuToolsOutputFolder
             // 
             this.m_mnuToolsOutputFolder.Name = "m_mnuToolsOutputFolder";
-            this.m_mnuToolsOutputFolder.Size = new System.Drawing.Size(157, 22);
+            this.m_mnuToolsOutputFolder.Size = new System.Drawing.Size(180, 22);
             this.m_mnuToolsOutputFolder.Text = "Output Folder...";
             this.m_mnuToolsOutputFolder.Click += new System.EventHandler(this.m_mnuToolsOutputFolder_Click);
             // 
@@ -211,7 +212,7 @@
             this.m_chkNoPlayList.Location = new System.Drawing.Point(888, 37);
             this.m_chkNoPlayList.Name = "m_chkNoPlayList";
             this.m_chkNoPlayList.Size = new System.Drawing.Size(110, 24);
-            this.m_chkNoPlayList.TabIndex = 7;
+            this.m_chkNoPlayList.TabIndex = 3;
             this.m_chkNoPlayList.Text = "No Play List";
             this.m_chkNoPlayList.UseVisualStyleBackColor = true;
             this.m_chkNoPlayList.CheckedChanged += new System.EventHandler(this.m_chkNoPlayList_CheckedChanged);
@@ -230,7 +231,7 @@
             this.m_listUrls.Location = new System.Drawing.Point(0, 0);
             this.m_listUrls.Name = "m_listUrls";
             this.m_listUrls.Size = new System.Drawing.Size(986, 155);
-            this.m_listUrls.TabIndex = 12;
+            this.m_listUrls.TabIndex = 0;
             this.m_listUrls.UseCompatibleStateImageBehavior = false;
             this.m_listUrls.View = System.Windows.Forms.View.Details;
             this.m_listUrls.SelectedIndexChanged += new System.EventHandler(this.m_listUrls_SelectedIndexChanged);
@@ -259,7 +260,7 @@
             this.m_btnAddUrl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnAddUrl.Name = "m_btnAddUrl";
             this.m_btnAddUrl.Size = new System.Drawing.Size(136, 35);
-            this.m_btnAddUrl.TabIndex = 13;
+            this.m_btnAddUrl.TabIndex = 4;
             this.m_btnAddUrl.Text = "Add && Start";
             this.m_btnAddUrl.UseVisualStyleBackColor = true;
             this.m_btnAddUrl.Click += new System.EventHandler(this.m_btnAddUrl_Click);
@@ -294,7 +295,7 @@
             this.m_btnClearList.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnClearList.Name = "m_btnClearList";
             this.m_btnClearList.Size = new System.Drawing.Size(136, 35);
-            this.m_btnClearList.TabIndex = 15;
+            this.m_btnClearList.TabIndex = 11;
             this.m_btnClearList.Text = "Remove All";
             this.m_btnClearList.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.m_btnClearList.UseVisualStyleBackColor = true;
@@ -306,16 +307,17 @@
             this.m_lblUrl.Location = new System.Drawing.Point(13, 38);
             this.m_lblUrl.Name = "m_lblUrl";
             this.m_lblUrl.Size = new System.Drawing.Size(115, 20);
-            this.m_lblUrl.TabIndex = 16;
+            this.m_lblUrl.TabIndex = 1;
             this.m_lblUrl.Text = "YouTube URL:";
             // 
             // m_lnkOutputFolder
             // 
-            this.m_lnkOutputFolder.AutoSize = true;
-            this.m_lnkOutputFolder.Location = new System.Drawing.Point(13, 72);
+            this.m_lnkOutputFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_lnkOutputFolder.Location = new System.Drawing.Point(135, 72);
             this.m_lnkOutputFolder.Name = "m_lnkOutputFolder";
-            this.m_lnkOutputFolder.Size = new System.Drawing.Size(107, 20);
-            this.m_lnkOutputFolder.TabIndex = 17;
+            this.m_lnkOutputFolder.Size = new System.Drawing.Size(742, 20);
+            this.m_lnkOutputFolder.TabIndex = 7;
             this.m_lnkOutputFolder.TabStop = true;
             this.m_lnkOutputFolder.Text = "Output Folder";
             this.m_lnkOutputFolder.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.m_lnkOutputFolder_LinkClicked);
@@ -330,7 +332,7 @@
             this.m_btnPause.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnPause.Name = "m_btnPause";
             this.m_btnPause.Size = new System.Drawing.Size(136, 35);
-            this.m_btnPause.TabIndex = 18;
+            this.m_btnPause.TabIndex = 9;
             this.m_btnPause.Text = "Start";
             this.m_btnPause.UseVisualStyleBackColor = true;
             this.m_btnPause.Click += new System.EventHandler(this.m_btnPause_Click);
@@ -352,7 +354,7 @@
             this.m_btnRemove.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnRemove.Name = "m_btnRemove";
             this.m_btnRemove.Size = new System.Drawing.Size(136, 35);
-            this.m_btnRemove.TabIndex = 19;
+            this.m_btnRemove.TabIndex = 10;
             this.m_btnRemove.Text = "Remove Sel";
             this.m_btnRemove.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.m_btnRemove.UseVisualStyleBackColor = true;
@@ -362,12 +364,22 @@
             // 
             this.m_chkAudioOnly.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_chkAudioOnly.AutoSize = true;
-            this.m_chkAudioOnly.Location = new System.Drawing.Point(888, 67);
+            this.m_chkAudioOnly.Location = new System.Drawing.Point(888, 71);
             this.m_chkAudioOnly.Name = "m_chkAudioOnly";
             this.m_chkAudioOnly.Size = new System.Drawing.Size(168, 24);
-            this.m_chkAudioOnly.TabIndex = 20;
+            this.m_chkAudioOnly.TabIndex = 8;
             this.m_chkAudioOnly.Text = "Extract Audio (mp3)";
             this.m_chkAudioOnly.UseVisualStyleBackColor = true;
+            // 
+            // m_btnBrowseForFolder
+            // 
+            this.m_btnBrowseForFolder.Location = new System.Drawing.Point(10, 68);
+            this.m_btnBrowseForFolder.Name = "m_btnBrowseForFolder";
+            this.m_btnBrowseForFolder.Size = new System.Drawing.Size(111, 29);
+            this.m_btnBrowseForFolder.TabIndex = 6;
+            this.m_btnBrowseForFolder.Text = "Change...";
+            this.m_btnBrowseForFolder.UseVisualStyleBackColor = true;
+            this.m_btnBrowseForFolder.Click += new System.EventHandler(this.m_btnBrowseForFolder_Click);
             // 
             // m_DownloaderUserControl
             // 
@@ -375,13 +387,14 @@
             this.m_DownloaderUserControl.Location = new System.Drawing.Point(0, 0);
             this.m_DownloaderUserControl.Name = "m_DownloaderUserControl";
             this.m_DownloaderUserControl.Size = new System.Drawing.Size(986, 254);
-            this.m_DownloaderUserControl.TabIndex = 11;
+            this.m_DownloaderUserControl.TabIndex = 0;
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1184, 562);
+            this.Controls.Add(this.m_btnBrowseForFolder);
             this.Controls.Add(this.m_chkAudioOnly);
             this.Controls.Add(this.m_btnRemove);
             this.Controls.Add(this.m_btnPause);
@@ -451,6 +464,7 @@
         private System.Windows.Forms.Button m_btnRemove;
         private System.Windows.Forms.ImageList m_imageListStartStop;
         private System.Windows.Forms.CheckBox m_chkAudioOnly;
+        private System.Windows.Forms.Button m_btnBrowseForFolder;
     }
 }
 
