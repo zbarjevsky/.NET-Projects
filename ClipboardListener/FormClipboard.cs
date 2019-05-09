@@ -1351,19 +1351,22 @@ namespace ClipboardManager
 
         private void m_contextMenuStripTrayIcon_UAC_Click(object sender, EventArgs e)
         {
+            bool reset = m_Settings.m_bAutoUAC;
+            bool bUserClick = (sender != null);
+            if(!reset && !bUserClick)
+                return;
+
             try
             {
-                bool bUserClick = (sender != null);
                 const string REG_KEY = @"SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System";
                 Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(REG_KEY, writable: true);
                 int val = (int)key.GetValue("EnableLUA");
                 if(val != 0)
                 {
-                    bool reset = m_Settings.m_bAutoUAC;
                     if ((bUserClick || !m_Settings.m_bAutoUAC)) //show question if user clicked or not Automatic UAC
                     {
                         reset = (DialogResult.Yes == MessageBox.Show(
-                            @"User Account Control Enabled\n  Disable?", @"EnableLUA",
+                            "User Account Control Enabled\n  Disable?", "EnableLUA",
                             MessageBoxButtons.YesNo, MessageBoxIcon.Question,
                             MessageBoxDefaultButton.Button1, MessageBoxOptions.ServiceNotification));
                     }
@@ -1375,7 +1378,7 @@ namespace ClipboardManager
                 }
                 else if (bUserClick) //comes from user
                 {
-                    CenteredMessageBox.MsgBoxIfo("UAC disabled");
+                    CenteredMessageBox.MsgBoxIfo("User Account Control Disabled");
                 }
             }
             catch (Exception err)
