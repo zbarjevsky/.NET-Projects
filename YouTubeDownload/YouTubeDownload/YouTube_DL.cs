@@ -178,8 +178,9 @@ namespace YouTubeDownload
             try
             {
                 string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, FF);
-                FileVersionInfo versionInfo = FileVersionInfo.GetVersionInfo(path);
-                return versionInfo.ProductName + " ver: " + versionInfo.ProductVersion;
+                List<string> ver = ProcessHelper.GetStdOut(path, " -version");
+
+                return ver.Aggregate("\n", (current, s) => current + (" " + s + Environment.NewLine));
             }
             catch (Exception e)
             {

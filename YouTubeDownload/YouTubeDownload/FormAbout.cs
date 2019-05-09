@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Reflection;
@@ -26,7 +27,18 @@ namespace YouTubeDownload
 
             m_lblVer.Text = "YouTube Download ver: " + ver1;
             m_lnkYouTubeDL.Text = "youtube-dl ver: " + ver2;
-            m_lnkFFMpeg.Text = "ffmpeg ver: " + ver3;
+            m_lnkFFMpeg.Text = "ffmpeg";
+            m_txtVer.Text = ver3;
+        }
+
+        private void m_lnkYouTubeDL_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://github.com/ytdl-org/youtube-dl/blob/master/README.md#readme");
+        }
+
+        private void m_lnkFFMpeg_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://ffmpeg.org/");
         }
     }
 }

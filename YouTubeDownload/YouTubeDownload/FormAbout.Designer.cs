@@ -33,6 +33,7 @@
             this.m_lnkYouTubeDL = new System.Windows.Forms.LinkLabel();
             this.m_lnkFFMpeg = new System.Windows.Forms.LinkLabel();
             this.m_lblVer = new System.Windows.Forms.Label();
+            this.m_txtVer = new System.Windows.Forms.RichTextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -55,6 +56,7 @@
             this.m_lnkYouTubeDL.TabIndex = 1;
             this.m_lnkYouTubeDL.TabStop = true;
             this.m_lnkYouTubeDL.Text = "youtube-dl ver:";
+            this.m_lnkYouTubeDL.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.m_lnkYouTubeDL_LinkClicked);
             // 
             // m_lnkFFMpeg
             // 
@@ -65,6 +67,7 @@
             this.m_lnkFFMpeg.TabIndex = 2;
             this.m_lnkFFMpeg.TabStop = true;
             this.m_lnkFFMpeg.Text = "ffmpeg ver:";
+            this.m_lnkFFMpeg.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.m_lnkFFMpeg_LinkClicked);
             // 
             // m_lblVer
             // 
@@ -75,11 +78,24 @@
             this.m_lblVer.TabIndex = 3;
             this.m_lblVer.Text = "YouTube Download ver:";
             // 
+            // m_txtVer
+            // 
+            this.m_txtVer.BackColor = System.Drawing.SystemColors.Info;
+            this.m_txtVer.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.m_txtVer.Location = new System.Drawing.Point(100, 113);
+            this.m_txtVer.Name = "m_txtVer";
+            this.m_txtVer.ReadOnly = true;
+            this.m_txtVer.Size = new System.Drawing.Size(517, 184);
+            this.m_txtVer.TabIndex = 4;
+            this.m_txtVer.Text = "";
+            this.m_txtVer.WordWrap = false;
+            // 
             // FormAbout
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(452, 134);
+            this.ClientSize = new System.Drawing.Size(629, 309);
+            this.Controls.Add(this.m_txtVer);
             this.Controls.Add(this.m_lblVer);
             this.Controls.Add(this.m_lnkFFMpeg);
             this.Controls.Add(this.m_lnkYouTubeDL);
@@ -105,5 +121,6 @@
         private System.Windows.Forms.LinkLabel m_lnkYouTubeDL;
         private System.Windows.Forms.LinkLabel m_lnkFFMpeg;
         private System.Windows.Forms.Label m_lblVer;
+        private System.Windows.Forms.RichTextBox m_txtVer;
     }
 }
