@@ -34,6 +34,8 @@ namespace YouTubeDownload
             m_lnkOutputFolder.Text = DNL_PREFIX + _folderName;
             m_lnkOutputFolder.LinkArea = new LinkArea(DNL_PREFIX.Length, _folderName.Length);
 
+            m_chkNoPlayList.Checked = Properties.Settings.Default.NoPlayList;
+
             UpdateButtonsState();
         }
 
@@ -53,18 +55,32 @@ namespace YouTubeDownload
             m_DownloaderUserControl.Stop();
         }
 
+        private void m_chkNoPlayList_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.NoPlayList = m_chkNoPlayList.Checked;
+            Properties.Settings.Default.Save();
+        }
+
         private void m_btnAddUrl_Click(object sender, EventArgs e)
         {
-            if (FindDataInList(m_txtUrl.Text) >= 0)
+            int urlIdx = FindDataInList(m_txtUrl.Text);
+            if (urlIdx >= 0)
             {
+                DownloadData data1 = m_listUrls.Items[urlIdx].Tag as DownloadData;
+                data1.NoPlayList = m_chkNoPlayList.Checked;
+                data1.ExtractAudio = m_chkAudioOnly.Checked;
+
                 MessageBox.Show(this, "Url already in list", Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
+
+            _pause = false;
 
             DownloadData data = new DownloadData()
             {
                 State = DownloadState.InQueue,
                 NoPlayList = m_chkNoPlayList.Checked,
+                ExtractAudio = m_chkAudioOnly.Checked,
                 OutputFolder = _folderName,
                 Url = m_txtUrl.Text
             };
@@ -76,6 +92,8 @@ namespace YouTubeDownload
 
             m_listUrls.Items.Add(item);
             m_txtUrl.Text = "";
+
+            UpdateButtonsState();
             StartDownloadNext();
         }
 
@@ -128,9 +146,15 @@ namespace YouTubeDownload
             int workIdx = FindStateInList(DownloadState.Working);
             m_btnPause.Enabled = queueIdx >= 0 || workIdx >= 0; //there are items in queue
             if (queueIdx < 0 && workIdx < 0)
+            {
                 m_btnPause.Text = "...";
+                m_btnPause.ImageIndex = -1;
+            }
             else
+            {
                 m_btnPause.Text = _pause ? "Start" : "Pause";
+                m_btnPause.ImageIndex = _pause ? 0 : 1;
+            }
         }
 
         private int FindDataInList(string url)
@@ -163,7 +187,7 @@ namespace YouTubeDownload
             m_StatusProgress.Value = 0;
             m_Status1.Text = "Done";
 
-            if(m_DownloaderUserControl.State == DownloadState.Failed)
+            //if(m_DownloaderUserControl.State == DownloadState.Failed)
 
             UpdateUrlList();
             if (!StartDownloadNext())

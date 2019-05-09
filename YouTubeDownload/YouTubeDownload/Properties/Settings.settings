@@ -5,5 +5,8 @@
     <Setting Name="OutputFolder" Type="System.String" Scope="User">
       <Value Profile="(Default)">"C:\Temp\YouTube"</Value>
     </Setting>
+    <Setting Name="NoPlayList" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Diagnostics;
+using System.IO;
 
 namespace YouTubeDownload
 {
@@ -18,7 +19,7 @@ namespace YouTubeDownload
         public string Description { get { return _youTube_DL.Data.FileName; } }
         public double Progress { get { return _youTube_DL.Data.Progress; } }
 
-        public DownloadState State { get; private set; } = DownloadState.None;
+        public DownloadState State { get { return _youTube_DL.Data.State; } }
 
         public Action<string> OutputDataReceived = (OutputData) => { };
         public Action ProcessExited = () => { };
@@ -30,15 +31,19 @@ namespace YouTubeDownload
 
         private void DownloaderUserControl_Load(object sender, EventArgs e)
         {
+            _youTube_DL.OutputDataReceived = DL_Process_OutputDataReceived;
+            _youTube_DL.ProcessExited = DL_Process_Exited;
+
             m_lnkDestination.LinkArea = new LinkArea();
-            m_lnkOutputFolder.LinkArea = new LinkArea();
         }
 
         private void m_lnkDestination_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            if(State != DownloadState.Succsess)
+            if(!File.Exists(_youTube_DL.Data.FileName))
             {
-                MessageBox.Show(this, "Not Ready", Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                if(!string.IsNullOrWhiteSpace(_youTube_DL.Data.FileName))
+                    MessageBox.Show(this, "Not Ready: \n"+ _youTube_DL.Data.FileName, Text, 
+                        MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
 
@@ -67,21 +72,11 @@ namespace YouTubeDownload
 
         public void Start(DownloadData data)
         {
-            State = DownloadState.Working;
-
-            _youTube_DL.OutputDataReceived = DL_Process_OutputDataReceived;
-            _youTube_DL.ProcessExited = DL_Process_Exited;
-
             _youTube_DL.Start(data);
-
-            const string PREFIX = "Downloading to: ";
-            m_lnkOutputFolder.Text = PREFIX + data.OutputFolder;
-            m_lnkOutputFolder.LinkArea = new LinkArea(PREFIX.Length, data.OutputFolder.Length);
         }
 
         public void Stop()
         {
-            State = DownloadState.Stopped;
             _youTube_DL.Stop();
         }
 
@@ -89,11 +84,9 @@ namespace YouTubeDownload
         {
             this.BeginInvoke(new MethodInvoker(() =>
             {
-                if(State == DownloadState.Working)
-                    State = DownloadState.Succsess;
+                this.Cursor = Cursors.Arrow;
 
                 m_ProgressBar.Value = (int)_youTube_DL.Data.Progress;
-
                 ProcessExited();
             }));
         }
@@ -102,6 +95,8 @@ namespace YouTubeDownload
         {
             this.BeginInvoke(new MethodInvoker(() =>
             {
+                this.Cursor = Cursors.AppStarting;
+
                 UpdateOutput(line);
                 OutputDataReceived(line);
             }));
@@ -109,8 +104,6 @@ namespace YouTubeDownload
 
         private void UpdateOutput(string line)
         {
-            this.Cursor = Cursors.AppStarting;
-
             m_txtOutput.Text = (line + "\n") + m_txtOutput.Text;
 
             m_lblStatus.Text = "Status: " + line;

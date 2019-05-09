@@ -34,5 +34,17 @@ namespace YouTubeDownload.Properties {
                 this["OutputFolder"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool NoPlayList {
+            get {
+                return ((bool)(this["NoPlayList"]));
+            }
+            set {
+                this["NoPlayList"] = value;
+            }
+        }
     }
 }

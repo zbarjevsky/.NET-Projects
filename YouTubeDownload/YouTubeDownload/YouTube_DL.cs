@@ -28,6 +28,7 @@ namespace YouTubeDownload
         public string OutputFolder { get; set; } = "";
         public string FileName { get; set; } = "";
         public bool NoPlayList { get; set; } = true;
+        public bool ExtractAudio { get; set; } = false;
         public string Url { get; set; } = "";
         public double Progress { get; set; } = 0;
     }
@@ -50,10 +51,12 @@ namespace YouTubeDownload
             Data = data;
             Data.State = DownloadState.Working;
 
-            string sNoPlayList = Data.NoPlayList ? "--no-playlist" : "";
+            string parameters = Data.NoPlayList ? "--no-playlist" : "";
+            parameters += Data.ExtractAudio ? " --extract-audio --audio-format mp3" : "";
+
             _DL_Process = YouTube_DL.Create(
                 string.Format(" \"{0}\" {1} -o \"{2}\\%(title)s-%(id)s.%(ext)s\"",
-                Data.Url, sNoPlayList, Data.OutputFolder));
+                Data.Url, parameters, Data.OutputFolder));
 
             _DL_Process.OutputDataReceived += DL_Process_OutputDataReceived;
             _DL_Process.Exited += DL_Process_Exited;
@@ -95,10 +98,7 @@ namespace YouTubeDownload
             Data.Progress = 0;
             if (Data.State == DownloadState.Working)
             {
-                if (exitCode == 0)
-                    Data.State = DownloadState.Succsess;
-                else
-                    Data.State = DownloadState.Failed;
+                Data.State = (exitCode == 0) ? DownloadState.Succsess : DownloadState.InQueue;
             }
 
             ProcessExited();
@@ -118,6 +118,13 @@ namespace YouTubeDownload
             if (pos1 >= 0)
             {
                 Data.FileName = line.Substring(pos1 + DST2.Length);
+            }
+
+            const string DST3 = "[ffmpeg] Destination: ";
+            pos1 = line.IndexOf(DST3);
+            if (pos1 >= 0)
+            {
+                Data.FileName = line.Substring(pos1 + DST3.Length);
             }
         }
 
