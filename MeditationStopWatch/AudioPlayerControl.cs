@@ -87,7 +87,7 @@ namespace MeditationStopWatch
 			UpdateInfo();
             m_playLists.PL.OP.OnListChanged += () => { UpdateInfo(); };
             m_playLists.PL.OP.PlayAction += (selectedIdx) => { PlaySelected(selectedIdx); };
-            m_playLists.PL.OP.PauseAction += () => { Pause(); };
+            m_playLists.PL.OP.PauseAction += () => { PauseResume(); };
             m_playLists.PL.OP.StopAction += () => { Stop(); };
             m_playLists.PL.OP.NextAction += () => { Next(); };
             m_playLists.PL.OP.PrevAction += () => { Prev(); };
@@ -250,9 +250,9 @@ namespace MeditationStopWatch
 			UpdateInfo();
 		}
 
-        public void Pause()
+        public void PauseResume()
         {
-            m_Mp3Player.Pause();
+            m_Mp3Player.PauseResume();
             if (m_Mp3Player.Paused)
                 m_progrReiKi.Pause();
             else
@@ -287,7 +287,7 @@ namespace MeditationStopWatch
 
         private void m_tbbtnPause_Click(object sender, EventArgs e)
 		{
-			Pause();
+			PauseResume();
 		}
 
 		private void m_tbbtnStop_Click(object sender, EventArgs e)

@@ -116,7 +116,7 @@ namespace MeditationStopWatch
                 return false;
         }
 
-        public void Pause()
+        public void PauseResume()
         {
             if (Paused)
             {

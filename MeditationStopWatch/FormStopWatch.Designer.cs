@@ -436,7 +436,7 @@
             this.m_mnuTools.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_mnuTools_Options});
             this.m_mnuTools.Name = "m_mnuTools";
-            this.m_mnuTools.Size = new System.Drawing.Size(47, 20);
+            this.m_mnuTools.Size = new System.Drawing.Size(48, 20);
             this.m_mnuTools.Text = "&Tools";
             // 
             // m_mnuTools_Options
@@ -627,6 +627,7 @@
             this.Controls.Add(this.m_statusBar);
             this.Controls.Add(this.m_menuMain);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MainMenuStrip = this.m_menuMain;
             this.MinimumSize = new System.Drawing.Size(500, 300);
             this.Name = "FormStopWatch";

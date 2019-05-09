@@ -322,13 +322,32 @@ namespace MeditationStopWatch
             MessageBox.Show(this, "Not Implemented...", "Favorities", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
         }
 
+        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        {
+            if (keyData == Keys.Up || keyData == Keys.Down || keyData == Keys.Space)
+            {
+                if (keyData == Keys.Space)
+                    m_audioPlayerControl.PauseResume();
+
+                if (keyData == Keys.Up)
+                    AdjustVolume(1);
+
+                if (keyData == Keys.Down)
+                    AdjustVolume(-1);
+
+                return true;
+            }
+
+            return base.ProcessCmdKey(ref msg, keyData);
+        }
+
         private void m_pictureBox1_Click(object sender, EventArgs e)
 		{
-			m_audioPlayerControl.Pause();
+			m_audioPlayerControl.PauseResume();
 			m_pictureBox1.Focus();
 		}
 
-		protected override void OnMouseWheel(MouseEventArgs e)
+        protected override void OnMouseWheel(MouseEventArgs e)
 		{
 			AdjustVolume(e.Delta);
 			base.OnMouseWheel(e);
