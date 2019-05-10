@@ -98,7 +98,7 @@ namespace YouTubeDownload
             Data.Progress = 0;
             if (Data.State == DownloadState.Working)
             {
-                Data.State = (exitCode == 0) ? DownloadState.Succsess : DownloadState.InQueue;
+                Data.State = (exitCode == 1) ? DownloadState.Succsess : DownloadState.InQueue;
             }
 
             ProcessExited();
@@ -164,7 +164,9 @@ namespace YouTubeDownload
                     CreateNoWindow = true,
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
-                    RedirectStandardError = true
+                    RedirectStandardError = true,
+                    //StandardOutputEncoding = Encoding.GetEncoding(855),
+                    //StandardErrorEncoding = Encoding.GetEncoding(855)
                 }
             };
         }

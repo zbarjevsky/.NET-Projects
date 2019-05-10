@@ -33,8 +33,6 @@ namespace YouTubeDownload
 
             UpdateOutputFolder(Properties.Settings.Default.OutputFolder);
 
-            m_chkNoPlayList.Checked = Properties.Settings.Default.NoPlayList;
-
             UpdateButtonsState();
         }
 
@@ -54,20 +52,21 @@ namespace YouTubeDownload
             m_DownloaderUserControl.Stop();
         }
 
-        private void m_chkNoPlayList_CheckedChanged(object sender, EventArgs e)
+        private void m_mnuFileAdd_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default.NoPlayList = m_chkNoPlayList.Checked;
-            Properties.Settings.Default.Save();
+            m_btnAddUrl_Click(sender, e);
         }
 
         private void m_btnAddUrl_Click(object sender, EventArgs e)
         {
-            int urlIdx = FindDataInList(m_txtUrl.Text);
+            FormAddUrl frm = new FormAddUrl(_folderName);
+            if(frm.ShowDialog(this) != DialogResult.OK)
+                return;
+
+            int urlIdx = FindDataInList(frm.Data.Url);
             if (urlIdx >= 0)
             {
-                DownloadData data1 = m_listUrls.Items[urlIdx].Tag as DownloadData;
-                data1.NoPlayList = m_chkNoPlayList.Checked;
-                data1.ExtractAudio = m_chkAudioOnly.Checked;
+                m_listUrls.Items[urlIdx].Tag = frm.Data;
 
                 MessageBox.Show(this, "Url already in list", Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -75,22 +74,14 @@ namespace YouTubeDownload
 
             _pause = false;
 
-            DownloadData data = new DownloadData()
-            {
-                State = DownloadState.InQueue,
-                NoPlayList = m_chkNoPlayList.Checked,
-                ExtractAudio = m_chkAudioOnly.Checked,
-                OutputFolder = _folderName,
-                Url = m_txtUrl.Text
-            };
+            frm.Data.State = DownloadState.InQueue;
 
-            ListViewItem item = new ListViewItem(data.State.ToString());
-            item.SubItems.Add(data.FileName);
-            item.SubItems.Add(data.Url);
-            item.Tag = data;
+            ListViewItem item = new ListViewItem(frm.Data.State.ToString());
+            item.SubItems.Add(frm.Data.FileName);
+            item.SubItems.Add(frm.Data.Url);
+            item.Tag = frm.Data;
 
             m_listUrls.Items.Add(item);
-            m_txtUrl.Text = "";
 
             UpdateButtonsState();
             StartDownloadNext();
@@ -137,7 +128,7 @@ namespace YouTubeDownload
 
             m_btnUpdate.Enabled = m_DownloaderUserControl.State != DownloadState.Working;
 
-            m_btnAddUrl.Enabled = IsValidYouTubeUrl();
+            m_btnAddUrl.Enabled = true;
             m_btnRemove.Enabled = bHasSelection;
             m_btnClearList.Enabled = m_listUrls.Items.Count > 0;
 
@@ -221,6 +212,11 @@ namespace YouTubeDownload
         private void m_btnUpdate_Click(object sender, EventArgs e)
         {
             YouTube_DL.Update();
+        }
+
+        private void m_mnuToolsUpdateDL_Click(object sender, EventArgs e)
+        {
+            m_btnUpdate_Click(sender, e);
         }
 
         private void m_mnuToolsSettings_Click(object sender, EventArgs e)
@@ -310,24 +306,6 @@ namespace YouTubeDownload
         private void m_txtUrl_TextChanged(object sender, EventArgs e)
         {
             UpdateButtonsState();
-        }
-
-        private bool IsValidYouTubeUrl()
-        {
-            Uri url = null;
-            try { url = new Uri(m_txtUrl.Text); } catch { }
-
-            if (url == null || url.Host != "www.youtube.com")
-            {
-                m_errorProvider.SetError(m_txtUrl, "invalid youtube url");
-                m_errorProvider.SetIconAlignment(m_txtUrl, ErrorIconAlignment.MiddleRight);
-                return false;
-            }
-            else
-            {
-                m_errorProvider.SetError(m_txtUrl, "");
-                return true;
-            }
         }
     }
 }
