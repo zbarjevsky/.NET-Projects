@@ -37,10 +37,12 @@
             this.m_btnUpdate = new System.Windows.Forms.Button();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.m_mnuFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuFileAdd = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.m_mnuFileExit = new System.Windows.Forms.ToolStripMenuItem();
             this.m_mnuTools = new System.Windows.Forms.ToolStripMenuItem();
             this.m_mnuToolsSettings = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuToolsUpdateDL = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.m_mnuToolsOutputFolder = new System.Windows.Forms.ToolStripMenuItem();
             this.m_mnuHelp = new System.Windows.Forms.ToolStripMenuItem();
@@ -59,8 +61,6 @@
             this.m_btnBrowseForFolder = new System.Windows.Forms.Button();
             this.m_errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.m_DownloaderUserControl = new YouTubeDownload.DownloaderUserControl();
-            this.m_mnuFileAdd = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_mnuToolsUpdateDL = new System.Windows.Forms.ToolStripMenuItem();
             this.m_statusStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_spliMain)).BeginInit();
@@ -79,7 +79,7 @@
             this.m_statusStrip.Location = new System.Drawing.Point(0, 531);
             this.m_statusStrip.Name = "m_statusStrip";
             this.m_statusStrip.Padding = new System.Windows.Forms.Padding(2, 0, 21, 0);
-            this.m_statusStrip.Size = new System.Drawing.Size(936, 31);
+            this.m_statusStrip.Size = new System.Drawing.Size(984, 31);
             this.m_statusStrip.TabIndex = 9;
             this.m_statusStrip.Text = ".";
             // 
@@ -92,7 +92,7 @@
             // m_Status2
             // 
             this.m_Status2.Name = "m_Status2";
-            this.m_Status2.Size = new System.Drawing.Size(719, 26);
+            this.m_Status2.Size = new System.Drawing.Size(767, 26);
             this.m_Status2.Spring = true;
             this.m_Status2.Text = "...";
             // 
@@ -106,7 +106,7 @@
             this.m_btnUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnUpdate.Image = ((System.Drawing.Image)(resources.GetObject("m_btnUpdate.Image")));
             this.m_btnUpdate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnUpdate.Location = new System.Drawing.Point(787, 29);
+            this.m_btnUpdate.Location = new System.Drawing.Point(835, 29);
             this.m_btnUpdate.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnUpdate.Name = "m_btnUpdate";
             this.m_btnUpdate.Size = new System.Drawing.Size(136, 29);
@@ -123,7 +123,7 @@
             this.m_mnuHelp});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(936, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(984, 24);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -136,6 +136,13 @@
             this.m_mnuFile.Name = "m_mnuFile";
             this.m_mnuFile.Size = new System.Drawing.Size(37, 20);
             this.m_mnuFile.Text = "&File";
+            // 
+            // m_mnuFileAdd
+            // 
+            this.m_mnuFileAdd.Name = "m_mnuFileAdd";
+            this.m_mnuFileAdd.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuFileAdd.Text = "Add New Download";
+            this.m_mnuFileAdd.Click += new System.EventHandler(this.m_mnuFileAdd_Click);
             // 
             // toolStripMenuItem1
             // 
@@ -157,7 +164,7 @@
             this.toolStripMenuItem2,
             this.m_mnuToolsOutputFolder});
             this.m_mnuTools.Name = "m_mnuTools";
-            this.m_mnuTools.Size = new System.Drawing.Size(47, 20);
+            this.m_mnuTools.Size = new System.Drawing.Size(48, 20);
             this.m_mnuTools.Text = "&Tools";
             // 
             // m_mnuToolsSettings
@@ -166,6 +173,13 @@
             this.m_mnuToolsSettings.Size = new System.Drawing.Size(174, 22);
             this.m_mnuToolsSettings.Text = "&Settings";
             this.m_mnuToolsSettings.Click += new System.EventHandler(this.m_mnuToolsSettings_Click);
+            // 
+            // m_mnuToolsUpdateDL
+            // 
+            this.m_mnuToolsUpdateDL.Name = "m_mnuToolsUpdateDL";
+            this.m_mnuToolsUpdateDL.Size = new System.Drawing.Size(174, 22);
+            this.m_mnuToolsUpdateDL.Text = "Update youtube-dl";
+            this.m_mnuToolsUpdateDL.Click += new System.EventHandler(this.m_mnuToolsUpdateDL_Click);
             // 
             // toolStripMenuItem2
             // 
@@ -207,7 +221,7 @@
             this.m_listUrls.HideSelection = false;
             this.m_listUrls.Location = new System.Drawing.Point(0, 0);
             this.m_listUrls.Name = "m_listUrls";
-            this.m_listUrls.Size = new System.Drawing.Size(911, 155);
+            this.m_listUrls.Size = new System.Drawing.Size(959, 155);
             this.m_listUrls.TabIndex = 0;
             this.m_listUrls.UseCompatibleStateImageBehavior = false;
             this.m_listUrls.View = System.Windows.Forms.View.Details;
@@ -258,7 +272,7 @@
             // m_spliMain.Panel2
             // 
             this.m_spliMain.Panel2.Controls.Add(this.m_DownloaderUserControl);
-            this.m_spliMain.Size = new System.Drawing.Size(915, 421);
+            this.m_spliMain.Size = new System.Drawing.Size(963, 421);
             this.m_spliMain.SplitterDistance = 159;
             this.m_spliMain.TabIndex = 7;
             // 
@@ -283,7 +297,7 @@
             this.m_lnkOutputFolder.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.m_lnkOutputFolder.Location = new System.Drawing.Point(578, 67);
             this.m_lnkOutputFolder.Name = "m_lnkOutputFolder";
-            this.m_lnkOutputFolder.Size = new System.Drawing.Size(343, 25);
+            this.m_lnkOutputFolder.Size = new System.Drawing.Size(391, 25);
             this.m_lnkOutputFolder.TabIndex = 6;
             this.m_lnkOutputFolder.TabStop = true;
             this.m_lnkOutputFolder.Text = "Output Folder";
@@ -344,28 +358,14 @@
             this.m_DownloaderUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_DownloaderUserControl.Location = new System.Drawing.Point(0, 0);
             this.m_DownloaderUserControl.Name = "m_DownloaderUserControl";
-            this.m_DownloaderUserControl.Size = new System.Drawing.Size(911, 254);
+            this.m_DownloaderUserControl.Size = new System.Drawing.Size(959, 254);
             this.m_DownloaderUserControl.TabIndex = 0;
-            // 
-            // m_mnuFileAdd
-            // 
-            this.m_mnuFileAdd.Name = "m_mnuFileAdd";
-            this.m_mnuFileAdd.Size = new System.Drawing.Size(180, 22);
-            this.m_mnuFileAdd.Text = "Add New Download";
-            this.m_mnuFileAdd.Click += new System.EventHandler(this.m_mnuFileAdd_Click);
-            // 
-            // m_mnuToolsUpdateDL
-            // 
-            this.m_mnuToolsUpdateDL.Name = "m_mnuToolsUpdateDL";
-            this.m_mnuToolsUpdateDL.Size = new System.Drawing.Size(174, 22);
-            this.m_mnuToolsUpdateDL.Text = "Update youtube-dl";
-            this.m_mnuToolsUpdateDL.Click += new System.EventHandler(this.m_mnuToolsUpdateDL_Click);
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(936, 562);
+            this.ClientSize = new System.Drawing.Size(984, 562);
             this.Controls.Add(this.m_btnBrowseForFolder);
             this.Controls.Add(this.m_btnRemove);
             this.Controls.Add(this.m_btnPause);

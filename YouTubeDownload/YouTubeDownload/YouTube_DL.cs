@@ -165,8 +165,8 @@ namespace YouTubeDownload
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
-                    //StandardOutputEncoding = Encoding.GetEncoding(855),
-                    //StandardErrorEncoding = Encoding.GetEncoding(855)
+                    //StandardOutputEncoding = Encoding.GetEncoding(1251),
+                    //StandardErrorEncoding = Encoding.GetEncoding(1251)
                 }
             };
         }

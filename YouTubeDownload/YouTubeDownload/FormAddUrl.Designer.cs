@@ -57,7 +57,7 @@
             // 
             this.m_chkAudioOnly.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_chkAudioOnly.AutoSize = true;
-            this.m_chkAudioOnly.Location = new System.Drawing.Point(539, 47);
+            this.m_chkAudioOnly.Location = new System.Drawing.Point(816, 47);
             this.m_chkAudioOnly.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_chkAudioOnly.Name = "m_chkAudioOnly";
             this.m_chkAudioOnly.Size = new System.Drawing.Size(168, 24);
@@ -72,7 +72,7 @@
             this.m_lnkOutputFolder.Location = new System.Drawing.Point(142, 58);
             this.m_lnkOutputFolder.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.m_lnkOutputFolder.Name = "m_lnkOutputFolder";
-            this.m_lnkOutputFolder.Size = new System.Drawing.Size(376, 24);
+            this.m_lnkOutputFolder.Size = new System.Drawing.Size(653, 24);
             this.m_lnkOutputFolder.TabIndex = 5;
             this.m_lnkOutputFolder.TabStop = true;
             this.m_lnkOutputFolder.Text = "Output Folder";
@@ -93,7 +93,7 @@
             this.m_chkNoPlayList.AutoSize = true;
             this.m_chkNoPlayList.Checked = true;
             this.m_chkNoPlayList.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.m_chkNoPlayList.Location = new System.Drawing.Point(539, 13);
+            this.m_chkNoPlayList.Location = new System.Drawing.Point(816, 13);
             this.m_chkNoPlayList.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_chkNoPlayList.Name = "m_chkNoPlayList";
             this.m_chkNoPlayList.Size = new System.Drawing.Size(110, 24);
@@ -108,7 +108,7 @@
             this.m_txtUrl.Location = new System.Drawing.Point(144, 11);
             this.m_txtUrl.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.m_txtUrl.Name = "m_txtUrl";
-            this.m_txtUrl.Size = new System.Drawing.Size(374, 26);
+            this.m_txtUrl.Size = new System.Drawing.Size(651, 26);
             this.m_txtUrl.TabIndex = 1;
             this.m_txtUrl.TextChanged += new System.EventHandler(this.m_txtUrl_TextChanged);
             // 
@@ -118,7 +118,7 @@
             this.m_btnAddUrl.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.m_btnAddUrl.Image = ((System.Drawing.Image)(resources.GetObject("m_btnAddUrl.Image")));
             this.m_btnAddUrl.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnAddUrl.Location = new System.Drawing.Point(202, 104);
+            this.m_btnAddUrl.Location = new System.Drawing.Point(341, 115);
             this.m_btnAddUrl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnAddUrl.Name = "m_btnAddUrl";
             this.m_btnAddUrl.Size = new System.Drawing.Size(136, 31);
@@ -134,9 +134,10 @@
             // m_btnCancel
             // 
             this.m_btnCancel.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.m_btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.m_btnCancel.Image = ((System.Drawing.Image)(resources.GetObject("m_btnCancel.Image")));
             this.m_btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnCancel.Location = new System.Drawing.Point(370, 104);
+            this.m_btnCancel.Location = new System.Drawing.Point(509, 115);
             this.m_btnCancel.Name = "m_btnCancel";
             this.m_btnCancel.Size = new System.Drawing.Size(136, 31);
             this.m_btnCancel.TabIndex = 7;
@@ -149,7 +150,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.m_btnCancel;
-            this.ClientSize = new System.Drawing.Size(707, 143);
+            this.ClientSize = new System.Drawing.Size(984, 162);
             this.Controls.Add(this.m_btnCancel);
             this.Controls.Add(this.m_btnAddUrl);
             this.Controls.Add(this.m_btnBrowseForFolder);
