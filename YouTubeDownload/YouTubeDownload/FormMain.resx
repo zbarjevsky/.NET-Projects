@@ -166,7 +166,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAAC4
-        AwAAAk1TRnQBSQFMAgEBAwEAAUgBAAFIAQABGQEAARkBAAT/ARkBAAj/AUIBTQE2BwABNgMAASgDAAFk
+        AwAAAk1TRnQBSQFMAgEBAwEAAXABAAFwAQABGQEAARkBAAT/ARkBAAj/AUIBTQE2BwABNgMAASgDAAFk
         AwABGQMAAQEBAAEYBQABTAEdEgDh/0sA4f9LAOH/SwDh/0sA4f9LAOH/SwBj/wNWA3oDfANXA/8DVgN6
         A3wDV2P/SwAV/wNyA08DrEX/A3QD9gP3A3UD/wN0A/YD9wN1Kv8DSAZZBloDWQZbCVwDShX/SwAV/wNv
         A+kDeANcA7k//wNzA/QD9gN0A/8DcwP0A/YDdCr/A3QD8APxA/ID9AP1A/YD9wP4A/kD+gN4Ff9LABX/
@@ -193,6 +193,9 @@
         AAAASUVORK5CYII=
 </value>
   </data>
+  <metadata name="m_errorProvider.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>427, 17</value>
+  </metadata>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAEAICAAAAEAIACoEAAAFgAAACgAAAAgAAAAQAAAAAEAIAAAAAAAABAAAAAAAAAAAAAAAAAAAAAA

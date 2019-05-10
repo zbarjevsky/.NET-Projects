@@ -61,6 +61,7 @@
             this.m_btnRemove = new System.Windows.Forms.Button();
             this.m_chkAudioOnly = new System.Windows.Forms.CheckBox();
             this.m_btnBrowseForFolder = new System.Windows.Forms.Button();
+            this.m_errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.m_DownloaderUserControl = new YouTubeDownload.DownloaderUserControl();
             this.m_statusStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -68,6 +69,7 @@
             this.m_spliMain.Panel1.SuspendLayout();
             this.m_spliMain.Panel2.SuspendLayout();
             this.m_spliMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.m_errorProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // m_txtUrl
@@ -77,7 +79,7 @@
             this.m_txtUrl.Location = new System.Drawing.Point(135, 35);
             this.m_txtUrl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_txtUrl.Name = "m_txtUrl";
-            this.m_txtUrl.Size = new System.Drawing.Size(742, 26);
+            this.m_txtUrl.Size = new System.Drawing.Size(713, 26);
             this.m_txtUrl.TabIndex = 2;
             this.m_txtUrl.TextChanged += new System.EventHandler(this.m_txtUrl_TextChanged);
             // 
@@ -172,19 +174,19 @@
             // m_mnuToolsSettings
             // 
             this.m_mnuToolsSettings.Name = "m_mnuToolsSettings";
-            this.m_mnuToolsSettings.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuToolsSettings.Size = new System.Drawing.Size(157, 22);
             this.m_mnuToolsSettings.Text = "&Settings";
             this.m_mnuToolsSettings.Click += new System.EventHandler(this.m_mnuToolsSettings_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(177, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(154, 6);
             // 
             // m_mnuToolsOutputFolder
             // 
             this.m_mnuToolsOutputFolder.Name = "m_mnuToolsOutputFolder";
-            this.m_mnuToolsOutputFolder.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuToolsOutputFolder.Size = new System.Drawing.Size(157, 22);
             this.m_mnuToolsOutputFolder.Text = "Output Folder...";
             this.m_mnuToolsOutputFolder.Click += new System.EventHandler(this.m_mnuToolsOutputFolder_Click);
             // 
@@ -316,7 +318,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_lnkOutputFolder.Location = new System.Drawing.Point(135, 72);
             this.m_lnkOutputFolder.Name = "m_lnkOutputFolder";
-            this.m_lnkOutputFolder.Size = new System.Drawing.Size(742, 20);
+            this.m_lnkOutputFolder.Size = new System.Drawing.Size(713, 20);
             this.m_lnkOutputFolder.TabIndex = 7;
             this.m_lnkOutputFolder.TabStop = true;
             this.m_lnkOutputFolder.Text = "Output Folder";
@@ -381,6 +383,10 @@
             this.m_btnBrowseForFolder.UseVisualStyleBackColor = true;
             this.m_btnBrowseForFolder.Click += new System.EventHandler(this.m_btnBrowseForFolder_Click);
             // 
+            // m_errorProvider
+            // 
+            this.m_errorProvider.ContainerControl = this;
+            // 
             // m_DownloaderUserControl
             // 
             this.m_DownloaderUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -426,6 +432,7 @@
             this.m_spliMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.m_spliMain)).EndInit();
             this.m_spliMain.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.m_errorProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -465,6 +472,7 @@
         private System.Windows.Forms.ImageList m_imageListStartStop;
         private System.Windows.Forms.CheckBox m_chkAudioOnly;
         private System.Windows.Forms.Button m_btnBrowseForFolder;
+        private System.Windows.Forms.ErrorProvider m_errorProvider;
     }
 }
 

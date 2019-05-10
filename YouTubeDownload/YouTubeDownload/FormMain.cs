@@ -137,7 +137,7 @@ namespace YouTubeDownload
 
             m_btnUpdate.Enabled = m_DownloaderUserControl.State != DownloadState.Working;
 
-            m_btnAddUrl.Enabled = !string.IsNullOrWhiteSpace(m_txtUrl.Text.Trim());
+            m_btnAddUrl.Enabled = IsValidYouTubeUrl();
             m_btnRemove.Enabled = bHasSelection;
             m_btnClearList.Enabled = m_listUrls.Items.Count > 0;
 
@@ -310,6 +310,24 @@ namespace YouTubeDownload
         private void m_txtUrl_TextChanged(object sender, EventArgs e)
         {
             UpdateButtonsState();
+        }
+
+        private bool IsValidYouTubeUrl()
+        {
+            Uri url = null;
+            try { url = new Uri(m_txtUrl.Text); } catch { }
+
+            if (url == null || url.Host != "www.youtube.com")
+            {
+                m_errorProvider.SetError(m_txtUrl, "invalid youtube url");
+                m_errorProvider.SetIconAlignment(m_txtUrl, ErrorIconAlignment.MiddleRight);
+                return false;
+            }
+            else
+            {
+                m_errorProvider.SetError(m_txtUrl, "");
+                return true;
+            }
         }
     }
 }

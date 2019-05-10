@@ -326,19 +326,46 @@ namespace MeditationStopWatch
         {
             if (keyData == Keys.Up || keyData == Keys.Down || keyData == Keys.Space)
             {
-                if (keyData == Keys.Space)
-                    m_audioPlayerControl.PauseResume();
+                //if (CanUseArrorws())
+                {
+                    if (keyData == Keys.Space)
+                        m_audioPlayerControl.PauseResume();
 
-                if (keyData == Keys.Up)
-                    AdjustVolume(1);
+                    if (keyData == Keys.Up)
+                        AdjustVolume(1);
 
-                if (keyData == Keys.Down)
-                    AdjustVolume(-1);
+                    if (keyData == Keys.Down)
+                        AdjustVolume(-1);
 
-                return true;
+                    return true;
+                }
             }
 
             return base.ProcessCmdKey(ref msg, keyData);
+        }
+
+        private bool CanUseArrorws()
+        {
+            List<Control> list = FindFocusedControls(this);
+            if (list.Count != 1)
+                return true;
+            if (list[0] is ListView || list[0] is Button)
+                return false;
+            if (list[0] is SplitContainer && (list[0] as SplitContainer).Orientation == Orientation.Horizontal)
+                return false;
+            return true;
+        }
+
+        private List<Control> FindFocusedControls(Control c)
+        {
+            List<Control> list = new List<Control>();
+            foreach (Control ctrl in c.Controls)
+            {
+                if (ctrl.Focused)
+                    list.Add(ctrl);
+                list.AddRange(FindFocusedControls(ctrl));
+            }
+            return list;
         }
 
         private void m_pictureBox1_Click(object sender, EventArgs e)
