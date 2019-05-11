@@ -20,7 +20,7 @@ namespace AnalogClockControl
         const double DEGREE_TO_RAD = Math.PI / 180.0;
         const double DEGREE90_TO_RAD = Math.PI / 2;
 
-        DateTime dateTime;
+        DateTime _dateTime = DateTime.Now;
 
 		float _fRadius;
         PointF _Center;
@@ -100,19 +100,19 @@ namespace AnalogClockControl
 		protected override void OnLoadCompleted(AsyncCompletedEventArgs e)
 		{
 			base.OnLoadCompleted(e);
-			dateTime = DateTime.Now;
+			_dateTime = DateTime.Now;
 			this.AnalogClock_Resize(null, e);
 		}
 
 		private void AnalogClock_Load(object sender, System.EventArgs e)
 		{
-			dateTime=DateTime.Now;
+			_dateTime=DateTime.Now;
 			this.AnalogClock_Resize(sender,e);
 		}
 
 		private void timer1_Tick(object sender, System.EventArgs e)
 		{
-			this.dateTime=DateTime.Now;
+			this._dateTime=DateTime.Now;
 			this.Refresh();
 		}
 
@@ -171,9 +171,9 @@ namespace AnalogClockControl
 
 		private void AnalogClock_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
 		{
-			double fRadHr=(dateTime.Hour%12+dateTime.Minute/60F) * 30 * DEGREE_TO_RAD;
-            double fRadMin =(dateTime.Minute + dateTime.Second/60F) * 6 * DEGREE_TO_RAD;
-            double fRadSec =(dateTime.Second) * 6 * DEGREE_TO_RAD;
+			double fRadHr=(_dateTime.Hour%12+_dateTime.Minute/60F) * 30 * DEGREE_TO_RAD;
+            double fRadMin =(_dateTime.Minute + _dateTime.Second/60F) * 6 * DEGREE_TO_RAD;
+            double fRadSec =(_dateTime.Second) * 6 * DEGREE_TO_RAD;
 
 			e.Graphics.SmoothingMode = SmoothingMode.HighQuality;
 

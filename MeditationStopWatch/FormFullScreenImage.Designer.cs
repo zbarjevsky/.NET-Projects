@@ -52,11 +52,14 @@
             this.m_btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnCancel.BackColor = System.Drawing.Color.Transparent;
             this.m_btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.m_btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.m_btnCancel.FlatAppearance.BorderSize = 0;
+            this.m_btnCancel.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(224)))), ((int)(((byte)(192)))));
+            this.m_btnCancel.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Red;
+            this.m_btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.m_btnCancel.Image = ((System.Drawing.Image)(resources.GetObject("m_btnCancel.Image")));
-            this.m_btnCancel.Location = new System.Drawing.Point(768, 12);
+            this.m_btnCancel.Location = new System.Drawing.Point(773, 2);
             this.m_btnCancel.Name = "m_btnCancel";
-            this.m_btnCancel.Size = new System.Drawing.Size(20, 20);
+            this.m_btnCancel.Size = new System.Drawing.Size(25, 26);
             this.m_btnCancel.TabIndex = 2;
             this.m_btnCancel.UseVisualStyleBackColor = false;
             // 
@@ -90,6 +93,7 @@
             this.ShowInTaskbar = false;
             this.Text = "FullScreenImage";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormFullScreenImage_FormClosed);
             this.Load += new System.EventHandler(this.FormFullScreenImage_Load);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_analogClock)).EndInit();
