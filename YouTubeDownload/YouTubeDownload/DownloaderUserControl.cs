@@ -16,7 +16,7 @@ namespace YouTubeDownload
     {
         YouTube_DL _youTube_DL = new YouTube_DL();
 
-        public string Description { get { return _youTube_DL.Data.FileName; } }
+        public string Description { get { return _youTube_DL.Data.Description; } }
         public double Progress { get { return _youTube_DL.Data.Progress; } }
 
         public DownloadState State { get { return _youTube_DL.Data.State; } }
@@ -39,10 +39,10 @@ namespace YouTubeDownload
 
         private void m_lnkDestination_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            if(!File.Exists(_youTube_DL.Data.FileName))
+            if(!File.Exists(_youTube_DL.Data.Description))
             {
-                if(!string.IsNullOrWhiteSpace(_youTube_DL.Data.FileName))
-                    MessageBox.Show(this, "Not Ready: \n"+ _youTube_DL.Data.FileName, Text, 
+                if(!string.IsNullOrWhiteSpace(_youTube_DL.Data.Description))
+                    MessageBox.Show(this, "Not Ready: \n"+ _youTube_DL.Data.Description, Text, 
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
@@ -111,10 +111,10 @@ namespace YouTubeDownload
             m_ProgressBar.Value = (int)_youTube_DL.Data.Progress;
 
             const string PREFIX = "Description: ";
-            if (!string.IsNullOrWhiteSpace(_youTube_DL.Data.FileName))
+            if (!string.IsNullOrWhiteSpace(_youTube_DL.Data.Description))
             {
-                m_lnkDestination.Text = PREFIX + _youTube_DL.Data.FileName;
-                m_lnkDestination.LinkArea = new LinkArea(PREFIX.Length, _youTube_DL.Data.FileName.Length);
+                m_lnkDestination.Text = PREFIX + _youTube_DL.Data.Description;
+                m_lnkDestination.LinkArea = new LinkArea(PREFIX.Length, _youTube_DL.Data.Description.Length);
             }
         }
     }

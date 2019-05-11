@@ -26,9 +26,10 @@ namespace YouTubeDownload
     {
         public DownloadState State { get; set; } = DownloadState.None;
         public string OutputFolder { get; set; } = "";
-        public string FileName { get; set; } = "";
+        public string Description { get; set; } = "";
+        public string FileNameTemplate { get; set; } = "%(title)s-%(id)s.%(ext)s";
         public bool NoPlayList { get; set; } = true;
-        public bool ExtractAudio { get; set; } = false;
+        public bool AudioOnly { get; set; } = false;
         public string Url { get; set; } = "";
         public double Progress { get; set; } = 0;
     }
@@ -52,11 +53,11 @@ namespace YouTubeDownload
             Data.State = DownloadState.Working;
 
             string parameters = Data.NoPlayList ? "--no-playlist" : "";
-            parameters += Data.ExtractAudio ? " --extract-audio --audio-format mp3" : "";
+            parameters += Data.AudioOnly ? " --extract-audio --audio-format mp3" : "";
 
             _DL_Process = YouTube_DL.Create(
-                string.Format(" \"{0}\" {1} -o \"{2}\\%(title)s-%(id)s.%(ext)s\"",
-                Data.Url, parameters, Data.OutputFolder));
+                string.Format(" \"{0}\" {1} -o \"{2}\\{3}\"",
+                Data.Url, parameters, Data.OutputFolder, Data.FileNameTemplate));
 
             _DL_Process.OutputDataReceived += DL_Process_OutputDataReceived;
             _DL_Process.Exited += DL_Process_Exited;
@@ -110,21 +111,21 @@ namespace YouTubeDownload
             int pos1 = line.IndexOf(DST1);
             if (pos1 >= 0)
             {
-                Data.FileName = line.Substring(pos1 + DST1.Length);
+                Data.Description = line.Substring(pos1 + DST1.Length);
             }
 
             const string DST2 = "[ffmpeg] Merging formats into ";
             pos1 = line.IndexOf(DST2);
             if (pos1 >= 0)
             {
-                Data.FileName = line.Substring(pos1 + DST2.Length);
+                Data.Description = line.Substring(pos1 + DST2.Length);
             }
 
             const string DST3 = "[ffmpeg] Destination: ";
             pos1 = line.IndexOf(DST3);
             if (pos1 >= 0)
             {
-                Data.FileName = line.Substring(pos1 + DST3.Length);
+                Data.Description = line.Substring(pos1 + DST3.Length);
             }
         }
 
@@ -135,7 +136,7 @@ namespace YouTubeDownload
             if (pos > 0)
             {
                 Data.State = DownloadState.Skipped;
-                Data.FileName = line.Substring(11, line.Length - SUFFIX.Length - 11);
+                Data.Description = line.Substring(11, line.Length - SUFFIX.Length - 11);
             }
         }
 

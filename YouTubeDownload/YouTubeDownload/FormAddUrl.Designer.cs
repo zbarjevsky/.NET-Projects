@@ -39,7 +39,11 @@
             this.m_btnAddUrl = new System.Windows.Forms.Button();
             this.m_errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.m_btnCancel = new System.Windows.Forms.Button();
+            this.m_cmbFileName = new System.Windows.Forms.ComboBox();
+            this.m_lnkOutputFileName = new System.Windows.Forms.LinkLabel();
+            this.m_pnlButtons = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.m_errorProvider)).BeginInit();
+            this.m_pnlButtons.SuspendLayout();
             this.SuspendLayout();
             // 
             // m_btnBrowseForFolder
@@ -75,7 +79,8 @@
             this.m_lnkOutputFolder.Size = new System.Drawing.Size(653, 24);
             this.m_lnkOutputFolder.TabIndex = 5;
             this.m_lnkOutputFolder.TabStop = true;
-            this.m_lnkOutputFolder.Text = "Output Folder";
+            this.m_lnkOutputFolder.Text = "Output Folder: ";
+            this.m_lnkOutputFolder.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.m_lnkOutputFolder_LinkClicked);
             // 
             // m_lblUrl
             // 
@@ -118,7 +123,7 @@
             this.m_btnAddUrl.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.m_btnAddUrl.Image = ((System.Drawing.Image)(resources.GetObject("m_btnAddUrl.Image")));
             this.m_btnAddUrl.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnAddUrl.Location = new System.Drawing.Point(341, 115);
+            this.m_btnAddUrl.Location = new System.Drawing.Point(339, 19);
             this.m_btnAddUrl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnAddUrl.Name = "m_btnAddUrl";
             this.m_btnAddUrl.Size = new System.Drawing.Size(136, 31);
@@ -137,12 +142,48 @@
             this.m_btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.m_btnCancel.Image = ((System.Drawing.Image)(resources.GetObject("m_btnCancel.Image")));
             this.m_btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnCancel.Location = new System.Drawing.Point(509, 115);
+            this.m_btnCancel.Location = new System.Drawing.Point(507, 19);
             this.m_btnCancel.Name = "m_btnCancel";
             this.m_btnCancel.Size = new System.Drawing.Size(136, 31);
             this.m_btnCancel.TabIndex = 7;
             this.m_btnCancel.Text = "Cancel";
             this.m_btnCancel.UseVisualStyleBackColor = true;
+            // 
+            // m_cmbFileName
+            // 
+            this.m_cmbFileName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_cmbFileName.FormattingEnabled = true;
+            this.m_cmbFileName.Items.AddRange(new object[] {
+            "%(title)s-%(id)s.%(ext)s",
+            "%(title)s.%(ext)s",
+            "%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s"});
+            this.m_cmbFileName.Location = new System.Drawing.Point(231, 103);
+            this.m_cmbFileName.Name = "m_cmbFileName";
+            this.m_cmbFileName.Size = new System.Drawing.Size(564, 28);
+            this.m_cmbFileName.TabIndex = 9;
+            // 
+            // m_lnkOutputFileName
+            // 
+            this.m_lnkOutputFileName.AutoSize = true;
+            this.m_lnkOutputFileName.Location = new System.Drawing.Point(18, 106);
+            this.m_lnkOutputFileName.Name = "m_lnkOutputFileName";
+            this.m_lnkOutputFileName.Size = new System.Drawing.Size(207, 20);
+            this.m_lnkOutputFileName.TabIndex = 10;
+            this.m_lnkOutputFileName.TabStop = true;
+            this.m_lnkOutputFileName.Text = "Output File Name Template:";
+            this.m_lnkOutputFileName.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.m_lnkOutputFileName_LinkClicked);
+            // 
+            // m_pnlButtons
+            // 
+            this.m_pnlButtons.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.m_pnlButtons.Controls.Add(this.m_btnCancel);
+            this.m_pnlButtons.Controls.Add(this.m_btnAddUrl);
+            this.m_pnlButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.m_pnlButtons.Location = new System.Drawing.Point(0, 156);
+            this.m_pnlButtons.Name = "m_pnlButtons";
+            this.m_pnlButtons.Size = new System.Drawing.Size(984, 65);
+            this.m_pnlButtons.TabIndex = 11;
             // 
             // FormAddUrl
             // 
@@ -150,9 +191,10 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.m_btnCancel;
-            this.ClientSize = new System.Drawing.Size(984, 162);
-            this.Controls.Add(this.m_btnCancel);
-            this.Controls.Add(this.m_btnAddUrl);
+            this.ClientSize = new System.Drawing.Size(984, 221);
+            this.Controls.Add(this.m_pnlButtons);
+            this.Controls.Add(this.m_lnkOutputFileName);
+            this.Controls.Add(this.m_cmbFileName);
             this.Controls.Add(this.m_btnBrowseForFolder);
             this.Controls.Add(this.m_chkAudioOnly);
             this.Controls.Add(this.m_lnkOutputFolder);
@@ -163,12 +205,13 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(700, 180);
+            this.MinimumSize = new System.Drawing.Size(700, 250);
             this.Name = "FormAddUrl";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Paste URL";
             this.Load += new System.EventHandler(this.FormAddUrl_Load);
             ((System.ComponentModel.ISupportInitialize)(this.m_errorProvider)).EndInit();
+            this.m_pnlButtons.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -185,5 +228,8 @@
         private System.Windows.Forms.Button m_btnAddUrl;
         private System.Windows.Forms.ErrorProvider m_errorProvider;
         private System.Windows.Forms.Button m_btnCancel;
+        private System.Windows.Forms.ComboBox m_cmbFileName;
+        private System.Windows.Forms.LinkLabel m_lnkOutputFileName;
+        private System.Windows.Forms.Panel m_pnlButtons;
     }
 }

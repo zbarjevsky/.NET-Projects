@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -34,6 +35,7 @@ namespace YouTubeDownload
             }
 
             UpdateOutputFolder(Data.OutputFolder);
+            m_cmbFileName.SelectedIndex = 0;
         }
 
         private void m_btnAddUrl_Click(object sender, EventArgs e)
@@ -41,10 +43,17 @@ namespace YouTubeDownload
             Properties.Settings.Default.NoPlayList = m_chkNoPlayList.Checked;
             Properties.Settings.Default.Save();
 
+            Uri url = new Uri(m_txtUrl.Text);
+
+            Data.Description = url.PathAndQuery;
             Data.Url = m_txtUrl.Text;
             Data.NoPlayList = m_chkNoPlayList.Checked;
-            Data.ExtractAudio = m_chkAudioOnly.Checked;
-            Data.FileName = "";
+            Data.AudioOnly = m_chkAudioOnly.Checked;
+
+            if (!string.IsNullOrWhiteSpace(m_cmbFileName.Text))
+                Data.FileNameTemplate = m_cmbFileName.Text;
+            else
+                Data.FileNameTemplate = m_cmbFileName.Items[0].ToString();
         }
 
         private void m_txtUrl_TextChanged(object sender, EventArgs e)
@@ -72,6 +81,16 @@ namespace YouTubeDownload
             {
                 UpdateOutputFolder(dlg.SelectedPath);
             }
+        }
+
+        private void m_lnkOutputFolder_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start(Data.OutputFolder);
+        }
+
+        private void m_lnkOutputFileName_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Process.Start("https://github.com/ytdl-org/youtube-dl/blob/master/README.md#output-template-examples");
         }
 
         private void UpdateOutputFolder(string newFolder)

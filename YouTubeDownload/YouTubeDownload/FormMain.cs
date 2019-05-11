@@ -77,7 +77,7 @@ namespace YouTubeDownload
             frm.Data.State = DownloadState.InQueue;
 
             ListViewItem item = new ListViewItem(frm.Data.State.ToString());
-            item.SubItems.Add(frm.Data.FileName);
+            item.SubItems.Add(frm.Data.Description);
             item.SubItems.Add(frm.Data.Url);
             item.Tag = frm.Data;
 
@@ -116,7 +116,7 @@ namespace YouTubeDownload
             {
                 DownloadData data = item.Tag as DownloadData;
                 item.SubItems[0].Text = data.State.ToString();
-                item.SubItems[1].Text = Path.GetFileName(data.FileName.Trim('"'));
+                item.SubItems[1].Text = Path.GetFileName(data.Description.Trim('"'));
                 item.SubItems[2].Text = data.Url;
             }
             UpdateButtonsState();
