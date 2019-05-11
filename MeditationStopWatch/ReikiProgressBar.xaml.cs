@@ -35,6 +35,7 @@ namespace Wizard
 			
 			chkBell3min.IsChecked = true;
 			chkBellOnOff.IsChecked = true;
+            chkBellAtTheEnd.IsChecked = true;
 
             m_Timer.Enabled = false;
             m_Timer.Elapsed += m_Timer_Elapsed;
@@ -130,7 +131,8 @@ namespace Wizard
 			{ 
 				_options = value;
 				chkBellOnOff.IsChecked = _options.BellAtTheEnd;
-				InitInterval();
+                chkBellAtTheEnd.IsChecked = _options.BellAtTheEnd;
+                InitInterval();
 				OnPropertyChanged("Max"); 
 			}
 		}
@@ -187,9 +189,22 @@ namespace Wizard
 
 		private void OnBellOnOffClicked(object sender, RoutedEventArgs e)
 		{
-			var menu = e.Source as MenuItem;
-			_options.BellAtTheEnd = menu.IsChecked = !menu.IsChecked;
-		}
+            if (e.Source is MenuItem)
+            {
+                chkBellOnOff.IsChecked = !chkBellOnOff.IsChecked;
+                if (_options != null)
+                    _options.BellAtTheEnd = chkBellOnOff.IsChecked;
+
+                chkBellAtTheEnd.IsChecked = chkBellOnOff.IsChecked;
+            }
+            if(e.Source is CheckBox)
+            {
+                if (_options != null)
+                    _options.BellAtTheEnd = chkBellAtTheEnd.IsChecked.Value;
+
+                chkBellOnOff.IsChecked = chkBellAtTheEnd.IsChecked.Value;
+            }
+        }
 
 		private void OnBellIntervalClicked(object sender, RoutedEventArgs e)
 		{
