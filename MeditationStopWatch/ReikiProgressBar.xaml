@@ -69,8 +69,8 @@
         <ProgressBar Value="{Binding Value, Mode=OneWay, ElementName=ReiKi}" Maximum="{Binding Max, ElementName=ReiKi}">
             <ProgressBar.BorderThickness >0</ProgressBar.BorderThickness>
         </ProgressBar>
-        <CheckBox x:Name="chkBellAtTheEnd" 
-                  HorizontalAlignment="Right" Margin="2"
+        <CheckBox x:Name="chkBellAtTheEnd" ToolTip="ThinkerBell at the end"
+                  HorizontalAlignment="Right" VerticalAlignment="Center" Margin="4"
                   Checked="OnBellOnOffClicked" Unchecked="OnBellOnOffClicked" />
         <Canvas x:Name="_canvas">
         </Canvas>

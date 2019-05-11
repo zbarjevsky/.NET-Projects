@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading;
+using AnalogClockControl;
 
 namespace MeditationStopWatch
 {
@@ -237,13 +238,9 @@ namespace MeditationStopWatch
 
 		private void ApplyOptions()
 		{
-			//m_pnlClock.BackColor = m_Options.ClockBackground;
-			
-			m_analogClock.BackColor = m_Options.ClockBackground;
-			m_analogClock.HourHandColor = m_Options.HourHandColor;
-			m_analogClock.MinuteHandColor = m_Options.MinuteHandColor;
-			m_analogClock.SecondHandColor = m_Options.SecondHandColor;
-			m_analogClock.TicksColor = m_Options.TicksColor;
+            //m_pnlClock.BackColor = m_Options.ClockBackground;
+
+            ApplyClockColors(m_analogClock, m_Options);
 
             digitalClockCtrl1.ForeColor = m_Options.DigitalClockTextColor;
             digitalClockCtrl1.BackColor = m_Options.DigitalClockBackColor;
@@ -252,7 +249,16 @@ namespace MeditationStopWatch
             m_audioPlayerControl.InitializeOptions(m_Options);
 		}
 
-		private void SaveOptions()
+        public static void ApplyClockColors(AnalogClock clock, Options options)
+        {
+            clock.BackColor         = options.ClockBackground;
+            clock.HourHandColor     = options.HourHandColor;
+            clock.MinuteHandColor   = options.MinuteHandColor;
+            clock.SecondHandColor   = options.SecondHandColor;
+            clock.TicksColor        = options.TicksColor;
+        }
+
+        private void SaveOptions()
 		{
 			m_Options.FavoritesList = m_FavoritesList.ToArray<string>();
             //m_Options.PlayList = m_audioPlayerControl.PlayList;
@@ -469,7 +475,7 @@ namespace MeditationStopWatch
 
 		private void m_btnFitWindow_Click(object sender, EventArgs e)
 		{
-            FormFullScreenImage frm = new FormFullScreenImage();
+            FormFullScreenImage frm = new FormFullScreenImage(m_Options);
             frm.Picture = m_pictureBox1.Image;
             frm.ShowDialog(this);
         }

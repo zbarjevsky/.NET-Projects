@@ -200,6 +200,7 @@
     </Compile>
     <Compile Include="ToolStripTrackBar.cs" />
     <Compile Include="ExifTools.cs" />
+    <Compile Include="Tools\ControlExtension.cs" />
     <Compile Include="TransparentLabel.cs">
       <SubType>Component</SubType>
     </Compile>
