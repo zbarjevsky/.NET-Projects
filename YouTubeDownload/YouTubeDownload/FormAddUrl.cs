@@ -27,12 +27,12 @@ namespace YouTubeDownload
 
         private void FormAddUrl_Load(object sender, EventArgs e)
         {
+            string text = m_txtUrl.Text;
             if (Clipboard.ContainsText(TextDataFormat.Text))
-            {
-                string text = Clipboard.GetText();
-                if (IsValidYouTubeUrl(text))
-                    m_txtUrl.Text = text;
-            }
+                text = Clipboard.GetText();
+
+            if (IsValidYouTubeUrl(text))
+                m_txtUrl.Text = text;
 
             UpdateOutputFolder(Data.OutputFolder);
             m_cmbFileName.SelectedIndex = 0;
