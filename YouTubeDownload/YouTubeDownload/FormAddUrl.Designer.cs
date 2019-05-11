@@ -123,7 +123,7 @@
             this.m_btnAddUrl.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.m_btnAddUrl.Image = ((System.Drawing.Image)(resources.GetObject("m_btnAddUrl.Image")));
             this.m_btnAddUrl.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnAddUrl.Location = new System.Drawing.Point(339, 19);
+            this.m_btnAddUrl.Location = new System.Drawing.Point(339, 14);
             this.m_btnAddUrl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnAddUrl.Name = "m_btnAddUrl";
             this.m_btnAddUrl.Size = new System.Drawing.Size(136, 31);
@@ -142,7 +142,7 @@
             this.m_btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.m_btnCancel.Image = ((System.Drawing.Image)(resources.GetObject("m_btnCancel.Image")));
             this.m_btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnCancel.Location = new System.Drawing.Point(507, 19);
+            this.m_btnCancel.Location = new System.Drawing.Point(507, 14);
             this.m_btnCancel.Name = "m_btnCancel";
             this.m_btnCancel.Size = new System.Drawing.Size(136, 31);
             this.m_btnCancel.TabIndex = 7;
@@ -176,13 +176,13 @@
             // 
             // m_pnlButtons
             // 
-            this.m_pnlButtons.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.m_pnlButtons.BackColor = System.Drawing.SystemColors.GradientInactiveCaption;
             this.m_pnlButtons.Controls.Add(this.m_btnCancel);
             this.m_pnlButtons.Controls.Add(this.m_btnAddUrl);
             this.m_pnlButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.m_pnlButtons.Location = new System.Drawing.Point(0, 156);
+            this.m_pnlButtons.Location = new System.Drawing.Point(0, 163);
             this.m_pnlButtons.Name = "m_pnlButtons";
-            this.m_pnlButtons.Size = new System.Drawing.Size(984, 65);
+            this.m_pnlButtons.Size = new System.Drawing.Size(984, 58);
             this.m_pnlButtons.TabIndex = 11;
             // 
             // FormAddUrl

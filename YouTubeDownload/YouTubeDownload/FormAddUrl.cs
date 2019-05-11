@@ -36,6 +36,7 @@ namespace YouTubeDownload
 
             UpdateOutputFolder(Data.OutputFolder);
             m_cmbFileName.SelectedIndex = 0;
+            UpdateButtonsState();
         }
 
         private void m_btnAddUrl_Click(object sender, EventArgs e)
