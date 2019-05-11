@@ -9,14 +9,12 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
-using System.Threading;
-using AnalogClockControl;
 
 namespace MeditationStopWatch
 {
 	public partial class FormStopWatch : Form
 	{
-		private Options m_Options = new Options();
+		public Options m_Options = new Options();
 		private string m_sSettingsFile = "MeditationStopWatch.mz";
 		private IList<string> m_FavoritesList = new List<string>();
 		ImageFileUtil ImageInfo = new ImageFileUtil();
@@ -330,18 +328,25 @@ namespace MeditationStopWatch
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            if (keyData == Keys.Up || keyData == Keys.Down || keyData == Keys.Space)
+            if (keyData == Keys.Up || keyData == Keys.Down || keyData == Keys.Space
+                || keyData == Keys.Left || keyData == Keys.Right)
             {
                 //if (CanUseArrorws())
                 {
                     if (keyData == Keys.Space)
-                        m_audioPlayerControl.PauseResume();
+                        PauseResume();
 
                     if (keyData == Keys.Up)
                         AdjustVolume(1);
 
                     if (keyData == Keys.Down)
                         AdjustVolume(-1);
+
+                    if (keyData == Keys.Left)
+                        m_btnPrevImage_Click(this, null);
+
+                    if (keyData == Keys.Right)
+                        m_btnNextImage_Click(this, null);
 
                     return true;
                 }
@@ -376,9 +381,14 @@ namespace MeditationStopWatch
 
         private void m_pictureBox1_Click(object sender, EventArgs e)
 		{
-			m_audioPlayerControl.PauseResume();
+			PauseResume();
 			m_pictureBox1.Focus();
 		}
+
+        public void PauseResume()
+        {
+            m_audioPlayerControl.PauseResume();
+        }
 
         protected override void OnMouseWheel(MouseEventArgs e)
 		{
@@ -386,7 +396,7 @@ namespace MeditationStopWatch
 			base.OnMouseWheel(e);
 		}
 
-		private void AdjustVolume(double delta)
+		public void AdjustVolume(double delta)
 		{
 			delta /= Math.Abs(delta);
 
@@ -404,19 +414,33 @@ namespace MeditationStopWatch
 
 		private void m_btnPrevImage_Click(object sender, EventArgs e)
 		{
-			OpenImage(ImageInfo.Prev());
-			EnsureVisible();
-			UpdateStatusText();
+            ShowPrevImage();
 		}
 
-		private void m_btnNextImage_Click(object sender, EventArgs e)
+        public FileInfo ShowPrevImage()
+        {
+            FileInfo ifo = ImageInfo.Prev();
+            OpenImage(ifo);
+            EnsureVisible();
+            UpdateStatusText();
+            return ifo;
+        }
+
+        private void m_btnNextImage_Click(object sender, EventArgs e)
 		{
-			OpenImage(ImageInfo.Next());
-			EnsureVisible();
-			UpdateStatusText();
+            ShowNextImage();
 		}
 
-		private void UpdateStatusText()
+        public FileInfo ShowNextImage()
+        {
+            FileInfo ifo = ImageInfo.Next();
+            OpenImage(ifo);
+            EnsureVisible();
+            UpdateStatusText();
+            return ifo;
+        }
+
+        private void UpdateStatusText()
 		{
 			int idx = ImageInfo.IndexOf(ImageInfo.ImageInfo);
 			m_lblImageDesc.Text = string.Format("{0} of {1}", idx + 1, ImageInfo.AllImages.Count);
@@ -475,7 +499,7 @@ namespace MeditationStopWatch
 
 		private void m_btnFitWindow_Click(object sender, EventArgs e)
 		{
-            FormFullScreenImage frm = new FormFullScreenImage(m_Options);
+            FormFullScreenImage frm = new FormFullScreenImage(this);
             frm.Picture = m_pictureBox1.Image;
             frm.ShowDialog(this);
         }

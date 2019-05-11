@@ -43,7 +43,7 @@
             this.m_imageListThumbnails = new System.Windows.Forms.ImageList(this.components);
             this.m_splitContainerTools = new System.Windows.Forms.SplitContainer();
             this.m_splitClocks = new System.Windows.Forms.SplitContainer();
-            this.m_analogClock = new AnalogClockControl.AnalogClock();
+            this.m_analogClock = new AnalogClock();
             this.digitalClockCtrl1 = new MeditationStopWatch.DigitalClockCtrl();
             this.m_audioPlayerControl = new MeditationStopWatch.AudioPlayerControl();
             this.m_menuMain = new System.Windows.Forms.MenuStrip();
@@ -677,7 +677,7 @@
 
 		#endregion
 
-		private AnalogClockControl.AnalogClock m_analogClock;
+		private AnalogClock m_analogClock;
 		private System.Windows.Forms.Panel m_pnlMain;
 		private System.Windows.Forms.MenuStrip m_menuMain;
 		private System.Windows.Forms.StatusStrip m_statusBar;

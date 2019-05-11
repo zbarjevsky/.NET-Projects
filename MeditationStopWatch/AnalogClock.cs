@@ -5,8 +5,9 @@ using System.Drawing;
 using System.Data;
 using System.Windows.Forms;
 using System.Drawing.Drawing2D;
+using MeditationStopWatch;
 
-namespace AnalogClockControl
+namespace MeditationStopWatch
 {
 	/// <summary>
 	/// Control name: Analog Clock Control
@@ -46,6 +47,8 @@ namespace AnalogClockControl
 
 		private System.Windows.Forms.Timer timer1;
 		private System.ComponentModel.IContainer components;
+
+        public bool SuspendScreenSaver { get; set; } = false;
 
 		public AnalogClock()
 		{
@@ -114,7 +117,10 @@ namespace AnalogClockControl
 		{
 			this._dateTime=DateTime.Now;
 			this.Refresh();
-		}
+
+            if(SuspendScreenSaver)
+                ScreenSaver.ResetIdleTimer();
+        }
 
 		public void Start()
 		{

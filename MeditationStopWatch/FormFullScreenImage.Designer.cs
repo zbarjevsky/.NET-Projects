@@ -31,7 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormFullScreenImage));
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.m_btnCancel = new System.Windows.Forms.Button();
-            this.m_analogClock = new AnalogClockControl.AnalogClock();
+            this.m_analogClock = new MeditationStopWatch.AnalogClock();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_analogClock)).BeginInit();
             this.SuspendLayout();
@@ -75,6 +75,7 @@
             this.m_analogClock.Name = "m_analogClock";
             this.m_analogClock.SecondHandColor = System.Drawing.Color.Red;
             this.m_analogClock.Size = new System.Drawing.Size(390, 377);
+            this.m_analogClock.SuspendScreenSaver = false;
             this.m_analogClock.TabIndex = 3;
             this.m_analogClock.TabStop = false;
             this.m_analogClock.TicksColor = System.Drawing.Color.Black;
@@ -105,6 +106,6 @@
 
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button m_btnCancel;
-        private AnalogClockControl.AnalogClock m_analogClock;
+        private AnalogClock m_analogClock;
     }
 }
