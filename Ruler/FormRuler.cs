@@ -67,25 +67,25 @@ namespace RulerApplication {
 		/// the contents of this method with the code editor.
 		/// </summary>
 		private void InitializeComponent() {
-			this.components = new System.ComponentModel.Container();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormRuler));
-			this.contextMenu = new System.Windows.Forms.ContextMenu();
-			this.menuItemFlip = new System.Windows.Forms.MenuItem();
-			this.menuItemSeparator1 = new System.Windows.Forms.MenuItem();
-			this.menuItemPixel = new System.Windows.Forms.MenuItem();
-			this.menuItemInch = new System.Windows.Forms.MenuItem();
-			this.menuItemCentimeter = new System.Windows.Forms.MenuItem();
-			this.menuItemSeparator2 = new System.Windows.Forms.MenuItem();
-			this.menuItemAbout = new System.Windows.Forms.MenuItem();
-			this.menuItemExit = new System.Windows.Forms.MenuItem();
-			this.m_pic = new System.Windows.Forms.PictureBox();
-			this.m_ToolTip = new System.Windows.Forms.ToolTip(this.components);
-			((System.ComponentModel.ISupportInitialize)(this.m_pic)).BeginInit();
-			this.SuspendLayout();
-			// 
-			// contextMenu
-			// 
-			this.contextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormRuler));
+            this.contextMenu = new System.Windows.Forms.ContextMenu();
+            this.menuItemFlip = new System.Windows.Forms.MenuItem();
+            this.menuItemSeparator1 = new System.Windows.Forms.MenuItem();
+            this.menuItemPixel = new System.Windows.Forms.MenuItem();
+            this.menuItemInch = new System.Windows.Forms.MenuItem();
+            this.menuItemCentimeter = new System.Windows.Forms.MenuItem();
+            this.menuItemSeparator2 = new System.Windows.Forms.MenuItem();
+            this.menuItemAbout = new System.Windows.Forms.MenuItem();
+            this.menuItemExit = new System.Windows.Forms.MenuItem();
+            this.m_pic = new System.Windows.Forms.PictureBox();
+            this.m_ToolTip = new System.Windows.Forms.ToolTip(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.m_pic)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // contextMenu
+            // 
+            this.contextMenu.MenuItems.AddRange(new System.Windows.Forms.MenuItem[] {
             this.menuItemFlip,
             this.menuItemSeparator1,
             this.menuItemPixel,
@@ -94,87 +94,86 @@ namespace RulerApplication {
             this.menuItemSeparator2,
             this.menuItemAbout,
             this.menuItemExit});
-			// 
-			// menuItemFlip
-			// 
-			this.menuItemFlip.Index = 0;
-			this.menuItemFlip.Text = "Flip Ruler";
-			this.menuItemFlip.Click += new System.EventHandler(this.menuItemFlip_Click);
-			// 
-			// menuItemSeparator1
-			// 
-			this.menuItemSeparator1.Index = 1;
-			this.menuItemSeparator1.Text = "-";
-			// 
-			// menuItemPixel
-			// 
-			this.menuItemPixel.Checked = true;
-			this.menuItemPixel.Index = 2;
-			this.menuItemPixel.Text = "Pixels";
-			this.menuItemPixel.Click += new System.EventHandler(this.menuItemPixel_Click);
-			// 
-			// menuItemInch
-			// 
-			this.menuItemInch.Index = 3;
-			this.menuItemInch.Text = "Inches";
-			this.menuItemInch.Click += new System.EventHandler(this.menuItemInch_Click);
-			// 
-			// menuItemCentimeter
-			// 
-			this.menuItemCentimeter.Index = 4;
-			this.menuItemCentimeter.Text = "Centimeters";
-			this.menuItemCentimeter.Click += new System.EventHandler(this.menuItemCentimeter_Click);
-			// 
-			// menuItemSeparator2
-			// 
-			this.menuItemSeparator2.Index = 5;
-			this.menuItemSeparator2.Text = "-";
-			// 
-			// menuItemAbout
-			// 
-			this.menuItemAbout.Index = 6;
-			this.menuItemAbout.Text = "About Ruler...";
-			this.menuItemAbout.Click += new System.EventHandler(this.menuItemAbout_Click);
-			// 
-			// menuItemExit
-			// 
-			this.menuItemExit.Index = 7;
-			this.menuItemExit.Text = "Exit Ruler";
-			this.menuItemExit.Click += new System.EventHandler(this.menuItemExit_Click);
-			// 
-			// m_pic
-			// 
-			this.m_pic.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.m_pic.Location = new System.Drawing.Point(0, 0);
-			this.m_pic.Name = "m_pic";
-			this.m_pic.Size = new System.Drawing.Size(400, 45);
-			this.m_pic.TabIndex = 0;
-			this.m_pic.TabStop = false;
-			this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Ruler_KeyDown);
-			this.m_pic.Paint += new System.Windows.Forms.PaintEventHandler(this.Ruler_Paint);
-			this.m_pic.DoubleClick += new System.EventHandler(this.menuItemFlip_Click);
-			this.m_pic.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Ruler_MouseDown);
-			this.m_pic.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Ruler_MouseMove);
-			this.m_pic.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Ruler_MouseUp);
-			// 
-			// FormRuler
-			// 
-			this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
-			this.BackColor = System.Drawing.Color.Gold;
-			this.ClientSize = new System.Drawing.Size(400, 45);
-			this.Controls.Add(this.m_pic);
-			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-			this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-			this.MinimumSize = new System.Drawing.Size(45, 45);
-			this.Name = "FormRuler";
-			this.ShowInTaskbar = false;
-			this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-			this.Text = "Ruler";
-			this.m_ToolTip.SetToolTip(this, "Double click to change orientation");
-			this.TopMost = true;
-			this.Load += new System.EventHandler(this.Ruler_Load);
-			((System.ComponentModel.ISupportInitialize)(this.m_pic)).EndInit();
-			this.ResumeLayout(false);
+            // 
+            // menuItemFlip
+            // 
+            this.menuItemFlip.Index = 0;
+            this.menuItemFlip.Text = "Flip Ruler";
+            this.menuItemFlip.Click += new System.EventHandler(this.menuItemFlip_Click);
+            // 
+            // menuItemSeparator1
+            // 
+            this.menuItemSeparator1.Index = 1;
+            this.menuItemSeparator1.Text = "-";
+            // 
+            // menuItemPixel
+            // 
+            this.menuItemPixel.Checked = true;
+            this.menuItemPixel.Index = 2;
+            this.menuItemPixel.Text = "Pixels";
+            this.menuItemPixel.Click += new System.EventHandler(this.menuItemPixel_Click);
+            // 
+            // menuItemInch
+            // 
+            this.menuItemInch.Index = 3;
+            this.menuItemInch.Text = "Inches";
+            this.menuItemInch.Click += new System.EventHandler(this.menuItemInch_Click);
+            // 
+            // menuItemCentimeter
+            // 
+            this.menuItemCentimeter.Index = 4;
+            this.menuItemCentimeter.Text = "Centimeters";
+            this.menuItemCentimeter.Click += new System.EventHandler(this.menuItemCentimeter_Click);
+            // 
+            // menuItemSeparator2
+            // 
+            this.menuItemSeparator2.Index = 5;
+            this.menuItemSeparator2.Text = "-";
+            // 
+            // menuItemAbout
+            // 
+            this.menuItemAbout.Index = 6;
+            this.menuItemAbout.Text = "About Ruler...";
+            this.menuItemAbout.Click += new System.EventHandler(this.menuItemAbout_Click);
+            // 
+            // menuItemExit
+            // 
+            this.menuItemExit.Index = 7;
+            this.menuItemExit.Text = "Exit Ruler";
+            this.menuItemExit.Click += new System.EventHandler(this.menuItemExit_Click);
+            // 
+            // m_pic
+            // 
+            this.m_pic.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_pic.Location = new System.Drawing.Point(0, 0);
+            this.m_pic.Name = "m_pic";
+            this.m_pic.Size = new System.Drawing.Size(400, 45);
+            this.m_pic.TabIndex = 0;
+            this.m_pic.TabStop = false;
+            this.m_pic.Paint += new System.Windows.Forms.PaintEventHandler(this.Ruler_Paint);
+            this.m_pic.DoubleClick += new System.EventHandler(this.menuItemFlip_Click);
+            this.m_pic.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Ruler_MouseDown);
+            this.m_pic.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Ruler_MouseMove);
+            this.m_pic.MouseUp += new System.Windows.Forms.MouseEventHandler(this.Ruler_MouseUp);
+            // 
+            // FormRuler
+            // 
+            this.AutoScaleBaseSize = new System.Drawing.Size(5, 13);
+            this.BackColor = System.Drawing.Color.Gold;
+            this.ClientSize = new System.Drawing.Size(400, 45);
+            this.Controls.Add(this.m_pic);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MinimumSize = new System.Drawing.Size(45, 45);
+            this.Name = "FormRuler";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Ruler";
+            this.m_ToolTip.SetToolTip(this, "Double click to change orientation");
+            this.TopMost = true;
+            this.Load += new System.EventHandler(this.Ruler_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Ruler_KeyDown);
+            ((System.ComponentModel.ISupportInitialize)(this.m_pic)).EndInit();
+            this.ResumeLayout(false);
 
 		}
 		#endregion
@@ -483,6 +482,7 @@ namespace RulerApplication {
 				this.m_ToolTip.SetToolTip(m_pic, info);
 			else
 				this.m_ToolTip.SetToolTip(m_pic, "");
+            this.Text = info + " - Ruler";
 
 			//System.Diagnostics.Debug.WriteLine(info);
 		}
