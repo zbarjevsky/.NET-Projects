@@ -56,7 +56,7 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator />
-                <MenuItem x:Name="chkBellOnOff" Header="ThinkerBell at the end" Click="OnBellOnOffClicked"/>
+                <MenuItem x:Name="mnuBellOnOff" Header="ThinkerBell at the end" Click="OnBellOnOffClicked"/>
                 <Separator />
                 <MenuItem x:Name="chkNoProgress" Header="None" Click="OnBellIntervalClicked"/>
                 <MenuItem x:Name="chkBell1min" Header="1 Min" Click="OnBellIntervalClicked"/>
@@ -71,7 +71,7 @@
         </ProgressBar>
         <CheckBox x:Name="chkBellAtTheEnd" 
                   HorizontalAlignment="Right" Margin="2"
-                  Checked="OnBellOnOffClicked" />
+                  Checked="OnBellOnOffClicked" Unchecked="OnBellOnOffClicked" />
         <Canvas x:Name="_canvas">
         </Canvas>
     </Grid>
