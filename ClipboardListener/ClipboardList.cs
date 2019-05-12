@@ -451,7 +451,9 @@ namespace ClipboardManager
 				{
 					try 
 					{
-						m_vData.Add(new ClipboardEntry(list[i], m_sListType, icoDefault)); 
+                        string ownerType = XmlUtil.GetStrAtt(list[i], "OwnerType", "");
+                        if(ownerType == m_sListType)
+                            m_vData.Add(new ClipboardEntry(list[i], m_sListType, icoDefault)); 
 					}//end try
 					catch (Exception err) 
 					{

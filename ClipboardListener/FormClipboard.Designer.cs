@@ -148,7 +148,7 @@ namespace ClipboardManager
             this.m_SaveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.m_splitMain = new System.Windows.Forms.SplitContainer();
             this.m_richTextBoxClipboard = new ClipboardManager.CustomRichTextBox();
-            this.m_listHistory = new ClipboardManager.Utils.ClipboardHistoryListView();
+            this.m_listHistory = new ClipboardManager.Utils.ClipboardHistoryListControl();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -1301,25 +1301,12 @@ namespace ClipboardManager
             // 
             // m_listHistory
             // 
-            this.m_listHistory.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader3});
             this.m_listHistory.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_listHistory.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.m_listHistory.FullRowSelect = true;
-            this.m_listHistory.GridLines = true;
-            this.m_listHistory.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.m_listHistory.LabelEdit = true;
             this.m_listHistory.Location = new System.Drawing.Point(0, 0);
             this.m_listHistory.Name = "m_listHistory";
-            this.m_listHistory.ShowItemToolTips = true;
             this.m_listHistory.Size = new System.Drawing.Size(485, 710);
-            this.m_listHistory.SmallImageList = this.m_imageListClipboardTypes;
             this.m_listHistory.TabIndex = 0;
-            this.m_listHistory.UseCompatibleStateImageBehavior = false;
-            this.m_listHistory.View = System.Windows.Forms.View.Details;
-            this.m_listHistory.VirtualMode = true;
             // 
             // columnHeader1
             // 
@@ -1511,7 +1498,7 @@ namespace ClipboardManager
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton m_tbbtnDataFolder;
         private System.Windows.Forms.SplitContainer m_splitMain;
-        private Utils.ClipboardHistoryListView m_listHistory;
+        private Utils.ClipboardHistoryListControl m_listHistory;
         private System.Windows.Forms.ToolStripMenuItem m_mnuToolsOpenLogFolder;
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;

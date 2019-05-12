@@ -116,9 +116,13 @@
     <Compile Include="AnimEffect.cs" />
     <Compile Include="ClipboardList.cs" />
     <Compile Include="ClipboardMessageFilter.cs" />
-    <Compile Include="Utils\ClipboardHistoryListView.cs">
-      <SubType>Component</SubType>
+    <Compile Include="Utils\ClipboardHistoryListControl.cs">
+      <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="Utils\ClipboardHistoryListControl.Designer.cs">
+      <DependentUpon>ClipboardHistoryListControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\ControlExtensions.cs" />
     <Compile Include="Utils\CustomRichTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -211,6 +215,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Utils\ClipboardHistoryListControl.resx">
+      <DependentUpon>ClipboardHistoryListControl.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="app.manifest">
       <SubType>Designer</SubType>

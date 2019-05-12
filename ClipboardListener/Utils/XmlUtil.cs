@@ -20,9 +20,14 @@ namespace ClipboardManager
 
 		public static string GetStrAtt(XmlNode nd, string Name, string sDefault)
 		{
-			try { XmlAttribute att = nd.Attributes[Name]; return att.Value; }
-			catch { return sDefault; }
-		}//end GetStrAtt
+            try
+            {
+                if (nd.Attributes != null && nd.Attributes[Name] != null)
+                    return nd.Attributes[Name].Value;
+            }
+            catch { }
+            return sDefault;
+        }//end GetStrAtt
 
 		public static XmlNode UpdSubNode(XmlNode nd, string Name, string Value)
 		{
