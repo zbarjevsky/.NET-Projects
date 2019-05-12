@@ -4,7 +4,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.Windows.Forms;
 
-namespace RulerApplication
+namespace MeasureTape
 {
 	/// <summary>
 	/// Summary description for About.

@@ -9,9 +9,10 @@ using System.Windows.Forms;
 using System.Reflection;
 using System.Windows.Interop;
 
-namespace RulerApplication {
-	public class FormRuler : System.Windows.Forms.Form {
-
+namespace MeasureTape
+{
+	public class FormMeasureTape : System.Windows.Forms.Form
+    {
 		private System.Windows.Forms.ContextMenu contextMenu;
 		private System.Windows.Forms.MenuItem menuItemFlip;
 		private System.Windows.Forms.MenuItem menuItemSeparator1;
@@ -24,7 +25,7 @@ namespace RulerApplication {
 		private ToolTip m_ToolTip;
 		private System.Windows.Forms.MenuItem menuItemExit;
 
-		public FormRuler() {
+		public FormMeasureTape() {
 			//
 			// Required for Windows Form Designer support
 			//
@@ -68,7 +69,7 @@ namespace RulerApplication {
 		/// </summary>
 		private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormRuler));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMeasureTape));
             this.contextMenu = new System.Windows.Forms.ContextMenu();
             this.menuItemFlip = new System.Windows.Forms.MenuItem();
             this.menuItemSeparator1 = new System.Windows.Forms.MenuItem();
@@ -184,7 +185,7 @@ namespace RulerApplication {
 		[STAThread]
 		static void Main() {
 			Application.EnableVisualStyles();
-			Application.Run(new FormRuler());
+			Application.Run(new FormMeasureTape());
 		}
 
 		//---------------------------------------------------------------------
