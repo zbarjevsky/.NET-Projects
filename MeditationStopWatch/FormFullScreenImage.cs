@@ -12,24 +12,6 @@ namespace MeditationStopWatch
 {
     public partial class FormFullScreenImage : Form
     {
-        class Position
-        {
-            public Rectangle R { get; set; }
-
-            internal void Apply(Control ctrl)
-            {
-                //ctrl.Location = R.Location;
-                //ctrl.Size = R.Size;
-                ctrl.Bounds = R;
-            }
-
-            internal void Read(Control ctrl)
-            {
-                R = ctrl.Bounds; //new Rectangle(ctrl.Location, ctrl.Size);
-            }
-        }
-        private static Position _clockPosition = null;
-
         FormStopWatch _stopWatch;
 
         public Image Picture
@@ -57,15 +39,12 @@ namespace MeditationStopWatch
 
         private void FormFullScreenImage_Load(object sender, EventArgs e)
         {
-            if (_clockPosition != null)
-                _clockPosition.Apply(m_analogClock);
+            m_analogClock.Bounds = _stopWatch.m_Options.ClockFullScreenBounds;
         }
 
         private void FormFullScreenImage_FormClosed(object sender, FormClosedEventArgs e)
         {
-            if (_clockPosition == null)
-                _clockPosition = new Position();
-            _clockPosition.Read(m_analogClock);
+            _stopWatch.m_Options.ClockFullScreenBounds = m_analogClock.Bounds;
         }
 
         protected override void OnMouseWheel(MouseEventArgs e)

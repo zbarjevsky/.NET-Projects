@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
+using MeditationStopWatch.Tools;
 
 namespace MeditationStopWatch
 {
@@ -77,8 +78,12 @@ namespace MeditationStopWatch
 			if ( File.Exists(m_sSettingsFile) )
 				OptionsSerializer.Load(m_sSettingsFile, m_Options);
 
+            m_lblVolume.Parent = m_pictureBox1;
+            m_lblVolume.Draggable(true);
+            if (!DesignMode)
+                m_lblVolume.Visible = false;
+
 			InitializeFavorites();
-			ApplyOptions();
 
             //restore position
             if (m_Options.AppRectangle != null)
@@ -97,6 +102,8 @@ namespace MeditationStopWatch
 			if (m_Options.ClockHeight > 25)
 				m_splitContainerTools.SplitterDistance = m_Options.ClockHeight;
 			
+			ApplyOptions();
+
 			this.Visible = true;
 			OpenImageDirectory(m_Options.LastImageFile);
 
@@ -245,6 +252,7 @@ namespace MeditationStopWatch
             digitalClockCtrl1.Font = m_Options.DigitalClockFont;
 
             m_audioPlayerControl.InitializeOptions(m_Options);
+            m_lblVolume.Bounds = m_Options.SoudVolumeLabelBounds;
 		}
 
         public static void ApplyClockColors(AnalogClock clock, Options options)
@@ -262,8 +270,9 @@ namespace MeditationStopWatch
             //m_Options.PlayList = m_audioPlayerControl.PlayList;
             m_Options.Volume = m_audioPlayerControl.Volume;
 			m_Options.Loop = m_audioPlayerControl.Loop;
+            m_Options.SoudVolumeLabelBounds = m_lblVolume.Bounds;
 
-			if (WindowState != FormWindowState.Minimized)
+            if (WindowState != FormWindowState.Minimized)
 				m_Options.WindowState = WindowState;
 			else
 				m_Options.WindowState = FormWindowState.Normal;
@@ -410,6 +419,8 @@ namespace MeditationStopWatch
 
             System.Diagnostics.Trace.WriteLine("Delta: " + delta + " Vol: " + vol);
 			m_audioPlayerControl.Volume = vol;
+
+            m_lblVolume.Show((vol/10.0).ToString("0.0") + "%", 4000);
 		}
 
 		private void m_btnPrevImage_Click(object sender, EventArgs e)

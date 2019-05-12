@@ -36,6 +36,7 @@
             this.m_toolStripContainerPictureInfo = new System.Windows.Forms.ToolStripContainer();
             this.m_toolStrip_Picture = new System.Windows.Forms.ToolStrip();
             this.m_tsTxt_FileName = new ToolStripSpringTextBox();
+            this.m_lblVolume = new MeditationStopWatch.Tools.LabelWithTimeout();
             this.m_btnHideSumbnails = new System.Windows.Forms.Button();
             this.m_imageListBtnHide = new System.Windows.Forms.ImageList(this.components);
             this.m_pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -43,7 +44,7 @@
             this.m_imageListThumbnails = new System.Windows.Forms.ImageList(this.components);
             this.m_splitContainerTools = new System.Windows.Forms.SplitContainer();
             this.m_splitClocks = new System.Windows.Forms.SplitContainer();
-            this.m_analogClock = new AnalogClock();
+            this.m_analogClock = new MeditationStopWatch.AnalogClock();
             this.digitalClockCtrl1 = new MeditationStopWatch.DigitalClockCtrl();
             this.m_audioPlayerControl = new MeditationStopWatch.AudioPlayerControl();
             this.m_menuMain = new System.Windows.Forms.MenuStrip();
@@ -166,6 +167,7 @@
             // 
             // m_toolStripContainerPictureInfo.ContentPanel
             // 
+            this.m_toolStripContainerPictureInfo.ContentPanel.Controls.Add(this.m_lblVolume);
             this.m_toolStripContainerPictureInfo.ContentPanel.Controls.Add(this.m_btnHideSumbnails);
             this.m_toolStripContainerPictureInfo.ContentPanel.Controls.Add(this.m_pictureBox1);
             this.m_toolStripContainerPictureInfo.ContentPanel.Size = new System.Drawing.Size(438, 284);
@@ -208,6 +210,19 @@
             this.m_tsTxt_FileName.ReadOnly = true;
             this.m_tsTxt_FileName.Size = new System.Drawing.Size(395, 23);
             this.m_tsTxt_FileName.Text = "Hello I am here";
+            // 
+            // m_lblVolume
+            // 
+            this.m_lblVolume.Anchor = System.Windows.Forms.AnchorStyles.Top;
+            this.m_lblVolume.AutoSize = true;
+            this.m_lblVolume.BackColor = System.Drawing.Color.Transparent;
+            this.m_lblVolume.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.m_lblVolume.ForeColor = System.Drawing.Color.Lime;
+            this.m_lblVolume.Location = new System.Drawing.Point(116, 26);
+            this.m_lblVolume.Name = "m_lblVolume";
+            this.m_lblVolume.Size = new System.Drawing.Size(208, 42);
+            this.m_lblVolume.TabIndex = 2;
+            this.m_lblVolume.Text = "Volume 3%";
             // 
             // m_btnHideSumbnails
             // 
@@ -323,6 +338,7 @@
             this.m_analogClock.SecondHandColor = System.Drawing.Color.Red;
             this.m_analogClock.Size = new System.Drawing.Size(342, 215);
             this.m_analogClock.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
+            this.m_analogClock.SuspendScreenSaver = false;
             this.m_analogClock.TabIndex = 0;
             this.m_analogClock.TabStop = false;
             this.m_analogClock.TicksColor = System.Drawing.Color.Sienna;
@@ -649,6 +665,7 @@
             this.m_toolStripContainerPictureInfo.BottomToolStripPanel.ResumeLayout(false);
             this.m_toolStripContainerPictureInfo.BottomToolStripPanel.PerformLayout();
             this.m_toolStripContainerPictureInfo.ContentPanel.ResumeLayout(false);
+            this.m_toolStripContainerPictureInfo.ContentPanel.PerformLayout();
             this.m_toolStripContainerPictureInfo.ResumeLayout(false);
             this.m_toolStripContainerPictureInfo.PerformLayout();
             this.m_toolStrip_Picture.ResumeLayout(false);
@@ -725,6 +742,7 @@
         private System.Windows.Forms.SplitContainer m_splitClocks;
         private System.Windows.Forms.Button m_btnHideSumbnails;
         private System.Windows.Forms.ImageList m_imageListBtnHide;
+        private Tools.LabelWithTimeout m_lblVolume;
     }
 }
 

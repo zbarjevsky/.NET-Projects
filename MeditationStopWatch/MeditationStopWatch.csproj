@@ -180,6 +180,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="Tools\LabelWithTimeout.resx">
+      <DependentUpon>LabelWithTimeout.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -201,6 +204,12 @@
     <Compile Include="ToolStripTrackBar.cs" />
     <Compile Include="ExifTools.cs" />
     <Compile Include="Tools\ControlExtension.cs" />
+    <Compile Include="Tools\LabelWithTimeout.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Tools\LabelWithTimeout.Designer.cs">
+      <DependentUpon>LabelWithTimeout.cs</DependentUpon>
+    </Compile>
     <Compile Include="TransparentLabel.cs">
       <SubType>Component</SubType>
     </Compile>

@@ -278,6 +278,18 @@ namespace MeditationStopWatch
         [DefaultValue(typeof(Rectangle), "100,100,800,600")]
         public Rectangle AppRectangle { get; set; }
 
+        [Category("4. Position")]
+        [DisplayName("Soud Volume Label Bounds")]
+        [Description("Diplay Volume At this Location")]
+        [DefaultValue(typeof(Rectangle), "116, 26, 208, 42")]
+        public Rectangle SoudVolumeLabelBounds { get; set; }
+
+        [Category("4. Position")]
+        [DisplayName("Clock Full Screen Bounds")]
+        [Description("Clock Position in Full Screen Image")]
+        [DefaultValue(typeof(Rectangle), "367, 33, 390, 377")]
+        public Rectangle ClockFullScreenBounds { get; set; }
+
         [Category("5. Color Options")]
         [Description("Options Description Background color")]
         [DefaultValue(typeof(Color), "Info")]
