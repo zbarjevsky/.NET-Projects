@@ -404,6 +404,7 @@ namespace MeasuringTape
 		private void Ruler_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
         {
             Graphics g = e.Graphics;
+
 			int scale;
 			int step;
 			int small;
