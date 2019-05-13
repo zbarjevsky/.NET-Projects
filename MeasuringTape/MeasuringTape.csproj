@@ -7,16 +7,16 @@
     <ProjectGuid>{469F9749-1DFC-4B0F-A05A-826106F12FBA}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ApplicationIcon>MeasureTape.ico</ApplicationIcon>
+    <ApplicationIcon>MeasuringTape.ico</ApplicationIcon>
     <AssemblyKeyContainerName />
-    <AssemblyName>MeasureTape</AssemblyName>
+    <AssemblyName>Ruler</AssemblyName>
     <AssemblyOriginatorKeyFile />
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>MeasureTape</RootNamespace>
+    <RootNamespace>MeasuringTape</RootNamespace>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <StartupObject />
     <FileUpgradeFlags>
@@ -90,16 +90,16 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="FormMeasureTape.cs">
+    <Compile Include="FormMeasuringTape.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="ScreenExtensions.cs" />
     <EmbeddedResource Include="About.resx">
       <DependentUpon>About.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="MeasureTape.ico" />
-    <EmbeddedResource Include="FormMeasureTape.resx">
-      <DependentUpon>FormMeasureTape.cs</DependentUpon>
+    <EmbeddedResource Include="MeasuringTape.ico" />
+    <EmbeddedResource Include="FormMeasuringTape.resx">
+      <DependentUpon>FormMeasuringTape.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

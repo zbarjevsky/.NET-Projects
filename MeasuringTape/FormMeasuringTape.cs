@@ -9,9 +9,9 @@ using System.Windows.Forms;
 using System.Reflection;
 using System.Windows.Interop;
 
-namespace MeasureTape
+namespace MeasuringTape
 {
-	public class FormMeasureTape : System.Windows.Forms.Form
+	public class FormMeasuringTape : System.Windows.Forms.Form
     {
 		private System.Windows.Forms.ContextMenu contextMenu;
 		private System.Windows.Forms.MenuItem menuItemFlip;
@@ -25,7 +25,7 @@ namespace MeasureTape
 		private ToolTip m_ToolTip;
 		private System.Windows.Forms.MenuItem menuItemExit;
 
-		public FormMeasureTape() {
+		public FormMeasuringTape() {
 			//
 			// Required for Windows Form Designer support
 			//
@@ -69,7 +69,7 @@ namespace MeasureTape
 		/// </summary>
 		private void InitializeComponent() {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMeasureTape));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMeasuringTape));
             this.contextMenu = new System.Windows.Forms.ContextMenu();
             this.menuItemFlip = new System.Windows.Forms.MenuItem();
             this.menuItemSeparator1 = new System.Windows.Forms.MenuItem();
@@ -185,7 +185,7 @@ namespace MeasureTape
 		[STAThread]
 		static void Main() {
 			Application.EnableVisualStyles();
-			Application.Run(new FormMeasureTape());
+			Application.Run(new FormMeasuringTape());
 		}
 
 		//---------------------------------------------------------------------

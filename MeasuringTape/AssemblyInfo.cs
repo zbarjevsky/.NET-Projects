@@ -6,13 +6,13 @@ using System.Runtime.CompilerServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
-[assembly: AssemblyTitle("Screen Ruler")]
-[assembly: AssemblyDescription("Screen Ruler")]
+[assembly: AssemblyTitle("Measuring Tape")]
+[assembly: AssemblyDescription("Measuring Tape")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Screen Ruler")]
-[assembly: AssemblyCopyright("Screen Ruler")]
-[assembly: AssemblyTrademark("Screen Ruler")]
+[assembly: AssemblyProduct("Measuring Tape")]
+[assembly: AssemblyCopyright("Measuring Tape 2019")]
+[assembly: AssemblyTrademark("Measuring Tape")]
 [assembly: AssemblyCulture("")]		
 
 //
