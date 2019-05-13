@@ -9,14 +9,11 @@
         AllowsTransparency="True"
         ClipToBounds="False"
         Background="Transparent"
-        Title="MainWindow" Height="600" Width="600">
-    <Grid Margin="20" ClipToBounds="False">
-        <Border BorderThickness="1" BorderBrush="Black">
-            <Rectangle x:Name="_ruler" Fill="LimeGreen" ClipToBounds="False" Width="400" Height="40">
-                <Rectangle.RenderTransform>
-                    <RotateTransform CenterX="200" CenterY="20" Angle="15"/>
-                </Rectangle.RenderTransform>
-            </Rectangle>
+        Loaded="MainWindow_OnLoaded"
+        Title="MainWindow" Height="2200" Width="4200" Left="0" Top="0">
+        <Border BorderThickness="4" BorderBrush="LimeGreen" ClipToBounds="False">
+            <Canvas x:Name="_canvas" ClipToBounds="False" >
+                <Rectangle x:Name="_ruler" Fill="Orange" ClipToBounds="False" Width="400" Height="40" Canvas.Left="10" Canvas.Top="100" />
+            </Canvas>
         </Border>
-    </Grid>
 </Window>

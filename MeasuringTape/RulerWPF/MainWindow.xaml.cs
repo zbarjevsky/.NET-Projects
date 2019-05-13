@@ -23,8 +23,37 @@ namespace RulerWPF
         public MainWindow()
         {
             InitializeComponent();
+        }
 
-            _ruler.Draggable(true);
+        private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
+        {
+            AddAdorner(_ruler);
+        }
+
+        private void AddAdorner(UIElement element)
+        {
+            AdornerLayer adornerlayer = AdornerLayer.GetAdornerLayer(element);
+            if (adornerlayer.GetAdorners(element) == null || adornerlayer.GetAdorners(element).Length == 0)
+            {
+                RotateResizeAdorner adorner = new RotateResizeAdorner(element);
+                adornerlayer.Add(adorner);
+            }
+        }
+
+        private void RemoveAllAdorners()
+        {
+            foreach (UIElement element in _canvas.Children)
+            {
+                AdornerLayer adornerlayer = AdornerLayer.GetAdornerLayer(element);
+                var adorners = adornerlayer.GetAdorners(element);
+                if (adorners != null)
+                {
+                    for (int i = adorners.Length - 1; i >= 0; i--)
+                    {
+                        adornerlayer.Remove(adorners[i]);
+                    }
+                }
+            }
         }
     }
 }
