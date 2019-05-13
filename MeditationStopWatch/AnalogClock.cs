@@ -133,7 +133,50 @@ namespace MeditationStopWatch
 			timer1.Enabled=false;
 		}
 
-		private void DrawLine(float fThickness, float fLength, Color color, double fRadians, System.Windows.Forms.PaintEventArgs e)
+        public void AdjustClockSize(int delta, Rectangle max)
+        {
+            const double scaleUp = 1.1;
+            const double scaleDown = 0.9;
+
+            delta /= Math.Abs(delta);
+            if (delta > 0)
+            {
+                if (this.Height > scaleDown * max.Height)
+                    return;
+                if (this.Width > scaleDown * max.Width)
+                    return;
+            }
+
+            if (this.Width <= this.MinimumSize.Width && delta < 0) //minimum size is 20
+                return;
+
+            double scale = delta > 0 ? scaleUp : scaleDown;
+            int width = (int)(scale * this.Width);
+            if (width > max.Width)
+                width = max.Width;
+
+            int height = width;
+            if (height > max.Height)
+                height = max.Height;
+
+            int deltaX = (this.Width - width) / 2;
+            int deltaY = deltaX;
+
+            //restrict on bounds
+            if (this.Right + deltaX > max.Width || this.Left + deltaX < 0)
+                deltaX = -deltaX;
+            if (this.Bottom + deltaY > max.Height || this.Top + deltaY < 0)
+                deltaY = -deltaY;
+
+            Point location = this.Location;
+            location.Offset(deltaX, deltaY);
+
+            ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
+            this.Bounds = new Rectangle(location, new Size(width, height));
+            ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
+        }
+
+        private void DrawLine(float fThickness, float fLength, Color color, double fRadians, System.Windows.Forms.PaintEventArgs e)
 		{
 			e.Graphics.DrawLine(new Pen( color, fThickness ),
 				_Center.X - (float)(fLength/9*System.Math.Sin(fRadians)), 
@@ -144,14 +187,24 @@ namespace MeditationStopWatch
 
 		private void DrawTicsLine(Graphics g, int minute, float f1, float f2)
 		{
-			g.DrawLine(new Pen(_ticksColor, _fTicksThickness),
-				_Center.X + (float)(this._fRadius / f1 * System.Math.Sin(minute * 6 * DEGREE_TO_RAD)),
-				_Center.Y - (float)(this._fRadius / f1 * System.Math.Cos(minute * 6 * DEGREE_TO_RAD)),
-				_Center.X + (float)(this._fRadius / f2 * System.Math.Sin(minute * 6 * DEGREE_TO_RAD)),
-				_Center.Y - (float)(this._fRadius / f2 * System.Math.Cos(minute * 6 * DEGREE_TO_RAD)));
-		}
+            double angle = minute * 6 * DEGREE_TO_RAD;
+            Point p1 = new Point((int)(_Center.X + this._fRadius / f1 * System.Math.Sin(angle)),
+                                 (int)(_Center.Y - this._fRadius / f1 * System.Math.Cos(angle)));
 
-		private void DrawAngledClockHand(float fThickness, float fLength, Color color, double fAngle, System.Windows.Forms.PaintEventArgs e)
+            Point p2 = new Point((int)(_Center.X + this._fRadius / f2 * System.Math.Sin(angle)), 
+                                 (int)(_Center.Y - this._fRadius / f2 * System.Math.Cos(angle)));
+
+            g.DrawLine(new Pen(Color.Wheat, 2*_fTicksThickness), p1.X, p1.Y, p2.X, p2.Y);
+            g.DrawLine(new Pen(_ticksColor, _fTicksThickness), p1.X, p1.Y, p2.X, p2.Y);
+        }
+
+        private Color InvertColor(Color c)
+        {
+            const int MAX = 255;
+            return Color.FromArgb(MAX - c.R, MAX - c.G, MAX - c.B);
+        }
+
+        private void DrawAngledClockHand(float fThickness, float fLength, Color color, double fAngle, System.Windows.Forms.PaintEventArgs e)
 		{
 			PointF bottom = new PointF( (float)(_Center.X - fThickness * 4 * System.Math.Sin(fAngle)), 
 				                 (float)(_Center.Y + fThickness * 4 * System.Math.Cos(fAngle) ));

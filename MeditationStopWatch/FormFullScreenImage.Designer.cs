@@ -31,6 +31,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormFullScreenImage));
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.m_btnCancel = new System.Windows.Forms.Button();
+            this.m_lblVolume = new MeditationStopWatch.Tools.LabelWithTimeout();
             this.m_analogClock = new MeditationStopWatch.AnalogClock();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_analogClock)).BeginInit();
@@ -63,6 +64,20 @@
             this.m_btnCancel.TabIndex = 2;
             this.m_btnCancel.UseVisualStyleBackColor = false;
             // 
+            // m_lblVolume
+            // 
+            this.m_lblVolume.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_lblVolume.AutoSize = true;
+            this.m_lblVolume.BackColor = System.Drawing.Color.Transparent;
+            this.m_lblVolume.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.m_lblVolume.ForeColor = System.Drawing.Color.Lime;
+            this.m_lblVolume.Location = new System.Drawing.Point(452, 494);
+            this.m_lblVolume.Margin = new System.Windows.Forms.Padding(12);
+            this.m_lblVolume.Name = "m_lblVolume";
+            this.m_lblVolume.Size = new System.Drawing.Size(305, 42);
+            this.m_lblVolume.TabIndex = 4;
+            this.m_lblVolume.Text = "Volume 100.0 %";
+            // 
             // m_analogClock
             // 
             this.m_analogClock.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -71,6 +86,7 @@
             this.m_analogClock.Draw5MinuteTicks = true;
             this.m_analogClock.HourHandColor = System.Drawing.Color.DarkMagenta;
             this.m_analogClock.Location = new System.Drawing.Point(367, 33);
+            this.m_analogClock.MinimumSize = new System.Drawing.Size(20, 20);
             this.m_analogClock.MinuteHandColor = System.Drawing.Color.Green;
             this.m_analogClock.Name = "m_analogClock";
             this.m_analogClock.SecondHandColor = System.Drawing.Color.Red;
@@ -86,6 +102,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.m_btnCancel;
             this.ClientSize = new System.Drawing.Size(800, 600);
+            this.Controls.Add(this.m_lblVolume);
             this.Controls.Add(this.m_analogClock);
             this.Controls.Add(this.m_btnCancel);
             this.Controls.Add(this.pictureBox1);
@@ -99,6 +116,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_analogClock)).EndInit();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -107,5 +125,6 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.Button m_btnCancel;
         private AnalogClock m_analogClock;
+        private Tools.LabelWithTimeout m_lblVolume;
     }
 }

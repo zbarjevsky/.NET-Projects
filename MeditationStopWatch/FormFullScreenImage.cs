@@ -39,6 +39,11 @@ namespace MeditationStopWatch
 
         private void FormFullScreenImage_Load(object sender, EventArgs e)
         {
+            m_lblVolume.Parent = pictureBox1;
+            m_lblVolume.Draggable(true);
+            if (!DesignMode)
+                m_lblVolume.Visible = false;
+
             m_analogClock.Bounds = _stopWatch.m_Options.ClockFullScreenBounds;
         }
 
@@ -55,51 +60,37 @@ namespace MeditationStopWatch
 
         private void AdjustClockSize(int delta)
         {
-            delta /= Math.Abs(delta);
-            if (m_analogClock.Size.Width > Screen.FromControl(m_analogClock).Bounds.Height && delta > 0)
-                return;
-
-            if (m_analogClock.Size.Width < 20 && delta < 0)
-                return;
-
-            double factor = delta > 0 ? 1.1 : 0.9;
-            int width = (int)(factor * m_analogClock.Size.Width);
-            int deltaWidth = (m_analogClock.Size.Width - width) / 2;
-
-            Point location = m_analogClock.Location;
-            location.Offset(deltaWidth, deltaWidth);
-
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.m_analogClock)).BeginInit();
-            m_analogClock.Bounds = new Rectangle(location, new Size(width, width));
+            m_analogClock.AdjustClockSize(delta, pictureBox1.Bounds);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.m_analogClock)).EndInit();
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            if (keyData == Keys.Up || keyData == Keys.Down || keyData == Keys.Space 
-                || keyData == Keys.Left || keyData == Keys.Right)
+            switch (keyData)
             {
-                //if (CanUseArrorws())
-                {
-                    if (keyData == Keys.Space)
-                        _stopWatch.PauseResume();
-
-                    if (keyData == Keys.Up)
-                        _stopWatch.AdjustVolume(1);
-
-                    if (keyData == Keys.Down)
-                        _stopWatch.AdjustVolume(-1);
-
-                    if (keyData == Keys.Left)
-                        pictureBox1.Load(_stopWatch.ShowPrevImage().FullName);
-
-                    if (keyData == Keys.Right)
-                        pictureBox1.Load(_stopWatch.ShowNextImage().FullName);
-
+                case Keys.Escape:
+                    Close();
                     return true;
-                }
+                case Keys.Space:
+                    _stopWatch.PauseResume();
+                    return true;
+                case Keys.Up:
+                    int vol1 = _stopWatch.AdjustVolume(1);
+                    m_lblVolume.Show((vol1 / 10.0).ToString("Volume: 0.0") + "%", 4000);
+                    return true;
+                case Keys.Down:
+                    int vol2 = _stopWatch.AdjustVolume(-1);
+                    m_lblVolume.Show((vol2 / 10.0).ToString("Volume: 0.0") + "%", 4000);
+                    return true;
+                case Keys.Left:
+                    pictureBox1.Load(_stopWatch.ShowPrevImage().FullName);
+                    return true;
+                case Keys.Right:
+                    pictureBox1.Load(_stopWatch.ShowNextImage().FullName);
+                    return true;
+                default:
+                    break;
             }
 
             return base.ProcessCmdKey(ref msg, keyData);

@@ -337,28 +337,25 @@ namespace MeditationStopWatch
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            if (keyData == Keys.Up || keyData == Keys.Down || keyData == Keys.Space
-                || keyData == Keys.Left || keyData == Keys.Right)
+            switch (keyData)
             {
-                //if (CanUseArrorws())
-                {
-                    if (keyData == Keys.Space)
-                        PauseResume();
-
-                    if (keyData == Keys.Up)
-                        AdjustVolume(1);
-
-                    if (keyData == Keys.Down)
-                        AdjustVolume(-1);
-
-                    if (keyData == Keys.Left)
-                        m_btnPrevImage_Click(this, null);
-
-                    if (keyData == Keys.Right)
-                        m_btnNextImage_Click(this, null);
-
+                case Keys.Space:
+                    PauseResume();
                     return true;
-                }
+                case Keys.Up:
+                    AdjustVolume(1);
+                    return true;
+                case Keys.Down:
+                    AdjustVolume(-1);
+                    return true;
+                case Keys.Left:
+                    ShowPrevImage();
+                    return true;
+                case Keys.Right:
+                    ShowNextImage();
+                    return true;
+                default:
+                    break;
             }
 
             return base.ProcessCmdKey(ref msg, keyData);
@@ -405,7 +402,7 @@ namespace MeditationStopWatch
 			base.OnMouseWheel(e);
 		}
 
-		public void AdjustVolume(double delta)
+		public int AdjustVolume(double delta)
 		{
 			delta /= Math.Abs(delta);
 
@@ -421,6 +418,8 @@ namespace MeditationStopWatch
 			m_audioPlayerControl.Volume = vol;
 
             m_lblVolume.Show((vol/10.0).ToString("0.0") + "%", 4000);
+
+            return vol;
 		}
 
 		private void m_btnPrevImage_Click(object sender, EventArgs e)
