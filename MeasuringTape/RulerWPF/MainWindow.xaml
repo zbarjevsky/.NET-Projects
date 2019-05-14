@@ -6,14 +6,59 @@
         xmlns:local="clr-namespace:RulerWPF"
         mc:Ignorable="d"
         WindowStyle="None"
+        ResizeMode="NoResize"
         AllowsTransparency="True"
-        ClipToBounds="False"
         Background="Transparent"
+        WindowStartupLocation="CenterScreen"
         Loaded="MainWindow_OnLoaded"
-        Title="MainWindow" Height="2200" Width="4200" Left="0" Top="0">
-        <Border BorderThickness="4" BorderBrush="LimeGreen" ClipToBounds="False">
-            <Canvas x:Name="_canvas" ClipToBounds="False" >
-                <Rectangle x:Name="_ruler" Fill="Orange" ClipToBounds="False" Width="400" Height="40" Canvas.Left="10" Canvas.Top="100" />
-            </Canvas>
-        </Border>
+        PreviewMouseMove="window_PreviewMouseMove"
+        Title="Ruler" Height="1200" Width="1900" Left="0" Top="0">
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="0" ResizeBorderThickness="5" />
+    </WindowChrome.WindowChrome>
+    <Canvas x:Name="_canvasMain">
+        <Canvas x:Name="_canvas" Opacity="1.0" Background="Orange" Cursor="Hand" 
+                    Width="400" Height="40"  Canvas.Left="50" Canvas.Top="230"
+                    PreviewMouseLeftButtonDown="canvas_OnPreviewMouseLeftButtonDown" >
+            <Canvas x:Name="_tics" />
+            <Line x:Name="leftGrip" X1="0" 
+                        Y1="0" 
+                        X2="0" 
+                        Y2="{Binding ActualHeight, ElementName=_canvas}" 
+                        StrokeThickness="4" Stroke="Black"  
+                        PreviewMouseLeftButtonDown="LeftGrip_OnPreviewMouseLeftButtonDown" 
+                        PreviewMouseLeftButtonUp="LeftGrip_OnPreviewMouseLeftButtonUp">
+                <Line.Style>
+                    <Style TargetType="Line">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter  Property="Opacity" Value="1.0"/>
+                                <Setter Property="Cursor" Value="SizeWE"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Line.Style>
+            </Line>
+
+            <Line x:Name="rightGrip" ClipToBounds="False"
+                        StrokeThickness="4" Stroke="Black" Opacity="0.3"
+                        X1="{Binding ActualWidth, ElementName=_canvas}" 
+                        Y1="0" 
+                        X2="{Binding ActualWidth, ElementName=_canvas}" 
+                        Y2="{Binding ActualHeight, ElementName=_canvas}" 
+                        PreviewMouseLeftButtonDown="resizeGrip_PreviewMouseLeftButtonDown" 
+                        PreviewMouseLeftButtonUp="resizeGrip_PreviewMouseLeftButtonUp">
+                <Line.Style>
+                    <Style TargetType="Line">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter  Property="Opacity" Value="1.0"/>
+                                <Setter Property="Cursor" Value="SizeWE"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Line.Style>
+            </Line>
+        </Canvas>
+    </Canvas>
 </Window>

@@ -21,7 +21,7 @@ namespace RulerWPF
         private Path outline;
         private VisualCollection visualChildren;
         private Point _center;
-        private TranslateTransform translate;
+        private TranslateTransform _translate;
         private RotateTransform rotation;
         private ScaleTransform scale;
         private TransformGroup transformGroup;
@@ -32,6 +32,7 @@ namespace RulerWPF
         {
 
             visualChildren = new VisualCollection(this);
+
             rotateHandle = new Thumb();
             rotateHandle.Cursor = Cursors.Hand;
             rotateHandle.Width = 10;
@@ -73,7 +74,7 @@ namespace RulerWPF
             outline.StrokeThickness = 1;
 
             rotation = new RotateTransform();
-            translate = new TranslateTransform();
+            _translate = new TranslateTransform();
             scale = new ScaleTransform();
             transformGroup = adornedElement.RenderTransform as TransformGroup;
             if (transformGroup == null)
@@ -153,7 +154,7 @@ namespace RulerWPF
 
         private void moveHandle_DragCompleted(object sender, DragCompletedEventArgs e)
         {
-            MoveNewTransformToAdornedElement(translate);
+            MoveNewTransformToAdornedElement(_translate);
         }
 
         private void moveHandle_DragDelta(object sender, DragDeltaEventArgs e)
@@ -163,10 +164,10 @@ namespace RulerWPF
             double deltaX = pos.X - _center.X;
             double deltaY = pos.Y - _center.Y;
 
-            translate.X = deltaX;
-            translate.Y = deltaY;
+            _translate.X = deltaX;
+            _translate.Y = deltaY;
 
-            outline.RenderTransform = translate;
+            outline.RenderTransform = _translate;
         }
 
         private void rotateHandle_DragDelta(object sender, DragDeltaEventArgs e)
