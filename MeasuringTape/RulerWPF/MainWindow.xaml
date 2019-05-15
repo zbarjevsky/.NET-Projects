@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:RulerWPF"
         mc:Ignorable="d"
         WindowStyle="None"
-        ResizeMode="CanResize"
+        ResizeMode="NoResize"
+        WindowState="Maximized"
         AllowsTransparency="True"
         Topmost="True"
         Background="Transparent"
@@ -14,14 +15,14 @@
         Loaded="MainWindow_OnLoaded"
         LocationChanged="Window_LocationChanged"
         PreviewMouseMove="window_PreviewMouseMove"
-        Title="Ruler" Height="600" Width="1200" Left="-300" Top="0">
+        Title="Ruler" Height="600" Width="800">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="0" ResizeBorderThickness="5" />
     </WindowChrome.WindowChrome>
     <Canvas x:Name="_canvasMain">
         <Canvas x:Name="_canvasRuler" Opacity="1.0" Background="Orange" Cursor="Hand" 
-                    Width="400" Height="60"  Canvas.Left="600" Canvas.Top="280"
-                    PreviewMouseLeftButtonDown="CanvasRuler_OnPreviewMouseLeftButtonDown" >
+                    Width="400" Height="60"  Canvas.Left="600" Canvas.Top="400"
+                    MouseMove="_canvasRuler_MouseMove" >
             <Canvas.LayoutTransform>
                 <RotateTransform Angle="0"/>
             </Canvas.LayoutTransform>

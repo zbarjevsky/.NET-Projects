@@ -32,12 +32,7 @@ namespace RulerWPF
         {
             //AddAdorner(_ruler);
             DrawTicks();
-        }
-
-        private void CanvasRuler_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (!e.OriginalSource.Equals(rightGrip) && !e.OriginalSource.Equals(leftGrip))
-                this.DragMove();
+            _canvasRuler.Draggable(true);
         }
 
         private void DrawTicks()
@@ -95,6 +90,10 @@ namespace RulerWPF
         private void DrawInfo()
         {
             Point loc = new Point(Canvas.GetLeft(_canvasRuler), Canvas.GetTop(_canvasRuler));
+            TranslateTransform tr = _canvasRuler.RenderTransform as TranslateTransform;
+            if (tr != null)
+                loc.Offset(tr.X, tr.Y);
+
             loc = this.PointToScreen(loc);
             _txtBounds.Text = string.Format("X: {0:0}, Y: {1:0}, Length: {2:0}",
                 loc.X, loc.Y, _canvasRuler.Width);
@@ -109,6 +108,8 @@ namespace RulerWPF
         bool _isResizingR = false, _isResizingL = false;
         private void window_PreviewMouseMove(object sender, MouseEventArgs e)
         {
+            const double MIN_WIDTH = 100;
+
             if (_isResizingR || _isResizingL)
             {
                 Point currentPosition = Mouse.GetPosition(this);
@@ -121,13 +122,13 @@ namespace RulerWPF
                 double left = Canvas.GetLeft(_canvasRuler);
                 if (_isResizingR)
                 {
-                    if (_canvasRuler.Width + diffX > 100) //min size
+                    if (_canvasRuler.Width + diffX > MIN_WIDTH) //min size
                         _canvasRuler.Width += diffX;
-                    this.Width = leftMargin + _canvasRuler.Width + rightMargin;
+                    //this.Width = leftMargin + _canvasRuler.Width + rightMargin;
                 }
                 else
                 {
-                    if (_canvasRuler.Width - diffX > 100) //min size
+                    if (_canvasRuler.Width - diffX > MIN_WIDTH) //min size
                     {
                         _canvasRuler.Width -= diffX;
                         Canvas.SetLeft(_canvasRuler, left + diffX);
@@ -140,6 +141,7 @@ namespace RulerWPF
 
                 DrawTicks();
             }
+            DrawInfo();
         }
 
         private void rightGrip_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -171,6 +173,11 @@ namespace RulerWPF
             }
         }
 
+        private void _canvasRuler_MouseMove(object sender, MouseEventArgs e)
+        {
+            DrawInfo();
+        }
+
         private void LeftGrip_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (_isResizingL)
@@ -178,11 +185,11 @@ namespace RulerWPF
                 _isResizingL = false;
                 Mouse.Capture(null);
 
-                double left = Canvas.GetLeft(_canvasRuler);
-                Canvas.SetLeft(_canvasRuler, leftMargin);
+                //double left = Canvas.GetLeft(_canvasRuler);
+                //Canvas.SetLeft(_canvasRuler, leftMargin);
 
-                this.Width = leftMargin + _canvasRuler.Width + rightMargin;
-                this.Left -= leftMargin - left;
+                //this.Width = leftMargin + _canvasRuler.Width + rightMargin;
+                //this.Left -= leftMargin - left;
             }
         }
     }
