@@ -20,6 +20,9 @@ namespace RulerWPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        const double rightMargin = 100;
+        const double leftMargin = 300;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -31,47 +34,20 @@ namespace RulerWPF
             DrawTicks();
         }
 
-        //private void AddAdorner(UIElement element)
-        //{
-        //    AdornerLayer adornerlayer = AdornerLayer.GetAdornerLayer(element);
-        //    if (adornerlayer.GetAdorners(element) == null || adornerlayer.GetAdorners(element).Length == 0)
-        //    {
-        //        RotateResizeAdorner adorner = new RotateResizeAdorner(element);
-        //        adornerlayer.Add(adorner);
-        //    }
-        //}
-
-        //private void RemoveAllAdorners()
-        //{
-        //    foreach (UIElement element in _canvas.Children)
-        //    {
-        //        AdornerLayer adornerlayer = AdornerLayer.GetAdornerLayer(element);
-        //        var adorners = adornerlayer.GetAdorners(element);
-        //        if (adorners != null)
-        //        {
-        //            for (int i = adorners.Length - 1; i >= 0; i--)
-        //            {
-        //                adornerlayer.Remove(adorners[i]);
-        //            }
-        //        }
-        //    }
-        //}
-        private void _ruler_OnMouseDown(object sender, MouseButtonEventArgs e)
+        private void CanvasRuler_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
+            if (!e.OriginalSource.Equals(rightGrip) && !e.OriginalSource.Equals(leftGrip))
                 this.DragMove();
-            }
         }
 
         private void DrawTicks()
         {
             _tics.Children.Clear();
-            double line_count = _canvas.ActualWidth / 10;
-            double line_offset = (_canvas.ActualWidth - 3) / line_count;
-            double smallDelta = _canvas.ActualHeight / 4;
-            double bigDelta = _canvas.ActualHeight / 3;
-            double tickHeight = _canvas.ActualHeight / 2;
+            double line_count = _canvasRuler.ActualWidth / 10;
+            double line_offset = (_canvasRuler.ActualWidth - 3) / line_count;
+            double smallDelta = _canvasRuler.ActualHeight / 4;
+            double bigDelta = _canvasRuler.ActualHeight / 3;
+            double tickHeight = _canvasRuler.ActualHeight / 2;
 
             for (int i = 0; i < line_count + 1; i++)
             {
@@ -103,16 +79,6 @@ namespace RulerWPF
 
         Point _startPosition;
         bool _isResizingR = false, _isResizingL = false;
-        private void resizeGrip_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (Mouse.Capture(rightGrip))
-            {
-                _isResizingR = true;
-                _startPosition = Mouse.GetPosition(this);
-                e.Handled = true;
-            }
-        }
-
         private void window_PreviewMouseMove(object sender, MouseEventArgs e)
         {
             if (_isResizingR || _isResizingL)
@@ -124,39 +90,47 @@ namespace RulerWPF
                 if(diffX == 0)
                     return;
 
+                double left = Canvas.GetLeft(_canvasRuler);
                 if (_isResizingR)
                 {
-                    if (_canvas.Width + diffX > 100) //min size
-                        _canvas.Width += diffX;
+                    if (_canvasRuler.Width + diffX > 100) //min size
+                        _canvasRuler.Width += diffX;
+                    this.Width = leftMargin + _canvasRuler.Width + rightMargin;
                 }
                 else
                 {
-                    if (_canvas.Width - diffX > 100) //min size
+                    if (_canvasRuler.Width - diffX > 100) //min size
                     {
-                        //this.Left += diffX;
-                        _canvas.Width -= diffX;
-                        double left = Canvas.GetLeft(_canvas);
-                        Canvas.SetLeft(_canvas, left + diffX);
+                        _canvasRuler.Width -= diffX;
+                        Canvas.SetLeft(_canvasRuler, left + diffX);
                     }
                 }
+
+                //left = Canvas.GetLeft(_canvasRuler);
+                //Canvas.SetLeft(_canvasRuler, leftMargin);
+                //this.Left -= (leftMargin - left);
 
                 DrawTicks();
             }
         }
 
-        private void resizeGrip_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void rightGrip_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (Mouse.Capture(rightGrip))
+            {
+                _isResizingR = true;
+                _startPosition = Mouse.GetPosition(this);
+                e.Handled = true;
+            }
+        }
+
+        private void rightGrip_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             if (_isResizingR)
             {
                 _isResizingR = false;
                 Mouse.Capture(null);
             }
-        }
-
-        private void canvas_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (!e.OriginalSource.Equals(rightGrip) && !e.OriginalSource.Equals(leftGrip))
-                this.DragMove();
         }
 
         private void LeftGrip_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -175,6 +149,12 @@ namespace RulerWPF
             {
                 _isResizingL = false;
                 Mouse.Capture(null);
+
+                double left = Canvas.GetLeft(_canvasRuler);
+                Canvas.SetLeft(_canvasRuler, leftMargin);
+
+                this.Width = leftMargin + _canvasRuler.Width + rightMargin;
+                this.Left -= leftMargin - left;
             }
         }
     }
