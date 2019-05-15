@@ -20,8 +20,8 @@ namespace RulerWPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        const double rightMargin = 100;
-        const double leftMargin = 300;
+        const double rightMargin = 10;
+        const double leftMargin = 600;
 
         public MainWindow()
         {
@@ -43,38 +43,66 @@ namespace RulerWPF
         private void DrawTicks()
         {
             _tics.Children.Clear();
-            double line_count = _canvasRuler.ActualWidth / 10;
-            double line_offset = (_canvasRuler.ActualWidth - 3) / line_count;
-            double smallDelta = _canvasRuler.ActualHeight / 4;
-            double bigDelta = _canvasRuler.ActualHeight / 3;
-            double tickHeight = _canvasRuler.ActualHeight / 2;
 
-            for (int i = 0; i < line_count + 1; i++)
+            double divider = 10;
+            double tick_count = _canvasRuler.ActualWidth / divider;
+            double tick_offset = _canvasRuler.ActualWidth / tick_count;
+
+            double tick1Size = _canvasRuler.ActualHeight / 4;
+            double tick2Size = _canvasRuler.ActualHeight / 3;
+            double tick3Size = _canvasRuler.ActualHeight / 3;
+
+            double tick1Interval = 1;
+            double tick2Interval = 5;
+            double tick3Interval = 10;
+
+            for (int i = 1; i < tick_count; i++)
             {
-                bool odd = i % 2 == 1;
-                bool ten = i%10 == 0;
-                double delta = odd ? smallDelta : bigDelta;
-                if (ten) delta = tickHeight;
+                double tickSize = tick1Size;
+                if (i % tick2Interval == 0)
+                {
+                    tickSize = tick2Size;
+                }
+                if (i % tick3Interval == 0)
+                {
+                    tickSize = tick3Size;
+                }
 
-                    Line line = new Line();
+                Line line = new Line();
                 line.Stroke = Brushes.Black;
                 line.StrokeThickness = 1;
-                line.X1 = 1 + i * line_offset;
+                line.X1 = 1 + i * tick_offset;
                 line.X2 = line.X1;
                 line.Y1 = 0;
-                line.Y2 = delta;
+                line.Y2 = tickSize;
 
                 _tics.Children.Add(line);
 
-                if (ten)
+                if (i % tick3Interval == 0) //add text
                 {
                     TextBlock txt = new TextBlock();
-                    txt.Text = i.ToString();
+                    txt.FontSize = 16;
+                    txt.Text = (divider * i).ToString();
                     Canvas.SetLeft(txt, line.X2 - 8);
                     Canvas.SetTop(txt, line.Y2);
                     _tics.Children.Add(txt);
                 }
             }
+
+            DrawInfo();
+        }
+
+        private void DrawInfo()
+        {
+            Point loc = new Point(Canvas.GetLeft(_canvasRuler), Canvas.GetTop(_canvasRuler));
+            loc = this.PointToScreen(loc);
+            _txtBounds.Text = string.Format("X: {0:0}, Y: {1:0}, Length: {2:0}",
+                loc.X, loc.Y, _canvasRuler.Width);
+        }
+
+        private void Window_LocationChanged(object sender, EventArgs e)
+        {
+            DrawInfo();
         }
 
         Point _startPosition;
