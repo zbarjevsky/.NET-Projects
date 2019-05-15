@@ -79,6 +79,7 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.m_btnSlideShow = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.m_mnuViewFullScreen = new System.Windows.Forms.ToolStripMenuItem();
             this.m_pnlMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitContainerMain)).BeginInit();
             this.m_splitContainerMain.Panel1.SuspendLayout();
@@ -219,6 +220,7 @@
             this.m_lblVolume.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.m_lblVolume.ForeColor = System.Drawing.Color.Lime;
             this.m_lblVolume.Location = new System.Drawing.Point(116, 26);
+            this.m_lblVolume.Margin = new System.Windows.Forms.Padding(12);
             this.m_lblVolume.Name = "m_lblVolume";
             this.m_lblVolume.Size = new System.Drawing.Size(208, 42);
             this.m_lblVolume.TabIndex = 2;
@@ -413,6 +415,8 @@
             // 
             // m_mnuView
             // 
+            this.m_mnuView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.m_mnuViewFullScreen});
             this.m_mnuView.Name = "m_mnuView";
             this.m_mnuView.Size = new System.Drawing.Size(44, 20);
             this.m_mnuView.Text = "&View";
@@ -632,6 +636,14 @@
             this.toolStripButton1.Size = new System.Drawing.Size(23, 23);
             this.toolStripButton1.Text = "toolStripButton1";
             // 
+            // m_mnuViewFullScreen
+            // 
+            this.m_mnuViewFullScreen.Name = "m_mnuViewFullScreen";
+            this.m_mnuViewFullScreen.ShortcutKeys = System.Windows.Forms.Keys.F11;
+            this.m_mnuViewFullScreen.Size = new System.Drawing.Size(192, 22);
+            this.m_mnuViewFullScreen.Text = "&Full Screen Image";
+            this.m_mnuViewFullScreen.Click += new System.EventHandler(this.m_mnuViewFullScreen_Click);
+            // 
             // FormStopWatch
             // 
             this.AllowDrop = true;
@@ -743,6 +755,7 @@
         private System.Windows.Forms.Button m_btnHideSumbnails;
         private System.Windows.Forms.ImageList m_imageListBtnHide;
         private Tools.LabelWithTimeout m_lblVolume;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuViewFullScreen;
     }
 }
 

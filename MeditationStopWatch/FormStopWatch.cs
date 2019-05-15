@@ -417,7 +417,7 @@ namespace MeditationStopWatch
             System.Diagnostics.Trace.WriteLine("Delta: " + delta + " Vol: " + vol);
 			m_audioPlayerControl.Volume = vol;
 
-            m_lblVolume.Show((vol/10.0).ToString("0.0") + "%", 4000);
+            m_lblVolume.Show(string.Format("Volume: {0:0.0} %", vol /10.0), 4000);
 
             return vol;
 		}
@@ -507,11 +507,16 @@ namespace MeditationStopWatch
 			UpdateStatusText();
 		}
 
-		private void m_btnFitWindow_Click(object sender, EventArgs e)
-		{
+        private void m_mnuViewFullScreen_Click(object sender, EventArgs e)
+        {
             FormFullScreenImage frm = new FormFullScreenImage(this);
             frm.Picture = m_pictureBox1.Image;
             frm.ShowDialog(this);
+        }
+
+        private void m_btnFitWindow_Click(object sender, EventArgs e)
+		{
+            m_mnuViewFullScreen_Click(sender, e);
         }
 
 		private void m_btnOrigSize_Click(object sender, EventArgs e)

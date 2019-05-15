@@ -70,6 +70,7 @@ namespace MeditationStopWatch
             switch (keyData)
             {
                 case Keys.Escape:
+                case Keys.F11:
                     Close();
                     return true;
                 case Keys.Space:
@@ -77,11 +78,11 @@ namespace MeditationStopWatch
                     return true;
                 case Keys.Up:
                     int vol1 = _stopWatch.AdjustVolume(1);
-                    m_lblVolume.Show((vol1 / 10.0).ToString("Volume: 0.0") + "%", 4000);
+                    m_lblVolume.Show(string.Format("Volume: {0:0.0} %", vol1 / 10.0), 4000);
                     return true;
                 case Keys.Down:
                     int vol2 = _stopWatch.AdjustVolume(-1);
-                    m_lblVolume.Show((vol2 / 10.0).ToString("Volume: 0.0") + "%", 4000);
+                    m_lblVolume.Show(string.Format("Volume: {0:0.0} %", vol2 / 10.0), 4000);
                     return true;
                 case Keys.Left:
                     pictureBox1.Load(_stopWatch.ShowPrevImage().FullName);
