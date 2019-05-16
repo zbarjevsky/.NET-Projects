@@ -144,24 +144,24 @@ namespace RulerWPF
             double sin = Math.Sin(angle);
             double cos =  Math.Cos(angle);
 
-            if (oAngle == 0)
+            if (oAngle == 0) // sin = 0, cos = 1
             {
-                oTranslateTransformX += deltaOrigin.Y; 
+                oTranslateTransformX += cos * deltaOrigin.Y + sin * deltaOrigin.X; // = 0
+                oTranslateTransformY += deltaOrigin.Y; // = 0
+            }
+            if (oAngle == 90) // sin = 1, cos = 0
+            {
+                oTranslateTransformX -= sin * deltaOrigin.Y + cos * deltaOrigin.X; // = width/-width
                 oTranslateTransformY += deltaOrigin.Y;
             }
-            if (oAngle == 90)
+            if (oAngle == 180) // sin = 0, cos = -1
             {
-                oTranslateTransformX -= deltaOrigin.Y;
-                oTranslateTransformY += deltaOrigin.Y;
+                oTranslateTransformX += sin * deltaOrigin.Y + (1 - cos) * deltaOrigin.X; // = width/-width
+                oTranslateTransformY += deltaOrigin.Y; // = 0
             }
-            if (oAngle == 180)
+            if (oAngle == 270) // sin = -1, cos = 0
             {
-                oTranslateTransformX += 2 * deltaOrigin.X;
-                //oTranslateTransformY += deltaOrigin.X;
-            }
-            if (oAngle == 270)
-            {
-                oTranslateTransformX += deltaOrigin.Y;
+                oTranslateTransformX -= sin * deltaOrigin.Y + cos * deltaOrigin.X; // = width/-width
                 oTranslateTransformY += deltaOrigin.Y;
             }
         }
