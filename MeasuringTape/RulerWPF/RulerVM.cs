@@ -32,6 +32,9 @@ namespace RulerWPF
         private double _width;
         public double oWidth { get { return _width; } set { _width = value; OnPropertyChanged(); } }
 
+        private double _height;
+        public double oHeight { get { return _height; } set { _height = value; OnPropertyChanged(); } }
+
         private double _thumbLeft;
         public double oThumbLeft { get { return _thumbLeft; } set { _thumbLeft = value; OnPropertyChanged(); } }
 
@@ -50,9 +53,47 @@ namespace RulerWPF
         {
             oAngle = 0;
             oWidth = 400;
+            oHeight = 60;
             oRenderTransformOrigin = new Point(0.5, 0.5);
             oTranslateTransformX = oTranslateTransformY = 0;
             oThumbLeft = 375;
+        }
+
+        public Point Origin(UIElement element)
+        {
+            return element.PointToScreen(Origin(_origin));
+        }
+
+        public void UpdateRenderTransformOrigin(Point newOrigin, UIElement element)
+        {
+            Point oldOrigin = Origin(element);
+            _origin = newOrigin;
+            newOrigin = Origin(element);
+
+            UpdateTranslateTransform(oldOrigin, newOrigin);
+
+            OnPropertyChanged("");
+        }
+
+        private Point Origin(Point origin)
+        {
+            if (origin.X <= 1 && origin.Y <= 1)
+            {
+                origin.X *= oWidth;
+                origin.Y *= oHeight;
+            }
+            return origin;
+        }
+
+        private void UpdateTranslateTransform(Point originOld, Point originNew)
+        {
+            if (originOld == originNew)
+                return;
+
+            Vector delta = originNew - originOld;
+
+            //_translateTransformX -= oWidth; // delta.X;
+            //_translateTransformY -= oWidth; // delta.Y;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -102,7 +102,7 @@ namespace RulerWPF
             DrawInfo();
         }
 
-        Point _startPosition, _center;
+        Point _startPosition;
         private void window_PreviewMouseMove(object sender, MouseEventArgs e)
         {
             const double MIN_WIDTH = 100;
@@ -135,8 +135,8 @@ namespace RulerWPF
             {
                 //Point currentPosition = Mouse.GetPosition(null);
 
-                Vector startToCenter = (_center - _startPosition);
-                Vector currToCenter = (_center - currentPosition);
+                Vector startToCenter = (_vm.Origin(_canvasRuler) - _startPosition);
+                Vector currToCenter = (_vm.Origin(_canvasRuler) - currentPosition);
                 double deltaAngle = Vector.AngleBetween(startToCenter, currToCenter);
 
                 SetAngle(_vm.oAngle + deltaAngle);// (e.VerticalChange < 0 ? 1 : -1));
@@ -149,15 +149,16 @@ namespace RulerWPF
             }
 
             _startPosition = currentPosition;
-            _center = _canvasRuler.PointToScreen(new Point(_canvasRuler.Width / 2, _canvasRuler.Height / 2));
+            //Point origin = new Point(_vm.oRenderTransformOrigin.X * _vm.oWidth, _vm.oRenderTransformOrigin.Y * _canvasRuler.ActualHeight);
+            //_origin = _canvasRuler.PointToScreen(origin);
 
             DrawInfo();
         }
 
         private double CalculateDiff(Point currentPosition)
         {
-            Vector startToCenter = (_center - _startPosition);
-            Vector currToCenter = (_center - currentPosition);
+            Vector startToCenter = (_vm.Origin(_canvasRuler) - _startPosition);
+            Vector currToCenter = (_vm.Origin(_canvasRuler) - currentPosition);
 
             Vector diffVector = (currToCenter - startToCenter);
             double angle = Vector.AngleBetween(diffVector, currToCenter);
@@ -172,26 +173,28 @@ namespace RulerWPF
             Mouse.Capture(null);
         }
 
-        private void rightGrip_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (Mouse.Capture(sender as IInputElement))
-            {
-                _vm.MouseMoveOp = MouseMoveOp.RightSize;
-                _startPosition = Mouse.GetPosition(null);
-                _center = _canvasRuler.PointToScreen(new Point(_canvasRuler.Width / 2, _canvasRuler.Height / 2));
-                _vm.oRenderTransformOrigin = new Point(0,0);
-                e.Handled = true;
-            }
-        }
-
         private void LeftGrip_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (Mouse.Capture(sender as IInputElement))
             {
                 _vm.MouseMoveOp = MouseMoveOp.LeftSize;
                 _startPosition = Mouse.GetPosition(null);
-                _center = _canvasRuler.PointToScreen(new Point(_canvasRuler.Width / 2, _canvasRuler.Height / 2));
-                _vm.oRenderTransformOrigin = new Point(0,0);
+                _vm.UpdateRenderTransformOrigin(new Point(1,0), _canvasRuler);
+                //Point origin = new Point(_vm.oRenderTransformOrigin.X * _vm.oWidth, _vm.oRenderTransformOrigin.Y * _canvasRuler.ActualHeight);
+                //_origin = _canvasRuler.PointToScreen(origin);
+                e.Handled = true;
+            }
+        }
+
+        private void rightGrip_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (Mouse.Capture(sender as IInputElement))
+            {
+                _vm.MouseMoveOp = MouseMoveOp.RightSize;
+                _startPosition = Mouse.GetPosition(null);
+                _vm.UpdateRenderTransformOrigin(new Point(0,0), _canvasRuler);
+                //Point origin = new Point(_vm.oRenderTransformOrigin.X * _vm.oWidth, _vm.oRenderTransformOrigin.Y * _canvasRuler.ActualHeight);
+                //_origin = _canvasRuler.PointToScreen(origin);
                 e.Handled = true;
             }
         }
@@ -202,7 +205,7 @@ namespace RulerWPF
             {
                 _vm.MouseMoveOp = MouseMoveOp.LeftRotate;
                 _startPosition = Mouse.GetPosition(null);
-                _vm.oRenderTransformOrigin = new Point(0.5, 0.5);
+                _vm.UpdateRenderTransformOrigin(new Point(1, 0), _canvasRuler);
                 e.Handled = true;
             }
         }
@@ -213,20 +216,20 @@ namespace RulerWPF
             {
                 _vm.MouseMoveOp = MouseMoveOp.RightRotate;
                 _startPosition = Mouse.GetPosition(null);
-                _vm.oRenderTransformOrigin = new Point(0.5, 0.5);
+                _vm.UpdateRenderTransformOrigin(new Point(0, 0), _canvasRuler);
                 e.Handled = true;
             }
         }
 
         private void _canvasRuler_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.Source == _canvasRuler)
+            if (e.Source == _canvasRuler || e.Source is TextBlock)
             {
-                if (Mouse.Capture(e.Source as IInputElement))
+                if (Mouse.Capture(_canvasRuler))
                 {
                     _vm.MouseMoveOp = MouseMoveOp.Move;
                     _startPosition = Mouse.GetPosition(null);
-                    _vm.oRenderTransformOrigin = new Point(0, 0);
+                    //_vm.UpdateRenderTransformOrigin(new Point(0, 0), _canvasRuler);
                     e.Handled = true;
                 }
             }
@@ -254,7 +257,7 @@ namespace RulerWPF
             {
                 //if (_canvasRuler.RenderTransformOrigin.X != 0.5 && _canvasRuler.RenderTransformOrigin.Y != 0.5)
                 {
-                    _vm.oRenderTransformOrigin = new Point(0.5, 0.5);
+                    //_vm.UpdateRenderTransformOrigin(new Point(0.5, 0.5), _canvasRuler);
                     //_moveTransform.X += 10; // ptCenter.X;
                     //_moveTransform.Y += ptCenter.Y;
                 }
