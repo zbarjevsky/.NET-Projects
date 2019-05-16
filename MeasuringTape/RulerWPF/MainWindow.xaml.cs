@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,9 +21,6 @@ namespace RulerWPF
     /// </summary>
     public partial class MainWindow : Window
     {
-        const double rightMargin = 10;
-        const double leftMargin = 600;
-
         public MainWindow()
         {
             InitializeComponent();
@@ -30,9 +28,8 @@ namespace RulerWPF
 
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            //AddAdorner(_ruler);
-            DrawTicks();
             _canvasRuler.Draggable(true);
+            DrawTicks();
         }
 
         private void DrawTicks()
@@ -90,13 +87,11 @@ namespace RulerWPF
         private void DrawInfo()
         {
             Point loc = new Point(Canvas.GetLeft(_canvasRuler), Canvas.GetTop(_canvasRuler));
-            TranslateTransform tr = _canvasRuler.RenderTransform as TranslateTransform;
-            if (tr != null)
-                loc.Offset(tr.X, tr.Y);
+            loc.Offset(_moveTransform.X, _moveTransform.Y);
 
             loc = this.PointToScreen(loc);
-            _txtBounds.Text = string.Format("X: {0:0}, Y: {1:0}, Length: {2:0}",
-                loc.X, loc.Y, _canvasRuler.Width);
+            _txtBounds.Text = string.Format("X: {0:0}, Y: {1:0}, Length: {2:0}, Angle: {3:0.000}",
+                loc.X, loc.Y, _canvasRuler.Width, _rotateTransform.Angle);
         }
 
         private void Window_LocationChanged(object sender, EventArgs e)
@@ -104,44 +99,81 @@ namespace RulerWPF
             DrawInfo();
         }
 
-        Point _startPosition;
-        bool _isResizingR = false, _isResizingL = false;
+        Point _startPosition, _center;
+        bool _isResizingR = false, _isResizingL = false, _isRotatingL = false;
+        bool _mouseMove = false;
         private void window_PreviewMouseMove(object sender, MouseEventArgs e)
         {
             const double MIN_WIDTH = 100;
 
+            if (_mouseMove)
+                return;
+            _mouseMove = true;
+
+            Point currentPosition = Mouse.GetPosition(null);
             if (_isResizingR || _isResizingL)
             {
-                Point currentPosition = Mouse.GetPosition(this);
-                double diffX = currentPosition.X - _startPosition.X;
-                double diffY = currentPosition.Y - _startPosition.Y;
-                _startPosition = currentPosition;
-                if(diffX == 0)
+                double diff = CalculateDiff(currentPosition);
+                if(diff == 0)
+                {
+                    _mouseMove = false;
                     return;
+                }
+
+                Debug.WriteLine("Diff: " + diff);
 
                 double left = Canvas.GetLeft(_canvasRuler);
-                if (_isResizingR)
+                if (_canvasRuler.Width + diff > MIN_WIDTH) //min size
                 {
-                    if (_canvasRuler.Width + diffX > MIN_WIDTH) //min size
-                        _canvasRuler.Width += diffX;
-                    //this.Width = leftMargin + _canvasRuler.Width + rightMargin;
-                }
-                else
-                {
-                    if (_canvasRuler.Width - diffX > MIN_WIDTH) //min size
+                    if (_isResizingL)
                     {
-                        _canvasRuler.Width -= diffX;
-                        Canvas.SetLeft(_canvasRuler, left + diffX);
+                        _canvasRuler.Width += diff;
+                        _moveTransform.X -= diff;
                     }
-                }
+                    else
+                    {
+                        _canvasRuler.Width += diff;
+                    }
 
-                //left = Canvas.GetLeft(_canvasRuler);
-                //Canvas.SetLeft(_canvasRuler, leftMargin);
-                //this.Left -= (leftMargin - left);
+                    Canvas.SetLeft(thumbRotateRight, _canvasRuler.Width - 30);
+                    Canvas.SetLeft(btnClose, _canvasRuler.Width - 30);
+                }
 
                 DrawTicks();
+
+                _startPosition = currentPosition;
             }
+            else if (_isRotatingL)
+            {
+                //Point currentPosition = Mouse.GetPosition(null);
+
+                Vector startToCenter = (_center - _startPosition);
+                Vector currToCenter = (_center - currentPosition);
+
+                //Vector diffVector = (currToCenter - startToCenter);
+                double deltaAngle = Vector.AngleBetween(startToCenter, currToCenter);
+
+                SetAngle(_rotateTransform.Angle + deltaAngle);// (e.VerticalChange < 0 ? 1 : -1));
+
+                _startPosition = currentPosition;
+            }
+
+            _center = _canvasRuler.PointToScreen(new Point(_canvasRuler.Width / 2, _canvasRuler.Height / 2));
+
             DrawInfo();
+            _mouseMove = false;
+        }
+
+        private double CalculateDiff(Point currentPosition)
+        {
+            Vector startToCenter = (_center - _startPosition);
+            Vector currToCenter = (_center - currentPosition);
+
+            Vector diffVector = (currToCenter - startToCenter);
+            double angle = Vector.AngleBetween(diffVector, currToCenter);
+
+            double diff = diffVector.Length * Math.Cos(Math.PI * angle / 180.0);
+            return diff;
         }
 
         private void rightGrip_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -149,7 +181,9 @@ namespace RulerWPF
             if (Mouse.Capture(rightGrip))
             {
                 _isResizingR = true;
-                _startPosition = Mouse.GetPosition(this);
+                _startPosition = Mouse.GetPosition(null);
+                _center = _canvasRuler.PointToScreen(new Point(_canvasRuler.Width / 2, _canvasRuler.Height / 2));
+                _canvasRuler.RenderTransformOrigin = new Point(0,0);
                 e.Handled = true;
             }
         }
@@ -168,14 +202,11 @@ namespace RulerWPF
             if (Mouse.Capture(leftGrip))
             {
                 _isResizingL = true;
-                _startPosition = Mouse.GetPosition(this);
+                _startPosition = Mouse.GetPosition(null);
+                _center = _canvasRuler.PointToScreen(new Point(_canvasRuler.Width / 2, _canvasRuler.Height / 2));
+                _canvasRuler.RenderTransformOrigin = new Point(1,0);
                 e.Handled = true;
             }
-        }
-
-        private void _canvasRuler_MouseMove(object sender, MouseEventArgs e)
-        {
-            DrawInfo();
         }
 
         private void LeftGrip_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -184,13 +215,84 @@ namespace RulerWPF
             {
                 _isResizingL = false;
                 Mouse.Capture(null);
-
-                //double left = Canvas.GetLeft(_canvasRuler);
-                //Canvas.SetLeft(_canvasRuler, leftMargin);
-
-                //this.Width = leftMargin + _canvasRuler.Width + rightMargin;
-                //this.Left -= leftMargin - left;
             }
+        }
+
+        private void _canvasRuler_MouseMove(object sender, MouseEventArgs e)
+        {
+            DrawInfo();
+        }
+
+        private void thumbRotateLeft_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (Mouse.Capture(thumbRotateLeft))
+            {
+                _startPosition = Mouse.GetPosition(null);
+                _isRotatingL = true;
+            }
+        }
+
+        private void thumbRotateLeft_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            if (_isRotatingL)
+            {
+                Mouse.Capture(null);
+            }
+            _isRotatingL = false;
+       }
+
+        private void thumbRotateLeft_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
+        {
+            //Point currentPosition = Mouse.GetPosition(null);
+
+            //Vector startToCenter = (_center - _startPosition);
+            //Vector currToCenter = (_center - currentPosition);
+
+            //Vector diffVector = (currToCenter - startToCenter);
+            //double deltaAngle = Vector.AngleBetween(startToCenter, currToCenter);
+
+            //SetAngle(_rotateTransform.Angle + deltaAngle);// (e.VerticalChange < 0 ? 1 : -1));
+
+            //_startPosition = currentPosition;
+        }
+
+        private void thumbRotateRight_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
+        {
+            SetAngle(_rotateTransform.Angle + (e.VerticalChange > 0 ? 1 : -1));
+        }
+
+        private void SetAngle(double angle)
+        {
+            if (angle > 360)
+                angle -= 360;
+            if (angle < 0)
+                angle += 360;
+
+            CompensateOrigin(true);
+
+            _rotateTransform.Angle = angle;
+        }
+
+        private void CompensateOrigin(bool moveToCenter)
+        {
+            Point ptLeftTop = _canvasRuler.PointToScreen(new Point());
+            Point ptCenter = new Point(_canvasRuler.Width / 2, _canvasRuler.Height / 2);
+            Vector delta = ptCenter - ptLeftTop;
+
+            if(moveToCenter)
+            {
+                //if (_canvasRuler.RenderTransformOrigin.X != 0.5 && _canvasRuler.RenderTransformOrigin.Y != 0.5)
+                {
+                    _canvasRuler.RenderTransformOrigin = new Point(0.95, 0.5);
+                    //_moveTransform.X += 10; // ptCenter.X;
+                    //_moveTransform.Y += ptCenter.Y;
+                }
+            }
+        }
+
+        private void ButtonClose_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

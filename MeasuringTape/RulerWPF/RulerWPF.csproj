@@ -57,6 +57,7 @@
     </ApplicationDefinition>
     <Compile Include="RotateResizeAdorner.cs" />
     <Compile Include="Tools\DraggableExtension.cs" />
+    <Compile Include="Tools\ExtensionMethods.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -30,7 +30,9 @@ namespace RulerWPF
                     return;
                 }
 
-                element.RenderTransform = new TranslateTransform();
+                TranslateTransform translate = FindTranslateTransform(element);
+                if(translate == null)
+                    element.RenderTransform = new TranslateTransform();
 
                 // 'false' - initial state is 'not dragging'
                 _draggables.Add(element, false);
@@ -55,13 +57,32 @@ namespace RulerWPF
             }
         }
 
+        private static TranslateTransform FindTranslateTransform(FrameworkElement element)
+        {
+            if (element.RenderTransform is TransformGroup)
+            {
+                TransformGroup g = element.RenderTransform as TransformGroup;
+                foreach (var item in g.Children)
+                {
+                    if (item is TranslateTransform)
+                        return item as TranslateTransform;
+                }
+            }
+            else if (element.RenderTransform is TranslateTransform)
+            {
+                return element.RenderTransform as TranslateTransform;
+            }
+
+            return null;
+        }
+
         static void control_MouseDown(object sender, MouseButtonEventArgs e)
         {
             FrameworkElement element = sender as FrameworkElement;
             if (element == null)
                 return;
 
-            TranslateTransform translate = element.RenderTransform as TranslateTransform;
+            TranslateTransform translate = FindTranslateTransform(element);
             if (translate == null)
                 return;
 
@@ -89,7 +110,7 @@ namespace RulerWPF
             if (element == null)
                 return;
 
-            TranslateTransform translate = element.RenderTransform as TranslateTransform;
+            TranslateTransform translate = FindTranslateTransform(element);
             if (translate == null)
                 return;
 
@@ -116,12 +137,12 @@ namespace RulerWPF
             FrameworkElement parent = element.Parent as FrameworkElement;
             Size parentSize = parent.RenderSize;
             Point location = RelativeLocation(element);
-            Debug.WriteLine("location: " + location);
+            //Debug.WriteLine("location: " + location);
 
             Point newOffset = new Point();
             newOffset.X = UpdateOffset(location.X, offset.X, element.RenderSize.Width, parentSize.Width, margin);
             newOffset.Y = UpdateOffset(location.Y, offset.Y, element.RenderSize.Height, parentSize.Height, margin);
-            Debug.WriteLine("new offset: " + newOffset);
+            //Debug.WriteLine("new offset: " + newOffset);
 
             return newOffset;
         }

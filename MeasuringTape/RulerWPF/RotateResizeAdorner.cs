@@ -22,9 +22,9 @@ namespace RulerWPF
         private VisualCollection visualChildren;
         private Point _center;
         private TranslateTransform _translate;
-        private RotateTransform rotation;
+        private RotateTransform _rotation;
         private ScaleTransform scale;
-        private TransformGroup transformGroup;
+        private TransformGroup _transformGroup;
         private const int HANDLEMARGIN = 10;
 
         public RotateResizeAdorner(UIElement adornedElement)
@@ -73,13 +73,13 @@ namespace RulerWPF
             outline.Stroke = Brushes.Blue;
             outline.StrokeThickness = 1;
 
-            rotation = new RotateTransform();
+            _rotation = new RotateTransform();
             _translate = new TranslateTransform();
             scale = new ScaleTransform();
-            transformGroup = adornedElement.RenderTransform as TransformGroup;
-            if (transformGroup == null)
+            _transformGroup = adornedElement.RenderTransform as TransformGroup;
+            if (_transformGroup == null)
             {
-                transformGroup = new TransformGroup();
+                _transformGroup = new TransformGroup();
             }
 
             visualChildren.Add(outline);
@@ -225,10 +225,10 @@ namespace RulerWPF
             angle += Math.Atan(tanOffset)*180/Math.PI;
 
             // Apply the rotation to the outline.
-            rotation.Angle = angle;
-            rotation.CenterX = _center.X;
-            rotation.CenterY = _center.Y;
-            outline.RenderTransform = rotation;
+            _rotation.Angle = angle;
+            _rotation.CenterX = _center.X;
+            _rotation.CenterY = _center.Y;
+            outline.RenderTransform = _rotation;
         }
 
         /// <summary>
@@ -236,7 +236,7 @@ namespace RulerWPF
         /// </summary>
         private void rotateHandle_DragCompleted(object sender, DragCompletedEventArgs e)
         {
-            MoveNewTransformToAdornedElement(rotation);
+            MoveNewTransformToAdornedElement(_rotation);
         }
 
         private void MoveNewTransformToAdornedElement(Transform transform)
@@ -248,8 +248,8 @@ namespace RulerWPF
 
             var newTransform = transform.Clone();
             newTransform.Freeze();
-            transformGroup.Children.Insert(0, newTransform);
-            AdornedElement.RenderTransform = transformGroup;
+            _transformGroup.Children.Insert(0, newTransform);
+            AdornedElement.RenderTransform = _transformGroup;
 
             outline.RenderTransform = Transform.Identity;
             this.InvalidateArrange();
