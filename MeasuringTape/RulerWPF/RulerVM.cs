@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -121,10 +122,14 @@ namespace RulerWPF
             return origin;
         }
 
-        public Point Center(FrameworkElement currentElement)
+        public double Distance(Point pt, FrameworkElement currentElement)
         {
-            Point center = new Point(currentElement.ActualWidth/2.0, currentElement.ActualHeight/2.0);
-            return currentElement.PointToScreen(center);
+            Point ptRelative = currentElement.PointFromScreen(pt);
+            Rect bounds = new Rect(new Point(), new Point(currentElement.ActualWidth, currentElement.ActualHeight));
+            if( bounds.IntersectsWith(new Rect(ptRelative, new Size(1, 1))))
+                return 0;
+
+            return Utils.MinimumDistance(bounds, ptRelative);
         }
 
         private void CompensateTranslateTransform(Point originOld, Point originNew)

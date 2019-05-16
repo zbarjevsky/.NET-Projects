@@ -21,6 +21,9 @@
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter TargetName="Ellipse" Property="Fill" Value="Yellow"/>
                             </Trigger>
+                            <Trigger Property="IsMouseCaptured" Value="True">
+                                <Setter TargetName="Ellipse" Property="Fill" Value="LawnGreen"/>
+                            </Trigger>
                             <Trigger Property="IsEnabled" Value="false">
                                 <Setter TargetName="Ellipse" Property="Fill" Value="Gray"/>
                             </Trigger>

@@ -110,8 +110,9 @@ namespace RulerWPF
             if (diff == 0) //no change
                 return;
 
-            Vector distance = currentPosition - _vm.Center(_vm.CurrentElement);
-            if (distance.Length > 350) //too far - disengage
+            double distance = _vm.Distance(currentPosition, _vm.CurrentElement);
+            Debug.WriteLine("Distance: " + distance);
+            if (distance > 150) //too far - disengage
             {
                 OnPreviewMouseLeftButtonUp(null, null);
                 return;
