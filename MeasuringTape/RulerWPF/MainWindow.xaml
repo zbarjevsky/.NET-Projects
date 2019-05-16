@@ -21,28 +21,31 @@
     </WindowChrome.WindowChrome>
     <Canvas x:Name="_canvasMain">
         <Canvas x:Name="_canvasRuler" Opacity="1.0" Background="Orange" Cursor="Hand" 
-                RenderTransformOrigin="0.5,0.5"
-                Width="400" Height="60"  Canvas.Left="600" Canvas.Top="400"
-                MouseMove="_canvasRuler_MouseMove" >
+                RenderTransformOrigin="{Binding oRenderTransformOrigin}"
+                PreviewMouseLeftButtonDown="_canvasRuler_PreviewMouseLeftButtonDown"
+                PreviewMouseLeftButtonUp="OnPreviewMouseLeftButtonUp"
+                Width="{Binding oWidth, FallbackValue=400}" Height="60"  Canvas.Left="600" Canvas.Top="400" >
             <Canvas.RenderTransform>
                 <TransformGroup>
-                    <RotateTransform x:Name="_rotateTransform" Angle="0"/>
-                    <TranslateTransform x:Name="_moveTransform" />
+                    <RotateTransform x:Name="_rotateTransform" Angle="{Binding oAngle}"/>
+                    <TranslateTransform x:Name="_moveTransform" 
+                                        X="{Binding oTranslateTransformX}" Y="{Binding oTranslateTransformY}"/>
                 </TransformGroup>
             </Canvas.RenderTransform>
             <Canvas x:Name="_tics" />
             <TextBlock x:Name="_txtBounds" Canvas.Left="10" Canvas.Top="36" Text="X: 10, Y: 10, Length: 400" FontSize="16"/>
             <Thumb x:Name="thumbRotateLeft" Width="20" Height="20" Canvas.Left="10" Canvas.Top="20" 
                    Style="{StaticResource RoundThumbStyle}"
-                   DragDelta="thumbRotateLeft_DragDelta" 
                    PreviewMouseLeftButtonDown="thumbRotateLeft_MouseLeftButtonDown" 
-                   PreviewMouseLeftButtonUp="thumbRotateLeft_PreviewMouseLeftButtonUp"/>
-            <Thumb x:Name="thumbRotateRight" Width="20" Height="20" Canvas.Left="375" Canvas.Top="30" 
+                   PreviewMouseLeftButtonUp="OnPreviewMouseLeftButtonUp"/>
+            <Thumb x:Name="thumbRotateRight" Width="20" Height="20" Canvas.Left="{Binding oThumbLeft, FallbackValue=375}" Canvas.Top="30" 
                     Style="{StaticResource RoundThumbStyle}"
-                   DragDelta="thumbRotateRight_DragDelta"/>
-            <Button x:Name="btnClose" Width="20" Height="20" Canvas.Left="375" Canvas.Top="5" 
+                   PreviewMouseLeftButtonDown="thumbRotateRight_PreviewMouseLeftButtonDown"
+                   PreviewMouseLeftButtonUp="OnPreviewMouseLeftButtonUp"/>
+            <Button x:Name="btnClose" Width="20" Height="20" Canvas.Left="{Binding oThumbLeft, FallbackValue=375}" Canvas.Top="5" 
                     Background="AliceBlue" Opacity="0.7"
-                    Content="X" Click="ButtonClose_Click"/>
+                    PreviewMouseLeftButtonUp="btnClose_PreviewMouseLeftButtonUp"
+                    Content="X" />
             <Line x:Name="leftGrip" 
                   X1="3" 
                   Y1="0" 
@@ -50,7 +53,7 @@
                   Y2="{Binding ActualHeight, ElementName=_canvasRuler}" 
                         StrokeThickness="6" Stroke="DarkGoldenrod"  
                         PreviewMouseLeftButtonDown="LeftGrip_OnPreviewMouseLeftButtonDown" 
-                        PreviewMouseLeftButtonUp="LeftGrip_OnPreviewMouseLeftButtonUp">
+                        PreviewMouseLeftButtonUp="OnPreviewMouseLeftButtonUp">
                 <Line.Style>
                     <Style TargetType="Line">
                         <Style.Triggers>
@@ -69,7 +72,7 @@
                         X2="{Binding ActualWidth, ElementName=_canvasRuler}" 
                         Y2="{Binding ActualHeight, ElementName=_canvasRuler}" 
                         PreviewMouseLeftButtonDown="rightGrip_PreviewMouseLeftButtonDown" 
-                        PreviewMouseLeftButtonUp="rightGrip_PreviewMouseLeftButtonUp">
+                        PreviewMouseLeftButtonUp="OnPreviewMouseLeftButtonUp">
                 <Line.Style>
                     <Style TargetType="Line">
                         <Style.Triggers>

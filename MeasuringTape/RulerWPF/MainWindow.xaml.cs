@@ -21,14 +21,17 @@ namespace RulerWPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        RulerVM _vm = new RulerVM();
+
         public MainWindow()
         {
+            DataContext = _vm;
             InitializeComponent();
         }
 
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            _canvasRuler.Draggable(true);
+            //_canvasRuler.Draggable(true);
             DrawTicks();
         }
 
@@ -90,7 +93,7 @@ namespace RulerWPF
             loc.Offset(_moveTransform.X, _moveTransform.Y);
 
             loc = this.PointToScreen(loc);
-            _txtBounds.Text = string.Format("X: {0:0}, Y: {1:0}, Length: {2:0}, Angle: {3:0.000}",
+            _txtBounds.Text = string.Format("X: {0:0}, Y: {1:0}, Length: {2:0}, Angle: {3:0.0}°",
                 loc.X, loc.Y, _canvasRuler.Width, _rotateTransform.Angle);
         }
 
@@ -100,68 +103,55 @@ namespace RulerWPF
         }
 
         Point _startPosition, _center;
-        bool _isResizingR = false, _isResizingL = false, _isRotatingL = false;
-        bool _mouseMove = false;
         private void window_PreviewMouseMove(object sender, MouseEventArgs e)
         {
             const double MIN_WIDTH = 100;
 
-            if (_mouseMove)
-                return;
-            _mouseMove = true;
-
             Point currentPosition = Mouse.GetPosition(null);
-            if (_isResizingR || _isResizingL)
+            double diff = CalculateDiff(currentPosition);
+            if (diff == 0)
+                return;
+
+            //Debug.WriteLine("Diff: " + diff);
+
+            if (_vm.MouseMoveOp == MouseMoveOp.LeftSize || _vm.MouseMoveOp == MouseMoveOp.RightSize)
             {
-                double diff = CalculateDiff(currentPosition);
-                if(diff == 0)
-                {
-                    _mouseMove = false;
-                    return;
-                }
 
-                Debug.WriteLine("Diff: " + diff);
-
-                double left = Canvas.GetLeft(_canvasRuler);
-                if (_canvasRuler.Width + diff > MIN_WIDTH) //min size
+                if (_vm.oWidth + diff > MIN_WIDTH) //min size
                 {
-                    if (_isResizingL)
+                    _vm.oWidth += diff;
+                   if (_vm.MouseMoveOp == MouseMoveOp.LeftSize)
                     {
-                        _canvasRuler.Width += diff;
-                        _moveTransform.X -= diff;
-                    }
-                    else
-                    {
-                        _canvasRuler.Width += diff;
+                        _vm.oTranslateTransformX -= diff;
                     }
 
-                    Canvas.SetLeft(thumbRotateRight, _canvasRuler.Width - 30);
-                    Canvas.SetLeft(btnClose, _canvasRuler.Width - 30);
+                    _vm.oThumbLeft = _vm.oWidth - 30;
                 }
 
                 DrawTicks();
 
-                _startPosition = currentPosition;
             }
-            else if (_isRotatingL)
+            else if (_vm.MouseMoveOp == MouseMoveOp.LeftRotate || _vm.MouseMoveOp == MouseMoveOp.RightRotate)
             {
                 //Point currentPosition = Mouse.GetPosition(null);
 
                 Vector startToCenter = (_center - _startPosition);
                 Vector currToCenter = (_center - currentPosition);
-
-                //Vector diffVector = (currToCenter - startToCenter);
                 double deltaAngle = Vector.AngleBetween(startToCenter, currToCenter);
 
-                SetAngle(_rotateTransform.Angle + deltaAngle);// (e.VerticalChange < 0 ? 1 : -1));
-
-                _startPosition = currentPosition;
+                SetAngle(_vm.oAngle + deltaAngle);// (e.VerticalChange < 0 ? 1 : -1));
+            }
+            else if (_vm.MouseMoveOp == MouseMoveOp.Move)
+            {
+                Vector diffV = currentPosition - _startPosition;
+                _vm.oTranslateTransformX += diffV.X;
+                _vm.oTranslateTransformY += diffV.Y;
             }
 
+            _startPosition = currentPosition;
             _center = _canvasRuler.PointToScreen(new Point(_canvasRuler.Width / 2, _canvasRuler.Height / 2));
 
             DrawInfo();
-            _mouseMove = false;
         }
 
         private double CalculateDiff(Point currentPosition)
@@ -176,89 +166,70 @@ namespace RulerWPF
             return diff;
         }
 
-        private void rightGrip_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            if (Mouse.Capture(rightGrip))
-            {
-                _isResizingR = true;
-                _startPosition = Mouse.GetPosition(null);
-                _center = _canvasRuler.PointToScreen(new Point(_canvasRuler.Width / 2, _canvasRuler.Height / 2));
-                _canvasRuler.RenderTransformOrigin = new Point(0,0);
-                e.Handled = true;
-            }
+            _vm.MouseMoveOp = MouseMoveOp.None;
+            Mouse.Capture(null);
         }
 
-        private void rightGrip_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void rightGrip_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (_isResizingR)
+            if (Mouse.Capture(sender as IInputElement))
             {
-                _isResizingR = false;
-                Mouse.Capture(null);
+                _vm.MouseMoveOp = MouseMoveOp.RightSize;
+                _startPosition = Mouse.GetPosition(null);
+                _center = _canvasRuler.PointToScreen(new Point(_canvasRuler.Width / 2, _canvasRuler.Height / 2));
+                _vm.oRenderTransformOrigin = new Point(0,0);
+                e.Handled = true;
             }
         }
 
         private void LeftGrip_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (Mouse.Capture(leftGrip))
+            if (Mouse.Capture(sender as IInputElement))
             {
-                _isResizingL = true;
+                _vm.MouseMoveOp = MouseMoveOp.LeftSize;
                 _startPosition = Mouse.GetPosition(null);
                 _center = _canvasRuler.PointToScreen(new Point(_canvasRuler.Width / 2, _canvasRuler.Height / 2));
-                _canvasRuler.RenderTransformOrigin = new Point(1,0);
+                _vm.oRenderTransformOrigin = new Point(0,0);
                 e.Handled = true;
             }
         }
 
-        private void LeftGrip_OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
-        {
-            if (_isResizingL)
-            {
-                _isResizingL = false;
-                Mouse.Capture(null);
-            }
-        }
-
-        private void _canvasRuler_MouseMove(object sender, MouseEventArgs e)
-        {
-            DrawInfo();
-        }
-
         private void thumbRotateLeft_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (Mouse.Capture(thumbRotateLeft))
+            if (Mouse.Capture(sender as IInputElement))
             {
+                _vm.MouseMoveOp = MouseMoveOp.LeftRotate;
                 _startPosition = Mouse.GetPosition(null);
-                _isRotatingL = true;
+                _vm.oRenderTransformOrigin = new Point(0.5, 0.5);
+                e.Handled = true;
             }
         }
 
-        private void thumbRotateLeft_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void thumbRotateRight_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (_isRotatingL)
+            if (Mouse.Capture(sender as IInputElement))
             {
-                Mouse.Capture(null);
+                _vm.MouseMoveOp = MouseMoveOp.RightRotate;
+                _startPosition = Mouse.GetPosition(null);
+                _vm.oRenderTransformOrigin = new Point(0.5, 0.5);
+                e.Handled = true;
             }
-            _isRotatingL = false;
-       }
-
-        private void thumbRotateLeft_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
-        {
-            //Point currentPosition = Mouse.GetPosition(null);
-
-            //Vector startToCenter = (_center - _startPosition);
-            //Vector currToCenter = (_center - currentPosition);
-
-            //Vector diffVector = (currToCenter - startToCenter);
-            //double deltaAngle = Vector.AngleBetween(startToCenter, currToCenter);
-
-            //SetAngle(_rotateTransform.Angle + deltaAngle);// (e.VerticalChange < 0 ? 1 : -1));
-
-            //_startPosition = currentPosition;
         }
 
-        private void thumbRotateRight_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
+        private void _canvasRuler_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            SetAngle(_rotateTransform.Angle + (e.VerticalChange > 0 ? 1 : -1));
+            if (e.Source == _canvasRuler)
+            {
+                if (Mouse.Capture(e.Source as IInputElement))
+                {
+                    _vm.MouseMoveOp = MouseMoveOp.Move;
+                    _startPosition = Mouse.GetPosition(null);
+                    _vm.oRenderTransformOrigin = new Point(0, 0);
+                    e.Handled = true;
+                }
+            }
         }
 
         private void SetAngle(double angle)
@@ -270,7 +241,7 @@ namespace RulerWPF
 
             CompensateOrigin(true);
 
-            _rotateTransform.Angle = angle;
+            _vm.oAngle = angle;
         }
 
         private void CompensateOrigin(bool moveToCenter)
@@ -283,14 +254,14 @@ namespace RulerWPF
             {
                 //if (_canvasRuler.RenderTransformOrigin.X != 0.5 && _canvasRuler.RenderTransformOrigin.Y != 0.5)
                 {
-                    _canvasRuler.RenderTransformOrigin = new Point(0.95, 0.5);
+                    _vm.oRenderTransformOrigin = new Point(0.5, 0.5);
                     //_moveTransform.X += 10; // ptCenter.X;
                     //_moveTransform.Y += ptCenter.Y;
                 }
             }
         }
 
-        private void ButtonClose_Click(object sender, RoutedEventArgs e)
+        private void btnClose_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             this.Close();
         }
