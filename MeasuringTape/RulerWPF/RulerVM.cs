@@ -66,13 +66,39 @@ namespace RulerWPF
 
         public void UpdateRenderTransformOrigin(Point newOrigin, UIElement element)
         {
+            double angle = oAngle;
+            oAngle = 0;
             Point oldOrigin = Origin(element);
-            _origin = newOrigin;
+            oRenderTransformOrigin = newOrigin;
             newOrigin = Origin(element);
+            oAngle = angle;
 
             UpdateTranslateTransform(oldOrigin, newOrigin);
+        }
 
-            OnPropertyChanged("");
+        public void SetAngle(double angle, bool snapToGrid)
+        {
+            if (angle > 360)
+                angle -= 360;
+            if (angle < 0)
+                angle += 360;
+
+            if(snapToGrid)
+                angle = SnapToGrid(angle);
+
+            oAngle = angle;
+        }
+
+        private double SnapToGrid(double angle)
+        {
+            double[] snapAngles = new double[] { 0, 90, 180, 360 };
+            foreach (double a in snapAngles)
+            {
+                double diff = Math.Abs(a - angle);
+                if (diff < 0.5)
+                    return a;
+            }
+            return angle;
         }
 
         private Point Origin(Point origin)
@@ -92,8 +118,11 @@ namespace RulerWPF
 
             Vector delta = originNew - originOld;
 
-            //_translateTransformX -= oWidth; // delta.X;
-            //_translateTransformY -= oWidth; // delta.Y;
+            //double angle = oAngle;
+            //oAngle = 0;
+            //oTranslateTransformX -= delta.X;
+            //oTranslateTransformY -= delta.Y;
+            //oAngle = angle;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

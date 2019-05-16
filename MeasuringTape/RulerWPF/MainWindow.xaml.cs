@@ -139,7 +139,7 @@ namespace RulerWPF
                 Vector currToCenter = (_vm.Origin(_canvasRuler) - currentPosition);
                 double deltaAngle = Vector.AngleBetween(startToCenter, currToCenter);
 
-                SetAngle(_vm.oAngle + deltaAngle);// (e.VerticalChange < 0 ? 1 : -1));
+                _vm.SetAngle(_vm.oAngle + deltaAngle, false);
             }
             else if (_vm.MouseMoveOp == MouseMoveOp.Move)
             {
@@ -149,8 +149,6 @@ namespace RulerWPF
             }
 
             _startPosition = currentPosition;
-            //Point origin = new Point(_vm.oRenderTransformOrigin.X * _vm.oWidth, _vm.oRenderTransformOrigin.Y * _canvasRuler.ActualHeight);
-            //_origin = _canvasRuler.PointToScreen(origin);
 
             DrawInfo();
         }
@@ -170,7 +168,9 @@ namespace RulerWPF
         private void OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             _vm.MouseMoveOp = MouseMoveOp.None;
+            _vm.SetAngle(_vm.oAngle, true);
             Mouse.Capture(null);
+            DrawInfo();
         }
 
         private void LeftGrip_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -231,35 +231,6 @@ namespace RulerWPF
                     _startPosition = Mouse.GetPosition(null);
                     //_vm.UpdateRenderTransformOrigin(new Point(0, 0), _canvasRuler);
                     e.Handled = true;
-                }
-            }
-        }
-
-        private void SetAngle(double angle)
-        {
-            if (angle > 360)
-                angle -= 360;
-            if (angle < 0)
-                angle += 360;
-
-            CompensateOrigin(true);
-
-            _vm.oAngle = angle;
-        }
-
-        private void CompensateOrigin(bool moveToCenter)
-        {
-            Point ptLeftTop = _canvasRuler.PointToScreen(new Point());
-            Point ptCenter = new Point(_canvasRuler.Width / 2, _canvasRuler.Height / 2);
-            Vector delta = ptCenter - ptLeftTop;
-
-            if(moveToCenter)
-            {
-                //if (_canvasRuler.RenderTransformOrigin.X != 0.5 && _canvasRuler.RenderTransformOrigin.Y != 0.5)
-                {
-                    //_vm.UpdateRenderTransformOrigin(new Point(0.5, 0.5), _canvasRuler);
-                    //_moveTransform.X += 10; // ptCenter.X;
-                    //_moveTransform.Y += ptCenter.Y;
                 }
             }
         }
