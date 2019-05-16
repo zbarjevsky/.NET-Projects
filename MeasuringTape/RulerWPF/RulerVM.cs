@@ -22,6 +22,7 @@ namespace RulerWPF
     public class RulerVM : INotifyPropertyChanged
     {
         public MouseMoveOp MouseMoveOp { get; set; } = MouseMoveOp.None;
+        public FrameworkElement CurrentElement { get; set; } = null;
 
         private double _angle;
         public double oAngle { get { return _angle; } set { _angle = value; OnPropertyChanged(); } }
@@ -54,9 +55,15 @@ namespace RulerWPF
             oAngle = 0;
             oWidth = 400;
             oHeight = 60;
-            oRenderTransformOrigin = new Point(0.5, 0.5);
+            oRenderTransformOrigin = new Point();
             oTranslateTransformX = oTranslateTransformY = 0;
             oThumbLeft = 375;
+        }
+
+        public void UpdateCurrentOperation(MouseMoveOp operation, FrameworkElement element)
+        {
+            CurrentElement = element;
+            MouseMoveOp = operation;
         }
 
         public Point Origin(UIElement element)
@@ -66,19 +73,22 @@ namespace RulerWPF
 
         public void UpdateRenderTransformOrigin(Point newOrigin, UIElement element)
         {
-            double angle = oAngle;
-            oAngle = 0;
+            if(newOrigin == _origin)
+                return;
+
+            //double angle = oAngle;
+            //oAngle = 0;
             Point oldOrigin = Origin(element);
             oRenderTransformOrigin = newOrigin;
             newOrigin = Origin(element);
-            oAngle = angle;
+            //oAngle = angle;
 
-            UpdateTranslateTransform(oldOrigin, newOrigin);
+            CompensateTranslateTransform(oldOrigin, newOrigin);
         }
 
         public void SetAngle(double angle, bool snapToGrid)
         {
-            if (angle > 360)
+            if (angle >= 360)
                 angle -= 360;
             if (angle < 0)
                 angle += 360;
@@ -91,11 +101,11 @@ namespace RulerWPF
 
         private double SnapToGrid(double angle)
         {
-            double[] snapAngles = new double[] { 0, 90, 180, 360 };
+            double[] snapAngles = new double[] { 0, 90, 180, 270, 360 };
             foreach (double a in snapAngles)
             {
                 double diff = Math.Abs(a - angle);
-                if (diff < 0.5)
+                if (diff < 45)
                     return a;
             }
             return angle;
@@ -111,18 +121,49 @@ namespace RulerWPF
             return origin;
         }
 
-        private void UpdateTranslateTransform(Point originOld, Point originNew)
+        public Point Center(FrameworkElement currentElement)
+        {
+            Point center = new Point(currentElement.ActualWidth/2.0, currentElement.ActualHeight/2.0);
+            return currentElement.PointToScreen(center);
+        }
+
+        private void CompensateTranslateTransform(Point originOld, Point originNew)
         {
             if (originOld == originNew)
                 return;
 
-            Vector delta = originNew - originOld;
+            Point left = CurrentElement.PointToScreen(new Point());
+            Point right = CurrentElement.PointToScreen(new Point(CurrentElement.ActualWidth, 0));
 
-            //double angle = oAngle;
-            //oAngle = 0;
-            //oTranslateTransformX -= delta.X;
-            //oTranslateTransformY -= delta.Y;
-            //oAngle = angle;
+            Vector deltaOrigin = originNew - originOld;
+            Vector deltaPosition = left - right;
+            Vector delta = deltaOrigin + deltaPosition;
+
+
+            double angle = Math.PI * (oAngle) / 180.0; //radian
+            double sin = Math.Sin(angle);
+            double cos =  Math.Cos(angle);
+
+            if (oAngle == 0)
+            {
+                oTranslateTransformX += deltaOrigin.Y; 
+                oTranslateTransformY += deltaOrigin.Y;
+            }
+            if (oAngle == 90)
+            {
+                oTranslateTransformX -= deltaOrigin.Y;
+                oTranslateTransformY += deltaOrigin.Y;
+            }
+            if (oAngle == 180)
+            {
+                oTranslateTransformX += 2 * deltaOrigin.X;
+                //oTranslateTransformY += deltaOrigin.X;
+            }
+            if (oAngle == 270)
+            {
+                oTranslateTransformX += deltaOrigin.Y;
+                oTranslateTransformY += deltaOrigin.Y;
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

@@ -47,7 +47,7 @@ namespace RulerWPF
             double tick2Size = _canvasRuler.ActualHeight / 3;
             double tick3Size = _canvasRuler.ActualHeight / 3;
 
-            double tick1Interval = 1;
+            //double tick1Interval = 1;
             double tick2Interval = 5;
             double tick3Interval = 10;
 
@@ -89,10 +89,7 @@ namespace RulerWPF
 
         private void DrawInfo()
         {
-            Point loc = new Point(Canvas.GetLeft(_canvasRuler), Canvas.GetTop(_canvasRuler));
-            loc.Offset(_moveTransform.X, _moveTransform.Y);
-
-            loc = this.PointToScreen(loc);
+            Point loc = _canvasRuler.PointToScreen(new Point());
             _txtBounds.Text = string.Format("X: {0:0}, Y: {1:0}, Length: {2:0}, Angle: {3:0.0}°",
                 loc.X, loc.Y, _canvasRuler.Width, _rotateTransform.Angle);
         }
@@ -105,15 +102,22 @@ namespace RulerWPF
         Point _startPosition;
         private void window_PreviewMouseMove(object sender, MouseEventArgs e)
         {
-            const double MIN_WIDTH = 100;
+            if(_vm.MouseMoveOp == MouseMoveOp.None)
+                return;
 
             Point currentPosition = Mouse.GetPosition(null);
             double diff = CalculateDiff(currentPosition);
-            if (diff == 0)
+            if (diff == 0) //no change
                 return;
 
-            //Debug.WriteLine("Diff: " + diff);
+            Vector distance = currentPosition - _vm.Center(_vm.CurrentElement);
+            if (distance.Length > 350) //too far - disengage
+            {
+                OnPreviewMouseLeftButtonUp(null, null);
+                return;
+            }
 
+            const double MIN_WIDTH = 100;
             if (_vm.MouseMoveOp == MouseMoveOp.LeftSize || _vm.MouseMoveOp == MouseMoveOp.RightSize)
             {
 
@@ -167,7 +171,7 @@ namespace RulerWPF
 
         private void OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            _vm.MouseMoveOp = MouseMoveOp.None;
+            _vm.UpdateCurrentOperation(MouseMoveOp.None, null);
             _vm.SetAngle(_vm.oAngle, true);
             Mouse.Capture(null);
             DrawInfo();
@@ -177,7 +181,7 @@ namespace RulerWPF
         {
             if (Mouse.Capture(sender as IInputElement))
             {
-                _vm.MouseMoveOp = MouseMoveOp.LeftSize;
+                _vm.UpdateCurrentOperation(MouseMoveOp.LeftSize, leftGrip);
                 _startPosition = Mouse.GetPosition(null);
                 _vm.UpdateRenderTransformOrigin(new Point(1,0), _canvasRuler);
                 //Point origin = new Point(_vm.oRenderTransformOrigin.X * _vm.oWidth, _vm.oRenderTransformOrigin.Y * _canvasRuler.ActualHeight);
@@ -190,7 +194,7 @@ namespace RulerWPF
         {
             if (Mouse.Capture(sender as IInputElement))
             {
-                _vm.MouseMoveOp = MouseMoveOp.RightSize;
+                _vm.UpdateCurrentOperation(MouseMoveOp.RightSize, rightGrip);
                 _startPosition = Mouse.GetPosition(null);
                 _vm.UpdateRenderTransformOrigin(new Point(0,0), _canvasRuler);
                 //Point origin = new Point(_vm.oRenderTransformOrigin.X * _vm.oWidth, _vm.oRenderTransformOrigin.Y * _canvasRuler.ActualHeight);
@@ -203,7 +207,7 @@ namespace RulerWPF
         {
             if (Mouse.Capture(sender as IInputElement))
             {
-                _vm.MouseMoveOp = MouseMoveOp.LeftRotate;
+                _vm.UpdateCurrentOperation(MouseMoveOp.LeftRotate, thumbRotateLeft);
                 _startPosition = Mouse.GetPosition(null);
                 _vm.UpdateRenderTransformOrigin(new Point(1, 0), _canvasRuler);
                 e.Handled = true;
@@ -214,7 +218,7 @@ namespace RulerWPF
         {
             if (Mouse.Capture(sender as IInputElement))
             {
-                _vm.MouseMoveOp = MouseMoveOp.RightRotate;
+                _vm.UpdateCurrentOperation(MouseMoveOp.RightRotate, thumbRotateRight);
                 _startPosition = Mouse.GetPosition(null);
                 _vm.UpdateRenderTransformOrigin(new Point(0, 0), _canvasRuler);
                 e.Handled = true;
@@ -227,7 +231,7 @@ namespace RulerWPF
             {
                 if (Mouse.Capture(_canvasRuler))
                 {
-                    _vm.MouseMoveOp = MouseMoveOp.Move;
+                    _vm.UpdateCurrentOperation(MouseMoveOp.Move, _canvasRuler);
                     _startPosition = Mouse.GetPosition(null);
                     //_vm.UpdateRenderTransformOrigin(new Point(0, 0), _canvasRuler);
                     e.Handled = true;
