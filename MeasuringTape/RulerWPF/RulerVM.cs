@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 
 namespace RulerWPF
 {
@@ -37,6 +38,9 @@ namespace RulerWPF
         private double _height;
         public double oHeight { get { return _height; } set { _height = value; OnPropertyChanged(); } }
 
+        private Cursor _cursor;
+        public Cursor oSizeCursor { get { return _cursor; } set { _cursor = value; OnPropertyChanged(); } }
+
         private double _thumbLeft;
         public double oThumbLeft { get { return _thumbLeft; } set { _thumbLeft = value; OnPropertyChanged(); } }
 
@@ -59,6 +63,7 @@ namespace RulerWPF
             oRenderTransformOrigin = new Point();
             oTranslateTransformX = oTranslateTransformY = 0;
             oThumbLeft = 375;
+            oSizeCursor = Cursors.SizeWE;
         }
 
         public void UpdateCurrentOperation(MouseMoveOp operation, FrameworkElement element)
@@ -77,12 +82,9 @@ namespace RulerWPF
             if(newOrigin == _origin)
                 return;
 
-            //double angle = oAngle;
-            //oAngle = 0;
             Point oldOrigin = Origin(element);
             oRenderTransformOrigin = newOrigin;
             newOrigin = Origin(element);
-            //oAngle = angle;
 
             CompensateTranslateTransform(oldOrigin, newOrigin);
         }
@@ -98,6 +100,27 @@ namespace RulerWPF
                 angle = SnapToGrid(angle);
 
             oAngle = angle;
+
+            UpdateSizeCursor(); 
+        }
+
+        private Cursor[] _sizeCursors = {Cursors.SizeWE, Cursors.SizeNWSE, Cursors.SizeNS, Cursors.SizeNESW};
+        private double[] _angleSectors = { 0, 45, 90, 135, 180, 225, 270, 315, 360 };
+
+        private void UpdateSizeCursor()
+        {
+            double angle = oAngle + 23; //shift for easy calculations
+            if (angle > 360)
+                angle -= 360;
+
+            for (int i = 0; i < _angleSectors.Length-1; i++)
+            {
+                if(angle >= _angleSectors[i] && angle < _angleSectors[i + 1])
+                {
+                    oSizeCursor = _sizeCursors[i%4];
+                    break;
+                }
+            }
         }
 
         private double SnapToGrid(double angle)
@@ -139,18 +162,21 @@ namespace RulerWPF
 
             Vector deltaOrigin = originNew - originOld;
 
-            double sign = Math.Sign(deltaOrigin.X);
-            double deltaX = sign * (oWidth - Math.Abs(deltaOrigin.X));
+            double signX = deltaOrigin.X < 0 ? -1 : 1;
+            double signY = deltaOrigin.Y < 0 ? -1 : 1;
+            if (deltaOrigin.X == 0)
+                signX = signY;
 
-            if ((oAngle >= 0 && oAngle < 90) || (oAngle >= 270 && oAngle < 360))
+            double deltaX = signX * (oWidth - Math.Abs(deltaOrigin.X));
+
+            if ((oAngle >= 0 && oAngle <= 90) || (oAngle > 270 && oAngle < 360))
             {
-                //sin(30) = 0.5, cos(30) = 0.866 sin(60) = 0.866 cos(60) = 0.5
-                oTranslateTransformX -= deltaX; // sin * deltaOrigin.X; // L(400,0) R(-400,0)
+                oTranslateTransformX -= deltaX; 
             }
 
-            if (oAngle >= 90 && oAngle < 270) // sin = 1, cos = 0
+            if (oAngle > 90 && oAngle <= 270) 
             {
-                oTranslateTransformX += deltaX + 2 * deltaOrigin.X; // L(0,400) R(0,-400)
+                oTranslateTransformX += deltaX + 2 * deltaOrigin.X; 
             }
 
             oTranslateTransformY += deltaOrigin.Y;

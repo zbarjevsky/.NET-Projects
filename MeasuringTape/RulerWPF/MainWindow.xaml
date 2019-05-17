@@ -20,7 +20,7 @@
         <WindowChrome CaptionHeight="0" ResizeBorderThickness="5" />
     </WindowChrome.WindowChrome>
     <Canvas x:Name="_canvasMain">
-        <Canvas x:Name="_canvasRuler" Opacity="1.0" Background="Orange" Cursor="Hand" 
+        <Canvas x:Name="_canvasRuler" Opacity="1.0" Background="Orange" Cursor="SizeAll" 
                 RenderTransformOrigin="{Binding oRenderTransformOrigin}"
                 PreviewMouseLeftButtonDown="_canvasRuler_PreviewMouseLeftButtonDown"
                 PreviewMouseLeftButtonUp="OnPreviewMouseLeftButtonUp"
@@ -35,15 +35,15 @@
             <Canvas x:Name="_tics" />
             <TextBlock x:Name="_txtBounds" Canvas.Left="10" Canvas.Top="36" Text="X: 10, Y: 10, Length: 400" FontSize="16"/>
             <Thumb x:Name="thumbRotateLeft" Width="20" Height="20" Canvas.Left="10" Canvas.Top="20" 
-                   Style="{StaticResource RoundThumbStyle}"
+                   Style="{StaticResource RoundThumbStyle}" Cursor="Hand"
                    PreviewMouseLeftButtonDown="thumbRotateLeft_MouseLeftButtonDown" 
                    PreviewMouseLeftButtonUp="OnPreviewMouseLeftButtonUp"/>
             <Thumb x:Name="thumbRotateRight" Width="20" Height="20" Canvas.Left="{Binding oThumbLeft, FallbackValue=375}" Canvas.Top="30" 
-                    Style="{StaticResource RoundThumbStyle}"
+                   Style="{StaticResource RoundThumbStyle}" Cursor="Hand"
                    PreviewMouseLeftButtonDown="thumbRotateRight_PreviewMouseLeftButtonDown"
                    PreviewMouseLeftButtonUp="OnPreviewMouseLeftButtonUp"/>
             <Button x:Name="btnClose" Width="20" Height="20" Canvas.Left="{Binding oThumbLeft, FallbackValue=375}" Canvas.Top="5" 
-                    Background="AliceBlue" Opacity="0.7"
+                    Background="AliceBlue" Opacity="0.7" Cursor="Arrow"
                     PreviewMouseLeftButtonUp="btnClose_PreviewMouseLeftButtonUp"
                     Content="X" />
             <Line x:Name="leftGrip" 
@@ -59,7 +59,7 @@
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter  Property="Opacity" Value="1.0"/>
-                                <Setter Property="Cursor" Value="SizeWE"/>
+                                <Setter Property="Cursor" Value="{Binding oSizeCursor, FallbackValue=SizeWE}"/>
                             </Trigger>
                         </Style.Triggers>
                     </Style>
@@ -78,7 +78,7 @@
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
                                 <Setter  Property="Opacity" Value="1.0"/>
-                                <Setter Property="Cursor" Value="SizeWE"/>
+                                <Setter Property="Cursor" Value="{Binding oSizeCursor, FallbackValue=SizeWE}"/>
                             </Trigger>
                         </Style.Triggers>
                     </Style>
