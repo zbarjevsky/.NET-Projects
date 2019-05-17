@@ -15,6 +15,7 @@
         Loaded="MainWindow_OnLoaded"
         LocationChanged="Window_LocationChanged"
         PreviewMouseMove="window_PreviewMouseMove"
+        PreviewKeyDown="Window_PreviewKeyDown"
         Title="Ruler" Height="600" Width="1200">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="0" ResizeBorderThickness="5" />

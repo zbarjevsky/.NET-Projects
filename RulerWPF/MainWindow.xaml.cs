@@ -70,7 +70,11 @@ namespace RulerWPF
             RulerTicsData r = new RulerTicsData(_vm.MeasurementUnits, _canvasRuler);
             for (int i = 1; i < r.tick_count; i++)
             {
-                double tickSize = r.tick1Height;
+                double tickSize = r.tick0Height;
+                if (i % 2 == 0)
+                {
+                    tickSize = r.tick1Height;
+                }
                 if (i % r.tickHalfCount == 0)
                 {
                     tickSize = r.tickHalfHeight;
@@ -82,8 +86,8 @@ namespace RulerWPF
 
                 Line line = new Line();
                 line.Stroke = Brushes.Black;
-                line.StrokeThickness = 1;
-                line.X1 = 1 + i * r.tick_offset;
+                line.StrokeThickness = 0.8;
+                line.X1 = 1 + i * r.tick_width;
                 line.X2 = line.X1;
                 line.Y1 = 0;
                 line.Y2 = tickSize;
@@ -94,8 +98,10 @@ namespace RulerWPF
                 {
                     TextBlock txt = new TextBlock();
                     txt.FontSize = 16;
-                    txt.Text = (i / r.tick_text_div).ToString();
-                    Canvas.SetLeft(txt, line.X2 - 8);
+                    txt.TextAlignment = TextAlignment.Center;
+                    txt.Width = 60;
+                    txt.Text = (i / r.tick_text_scale).ToString();
+                    Canvas.SetLeft(txt, line.X1 - 30);
                     Canvas.SetTop(txt, line.Y2);
                     _tics.Children.Add(txt);
                 }
@@ -118,6 +124,39 @@ namespace RulerWPF
 
         private void Window_LocationChanged(object sender, EventArgs e)
         {
+            DrawInfo();
+        }
+
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            double delta = (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) ? 25 : 1;
+            bool changeSize = (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift));
+
+            if(changeSize) // width or angle
+            {
+                if (e.Key == Key.Right)
+                    _vm.oWidth += delta;
+                if (e.Key == Key.Left)
+                    _vm.oWidth -= delta;
+                if (e.Key == Key.Up)
+                    _vm.oAngle -= delta;
+                if (e.Key == Key.Down)
+                    _vm.oAngle += delta;
+
+                DrawTicks();
+            }
+            else //move
+            {
+                if (e.Key == Key.Right)
+                    _moveTransform.X += delta;
+                if (e.Key == Key.Left)
+                    _moveTransform.X -= delta;
+                if (e.Key == Key.Up)
+                    _moveTransform.Y -= delta;
+                if (e.Key == Key.Down)
+                    _moveTransform.Y += delta;
+            }
+
             DrawInfo();
         }
 
@@ -151,12 +190,9 @@ namespace RulerWPF
                     {
                         _vm.oTranslateTransformX -= diff;
                     }
-
-                    _vm.oThumbLeft = _vm.oWidth - 30;
                 }
 
                 DrawTicks();
-
             }
             else if (_vm.MouseMoveOp == MouseMoveOp.LeftRotate || _vm.MouseMoveOp == MouseMoveOp.RightRotate)
             {

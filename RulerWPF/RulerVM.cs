@@ -48,7 +48,7 @@ namespace RulerWPF
         public Point oRenderTransformOrigin { get { return _origin; } set { _origin = value; OnPropertyChanged(); } }
 
         private double _width = 400;
-        public double oWidth { get { return _width; } set { _width = value; OnPropertyChanged(); } }
+        public double oWidth { get { return _width; } set { _width = value; oThumbLeft = value - 30; OnPropertyChanged(); } }
 
         private double _height = 60;
         public double oHeight { get { return _height; } set { _height = value; OnPropertyChanged(); } }
