@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowStyle="None"
         ResizeMode="NoResize"
-        WindowState="Maximized"
+        WindowState="Normal"
         AllowsTransparency="True"
         Topmost="True"
         Background="Transparent"
@@ -58,7 +58,7 @@
                     <Style TargetType="Line">
                         <Style.Triggers>
                             <Trigger Property="IsMouseOver" Value="True">
-                                <Setter  Property="Opacity" Value="1.0"/>
+                                <Setter Property="Opacity" Value="1.0"/>
                                 <Setter Property="Cursor" Value="{Binding oSizeCursor, FallbackValue=SizeWE}"/>
                             </Trigger>
                         </Style.Triggers>

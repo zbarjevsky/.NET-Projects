@@ -31,8 +31,15 @@ namespace RulerWPF
 
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            //_canvasRuler.Draggable(true);
             DrawTicks();
+
+            Rect bounds = new Rect(
+                new Point(SystemParameters.VirtualScreenLeft, SystemParameters.VirtualScreenTop),
+                new Size(SystemParameters.VirtualScreenWidth, SystemParameters.VirtualScreenHeight));
+            this.Left = bounds.Left;
+            this.Top = bounds.Top;
+            this.Width = bounds.Width;
+            this.Height = bounds.Height;
         }
 
         private void DrawTicks()
