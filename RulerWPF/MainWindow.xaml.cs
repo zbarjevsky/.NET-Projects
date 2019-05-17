@@ -51,6 +51,7 @@ namespace RulerWPF
             MenuItem mnu = sender as MenuItem;
             int units = int.Parse(mnu.Tag.ToString());
             _vm.MeasurementUnits = (MeasurementUnits)units;
+            DrawTicks();
         }
 
         private void AngleMenuItem_Click(object sender, RoutedEventArgs e)
@@ -66,45 +67,34 @@ namespace RulerWPF
         {
             _tics.Children.Clear();
 
-            double divider = 10;
-            double tick_count = _canvasRuler.ActualWidth / divider;
-            double tick_offset = _canvasRuler.ActualWidth / tick_count;
-
-            double tick1Size = _canvasRuler.ActualHeight / 4;
-            double tick2Size = _canvasRuler.ActualHeight / 3;
-            double tick3Size = _canvasRuler.ActualHeight / 3;
-
-            //double tick1Interval = 1;
-            double tick2Interval = 5;
-            double tick3Interval = 10;
-
-            for (int i = 1; i < tick_count; i++)
+            RulerTicsData r = new RulerTicsData(_vm.MeasurementUnits, _canvasRuler);
+            for (int i = 1; i < r.tick_count; i++)
             {
-                double tickSize = tick1Size;
-                if (i % tick2Interval == 0)
+                double tickSize = r.tick1Height;
+                if (i % r.tickHalfCount == 0)
                 {
-                    tickSize = tick2Size;
+                    tickSize = r.tickHalfHeight;
                 }
-                if (i % tick3Interval == 0)
+                if (i % r.tickTextCount == 0)
                 {
-                    tickSize = tick3Size;
+                    tickSize = r.tickTextHeight;
                 }
 
                 Line line = new Line();
                 line.Stroke = Brushes.Black;
                 line.StrokeThickness = 1;
-                line.X1 = 1 + i * tick_offset;
+                line.X1 = 1 + i * r.tick_offset;
                 line.X2 = line.X1;
                 line.Y1 = 0;
                 line.Y2 = tickSize;
 
                 _tics.Children.Add(line);
 
-                if (i % tick3Interval == 0) //add text
+                if (i % r.tickTextCount == 0) //add text
                 {
                     TextBlock txt = new TextBlock();
                     txt.FontSize = 16;
-                    txt.Text = (divider * i).ToString();
+                    txt.Text = (i / r.tick_text_div).ToString();
                     Canvas.SetLeft(txt, line.X2 - 8);
                     Canvas.SetTop(txt, line.Y2);
                     _tics.Children.Add(txt);
@@ -119,10 +109,11 @@ namespace RulerWPF
                 return;
 
             string units = _vm.MeasurementUnits.GetDescription();
+            RulerTicsData r = new RulerTicsData(_vm.MeasurementUnits, _canvasRuler);
 
             Point loc = _canvasRuler.PointToScreen(new Point());
-            _txtBounds.Text = string.Format("X: {0:0}, Y: {1:0}, Length: {2:0} {3}, Angle: {4:0.0}°",
-                loc.X, loc.Y, _vm.oWidth,  units, _vm.oAngle);
+            _txtBounds.Text = string.Format("X: {0:0}, Y: {1:0}, Length: {2:0.0} {3}, Angle: {4:0.0}°",
+                loc.X, loc.Y, r.WidthInSelectedUnits(_vm.oWidth),  units, _vm.oAngle);
         }
 
         private void Window_LocationChanged(object sender, EventArgs e)

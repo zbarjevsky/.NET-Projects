@@ -64,6 +64,7 @@
     <Compile Include="Tools\DraggableExtension.cs" />
     <Compile Include="Tools\Converters.cs" />
     <Compile Include="Tools\ExtensionMethods.cs" />
+    <Compile Include="Tools\RulerTicsData.cs" />
     <Compile Include="Tools\Utils.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>

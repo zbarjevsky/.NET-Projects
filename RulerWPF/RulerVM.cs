@@ -28,8 +28,8 @@ namespace RulerWPF
         Pixels = 0,
         [Description("in")]
         Inches = 1,
-        [Description("mm")]
-        Millimeters = 2
+        [Description("cm")]
+        Centimeters = 2
     }
 
     public class RulerVM : INotifyPropertyChanged

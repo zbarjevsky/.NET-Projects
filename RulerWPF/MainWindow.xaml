@@ -63,7 +63,7 @@
                     <MenuItem Header="Inches"  
                               Click="UnitsMenuItem_Click" Tag="1"
                               IsChecked="{Binding MeasurementUnits, Converter={StaticResource ValueWithParameterToCheckedConverter}, ConverterParameter='Inches' }" />
-                    <MenuItem Header="Millimeters"  
+                    <MenuItem Header="Centimeters"  
                               Click="UnitsMenuItem_Click" Tag="2"
                               IsChecked="{Binding MeasurementUnits, Converter={StaticResource ValueWithParameterToCheckedConverter}, ConverterParameter='Millimeters' }" />
                     <Separator />
