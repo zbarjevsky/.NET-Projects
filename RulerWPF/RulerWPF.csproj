@@ -62,6 +62,7 @@
     <Compile Include="RotateResizeAdorner.cs" />
     <Compile Include="RulerVM.cs" />
     <Compile Include="Tools\DraggableExtension.cs" />
+    <Compile Include="Tools\Converters.cs" />
     <Compile Include="Tools\ExtensionMethods.cs" />
     <Compile Include="Tools\Utils.cs" />
     <Page Include="MainWindow.xaml">

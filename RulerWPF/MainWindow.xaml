@@ -19,6 +19,12 @@
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="0" ResizeBorderThickness="5" />
     </WindowChrome.WindowChrome>
+
+    <!-- Converters -->
+    <Window.Resources>
+        <local:ValueWithParameterToCheckedConverter x:Key="ValueWithParameterToCheckedConverter" />
+    </Window.Resources>
+    
     <Canvas x:Name="_canvasMain">
         <Canvas x:Name="_canvasRuler" Opacity="1.0" Background="Orange" Cursor="SizeAll" 
                 RenderTransformOrigin="{Binding oRenderTransformOrigin}"
@@ -34,12 +40,22 @@
             </Canvas.RenderTransform>
             <Canvas.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Rotate 0°" IsChecked="True" />
-                    <MenuItem Header="Rotate 90°" />
+                    <MenuItem Header="Rotate 0°" 
+                              Click="AngleMenuItem_Click" Tag="0"
+                              IsChecked="{Binding oAngle, Converter={StaticResource ValueWithParameterToCheckedConverter}, ConverterParameter='0' }" />
+                    <MenuItem Header="Rotate 90°" 
+                              Click="AngleMenuItem_Click" Tag="90"
+                              IsChecked="{Binding oAngle, Converter={StaticResource ValueWithParameterToCheckedConverter}, ConverterParameter='90' }" />
                     <Separator />
-                    <MenuItem Header="Pixels" IsChecked="True" />
-                    <MenuItem Header="Inches" />
-                    <MenuItem Header="Millimeters" />
+                    <MenuItem Header="Pixels" 
+                              Click="UnitsMenuItem_Click" Tag="0"
+                              IsChecked="{Binding MeasurementUnits, Converter={StaticResource ValueWithParameterToCheckedConverter}, ConverterParameter='Pixels' }" />
+                    <MenuItem Header="Inches"  
+                              Click="UnitsMenuItem_Click" Tag="1"
+                              IsChecked="{Binding MeasurementUnits, Converter={StaticResource ValueWithParameterToCheckedConverter}, ConverterParameter='Inches' }" />
+                    <MenuItem Header="Millimeters"  
+                              Click="UnitsMenuItem_Click" Tag="2"
+                              IsChecked="{Binding MeasurementUnits, Converter={StaticResource ValueWithParameterToCheckedConverter}, ConverterParameter='Millimeters' }" />
                     <Separator />
                     <MenuItem Header="About WPF Ruler" />
                     <MenuItem Header="Exit" />

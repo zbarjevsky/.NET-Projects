@@ -42,6 +42,20 @@ namespace RulerWPF
             this.Height = bounds.Height;
         }
 
+        private void UnitsMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem mnu = sender as MenuItem;
+            int units = int.Parse(mnu.Tag.ToString());
+            _vm.MeasurementUnits = (MeasurementUnits)units;
+        }
+
+        private void AngleMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem mnu = sender as MenuItem;
+            int angle = int.Parse(mnu.Tag.ToString());
+            _vm.oAngle = angle;
+        }
+
         private void DrawTicks()
         {
             _tics.Children.Clear();
@@ -235,7 +249,20 @@ namespace RulerWPF
 
         private void _canvasRuler_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.Source == _canvasRuler || e.Source is TextBlock)
+            if(e.ClickCount == 2)
+            {
+                switch (_vm.oAngle)
+                {
+                    case 0:
+                        _vm.SetAngle(90, true);
+                        break;
+                    case 90:
+                    default:
+                        _vm.SetAngle(0, true);
+                        break;
+                }
+            }
+            else if (e.Source == _canvasRuler || e.Source is TextBlock)
             {
                 if (Mouse.Capture(_canvasRuler))
                 {

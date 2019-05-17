@@ -21,33 +21,47 @@ namespace RulerWPF
         Move
     }
 
+    //https://stackoverflow.com/questions/32256222/a-generic-way-to-create-a-checkable-context-menu-from-a-list-of-enum-values
+    public enum MeasurementUnits : int
+    {
+        [Description("Pixels")]
+        Pixels = 0,
+        [Description("Inches")]
+        Inches = 1,
+        [Description("Millimeters")]
+        Millimeters = 2
+    }
+
     public class RulerVM : INotifyPropertyChanged
     {
+        private MeasurementUnits _units = MeasurementUnits.Pixels;
+        public MeasurementUnits MeasurementUnits { get { return _units; } set { _units = value; OnPropertyChanged(); } }
+
         public MouseMoveOp MouseMoveOp { get; set; } = MouseMoveOp.None;
         public FrameworkElement CurrentElement { get; set; } = null;
 
-        private double _angle;
+        private double _angle = 0;
         public double oAngle { get { return _angle; } set { _angle = value; OnPropertyChanged(); } }
 
-        private Point _origin;
+        private Point _origin = new Point();
         public Point oRenderTransformOrigin { get { return _origin; } set { _origin = value; OnPropertyChanged(); } }
 
-        private double _width;
+        private double _width = 400;
         public double oWidth { get { return _width; } set { _width = value; OnPropertyChanged(); } }
 
-        private double _height;
+        private double _height = 60;
         public double oHeight { get { return _height; } set { _height = value; OnPropertyChanged(); } }
 
-        private Cursor _cursor;
+        private Cursor _cursor = Cursors.AppStarting;
         public Cursor oSizeCursor { get { return _cursor; } set { _cursor = value; OnPropertyChanged(); } }
 
-        private double _thumbLeft;
+        private double _thumbLeft = 370;
         public double oThumbLeft { get { return _thumbLeft; } set { _thumbLeft = value; OnPropertyChanged(); } }
 
-        private double _translateTransformX;
+        private double _translateTransformX = 0;
         public double oTranslateTransformX { get { return _translateTransformX; } set { _translateTransformX = value; OnPropertyChanged(); } }
 
-        private double _translateTransformY;
+        private double _translateTransformY = 0;
         public double oTranslateTransformY { get { return _translateTransformY; } set { _translateTransformY = value; OnPropertyChanged(); } }
 
         public RulerVM()
