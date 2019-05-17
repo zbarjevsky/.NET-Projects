@@ -24,11 +24,11 @@ namespace RulerWPF
     //https://stackoverflow.com/questions/32256222/a-generic-way-to-create-a-checkable-context-menu-from-a-list-of-enum-values
     public enum MeasurementUnits : int
     {
-        [Description("Pixels")]
+        [Description("px")]
         Pixels = 0,
-        [Description("Inches")]
+        [Description("in")]
         Inches = 1,
-        [Description("Millimeters")]
+        [Description("mm")]
         Millimeters = 2
     }
 

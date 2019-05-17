@@ -36,10 +36,14 @@ namespace RulerWPF
             Rect bounds = new Rect(
                 new Point(SystemParameters.VirtualScreenLeft, SystemParameters.VirtualScreenTop),
                 new Size(SystemParameters.VirtualScreenWidth, SystemParameters.VirtualScreenHeight));
+
+            //full virtual screen - 2 displays
             this.Left = bounds.Left;
             this.Top = bounds.Top;
             this.Width = bounds.Width;
             this.Height = bounds.Height;
+
+            _vm.PropertyChanged += (o, propName) => { DrawInfo(); };
         }
 
         private void UnitsMenuItem_Click(object sender, RoutedEventArgs e)
@@ -106,15 +110,19 @@ namespace RulerWPF
                     _tics.Children.Add(txt);
                 }
             }
-
-            DrawInfo();
         }
 
         private void DrawInfo()
         {
+            var src = PresentationSource.FromVisual(_canvasRuler);
+            if (src == null)
+                return;
+
+            string units = _vm.MeasurementUnits.GetDescription();
+
             Point loc = _canvasRuler.PointToScreen(new Point());
-            _txtBounds.Text = string.Format("X: {0:0}, Y: {1:0}, Length: {2:0}, Angle: {3:0.0}°",
-                loc.X, loc.Y, _canvasRuler.Width, _rotateTransform.Angle);
+            _txtBounds.Text = string.Format("X: {0:0}, Y: {1:0}, Length: {2:0} {3}, Angle: {4:0.0}°",
+                loc.X, loc.Y, _vm.oWidth,  units, _vm.oAngle);
         }
 
         private void Window_LocationChanged(object sender, EventArgs e)
@@ -135,7 +143,7 @@ namespace RulerWPF
 
             double distance = _vm.Distance(currentPosition, _vm.CurrentElement);
             Debug.WriteLine("Distance: " + distance);
-            if (distance > 150) //too far - disengage
+            if (distance > 200) //too far - disengage
             {
                 OnPreviewMouseLeftButtonUp(null, null);
                 return;
@@ -177,8 +185,6 @@ namespace RulerWPF
             }
 
             _startPosition = currentPosition;
-
-            DrawInfo();
         }
 
         private double CalculateDiff(Point currentPosition)
@@ -200,7 +206,6 @@ namespace RulerWPF
 
             _vm.UpdateCurrentOperation(MouseMoveOp.None, null);
             Mouse.Capture(null);
-            DrawInfo();
         }
 
         private void LeftGrip_OnPreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
