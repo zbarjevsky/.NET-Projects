@@ -106,7 +106,7 @@ namespace RulerWPF
             foreach (double a in snapAngles)
             {
                 double diff = Math.Abs(a - angle);
-                if (diff < 45)
+                if (diff < 3)
                     return a;
             }
             return angle;
@@ -137,38 +137,23 @@ namespace RulerWPF
             if (originOld == originNew)
                 return;
 
-            Point left = CurrentElement.PointToScreen(new Point());
-            Point right = CurrentElement.PointToScreen(new Point(CurrentElement.ActualWidth, 0));
-
             Vector deltaOrigin = originNew - originOld;
-            Vector deltaPosition = left - right;
-            Vector delta = deltaOrigin + deltaPosition;
 
+            double sign = Math.Sign(deltaOrigin.X);
+            double deltaX = sign * (oWidth - Math.Abs(deltaOrigin.X));
 
-            double angle = Math.PI * (oAngle) / 180.0; //radian
-            double sin = Math.Sin(angle);
-            double cos =  Math.Cos(angle);
+            if ((oAngle >= 0 && oAngle < 90) || (oAngle >= 270 && oAngle < 360))
+            {
+                //sin(30) = 0.5, cos(30) = 0.866 sin(60) = 0.866 cos(60) = 0.5
+                oTranslateTransformX -= deltaX; // sin * deltaOrigin.X; // L(400,0) R(-400,0)
+            }
 
-            if (oAngle == 0) // sin = 0, cos = 1
+            if (oAngle >= 90 && oAngle < 270) // sin = 1, cos = 0
             {
-                oTranslateTransformX += cos * deltaOrigin.Y + sin * deltaOrigin.X; // = 0
-                oTranslateTransformY += deltaOrigin.Y; // = 0
+                oTranslateTransformX += deltaX + 2 * deltaOrigin.X; // L(0,400) R(0,-400)
             }
-            if (oAngle == 90) // sin = 1, cos = 0
-            {
-                oTranslateTransformX -= sin * deltaOrigin.Y + cos * deltaOrigin.X; // = width/-width
-                oTranslateTransformY += deltaOrigin.Y;
-            }
-            if (oAngle == 180) // sin = 0, cos = -1
-            {
-                oTranslateTransformX += sin * deltaOrigin.Y + (1 - cos) * deltaOrigin.X; // = width/-width
-                oTranslateTransformY += deltaOrigin.Y; // = 0
-            }
-            if (oAngle == 270) // sin = -1, cos = 0
-            {
-                oTranslateTransformX -= sin * deltaOrigin.Y + cos * deltaOrigin.X; // = width/-width
-                oTranslateTransformY += deltaOrigin.Y;
-            }
+
+            oTranslateTransformY += deltaOrigin.Y;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
