@@ -32,6 +32,20 @@
                                         X="{Binding oTranslateTransformX}" Y="{Binding oTranslateTransformY}"/>
                 </TransformGroup>
             </Canvas.RenderTransform>
+            <Canvas.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Rotate 0°" IsChecked="True" />
+                    <MenuItem Header="Rotate 90°" />
+                    <Separator />
+                    <MenuItem Header="Pixels" IsChecked="True" />
+                    <MenuItem Header="Inches" />
+                    <MenuItem Header="Millimeters" />
+                    <Separator />
+                    <MenuItem Header="About WPF Ruler" />
+                    <MenuItem Header="Exit" />
+                </ContextMenu>
+            </Canvas.ContextMenu>
+
             <Canvas x:Name="_tics" />
             <TextBlock x:Name="_txtBounds" Canvas.Left="10" Canvas.Top="36" Text="X: 10, Y: 10, Length: 400" FontSize="16"/>
             <Thumb x:Name="thumbRotateLeft" Width="20" Height="20" Canvas.Left="10" Canvas.Top="20" 
