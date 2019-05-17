@@ -41,7 +41,8 @@ namespace RulerWPF
         public FrameworkElement CurrentElement { get; set; } = null;
 
         private double _angle = 0;
-        public double oAngle { get { return _angle; } set { _angle = value; OnPropertyChanged(); } }
+        public double oAngle { get { return _angle; } set { SetAngle(value); OnPropertyChanged(); OnPropertyChanged("oAngleText"); } }
+        public string oAngleText { get { return _angle.ToString("0.0"); } set { SetAngle(value); OnPropertyChanged(""); } }
 
         private Point _origin = new Point();
         public Point oRenderTransformOrigin { get { return _origin; } set { _origin = value; OnPropertyChanged(); } }
@@ -103,19 +104,17 @@ namespace RulerWPF
             CompensateTranslateTransform(oldOrigin, newOrigin);
         }
 
-        public void SetAngle(double angle, bool snapToGrid)
+        public void SetAngle(double angle)
         {
-            if (angle >= 360)
-                angle -= 360;
-            if (angle < 0)
-                angle += 360;
+            _angle = angle % 360;
+            UpdateSizeCursor();
+        }
 
-            if(snapToGrid)
-                angle = SnapToGrid(angle);
-
-            oAngle = angle;
-
-            UpdateSizeCursor(); 
+        public void SetAngle(string strAngle)
+        {
+            double angle;
+            if(double.TryParse(strAngle, out angle))
+                oAngle = angle;
         }
 
         private Cursor[] _sizeCursors = {Cursors.SizeWE, Cursors.SizeNWSE, Cursors.SizeNS, Cursors.SizeNESW};
@@ -137,7 +136,7 @@ namespace RulerWPF
             }
         }
 
-        private double SnapToGrid(double angle)
+        public static double SnapToGrid(double angle)
         {
             double[] snapAngles = new double[] { 0, 90, 180, 270, 360 };
             foreach (double a in snapAngles)

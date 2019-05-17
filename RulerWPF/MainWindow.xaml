@@ -40,12 +40,22 @@
             </Canvas.RenderTransform>
             <Canvas.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Header="Rotate 0°" 
+                    <MenuItem Header="Orientation: 0°" 
                               Click="AngleMenuItem_Click" Tag="0"
                               IsChecked="{Binding oAngle, Converter={StaticResource ValueWithParameterToCheckedConverter}, ConverterParameter='0' }" />
-                    <MenuItem Header="Rotate 90°" 
+                    <MenuItem Header="Orientation: 90°" 
                               Click="AngleMenuItem_Click" Tag="90"
                               IsChecked="{Binding oAngle, Converter={StaticResource ValueWithParameterToCheckedConverter}, ConverterParameter='90' }" />
+                    <MenuItem>
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Orientation: " VerticalAlignment="Center"/>
+                                <TextBox Margin="1" MaxLength="5" Width="60" AcceptsReturn="True"
+                                         TextAlignment="Center" 
+                                         Text="{Binding oAngleText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=1}"/>
+                            </StackPanel>
+                        </MenuItem.Header>
+                    </MenuItem>
                     <Separator />
                     <MenuItem Header="Pixels" 
                               Click="UnitsMenuItem_Click" Tag="0"

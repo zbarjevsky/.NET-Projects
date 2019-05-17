@@ -51,6 +51,8 @@ namespace RulerWPF
 
         private void AngleMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            _vm.UpdateRenderTransformOrigin(new Point(), _canvasRuler);
+
             MenuItem mnu = sender as MenuItem;
             int angle = int.Parse(mnu.Tag.ToString());
             _vm.oAngle = angle;
@@ -165,7 +167,7 @@ namespace RulerWPF
                 Vector currToCenter = (_vm.Origin(_canvasRuler) - currentPosition);
                 double deltaAngle = Vector.AngleBetween(startToCenter, currToCenter);
 
-                _vm.SetAngle(_vm.oAngle + deltaAngle, false);
+                _vm.oAngle += deltaAngle;
             }
             else if (_vm.MouseMoveOp == MouseMoveOp.Move)
             {
@@ -193,8 +195,10 @@ namespace RulerWPF
 
         private void OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
+            if(_vm.MouseMoveOp == MouseMoveOp.LeftRotate || _vm.MouseMoveOp == MouseMoveOp.RightRotate)
+                _vm.oAngle = RulerVM.SnapToGrid(_vm.oAngle);
+
             _vm.UpdateCurrentOperation(MouseMoveOp.None, null);
-            _vm.SetAngle(_vm.oAngle, true);
             Mouse.Capture(null);
             DrawInfo();
         }
@@ -254,11 +258,11 @@ namespace RulerWPF
                 switch (_vm.oAngle)
                 {
                     case 0:
-                        _vm.SetAngle(90, true);
+                        _vm.oAngle = 90;
                         break;
                     case 90:
                     default:
-                        _vm.SetAngle(0, true);
+                        _vm.oAngle = 0;
                         break;
                 }
             }
