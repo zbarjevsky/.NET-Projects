@@ -179,7 +179,6 @@
     <EmbeddedResource Include="RadiationGraphControl.resx">
       <DependentUpon>RadiationGraphControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Sounds\Tornado_Siren_II-Delilah.wav" />
     <None Include="Sounds\Tornado_Siren_II-Delilah.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
