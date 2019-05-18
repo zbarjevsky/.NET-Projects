@@ -24,10 +24,10 @@ namespace ClipboardManager.Utils
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.m_imageListClipboardTypes = new System.Windows.Forms.ImageList(this.components);
             this.m_pnlOperations = new System.Windows.Forms.Panel();
+            this.m_btnFindNext = new System.Windows.Forms.Button();
             this.m_lblSearch = new System.Windows.Forms.Label();
             this.m_txtSearch = new System.Windows.Forms.TextBox();
             this.m_errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
-            this.m_btnFindNext = new System.Windows.Forms.Button();
             this.m_pnlOperations.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_errorProvider)).BeginInit();
             this.SuspendLayout();
@@ -54,6 +54,7 @@ namespace ClipboardManager.Utils
             this.m_listHistory.View = System.Windows.Forms.View.Details;
             this.m_listHistory.VirtualMode = true;
             this.m_listHistory.RetrieveVirtualItem += new System.Windows.Forms.RetrieveVirtualItemEventHandler(this.ClipboardHistoryListView_RetrieveVirtualItem);
+            this.m_listHistory.DoubleClick += new System.EventHandler(this.ClipboardHistoryListView_DoubleClick);
             // 
             // columnHeader1
             // 
@@ -96,6 +97,17 @@ namespace ClipboardManager.Utils
             this.m_pnlOperations.Size = new System.Drawing.Size(301, 43);
             this.m_pnlOperations.TabIndex = 0;
             // 
+            // m_btnFindNext
+            // 
+            this.m_btnFindNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnFindNext.Location = new System.Drawing.Point(227, 6);
+            this.m_btnFindNext.Name = "m_btnFindNext";
+            this.m_btnFindNext.Size = new System.Drawing.Size(64, 23);
+            this.m_btnFindNext.TabIndex = 2;
+            this.m_btnFindNext.Text = "Find Next";
+            this.m_btnFindNext.UseVisualStyleBackColor = true;
+            this.m_btnFindNext.Click += new System.EventHandler(this.m_btnFindNext_Click);
+            // 
             // m_lblSearch
             // 
             this.m_lblSearch.AutoSize = true;
@@ -118,17 +130,6 @@ namespace ClipboardManager.Utils
             // m_errorProvider
             // 
             this.m_errorProvider.ContainerControl = this;
-            // 
-            // m_btnFindNext
-            // 
-            this.m_btnFindNext.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnFindNext.Location = new System.Drawing.Point(227, 6);
-            this.m_btnFindNext.Name = "m_btnFindNext";
-            this.m_btnFindNext.Size = new System.Drawing.Size(64, 23);
-            this.m_btnFindNext.TabIndex = 2;
-            this.m_btnFindNext.Text = "Find Next";
-            this.m_btnFindNext.UseVisualStyleBackColor = true;
-            this.m_btnFindNext.Click += new System.EventHandler(this.m_btnFindNext_Click);
             // 
             // ClipboardHistoryListControl
             // 
