@@ -107,6 +107,10 @@ namespace RulerWPF
         public void SetAngle(double angle)
         {
             _angle = angle % 360;
+
+            if (_angle < 0)
+                _angle += 360;
+
             UpdateSizeCursor();
         }
 

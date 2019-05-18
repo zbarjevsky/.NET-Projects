@@ -68,7 +68,7 @@
                               Click="UnitsMenuItem_Click" Tag="2"
                               IsChecked="{Binding MeasurementUnits, Converter={StaticResource ValueWithParameterToCheckedConverter}, ConverterParameter='Millimeters' }" />
                     <Separator />
-                    <MenuItem Header="About WPF Ruler" />
+                    <MenuItem Header="About WPF Ruler" Click="AboutMenuItem_Click" />
                     <MenuItem Header="Exit" Click="ExitMenuItem_Click" />
                 </ContextMenu>
             </Canvas.ContextMenu>

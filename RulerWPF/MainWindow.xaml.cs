@@ -148,13 +148,13 @@ namespace RulerWPF
             else //move
             {
                 if (e.Key == Key.Right)
-                    _moveTransform.X += delta;
+                    _vm.oTranslateTransformX += delta;
                 if (e.Key == Key.Left)
-                    _moveTransform.X -= delta;
+                    _vm.oTranslateTransformX -= delta;
                 if (e.Key == Key.Up)
-                    _moveTransform.Y -= delta;
+                    _vm.oTranslateTransformY -= delta;
                 if (e.Key == Key.Down)
-                    _moveTransform.Y += delta;
+                    _vm.oTranslateTransformY += delta;
             }
 
             DrawInfo();
@@ -318,6 +318,13 @@ namespace RulerWPF
         private void ExitMenuItem_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void AboutMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            AboutWindow wnd = new AboutWindow();
+            wnd.CenterTo(_canvasRuler);
+            wnd.ShowDialog();
         }
     }
 }

@@ -59,5 +59,23 @@ namespace RulerWPF.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {\rtf1\ansi\ansicpg1251\deff0\deflang1049{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
+        ///{\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\sa200\sl276\slmult1\lang9\f0\fs22\par
+        ///\b\fs32 Use keyboard for fine navigation\b0\par
+        ///Arrow keys to move 1 pixel.\par
+        ///\b Shift \b0 + Left or Right -- resize\par
+        ///\b Shift \b0 + Up or Down -- rotate\par
+        ///\b Ctrl \b0 - will asselerate movements x25\fs22\par
+        ///\par
+        ///}
+        ///.
+        /// </summary>
+        internal static string AboutRulerWPF {
+            get {
+                return ResourceManager.GetString("AboutRulerWPF", resourceCulture);
+            }
+        }
     }
 }
