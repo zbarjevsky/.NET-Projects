@@ -262,6 +262,7 @@ namespace MeditationStopWatch
             clock.MinuteHandColor   = options.MinuteHandColor;
             clock.SecondHandColor   = options.SecondHandColor;
             clock.TicksColor        = options.TicksColor;
+            clock.TicksBackColor    = options.TicksBackColor;
         }
 
         private void SaveOptions()

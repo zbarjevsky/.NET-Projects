@@ -43,10 +43,57 @@ namespace MeditationStopWatch
 		Color _minColor=Color.Green ;
 		Color _secColor=Color.Red ;
 		Color _circleColor=Color.Red;
-		Color _ticksColor=Color.Black;
+        Color _ticksColor = Color.Black;
+        Color _ticksBackColor = Color.Transparent;
 
-		private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer timer1;
 		private System.ComponentModel.IContainer components;
+
+        public Color HourHandColor
+        {
+            get { return this._hrColor; }
+            set { this._hrColor = value; }
+        }
+
+        public Color MinuteHandColor
+        {
+            get { return this._minColor; }
+            set { this._minColor = value; }
+        }
+
+        public Color SecondHandColor
+        {
+            get { return this._secColor; }
+            set
+            {
+                this._secColor = value;
+                this._circleColor = value;
+            }
+        }
+
+        public Color TicksColor
+        {
+            get { return this._ticksColor; }
+            set { this._ticksColor = value; }
+        }
+
+        public Color TicksBackColor
+        {
+            get { return this._ticksBackColor; }
+            set { this._ticksBackColor = value; }
+        }
+
+        public bool Draw1MinuteTicks
+        {
+            get { return this._bDraw1MinuteTicks; }
+            set { this._bDraw1MinuteTicks = value; }
+        }
+
+        public bool Draw5MinuteTicks
+        {
+            get { return this._bDraw5MinuteTicks; }
+            set { this._bDraw5MinuteTicks = value; }
+        }
 
         public bool SuspendScreenSaver { get; set; } = false;
 
@@ -194,7 +241,7 @@ namespace MeditationStopWatch
             Point p2 = new Point((int)(_Center.X + this._fRadius / f2 * System.Math.Sin(angle)), 
                                  (int)(_Center.Y - this._fRadius / f2 * System.Math.Cos(angle)));
 
-            g.DrawLine(new Pen(Color.Wheat, 2*_fTicksThickness), p1.X, p1.Y, p2.X, p2.Y);
+            g.DrawLine(new Pen(_ticksBackColor, 2*_fTicksThickness), p1.X, p1.Y, p2.X, p2.Y);
             g.DrawLine(new Pen(_ticksColor, _fTicksThickness), p1.X, p1.Y, p2.X, p2.Y);
         }
 
@@ -274,44 +321,6 @@ namespace MeditationStopWatch
 			this._fCenterCircleRadius = diameter / 50F;
 
 			this.Refresh();
-		}
-	
-		public Color HourHandColor
-		{
-			get { return this._hrColor; }
-			set { this._hrColor = value; }
-		}
-
-		public Color MinuteHandColor
-		{
-			get { return this._minColor; }
-			set { this._minColor = value; }
-		}
-
-		public Color SecondHandColor
-		{
-			get { return this._secColor; }
-			set { this._secColor = value;
-				  this._circleColor = value; }
-		}
-
-		public Color TicksColor
-		{
-			get { return this._ticksColor; }
-			set { this._ticksColor = value; }
-		}
-
-		public bool Draw1MinuteTicks
-		{
-			get { return this._bDraw1MinuteTicks; }
-			set { this._bDraw1MinuteTicks = value; }
-		}
-
-		public bool Draw5MinuteTicks
-		{
-			get { return this._bDraw5MinuteTicks; }
-			set { this._bDraw5MinuteTicks = value; }
-		}
-
+		}	
 	}
 }

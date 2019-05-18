@@ -224,14 +224,20 @@ namespace MeditationStopWatch
 		public Color SecondHandColor { get; set; }
 
         [Category("3. Clock Color Options")]
-		[DisplayName("Clock Ticks Color")]
-		[Description("Clock Ticks Color")]
-		[DefaultValue(typeof(Color), "Sienna")]
-		public Color TicksColor { get; set; }
+        [DisplayName("Clock Ticks Color")]
+        [Description("Clock Ticks Color")]
+        [DefaultValue(typeof(Color), "Sienna")]
+        public Color TicksColor { get; set; }
 
         [Category("3. Clock Color Options")]
-		[DisplayName("Clock Clock Background")]
-		[Description("Clock Clock Background")]
+        [DisplayName("Clock Ticks Background Color")]
+        [Description("Clock Ticks Background Color")]
+        [DefaultValue(typeof(Color), "Black")]
+        public Color TicksBackColor { get; set; }
+
+        [Category("3. Clock Color Options")]
+		[DisplayName("Clock Background")]
+		[Description("Clock Background")]
 		[DefaultValue(typeof(Color), "Control")]
 		public Color ClockBackground { get; set; }
 
