@@ -13,6 +13,7 @@
         Background="Transparent"
         WindowStartupLocation="CenterScreen"
         Loaded="MainWindow_OnLoaded"
+        Closed="Window_Closed"
         LocationChanged="Window_LocationChanged"
         PreviewMouseMove="window_PreviewMouseMove"
         PreviewKeyDown="Window_PreviewKeyDown"

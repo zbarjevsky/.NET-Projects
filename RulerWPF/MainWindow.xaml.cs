@@ -27,6 +27,9 @@ namespace RulerWPF
         {
             DataContext = _vm;
             InitializeComponent();
+
+            Canvas.SetTop(_canvasRuler, Properties.Settings.Default.Location.Y);
+            Canvas.SetLeft(_canvasRuler, Properties.Settings.Default.Location.X);
         }
 
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
@@ -44,6 +47,11 @@ namespace RulerWPF
             this.Height = bounds.Height;
 
             _vm.PropertyChanged += (o, propName) => { DrawInfo(); };
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.Save();
         }
 
         private void UnitsMenuItem_Click(object sender, RoutedEventArgs e)
@@ -120,6 +128,7 @@ namespace RulerWPF
             Point loc = _canvasRuler.PointToScreen(new Point());
             _txtBounds.Text = string.Format("X: {0:0}, Y: {1:0}, Length: {2:0.0} {3}, Angle: {4:0.0}°",
                 loc.X, loc.Y, r.WidthInSelectedUnits(_vm.oWidth),  units, _vm.oAngle);
+            Properties.Settings.Default.Location = new System.Drawing.Point((int)loc.X, (int)loc.Y);
         }
 
         private void Window_LocationChanged(object sender, EventArgs e)
@@ -322,9 +331,11 @@ namespace RulerWPF
 
         private void AboutMenuItem_Click(object sender, RoutedEventArgs e)
         {
+            _canvasRuler.Opacity = 0.1;
             AboutWindow wnd = new AboutWindow();
             wnd.CenterTo(_canvasRuler);
             wnd.ShowDialog();
+            _canvasRuler.Opacity = 1.0;
         }
     }
 }
