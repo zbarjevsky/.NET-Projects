@@ -113,9 +113,6 @@ namespace MeditationStopWatch
 		float _fSecThickness;
 		float _fTicksThickness;
 
-		bool _bDraw5MinuteTicks=true;
-		bool _bDraw1MinuteTicks=true;
-
         private System.Windows.Forms.Timer timer1;
 		private System.ComponentModel.IContainer components;
 
@@ -308,11 +305,11 @@ namespace MeditationStopWatch
 
 			for(int i=0;i<60;i++)
 			{
-				if ( this._bDraw5MinuteTicks==true && i%5==0 ) // Draw 5 minute ticks
+				if ( this.Settings.Draw5MinuteTicks==true && i%5==0 ) // Draw 5 minute ticks
 				{
 					DrawTicsLine(e.Graphics, i, 1.00F, 1.25F);
 				}
-				else if ( this._bDraw1MinuteTicks==true ) // draw 1 minute ticks
+				else if ( this.Settings.Draw1MinuteTicks==true ) // draw 1 minute ticks
 				{
 					DrawTicsLine(e.Graphics, i, 1.0F, 1.05F);
 				}

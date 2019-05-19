@@ -30,6 +30,29 @@ namespace MeditationStopWatch.Tools
             aProp.SetValue(c, value, null);
         }
 
+        public static void ExpandGridItem(this PropertyGrid propertyGrid, string name)
+        {
+            GridItem root = propertyGrid.SelectedGridItem;
+            //Get the parent
+            while (root.Parent != null)
+                root = root.Parent;
+
+            ExpandGridItem(root, name);
+        }
+
+        private static void ExpandGridItem(GridItem root, string name)
+        {
+            if (root != null)
+            {
+                foreach (GridItem g in root.GridItems)
+                {
+                    ExpandGridItem(g, name);
+                    if (g.Label == name)
+                        g.Expanded = true;
+                }
+            }
+        }
+
         public static void ShowOnDisabled(this ToolTip control, bool bEnable)
         {
 

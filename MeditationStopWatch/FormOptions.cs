@@ -1,6 +1,7 @@
 using System;
 using System.Windows.Forms;
 using System.Drawing;
+using MeditationStopWatch.Tools;
 
 namespace MeditationStopWatch
 {
@@ -122,6 +123,7 @@ namespace MeditationStopWatch
 			
 			m_PropertyGrid.SelectedObject = propclass;
 			m_PropertyGrid.HelpBackColor = propclass.Background;
+            m_PropertyGrid.ExpandGridItem("AnalogClockSettings");
 
             if (onPropertyChange != null)
                 OnPropertyChange = onPropertyChange;
