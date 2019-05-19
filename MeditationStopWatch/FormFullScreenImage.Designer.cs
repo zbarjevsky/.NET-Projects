@@ -82,19 +82,12 @@
             // 
             this.m_analogClock.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_analogClock.BackColor = System.Drawing.Color.Transparent;
-            this.m_analogClock.Draw1MinuteTicks = true;
-            this.m_analogClock.Draw5MinuteTicks = true;
-            this.m_analogClock.HourHandColor = System.Drawing.Color.DarkMagenta;
             this.m_analogClock.Location = new System.Drawing.Point(367, 33);
             this.m_analogClock.MinimumSize = new System.Drawing.Size(20, 20);
-            this.m_analogClock.MinuteHandColor = System.Drawing.Color.Green;
             this.m_analogClock.Name = "m_analogClock";
-            this.m_analogClock.SecondHandColor = System.Drawing.Color.Red;
             this.m_analogClock.Size = new System.Drawing.Size(390, 377);
-            this.m_analogClock.SuspendScreenSaver = false;
             this.m_analogClock.TabIndex = 3;
             this.m_analogClock.TabStop = false;
-            this.m_analogClock.TicksColor = System.Drawing.Color.Black;
             // 
             // FormFullScreenImage
             // 

@@ -26,12 +26,13 @@ namespace MeditationStopWatch
 
             InitializeComponent();
 
-            FormStopWatch.ApplyClockColors(m_analogClock, parent.m_Options);
+            m_analogClock.Settings = parent.m_Options.AnalogClockSettings.Clone();
+            m_analogClock.Settings.HandOpacity = 210;
+            m_analogClock.Settings.ClockBackground = Color.Transparent;
+            m_analogClock.Settings.SuspendScreenSaver = true;
 
             m_analogClock.Draggable(true);
-            m_analogClock.BackColor = Color.Transparent;
             m_analogClock.Parent = pictureBox1;
-            m_analogClock.SuspendScreenSaver = true;
 
             m_btnCancel.BackColor = Color.Transparent;
             m_btnCancel.Parent = pictureBox1;

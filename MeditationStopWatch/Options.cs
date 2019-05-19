@@ -205,41 +205,9 @@ namespace MeditationStopWatch
 
 		#region Clock Options
 		
-		[Category("3. Clock Color Options")]
-		[DisplayName("Clock Hour Hand Color")]
-		[Description("Clock Hour Hand Color")]
-		[DefaultValue(typeof(Color), "DarkGoldenrod")]
-		public Color HourHandColor { get; set; }
-
         [Category("3. Clock Color Options")]
-		[DisplayName("Clock Minute Hand Color")]
-		[Description("Clock Minute Hand Color")]
-		[DefaultValue(typeof(Color), "Goldenrod")]
-		public Color MinuteHandColor { get; set; }
-
-        [Category("3. Clock Color Options")]
-		[DisplayName("Clock Second Hand Color")]
-		[Description("Clock Second Hand Color")]
-		[DefaultValue(typeof(Color), "Red")]
-		public Color SecondHandColor { get; set; }
-
-        [Category("3. Clock Color Options")]
-        [DisplayName("Clock Ticks Color")]
-        [Description("Clock Ticks Color")]
-        [DefaultValue(typeof(Color), "Sienna")]
-        public Color TicksColor { get; set; }
-
-        [Category("3. Clock Color Options")]
-        [DisplayName("Clock Ticks Background Color")]
-        [Description("Clock Ticks Background Color")]
-        [DefaultValue(typeof(Color), "Black")]
-        public Color TicksBackColor { get; set; }
-
-        [Category("3. Clock Color Options")]
-		[DisplayName("Clock Background")]
-		[Description("Clock Background")]
-		[DefaultValue(typeof(Color), "Control")]
-		public Color ClockBackground { get; set; }
+        [Description("Analog Clock Settings")]
+        public AnalogClock.ClockSettings AnalogClockSettings { get; set; } = new AnalogClock.ClockSettings();
 
         [Category("3. Clock Color Options")]
 		[DisplayName("Digital Clock Text Color")]

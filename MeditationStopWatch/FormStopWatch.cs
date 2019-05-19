@@ -33,6 +33,8 @@ namespace MeditationStopWatch
 
 			m_ThumbnailCache = new ThumbnailCache(m_imageListThumbnails);
 			m_ThumbnailCache.ProgressChanged += m_ThumbnailCache_ProgressChanged;
+
+            m_Options.AnalogClockSettings = m_analogClock.Settings;
 		}
 
 		private void m_ThumbnailCache_ProgressChanged(object sender, CacheEventArgs e)
@@ -77,6 +79,8 @@ namespace MeditationStopWatch
 		{
 			if ( File.Exists(m_sSettingsFile) )
 				OptionsSerializer.Load(m_sSettingsFile, m_Options);
+
+            m_analogClock.Settings = m_Options.AnalogClockSettings;
 
             m_lblVolume.Parent = m_pictureBox1;
             m_lblVolume.Draggable(true);
@@ -243,10 +247,6 @@ namespace MeditationStopWatch
 
 		private void ApplyOptions()
 		{
-            //m_pnlClock.BackColor = m_Options.ClockBackground;
-
-            ApplyClockColors(m_analogClock, m_Options);
-
             digitalClockCtrl1.ForeColor = m_Options.DigitalClockTextColor;
             digitalClockCtrl1.BackColor = m_Options.DigitalClockBackColor;
             digitalClockCtrl1.Font = m_Options.DigitalClockFont;
@@ -254,16 +254,6 @@ namespace MeditationStopWatch
             m_audioPlayerControl.InitializeOptions(m_Options);
             m_lblVolume.Bounds = m_Options.SoudVolumeLabelBounds;
 		}
-
-        public static void ApplyClockColors(AnalogClock clock, Options options)
-        {
-            clock.BackColor         = options.ClockBackground;
-            clock.HourHandColor     = options.HourHandColor;
-            clock.MinuteHandColor   = options.MinuteHandColor;
-            clock.SecondHandColor   = options.SecondHandColor;
-            clock.TicksColor        = options.TicksColor;
-            clock.TicksBackColor    = options.TicksBackColor;
-        }
 
         private void SaveOptions()
 		{

@@ -330,20 +330,13 @@
             // m_analogClock
             // 
             this.m_analogClock.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_analogClock.Draw1MinuteTicks = true;
-            this.m_analogClock.Draw5MinuteTicks = true;
-            this.m_analogClock.HourHandColor = System.Drawing.Color.DarkGoldenrod;
             this.m_analogClock.Location = new System.Drawing.Point(0, 0);
             this.m_analogClock.Margin = new System.Windows.Forms.Padding(30);
-            this.m_analogClock.MinuteHandColor = System.Drawing.Color.Goldenrod;
             this.m_analogClock.Name = "m_analogClock";
-            this.m_analogClock.SecondHandColor = System.Drawing.Color.Red;
             this.m_analogClock.Size = new System.Drawing.Size(342, 215);
             this.m_analogClock.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
-            this.m_analogClock.SuspendScreenSaver = false;
             this.m_analogClock.TabIndex = 0;
             this.m_analogClock.TabStop = false;
-            this.m_analogClock.TicksColor = System.Drawing.Color.Sienna;
             // 
             // digitalClockCtrl1
             // 

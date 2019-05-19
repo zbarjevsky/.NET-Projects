@@ -23,7 +23,84 @@ namespace MeditationStopWatch
 
         DateTime _dateTime = DateTime.Now;
 
-		float _fRadius;
+        [Serializable]
+        [DefaultPropertyAttribute("ClockBackground")]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        public class ClockSettings
+        {
+            [DisplayName("Hour Hand Color")]
+            [Description("Hour Hand Color")]
+            [DefaultValue(typeof(Color), "DarkGoldenrod")]
+            public Color HourHandColor { get; set; } = Color.DarkGoldenrod;
+
+            [DisplayName("Minute Hand Color")]
+            [Description("Minute Hand Color")]
+            [DefaultValue(typeof(Color), "Goldenrod")]
+            public Color MinuteHandColor { get; set; } = Color.Goldenrod;
+
+            [DisplayName("Hour and Minute Opacity")]
+            [Description("Hour and Minute Opacity (0-255")]
+            [DefaultValue(typeof(byte), "255")]
+            public byte HandOpacity { get; set; } = 255;
+
+            [DisplayName("Second Hand Color")]
+            [Description("Second Hand Color")]
+            [DefaultValue(typeof(Color), "Red")]
+            public Color SecondHandColor { get; set; } = Color.Red;
+
+            [DisplayName("Second Hand Circle Color")]
+            [Description("Second Hand Circle Color")]
+            [DefaultValue(typeof(Color), "Red")]
+            public Color SecondHandCircleColor { get; set; } = Color.Red;
+
+            [DisplayName("Ticks Color")]
+            [Description("Ticks Color")]
+            [DefaultValue(typeof(Color), "SaddleBrown")]
+            public Color TicksColor { get; set; } = Color.SaddleBrown;
+
+            [DisplayName("Ticks Background Color")]
+            [Description("Ticks Background Color")]
+            [DefaultValue(typeof(Color), "Black")]
+            public Color TicksBackColor { get; set; } = Color.Black;
+
+            [DisplayName("Background")]
+            [Description("Clock Background")]
+            [DefaultValue(typeof(Color), "Black")]
+            public Color ClockBackground { get; set; } = Color.Black;
+
+            public bool Draw1MinuteTicks { get; set; } = true;
+
+            public bool Draw5MinuteTicks { get; set; } = true;
+
+            public bool SuspendScreenSaver { get; set; } = false;
+
+            public override string ToString()
+            {
+                return "Analog Clock Settings";
+            }
+
+            public  ClockSettings Clone()
+            {
+                return new ClockSettings()
+                {
+                    HourHandColor = HourHandColor,
+                    MinuteHandColor = MinuteHandColor,
+                    HandOpacity = HandOpacity,
+                    SecondHandColor = SecondHandColor,
+                    SecondHandCircleColor = SecondHandCircleColor,
+                    TicksColor = TicksColor,
+                    TicksBackColor = TicksBackColor,
+                    ClockBackground = ClockBackground,
+                    Draw1MinuteTicks = Draw1MinuteTicks,
+                    Draw5MinuteTicks = Draw5MinuteTicks,
+                    SuspendScreenSaver = SuspendScreenSaver
+                };
+            }
+        }
+
+        public ClockSettings Settings { get; set; } = new ClockSettings();
+
+        float _fRadius;
         PointF _Center;
 		float _fCenterCircleRadius;
 
@@ -39,63 +116,8 @@ namespace MeditationStopWatch
 		bool _bDraw5MinuteTicks=true;
 		bool _bDraw1MinuteTicks=true;
 
-		Color _hrColor=Color.DarkMagenta ;
-		Color _minColor=Color.Green ;
-		Color _secColor=Color.Red ;
-		Color _circleColor=Color.Red;
-        Color _ticksColor = Color.Black;
-        Color _ticksBackColor = Color.Transparent;
-
         private System.Windows.Forms.Timer timer1;
 		private System.ComponentModel.IContainer components;
-
-        public Color HourHandColor
-        {
-            get { return this._hrColor; }
-            set { this._hrColor = value; }
-        }
-
-        public Color MinuteHandColor
-        {
-            get { return this._minColor; }
-            set { this._minColor = value; }
-        }
-
-        public Color SecondHandColor
-        {
-            get { return this._secColor; }
-            set
-            {
-                this._secColor = value;
-                this._circleColor = value;
-            }
-        }
-
-        public Color TicksColor
-        {
-            get { return this._ticksColor; }
-            set { this._ticksColor = value; }
-        }
-
-        public Color TicksBackColor
-        {
-            get { return this._ticksBackColor; }
-            set { this._ticksBackColor = value; }
-        }
-
-        public bool Draw1MinuteTicks
-        {
-            get { return this._bDraw1MinuteTicks; }
-            set { this._bDraw1MinuteTicks = value; }
-        }
-
-        public bool Draw5MinuteTicks
-        {
-            get { return this._bDraw5MinuteTicks; }
-            set { this._bDraw5MinuteTicks = value; }
-        }
-
-        public bool SuspendScreenSaver { get; set; } = false;
 
 		public AnalogClock()
 		{
@@ -162,10 +184,11 @@ namespace MeditationStopWatch
 
 		private void timer1_Tick(object sender, System.EventArgs e)
 		{
-			this._dateTime=DateTime.Now;
+			this._dateTime = DateTime.Now;
+            this.BackColor = Settings.ClockBackground;
 			this.Refresh();
 
-            if(SuspendScreenSaver)
+            if(Settings.SuspendScreenSaver)
                 ScreenSaver.ResetIdleTimer();
         }
 
@@ -241,8 +264,8 @@ namespace MeditationStopWatch
             Point p2 = new Point((int)(_Center.X + this._fRadius / f2 * System.Math.Sin(angle)), 
                                  (int)(_Center.Y - this._fRadius / f2 * System.Math.Cos(angle)));
 
-            g.DrawLine(new Pen(_ticksBackColor, 2*_fTicksThickness), p1.X, p1.Y, p2.X, p2.Y);
-            g.DrawLine(new Pen(_ticksColor, _fTicksThickness), p1.X, p1.Y, p2.X, p2.Y);
+            g.DrawLine(new Pen(Settings.TicksBackColor, 2*_fTicksThickness), p1.X, p1.Y, p2.X, p2.Y);
+            g.DrawLine(new Pen(Settings.TicksColor, _fTicksThickness), p1.X, p1.Y, p2.X, p2.Y);
         }
 
         private Color InvertColor(Color c)
@@ -272,7 +295,7 @@ namespace MeditationStopWatch
 
             PointF[] points={bottomRight,bottom,bottomLeft,topLeft, top, topRight};
 
-            e.Graphics.FillPolygon( new SolidBrush(color), points );
+            e.Graphics.FillPolygon( new SolidBrush(Color.FromArgb(Settings.HandOpacity, color)), points );
 		}
 
 		private void AnalogClock_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
@@ -295,12 +318,12 @@ namespace MeditationStopWatch
 				}
 			}
 
-			DrawAngledClockHand(this._fHourThickness, this._fHourLength, _hrColor, fRadHr, e);
-            DrawAngledClockHand(this._fMinThickness, this._fMinLength, _minColor, fRadMin, e);
-			DrawLine(this._fSecThickness, this._fSecLength, _secColor, fRadSec, e);
+			DrawAngledClockHand(this._fHourThickness, this._fHourLength, Settings.HourHandColor, fRadHr, e);
+            DrawAngledClockHand(this._fMinThickness, this._fMinLength, Settings.MinuteHandColor, fRadMin, e);
+			DrawLine(this._fSecThickness, this._fSecLength, Settings.SecondHandColor, fRadSec, e);
 
 			//draw circle at center
-			e.Graphics.FillEllipse( new SolidBrush( _circleColor ), _Center.X-_fCenterCircleRadius/2, _Center.Y-_fCenterCircleRadius/2, _fCenterCircleRadius, _fCenterCircleRadius);
+			e.Graphics.FillEllipse( new SolidBrush(Settings.SecondHandCircleColor), _Center.X-_fCenterCircleRadius/2, _Center.Y-_fCenterCircleRadius/2, _fCenterCircleRadius, _fCenterCircleRadius);
 		}
 
 		private void AnalogClock_Resize(object sender, System.EventArgs e)
