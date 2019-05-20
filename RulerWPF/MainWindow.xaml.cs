@@ -143,6 +143,8 @@ namespace RulerWPF
 
             if(changeSize) // width or angle
             {
+                _vm.UpdateRenderTransformOrigin(new Point(), _canvasRuler);
+
                 if (e.Key == Key.Right)
                     _vm.oWidth += delta;
                 if (e.Key == Key.Left)
@@ -296,7 +298,7 @@ namespace RulerWPF
         {
             if(e.ClickCount == 2)
             {
-                switch (_vm.oAngle)
+                switch ((int)_vm.oAngle)
                 {
                     case 0:
                         _vm.oAngle = 90;
