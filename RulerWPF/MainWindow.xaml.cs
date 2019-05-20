@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -83,11 +85,11 @@ namespace RulerWPF
                 {
                     tickSize = r.tick1Height;
                 }
-                if (i % r.tickHalfCount == 0)
+                if (i % (int)r.tickHalfCount == 0)
                 {
                     tickSize = r.tickHalfHeight;
                 }
-                if (i % r.tickTextCount == 0)
+                if (i % (int)r.tickTextCount == 0)
                 {
                     tickSize = r.tickTextHeight;
                 }
@@ -102,13 +104,13 @@ namespace RulerWPF
 
                 _tics.Children.Add(line);
 
-                if (i % r.tickTextCount == 0) //add text
+                if (i % (int)r.tickTextCount == 0) //add text
                 {
                     TextBlock txt = new TextBlock();
                     txt.FontSize = 16;
                     txt.TextAlignment = TextAlignment.Center;
                     txt.Width = 60;
-                    txt.Text = (i / r.tick_text_scale).ToString();
+                    txt.Text = (i / r.tick_text_scale).ToString(CultureInfo.InvariantCulture);
                     Canvas.SetLeft(txt, line.X1 - 30);
                     Canvas.SetTop(txt, line.Y2);
                     _tics.Children.Add(txt);
@@ -179,14 +181,15 @@ namespace RulerWPF
 
             Point currentPosition = Mouse.GetPosition(null);
             double diff = CalculateDiff(currentPosition);
-            if (diff == 0) //no change
+            if ((int)diff == 0) //no change
                 return;
 
             double distance = _vm.Distance(currentPosition, _vm.CurrentElement);
-            Debug.WriteLine("Distance: " + distance);
+            //Debug.WriteLine("Distance: " + distance);
             if (distance > 200) //too far - disengage
             {
                 OnPreviewMouseLeftButtonUp(null, null);
+                SystemSounds.Asterisk.Play();
                 return;
             }
 
