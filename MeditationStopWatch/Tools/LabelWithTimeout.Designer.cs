@@ -44,6 +44,7 @@
             this.Margin = new System.Windows.Forms.Padding(12);
             this.Size = new System.Drawing.Size(100, 23);
             this.VisibleChanged += new System.EventHandler(this.LabelWithTimeout_VisibleChanged);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.LabelWithTimeout_MouseMove);
             this.ResumeLayout(false);
 
         }

@@ -26,8 +26,7 @@
     <Window.Resources>
         <local:ValueWithParameterToCheckedConverter x:Key="ValueWithParameterToCheckedConverter" />
     </Window.Resources>
-    
-    <Canvas x:Name="_canvasMain">
+    <Canvas>
         <Canvas x:Name="_canvasRuler" Opacity="1.0" Background="Orange" Cursor="SizeAll" 
                 RenderTransformOrigin="{Binding oRenderTransformOrigin}"
                 PreviewMouseLeftButtonDown="_canvasRuler_PreviewMouseLeftButtonDown"
@@ -35,9 +34,8 @@
                 Width="{Binding oWidth, FallbackValue=400}" Height="{Binding oHeight, FallbackValue=60}"  Canvas.Left="600" Canvas.Top="400" >
             <Canvas.RenderTransform>
                 <TransformGroup>
-                    <RotateTransform x:Name="_rotateTransform" Angle="{Binding oAngle}"/>
-                    <TranslateTransform x:Name="_moveTransform" 
-                                        X="{Binding oTranslateTransformX}" Y="{Binding oTranslateTransformY}"/>
+                    <RotateTransform Angle="{Binding oAngle}"/>
+                    <TranslateTransform X="{Binding oTranslateTransformX}" Y="{Binding oTranslateTransformY}"/>
                 </TransformGroup>
             </Canvas.RenderTransform>
             <Canvas.ContextMenu>

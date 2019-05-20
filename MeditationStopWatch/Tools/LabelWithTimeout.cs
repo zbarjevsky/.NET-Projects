@@ -47,5 +47,11 @@ namespace MeditationStopWatch.Tools
             if (_stopwatch.Elapsed.TotalMilliseconds > _timeout)
                 this.Visible = false;
         }
+
+        private void LabelWithTimeout_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (this.Visible)
+                _stopwatch.Restart();
+        }
     }
 }
