@@ -7,8 +7,9 @@
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanResize"
         ShowInTaskbar="False"
+        Background="Orange"
         mc:Ignorable="d"
-        Title="About Ruler WPF" Height="450" Width="600" MinHeight="400" MinWidth="600" >
+        Title="About Ruler WPF" Height="500" Width="650" MinHeight="400" MinWidth="600" >
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -19,11 +20,19 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="20*"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="3*"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <RichTextBox x:Name="txtAbout" Grid.Row="1" Grid.Column="1" Background="{Binding SystemColors.Info}"/>
-        <Button Content="OK" Grid.Row="3" Grid.Column="1" 
+        <RichTextBox x:Name="txtAbout" Grid.Row="1" Grid.Column="1" 
+                     IsReadOnly="True" BorderThickness="1" BorderBrush="Orange"
+                     HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                     Background="White" >
+        </RichTextBox>
+        <TextBlock x:Name="_version" Grid.ColumnSpan="3" Grid.Row="3" FontSize="24"
+                   TextAlignment="Center" Text="Version: 1.0" />
+        <Button Content="OK" Grid.Row="5" Grid.Column="1" 
                 Width="120" Margin="100,1" Click="ButtonOk_Click"/>
     </Grid>
 </Window>

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -28,6 +29,8 @@ namespace RulerWPF
             {
                 txtAbout.Selection.Load(stream, DataFormats.Rtf);
             }
+
+            _version.Text = "Version: " + Assembly.GetEntryAssembly().GetName().Version.ToString();
         }
 
         private void ButtonOk_Click(object sender, RoutedEventArgs e)

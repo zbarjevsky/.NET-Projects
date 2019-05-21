@@ -1,4 +1,5 @@
-﻿using System;
+﻿using RulerWPF.Tools;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
@@ -13,5 +14,14 @@ namespace RulerWPF
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            if (UpdateAssemblyVersion.ProcessCommandLine(e.Args))
+            {
+                this.Shutdown();
+                return;
+            }
+            base.OnStartup(e);
+        }
     }
 }

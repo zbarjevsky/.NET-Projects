@@ -70,6 +70,7 @@
     <Compile Include="Tools\Converters.cs" />
     <Compile Include="Tools\ExtensionMethods.cs" />
     <Compile Include="Tools\RulerTicsData.cs" />
+    <Compile Include="Tools\UpdateAssemblyVersion.cs" />
     <Compile Include="Tools\Utils.cs" />
     <Page Include="AboutWindow.xaml">
       <SubType>Designer</SubType>
@@ -122,6 +123,12 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /s /f /r /y $(TargetPath) $(SolutionDir)\..\Binaries</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>if exist "$(TargetPath)" (
+ "$(TargetPath)" -FILE"$(ProjectDir)Properties/AssemblyInfo.cs"
+)
+</PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
