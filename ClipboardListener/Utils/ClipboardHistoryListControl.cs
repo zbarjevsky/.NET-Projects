@@ -11,6 +11,10 @@ namespace ClipboardManager.Utils
     {
         private List<ClipboardList.ClipboardEntry> _history = new List<ClipboardList.ClipboardEntry>();
 
+        public Action<ClipboardList.ClipboardEntry> AddToFavorites = (clp) => { };
+        public Action<ClipboardList.ClipboardEntry> RemoveFromMain = (clp) => { };
+        public Action<ClipboardList.ClipboardEntry> SelectMainEntry = (clp) => { };
+
         public ClipboardHistoryListControl()
         {
             InitializeComponent();
@@ -100,6 +104,30 @@ namespace ClipboardManager.Utils
 
             _searchIndex = -1;
             m_errorProvider.SetError(m_txtSearch, "Text not found: " + txt);
+        }
+
+        private void m_contextMenuStrip_ClipboardEntry_AddToFavorites_Click(object sender, EventArgs e)
+        {
+            if (this.m_listHistory.SelectedIndices.Count == 0)
+                return;
+
+            AddToFavorites(_history[m_listHistory.SelectedIndices[0]]);
+        }
+
+        private void m_contextMenuStrip_ClipboardEntry_Edit_Click(object sender, EventArgs e)
+        {
+            if (this.m_listHistory.SelectedIndices.Count == 0)
+                return;
+
+            SelectMainEntry(_history[m_listHistory.SelectedIndices[0]]);
+        }
+
+        private void m_contextMenuStrip_ClipboardEntry_Remove_Click(object sender, EventArgs e)
+        {
+            if (this.m_listHistory.SelectedIndices.Count == 0)
+                return;
+
+            RemoveFromMain(_history[m_listHistory.SelectedIndices[0]]);
         }
     }
 }
