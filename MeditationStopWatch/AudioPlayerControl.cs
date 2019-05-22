@@ -78,7 +78,7 @@ namespace MeditationStopWatch
 		{
             m_Options = opt;
             Volume = m_Options.Volume;
-            m_progrReiKi.Options = m_Options;
+            m_progrReiKi.Initialize(m_Options);
             m_playLists.Initialize(m_Options);
 		}
 
@@ -120,8 +120,9 @@ namespace MeditationStopWatch
 			UpdateButtonsState(sStatus);
 			DisableScreenSaver();
 			UpdatePlayingFile();
+            m_progrReiKi.Initialize(m_Options);
 
-			int sec = m_Mp3Player.GetCurentMilisecond() / 1000;
+            int sec = m_Mp3Player.GetCurentMilisecond() / 1000;
 			m_trackBarPosition.Value = sec;
 			//m_prgr3Minute.Value = (int)(sec % 180);
 

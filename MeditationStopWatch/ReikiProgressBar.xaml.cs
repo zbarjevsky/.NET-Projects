@@ -12,7 +12,7 @@ using MeditationStopWatch;
 using System.Runtime.CompilerServices;
 using System.Windows.Shapes;
 
-namespace Wizard
+namespace ReiKi
 {
     /// <summary>
     /// Interaction logic for ReikiProgressBar.xaml
@@ -28,6 +28,31 @@ namespace Wizard
         private MCIPLayer m_SoundPlayer = new MCIPLayer();
         private string m_sExePath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         private Options _options;
+
+        [Serializable]
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        public class ReiKiSettings
+        {
+            [Browsable(false)]
+            [DefaultValue(180.0)]
+            public double ProgressInterval { get; set; } = 180.0;
+
+            [Browsable(false)]
+            public bool BellAtTheEnd { get; set; } = false;
+        }
+
+        private double ProgressInterval { get; set; }
+        private bool BellAtTheEnd { get; set; }
+
+        private ReiKiSettings Settings
+        {
+            get
+            {
+                if(_options.PlayListCollection.SelectedPlayList != null)
+                    return _options.PlayListCollection.SelectedPlayList.ReiKiSettings;
+                return new ReiKiSettings();
+            }
+        }
 
         public ReikiProgressBar()
         {
@@ -54,13 +79,13 @@ namespace Wizard
             {
                 const string FMT = @"m\:ss"; // @"hh\:mm\:ss"
 
-                string interval = TimeSpan.FromSeconds(_options.ProgressInterval).ToString(FMT);
+                string interval = TimeSpan.FromSeconds(Settings.ProgressInterval).ToString(FMT);
                 string value = TimeSpan.FromSeconds(secondsLeft).ToString(FMT);
 
                 if (Max > 10)
                 {
                     this.ToolTip = string.Format("Bell: {0}, Interval: {1:0} Time Left: {2:0}",
-                        _options.BellAtTheEnd ? "On" : "Off", interval, value);
+                        Settings.BellAtTheEnd ? "On" : "Off", interval, value);
                 }
                 else
                 {
@@ -82,7 +107,7 @@ namespace Wizard
             {
                 Value = m_ElapsedTime.TotalSeconds % Max;
 
-                if (_options.BellAtTheEnd && Max - Value < 2 && !m_bSoundPlayed)
+                if (Settings.BellAtTheEnd && Max - Value < 2 && !m_bSoundPlayed)
                 {
                     m_bSoundPlayed = true;
                     PlayDing();
@@ -114,28 +139,29 @@ namespace Wizard
 			{ 
 				if (_options == null) 
 					return 180; 
-				return _options.ProgressInterval; 
+				return Settings.ProgressInterval; 
 			}
 			set 
-			{ 
-				_options.ProgressInterval = value;
+			{
+                Settings.ProgressInterval = value;
                 DrawTicks();
 
                 OnPropertyChanged(); 
 			}
 		}
 
-		public Options Options
-		{
-			set 
-			{ 
-				_options = value;
-				mnuBellOnOff.IsChecked = _options.BellAtTheEnd;
-                chkBellAtTheEnd.IsChecked = _options.BellAtTheEnd;
-                InitInterval();
-				OnPropertyChanged("Max"); 
-			}
-		}
+        public void Initialize(Options options)
+        {
+            if (options == null)
+                return;
+
+            _options = options;
+
+            mnuBellOnOff.IsChecked = Settings.BellAtTheEnd;
+            chkBellAtTheEnd.IsChecked = Settings.BellAtTheEnd;
+            InitInterval();
+            OnPropertyChanged("Max");
+        }
         
         public void Start()
         {
@@ -193,14 +219,14 @@ namespace Wizard
             {
                 mnuBellOnOff.IsChecked = !mnuBellOnOff.IsChecked;
                 if (_options != null)
-                    _options.BellAtTheEnd = mnuBellOnOff.IsChecked;
+                    Settings.BellAtTheEnd = mnuBellOnOff.IsChecked;
 
                 chkBellAtTheEnd.IsChecked = mnuBellOnOff.IsChecked;
             }
             if(e.Source is CheckBox)
             {
                 if (_options != null)
-                    _options.BellAtTheEnd = chkBellAtTheEnd.IsChecked.Value;
+                    Settings.BellAtTheEnd = chkBellAtTheEnd.IsChecked.Value;
 
                 mnuBellOnOff.IsChecked = chkBellAtTheEnd.IsChecked.Value;
             }
@@ -236,17 +262,17 @@ namespace Wizard
 
 		private void InitInterval()
 		{
-            if (_options.ProgressInterval < 31)
+            if (Settings.ProgressInterval < 31)
                 SetInterval(chkNoProgress);
-            else if (_options.ProgressInterval > 30 && _options.ProgressInterval < 61)
+            else if (Settings.ProgressInterval > 30 && Settings.ProgressInterval < 61)
                 SetInterval(chkBell1min);
-            else if (_options.ProgressInterval > 60 && _options.ProgressInterval < 121)
+            else if (Settings.ProgressInterval > 60 && Settings.ProgressInterval < 121)
                 SetInterval(chkBell2min);
-            else if (_options.ProgressInterval > 120 && _options.ProgressInterval < 181)
+            else if (Settings.ProgressInterval > 120 && Settings.ProgressInterval < 181)
 				SetInterval(chkBell3min);
-			else if (_options.ProgressInterval > 180 && _options.ProgressInterval < 241)
+			else if (Settings.ProgressInterval > 180 && Settings.ProgressInterval < 241)
 				SetInterval(chkBell4min);
-			else if (_options.ProgressInterval > 240)
+			else if (Settings.ProgressInterval > 240)
 				SetInterval(chkBell5min);
 			else //default
 				SetInterval(chkBell3min);

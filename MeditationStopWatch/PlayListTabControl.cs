@@ -47,8 +47,8 @@ namespace MeditationStopWatch
                 m_tabPlayLists.TabPages.Add(tab);
             }
 
-            if (m_tabPlayLists.TabPages.Count > 0)
-                m_tabPlayLists.SelectedIndex = 0;
+            if (m_tabPlayLists.TabPages.Count > 0 && m_Options.PlayListCollection.SelectedIndex < m_tabPlayLists.TabPages.Count)
+                m_tabPlayLists.SelectedIndex = m_Options.PlayListCollection.SelectedIndex;
             m_tabPlayLists_SelectedIndexChanged(this, null);
         }
 
@@ -60,6 +60,7 @@ namespace MeditationStopWatch
                 return;
             }
 
+            m_Options.PlayListCollection.SelectedIndex = m_tabPlayLists.SelectedIndex;
             PlayList list = m_tabPlayLists.SelectedTab.Tag as PlayList;
             m_mp3List.ReloadList(list.List.ToArray(), false);
         }

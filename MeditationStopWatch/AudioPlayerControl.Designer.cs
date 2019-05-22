@@ -53,7 +53,7 @@
             this.m_openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.m_toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.m_reiKi = new System.Windows.Forms.Integration.ElementHost();
-            this.m_progrReiKi = new Wizard.ReikiProgressBar();
+            this.m_progrReiKi = new ReiKi.ReikiProgressBar();
             this.m_imageListTab = new System.Windows.Forms.ImageList(this.components);
             this.m_pnlMain = new System.Windows.Forms.Panel();
             this.m_splitFiles = new System.Windows.Forms.SplitContainer();
@@ -409,7 +409,7 @@
 		private System.Windows.Forms.OpenFileDialog m_openFileDialog;
         private System.Windows.Forms.ToolTip m_toolTip1;
         private System.Windows.Forms.Integration.ElementHost m_reiKi;
-        private Wizard.ReikiProgressBar m_progrReiKi;
+        private ReiKi.ReikiProgressBar m_progrReiKi;
 		private System.Windows.Forms.SplitContainer m_splitInfo;
 		private System.Windows.Forms.Panel m_pnlButtons;
         private System.Windows.Forms.Panel m_pnlMain;

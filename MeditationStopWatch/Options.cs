@@ -22,6 +22,21 @@ namespace MeditationStopWatch
 
         public List<string> List { get; set; } = new List<string>();
 
+        private ReiKi.ReikiProgressBar.ReiKiSettings _reiKi;
+        public ReiKi.ReikiProgressBar.ReiKiSettings ReiKiSettings
+        {
+            get
+            {
+                if (_reiKi == null)
+                    _reiKi = new ReiKi.ReikiProgressBar.ReiKiSettings();
+                return _reiKi;
+            }
+            set
+            {
+                _reiKi = value;
+            }
+        }
+
         public override string ToString()
         {
             return Name;
@@ -113,9 +128,21 @@ namespace MeditationStopWatch
     {
         public List<PlayList> Collection { get; set; } = new List<PlayList>();
 
+        public int SelectedIndex { get; set; } = 0;
+
         public PlayLists()
         {
             Collection.Add(new PlayList());
+        }
+
+        public PlayList SelectedPlayList
+        {
+            get
+            {
+                if(SelectedIndex >=0 && SelectedIndex < Count)
+                    return Collection[SelectedIndex];
+                return null;
+            }
         }
 
         public int Count { get { return Collection.Count; } }
@@ -196,15 +223,8 @@ namespace MeditationStopWatch
 		[DefaultValue(true)]
 		public bool Loop { get; set; }
 
-		[Browsable(false)]
-		public bool BellAtTheEnd { get; set; }
+        #region Clock Options
 
-		[Browsable(false)]
-		[DefaultValue(180.0)]
-		public double ProgressInterval { get; set; }
-
-		#region Clock Options
-		
         [Category("3. Clock Color Options")]
         [Description("Analog Clock Settings")]
         public AnalogClock.ClockSettings AnalogClockSettings { get; set; } = new AnalogClock.ClockSettings();
