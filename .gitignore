@@ -30,3 +30,7 @@ SpeedCamUpd
 /MeasuringTape/RulerWPF/.vs/RulerWPF/v15/Server/sqlite3
 /RulerWPF/.vs/RulerWPF/v15/Server/sqlite3
 /Binaries/app.publish/DUMeterMZ.exe
+/Binaries/DUMeterMZ.config.xml
+/Binaries/DUMeterMZ.config
+/Binaries/log.mdb
+/Binaries/log.ldb

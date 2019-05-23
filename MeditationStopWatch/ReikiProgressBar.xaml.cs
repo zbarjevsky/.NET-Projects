@@ -281,16 +281,33 @@ namespace ReiKi
         private void DrawTicks()
         {
             _canvas.Children.Clear();
-            double line_count = (Max / 30.0); //line per 30 sec
+            double line_count = Max;  //(Max / 30.0); //line per 30 sec
             double line_offset = (_canvas.ActualWidth-3) / line_count;
             double smallDelta = _canvas.ActualHeight / 10;
             double bigDelta = _canvas.ActualHeight / 4;
 
             for (int i = 0; i < line_count + 1; i++)
             {
-                bool odd = i % 2 == 1;
-                double thickness = odd ? 1 : 2;
-                double delta = odd ? bigDelta : smallDelta;
+                double thickness = -1;
+                double delta = bigDelta;
+
+                if (i % 10 == 0)
+                {
+                    thickness = 0.5;
+                    delta = bigDelta;
+                }
+                if (i % 30 == 0)
+                {
+                    thickness = 2;
+                    delta = bigDelta;
+                }
+                if (i % 60 == 0)
+                {
+                    thickness = 2;
+                    delta = smallDelta;
+                }
+                if (thickness < 0)
+                    continue;
 
                 Line line = new Line();
                 line.Stroke = System.Windows.Media.Brushes.Green;
