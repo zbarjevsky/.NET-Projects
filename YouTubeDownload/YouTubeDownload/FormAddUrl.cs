@@ -114,9 +114,9 @@ namespace YouTubeDownload
             Uri url = null;
             try { url = new Uri(text); } catch { }
 
-            if (url == null || url.Host != "www.youtube.com")
+            if (url == null || string.IsNullOrWhiteSpace(url.Host)) // != "www.youtube.com")
             {
-                m_errorProvider.SetError(m_txtUrl, "invalid youtube url");
+                m_errorProvider.SetError(m_txtUrl, "invalid url");
                 m_errorProvider.SetIconAlignment(m_txtUrl, ErrorIconAlignment.MiddleRight);
                 return false;
             }

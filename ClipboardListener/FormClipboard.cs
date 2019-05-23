@@ -166,7 +166,11 @@ namespace ClipboardManager
 
             m_notifyIconCoodClip.Visible = true;
             this.Hide();
-		}//end FormClipboard_Load
+
+            m_listHistory.SelectMainEntry = (clp) => SetAsActiveItem(clp);
+            m_listHistory.RemoveFromMain = (clp) => RemoveFromMainList(clp);
+            m_listHistory.AddToFavorites = (clp) => AddToFavorites(clp);
+        }//end FormClipboard_Load
 
 		private void FormClipboard_FormClosing(object sender, FormClosingEventArgs e)
 		{
@@ -617,25 +621,29 @@ namespace ClipboardManager
 			if (itm == null || itm.Tag == null)
 				return;
 
-			try
-			{
-				ClipboardList.ClipboardEntry clp = (ClipboardList.ClipboardEntry)itm.Tag;
-				LogMethod("ClipboardEntry_AddToFavorites_Click", "Add tofavorites: {0}", clp.ShortDesc());
+            AddToFavorites(itm.Tag as ClipboardList.ClipboardEntry);
+        }//end m_contextMenuStrip_ClipboardEntry_AddToFavorites_Click
 
-				m_ClipboardListFavorites.AddEntry(clp);
+        private void AddToFavorites(ClipboardList.ClipboardEntry clp)
+        {
+            try
+            {
+                LogMethod("ClipboardEntry_AddToFavorites_Click", "Add tofavorites: {0}", clp.ShortDesc());
 
-				//rebuild favorites list
-				m_contextMenuStripClipboard_Favorites.DropDownItems.Clear();
-				m_contextMenuStripClipboard_Favorites.DropDownItems.AddRange(BuildFavoritesList(true));
+                m_ClipboardListFavorites.AddEntry(clp);
 
-				m_contextMenuStripClipboard.Focus();
-			}//end try
-			finally
-			{
-			}//end finally
-		}//end m_contextMenuStrip_ClipboardEntry_AddToFavorites_Click
+                //rebuild favorites list
+                m_contextMenuStripClipboard_Favorites.DropDownItems.Clear();
+                m_contextMenuStripClipboard_Favorites.DropDownItems.AddRange(BuildFavoritesList(true));
 
-		private void m_contextMenuStrip_ClipboardEntry_Edit_Click(object sender, EventArgs e)
+                m_contextMenuStripClipboard.Focus();
+            }//end try
+            finally
+            {
+            }//end finally
+        }
+
+        private void m_contextMenuStrip_ClipboardEntry_Edit_Click(object sender, EventArgs e)
 		{
 			ToolStripItem itm = (ToolStripItem)sender;
 			if (itm == null || itm.Tag == null)
@@ -653,23 +661,28 @@ namespace ClipboardManager
 			if (itm == null || itm.Tag == null)
 				return;
 
-			try
-			{
-				ClipboardList.ClipboardEntry clp = (ClipboardList.ClipboardEntry)itm.Tag;
-				LogMethod("ClipboardEntry_Remove_Click", "Delete: {0}", clp.ShortDesc());
-				int idx = m_ClipboardListMain.FindEntry(clp);
-				if (idx > 0) //cannot remove last entry
-					m_ClipboardListMain.RemoveAt(idx);
-				m_contextMenuStripClipboard.Close(ToolStripDropDownCloseReason.AppFocusChange);
-				m_bModified = true;
-			}//end try
-			finally
-			{
-				GC.Collect();
-			}//end finally
+            RemoveFromMainList(itm.Tag as ClipboardList.ClipboardEntry);
 		}//end m_contextMenuStrip_ClipboardEntry_Remove_Click
 
-		private void m_contextMenuStripClipboard_Favorites_Entry_MouseUp(object sender, MouseEventArgs e)
+        private void RemoveFromMainList(ClipboardList.ClipboardEntry clp)
+        {
+            try
+            {
+                LogMethod("ClipboardEntry_Remove_Click", "Delete: {0}", clp.ShortDesc());
+                int idx = m_ClipboardListMain.FindEntry(clp);
+                if (idx > 0) //cannot remove last entry
+                    m_ClipboardListMain.RemoveAt(idx);
+                m_contextMenuStripClipboard.Close(ToolStripDropDownCloseReason.AppFocusChange);
+                m_listHistory.UpdateHistoryList(m_ClipboardListMain);
+                m_bModified = true;
+            }//end try
+            finally
+            {
+                GC.Collect();
+            }//end finally
+        }
+
+        private void m_contextMenuStripClipboard_Favorites_Entry_MouseUp(object sender, MouseEventArgs e)
 		{
 			//m_contextMenuStrip_ClipboardEntry_LeftClick(sender, e);
 		}//end m_contextMenuStripClipboard_Favorites_Entry_MouseUp
@@ -680,41 +693,45 @@ namespace ClipboardManager
 			if (itm == null || itm.Tag == null)
 				return;
 
-			try
-			{
-				ClipboardList.ClipboardEntry clp = (ClipboardList.ClipboardEntry)itm.Tag;
-				ClipboardList.ClipboardEntry latest = m_ClipboardListMain.GetCurrentEntry();
+            SetAsActiveItem(itm.Tag as ClipboardList.ClipboardEntry);
+		}//end m_contextMenuStrip_ClipboardEntry_LeftClick
 
-				//special threatment for last entry click
-				//for main list only
-				if ( clp._ownerType == m_ClipboardListMain.m_sListType && latest.Equals(clp) ) 
-				{
-					m_contextMenuStripTrayIcon_Show_Click(sender, e);
+        private void SetAsActiveItem(ClipboardList.ClipboardEntry clp)
+        {
+            try
+            {
+                ClipboardList.ClipboardEntry latest = m_ClipboardListMain.GetCurrentEntry();
+
+                //special threatment for last entry click
+                //for main list only
+                if (clp._ownerType == m_ClipboardListMain.m_sListType && latest.Equals(clp))
+                {
+                    m_contextMenuStripTrayIcon_Show_Click(this, null);
                 }//end if
-				else
-				{
-					//make this item first and preserve original icon
-					m_ClipboardListMain.AddEntry(clp.Clone());
+                else
+                {
+                    //make this item first and preserve original icon
+                    m_ClipboardListMain.AddEntry(clp.Clone());
 
-					m_bPasteFromThis = true;
-					clp.Put();
+                    m_bPasteFromThis = true;
+                    clp.Put();
                 }//end else
 
                 //close parent menu
                 m_contextMenuStripClipboard.Visible = false;
             }//end try
-			catch ( Exception err )
-			{
-				LogMethod("m_contextMenuStrip_ClipboardEntry_LeftClick()", 
-					"Error: ", err.Message);
-			}//end catch
-			finally
-			{
-				//m_bPasteFromThis = false;
-			}//end finally
-		}//end m_contextMenuStrip_ClipboardEntry_LeftClick
+            catch (Exception err)
+            {
+                LogMethod("m_contextMenuStrip_ClipboardEntry_LeftClick()",
+                    "Error: ", err.Message);
+            }//end catch
+            finally
+            {
+                //m_bPasteFromThis = false;
+            }//end finally
+        }
 
-		private void m_contextMenuStripClipboard_Closing(object sender, ToolStripDropDownClosingEventArgs e)
+        private void m_contextMenuStripClipboard_Closing(object sender, ToolStripDropDownClosingEventArgs e)
 		{
 			if ( m_bLeaveContextMenuOpened )
 				e.Cancel = true;
@@ -911,10 +928,10 @@ namespace ClipboardManager
 			this.WindowState = FormWindowState.Normal;
 
 			//if out of desktop window more than a half
-			if (this.Location.X < 0 || this.Location.X > SystemInformation.WorkingArea.Width - this.Width/2)
+			if (this.Location.X < 0 || this.Location.X > SystemInformation.VirtualScreen.Width - this.Width/2)
 				this.Left = 200;
 
-			if (this.Location.Y < 0 || this.Location.Y > SystemInformation.WorkingArea.Height - this.Height/2)
+			if (this.Location.Y < 0 || this.Location.Y > SystemInformation.VirtualScreen.Height - this.Height/2)
 				this.Top = 150;
 
 			NativeWIN32.SetForegroundWindow(this.Handle);

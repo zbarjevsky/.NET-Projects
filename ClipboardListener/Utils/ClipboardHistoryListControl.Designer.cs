@@ -28,8 +28,13 @@ namespace ClipboardManager.Utils
             this.m_lblSearch = new System.Windows.Forms.Label();
             this.m_txtSearch = new System.Windows.Forms.TextBox();
             this.m_errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
+            this.m_contextMenuStrip_ClipboardEntry = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.m_contextMenuStrip_ClipboardEntry_AddToFavorites = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_contextMenuStrip_ClipboardEntry_Edit = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_contextMenuStrip_ClipboardEntry_Remove = new System.Windows.Forms.ToolStripMenuItem();
             this.m_pnlOperations.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_errorProvider)).BeginInit();
+            this.m_contextMenuStrip_ClipboardEntry.SuspendLayout();
             this.SuspendLayout();
             // 
             // m_listHistory
@@ -38,6 +43,7 @@ namespace ClipboardManager.Utils
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader3});
+            this.m_listHistory.ContextMenuStrip = this.m_contextMenuStrip_ClipboardEntry;
             this.m_listHistory.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_listHistory.FullRowSelect = true;
             this.m_listHistory.GridLines = true;
@@ -131,6 +137,41 @@ namespace ClipboardManager.Utils
             // 
             this.m_errorProvider.ContainerControl = this;
             // 
+            // m_contextMenuStrip_ClipboardEntry
+            // 
+            this.m_contextMenuStrip_ClipboardEntry.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.m_contextMenuStrip_ClipboardEntry.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.m_contextMenuStrip_ClipboardEntry_AddToFavorites,
+            this.m_contextMenuStrip_ClipboardEntry_Edit,
+            this.m_contextMenuStrip_ClipboardEntry_Remove});
+            this.m_contextMenuStrip_ClipboardEntry.Name = "m_contextMenuStrip_ClipboardEntry";
+            this.m_contextMenuStrip_ClipboardEntry.Size = new System.Drawing.Size(165, 104);
+            this.m_contextMenuStrip_ClipboardEntry.Text = "Operations";
+            // 
+            // m_contextMenuStrip_ClipboardEntry_AddToFavorites
+            // 
+            this.m_contextMenuStrip_ClipboardEntry_AddToFavorites.Image = ((System.Drawing.Image)(resources.GetObject("m_contextMenuStrip_ClipboardEntry_AddToFavorites.Image")));
+            this.m_contextMenuStrip_ClipboardEntry_AddToFavorites.Name = "m_contextMenuStrip_ClipboardEntry_AddToFavorites";
+            this.m_contextMenuStrip_ClipboardEntry_AddToFavorites.Size = new System.Drawing.Size(164, 26);
+            this.m_contextMenuStrip_ClipboardEntry_AddToFavorites.Text = "&Add to Favorites";
+            this.m_contextMenuStrip_ClipboardEntry_AddToFavorites.Click += new System.EventHandler(this.m_contextMenuStrip_ClipboardEntry_AddToFavorites_Click);
+            // 
+            // m_contextMenuStrip_ClipboardEntry_Edit
+            // 
+            this.m_contextMenuStrip_ClipboardEntry_Edit.Image = ((System.Drawing.Image)(resources.GetObject("m_contextMenuStrip_ClipboardEntry_Edit.Image")));
+            this.m_contextMenuStrip_ClipboardEntry_Edit.Name = "m_contextMenuStrip_ClipboardEntry_Edit";
+            this.m_contextMenuStrip_ClipboardEntry_Edit.Size = new System.Drawing.Size(164, 26);
+            this.m_contextMenuStrip_ClipboardEntry_Edit.Text = "&Edit";
+            this.m_contextMenuStrip_ClipboardEntry_Edit.Click += new System.EventHandler(this.m_contextMenuStrip_ClipboardEntry_Edit_Click);
+            // 
+            // m_contextMenuStrip_ClipboardEntry_Remove
+            // 
+            this.m_contextMenuStrip_ClipboardEntry_Remove.Image = ((System.Drawing.Image)(resources.GetObject("m_contextMenuStrip_ClipboardEntry_Remove.Image")));
+            this.m_contextMenuStrip_ClipboardEntry_Remove.Name = "m_contextMenuStrip_ClipboardEntry_Remove";
+            this.m_contextMenuStrip_ClipboardEntry_Remove.Size = new System.Drawing.Size(164, 26);
+            this.m_contextMenuStrip_ClipboardEntry_Remove.Text = "&Delete";
+            this.m_contextMenuStrip_ClipboardEntry_Remove.Click += new System.EventHandler(this.m_contextMenuStrip_ClipboardEntry_Remove_Click);
+            // 
             // ClipboardHistoryListControl
             // 
             this.Controls.Add(this.m_listHistory);
@@ -141,6 +182,7 @@ namespace ClipboardManager.Utils
             this.m_pnlOperations.ResumeLayout(false);
             this.m_pnlOperations.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_errorProvider)).EndInit();
+            this.m_contextMenuStrip_ClipboardEntry.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -152,5 +194,9 @@ namespace ClipboardManager.Utils
         private System.ComponentModel.IContainer components;
         private ErrorProvider m_errorProvider;
         private Button m_btnFindNext;
+        private ContextMenuStrip m_contextMenuStrip_ClipboardEntry;
+        private ToolStripMenuItem m_contextMenuStrip_ClipboardEntry_AddToFavorites;
+        private ToolStripMenuItem m_contextMenuStrip_ClipboardEntry_Edit;
+        private ToolStripMenuItem m_contextMenuStrip_ClipboardEntry_Remove;
     }
 }
