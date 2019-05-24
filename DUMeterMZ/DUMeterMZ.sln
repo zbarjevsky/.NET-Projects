@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 2013 for Windows Desktop
-VisualStudioVersion = 12.0.21005.1
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DUMeterMZ", "DUMeterMZ.csproj", "{63612068-2997-4E1E-BF7B-22F499966EE7}"
 EndProject
@@ -20,6 +20,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HotPixelTest", "..\HotPixelTest\HotPixelTest.csproj", "{199B81F5-F93D-45FE-AF71-67F2A8AC1A85}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VCFEdit", "..\VCFEdit\VCFEdit.csproj", "{675CB075-E42C-47F1-BA41-2204AF40AD6A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RulerWPF", "..\RulerWPF\RulerWPF.csproj", "{D570FA45-E261-4594-99F9-00982C366EC1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -130,6 +132,18 @@ Global
 		{675CB075-E42C-47F1-BA41-2204AF40AD6A}.Release|Mixed Platforms.Build.0 = Release|x86
 		{675CB075-E42C-47F1-BA41-2204AF40AD6A}.Release|x86.ActiveCfg = Release|x86
 		{675CB075-E42C-47F1-BA41-2204AF40AD6A}.Release|x86.Build.0 = Release|x86
+		{D570FA45-E261-4594-99F9-00982C366EC1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D570FA45-E261-4594-99F9-00982C366EC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D570FA45-E261-4594-99F9-00982C366EC1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D570FA45-E261-4594-99F9-00982C366EC1}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D570FA45-E261-4594-99F9-00982C366EC1}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{D570FA45-E261-4594-99F9-00982C366EC1}.Debug|x86.Build.0 = Debug|Any CPU
+		{D570FA45-E261-4594-99F9-00982C366EC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D570FA45-E261-4594-99F9-00982C366EC1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D570FA45-E261-4594-99F9-00982C366EC1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D570FA45-E261-4594-99F9-00982C366EC1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D570FA45-E261-4594-99F9-00982C366EC1}.Release|x86.ActiveCfg = Release|Any CPU
+		{D570FA45-E261-4594-99F9-00982C366EC1}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
