@@ -29,11 +29,10 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormFullScreenImage));
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pictureBox1 = new MeditationStopWatch.ZoomablePictureBoxUserControl();
             this.m_btnCancel = new System.Windows.Forms.Button();
             this.m_lblVolume = new MeditationStopWatch.Tools.LabelWithTimeout();
             this.m_analogClock = new MeditationStopWatch.AnalogClock();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_analogClock)).BeginInit();
             this.SuspendLayout();
             // 
@@ -44,7 +43,6 @@
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(800, 600);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
@@ -58,7 +56,7 @@
             this.m_btnCancel.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Red;
             this.m_btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.m_btnCancel.Image = ((System.Drawing.Image)(resources.GetObject("m_btnCancel.Image")));
-            this.m_btnCancel.Location = new System.Drawing.Point(773, 2);
+            this.m_btnCancel.Location = new System.Drawing.Point(763, 12);
             this.m_btnCancel.Name = "m_btnCancel";
             this.m_btnCancel.Size = new System.Drawing.Size(25, 26);
             this.m_btnCancel.TabIndex = 2;
@@ -81,7 +79,7 @@
             // m_analogClock
             // 
             this.m_analogClock.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_analogClock.BackColor = System.Drawing.Color.Transparent;
+            this.m_analogClock.BackColor = System.Drawing.Color.Black;
             this.m_analogClock.Location = new System.Drawing.Point(367, 33);
             this.m_analogClock.MinimumSize = new System.Drawing.Size(20, 20);
             this.m_analogClock.Name = "m_analogClock";
@@ -95,9 +93,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.m_btnCancel;
             this.ClientSize = new System.Drawing.Size(800, 600);
+            this.Controls.Add(this.m_btnCancel);
             this.Controls.Add(this.m_lblVolume);
             this.Controls.Add(this.m_analogClock);
-            this.Controls.Add(this.m_btnCancel);
             this.Controls.Add(this.pictureBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Name = "FormFullScreenImage";
@@ -106,7 +104,6 @@
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormFullScreenImage_FormClosed);
             this.Load += new System.EventHandler(this.FormFullScreenImage_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_analogClock)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -115,7 +112,7 @@
 
         #endregion
 
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private ZoomablePictureBoxUserControl pictureBox1;
         private System.Windows.Forms.Button m_btnCancel;
         private AnalogClock m_analogClock;
         private Tools.LabelWithTimeout m_lblVolume;

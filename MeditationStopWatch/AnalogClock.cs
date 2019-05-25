@@ -46,8 +46,7 @@ namespace MeditationStopWatch
 			// This call is required by the Windows.Forms Form Designer.
 			InitializeComponent();
 
-			// TODO: Add any initialization after the InitializeComponent call
-
+            // TODO: Add any initialization after the InitializeComponent call
 		}
 
 		/// <summary> 
@@ -98,14 +97,15 @@ namespace MeditationStopWatch
 		{
 			base.OnLoadCompleted(e);
 			_dateTime = DateTime.Now;
-			this.AnalogClock_Resize(null, e);
+            this.AnalogClock_Resize(null, e);
 		}
 
-		private void AnalogClock_Load(object sender, System.EventArgs e)
-		{
-			_dateTime=DateTime.Now;
-			this.AnalogClock_Resize(sender,e);
-		}
+		//private void AnalogClock_Load(object sender, System.EventArgs e)
+		//{
+		//	_dateTime=DateTime.Now;
+  //          this.BackColor = Settings.ClockBackground;
+  //          this.AnalogClock_Resize(sender,e);
+		//}
 
 		private void timer1_Tick(object sender, System.EventArgs e)
 		{

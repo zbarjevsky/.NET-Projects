@@ -50,7 +50,7 @@ namespace MeditationStopWatch
                 m_lblVolume.Visible = false;
             m_pictureBox1.OnSizeChangedAction = (bounds) =>
             {
-                m_pictureBox1.EnsureVisible(m_lblVolume);
+                m_pictureBox1.EnsureVisible(m_lblVolume, AnchorStyles.Top | AnchorStyles.Right, 50);
             };
             m_pictureBox1.OnClickAction = () =>
             {
@@ -399,7 +399,7 @@ namespace MeditationStopWatch
             base.OnMouseWheel(e);
 		}
 
-		public int AdjustVolume(double delta)
+		public string AdjustVolume(double delta)
 		{
 			delta /= Math.Abs(delta);
 
@@ -425,10 +425,10 @@ namespace MeditationStopWatch
 
             string fmt = (vol < 10) ? "0.0" : "0";
 
-            m_pictureBox1.EnsureVisible(m_lblVolume);
+            m_pictureBox1.EnsureVisible(m_lblVolume, AnchorStyles.Top | AnchorStyles.Right, 50);
             m_lblVolume.Show(string.Format("Volume: {0} %", (vol /10.0).ToString(fmt)), 4000);
 
-            return vol;
+            return m_lblVolume.Text;
 		}
 
         private void m_btnPrevImage_Click(object sender, EventArgs e)

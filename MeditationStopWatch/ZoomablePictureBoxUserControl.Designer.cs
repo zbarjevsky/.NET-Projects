@@ -128,6 +128,7 @@
             this.Name = "ZoomablePictureBoxUserControl";
             this.Size = new System.Drawing.Size(435, 367);
             this.Load += new System.EventHandler(this.ZoomablePictureBoxUserControl_Load);
+            this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Control_MouseMove);
             this.panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);

@@ -35,7 +35,7 @@ namespace MeditationStopWatch
             m_btnFitWindow_Click(this, null);
         }
 
-        public void EnsureVisible(Control ctrl)
+        public void EnsureVisible(Control ctrl, AnchorStyles ancors, int margin = 20, bool bAlways = false)
         {
             //visible bounds in picture box coordinates
             int left = pictureBox1.Left > 0 ? 0 : -pictureBox1.Left;
@@ -52,11 +52,29 @@ namespace MeditationStopWatch
             //if (ctrl.Bottom > bottom)
             //    ctrl.Top = bottom - ctrl.Height;
 
-            if(ctrl.Left < left || ctrl.Top < top || ctrl.Right > right || ctrl.Bottom > bottom)
+            if (bAlways || ctrl.Left < left || ctrl.Top < top || ctrl.Right > right || ctrl.Bottom > bottom)
             {
-                //align right bottom
-                ctrl.Left = right - ctrl.Width - 20;
-                ctrl.Top = bottom - ctrl.Height - 20;
+                if (ancors == AnchorStyles.None) //center if out of view
+                {
+                    ctrl.Left = left + (right - left - ctrl.Width) / 2;
+                    ctrl.Top = top + (bottom - top - ctrl.Height) / 2;
+                }
+                if (ancors.HasFlag(AnchorStyles.Left))
+                {
+                    ctrl.Left = left + margin;
+                }
+                if (ancors.HasFlag(AnchorStyles.Right))
+                {
+                    ctrl.Left = right - ctrl.Width - margin;
+                }
+                if (ancors.HasFlag(AnchorStyles.Top))
+                {
+                    ctrl.Top = top + margin;
+                }
+                if (ancors.HasFlag(AnchorStyles.Bottom))
+                {
+                    ctrl.Top = bottom - ctrl.Height - margin;
+                }
             }
         }
 
@@ -115,10 +133,9 @@ namespace MeditationStopWatch
         private Point _mousePos = new Point();
         private void Control_MouseMove(object sender, MouseEventArgs e)
         {
-            if (Math.Abs(e.X - _mousePos.X) < 3 && Math.Abs(e.Y - _mousePos.Y) < 3)
+            if (Math.Abs(e.X - _mousePos.X) < 2 && Math.Abs(e.Y - _mousePos.Y) < 2)
                 return;
             _mousePos = e.Location;
-
             ShowControls(true);
             OnMouseMoveAction();
         }
@@ -133,6 +150,9 @@ namespace MeditationStopWatch
         {
             if(show)
                 _stopwatch.Restart();
+
+            if (m_btnFitWindow.Visible == show)
+                return;
 
             if (pictureBox1.Dock == DockStyle.Fill)
                 pictureBox1.Cursor = Cursors.Arrow;
@@ -159,8 +179,13 @@ namespace MeditationStopWatch
 
         private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
         {
+            ShowControls(true);
+
             if (pictureBox1.WasDragging())
+            {
+                OnSizeChangedAction(pictureBox1.Bounds);
                 return;
+            }
 
             if(e.Button == MouseButtons.Left)
                 OnClickAction();
@@ -174,11 +199,6 @@ namespace MeditationStopWatch
                 Zoom(e.Delta > 0 ? 1.1 : 0.9);
 
             OnMouseWheelAction(e.Delta);
-        }
-
-        private void pictureBox1_LoadCompleted(object sender, AsyncCompletedEventArgs e)
-        {
-            toolTip1.SetToolTip(m_btnOrigSize, string.Format("Original Size ({0})", pictureBox1.Image.Size));
         }
     }
 }
