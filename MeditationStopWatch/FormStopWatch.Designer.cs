@@ -231,7 +231,7 @@
             this.m_btnHideSumbnails.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.m_btnHideSumbnails.ImageIndex = 0;
             this.m_btnHideSumbnails.ImageList = this.m_imageListBtnHide;
-            this.m_btnHideSumbnails.Location = new System.Drawing.Point(3, 261);
+            this.m_btnHideSumbnails.Location = new System.Drawing.Point(3, 258);
             this.m_btnHideSumbnails.Name = "m_btnHideSumbnails";
             this.m_btnHideSumbnails.Size = new System.Drawing.Size(111, 23);
             this.m_btnHideSumbnails.TabIndex = 1;

@@ -37,44 +37,6 @@ namespace MeditationStopWatch
             m_Options.AnalogClockSettings = m_analogClock.Settings;
 		}
 
-		private void m_ThumbnailCache_ProgressChanged(object sender, CacheEventArgs e)
-		{
-			UpdateStatus(e.Percent, e.Status);
-		}
-
-		private void UpdateStatus(int percent, string status)
-		{
-			if (this.Disposing || this.IsDisposed) return;
-
-			if (this.InvokeRequired)
-			{
-				BeginInvoke(new MethodInvoker(delegate() { UpdateStatus(percent, status); }));
-			}
-			else
-			{
-				if (m_ThumbnailCache.CancelLoadingThumbnails)
-				{
-					m_toolStripStatusLabel1.Text = "Ready";
-					m_toolStripStatusLabel2.Text = "";
-					//m_toolStripProgressBar1.Value = 0;
-					return;
-				}
-
-				m_toolStripStatusLabel1.Text = status;
-				if (percent > 0)
-					m_toolStripStatusLabel2.Text =
-						percent + " % (" + percent * ImageInfo.AllImages.Count / 100 + " of " + ImageInfo.AllImages.Count + ")";
-				else
-					m_toolStripStatusLabel2.Text = "";
-
-				m_toolStripProgressBar1.Value = percent;
-
-                m_listThumbnails.Invalidate();
-				
-				Application.DoEvents();
-			}
-		}
-
 		private void FormStopWatch_Load(object sender, EventArgs e)
 		{
 			if ( File.Exists(m_sSettingsFile) )
@@ -86,15 +48,16 @@ namespace MeditationStopWatch
             m_lblVolume.Draggable(true);
             if (!DesignMode)
                 m_lblVolume.Visible = false;
-            m_pictureBox1.OnSizeChanged = (bounds) =>
+            m_pictureBox1.OnSizeChangedAction = (bounds) =>
             {
                 m_pictureBox1.EnsureVisible(m_lblVolume);
             };
-            m_pictureBox1.OnClick = () =>
+            m_pictureBox1.OnClickAction = () =>
             {
                 PauseResume();
                 m_pictureBox1.Focus();
             };
+            m_pictureBox1.ShowControlsAction = (show) => { m_btnHideSumbnails.Visible = show; };
 
             InitializeFavorites();
 
@@ -136,6 +99,44 @@ namespace MeditationStopWatch
 
 		private void FormStopWatch_FormClosed(object sender, FormClosedEventArgs e)
 		{
+		}
+
+		private void m_ThumbnailCache_ProgressChanged(object sender, CacheEventArgs e)
+		{
+			UpdateStatus(e.Percent, e.Status);
+		}
+
+		private void UpdateStatus(int percent, string status)
+		{
+			if (this.Disposing || this.IsDisposed) return;
+
+			if (this.InvokeRequired)
+			{
+				BeginInvoke(new MethodInvoker(delegate() { UpdateStatus(percent, status); }));
+			}
+			else
+			{
+				if (m_ThumbnailCache.CancelLoadingThumbnails)
+				{
+					m_toolStripStatusLabel1.Text = "Ready";
+					m_toolStripStatusLabel2.Text = "";
+					//m_toolStripProgressBar1.Value = 0;
+					return;
+				}
+
+				m_toolStripStatusLabel1.Text = status;
+				if (percent > 0)
+					m_toolStripStatusLabel2.Text =
+						percent + " % (" + percent * ImageInfo.AllImages.Count / 100 + " of " + ImageInfo.AllImages.Count + ")";
+				else
+					m_toolStripStatusLabel2.Text = "";
+
+				m_toolStripProgressBar1.Value = percent;
+
+                m_listThumbnails.Invalidate();
+				
+				Application.DoEvents();
+			}
 		}
 
         private void AutoCloseThumbnailsPanel(int delayMs = 2000)
@@ -223,8 +224,9 @@ namespace MeditationStopWatch
 		{
 			_iImageTimeoutCount = 1;
 			m_Options.LastImageFile = image.FullName;
-			m_pictureBox1.PictureBox.Load(image.FullName);
-		}
+			m_pictureBox1.LoadImage(image.FullName);
+            m_pictureBox1.Focus();
+        }
 
 		private void m_mnuFile_Open_Click(object sender, EventArgs e)
 		{
@@ -392,8 +394,9 @@ namespace MeditationStopWatch
 
         protected override void OnMouseWheel(MouseEventArgs e)
 		{
-			//AdjustVolume(e.Delta);
-			base.OnMouseWheel(e);
+            if (!ModifierKeys.HasFlag(Keys.Control))
+                AdjustVolume(e.Delta);
+            base.OnMouseWheel(e);
 		}
 
 		public int AdjustVolume(double delta)
@@ -422,6 +425,7 @@ namespace MeditationStopWatch
 
             string fmt = (vol < 10) ? "0.0" : "0";
 
+            m_pictureBox1.EnsureVisible(m_lblVolume);
             m_lblVolume.Show(string.Format("Volume: {0} %", (vol /10.0).ToString(fmt)), 4000);
 
             return vol;

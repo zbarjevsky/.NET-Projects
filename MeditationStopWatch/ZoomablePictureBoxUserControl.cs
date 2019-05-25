@@ -16,8 +16,11 @@ namespace MeditationStopWatch
     {
         Stopwatch _stopwatch = new Stopwatch();
 
-        public Action OnClick = () => { };
-        public Action<Rectangle> OnSizeChanged = (rect) => { };
+        public Action OnClickAction = () => { };
+        public Action<Rectangle> OnSizeChangedAction = (rect) => { };
+        public Action OnMouseMoveAction = () => { };
+        public Action<bool> ShowControlsAction = (show) => { };
+        public Action<int> OnMouseWheelAction = (delta) => { };
 
         public ZoomablePictureBoxUserControl()
         {
@@ -25,6 +28,12 @@ namespace MeditationStopWatch
         }
 
         public PictureBox PictureBox {  get { return pictureBox1; } }
+        public void LoadImage(string fullPath)
+        {
+            pictureBox1.Load(fullPath);
+            toolTip1.SetToolTip(m_btnOrigSize, string.Format("Original Size ({0})", pictureBox1.Image.Size));
+            m_btnFitWindow_Click(this, null);
+        }
 
         public void EnsureVisible(Control ctrl)
         {
@@ -34,14 +43,21 @@ namespace MeditationStopWatch
             int right = pictureBox1.Right > this.Width ? this.Width - pictureBox1.Left : pictureBox1.Width;
             int bottom = pictureBox1.Bottom > this.Height ? this.Height - pictureBox1.Top : pictureBox1.Height;
 
-            if (ctrl.Left < left)
-                ctrl.Left = left;
-            if (ctrl.Top < top)
-                ctrl.Top = top;
-            if (ctrl.Right > right)
-                ctrl.Left = right - ctrl.Width;
-            if (ctrl.Bottom > bottom)
-                ctrl.Top = bottom - ctrl.Height;
+            //if (ctrl.Left < left)
+            //    ctrl.Left = left;
+            //if (ctrl.Top < top)
+            //    ctrl.Top = top;
+            //if (ctrl.Right > right)
+            //    ctrl.Left = right - ctrl.Width;
+            //if (ctrl.Bottom > bottom)
+            //    ctrl.Top = bottom - ctrl.Height;
+
+            if(ctrl.Left < left || ctrl.Top < top || ctrl.Right > right || ctrl.Bottom > bottom)
+            {
+                //align right bottom
+                ctrl.Left = right - ctrl.Width - 20;
+                ctrl.Top = bottom - ctrl.Height - 20;
+            }
         }
 
         private void ZoomablePictureBoxUserControl_Load(object sender, EventArgs e)
@@ -93,17 +109,18 @@ namespace MeditationStopWatch
             int left = (this.Width - pictureBox1.Width) / 2;
             int top = (this.Height - pictureBox1.Height) / 2;
             pictureBox1.Location = new Point(left, top);
-            OnSizeChanged(pictureBox1.Bounds);
+            OnSizeChangedAction(pictureBox1.Bounds);
         }
 
-        private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
+        private Point _mousePos = new Point();
+        private void Control_MouseMove(object sender, MouseEventArgs e)
         {
-            ShowControls(true);
-        }
+            if (Math.Abs(e.X - _mousePos.X) < 3 && Math.Abs(e.Y - _mousePos.Y) < 3)
+                return;
+            _mousePos = e.Location;
 
-        private void panel1_MouseMove(object sender, MouseEventArgs e)
-        {
             ShowControls(true);
+            OnMouseMoveAction();
         }
 
         private void timer1_Tick(object sender, EventArgs e)
@@ -117,22 +134,51 @@ namespace MeditationStopWatch
             if(show)
                 _stopwatch.Restart();
 
+            if (pictureBox1.Dock == DockStyle.Fill)
+                pictureBox1.Cursor = Cursors.Arrow;
+            else
+                pictureBox1.Cursor = Cursors.Hand;
+
+            ShowCursor(show);
+
             m_btnZoomIn.Visible = show;
             m_btnZoomOut.Visible = show;
             m_btnOrigSize.Visible = show;
             m_btnFitWindow.Visible = show;
 
+            ShowControlsAction(show);
         }
 
-        private void pictureBox1_Click(object sender, EventArgs e)
+        private void ShowCursor(bool show)
         {
-            OnClick();
+            if (!show && ClientRectangle.Contains(PointToClient(Control.MousePosition)))
+                CursorHandler.IsCursorVisible = false;
+            else
+                CursorHandler.IsCursorVisible = true;
+        }
+
+        private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
+        {
+            if (pictureBox1.WasDragging())
+                return;
+
+            if(e.Button == MouseButtons.Left)
+                OnClickAction();
         }
 
         protected override void OnMouseWheel(MouseEventArgs e)
         {
             base.OnMouseWheel(e);
-            Zoom(e.Delta > 0 ? 1.1 : 0.9);
+
+            if(ModifierKeys.HasFlag(Keys.Control))
+                Zoom(e.Delta > 0 ? 1.1 : 0.9);
+
+            OnMouseWheelAction(e.Delta);
+        }
+
+        private void pictureBox1_LoadCompleted(object sender, AsyncCompletedEventArgs e)
+        {
+            toolTip1.SetToolTip(m_btnOrigSize, string.Format("Original Size ({0})", pictureBox1.Image.Size));
         }
     }
 }

@@ -50,7 +50,7 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(435, 367);
             this.panel1.TabIndex = 0;
-            this.panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseMove);
+            this.panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Control_MouseMove);
             // 
             // pictureBox1
             // 
@@ -61,18 +61,18 @@
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
-            this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
-            this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseMove);
+            this.pictureBox1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.pictureBox1_MouseClick);
+            this.pictureBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Control_MouseMove);
             // 
             // m_btnZoomIn
             // 
             this.m_btnZoomIn.Image = ((System.Drawing.Image)(resources.GetObject("m_btnZoomIn.Image")));
             this.m_btnZoomIn.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.m_btnZoomIn.Location = new System.Drawing.Point(0, 0);
+            this.m_btnZoomIn.Location = new System.Drawing.Point(4, 4);
             this.m_btnZoomIn.Name = "m_btnZoomIn";
             this.m_btnZoomIn.Size = new System.Drawing.Size(26, 25);
             this.m_btnZoomIn.TabIndex = 1;
-            this.toolTip1.SetToolTip(this.m_btnZoomIn, "Zoom In");
+            this.toolTip1.SetToolTip(this.m_btnZoomIn, "Zoom In (Ctrl + Mouse Wheel)");
             this.m_btnZoomIn.UseVisualStyleBackColor = true;
             this.m_btnZoomIn.Click += new System.EventHandler(this.m_btnZoomIn_Click);
             // 
@@ -80,11 +80,11 @@
             // 
             this.m_btnZoomOut.Image = ((System.Drawing.Image)(resources.GetObject("m_btnZoomOut.Image")));
             this.m_btnZoomOut.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.m_btnZoomOut.Location = new System.Drawing.Point(25, 0);
+            this.m_btnZoomOut.Location = new System.Drawing.Point(34, 4);
             this.m_btnZoomOut.Name = "m_btnZoomOut";
             this.m_btnZoomOut.Size = new System.Drawing.Size(26, 25);
             this.m_btnZoomOut.TabIndex = 2;
-            this.toolTip1.SetToolTip(this.m_btnZoomOut, "Zoom Out");
+            this.toolTip1.SetToolTip(this.m_btnZoomOut, "Zoom Out( Ctrl + Mouse Wheel)");
             this.m_btnZoomOut.UseVisualStyleBackColor = true;
             this.m_btnZoomOut.Click += new System.EventHandler(this.m_btnZoomOut_Click);
             // 
@@ -92,7 +92,7 @@
             // 
             this.m_btnFitWindow.Image = ((System.Drawing.Image)(resources.GetObject("m_btnFitWindow.Image")));
             this.m_btnFitWindow.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.m_btnFitWindow.Location = new System.Drawing.Point(75, 0);
+            this.m_btnFitWindow.Location = new System.Drawing.Point(94, 4);
             this.m_btnFitWindow.Name = "m_btnFitWindow";
             this.m_btnFitWindow.Size = new System.Drawing.Size(26, 25);
             this.m_btnFitWindow.TabIndex = 3;
@@ -104,7 +104,7 @@
             // 
             this.m_btnOrigSize.Image = ((System.Drawing.Image)(resources.GetObject("m_btnOrigSize.Image")));
             this.m_btnOrigSize.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.m_btnOrigSize.Location = new System.Drawing.Point(50, 0);
+            this.m_btnOrigSize.Location = new System.Drawing.Point(64, 4);
             this.m_btnOrigSize.Name = "m_btnOrigSize";
             this.m_btnOrigSize.Size = new System.Drawing.Size(26, 25);
             this.m_btnOrigSize.TabIndex = 4;
