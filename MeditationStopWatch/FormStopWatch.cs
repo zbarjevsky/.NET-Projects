@@ -82,12 +82,21 @@ namespace MeditationStopWatch
 
             m_analogClock.Settings = m_Options.AnalogClockSettings;
 
-            m_lblVolume.Parent = m_pictureBox1;
+            m_lblVolume.Parent = m_pictureBox1.PictureBox;
             m_lblVolume.Draggable(true);
             if (!DesignMode)
                 m_lblVolume.Visible = false;
+            m_pictureBox1.OnSizeChanged = (bounds) =>
+            {
+                m_pictureBox1.EnsureVisible(m_lblVolume);
+            };
+            m_pictureBox1.OnClick = () =>
+            {
+                PauseResume();
+                m_pictureBox1.Focus();
+            };
 
-			InitializeFavorites();
+            InitializeFavorites();
 
             //restore position
             if (m_Options.AppRectangle != null)
@@ -214,7 +223,7 @@ namespace MeditationStopWatch
 		{
 			_iImageTimeoutCount = 1;
 			m_Options.LastImageFile = image.FullName;
-			m_pictureBox1.Load(image.FullName);
+			m_pictureBox1.PictureBox.Load(image.FullName);
 		}
 
 		private void m_mnuFile_Open_Click(object sender, EventArgs e)
@@ -376,12 +385,6 @@ namespace MeditationStopWatch
             return list;
         }
 
-        private void m_pictureBox1_Click(object sender, EventArgs e)
-		{
-			PauseResume();
-			m_pictureBox1.Focus();
-		}
-
         public void PauseResume()
         {
             m_audioPlayerControl.PauseResume();
@@ -389,7 +392,7 @@ namespace MeditationStopWatch
 
         protected override void OnMouseWheel(MouseEventArgs e)
 		{
-			AdjustVolume(e.Delta);
+			//AdjustVolume(e.Delta);
 			base.OnMouseWheel(e);
 		}
 
@@ -398,9 +401,18 @@ namespace MeditationStopWatch
 			delta /= Math.Abs(delta);
 
 			int vol = m_audioPlayerControl.Volume;
-            delta *= (1 + vol/10.0);
+            if ((vol + delta) >= 10 && (vol + delta) <= 100)
+            {
+                vol -= (vol % 10); //round to nearest 10
+                delta *= 10;
+            }
+            else if ((vol + delta) > 100)
+            {
+                vol -= (vol % 100); //round to nearest 100
+                delta *= 100;
+            }
 
-			vol += (int)delta;
+            vol += (int)delta;
 
 			if (vol < 0) vol = 0;
 			if (vol > 1000) vol = 1000;
@@ -408,12 +420,14 @@ namespace MeditationStopWatch
             System.Diagnostics.Trace.WriteLine("Delta: " + delta + " Vol: " + vol);
 			m_audioPlayerControl.Volume = vol;
 
-            m_lblVolume.Show(string.Format("Volume: {0:0.0} %", vol /10.0), 4000);
+            string fmt = (vol < 10) ? "0.0" : "0";
+
+            m_lblVolume.Show(string.Format("Volume: {0} %", (vol /10.0).ToString(fmt)), 4000);
 
             return vol;
 		}
 
-		private void m_btnPrevImage_Click(object sender, EventArgs e)
+        private void m_btnPrevImage_Click(object sender, EventArgs e)
 		{
             ShowPrevImage();
 		}
@@ -501,19 +515,14 @@ namespace MeditationStopWatch
         private void m_mnuViewFullScreen_Click(object sender, EventArgs e)
         {
             FormFullScreenImage frm = new FormFullScreenImage(this);
-            frm.Picture = m_pictureBox1.Image;
+            frm.Picture = m_pictureBox1.PictureBox.Image;
             frm.ShowDialog(this);
         }
 
-        private void m_btnFitWindow_Click(object sender, EventArgs e)
+        private void m_btnFullScreen_Click(object sender, EventArgs e)
 		{
             m_mnuViewFullScreen_Click(sender, e);
         }
-
-		private void m_btnOrigSize_Click(object sender, EventArgs e)
-		{
-
-		}
 
 		private void m_txtImageIndex_TextChanged(object sender, EventArgs e)
 		{

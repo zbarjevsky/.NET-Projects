@@ -138,6 +138,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="ZoomablePictureBoxUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ZoomablePictureBoxUserControl.Designer.cs">
+      <DependentUpon>ZoomablePictureBoxUserControl.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="AnalogClock.resx">
       <DependentUpon>AnalogClock.cs</DependentUpon>
     </EmbeddedResource>
@@ -166,6 +172,7 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormStopWatch.resx">
       <DependentUpon>FormStopWatch.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="PlayListTabControl.resx">
       <DependentUpon>PlayListTabControl.cs</DependentUpon>
@@ -182,6 +189,9 @@
     </Compile>
     <EmbeddedResource Include="Tools\LabelWithTimeout.resx">
       <DependentUpon>LabelWithTimeout.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ZoomablePictureBoxUserControl.resx">
+      <DependentUpon>ZoomablePictureBoxUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
@@ -215,8 +225,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Images\OriginalSize.ico" />
+    <None Include="Images\FullScreen.ico" />
+    <None Include="Images\RestoreFullScreen.ico" />
     <Content Include="Images\yin-yang %281%29.ico" />
     <Content Include="Images\Yin-Yang.ico" />
+    <None Include="Images\ZoomIn.ico" />
+    <None Include="Images\ZoomOut.ico" />
     <Content Include="Sounds\ding.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

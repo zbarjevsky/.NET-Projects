@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,10 +117,43 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="timer1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="m_btnZoomIn.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsEAAA7BAbiRa+0AAAB5SURBVDhPzZEBCoAwDAP3/1f0ifuBLp2RdNqhIuLBIdRk
+        bq4oZra0R3CbXcILtdYg5wjM8C+NZSo7O8KXWmgDV2fIZMcJQXi2AES2VyJ7gMXR7xagY5Ei2yvCGz8R
+        TK8RItOjOR5KimoOj6PKtnX+mB8tMruRG5SyAqT9T0fBQRSkAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <metadata name="toolTip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <metadata name="$this.TrayLargeIcon" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>False</value>
+  <data name="m_btnZoomOut.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsEAAA7BAbiRa+0AAAB0SURBVDhPzZELDsAgCEO5/yk4ojfYrIylTnCfLMte0phg
+        i6jCqOpSl05b7RItUErp5HUYZrSTjmEXTTbim1GQBU92nTAQCV6L9OyGuhvquwZngtcixBuPCKbfCMFj
+        1pxwEq+Tcvw6LBqb64/5UZPZj9xAZAUAE13Ph9GOIgAAAABJRU5ErkJggg==
+</value>
+  </data>
+  <data name="m_btnFitWindow.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsEAAA7BAbiRa+0AAAA6SURBVDhPYwCC/zgwOsCmBoSxCoIwOsCmBoQRDBLBcDJg
+        FFAhEIeRAegYHWBTA8JYBUEYHWBRw/AfAHN3T7HlTUrEAAAAAElFTkSuQmCC
+</value>
+  </data>
+  <data name="m_btnOrigSize.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsEAAA7BAbiRa+0AAACHSURBVDhP3dG7CoNAFIThTRDSJIUWBhsLIVhaaR1IJeT9
+        Xyf5Z8OBg7trbwY+UHYYvIT/S4MPxniX5oQ31EnSQgelgQozrJPEDvxAByvf4TtJFkzwAwOsfMMLK7ID
+        Z1zhB/TY9e8yvr86T2QHlO1ALgcb8B/RsjtwgQ71y5Qe2/IDxYHDJYQv3LAjWRnkdSUAAAAASUVORK5C
+        YII=
+</value>
+  </data>
+  <metadata name="timer1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>114, 17</value>
   </metadata>
 </root>

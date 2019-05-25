@@ -147,21 +147,24 @@ namespace MeditationStopWatch
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
-			this.timer1 = new System.Windows.Forms.Timer(this.components);
-			// 
-			// timer1
-			// 
-			this.timer1.Enabled = true;
-			this.timer1.Interval = 1000;
-			this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-			// 
-			// AnalogClock
-			// 
-			this.Name = "AnalogClock";
-			this.Resize += new System.EventHandler(this.AnalogClock_Resize);
-			//this.Load += new System.EventHandler(this.AnalogClock_Load);
-			this.Paint += new System.Windows.Forms.PaintEventHandler(this.AnalogClock_Paint);
+            this.components = new System.ComponentModel.Container();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 1000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // AnalogClock
+            // 
+            this.BackColor = System.Drawing.Color.Black;
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.AnalogClock_Paint);
+            this.Resize += new System.EventHandler(this.AnalogClock_Resize);
+            ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
+            this.ResumeLayout(false);
 
 		}
 		#endregion

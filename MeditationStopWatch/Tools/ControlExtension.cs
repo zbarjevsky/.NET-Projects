@@ -121,20 +121,18 @@ namespace MeditationStopWatch.Tools
 
         private static Point UpdateOffset(Control ctrl, Point newLocationOffset)
         {
-            const int HARD_MARGIN = 128;
-
             Size parentSize = ctrl.Parent.Size;
 
-            if (ctrl.Left + newLocationOffset.X < -HARD_MARGIN)
+            if (ctrl.Left + newLocationOffset.X < -ctrl.Width / 2)
                 newLocationOffset.X = 0;
 
-            if (ctrl.Top + newLocationOffset.Y < -HARD_MARGIN)
+            if (ctrl.Top + newLocationOffset.Y < -ctrl.Height / 2)
                 newLocationOffset.Y = 0;
 
-            if (ctrl.Left + ctrl.Width + newLocationOffset.X > parentSize.Width + HARD_MARGIN)
+            if (ctrl.Left + ctrl.Width + newLocationOffset.X > parentSize.Width + ctrl.Width / 2)
                 newLocationOffset.X = 0;
 
-            if (ctrl.Top + ctrl.Height + newLocationOffset.Y > parentSize.Height + HARD_MARGIN)
+            if (ctrl.Top + ctrl.Height + newLocationOffset.Y > parentSize.Height + ctrl.Height / 2)
                 newLocationOffset.Y = 0;
 
             return newLocationOffset;
