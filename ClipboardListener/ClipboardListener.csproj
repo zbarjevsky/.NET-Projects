@@ -139,6 +139,7 @@
     <Compile Include="Utils\SingleInstanceHelper.cs" />
     <Compile Include="Utils\Log.cs" />
     <Compile Include="Utils\Settings.cs" />
+    <Compile Include="Utils\XmlSerializerHelper.cs" />
     <Compile Include="Zip\DotNetZip.cs" />
     <Compile Include="Utils\Encodings.cs" />
     <Compile Include="FormAbout.cs">

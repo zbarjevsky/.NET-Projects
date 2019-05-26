@@ -1,12 +1,116 @@
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace ClipboardManager
 {
-	public class HotKeyTranslator
+    [Serializable]
+    [TypeConverter(typeof(ExpandableObjectConverter))]
+    public class HotKeyData
+    {
+        [XmlIgnore]
+        public int AppId { get; set; } = new Random().Next(100, 500);
+        public Keys HotKey { get; set; } = Keys.Q;
+        public bool m_ctrlHotKey { get; set; } = true;
+        public bool m_shiftHotKey { get; set; } = false;
+        public bool m_altHotKey { get; set; } = false;
+        public bool m_winHotKey { get; set; } = false;
+        public bool m_bUseHotKey { get; set; } = true;
+
+        public HotKeyData() { }
+        public HotKeyData(int appId) { AppId = appId; }
+
+        public void Reset()
+        {
+            HotKeyData key = new HotKeyData(AppId);
+#if DEBUG
+            HotKey      = Keys.W; // default HotKey for Debug is Ctrl+W
+#else
+			HotKey		= Keys.Q; // default HotKey is Ctrl+Q
+#endif
+            m_ctrlHotKey = key.m_ctrlHotKey;
+            m_shiftHotKey = key.m_shiftHotKey;
+            m_altHotKey = key.m_altHotKey;
+            m_winHotKey = key.m_winHotKey;
+
+            m_bUseHotKey = key.m_bUseHotKey;
+        }//end Reset
+
+        public HotKeyData Clone()
+        {
+            HotKeyData key = new HotKeyData(AppId);
+
+            key.m_bUseHotKey = this.m_bUseHotKey;
+
+            key.HotKey = HotKey;
+
+            key.m_ctrlHotKey = m_ctrlHotKey;
+            key.m_shiftHotKey = m_shiftHotKey;
+            key.m_altHotKey = m_altHotKey;
+            key.m_winHotKey = m_winHotKey;
+
+            return key;
+        }//end Clone
+
+        public void SetHotKey(System.Windows.Forms.KeyEventArgs e)
+        {
+            SetHotKey(e.KeyCode,
+                (e.Modifiers & Keys.Control) != 0 ? true : false,
+                (e.Modifiers & Keys.Shift) != 0 ? true : false,
+                (e.Modifiers & Keys.Alt) != 0 ? true : false,
+                ((e.Modifiers & Keys.LWin) != 0 || (e.Modifiers & Keys.RWin) != 0) ? true : false);
+        }//end SetHotKey
+
+        public void SetHotKey(Keys c, bool bCtrl, bool bShift, bool bAlt, bool bWindows)
+        {
+            HotKey = c;
+            m_ctrlHotKey = bCtrl;
+            m_shiftHotKey = bShift;
+            m_altHotKey = bAlt;
+            m_winHotKey = bWindows;
+        }//end SetHotKey
+
+        public override string ToString()
+        {
+            String sHotKey = "";
+            if (m_ctrlHotKey)
+                sHotKey += "Ctrl";
+
+            if (m_shiftHotKey)
+            {
+                if (sHotKey.Length != 0)
+                    sHotKey += " + ";
+                sHotKey += "Shift";
+            }//end if
+
+            if (m_altHotKey)
+            {
+                if (sHotKey.Length != 0)
+                    sHotKey += " + ";
+                sHotKey += "Alt";
+            }//end if
+
+            if (m_winHotKey)
+            {
+                if (sHotKey.Length != 0)
+                    sHotKey += " + ";
+                sHotKey += "Win";
+            }//end if
+
+            if (sHotKey.Length != 0)
+                sHotKey += " + ";
+
+            sHotKey += HotKey.ToString();
+
+            return sHotKey;
+        }//end ToString
+    }
+
+    public class HotKeyTranslator
 	{
 		private int m_Id = 101;
 

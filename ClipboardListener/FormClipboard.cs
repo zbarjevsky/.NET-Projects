@@ -16,6 +16,7 @@ using ClipboardManager.Zip;
 using ClipboardManager.DesktopUtil;
 using Microsoft.Win32;
 using Utils;
+using ClipboardManager.Utils;
 
 namespace ClipboardManager
 {
@@ -28,9 +29,10 @@ namespace ClipboardManager
 		private IntPtr m_hWndToRestore					= IntPtr.Zero;
 		private volatile bool m_bPasteFromThis			= false; //to prevent loop
 		private volatile bool m_bCopyFromSnapShot		= false;
-		public static FormClipboard m_This				= null;
-		public static Utils.Settings m_Settings			= new Utils.Settings();
-		private bool m_bModified						= false;
+		public  static FormClipboard m_This				= null;
+		public  Settings m_Settings			            = new Settings();
+        public  SettingsData m_SettingsData             = new SettingsData();
+        private bool m_bModified						= false;
 		private int m_iAboutId							= 32164;
 		private int m_iExitId							= 32165;
 
@@ -137,7 +139,9 @@ namespace ClipboardManager
 
 		private void FormClipboard_Load(object sender, EventArgs e)
 		{
-			m_Settings.Load(m_sFileName, this, m_ClipboardListMain, m_ClipboardListFavorites, this.Icon.ToBitmap());
+            m_SettingsData.Load(m_sFileName + ".1");
+
+            m_Settings.Load(m_sFileName, this, m_ClipboardListMain, m_ClipboardListFavorites, this.Icon.ToBitmap());
             m_NextClipboardViewer = (IntPtr)NativeWIN32.SetClipboardViewer((int)this.Handle);
 			bool success = m_Settings.m_HotKey.RegisterHotKey();
 			
@@ -265,6 +269,7 @@ namespace ClipboardManager
 			{
                 LogMethod("Save", "Saving: {0}", m_sFileName);
 				m_Settings.Save(m_sFileName, m_ClipboardListMain, m_ClipboardListFavorites);
+                m_SettingsData.Save(m_sFileName + ".1");
 				m_bModified = false;
 			}//end try
 			catch ( Exception err )
@@ -483,7 +488,7 @@ namespace ClipboardManager
 		//build main clipboard history menu
 		private ToolStripMenuItem[] BuildMainClipboardList(int startIdx)
 		{
-		    int count = Math.Min(m_ClipboardListMain.Count, m_Settings.m_iHistoryLen);
+		    int count = Math.Min(m_ClipboardListMain.Count, m_Settings.m_iMenuMaxLen);
 
 			ToolStripMenuItem[] list = new ToolStripMenuItem[count - startIdx];
             //load last items up to m_Settings.m_iHistoryLen
@@ -506,7 +511,7 @@ namespace ClipboardManager
 
 		private ToolStripMenuItem[] BuildFavoritesList(bool bTwinImage)
 		{
-            int count = Math.Min(m_ClipboardListFavorites.Count, m_Settings.m_iHistoryLen);
+            int count = Math.Min(m_ClipboardListFavorites.Count, m_Settings.m_iMenuMaxLen);
 
             ToolStripMenuItem[] list = new ToolStripMenuItem[count];
             //load last items up to m_Settings.m_iHistoryLen
@@ -890,7 +895,7 @@ namespace ClipboardManager
 		{
 			try
 			{
-				FormSettings frm = new FormSettings(m_Settings);
+				FormSettings frm = new FormSettings(m_Settings, m_SettingsData);
 				frm.Icon = this.Icon;
 				if ( frm.ShowDialog(this) != DialogResult.OK )
 					return;
@@ -902,6 +907,9 @@ namespace ClipboardManager
 
                 ShutdownHandler.AbortShutdownIfScheduled = m_Settings.m_bAbortShutdown;
                 Utils.ServicesManipulator.ContinuousMonitoringServices = m_Settings.m_bStopServices;
+
+                m_ClipboardListMain.MAX_HISTORY = m_Settings.m_iBufferMaxLen;
+                m_ClipboardListFavorites.MAX_HISTORY = m_Settings.m_iBufferMaxLen;
             }//end try
             catch ( Exception err )
 			{

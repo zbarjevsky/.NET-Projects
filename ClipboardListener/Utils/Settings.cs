@@ -1,6 +1,7 @@
 ﻿using ClipboardManager.Zip;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -11,10 +12,82 @@ using System.Xml;
 
 namespace ClipboardManager.Utils
 {
+    public class SettingsData
+    {
+        public HotKeyData HotKey { get; set; } = new HotKeyData();
+        public int m_iMenuMaxLen { get; set; } = 30;
+        public int m_iBufferMaxLen { get; set; } = 200;
+        public bool m_bShowSnapShot { get; set; } = true;
+        public bool m_bShowDebug { get; set; } = true;
+        private int m_iHotKeyAppId { get; set; } = new Random().Next(100, 500);
+        public EncodingsData m_Encodings { get; set; } = new EncodingsData();
+        public bool m_AutoReconnect { get; set; } = true;
+        private bool m_WriteLogFile { get; set; } = false;
+        public bool m_bAutoUAC { get; set; } = false;
+        public bool m_bAbortShutdown { get; set; } = false;
+        public bool m_bStopServices { get; set; } = false;
+
+        public SettingsData()
+        {
+
+        }
+
+        public void Save(string fileName)
+        {
+            try
+            {
+                this.SaveAs(fileName);
+            }
+            catch (Exception err)
+            {
+                Debug.WriteLine("Save error: "+err);
+            }
+        }
+
+        public void Load(string fileName)
+        {
+            try
+            {
+                SettingsData s = this.Open(fileName);
+                if (s == null)
+                    s = new SettingsData();
+                s.UpdateEncodingsAfterLoadFromXml();
+
+                this.CopyFrom(s);
+            }
+            catch (Exception err)
+            {
+                Debug.WriteLine("Load Error: "+err);
+            }
+        }
+
+        private void UpdateEncodingsAfterLoadFromXml()
+        {
+            this.m_Encodings.UpdateEncodingsAfterLoadFromXml();
+        }
+
+        private void CopyFrom(SettingsData s)
+        {
+            HotKey = s.HotKey;
+            m_iMenuMaxLen = s.m_iMenuMaxLen;
+            m_iBufferMaxLen = s.m_iBufferMaxLen;
+            m_bShowSnapShot = s.m_bShowSnapShot;
+            m_bShowDebug = s.m_bShowDebug;
+            m_iHotKeyAppId = s.m_iHotKeyAppId;
+            m_Encodings = s.m_Encodings;
+            m_AutoReconnect = s.m_AutoReconnect;
+            m_WriteLogFile = s.m_WriteLogFile;
+            m_bAutoUAC = s.m_bAutoUAC;
+            m_bAbortShutdown = s.m_bAbortShutdown;
+            m_bStopServices = s.m_bStopServices;
+        }
+}
+
     public class Settings
     {
         public HotKeyTranslator m_HotKey = null;
-        public int m_iHistoryLen = 20;
+        public int m_iMenuMaxLen = 30;
+        public int m_iBufferMaxLen = 200;
         public bool m_bShowSnapShot = true;
         public bool m_bShowDebug = true;
         private int m_iHotKeyAppId = new Random().Next(100, 500);
@@ -53,7 +126,8 @@ namespace ClipboardManager.Utils
                 root = doc.AppendChild(root);
 
                 m_HotKey.Save(root);
-                XmlUtil.AddNewNode(root, "HistoryLength", m_iHistoryLen.ToString());
+                XmlUtil.AddNewNode(root, "HistoryLength", m_iMenuMaxLen.ToString());
+                XmlUtil.AddNewNode(root, "HistoryMaxLength", m_iBufferMaxLen.ToString());
                 XmlUtil.AddNewNode(root, "ShowSnapShot", m_bShowSnapShot.ToString());
                 XmlUtil.AddNewNode(root, "ShowDebugWindow", m_bShowDebug.ToString());
                 XmlUtil.AddNewNode(root, "AutoReconnect", m_AutoReconnect.ToString());
@@ -101,7 +175,8 @@ namespace ClipboardManager.Utils
                 XmlNode root = doc.SelectSingleNode("Settings");
 
                 m_HotKey.Load(root);
-                m_iHistoryLen = XmlUtil.GetInt(root, "HistoryLength", m_iHistoryLen);
+                m_iMenuMaxLen = XmlUtil.GetInt(root, "HistoryLength", m_iMenuMaxLen);
+                m_iBufferMaxLen = XmlUtil.GetInt(root, "HistoryMaxLength", m_iBufferMaxLen);
                 m_bShowSnapShot = XmlUtil.GetBool(root, "ShowSnapShot", m_bShowSnapShot);
                 m_bShowDebug = XmlUtil.GetBool(root, "ShowDebugWindow", m_bShowDebug);
                 m_AutoReconnect = XmlUtil.GetBool(root, "AutoReconnect", m_AutoReconnect);
@@ -112,6 +187,9 @@ namespace ClipboardManager.Utils
                 m_Encodings.Load(root);
                 listMain.Load(doc, icoDefault);
                 listFavorites.Load(doc, icoDefault);
+
+                listMain.MAX_HISTORY = m_iBufferMaxLen;
+                listFavorites.MAX_HISTORY = m_iBufferMaxLen;
 
                 File.Delete(sFileName);
             }//end try

@@ -420,6 +420,8 @@ namespace ClipboardManager
 		public string m_sListType		= "";
 		private ClipboardEntry m_EmptyEntry = null;
 
+        public int MAX_HISTORY { get; set; } = 200;
+
 		public ClipboardList(string sListType, ImageList list)
 		{
 			m_sListType = sListType;
@@ -536,7 +538,6 @@ namespace ClipboardManager
 			c._ownerType = this.m_sListType;
 			m_vData.Insert(0, c);
 
-		    const int MAX_HISTORY = 1000;
             while (m_vData.Count > MAX_HISTORY) //if too big - remove from the end
             {
                 m_vData[MAX_HISTORY].Clear();

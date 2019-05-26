@@ -43,8 +43,13 @@ namespace ClipboardManager
             this.m_chkAutoUAC = new System.Windows.Forms.CheckBox();
             this.m_chkAbortShutdown = new System.Windows.Forms.CheckBox();
             this.m_chkStopServices = new System.Windows.Forms.CheckBox();
+            this.m_numHistoryMax = new System.Windows.Forms.NumericUpDown();
+            this.m_lblItems = new System.Windows.Forms.Label();
+            this.m_lblHistoryMax = new System.Windows.Forms.Label();
+            this.propertyGrid1 = new System.Windows.Forms.PropertyGrid();
             ((System.ComponentModel.ISupportInitialize)(this.m_numHistoryLen)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_Logo)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.m_numHistoryMax)).BeginInit();
             this.SuspendLayout();
             // 
             // m_txtHotKey
@@ -53,7 +58,7 @@ namespace ClipboardManager
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_txtHotKey.Location = new System.Drawing.Point(104, 12);
             this.m_txtHotKey.Name = "m_txtHotKey";
-            this.m_txtHotKey.Size = new System.Drawing.Size(85, 20);
+            this.m_txtHotKey.Size = new System.Drawing.Size(584, 20);
             this.m_txtHotKey.TabIndex = 1;
             this.m_txtHotKey.Text = "Ctrl+Q";
             this.m_txtHotKey.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
@@ -66,7 +71,7 @@ namespace ClipboardManager
             this.m_btnOK.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.m_btnOK.Image = ((System.Drawing.Image)(resources.GetObject("m_btnOK.Image")));
             this.m_btnOK.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.m_btnOK.Location = new System.Drawing.Point(248, 160);
+            this.m_btnOK.Location = new System.Drawing.Point(747, 380);
             this.m_btnOK.Name = "m_btnOK";
             this.m_btnOK.Size = new System.Drawing.Size(75, 23);
             this.m_btnOK.TabIndex = 9;
@@ -80,7 +85,7 @@ namespace ClipboardManager
             this.m_btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.m_btnCancel.Image = ((System.Drawing.Image)(resources.GetObject("m_btnCancel.Image")));
             this.m_btnCancel.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.m_btnCancel.Location = new System.Drawing.Point(248, 191);
+            this.m_btnCancel.Location = new System.Drawing.Point(747, 411);
             this.m_btnCancel.Name = "m_btnCancel";
             this.m_btnCancel.Size = new System.Drawing.Size(75, 23);
             this.m_btnCancel.TabIndex = 10;
@@ -93,9 +98,9 @@ namespace ClipboardManager
             this.m_lblHistory1.AutoSize = true;
             this.m_lblHistory1.Location = new System.Drawing.Point(9, 49);
             this.m_lblHistory1.Name = "m_lblHistory1";
-            this.m_lblHistory1.Size = new System.Drawing.Size(79, 13);
+            this.m_lblHistory1.Size = new System.Drawing.Size(83, 13);
             this.m_lblHistory1.TabIndex = 2;
-            this.m_lblHistory1.Text = "Menu List Size:";
+            this.m_lblHistory1.Text = "Menu Max Size:";
             // 
             // m_chkUseHotKey
             // 
@@ -114,7 +119,7 @@ namespace ClipboardManager
             // 
             this.m_lblHistory2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_lblHistory2.AutoSize = true;
-            this.m_lblHistory2.Location = new System.Drawing.Point(195, 49);
+            this.m_lblHistory2.Location = new System.Drawing.Point(694, 49);
             this.m_lblHistory2.Name = "m_lblHistory2";
             this.m_lblHistory2.Size = new System.Drawing.Size(32, 13);
             this.m_lblHistory2.TabIndex = 4;
@@ -136,7 +141,7 @@ namespace ClipboardManager
             0,
             0});
             this.m_numHistoryLen.Name = "m_numHistoryLen";
-            this.m_numHistoryLen.Size = new System.Drawing.Size(85, 20);
+            this.m_numHistoryLen.Size = new System.Drawing.Size(584, 20);
             this.m_numHistoryLen.TabIndex = 3;
             this.m_numHistoryLen.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.m_numHistoryLen.Value = new decimal(new int[] {
@@ -149,7 +154,7 @@ namespace ClipboardManager
             // 
             this.m_chkStartWithWindows.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.m_chkStartWithWindows.AutoSize = true;
-            this.m_chkStartWithWindows.Location = new System.Drawing.Point(12, 112);
+            this.m_chkStartWithWindows.Location = new System.Drawing.Point(12, 332);
             this.m_chkStartWithWindows.Name = "m_chkStartWithWindows";
             this.m_chkStartWithWindows.Size = new System.Drawing.Size(119, 17);
             this.m_chkStartWithWindows.TabIndex = 6;
@@ -160,7 +165,7 @@ namespace ClipboardManager
             // 
             this.m_chkReconnect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.m_chkReconnect.AutoSize = true;
-            this.m_chkReconnect.Location = new System.Drawing.Point(12, 90);
+            this.m_chkReconnect.Location = new System.Drawing.Point(12, 310);
             this.m_chkReconnect.Name = "m_chkReconnect";
             this.m_chkReconnect.Size = new System.Drawing.Size(124, 17);
             this.m_chkReconnect.TabIndex = 5;
@@ -173,7 +178,7 @@ namespace ClipboardManager
             this.m_Logo.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.m_Logo.Image = ((System.Drawing.Image)(resources.GetObject("m_Logo.Image")));
             this.m_Logo.InitialImage = ((System.Drawing.Image)(resources.GetObject("m_Logo.InitialImage")));
-            this.m_Logo.Location = new System.Drawing.Point(262, 2);
+            this.m_Logo.Location = new System.Drawing.Point(761, 2);
             this.m_Logo.Name = "m_Logo";
             this.m_Logo.Size = new System.Drawing.Size(47, 50);
             this.m_Logo.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
@@ -184,7 +189,7 @@ namespace ClipboardManager
             // 
             this.m_chkLog.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.m_chkLog.AutoSize = true;
-            this.m_chkLog.Location = new System.Drawing.Point(12, 134);
+            this.m_chkLog.Location = new System.Drawing.Point(12, 354);
             this.m_chkLog.Name = "m_chkLog";
             this.m_chkLog.Size = new System.Drawing.Size(145, 17);
             this.m_chkLog.TabIndex = 7;
@@ -195,7 +200,7 @@ namespace ClipboardManager
             // 
             this.m_chkAutoUAC.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.m_chkAutoUAC.AutoSize = true;
-            this.m_chkAutoUAC.Location = new System.Drawing.Point(12, 156);
+            this.m_chkAutoUAC.Location = new System.Drawing.Point(12, 376);
             this.m_chkAutoUAC.Name = "m_chkAutoUAC";
             this.m_chkAutoUAC.Size = new System.Drawing.Size(98, 17);
             this.m_chkAutoUAC.TabIndex = 8;
@@ -206,7 +211,7 @@ namespace ClipboardManager
             // 
             this.m_chkAbortShutdown.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.m_chkAbortShutdown.AutoSize = true;
-            this.m_chkAbortShutdown.Location = new System.Drawing.Point(12, 178);
+            this.m_chkAbortShutdown.Location = new System.Drawing.Point(12, 398);
             this.m_chkAbortShutdown.Name = "m_chkAbortShutdown";
             this.m_chkAbortShutdown.Size = new System.Drawing.Size(150, 17);
             this.m_chkAbortShutdown.TabIndex = 11;
@@ -217,12 +222,67 @@ namespace ClipboardManager
             // 
             this.m_chkStopServices.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.m_chkStopServices.AutoSize = true;
-            this.m_chkStopServices.Location = new System.Drawing.Point(12, 200);
+            this.m_chkStopServices.Location = new System.Drawing.Point(12, 420);
             this.m_chkStopServices.Name = "m_chkStopServices";
             this.m_chkStopServices.Size = new System.Drawing.Size(170, 17);
             this.m_chkStopServices.TabIndex = 12;
             this.m_chkStopServices.Text = "Stop Service if Running (SMS)";
             this.m_chkStopServices.UseVisualStyleBackColor = true;
+            // 
+            // m_numHistoryMax
+            // 
+            this.m_numHistoryMax.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_numHistoryMax.Location = new System.Drawing.Point(104, 83);
+            this.m_numHistoryMax.Maximum = new decimal(new int[] {
+            1200,
+            0,
+            0,
+            0});
+            this.m_numHistoryMax.Minimum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.m_numHistoryMax.Name = "m_numHistoryMax";
+            this.m_numHistoryMax.Size = new System.Drawing.Size(584, 20);
+            this.m_numHistoryMax.TabIndex = 14;
+            this.m_numHistoryMax.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.m_numHistoryMax.Value = new decimal(new int[] {
+            200,
+            0,
+            0,
+            0});
+            // 
+            // m_lblItems
+            // 
+            this.m_lblItems.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_lblItems.AutoSize = true;
+            this.m_lblItems.Location = new System.Drawing.Point(694, 85);
+            this.m_lblItems.Name = "m_lblItems";
+            this.m_lblItems.Size = new System.Drawing.Size(32, 13);
+            this.m_lblItems.TabIndex = 15;
+            this.m_lblItems.Text = "Items";
+            // 
+            // m_lblHistoryMax
+            // 
+            this.m_lblHistoryMax.AutoSize = true;
+            this.m_lblHistoryMax.Location = new System.Drawing.Point(9, 85);
+            this.m_lblHistoryMax.Name = "m_lblHistoryMax";
+            this.m_lblHistoryMax.Size = new System.Drawing.Size(88, 13);
+            this.m_lblHistoryMax.TabIndex = 13;
+            this.m_lblHistoryMax.Text = "History Max Size:";
+            // 
+            // propertyGrid1
+            // 
+            this.propertyGrid1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.propertyGrid1.Location = new System.Drawing.Point(276, 153);
+            this.propertyGrid1.Name = "propertyGrid1";
+            this.propertyGrid1.PropertySort = System.Windows.Forms.PropertySort.NoSort;
+            this.propertyGrid1.Size = new System.Drawing.Size(412, 281);
+            this.propertyGrid1.TabIndex = 16;
             // 
             // FormSettings
             // 
@@ -230,7 +290,11 @@ namespace ClipboardManager
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.m_btnCancel;
-            this.ClientSize = new System.Drawing.Size(335, 226);
+            this.ClientSize = new System.Drawing.Size(834, 446);
+            this.Controls.Add(this.propertyGrid1);
+            this.Controls.Add(this.m_numHistoryMax);
+            this.Controls.Add(this.m_lblItems);
+            this.Controls.Add(this.m_lblHistoryMax);
             this.Controls.Add(this.m_chkStopServices);
             this.Controls.Add(this.m_chkAbortShutdown);
             this.Controls.Add(this.m_chkAutoUAC);
@@ -245,12 +309,11 @@ namespace ClipboardManager
             this.Controls.Add(this.m_btnCancel);
             this.Controls.Add(this.m_btnOK);
             this.Controls.Add(this.m_txtHotKey);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(500, 650);
+            this.MaximumSize = new System.Drawing.Size(900, 850);
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(341, 150);
+            this.MinimumSize = new System.Drawing.Size(380, 300);
             this.Name = "FormSettings";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -258,6 +321,7 @@ namespace ClipboardManager
             this.Load += new System.EventHandler(this.FormSettings_Load);
             ((System.ComponentModel.ISupportInitialize)(this.m_numHistoryLen)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_Logo)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.m_numHistoryMax)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -279,5 +343,9 @@ namespace ClipboardManager
         private System.Windows.Forms.CheckBox m_chkAutoUAC;
         private System.Windows.Forms.CheckBox m_chkAbortShutdown;
         private System.Windows.Forms.CheckBox m_chkStopServices;
+        private System.Windows.Forms.NumericUpDown m_numHistoryMax;
+        private System.Windows.Forms.Label m_lblItems;
+        private System.Windows.Forms.Label m_lblHistoryMax;
+        private System.Windows.Forms.PropertyGrid propertyGrid1;
     }
 }

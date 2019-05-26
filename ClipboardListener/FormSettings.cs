@@ -1,3 +1,4 @@
+using ClipboardManager.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,9 +14,12 @@ namespace ClipboardManager
 	{
 		private Utils.Settings m_Settings = null;
 		private HotKeyTranslator m_HotKey = null;
+        private SettingsData _data;
 
-		public FormSettings(Utils.Settings settings)
+
+        public FormSettings(Utils.Settings settings, SettingsData data)
 		{
+            _data = data;
 			this.m_Settings = settings;
 			
 			//remember old settings - to reset on cancel
@@ -44,8 +48,8 @@ namespace ClipboardManager
 			m_txtHotKey.Text				= m_HotKey.ToString();
 			m_chkUseHotKey.Checked			= m_HotKey.m_bUseHotKey;
 
-			m_numHistoryLen.Text			= m_Settings.m_iHistoryLen.ToString();
-			m_numHistoryLen.Value			= m_Settings.m_iHistoryLen;
+			m_numHistoryLen.Value			= m_Settings.m_iMenuMaxLen;
+            m_numHistoryMax.Value           = m_Settings.m_iBufferMaxLen;
 			m_chkStartWithWindows.Checked	= LoadWithWindows;
 		    m_chkAutoUAC.Checked            = m_Settings.m_bAutoUAC;
             m_chkAbortShutdown.Checked      = m_Settings.m_bAbortShutdown;
@@ -56,13 +60,16 @@ namespace ClipboardManager
 
             m_chkReconnect.Checked			= m_Settings.m_AutoReconnect;
             m_chkLog.Checked    			= m_Settings.WriteLogFile;
+
+            propertyGrid1.SelectedObject    = _data;
         }//end FormSettings_Load
 
 		private void m_btnOK_Click(object sender, EventArgs e)
 		{
 			LoadWithWindows = m_chkStartWithWindows.Checked;
 
-			m_Settings.m_iHistoryLen = (int)m_numHistoryLen.Value;
+			m_Settings.m_iMenuMaxLen = (int)m_numHistoryLen.Value;
+			m_Settings.m_iBufferMaxLen = (int)m_numHistoryMax.Value;
 
 			m_Settings.m_HotKey = m_HotKey; //set new values
 			m_Settings.m_HotKey.RegisterHotKey(); //register if needed
