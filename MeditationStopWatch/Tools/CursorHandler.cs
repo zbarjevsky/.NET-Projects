@@ -20,18 +20,22 @@ namespace MeditationStopWatch
                     if (ReferenceCount >= 2)
                         return;
 
-                    ReferenceCount++;
-                    System.Windows.Forms.Cursor.Show();
-                    ReferenceCount++;
-                    System.Windows.Forms.Cursor.Show();
+                    for (int i = 0; i < 2; i++)
+                    {
+                        System.Windows.Forms.Cursor.Show();
+                        ReferenceCount++;
+                    }
                 }
                 else //hide
                 {
                     if (ReferenceCount <= 0)
                         return;
 
-                    while (ReferenceCount-- > 0)
+                    while (ReferenceCount > 0)
+                    {
                         System.Windows.Forms.Cursor.Hide();
+                        ReferenceCount--;
+                    }
                 }
             }
         }
