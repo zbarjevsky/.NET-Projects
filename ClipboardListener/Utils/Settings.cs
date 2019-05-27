@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
+using Utils;
 
 namespace ClipboardManager.Utils
 {
@@ -27,9 +28,40 @@ namespace ClipboardManager.Utils
         public bool IsAbortShutdown { get; set; } = false;
         [DisplayName("Stop Services if Running")]
         public bool IsStopServices { get; set; } = false;
-        public List<string> ServiceNameList { get; set; } = new List<string>() { "SMS Agent Host" };
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        public ServicesManipulatorSettings ServicesManipulatorSettings { get; set; } = new ServicesManipulatorSettings();
         [TypeConverter(typeof(ExpandableObjectConverter))]
         public EncodingsList EncodingsList { get; set; } = new EncodingsList();
+
+        [XmlIgnore] //read from registry and not from XML
+        [Category("Startup Options")]
+        [Description("Load application when Windows starts")]
+        [DisplayName("Load with Windows")]
+        public bool LoadWithWindows
+        {
+            get
+            {
+                var key = OpenRegKey(writable: false);
+                if (key == null)
+                    return false;
+                bool run = (key.GetValue(_strAppKey) != null);
+                key.Close();
+                return run;
+            }//end get
+
+            set
+            {
+                var key = OpenRegKey(writable: true);
+                if (key == null)
+                    return;
+
+                if (value)
+                    key.SetValue(_strAppKey, "\"" + Application.ExecutablePath + "\"");
+                else
+                    key.DeleteValue(_strAppKey, false);
+                key.Close();
+            }//end set
+        }//end LoadWithWindows
 
         public void Save(string fileName)
         {
@@ -77,6 +109,22 @@ namespace ClipboardManager.Utils
             IsAutoUAC = s.IsAutoUAC;
             IsAbortShutdown = s.IsAbortShutdown;
             IsStopServices = s.IsStopServices;
+        }
+
+        private const string _strAppKey = @"ClipboardHistoryMZ";
+        private Microsoft.Win32.RegistryKey OpenRegKey(bool writable)
+        {
+            //const string REG_KEY = @"Software\Microsoft\Windows\CurrentVersion\Run";
+            const string REG_KEY = @"SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Run";
+            try
+            {
+                return Microsoft.Win32.Registry.LocalMachine.OpenSubKey(REG_KEY, writable);
+            }
+            catch (Exception err)
+            {
+                CenteredMessageBox.MsgBoxErr(err.Message);
+                return null;
+            }
         }
     }
 

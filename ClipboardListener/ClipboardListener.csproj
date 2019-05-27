@@ -134,6 +134,12 @@
     <Compile Include="DesktopUtil\DesktopRegistry.cs" />
     <Compile Include="DesktopUtil\Storage.cs" />
     <Compile Include="DesktopUtil\Win32.cs" />
+    <Compile Include="Utils\HotKeyEditorUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Utils\HotKeyEditorUserControl.Designer.cs">
+      <DependentUpon>HotKeyEditorUserControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="Utils\ServicesManipulator.cs" />
     <Compile Include="Utils\ShutdownHandler.cs" />
     <Compile Include="Utils\SingleInstanceHelper.cs" />
@@ -218,6 +224,9 @@
     </Compile>
     <EmbeddedResource Include="Utils\ClipboardHistoryListControl.resx">
       <DependentUpon>ClipboardHistoryListControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Utils\HotKeyEditorUserControl.resx">
+      <DependentUpon>HotKeyEditorUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
     <None Include="app.manifest">

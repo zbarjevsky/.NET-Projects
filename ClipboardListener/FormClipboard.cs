@@ -163,7 +163,7 @@ namespace ClipboardManager
 
             ShutdownHandler.AbortShutdownIfScheduled = m_Settings.I.IsAbortShutdown;
 
-            Utils.ServicesManipulator.ContinuousMonitoringServices = m_Settings.I.IsStopServices;
+            Utils.ServicesManipulator.UpdateSettings(m_Settings.I.ServicesManipulatorSettings);
             Utils.ServicesManipulator.Start();
 
             m_notifyIconCoodClip.Visible = true;
@@ -904,7 +904,7 @@ namespace ClipboardManager
 					m_TimerReconnect.Stop();
 
                 ShutdownHandler.AbortShutdownIfScheduled = m_Settings.I.IsAbortShutdown;
-                Utils.ServicesManipulator.ContinuousMonitoringServices = m_Settings.I.IsStopServices;
+                ServicesManipulator.UpdateSettings(m_Settings.I.ServicesManipulatorSettings);
 
                 m_ClipboardListMain.MAX_HISTORY = m_Settings.I.BufferMaxLen;
                 m_ClipboardListFavorites.MAX_HISTORY = m_Settings.I.BufferMaxLen;
