@@ -1346,6 +1346,9 @@ namespace ClipboardManager
 
                 //save Desktop snapshot
                 m_contextMenuStripTrayIcon_DesktopSave_Click(sender, e);
+
+                //register if needed
+                m_Settings.I.HotKeyInfo.RegisterHotKey(this);
             }//end try
             catch (Exception err)
             {

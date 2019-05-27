@@ -1,3 +1,4 @@
+using ClipboardManager.Utils;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -99,12 +100,14 @@ namespace ClipboardManager
 
             Keys key = (Keys)((int)keyData.KeyData & 0x0000FFFF); //filter out modifiers
 
+            Log.WriteLine("RegisterHotKey: " + keyData);
             return NativeWIN32.RegisterHotKey(parent.Handle, keyData.AppId, modifiers, key);
 		}//end RegisterHotKey
 
-		public static void UnregisterHotKey(this HotKeyData key, Form parent)
+		public static void UnregisterHotKey(this HotKeyData keyData, Form parent)
 		{
-			NativeWIN32.UnregisterHotKey(parent.Handle, key.AppId);
+            Log.WriteLine("UnregisterHotKey: " + keyData);
+            NativeWIN32.UnregisterHotKey(parent.Handle, keyData.AppId);
 		}//end UnregisterHotKey
 	}//end class HotKeyTranslator
 }//end namespace ClipboardListener

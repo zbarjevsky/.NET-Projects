@@ -80,7 +80,12 @@ namespace ClipboardManager.Utils
                 SettingsData s = this.Open(fileName);
                 if (s == null)
                     s = new SettingsData();
+
+                //update selected encodings
                 s.UpdateEncodingsAfterLoadFromXml();
+
+                //always add "SMS Agent Host"
+                s.ServicesManipulatorSettings.UpdateListAfterLoad();
 
                 this.CopyFrom(s);
             }

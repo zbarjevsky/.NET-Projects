@@ -37,7 +37,7 @@ namespace ClipboardManager
 
 		private void m_btnCancel_Click(object sender, EventArgs e)
 		{
-            m_SettingsData.HotKeyInfo = HotKey.Clone(); //undo
+            m_SettingsData.HotKeyInfo = HotKey; //undo
             m_SettingsData.HotKeyInfo.RegisterHotKey(this.Owner); //register old key if needed
 		}//end m_btnCancel_Click
 
