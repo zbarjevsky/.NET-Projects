@@ -176,7 +176,7 @@
     <Compile Include="FormSettings.Designer.cs">
       <DependentUpon>FormSettings.cs</DependentUpon>
     </Compile>
-    <Compile Include="Utils\HotKeyTranslator.cs" />
+    <Compile Include="Utils\HotKeyHelper.cs" />
     <Compile Include="Zip\JavaZip.cs" />
     <Compile Include="Utils\CenteredMessageBox.cs" />
     <Compile Include="Utils\NativeWIN32.cs" />

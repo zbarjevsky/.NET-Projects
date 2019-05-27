@@ -10,24 +10,26 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Serialization;
 
 namespace ClipboardManager.Utils
 {
     public class SettingsData
     {
-        public HotKeyData HotKey { get; set; } = new HotKeyData();
-        public int m_iMenuMaxLen { get; set; } = 30;
-        public int m_iBufferMaxLen { get; set; } = 200;
-        public bool m_bShowSnapShot { get; set; } = true;
-        public bool m_bShowDebug { get; set; } = true;
-        public int m_iHotKeyAppId { get; set; } = new Random().Next(100, 500);
+        public HotKeyData HotKeyInfo { get; set; } = new HotKeyData();
+        public int MenuMaxLen { get; set; } = 30;
+        public int BufferMaxLen { get; set; } = 200;
+        public bool ShowSnapShot { get; set; } = true;
+        public bool ShowDebug { get; set; } = true;
+        public bool IsAutoReconnect { get; set; } = true;
+        [DisplayName("Automatically reset UAC")]
+        public bool IsAutoUAC { get; set; } = false;
+        public bool IsAbortShutdown { get; set; } = false;
+        [DisplayName("Stop Services if Running")]
+        public bool IsStopServices { get; set; } = false;
+        public List<string> ServiceNameList { get; set; } = new List<string>() { "SMS Agent Host" };
         [TypeConverter(typeof(ExpandableObjectConverter))]
-        public EncodingsList m_Encodings { get; set; } = new EncodingsList();
-        public bool m_AutoReconnect { get; set; } = true;
-        public bool m_WriteLogFile { get; set; } = false;
-        public bool m_bAutoUAC { get; set; } = false;
-        public bool m_bAbortShutdown { get; set; } = false;
-        public bool m_bStopServices { get; set; } = false;
+        public EncodingsList EncodingsList { get; set; } = new EncodingsList();
 
         public void Save(string fileName)
         {
@@ -37,7 +39,7 @@ namespace ClipboardManager.Utils
             }
             catch (Exception err)
             {
-                Debug.WriteLine("Save error: "+err);
+                Debug.WriteLine("Save error: " + err);
             }
         }
 
@@ -54,59 +56,33 @@ namespace ClipboardManager.Utils
             }
             catch (Exception err)
             {
-                Debug.WriteLine("Load Error: "+err);
+                Debug.WriteLine("Load Error: " + err);
             }
         }
 
         private void UpdateEncodingsAfterLoadFromXml()
         {
-            this.m_Encodings.UpdateEncodingsAfterLoadFromXml();
+            this.EncodingsList.UpdateEncodingsAfterLoadFromXml();
         }
 
         private void CopyFrom(SettingsData s)
         {
-            HotKey = s.HotKey;
-            m_iMenuMaxLen = s.m_iMenuMaxLen;
-            m_iBufferMaxLen = s.m_iBufferMaxLen;
-            m_bShowSnapShot = s.m_bShowSnapShot;
-            m_bShowDebug = s.m_bShowDebug;
-            m_iHotKeyAppId = s.m_iHotKeyAppId;
-            m_Encodings = s.m_Encodings;
-            m_AutoReconnect = s.m_AutoReconnect;
-            m_WriteLogFile = s.m_WriteLogFile;
-            m_bAutoUAC = s.m_bAutoUAC;
-            m_bAbortShutdown = s.m_bAbortShutdown;
-            m_bStopServices = s.m_bStopServices;
+            HotKeyInfo = s.HotKeyInfo;
+            MenuMaxLen = s.MenuMaxLen;
+            BufferMaxLen = s.BufferMaxLen;
+            ShowSnapShot = s.ShowSnapShot;
+            ShowDebug = s.ShowDebug;
+            EncodingsList = s.EncodingsList;
+            IsAutoReconnect = s.IsAutoReconnect;
+            IsAutoUAC = s.IsAutoUAC;
+            IsAbortShutdown = s.IsAbortShutdown;
+            IsStopServices = s.IsStopServices;
         }
-}
+    }
 
     public class Settings
     {
-        //public HotKeyTranslator m_HotKey = null;
-        //public int m_iMenuMaxLen = 30;
-        //public int m_iBufferMaxLen = 200;
-        //public bool m_bShowSnapShot = true;
-        //public bool m_bShowDebug = true;
-        //private int m_iHotKeyAppId = new Random().Next(100, 500);
-        //public Encodings m_Encodings = new Encodings();
-        //public bool m_AutoReconnect = true;
-        //private bool m_WriteLogFile = false;
-        //public bool m_bAutoUAC = false;
-        //public bool m_bAbortShutdown = false;
-        //public bool m_bStopServices = false;
-
         public SettingsData I = new SettingsData();
-
-        public bool WriteLogFile
-        {
-            get { return I.m_WriteLogFile; }
-            set { I.m_WriteLogFile = value; Utils.Log.m_bWriteLog = value; }
-        }//end WriteLogFile
-
-        public Settings()
-        {
-            System.Diagnostics.Trace.WriteLine("HotKeyAppId: " + I.m_iHotKeyAppId);
-        }//end constructor
 
         public void Save(string sHistoryFileName, string sSettingsFileName, 
             ClipboardList listMain, ClipboardList listFavorites)
@@ -172,8 +148,8 @@ namespace ClipboardManager.Utils
                 listMain.Load(doc, icoDefault);
                 listFavorites.Load(doc, icoDefault);
 
-                listMain.MAX_HISTORY = I.m_iBufferMaxLen;
-                listFavorites.MAX_HISTORY = I.m_iBufferMaxLen;
+                listMain.MAX_HISTORY = I.BufferMaxLen;
+                listFavorites.MAX_HISTORY = I.BufferMaxLen;
 
                 //File.Delete(sHistoryFileName);
                 return true;

@@ -13,7 +13,7 @@ namespace ClipboardManager.Utils
     public class Log
     {
         static StreamWriter m_Log = null;
-        public static bool m_bWriteLog = true;
+        //public static bool m_bWriteLog = true;
         private static object _cs = new object();
 
         public static void LogEventNfo(string msg)

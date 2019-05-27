@@ -23,15 +23,15 @@ namespace ClipboardManager
 		{
 			foreach (EncodingItemData i in m_Encodings.Encodings )
 			{
-				ListViewItem itm = m_listEncodings.Items.Add(i.sName);
+				ListViewItem itm = m_listEncodings.Items.Add(i.EncodingName);
 				itm.Tag = i;
 
-				itm.SubItems.Add(i.e.CodePage.ToString());
-				itm.SubItems.Add(i.e.BodyName);
-				itm.SubItems.Add(i.e.HeaderName);
-				itm.SubItems.Add(i.e.WebName);
+				itm.SubItems.Add(i.Enc.CodePage.ToString());
+				itm.SubItems.Add(i.Enc.BodyName);
+				itm.SubItems.Add(i.Enc.HeaderName);
+				itm.SubItems.Add(i.Enc.WebName);
 
-				itm.Checked = i.bEnable;
+				itm.Checked = i.ShowInMenu;
 			}//end foreach
 		}//end FormEncodings_Load
 
@@ -40,7 +40,7 @@ namespace ClipboardManager
 			foreach ( ListViewItem itm in m_listEncodings.Items )
 			{
                 EncodingItemData i = itm.Tag as EncodingItemData;
-				i.bEnable = itm.Checked;
+				i.ShowInMenu = itm.Checked;
 			}//end foreach
 		}
 
