@@ -1,6 +1,7 @@
 ﻿using ClipboardManager.Zip;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.IO;
@@ -19,18 +20,14 @@ namespace ClipboardManager.Utils
         public int m_iBufferMaxLen { get; set; } = 200;
         public bool m_bShowSnapShot { get; set; } = true;
         public bool m_bShowDebug { get; set; } = true;
-        private int m_iHotKeyAppId { get; set; } = new Random().Next(100, 500);
-        public EncodingsData m_Encodings { get; set; } = new EncodingsData();
+        public int m_iHotKeyAppId { get; set; } = new Random().Next(100, 500);
+        [TypeConverter(typeof(ExpandableObjectConverter))]
+        public EncodingsList m_Encodings { get; set; } = new EncodingsList();
         public bool m_AutoReconnect { get; set; } = true;
-        private bool m_WriteLogFile { get; set; } = false;
+        public bool m_WriteLogFile { get; set; } = false;
         public bool m_bAutoUAC { get; set; } = false;
         public bool m_bAbortShutdown { get; set; } = false;
         public bool m_bStopServices { get; set; } = false;
-
-        public SettingsData()
-        {
-
-        }
 
         public void Save(string fileName)
         {
@@ -85,66 +82,60 @@ namespace ClipboardManager.Utils
 
     public class Settings
     {
-        public HotKeyTranslator m_HotKey = null;
-        public int m_iMenuMaxLen = 30;
-        public int m_iBufferMaxLen = 200;
-        public bool m_bShowSnapShot = true;
-        public bool m_bShowDebug = true;
-        private int m_iHotKeyAppId = new Random().Next(100, 500);
-        public Encodings m_Encodings = new Encodings();
-        public bool m_AutoReconnect = true;
-        private bool m_WriteLogFile = false;
-        public bool m_bAutoUAC = false;
-        public bool m_bAbortShutdown = false;
-        public bool m_bStopServices = false;
+        //public HotKeyTranslator m_HotKey = null;
+        //public int m_iMenuMaxLen = 30;
+        //public int m_iBufferMaxLen = 200;
+        //public bool m_bShowSnapShot = true;
+        //public bool m_bShowDebug = true;
+        //private int m_iHotKeyAppId = new Random().Next(100, 500);
+        //public Encodings m_Encodings = new Encodings();
+        //public bool m_AutoReconnect = true;
+        //private bool m_WriteLogFile = false;
+        //public bool m_bAutoUAC = false;
+        //public bool m_bAbortShutdown = false;
+        //public bool m_bStopServices = false;
+
+        public SettingsData I = new SettingsData();
 
         public bool WriteLogFile
         {
-            get { return m_WriteLogFile; }
-            set { m_WriteLogFile = value; Utils.Log.m_bWriteLog = value; }
+            get { return I.m_WriteLogFile; }
+            set { I.m_WriteLogFile = value; Utils.Log.m_bWriteLog = value; }
         }//end WriteLogFile
 
         public Settings()
         {
-            System.Diagnostics.Trace.WriteLine("HotKeyAppId: " + m_iHotKeyAppId);
+            System.Diagnostics.Trace.WriteLine("HotKeyAppId: " + I.m_iHotKeyAppId);
         }//end constructor
 
-        public void Save(string sFileName, ClipboardList listMain, ClipboardList listFavorites)
+        public void Save(string sHistoryFileName, string sSettingsFileName, 
+            ClipboardList listMain, ClipboardList listFavorites)
         {
+            I.Save(sSettingsFileName);
+
             try
             {
                 IZip zip = null;
-                try { zip = new DotNetZip(GetZipFilePath(sFileName), true); }
+                try { zip = new DotNetZip(GetZipFilePath(sHistoryFileName), true); }
                 catch (Exception err)
                 {
                     FormClipboard.TraceLn(true, "Settings", "Save",
-                        "Create Zip: {0} Error: {1}", sFileName, err.Message);
+                        "Create Zip: {0} Error: {1}", sHistoryFileName, err.Message);
                 }//end catch
 
                 XmlDocument doc = new XmlDocument();
                 XmlNode root = doc.CreateNode(XmlNodeType.Element, "Settings", "");
                 root = doc.AppendChild(root);
 
-                m_HotKey.Save(root);
-                XmlUtil.AddNewNode(root, "HistoryLength", m_iMenuMaxLen.ToString());
-                XmlUtil.AddNewNode(root, "HistoryMaxLength", m_iBufferMaxLen.ToString());
-                XmlUtil.AddNewNode(root, "ShowSnapShot", m_bShowSnapShot.ToString());
-                XmlUtil.AddNewNode(root, "ShowDebugWindow", m_bShowDebug.ToString());
-                XmlUtil.AddNewNode(root, "AutoReconnect", m_AutoReconnect.ToString());
-                XmlUtil.AddNewNode(root, "WriteLogFile", m_WriteLogFile.ToString());
-                XmlUtil.AddNewNode(root, "AutoUAC", m_bAutoUAC.ToString());
-                XmlUtil.AddNewNode(root, "AbortShutdown", m_bAbortShutdown.ToString());
-                XmlUtil.AddNewNode(root, "StopServices", m_bStopServices.ToString());
-                m_Encodings.Save(root);
-                listMain.Save(root, zip, Path.GetDirectoryName(sFileName));
-                listFavorites.Save(root, zip, Path.GetDirectoryName(sFileName));
+                listMain.Save(root, zip, Path.GetDirectoryName(sHistoryFileName));
+                listFavorites.Save(root, zip, Path.GetDirectoryName(sHistoryFileName));
 
                 doc.PreserveWhitespace = true;
-                doc.Save(sFileName);
+                doc.Save(sHistoryFileName);
 
-                zip.Add(sFileName);
+                zip.Add(sHistoryFileName);
                 zip.Close();
-                File.Delete(sFileName);
+                File.Delete(sHistoryFileName);
             }//end try
             catch (Exception err)
             {
@@ -152,53 +143,48 @@ namespace ClipboardManager.Utils
             }//end catch
         }//end save
 
-        public void Load(string sFileName, Form parent, ClipboardList listMain, ClipboardList listFavorites, Image icoDefault)
+        public bool Load(string sHistoryFileName, string sSettingsFileName, 
+            Form parent, 
+            ClipboardList listMain, ClipboardList listFavorites, Image icoDefault)
+        {
+            I.Load(sSettingsFileName);
+            return Import(sHistoryFileName, listMain, listFavorites, icoDefault);
+        }//end Load
+
+        public bool Import(string sHistoryFileName, ClipboardList listMain, ClipboardList listFavorites, Image icoDefault)
         {
             try
             {
-                m_HotKey = new HotKeyTranslator(parent, m_iHotKeyAppId);
-
                 try
                 {
-                    DotNetZip.UnZipFiles(GetZipFilePath(sFileName), Path.GetDirectoryName(GetZipFilePath(sFileName)));
-                    //JavaUnZip unzip = new JavaUnZip(GetZipFilePath(sFileName));
-                    //unzip.ExtractFiles(Path.GetDirectoryName(GetZipFilePath(sFileName)));
+                    DotNetZip.UnZipFiles(GetZipFilePath(sHistoryFileName), Path.GetDirectoryName(GetZipFilePath(sHistoryFileName)));
                 }//end try
                 catch (Exception err)
                 {
                     FormClipboard.TraceLn(true, "Settings", "Load",
-                        "Unzip: {0} Error: {1}", sFileName, err.Message);
+                        "Unzip: {0} Error: {1}", sHistoryFileName, err.Message);
                 }//end catch
 
                 XmlDocument doc = new XmlDocument();
-                doc.Load(sFileName);
+                doc.Load(sHistoryFileName);
                 XmlNode root = doc.SelectSingleNode("Settings");
 
-                m_HotKey.Load(root);
-                m_iMenuMaxLen = XmlUtil.GetInt(root, "HistoryLength", m_iMenuMaxLen);
-                m_iBufferMaxLen = XmlUtil.GetInt(root, "HistoryMaxLength", m_iBufferMaxLen);
-                m_bShowSnapShot = XmlUtil.GetBool(root, "ShowSnapShot", m_bShowSnapShot);
-                m_bShowDebug = XmlUtil.GetBool(root, "ShowDebugWindow", m_bShowDebug);
-                m_AutoReconnect = XmlUtil.GetBool(root, "AutoReconnect", m_AutoReconnect);
-                WriteLogFile = XmlUtil.GetBool(root, "WriteLogFile", m_WriteLogFile);
-                m_bAutoUAC = XmlUtil.GetBool(root, "AutoUAC", m_bAutoUAC);
-                m_bAbortShutdown = XmlUtil.GetBool(root, "AbortShutdown", m_bAbortShutdown);
-                m_bStopServices = XmlUtil.GetBool(root, "StopServices", m_bStopServices);
-                m_Encodings.Load(root);
                 listMain.Load(doc, icoDefault);
                 listFavorites.Load(doc, icoDefault);
 
-                listMain.MAX_HISTORY = m_iBufferMaxLen;
-                listFavorites.MAX_HISTORY = m_iBufferMaxLen;
+                listMain.MAX_HISTORY = I.m_iBufferMaxLen;
+                listFavorites.MAX_HISTORY = I.m_iBufferMaxLen;
 
-                File.Delete(sFileName);
+                //File.Delete(sHistoryFileName);
+                return true;
             }//end try
             catch (Exception err)
             {
                 FormClipboard.TraceLn(true, "Settings", "Load",
-                    "{0} Error: {1}", sFileName, err.Message);
+                    "{0} Error: {1}", sHistoryFileName, err.Message);
+                return false;
             }//end catch
-        }//end Load
+        }
 
         private string GetZipFilePath(string sFileName)
         {

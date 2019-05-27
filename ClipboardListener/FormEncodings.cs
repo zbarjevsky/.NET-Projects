@@ -10,9 +10,9 @@ namespace ClipboardManager
 {
 	public partial class FormEncodings : Form
 	{
-		private Encodings m_Encodings = null;
+		private EncodingsList m_Encodings = null;
 
-		public FormEncodings(Encodings encodings)
+		public FormEncodings(EncodingsList encodings)
 		{
 			m_Encodings = encodings;
 
@@ -21,7 +21,7 @@ namespace ClipboardManager
 
 		private void FormEncodings_Load(object sender, EventArgs e)
 		{
-			foreach ( Encodings.Item i in m_Encodings.m_vItems )
+			foreach (EncodingItemData i in m_Encodings.Encodings )
 			{
 				ListViewItem itm = m_listEncodings.Items.Add(i.sName);
 				itm.Tag = i;
@@ -39,7 +39,7 @@ namespace ClipboardManager
 		{
 			foreach ( ListViewItem itm in m_listEncodings.Items )
 			{
-				Encodings.Item i = (Encodings.Item)itm.Tag;
+                EncodingItemData i = itm.Tag as EncodingItemData;
 				i.bEnable = itm.Checked;
 			}//end foreach
 		}

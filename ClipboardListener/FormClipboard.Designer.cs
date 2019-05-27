@@ -90,6 +90,7 @@ namespace ClipboardManager
             this.m_toolStripContainer = new System.Windows.Forms.ToolStripContainer();
             this.m_splitContainerClipboard = new System.Windows.Forms.SplitContainer();
             this.m_pnlClipboard = new System.Windows.Forms.Panel();
+            this.m_richTextBoxClipboard = new ClipboardManager.CustomRichTextBox();
             this.m_contextMenuStrip_RichTextBox = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.m_pnlClipboardLeft = new System.Windows.Forms.Panel();
             this.m_icoClipboardApp = new System.Windows.Forms.PictureBox();
@@ -147,11 +148,12 @@ namespace ClipboardManager
             this.m_ToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.m_SaveFileDialog = new System.Windows.Forms.SaveFileDialog();
             this.m_splitMain = new System.Windows.Forms.SplitContainer();
-            this.m_richTextBoxClipboard = new ClipboardManager.CustomRichTextBox();
             this.m_listHistory = new ClipboardManager.Utils.ClipboardHistoryListControl();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.m_mnuImportHistory = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.m_contextMenuStripTrayIcon.SuspendLayout();
             this.m_menuStripMain.SuspendLayout();
             this.m_statusStrip.SuspendLayout();
@@ -513,6 +515,8 @@ namespace ClipboardManager
             this.m_ToolStripMenuItem_Tools_Settings,
             this.m_ToolStripMenuItem_Tools_Sep1,
             this.m_mnuToolsOpenLogFolder,
+            this.m_mnuImportHistory,
+            this.toolStripMenuItem1,
             this.m_ToolStripMenuItem_Tools_ReverseChars,
             this.m_ToolStripMenuItem_Tools_Convert,
             this.m_ToolStripMenuItem_Tools_Encoding});
@@ -524,26 +528,26 @@ namespace ClipboardManager
             // 
             this.m_ToolStripMenuItem_Tools_Settings.Image = ((System.Drawing.Image)(resources.GetObject("m_ToolStripMenuItem_Tools_Settings.Image")));
             this.m_ToolStripMenuItem_Tools_Settings.Name = "m_ToolStripMenuItem_Tools_Settings";
-            this.m_ToolStripMenuItem_Tools_Settings.Size = new System.Drawing.Size(177, 22);
+            this.m_ToolStripMenuItem_Tools_Settings.Size = new System.Drawing.Size(238, 26);
             this.m_ToolStripMenuItem_Tools_Settings.Text = "&Properties";
             this.m_ToolStripMenuItem_Tools_Settings.Click += new System.EventHandler(this.m_ToolStripMenuItem_Tools_Settings_Click);
             // 
             // m_ToolStripMenuItem_Tools_Sep1
             // 
             this.m_ToolStripMenuItem_Tools_Sep1.Name = "m_ToolStripMenuItem_Tools_Sep1";
-            this.m_ToolStripMenuItem_Tools_Sep1.Size = new System.Drawing.Size(174, 6);
+            this.m_ToolStripMenuItem_Tools_Sep1.Size = new System.Drawing.Size(235, 6);
             // 
             // m_mnuToolsOpenLogFolder
             // 
             this.m_mnuToolsOpenLogFolder.Name = "m_mnuToolsOpenLogFolder";
-            this.m_mnuToolsOpenLogFolder.Size = new System.Drawing.Size(177, 22);
+            this.m_mnuToolsOpenLogFolder.Size = new System.Drawing.Size(238, 26);
             this.m_mnuToolsOpenLogFolder.Text = "Open Log Folder...";
             this.m_mnuToolsOpenLogFolder.Click += new System.EventHandler(this.m_mnuToolsOpenLogFolder_Click);
             // 
             // m_ToolStripMenuItem_Tools_ReverseChars
             // 
             this.m_ToolStripMenuItem_Tools_ReverseChars.Name = "m_ToolStripMenuItem_Tools_ReverseChars";
-            this.m_ToolStripMenuItem_Tools_ReverseChars.Size = new System.Drawing.Size(177, 22);
+            this.m_ToolStripMenuItem_Tools_ReverseChars.Size = new System.Drawing.Size(238, 26);
             this.m_ToolStripMenuItem_Tools_ReverseChars.Text = "&Reverese char order";
             this.m_ToolStripMenuItem_Tools_ReverseChars.Click += new System.EventHandler(this.m_ToolStripMenuItem_Tools_ReverseChars_Click);
             // 
@@ -552,7 +556,7 @@ namespace ClipboardManager
             this.m_ToolStripMenuItem_Tools_Convert.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_ToolStripMenuItem_Tools_UnescapeURI});
             this.m_ToolStripMenuItem_Tools_Convert.Name = "m_ToolStripMenuItem_Tools_Convert";
-            this.m_ToolStripMenuItem_Tools_Convert.Size = new System.Drawing.Size(177, 22);
+            this.m_ToolStripMenuItem_Tools_Convert.Size = new System.Drawing.Size(238, 26);
             this.m_ToolStripMenuItem_Tools_Convert.Text = "Text Convert";
             // 
             // m_ToolStripMenuItem_Tools_UnescapeURI
@@ -568,7 +572,7 @@ namespace ClipboardManager
             this.m_ToolStripMenuItem_Tools_Encoding_Config,
             this.m_ToolStripMenuItem_Tools_Encoding_Sep1});
             this.m_ToolStripMenuItem_Tools_Encoding.Name = "m_ToolStripMenuItem_Tools_Encoding";
-            this.m_ToolStripMenuItem_Tools_Encoding.Size = new System.Drawing.Size(177, 22);
+            this.m_ToolStripMenuItem_Tools_Encoding.Size = new System.Drawing.Size(238, 26);
             this.m_ToolStripMenuItem_Tools_Encoding.Text = "&Encoding";
             // 
             // m_ToolStripMenuItem_Tools_Encoding_Config
@@ -711,6 +715,24 @@ namespace ClipboardManager
             this.m_pnlClipboard.Name = "m_pnlClipboard";
             this.m_pnlClipboard.Size = new System.Drawing.Size(691, 274);
             this.m_pnlClipboard.TabIndex = 3;
+            // 
+            // m_richTextBoxClipboard
+            // 
+            this.m_richTextBoxClipboard.AcceptsTab = true;
+            this.m_richTextBoxClipboard.ContextMenuStrip = this.m_contextMenuStrip_RichTextBox;
+            this.m_richTextBoxClipboard.DetectUrls = false;
+            this.m_richTextBoxClipboard.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_richTextBoxClipboard.EnableAutoDragDrop = true;
+            this.m_richTextBoxClipboard.Location = new System.Drawing.Point(26, 0);
+            this.m_richTextBoxClipboard.Name = "m_richTextBoxClipboard";
+            this.m_richTextBoxClipboard.Size = new System.Drawing.Size(665, 274);
+            this.m_richTextBoxClipboard.TabIndex = 0;
+            this.m_richTextBoxClipboard.Text = "";
+            this.m_richTextBoxClipboard.WordWrap = false;
+            this.m_richTextBoxClipboard.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.m_richTextBoxClipboard_LinkClicked);
+            this.m_richTextBoxClipboard.SelectionChanged += new System.EventHandler(this.m_richTextBoxClipboard_SelectionChanged);
+            this.m_richTextBoxClipboard.TextChanged += new System.EventHandler(this.m_richTextBoxClipboard_TextChanged);
+            this.m_richTextBoxClipboard.Enter += new System.EventHandler(this.m_richTextBoxClipboard_Enter);
             // 
             // m_contextMenuStrip_RichTextBox
             // 
@@ -1281,24 +1303,6 @@ namespace ClipboardManager
             this.m_splitMain.SplitterDistance = 693;
             this.m_splitMain.TabIndex = 4;
             // 
-            // m_richTextBoxClipboard
-            // 
-            this.m_richTextBoxClipboard.AcceptsTab = true;
-            this.m_richTextBoxClipboard.ContextMenuStrip = this.m_contextMenuStrip_RichTextBox;
-            this.m_richTextBoxClipboard.DetectUrls = false;
-            this.m_richTextBoxClipboard.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_richTextBoxClipboard.EnableAutoDragDrop = true;
-            this.m_richTextBoxClipboard.Location = new System.Drawing.Point(26, 0);
-            this.m_richTextBoxClipboard.Name = "m_richTextBoxClipboard";
-            this.m_richTextBoxClipboard.Size = new System.Drawing.Size(665, 274);
-            this.m_richTextBoxClipboard.TabIndex = 0;
-            this.m_richTextBoxClipboard.Text = "";
-            this.m_richTextBoxClipboard.WordWrap = false;
-            this.m_richTextBoxClipboard.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.m_richTextBoxClipboard_LinkClicked);
-            this.m_richTextBoxClipboard.SelectionChanged += new System.EventHandler(this.m_richTextBoxClipboard_SelectionChanged);
-            this.m_richTextBoxClipboard.TextChanged += new System.EventHandler(this.m_richTextBoxClipboard_TextChanged);
-            this.m_richTextBoxClipboard.Enter += new System.EventHandler(this.m_richTextBoxClipboard_Enter);
-            // 
             // m_listHistory
             // 
             this.m_listHistory.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -1322,6 +1326,18 @@ namespace ClipboardManager
             // 
             this.columnHeader3.Text = "Clipboard Histort";
             this.columnHeader3.Width = 25;
+            // 
+            // m_mnuImportHistory
+            // 
+            this.m_mnuImportHistory.Name = "m_mnuImportHistory";
+            this.m_mnuImportHistory.Size = new System.Drawing.Size(238, 26);
+            this.m_mnuImportHistory.Text = "Import History From Old File...";
+            this.m_mnuImportHistory.Click += new System.EventHandler(this.m_mnuImportHistory_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(235, 6);
             // 
             // FormClipboard
             // 
@@ -1503,6 +1519,8 @@ namespace ClipboardManager
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.ColumnHeader columnHeader3;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuImportHistory;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
     }
 }
 
