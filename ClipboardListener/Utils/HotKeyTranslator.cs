@@ -14,11 +14,11 @@ namespace ClipboardManager
     {
         [XmlIgnore]
         public int AppId { get; set; } = new Random().Next(100, 500);
-        public Keys HotKey { get; set; } = Keys.Q;
-        public bool m_ctrlHotKey { get; set; } = true;
-        public bool m_shiftHotKey { get; set; } = false;
-        public bool m_altHotKey { get; set; } = false;
-        public bool m_winHotKey { get; set; } = false;
+        public Keys HotKey { get; set; } = Keys.Control | Keys.Q;
+        //public bool m_ctrlHotKey { get; set; } = true;
+        //public bool m_shiftHotKey { get; set; } = false;
+        //public bool m_altHotKey { get; set; } = false;
+        //public bool m_winHotKey { get; set; } = false;
         public bool m_bUseHotKey { get; set; } = true;
 
         public HotKeyData() { }
@@ -28,14 +28,14 @@ namespace ClipboardManager
         {
             HotKeyData key = new HotKeyData(AppId);
 #if DEBUG
-            HotKey      = Keys.W; // default HotKey for Debug is Ctrl+W
+            HotKey      = Keys.Control | Keys.W; // default HotKey for Debug is Ctrl+W
 #else
-			HotKey		= Keys.Q; // default HotKey is Ctrl+Q
+			HotKey		= Keys.Control | Keys.Q; // default HotKey is Ctrl+Q
 #endif
-            m_ctrlHotKey = key.m_ctrlHotKey;
-            m_shiftHotKey = key.m_shiftHotKey;
-            m_altHotKey = key.m_altHotKey;
-            m_winHotKey = key.m_winHotKey;
+            //m_ctrlHotKey = key.m_ctrlHotKey;
+            //m_shiftHotKey = key.m_shiftHotKey;
+            //m_altHotKey = key.m_altHotKey;
+            //m_winHotKey = key.m_winHotKey;
 
             m_bUseHotKey = key.m_bUseHotKey;
         }//end Reset
@@ -48,53 +48,35 @@ namespace ClipboardManager
 
             key.HotKey = HotKey;
 
-            key.m_ctrlHotKey = m_ctrlHotKey;
-            key.m_shiftHotKey = m_shiftHotKey;
-            key.m_altHotKey = m_altHotKey;
-            key.m_winHotKey = m_winHotKey;
+            //key.m_ctrlHotKey = m_ctrlHotKey;
+            //key.m_shiftHotKey = m_shiftHotKey;
+            //key.m_altHotKey = m_altHotKey;
+            //key.m_winHotKey = m_winHotKey;
 
             return key;
         }//end Clone
 
-        public void SetHotKey(System.Windows.Forms.KeyEventArgs e)
-        {
-            SetHotKey(e.KeyCode,
-                (e.Modifiers & Keys.Control) != 0 ? true : false,
-                (e.Modifiers & Keys.Shift) != 0 ? true : false,
-                (e.Modifiers & Keys.Alt) != 0 ? true : false,
-                ((e.Modifiers & Keys.LWin) != 0 || (e.Modifiers & Keys.RWin) != 0) ? true : false);
-        }//end SetHotKey
-
-        public void SetHotKey(Keys c, bool bCtrl, bool bShift, bool bAlt, bool bWindows)
-        {
-            HotKey = c;
-            m_ctrlHotKey = bCtrl;
-            m_shiftHotKey = bShift;
-            m_altHotKey = bAlt;
-            m_winHotKey = bWindows;
-        }//end SetHotKey
-
         public override string ToString()
         {
             String sHotKey = "";
-            if (m_ctrlHotKey)
+            if (HotKey.HasFlag(Keys.Control))
                 sHotKey += "Ctrl";
 
-            if (m_shiftHotKey)
+            if (HotKey.HasFlag(Keys.Shift))
             {
                 if (sHotKey.Length != 0)
                     sHotKey += " + ";
                 sHotKey += "Shift";
             }//end if
 
-            if (m_altHotKey)
+            if (HotKey.HasFlag(Keys.Alt))
             {
                 if (sHotKey.Length != 0)
                     sHotKey += " + ";
                 sHotKey += "Alt";
             }//end if
 
-            if (m_winHotKey)
+            if (HotKey.HasFlag(Keys.LWin))
             {
                 if (sHotKey.Length != 0)
                     sHotKey += " + ";
@@ -104,7 +86,7 @@ namespace ClipboardManager
             if (sHotKey.Length != 0)
                 sHotKey += " + ";
 
-            sHotKey += HotKey.ToString();
+            sHotKey += HotKey.ToString().Substring(0,1);
 
             return sHotKey;
         }//end ToString
@@ -193,24 +175,26 @@ namespace ClipboardManager
 		//	m_winHotKey		= bWindows;
 		//}//end SetHotKey
 
-		public static bool RegisterHotKey(this HotKeyData key, Form parent)
+		public static bool RegisterHotKey(this HotKeyData keyData, Form parent)
 		{
-			if ( !key.m_bUseHotKey )
+			if ( !keyData.m_bUseHotKey )
 				return true;
 
 			// update HotKey
 			NativeWIN32.KeyModifiers modifiers = NativeWIN32.KeyModifiers.None;
 
-			if (key.m_ctrlHotKey)
+			if (keyData.HotKey.HasFlag(Keys.Control))
 				modifiers |= NativeWIN32.KeyModifiers.Control;
-			if (key.m_shiftHotKey)
+			if (keyData.HotKey.HasFlag(Keys.Shift))
 				modifiers |= NativeWIN32.KeyModifiers.Shift;
-			if (key.m_altHotKey)
+			if (keyData.HotKey.HasFlag(Keys.Alt))
 				modifiers |= NativeWIN32.KeyModifiers.Alt;
-			if (key.m_winHotKey)
+			if (keyData.HotKey.HasFlag(Keys.LWin) || keyData.HotKey.HasFlag(Keys.RWin))
 				modifiers |= NativeWIN32.KeyModifiers.Windows;
 
-			return NativeWIN32.RegisterHotKey(parent.Handle, key.AppId, modifiers, key.HotKey);
+            Keys key = (Keys)((int)keyData.HotKey & 0x0000FFFF); //filter out modifiers
+
+            return NativeWIN32.RegisterHotKey(parent.Handle, keyData.AppId, modifiers, key);
 		}//end RegisterHotKey
 
 		public static void UnregisterHotKey(this HotKeyData key, Form parent)

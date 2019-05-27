@@ -35,7 +35,7 @@ namespace ClipboardManager
 			if (e.KeyCode < Keys.A || e.KeyCode > Keys.Z )
 				return;
 
-			m_HotKey.SetHotKey(e);
+			m_HotKey.HotKey = e.KeyData;
 			e.Handled = true;
 			m_txtHotKey.Text = m_HotKey.ToString();
 		}//end m_txtHotKey_KeyUp
@@ -53,7 +53,7 @@ namespace ClipboardManager
             m_chkStopServices.Checked       = m_Settings.I.m_bStopServices;
 
 
-            m_HotKey.UnregisterHotKey(this.Parent as Form); //to allow change or reset
+            m_HotKey.UnregisterHotKey(this.Owner); //to allow change or reset
 
             m_chkReconnect.Checked			= m_Settings.I.m_AutoReconnect;
             m_chkLog.Checked    			= m_Settings.WriteLogFile;
@@ -69,7 +69,7 @@ namespace ClipboardManager
 			m_Settings.I.m_iBufferMaxLen = (int)m_numHistoryMax.Value;
 
 			m_Settings.I.HotKey = m_HotKey; //set new values
-			m_Settings.I.HotKey.RegisterHotKey(this.Parent as Form); //register if needed
+			m_Settings.I.HotKey.RegisterHotKey(this.Owner); //register if needed
 
 			m_Settings.I.m_AutoReconnect = m_chkReconnect.Checked;
             m_Settings.WriteLogFile  = m_chkLog.Checked;
@@ -80,7 +80,7 @@ namespace ClipboardManager
 
 		private void m_btnCancel_Click(object sender, EventArgs e)
 		{
-			m_Settings.I.HotKey.RegisterHotKey(this.Parent as Form); //register old key if needed
+			m_Settings.I.HotKey.RegisterHotKey(this.Owner); //register old key if needed
 		}//end m_btnCancel_Click
 
         private const string _strAppKey = @"ClipboardHistoryMZ";

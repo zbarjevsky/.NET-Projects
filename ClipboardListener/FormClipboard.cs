@@ -912,6 +912,8 @@ namespace ClipboardManager
 
                 m_ClipboardListMain.MAX_HISTORY = m_Settings.I.m_iBufferMaxLen;
                 m_ClipboardListFavorites.MAX_HISTORY = m_Settings.I.m_iBufferMaxLen;
+
+                m_Settings.I.Save(m_sSettingsFileName);
             }//end try
             catch ( Exception err )
 			{
