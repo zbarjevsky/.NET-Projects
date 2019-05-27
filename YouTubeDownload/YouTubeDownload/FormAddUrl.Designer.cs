@@ -48,7 +48,8 @@
             // 
             // m_btnBrowseForFolder
             // 
-            this.m_btnBrowseForFolder.Location = new System.Drawing.Point(18, 54);
+            this.m_btnBrowseForFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnBrowseForFolder.Location = new System.Drawing.Point(680, 54);
             this.m_btnBrowseForFolder.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnBrowseForFolder.Name = "m_btnBrowseForFolder";
             this.m_btnBrowseForFolder.Size = new System.Drawing.Size(115, 29);
@@ -73,13 +74,15 @@
             // 
             this.m_lnkOutputFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_lnkOutputFolder.Location = new System.Drawing.Point(142, 58);
+            this.m_lnkOutputFolder.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.m_lnkOutputFolder.Location = new System.Drawing.Point(144, 54);
             this.m_lnkOutputFolder.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.m_lnkOutputFolder.Name = "m_lnkOutputFolder";
-            this.m_lnkOutputFolder.Size = new System.Drawing.Size(653, 24);
+            this.m_lnkOutputFolder.Size = new System.Drawing.Size(528, 28);
             this.m_lnkOutputFolder.TabIndex = 5;
             this.m_lnkOutputFolder.TabStop = true;
             this.m_lnkOutputFolder.Text = "Output Folder: ";
+            this.m_lnkOutputFolder.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.m_lnkOutputFolder.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.m_lnkOutputFolder_LinkClicked);
             // 
             // m_lblUrl

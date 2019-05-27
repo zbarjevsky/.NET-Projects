@@ -142,7 +142,7 @@ namespace YouTubeDownload
             }
             else
             {
-                m_btnPause.Text = _pause ? "Start" : "Pause";
+                m_btnPause.Text = _pause ? "Start" : "Abort";
                 m_btnPause.ImageIndex = _pause ? 0 : 1;
             }
         }

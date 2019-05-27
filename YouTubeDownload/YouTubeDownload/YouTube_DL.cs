@@ -27,6 +27,8 @@ namespace YouTubeDownload
         public DownloadState State { get; set; } = DownloadState.None;
         public string OutputFolder { get; set; } = "";
         public string Description { get; set; } = "";
+        public string PlayListDescription { get; set; } = "";
+        public string PlayListProgress { get; set; } = "";
         public string FileNameTemplate { get; set; } = "%(title)s-%(id)s.%(ext)s";
         public bool NoPlayList { get; set; } = true;
         public bool AudioOnly { get; set; } = false;
@@ -82,6 +84,7 @@ namespace YouTubeDownload
             ParseDestination(line);
             ParseProgress(line);
             ParseStatus(line);
+            ParsePlayList(line);
 
             OutputDataReceived(e.Data);
         }
@@ -99,7 +102,7 @@ namespace YouTubeDownload
             Data.Progress = 0;
             if (Data.State == DownloadState.Working)
             {
-                Data.State = (exitCode == 1) ? DownloadState.Succsess : DownloadState.InQueue;
+                Data.State = (exitCode == 1 || exitCode == 0) ? DownloadState.Succsess : DownloadState.InQueue;
             }
 
             ProcessExited();
@@ -126,6 +129,41 @@ namespace YouTubeDownload
             if (pos1 >= 0)
             {
                 Data.Description = line.Substring(pos1 + DST3.Length);
+            }
+        }
+
+        private void ParsePlayList(string line)
+        {
+            const string DST1 = "[youtube:playlist] Downloading playlist ";
+            int pos1 = line.IndexOf(DST1);
+            if (pos1 >= 0)
+            {
+                Data.PlayListDescription = line.Substring(pos1 + DST1.Length);
+            }
+
+            const string DST2 = "[download] Downloading playlist: ";
+            pos1 = line.IndexOf(DST2);
+            if (pos1 >= 0)
+            {
+                Data.PlayListDescription = line.Substring(pos1 + DST2.Length);
+            }
+
+            const string DST3 = "[youtube:playlist] playlist ";
+            pos1 = line.IndexOf(DST3);
+            if (pos1 >= 0)
+            {
+                int pos2 = line.LastIndexOf(": Collected ");
+                if(pos2>0)
+                    Data.PlayListDescription = line.Substring(pos2+2);
+                else
+                    Data.PlayListDescription = line.Substring(pos1 + DST3.Length);
+            }
+
+            const string DST4 = "[download] Downloading video ";
+            pos1 = line.IndexOf(DST4);
+            if (pos1 >= 0)
+            {
+                Data.PlayListProgress = line.Substring(pos1 + 11);
             }
         }
 
