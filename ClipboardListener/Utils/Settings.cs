@@ -26,8 +26,6 @@ namespace ClipboardManager.Utils
         [DisplayName("Automatically reset UAC")]
         public bool IsAutoUAC { get; set; } = false;
         public bool IsAbortShutdown { get; set; } = false;
-        [DisplayName("Stop Services if Running")]
-        public bool IsStopServices { get; set; } = false;
         [TypeConverter(typeof(ExpandableObjectConverter))]
         public ServicesManipulatorSettings ServicesManipulatorSettings { get; set; } = new ServicesManipulatorSettings();
         [TypeConverter(typeof(ExpandableObjectConverter))]
@@ -104,11 +102,11 @@ namespace ClipboardManager.Utils
             BufferMaxLen = s.BufferMaxLen;
             ShowSnapShot = s.ShowSnapShot;
             ShowDebug = s.ShowDebug;
-            EncodingsList = s.EncodingsList;
             IsAutoReconnect = s.IsAutoReconnect;
             IsAutoUAC = s.IsAutoUAC;
             IsAbortShutdown = s.IsAbortShutdown;
-            IsStopServices = s.IsStopServices;
+            ServicesManipulatorSettings = s.ServicesManipulatorSettings;
+            EncodingsList = s.EncodingsList;
         }
 
         private const string _strAppKey = @"ClipboardHistoryMZ";

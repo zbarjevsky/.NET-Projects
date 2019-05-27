@@ -18,11 +18,12 @@ namespace ClipboardManager.Utils
         [DisplayName("Enable Service Monitoring")]
         public bool ContinuousMonitoringServices { get; set; } = false;
         [XmlArrayItem("ServiceName")]
-        public List<string> ServiceNameList { get; set; } = new List<string>() { "SMS Agent Host" };
+        public List<string> ServiceNameList { get; set; } 
 
         public override string ToString()
         {
-            return ContinuousMonitoringServices?"Monitoring Enabled":"Monitoring Disabled";
+            return (ContinuousMonitoringServices?"Monitoring Enabled":"Monitoring Disabled") 
+                + ", Services: " + ServiceNameList.Count;
         }
     }
 
@@ -62,7 +63,11 @@ namespace ClipboardManager.Utils
         {
             ServicesDictionary.Clear();
             foreach (string name in settings.ServiceNameList)
-                ServicesDictionary.Add(name, null);
+            {
+                if(!ServicesDictionary.ContainsKey(name))
+                    ServicesDictionary.Add(name, null);
+            }
+
             _isMonitoring = settings.ContinuousMonitoringServices;
         }
 
