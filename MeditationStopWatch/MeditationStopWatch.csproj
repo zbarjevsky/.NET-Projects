@@ -139,6 +139,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\CursorHandler.cs" />
+    <Compile Include="Tools\GlobalMessageFilter.cs" />
     <Compile Include="ZoomablePictureBoxUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>

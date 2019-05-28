@@ -27,7 +27,6 @@ namespace MeditationStopWatch
             InitializeComponent();
 
             m_analogClock.Settings = parent.m_Options.AnalogClockSettings.Clone();
-            m_analogClock.Settings.HandOpacity = 210;
             m_analogClock.Settings.ClockBackground = Color.Transparent;
             m_analogClock.Settings.SuspendScreenSaver = true;
             m_analogClock.BackColor = Color.Transparent; 

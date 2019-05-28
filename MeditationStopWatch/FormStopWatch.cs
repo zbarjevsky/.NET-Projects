@@ -23,7 +23,11 @@ namespace MeditationStopWatch
 
 		public FormStopWatch()
 		{
-			InitializeComponent();
+            GlobalMessageFilter gmh = new GlobalMessageFilter();
+            gmh.MouseMovedAction = (point) => { CursorHandler.IsCursorVisible = true; };
+            Application.AddMessageFilter(gmh);
+
+            InitializeComponent();
 
 			//designer problems
 			this.m_splitContainerMain.Panel2MinSize = 220;
@@ -399,7 +403,7 @@ namespace MeditationStopWatch
             base.OnMouseWheel(e);
 		}
 
-		public string AdjustVolume(double delta)
+        public string AdjustVolume(double delta)
 		{
 			delta /= Math.Abs(delta);
 
