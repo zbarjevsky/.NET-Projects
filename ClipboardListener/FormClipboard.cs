@@ -88,8 +88,8 @@ namespace ClipboardManager
         private int count = 0;
         protected override void WndProc(ref Message m)
         {
-            System.Diagnostics.Debug.WriteLine(string.Format("{0}. MAINF: PreFilterMessage({1}-{2})",
-            count++, m.Msg, WindowsMessages.Message(m.Msg)));
+            //System.Diagnostics.Debug.WriteLine(string.Format("{0}. MAINF: PreFilterMessage({1}-{2})",
+            //count++, m.Msg, WindowsMessages.Message(m.Msg)));
 
             if (!ProcessWindowsMessage(ref m))
                 base.WndProc(ref m);
@@ -1315,7 +1315,17 @@ namespace ClipboardManager
             m_richTextBoxClipboard.SelectedText = Uri.UnescapeDataString(s);
         }//end m_ToolStripMenuItem_Tools_UnescapeURI_Click
 
-		private void m_ToolStripMenuItem_Tools_Encoding_Config_Click(object sender, EventArgs e)
+        private void m_mnuToolsConvertTryAll_Click(object sender, EventArgs e)
+        {
+            List<string> txt = EncodingsHelper.ConvertTryAll(Clipboard.GetText());
+            m_richTextBoxClipboard.Text = "";
+            foreach (string item in txt)
+            {
+                m_richTextBoxClipboard.Text += item + Environment.NewLine;
+            }
+        }
+
+        private void m_ToolStripMenuItem_Tools_Encoding_Config_Click(object sender, EventArgs e)
 		{
 			FormEncodings frm = new FormEncodings(m_Settings.I.EncodingsList);
 			frm.Icon = this.Icon;
