@@ -174,7 +174,8 @@ namespace ClipboardManager
 
             internal void Clear()
             {
-                _icoAppFrom.Dispose();
+                if(_icoAppFrom != null)
+                    _icoAppFrom.Dispose();
                 _icoAppFrom = null;
             }
 

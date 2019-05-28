@@ -531,7 +531,7 @@ namespace ClipboardManager
             this.m_ToolStripMenuItem_Tools_Settings.Image = ((System.Drawing.Image)(resources.GetObject("m_ToolStripMenuItem_Tools_Settings.Image")));
             this.m_ToolStripMenuItem_Tools_Settings.Name = "m_ToolStripMenuItem_Tools_Settings";
             this.m_ToolStripMenuItem_Tools_Settings.Size = new System.Drawing.Size(238, 26);
-            this.m_ToolStripMenuItem_Tools_Settings.Text = "&Properties";
+            this.m_ToolStripMenuItem_Tools_Settings.Text = "&Settings";
             this.m_ToolStripMenuItem_Tools_Settings.Click += new System.EventHandler(this.m_ToolStripMenuItem_Tools_Settings_Click);
             // 
             // m_ToolStripMenuItem_Tools_Sep1

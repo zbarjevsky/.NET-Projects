@@ -20,7 +20,9 @@ namespace ClipboardManager.Utils
         public HotKeyData HotKeyInfo { get; set; } = new HotKeyData();
         public int MenuMaxLen { get; set; } = 30;
         public int BufferMaxLen { get; set; } = 200;
+        [Browsable(false)]
         public bool ShowSnapShot { get; set; } = true;
+        [Browsable(false)]
         public bool ShowDebug { get; set; } = true;
         public bool IsAutoReconnect { get; set; } = true;
         [DisplayName("Automatically reset UAC")]

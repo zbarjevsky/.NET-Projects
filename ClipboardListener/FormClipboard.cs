@@ -893,7 +893,7 @@ namespace ClipboardManager
 		{
 			try
 			{
-				FormSettings frm = new FormSettings(m_Settings);
+                FormSettings frm = new FormSettings(m_Settings);
 				frm.Icon = this.Icon;
 				if ( frm.ShowDialog(this) != DialogResult.OK )
 					return;
