@@ -164,6 +164,82 @@ namespace MeditationStopWatch
         }
     }
 
+    [Serializable]
+    [DefaultPropertyAttribute("ClockBackground")]
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    [TypeConverter(typeof(ExpandableObjectConverter))]
+    public class AnalogClockSettings
+    {
+        [DisplayName("Hour Hand Color")]
+        [Description("Hour Hand Color")]
+        [DefaultValue(typeof(Color), "DarkGoldenrod")]
+        public Color HourHandColor { get; set; } = Color.DarkGoldenrod;
+
+        [DisplayName("Minute Hand Color")]
+        [Description("Minute Hand Color")]
+        [DefaultValue(typeof(Color), "Goldenrod")]
+        public Color MinuteHandColor { get; set; } = Color.Goldenrod;
+
+        [DisplayName("Hour and Minute Opacity")]
+        [Description("Hour and Minute Opacity (0-255")]
+        [DefaultValue(typeof(byte), "255")]
+        public byte HandOpacity { get; set; } = 255;
+
+        [DisplayName("Second Hand Color")]
+        [Description("Second Hand Color")]
+        [DefaultValue(typeof(Color), "Red")]
+        public Color SecondHandColor { get; set; } = Color.Red;
+
+        [DisplayName("Second Hand Circle Color")]
+        [Description("Second Hand Circle Color")]
+        [DefaultValue(typeof(Color), "Red")]
+        public Color SecondHandCircleColor { get; set; } = Color.Red;
+
+        [DisplayName("Ticks Color")]
+        [Description("Ticks Color")]
+        [DefaultValue(typeof(Color), "SaddleBrown")]
+        public Color TicksColor { get; set; } = Color.SaddleBrown;
+
+        [DisplayName("Ticks Background Color")]
+        [Description("Ticks Background Color")]
+        [DefaultValue(typeof(Color), "Black")]
+        public Color TicksBackColor { get; set; } = Color.Black;
+
+        [DisplayName("Background")]
+        [Description("Clock Background")]
+        [DefaultValue(typeof(Color), "Black")]
+        public Color ClockBackground { get; set; } = Color.Black;
+
+        public bool Draw1MinuteTicks { get; set; } = true;
+
+        public bool Draw5MinuteTicks { get; set; } = true;
+
+        public bool SuspendScreenSaver { get; set; } = false;
+
+        public override string ToString()
+        {
+            return "Analog Clock Settings";
+        }
+
+        public AnalogClockSettings Clone()
+        {
+            return new AnalogClockSettings()
+            {
+                HourHandColor = HourHandColor,
+                MinuteHandColor = MinuteHandColor,
+                HandOpacity = HandOpacity,
+                SecondHandColor = SecondHandColor,
+                SecondHandCircleColor = SecondHandCircleColor,
+                TicksColor = TicksColor,
+                TicksBackColor = TicksBackColor,
+                ClockBackground = ClockBackground,
+                Draw1MinuteTicks = Draw1MinuteTicks,
+                Draw5MinuteTicks = Draw5MinuteTicks,
+                SuspendScreenSaver = SuspendScreenSaver
+            };
+        }
+    }
+
     [DefaultProperty("Interface")] //will show this property as selected value
 	public class Options
 	{
@@ -227,7 +303,7 @@ namespace MeditationStopWatch
 
         [Category("3. Clock Color Options")]
         [Description("Analog Clock Settings")]
-        public AnalogClock.ClockSettings AnalogClockSettings { get; set; } = new AnalogClock.ClockSettings();
+        public AnalogClockSettings AnalogClockSettings { get; set; } = new AnalogClockSettings();
 
         [Category("3. Clock Color Options")]
 		[DisplayName("Digital Clock Text Color")]

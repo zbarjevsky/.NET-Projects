@@ -9,7 +9,7 @@
         ShowInTaskbar="False"
         Background="Orange"
         mc:Ignorable="d"
-        Title="About Ruler WPF" Height="500" Width="650" MinHeight="400" MinWidth="600" >
+        Title="About Ruler WPF" Height="600" Width="650" MinHeight="400" MinWidth="600" >
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -24,6 +24,8 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <RichTextBox x:Name="txtAbout" Grid.Row="1" Grid.Column="1" 
                      IsReadOnly="True" BorderThickness="1" BorderBrush="Orange"
@@ -32,7 +34,14 @@
         </RichTextBox>
         <TextBlock x:Name="_version" Grid.ColumnSpan="3" Grid.Row="3" FontSize="24"
                    TextAlignment="Center" Text="Version: 1.0" />
-        <Button Content="OK" Grid.Row="5" Grid.Column="1" 
+        <TextBlock x:Name="_link" Grid.ColumnSpan="3" Grid.Row="5" FontSize="24"
+                   TextAlignment="Center" >
+            <Hyperlink Click="Hyperlink_Click"
+                NavigateUri="https://github.com/zbarjevsky/.NET-Projects/tree/master/Binaries" >
+                Open in GitHub.com
+            </Hyperlink>
+        </TextBlock>
+        <Button Content="OK" Grid.Row="7" Grid.Column="1" 
                 Width="120" Margin="100,1" Click="ButtonOk_Click"/>
     </Grid>
 </Window>

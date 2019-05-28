@@ -12,7 +12,7 @@ namespace MeditationStopWatch.Tools
     {
         // TKey is control to drag, TValue is a flag used while dragging
         private static Dictionary<Control, bool> _draggables = new Dictionary<Control, bool>();
-        private static System.Drawing.Size _mouseOffset;
+        private static System.Drawing.Size _dragStartLocation;
 
         public static void SetDoubleBuffered(this Control c, bool value)
         {
@@ -58,6 +58,14 @@ namespace MeditationStopWatch.Tools
 
         }
 
+        private static Size _dragOffset = new Size();
+        public static bool WasDragging(this Control control)
+        {
+            if (!_draggables.ContainsKey(control))
+                return false;
+            return (Math.Abs(_dragOffset.Width) > 0 || Math.Abs(_dragOffset.Height) > 0);
+        }
+
         /// <summary>
         /// Enabling/disabling dragging for control
         /// </summary>
@@ -94,9 +102,14 @@ namespace MeditationStopWatch.Tools
         }
         static void control_MouseDown(object sender, MouseEventArgs e)
         {
-            _mouseOffset = new System.Drawing.Size(e.Location);
-            // turning on dragging
-            _draggables[(Control)sender] = true;
+            if (e.Button == MouseButtons.Left)
+            {
+                _dragOffset = new Size();
+                _dragStartLocation = new Size(e.Location);
+                
+                // turning on dragging
+                _draggables[(Control)sender] = true;
+            }
         }
         static void control_MouseUp(object sender, MouseEventArgs e)
         {
@@ -112,29 +125,30 @@ namespace MeditationStopWatch.Tools
             if (!_draggables[ctrl])
                 return;
 
-            // calculations of control's new position
-            Point newLocationOffset = UpdateOffset(ctrl, e.Location - _mouseOffset);
+            //accumulated move
+            _dragOffset += new Size(e.Location - _dragStartLocation);
 
-            ctrl.Left += newLocationOffset.X;
-            ctrl.Top += newLocationOffset.Y;
+            // calculations of control's new position
+            Point offset = UpdateOffset(ctrl, e.Location - _dragStartLocation);
+
+            ctrl.Left += offset.X;
+            ctrl.Top += offset.Y;
         }
 
         private static Point UpdateOffset(Control ctrl, Point newLocationOffset)
         {
-            const int HARD_MARGIN = 128;
-
             Size parentSize = ctrl.Parent.Size;
 
-            if (ctrl.Left + newLocationOffset.X < -HARD_MARGIN)
+            if (ctrl.Left + newLocationOffset.X < -ctrl.Width / 2)
                 newLocationOffset.X = 0;
 
-            if (ctrl.Top + newLocationOffset.Y < -HARD_MARGIN)
+            if (ctrl.Top + newLocationOffset.Y < -ctrl.Height / 2)
                 newLocationOffset.Y = 0;
 
-            if (ctrl.Left + ctrl.Width + newLocationOffset.X > parentSize.Width + HARD_MARGIN)
+            if (ctrl.Left + ctrl.Width + newLocationOffset.X > parentSize.Width + ctrl.Width / 2)
                 newLocationOffset.X = 0;
 
-            if (ctrl.Top + ctrl.Height + newLocationOffset.Y > parentSize.Height + HARD_MARGIN)
+            if (ctrl.Top + ctrl.Height + newLocationOffset.Y > parentSize.Height + ctrl.Height / 2)
                 newLocationOffset.Y = 0;
 
             return newLocationOffset;

@@ -16,21 +16,23 @@ using ClipboardManager.Zip;
 using ClipboardManager.DesktopUtil;
 using Microsoft.Win32;
 using Utils;
+using ClipboardManager.Utils;
 
 namespace ClipboardManager
 {
 	public partial class FormClipboard : Form
 	{
 		private IntPtr m_NextClipboardViewer			= IntPtr.Zero;
-		private String m_sFileName						= "ClipboardListener.xml";
-		private ClipboardList m_ClipboardListMain		= null;
+        private String m_sSettingsFileName              = "ClipboardListener.Settings.xml";
+        private String m_sHistoryFileName               = "ClipboardListener.History.xml";
+        private ClipboardList m_ClipboardListMain		= null;
 		private ClipboardList m_ClipboardListFavorites	= null;
 		private IntPtr m_hWndToRestore					= IntPtr.Zero;
 		private volatile bool m_bPasteFromThis			= false; //to prevent loop
 		private volatile bool m_bCopyFromSnapShot		= false;
-		public static FormClipboard m_This				= null;
-		public static Utils.Settings m_Settings			= new Utils.Settings();
-		private bool m_bModified						= false;
+		public  static FormClipboard m_This				= null;
+		public  Settings m_Settings			            = new Settings();
+        private bool m_bModified						= false;
 		private int m_iAboutId							= 32164;
 		private int m_iExitId							= 32165;
 
@@ -70,8 +72,11 @@ namespace ClipboardManager
 
             string appDataFolder = Path.GetDirectoryName(Application.LocalUserAppDataPath); //exclude version
 
-            m_sFileName = Path.Combine(appDataFolder, m_sFileName);
-			LogMethodEx(true, "FormClipboard", "C-tor", "Settings file: {0}", m_sFileName);
+            m_sSettingsFileName = Path.Combine(appDataFolder, m_sSettingsFileName);
+			LogMethodEx(true, "FormClipboard", "C-tor", "Settings file: {0}", m_sSettingsFileName);
+
+            m_sHistoryFileName = Path.Combine(appDataFolder, m_sHistoryFileName);
+			LogMethodEx(true, "FormClipboard", "C-tor", "History List file: {0}", m_sHistoryFileName);
 
 			this.SetupSystemMenu();
 			Application.AddMessageFilter(new ClipboardMessageFilter(this));
@@ -83,8 +88,8 @@ namespace ClipboardManager
         private int count = 0;
         protected override void WndProc(ref Message m)
         {
-            System.Diagnostics.Debug.WriteLine(string.Format("{0}. MAINF: PreFilterMessage({1}-{2})",
-            count++, m.Msg, WindowsMessages.Message(m.Msg)));
+            //System.Diagnostics.Debug.WriteLine(string.Format("{0}. MAINF: PreFilterMessage({1}-{2})",
+            //count++, m.Msg, WindowsMessages.Message(m.Msg)));
 
             if (!ProcessWindowsMessage(ref m))
                 base.WndProc(ref m);
@@ -137,31 +142,28 @@ namespace ClipboardManager
 
 		private void FormClipboard_Load(object sender, EventArgs e)
 		{
-			m_Settings.Load(m_sFileName, this, m_ClipboardListMain, m_ClipboardListFavorites, this.Icon.ToBitmap());
+            m_Settings.Load(m_sHistoryFileName, m_sSettingsFileName, this, m_ClipboardListMain, m_ClipboardListFavorites, this.Icon.ToBitmap());
             m_NextClipboardViewer = (IntPtr)NativeWIN32.SetClipboardViewer((int)this.Handle);
-			bool success = m_Settings.m_HotKey.RegisterHotKey();
+			bool success = m_Settings.I.HotKeyInfo.RegisterHotKey(this);
 			
 			m_richTextBoxClipboard_SelectionChanged(null, null); //to enable copy/paste
 			
-			m_ToolStripMenuItem_View_SnapShot.Checked = m_Settings.m_bShowSnapShot;
-			m_splitContainerClipboard.Panel2Collapsed = !m_Settings.m_bShowSnapShot;
+			m_ToolStripMenuItem_View_SnapShot.Checked = m_Settings.I.ShowSnapShot;
+			m_splitContainerClipboard.Panel2Collapsed = !m_Settings.I.ShowSnapShot;
 
-			m_ToolStripMenuItem_View_Debug.Checked = m_Settings.m_bShowDebug;
+			m_ToolStripMenuItem_View_Debug.Checked = m_Settings.I.ShowDebug;
 			m_ToolStripMenuItem_View_Debug_Click(sender, e);
 
-			m_Settings.m_Encodings.CreateEncodingsMenuItems(
-				m_ToolStripMenuItem_Tools_Encoding.DropDownItems,
-				m_richTextBoxSnapShot,
-				m_richTextBoxClipboard);
+            RebuildEncodingsMenu();
 
 			m_TimerReconnect.Tick += new EventHandler(m_TimerReconnect_Tick);
 			m_TimerReconnect.Interval = TIMEOUT; //~15 min
-			if ( m_Settings.m_AutoReconnect ) 
+			if ( m_Settings.I.IsAutoReconnect ) 
 				m_TimerReconnect.Start();
 
-            ShutdownHandler.AbortShutdownIfScheduled = m_Settings.m_bAbortShutdown;
+            ShutdownHandler.AbortShutdownIfScheduled = m_Settings.I.IsAbortShutdown;
 
-            Utils.ServicesManipulator.ContinuousMonitoringServices = m_Settings.m_bStopServices;
+            Utils.ServicesManipulator.UpdateSettings(m_Settings.I.ServicesManipulatorSettings);
             Utils.ServicesManipulator.Start();
 
             m_notifyIconCoodClip.Visible = true;
@@ -182,7 +184,7 @@ namespace ClipboardManager
 			}//end if
 
 			m_notifyIconCoodClip.Visible = false;
-			m_Settings.m_HotKey.UnregisterHotKey();
+			m_Settings.I.HotKeyInfo.UnregisterHotKey(this);
             ShutdownHandler.CancelMonitoringShutdown();
             Utils.ServicesManipulator.Stop();
 
@@ -238,7 +240,7 @@ namespace ClipboardManager
                 if ( m_bModified )
 				{
                     LogMethodEx(true, "FormClipboard", "m_TimerReconnect_Tick", "SaveInThread()");
-					m_Settings.m_bShowSnapShot = m_ToolStripMenuItem_View_SnapShot.Checked;
+					m_Settings.I.ShowSnapShot = m_ToolStripMenuItem_View_SnapShot.Checked;
 					Thread thr = new Thread(new ThreadStart(Save));
                     thr.IsBackground = false;
 					thr.Start();
@@ -258,13 +260,14 @@ namespace ClipboardManager
 
 		private void Save()
 		{
-			m_Settings.m_bShowSnapShot = m_ToolStripMenuItem_View_SnapShot.Checked;
-			m_Settings.m_bShowDebug = m_ToolStripMenuItem_View_Debug.Checked;
+			m_Settings.I.ShowSnapShot = m_ToolStripMenuItem_View_SnapShot.Checked;
+			m_Settings.I.ShowDebug = m_ToolStripMenuItem_View_Debug.Checked;
 
 			try
 			{
-                LogMethod("Save", "Saving: {0}", m_sFileName);
-				m_Settings.Save(m_sFileName, m_ClipboardListMain, m_ClipboardListFavorites);
+                LogMethod("Save", "Saving: {0}", m_sHistoryFileName);
+				m_Settings.Save(m_sHistoryFileName, m_sSettingsFileName, 
+                    m_ClipboardListMain, m_ClipboardListFavorites);
 				m_bModified = false;
 			}//end try
 			catch ( Exception err )
@@ -483,7 +486,7 @@ namespace ClipboardManager
 		//build main clipboard history menu
 		private ToolStripMenuItem[] BuildMainClipboardList(int startIdx)
 		{
-		    int count = Math.Min(m_ClipboardListMain.Count, m_Settings.m_iHistoryLen);
+		    int count = Math.Min(m_ClipboardListMain.Count, m_Settings.I.MenuMaxLen);
 
 			ToolStripMenuItem[] list = new ToolStripMenuItem[count - startIdx];
             //load last items up to m_Settings.m_iHistoryLen
@@ -506,7 +509,7 @@ namespace ClipboardManager
 
 		private ToolStripMenuItem[] BuildFavoritesList(bool bTwinImage)
 		{
-            int count = Math.Min(m_ClipboardListFavorites.Count, m_Settings.m_iHistoryLen);
+            int count = Math.Min(m_ClipboardListFavorites.Count, m_Settings.I.MenuMaxLen);
 
             ToolStripMenuItem[] list = new ToolStripMenuItem[count];
             //load last items up to m_Settings.m_iHistoryLen
@@ -890,18 +893,23 @@ namespace ClipboardManager
 		{
 			try
 			{
-				FormSettings frm = new FormSettings(m_Settings);
+                FormSettings frm = new FormSettings(m_Settings);
 				frm.Icon = this.Icon;
 				if ( frm.ShowDialog(this) != DialogResult.OK )
 					return;
 
-				if ( m_Settings.m_AutoReconnect )
+				if ( m_Settings.I.IsAutoReconnect )
 					m_TimerReconnect.Start();
 				else
 					m_TimerReconnect.Stop();
 
-                ShutdownHandler.AbortShutdownIfScheduled = m_Settings.m_bAbortShutdown;
-                Utils.ServicesManipulator.ContinuousMonitoringServices = m_Settings.m_bStopServices;
+                ShutdownHandler.AbortShutdownIfScheduled = m_Settings.I.IsAbortShutdown;
+                ServicesManipulator.UpdateSettings(m_Settings.I.ServicesManipulatorSettings);
+
+                m_ClipboardListMain.MAX_HISTORY = m_Settings.I.BufferMaxLen;
+                m_ClipboardListFavorites.MAX_HISTORY = m_Settings.I.BufferMaxLen;
+
+                m_Settings.I.Save(m_sSettingsFileName);
             }//end try
             catch ( Exception err )
 			{
@@ -1307,20 +1315,36 @@ namespace ClipboardManager
             m_richTextBoxClipboard.SelectedText = Uri.UnescapeDataString(s);
         }//end m_ToolStripMenuItem_Tools_UnescapeURI_Click
 
-		private void m_ToolStripMenuItem_Tools_Encoding_Config_Click(object sender, EventArgs e)
+        private void m_mnuToolsConvertTryAll_Click(object sender, EventArgs e)
+        {
+            List<string> txt = EncodingsHelper.ConvertTryAll(Clipboard.GetText());
+            m_richTextBoxClipboard.Text = "";
+            foreach (string item in txt)
+            {
+                m_richTextBoxClipboard.Text += item + Environment.NewLine;
+            }
+        }
+
+        private void m_ToolStripMenuItem_Tools_Encoding_Config_Click(object sender, EventArgs e)
 		{
-			FormEncodings frm = new FormEncodings(m_Settings.m_Encodings);
+			FormEncodings frm = new FormEncodings(m_Settings.I.EncodingsList);
 			frm.Icon = this.Icon;
 			if ( DialogResult.OK != frm.ShowDialog(this) )
 				return;
 
-			m_Settings.m_Encodings.CreateEncodingsMenuItems(
-				m_ToolStripMenuItem_Tools_Encoding.DropDownItems,
-				m_richTextBoxSnapShot,
-				m_richTextBoxClipboard);
+            RebuildEncodingsMenu();
 		}//end m_ToolStripMenuItem_Tools_Encoding_Config_Click
 
-		private void m_contextMenuStripTrayIcon_Reconnect_Click(object sender, EventArgs e)
+        private void RebuildEncodingsMenu()
+        {
+            EncodingsHelper.CreateEncodingsMenuItems(
+                m_ToolStripMenuItem_Tools_Encoding.DropDownItems,
+                () => { return m_richTextBoxSnapShot.Text; },
+                (convertedText) => { m_richTextBoxClipboard.Text = convertedText; },
+                m_Settings.I.EncodingsList.Encodings);
+        }
+
+        private void m_contextMenuStripTrayIcon_Reconnect_Click(object sender, EventArgs e)
 		{
             bool bOldModified = m_bModified;
             try
@@ -1332,6 +1356,9 @@ namespace ClipboardManager
 
                 //save Desktop snapshot
                 m_contextMenuStripTrayIcon_DesktopSave_Click(sender, e);
+
+                //register if needed
+                m_Settings.I.HotKeyInfo.RegisterHotKey(this);
             }//end try
             catch (Exception err)
             {
@@ -1368,7 +1395,7 @@ namespace ClipboardManager
 
         private void m_contextMenuStripTrayIcon_UAC_Click(object sender, EventArgs e)
         {
-            bool reset = m_Settings.m_bAutoUAC;
+            bool reset = m_Settings.I.IsAutoUAC;
             bool bUserClick = (sender != null);
             if(!reset && !bUserClick)
                 return;
@@ -1380,7 +1407,7 @@ namespace ClipboardManager
                 int val = (int)key.GetValue("EnableLUA");
                 if(val != 0)
                 {
-                    if ((bUserClick || !m_Settings.m_bAutoUAC)) //show question if user clicked or not Automatic UAC
+                    if ((bUserClick || !m_Settings.I.IsAutoUAC)) //show question if user clicked or not Automatic UAC
                     {
                         reset = (DialogResult.Yes == MessageBox.Show(
                             "User Account Control Enabled\n  Disable?", "EnableLUA",
@@ -1411,8 +1438,24 @@ namespace ClipboardManager
 
         private void m_mnuToolsOpenLogFolder_Click(object sender, EventArgs e)
         {
-            if(!string.IsNullOrWhiteSpace(m_sFileName))
-                Process.Start(Path.GetDirectoryName(m_sFileName));
+            if(!string.IsNullOrWhiteSpace(m_sHistoryFileName))
+                Process.Start(Path.GetDirectoryName(m_sHistoryFileName));
+        }
+
+        private void m_mnuImportHistory_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog()
+            {
+                FileName = m_sHistoryFileName,
+                Filter = "History Files(*.xml)|*.xml|All Files(*.*)|*.*"
+            };
+            if (dlg.ShowDialog(this) != DialogResult.OK)
+                return;
+
+            if (m_Settings.Import(dlg.FileName, m_ClipboardListMain, m_ClipboardListFavorites, this.Icon.ToBitmap()))
+                m_listHistory.UpdateHistoryList(m_ClipboardListMain);
+            else
+                MessageBox.Show(this, "Cannot import History", Text);
         }
 
         private void m_contextMenuStripTrayIcon_About_Click(object sender, EventArgs e)

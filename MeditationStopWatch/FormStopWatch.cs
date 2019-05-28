@@ -23,7 +23,11 @@ namespace MeditationStopWatch
 
 		public FormStopWatch()
 		{
-			InitializeComponent();
+            GlobalMessageFilter gmh = new GlobalMessageFilter();
+            gmh.MouseMovedAction = (point) => { CursorHandler.IsCursorVisible = true; };
+            Application.AddMessageFilter(gmh);
+
+            InitializeComponent();
 
 			//designer problems
 			this.m_splitContainerMain.Panel2MinSize = 220;
@@ -37,44 +41,6 @@ namespace MeditationStopWatch
             m_Options.AnalogClockSettings = m_analogClock.Settings;
 		}
 
-		private void m_ThumbnailCache_ProgressChanged(object sender, CacheEventArgs e)
-		{
-			UpdateStatus(e.Percent, e.Status);
-		}
-
-		private void UpdateStatus(int percent, string status)
-		{
-			if (this.Disposing || this.IsDisposed) return;
-
-			if (this.InvokeRequired)
-			{
-				BeginInvoke(new MethodInvoker(delegate() { UpdateStatus(percent, status); }));
-			}
-			else
-			{
-				if (m_ThumbnailCache.CancelLoadingThumbnails)
-				{
-					m_toolStripStatusLabel1.Text = "Ready";
-					m_toolStripStatusLabel2.Text = "";
-					//m_toolStripProgressBar1.Value = 0;
-					return;
-				}
-
-				m_toolStripStatusLabel1.Text = status;
-				if (percent > 0)
-					m_toolStripStatusLabel2.Text =
-						percent + " % (" + percent * ImageInfo.AllImages.Count / 100 + " of " + ImageInfo.AllImages.Count + ")";
-				else
-					m_toolStripStatusLabel2.Text = "";
-
-				m_toolStripProgressBar1.Value = percent;
-
-                m_listThumbnails.Invalidate();
-				
-				Application.DoEvents();
-			}
-		}
-
 		private void FormStopWatch_Load(object sender, EventArgs e)
 		{
 			if ( File.Exists(m_sSettingsFile) )
@@ -82,12 +48,22 @@ namespace MeditationStopWatch
 
             m_analogClock.Settings = m_Options.AnalogClockSettings;
 
-            m_lblVolume.Parent = m_pictureBox1;
+            m_lblVolume.Parent = m_pictureBox1.PictureBox;
             m_lblVolume.Draggable(true);
             if (!DesignMode)
                 m_lblVolume.Visible = false;
+            m_pictureBox1.OnSizeChangedAction = (bounds) =>
+            {
+                m_pictureBox1.EnsureVisible(m_lblVolume, AnchorStyles.Top | AnchorStyles.Right, 50);
+            };
+            m_pictureBox1.OnClickAction = () =>
+            {
+                PauseResume();
+                m_pictureBox1.Focus();
+            };
+            m_pictureBox1.ShowControlsAction = (show) => { m_btnHideSumbnails.Visible = show; };
 
-			InitializeFavorites();
+            InitializeFavorites();
 
             //restore position
             if (m_Options.AppRectangle != null)
@@ -127,6 +103,44 @@ namespace MeditationStopWatch
 
 		private void FormStopWatch_FormClosed(object sender, FormClosedEventArgs e)
 		{
+		}
+
+		private void m_ThumbnailCache_ProgressChanged(object sender, CacheEventArgs e)
+		{
+			UpdateStatus(e.Percent, e.Status);
+		}
+
+		private void UpdateStatus(int percent, string status)
+		{
+			if (this.Disposing || this.IsDisposed) return;
+
+			if (this.InvokeRequired)
+			{
+				BeginInvoke(new MethodInvoker(delegate() { UpdateStatus(percent, status); }));
+			}
+			else
+			{
+				if (m_ThumbnailCache.CancelLoadingThumbnails)
+				{
+					m_toolStripStatusLabel1.Text = "Ready";
+					m_toolStripStatusLabel2.Text = "";
+					//m_toolStripProgressBar1.Value = 0;
+					return;
+				}
+
+				m_toolStripStatusLabel1.Text = status;
+				if (percent > 0)
+					m_toolStripStatusLabel2.Text =
+						percent + " % (" + percent * ImageInfo.AllImages.Count / 100 + " of " + ImageInfo.AllImages.Count + ")";
+				else
+					m_toolStripStatusLabel2.Text = "";
+
+				m_toolStripProgressBar1.Value = percent;
+
+                m_listThumbnails.Invalidate();
+				
+				Application.DoEvents();
+			}
 		}
 
         private void AutoCloseThumbnailsPanel(int delayMs = 2000)
@@ -214,8 +228,9 @@ namespace MeditationStopWatch
 		{
 			_iImageTimeoutCount = 1;
 			m_Options.LastImageFile = image.FullName;
-			m_pictureBox1.Load(image.FullName);
-		}
+			m_pictureBox1.LoadImage(image.FullName);
+            m_pictureBox1.Focus();
+        }
 
 		private void m_mnuFile_Open_Click(object sender, EventArgs e)
 		{
@@ -376,12 +391,6 @@ namespace MeditationStopWatch
             return list;
         }
 
-        private void m_pictureBox1_Click(object sender, EventArgs e)
-		{
-			PauseResume();
-			m_pictureBox1.Focus();
-		}
-
         public void PauseResume()
         {
             m_audioPlayerControl.PauseResume();
@@ -389,18 +398,28 @@ namespace MeditationStopWatch
 
         protected override void OnMouseWheel(MouseEventArgs e)
 		{
-			AdjustVolume(e.Delta);
-			base.OnMouseWheel(e);
+            if (!ModifierKeys.HasFlag(Keys.Control))
+                AdjustVolume(e.Delta);
+            base.OnMouseWheel(e);
 		}
 
-		public int AdjustVolume(double delta)
+        public string AdjustVolume(double delta)
 		{
 			delta /= Math.Abs(delta);
 
 			int vol = m_audioPlayerControl.Volume;
-            delta *= (1 + vol/10.0);
+            if ((vol + delta) >= 10 && (vol + delta) <= 100)
+            {
+                vol -= (vol % 10); //round to nearest 10
+                delta *= 10;
+            }
+            else if ((vol + delta) > 100)
+            {
+                vol -= (vol % 100); //round to nearest 100
+                delta *= 100;
+            }
 
-			vol += (int)delta;
+            vol += (int)delta;
 
 			if (vol < 0) vol = 0;
 			if (vol > 1000) vol = 1000;
@@ -408,12 +427,15 @@ namespace MeditationStopWatch
             System.Diagnostics.Trace.WriteLine("Delta: " + delta + " Vol: " + vol);
 			m_audioPlayerControl.Volume = vol;
 
-            m_lblVolume.Show(string.Format("Volume: {0:0.0} %", vol /10.0), 4000);
+            string fmt = (vol < 10) ? "0.0" : "0";
 
-            return vol;
+            m_pictureBox1.EnsureVisible(m_lblVolume, AnchorStyles.Top | AnchorStyles.Right, 50);
+            m_lblVolume.Show(string.Format("Volume: {0} %", (vol /10.0).ToString(fmt)), 4000);
+
+            return m_lblVolume.Text;
 		}
 
-		private void m_btnPrevImage_Click(object sender, EventArgs e)
+        private void m_btnPrevImage_Click(object sender, EventArgs e)
 		{
             ShowPrevImage();
 		}
@@ -501,19 +523,14 @@ namespace MeditationStopWatch
         private void m_mnuViewFullScreen_Click(object sender, EventArgs e)
         {
             FormFullScreenImage frm = new FormFullScreenImage(this);
-            frm.Picture = m_pictureBox1.Image;
+            frm.Picture = m_pictureBox1.PictureBox.Image;
             frm.ShowDialog(this);
         }
 
-        private void m_btnFitWindow_Click(object sender, EventArgs e)
+        private void m_btnFullScreen_Click(object sender, EventArgs e)
 		{
             m_mnuViewFullScreen_Click(sender, e);
         }
-
-		private void m_btnOrigSize_Click(object sender, EventArgs e)
-		{
-
-		}
 
 		private void m_txtImageIndex_TextChanged(object sender, EventArgs e)
 		{

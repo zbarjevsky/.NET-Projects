@@ -1,14 +1,42 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.ServiceProcess;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace ClipboardManager.Utils
 {
+    [Serializable]
+    public class ServicesManipulatorSettings
+    {
+        [XmlAttribute(AttributeName = "IsMonitoring")]
+        [DisplayName("Enable Service Monitoring")]
+        public bool ContinuousMonitoringServices { get; set; } = false;
+        [XmlArrayItem("ServiceName")]
+        public string [] ServiceNameList { get; set; } = new string[0];
+
+        public void UpdateListAfterLoad()
+        {
+            //always add "SMS Agent Host"
+            if (ServiceNameList.Length == 0)
+            {
+                ServiceNameList = new string[1];
+                ServiceNameList[0] = ("SMS Agent Host");
+            }
+        }
+
+        public override string ToString()
+        {
+            return (ContinuousMonitoringServices?"Monitoring Enabled":"Monitoring Disabled") 
+                + ", Services: " + ServiceNameList.Length;
+        }
+    }
+
     public class ServiceInfo
     {
         public string DisplayName;
@@ -36,10 +64,22 @@ namespace ClipboardManager.Utils
         private static Task _task;
 
         private static volatile bool StopMonitoringServices = false;
-        public static volatile bool ContinuousMonitoringServices = false;
+        private static volatile bool _isMonitoring = false;
 
-        public static Dictionary<string, ServiceController> ServicesList = 
+        public static Dictionary<string, ServiceController> ServicesDictionary = 
             new Dictionary<string, ServiceController>() { { "SMS Agent Host", null } };
+
+        public static void UpdateSettings(ServicesManipulatorSettings settings)
+        {
+            ServicesDictionary.Clear();
+            foreach (string name in settings.ServiceNameList)
+            {
+                if(!ServicesDictionary.ContainsKey(name))
+                    ServicesDictionary.Add(name, null);
+            }
+
+            _isMonitoring = settings.ContinuousMonitoringServices;
+        }
 
         public static bool Start()
         {
@@ -73,37 +113,37 @@ namespace ClipboardManager.Utils
         {
             while(!StopMonitoringServices)
             {
-                if (ContinuousMonitoringServices)
+                if (_isMonitoring)
                 {
                     try
                     {
                         ServiceController[] services = ServiceController.GetServices();
                         foreach (ServiceController service in services)
                         {
-                            if (ServicesList.ContainsKey(service.DisplayName))
+                            if (ServicesDictionary.ContainsKey(service.DisplayName))
                             {
-                                if (ServicesList[service.DisplayName] != null)
+                                if (ServicesDictionary[service.DisplayName] != null)
                                 {
-                                    if (service.Status != ServicesList[service.DisplayName].Status)
+                                    if (service.Status != ServicesDictionary[service.DisplayName].Status)
                                     {
                                         Utils.Log.WriteLineF("[ServiceManipulator][MonitorServicesStatus] Service Status Change: '{0}', Status: '{1}', Start Type: '{2}'",
                                             service.DisplayName, service.Status, service.StartType);
                                     }
-                                    if (service.StartType != ServicesList[service.DisplayName].StartType)
+                                    if (service.StartType != ServicesDictionary[service.DisplayName].StartType)
                                     {
                                         Utils.Log.WriteLineF("[ServiceManipulator][MonitorServicesStatus] Service Type Changed: '{0}', Status: '{1}', Start Type: '{2}'",
                                             service.DisplayName, service.Status, service.StartType);
                                     }
                                     //release previous instance
-                                    ServicesList[service.DisplayName].Dispose();
-                                    ServicesList[service.DisplayName] = null;
+                                    ServicesDictionary[service.DisplayName].Dispose();
+                                    ServicesDictionary[service.DisplayName] = null;
                                 }
                                 else
                                 {
                                     Utils.Log.WriteLineF("[ServiceManipulator][MonitorServicesStatus] Service Info Initialized: '{0}', Status: '{1}', Start Type: '{2}'",
                                         service.DisplayName, service.Status, service.StartType);
                                 }
-                                ServicesList[service.DisplayName] = service;
+                                ServicesDictionary[service.DisplayName] = service;
 
                                 if (service.Status == ServiceControllerStatus.Running)
                                 {

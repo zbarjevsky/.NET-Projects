@@ -15,6 +15,7 @@ namespace YouTubeDownload
     public partial class DownloaderUserControl : UserControl
     {
         YouTube_DL _youTube_DL = new YouTube_DL();
+        Stopwatch _stopwatch = new Stopwatch();
 
         public string Description { get { return _youTube_DL.Data.Description; } }
         public double Progress { get { return _youTube_DL.Data.Progress; } }
@@ -39,7 +40,7 @@ namespace YouTubeDownload
 
         private void m_lnkDestination_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            if(!File.Exists(_youTube_DL.Data.Description))
+            if(!File.Exists(_youTube_DL.Data.Description.Trim('"')))
             {
                 if(!string.IsNullOrWhiteSpace(_youTube_DL.Data.Description))
                     MessageBox.Show(this, "Not Ready: \n"+ _youTube_DL.Data.Description, Text, 
@@ -72,6 +73,7 @@ namespace YouTubeDownload
 
         public void Start(DownloadData data)
         {
+            timer1.Start();
             _youTube_DL.Start(data);
         }
 
@@ -85,8 +87,10 @@ namespace YouTubeDownload
             this.BeginInvoke(new MethodInvoker(() =>
             {
                 this.Cursor = Cursors.Arrow;
-
+                timer1.Stop();
                 m_ProgressBar.Value = (int)_youTube_DL.Data.Progress;
+                UpdateOutput("======================= Done: "+ _youTube_DL.Data.State + " ========================");
+                m_lblTime.Text = "...";
                 ProcessExited();
             }));
         }
@@ -104,7 +108,10 @@ namespace YouTubeDownload
 
         private void UpdateOutput(string line)
         {
-            m_txtOutput.Text = (line + "\n") + m_txtOutput.Text;
+            _stopwatch.Restart();
+            m_lblTime.Text = "Downloading... ";
+
+           m_txtOutput.Text = (line + "\n") + m_txtOutput.Text;
 
             m_lblStatus.Text = "Status: " + line;
 
@@ -116,6 +123,14 @@ namespace YouTubeDownload
                 m_lnkDestination.Text = PREFIX + _youTube_DL.Data.Description;
                 m_lnkDestination.LinkArea = new LinkArea(PREFIX.Length, _youTube_DL.Data.Description.Length);
             }
+
+            m_lblPlayListStatus.Text = _youTube_DL.Data.PlayListProgress;
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if(_stopwatch.Elapsed.TotalMilliseconds > 1800)
+                m_lblTime.Text = "Waiting... "+_stopwatch.Elapsed.ToString(@"hh\:mm\:ss");
         }
     }
 }

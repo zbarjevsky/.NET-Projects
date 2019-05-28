@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace ClipboardManager
 {
@@ -26,6 +27,7 @@ namespace ClipboardManager
             IntPtr wnd = FindWindow(null, title);
             if (wnd != IntPtr.Zero)
             {
+                MessageBox.Show("Already Opened! Show Running Instance.", title);
                 ShowWindow(wnd, SW_RESTORE);
                 SetForegroundWindow(wnd);
             }

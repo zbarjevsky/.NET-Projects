@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ClipboardManager
 {
-	class XmlUtil
+	public class XmlUtil
 	{
 		public static string GetStr(XmlNode nd, string Name)
 		{

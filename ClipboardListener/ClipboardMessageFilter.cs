@@ -17,7 +17,7 @@ namespace ClipboardManager
 			_frm = frm;
 		}
 
-		int count = 0;
+		//int count = 0;
 		public bool PreFilterMessage(ref Message m)
 		{
 			//System.Diagnostics.Debug.WriteLine(string.Format("{0}. FILTER: PreFilterMessage({1}-{2})",

@@ -295,9 +295,9 @@
             this.m_lnkOutputFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_lnkOutputFolder.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.m_lnkOutputFolder.Location = new System.Drawing.Point(578, 67);
+            this.m_lnkOutputFolder.Location = new System.Drawing.Point(441, 67);
             this.m_lnkOutputFolder.Name = "m_lnkOutputFolder";
-            this.m_lnkOutputFolder.Size = new System.Drawing.Size(391, 25);
+            this.m_lnkOutputFolder.Size = new System.Drawing.Size(411, 25);
             this.m_lnkOutputFolder.TabIndex = 6;
             this.m_lnkOutputFolder.TabStop = true;
             this.m_lnkOutputFolder.Text = "Output Folder";
@@ -329,7 +329,7 @@
             // 
             this.m_btnRemove.Image = ((System.Drawing.Image)(resources.GetObject("m_btnRemove.Image")));
             this.m_btnRemove.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnRemove.Location = new System.Drawing.Point(155, 64);
+            this.m_btnRemove.Location = new System.Drawing.Point(154, 64);
             this.m_btnRemove.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnRemove.Name = "m_btnRemove";
             this.m_btnRemove.Size = new System.Drawing.Size(136, 29);
@@ -341,7 +341,8 @@
             // 
             // m_btnBrowseForFolder
             // 
-            this.m_btnBrowseForFolder.Location = new System.Drawing.Point(461, 64);
+            this.m_btnBrowseForFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnBrowseForFolder.Location = new System.Drawing.Point(858, 65);
             this.m_btnBrowseForFolder.Name = "m_btnBrowseForFolder";
             this.m_btnBrowseForFolder.Size = new System.Drawing.Size(111, 29);
             this.m_btnBrowseForFolder.TabIndex = 5;
@@ -380,7 +381,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.MinimumSize = new System.Drawing.Size(600, 450);
+            this.MinimumSize = new System.Drawing.Size(800, 500);
             this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "YouTube - Download";

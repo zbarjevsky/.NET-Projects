@@ -23,82 +23,7 @@ namespace MeditationStopWatch
 
         DateTime _dateTime = DateTime.Now;
 
-        [Serializable]
-        [DefaultPropertyAttribute("ClockBackground")]
-        [TypeConverter(typeof(ExpandableObjectConverter))]
-        public class ClockSettings
-        {
-            [DisplayName("Hour Hand Color")]
-            [Description("Hour Hand Color")]
-            [DefaultValue(typeof(Color), "DarkGoldenrod")]
-            public Color HourHandColor { get; set; } = Color.DarkGoldenrod;
-
-            [DisplayName("Minute Hand Color")]
-            [Description("Minute Hand Color")]
-            [DefaultValue(typeof(Color), "Goldenrod")]
-            public Color MinuteHandColor { get; set; } = Color.Goldenrod;
-
-            [DisplayName("Hour and Minute Opacity")]
-            [Description("Hour and Minute Opacity (0-255")]
-            [DefaultValue(typeof(byte), "255")]
-            public byte HandOpacity { get; set; } = 255;
-
-            [DisplayName("Second Hand Color")]
-            [Description("Second Hand Color")]
-            [DefaultValue(typeof(Color), "Red")]
-            public Color SecondHandColor { get; set; } = Color.Red;
-
-            [DisplayName("Second Hand Circle Color")]
-            [Description("Second Hand Circle Color")]
-            [DefaultValue(typeof(Color), "Red")]
-            public Color SecondHandCircleColor { get; set; } = Color.Red;
-
-            [DisplayName("Ticks Color")]
-            [Description("Ticks Color")]
-            [DefaultValue(typeof(Color), "SaddleBrown")]
-            public Color TicksColor { get; set; } = Color.SaddleBrown;
-
-            [DisplayName("Ticks Background Color")]
-            [Description("Ticks Background Color")]
-            [DefaultValue(typeof(Color), "Black")]
-            public Color TicksBackColor { get; set; } = Color.Black;
-
-            [DisplayName("Background")]
-            [Description("Clock Background")]
-            [DefaultValue(typeof(Color), "Black")]
-            public Color ClockBackground { get; set; } = Color.Black;
-
-            public bool Draw1MinuteTicks { get; set; } = true;
-
-            public bool Draw5MinuteTicks { get; set; } = true;
-
-            public bool SuspendScreenSaver { get; set; } = false;
-
-            public override string ToString()
-            {
-                return "Analog Clock Settings";
-            }
-
-            public  ClockSettings Clone()
-            {
-                return new ClockSettings()
-                {
-                    HourHandColor = HourHandColor,
-                    MinuteHandColor = MinuteHandColor,
-                    HandOpacity = HandOpacity,
-                    SecondHandColor = SecondHandColor,
-                    SecondHandCircleColor = SecondHandCircleColor,
-                    TicksColor = TicksColor,
-                    TicksBackColor = TicksBackColor,
-                    ClockBackground = ClockBackground,
-                    Draw1MinuteTicks = Draw1MinuteTicks,
-                    Draw5MinuteTicks = Draw5MinuteTicks,
-                    SuspendScreenSaver = SuspendScreenSaver
-                };
-            }
-        }
-
-        public ClockSettings Settings { get; set; } = new ClockSettings();
+        public AnalogClockSettings Settings { get; set; } = new AnalogClockSettings();
 
         float _fRadius;
         PointF _Center;
@@ -121,8 +46,7 @@ namespace MeditationStopWatch
 			// This call is required by the Windows.Forms Form Designer.
 			InitializeComponent();
 
-			// TODO: Add any initialization after the InitializeComponent call
-
+            // TODO: Add any initialization after the InitializeComponent call
 		}
 
 		/// <summary> 
@@ -147,21 +71,24 @@ namespace MeditationStopWatch
 		/// </summary>
 		private void InitializeComponent()
 		{
-			this.components = new System.ComponentModel.Container();
-			this.timer1 = new System.Windows.Forms.Timer(this.components);
-			// 
-			// timer1
-			// 
-			this.timer1.Enabled = true;
-			this.timer1.Interval = 1000;
-			this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-			// 
-			// AnalogClock
-			// 
-			this.Name = "AnalogClock";
-			this.Resize += new System.EventHandler(this.AnalogClock_Resize);
-			//this.Load += new System.EventHandler(this.AnalogClock_Load);
-			this.Paint += new System.Windows.Forms.PaintEventHandler(this.AnalogClock_Paint);
+            this.components = new System.ComponentModel.Container();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
+            this.SuspendLayout();
+            // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 1000;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
+            // AnalogClock
+            // 
+            this.BackColor = System.Drawing.Color.Black;
+            this.Paint += new System.Windows.Forms.PaintEventHandler(this.AnalogClock_Paint);
+            this.Resize += new System.EventHandler(this.AnalogClock_Resize);
+            ((System.ComponentModel.ISupportInitialize)(this)).EndInit();
+            this.ResumeLayout(false);
 
 		}
 		#endregion
@@ -170,14 +97,15 @@ namespace MeditationStopWatch
 		{
 			base.OnLoadCompleted(e);
 			_dateTime = DateTime.Now;
-			this.AnalogClock_Resize(null, e);
+            this.AnalogClock_Resize(null, e);
 		}
 
-		private void AnalogClock_Load(object sender, System.EventArgs e)
-		{
-			_dateTime=DateTime.Now;
-			this.AnalogClock_Resize(sender,e);
-		}
+		//private void AnalogClock_Load(object sender, System.EventArgs e)
+		//{
+		//	_dateTime=DateTime.Now;
+  //          this.BackColor = Settings.ClockBackground;
+  //          this.AnalogClock_Resize(sender,e);
+		//}
 
 		private void timer1_Tick(object sender, System.EventArgs e)
 		{

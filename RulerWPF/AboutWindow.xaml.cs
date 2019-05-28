@@ -44,5 +44,15 @@ namespace RulerWPF
             this.Left = ownerLocation.X;
             this.Top = ownerLocation.Y + 60;
         }
+
+        private void Hyperlink_Click(object sender, RoutedEventArgs e)
+        {
+            // open URL
+            Hyperlink source = sender as Hyperlink;
+            if (source != null)
+            {
+                System.Diagnostics.Process.Start(source.NavigateUri.ToString());
+            }
+        }
     }
 }

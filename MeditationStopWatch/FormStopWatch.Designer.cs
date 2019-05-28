@@ -39,7 +39,7 @@
             this.m_lblVolume = new MeditationStopWatch.Tools.LabelWithTimeout();
             this.m_btnHideSumbnails = new System.Windows.Forms.Button();
             this.m_imageListBtnHide = new System.Windows.Forms.ImageList(this.components);
-            this.m_pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.m_pictureBox1 = new MeditationStopWatch.ZoomablePictureBoxUserControl();
             this.m_listThumbnails = new System.Windows.Forms.ListView();
             this.m_imageListThumbnails = new System.Windows.Forms.ImageList(this.components);
             this.m_splitContainerTools = new System.Windows.Forms.SplitContainer();
@@ -53,6 +53,7 @@
             this.m_mnuFile_Exit = new System.Windows.Forms.ToolStripMenuItem();
             this.m_mnuEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.m_mnuView = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuViewFullScreen = new System.Windows.Forms.ToolStripMenuItem();
             this.m_mnuFavorites = new System.Windows.Forms.ToolStripMenuItem();
             this.m_mnuFavorites_Add = new System.Windows.Forms.ToolStripMenuItem();
             this.m_mnuFavorites_Organize = new System.Windows.Forms.ToolStripMenuItem();
@@ -68,8 +69,7 @@
             this.m_openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.m_toolStripMain = new System.Windows.Forms.ToolStrip();
             this.m_btnOpenImage = new System.Windows.Forms.ToolStripButton();
-            this.m_btnFitWindow = new System.Windows.Forms.ToolStripButton();
-            this.m_btnOrigSize = new System.Windows.Forms.ToolStripButton();
+            this.m_btnFullScreen = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.m_btnPrevImage = new System.Windows.Forms.ToolStripButton();
             this.m_btnNextImage = new System.Windows.Forms.ToolStripButton();
@@ -79,7 +79,7 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.m_btnSlideShow = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-            this.m_mnuViewFullScreen = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_imageListFullScreen = new System.Windows.Forms.ImageList(this.components);
             this.m_pnlMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitContainerMain)).BeginInit();
             this.m_splitContainerMain.Panel1.SuspendLayout();
@@ -93,7 +93,6 @@
             this.m_toolStripContainerPictureInfo.ContentPanel.SuspendLayout();
             this.m_toolStripContainerPictureInfo.SuspendLayout();
             this.m_toolStrip_Picture.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.m_pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitContainerTools)).BeginInit();
             this.m_splitContainerTools.Panel1.SuspendLayout();
             this.m_splitContainerTools.Panel2.SuspendLayout();
@@ -232,7 +231,7 @@
             this.m_btnHideSumbnails.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.m_btnHideSumbnails.ImageIndex = 0;
             this.m_btnHideSumbnails.ImageList = this.m_imageListBtnHide;
-            this.m_btnHideSumbnails.Location = new System.Drawing.Point(3, 261);
+            this.m_btnHideSumbnails.Location = new System.Drawing.Point(3, 258);
             this.m_btnHideSumbnails.Name = "m_btnHideSumbnails";
             this.m_btnHideSumbnails.Size = new System.Drawing.Size(111, 23);
             this.m_btnHideSumbnails.TabIndex = 1;
@@ -255,10 +254,8 @@
             this.m_pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.m_pictureBox1.Name = "m_pictureBox1";
             this.m_pictureBox1.Size = new System.Drawing.Size(438, 284);
-            this.m_pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.m_pictureBox1.TabIndex = 0;
             this.m_pictureBox1.TabStop = false;
-            this.m_pictureBox1.Click += new System.EventHandler(this.m_pictureBox1_Click);
             // 
             // m_listThumbnails
             // 
@@ -329,6 +326,7 @@
             // 
             // m_analogClock
             // 
+            this.m_analogClock.BackColor = System.Drawing.Color.Black;
             this.m_analogClock.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_analogClock.Location = new System.Drawing.Point(0, 0);
             this.m_analogClock.Margin = new System.Windows.Forms.Padding(30);
@@ -413,6 +411,14 @@
             this.m_mnuView.Name = "m_mnuView";
             this.m_mnuView.Size = new System.Drawing.Size(44, 20);
             this.m_mnuView.Text = "&View";
+            // 
+            // m_mnuViewFullScreen
+            // 
+            this.m_mnuViewFullScreen.Name = "m_mnuViewFullScreen";
+            this.m_mnuViewFullScreen.ShortcutKeys = System.Windows.Forms.Keys.F11;
+            this.m_mnuViewFullScreen.Size = new System.Drawing.Size(192, 22);
+            this.m_mnuViewFullScreen.Text = "&Full Screen Image";
+            this.m_mnuViewFullScreen.Click += new System.EventHandler(this.m_mnuViewFullScreen_Click);
             // 
             // m_mnuFavorites
             // 
@@ -516,8 +522,7 @@
             this.m_toolStripMain.ImageScalingSize = new System.Drawing.Size(22, 22);
             this.m_toolStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_btnOpenImage,
-            this.m_btnFitWindow,
-            this.m_btnOrigSize,
+            this.m_btnFullScreen,
             this.toolStripSeparator1,
             this.m_btnPrevImage,
             this.m_btnNextImage,
@@ -541,25 +546,15 @@
             this.m_btnOpenImage.Text = "Open Image";
             this.m_btnOpenImage.Click += new System.EventHandler(this.m_btnOpenImage_Click);
             // 
-            // m_btnFitWindow
+            // m_btnFullScreen
             // 
-            this.m_btnFitWindow.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.m_btnFitWindow.Image = ((System.Drawing.Image)(resources.GetObject("m_btnFitWindow.Image")));
-            this.m_btnFitWindow.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.m_btnFitWindow.Name = "m_btnFitWindow";
-            this.m_btnFitWindow.Size = new System.Drawing.Size(26, 26);
-            this.m_btnFitWindow.Text = "Fit Window";
-            this.m_btnFitWindow.Click += new System.EventHandler(this.m_btnFitWindow_Click);
-            // 
-            // m_btnOrigSize
-            // 
-            this.m_btnOrigSize.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.m_btnOrigSize.Image = ((System.Drawing.Image)(resources.GetObject("m_btnOrigSize.Image")));
-            this.m_btnOrigSize.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.m_btnOrigSize.Name = "m_btnOrigSize";
-            this.m_btnOrigSize.Size = new System.Drawing.Size(26, 26);
-            this.m_btnOrigSize.Text = "Original Size";
-            this.m_btnOrigSize.Click += new System.EventHandler(this.m_btnOrigSize_Click);
+            this.m_btnFullScreen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.m_btnFullScreen.Image = ((System.Drawing.Image)(resources.GetObject("m_btnFullScreen.Image")));
+            this.m_btnFullScreen.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.m_btnFullScreen.Name = "m_btnFullScreen";
+            this.m_btnFullScreen.Size = new System.Drawing.Size(26, 26);
+            this.m_btnFullScreen.Text = "View Full Screen";
+            this.m_btnFullScreen.Click += new System.EventHandler(this.m_btnFullScreen_Click);
             // 
             // toolStripSeparator1
             // 
@@ -629,13 +624,12 @@
             this.toolStripButton1.Size = new System.Drawing.Size(23, 23);
             this.toolStripButton1.Text = "toolStripButton1";
             // 
-            // m_mnuViewFullScreen
+            // m_imageListFullScreen
             // 
-            this.m_mnuViewFullScreen.Name = "m_mnuViewFullScreen";
-            this.m_mnuViewFullScreen.ShortcutKeys = System.Windows.Forms.Keys.F11;
-            this.m_mnuViewFullScreen.Size = new System.Drawing.Size(192, 22);
-            this.m_mnuViewFullScreen.Text = "&Full Screen Image";
-            this.m_mnuViewFullScreen.Click += new System.EventHandler(this.m_mnuViewFullScreen_Click);
+            this.m_imageListFullScreen.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_imageListFullScreen.ImageStream")));
+            this.m_imageListFullScreen.TransparentColor = System.Drawing.Color.Transparent;
+            this.m_imageListFullScreen.Images.SetKeyName(0, "FullScreen.ico");
+            this.m_imageListFullScreen.Images.SetKeyName(1, "RestoreFullScreen.ico");
             // 
             // FormStopWatch
             // 
@@ -675,7 +669,6 @@
             this.m_toolStripContainerPictureInfo.PerformLayout();
             this.m_toolStrip_Picture.ResumeLayout(false);
             this.m_toolStrip_Picture.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.m_pictureBox1)).EndInit();
             this.m_splitContainerTools.Panel1.ResumeLayout(false);
             this.m_splitContainerTools.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.m_splitContainerTools)).EndInit();
@@ -706,7 +699,7 @@
 		private System.Windows.Forms.SplitContainer m_splitContainerTools;
 		private AudioPlayerControl m_audioPlayerControl;
 		private System.Windows.Forms.SplitContainer m_splitContainerMain;
-		private System.Windows.Forms.PictureBox m_pictureBox1;
+		private ZoomablePictureBoxUserControl m_pictureBox1;
 		private System.Windows.Forms.OpenFileDialog m_openFileDialog;
 		private System.Windows.Forms.ToolStrip m_toolStripMain;
 		private System.Windows.Forms.ToolStripButton m_btnOpenImage;
@@ -735,8 +728,7 @@
 		private System.Windows.Forms.ToolStripStatusLabel m_toolStripStatusLabel1;
 		private System.Windows.Forms.ToolStripStatusLabel m_toolStripStatusLabel2;
 		private System.Windows.Forms.ToolStripProgressBar m_toolStripProgressBar1;
-		private System.Windows.Forms.ToolStripButton m_btnFitWindow;
-		private System.Windows.Forms.ToolStripButton m_btnOrigSize;
+		private System.Windows.Forms.ToolStripButton m_btnFullScreen;
 		private System.Windows.Forms.ToolStripTextBox m_txtImageIndex;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
 		private System.Windows.Forms.ToolStripButton toolStripButton1;
@@ -749,6 +741,7 @@
         private System.Windows.Forms.ImageList m_imageListBtnHide;
         private Tools.LabelWithTimeout m_lblVolume;
         private System.Windows.Forms.ToolStripMenuItem m_mnuViewFullScreen;
+        private System.Windows.Forms.ImageList m_imageListFullScreen;
     }
 }
 
