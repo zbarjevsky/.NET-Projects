@@ -18,19 +18,22 @@ namespace ClipboardManager.Utils
         [DisplayName("Enable Service Monitoring")]
         public bool ContinuousMonitoringServices { get; set; } = false;
         [XmlArrayItem("ServiceName")]
-        public List<string> ServiceNameList { get; set; } = new List<string>();
+        public string [] ServiceNameList { get; set; } = new string[0];
 
         public void UpdateListAfterLoad()
         {
             //always add "SMS Agent Host"
-            if (ServiceNameList.Count == 0)
-                ServiceNameList.Add("SMS Agent Host");
+            if (ServiceNameList.Length == 0)
+            {
+                ServiceNameList = new string[1];
+                ServiceNameList[0] = ("SMS Agent Host");
+            }
         }
 
         public override string ToString()
         {
             return (ContinuousMonitoringServices?"Monitoring Enabled":"Monitoring Disabled") 
-                + ", Services: " + ServiceNameList.Count;
+                + ", Services: " + ServiceNameList.Length;
         }
     }
 

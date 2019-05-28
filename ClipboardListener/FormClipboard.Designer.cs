@@ -1345,7 +1345,7 @@ namespace ClipboardManager
             // 
             this.m_mnuToolsConvertTryAll.Name = "m_mnuToolsConvertTryAll";
             this.m_mnuToolsConvertTryAll.Size = new System.Drawing.Size(238, 26);
-            this.m_mnuToolsConvertTryAll.Text = "Convert &Try All";
+            this.m_mnuToolsConvertTryAll.Text = "Convert &Try All Encodings";
             this.m_mnuToolsConvertTryAll.Click += new System.EventHandler(this.m_mnuToolsConvertTryAll_Click);
             // 
             // FormClipboard
