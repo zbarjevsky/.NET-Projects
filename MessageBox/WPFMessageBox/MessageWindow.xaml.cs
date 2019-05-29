@@ -329,6 +329,11 @@ namespace sD.WPF.MessageBox
 
             //calculate message size
             Size size = MeasureString(txtMessage);
+            //calculate buttons size
+            Size buttonsSize = CalculateButtonsSize();
+            if (buttonsSize.Width > size.Width)
+                size.Width = buttonsSize.Width;
+
             if (size.Width > maxWidth) size.Width = maxWidth;
             if (size.Width < this.MinWidth - deltaWidth) size.Width = this.MinWidth - deltaWidth;
 
@@ -392,6 +397,31 @@ namespace sD.WPF.MessageBox
                 Brushes.Black);
 
             return new Size(formattedText.Width, formattedText.Height);
+        }
+
+        private Size CalculateButtonsSize()
+        {
+            Size sz1 = CalculateButtonSize(btn1);
+            Size sz2 = CalculateButtonSize(btnF5);
+            Size sz3 = CalculateButtonSize(btnF6);
+
+            return new Size(sz1.Width + sz2.Width + sz3.Width, sz1.Height + sz2.Height + sz3.Height);
+        }
+
+        private Size CalculateButtonSize(Button btn)
+        {
+            if (btn.Content == null)
+                return new Size();
+
+            FormattedText formattedText = new FormattedText(
+                btn.Content.ToString(),
+                CultureInfo.CurrentUICulture,
+                FlowDirection.LeftToRight,
+                new Typeface(btn.FontFamily, btn.FontStyle, btn.FontWeight, btn.FontStretch),
+                btn.FontSize,
+                Brushes.Black);
+
+            return new Size(formattedText.Width + 40, formattedText.Height + 20);
         }
 
         public static ImageSource _imgError = System.Drawing.SystemIcons.Error.ToImageSource();

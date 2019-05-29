@@ -23,6 +23,10 @@
         <KeyBinding Key="Escape" Command="{Binding EscapeCommand}"/>
         <KeyBinding Key="C" Modifiers="Ctrl" Command="{Binding CopyCommand}"/>
     </Window.InputBindings>
+    <Window.Resources>
+        <BitmapImage x:Key="noImage" UriSource="Images\close.ico" />
+        <BitmapImage x:Key="yesImage" UriSource="Images\ok_plain.ico" />
+    </Window.Resources>
     <!--<Window.Effect>
         <DropShadowEffect BlurRadius="15" Direction="-90" RenderingBias="Quality" ShadowDepth="2"/>
     </Window.Effect>-->
@@ -113,7 +117,8 @@
                     <Button.ContentTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" >
-                                <messageBox:UserControlFootSwitchIcon OrangeIconVisibility="Visible" Margin="3,3,10,3" />
+                                <!--<messageBox:UserControlFootSwitchIcon OrangeIconVisibility="Visible" Margin="3,3,10,3" />-->
+                                <Image Source="{StaticResource noImage}" Margin="4,4,20,4" />
                                 <AccessText Margin="4,0,4,4" Text="{Binding}"/>
                             </StackPanel>
                         </DataTemplate>
@@ -124,7 +129,8 @@
                     <Button.ContentTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
-                                <messageBox:UserControlFootSwitchIcon GreenIconVisibility="Visible" Margin="3,3,10,3" />
+                                <Image Source="{StaticResource yesImage}" Margin="4,4,20,4" />
+                                <!--<messageBox:UserControlFootSwitchIcon GreenIconVisibility="Visible" Margin="3,3,10,3" />-->
                                 <AccessText Margin="4,0,4,4" Text="{Binding}" />
                             </StackPanel>
                         </DataTemplate>
