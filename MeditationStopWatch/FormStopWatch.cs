@@ -24,7 +24,7 @@ namespace MeditationStopWatch
 		public FormStopWatch()
 		{
             GlobalMessageFilter gmh = new GlobalMessageFilter();
-            gmh.MouseMovedAction = (point) => { CursorHandler.IsCursorVisible = true; };
+            gmh.MouseMovedAction = (point) => OnMouseMove(point);
             Application.AddMessageFilter(gmh);
 
             InitializeComponent();
@@ -394,6 +394,17 @@ namespace MeditationStopWatch
         public void PauseResume()
         {
             m_audioPlayerControl.PauseResume();
+        }
+
+        private Point _prevMouseMovePoint = new Point();
+        private void OnMouseMove(Point pt)
+        {
+            int x = Math.Abs(pt.X - _prevMouseMovePoint.X);
+            int y = Math.Abs(pt.Y - _prevMouseMovePoint.Y);
+            _prevMouseMovePoint = pt;
+
+            if(x>1 || y>1)
+                CursorHandler.IsCursorVisible = true;
         }
 
         protected override void OnMouseWheel(MouseEventArgs e)

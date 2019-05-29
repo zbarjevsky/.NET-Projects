@@ -247,11 +247,14 @@ namespace MeditationStopWatch
             DrawAngledClockHand(this._fMinThickness, this._fMinLength, Settings.MinuteHandColor, fRadMin, e);
 			DrawLine(this._fSecThickness, this._fSecLength, Settings.SecondHandColor, fRadSec, e);
 
-			//draw circle at center
-			e.Graphics.FillEllipse( new SolidBrush(Settings.SecondHandCircleColor), _Center.X-_fCenterCircleRadius/2, _Center.Y-_fCenterCircleRadius/2, _fCenterCircleRadius, _fCenterCircleRadius);
-		}
+            //draw circle at center
+            float r1 = _fCenterCircleRadius;
+            e.Graphics.FillEllipse(new SolidBrush(Settings.SecondHandColor), _Center.X - r1 / 2, _Center.Y - r1 / 2, r1, r1);
+            float r2 = r1 * 0.5f;
+            e.Graphics.FillEllipse(new SolidBrush(Settings.SecondHandCircleColor), _Center.X - r2 / 2, _Center.Y - r2 / 2, r2, r2);
+        }
 
-		private void AnalogClock_Resize(object sender, System.EventArgs e)
+        private void AnalogClock_Resize(object sender, System.EventArgs e)
 		{
             //this.Width = this.Height;
             float diameter = Math.Min(Width, Height) - this.Margin.Left;
