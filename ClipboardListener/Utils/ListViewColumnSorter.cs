@@ -161,8 +161,17 @@ namespace ClipboardManager
             listviewX = (ListViewItem)x;
             listviewY = (ListViewItem)y;
 
+            string s1 = listviewX.SubItems[SortColumn].Text;
+            string s2 = listviewY.SubItems[SortColumn].Text;
+
+            int test;
+            if (int.TryParse(s1, out test))
+                s1 = test.ToString("D10");
+            if (int.TryParse(s2, out test))
+                s2 = test.ToString("D10");
+
             // Compare the two items
-            compareResult = ObjectCompare.Compare(listviewX.SubItems[SortColumn].Text, listviewY.SubItems[SortColumn].Text);
+            compareResult = ObjectCompare.Compare(s1, s2);
 
             // Calculate correct return value based on object comparison
             if (SortOrder == SortOrder.Ascending)
@@ -194,23 +203,19 @@ namespace ClipboardManager
                 // Reverse the current sort direction for this column.
                 if (this.SortOrder == SortOrder.Ascending)
                 {
-                    this.SortOrder = SortOrder.Descending;
+                    this.SortOrder = SortOrder.Descending;// Perform the sort with these new sort options.
                 }
                 else
                 {
-                    this.SortOrder = SortOrder.Ascending;
+                    this.SortOrder = SortOrder.Ascending;// Perform the sort with these new sort options.
                 }
             }
             else
             {
                 // Set the column number that is to be sorted; default to ascending.
-                this.SortColumn = e.Column;
-                this.SortOrder = SortOrder.Ascending;
+                this.SortColumn = e.Column;// Perform the sort with these new sort options.
+                this.SortOrder = SortOrder.Ascending; // Perform the sort with these new sort options.
             }
-
-            //
-            // Perform the sort with these new sort options.
-            //_listView.Sort();
 
             _listView.EndUpdate();
         }

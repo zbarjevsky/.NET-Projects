@@ -141,7 +141,6 @@
       <DependentUpon>HotKeyEditorUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Utils\ListViewColumnSorter.cs" />
-    <Compile Include="Utils\ListViewExtensions.cs" />
     <Compile Include="Utils\ServicesManipulator.cs" />
     <Compile Include="Utils\ShutdownHandler.cs" />
     <Compile Include="Utils\SingleInstanceHelper.cs" />
