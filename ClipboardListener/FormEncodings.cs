@@ -12,7 +12,7 @@ namespace ClipboardManager
 	{
 		private EncodingsList m_Encodings = null;
 
-		public FormEncodings(EncodingsList encodings)
+        public FormEncodings(EncodingsList encodings)
 		{
 			m_Encodings = encodings;
 
@@ -21,7 +21,11 @@ namespace ClipboardManager
 
 		private void FormEncodings_Load(object sender, EventArgs e)
 		{
-			foreach (EncodingItemData i in m_Encodings.Encodings )
+            // Create an instance of a ListView column sorter and assign it 
+            // to the ListView control.
+            m_listEncodings.SetListViewColumnSorter(0, SortOrder.Ascending);
+
+            foreach (EncodingItemData i in m_Encodings.Encodings )
 			{
 				ListViewItem itm = m_listEncodings.Items.Add(i.EncodingName);
 				itm.Tag = i;
@@ -33,7 +37,9 @@ namespace ClipboardManager
 
 				itm.Checked = i.ShowInMenu;
 			}//end foreach
-		}//end FormEncodings_Load
+
+            m_listEncodings.Sort();
+        }//end FormEncodings_Load
 
 		private void m_btnOK_Click(object sender, EventArgs e)
 		{
@@ -48,5 +54,5 @@ namespace ClipboardManager
 		{
 
 		}
-	}//end class FormEncodings
+    }//end class FormEncodings
 }//end namespace ClipboardListener
