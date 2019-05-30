@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 
-namespace sD.WPF.MessageBox
+namespace MZ.WPF.MessageBox
 {
     /// <summary>
     /// Interaction logic for UserControlFootSwitchIcon.xaml

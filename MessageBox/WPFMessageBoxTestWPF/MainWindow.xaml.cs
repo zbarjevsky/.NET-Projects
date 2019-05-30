@@ -27,22 +27,22 @@ namespace WPFMessageBoxTestWPF
 
         private void btnInfo_OnClick(object sender, RoutedEventArgs e)
         {
-            sD.WPF.MessageBox.PopUp.Information("Information.");
+            MZ.WPF.MessageBox.PopUp.Information("Information.");
         }
 
         private void btnWarn_OnClick(object sender, RoutedEventArgs e)
         {
-            sD.WPF.MessageBox.PopUp.Exclamation("Exclamation!");
+            MZ.WPF.MessageBox.PopUp.Exclamation("Exclamation!");
         }
 
         private void btnError_OnClick(object sender, RoutedEventArgs e)
         {
-            sD.WPF.MessageBox.PopUp.Error("Error!!!");
+            MZ.WPF.MessageBox.PopUp.Error("Error!!!");
         }
 
         private void btnQuestionr_OnClick(object sender, RoutedEventArgs e)
         {
-            sD.WPF.MessageBox.PopUp.Question("Question!");
+            MZ.WPF.MessageBox.PopUp.Question("Question!");
         }
     }
 }

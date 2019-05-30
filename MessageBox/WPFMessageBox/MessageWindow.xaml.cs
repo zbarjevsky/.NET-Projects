@@ -10,7 +10,7 @@ using System.Windows.Media;
 // <summary>
 // MarkZ. 2017-08-01
 // </summary>
-namespace sD.WPF.MessageBox
+namespace MZ.WPF.MessageBox
 {
     /// <summary>
     /// Interaction logic for MessageWindow.xaml
@@ -33,6 +33,9 @@ namespace sD.WPF.MessageBox
         public ICommand F5Command { get; set; }
         public ICommand F6Command { get; set; }
         public ICommand CopyCommand { get; set; }
+
+        public static Visibility IconType1Visibility { get; set; } = Visibility.Visible;
+        public static Visibility IconType2Visibility { get; set; } = Visibility.Collapsed;
 
         private MessageBoxResult _DialogResult = MessageBoxResult.None;
         private MessageBoxButton _buttons = MessageBoxButton.OKCancel;
@@ -201,6 +204,8 @@ namespace sD.WPF.MessageBox
 
             btnF5.ToolTip = btnF5.Content.ToString().TryRemoveKeyboardAccellerator() + "\n(Left Foot Pedal/F5)";
             btnF6.ToolTip = btnF6.Content.ToString().TryRemoveKeyboardAccellerator() + "\n(Right Foot Pedal/F6)";
+
+            txtMessage.TextChanged += txtMessage_TextChanged;
         }
 
         private void SetDefaultButton()
@@ -224,6 +229,11 @@ namespace sD.WPF.MessageBox
                     btnF6.IsDefault = true;
                     break;
             }
+        }
+
+        private void txtMessage_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            AdjustSize();
         }
 
         //allow window move on left click
@@ -320,12 +330,15 @@ namespace sD.WPF.MessageBox
         {
             var screen = System.Windows.Forms.Screen.FromHandle(new System.Windows.Interop.WindowInteropHelper(this).Handle);
             double deltaWidth = 70;
-            double deltaHeight = 150;
+            double deltaHeight = 120;
             double deltaWidthTitle = 80;
             
             //restrict size to 80% of display
             double maxWidth = screen.Bounds.Width * 0.8 - deltaWidth;
             double maxHeight = screen.Bounds.Height * 0.9 - deltaHeight;
+
+            //minimal height for input box (not readonly)
+            double minHeight = txtMessage.IsReadOnly ? this.MinHeight + 50 : this.MinHeight;
 
             //calculate message size
             Size size = MeasureString(txtMessage);
@@ -333,12 +346,6 @@ namespace sD.WPF.MessageBox
             Size buttonsSize = CalculateButtonsSize();
             if (buttonsSize.Width > size.Width)
                 size.Width = buttonsSize.Width;
-
-            if (size.Width > maxWidth) size.Width = maxWidth;
-            if (size.Width < this.MinWidth - deltaWidth) size.Width = this.MinWidth - deltaWidth;
-
-            if (size.Height > maxHeight) size.Height = maxHeight;
-            if (size.Height < this.MinHeight - deltaHeight) size.Height = this.MinHeight - deltaHeight;
 
             //calculate title size
             Size sizeTitle = MeasureString(txtTitle);
@@ -348,6 +355,12 @@ namespace sD.WPF.MessageBox
             //if title is wider than message
             if (sizeTitle.Width < maxWidth - deltaWidthTitle && sizeTitle.Width + deltaWidthTitle > size.Width)
                 size.Width = sizeTitle.Width + deltaWidthTitle;
+
+            if (size.Width > maxWidth) size.Width = maxWidth;
+            if (size.Width < this.MinWidth - deltaWidth) size.Width = this.MinWidth - deltaWidth;
+
+            if (size.Height > maxHeight) size.Height = maxHeight;
+            if (size.Height < minHeight - deltaHeight) size.Height = minHeight - deltaHeight;
 
             this.Width = size.Width + deltaWidth;
             this.Height = size.Height + deltaHeight;

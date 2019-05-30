@@ -8,10 +8,50 @@ using System.Windows;
 // Show Message Box, using main app window(WinForms or WPF) as owner,
 // If btn*text is null will assign text by 'buttons'
 // </summary>
-namespace sD.WPF.MessageBox
+namespace MZ.WPF.MessageBox
 {
     public class PopUp
     {
+        public enum IconStyle
+        {
+            FootPedalImages,
+            RegularImages,
+            NoImages
+        }
+
+        public static IconStyle IconType
+        {
+
+            set
+            {
+                switch (value)
+                {
+                    case IconStyle.FootPedalImages:
+                        MessageWindow.IconType1Visibility = Visibility.Collapsed;
+                        MessageWindow.IconType2Visibility = Visibility.Visible;
+                        break;
+                    case IconStyle.RegularImages:
+                        MessageWindow.IconType1Visibility = Visibility.Visible;
+                        MessageWindow.IconType2Visibility = Visibility.Collapsed;
+                        break;
+                    case IconStyle.NoImages:
+                    default:
+                        MessageWindow.IconType1Visibility = Visibility.Collapsed;
+                        MessageWindow.IconType2Visibility = Visibility.Collapsed;
+                        break;
+                }
+            }
+
+            get
+            {
+                if (MessageWindow.IconType1Visibility == Visibility.Collapsed && MessageWindow.IconType2Visibility == Visibility.Collapsed)
+                    return IconStyle.NoImages;
+                if (MessageWindow.IconType1Visibility == Visibility.Collapsed && MessageWindow.IconType2Visibility == Visibility.Visible)
+                    return IconStyle.FootPedalImages;
+                return IconStyle.RegularImages;
+            }
+        }
+
         public static void Error(string message, string title = "Error",
           MessageBoxImage icon = MessageBoxImage.Error,
           TextAlignment textAlignment = TextAlignment.Center)
