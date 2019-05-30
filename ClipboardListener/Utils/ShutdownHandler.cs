@@ -46,7 +46,7 @@ namespace ClipboardManager
                 Win32_Shutdown.ShutdownBlockReasonCreate(hWnd, "Block Unexpected Shutdown!");
                 Utils.Log.WriteLineF("ProcessShutdownMessage: ShutdownBlockReasonCreate(hWnd = 0x{0:X8})", (uint)hWnd);
 
-                DialogResult res = MessageBox.Show("Allow Windows Shutdown/Reboot/Log off?", "...", 
+                DialogResult res = MessageBox.Show("Allow Windows Shutdown/Reboot/Log off?", Environment.UserName, 
                     MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, 
                     MessageBoxDefaultButton.Button2, MessageBoxOptions.ServiceNotification);
 

@@ -805,9 +805,7 @@ namespace ClipboardManager
 			}//end try
 			catch ( Exception err )
 			{
-				MessageBox.Show(this, "Cannot save: "+err.Message, this.Text,
-					MessageBoxButtons.OK,
-					MessageBoxIcon.Error);
+                CenteredMessageBox.MsgBoxErr("Cannot save: "+err.Message);
 			}//end catch
 		}//end m_ToolStripMenuItem_File_Save_Click
 
@@ -1307,9 +1305,7 @@ namespace ClipboardManager
             string s = m_richTextBoxClipboard.SelectedText;
             if (s == null || s.Length == 0)
             {
-                MessageBox.Show(this, "No text selected", this.Text,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Information);
+                CenteredMessageBox.MsgBoxIfo("No text selected");
                 return;
             }//end if
             m_richTextBoxClipboard.SelectedText = Uri.UnescapeDataString(s);
@@ -1409,10 +1405,8 @@ namespace ClipboardManager
                 {
                     if ((bUserClick || !m_Settings.I.IsAutoUAC)) //show question if user clicked or not Automatic UAC
                     {
-                        reset = (DialogResult.Yes == MessageBox.Show(
-                            "User Account Control Enabled\n  Disable?", "EnableLUA",
-                            MessageBoxButtons.YesNo, MessageBoxIcon.Question,
-                            MessageBoxDefaultButton.Button1, MessageBoxOptions.ServiceNotification));
+                        reset = (System.Windows.MessageBoxResult.OK == CenteredMessageBox.MsgBoxQst(
+                            "User Account Control Enabled\n  Disable?", "Enable LUA"));
                     }
 
                     if (reset)
@@ -1444,7 +1438,7 @@ namespace ClipboardManager
 
         private void m_mnuImportHistory_Click(object sender, EventArgs e)
         {
-            OpenFileDialog dlg = new OpenFileDialog()
+            System.Windows.Forms.OpenFileDialog dlg = new System.Windows.Forms.OpenFileDialog()
             {
                 FileName = m_sHistoryFileName,
                 Filter = "History Files(*.xml)|*.xml|All Files(*.*)|*.*"
@@ -1455,7 +1449,7 @@ namespace ClipboardManager
             if (m_Settings.Import(dlg.FileName, m_ClipboardListMain, m_ClipboardListFavorites, this.Icon.ToBitmap()))
                 m_listHistory.UpdateHistoryList(m_ClipboardListMain);
             else
-                MessageBox.Show(this, "Cannot import History", Text);
+                CenteredMessageBox.MsgBoxErr("Cannot import History");
         }
 
         private void m_contextMenuStripTrayIcon_About_Click(object sender, EventArgs e)
