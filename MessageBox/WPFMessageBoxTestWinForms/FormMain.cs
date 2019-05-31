@@ -94,7 +94,8 @@ namespace WPFMessageBoxTestWinForms
         {
             string inputText = "Type Here...";
             if(MZ.WPF.MessageBox.PopUp.InputBox(ref inputText, "Title") == MessageBoxResult.OK)
-                MZ.WPF.MessageBox.PopUp.Information(inputText, Text);
+                MZ.WPF.MessageBox.PopUp.Information(inputText, Text, 
+                    MessageBoxImage.Information, TextAlignment.Justify);
         }
     }
 }

@@ -233,7 +233,8 @@ namespace MZ.WPF.MessageBox
 
         private void txtMessage_TextChanged(object sender, TextChangedEventArgs e)
         {
-            AdjustSize();
+            Point delta = AdjustSize();
+            this.Left -= delta.X / 2;
         }
 
         //allow window move on left click
@@ -326,11 +327,11 @@ namespace MZ.WPF.MessageBox
         /// <summary>
         /// Calculate size of message and adjust window size correspondently
         /// </summary>
-        private void AdjustSize()
+        private Point AdjustSize()
         {
             var screen = System.Windows.Forms.Screen.FromHandle(new System.Windows.Interop.WindowInteropHelper(this).Handle);
             double deltaWidth = 70;
-            double deltaHeight = 120;
+            double deltaHeight = 140;
             double deltaWidthTitle = 80;
             
             //restrict size to 80% of display
@@ -362,12 +363,17 @@ namespace MZ.WPF.MessageBox
             if (size.Height > maxHeight) size.Height = maxHeight;
             if (size.Height < minHeight - deltaHeight) size.Height = minHeight - deltaHeight;
 
+            double deltaX = Math.Round(size.Width + deltaWidth - this.ActualWidth);
+            double deltaY = Math.Round(size.Height + deltaHeight - this.ActualHeight);
+
             this.Width = size.Width + deltaWidth;
             this.Height = size.Height + deltaHeight;
 
             //for very long lines - scroll to the middle
             if(sTextAlignment == TextAlignment.Center)
                 txtMessage.ScrollToHorizontalOffset(size.Width/2);
+
+            return new Point(deltaX, deltaY);
         }
 
         private void CenterToUIElement(UIElement owner)
@@ -401,8 +407,14 @@ namespace MZ.WPF.MessageBox
 
         private Size MeasureString(TextBox t)
         {
+            string text = t.Text;
+            if (string.IsNullOrEmpty(text))
+                text = "  ";
+            if (text.EndsWith(Environment.NewLine))
+                text += "   "; //add spaces to calculate correct height
+
             var formattedText = new FormattedText(
-                t.Text,
+                text,
                 CultureInfo.CurrentUICulture,
                 FlowDirection.LeftToRight,
                 new Typeface(t.FontFamily, t.FontStyle, t.FontWeight, t.FontStretch),
@@ -434,6 +446,7 @@ namespace MZ.WPF.MessageBox
                 btn.FontSize,
                 Brushes.Black);
 
+            //compensate for Icon width
             return new Size(formattedText.Width + 40, formattedText.Height + 20);
         }
 
