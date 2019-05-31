@@ -12,7 +12,7 @@
         Background="Transparent"
         Loaded="MessageWindow_OnLoaded"
         MinHeight="150" MinWidth="450"
-        Title="MessageWindow" Height="200" Width="500" x:ClassModifier="internal">
+        Title="MessageWindow" Height="200" Width="{Binding AdjustedWidth}" x:ClassModifier="internal">
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="0" ResizeBorderThickness="6" />
     </WindowChrome.WindowChrome>
@@ -97,7 +97,7 @@
                                 FontSize="20" FontFamily="Courier New" IsReadOnly="True" BorderThickness="0"
                                 VerticalScrollBarVisibility="Hidden" HorizontalScrollBarVisibility="Hidden"
                                 HorizontalAlignment="Stretch" VerticalAlignment="Center" TextWrapping="NoWrap"
-                                TextAlignment="Center" Text="Message" >
+                                TextAlignment="Center" Text="Message" TextChanged="txtMessage_TextChanged">
                         <!--<TextBox.Resources>
                             <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" Color="Yellow" />
                             <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="{DynamicResource {x:Static SystemColors.HighlightColorKey}}" />
