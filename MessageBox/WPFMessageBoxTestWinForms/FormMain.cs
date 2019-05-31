@@ -61,32 +61,32 @@ namespace WPFMessageBoxTestWinForms
 
         private void m_btnInfo_Click(object sender, EventArgs e)
         {
-            MZ.WPF.MessageBox.PopUp.Information("Information.");
+            MZ.WPF.MessageBox.PopUp.Information(richTextBox1.Text);
         }
 
         private void m_btnWarn_Click(object sender, EventArgs e)
         {
-            MZ.WPF.MessageBox.PopUp.Exclamation("Exclamation!");
+            MZ.WPF.MessageBox.PopUp.Exclamation(richTextBox1.Text);
         }
 
         private void m_btnError_Click(object sender, EventArgs e)
         {
-            MZ.WPF.MessageBox.PopUp.Error("Error!!!");
+            MZ.WPF.MessageBox.PopUp.Error(richTextBox1.Text);
         }
 
         private void m_btnQuestion_Click(object sender, EventArgs e)
         {
-            MZ.WPF.MessageBox.PopUp.Question("Question?");
+            MZ.WPF.MessageBox.PopUp.Question(richTextBox1.Text);
         }
 
         private void m_btnQuestionYNC_Click(object sender, EventArgs e)
         {
-            MZ.WPF.MessageBox.PopUp.Question("Question?", "Title", MessageBoxImage.Question, TextAlignment.Center, MessageBoxButton.YesNoCancel);
+            MZ.WPF.MessageBox.PopUp.Question(richTextBox1.Text, "Title", MessageBoxImage.Question, TextAlignment.Center, MessageBoxButton.YesNoCancel);
         }
 
         private void m_btnSpecial_Click(object sender, EventArgs e)
         {
-            MZ.WPF.MessageBox.PopUp.MessageBox("Question?", "Title", MessageBoxImage.Question, TextAlignment.Center, MessageBoxButton.YesNoCancel,
+            MZ.WPF.MessageBox.PopUp.MessageBox(richTextBox1.Text, "Title", MessageBoxImage.Question, TextAlignment.Center, MessageBoxButton.YesNoCancel,
                 "Yes - Long Text", "No - Long Long Long Text", "Cancel - Da Da Da Da Long Text");
         }
 

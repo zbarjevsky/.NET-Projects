@@ -144,7 +144,6 @@ namespace MZ.WPF.MessageBox
 
         private void MessageWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            //AdjustSize(txtMessage.Text);
 
             if (!txtMessage.IsReadOnly)
             {
@@ -154,6 +153,8 @@ namespace MZ.WPF.MessageBox
                 FocusManager.SetFocusedElement(this, txtMessage);
                 DataObject.AddPastingHandler(txtMessage, PasteHandler);
             }
+
+            AdjustSize(txtMessage.Text, true);
 
             SetDefaultButton();
 
