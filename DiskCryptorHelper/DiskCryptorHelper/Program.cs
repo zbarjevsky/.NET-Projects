@@ -1,11 +1,7 @@
-﻿using DiskCryptorHelper.Properties;
-using Microsoft.Win32;
-using sD.WPF.MessageBox;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+using System.IO;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace DiskCryptorHelper
@@ -24,6 +20,8 @@ namespace DiskCryptorHelper
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            UpdateDependencies();
+
             try
             {
                 Application.Run(new FormMain(cmd_line));
@@ -35,6 +33,16 @@ namespace DiskCryptorHelper
             finally
             {
             }
+        }
+
+        private static void UpdateDependencies()
+        {
+            string dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string fileName = Path.Combine(dir, "MZ.WPF.MessageBox.dll");
+            if (!File.Exists(fileName))
+                File.WriteAllBytes(fileName, Properties.Resources.MZ_WPF_MessageBox);
+
+            MZ.WPF.MessageBox.PopUp.IconType = MZ.WPF.MessageBox.PopUp.IconStyle.RegularImages;
         }
     }
 }

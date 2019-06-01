@@ -17,9 +17,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using DiskCryptorHelper.Properties;
-using sD.WPF.MessageBox;
 using VhdApiExample;
 using System.Reflection;
+using MZ.WPF.MessageBox;
 
 namespace DiskCryptorHelper
 {
@@ -155,7 +155,7 @@ namespace DiskCryptorHelper
             if (cmd_line == null || cmd_line.Length == 0)
                 return;
 
-            PopUp.MessageBox(cmd_line[0], "ProcessCommanLine");
+            PopUp.MessageBox(cmd_line[0], "DiskCryptorHelper::ProcessCommanLine");
 
             string vhd = cmd_line[0];
             string exe = Path.GetFileName(Assembly.GetExecutingAssembly().Location).ToLower();

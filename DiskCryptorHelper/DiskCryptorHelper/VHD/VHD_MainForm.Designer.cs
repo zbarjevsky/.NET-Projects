@@ -120,7 +120,7 @@
             this.textFileName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textFileName.Location = new System.Drawing.Point(99, 32);
-            this.textFileName.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textFileName.Margin = new System.Windows.Forms.Padding(2);
             this.textFileName.Name = "textFileName";
             this.textFileName.ReadOnly = true;
             this.textFileName.Size = new System.Drawing.Size(286, 20);
@@ -131,7 +131,7 @@
             this.textLocation.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textLocation.Location = new System.Drawing.Point(99, 55);
-            this.textLocation.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.textLocation.Margin = new System.Windows.Forms.Padding(2);
             this.textLocation.Name = "textLocation";
             this.textLocation.ReadOnly = true;
             this.textLocation.Size = new System.Drawing.Size(286, 20);
@@ -162,9 +162,12 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.mnu);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "VHD_MainForm";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "VHD API Example";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);

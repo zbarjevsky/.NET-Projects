@@ -6,39 +6,49 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using MZ.WPF.MessageBox;
 
 namespace VhdApiExample {
-    public partial class VHD_MainForm : Form {
+    public partial class VHD_MainForm : Form
+    {
 
         Medo.IO.VirtualDisk _disk;
 
-        public VHD_MainForm() {
+        public VHD_MainForm()
+        {
             InitializeComponent();
             this.Font = SystemFonts.MessageBoxFont;
         }
 
 
-        private void MainForm_Load(object sender, EventArgs e) {
+        private void MainForm_Load(object sender, EventArgs e)
+        {
             UpdateData();
         }
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e) {
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
             if (this._disk != null) { this._disk.Close(); }
         }
 
 
-        private void mnuCreate_Click(object sender, EventArgs e) {
+        private void mnuCreate_Click(object sender, EventArgs e)
+        {
             if (this._disk != null) { this._disk.Close(); }
-            using (var frm = new VHD_CreateForm()) {
-                if (frm.ShowDialog(this) == DialogResult.OK) {
+            using (var frm = new VHD_CreateForm())
+            {
+                if (frm.ShowDialog(this) == DialogResult.OK)
+                {
                     this._disk = frm.Disk;
                     UpdateData();
                 }
             }
         }
 
-        private void mnuOpen_Click(object sender, EventArgs e) {
-            if (openDialog.ShowDialog(this) == DialogResult.OK) {
+        private void mnuOpen_Click(object sender, EventArgs e)
+        {
+            if (openDialog.ShowDialog(this) == DialogResult.OK)
+            {
                 if (this._disk != null) { this._disk.Close(); }
                 this._disk = new Medo.IO.VirtualDisk(openDialog.FileName);
                 this._disk.Open();
@@ -47,15 +57,21 @@ namespace VhdApiExample {
         }
 
 
-        private void UpdateData() {
-            if (this._disk != null) {
+        private void UpdateData()
+        {
+            if (this._disk != null)
+            {
                 textFileName.Text = this._disk.FileName;
-                if (this._disk.IsOpen) {
-                    try {
+                if (this._disk.IsOpen)
+                {
+                    try
+                    {
                         textLocation.Text = this._disk.GetAttachedPath();
                         mnuAttach.Enabled = false;
                         mnuDetach.Enabled = true;
-                    } catch (IOException) {
+                    }
+                    catch (IOException)
+                    {
                         textLocation.Text = "";
                         mnuAttach.Enabled = true;
                         mnuDetach.Enabled = false;
@@ -63,7 +79,9 @@ namespace VhdApiExample {
                     mnuCreate.Enabled = false;
                     mnuOpen.Enabled = false;
                     mnuClose.Enabled = true;
-                } else {
+                }
+                else
+                {
                     textLocation.Text = "";
                     mnuCreate.Enabled = false;
                     mnuOpen.Enabled = true;
@@ -71,7 +89,9 @@ namespace VhdApiExample {
                     mnuAttach.Enabled = false;
                     mnuDetach.Enabled = false;
                 }
-            } else {
+            }
+            else
+            {
                 textFileName.Text = "";
                 textLocation.Text = "";
                 mnuCreate.Enabled = true;
@@ -82,25 +102,37 @@ namespace VhdApiExample {
             }
         }
 
-        private void mnuClose_Click(object sender, EventArgs e) {
-            if (this._disk != null) {
+        private void mnuClose_Click(object sender, EventArgs e)
+        {
+            if (this._disk != null)
+            {
                 this._disk.Close();
                 this._disk = null;
                 UpdateData();
             }
         }
 
-        private void mnuAttach_Click(object sender, EventArgs e) {
+        private void mnuAttach_Click(object sender, EventArgs e)
+        {
             if (this._disk == null) { return; }
-            this._disk.Attach(Medo.IO.VirtualDiskAttachOptions.None);
+
+            try
+            {
+                this._disk.Attach(Medo.IO.VirtualDiskAttachOptions.None);
+            }
+            catch (Exception err)
+            {
+                PopUp.Error(err.ToString());
+            }
             UpdateData();
         }
 
-        private void mnuDetach_Click(object sender, EventArgs e) {
+        private void mnuDetach_Click(object sender, EventArgs e)
+        {
             if (this._disk == null) { return; }
             this._disk.Detach();
             UpdateData();
         }
-    
+
     }
 }

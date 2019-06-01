@@ -37,11 +37,12 @@
     <ApplicationIcon>RedSkull32x32.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MZ.WPF.MessageBox, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Binaries\MZ.WPF.MessageBox.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="sD.WPF.MessageBox">
-      <HintPath>Dependencies\sD.WPF.MessageBox.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -135,6 +136,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\Binaries\MZ.WPF.MessageBox.dll">
+      <Link>Dependencies\MZ.WPF.MessageBox.dll</Link>
+    </None>
     <Content Include="AppIcon.ico" />
     <Content Include="Images\AppIcon.ico" />
     <Content Include="Images\gray-skull-hi.png" />
@@ -143,9 +147,7 @@
     <Content Include="Images\RedSkull32x32.png" />
     <Content Include="RedSkull32x32.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Dependencies\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>xcopy /s /f /r /y $(TargetPath) $(SolutionDir)\..\Binaries</PostBuildEvent>
