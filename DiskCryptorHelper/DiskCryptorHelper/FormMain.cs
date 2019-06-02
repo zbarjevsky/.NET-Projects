@@ -50,10 +50,10 @@ namespace DiskCryptorHelper
                     {
                         if (info.IsValidInfo)
                         {
-                            ListViewItem item = m_listDrives.Items.Add(info.volume);
+                            ListViewItem item = m_listDrives.Items.Add(info.MountPoint);
                             item.Tag = info;
 
-                            item.SubItems.Add(info.mount_point);
+                            item.SubItems.Add(info.DriveLetter);
                             item.SubItems.Add(info.size);
                             item.SubItems.Add(info.status);
                         }
@@ -110,7 +110,6 @@ namespace DiskCryptorHelper
 
             m_mnuFile.DropDown = m_sysIconMenu;
             m_mnuOptionsHideWhenMinimized.Checked = Settings.Default.HideWhenMinimized;
-            m_chkPreventShutdown_CheckedChanged(sender, e);
 
             _recentFiles.Update(m_mnuFileAttachVHD.DropDown, m_cmbVHD_FileName);
         }
@@ -200,7 +199,7 @@ namespace DiskCryptorHelper
         private void ReloadDriveList()
         {
             List<UsbEject.Library.Device> list = DriveTools.GetUsbDriveList();
-            List<UsbEject.Library.Volume> removable_volumes = new List<UsbEject.Library.Volume>();
+            List<UsbEject.Library.Volume> removable_volumes = DriveTools.GetRemovableDriveList(list);
 
             Utils.ExecuteOnUIThread(() =>
             {
@@ -210,20 +209,8 @@ namespace DiskCryptorHelper
 
                 hideDriveLetterControl1.ReloadList();
 
-                foreach (UsbEject.Library.Device drive in list)
+                foreach (UsbEject.Library.Volume vol in removable_volumes)
                 {
-                    if (drive.RemovableDevices.Count == 0)
-                        continue;
-
-                    UsbEject.Library.Volume vol = drive as UsbEject.Library.Volume;
-                    if (vol == null || vol.Disks.Count == 0)
-                        continue;
-
-                    //if already has this volume
-                    if (removable_volumes.FirstOrDefault(v => v.Disks[0].FriendlyName == vol.Disks[0].FriendlyName) != null)
-                        continue;
-
-                    removable_volumes.Add(vol);
                     TreeNode node = m_treeDrives.Nodes.Add(vol.Disks[0].FriendlyName);
                     node.Tag = vol;
 
@@ -250,6 +237,23 @@ namespace DiskCryptorHelper
                 if (m_treeDrives.Nodes.Count > 0)
                     m_treeDrives.SelectedNode = m_treeDrives.Nodes[0];
             }, this);
+        }
+
+        private bool DetachVHDDrive(string driveLetter)
+        {
+            List<UsbEject.Library.Device> list = DriveTools.GetUsbDriveList();
+            List<UsbEject.Library.Volume> removable_volumes = DriveTools.GetRemovableDriveList(list);
+
+            foreach (UsbEject.Library.Volume vol in removable_volumes)
+            {
+                if(vol.LogicalDrive == driveLetter)
+                {
+
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         private string GetDriveDescription(string driveLetter, DriveInfo [] driveInfoList)
@@ -392,10 +396,10 @@ namespace DiskCryptorHelper
             m_cmbAvailableDriveLetters_SelectedIndexChanged(sender, e);
             DiskCryptor.DriveInfo drive = m_listDrives.SelectedItems[0].Tag as DiskCryptor.DriveInfo;
 
-            m_lblSelected.Text = "Selected: " + drive.volume + ", MP: " + drive.mount_point;
-            m_btnMount.Enabled = drive.volume.StartsWith("pt") && drive.status.StartsWith("unmounted");
-            m_btnUnmount.Enabled = drive.volume.StartsWith("pt") && drive.status.StartsWith("mounted");
-            m_btnUnmount.Text = "UnMount: " + drive.volume;
+            m_lblSelected.Text = "Selected: " + drive.MountPoint + ", MP: " + drive.DriveLetter;
+            m_btnMount.Enabled = drive.MountPoint.StartsWith("pt") && drive.status.StartsWith("unmounted");
+            m_btnUnmount.Enabled = drive.MountPoint.StartsWith("pt") && drive.status.StartsWith("mounted");
+            m_btnUnmount.Text = "UnMount: " + drive.MountPoint;
         }
 
         private void SmartSelectFirstAvailableDrive()
@@ -416,7 +420,7 @@ namespace DiskCryptorHelper
             for (int i = 0; i < m_listDrives.Items.Count; i++)
             {
                 DiskCryptor.DriveInfo drive = m_listDrives.Items[i].Tag as DiskCryptor.DriveInfo;
-                if (string.IsNullOrWhiteSpace(drive.mount_point) && drive.status.Equals("unmounted"))
+                if (string.IsNullOrWhiteSpace(drive.DriveLetter) && drive.status.Equals("unmounted"))
                     m_listDrives.Items[i].Selected = true;
             }
         }
@@ -450,8 +454,8 @@ namespace DiskCryptorHelper
                 return;
 
             DiskCryptor.DriveInfo drive = m_listDrives.SelectedItems[0].Tag as DiskCryptor.DriveInfo;
-            if (!string.IsNullOrWhiteSpace(drive.mount_point))
-                m_btnMount.Text = "Mount As " + drive.mount_point;
+            if (!string.IsNullOrWhiteSpace(drive.DriveLetter))
+                m_btnMount.Text = "Mount As " + drive.DriveLetter;
 
         }
 
@@ -575,7 +579,10 @@ namespace DiskCryptorHelper
             };
 
             if (File.Exists(m_cmbVHD_FileName.Text))
+            {
+                open.InitialDirectory = Path.GetDirectoryName(m_cmbVHD_FileName.Text);
                 open.FileName = m_cmbVHD_FileName.Text;
+            }
 
             if (open.ShowDialog(this) != DialogResult.OK)
                 return;
@@ -595,19 +602,20 @@ namespace DiskCryptorHelper
         }
 
         private Medo.IO.VirtualDisk _virtualDisk;
-        private List<DiskCryptor.DriveInfo> _cachedDriveInfo; 
-        private void m_btnAttachVHD_Click(object sender, EventArgs e)
+        private List<DiskCryptor.DriveInfo> _cachedDriveInfo;
+        private string _selectedDriveLetterForMount;
+        private void m_btnAttachVHDandMount_Click(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(m_txtPwd.Text))
             {
-                PopUp.MessageBox("Password is empty", "Password", MessageBoxImage.Error);
+                PopUp.Error("Password is empty", "Password");
                 return;
             }
 
             FileInfo fi = new FileInfo(m_cmbVHD_FileName.Text);
             if (!fi.Exists)
             {
-                PopUp.MessageBox("File does not exist: "+fi.FullName, "VHD File Name", MessageBoxImage.Error);
+                PopUp.Error("File does not exist: "+fi.FullName, "VHD File Name");
                 return;
             }
 
@@ -627,7 +635,9 @@ namespace DiskCryptorHelper
                 _virtualDisk = new Medo.IO.VirtualDisk(fi.FullName);
                 _virtualDisk.Open();
                 try { _virtualDisk.Detach(); } catch (Exception err) { Debug.WriteLine("Cannot detach: "+err.Message); }
-                _diskCryptor.OnDisksAdded += OnDiskAdded; //mount DiskCryptor disk
+
+                _selectedDriveLetterForMount = _selectedDriveLetter;
+                _diskCryptor.OnDisksAdded += OnDiskAddedMountDiskCryptorDisk; //mount DiskCryptor disk
 
                 Medo.IO.VirtualDiskAttachOptions options = Medo.IO.VirtualDiskAttachOptions.NoDriveLetter;
                 if (m_chkPermanent.Checked)
@@ -638,68 +648,95 @@ namespace DiskCryptorHelper
             }, sender);
         }
 
-        private void OnDiskAdded(DiskCryptor.DriveInfo driveInfo)
+        private void OnDiskAddedMountDiskCryptorDisk(DiskCryptor.DriveInfo driveInfo)
         {
             if (_cachedDriveInfo == null)
                 return;
 
+            //find newly added drive
             var found = _cachedDriveInfo.FirstOrDefault(d => d.ToString() == driveInfo.ToString());
             if (found == null)
             {
-                _diskCryptor.OnDisksAdded -= OnDiskAdded;
+                _diskCryptor.OnDisksAdded -= OnDiskAddedMountDiskCryptorDisk;
                 _cachedDriveInfo = null;
 
                 Debug.WriteLine("On Disk Added: " + driveInfo.Description());
 
-                _diskCryptor.ExecuteMount(driveInfo, _selectedDriveLetter, m_txtPwd.Text);
+                _diskCryptor.ExecuteMount(driveInfo, _selectedDriveLetterForMount, m_txtPwd.Text);
 
                 Utils.ExecuteOnUIThread(() => { ReloadDriveData(1000); } , this);
             }
         }
 
-        private void m_btnDetach_Click(object sender, EventArgs e)
+        private void m_btnUnmountAndDetach_Click(object sender, EventArgs e)
         {
-            if (!File.Exists(m_cmbVHD_FileName.Text))
+            string vhdFileName = m_cmbVHD_FileName.Text;
+            if (!File.Exists(vhdFileName))
             {
-                PopUp.MessageBox("File does not exist: "+m_cmbVHD_FileName.Text, "Detach Error", MessageBoxImage.Asterisk);
+                PopUp.MessageBox("File does not exist: "+ vhdFileName, "Detach Error", MessageBoxImage.Asterisk);
                 return;
             }
 
             ExecuteClickAction(() =>
             {
-                if (_virtualDisk != null && _virtualDisk.FileName.CompareTo(m_cmbVHD_FileName.Text) != 0)
+                if (_virtualDisk != null && _virtualDisk.FileName.CompareTo(vhdFileName) != 0)
                 { 
                     _virtualDisk.Close();
                     _virtualDisk = null;
                 }
 
-                if(_virtualDisk == null)
+                if(_virtualDisk == null || !_virtualDisk.IsOpen)
                 {
-                    _virtualDisk = new Medo.IO.VirtualDisk(m_cmbVHD_FileName.Text);
+                    _virtualDisk = new Medo.IO.VirtualDisk(vhdFileName);
                     _virtualDisk.Open();
                 }
 
                 string path = _virtualDisk.GetAttachedPath();
+                DiskCryptor.DriveInfo drive = FindDriveInfo(path);
+                if(drive != null)
+                    Unmount(drive);
+
                 _virtualDisk.Detach();
                 _virtualDisk.Close();
                 _virtualDisk = null;
             }, sender);
         }
 
-        private void m_chkPreventShutdown_CheckedChanged(object sender, EventArgs e)
+        private DiskCryptor.DriveInfo FindDriveInfo(string attachedPath)
         {
-            if(sender == m_mnuBlockShutdown)
+            List<UsbEject.Library.Device> list = DriveTools.GetUsbDriveList();
+            List<UsbEject.Library.Volume> removable_volumes = DriveTools.GetRemovableDriveList(list);
+            DriveInfo[] driveInfos = System.IO.DriveInfo.GetDrives();
+
+            const string PHYSICALDRIVE = "PHYSICALDRIVE";
+            int pos = attachedPath.IndexOf(PHYSICALDRIVE) + PHYSICALDRIVE.Length;
+            int diskNumber = int.Parse(attachedPath.Substring(pos));
+
+            UsbEject.Library.Volume vol = null;
+            foreach (UsbEject.Library.Volume device in removable_volumes)
             {
-                Settings.Default.PreventShutdown = m_mnuBlockShutdown.Checked;
-            }
-            else if(sender == m_chkPreventShutdown)
-            {
-                Settings.Default.PreventShutdown = m_chkPreventShutdown.Checked;
+                if (device.Disks[0].DiskNumber == diskNumber)
+                {
+                    vol = device;
+                    break;
+                }
             }
 
-            m_mnuBlockShutdown.Checked = m_chkPreventShutdown.Checked = Settings.Default.PreventShutdown;
+            if (vol == null)
+                return null;
 
-            Settings.Default.Save();
+            foreach (ListViewItem item in m_listDrives.Items)
+            {
+                DiskCryptor.DriveInfo drive = item.Tag as DiskCryptor.DriveInfo;
+                if (drive != null && !string.IsNullOrWhiteSpace(drive.DriveLetter) && drive.DriveLetter[0] == vol.LogicalDrive[0])
+                    return drive;
+            }
+            return null;
+        }
+
+        private void m_mnuOpenDiskCryptor_Click(object sender, EventArgs e)
+        {
+            Process.Start(DiskCryptor.DiskCryptorPath);
         }
     }
 }

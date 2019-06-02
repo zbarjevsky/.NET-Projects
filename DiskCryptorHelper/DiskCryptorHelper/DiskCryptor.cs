@@ -12,6 +12,8 @@ namespace DiskCryptorHelper
 {
     public class DiskCryptor
     {
+        public const string DiskCryptorPath = @"c:\Program Files\dcrypt\dccon.exe";
+
         /* operation status codes */
         public enum ErrorCode
         {
@@ -152,8 +154,8 @@ namespace DiskCryptorHelper
 
         public class DriveInfo
         {
-            public string volume = "";
-            public string mount_point = "";
+            public string MountPoint = "";
+            public string DriveLetter = "";
             public string size = "";
             public string status = "";
 
@@ -165,19 +167,19 @@ namespace DiskCryptorHelper
                 string[] line = report_line.Split('|');
                 if (line.Length == 4)
                 {
-                    volume = (line[0].Trim());
-                    mount_point = (line[1].Trim());
+                    MountPoint = (line[0].Trim());
+                    DriveLetter = (line[1].Trim());
                     size = (line[2].Trim());
                     status = (line[3].Trim());
                 }
 
                 HasInfo = line.Length == 4 || report_line.Contains("-------");
-                IsValidInfo = volume.StartsWith("pt");
+                IsValidInfo = MountPoint.StartsWith("pt");
             }
 
             public override string ToString()
             {
-                return volume + " | " + mount_point + " | " + status;
+                return MountPoint + " | " + DriveLetter + " | " + status;
             }
         }
 
@@ -201,20 +203,20 @@ namespace DiskCryptorHelper
 
         public void ExecuteMount(DriveInfo drive, string driveLetter, string pwd)
         {
-            Log.AppendLine("Mount: " + drive.volume);
-            ExecuteDiskCryptorCommanLine("-mount " + drive.volume + " -mp " + driveLetter + " -p " + pwd);
+            Log.AppendLine("Mount: " + drive.MountPoint);
+            ExecuteDiskCryptorCommanLine("-mount " + drive.MountPoint + " -mp " + driveLetter + " -p " + pwd);
         }
 
         public void ExecuteUnMount(DriveInfo drive)
         {
             if(!drive.status.StartsWith("mounted"))
             {
-                Log.AppendLine("UnMount: " + drive.volume + ", device is not mounted");
+                Log.AppendLine("UnMount: " + drive.MountPoint + ", device is not mounted");
                 return;
             }
 
-            Log.AppendLine("UnMount: " + drive.volume);
-            ExecuteDiskCryptorCommanLine("-unmount " + drive.volume + " -f -dp");
+            Log.AppendLine("UnMount: " + drive.MountPoint);
+            ExecuteDiskCryptorCommanLine("-unmount " + drive.MountPoint + " -f -dp");
         }
 
         public void ExecuteUnMount(string driveLetter)
@@ -250,7 +252,7 @@ namespace DiskCryptorHelper
         {
             foreach (DriveInfo info in DriveList)
             {
-                if (info.mount_point == driveLetter)
+                if (info.DriveLetter == driveLetter)
                     return info;
             }
             return null;
@@ -270,7 +272,7 @@ namespace DiskCryptorHelper
 
             startInfo.UseShellExecute = false;
             startInfo.Arguments = args;
-            startInfo.FileName = @"c:\Program Files\dcrypt\dccon.exe";
+            startInfo.FileName = DiskCryptorPath;
 
             p.StartInfo = startInfo;
 
@@ -297,7 +299,7 @@ namespace DiskCryptorHelper
                     DiskCryptor.DriveInfo newDrive = new DiskCryptor.DriveInfo(e.Data);
                     if (newDrive.HasInfo)
                     {
-                        if (newDrive.IsValidInfo && DriveList.FirstOrDefault((drv) => drv.volume == newDrive.volume) == null)
+                        if (newDrive.IsValidInfo && DriveList.FirstOrDefault((drv) => drv.MountPoint == newDrive.MountPoint) == null)
                         {
                             DriveList.Add(newDrive);
                             OnDisksAdded(newDrive);

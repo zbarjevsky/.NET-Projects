@@ -11,7 +11,6 @@ using MZ.WPF.MessageBox;
 namespace VhdApiExample {
     public partial class VHD_MainForm : Form
     {
-
         Medo.IO.VirtualDisk _disk;
 
         public VHD_MainForm()
@@ -19,7 +18,6 @@ namespace VhdApiExample {
             InitializeComponent();
             this.Font = SystemFonts.MessageBoxFont;
         }
-
 
         private void MainForm_Load(object sender, EventArgs e)
         {
@@ -30,7 +28,6 @@ namespace VhdApiExample {
         {
             if (this._disk != null) { this._disk.Close(); }
         }
-
 
         private void mnuCreate_Click(object sender, EventArgs e)
         {
@@ -55,7 +52,6 @@ namespace VhdApiExample {
                 UpdateData();
             }
         }
-
 
         private void UpdateData()
         {
@@ -122,7 +118,7 @@ namespace VhdApiExample {
             }
             catch (Exception err)
             {
-                PopUp.Error(err.ToString());
+                PopUp.Error(err.ToString(), "Attach - ERROR");
             }
             UpdateData();
         }
@@ -130,7 +126,14 @@ namespace VhdApiExample {
         private void mnuDetach_Click(object sender, EventArgs e)
         {
             if (this._disk == null) { return; }
-            this._disk.Detach();
+            try
+            {
+                this._disk.Detach();
+            }
+            catch (Exception err)
+            {
+                PopUp.Error(err.ToString(), "Detach - ERROR");
+            }
             UpdateData();
         }
 
