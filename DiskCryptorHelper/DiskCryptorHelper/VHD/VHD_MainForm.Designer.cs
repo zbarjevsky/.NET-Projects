@@ -169,7 +169,7 @@
             this.Name = "VHD_MainForm";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "VHD API Example";
+            this.Text = "VHD Tools";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.mnu.ResumeLayout(false);

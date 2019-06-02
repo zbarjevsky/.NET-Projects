@@ -61,7 +61,7 @@ namespace DiskCryptorHelper
             foreach (string fileName in _files)
             {
                 ToolStripMenuItem item = new ToolStripMenuItem(fileName);
-                item.Click += (s, e) => { cmb.Text = item.Text; };
+                item.Click += (s, e) => { cmb.Text = item.Text; SingleInstanceHelper.GlobalShowWindow(FormMain.TITLE); };
                 menu.Items.Add(item);
             }
         }

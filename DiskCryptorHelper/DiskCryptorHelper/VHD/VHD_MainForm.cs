@@ -47,8 +47,15 @@ namespace VhdApiExample {
             if (openDialog.ShowDialog(this) == DialogResult.OK)
             {
                 if (this._disk != null) { this._disk.Close(); }
-                this._disk = new Medo.IO.VirtualDisk(openDialog.FileName);
-                this._disk.Open();
+                try
+                {
+                    this._disk = new Medo.IO.VirtualDisk(openDialog.FileName);
+                    this._disk.Open();
+                }
+                catch (Exception err)
+                {
+                    PopUp.Error(err.ToString(), "Open - ERROR");
+                }
                 UpdateData();
             }
         }
@@ -102,8 +109,15 @@ namespace VhdApiExample {
         {
             if (this._disk != null)
             {
-                this._disk.Close();
-                this._disk = null;
+                try
+                {
+                    this._disk.Close();
+                    this._disk = null;
+                }
+                catch (Exception err)
+                {
+                    PopUp.Error(err.ToString(), "Close - ERROR");
+                }
                 UpdateData();
             }
         }
@@ -114,7 +128,7 @@ namespace VhdApiExample {
 
             try
             {
-                this._disk.Attach(Medo.IO.VirtualDiskAttachOptions.None);
+                this._disk.Attach(Medo.IO.VirtualDiskAttachOptions.PermanentLifetime);
             }
             catch (Exception err)
             {

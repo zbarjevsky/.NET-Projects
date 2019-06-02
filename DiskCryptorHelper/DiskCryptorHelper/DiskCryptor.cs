@@ -12,7 +12,8 @@ namespace DiskCryptorHelper
 {
     public class DiskCryptor
     {
-        public const string DiskCryptorPath = @"c:\Program Files\dcrypt\dccon.exe";
+        public const string DiskCryptorConsolePath = @"c:\Program Files\dcrypt\dccon.exe";
+        public const string DiskCryptorAppPath = @"c:\Program Files\dcrypt\dcrypt.exe";
 
         /* operation status codes */
         public enum ErrorCode
@@ -272,7 +273,7 @@ namespace DiskCryptorHelper
 
             startInfo.UseShellExecute = false;
             startInfo.Arguments = args;
-            startInfo.FileName = DiskCryptorPath;
+            startInfo.FileName = DiskCryptorConsolePath;
 
             p.StartInfo = startInfo;
 

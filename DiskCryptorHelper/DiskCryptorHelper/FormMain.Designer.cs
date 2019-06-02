@@ -61,15 +61,9 @@
             this.m_btnEject = new System.Windows.Forms.Button();
             this.m_splitMain = new System.Windows.Forms.SplitContainer();
             this.m_splitDiskCryptorInfo = new System.Windows.Forms.SplitContainer();
+            this.m_pnlSeparate1 = new System.Windows.Forms.Panel();
             this.m_splitOperations = new System.Windows.Forms.SplitContainer();
             this.m_pnlVHD = new System.Windows.Forms.Panel();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.m_lblVHD_File = new System.Windows.Forms.Label();
-            this.m_btnAttachVHD = new System.Windows.Forms.Button();
-            this.m_cmbVHD_FileName = new System.Windows.Forms.ComboBox();
-            this.m_btnOpenVHD = new System.Windows.Forms.Button();
-            this.m_chkPermanent = new System.Windows.Forms.CheckBox();
-            this.m_btnDetach = new System.Windows.Forms.Button();
             this.m_pnlPassword = new System.Windows.Forms.Panel();
             this.m_grpPwd = new System.Windows.Forms.GroupBox();
             this.m_grpBSOD = new System.Windows.Forms.GroupBox();
@@ -93,7 +87,9 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.m_pnlSeparate1 = new System.Windows.Forms.Panel();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.m_btnBrowseDisk = new System.Windows.Forms.Button();
+            this.m_VHD_MountUnMountUserControl = new DiskCryptorHelper.VHD.VHD_MountUnMountUserControl();
             this.hideDriveLetterControl1 = new DiskCryptorHelper.HideDriveLetterControl();
             this.m_sysIconMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitMain)).BeginInit();
@@ -109,7 +105,6 @@
             this.m_splitOperations.Panel2.SuspendLayout();
             this.m_splitOperations.SuspendLayout();
             this.m_pnlVHD.SuspendLayout();
-            this.groupBox2.SuspendLayout();
             this.m_pnlPassword.SuspendLayout();
             this.m_grpPwd.SuspendLayout();
             this.m_grpBSOD.SuspendLayout();
@@ -125,6 +120,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // m_listDrives
@@ -202,11 +198,12 @@
             this.m_txtPwd.TabIndex = 1;
             this.m_txtPwd.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.m_txtPwd.UseSystemPasswordChar = true;
+            this.m_txtPwd.TextChanged += new System.EventHandler(this.m_txtPwd_TextChanged);
             // 
             // m_btnMount
             // 
             this.m_btnMount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnMount.Location = new System.Drawing.Point(432, 76);
+            this.m_btnMount.Location = new System.Drawing.Point(432, 104);
             this.m_btnMount.Name = "m_btnMount";
             this.m_btnMount.Size = new System.Drawing.Size(93, 23);
             this.m_btnMount.TabIndex = 0;
@@ -226,11 +223,12 @@
             // 
             // m_cmbAvailableDriveLetters
             // 
+            this.m_cmbAvailableDriveLetters.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_cmbAvailableDriveLetters.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.m_cmbAvailableDriveLetters.FormattingEnabled = true;
-            this.m_cmbAvailableDriveLetters.Location = new System.Drawing.Point(336, 17);
+            this.m_cmbAvailableDriveLetters.Location = new System.Drawing.Point(432, 74);
             this.m_cmbAvailableDriveLetters.Name = "m_cmbAvailableDriveLetters";
-            this.m_cmbAvailableDriveLetters.Size = new System.Drawing.Size(40, 21);
+            this.m_cmbAvailableDriveLetters.Size = new System.Drawing.Size(93, 21);
             this.m_cmbAvailableDriveLetters.TabIndex = 3;
             this.m_cmbAvailableDriveLetters.SelectedIndexChanged += new System.EventHandler(this.m_cmbAvailableDriveLetters_SelectedIndexChanged);
             // 
@@ -263,7 +261,7 @@
             // m_btnUnmount
             // 
             this.m_btnUnmount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnUnmount.Location = new System.Drawing.Point(432, 105);
+            this.m_btnUnmount.Location = new System.Drawing.Point(432, 133);
             this.m_btnUnmount.Name = "m_btnUnmount";
             this.m_btnUnmount.Size = new System.Drawing.Size(93, 23);
             this.m_btnUnmount.TabIndex = 1;
@@ -338,7 +336,7 @@
             this.m_mnuFileOpenVHD_File});
             this.m_mnuFileAttachVHD.Name = "m_mnuFileAttachVHD";
             this.m_mnuFileAttachVHD.Size = new System.Drawing.Size(176, 22);
-            this.m_mnuFileAttachVHD.Text = "Attach VHD";
+            this.m_mnuFileAttachVHD.Text = "Fetch Recent VHD";
             // 
             // m_mnuFileOpenVHD_File
             // 
@@ -351,7 +349,7 @@
             // 
             this.m_mnuFileCreateVHD.Name = "m_mnuFileCreateVHD";
             this.m_mnuFileCreateVHD.Size = new System.Drawing.Size(176, 22);
-            this.m_mnuFileCreateVHD.Text = "Create VHD";
+            this.m_mnuFileCreateVHD.Text = "VHD Tools";
             this.m_mnuFileCreateVHD.Click += new System.EventHandler(this.m_mnuFileCreateVHD_Click);
             // 
             // toolStripMenuItem3
@@ -424,7 +422,9 @@
             // m_splitDiskCryptorInfo.Panel1
             // 
             this.m_splitDiskCryptorInfo.Panel1.BackColor = System.Drawing.SystemColors.Control;
+            this.m_splitDiskCryptorInfo.Panel1.Controls.Add(this.m_btnBrowseDisk);
             this.m_splitDiskCryptorInfo.Panel1.Controls.Add(this.m_btnUnmount);
+            this.m_splitDiskCryptorInfo.Panel1.Controls.Add(this.m_cmbAvailableDriveLetters);
             this.m_splitDiskCryptorInfo.Panel1.Controls.Add(this.m_btnMount);
             this.m_splitDiskCryptorInfo.Panel1.Controls.Add(this.m_listDrives);
             this.m_splitDiskCryptorInfo.Panel1.Controls.Add(this.m_lblSelected);
@@ -438,6 +438,16 @@
             this.m_splitDiskCryptorInfo.Size = new System.Drawing.Size(887, 343);
             this.m_splitDiskCryptorInfo.SplitterDistance = 541;
             this.m_splitDiskCryptorInfo.TabIndex = 0;
+            // 
+            // m_pnlSeparate1
+            // 
+            this.m_pnlSeparate1.BackColor = System.Drawing.Color.LightSlateGray;
+            this.m_pnlSeparate1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.m_pnlSeparate1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.m_pnlSeparate1.Location = new System.Drawing.Point(0, 174);
+            this.m_pnlSeparate1.Name = "m_pnlSeparate1";
+            this.m_pnlSeparate1.Size = new System.Drawing.Size(887, 15);
+            this.m_pnlSeparate1.TabIndex = 5;
             // 
             // m_splitOperations
             // 
@@ -462,97 +472,17 @@
             // m_pnlVHD
             // 
             this.m_pnlVHD.BackColor = System.Drawing.Color.LightGoldenrodYellow;
-            this.m_pnlVHD.Controls.Add(this.groupBox2);
+            this.m_pnlVHD.Controls.Add(this.m_VHD_MountUnMountUserControl);
             this.m_pnlVHD.Dock = System.Windows.Forms.DockStyle.Top;
             this.m_pnlVHD.Location = new System.Drawing.Point(0, 68);
             this.m_pnlVHD.Name = "m_pnlVHD";
             this.m_pnlVHD.Size = new System.Drawing.Size(646, 100);
             this.m_pnlVHD.TabIndex = 5;
             // 
-            // groupBox2
-            // 
-            this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this.m_lblVHD_File);
-            this.groupBox2.Controls.Add(this.m_btnAttachVHD);
-            this.groupBox2.Controls.Add(this.m_cmbVHD_FileName);
-            this.groupBox2.Controls.Add(this.m_btnOpenVHD);
-            this.groupBox2.Controls.Add(this.m_chkPermanent);
-            this.groupBox2.Controls.Add(this.m_btnDetach);
-            this.groupBox2.Location = new System.Drawing.Point(7, 4);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(631, 87);
-            this.groupBox2.TabIndex = 5;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Virtual Hard Drive (VHD)";
-            // 
-            // m_lblVHD_File
-            // 
-            this.m_lblVHD_File.AutoSize = true;
-            this.m_lblVHD_File.Location = new System.Drawing.Point(20, 32);
-            this.m_lblVHD_File.Name = "m_lblVHD_File";
-            this.m_lblVHD_File.Size = new System.Drawing.Size(55, 13);
-            this.m_lblVHD_File.TabIndex = 0;
-            this.m_lblVHD_File.Text = "VHD File: ";
-            // 
-            // m_btnAttachVHD
-            // 
-            this.m_btnAttachVHD.Location = new System.Drawing.Point(186, 53);
-            this.m_btnAttachVHD.Name = "m_btnAttachVHD";
-            this.m_btnAttachVHD.Size = new System.Drawing.Size(123, 23);
-            this.m_btnAttachVHD.TabIndex = 4;
-            this.m_btnAttachVHD.Text = "Attach && Mount";
-            this.toolTip1.SetToolTip(this.m_btnAttachVHD, "Attach VHD without DriveLetter, then mount DiskCryptor Drive and assign DriveLett" +
-        "er");
-            this.m_btnAttachVHD.UseVisualStyleBackColor = true;
-            this.m_btnAttachVHD.Click += new System.EventHandler(this.m_btnAttachVHDandMount_Click);
-            // 
-            // m_cmbVHD_FileName
-            // 
-            this.m_cmbVHD_FileName.Location = new System.Drawing.Point(85, 26);
-            this.m_cmbVHD_FileName.Name = "m_cmbVHD_FileName";
-            this.m_cmbVHD_FileName.Size = new System.Drawing.Size(329, 21);
-            this.m_cmbVHD_FileName.TabIndex = 1;
-            // 
-            // m_btnOpenVHD
-            // 
-            this.m_btnOpenVHD.Location = new System.Drawing.Point(420, 25);
-            this.m_btnOpenVHD.Name = "m_btnOpenVHD";
-            this.m_btnOpenVHD.Size = new System.Drawing.Size(28, 23);
-            this.m_btnOpenVHD.TabIndex = 2;
-            this.m_btnOpenVHD.Text = "...";
-            this.m_btnOpenVHD.UseVisualStyleBackColor = true;
-            this.m_btnOpenVHD.Click += new System.EventHandler(this.m_btnOpenVHD_Click);
-            // 
-            // m_chkPermanent
-            // 
-            this.m_chkPermanent.Checked = true;
-            this.m_chkPermanent.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.m_chkPermanent.Location = new System.Drawing.Point(85, 53);
-            this.m_chkPermanent.Name = "m_chkPermanent";
-            this.m_chkPermanent.Size = new System.Drawing.Size(93, 23);
-            this.m_chkPermanent.TabIndex = 3;
-            this.m_chkPermanent.Text = "Permanent";
-            this.toolTip1.SetToolTip(this.m_chkPermanent, "Do not detach virtual disk on exit");
-            this.m_chkPermanent.UseVisualStyleBackColor = true;
-            // 
-            // m_btnDetach
-            // 
-            this.m_btnDetach.Location = new System.Drawing.Point(329, 53);
-            this.m_btnDetach.Name = "m_btnDetach";
-            this.m_btnDetach.Size = new System.Drawing.Size(119, 23);
-            this.m_btnDetach.TabIndex = 5;
-            this.m_btnDetach.Text = "UnMount && Detach";
-            this.toolTip1.SetToolTip(this.m_btnDetach, "Unmount DiskCryptor Drive and Detach VHD");
-            this.m_btnDetach.UseVisualStyleBackColor = true;
-            this.m_btnDetach.Click += new System.EventHandler(this.m_btnUnmountAndDetach_Click);
-            // 
             // m_pnlPassword
             // 
             this.m_pnlPassword.BackColor = System.Drawing.SystemColors.Control;
             this.m_pnlPassword.Controls.Add(this.m_grpPwd);
-            this.m_pnlPassword.Controls.Add(this.m_cmbAvailableDriveLetters);
             this.m_pnlPassword.Dock = System.Windows.Forms.DockStyle.Top;
             this.m_pnlPassword.Location = new System.Drawing.Point(0, 0);
             this.m_pnlPassword.Name = "m_pnlPassword";
@@ -564,7 +494,7 @@
             this.m_grpPwd.Controls.Add(this.m_txtPwd);
             this.m_grpPwd.Location = new System.Drawing.Point(10, 7);
             this.m_grpPwd.Name = "m_grpPwd";
-            this.m_grpPwd.Size = new System.Drawing.Size(200, 51);
+            this.m_grpPwd.Size = new System.Drawing.Size(212, 51);
             this.m_grpPwd.TabIndex = 2;
             this.m_grpPwd.TabStop = false;
             this.m_grpPwd.Text = "Password:";
@@ -605,7 +535,7 @@
             this.m_splitDisks.Panel2.Controls.Add(this.panel1);
             this.m_splitDisks.Panel2.Controls.Add(this.m_treeDrives);
             this.m_splitDisks.Panel2.Controls.Add(this.label1);
-            this.m_splitDisks.Size = new System.Drawing.Size(960, 484);
+            this.m_splitDisks.Size = new System.Drawing.Size(960, 534);
             this.m_splitDisks.SplitterDistance = 310;
             this.m_splitDisks.TabIndex = 2;
             // 
@@ -615,7 +545,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 187);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(642, 293);
+            this.panel1.Size = new System.Drawing.Size(642, 343);
             this.panel1.TabIndex = 3;
             // 
             // m_treeDrives
@@ -752,7 +682,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(1164, 490);
+            this.tabPage2.Size = new System.Drawing.Size(1164, 540);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "USB";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -766,19 +696,34 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.m_splitDisks);
-            this.splitContainer1.Size = new System.Drawing.Size(1158, 484);
+            this.splitContainer1.Size = new System.Drawing.Size(1158, 534);
             this.splitContainer1.SplitterDistance = 194;
             this.splitContainer1.TabIndex = 0;
             // 
-            // m_pnlSeparate1
+            // errorProvider1
             // 
-            this.m_pnlSeparate1.BackColor = System.Drawing.Color.LightSlateGray;
-            this.m_pnlSeparate1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.m_pnlSeparate1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.m_pnlSeparate1.Location = new System.Drawing.Point(0, 174);
-            this.m_pnlSeparate1.Name = "m_pnlSeparate1";
-            this.m_pnlSeparate1.Size = new System.Drawing.Size(887, 15);
-            this.m_pnlSeparate1.TabIndex = 5;
+            this.errorProvider1.ContainerControl = this;
+            // 
+            // m_btnBrowseDisk
+            // 
+            this.m_btnBrowseDisk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnBrowseDisk.Location = new System.Drawing.Point(432, 189);
+            this.m_btnBrowseDisk.Name = "m_btnBrowseDisk";
+            this.m_btnBrowseDisk.Size = new System.Drawing.Size(93, 23);
+            this.m_btnBrowseDisk.TabIndex = 5;
+            this.m_btnBrowseDisk.Text = "Browse...";
+            this.m_btnBrowseDisk.UseVisualStyleBackColor = true;
+            this.m_btnBrowseDisk.Click += new System.EventHandler(this.m_btnBrowseDisk_Click);
+            // 
+            // m_VHD_MountUnMountUserControl
+            // 
+            this.m_VHD_MountUnMountUserControl.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.m_VHD_MountUnMountUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_VHD_MountUnMountUserControl.Location = new System.Drawing.Point(0, 0);
+            this.m_VHD_MountUnMountUserControl.MinimumSize = new System.Drawing.Size(550, 100);
+            this.m_VHD_MountUnMountUserControl.Name = "m_VHD_MountUnMountUserControl";
+            this.m_VHD_MountUnMountUserControl.Size = new System.Drawing.Size(646, 100);
+            this.m_VHD_MountUnMountUserControl.TabIndex = 0;
             // 
             // hideDriveLetterControl1
             // 
@@ -821,8 +766,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.m_splitOperations)).EndInit();
             this.m_splitOperations.ResumeLayout(false);
             this.m_pnlVHD.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             this.m_pnlPassword.ResumeLayout(false);
             this.m_grpPwd.ResumeLayout(false);
             this.m_grpPwd.PerformLayout();
@@ -841,6 +784,7 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -884,18 +828,12 @@
         private System.Windows.Forms.ToolStripMenuItem m_mnuOptions;
         private System.Windows.Forms.ToolStripMenuItem m_mnuOptionsHideWhenMinimized;
         private System.Windows.Forms.ToolStripMenuItem m_mnuOptionsVHD;
-        private System.Windows.Forms.Label m_lblVHD_File;
-        private System.Windows.Forms.ComboBox m_cmbVHD_FileName;
-        private System.Windows.Forms.Button m_btnAttachVHD;
         private System.Windows.Forms.ToolStripMenuItem m_mnuFileAttachVHD;
         private System.Windows.Forms.ToolStripMenuItem m_mnuFileOpenVHD_File;
         private System.Windows.Forms.ToolStripMenuItem m_mnuFileCreateVHD;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
-        private System.Windows.Forms.CheckBox m_chkPermanent;
         private System.Windows.Forms.SplitContainer m_splitDisks;
         private HideDriveLetterControl hideDriveLetterControl1;
-        private System.Windows.Forms.Button m_btnDetach;
-        private System.Windows.Forms.Button m_btnOpenVHD;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
         private System.Windows.Forms.ToolStripMenuItem m_mnuOpenDiskCryptor;
         private System.Windows.Forms.ToolTip toolTip1;
@@ -906,12 +844,14 @@
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.SplitContainer m_splitDiskCryptorInfo;
         private System.Windows.Forms.GroupBox m_grpBSOD;
-        private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Panel m_pnlVHD;
         private System.Windows.Forms.Panel m_pnlPassword;
         private System.Windows.Forms.GroupBox m_grpPwd;
         private System.Windows.Forms.SplitContainer m_splitOperations;
         private System.Windows.Forms.Panel m_pnlSeparate1;
+        private VHD.VHD_MountUnMountUserControl m_VHD_MountUnMountUserControl;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.Button m_btnBrowseDisk;
     }
 }
 

@@ -11,11 +11,20 @@ using System.IO;
 using MZ.WPF.MessageBox;
 using System.Windows;
 using System.Runtime.CompilerServices;
+using System.Diagnostics;
 
 namespace DiskCryptorHelper.VHD
 {
     public partial class VHD_MountUnMountUserControl : UserControl
     {
+        private DiskCryptor _diskCryptor;
+        private ToolStripMenuItem m_mnuFileAttachVHD;
+        private RecentFilesList _recentFiles = new RecentFilesList();
+
+        public Func<string> GetPasswordFunc = () => "";
+        public Action<DiskCryptor.DriveInfo> UnmountDiscryptorDrive = (drive) => { };
+        public Action<int> ReloadDriveData = (delay) => { };
+
         public VHD_MountUnMountUserControl()
         {
             InitializeComponent();
@@ -24,6 +33,24 @@ namespace DiskCryptorHelper.VHD
         private void VHD_MountUnMountUserControl_Load(object sender, EventArgs e)
         {
 
+        }
+
+        public void Initialize(DiskCryptor diskCryptor, ToolStripMenuItem mnuFileAttachVHD)
+        {
+            _diskCryptor = diskCryptor;
+            m_mnuFileAttachVHD = mnuFileAttachVHD;
+
+            _recentFiles.Update(m_mnuFileAttachVHD.DropDown, m_cmbVHD_FileName);
+        }
+
+        public void BrowseForVHD()
+        {
+            m_btnOpenVHD_Click(this, null);
+        }
+
+        public void OpenRecentVHD(string vhdFileName)
+        {
+            _recentFiles.AddRecent(vhdFileName, m_mnuFileAttachVHD.DropDown, m_cmbVHD_FileName);
         }
 
         private void m_btnOpenVHD_Click(object sender, EventArgs e)
@@ -52,7 +79,7 @@ namespace DiskCryptorHelper.VHD
         private string _selectedDriveLetterForMount;
         private void m_btnAttachVHDandMount_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(m_txtPwd.Text))
+            if (string.IsNullOrWhiteSpace(GetPasswordFunc()))
             {
                 PopUp.Error("Password is empty", "Password");
                 return;
@@ -112,17 +139,18 @@ namespace DiskCryptorHelper.VHD
 
                 Debug.WriteLine("On Disk Added: " + driveInfo.Description());
 
-                _diskCryptor.ExecuteMount(driveInfo, _selectedDriveLetterForMount, m_txtPwd.Text);
+                _diskCryptor.ExecuteMount(driveInfo, _selectedDriveLetterForMount, GetPasswordFunc());
 
-                Utils.ExecuteOnUIThread(() => { ReloadDriveData(1000); }, this);
+                ReloadDriveData(1000);
             }
         }
 
+        private string _selectedDriveLetter = "";
         private void m_cmbAvailableDriveLetters_SelectedIndexChanged(object sender, EventArgs e)
         {
-
+            _selectedDriveLetter = m_cmbAvailableDriveLetters.SelectedItem.ToString();
+            m_btnAttachVHD.Text = "Attach && Mount As: " + _selectedDriveLetter;
         }
-
 
         private void m_btnUnmountAndDetach_Click(object sender, EventArgs e)
         {
@@ -150,12 +178,42 @@ namespace DiskCryptorHelper.VHD
                 string path = _virtualDisk.GetAttachedPath();
                 DiskCryptor.DriveInfo drive = FindDriveInfo(path);
                 if (drive != null)
-                    Unmount(drive);
+                    UnmountDiscryptorDrive(drive);
 
                 _virtualDisk.Detach();
                 _virtualDisk.Close();
                 _virtualDisk = null;
             }, sender);
+        }
+
+        private DiskCryptor.DriveInfo FindDriveInfo(string attachedPath)
+        {
+            List<UsbEject.Library.Device> list = DriveTools.GetUsbDriveList();
+            List<UsbEject.Library.Volume> removable_volumes = DriveTools.GetRemovableDriveList(list);
+
+            const string PHYSICALDRIVE = "PHYSICALDRIVE";
+            int pos = attachedPath.IndexOf(PHYSICALDRIVE) + PHYSICALDRIVE.Length;
+            int diskNumber = int.Parse(attachedPath.Substring(pos));
+
+            UsbEject.Library.Volume vol = null;
+            foreach (UsbEject.Library.Volume device in removable_volumes)
+            {
+                if (device.Disks[0].DiskNumber == diskNumber)
+                {
+                    vol = device;
+                    break;
+                }
+            }
+
+            if (vol == null)
+                return null;
+
+            foreach (DiskCryptor.DriveInfo drive in _diskCryptor.DriveList)
+            {
+                if (drive != null && !string.IsNullOrWhiteSpace(drive.DriveLetter) && drive.DriveLetter[0] == vol.LogicalDrive[0])
+                    return drive;
+            }
+            return null;
         }
 
         private void ExecuteClickAction(Action action, object sender, [CallerMemberName] string propertyName = null)
@@ -183,6 +241,46 @@ namespace DiskCryptorHelper.VHD
                 btn.Enabled = true;
                 btn.Focus();
             }
+        }
+
+        public void ReloadAvailableDriveLetters(Form owner)
+        {
+            ReloadAvailableDriveLetters(m_cmbAvailableDriveLetters, owner);
+        }
+
+        public static void ReloadAvailableDriveLetters(ComboBox cmbAvailableDriveLetters, Form owner)
+        {
+            List<char> driveLetters = new List<char>(26); // Allocate space for alphabet
+            for (int i = 65; i < 91; i++) // increment from ASCII values for A-Z
+                driveLetters.Add(Convert.ToChar(i)); // Add uppercase letters to possible drive letters
+
+            var res = NetResourceEnumerator.WNetResource(); //find disconnected/remembered network drives
+            foreach (string key in res.Keys)
+                driveLetters.Remove(key[0]);
+
+            string[] drives = Directory.GetLogicalDrives();
+            foreach (string drive in drives)
+                driveLetters.Remove(drive[0]); // removed used drive letters from possible drive letters
+
+            Utils.ExecuteOnUIThread(() =>
+            {
+                cmbAvailableDriveLetters.Items.Clear();
+
+                foreach (char drive in driveLetters)
+                {
+                    cmbAvailableDriveLetters.Items.Add(drive + ":"); // add unused drive letters to the combo box
+                }
+
+                //default select T or M
+                int idx = cmbAvailableDriveLetters.Items.IndexOf("T:");
+                if (idx < 0)
+                    idx = cmbAvailableDriveLetters.Items.IndexOf("M:");
+                if (idx >= 0)
+                    cmbAvailableDriveLetters.SelectedIndex = idx;
+                else
+                    cmbAvailableDriveLetters.SelectedIndex = 0;
+
+            }, owner);
         }
     }
 }

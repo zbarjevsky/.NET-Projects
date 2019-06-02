@@ -29,13 +29,13 @@
         private void InitializeComponent()
         {
             this.m_grpVHD = new System.Windows.Forms.GroupBox();
+            this.m_cmbAvailableDriveLetters = new System.Windows.Forms.ComboBox();
             this.m_lblVHD_File = new System.Windows.Forms.Label();
             this.m_btnAttachVHD = new System.Windows.Forms.Button();
             this.m_cmbVHD_FileName = new System.Windows.Forms.ComboBox();
             this.m_btnOpenVHD = new System.Windows.Forms.Button();
             this.m_chkPermanent = new System.Windows.Forms.CheckBox();
             this.m_btnDetach = new System.Windows.Forms.Button();
-            this.m_cmbAvailableDriveLetters = new System.Windows.Forms.ComboBox();
             this.m_grpVHD.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -57,6 +57,16 @@
             this.m_grpVHD.TabIndex = 6;
             this.m_grpVHD.TabStop = false;
             this.m_grpVHD.Text = "Virtual Hard Drive (VHD)";
+            // 
+            // m_cmbAvailableDriveLetters
+            // 
+            this.m_cmbAvailableDriveLetters.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.m_cmbAvailableDriveLetters.FormattingEnabled = true;
+            this.m_cmbAvailableDriveLetters.Location = new System.Drawing.Point(298, 54);
+            this.m_cmbAvailableDriveLetters.Name = "m_cmbAvailableDriveLetters";
+            this.m_cmbAvailableDriveLetters.Size = new System.Drawing.Size(40, 21);
+            this.m_cmbAvailableDriveLetters.TabIndex = 6;
+            this.m_cmbAvailableDriveLetters.SelectedIndexChanged += new System.EventHandler(this.m_cmbAvailableDriveLetters_SelectedIndexChanged);
             // 
             // m_lblVHD_File
             // 
@@ -101,7 +111,7 @@
             // 
             this.m_chkPermanent.Checked = true;
             this.m_chkPermanent.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.m_chkPermanent.Location = new System.Drawing.Point(85, 53);
+            this.m_chkPermanent.Location = new System.Drawing.Point(85, 54);
             this.m_chkPermanent.Name = "m_chkPermanent";
             this.m_chkPermanent.Size = new System.Drawing.Size(93, 23);
             this.m_chkPermanent.TabIndex = 3;
@@ -111,23 +121,13 @@
             // m_btnDetach
             // 
             this.m_btnDetach.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnDetach.Location = new System.Drawing.Point(357, 52);
+            this.m_btnDetach.Location = new System.Drawing.Point(357, 53);
             this.m_btnDetach.Name = "m_btnDetach";
             this.m_btnDetach.Size = new System.Drawing.Size(119, 23);
             this.m_btnDetach.TabIndex = 5;
             this.m_btnDetach.Text = "UnMount && Detach";
             this.m_btnDetach.UseVisualStyleBackColor = true;
             this.m_btnDetach.Click += new System.EventHandler(this.m_btnUnmountAndDetach_Click);
-            // 
-            // m_cmbAvailableDriveLetters
-            // 
-            this.m_cmbAvailableDriveLetters.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.m_cmbAvailableDriveLetters.FormattingEnabled = true;
-            this.m_cmbAvailableDriveLetters.Location = new System.Drawing.Point(298, 53);
-            this.m_cmbAvailableDriveLetters.Name = "m_cmbAvailableDriveLetters";
-            this.m_cmbAvailableDriveLetters.Size = new System.Drawing.Size(40, 21);
-            this.m_cmbAvailableDriveLetters.TabIndex = 6;
-            this.m_cmbAvailableDriveLetters.SelectedIndexChanged += new System.EventHandler(this.m_cmbAvailableDriveLetters_SelectedIndexChanged);
             // 
             // VHD_MountUnMountUserControl
             // 
