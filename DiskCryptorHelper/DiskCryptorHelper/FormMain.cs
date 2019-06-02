@@ -615,7 +615,11 @@ namespace DiskCryptorHelper
             FileInfo fi = new FileInfo(m_cmbVHD_FileName.Text);
             if (!fi.Exists)
             {
-                PopUp.Error("File does not exist: "+fi.FullName, "VHD File Name");
+                if (PopUp.Question("File not found: " + fi.FullName + "\nRemove from Recent Files List?", "Mount VHD - ERROR", 
+                    MessageBoxImage.Asterisk, TextAlignment.Center, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                {
+                    _recentFiles.RemoveFromList(m_cmbVHD_FileName.Text, m_mnuFileAttachVHD.DropDown, m_cmbVHD_FileName);
+                }
                 return;
             }
 

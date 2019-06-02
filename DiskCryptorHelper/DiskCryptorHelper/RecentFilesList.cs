@@ -37,24 +37,32 @@ namespace DiskCryptorHelper
             Update(menu, cmb);
         }
 
+        public void RemoveFromList(string fileName, ToolStripDropDown menu, ComboBox cmb)
+        {
+            if (string.IsNullOrWhiteSpace(fileName))
+                return;
+
+            if (_files.Contains(fileName))
+                _files.Remove(fileName);
+
+            Update(menu, cmb);
+        }
+
         public void Update(ToolStripDropDown menu, ComboBox cmb)
         {
-            UpdateMenu(menu, cmb);
             UpdateComboBox(cmb);
+            UpdateMenu(menu, cmb);
             Save();
         }
 
         private void UpdateMenu(ToolStripDropDown menu, ComboBox cmb)
         {
+            menu.Items.Clear();
             foreach (string fileName in _files)
             {
-                ToolStripItem found = Find(menu.Items, fileName);
-                if (found == null)
-                {
-                    ToolStripMenuItem item = new ToolStripMenuItem(fileName);
-                    item.Click += (s, e) => { cmb.Text = item.Text; };
-                    menu.Items.Add(item);
-                }
+                ToolStripMenuItem item = new ToolStripMenuItem(fileName);
+                item.Click += (s, e) => { cmb.Text = item.Text; };
+                menu.Items.Add(item);
             }
         }
 

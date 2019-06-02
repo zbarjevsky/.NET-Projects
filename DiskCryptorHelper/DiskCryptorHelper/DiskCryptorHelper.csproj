@@ -97,6 +97,12 @@
     <Compile Include="VHD\VHD_MainForm.Designer.cs">
       <DependentUpon>VHD_MainForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="VHD\VHD_MountUnMountUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="VHD\VHD_MountUnMountUserControl.Designer.cs">
+      <DependentUpon>VHD_MountUnMountUserControl.cs</DependentUpon>
+    </Compile>
     <Compile Include="VHD\VirtualDiskManager.cs" />
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
@@ -119,6 +125,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="VHD\VHD_MainForm.resx">
       <DependentUpon>VHD_MainForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="VHD\VHD_MountUnMountUserControl.resx">
+      <DependentUpon>VHD_MountUnMountUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.manifest" />
     <None Include="Properties\Settings.settings">
