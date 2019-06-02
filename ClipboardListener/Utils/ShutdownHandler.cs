@@ -117,22 +117,29 @@ namespace ClipboardManager
 
         private static void ParseAndLogShutdownParameters(ref Message m)
         {
-            string msg = "WndProc: ";
-            if (m.Msg == (int)Win32_Shutdown.eMsg.WM_QUERYENDSESSION)
-                msg += "WM_QUERYENDSESSION";
-            else if (m.Msg == (int)Win32_Shutdown.eMsg.WM_ENDSESSION)
-                msg += "WM_ENDSESSION";
-            msg += string.Format(", LParam: 0x{0:X8}", (uint)m.LParam);
-            if ((uint)m.LParam == 0) //
-                msg += ", NORMAL";
-            if (((uint)m.LParam & (uint)Win32_Shutdown.eLParam.ENDSESSION_CLOSEAPP) != 0)
-                msg += ", ENDSESSION_CLOSEAPP";
-            if (((uint)m.LParam & (uint)Win32_Shutdown.eLParam.ENDSESSION_CRITICAL) != 0)
-                msg += ", ENDSESSION_CRITICAL";
-            if (((uint)m.LParam & (uint)Win32_Shutdown.eLParam.ENDSESSION_LOGOFF) != 0)
-                msg += ", ENDSESSION_LOGOFF";
+            try
+            {
+                string msg = "WndProc: ";
+                if (m.Msg == (int)Win32_Shutdown.eMsg.WM_QUERYENDSESSION)
+                    msg += "WM_QUERYENDSESSION";
+                else if (m.Msg == (int)Win32_Shutdown.eMsg.WM_ENDSESSION)
+                    msg += "WM_ENDSESSION";
+                msg += string.Format(", LParam: 0x{0:X8}", (uint)m.LParam);
+                if ((uint)m.LParam == 0) //
+                    msg += ", NORMAL";
+                if (((uint)m.LParam & (uint)Win32_Shutdown.eLParam.ENDSESSION_CLOSEAPP) != 0)
+                    msg += ", ENDSESSION_CLOSEAPP";
+                if (((uint)m.LParam & (uint)Win32_Shutdown.eLParam.ENDSESSION_CRITICAL) != 0)
+                    msg += ", ENDSESSION_CRITICAL";
+                if (((uint)m.LParam & (uint)Win32_Shutdown.eLParam.ENDSESSION_LOGOFF) != 0)
+                    msg += ", ENDSESSION_LOGOFF";
 
-            Utils.Log.WriteLineF(msg);
+                Utils.Log.WriteLineF(msg);
+            }
+            catch (Exception err)
+            {
+                Utils.Log.WriteLineF(err.ToString());
+            }
         }
 
         private static void SetPrivilege(String privilegeName, Int32 state)
