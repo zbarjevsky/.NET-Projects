@@ -33,6 +33,8 @@ namespace ClipboardManager
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 
+            UpdateDependencies();
+
 RunAgain:
 			try
 			{
@@ -51,22 +53,17 @@ RunAgain:
             Utils.Log.CloseLog();
 		}//end Main
 
+        private static void UpdateDependencies()
+        {
+            string dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            string fileName = Path.Combine(dir, "MZ.WPF.MessageBox.dll");
+            if (!File.Exists(fileName))
+                File.WriteAllBytes(fileName, Properties.Resources.MZ_WPF_MessageBox);
+        }
+
         private static bool SingleInstance()
         {
             return !(SingleInstanceHelper.GlobalShowWindow(FormClipboard.TITLE));
-
-            //try
-            //{
-            //    bool createdNew = false;
-            //    m_SingleInstance = new Mutex(true, AppName, out createdNew);
-            //    LogEventNfo("Started successfully");
-            //    return createdNew;
-            //}//end try
-            //catch (Exception err)
-            //{
-            //    LogEventErr("Failure to start: " + err.Message);
-            //    return false;
-            //}//end catch
         }//end SingleInstance
 
         public static string GetUserPath()

@@ -8,10 +8,50 @@ using System.Windows;
 // Show Message Box, using main app window(WinForms or WPF) as owner,
 // If btn*text is null will assign text by 'buttons'
 // </summary>
-namespace sD.WPF.MessageBox
+namespace MZ.WPF.MessageBox
 {
-    public class PopUp
+    public partial class PopUp
     {
+        public enum IconStyle
+        {
+            FootPedalImages,
+            RegularImages,
+            NoImages
+        }
+
+        public static IconStyle IconType
+        {
+
+            set
+            {
+                switch (value)
+                {
+                    case IconStyle.FootPedalImages:
+                        MessageWindow.IconType1Visibility = Visibility.Collapsed;
+                        MessageWindow.IconType2Visibility = Visibility.Visible;
+                        break;
+                    case IconStyle.RegularImages:
+                        MessageWindow.IconType1Visibility = Visibility.Visible;
+                        MessageWindow.IconType2Visibility = Visibility.Collapsed;
+                        break;
+                    case IconStyle.NoImages:
+                    default:
+                        MessageWindow.IconType1Visibility = Visibility.Collapsed;
+                        MessageWindow.IconType2Visibility = Visibility.Collapsed;
+                        break;
+                }
+            }
+
+            get
+            {
+                if (MessageWindow.IconType1Visibility == Visibility.Collapsed && MessageWindow.IconType2Visibility == Visibility.Collapsed)
+                    return IconStyle.NoImages;
+                if (MessageWindow.IconType1Visibility == Visibility.Collapsed && MessageWindow.IconType2Visibility == Visibility.Visible)
+                    return IconStyle.FootPedalImages;
+                return IconStyle.RegularImages;
+            }
+        }
+
         public static void Error(string message, string title = "Error",
           MessageBoxImage icon = MessageBoxImage.Error,
           TextAlignment textAlignment = TextAlignment.Center)
@@ -42,11 +82,13 @@ namespace sD.WPF.MessageBox
         /// <param name="textAlignment"></param>
         /// <param name="buttons"></param>
         /// <returns></returns>
-        public static MessageBoxResult Question(string message, string title = "Question",
+        public static PopUpResult Question(string message, string title = "Question",
             MessageBoxImage icon = MessageBoxImage.Question, 
             TextAlignment textAlignment = TextAlignment.Center,
-            MessageBoxButton buttons = MessageBoxButton.OKCancel)
+            PopUpButtonsType buttonsType = PopUpButtonsType.CancelOK)
         {
+            PopUpButtons buttons = new PopUpButtons(buttonsType);
+
             return MessageBox(message, title, icon, textAlignment, buttons);
         }
 
@@ -59,20 +101,17 @@ namespace sD.WPF.MessageBox
         /// <param name="icon"></param>
         /// <param name="textAlignment"></param>
         /// <param name="buttons"></param>
-        /// <param name="btnF6text">right most button, uses right foot pedal (F6), MessageBoxResult.Yes, OK; if is null will assign text by 'buttons'</param>
-        /// <param name="btnF5text">left/middle button, uses left foot pedal (F5), MessageBoxResult.Cancel, No; if is null will assign text by 'buttons'</param>
-        /// <param name="btn1text">left most button, MessageBoxResult.Cancel; if is null will assign text by 'buttons'</param>
-        /// <param name="defaultButton"></param>
         /// <returns></returns>
-        public static MessageBoxResult MessageBox(string message, string title,
+        public static PopUpResult MessageBox(string message, string title,
             MessageBoxImage icon = MessageBoxImage.Information, TextAlignment textAlignment = TextAlignment.Center,
-            MessageBoxButton buttons = MessageBoxButton.OK, 
-            string btnF6text = null, string btnF5text = null, string btn1text = null, 
-            MessageBoxResult defaultButton = MessageBoxResult.OK)
+            PopUpButtons buttons = null)
         {
+            if (buttons == null)
+                buttons = new PopUpButtons(PopUpButtonsType.OK);
+
             return WPF_Helper.ExecuteOnUIThread(() =>
             {
-                return MessageWindow.MessageBox(null, ref message, title, icon, textAlignment, buttons, btnF6text, btnF5text, btn1text, defaultButton);
+                return MessageWindow.MessageBox(null, ref message, title, icon, textAlignment, buttons);
             });
         }
 
@@ -86,22 +125,16 @@ namespace sD.WPF.MessageBox
         /// <param name="icon"></param>
         /// <param name="textAlignment"></param>
         /// <param name="buttons"></param>
-        /// <param name="btnF6text">right most button, uses right foot pedal (F6), MessageBoxResult.Yes, OK; if is null will assign text by 'buttons'</param>
-        /// <param name="btnF5text">left/middle button, uses left foot pedal (F5), MessageBoxResult.Cancel, No; if is null will assign text by 'buttons'</param>
-        /// <param name="btn1text">left most button, MessageBoxResult.Cancel; if is null will assign text by 'buttons'</param>
-        /// <param name="defaultButton">MessageBoxResult - will set as default action on 'Enter'</param>
         /// <param name="timeout">execute default action after timeout if more than 100 milliseconds</param>
         /// <returns></returns>
-        public static MessageBoxResult MessageBox(UIElement owner, string message, string title,
+        public static PopUpResult MessageBox(UIElement owner, string message, string title,
             MessageBoxImage icon, TextAlignment textAlignment = TextAlignment.Center,
-            MessageBoxButton buttons = MessageBoxButton.OK,
-            string btnF6text = null, string btnF5text = null, string btn1text = null,
-            MessageBoxResult defaultButton = MessageBoxResult.OK, int timeout = Timeout.Infinite)
+            PopUpButtons buttons = null, int timeout = Timeout.Infinite)
         {
-            return MessageBox(() => owner,
-                    message, title,
-                    icon, textAlignment,
-                    buttons, btnF6text, btnF5text, btn1text, defaultButton, timeout);
+            if (buttons == null)
+                buttons = new PopUpButtons(PopUpButtonsType.OK);
+
+            return MessageBox(() => owner, message, title, icon, textAlignment, buttons, timeout);
         }
 
         /// <summary>
@@ -114,18 +147,15 @@ namespace sD.WPF.MessageBox
         /// <param name="icon"></param>
         /// <param name="textAlignment"></param>
         /// <param name="buttons"></param>
-        /// <param name="btnF6text">right most button, uses right foot pedal (F6), MessageBoxResult.Yes, OK; if is null will assign text by 'buttons'</param>
-        /// <param name="btnF5text">left/middle button, uses left foot pedal (F5), MessageBoxResult.Cancel, No; if is null will assign text by 'buttons'</param>
-        /// <param name="btn1text">left most button, MessageBoxResult.Cancel; if is null will assign text by 'buttons'</param>
-        /// <param name="defaultButton">MessageBoxResult - will set as default action on 'Enter'</param>
         /// <param name="timeout">execute default action after timeout if more than 100 milliseconds</param>
         /// <returns></returns>
-        public static MessageBoxResult MessageBox(Func<UIElement> GetOwnerOnUIThread, string message, string title,
+        public static PopUpResult MessageBox(Func<UIElement> GetOwnerOnUIThread, string message, string title,
             MessageBoxImage icon, TextAlignment textAlignment = TextAlignment.Center,
-            MessageBoxButton buttons = MessageBoxButton.OK,
-            string btnF6text = null, string btnF5text = null, string btn1text = null,
-            MessageBoxResult defaultButton = MessageBoxResult.OK, int timeout = Timeout.Infinite)
+            PopUpButtons buttons = null, int timeout = Timeout.Infinite)
         {
+            if (buttons == null)
+                buttons = new PopUpButtons(PopUpButtonsType.OK);
+
             return WPF_Helper.ExecuteOnUIThread(() =>
             {
                 UIElement owner = null;
@@ -135,21 +165,21 @@ namespace sD.WPF.MessageBox
                 return MessageWindow.MessageBox(owner,
                     ref message, title,
                     icon, textAlignment,
-                    buttons, btnF6text, btnF5text, btn1text, defaultButton, timeout);
+                    buttons, timeout);
             });
         }
 
-        public static MessageBoxResult InputBox(ref string userInput, string title, 
+        public static PopUpResult InputBox(ref string userInput, string title, 
             MessageBoxImage icon = MessageBoxImage.Information, TextAlignment textAlignment = TextAlignment.Justify,
-            MessageBoxButton buttons = MessageBoxButton.OKCancel, 
-            string btnF6text = null, string btnF5text = null, string btn1text = null,
-            MessageBoxResult defaultButton = MessageBoxResult.OK, int timeout = Timeout.Infinite)
+            PopUpButtonsType buttonsType = PopUpButtonsType.CancelOK, int timeout = Timeout.Infinite)
         {
+            PopUpButtons buttons = new PopUpButtons(buttonsType);
+
             string message = userInput;
-            MessageBoxResult res = WPF_Helper.ExecuteOnUIThread(() =>
+            PopUpResult res = WPF_Helper.ExecuteOnUIThread(() =>
             {
                 return MessageWindow.MessageBox(null, ref message, title, icon, textAlignment, 
-                    buttons, btnF6text, btnF5text, btn1text, defaultButton, timeout,
+                    buttons, timeout,
                     false);
             });
             userInput = message;

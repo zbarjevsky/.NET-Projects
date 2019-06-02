@@ -39,12 +39,17 @@
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.m_btnQuestionYNC = new System.Windows.Forms.Button();
             this.m_btnSpecial = new System.Windows.Forms.Button();
+            this.m_btnInput = new System.Windows.Forms.Button();
+            this.m_cmbIconStyle = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // m_btnInfo
             // 
             this.m_btnInfo.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnInfo.Location = new System.Drawing.Point(67, 37);
+            this.m_btnInfo.Location = new System.Drawing.Point(67, 97);
             this.m_btnInfo.Name = "m_btnInfo";
             this.m_btnInfo.Size = new System.Drawing.Size(167, 45);
             this.m_btnInfo.TabIndex = 0;
@@ -55,7 +60,7 @@
             // m_btnWarn
             // 
             this.m_btnWarn.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnWarn.Location = new System.Drawing.Point(67, 94);
+            this.m_btnWarn.Location = new System.Drawing.Point(67, 154);
             this.m_btnWarn.Name = "m_btnWarn";
             this.m_btnWarn.Size = new System.Drawing.Size(167, 45);
             this.m_btnWarn.TabIndex = 1;
@@ -66,7 +71,7 @@
             // m_btnError
             // 
             this.m_btnError.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnError.Location = new System.Drawing.Point(67, 151);
+            this.m_btnError.Location = new System.Drawing.Point(67, 211);
             this.m_btnError.Name = "m_btnError";
             this.m_btnError.Size = new System.Drawing.Size(167, 45);
             this.m_btnError.TabIndex = 2;
@@ -77,7 +82,7 @@
             // m_btnQuestion
             // 
             this.m_btnQuestion.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnQuestion.Location = new System.Drawing.Point(67, 208);
+            this.m_btnQuestion.Location = new System.Drawing.Point(67, 268);
             this.m_btnQuestion.Name = "m_btnQuestion";
             this.m_btnQuestion.Size = new System.Drawing.Size(167, 45);
             this.m_btnQuestion.TabIndex = 3;
@@ -93,13 +98,15 @@
             // 
             // listView1
             // 
+            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2});
             this.listView1.LargeImageList = this.m_imageListIcons;
-            this.listView1.Location = new System.Drawing.Point(274, 37);
+            this.listView1.Location = new System.Drawing.Point(274, 12);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(346, 216);
+            this.listView1.Size = new System.Drawing.Size(395, 162);
             this.listView1.SmallImageList = this.m_imageListIcons;
             this.listView1.TabIndex = 4;
             this.listView1.UseCompatibleStateImageBehavior = false;
@@ -107,7 +114,7 @@
             // m_btnQuestionYNC
             // 
             this.m_btnQuestionYNC.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnQuestionYNC.Location = new System.Drawing.Point(67, 269);
+            this.m_btnQuestionYNC.Location = new System.Drawing.Point(67, 329);
             this.m_btnQuestionYNC.Name = "m_btnQuestionYNC";
             this.m_btnQuestionYNC.Size = new System.Drawing.Size(167, 45);
             this.m_btnQuestionYNC.TabIndex = 5;
@@ -118,7 +125,7 @@
             // m_btnSpecial
             // 
             this.m_btnSpecial.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnSpecial.Location = new System.Drawing.Point(274, 269);
+            this.m_btnSpecial.Location = new System.Drawing.Point(274, 329);
             this.m_btnSpecial.Name = "m_btnSpecial";
             this.m_btnSpecial.Size = new System.Drawing.Size(167, 45);
             this.m_btnSpecial.TabIndex = 6;
@@ -126,11 +133,68 @@
             this.m_btnSpecial.UseVisualStyleBackColor = true;
             this.m_btnSpecial.Click += new System.EventHandler(this.m_btnSpecial_Click);
             // 
+            // m_btnInput
+            // 
+            this.m_btnInput.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.m_btnInput.Location = new System.Drawing.Point(498, 329);
+            this.m_btnInput.Name = "m_btnInput";
+            this.m_btnInput.Size = new System.Drawing.Size(167, 45);
+            this.m_btnInput.TabIndex = 7;
+            this.m_btnInput.Text = "Input...";
+            this.m_btnInput.UseVisualStyleBackColor = true;
+            this.m_btnInput.Click += new System.EventHandler(this.m_btnInput_Click);
+            // 
+            // m_cmbIconStyle
+            // 
+            this.m_cmbIconStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.m_cmbIconStyle.FormattingEnabled = true;
+            this.m_cmbIconStyle.Location = new System.Drawing.Point(67, 59);
+            this.m_cmbIconStyle.Name = "m_cmbIconStyle";
+            this.m_cmbIconStyle.Size = new System.Drawing.Size(167, 21);
+            this.m_cmbIconStyle.TabIndex = 8;
+            this.m_cmbIconStyle.SelectionChangeCommitted += new System.EventHandler(this.m_cmbIconStyle_SelectionChangeCommitted);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(67, 37);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(93, 13);
+            this.label1.TabIndex = 9;
+            this.label1.Text = "Buttons Icon Style";
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.richTextBox1.Location = new System.Drawing.Point(274, 211);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(395, 102);
+            this.richTextBox1.TabIndex = 10;
+            this.richTextBox1.Text = "\"The quick brown fox jumps over the lazy dog\"\n\"The quick brown fox jumps over the" +
+    " lazy dog\"\n\"The quick brown fox jumps over the lazy dog\"\n\"The quick brown fox ju" +
+    "mps over the lazy dog\"";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(271, 186);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(77, 13);
+            this.label2.TabIndex = 11;
+            this.label2.Text = "Message Text:";
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(675, 354);
+            this.ClientSize = new System.Drawing.Size(691, 420);
+            this.Controls.Add(this.label2);
+            this.Controls.Add(this.richTextBox1);
+            this.Controls.Add(this.label1);
+            this.Controls.Add(this.m_cmbIconStyle);
+            this.Controls.Add(this.m_btnInput);
             this.Controls.Add(this.m_btnSpecial);
             this.Controls.Add(this.m_btnQuestionYNC);
             this.Controls.Add(this.listView1);
@@ -144,6 +208,7 @@
             this.Text = "Test Message Box";
             this.Load += new System.EventHandler(this.FormMain_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -159,6 +224,11 @@
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.Button m_btnQuestionYNC;
         private System.Windows.Forms.Button m_btnSpecial;
+        private System.Windows.Forms.Button m_btnInput;
+        private System.Windows.Forms.ComboBox m_cmbIconStyle;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.Label label2;
     }
 }
 

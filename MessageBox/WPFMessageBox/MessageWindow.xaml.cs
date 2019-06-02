@@ -1,5 +1,7 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -10,7 +12,7 @@ using System.Windows.Media;
 // <summary>
 // MarkZ. 2017-08-01
 // </summary>
-namespace sD.WPF.MessageBox
+namespace MZ.WPF.MessageBox
 {
     /// <summary>
     /// Interaction logic for MessageWindow.xaml
@@ -25,7 +27,7 @@ namespace sD.WPF.MessageBox
     /// 
     /// Another implementation: http://blogs.microsoft.co.il/arik/2011/05/26/a-customizable-wpf-messagebox/
     /// </summary>
-    internal partial class MessageWindow : Window
+    internal partial class MessageWindow : Window, INotifyPropertyChanged
     {
         //commands for foot pedal - F5 and F6
         public ICommand DefaultCommand { get; set; }
@@ -34,9 +36,15 @@ namespace sD.WPF.MessageBox
         public ICommand F6Command { get; set; }
         public ICommand CopyCommand { get; set; }
 
-        private MessageBoxResult _DialogResult = MessageBoxResult.None;
-        private MessageBoxButton _buttons = MessageBoxButton.OKCancel;
-        private MessageBoxResult _defaultButton = MessageBoxResult.None;
+        private double _width = 600;
+        public double AdjustedWidth { get { return _width; } set { _width = value; NotifyPropertyChanged(); } }
+
+        public static Visibility IconType1Visibility { get; set; } = Visibility.Visible;
+        public static Visibility IconType2Visibility { get; set; } = Visibility.Collapsed;
+
+        private PopUp.PopUpResult _DialogResult = PopUp.PopUpResult.None;
+        private PopUp.PopUpButtons _buttons = new PopUp.PopUpButtons(PopUp.PopUpButtonsType.CancelOK);
+        //private PopUp.PopUpResult _defaultButton = PopUp.PopUpResult.None;
 
         /// <summary>
         /// Change the message text Alingment
@@ -44,15 +52,15 @@ namespace sD.WPF.MessageBox
         public static TextAlignment sTextAlignment = TextAlignment.Center;
         public static WindowStartupLocation sWindowStartupLocation = WindowStartupLocation.CenterOwner;
 
-        public static MessageBoxResult MessageBox(UIElement owner, 
+        public static PopUp.PopUpResult MessageBox(UIElement owner, 
             ref string message, string title,
             MessageBoxImage icon, 
-            TextAlignment textAlignment, 
-            MessageBoxButton buttons, string btnF6text, string btnF5text, string btn1text, MessageBoxResult defaultButton, 
+            TextAlignment textAlignment,
+            PopUp.PopUpButtons buttons, 
             int autoCloseTimeoutMs = Timeout.Infinite, //infinite
             bool bReadonly = true)
         {
-            MessageWindow wnd = new MessageWindow(buttons, defaultButton);
+            MessageWindow wnd = new MessageWindow(buttons);
             wnd.WindowStartupLocation = WindowStartupLocation.Manual; // sWindowStartupLocation;
             wnd.Owner = GetWindowImpl(owner);
             wnd.ConfigureAppearance(icon);
@@ -64,11 +72,11 @@ namespace sD.WPF.MessageBox
             wnd.txtTitle.Text = title;
             //wnd.txtTitle.ToolTip = title;
 
-            wnd.btn1.Content = btn1text;
-            wnd.btnF5.Content = btnF5text;
-            wnd.btnF6.Content = btnF6text;
+            wnd.btn1.Content = buttons.btn1.Text;
+            wnd.btn2.Content = buttons.btn2.Text;
+            wnd.btn3.Content = buttons.btn3.Text;
 
-            wnd.AdjustSize();
+            wnd.AdjustSize(message, true);
             if (owner != null)
                 wnd.CenterToUIElement(owner);
             else
@@ -89,10 +97,10 @@ namespace sD.WPF.MessageBox
             return wnd._DialogResult;
         }
 
-        public MessageWindow(MessageBoxButton buttons, MessageBoxResult defaultButton)
+        public MessageWindow(PopUp.PopUpButtons buttons)
         {
             _buttons = buttons;
-            _defaultButton = defaultButton;
+            //_defaultButton = defaultButton;
 
             InitializeComponent();
 
@@ -102,10 +110,10 @@ namespace sD.WPF.MessageBox
             {
                 if (btn1.IsDefault)
                     btn1_Click(o, new RoutedEventArgs());
-                else if (btnF5.IsDefault)
-                    btnF5_Click(o, new RoutedEventArgs());
-                else if (btnF6.IsDefault)
-                    btnF6_Click(o, new RoutedEventArgs());
+                else if (btn2.IsDefault)
+                    btn2_Click(o, new RoutedEventArgs());
+                else if (btn3.IsDefault)
+                    btn3_Click(o, new RoutedEventArgs());
             });
 
             EscapeCommand = new RelayCommand((o) =>
@@ -116,13 +124,13 @@ namespace sD.WPF.MessageBox
             //Foot pedal (F6)
             F6Command = new RelayCommand((o) =>
             {
-                btnF6_Click(o, new RoutedEventArgs());
+                btn3_Click(o, new RoutedEventArgs());
             });
 
             //Foot pedal (F5)
             F5Command = new RelayCommand((o) =>
             {
-                btnF5_Click(o, new RoutedEventArgs());
+                btn2_Click(o, new RoutedEventArgs());
             });
 
             //Foot pedal (F5)
@@ -136,7 +144,6 @@ namespace sD.WPF.MessageBox
 
         private void MessageWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            AdjustSize();
 
             if (!txtMessage.IsReadOnly)
             {
@@ -144,85 +151,70 @@ namespace sD.WPF.MessageBox
                 txtMessage.AcceptsReturn = true;
                 txtMessage.Select(0, txtMessage.Text.Length);
                 FocusManager.SetFocusedElement(this, txtMessage);
+                DataObject.AddPastingHandler(txtMessage, PasteHandler);
             }
 
-            SetDefaultButton();
+            AdjustSize(txtMessage.Text, true);
 
             string closeAction = "";
 
-            switch (_buttons)
+            UpdateButton(btn1, _buttons.btn1);
+            UpdateButton(btn2, _buttons.btn2);
+            UpdateButton(btn3, _buttons.btn3);
+
+            switch (_buttons.ButtonsType)
             {
-                case MessageBoxButton.YesNo:
-                    btn1.Visibility = Visibility.Hidden;
-                    btnF5.Visibility = Visibility.Visible;
-                    if (btnF5.Content == null)
-                        btnF5.Content = WPF_Helper.GetMessageBoxButtonText(MessageBoxResult.No);
-                    btnF6.Visibility = Visibility.Visible;
-                    if (btnF6.Content == null)
-                        btnF6.Content = WPF_Helper.GetMessageBoxButtonText(MessageBoxResult.Yes);
-                    closeAction = btnF5.Content.ToString().TryRemoveKeyboardAccellerator();
+                case PopUp.PopUpButtonsType.NoYes:
+                    closeAction = btn2.Content.ToString().TryRemoveKeyboardAccellerator();
                     break;
-                case MessageBoxButton.OKCancel:
-                    btn1.Visibility = Visibility.Hidden;
-                    btnF5.Visibility = Visibility.Visible;
-                    if (btnF5.Content == null)
-                        btnF5.Content = WPF_Helper.GetMessageBoxButtonText(MessageBoxResult.Cancel);
-                    btnF6.Visibility = Visibility.Visible;
-                    if (btnF6.Content == null)
-                        btnF6.Content = WPF_Helper.GetMessageBoxButtonText(MessageBoxResult.OK);
-                    closeAction = btnF5.Content.ToString().TryRemoveKeyboardAccellerator();
+                case PopUp.PopUpButtonsType.CancelOK:
+                    closeAction = btn2.Content.ToString().TryRemoveKeyboardAccellerator();
                     break;
-                case MessageBoxButton.YesNoCancel:
-                    btn1.Visibility = Visibility.Visible;
-                    if (btn1.Content == null)
-                        btn1.Content = WPF_Helper.GetMessageBoxButtonText(MessageBoxResult.Cancel);
-                    btnF5.Visibility = Visibility.Visible;
-                    if (btnF5.Content == null)
-                        btnF5.Content = WPF_Helper.GetMessageBoxButtonText(MessageBoxResult.No);
-                    btnF6.Visibility = Visibility.Visible;
-                    if (btnF6.Content == null)
-                        btnF6.Content = WPF_Helper.GetMessageBoxButtonText(MessageBoxResult.Yes);
+                case PopUp.PopUpButtonsType.CancelNoYes:
                     closeAction = btn1.Content.ToString().TryRemoveKeyboardAccellerator();
                     btn1.ToolTip = closeAction + "\n(Escape)";
                     break;
-                case MessageBoxButton.OK:
+                case PopUp.PopUpButtonsType.OK:
                 default:
-                    btn1.Visibility = Visibility.Hidden;
-                    btnF5.Visibility = Visibility.Hidden;
-                    btnF5.Content = WPF_Helper.GetMessageBoxButtonText(MessageBoxResult.Cancel);
-                    btnF6.Visibility = Visibility.Visible;
-                    if (btnF6.Content == null)
-                        btnF6.Content = WPF_Helper.GetMessageBoxButtonText(MessageBoxResult.OK);
-                    closeAction = btnF6.Content.ToString().TryRemoveKeyboardAccellerator();
+                    closeAction = btn3.Content.ToString().TryRemoveKeyboardAccellerator();
                     break;
             }
 
             btnClose.ToolTip = "Close\nAlt+F4 / ('" + closeAction + "')";
 
-            btnF5.ToolTip = btnF5.Content.ToString().TryRemoveKeyboardAccellerator() + "\n(Left Foot Pedal/F5)";
-            btnF6.ToolTip = btnF6.Content.ToString().TryRemoveKeyboardAccellerator() + "\n(Right Foot Pedal/F6)";
+            btn2.ToolTip = btn2.Content.ToString().TryRemoveKeyboardAccellerator() + "\n(Left Foot Pedal/F5)";
+            btn3.ToolTip = btn3.Content.ToString().TryRemoveKeyboardAccellerator() + "\n(Right Foot Pedal/F6)";
+
+            //txtMessage.TextChanged += txtMessage_TextChanged;
         }
 
-        private void SetDefaultButton()
+        private static void UpdateButton(Button btn, PopUp.PopUpButton info)
         {
-            switch (_defaultButton)
+            btn.Content = info.Text;
+            btn.IsDefault = info.IsDefault;
+            btn.Visibility = info.IsVisible ? Visibility.Visible : Visibility.Hidden;
+            btn.ToolTip = btn.Content.ToString().TryRemoveKeyboardAccellerator();
+        }
+
+        private void txtMessage_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            Point delta = AdjustSize(txtMessage.Text, false);
+        }
+
+        private void PasteHandler(object sender, DataObjectPastingEventArgs e)
+        {
+            if (e.DataObject.GetDataPresent(typeof(string)))
             {
-                case MessageBoxResult.None:
-                    break;
-                case MessageBoxResult.No:
-                    btnF5.IsDefault = true;
-                    break;
-                case MessageBoxResult.Cancel:
-                    if (_buttons == MessageBoxButton.YesNoCancel)
-                        btn1.IsDefault = true;
-                    else
-                        btnF5.IsDefault = true;
-                    break;
-                case MessageBoxResult.OK:
-                case MessageBoxResult.Yes:
-                default:
-                    btnF6.IsDefault = true;
-                    break;
+                string pasteText = e.DataObject.GetData(typeof(string)) as string;
+                if (txtMessage.SelectedText.Length == 0)
+                    pasteText += txtMessage.Text;
+                else //text will be replaced - adjust length
+                    pasteText += txtMessage.Text.Substring(txtMessage.SelectedText.Length);
+                AdjustSize(pasteText, false); //grow only
+            }
+            else
+            {
+                e.CancelCommand();
             }
         }
 
@@ -235,12 +227,12 @@ namespace sD.WPF.MessageBox
 
         private void CloseBtn_OnClick(object sender, RoutedEventArgs e)
         {
-            if (_buttons == MessageBoxButton.OK)
-                btnF6_Click(sender, e);
-            else if (_buttons == MessageBoxButton.YesNoCancel)
+            if (_buttons.ButtonsType == PopUp.PopUpButtonsType.OK)
+                btn3_Click(sender, e);
+            else if (_buttons.ButtonsType == PopUp.PopUpButtonsType.CancelNoYes)
                 btn1_Click(sender, e);
             else //default F5
-                btnF5_Click(sender, e);
+                btn2_Click(sender, e);
         }
 
         private void Copy_Click(object sender, RoutedEventArgs e)
@@ -253,10 +245,10 @@ namespace sD.WPF.MessageBox
                 msg += "\n---------------------------------\n";
                 msg += txtMessage.Text;
                 msg += "\n---------------------------------\n";
-                if(btnF5.Visibility == Visibility.Visible)
-                    msg += "------" + btnF5.Content + "----" + btnF6.Content + "----";
+                if(btn2.Visibility == Visibility.Visible)
+                    msg += "------" + btn2.Content + "----" + btn3.Content + "----";
                 else
-                    msg += "----------------------------" + btnF6.Content + "----";
+                    msg += "----------------------------" + btn3.Content + "----";
             }
 
             Clipboard.SetText(msg);
@@ -265,25 +257,25 @@ namespace sD.WPF.MessageBox
         private void btn1_Click(object sender, RoutedEventArgs e)
         {
             //btn1 - is always cancel button 
-            _DialogResult = MessageBoxResult.Cancel;
+            _DialogResult = PopUp.PopUpResult.Cancel;
             this.Close();
         }
 
-        private void btnF5_Click(object sender, RoutedEventArgs e)
+        private void btn2_Click(object sender, RoutedEventArgs e)
         {
             //btnF5 - is 'No' or 'Cancel' 
-            _DialogResult = MessageBoxResult.Cancel;
-            if (_buttons == MessageBoxButton.YesNoCancel || _buttons == MessageBoxButton.YesNo)
-                _DialogResult = MessageBoxResult.No;
+            _DialogResult = PopUp.PopUpResult.Cancel;
+            if (_buttons.ButtonsType == PopUp.PopUpButtonsType.CancelNoYes || _buttons.ButtonsType == PopUp.PopUpButtonsType.NoYes)
+                _DialogResult = PopUp.PopUpResult.No;
 
             this.Close();
         }
 
-        private void btnF6_Click(object sender, RoutedEventArgs e)
+        private void btn3_Click(object sender, RoutedEventArgs e)
         {
-            _DialogResult = MessageBoxResult.OK;
-            if (_buttons == MessageBoxButton.YesNoCancel || _buttons == MessageBoxButton.YesNo)
-                _DialogResult = MessageBoxResult.Yes;
+            _DialogResult = PopUp.PopUpResult.OK;
+            if (_buttons.ButtonsType == PopUp.PopUpButtonsType.CancelNoYes || _buttons.ButtonsType == PopUp.PopUpButtonsType.NoYes)
+                _DialogResult = PopUp.PopUpResult.Yes;
 
             this.Close();
         }
@@ -316,29 +308,26 @@ namespace sD.WPF.MessageBox
         /// <summary>
         /// Calculate size of message and adjust window size correspondently
         /// </summary>
-        private void AdjustSize()
+        private Point AdjustSize(string newText, bool growAndShrink)
         {
             var screen = System.Windows.Forms.Screen.FromHandle(new System.Windows.Interop.WindowInteropHelper(this).Handle);
             double deltaWidth = 70;
-            double deltaHeight = 150;
+            double deltaHeight = 140;
             double deltaWidthTitle = 80;
             
             //restrict size to 80% of display
             double maxWidth = screen.Bounds.Width * 0.8 - deltaWidth;
             double maxHeight = screen.Bounds.Height * 0.9 - deltaHeight;
 
+            //minimal height for input box (not readonly)
+            double minHeight = txtMessage.IsReadOnly ? this.MinHeight + 50 : this.MinHeight;
+
             //calculate message size
-            Size size = MeasureString(txtMessage);
+            Size size = MeasureString(newText, txtMessage);
             //calculate buttons size
             Size buttonsSize = CalculateButtonsSize();
             if (buttonsSize.Width > size.Width)
                 size.Width = buttonsSize.Width;
-
-            if (size.Width > maxWidth) size.Width = maxWidth;
-            if (size.Width < this.MinWidth - deltaWidth) size.Width = this.MinWidth - deltaWidth;
-
-            if (size.Height > maxHeight) size.Height = maxHeight;
-            if (size.Height < this.MinHeight - deltaHeight) size.Height = this.MinHeight - deltaHeight;
 
             //calculate title size
             Size sizeTitle = MeasureString(txtTitle);
@@ -349,12 +338,30 @@ namespace sD.WPF.MessageBox
             if (sizeTitle.Width < maxWidth - deltaWidthTitle && sizeTitle.Width + deltaWidthTitle > size.Width)
                 size.Width = sizeTitle.Width + deltaWidthTitle;
 
-            this.Width = size.Width + deltaWidth;
-            this.Height = size.Height + deltaHeight;
+            if (size.Width > maxWidth) size.Width = maxWidth;
+            if (size.Width < this.MinWidth - deltaWidth) size.Width = this.MinWidth - deltaWidth;
+
+            if (size.Height > maxHeight) size.Height = maxHeight;
+            if (size.Height < minHeight - deltaHeight) size.Height = minHeight - deltaHeight;
+
+            double deltaX = Math.Round(size.Width + deltaWidth - this.ActualWidth);
+            double deltaY = Math.Round(size.Height + deltaHeight - this.ActualHeight);
+
+            //grow only
+            if (growAndShrink || size.Width + deltaWidth > this.Width)
+            {
+                this.Width = size.Width + deltaWidth;
+                this.Left -= deltaX / 2;
+            }
+
+            if (growAndShrink || size.Height + deltaHeight > this.Height)
+                this.Height = size.Height + deltaHeight;
 
             //for very long lines - scroll to the middle
-            if(sTextAlignment == TextAlignment.Center)
+            if (sTextAlignment == TextAlignment.Center)
                 txtMessage.ScrollToHorizontalOffset(size.Width/2);
+
+            return new Point(deltaX, deltaY);
         }
 
         private void CenterToUIElement(UIElement owner)
@@ -386,10 +393,15 @@ namespace sD.WPF.MessageBox
             return new Size(formattedText.Width, formattedText.Height);
         }
 
-        private Size MeasureString(TextBox t)
+        private Size MeasureString(string text, Control t)
         {
+            if (string.IsNullOrEmpty(text))
+                text = "  ";
+            if (text.EndsWith(Environment.NewLine))
+                text += "   "; //add spaces to calculate correct height
+
             var formattedText = new FormattedText(
-                t.Text,
+                text,
                 CultureInfo.CurrentUICulture,
                 FlowDirection.LeftToRight,
                 new Typeface(t.FontFamily, t.FontStyle, t.FontWeight, t.FontStretch),
@@ -402,26 +414,21 @@ namespace sD.WPF.MessageBox
         private Size CalculateButtonsSize()
         {
             Size sz1 = CalculateButtonSize(btn1);
-            Size sz2 = CalculateButtonSize(btnF5);
-            Size sz3 = CalculateButtonSize(btnF6);
+            Size sz2 = CalculateButtonSize(btn2);
+            Size sz3 = CalculateButtonSize(btn3);
 
             return new Size(sz1.Width + sz2.Width + sz3.Width, sz1.Height + sz2.Height + sz3.Height);
         }
 
         private Size CalculateButtonSize(Button btn)
         {
-            if (btn.Content == null)
+            if (btn == null || btn.Content == null)
                 return new Size();
 
-            FormattedText formattedText = new FormattedText(
-                btn.Content.ToString(),
-                CultureInfo.CurrentUICulture,
-                FlowDirection.LeftToRight,
-                new Typeface(btn.FontFamily, btn.FontStyle, btn.FontWeight, btn.FontStretch),
-                btn.FontSize,
-                Brushes.Black);
+            Size sz = MeasureString(btn.Content.ToString(), btn);
 
-            return new Size(formattedText.Width + 40, formattedText.Height + 20);
+            //compensate for Icon width
+            return new Size(sz.Width + 40, sz.Height + 20);
         }
 
         public static ImageSource _imgError = System.Drawing.SystemIcons.Error.ToImageSource();
@@ -477,5 +484,22 @@ namespace sD.WPF.MessageBox
 
             this.Icon = img.Source; //for task bar visible image
         }
+
+        #region INotifyPropertyChanged
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void NotifyPropertyChangedAll()
+        {
+            NotifyPropertyChanged("");
+        }
+
+        public void NotifyPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+        #endregion
     }
 }
