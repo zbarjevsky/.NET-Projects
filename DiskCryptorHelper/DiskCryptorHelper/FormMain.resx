@@ -127,6 +127,14 @@
     <value>139, 17</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="m_mnuExit.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAB1SURBVDhPvY9JDoBACAR5+vxcAWkN2ywXKxIjVHci/crF
+        z+CRt608EOzTgRvG1h9OGMMJMRzvSidthUElx29Te1IJZicMypKTghQ+KWh/QWZVMg1jupIyzHLa2d5i
+        D114dXtJUhDcPYaFpcCo09wUOU6FEqIbTWnK+un8sG4AAAAASUVORK5CYII=
+</value>
+  </data>
   <data name="m_sysIcon.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAIAICAAAAEACACoCAAAJgAAABAQAAABACAAaAQAAM4IAAAoAAAAIAAAAEAAAAABAAgAAAAAAAAA

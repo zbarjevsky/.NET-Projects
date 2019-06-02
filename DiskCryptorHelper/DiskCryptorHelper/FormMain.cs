@@ -130,16 +130,16 @@ namespace DiskCryptorHelper
             else if(e.CloseReason == CloseReason.UserClosing) //user clicked close button
             {
                 System.Windows.MessageBoxResult res = PopUp.MessageBox(
-                    "Cancel(C), Hide(H) or Exit(X)?", "Exit Application",
+                    "Cancel(C), Exit(X) or Hide(H)?", "Exit Application",
                     System.Windows.MessageBoxImage.Question,
                     System.Windows.TextAlignment.Center,
                     System.Windows.MessageBoxButton.YesNoCancel,
-                    "E_xit", "_Hide");
+                    "_Hide", "E_xit");
 
-                if (res != System.Windows.MessageBoxResult.Yes)
+                if (res != System.Windows.MessageBoxResult.No)
                 {
                     e.Cancel = true;
-                    if (res == System.Windows.MessageBoxResult.No)
+                    if (res == System.Windows.MessageBoxResult.Yes)
                         this.Visible = false; //hide
                 }
             }

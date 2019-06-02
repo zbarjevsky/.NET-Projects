@@ -61,12 +61,15 @@
             this.m_btnEject = new System.Windows.Forms.Button();
             this.m_splitMain = new System.Windows.Forms.SplitContainer();
             this.m_splitDiskCryptorInfo = new System.Windows.Forms.SplitContainer();
+            this.m_btnBrowseDisk = new System.Windows.Forms.Button();
             this.m_pnlSeparate1 = new System.Windows.Forms.Panel();
             this.m_splitOperations = new System.Windows.Forms.SplitContainer();
             this.m_pnlVHD = new System.Windows.Forms.Panel();
+            this.m_VHD_MountUnMountUserControl = new DiskCryptorHelper.VHD.VHD_MountUnMountUserControl();
             this.m_pnlPassword = new System.Windows.Forms.Panel();
             this.m_grpPwd = new System.Windows.Forms.GroupBox();
             this.m_grpBSOD = new System.Windows.Forms.GroupBox();
+            this.hideDriveLetterControl1 = new DiskCryptorHelper.HideDriveLetterControl();
             this.panel2 = new System.Windows.Forms.Panel();
             this.m_splitDisks = new System.Windows.Forms.SplitContainer();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -88,9 +91,6 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.m_btnBrowseDisk = new System.Windows.Forms.Button();
-            this.m_VHD_MountUnMountUserControl = new DiskCryptorHelper.VHD.VHD_MountUnMountUserControl();
-            this.hideDriveLetterControl1 = new DiskCryptorHelper.HideDriveLetterControl();
             this.m_sysIconMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitMain)).BeginInit();
             this.m_splitMain.Panel1.SuspendLayout();
@@ -290,7 +290,7 @@
             this.toolStripMenuItem3,
             this.m_mnuExit});
             this.m_sysIconMenu.Name = "m_sysIconMenu";
-            this.m_sysIconMenu.Size = new System.Drawing.Size(177, 154);
+            this.m_sysIconMenu.Size = new System.Drawing.Size(177, 176);
             // 
             // m_mnuShow
             // 
@@ -359,6 +359,7 @@
             // 
             // m_mnuExit
             // 
+            this.m_mnuExit.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuExit.Image")));
             this.m_mnuExit.Name = "m_mnuExit";
             this.m_mnuExit.Size = new System.Drawing.Size(176, 22);
             this.m_mnuExit.Text = "E&xit";
@@ -439,6 +440,17 @@
             this.m_splitDiskCryptorInfo.SplitterDistance = 541;
             this.m_splitDiskCryptorInfo.TabIndex = 0;
             // 
+            // m_btnBrowseDisk
+            // 
+            this.m_btnBrowseDisk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnBrowseDisk.Location = new System.Drawing.Point(432, 189);
+            this.m_btnBrowseDisk.Name = "m_btnBrowseDisk";
+            this.m_btnBrowseDisk.Size = new System.Drawing.Size(93, 23);
+            this.m_btnBrowseDisk.TabIndex = 5;
+            this.m_btnBrowseDisk.Text = "Browse...";
+            this.m_btnBrowseDisk.UseVisualStyleBackColor = true;
+            this.m_btnBrowseDisk.Click += new System.EventHandler(this.m_btnBrowseDisk_Click);
+            // 
             // m_pnlSeparate1
             // 
             this.m_pnlSeparate1.BackColor = System.Drawing.Color.LightSlateGray;
@@ -479,6 +491,16 @@
             this.m_pnlVHD.Size = new System.Drawing.Size(646, 100);
             this.m_pnlVHD.TabIndex = 5;
             // 
+            // m_VHD_MountUnMountUserControl
+            // 
+            this.m_VHD_MountUnMountUserControl.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.m_VHD_MountUnMountUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_VHD_MountUnMountUserControl.Location = new System.Drawing.Point(0, 0);
+            this.m_VHD_MountUnMountUserControl.MinimumSize = new System.Drawing.Size(550, 100);
+            this.m_VHD_MountUnMountUserControl.Name = "m_VHD_MountUnMountUserControl";
+            this.m_VHD_MountUnMountUserControl.Size = new System.Drawing.Size(646, 100);
+            this.m_VHD_MountUnMountUserControl.TabIndex = 0;
+            // 
             // m_pnlPassword
             // 
             this.m_pnlPassword.BackColor = System.Drawing.SystemColors.Control;
@@ -511,6 +533,14 @@
             this.m_grpBSOD.TabIndex = 6;
             this.m_grpBSOD.TabStop = false;
             this.m_grpBSOD.Text = "BSOD";
+            // 
+            // hideDriveLetterControl1
+            // 
+            this.hideDriveLetterControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.hideDriveLetterControl1.Location = new System.Drawing.Point(0, 40);
+            this.hideDriveLetterControl1.Name = "hideDriveLetterControl1";
+            this.hideDriveLetterControl1.Size = new System.Drawing.Size(263, 492);
+            this.hideDriveLetterControl1.TabIndex = 0;
             // 
             // panel2
             // 
@@ -703,35 +733,6 @@
             // errorProvider1
             // 
             this.errorProvider1.ContainerControl = this;
-            // 
-            // m_btnBrowseDisk
-            // 
-            this.m_btnBrowseDisk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnBrowseDisk.Location = new System.Drawing.Point(432, 189);
-            this.m_btnBrowseDisk.Name = "m_btnBrowseDisk";
-            this.m_btnBrowseDisk.Size = new System.Drawing.Size(93, 23);
-            this.m_btnBrowseDisk.TabIndex = 5;
-            this.m_btnBrowseDisk.Text = "Browse...";
-            this.m_btnBrowseDisk.UseVisualStyleBackColor = true;
-            this.m_btnBrowseDisk.Click += new System.EventHandler(this.m_btnBrowseDisk_Click);
-            // 
-            // m_VHD_MountUnMountUserControl
-            // 
-            this.m_VHD_MountUnMountUserControl.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.m_VHD_MountUnMountUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_VHD_MountUnMountUserControl.Location = new System.Drawing.Point(0, 0);
-            this.m_VHD_MountUnMountUserControl.MinimumSize = new System.Drawing.Size(550, 100);
-            this.m_VHD_MountUnMountUserControl.Name = "m_VHD_MountUnMountUserControl";
-            this.m_VHD_MountUnMountUserControl.Size = new System.Drawing.Size(646, 100);
-            this.m_VHD_MountUnMountUserControl.TabIndex = 0;
-            // 
-            // hideDriveLetterControl1
-            // 
-            this.hideDriveLetterControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hideDriveLetterControl1.Location = new System.Drawing.Point(0, 40);
-            this.hideDriveLetterControl1.Name = "hideDriveLetterControl1";
-            this.hideDriveLetterControl1.Size = new System.Drawing.Size(263, 492);
-            this.hideDriveLetterControl1.TabIndex = 0;
             // 
             // FormMain
             // 
