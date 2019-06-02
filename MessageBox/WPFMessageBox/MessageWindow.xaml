@@ -112,8 +112,8 @@
                     Click="btn1_Click"/>
 
             <StackPanel Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button x:Name="btnF5" MinWidth="120" Margin="0,4,10,4"  FontSize="20" FontWeight="DemiBold"
-                        Content="_No" ToolTip="(Foot Pedal: Left/F5)" Click="btnF5_Click" >
+                <Button x:Name="btn2" MinWidth="120" Margin="0,4,10,4"  FontSize="20" FontWeight="DemiBold"
+                        Content="_No" ToolTip="(Foot Pedal: Left/F5)" Click="btn2_Click" >
                     <Button.ContentTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal" >
@@ -126,8 +126,8 @@
                         </DataTemplate>
                     </Button.ContentTemplate>
                 </Button>
-                <Button x:Name="btnF6" MinWidth="120" Margin="0,4,4,4" FontSize="20" FontWeight="DemiBold" 
-                        Content="_Yes" ToolTip="(Foot Pedal: Right/F6)" Click="btnF6_Click">
+                <Button x:Name="btn3" MinWidth="120" Margin="0,4,4,4" FontSize="20" FontWeight="DemiBold" 
+                        Content="_Yes" ToolTip="(Foot Pedal: Right/F6)" Click="btn3_Click">
                     <Button.ContentTemplate>
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">

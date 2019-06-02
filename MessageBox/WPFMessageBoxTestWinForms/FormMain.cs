@@ -76,24 +76,32 @@ namespace WPFMessageBoxTestWinForms
 
         private void m_btnQuestion_Click(object sender, EventArgs e)
         {
-            MZ.WPF.MessageBox.PopUp.Question(richTextBox1.Text);
+            MZ.WPF.MessageBox.PopUp.PopUpResult res = MZ.WPF.MessageBox.PopUp.Question(richTextBox1.Text);
+
+            MZ.WPF.MessageBox.PopUp.Information("Result = " + res);
         }
 
         private void m_btnQuestionYNC_Click(object sender, EventArgs e)
         {
-            MZ.WPF.MessageBox.PopUp.Question(richTextBox1.Text, "Title", MessageBoxImage.Question, TextAlignment.Center, MessageBoxButton.YesNoCancel);
+            MZ.WPF.MessageBox.PopUp.PopUpResult res = MZ.WPF.MessageBox.PopUp.Question(richTextBox1.Text, "Title", MessageBoxImage.Question, TextAlignment.Center, MZ.WPF.MessageBox.PopUp.PopUpButtonsType.CancelNoYes);
+
+            MZ.WPF.MessageBox.PopUp.Information("Result = " + res);
         }
 
         private void m_btnSpecial_Click(object sender, EventArgs e)
         {
-            MZ.WPF.MessageBox.PopUp.MessageBox(richTextBox1.Text, "Title", MessageBoxImage.Question, TextAlignment.Center, MessageBoxButton.YesNoCancel,
-                "Yes - Long Text", "No - Long Long Long Text", "Cancel - Da Da Da Da Long Text");
+            MZ.WPF.MessageBox.PopUp.PopUpResult res = MZ.WPF.MessageBox.PopUp.MessageBox(richTextBox1.Text, "Title", MessageBoxImage.Question, TextAlignment.Center, 
+                new MZ.WPF.MessageBox.PopUp.PopUpButtons(
+                "Cancel - Da Da Da Da Long Text", "No - Long Long Long Text", "Yes - Long Text", 
+                MZ.WPF.MessageBox.PopUp.PopUpResult.Btn2));
+
+            MZ.WPF.MessageBox.PopUp.Information("Result = "+res);
         }
 
         private void m_btnInput_Click(object sender, EventArgs e)
         {
             string inputText = "Type Here...";
-            if(MZ.WPF.MessageBox.PopUp.InputBox(ref inputText, "Title") == MessageBoxResult.OK)
+            if(MZ.WPF.MessageBox.PopUp.InputBox(ref inputText, "Title") == MZ.WPF.MessageBox.PopUp.PopUpResult.OK)
                 MZ.WPF.MessageBox.PopUp.Information(inputText, Text, 
                     MessageBoxImage.Information, TextAlignment.Justify);
         }

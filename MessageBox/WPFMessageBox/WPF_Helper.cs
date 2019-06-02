@@ -205,29 +205,29 @@ namespace MZ.WPF.MessageBox
         /// </summary>
         /// <param name="btn"></param>
         /// <returns></returns>
-        public static string GetMessageBoxButtonText(MessageBoxResult btn)
-        {
-            string btnText = "?";
-            switch (btn)
-            {
-                case MessageBoxResult.OK:
-                    btnText = WIN32.MB_GetString(WIN32.SystemLocStrings.OK);
-                    break;
-                case MessageBoxResult.Cancel:
-                    btnText = WIN32.MB_GetString(WIN32.SystemLocStrings.Cancel);
-                    break;
-                case MessageBoxResult.Yes:
-                    btnText = WIN32.MB_GetString(WIN32.SystemLocStrings.Yes);
-                    break;
-                case MessageBoxResult.No:
-                    btnText = WIN32.MB_GetString(WIN32.SystemLocStrings.No);
-                    break;
-                case MessageBoxResult.None:
-                default:
-                    break;
-            }
-            return btnText.TryAddKeyboardAccellerator();
-        }
+        //public static string GetMessageBoxButtonText(PopUp.PopUpResult btn)
+        //{
+        //    string btnText = "?";
+        //    switch (btn)
+        //    {
+        //        case PopUp.PopUpResult.OK:
+        //            btnText = WIN32.MB_GetString(WIN32.SystemLocStrings.OK);
+        //            break;
+        //        case PopUp.PopUpResult.Cancel:
+        //            btnText = WIN32.MB_GetString(WIN32.SystemLocStrings.Cancel);
+        //            break;
+        //        //case PopUp.PopUpResult.Btn3:
+        //        //    btnText = WIN32.MB_GetString(WIN32.SystemLocStrings.Yes);
+        //        //    break;
+        //        case PopUp.PopUpResult.No:
+        //            btnText = WIN32.MB_GetString(WIN32.SystemLocStrings.No);
+        //            break;
+        //        case PopUp.PopUpResult.None:
+        //        default:
+        //            break;
+        //    }
+        //    return btnText.TryAddKeyboardAccellerator();
+        //}
 
         public static ImageSource ToImageSource(this System.Drawing.Icon icon)
         {
