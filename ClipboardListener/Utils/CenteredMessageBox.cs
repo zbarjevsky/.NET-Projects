@@ -25,7 +25,7 @@ namespace Utils
             MZ.WPF.MessageBox.PopUp.Information(msg, title);
         }//end MsgBoxIfo
 
-        public static System.Windows.MessageBoxResult MsgBoxQst(string msg, string title = "Clipboard Manager")
+        public static MZ.WPF.MessageBox.PopUp.PopUpResult MsgBoxQst(string msg, string title = "Clipboard Manager")
         {
             return MZ.WPF.MessageBox.PopUp.Question(msg, title);
         }//end MsgBoxErr

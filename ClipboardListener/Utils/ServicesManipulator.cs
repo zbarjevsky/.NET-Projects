@@ -149,7 +149,16 @@ namespace ClipboardManager.Utils
                                 {
                                     Utils.Log.WriteLineF("[ServiceManipulator][MonitorServicesStatus] Service Is Running and will be stopped: '{0}', Status: '{1}', Start Type: '{2}'",
                                        service.DisplayName, service.Status, service.StartType);
-                                    service.Stop();
+                                    try
+                                    {
+                                        service.Stop();
+                                        service.WaitForStatus(ServiceControllerStatus.Stopped, TimeSpan.FromSeconds(2));
+                                    }
+                                    catch (Exception err)
+                                    {
+                                        Utils.Log.WriteLine("[ServiceManipulator][MonitorServicesStatus] Stop Service '{0}' Failed: Exception: {1}",
+                                            service.DisplayName, err.ToString());
+                                    }
                                 }
                             }
                             else //service is not monitored

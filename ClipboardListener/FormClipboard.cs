@@ -85,7 +85,7 @@ namespace ClipboardManager
             Win32_Shutdown.SetProcessShutdownParameters(0x3FF, Win32_Shutdown.SHUTDOWN_NORETRY);
         }//end constructor
 
-        private int count = 0;
+        //private int count = 0;
         protected override void WndProc(ref Message m)
         {
             //System.Diagnostics.Debug.WriteLine(string.Format("{0}. MAINF: PreFilterMessage({1}-{2})",
@@ -1405,7 +1405,7 @@ namespace ClipboardManager
                 {
                     if ((bUserClick || !m_Settings.I.IsAutoUAC)) //show question if user clicked or not Automatic UAC
                     {
-                        reset = (System.Windows.MessageBoxResult.OK == CenteredMessageBox.MsgBoxQst(
+                        reset = (MZ.WPF.MessageBox.PopUp.PopUpResult.OK == CenteredMessageBox.MsgBoxQst(
                             "User Account Control Enabled\n  Disable?", "Enable LUA"));
                     }
 
