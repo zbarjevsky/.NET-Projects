@@ -53,9 +53,11 @@
             this.m_grpVHD.Controls.Add(this.m_btnOpenVHD);
             this.m_grpVHD.Controls.Add(this.m_chkPermanent);
             this.m_grpVHD.Controls.Add(this.m_btnDetach);
-            this.m_grpVHD.Location = new System.Drawing.Point(6, 6);
+            this.m_grpVHD.Location = new System.Drawing.Point(8, 7);
+            this.m_grpVHD.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_grpVHD.Name = "m_grpVHD";
-            this.m_grpVHD.Size = new System.Drawing.Size(541, 94);
+            this.m_grpVHD.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.m_grpVHD.Size = new System.Drawing.Size(721, 116);
             this.m_grpVHD.TabIndex = 6;
             this.m_grpVHD.TabStop = false;
             this.m_grpVHD.Text = "Virtual Hard Drive (VHD)";
@@ -64,26 +66,29 @@
             // 
             this.m_cmbAvailableDriveLetters.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.m_cmbAvailableDriveLetters.FormattingEnabled = true;
-            this.m_cmbAvailableDriveLetters.Location = new System.Drawing.Point(298, 54);
+            this.m_cmbAvailableDriveLetters.Location = new System.Drawing.Point(397, 66);
+            this.m_cmbAvailableDriveLetters.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_cmbAvailableDriveLetters.Name = "m_cmbAvailableDriveLetters";
-            this.m_cmbAvailableDriveLetters.Size = new System.Drawing.Size(40, 21);
+            this.m_cmbAvailableDriveLetters.Size = new System.Drawing.Size(52, 24);
             this.m_cmbAvailableDriveLetters.TabIndex = 6;
             this.m_cmbAvailableDriveLetters.SelectedIndexChanged += new System.EventHandler(this.m_cmbAvailableDriveLetters_SelectedIndexChanged);
             // 
             // m_lblVHD_File
             // 
             this.m_lblVHD_File.AutoSize = true;
-            this.m_lblVHD_File.Location = new System.Drawing.Point(20, 32);
+            this.m_lblVHD_File.Location = new System.Drawing.Point(27, 39);
+            this.m_lblVHD_File.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.m_lblVHD_File.Name = "m_lblVHD_File";
-            this.m_lblVHD_File.Size = new System.Drawing.Size(55, 13);
+            this.m_lblVHD_File.Size = new System.Drawing.Size(71, 17);
             this.m_lblVHD_File.TabIndex = 0;
             this.m_lblVHD_File.Text = "VHD File: ";
             // 
             // m_btnAttachVHD
             // 
-            this.m_btnAttachVHD.Location = new System.Drawing.Point(169, 53);
+            this.m_btnAttachVHD.Location = new System.Drawing.Point(225, 65);
+            this.m_btnAttachVHD.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_btnAttachVHD.Name = "m_btnAttachVHD";
-            this.m_btnAttachVHD.Size = new System.Drawing.Size(123, 23);
+            this.m_btnAttachVHD.Size = new System.Drawing.Size(164, 28);
             this.m_btnAttachVHD.TabIndex = 4;
             this.m_btnAttachVHD.Text = "Attach && Mount";
             this.toolTip1.SetToolTip(this.m_btnAttachVHD, "Attach VHD & Mount DiskCryptor Drive");
@@ -94,17 +99,19 @@
             // 
             this.m_cmbVHD_FileName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_cmbVHD_FileName.Location = new System.Drawing.Point(85, 26);
+            this.m_cmbVHD_FileName.Location = new System.Drawing.Point(113, 32);
+            this.m_cmbVHD_FileName.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_cmbVHD_FileName.Name = "m_cmbVHD_FileName";
-            this.m_cmbVHD_FileName.Size = new System.Drawing.Size(391, 21);
+            this.m_cmbVHD_FileName.Size = new System.Drawing.Size(520, 24);
             this.m_cmbVHD_FileName.TabIndex = 1;
             // 
             // m_btnOpenVHD
             // 
             this.m_btnOpenVHD.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnOpenVHD.Location = new System.Drawing.Point(494, 25);
+            this.m_btnOpenVHD.Location = new System.Drawing.Point(659, 31);
+            this.m_btnOpenVHD.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_btnOpenVHD.Name = "m_btnOpenVHD";
-            this.m_btnOpenVHD.Size = new System.Drawing.Size(28, 23);
+            this.m_btnOpenVHD.Size = new System.Drawing.Size(37, 28);
             this.m_btnOpenVHD.TabIndex = 2;
             this.m_btnOpenVHD.Text = "...";
             this.m_btnOpenVHD.UseVisualStyleBackColor = true;
@@ -114,9 +121,10 @@
             // 
             this.m_chkPermanent.Checked = true;
             this.m_chkPermanent.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.m_chkPermanent.Location = new System.Drawing.Point(85, 54);
+            this.m_chkPermanent.Location = new System.Drawing.Point(113, 66);
+            this.m_chkPermanent.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_chkPermanent.Name = "m_chkPermanent";
-            this.m_chkPermanent.Size = new System.Drawing.Size(93, 23);
+            this.m_chkPermanent.Size = new System.Drawing.Size(124, 28);
             this.m_chkPermanent.TabIndex = 3;
             this.m_chkPermanent.Text = "Permanent";
             this.toolTip1.SetToolTip(this.m_chkPermanent, "Do not detach VHD on exit");
@@ -125,9 +133,10 @@
             // m_btnDetach
             // 
             this.m_btnDetach.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnDetach.Location = new System.Drawing.Point(357, 53);
+            this.m_btnDetach.Location = new System.Drawing.Point(476, 65);
+            this.m_btnDetach.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_btnDetach.Name = "m_btnDetach";
-            this.m_btnDetach.Size = new System.Drawing.Size(119, 23);
+            this.m_btnDetach.Size = new System.Drawing.Size(159, 28);
             this.m_btnDetach.TabIndex = 5;
             this.m_btnDetach.Text = "UnMount && Detach";
             this.m_btnDetach.UseVisualStyleBackColor = true;
@@ -135,13 +144,13 @@
             // 
             // VHD_MountUnMountUserControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.Controls.Add(this.m_grpVHD);
-            this.MinimumSize = new System.Drawing.Size(550, 100);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.MinimumSize = new System.Drawing.Size(732, 122);
             this.Name = "VHD_MountUnMountUserControl";
-            this.Size = new System.Drawing.Size(554, 106);
+            this.Size = new System.Drawing.Size(739, 130);
             this.Load += new System.EventHandler(this.VHD_MountUnMountUserControl_Load);
             this.m_grpVHD.ResumeLayout(false);
             this.m_grpVHD.PerformLayout();

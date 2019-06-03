@@ -535,7 +535,6 @@ namespace MeditationStopWatch
         {
             FormFullScreenImage frm = new FormFullScreenImage(this);
             frm.Picture = m_pictureBox1.PictureBox.Image;
-            frm.Location = this.Location;
             frm.ShowDialog(this);
         }
 

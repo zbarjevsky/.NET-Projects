@@ -41,8 +41,9 @@
             this.pictureBox1.BackColor = System.Drawing.Color.Black;
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(800, 600);
+            this.pictureBox1.Size = new System.Drawing.Size(1067, 738);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
@@ -56,9 +57,10 @@
             this.m_btnCancel.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Red;
             this.m_btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.m_btnCancel.Image = ((System.Drawing.Image)(resources.GetObject("m_btnCancel.Image")));
-            this.m_btnCancel.Location = new System.Drawing.Point(763, 12);
+            this.m_btnCancel.Location = new System.Drawing.Point(1017, 15);
+            this.m_btnCancel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_btnCancel.Name = "m_btnCancel";
-            this.m_btnCancel.Size = new System.Drawing.Size(25, 26);
+            this.m_btnCancel.Size = new System.Drawing.Size(33, 32);
             this.m_btnCancel.TabIndex = 2;
             this.m_btnCancel.UseVisualStyleBackColor = false;
             // 
@@ -69,10 +71,10 @@
             this.m_lblVolume.BackColor = System.Drawing.Color.Transparent;
             this.m_lblVolume.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.m_lblVolume.ForeColor = System.Drawing.Color.Lime;
-            this.m_lblVolume.Location = new System.Drawing.Point(452, 494);
-            this.m_lblVolume.Margin = new System.Windows.Forms.Padding(12);
+            this.m_lblVolume.Location = new System.Drawing.Point(603, 608);
+            this.m_lblVolume.Margin = new System.Windows.Forms.Padding(16, 15, 16, 15);
             this.m_lblVolume.Name = "m_lblVolume";
-            this.m_lblVolume.Size = new System.Drawing.Size(305, 42);
+            this.m_lblVolume.Size = new System.Drawing.Size(378, 54);
             this.m_lblVolume.TabIndex = 4;
             this.m_lblVolume.Text = "Volume 100.0 %";
             // 
@@ -80,26 +82,28 @@
             // 
             this.m_analogClock.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_analogClock.BackColor = System.Drawing.Color.Black;
-            this.m_analogClock.Location = new System.Drawing.Point(367, 33);
-            this.m_analogClock.MinimumSize = new System.Drawing.Size(20, 20);
+            this.m_analogClock.Location = new System.Drawing.Point(489, 41);
+            this.m_analogClock.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.m_analogClock.MinimumSize = new System.Drawing.Size(27, 25);
             this.m_analogClock.Name = "m_analogClock";
-            this.m_analogClock.Size = new System.Drawing.Size(390, 377);
+            this.m_analogClock.Size = new System.Drawing.Size(520, 464);
             this.m_analogClock.TabIndex = 3;
             this.m_analogClock.TabStop = false;
             // 
             // FormFullScreenImage
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.CancelButton = this.m_btnCancel;
-            this.ClientSize = new System.Drawing.Size(800, 600);
+            this.ClientSize = new System.Drawing.Size(1067, 738);
             this.Controls.Add(this.m_btnCancel);
             this.Controls.Add(this.m_lblVolume);
             this.Controls.Add(this.m_analogClock);
             this.Controls.Add(this.pictureBox1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "FormFullScreenImage";
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "FullScreenImage";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormFullScreenImage_FormClosed);

@@ -112,9 +112,10 @@
             // 
             this.m_pnlMain.Controls.Add(this.m_splitContainerMain);
             this.m_pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_pnlMain.Location = new System.Drawing.Point(0, 53);
+            this.m_pnlMain.Location = new System.Drawing.Point(0, 57);
+            this.m_pnlMain.Margin = new System.Windows.Forms.Padding(4);
             this.m_pnlMain.Name = "m_pnlMain";
-            this.m_pnlMain.Size = new System.Drawing.Size(792, 498);
+            this.m_pnlMain.Size = new System.Drawing.Size(1182, 670);
             this.m_pnlMain.TabIndex = 1;
             // 
             // m_splitContainerMain
@@ -122,6 +123,7 @@
             this.m_splitContainerMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_splitContainerMain.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
             this.m_splitContainerMain.Location = new System.Drawing.Point(0, 0);
+            this.m_splitContainerMain.Margin = new System.Windows.Forms.Padding(4);
             this.m_splitContainerMain.Name = "m_splitContainerMain";
             // 
             // m_splitContainerMain.Panel1
@@ -132,8 +134,9 @@
             // m_splitContainerMain.Panel2
             // 
             this.m_splitContainerMain.Panel2.Controls.Add(this.m_splitContainerTools);
-            this.m_splitContainerMain.Size = new System.Drawing.Size(792, 498);
-            this.m_splitContainerMain.SplitterDistance = 442;
+            this.m_splitContainerMain.Size = new System.Drawing.Size(1182, 670);
+            this.m_splitContainerMain.SplitterDistance = 830;
+            this.m_splitContainerMain.SplitterWidth = 5;
             this.m_splitContainerMain.TabIndex = 2;
             // 
             // m_splitContainerImage
@@ -142,6 +145,7 @@
             this.m_splitContainerImage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_splitContainerImage.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
             this.m_splitContainerImage.Location = new System.Drawing.Point(0, 0);
+            this.m_splitContainerImage.Margin = new System.Windows.Forms.Padding(4);
             this.m_splitContainerImage.Name = "m_splitContainerImage";
             this.m_splitContainerImage.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -154,8 +158,9 @@
             // 
             this.m_splitContainerImage.Panel2.Controls.Add(this.m_listThumbnails);
             this.m_splitContainerImage.Panel2MinSize = 0;
-            this.m_splitContainerImage.Size = new System.Drawing.Size(442, 498);
-            this.m_splitContainerImage.SplitterDistance = 338;
+            this.m_splitContainerImage.Size = new System.Drawing.Size(830, 670);
+            this.m_splitContainerImage.SplitterDistance = 508;
+            this.m_splitContainerImage.SplitterWidth = 5;
             this.m_splitContainerImage.TabIndex = 1;
             // 
             // m_toolStripContainerPictureInfo
@@ -170,7 +175,8 @@
             this.m_toolStripContainerPictureInfo.ContentPanel.Controls.Add(this.m_lblVolume);
             this.m_toolStripContainerPictureInfo.ContentPanel.Controls.Add(this.m_btnHideSumbnails);
             this.m_toolStripContainerPictureInfo.ContentPanel.Controls.Add(this.m_pictureBox1);
-            this.m_toolStripContainerPictureInfo.ContentPanel.Size = new System.Drawing.Size(438, 284);
+            this.m_toolStripContainerPictureInfo.ContentPanel.Margin = new System.Windows.Forms.Padding(4);
+            this.m_toolStripContainerPictureInfo.ContentPanel.Size = new System.Drawing.Size(826, 450);
             this.m_toolStripContainerPictureInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             // 
             // m_toolStripContainerPictureInfo.LeftToolStripPanel
@@ -178,25 +184,27 @@
             this.m_toolStripContainerPictureInfo.LeftToolStripPanel.Enabled = false;
             this.m_toolStripContainerPictureInfo.LeftToolStripPanelVisible = false;
             this.m_toolStripContainerPictureInfo.Location = new System.Drawing.Point(0, 0);
+            this.m_toolStripContainerPictureInfo.Margin = new System.Windows.Forms.Padding(4);
             this.m_toolStripContainerPictureInfo.Name = "m_toolStripContainerPictureInfo";
             // 
             // m_toolStripContainerPictureInfo.RightToolStripPanel
             // 
             this.m_toolStripContainerPictureInfo.RightToolStripPanel.Enabled = false;
             this.m_toolStripContainerPictureInfo.RightToolStripPanelVisible = false;
-            this.m_toolStripContainerPictureInfo.Size = new System.Drawing.Size(438, 334);
+            this.m_toolStripContainerPictureInfo.Size = new System.Drawing.Size(826, 504);
             this.m_toolStripContainerPictureInfo.TabIndex = 2;
             this.m_toolStripContainerPictureInfo.Text = "toolStripContainer1";
             // 
             // m_toolStrip_Picture
             // 
             this.m_toolStrip_Picture.Dock = System.Windows.Forms.DockStyle.None;
+            this.m_toolStrip_Picture.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.m_toolStrip_Picture.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_tsTxt_FileName});
             this.m_toolStrip_Picture.Location = new System.Drawing.Point(0, 0);
             this.m_toolStrip_Picture.Name = "m_toolStrip_Picture";
             this.m_toolStrip_Picture.Padding = new System.Windows.Forms.Padding(0, 2, 1, 0);
-            this.m_toolStrip_Picture.Size = new System.Drawing.Size(438, 25);
+            this.m_toolStrip_Picture.Size = new System.Drawing.Size(826, 29);
             this.m_toolStrip_Picture.Stretch = true;
             this.m_toolStrip_Picture.TabIndex = 0;
             // 
@@ -208,7 +216,7 @@
             this.m_tsTxt_FileName.Name = "m_tsTxt_FileName";
             this.m_tsTxt_FileName.Overflow = System.Windows.Forms.ToolStripItemOverflow.Never;
             this.m_tsTxt_FileName.ReadOnly = true;
-            this.m_tsTxt_FileName.Size = new System.Drawing.Size(395, 23);
+            this.m_tsTxt_FileName.Size = new System.Drawing.Size(775, 27);
             this.m_tsTxt_FileName.Text = "Hello I am here";
             // 
             // m_lblVolume
@@ -218,10 +226,10 @@
             this.m_lblVolume.BackColor = System.Drawing.Color.Transparent;
             this.m_lblVolume.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.m_lblVolume.ForeColor = System.Drawing.Color.Lime;
-            this.m_lblVolume.Location = new System.Drawing.Point(116, 26);
-            this.m_lblVolume.Margin = new System.Windows.Forms.Padding(12);
+            this.m_lblVolume.Location = new System.Drawing.Point(276, 32);
+            this.m_lblVolume.Margin = new System.Windows.Forms.Padding(16, 15, 16, 15);
             this.m_lblVolume.Name = "m_lblVolume";
-            this.m_lblVolume.Size = new System.Drawing.Size(208, 42);
+            this.m_lblVolume.Size = new System.Drawing.Size(261, 54);
             this.m_lblVolume.TabIndex = 2;
             this.m_lblVolume.Text = "Volume 3%";
             // 
@@ -231,9 +239,10 @@
             this.m_btnHideSumbnails.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.m_btnHideSumbnails.ImageIndex = 0;
             this.m_btnHideSumbnails.ImageList = this.m_imageListBtnHide;
-            this.m_btnHideSumbnails.Location = new System.Drawing.Point(3, 258);
+            this.m_btnHideSumbnails.Location = new System.Drawing.Point(4, 418);
+            this.m_btnHideSumbnails.Margin = new System.Windows.Forms.Padding(4);
             this.m_btnHideSumbnails.Name = "m_btnHideSumbnails";
-            this.m_btnHideSumbnails.Size = new System.Drawing.Size(111, 23);
+            this.m_btnHideSumbnails.Size = new System.Drawing.Size(148, 28);
             this.m_btnHideSumbnails.TabIndex = 1;
             this.m_btnHideSumbnails.Text = "Hide Thumbnails";
             this.m_btnHideSumbnails.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -252,8 +261,9 @@
             this.m_pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.m_pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.m_pictureBox1.Margin = new System.Windows.Forms.Padding(4);
             this.m_pictureBox1.Name = "m_pictureBox1";
-            this.m_pictureBox1.Size = new System.Drawing.Size(438, 284);
+            this.m_pictureBox1.Size = new System.Drawing.Size(826, 450);
             this.m_pictureBox1.TabIndex = 0;
             this.m_pictureBox1.TabStop = false;
             // 
@@ -267,9 +277,10 @@
             this.m_listThumbnails.HideSelection = false;
             this.m_listThumbnails.LargeImageList = this.m_imageListThumbnails;
             this.m_listThumbnails.Location = new System.Drawing.Point(0, 0);
+            this.m_listThumbnails.Margin = new System.Windows.Forms.Padding(4);
             this.m_listThumbnails.MultiSelect = false;
             this.m_listThumbnails.Name = "m_listThumbnails";
-            this.m_listThumbnails.Size = new System.Drawing.Size(438, 152);
+            this.m_listThumbnails.Size = new System.Drawing.Size(826, 153);
             this.m_listThumbnails.SmallImageList = this.m_imageListThumbnails;
             this.m_listThumbnails.TabIndex = 0;
             this.m_listThumbnails.UseCompatibleStateImageBehavior = false;
@@ -289,6 +300,7 @@
             this.m_splitContainerTools.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_splitContainerTools.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.m_splitContainerTools.Location = new System.Drawing.Point(0, 0);
+            this.m_splitContainerTools.Margin = new System.Windows.Forms.Padding(4);
             this.m_splitContainerTools.Name = "m_splitContainerTools";
             this.m_splitContainerTools.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -300,8 +312,9 @@
             // m_splitContainerTools.Panel2
             // 
             this.m_splitContainerTools.Panel2.Controls.Add(this.m_audioPlayerControl);
-            this.m_splitContainerTools.Size = new System.Drawing.Size(346, 498);
+            this.m_splitContainerTools.Size = new System.Drawing.Size(347, 670);
             this.m_splitContainerTools.SplitterDistance = 283;
+            this.m_splitContainerTools.SplitterWidth = 5;
             this.m_splitContainerTools.TabIndex = 1;
             // 
             // m_splitClocks
@@ -310,6 +323,7 @@
             this.m_splitClocks.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_splitClocks.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
             this.m_splitClocks.Location = new System.Drawing.Point(0, 0);
+            this.m_splitClocks.Margin = new System.Windows.Forms.Padding(4);
             this.m_splitClocks.Name = "m_splitClocks";
             this.m_splitClocks.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -320,8 +334,9 @@
             // m_splitClocks.Panel2
             // 
             this.m_splitClocks.Panel2.Controls.Add(this.digitalClockCtrl1);
-            this.m_splitClocks.Size = new System.Drawing.Size(346, 283);
-            this.m_splitClocks.SplitterDistance = 219;
+            this.m_splitClocks.Size = new System.Drawing.Size(347, 283);
+            this.m_splitClocks.SplitterDistance = 217;
+            this.m_splitClocks.SplitterWidth = 5;
             this.m_splitClocks.TabIndex = 1;
             // 
             // m_analogClock
@@ -329,9 +344,9 @@
             this.m_analogClock.BackColor = System.Drawing.Color.Black;
             this.m_analogClock.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_analogClock.Location = new System.Drawing.Point(0, 0);
-            this.m_analogClock.Margin = new System.Windows.Forms.Padding(30);
+            this.m_analogClock.Margin = new System.Windows.Forms.Padding(40, 37, 40, 37);
             this.m_analogClock.Name = "m_analogClock";
-            this.m_analogClock.Size = new System.Drawing.Size(342, 215);
+            this.m_analogClock.Size = new System.Drawing.Size(343, 213);
             this.m_analogClock.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.m_analogClock.TabIndex = 0;
             this.m_analogClock.TabStop = false;
@@ -342,8 +357,9 @@
             this.digitalClockCtrl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.digitalClockCtrl1.ForeColor = System.Drawing.Color.LimeGreen;
             this.digitalClockCtrl1.Location = new System.Drawing.Point(0, 0);
+            this.digitalClockCtrl1.Margin = new System.Windows.Forms.Padding(4);
             this.digitalClockCtrl1.Name = "digitalClockCtrl1";
-            this.digitalClockCtrl1.Size = new System.Drawing.Size(342, 56);
+            this.digitalClockCtrl1.Size = new System.Drawing.Size(343, 57);
             this.digitalClockCtrl1.TabIndex = 1;
             this.digitalClockCtrl1.TabStop = false;
             // 
@@ -354,13 +370,15 @@
             this.m_audioPlayerControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_audioPlayerControl.Location = new System.Drawing.Point(0, 0);
             this.m_audioPlayerControl.Loop = true;
+            this.m_audioPlayerControl.Margin = new System.Windows.Forms.Padding(5);
             this.m_audioPlayerControl.Name = "m_audioPlayerControl";
-            this.m_audioPlayerControl.Size = new System.Drawing.Size(342, 207);
+            this.m_audioPlayerControl.Size = new System.Drawing.Size(343, 378);
             this.m_audioPlayerControl.TabIndex = 0;
             this.m_audioPlayerControl.Volume = 300;
             // 
             // m_menuMain
             // 
+            this.m_menuMain.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.m_menuMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_mnuFile,
             this.m_mnuEdit,
@@ -370,7 +388,8 @@
             this.m_mnuHelp});
             this.m_menuMain.Location = new System.Drawing.Point(0, 0);
             this.m_menuMain.Name = "m_menuMain";
-            this.m_menuMain.Size = new System.Drawing.Size(792, 24);
+            this.m_menuMain.Padding = new System.Windows.Forms.Padding(8, 2, 0, 2);
+            this.m_menuMain.Size = new System.Drawing.Size(1182, 28);
             this.m_menuMain.TabIndex = 2;
             this.m_menuMain.Text = "menuStrip1";
             // 
@@ -380,28 +399,28 @@
             this.m_mnuFile_Open,
             this.m_mnuFile_Exit});
             this.m_mnuFile.Name = "m_mnuFile";
-            this.m_mnuFile.Size = new System.Drawing.Size(37, 20);
+            this.m_mnuFile.Size = new System.Drawing.Size(44, 24);
             this.m_mnuFile.Text = "&File";
             // 
             // m_mnuFile_Open
             // 
             this.m_mnuFile_Open.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuFile_Open.Image")));
             this.m_mnuFile_Open.Name = "m_mnuFile_Open";
-            this.m_mnuFile_Open.Size = new System.Drawing.Size(139, 22);
+            this.m_mnuFile_Open.Size = new System.Drawing.Size(166, 26);
             this.m_mnuFile_Open.Text = "&Open Image";
             this.m_mnuFile_Open.Click += new System.EventHandler(this.m_mnuFile_Open_Click);
             // 
             // m_mnuFile_Exit
             // 
             this.m_mnuFile_Exit.Name = "m_mnuFile_Exit";
-            this.m_mnuFile_Exit.Size = new System.Drawing.Size(139, 22);
+            this.m_mnuFile_Exit.Size = new System.Drawing.Size(166, 26);
             this.m_mnuFile_Exit.Text = "E&xit";
             this.m_mnuFile_Exit.Click += new System.EventHandler(this.m_mnuFile_Exit_Click);
             // 
             // m_mnuEdit
             // 
             this.m_mnuEdit.Name = "m_mnuEdit";
-            this.m_mnuEdit.Size = new System.Drawing.Size(39, 20);
+            this.m_mnuEdit.Size = new System.Drawing.Size(47, 24);
             this.m_mnuEdit.Text = "&Edit";
             // 
             // m_mnuView
@@ -409,14 +428,14 @@
             this.m_mnuView.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_mnuViewFullScreen});
             this.m_mnuView.Name = "m_mnuView";
-            this.m_mnuView.Size = new System.Drawing.Size(44, 20);
+            this.m_mnuView.Size = new System.Drawing.Size(53, 24);
             this.m_mnuView.Text = "&View";
             // 
             // m_mnuViewFullScreen
             // 
             this.m_mnuViewFullScreen.Name = "m_mnuViewFullScreen";
             this.m_mnuViewFullScreen.ShortcutKeys = System.Windows.Forms.Keys.F11;
-            this.m_mnuViewFullScreen.Size = new System.Drawing.Size(192, 22);
+            this.m_mnuViewFullScreen.Size = new System.Drawing.Size(233, 26);
             this.m_mnuViewFullScreen.Text = "&Full Screen Image";
             this.m_mnuViewFullScreen.Click += new System.EventHandler(this.m_mnuViewFullScreen_Click);
             // 
@@ -428,41 +447,41 @@
             this.m_mnuFavorites_Sep1});
             this.m_mnuFavorites.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuFavorites.Image")));
             this.m_mnuFavorites.Name = "m_mnuFavorites";
-            this.m_mnuFavorites.Size = new System.Drawing.Size(82, 20);
+            this.m_mnuFavorites.Size = new System.Drawing.Size(99, 24);
             this.m_mnuFavorites.Text = "F&avorites";
             // 
             // m_mnuFavorites_Add
             // 
             this.m_mnuFavorites_Add.Name = "m_mnuFavorites_Add";
-            this.m_mnuFavorites_Add.Size = new System.Drawing.Size(171, 22);
+            this.m_mnuFavorites_Add.Size = new System.Drawing.Size(206, 26);
             this.m_mnuFavorites_Add.Text = "&Add to Favorites";
             this.m_mnuFavorites_Add.Click += new System.EventHandler(this.m_mnuFavorites_Add_Click);
             // 
             // m_mnuFavorites_Organize
             // 
             this.m_mnuFavorites_Organize.Name = "m_mnuFavorites_Organize";
-            this.m_mnuFavorites_Organize.Size = new System.Drawing.Size(171, 22);
+            this.m_mnuFavorites_Organize.Size = new System.Drawing.Size(206, 26);
             this.m_mnuFavorites_Organize.Text = "&Organize Favorites";
             this.m_mnuFavorites_Organize.Click += new System.EventHandler(this.m_mnuFavorites_Organize_Click);
             // 
             // m_mnuFavorites_Sep1
             // 
             this.m_mnuFavorites_Sep1.Name = "m_mnuFavorites_Sep1";
-            this.m_mnuFavorites_Sep1.Size = new System.Drawing.Size(168, 6);
+            this.m_mnuFavorites_Sep1.Size = new System.Drawing.Size(203, 6);
             // 
             // m_mnuTools
             // 
             this.m_mnuTools.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_mnuTools_Options});
             this.m_mnuTools.Name = "m_mnuTools";
-            this.m_mnuTools.Size = new System.Drawing.Size(48, 20);
+            this.m_mnuTools.Size = new System.Drawing.Size(56, 24);
             this.m_mnuTools.Text = "&Tools";
             // 
             // m_mnuTools_Options
             // 
             this.m_mnuTools_Options.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuTools_Options.Image")));
             this.m_mnuTools_Options.Name = "m_mnuTools_Options";
-            this.m_mnuTools_Options.Size = new System.Drawing.Size(116, 22);
+            this.m_mnuTools_Options.Size = new System.Drawing.Size(136, 26);
             this.m_mnuTools_Options.Text = "&Options";
             this.m_mnuTools_Options.Click += new System.EventHandler(this.m_mnuTools_Options_Click);
             // 
@@ -471,43 +490,45 @@
             this.m_mnuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_mnuHelp_About});
             this.m_mnuHelp.Name = "m_mnuHelp";
-            this.m_mnuHelp.Size = new System.Drawing.Size(44, 20);
+            this.m_mnuHelp.Size = new System.Drawing.Size(53, 24);
             this.m_mnuHelp.Text = "&Help";
             // 
             // m_mnuHelp_About
             // 
             this.m_mnuHelp_About.Name = "m_mnuHelp_About";
-            this.m_mnuHelp_About.Size = new System.Drawing.Size(107, 22);
+            this.m_mnuHelp_About.Size = new System.Drawing.Size(125, 26);
             this.m_mnuHelp_About.Text = "&About";
             this.m_mnuHelp_About.Click += new System.EventHandler(this.m_mnuHelp_About_Click);
             // 
             // m_statusBar
             // 
+            this.m_statusBar.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.m_statusBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_toolStripStatusLabel1,
             this.m_toolStripStatusLabel2,
             this.m_toolStripProgressBar1});
-            this.m_statusBar.Location = new System.Drawing.Point(0, 551);
+            this.m_statusBar.Location = new System.Drawing.Point(0, 727);
             this.m_statusBar.Name = "m_statusBar";
-            this.m_statusBar.Size = new System.Drawing.Size(792, 22);
+            this.m_statusBar.Padding = new System.Windows.Forms.Padding(1, 0, 19, 0);
+            this.m_statusBar.Size = new System.Drawing.Size(1182, 26);
             this.m_statusBar.TabIndex = 4;
             this.m_statusBar.Text = "statusStrip1";
             // 
             // m_toolStripStatusLabel1
             // 
             this.m_toolStripStatusLabel1.Name = "m_toolStripStatusLabel1";
-            this.m_toolStripStatusLabel1.Size = new System.Drawing.Size(39, 17);
+            this.m_toolStripStatusLabel1.Size = new System.Drawing.Size(50, 21);
             this.m_toolStripStatusLabel1.Text = "Ready";
             // 
             // m_toolStripStatusLabel2
             // 
             this.m_toolStripStatusLabel2.Name = "m_toolStripStatusLabel2";
-            this.m_toolStripStatusLabel2.Size = new System.Drawing.Size(0, 17);
+            this.m_toolStripStatusLabel2.Size = new System.Drawing.Size(0, 21);
             // 
             // m_toolStripProgressBar1
             // 
             this.m_toolStripProgressBar1.Name = "m_toolStripProgressBar1";
-            this.m_toolStripProgressBar1.Size = new System.Drawing.Size(100, 16);
+            this.m_toolStripProgressBar1.Size = new System.Drawing.Size(133, 20);
             // 
             // m_openFileDialog
             // 
@@ -531,9 +552,9 @@
             this.m_lblImageDesc,
             this.toolStripSeparator3,
             this.m_btnSlideShow});
-            this.m_toolStripMain.Location = new System.Drawing.Point(0, 24);
+            this.m_toolStripMain.Location = new System.Drawing.Point(0, 28);
             this.m_toolStripMain.Name = "m_toolStripMain";
-            this.m_toolStripMain.Size = new System.Drawing.Size(792, 29);
+            this.m_toolStripMain.Size = new System.Drawing.Size(1182, 29);
             this.m_toolStripMain.TabIndex = 5;
             this.m_toolStripMain.Text = "Picture Tools";
             // 
@@ -542,7 +563,7 @@
             this.m_btnOpenImage.Image = ((System.Drawing.Image)(resources.GetObject("m_btnOpenImage.Image")));
             this.m_btnOpenImage.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.m_btnOpenImage.Name = "m_btnOpenImage";
-            this.m_btnOpenImage.Size = new System.Drawing.Size(98, 26);
+            this.m_btnOpenImage.Size = new System.Drawing.Size(117, 26);
             this.m_btnOpenImage.Text = "Open Image";
             this.m_btnOpenImage.Click += new System.EventHandler(this.m_btnOpenImage_Click);
             // 
@@ -591,14 +612,14 @@
             this.m_txtImageIndex.AcceptsReturn = true;
             this.m_txtImageIndex.MaxLength = 30;
             this.m_txtImageIndex.Name = "m_txtImageIndex";
-            this.m_txtImageIndex.Size = new System.Drawing.Size(40, 29);
+            this.m_txtImageIndex.Size = new System.Drawing.Size(52, 29);
             this.m_txtImageIndex.TextBoxTextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.m_txtImageIndex.TextChanged += new System.EventHandler(this.m_txtImageIndex_TextChanged);
             // 
             // m_lblImageDesc
             // 
             this.m_lblImageDesc.Name = "m_lblImageDesc";
-            this.m_lblImageDesc.Size = new System.Drawing.Size(24, 26);
+            this.m_lblImageDesc.Size = new System.Drawing.Size(31, 26);
             this.m_lblImageDesc.Text = "1/1";
             // 
             // toolStripSeparator3
@@ -611,7 +632,7 @@
             this.m_btnSlideShow.Image = ((System.Drawing.Image)(resources.GetObject("m_btnSlideShow.Image")));
             this.m_btnSlideShow.ImageTransparentColor = System.Drawing.Color.White;
             this.m_btnSlideShow.Name = "m_btnSlideShow";
-            this.m_btnSlideShow.Size = new System.Drawing.Size(90, 26);
+            this.m_btnSlideShow.Size = new System.Drawing.Size(108, 26);
             this.m_btnSlideShow.Text = "Slide Show";
             this.m_btnSlideShow.Click += new System.EventHandler(this.m_btnSlideShow_Click);
             // 
@@ -634,9 +655,9 @@
             // FormStopWatch
             // 
             this.AllowDrop = true;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(792, 573);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(120F, 120F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
+            this.ClientSize = new System.Drawing.Size(1182, 753);
             this.Controls.Add(this.m_pnlMain);
             this.Controls.Add(this.m_toolStripMain);
             this.Controls.Add(this.m_statusBar);
@@ -644,7 +665,8 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MainMenuStrip = this.m_menuMain;
-            this.MinimumSize = new System.Drawing.Size(500, 300);
+            this.Margin = new System.Windows.Forms.Padding(4);
+            this.MinimumSize = new System.Drawing.Size(661, 358);
             this.Name = "FormStopWatch";
             this.Text = "Meditation";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormStopWatch_FormClosing);

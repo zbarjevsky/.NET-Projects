@@ -46,9 +46,10 @@
             // 
             this.m_btnEditTab.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnEditTab.Image = ((System.Drawing.Image)(resources.GetObject("m_btnEditTab.Image")));
-            this.m_btnEditTab.Location = new System.Drawing.Point(300, 0);
+            this.m_btnEditTab.Location = new System.Drawing.Point(400, 0);
+            this.m_btnEditTab.Margin = new System.Windows.Forms.Padding(4);
             this.m_btnEditTab.Name = "m_btnEditTab";
-            this.m_btnEditTab.Size = new System.Drawing.Size(28, 23);
+            this.m_btnEditTab.Size = new System.Drawing.Size(37, 28);
             this.m_btnEditTab.TabIndex = 12;
             this.toolTip1.SetToolTip(this.m_btnEditTab, "Rename Selected");
             this.m_btnEditTab.UseVisualStyleBackColor = true;
@@ -58,9 +59,10 @@
             // 
             this.m_btnDelTab.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnDelTab.Image = ((System.Drawing.Image)(resources.GetObject("m_btnDelTab.Image")));
-            this.m_btnDelTab.Location = new System.Drawing.Point(368, 0);
+            this.m_btnDelTab.Location = new System.Drawing.Point(491, 0);
+            this.m_btnDelTab.Margin = new System.Windows.Forms.Padding(4);
             this.m_btnDelTab.Name = "m_btnDelTab";
-            this.m_btnDelTab.Size = new System.Drawing.Size(28, 23);
+            this.m_btnDelTab.Size = new System.Drawing.Size(37, 28);
             this.m_btnDelTab.TabIndex = 11;
             this.toolTip1.SetToolTip(this.m_btnDelTab, "Delete Selected");
             this.m_btnDelTab.UseVisualStyleBackColor = true;
@@ -70,9 +72,10 @@
             // 
             this.m_btnAddTab.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnAddTab.Image = ((System.Drawing.Image)(resources.GetObject("m_btnAddTab.Image")));
-            this.m_btnAddTab.Location = new System.Drawing.Point(334, 0);
+            this.m_btnAddTab.Location = new System.Drawing.Point(445, 0);
+            this.m_btnAddTab.Margin = new System.Windows.Forms.Padding(4);
             this.m_btnAddTab.Name = "m_btnAddTab";
-            this.m_btnAddTab.Size = new System.Drawing.Size(28, 23);
+            this.m_btnAddTab.Size = new System.Drawing.Size(37, 28);
             this.m_btnAddTab.TabIndex = 10;
             this.toolTip1.SetToolTip(this.m_btnAddTab, "Add New List");
             this.m_btnAddTab.UseVisualStyleBackColor = true;
@@ -83,20 +86,22 @@
             this.m_tabPlayLists.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_tabPlayLists.Controls.Add(this.tabPage1);
-            this.m_tabPlayLists.Location = new System.Drawing.Point(0, 8);
+            this.m_tabPlayLists.Location = new System.Drawing.Point(0, 10);
+            this.m_tabPlayLists.Margin = new System.Windows.Forms.Padding(4);
             this.m_tabPlayLists.Name = "m_tabPlayLists";
             this.m_tabPlayLists.SelectedIndex = 0;
-            this.m_tabPlayLists.Size = new System.Drawing.Size(294, 37);
+            this.m_tabPlayLists.Size = new System.Drawing.Size(392, 46);
             this.m_tabPlayLists.TabIndex = 9;
             this.m_tabPlayLists.SelectedIndexChanged += new System.EventHandler(this.m_tabPlayLists_SelectedIndexChanged);
             // 
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Location = new System.Drawing.Point(4, 29);
+            this.tabPage1.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(286, 11);
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(4);
+            this.tabPage1.Size = new System.Drawing.Size(384, 13);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Music";
             // 
@@ -108,26 +113,29 @@
             this.m_pnlTabs.Controls.Add(this.m_btnDelTab);
             this.m_pnlTabs.Dock = System.Windows.Forms.DockStyle.Top;
             this.m_pnlTabs.Location = new System.Drawing.Point(0, 0);
+            this.m_pnlTabs.Margin = new System.Windows.Forms.Padding(4);
             this.m_pnlTabs.Name = "m_pnlTabs";
-            this.m_pnlTabs.Size = new System.Drawing.Size(399, 29);
+            this.m_pnlTabs.Size = new System.Drawing.Size(532, 36);
             this.m_pnlTabs.TabIndex = 13;
             // 
             // m_mp3List
             // 
             this.m_mp3List.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_mp3List.Location = new System.Drawing.Point(0, 29);
+            this.m_mp3List.Location = new System.Drawing.Point(0, 36);
+            this.m_mp3List.Margin = new System.Windows.Forms.Padding(5);
             this.m_mp3List.Name = "m_mp3List";
-            this.m_mp3List.Size = new System.Drawing.Size(399, 159);
+            this.m_mp3List.Size = new System.Drawing.Size(532, 195);
             this.m_mp3List.TabIndex = 14;
             // 
             // PlayListTabControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.Controls.Add(this.m_mp3List);
             this.Controls.Add(this.m_pnlTabs);
+            this.Font = new System.Drawing.Font("Microsoft Sans Serif", 10.2F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "PlayListTabControl";
-            this.Size = new System.Drawing.Size(399, 188);
+            this.Size = new System.Drawing.Size(532, 231);
             this.Load += new System.EventHandler(this.PlayListTabControl_Load);
             this.m_tabPlayLists.ResumeLayout(false);
             this.m_pnlTabs.ResumeLayout(false);
