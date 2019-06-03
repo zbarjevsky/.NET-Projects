@@ -65,11 +65,9 @@
             this.m_pnlSeparate1 = new System.Windows.Forms.Panel();
             this.m_splitOperations = new System.Windows.Forms.SplitContainer();
             this.m_pnlVHD = new System.Windows.Forms.Panel();
-            this.m_VHD_MountUnMountUserControl = new DiskCryptorHelper.VHD.VHD_MountUnMountUserControl();
             this.m_pnlPassword = new System.Windows.Forms.Panel();
             this.m_grpPwd = new System.Windows.Forms.GroupBox();
             this.m_grpBSOD = new System.Windows.Forms.GroupBox();
-            this.hideDriveLetterControl1 = new DiskCryptorHelper.HideDriveLetterControl();
             this.panel2 = new System.Windows.Forms.Panel();
             this.m_splitDisks = new System.Windows.Forms.SplitContainer();
             this.panel1 = new System.Windows.Forms.Panel();
@@ -91,6 +89,8 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.m_VHD_MountUnMountUserControl = new DiskCryptorHelper.VHD.VHD_MountUnMountUserControl();
+            this.hideDriveLetterControl1 = new DiskCryptorHelper.HideDriveLetterControl();
             this.m_sysIconMenu.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitMain)).BeginInit();
             this.m_splitMain.Panel1.SuspendLayout();
@@ -290,7 +290,7 @@
             this.toolStripMenuItem3,
             this.m_mnuExit});
             this.m_sysIconMenu.Name = "m_sysIconMenu";
-            this.m_sysIconMenu.Size = new System.Drawing.Size(177, 176);
+            this.m_sysIconMenu.Size = new System.Drawing.Size(177, 154);
             // 
             // m_mnuShow
             // 
@@ -475,7 +475,7 @@
             // 
             // m_splitOperations.Panel2
             // 
-            this.m_splitOperations.Panel2.BackColor = System.Drawing.Color.AliceBlue;
+            this.m_splitOperations.Panel2.BackColor = System.Drawing.Color.Ivory;
             this.m_splitOperations.Panel2.Controls.Add(this.m_grpBSOD);
             this.m_splitOperations.Size = new System.Drawing.Size(887, 174);
             this.m_splitOperations.SplitterDistance = 650;
@@ -490,16 +490,6 @@
             this.m_pnlVHD.Name = "m_pnlVHD";
             this.m_pnlVHD.Size = new System.Drawing.Size(646, 100);
             this.m_pnlVHD.TabIndex = 5;
-            // 
-            // m_VHD_MountUnMountUserControl
-            // 
-            this.m_VHD_MountUnMountUserControl.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.m_VHD_MountUnMountUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_VHD_MountUnMountUserControl.Location = new System.Drawing.Point(0, 0);
-            this.m_VHD_MountUnMountUserControl.MinimumSize = new System.Drawing.Size(550, 100);
-            this.m_VHD_MountUnMountUserControl.Name = "m_VHD_MountUnMountUserControl";
-            this.m_VHD_MountUnMountUserControl.Size = new System.Drawing.Size(646, 100);
-            this.m_VHD_MountUnMountUserControl.TabIndex = 0;
             // 
             // m_pnlPassword
             // 
@@ -527,20 +517,14 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_grpBSOD.Controls.Add(this.m_btnUnmountAllandBSOD);
+            this.m_grpBSOD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.m_grpBSOD.ForeColor = System.Drawing.Color.SaddleBrown;
             this.m_grpBSOD.Location = new System.Drawing.Point(15, 7);
             this.m_grpBSOD.Name = "m_grpBSOD";
             this.m_grpBSOD.Size = new System.Drawing.Size(200, 148);
             this.m_grpBSOD.TabIndex = 6;
             this.m_grpBSOD.TabStop = false;
             this.m_grpBSOD.Text = "BSOD";
-            // 
-            // hideDriveLetterControl1
-            // 
-            this.hideDriveLetterControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hideDriveLetterControl1.Location = new System.Drawing.Point(0, 40);
-            this.hideDriveLetterControl1.Name = "hideDriveLetterControl1";
-            this.hideDriveLetterControl1.Size = new System.Drawing.Size(263, 492);
-            this.hideDriveLetterControl1.TabIndex = 0;
             // 
             // panel2
             // 
@@ -648,6 +632,7 @@
             // 
             // m_mnuOpenDiskCryptor
             // 
+            this.m_mnuOpenDiskCryptor.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuOpenDiskCryptor.Image")));
             this.m_mnuOpenDiskCryptor.Name = "m_mnuOpenDiskCryptor";
             this.m_mnuOpenDiskCryptor.Size = new System.Drawing.Size(202, 22);
             this.m_mnuOpenDiskCryptor.Text = "Open DiskCryptor...";
@@ -734,10 +719,27 @@
             // 
             this.errorProvider1.ContainerControl = this;
             // 
+            // m_VHD_MountUnMountUserControl
+            // 
+            this.m_VHD_MountUnMountUserControl.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.m_VHD_MountUnMountUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_VHD_MountUnMountUserControl.Location = new System.Drawing.Point(0, 0);
+            this.m_VHD_MountUnMountUserControl.MinimumSize = new System.Drawing.Size(550, 100);
+            this.m_VHD_MountUnMountUserControl.Name = "m_VHD_MountUnMountUserControl";
+            this.m_VHD_MountUnMountUserControl.Size = new System.Drawing.Size(646, 100);
+            this.m_VHD_MountUnMountUserControl.TabIndex = 0;
+            // 
+            // hideDriveLetterControl1
+            // 
+            this.hideDriveLetterControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.hideDriveLetterControl1.Location = new System.Drawing.Point(0, 40);
+            this.hideDriveLetterControl1.Name = "hideDriveLetterControl1";
+            this.hideDriveLetterControl1.Size = new System.Drawing.Size(263, 492);
+            this.hideDriveLetterControl1.TabIndex = 0;
+            // 
             // FormMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.ClientSize = new System.Drawing.Size(1172, 612);
             this.Controls.Add(this.m_tabMain);
             this.Controls.Add(this.m_menuStripMain);

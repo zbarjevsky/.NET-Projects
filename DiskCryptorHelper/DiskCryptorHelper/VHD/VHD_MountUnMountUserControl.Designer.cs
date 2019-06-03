@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.m_grpVHD = new System.Windows.Forms.GroupBox();
             this.m_cmbAvailableDriveLetters = new System.Windows.Forms.ComboBox();
             this.m_lblVHD_File = new System.Windows.Forms.Label();
@@ -36,6 +37,7 @@
             this.m_btnOpenVHD = new System.Windows.Forms.Button();
             this.m_chkPermanent = new System.Windows.Forms.CheckBox();
             this.m_btnDetach = new System.Windows.Forms.Button();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.m_grpVHD.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -84,6 +86,7 @@
             this.m_btnAttachVHD.Size = new System.Drawing.Size(123, 23);
             this.m_btnAttachVHD.TabIndex = 4;
             this.m_btnAttachVHD.Text = "Attach && Mount";
+            this.toolTip1.SetToolTip(this.m_btnAttachVHD, "Attach VHD & Mount DiskCryptor Drive");
             this.m_btnAttachVHD.UseVisualStyleBackColor = true;
             this.m_btnAttachVHD.Click += new System.EventHandler(this.m_btnAttachVHDandMount_Click);
             // 
@@ -116,6 +119,7 @@
             this.m_chkPermanent.Size = new System.Drawing.Size(93, 23);
             this.m_chkPermanent.TabIndex = 3;
             this.m_chkPermanent.Text = "Permanent";
+            this.toolTip1.SetToolTip(this.m_chkPermanent, "Do not detach VHD on exit");
             this.m_chkPermanent.UseVisualStyleBackColor = true;
             // 
             // m_btnDetach
@@ -155,5 +159,6 @@
         private System.Windows.Forms.CheckBox m_chkPermanent;
         private System.Windows.Forms.Button m_btnDetach;
         private System.Windows.Forms.ComboBox m_cmbAvailableDriveLetters;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
