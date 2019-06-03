@@ -89,7 +89,7 @@ namespace DiskCryptorHelper.VHD
             if (!fi.Exists)
             {
                 if (PopUp.Question("File not found: " + fi.FullName + "\nRemove from Recent Files List?", "Mount VHD - ERROR",
-                    MessageBoxImage.Asterisk, TextAlignment.Center, MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+                    MessageBoxImage.Asterisk, TextAlignment.Center, PopUp.PopUpButtonsType.NoYes) == PopUp.PopUpResult.Yes)
                 {
                     _recentFiles.RemoveFromList(m_cmbVHD_FileName.Text, m_mnuFileAttachVHD.DropDown, m_cmbVHD_FileName);
                 }

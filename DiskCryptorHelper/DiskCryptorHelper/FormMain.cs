@@ -129,17 +129,16 @@ namespace DiskCryptorHelper
             }
             else if(e.CloseReason == CloseReason.UserClosing) //user clicked close button
             {
-                System.Windows.MessageBoxResult res = PopUp.MessageBox(
+                PopUp.PopUpResult res = PopUp.MessageBox(
                     "Cancel(C), Exit(X) or Hide(H)?", "Exit Application",
                     System.Windows.MessageBoxImage.Question,
                     System.Windows.TextAlignment.Center,
-                    System.Windows.MessageBoxButton.YesNoCancel,
-                    "_Hide", "E_xit");
+                    new PopUp.PopUpButtons("_Cancel", "E_xit", "_Hide"));
 
-                if (res != System.Windows.MessageBoxResult.No)
+                if (res != PopUp.PopUpResult.Btn2)
                 {
                     e.Cancel = true;
-                    if (res == System.Windows.MessageBoxResult.Yes)
+                    if (res == PopUp.PopUpResult.Btn3)
                         this.Visible = false; //hide
                 }
             }
@@ -420,7 +419,7 @@ namespace DiskCryptorHelper
 
         private void m_btnUnmountAllandBSOD_Click(object sender, EventArgs e)
         {
-            if (PopUp.Question("Are you sure?", "BSOD") != MessageBoxResult.OK)
+            if (PopUp.Question("Are you sure?", "BSOD") != PopUp.PopUpResult.OK)
                 return;
 
             m_btnUnmoutAll_Click(sender, e);
