@@ -68,6 +68,12 @@ namespace RulerWPF
         }
 
         //dot per mm
+        public static Point DPPX(Visual visual)
+        {
+            return ScaleFromVisual(visual);
+        }
+
+        //dot per mm
         public static Point DPCM(Visual visual)
         {
             const double inch2cm = 2.54;

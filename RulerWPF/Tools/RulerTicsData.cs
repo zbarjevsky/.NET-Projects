@@ -39,9 +39,9 @@ namespace RulerWPF
             switch (units)
             {
                 case MeasurementUnits.Pixels:
-                    dotsPerUnit = 1; //per pixel
-                    tickTextCount = 10;
-                    tick_width = 10;
+                    dotsPerUnit = 1/Utils.DPPX(canvas).X; //per pixel
+                    tickTextCount = 10.0;
+                    tick_width = 10.0 * Utils.DPPX(canvas).X; //per pixel
                     tick_text_scale = 0.1;
                     break;
                 case MeasurementUnits.Inches:
