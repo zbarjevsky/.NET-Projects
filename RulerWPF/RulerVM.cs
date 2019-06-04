@@ -89,7 +89,18 @@ namespace RulerWPF
 
         public Point Origin(UIElement element)
         {
-            return element.PointToScreen(Origin(_origin));
+            return element.PointToScreen(OriginToRealLocation(_origin));
+        }
+
+        //if origin < 1 - it's relative - expand to real location
+        private Point OriginToRealLocation(Point origin)
+        {
+            if (origin.X <= 1 && origin.Y <= 1)
+            {
+                origin.X *= oWidth;
+                origin.Y *= oHeight;
+            }
+            return origin;
         }
 
         public void UpdateRenderTransformOrigin(Point newOrigin, UIElement element)
@@ -97,11 +108,12 @@ namespace RulerWPF
             if(newOrigin == _origin)
                 return;
 
-            Point oldOrigin = Origin(element);
+            Point oldOrigin = Utils.ScaleLocationDown(Origin(element), element);
             oRenderTransformOrigin = newOrigin;
-            newOrigin = Origin(element);
+            newOrigin = Utils.ScaleLocationDown(Origin(element), element);
 
-            CompensateTranslateTransform(oldOrigin, newOrigin);
+            Point scale = Utils.ScaleFromVisual(element);
+            CompensateTranslateTransform(oldOrigin, newOrigin, scale);
         }
 
         public void SetAngle(double angle)
@@ -152,18 +164,9 @@ namespace RulerWPF
             return angle;
         }
 
-        private Point Origin(Point origin)
-        {
-            if (origin.X <= 1 && origin.Y <= 1)
-            {
-                origin.X *= oWidth;
-                origin.Y *= oHeight;
-            }
-            return origin;
-        }
-
         public double Distance(Point pt, FrameworkElement currentElement)
         {
+            Point ptOnScreen = currentElement.PointToScreen(new Point());
             Point ptRelative = currentElement.PointFromScreen(pt);
             Rect bounds = new Rect(new Point(), new Point(currentElement.ActualWidth, currentElement.ActualHeight));
             if( bounds.IntersectsWith(new Rect(ptRelative, new Size(1, 1))))
@@ -172,12 +175,13 @@ namespace RulerWPF
             return Utils.MinimumDistance(bounds, ptRelative);
         }
 
-        private void CompensateTranslateTransform(Point originOld, Point originNew)
+        private void CompensateTranslateTransform(Point originOld, Point originNew, Point scale)
         {
             if (originOld == originNew)
                 return;
 
             Vector deltaOrigin = originNew - originOld;
+            deltaOrigin = new Vector(deltaOrigin.X, deltaOrigin.Y);
 
             double signX = deltaOrigin.X < 0 ? -1 : 1;
             double signY = deltaOrigin.Y < 0 ? -1 : 1;
@@ -193,7 +197,7 @@ namespace RulerWPF
 
             if (oAngle > 90 && oAngle <= 270) 
             {
-                oTranslateTransformX += deltaX + 2 * deltaOrigin.X; 
+                oTranslateTransformX += (deltaX + 2 * deltaOrigin.X); 
             }
 
             oTranslateTransformY += deltaOrigin.Y;

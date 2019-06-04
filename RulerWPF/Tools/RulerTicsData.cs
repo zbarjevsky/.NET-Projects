@@ -45,7 +45,7 @@ namespace RulerWPF
                     tick_text_scale = 0.1;
                     break;
                 case MeasurementUnits.Inches:
-                    dotsPerUnit = DPI(canvas).X;
+                    dotsPerUnit = Utils.DPI(canvas).X;
                     tickTextCount = 16;
                     tick_width = dotsPerUnit / 16;
                     tick_text_scale = 16;
@@ -53,7 +53,7 @@ namespace RulerWPF
                     tickHalfHeight = canvas.ActualHeight / 3;
                     break;
                 case MeasurementUnits.Centimeters:
-                    dotsPerUnit = DPCM(canvas).X;
+                    dotsPerUnit = Utils.DPCM(canvas).X;
                     tickTextCount = 10;
                     tick_width = dotsPerUnit / 10;
                     tick_text_scale = 10;
@@ -69,39 +69,6 @@ namespace RulerWPF
         public double WidthInSelectedUnits(double widthInPixels)
         {
             return widthInPixels / dotsPerUnit;
-        }
-
-        //dot per mm
-        private Point DPCM(Visual visual)
-        {
-            const double inch2cm = 2.54;
-
-            Point dpi = DPI(visual);
-            Point dpcm = new Point(dpi.X / inch2cm, dpi.Y / inch2cm);
-            return dpcm;
-        }
-
-        private Point DPI(Visual visual)
-        {
-            PresentationSource source = PresentationSource.FromVisual(visual);
-            Point dpi = new Point(96, 96);
-            if (source != null)
-            {
-                dpi.X = 96.0 * source.CompositionTarget.TransformToDevice.M11;
-                dpi.Y = 96.0 * source.CompositionTarget.TransformToDevice.M22;
-            }
-
-            //https://docs.microsoft.com/en-us/dotnet/api/system.windows.frameworkelement.height?redirectedfrom=MSDN&view=netframework-4.8#System_Windows_FrameworkElement_Height
-            //px(default) is device-independent units(1/96th inch per unit)
-            //in is inches; 1in==96px
-            //cm is centimeters; 1cm==(96/2.54) px
-            //pt is points; 1pt==(96/72) px
-            const double scale = (96.0 / 72.0);
-
-            dpi.X *= scale;
-            dpi.Y *= scale;
-
-            return dpi;
         }
     }
 }
