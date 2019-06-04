@@ -26,6 +26,7 @@
     <Window.Resources>
         <local:ValueWithParameterToCheckedConverter x:Key="ValueWithParameterToCheckedConverter" />
     </Window.Resources>
+    <Border BorderThickness="4" BorderBrush="LawnGreen">
     <Canvas>
         <Canvas x:Name="_canvasRuler" Opacity="1.0" Background="Orange" Cursor="SizeAll" 
                 RenderTransformOrigin="{Binding oRenderTransformOrigin}"
@@ -126,4 +127,5 @@
             </Line>
         </Canvas>
     </Canvas>
+    </Border>
 </Window>

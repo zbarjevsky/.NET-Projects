@@ -29,6 +29,8 @@ namespace RulerWPF
 
         public double tick_text_scale { get; private set; }
 
+        //use DPI aware calculations
+        //https://stackoverflow.com/questions/3286175/how-do-i-convert-a-wpf-size-to-physical-pixels
         public RulerTicsData(MeasurementUnits units, FrameworkElement canvas)
         {
             tick0Height = canvas.ActualHeight / 8; //every tick
@@ -39,14 +41,14 @@ namespace RulerWPF
             switch (units)
             {
                 case MeasurementUnits.Pixels:
-                    dotsPerUnit = 1/Utils.DPPX(canvas).X; //per pixel
-                    tickTextCount = 10.0;
-                    tick_width = 10.0 * Utils.DPPX(canvas).X; //per pixel
+                    dotsPerUnit = 1; //per pixel
+                    tickTextCount = 10.0; //10 ticks per 100 pixel
+                    tick_width = 10.0;
                     tick_text_scale = 0.1;
                     break;
                 case MeasurementUnits.Inches:
                     dotsPerUnit = Utils.DPI(canvas).X;
-                    tickTextCount = 16;
+                    tickTextCount = 16; //16 ticks per INCH
                     tick_width = dotsPerUnit / 16;
                     tick_text_scale = 16;
                     tick1Height = canvas.ActualHeight / 4;
@@ -54,7 +56,7 @@ namespace RulerWPF
                     break;
                 case MeasurementUnits.Centimeters:
                     dotsPerUnit = Utils.DPCM(canvas).X;
-                    tickTextCount = 10;
+                    tickTextCount = 10; //10 ticks per CM
                     tick_width = dotsPerUnit / 10;
                     tick_text_scale = 10;
                     break;
@@ -63,7 +65,7 @@ namespace RulerWPF
             }
 
             tickHalfCount = tickTextCount / 2;
-            tick_count = canvas.ActualWidth / tick_width;
+            tick_count = canvas.ActualWidth / (tick_width * Utils.DPPX(canvas).X);
         }
 
         public double WidthInSelectedUnits(double widthInPixels)
