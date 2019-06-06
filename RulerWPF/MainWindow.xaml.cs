@@ -25,10 +25,6 @@ namespace RulerWPF
 
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
-            Tools.GraphicsHelper.UpdateSystemDpi();
-
-            DrawTicks();
-
             Rect bounds = ChangeWindowSize();
 
             System.Drawing.Point location = Properties.Settings.Default.Location;
@@ -75,6 +71,9 @@ namespace RulerWPF
                 this.Width = bounds.Width;
             if (this.Height != bounds.Height)
                 this.Height = bounds.Height;
+
+            DrawInfo();
+            DrawTicks();
 
             return bounds;
         }
@@ -147,6 +146,8 @@ namespace RulerWPF
             if (src == null)
                 return;
 
+            Utils.UpdateScaleWPF(src);
+
             string units = _vm.MeasurementUnits.GetDescription();
             RulerTicsData r = new RulerTicsData(_vm.MeasurementUnits, _canvasRuler);
 
@@ -154,7 +155,7 @@ namespace RulerWPF
             double scale = Utils.ScaleFromGraphics();
             double width = _vm.oWidth * scale;
 
-            double wpfScale = src.CompositionTarget.TransformToDevice.M11;
+            double wpfScale = Utils.ScaleWPF;
 
             _txtBounds.Text = string.Format("X: {0:0}, Y: {1:0}, Length: {2:0.0} {3}, Angle: {4:0.0}°, Scale: {5:0.00}, WPF Scale: {6:0.00}",
                 loc.X, loc.Y, r.WidthInSelectedUnits(width),  units, _vm.oAngle, scale, wpfScale);
@@ -164,7 +165,6 @@ namespace RulerWPF
 
         private void Window_LocationChanged(object sender, EventArgs e)
         {
-            DrawInfo();
             Dispatcher.BeginInvoke((Action)(() => ChangeWindowSize()));
         }
 
@@ -295,8 +295,7 @@ namespace RulerWPF
                 _vm.UpdateCurrentOperation(MouseMoveOp.LeftSize, leftGrip);
                 _mouseDownPosition = Utils.GetMousePosition();
                 _vm.UpdateRenderTransformOrigin(new Point(1,0), _canvasRuler);
-                //Point origin = new Point(_vm.oRenderTransformOrigin.X * _vm.oWidth, _vm.oRenderTransformOrigin.Y * _canvasRuler.ActualHeight);
-                //_origin = _canvasRuler.PointToScreen(origin);
+
                 e.Handled = true;
             }
         }
@@ -308,8 +307,7 @@ namespace RulerWPF
                 _vm.UpdateCurrentOperation(MouseMoveOp.RightSize, rightGrip);
                 _mouseDownPosition = Utils.GetMousePosition();
                 _vm.UpdateRenderTransformOrigin(new Point(0,0), _canvasRuler);
-                //Point origin = new Point(_vm.oRenderTransformOrigin.X * _vm.oWidth, _vm.oRenderTransformOrigin.Y * _canvasRuler.ActualHeight);
-                //_origin = _canvasRuler.PointToScreen(origin);
+
                 e.Handled = true;
             }
         }
@@ -357,7 +355,7 @@ namespace RulerWPF
                 {
                     _vm.UpdateCurrentOperation(MouseMoveOp.Move, _canvasRuler);
                     _mouseDownPosition = Utils.GetMousePosition();
-                    //_vm.UpdateRenderTransformOrigin(new Point(0, 0), _canvasRuler);
+
                     e.Handled = true;
                 }
             }

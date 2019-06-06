@@ -271,6 +271,12 @@ namespace MeditationStopWatch
         [TypeConverter(typeof(PlayListsTypeConverter))]
         public PlayLists PlayListCollection { get; set; } = new PlayLists();
 
+        [Category("1. Play List")]
+        [DisplayName("Play List Font")]
+        [Description("Play List Font")]
+        [DefaultValue(typeof(Font), "Microsoft Sans Serif, 12pt")]
+        public Font PlayListFont { get; set; }
+
         [Category("2. Misc")]
 		[DisplayName("Last Image")]
 		[Description("Image")]

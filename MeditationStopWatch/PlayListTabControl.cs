@@ -36,6 +36,9 @@ namespace MeditationStopWatch
         {
             m_Options = opt;
 
+            m_tabPlayLists.Font = m_Options.PlayListFont;
+            m_mp3List.Font = m_Options.PlayListFont;
+
             m_tabPlayLists.TabPages.Clear();
             m_tabPlayLists.SelectedIndex = -1;
 
