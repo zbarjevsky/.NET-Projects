@@ -12,6 +12,10 @@ namespace RulerWPF
 {
     public class Utils
     {
+        private static CompositionTarget _CompositionTarget;
+
+        public static double ScaleWPF { get { return _CompositionTarget.TransformToDevice.M11; } }
+
         // Return minimum distance between line segment vw and point p
         public static double MinimumDistance(Point v, Point w, Point p)
         {
@@ -120,35 +124,40 @@ namespace RulerWPF
 
         public static Point ScaleToWPF_DPI(Point pt)
         {
-            double scale = 1.25;
-            Point ptScaled = new Point(pt.X / scale, pt.Y / scale);
-            return ptScaled;
+            return _CompositionTarget.TransformFromDevice.Transform(pt);
+            //double scale = 1.0;
+            //Point ptScaled = new Point(pt.X / scale, pt.Y / scale);
+            //return ptScaled;
         }
 
         public static Point ScaleFromWPF_DPI(Point pt)
         {
-            double scale = 1.25;
-            Point ptScaled = new Point(pt.X * scale, pt.Y * scale);
-            return ptScaled;
+            return _CompositionTarget.TransformToDevice.Transform(pt);
+            //double scale = 1.0;
+            //Point ptScaled = new Point(pt.X * scale, pt.Y * scale);
+            //return ptScaled;
         }
 
+        public static Size GetElementPixelSize(UIElement element)
+        {
+            Matrix transformToDevice;
+            var source = PresentationSource.FromVisual(element);
+            if (source != null)
+                transformToDevice = source.CompositionTarget.TransformToDevice;
+            else
+                using (var source1 = new HwndSource(new HwndSourceParameters()))
+                    transformToDevice = source1.CompositionTarget.TransformToDevice;
 
+            if (element.DesiredSize == new Size()) //not measured yet
+                element.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 
-        //public static Size GetElementPixelSize(UIElement element)
-        //{
-        //    Matrix transformToDevice;
-        //    var source = PresentationSource.FromVisual(element);
-        //    if (source != null)
-        //        transformToDevice = source.CompositionTarget.TransformToDevice;
-        //    else
-        //        using (var source1 = new HwndSource(new HwndSourceParameters()))
-        //            transformToDevice = source1.CompositionTarget.TransformToDevice;
+            return (Size)transformToDevice.Transform((Vector)element.DesiredSize);
+        }
 
-        //    if (element.DesiredSize == new Size()) //not measured yet
-        //        element.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
-
-        //    return (Size)transformToDevice.Transform((Vector)element.DesiredSize);
-        //}
+        public static void UpdateScaleWPF(PresentationSource source)
+        {
+            _CompositionTarget = source.CompositionTarget;
+        }
 
         public static double ScaleFromGraphics()
         {
