@@ -71,7 +71,6 @@
     <Compile Include="Tools\DraggableExtension.cs" />
     <Compile Include="Tools\Converters.cs" />
     <Compile Include="Tools\ExtensionMethods.cs" />
-    <Compile Include="Tools\GraphicsHelper.cs" />
     <Compile Include="Tools\RulerTicsData.cs" />
     <Compile Include="Tools\UpdateAssemblyVersion.cs" />
     <Compile Include="Tools\Utils.cs" />
