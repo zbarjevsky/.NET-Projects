@@ -14,9 +14,9 @@ namespace RulerWPF
     public class RulerTicsData
     {
         //interval in pixels
-        public double dotsPerUnit { get; private set; }
+        private double dotsPerTextLabel { get; set; }
         public double tickHalfCount { get; private set; }
-        public double tickTextCount { get; private set; }
+        public double ticksPerTextLabelCount { get; private set; }
 
         public double tick_count { get; private set; }
 
@@ -29,48 +29,51 @@ namespace RulerWPF
 
         public double tick_text_scale { get; private set; }
 
+        public double tick_to_device_scale { get; private set; }
+
         //use DPI aware calculations
         //https://stackoverflow.com/questions/3286175/how-do-i-convert-a-wpf-size-to-physical-pixels
         public RulerTicsData(MeasurementUnits units, FrameworkElement canvas)
         {
-            tick0Height = canvas.ActualHeight / 8; //every tick
-            tick1Height = canvas.ActualHeight / 8; //eveery second tick
-            tickHalfHeight = canvas.ActualHeight / 4; //half
             tickTextHeight = canvas.ActualHeight / 3; //every tick with number
+            tick0Height = 0.4 * tickTextHeight; //every tick
+            tick1Height = 0.4 * tickTextHeight; //eveery second tick
+            tickHalfHeight = 0.75 * tickTextHeight; //half
 
             switch (units)
             {
                 case MeasurementUnits.Pixels:
-                    dotsPerUnit = 1; //per pixel
-                    tickTextCount = 10.0; //10 ticks per 100 pixel
-                    tick_width = 10.0;
+                    dotsPerTextLabel = 100.0; //per 100 pixel
+                    ticksPerTextLabelCount = 10.0; //10 ticks per 100 pixel
                     tick_text_scale = 0.1;
                     break;
                 case MeasurementUnits.Inches:
-                    dotsPerUnit = Utils.DPI(canvas).X;
-                    tickTextCount = 16; //16 ticks per INCH
-                    tick_width = dotsPerUnit / 16;
+                    dotsPerTextLabel = Utils.DPI.X;
+                    ticksPerTextLabelCount = 16; //16 ticks per INCH
                     tick_text_scale = 16;
-                    tick1Height = canvas.ActualHeight / 4;
-                    tickHalfHeight = canvas.ActualHeight / 3;
+                    tick1Height = 0.75 * tickTextHeight; //eveery second tick
+                    tickHalfHeight = tickTextHeight; //half
                     break;
                 case MeasurementUnits.Centimeters:
-                    dotsPerUnit = Utils.DPCM(canvas).X;
-                    tickTextCount = 10; //10 ticks per CM
-                    tick_width = dotsPerUnit / 10;
+                    dotsPerTextLabel = Utils.DPCM.X;
+                    ticksPerTextLabelCount = 10; //10 ticks per CM
                     tick_text_scale = 10;
                     break;
                 default:
                     throw new ArgumentOutOfRangeException("MeasurementUnits", "Unknown unit");
             }
 
-            tickHalfCount = tickTextCount / 2;
-            tick_count = canvas.ActualWidth / (tick_width * Utils.DPPX(canvas).X);
+            tick_width = dotsPerTextLabel / ticksPerTextLabelCount;
+            tickHalfCount = ticksPerTextLabelCount / 2;
+
+            tick_to_device_scale = Utils.ScaleFromGraphics();
+            double width_in_pixels = canvas.ActualWidth * tick_to_device_scale;
+            tick_count = width_in_pixels / tick_width;
         }
 
         public double WidthInSelectedUnits(double widthInPixels)
         {
-            return widthInPixels / dotsPerUnit;
+            return widthInPixels / (tick_width * tick_text_scale);
         }
     }
 }

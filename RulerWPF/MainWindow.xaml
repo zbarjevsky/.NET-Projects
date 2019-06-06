@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:RulerWPF"
         mc:Ignorable="d"
         WindowStyle="None"
-        ResizeMode="NoResize"
+        ResizeMode="CanResize"
         WindowState="Normal"
         AllowsTransparency="True"
         Topmost="True"

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 
 namespace RulerWPF
@@ -32,7 +33,6 @@ namespace RulerWPF
 
         public static double Distance(double x, double y, double x1, double y1, double x2, double y2)
         {
-
             double A = x - x1;
             double B = y - y1;
             double C = x2 - x1;
@@ -68,70 +68,91 @@ namespace RulerWPF
         }
 
         //dot per mm
-        public static Point DPPX(Visual visual)
+        public static Point DPCM
         {
-            return ScaleFromVisual(visual);
-        }
-
-        //dot per mm
-        public static Point DPCM(Visual visual)
-        {
-            const double inch2cm = 2.54;
-
-            Point dpi = DPI(visual);
-            Point dpcm = new Point(dpi.X / inch2cm, dpi.Y / inch2cm);
-            return dpcm;
-        }
-
-        public static Point DPI(Visual visual)
-        {
-            PresentationSource source = PresentationSource.FromVisual(visual);
-            Point dpi = new Point(96, 96);
-            if (source != null)
+            get
             {
-                dpi.X = 96.0 * source.CompositionTarget.TransformToDevice.M11;
-                dpi.Y = 96.0 * source.CompositionTarget.TransformToDevice.M22;
+                const double inch2cm = 2.54;
+
+                Point dpi = DPI;
+                Point dpcm = new Point(dpi.X / inch2cm, dpi.Y / inch2cm);
+                return dpcm;
             }
-
-            //https://docs.microsoft.com/en-us/dotnet/api/system.windows.frameworkelement.height?redirectedfrom=MSDN&view=netframework-4.8#System_Windows_FrameworkElement_Height
-            //px(default) is device-independent units(1/96th inch per unit)
-            //in is inches; 1in==96px
-            //cm is centimeters; 1cm==(96/2.54) px
-            //pt is points; 1pt==(96/72) px
-            const double scale = (96.0 / 72.0);
-
-            dpi.X *= scale;
-            dpi.Y *= scale;
-
-            return dpi;
         }
 
-        public static Point MouseLocationOnScreenScaled(Visual visual)
+        public static Point DPI
         {
-            return ScaleLocationUp(Mouse.GetPosition(null), visual);
+            get
+            {
+                //https://docs.microsoft.com/en-us/dotnet/api/system.windows.frameworkelement.height?redirectedfrom=MSDN&view=netframework-4.8#System_Windows_FrameworkElement_Height
+                //px(default) is device-independent units(1/96th inch per unit)
+                //in is inches; 1in==96px
+                //cm is centimeters; 1cm==(96/2.54) px
+                //pt is points; 1pt==(96/72) px
+                const double scale = (96.0 / 72.0);
+
+                Point dpi = new Point(96, 96);
+                dpi.X *= scale;
+                dpi.Y *= scale;
+
+                return dpi;
+            }
         }
 
-        public static Point ScaleFromVisual(Visual visual)
+        public static Point GetMousePosition()
         {
-            PresentationSource source = PresentationSource.FromVisual(visual);
-            Point scale = new Point(
-                source.CompositionTarget.TransformToDevice.M11,
-                source.CompositionTarget.TransformToDevice.M22);
-            return scale;
+            return Mouse.GetPosition(null);
         }
 
-        public static Point ScaleLocationUp(Point pt, Visual visual)
+        public static Point ScaleLocationUp(Point pt)
         {
-            Point scale = ScaleFromVisual(visual);
-            scale = new Point(pt.X * scale.X, pt.Y * scale.Y);
-            return scale;
+            double scale = ScaleFromGraphics();
+            Point ptScaled = new Point(pt.X * scale, pt.Y * scale);
+            return ptScaled;
         }
 
-        public static Point ScaleLocationDown(Point pt, Visual visual)
+        public static Point ScaleLocationDown(Point pt)
         {
-            Point scale = ScaleFromVisual(visual);
-            scale = new Point(pt.X / scale.X, pt.Y / scale.Y);
-            return scale;
+            double scale = ScaleFromGraphics();
+            Point ptScaled = new Point(pt.X / scale, pt.Y / scale);
+            return ptScaled;
+        }
+
+        public static Point ScaleToWPF_DPI(Point pt)
+        {
+            double scale = 1.25;
+            Point ptScaled = new Point(pt.X / scale, pt.Y / scale);
+            return ptScaled;
+        }
+
+        public static Point ScaleFromWPF_DPI(Point pt)
+        {
+            double scale = 1.25;
+            Point ptScaled = new Point(pt.X * scale, pt.Y * scale);
+            return ptScaled;
+        }
+
+
+
+        //public static Size GetElementPixelSize(UIElement element)
+        //{
+        //    Matrix transformToDevice;
+        //    var source = PresentationSource.FromVisual(element);
+        //    if (source != null)
+        //        transformToDevice = source.CompositionTarget.TransformToDevice;
+        //    else
+        //        using (var source1 = new HwndSource(new HwndSourceParameters()))
+        //            transformToDevice = source1.CompositionTarget.TransformToDevice;
+
+        //    if (element.DesiredSize == new Size()) //not measured yet
+        //        element.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+
+        //    return (Size)transformToDevice.Transform((Vector)element.DesiredSize);
+        //}
+
+        public static double ScaleFromGraphics()
+        {
+            return SystemParameters.VirtualScreenHeight / SystemParameters.PrimaryScreenHeight;
         }
     }
 }

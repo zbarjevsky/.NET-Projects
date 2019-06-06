@@ -26,6 +26,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <UseVSHostingProcess>false</UseVSHostingProcess>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -43,6 +44,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -69,6 +71,7 @@
     <Compile Include="Tools\DraggableExtension.cs" />
     <Compile Include="Tools\Converters.cs" />
     <Compile Include="Tools\ExtensionMethods.cs" />
+    <Compile Include="Tools\GraphicsHelper.cs" />
     <Compile Include="Tools\RulerTicsData.cs" />
     <Compile Include="Tools\UpdateAssemblyVersion.cs" />
     <Compile Include="Tools\Utils.cs" />

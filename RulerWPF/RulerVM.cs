@@ -87,13 +87,13 @@ namespace RulerWPF
             MouseMoveOp = operation;
         }
 
-        public Point Origin(UIElement element)
+        public Point OriginOnScreen(UIElement element)
         {
-            return element.PointToScreen(OriginToRealLocation(_origin));
+            return element.PointToScreen(ExpandOriginToRealLocation(_origin));
         }
 
         //if origin < 1 - it's relative - expand to real location
-        private Point OriginToRealLocation(Point origin)
+        private Point ExpandOriginToRealLocation(Point origin)
         {
             if (origin.X <= 1 && origin.Y <= 1)
             {
@@ -108,12 +108,11 @@ namespace RulerWPF
             if(newOrigin == _origin)
                 return;
 
-            Point oldOrigin = Utils.ScaleLocationDown(Origin(element), element);
+            Point oldOrigin = Utils.ScaleToWPF_DPI(OriginOnScreen(element));
             oRenderTransformOrigin = newOrigin;
-            newOrigin = Utils.ScaleLocationDown(Origin(element), element);
+            newOrigin = Utils.ScaleToWPF_DPI(OriginOnScreen(element));
 
-            Point scale = Utils.ScaleFromVisual(element);
-            CompensateTranslateTransform(oldOrigin, newOrigin, scale);
+            CompensateTranslateTransform(oldOrigin, newOrigin);
         }
 
         public void SetAngle(double angle)
@@ -164,10 +163,11 @@ namespace RulerWPF
             return angle;
         }
 
-        public double Distance(Point pt, FrameworkElement currentElement)
+        public double Distance(Point ptClick, FrameworkElement currentElement)
         {
-            Point ptOnScreen = currentElement.PointToScreen(new Point());
-            Point ptRelative = currentElement.PointFromScreen(pt);
+            Point elementLocationOnScreen = Utils.ScaleToWPF_DPI(currentElement.PointToScreen(new Point()));
+
+            Point ptRelative = currentElement.PointFromScreen(Utils.ScaleFromWPF_DPI(ptClick));
             Rect bounds = new Rect(new Point(), new Point(currentElement.ActualWidth, currentElement.ActualHeight));
             if( bounds.IntersectsWith(new Rect(ptRelative, new Size(1, 1))))
                 return 0;
@@ -175,7 +175,7 @@ namespace RulerWPF
             return Utils.MinimumDistance(bounds, ptRelative);
         }
 
-        private void CompensateTranslateTransform(Point originOld, Point originNew, Point scale)
+        private void CompensateTranslateTransform(Point originOld, Point originNew)
         {
             if (originOld == originNew)
                 return;

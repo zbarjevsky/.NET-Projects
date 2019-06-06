@@ -1,19 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
 using System.Media;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace RulerWPF
@@ -33,17 +25,11 @@ namespace RulerWPF
 
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
+            Tools.GraphicsHelper.UpdateSystemDpi();
+
             DrawTicks();
 
-            Rect bounds = new Rect(
-                new Point(SystemParameters.VirtualScreenLeft, SystemParameters.VirtualScreenTop),
-                new Size(SystemParameters.VirtualScreenWidth, SystemParameters.VirtualScreenHeight));
-
-            //full virtual screen - 2 displays
-            this.Left = bounds.Left;
-            this.Top = bounds.Top;
-            this.Width = bounds.Width;
-            this.Height = bounds.Height;
+            Rect bounds = ChangeWindowSize();
 
             System.Drawing.Point location = Properties.Settings.Default.Location;
             if (location.X < 0 || location.X > bounds.Right)
@@ -55,11 +41,42 @@ namespace RulerWPF
             Canvas.SetTop(_canvasRuler, location.Y);
 
             _vm.PropertyChanged += (o, propName) => { DrawInfo(); };
+
+            SystemParameters.StaticPropertyChanged += SystemParameters_StaticPropertyChanged;
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
             Properties.Settings.Default.Save();
+        }
+
+        private void SystemParameters_StaticPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            Debug.WriteLine("SystemParameters_StaticPropertyChanged" + e.PropertyName);
+            if(e.PropertyName == "VirtualScreenHeight" || e.PropertyName == "VirtualScreenWidth")
+            {
+                ChangeWindowSize(); 
+            }
+            Tools.GraphicsHelper.UpdateSystemDpi();
+        }
+
+        private Rect ChangeWindowSize()
+        {
+            Rect bounds = new Rect(
+                new Point(SystemParameters.VirtualScreenLeft, SystemParameters.VirtualScreenTop),
+                new Size(SystemParameters.VirtualScreenWidth, SystemParameters.VirtualScreenHeight));
+
+            //full virtual screen - 2 displays
+            if (this.Left != bounds.Left)
+                this.Left = bounds.Left;
+            if (this.Top != bounds.Top)
+                this.Top = bounds.Top;
+            if (this.Width != bounds.Width)
+                this.Width = bounds.Width;
+            if (this.Height != bounds.Height)
+                this.Height = bounds.Height;
+
+            return bounds;
         }
 
         private void UnitsMenuItem_Click(object sender, RoutedEventArgs e)
@@ -86,31 +103,31 @@ namespace RulerWPF
             RulerTicsData r = new RulerTicsData(_vm.MeasurementUnits, _canvasRuler);
             for (int i = 1; i < r.tick_count; i++)
             {
-                double tickSize = r.tick0Height;
+                double tickHeght = r.tick0Height;
                 if (i % 2 == 0)
                 {
-                    tickSize = r.tick1Height;
+                    tickHeght = r.tick1Height;
                 }
                 if (i % (int)r.tickHalfCount == 0)
                 {
-                    tickSize = r.tickHalfHeight;
+                    tickHeght = r.tickHalfHeight;
                 }
-                if (i % (int)r.tickTextCount == 0)
+                if (i % (int)r.ticksPerTextLabelCount == 0)
                 {
-                    tickSize = r.tickTextHeight;
+                    tickHeght = r.tickTextHeight;
                 }
 
                 Line line = new Line();
                 line.Stroke = Brushes.Black;
                 line.StrokeThickness = 0.8;
-                line.X1 = 1 + i * r.tick_width;
+                line.X1 = (1 + i * r.tick_width) / r.tick_to_device_scale;
                 line.X2 = line.X1;
                 line.Y1 = 0;
-                line.Y2 = tickSize;
+                line.Y2 = tickHeght;
 
                 _tics.Children.Add(line);
 
-                if (i % (int)r.tickTextCount == 0) //add text
+                if (i % (int)r.ticksPerTextLabelCount == 0) //add text
                 {
                     TextBlock txt = new TextBlock();
                     txt.FontSize = 16;
@@ -134,14 +151,21 @@ namespace RulerWPF
             RulerTicsData r = new RulerTicsData(_vm.MeasurementUnits, _canvasRuler);
 
             Point loc = _canvasRuler.PointToScreen(new Point());
-            _txtBounds.Text = string.Format("X: {0:0}, Y: {1:0}, Length: {2:0.0} {3}, Angle: {4:0.0}°",
-                loc.X, loc.Y, r.WidthInSelectedUnits(_vm.oWidth),  units, _vm.oAngle);
+            double scale = Utils.ScaleFromGraphics();
+            double width = _vm.oWidth * scale;
+
+            double wpfScale = src.CompositionTarget.TransformToDevice.M11;
+
+            _txtBounds.Text = string.Format("X: {0:0}, Y: {1:0}, Length: {2:0.0} {3}, Angle: {4:0.0}°, Scale: {5:0.00}, WPF Scale: {6:0.00}",
+                loc.X, loc.Y, r.WidthInSelectedUnits(width),  units, _vm.oAngle, scale, wpfScale);
+
             Properties.Settings.Default.Location = new System.Drawing.Point((int)loc.X, (int)loc.Y);
         }
 
         private void Window_LocationChanged(object sender, EventArgs e)
         {
             DrawInfo();
+            Dispatcher.BeginInvoke((Action)(() => ChangeWindowSize()));
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -149,10 +173,12 @@ namespace RulerWPF
             double delta = (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) ? 25 : 1;
             bool changeSize = (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift));
 
-            if(changeSize) // width or angle
+            double scale = Utils.ScaleFromGraphics();
+            delta /= scale;
+
+            if (changeSize) // width or angle
             {
                 _vm.UpdateRenderTransformOrigin(new Point(), _canvasRuler);
-
                 if (e.Key == Key.Right)
                     _vm.oWidth += delta;
                 if (e.Key == Key.Left)
@@ -179,15 +205,15 @@ namespace RulerWPF
             DrawInfo();
         }
 
-        Point _startPosition;
+        Point _mouseDownPosition;
         private void window_PreviewMouseMove(object sender, MouseEventArgs e)
         {
             if(_vm.MouseMoveOp == MouseMoveOp.None)
                 return;
 
-            Point currentPosition = Utils.MouseLocationOnScreenScaled(_canvasRuler);
-            double diff = CalculateDiff(currentPosition);
-            if ((int)diff == 0) //no change
+            Point currentPosition = Utils.GetMousePosition();
+            Vector movedBy = currentPosition - _mouseDownPosition;
+            if ((int)movedBy.Length == 0) //no change
                 return;
 
             double distance = _vm.Distance(currentPosition, _vm.CurrentElement);
@@ -199,16 +225,17 @@ namespace RulerWPF
                 return;
             }
 
+            Vector diff = CalculateDiffByDirection(currentPosition);
+
             const double MIN_WIDTH = 100;
             if (_vm.MouseMoveOp == MouseMoveOp.LeftSize || _vm.MouseMoveOp == MouseMoveOp.RightSize)
             {
-
-                if (_vm.oWidth + diff > MIN_WIDTH) //min size
+                if (_vm.oWidth + diff.X > MIN_WIDTH) //min size
                 {
-                    _vm.oWidth += diff;
+                    _vm.oWidth += diff.X;
                    if (_vm.MouseMoveOp == MouseMoveOp.LeftSize)
                     {
-                        _vm.oTranslateTransformX -= diff;
+                        _vm.oTranslateTransformX -= diff.X;
                     }
                 }
 
@@ -216,33 +243,40 @@ namespace RulerWPF
             }
             else if (_vm.MouseMoveOp == MouseMoveOp.LeftRotate || _vm.MouseMoveOp == MouseMoveOp.RightRotate)
             {
-                Vector startToCenter = (_vm.Origin(_canvasRuler) - _startPosition);
-                Vector currToCenter = (_vm.Origin(_canvasRuler) - currentPosition);
+                Point originOnScreen = Utils.ScaleToWPF_DPI(_vm.OriginOnScreen(_canvasRuler));
+                Vector startToCenter = (originOnScreen -_mouseDownPosition);
+                startToCenter.Normalize();
+                Vector currToCenter = (originOnScreen - currentPosition);
+                currToCenter.Normalize();
                 double deltaAngle = Vector.AngleBetween(startToCenter, currToCenter);
+
+                Debug.WriteLine(string.Format("delta angle: {0:0.00}, moved by: {1:0.00}", deltaAngle, movedBy.Length));
 
                 _vm.oAngle += deltaAngle;
             }
             else if (_vm.MouseMoveOp == MouseMoveOp.Move)
             {
-                Point scale = Utils.ScaleFromVisual(_canvasRuler);
-                Vector diffV = currentPosition - _startPosition;
-                _vm.oTranslateTransformX += diffV.X / scale.X;
-                _vm.oTranslateTransformY += diffV.Y / scale.Y;
+                _vm.oTranslateTransformX += movedBy.X;
+                _vm.oTranslateTransformY += movedBy.Y;
             }
 
-            _startPosition = currentPosition;
+            _mouseDownPosition = currentPosition;
         }
 
-        private double CalculateDiff(Point currentPosition)
+        private Vector CalculateDiffByDirection(Point currentPosition)
         {
-            Vector startToCenter = (_vm.Origin(_canvasRuler) - _startPosition);
-            Vector currToCenter = (_vm.Origin(_canvasRuler) - currentPosition);
+            Point originOnScreen = _vm.OriginOnScreen(_canvasRuler);
+            Vector startToCenter = (originOnScreen - _mouseDownPosition);
+            Vector currToCenter = (originOnScreen - currentPosition);
 
             Vector diffVector = (currToCenter - startToCenter);
             double angle = Vector.AngleBetween(diffVector, currToCenter);
+            //Debug.WriteLine("delta angle1: " + angle);
 
-            double diff = diffVector.Length * Math.Cos(Math.PI * angle / 180.0);
-            return diff;
+            double angleRad = Math.PI * angle / 180.0;
+            double diffX = diffVector.Length * Math.Cos(angleRad);
+            double diffY = diffVector.Length * Math.Sin(angleRad);
+            return new Vector(diffX, diffY);
         }
 
         private void OnPreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -259,7 +293,7 @@ namespace RulerWPF
             if (Mouse.Capture(sender as IInputElement))
             {
                 _vm.UpdateCurrentOperation(MouseMoveOp.LeftSize, leftGrip);
-                _startPosition = Utils.MouseLocationOnScreenScaled(_canvasRuler);
+                _mouseDownPosition = Utils.GetMousePosition();
                 _vm.UpdateRenderTransformOrigin(new Point(1,0), _canvasRuler);
                 //Point origin = new Point(_vm.oRenderTransformOrigin.X * _vm.oWidth, _vm.oRenderTransformOrigin.Y * _canvasRuler.ActualHeight);
                 //_origin = _canvasRuler.PointToScreen(origin);
@@ -272,7 +306,7 @@ namespace RulerWPF
             if (Mouse.Capture(sender as IInputElement))
             {
                 _vm.UpdateCurrentOperation(MouseMoveOp.RightSize, rightGrip);
-                _startPosition = Utils.MouseLocationOnScreenScaled(_canvasRuler);
+                _mouseDownPosition = Utils.GetMousePosition();
                 _vm.UpdateRenderTransformOrigin(new Point(0,0), _canvasRuler);
                 //Point origin = new Point(_vm.oRenderTransformOrigin.X * _vm.oWidth, _vm.oRenderTransformOrigin.Y * _canvasRuler.ActualHeight);
                 //_origin = _canvasRuler.PointToScreen(origin);
@@ -285,7 +319,7 @@ namespace RulerWPF
             if (Mouse.Capture(sender as IInputElement))
             {
                 _vm.UpdateCurrentOperation(MouseMoveOp.LeftRotate, thumbRotateLeft);
-                _startPosition = Utils.MouseLocationOnScreenScaled(_canvasRuler);
+                _mouseDownPosition = Utils.GetMousePosition();
                 _vm.UpdateRenderTransformOrigin(new Point(1, 0), _canvasRuler);
                 e.Handled = true;
             }
@@ -296,7 +330,7 @@ namespace RulerWPF
             if (Mouse.Capture(sender as IInputElement))
             {
                 _vm.UpdateCurrentOperation(MouseMoveOp.RightRotate, thumbRotateRight);
-                _startPosition = Utils.MouseLocationOnScreenScaled(_canvasRuler);
+                _mouseDownPosition = Utils.GetMousePosition();
                 _vm.UpdateRenderTransformOrigin(new Point(0, 0), _canvasRuler);
                 e.Handled = true;
             }
@@ -322,7 +356,7 @@ namespace RulerWPF
                 if (Mouse.Capture(_canvasRuler))
                 {
                     _vm.UpdateCurrentOperation(MouseMoveOp.Move, _canvasRuler);
-                    _startPosition = Utils.MouseLocationOnScreenScaled(_canvasRuler);
+                    _mouseDownPosition = Utils.GetMousePosition();
                     //_vm.UpdateRenderTransformOrigin(new Point(0, 0), _canvasRuler);
                     e.Handled = true;
                 }
