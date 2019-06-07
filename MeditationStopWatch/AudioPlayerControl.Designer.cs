@@ -81,7 +81,7 @@
             this.m_pnlControls.Controls.Add(this.m_pnlButtons);
             this.m_pnlControls.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.m_pnlControls.Location = new System.Drawing.Point(0, 465);
-            this.m_pnlControls.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.m_pnlControls.Margin = new System.Windows.Forms.Padding(4);
             this.m_pnlControls.Name = "m_pnlControls";
             this.m_pnlControls.Size = new System.Drawing.Size(679, 131);
             this.m_pnlControls.TabIndex = 0;
@@ -93,7 +93,7 @@
             this.m_splitInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_splitInfo.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
             this.m_splitInfo.Location = new System.Drawing.Point(0, 89);
-            this.m_splitInfo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.m_splitInfo.Margin = new System.Windows.Forms.Padding(4);
             this.m_splitInfo.Name = "m_splitInfo";
             // 
             // m_splitInfo.Panel1
@@ -104,7 +104,7 @@
             // 
             this.m_splitInfo.Panel2.Controls.Add(this.m_lblTime);
             this.m_splitInfo.Size = new System.Drawing.Size(675, 38);
-            this.m_splitInfo.SplitterDistance = 505;
+            this.m_splitInfo.SplitterDistance = 504;
             this.m_splitInfo.SplitterWidth = 5;
             this.m_splitInfo.TabIndex = 2;
             // 
@@ -117,7 +117,7 @@
             this.m_lblStatus.Location = new System.Drawing.Point(0, 0);
             this.m_lblStatus.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.m_lblStatus.Name = "m_lblStatus";
-            this.m_lblStatus.Size = new System.Drawing.Size(503, 36);
+            this.m_lblStatus.Size = new System.Drawing.Size(502, 36);
             this.m_lblStatus.TabIndex = 0;
             this.m_lblStatus.Text = "Ready";
             this.m_lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -131,7 +131,7 @@
             this.m_lblTime.Location = new System.Drawing.Point(0, 0);
             this.m_lblTime.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.m_lblTime.Name = "m_lblTime";
-            this.m_lblTime.Size = new System.Drawing.Size(163, 36);
+            this.m_lblTime.Size = new System.Drawing.Size(164, 36);
             this.m_lblTime.TabIndex = 1;
             this.m_lblTime.Text = "00:00/00:00";
             this.m_lblTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -142,7 +142,7 @@
             this.m_pnlButtons.Controls.Add(this.m_toolStripPlayer);
             this.m_pnlButtons.Dock = System.Windows.Forms.DockStyle.Top;
             this.m_pnlButtons.Location = new System.Drawing.Point(0, 0);
-            this.m_pnlButtons.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.m_pnlButtons.Margin = new System.Windows.Forms.Padding(4);
             this.m_pnlButtons.Name = "m_pnlButtons";
             this.m_pnlButtons.Size = new System.Drawing.Size(675, 89);
             this.m_pnlButtons.TabIndex = 3;
@@ -153,7 +153,7 @@
             this.m_trackBarPosition.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_trackBarPosition.LargeChange = 50;
             this.m_trackBarPosition.Location = new System.Drawing.Point(0, 0);
-            this.m_trackBarPosition.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.m_trackBarPosition.Margin = new System.Windows.Forms.Padding(4);
             this.m_trackBarPosition.Maximum = 300;
             this.m_trackBarPosition.Name = "m_trackBarPosition";
             this.m_trackBarPosition.Size = new System.Drawing.Size(675, 50);
@@ -314,9 +314,9 @@
             // 
             this.m_reiKi.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_reiKi.Location = new System.Drawing.Point(0, 0);
-            this.m_reiKi.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.m_reiKi.Margin = new System.Windows.Forms.Padding(4);
             this.m_reiKi.Name = "m_reiKi";
-            this.m_reiKi.Size = new System.Drawing.Size(675, 21);
+            this.m_reiKi.Size = new System.Drawing.Size(675, 22);
             this.m_reiKi.TabIndex = 4;
             this.m_reiKi.Text = "elementHost1";
             this.m_reiKi.Child = this.m_progrReiKi;
@@ -334,7 +334,7 @@
             this.m_pnlMain.Controls.Add(this.m_pnlControls);
             this.m_pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_pnlMain.Location = new System.Drawing.Point(0, 0);
-            this.m_pnlMain.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.m_pnlMain.Margin = new System.Windows.Forms.Padding(4);
             this.m_pnlMain.Name = "m_pnlMain";
             this.m_pnlMain.Size = new System.Drawing.Size(679, 596);
             this.m_pnlMain.TabIndex = 6;
@@ -345,7 +345,7 @@
             this.m_splitFiles.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_splitFiles.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
             this.m_splitFiles.Location = new System.Drawing.Point(0, 0);
-            this.m_splitFiles.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.m_splitFiles.Margin = new System.Windows.Forms.Padding(4);
             this.m_splitFiles.Name = "m_splitFiles";
             this.m_splitFiles.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -359,7 +359,7 @@
             this.m_splitFiles.Panel2.Controls.Add(this.m_reiKi);
             this.m_splitFiles.Panel2MinSize = 10;
             this.m_splitFiles.Size = new System.Drawing.Size(679, 465);
-            this.m_splitFiles.SplitterDistance = 435;
+            this.m_splitFiles.SplitterDistance = 434;
             this.m_splitFiles.SplitterWidth = 5;
             this.m_splitFiles.TabIndex = 5;
             // 
@@ -368,19 +368,18 @@
             this.m_playLists.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_playLists.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.m_playLists.Location = new System.Drawing.Point(0, 0);
-            this.m_playLists.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.m_playLists.Margin = new System.Windows.Forms.Padding(5);
             this.m_playLists.Name = "m_playLists";
-            this.m_playLists.Size = new System.Drawing.Size(675, 431);
+            this.m_playLists.Size = new System.Drawing.Size(675, 430);
             this.m_playLists.TabIndex = 0;
             // 
             // AudioPlayerControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.AutoScroll = true;
             this.AutoScrollMinSize = new System.Drawing.Size(310, 0);
             this.Controls.Add(this.m_pnlMain);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "AudioPlayerControl";
             this.Size = new System.Drawing.Size(679, 596);
             this.Load += new System.EventHandler(this.AudioPlayerControl_Load);

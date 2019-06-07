@@ -171,10 +171,20 @@ namespace MeditationStopWatch
 
         private void ShowCursor(bool show)
         {
-            if (!show && ClientRectangle.Contains(PointToClient(Control.MousePosition)))
-                CursorHandler.IsCursorVisible = false;
-            else
+            if(show)
+            {
                 CursorHandler.IsCursorVisible = true;
+            }
+            else
+            {
+                Control parent = Parent;
+                while (parent.Parent != null)
+                    parent = parent.Parent;
+
+                IntPtr hWnd = CursorHandler.WindowFromPoint(Cursor.Position);
+                if (hWnd == pictureBox1.Handle) //mouse over picture box
+                    CursorHandler.IsCursorVisible = false;
+            }
         }
 
         private void pictureBox1_MouseClick(object sender, MouseEventArgs e)
