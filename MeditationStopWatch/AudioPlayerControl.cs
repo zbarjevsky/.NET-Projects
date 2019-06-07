@@ -80,6 +80,7 @@ namespace MeditationStopWatch
             Volume = m_Options.Volume;
             m_progrReiKi.Initialize(m_Options);
             m_playLists.Initialize(m_Options);
+            m_lblStatus.Font = m_Options.PlayListFont;
 		}
 
 		private void AudioPlayerControl_Load(object sender, EventArgs e)

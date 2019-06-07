@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.Media;
@@ -38,22 +39,17 @@ namespace RulerWPF
 
             _vm.PropertyChanged += (o, propName) => { DrawInfo(); };
 
-            SystemParameters.StaticPropertyChanged += SystemParameters_StaticPropertyChanged;
+            SystemEvents.DisplaySettingsChanged += SystemEvents_DisplaySettingsChanged; ;
+        }
+
+        private void SystemEvents_DisplaySettingsChanged(object sender, EventArgs e)
+        {
+            ChangeWindowSize();
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
             Properties.Settings.Default.Save();
-        }
-
-        private void SystemParameters_StaticPropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            Debug.WriteLine("SystemParameters_StaticPropertyChanged" + e.PropertyName);
-            if(e.PropertyName == "VirtualScreenHeight" || e.PropertyName == "VirtualScreenWidth")
-            {
-                ChangeWindowSize(); 
-            }
-            Tools.GraphicsHelper.UpdateSystemDpi();
         }
 
         private Rect ChangeWindowSize()
@@ -152,7 +148,7 @@ namespace RulerWPF
             RulerTicsData r = new RulerTicsData(_vm.MeasurementUnits, _canvasRuler);
 
             Point loc = _canvasRuler.PointToScreen(new Point());
-            double scale = Utils.ScaleFromGraphics();
+            double scale = Utils.SystemScale;
             double width = _vm.oWidth * scale;
 
             double wpfScale = Utils.ScaleWPF;
@@ -173,8 +169,7 @@ namespace RulerWPF
             double delta = (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl)) ? 25 : 1;
             bool changeSize = (Keyboard.IsKeyDown(Key.LeftShift) || Keyboard.IsKeyDown(Key.RightShift));
 
-            double scale = Utils.ScaleFromGraphics();
-            delta /= scale;
+            delta /= Utils.SystemScale;
 
             if (changeSize) // width or angle
             {

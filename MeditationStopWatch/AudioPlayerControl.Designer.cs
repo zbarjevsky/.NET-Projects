@@ -80,9 +80,10 @@
             this.m_pnlControls.Controls.Add(this.m_splitInfo);
             this.m_pnlControls.Controls.Add(this.m_pnlButtons);
             this.m_pnlControls.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.m_pnlControls.Location = new System.Drawing.Point(0, 377);
+            this.m_pnlControls.Location = new System.Drawing.Point(0, 465);
+            this.m_pnlControls.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_pnlControls.Name = "m_pnlControls";
-            this.m_pnlControls.Size = new System.Drawing.Size(509, 107);
+            this.m_pnlControls.Size = new System.Drawing.Size(679, 131);
             this.m_pnlControls.TabIndex = 0;
             // 
             // m_splitInfo
@@ -91,7 +92,8 @@
             this.m_splitInfo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.m_splitInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_splitInfo.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-            this.m_splitInfo.Location = new System.Drawing.Point(0, 72);
+            this.m_splitInfo.Location = new System.Drawing.Point(0, 89);
+            this.m_splitInfo.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_splitInfo.Name = "m_splitInfo";
             // 
             // m_splitInfo.Panel1
@@ -101,18 +103,21 @@
             // m_splitInfo.Panel2
             // 
             this.m_splitInfo.Panel2.Controls.Add(this.m_lblTime);
-            this.m_splitInfo.Size = new System.Drawing.Size(505, 31);
-            this.m_splitInfo.SplitterDistance = 336;
+            this.m_splitInfo.Size = new System.Drawing.Size(675, 38);
+            this.m_splitInfo.SplitterDistance = 505;
+            this.m_splitInfo.SplitterWidth = 5;
             this.m_splitInfo.TabIndex = 2;
             // 
             // m_lblStatus
             // 
+            this.m_lblStatus.AutoEllipsis = true;
             this.m_lblStatus.BackColor = System.Drawing.Color.Black;
             this.m_lblStatus.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_lblStatus.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(192)))));
             this.m_lblStatus.Location = new System.Drawing.Point(0, 0);
+            this.m_lblStatus.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.m_lblStatus.Name = "m_lblStatus";
-            this.m_lblStatus.Size = new System.Drawing.Size(334, 29);
+            this.m_lblStatus.Size = new System.Drawing.Size(503, 36);
             this.m_lblStatus.TabIndex = 0;
             this.m_lblStatus.Text = "Ready";
             this.m_lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -124,8 +129,9 @@
             this.m_lblTime.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.m_lblTime.ForeColor = System.Drawing.Color.Lime;
             this.m_lblTime.Location = new System.Drawing.Point(0, 0);
+            this.m_lblTime.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.m_lblTime.Name = "m_lblTime";
-            this.m_lblTime.Size = new System.Drawing.Size(163, 29);
+            this.m_lblTime.Size = new System.Drawing.Size(163, 36);
             this.m_lblTime.TabIndex = 1;
             this.m_lblTime.Text = "00:00/00:00";
             this.m_lblTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -136,8 +142,9 @@
             this.m_pnlButtons.Controls.Add(this.m_toolStripPlayer);
             this.m_pnlButtons.Dock = System.Windows.Forms.DockStyle.Top;
             this.m_pnlButtons.Location = new System.Drawing.Point(0, 0);
+            this.m_pnlButtons.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_pnlButtons.Name = "m_pnlButtons";
-            this.m_pnlButtons.Size = new System.Drawing.Size(505, 72);
+            this.m_pnlButtons.Size = new System.Drawing.Size(675, 89);
             this.m_pnlButtons.TabIndex = 3;
             // 
             // m_trackBarPosition
@@ -146,9 +153,10 @@
             this.m_trackBarPosition.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_trackBarPosition.LargeChange = 50;
             this.m_trackBarPosition.Location = new System.Drawing.Point(0, 0);
+            this.m_trackBarPosition.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_trackBarPosition.Maximum = 300;
             this.m_trackBarPosition.Name = "m_trackBarPosition";
-            this.m_trackBarPosition.Size = new System.Drawing.Size(505, 40);
+            this.m_trackBarPosition.Size = new System.Drawing.Size(675, 50);
             this.m_trackBarPosition.SmallChange = 10;
             this.m_trackBarPosition.TabIndex = 0;
             this.m_trackBarPosition.TickFrequency = 180;
@@ -160,6 +168,7 @@
             // 
             this.m_toolStripPlayer.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.m_toolStripPlayer.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.m_toolStripPlayer.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.m_toolStripPlayer.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_tbbtnPlay,
             this.m_tbbtnPause,
@@ -171,9 +180,9 @@
             this.m_toolStripTrackBarVolume,
             this.m_toolStripSeparator3,
             this.m_chkLoop});
-            this.m_toolStripPlayer.Location = new System.Drawing.Point(0, 40);
+            this.m_toolStripPlayer.Location = new System.Drawing.Point(0, 50);
             this.m_toolStripPlayer.Name = "m_toolStripPlayer";
-            this.m_toolStripPlayer.Size = new System.Drawing.Size(505, 32);
+            this.m_toolStripPlayer.Size = new System.Drawing.Size(675, 39);
             this.m_toolStripPlayer.TabIndex = 1;
             this.m_toolStripPlayer.Text = "Tools";
             // 
@@ -184,7 +193,7 @@
             this.m_tbbtnPlay.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.m_tbbtnPlay.ImageTransparentColor = System.Drawing.Color.White;
             this.m_tbbtnPlay.Name = "m_tbbtnPlay";
-            this.m_tbbtnPlay.Size = new System.Drawing.Size(29, 29);
+            this.m_tbbtnPlay.Size = new System.Drawing.Size(29, 36);
             this.m_tbbtnPlay.Text = "Play";
             this.m_tbbtnPlay.Click += new System.EventHandler(this.m_tbbtnPlay_Click);
             // 
@@ -195,7 +204,7 @@
             this.m_tbbtnPause.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.m_tbbtnPause.ImageTransparentColor = System.Drawing.Color.White;
             this.m_tbbtnPause.Name = "m_tbbtnPause";
-            this.m_tbbtnPause.Size = new System.Drawing.Size(29, 29);
+            this.m_tbbtnPause.Size = new System.Drawing.Size(29, 36);
             this.m_tbbtnPause.Text = "Pause";
             this.m_tbbtnPause.Click += new System.EventHandler(this.m_tbbtnPause_Click);
             // 
@@ -206,14 +215,14 @@
             this.m_tbbtnStop.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.m_tbbtnStop.ImageTransparentColor = System.Drawing.Color.White;
             this.m_tbbtnStop.Name = "m_tbbtnStop";
-            this.m_tbbtnStop.Size = new System.Drawing.Size(29, 29);
+            this.m_tbbtnStop.Size = new System.Drawing.Size(29, 36);
             this.m_tbbtnStop.Text = "Stop";
             this.m_tbbtnStop.Click += new System.EventHandler(this.m_tbbtnStop_Click);
             // 
             // m_toolStripSeparator1
             // 
             this.m_toolStripSeparator1.Name = "m_toolStripSeparator1";
-            this.m_toolStripSeparator1.Size = new System.Drawing.Size(6, 32);
+            this.m_toolStripSeparator1.Size = new System.Drawing.Size(6, 39);
             // 
             // m_tbbtnPrev
             // 
@@ -222,7 +231,7 @@
             this.m_tbbtnPrev.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.m_tbbtnPrev.ImageTransparentColor = System.Drawing.Color.White;
             this.m_tbbtnPrev.Name = "m_tbbtnPrev";
-            this.m_tbbtnPrev.Size = new System.Drawing.Size(29, 29);
+            this.m_tbbtnPrev.Size = new System.Drawing.Size(29, 36);
             this.m_tbbtnPrev.Text = "Previous";
             this.m_tbbtnPrev.Click += new System.EventHandler(this.m_tbbtnPrev_Click);
             // 
@@ -233,14 +242,14 @@
             this.m_tbbtnNext.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.m_tbbtnNext.ImageTransparentColor = System.Drawing.Color.White;
             this.m_tbbtnNext.Name = "m_tbbtnNext";
-            this.m_tbbtnNext.Size = new System.Drawing.Size(29, 29);
+            this.m_tbbtnNext.Size = new System.Drawing.Size(29, 36);
             this.m_tbbtnNext.Text = "Next";
             this.m_tbbtnNext.Click += new System.EventHandler(this.m_tbbtnNext_Click);
             // 
             // m_toolStripSeparator2
             // 
             this.m_toolStripSeparator2.Name = "m_toolStripSeparator2";
-            this.m_toolStripSeparator2.Size = new System.Drawing.Size(6, 32);
+            this.m_toolStripSeparator2.Size = new System.Drawing.Size(6, 39);
             // 
             // m_toolStripTrackBarVolume
             // 
@@ -249,7 +258,7 @@
             this.m_toolStripTrackBarVolume.LargeChange = 100;
             this.m_toolStripTrackBarVolume.Maximum = 1000;
             this.m_toolStripTrackBarVolume.Name = "m_toolStripTrackBarVolume";
-            this.m_toolStripTrackBarVolume.Size = new System.Drawing.Size(78, 29);
+            this.m_toolStripTrackBarVolume.Size = new System.Drawing.Size(104, 36);
             this.m_toolStripTrackBarVolume.SmallChange = 40;
             this.m_toolStripTrackBarVolume.ToolTipText = "Volume Control";
             this.m_toolStripTrackBarVolume.Value = 300;
@@ -258,14 +267,14 @@
             // m_toolStripSeparator3
             // 
             this.m_toolStripSeparator3.Name = "m_toolStripSeparator3";
-            this.m_toolStripSeparator3.Size = new System.Drawing.Size(6, 32);
+            this.m_toolStripSeparator3.Size = new System.Drawing.Size(6, 39);
             // 
             // m_chkLoop
             // 
             this.m_chkLoop.Image = ((System.Drawing.Image)(resources.GetObject("m_chkLoop.Image")));
             this.m_chkLoop.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.m_chkLoop.Name = "m_chkLoop";
-            this.m_chkLoop.Size = new System.Drawing.Size(54, 29);
+            this.m_chkLoop.Size = new System.Drawing.Size(67, 36);
             this.m_chkLoop.Text = "Loop";
             this.m_chkLoop.Click += new System.EventHandler(this.m_chkLoop_Click);
             // 
@@ -305,8 +314,9 @@
             // 
             this.m_reiKi.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_reiKi.Location = new System.Drawing.Point(0, 0);
+            this.m_reiKi.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_reiKi.Name = "m_reiKi";
-            this.m_reiKi.Size = new System.Drawing.Size(505, 14);
+            this.m_reiKi.Size = new System.Drawing.Size(675, 21);
             this.m_reiKi.TabIndex = 4;
             this.m_reiKi.Text = "elementHost1";
             this.m_reiKi.Child = this.m_progrReiKi;
@@ -324,8 +334,9 @@
             this.m_pnlMain.Controls.Add(this.m_pnlControls);
             this.m_pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_pnlMain.Location = new System.Drawing.Point(0, 0);
+            this.m_pnlMain.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_pnlMain.Name = "m_pnlMain";
-            this.m_pnlMain.Size = new System.Drawing.Size(509, 484);
+            this.m_pnlMain.Size = new System.Drawing.Size(679, 596);
             this.m_pnlMain.TabIndex = 6;
             // 
             // m_splitFiles
@@ -334,6 +345,7 @@
             this.m_splitFiles.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_splitFiles.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
             this.m_splitFiles.Location = new System.Drawing.Point(0, 0);
+            this.m_splitFiles.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_splitFiles.Name = "m_splitFiles";
             this.m_splitFiles.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -346,27 +358,31 @@
             // 
             this.m_splitFiles.Panel2.Controls.Add(this.m_reiKi);
             this.m_splitFiles.Panel2MinSize = 10;
-            this.m_splitFiles.Size = new System.Drawing.Size(509, 377);
-            this.m_splitFiles.SplitterDistance = 355;
+            this.m_splitFiles.Size = new System.Drawing.Size(679, 465);
+            this.m_splitFiles.SplitterDistance = 435;
+            this.m_splitFiles.SplitterWidth = 5;
             this.m_splitFiles.TabIndex = 5;
             // 
             // m_playLists
             // 
             this.m_playLists.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_playLists.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.m_playLists.Location = new System.Drawing.Point(0, 0);
+            this.m_playLists.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.m_playLists.Name = "m_playLists";
-            this.m_playLists.Size = new System.Drawing.Size(505, 351);
+            this.m_playLists.Size = new System.Drawing.Size(675, 431);
             this.m_playLists.TabIndex = 0;
             // 
             // AudioPlayerControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoScroll = true;
             this.AutoScrollMinSize = new System.Drawing.Size(310, 0);
             this.Controls.Add(this.m_pnlMain);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "AudioPlayerControl";
-            this.Size = new System.Drawing.Size(509, 484);
+            this.Size = new System.Drawing.Size(679, 596);
             this.Load += new System.EventHandler(this.AudioPlayerControl_Load);
             this.m_pnlControls.ResumeLayout(false);
             this.m_splitInfo.Panel1.ResumeLayout(false);

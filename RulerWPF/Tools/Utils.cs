@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
@@ -72,15 +69,12 @@ namespace RulerWPF
         }
 
         //dot per mm
-        public static Point DPCM
+        public static double DPCM
         {
             get
             {
                 const double inch2cm = 2.54;
-
-                Point dpi = DPI;
-                Point dpcm = new Point(dpi.X / inch2cm, dpi.Y / inch2cm);
-                return dpcm;
+                return DisplayDPI / inch2cm;
             }
         }
 
@@ -103,65 +97,68 @@ namespace RulerWPF
             }
         }
 
+        public static double DisplayDPI
+        {
+            get
+            {
+                double diagonal = Math.Sqrt(
+                    SystemParameters.PrimaryScreenHeight * SystemParameters.PrimaryScreenHeight +
+                    SystemParameters.PrimaryScreenWidth * SystemParameters.PrimaryScreenWidth);
+                return SystemScale * diagonal / Properties.Settings.Default.MonitorDiagonal;
+            }
+        }
+
         public static Point GetMousePosition()
         {
             return Mouse.GetPosition(null);
         }
 
-        public static Point ScaleLocationUp(Point pt)
-        {
-            double scale = ScaleFromGraphics();
-            Point ptScaled = new Point(pt.X * scale, pt.Y * scale);
-            return ptScaled;
-        }
+        //public static Point ScaleLocationUp(Point pt)
+        //{
+        //    Point ptScaled = new Point(pt.X * SystemScale, pt.Y * SystemScale);
+        //    return ptScaled;
+        //}
 
-        public static Point ScaleLocationDown(Point pt)
-        {
-            double scale = ScaleFromGraphics();
-            Point ptScaled = new Point(pt.X / scale, pt.Y / scale);
-            return ptScaled;
-        }
+        //public static Point ScaleLocationDown(Point pt)
+        //{
+        //    Point ptScaled = new Point(pt.X / SystemScale, pt.Y / SystemScale);
+        //    return ptScaled;
+        //}
 
         public static Point ScaleToWPF_DPI(Point pt)
         {
             return _CompositionTarget.TransformFromDevice.Transform(pt);
-            //double scale = 1.0;
-            //Point ptScaled = new Point(pt.X / scale, pt.Y / scale);
-            //return ptScaled;
         }
 
         public static Point ScaleFromWPF_DPI(Point pt)
         {
             return _CompositionTarget.TransformToDevice.Transform(pt);
-            //double scale = 1.0;
-            //Point ptScaled = new Point(pt.X * scale, pt.Y * scale);
-            //return ptScaled;
         }
 
-        public static Size GetElementPixelSize(UIElement element)
-        {
-            Matrix transformToDevice;
-            var source = PresentationSource.FromVisual(element);
-            if (source != null)
-                transformToDevice = source.CompositionTarget.TransformToDevice;
-            else
-                using (var source1 = new HwndSource(new HwndSourceParameters()))
-                    transformToDevice = source1.CompositionTarget.TransformToDevice;
+        //public static Size GetElementPixelSize(UIElement element)
+        //{
+        //    Matrix transformToDevice;
+        //    var source = PresentationSource.FromVisual(element);
+        //    if (source != null)
+        //        transformToDevice = source.CompositionTarget.TransformToDevice;
+        //    else
+        //        using (var source1 = new HwndSource(new HwndSourceParameters()))
+        //            transformToDevice = source1.CompositionTarget.TransformToDevice;
 
-            if (element.DesiredSize == new Size()) //not measured yet
-                element.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
+        //    if (element.DesiredSize == new Size()) //not measured yet
+        //        element.Measure(new Size(double.PositiveInfinity, double.PositiveInfinity));
 
-            return (Size)transformToDevice.Transform((Vector)element.DesiredSize);
-        }
+        //    return (Size)transformToDevice.Transform((Vector)element.DesiredSize);
+        //}
 
         public static void UpdateScaleWPF(PresentationSource source)
         {
             _CompositionTarget = source.CompositionTarget;
         }
 
-        public static double ScaleFromGraphics()
+        public static double SystemScale
         {
-            return SystemParameters.VirtualScreenHeight / SystemParameters.PrimaryScreenHeight;
+            get { return SystemParameters.VirtualScreenHeight / SystemParameters.PrimaryScreenHeight; }
         }
     }
 }

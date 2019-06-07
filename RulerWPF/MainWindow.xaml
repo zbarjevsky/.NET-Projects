@@ -52,8 +52,8 @@
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Orientation: " VerticalAlignment="Center"/>
                                 <TextBox Margin="1" MaxLength="5" Width="60" AcceptsReturn="True"
-                                         TextAlignment="Center" 
-                                         Text="{Binding oAngleText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=1}"/>
+                                         TextAlignment="Center" MaxLines="1"
+                                         Text="{Binding oAngleText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=250}"/>
                             </StackPanel>
                         </MenuItem.Header>
                     </MenuItem>
@@ -67,6 +67,18 @@
                     <MenuItem Header="Centimeters"  
                               Click="UnitsMenuItem_Click" Tag="2"
                               IsChecked="{Binding MeasurementUnits, Converter={StaticResource ValueWithParameterToCheckedConverter}, ConverterParameter='Millimeters' }" />
+                    <Separator />
+                    <MenuItem>
+                        <MenuItem.Header>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Text="Display Size: " VerticalAlignment="Center"/>
+                                <TextBox Margin="1" MaxLength="5" Width="60" AcceptsReturn="True"
+                                        TextAlignment="Center" MaxLines="1"
+                                        Text="{Binding oDisplayDiagonal, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, Delay=250}"/>
+                                <TextBlock Text=" inches" VerticalAlignment="Center"/>
+                             </StackPanel>
+                        </MenuItem.Header>
+                    </MenuItem>
                     <Separator />
                     <MenuItem Header="About WPF Ruler" Click="AboutMenuItem_Click" />
                     <MenuItem Header="Exit" Click="ExitMenuItem_Click" />

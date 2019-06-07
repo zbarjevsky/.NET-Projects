@@ -37,6 +37,8 @@ namespace RulerWPF
         private MeasurementUnits _units = MeasurementUnits.Pixels;
         public MeasurementUnits MeasurementUnits { get { return _units; } set { _units = value; OnPropertyChanged(); } }
 
+        public double oDisplayDiagonal { get { return Properties.Settings.Default.MonitorDiagonal; } set { Properties.Settings.Default.MonitorDiagonal = value; OnPropertyChanged(); } }
+
         public MouseMoveOp MouseMoveOp { get; set; } = MouseMoveOp.None;
         public FrameworkElement CurrentElement { get; set; } = null;
 

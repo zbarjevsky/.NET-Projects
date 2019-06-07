@@ -48,14 +48,14 @@ namespace RulerWPF
                     tick_text_scale = 0.1;
                     break;
                 case MeasurementUnits.Inches:
-                    dotsPerTextLabel = Utils.DPI.X;
+                    dotsPerTextLabel = Utils.DisplayDPI; // Utils.DPI.X;
                     ticksPerTextLabelCount = 16; //16 ticks per INCH
                     tick_text_scale = 16;
                     tick1Height = 0.75 * tickTextHeight; //eveery second tick
                     tickHalfHeight = tickTextHeight; //half
                     break;
                 case MeasurementUnits.Centimeters:
-                    dotsPerTextLabel = Utils.DPCM.X;
+                    dotsPerTextLabel = Utils.DPCM;
                     ticksPerTextLabelCount = 10; //10 ticks per CM
                     tick_text_scale = 10;
                     break;
@@ -66,7 +66,7 @@ namespace RulerWPF
             tick_width = dotsPerTextLabel / ticksPerTextLabelCount;
             tickHalfCount = ticksPerTextLabelCount / 2;
 
-            tick_to_device_scale = Utils.ScaleFromGraphics();
+            tick_to_device_scale = Utils.SystemScale;
             double width_in_pixels = canvas.ActualWidth * tick_to_device_scale;
             tick_count = width_in_pixels / tick_width;
         }
