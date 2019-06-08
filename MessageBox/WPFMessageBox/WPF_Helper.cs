@@ -19,6 +19,10 @@ namespace MZ.WPF.MessageBox
         private static readonly Application _app;
         private static readonly string _assemblyName = Assembly.GetExecutingAssembly().GetName().Name; //"sD.WPF.MessageBox";
 
+        private static Matrix _CompositionTarget;
+
+        public static double ScaleWPF { get { return _CompositionTarget.M11; } }
+
         static WPF_Helper()
         {
             //to use in WinForms Application - when no WPF Application
@@ -105,7 +109,7 @@ namespace MZ.WPF.MessageBox
             System.Windows.Forms.Form topmost = TopmostForm();
             if (topmost != null)
             {
-                return new Rect(topmost.Location.X, topmost.Location.Y, topmost.Width, topmost.Height);
+                return new Rect(topmost.Location.X / ScaleWPF, topmost.Location.Y / ScaleWPF, topmost.Width / ScaleWPF, topmost.Height / ScaleWPF);
             }
             else if (_app != null && _app.MainWindow != null && _app.MainWindow.ActualWidth > 10)
             {
@@ -116,6 +120,21 @@ namespace MZ.WPF.MessageBox
             //no main window - use current screen
             System.Drawing.Rectangle bounds = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
             return new Rect(bounds.Left, bounds.Top, bounds.Width, bounds.Height);
+        }
+
+        public static void UpdateScaleWPF(UIElement element)
+        {
+            var source = PresentationSource.FromVisual(element);
+            if (source != null)
+                _CompositionTarget = source.CompositionTarget.TransformToDevice;
+            else
+                using (var source1 = new HwndSource(new HwndSourceParameters()))
+                    _CompositionTarget = source1.CompositionTarget.TransformToDevice;
+        }
+
+        public static double SystemScale
+        {
+            get { return SystemParameters.VirtualScreenHeight / SystemParameters.PrimaryScreenHeight; }
         }
 
         public static T ExecuteOnUIThread<T>(Func<T> action)
@@ -267,6 +286,7 @@ namespace MZ.WPF.MessageBox
 
             return accellerator + input;
         }
+
         internal static string TryRemoveKeyboardAccellerator(this string input)
         {
             const string accellerator = "_";  //This is the default WPF accellerator symbol - used to be & in WinForms

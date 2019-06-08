@@ -310,6 +310,8 @@ namespace MZ.WPF.MessageBox
         /// </summary>
         private Point AdjustSize(string newText, bool growAndShrink)
         {
+            WPF_Helper.UpdateScaleWPF(txtMessage);
+
             var screen = System.Windows.Forms.Screen.FromHandle(new System.Windows.Interop.WindowInteropHelper(this).Handle);
             double deltaWidth = 70;
             double deltaHeight = 140;
