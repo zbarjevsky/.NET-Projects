@@ -104,7 +104,7 @@
             // 
             this.m_splitInfo.Panel2.Controls.Add(this.m_lblTime);
             this.m_splitInfo.Size = new System.Drawing.Size(675, 38);
-            this.m_splitInfo.SplitterDistance = 504;
+            this.m_splitInfo.SplitterDistance = 503;
             this.m_splitInfo.SplitterWidth = 5;
             this.m_splitInfo.TabIndex = 2;
             // 
@@ -117,7 +117,7 @@
             this.m_lblStatus.Location = new System.Drawing.Point(0, 0);
             this.m_lblStatus.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.m_lblStatus.Name = "m_lblStatus";
-            this.m_lblStatus.Size = new System.Drawing.Size(502, 36);
+            this.m_lblStatus.Size = new System.Drawing.Size(501, 36);
             this.m_lblStatus.TabIndex = 0;
             this.m_lblStatus.Text = "Ready";
             this.m_lblStatus.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -131,8 +131,8 @@
             this.m_lblTime.Location = new System.Drawing.Point(0, 0);
             this.m_lblTime.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.m_lblTime.Name = "m_lblTime";
-            this.m_lblTime.Size = new System.Drawing.Size(164, 36);
-            this.m_lblTime.TabIndex = 1;
+            this.m_lblTime.Size = new System.Drawing.Size(165, 36);
+            this.m_lblTime.TabIndex = 0;
             this.m_lblTime.Text = "00:00/00:00";
             this.m_lblTime.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -316,8 +316,8 @@
             this.m_reiKi.Location = new System.Drawing.Point(0, 0);
             this.m_reiKi.Margin = new System.Windows.Forms.Padding(4);
             this.m_reiKi.Name = "m_reiKi";
-            this.m_reiKi.Size = new System.Drawing.Size(675, 22);
-            this.m_reiKi.TabIndex = 4;
+            this.m_reiKi.Size = new System.Drawing.Size(675, 23);
+            this.m_reiKi.TabIndex = 0;
             this.m_reiKi.Text = "elementHost1";
             this.m_reiKi.Child = this.m_progrReiKi;
             // 
@@ -359,7 +359,7 @@
             this.m_splitFiles.Panel2.Controls.Add(this.m_reiKi);
             this.m_splitFiles.Panel2MinSize = 10;
             this.m_splitFiles.Size = new System.Drawing.Size(679, 465);
-            this.m_splitFiles.SplitterDistance = 434;
+            this.m_splitFiles.SplitterDistance = 433;
             this.m_splitFiles.SplitterWidth = 5;
             this.m_splitFiles.TabIndex = 5;
             // 
@@ -370,7 +370,7 @@
             this.m_playLists.Location = new System.Drawing.Point(0, 0);
             this.m_playLists.Margin = new System.Windows.Forms.Padding(5);
             this.m_playLists.Name = "m_playLists";
-            this.m_playLists.Size = new System.Drawing.Size(675, 430);
+            this.m_playLists.Size = new System.Drawing.Size(675, 429);
             this.m_playLists.TabIndex = 0;
             // 
             // AudioPlayerControl

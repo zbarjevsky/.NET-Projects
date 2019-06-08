@@ -236,7 +236,7 @@ namespace MeditationStopWatch
         {
             foreach (ListViewItem item in m_listFiles.Items)
             {
-                Color crText = item.Index == _playingIdx ? Color.Red : SystemColors.WindowText;
+                Color crText = item.Index == _playingIdx ? Color.Blue : SystemColors.WindowText;
                 item.ForeColor = crText;
             }
         }

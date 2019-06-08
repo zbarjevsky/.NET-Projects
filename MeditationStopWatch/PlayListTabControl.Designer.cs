@@ -50,7 +50,7 @@
             this.m_btnEditTab.Margin = new System.Windows.Forms.Padding(4);
             this.m_btnEditTab.Name = "m_btnEditTab";
             this.m_btnEditTab.Size = new System.Drawing.Size(37, 28);
-            this.m_btnEditTab.TabIndex = 12;
+            this.m_btnEditTab.TabIndex = 0;
             this.toolTip1.SetToolTip(this.m_btnEditTab, "Rename Selected");
             this.m_btnEditTab.UseVisualStyleBackColor = true;
             this.m_btnEditTab.Click += new System.EventHandler(this.m_btnEditTab_Click);
@@ -63,7 +63,7 @@
             this.m_btnDelTab.Margin = new System.Windows.Forms.Padding(4);
             this.m_btnDelTab.Name = "m_btnDelTab";
             this.m_btnDelTab.Size = new System.Drawing.Size(37, 28);
-            this.m_btnDelTab.TabIndex = 11;
+            this.m_btnDelTab.TabIndex = 2;
             this.toolTip1.SetToolTip(this.m_btnDelTab, "Delete Selected");
             this.m_btnDelTab.UseVisualStyleBackColor = true;
             this.m_btnDelTab.Click += new System.EventHandler(this.m_btnDelTab_Click);
@@ -76,7 +76,7 @@
             this.m_btnAddTab.Margin = new System.Windows.Forms.Padding(4);
             this.m_btnAddTab.Name = "m_btnAddTab";
             this.m_btnAddTab.Size = new System.Drawing.Size(37, 28);
-            this.m_btnAddTab.TabIndex = 10;
+            this.m_btnAddTab.TabIndex = 1;
             this.toolTip1.SetToolTip(this.m_btnAddTab, "Add New List");
             this.m_btnAddTab.UseVisualStyleBackColor = true;
             this.m_btnAddTab.Click += new System.EventHandler(this.m_btnAddTab_Click);
@@ -91,17 +91,17 @@
             this.m_tabPlayLists.Name = "m_tabPlayLists";
             this.m_tabPlayLists.SelectedIndex = 0;
             this.m_tabPlayLists.Size = new System.Drawing.Size(392, 46);
-            this.m_tabPlayLists.TabIndex = 9;
+            this.m_tabPlayLists.TabIndex = 3;
             this.m_tabPlayLists.SelectedIndexChanged += new System.EventHandler(this.m_tabPlayLists_SelectedIndexChanged);
             // 
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.tabPage1.Location = new System.Drawing.Point(4, 29);
+            this.tabPage1.Location = new System.Drawing.Point(4, 34);
             this.tabPage1.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPage1.Size = new System.Drawing.Size(384, 13);
+            this.tabPage1.Size = new System.Drawing.Size(384, 8);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Music";
             // 
@@ -116,7 +116,7 @@
             this.m_pnlTabs.Margin = new System.Windows.Forms.Padding(4);
             this.m_pnlTabs.Name = "m_pnlTabs";
             this.m_pnlTabs.Size = new System.Drawing.Size(532, 36);
-            this.m_pnlTabs.TabIndex = 13;
+            this.m_pnlTabs.TabIndex = 0;
             // 
             // m_mp3List
             // 
@@ -125,7 +125,7 @@
             this.m_mp3List.Margin = new System.Windows.Forms.Padding(5);
             this.m_mp3List.Name = "m_mp3List";
             this.m_mp3List.Size = new System.Drawing.Size(532, 195);
-            this.m_mp3List.TabIndex = 14;
+            this.m_mp3List.TabIndex = 1;
             // 
             // PlayListTabControl
             // 

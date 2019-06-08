@@ -72,13 +72,12 @@
             this.m_listFiles.FullRowSelect = true;
             this.m_listFiles.GridLines = true;
             this.m_listFiles.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.m_listFiles.HideSelection = false;
             this.m_listFiles.Location = new System.Drawing.Point(0, 27);
             this.m_listFiles.Margin = new System.Windows.Forms.Padding(4);
             this.m_listFiles.Name = "m_listFiles";
             this.m_listFiles.ShowItemToolTips = true;
             this.m_listFiles.Size = new System.Drawing.Size(533, 156);
-            this.m_listFiles.TabIndex = 5;
+            this.m_listFiles.TabIndex = 1;
             this.m_listFiles.UseCompatibleStateImageBehavior = false;
             this.m_listFiles.View = System.Windows.Forms.View.Details;
             this.m_listFiles.SelectedIndexChanged += new System.EventHandler(this.m_listFiles_SelectedIndexChanged);
@@ -223,7 +222,7 @@
             this.m_toolbarPlayer.Location = new System.Drawing.Point(0, 0);
             this.m_toolbarPlayer.Name = "m_toolbarPlayer";
             this.m_toolbarPlayer.Size = new System.Drawing.Size(533, 27);
-            this.m_toolbarPlayer.TabIndex = 4;
+            this.m_toolbarPlayer.TabIndex = 0;
             this.m_toolbarPlayer.Text = "toolStrip1";
             // 
             // m_toolStripButton_AddFiles

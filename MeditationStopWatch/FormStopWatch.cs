@@ -343,25 +343,28 @@ namespace MeditationStopWatch
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            switch (keyData)
+            if (CanUseArrorws())
             {
-                case Keys.Space:
-                    PauseResume();
-                    return true;
-                case Keys.Up:
-                    AdjustVolume(1);
-                    return true;
-                case Keys.Down:
-                    AdjustVolume(-1);
-                    return true;
-                case Keys.Left:
-                    ShowPrevImage();
-                    return true;
-                case Keys.Right:
-                    ShowNextImage();
-                    return true;
-                default:
-                    break;
+                switch (keyData)
+                {
+                    case Keys.Space:
+                        PauseResume();
+                        return true;
+                    case Keys.Up:
+                        AdjustVolume(1);
+                        return true;
+                    case Keys.Down:
+                        AdjustVolume(-1);
+                        return true;
+                    case Keys.Left:
+                        ShowPrevImage();
+                        return true;
+                    case Keys.Right:
+                        ShowNextImage();
+                        return true;
+                    default:
+                        break;
+                }
             }
 
             return base.ProcessCmdKey(ref msg, keyData);
@@ -369,13 +372,13 @@ namespace MeditationStopWatch
 
         private bool CanUseArrorws()
         {
-            List<Control> list = FindFocusedControls(this);
-            if (list.Count != 1)
+            List<Control> ctrls_in_focus = FindFocusedControls(this);
+            if (ctrls_in_focus.Count != 1)
                 return true;
-            if (list[0] is ListView || list[0] is Button)
+            if (ctrls_in_focus[0] is ListView) // || ctrls_in_focus[0] is Button)
                 return false;
-            if (list[0] is SplitContainer && (list[0] as SplitContainer).Orientation == Orientation.Horizontal)
-                return false;
+            //if (list[0] is SplitContainer && (list[0] as SplitContainer).Orientation == Orientation.Horizontal)
+            //    return false;
             return true;
         }
 
