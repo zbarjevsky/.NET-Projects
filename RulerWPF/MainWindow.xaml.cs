@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.Configuration;
 using System.Diagnostics;
 using System.Globalization;
 using System.Media;
@@ -22,13 +23,28 @@ namespace RulerWPF
         {
             DataContext = _vm;
             InitializeComponent();
+
+            //if version changed - settings location changed - get settings from previous location/version
+            if (Properties.Settings.Default.UpgradeNeeded)
+            {
+                Properties.Settings.Default.Upgrade();
+                Properties.Settings.Default.UpgradeNeeded = false;
+                Properties.Settings.Default.Save();
+                Properties.Settings.Default.Reload();
+            }
         }
 
         private void MainWindow_OnLoaded(object sender, RoutedEventArgs e)
         {
+            System.Drawing.Point location = Properties.Settings.Default.Location;
+
             Rect bounds = ChangeWindowSize();
 
-            System.Drawing.Point location = Properties.Settings.Default.Location;
+            var path = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal).FilePath;
+
+            Point deltaLocation = _canvasMain.PointToScreen(new Point());
+            location.X = (int)((location.X - deltaLocation.X) / (Utils.SystemScale));
+            location.Y = (int)((location.Y - deltaLocation.Y) / (Utils.SystemScale));
             if (location.X < 0 || location.X > bounds.Right)
                 location.X = 300;
             if (location.Y < 0 || location.Y > bounds.Bottom)

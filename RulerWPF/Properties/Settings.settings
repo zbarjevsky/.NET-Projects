@@ -8,5 +8,8 @@
     <Setting Name="MonitorDiagonal" Type="System.Double" Scope="User">
       <Value Profile="(Default)">15</Value>
     </Setting>
+    <Setting Name="UpgradeNeeded" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
