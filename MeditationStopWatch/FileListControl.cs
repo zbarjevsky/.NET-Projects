@@ -42,6 +42,17 @@ namespace MeditationStopWatch
             m_mnuRemoveAll.Image = m_toolStripButton_RemoveAll.Image;
         }
 
+        private void FileListControl_SizeChanged(object sender, EventArgs e)
+        {
+            double width = m_listFiles.Width;
+            double width_scale = m_listFiles.Font.Size / 8.0; //relative to 8pt font
+            double scroll_width = 2 + SystemInformation.VerticalScrollBarWidth;
+
+            m_listFiles.Columns[2].Width = (int)(70 * width_scale);
+            m_listFiles.Columns[1].Width = (int)(70 * width_scale);
+            m_listFiles.Columns[0].Width = (int)(width - m_listFiles.Columns[1].Width - m_listFiles.Columns[1].Width - scroll_width);
+        }
+
         private void m_toolStripButton_AddFiles_Click(object sender, EventArgs e)
         {
             if (DialogResult.OK != m_openFileDialog.ShowDialog(this))
