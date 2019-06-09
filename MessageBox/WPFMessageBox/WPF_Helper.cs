@@ -19,9 +19,9 @@ namespace MZ.WPF.MessageBox
         private static readonly Application _app;
         private static readonly string _assemblyName = Assembly.GetExecutingAssembly().GetName().Name; //"sD.WPF.MessageBox";
 
-        private static Matrix _CompositionTarget;
+        private static Matrix _TransformToDevice;
 
-        public static double ScaleWPF { get { return _CompositionTarget.M11; } }
+        public static double ScaleWPF { get { return _TransformToDevice.M11; } }
 
         static WPF_Helper()
         {
@@ -84,24 +84,34 @@ namespace MZ.WPF.MessageBox
             _window = null;
         }
 
-        public static Point CenterToRectangle(Window window, Rect r)
+        public static Point CenterToRectangle(Size sizeToCenter, Rect rOwner)
         {
-            double left = r.Left + (r.Width - window.Width) / 2;
-            double top = r.Top + (r.Height - window.Height) / 2;
+            double left = rOwner.Left + (rOwner.Width - sizeToCenter.Width) / 2;
+            double top = rOwner.Top + (rOwner.Height - sizeToCenter.Height) / 2;
 
             //check bounds - stay within desktop
-            System.Drawing.Rectangle bounds = System.Windows.Forms.Screen.FromPoint(new System.Drawing.Point((int)r.Left, (int)r.Top)).Bounds;
-            if (left + window.Width > bounds.Left + bounds.Width)
-                left = bounds.Left + bounds.Width - window.Width;
+            Rect screenBounds = VirtualScreenBounds();
 
-            if (top + window.Height > bounds.Top + bounds.Height)
-                top = bounds.Top + bounds.Height - window.Height;
+            if (left + sizeToCenter.Width > screenBounds.Left + screenBounds.Width)
+                left = screenBounds.Left + screenBounds.Width - sizeToCenter.Width;
 
-            if (left < bounds.Left) left = bounds.Left;
-            if (top < bounds.Top) top = bounds.Top;
+            if (top + sizeToCenter.Height > screenBounds.Top + screenBounds.Height)
+                top = screenBounds.Top + screenBounds.Height - sizeToCenter.Height;
+
+            if (left < screenBounds.Left) left = screenBounds.Left;
+            if (top < screenBounds.Top) top = screenBounds.Top;
 
             Point location = new Point(left, top);
             return location;
+        }
+
+        public static Rect VirtualScreenBounds()
+        {
+            //System.Windows.Forms.Screen.FromPoint(new System.Drawing.Point((int)rectToCenter.Left, (int)rectToCenter.Top)).Bounds;
+            Rect screenBounds = new Rect(
+                SystemParameters.VirtualScreenLeft, SystemParameters.VirtualScreenTop,
+                SystemParameters.VirtualScreenWidth, SystemParameters.VirtualScreenHeight);
+            return screenBounds;
         }
 
         public static Rect GetMainWindowRect()
@@ -109,27 +119,28 @@ namespace MZ.WPF.MessageBox
             System.Windows.Forms.Form topmost = TopmostForm();
             if (topmost != null)
             {
-                return new Rect(topmost.Location.X / ScaleWPF, topmost.Location.Y / ScaleWPF, topmost.Width / ScaleWPF, topmost.Height / ScaleWPF);
+                double scale = WPF_Helper.ScaleWPF;// * WPF_Helper.SystemScale;
+                return new Rect(topmost.Location.X / scale, topmost.Location.Y / scale, topmost.Width / scale, topmost.Height / scale);
             }
             else if (_app != null && _app.MainWindow != null && _app.MainWindow.ActualWidth > 10)
             {
                 Window main = _app.MainWindow;
-                return new Rect(main.PointToScreen(new Point()), new Size(main.Width, main.Height));
+                return new Rect(main.Left, main.Top, main.ActualWidth, main.ActualHeight);
             }
 
             //no main window - use current screen
-            System.Drawing.Rectangle bounds = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
-            return new Rect(bounds.Left, bounds.Top, bounds.Width, bounds.Height);
+            return VirtualScreenBounds(); 
         }
 
+        //get scale from visual and store it in static variable
         public static void UpdateScaleWPF(UIElement element)
         {
             var source = PresentationSource.FromVisual(element);
             if (source != null)
-                _CompositionTarget = source.CompositionTarget.TransformToDevice;
+                _TransformToDevice = source.CompositionTarget.TransformToDevice;
             else
                 using (var source1 = new HwndSource(new HwndSourceParameters()))
-                    _CompositionTarget = source1.CompositionTarget.TransformToDevice;
+                    _TransformToDevice = source1.CompositionTarget.TransformToDevice;
         }
 
         public static double SystemScale

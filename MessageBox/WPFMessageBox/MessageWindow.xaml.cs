@@ -369,15 +369,18 @@ namespace MZ.WPF.MessageBox
         private void CenterToUIElement(UIElement owner)
         {
             Rect r = new Rect(owner.PointToScreen(new Point()), owner.RenderSize);
-            Point location = WPF_Helper.CenterToRectangle(this, r);
-            this.Left = location.X;
-            this.Top = location.Y;
+            CenterToRectangle(r);
         }
 
         private void CenterToMainWindow()
         {
             Rect r = WPF_Helper.GetMainWindowRect();
-            Point location = WPF_Helper.CenterToRectangle(this, r);
+            CenterToRectangle(r);
+        }
+
+        private void CenterToRectangle(Rect rOwner)
+        {
+            Point location = WPF_Helper.CenterToRectangle(new Size(this.Width, this.Height), rOwner);
             this.Left = location.X;
             this.Top = location.Y;
         }

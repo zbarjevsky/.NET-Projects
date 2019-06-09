@@ -44,5 +44,11 @@ namespace WPFMessageBoxTestWPF
         {
             MZ.WPF.MessageBox.PopUp.Question("Question!");
         }
+
+        private void CYNQuestion_Click(object sender, RoutedEventArgs e)
+        {
+            MZ.WPF.MessageBox.PopUp.Question("Question!", this.Title, MessageBoxImage.Question, TextAlignment.Center,
+                MZ.WPF.MessageBox.PopUp.PopUpButtonsType.CancelNoYes);
+        }
     }
 }

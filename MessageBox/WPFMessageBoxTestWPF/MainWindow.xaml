@@ -13,6 +13,7 @@
             <Button Content="Message Box - Warning" Click="btnWarn_OnClick" Margin="10"/>
             <Button Content="Message Box - Error" Click="btnError_OnClick" Margin="10"/>
             <Button Content="Message Box - Question" Click="btnQuestionr_OnClick" Margin="10"/>
+            <Button Content="Message Box - CNY Question" Click="CYNQuestion_Click"  Margin="10"/>
         </StackPanel>
     </Grid>
 </Window>
