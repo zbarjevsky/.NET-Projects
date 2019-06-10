@@ -58,6 +58,12 @@ namespace RulerWPF
         private Cursor _cursor = Cursors.AppStarting;
         public Cursor oSizeCursor { get { return _cursor; } set { _cursor = value; OnPropertyChanged(); } }
 
+        private double _cursorX = 0;
+        public double oCursorPosX { get { return _cursorX; } set { _cursorX = value; OnPropertyChanged(); } }
+
+        private Visibility _cursorXVisibility = Visibility.Visible;
+        public Visibility oCursorLineVisibility { get { return _cursorXVisibility; } set { _cursorXVisibility = value; OnPropertyChanged(); } }
+
         private double _thumbLeft = 370;
         public double oThumbLeft { get { return _thumbLeft; } set { _thumbLeft = value; OnPropertyChanged(); } }
 
@@ -87,6 +93,8 @@ namespace RulerWPF
         {
             CurrentElement = element;
             MouseMoveOp = operation;
+
+            oCursorLineVisibility = MouseMoveOp == MouseMoveOp.None ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public Point OriginOnScreen(UIElement element)

@@ -15,7 +15,7 @@
         Loaded="MainWindow_OnLoaded"
         Closed="Window_Closed"
         LocationChanged="Window_LocationChanged"
-        PreviewMouseMove="window_PreviewMouseMove"
+        PreviewMouseMove="MainWindow_PreviewMouseMove"
         PreviewKeyDown="Window_PreviewKeyDown"
         Title="Ruler" Height="600" Width="1200">
     <WindowChrome.WindowChrome>
@@ -84,7 +84,23 @@
                     <MenuItem Header="Exit" Click="ExitMenuItem_Click" />
                 </ContextMenu>
             </Canvas.ContextMenu>
-
+            <!-- Cursor Line Background for dragging-->
+            <Border CornerRadius="10">
+                <Line Visibility="{Binding oCursorLineVisibility, FallbackValue=Visible}"
+                    X1="{Binding oCursorPosX, FallbackValue=100}" 
+                    Y1="-20" 
+                    X2="{Binding oCursorPosX, FallbackValue=100}" 
+                    Y2="15" 
+                    Opacity="0.3"
+                    StrokeThickness="20" Stroke="White"/>
+            </Border>
+            <!-- Cursor Line-->
+            <Line Visibility="{Binding oCursorLineVisibility, FallbackValue=Visible}"
+                X1="{Binding oCursorPosX, FallbackValue=100}" 
+                Y1="-20" 
+                X2="{Binding oCursorPosX, FallbackValue=100}" 
+                Y2="15" 
+                StrokeThickness="0.8" Stroke="Navy"/>
             <Canvas x:Name="_tics" />
             <TextBlock x:Name="_txtBounds" Canvas.Left="10" Canvas.Top="36" Text="X: 10, Y: 10, Length: 400" FontSize="16"/>
             <Thumb x:Name="thumbRotateLeft" Width="20" Height="20" Canvas.Left="10" Canvas.Top="20" 

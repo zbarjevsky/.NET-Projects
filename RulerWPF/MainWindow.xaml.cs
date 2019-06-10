@@ -169,8 +169,8 @@ namespace RulerWPF
 
             double wpfScale = Utils.ScaleWPF;
 
-            _txtBounds.Text = string.Format("X: {0:0}, Y: {1:0}, Length: {2:0.0} {3}, Angle: {4:0.0}°, Scale: {5:0.00}, WPF Scale: {6:0.00}",
-                loc.X, loc.Y, r.WidthInSelectedUnits(width),  units, _vm.oAngle, scale, wpfScale);
+            _txtBounds.Text = string.Format("X: {0:0}, Y: {1:0}, Length: {2:0.0} {3}, Angle: {4:0.0}°, Cursor: {5:0.00}, Scale: {6:0.00}, WPF Scale: {7:0.00}",
+                loc.X, loc.Y, r.WidthInSelectedUnits(width),  units, _vm.oAngle, scale * _vm.oCursorPosX, scale, wpfScale);
 
             Properties.Settings.Default.Location = new System.Drawing.Point((int)loc.X, (int)loc.Y);
         }
@@ -217,12 +217,19 @@ namespace RulerWPF
         }
 
         Point _mouseDownPosition;
-        private void window_PreviewMouseMove(object sender, MouseEventArgs e)
+        private void MainWindow_PreviewMouseMove(object sender, MouseEventArgs e)
         {
-            if(_vm.MouseMoveOp == MouseMoveOp.None)
-                return;
-
             Point currentPosition = Utils.GetMousePosition();
+            if (_vm.MouseMoveOp == MouseMoveOp.None)
+            {
+                Point ptScaled = Utils.ScaleFromWPF_DPI(currentPosition);
+
+                //draw vertical line to show current mouse position
+                _vm.oCursorPosX = (_canvasRuler.PointFromScreen(ptScaled).X);
+
+                return;
+            }
+
             Vector movedBy = currentPosition - _mouseDownPosition;
             if ((int)movedBy.Length == 0) //no change
                 return;
