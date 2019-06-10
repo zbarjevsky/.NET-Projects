@@ -46,7 +46,7 @@ namespace MeditationStopWatch
         {
             double width = m_listFiles.Width;
             double width_scale = m_listFiles.Font.Size / 8.0; //relative to 8pt font
-            double scroll_width = 2 + SystemInformation.VerticalScrollBarWidth;
+            double scroll_width = 8 + SystemInformation.VerticalScrollBarWidth;
 
             m_listFiles.Columns[2].Width = (int)(70 * width_scale);
             m_listFiles.Columns[1].Width = (int)(70 * width_scale);
