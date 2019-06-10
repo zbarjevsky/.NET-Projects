@@ -127,6 +127,14 @@
     <value>139, 17</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="m_mnuExit.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAAHVJREFUOE+9j0kOgEAIBHn6/FwBaQ3bLBcrEiNUdyL9ysXP4JG3rTwQ7NOBG8bW
+        H04YwwkxHO9KJ22FQSXHb1N7UglmJwzKkpOCFD4paH9BZlUyDWO6kjLMctrZ3mIPXXh1e0lSENw9hoWl
+        wKjT3BQ5ToUSohtNacr66fywbgAAAABJRU5ErkJggg==
+</value>
+  </data>
   <data name="m_sysIcon.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAIAICAAAAEACACoCAAAJgAAABAQAAABACAAaAQAAM4IAAAoAAAAIAAAAEAAAAABAAgAAAAAAAAA
@@ -186,14 +194,6 @@
         /0AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAF1d/4CQkP+AXV3/gF1d/4B/f/+ASEj/gAAA
         AAAAAAAAAAAAAAAAAAAAAAAAn/kAAIQhAACAAQAA4AcAAPAHAAAAAAAAAAAAAAAAAACgBQAA4AcAAMAD
         AADAAwAAwAMAAOAHAADgBwAA+B8AAA==
-</value>
-  </data>
-  <data name="m_mnuExit.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        wwAADsMBx2+oZAAAAHVJREFUOE+9j0kOgEAIBHn6/FwBaQ3bLBcrEiNUdyL9ysXP4JG3rTwQ7NOBG8bW
-        H04YwwkxHO9KJ22FQSXHb1N7UglmJwzKkpOCFD4paH9BZlUyDWO6kjLMctrZ3mIPXXh1e0lSENw9hoWl
-        wKjT3BQ5ToUSohtNacr66fywbgAAAABJRU5ErkJggg==
 </value>
   </data>
   <data name="m_btnUnmountAllandBSOD.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
