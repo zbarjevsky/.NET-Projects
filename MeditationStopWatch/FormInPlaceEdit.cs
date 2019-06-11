@@ -13,7 +13,7 @@ namespace MeditationStopWatch
     {
         public Action<string> OkAction = (text) => { };
 
-        public string EditText { get { return richTextBox1.Text; } set { richTextBox1.Text = value; } }
+        public string EditText { get { return m_txtInput.Text; } set { m_txtInput.Text = value; } }
 
         public FormInPlaceEdit()
         {
@@ -22,9 +22,8 @@ namespace MeditationStopWatch
 
         private void FormInPlaceEdit_Load(object sender, EventArgs e)
         {
-            this.ActiveControl = richTextBox1;
-            richTextBox1.SelectAll();
-            this.Height = 30;
+            this.ActiveControl = m_txtInput;
+            m_txtInput.SelectAll();
         }
 
         private void FormInPlaceEdit_Deactivate(object sender, EventArgs e)

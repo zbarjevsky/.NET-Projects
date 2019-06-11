@@ -86,10 +86,10 @@ namespace MeditationStopWatch
         {
             if (m_tabPlayLists.SelectedIndex >= 0)
             {
-                m_tabPlayLists.TabPages.RemoveAt(m_tabPlayLists.SelectedIndex);
-                m_Options.PlayListCollection.RemoveAt(m_tabPlayLists.SelectedIndex);
-
                 int newIdx = m_tabPlayLists.SelectedIndex - 1;
+                m_Options.PlayListCollection.RemoveAt(m_tabPlayLists.SelectedIndex);
+                m_tabPlayLists.TabPages.RemoveAt(m_tabPlayLists.SelectedIndex);
+
                 if (newIdx < 0) newIdx = 0;
                 m_tabPlayLists.SelectedIndex = newIdx;
             }
@@ -99,7 +99,12 @@ namespace MeditationStopWatch
         {
             if (m_tabPlayLists.SelectedIndex >= 0)
             {
-                FormInPlaceEdit frm = new FormInPlaceEdit() { EditText = m_tabPlayLists.SelectedTab.Text };
+                FormInPlaceEdit frm = new FormInPlaceEdit()
+                {
+                    Font = m_tabPlayLists.Font,
+                    EditText = m_tabPlayLists.SelectedTab.Text
+                };
+
                 Point location = m_tabPlayLists.PointToScreen(m_tabPlayLists.GetTabRect(m_tabPlayLists.SelectedIndex).Location);
                 location.Offset(4, 16);
                 frm.Location = location;

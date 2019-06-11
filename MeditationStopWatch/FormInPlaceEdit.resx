@@ -120,17 +120,17 @@
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="m_btnOk.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAABESURBVDhP1YzRCgAgDAL3/z9dCAkOQlp72vkSyzOGsk7w
-        KvEtguGyHXAF95dgUcu3m0UFzZNMVGRKA6Alg/YAaMklIjYTgGCgGXFFAQAAAABJRU5ErkJggg==
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wgAADsIBFShKgAAAAERJREFUOE/VjNEKACAMAvf/P10ICQ5CWnva+RLLM4ayTvAq8S2C4bIdcAX3l2BR
+        y7ebRQXNk0xUZEoDoCWD9gBoySUiNhOAYKAZcUUBAAAAAElFTkSuQmCC
 </value>
   </data>
   <data name="m_btnCancel.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsIAAA7CARUoSoAAAABcSURBVDhPzY1RCkAhCAS9/9m60ysfbEjpZuBHQ0K5o8kb
-        fONotf/KcV003dBAc4SRFPU3IFrZ3lNgga2rBUrZMCq9xBta3yEQPTnqTyAwiWWpBQrNT8NlFH4k0gFY
-        6Y8+RH9GkgAAAABJRU5ErkJggg==
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wgAADsIBFShKgAAAAFxJREFUOE/NjVEKQCEIBL3/2brTKx9sSOlm4EdDQrmjyRt842i1/8pxXTTd0EBz
+        hJEU9TcgWtneU2CBrasFStkwKr3EG1rfIRA9OepPIDCJZakFCs1Pw2UUfiTSAVjpjz5Ef0aSAAAAAElF
+        TkSuQmCC
 </value>
   </data>
 </root>
