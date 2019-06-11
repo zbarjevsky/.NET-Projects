@@ -40,6 +40,21 @@ namespace MeditationStopWatch
             m_mnuAdd.Image = m_toolStripButton_AddFiles.Image;
             m_mnuRemove.Image = m_toolStripButton_Remove.Image;
             m_mnuRemoveAll.Image = m_toolStripButton_RemoveAll.Image;
+
+            m_listFiles.KeyPress += ListFiles_KeyPress;
+        }
+
+        private void ListFiles_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == ' ') //space
+            {
+                m_mnuPause_Click(this, e);
+            }
+
+            if (e.KeyChar == '\r') //return
+            {
+                m_mnuPlay_Click(this, e);
+            }
         }
 
         private void FileListControl_SizeChanged(object sender, EventArgs e)
