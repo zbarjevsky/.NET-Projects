@@ -91,16 +91,16 @@
                     Y1="-20" 
                     X2="{Binding oCursorPosX, FallbackValue=100}" 
                     Y2="15" 
-                    Opacity="0.3"
-                    StrokeThickness="20" Stroke="White"/>
+                    Opacity="0.01"
+                    StrokeThickness="40" Stroke="White"/>
             </Border>
             <!-- Cursor Line-->
             <Line Visibility="{Binding oCursorLineVisibility, FallbackValue=Visible}"
                 X1="{Binding oCursorPosX, FallbackValue=100}" 
                 Y1="-20" 
                 X2="{Binding oCursorPosX, FallbackValue=100}" 
-                Y2="15" 
-                StrokeThickness="0.8" Stroke="Navy"/>
+                Y2="10" 
+                StrokeThickness="0.8" Stroke="Black"/>
             <Canvas x:Name="_tics" />
             <TextBlock x:Name="_txtBounds" Canvas.Left="10" Canvas.Top="36" Text="X: 10, Y: 10, Length: 400" FontSize="16"/>
             <Thumb x:Name="thumbRotateLeft" Width="20" Height="20" Canvas.Left="10" Canvas.Top="20" 
@@ -115,45 +115,37 @@
                     Background="AliceBlue" Opacity="0.7" Cursor="Arrow"
                     PreviewMouseLeftButtonUp="btnClose_PreviewMouseLeftButtonUp"
                     Content="X" />
-            <Line x:Name="leftGrip" 
-                  X1="3" 
-                  Y1="0" 
-                  X2="3" 
-                  Y2="{Binding ActualHeight, ElementName=_canvasRuler}" 
-                        StrokeThickness="6" Stroke="DarkGoldenrod"  
-                        PreviewMouseLeftButtonDown="LeftGrip_OnPreviewMouseLeftButtonDown" 
-                        PreviewMouseLeftButtonUp="OnPreviewMouseLeftButtonUp">
-                <Line.Style>
-                    <Style TargetType="Line">
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Opacity" Value="1.0"/>
-                                <Setter Property="Cursor" Value="{Binding oSizeCursor, FallbackValue=SizeWE}"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Line.Style>
-            </Line>
+            <!-- Left Grip -->
+            <Line x:Name="leftGrip" StrokeThickness="15" Stroke="DarkGoldenrod" Opacity="0.01" 
+                  X1="0" Y1="0" X2="0" Y2="{Binding ActualHeight, ElementName=_canvasRuler}" 
+                  Cursor="{Binding oSizeCursor, FallbackValue=SizeWE}"
+                  PreviewMouseLeftButtonDown="LeftGrip_OnPreviewMouseLeftButtonDown" 
+                  PreviewMouseLeftButtonUp="OnPreviewMouseLeftButtonUp"/>
+
+            <!-- Left Grip Hair-->
+            <Line StrokeThickness="1" Stroke="Black" Opacity="1"
+                  X1="0" Y1="0" X2="0" Y2="{Binding ActualHeight, ElementName=_canvasRuler}"
+                  Cursor="{Binding oSizeCursor, FallbackValue=SizeWE}"/>
+
+            <!-- Right Grip -->
             <Line x:Name="rightGrip" ClipToBounds="False"
-                        StrokeThickness="6" Stroke="DarkGoldenrod" Opacity="1"
-                        X1="{Binding ActualWidth, ElementName=_canvasRuler}" 
-                        Y1="0" 
-                        X2="{Binding ActualWidth, ElementName=_canvasRuler}" 
-                        Y2="{Binding ActualHeight, ElementName=_canvasRuler}" 
-                        PreviewMouseLeftButtonDown="rightGrip_PreviewMouseLeftButtonDown" 
-                        PreviewMouseLeftButtonUp="OnPreviewMouseLeftButtonUp">
-                <Line.Style>
-                    <Style TargetType="Line">
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter  Property="Opacity" Value="1.0"/>
-                                <Setter Property="Cursor" Value="{Binding oSizeCursor, FallbackValue=SizeWE}"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Line.Style>
-            </Line>
-        </Canvas>
+                    StrokeThickness="15" Stroke="DarkGoldenrod" Opacity="0.01"
+                    X1="{Binding ActualWidth, ElementName=_canvasRuler}" 
+                    Y1="0" 
+                    X2="{Binding ActualWidth, ElementName=_canvasRuler}" 
+                    Y2="{Binding ActualHeight, ElementName=_canvasRuler}" 
+                    Cursor="{Binding oSizeCursor, FallbackValue=SizeWE}"
+                    PreviewMouseLeftButtonDown="rightGrip_PreviewMouseLeftButtonDown" 
+                    PreviewMouseLeftButtonUp="OnPreviewMouseLeftButtonUp"/>
+
+            <!-- Right Grip Hair-->
+            <Line ClipToBounds="False" StrokeThickness="0.8" Stroke="Black" Opacity="1"
+                    X1="{Binding ActualWidth, ElementName=_canvasRuler}" 
+                    Y1="0" 
+                    X2="{Binding ActualWidth, ElementName=_canvasRuler}" 
+                    Y2="{Binding ActualHeight, ElementName=_canvasRuler}" 
+                    Cursor="{Binding oSizeCursor, FallbackValue=SizeWE}"/>
+            </Canvas>
     </Canvas>
     </Border>
 </Window>
