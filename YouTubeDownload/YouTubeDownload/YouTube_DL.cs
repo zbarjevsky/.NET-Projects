@@ -57,13 +57,15 @@ namespace YouTubeDownload
             string parameters = Data.NoPlayList ? "--no-playlist" : "";
             parameters += Data.AudioOnly ? " --extract-audio --audio-format mp3" : "";
 
-            _DL_Process = YouTube_DL.Create(
+            string exePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), DL);
+            _DL_Process = ProcessHelper.Create(exePath,
                 string.Format(" \"{0}\" {1} -o \"{2}\\{3}\"",
                 Data.Url, parameters, Data.OutputFolder, Data.FileNameTemplate));
 
             _DL_Process.OutputDataReceived += DL_Process_OutputDataReceived;
             _DL_Process.Exited += DL_Process_Exited;
             _DL_Process.Start();
+
             _DL_Process.BeginOutputReadLine();
         }
 
@@ -78,15 +80,18 @@ namespace YouTubeDownload
             if (e == null || e.Data == null)
                 return;
 
-            string line = e.Data;
+            ProcessOutputLine(e.Data);
+        }
 
+        private void ProcessOutputLine(string line)
+        { 
             //parse
             ParseDestination(line);
             ParseProgress(line);
             ParseStatus(line);
             ParsePlayList(line);
 
-            OutputDataReceived(e.Data);
+            OutputDataReceived(line);
         }
 
         private void DL_Process_Exited(object sender, EventArgs e)
@@ -193,33 +198,17 @@ namespace YouTubeDownload
             }
         }
 
-        private static Process Create(string arguments)
+        public static int Update()
         {
-            return new Process
-            {
-                EnableRaisingEvents = true,
-                StartInfo = new ProcessStartInfo(DL, arguments)
-                {
-                    CreateNoWindow = true,
-                    UseShellExecute = false,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    //StandardOutputEncoding = Encoding.GetEncoding(1251),
-                    //StandardErrorEncoding = Encoding.GetEncoding(1251)
-                }
-            };
-        }
 
-        public static async Task Update()
-        {
-            await new Process
+            Process p = Process.Start(new ProcessStartInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, DL), "-U")
             {
-                StartInfo = new ProcessStartInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, DL), "-U")
-                {
-                    CreateNoWindow = true,
-                    UseShellExecute = false
-                }
-            }.RunAndWaitForExitAsync();
+                CreateNoWindow = true,
+                UseShellExecute = false
+            });
+
+            p.WaitForExit();
+            return p.ExitCode;
         }
 
         public static string GetVersion()

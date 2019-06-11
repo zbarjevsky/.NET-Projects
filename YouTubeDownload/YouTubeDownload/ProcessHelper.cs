@@ -16,6 +16,8 @@ namespace YouTubeDownload
             return new ProcessHelper().GetStdOutImpl(fileName, arguments);
         }
 
+        //https://stackoverflow.com/questions/1259084/what-encoding-code-page-is-cmd-exe-using/17177904#17177904
+        //https://stackoverflow.com/questions/38533903/set-c-sharp-console-application-to-unicode-output
         private List<string> GetStdOutImpl(string fileName, string arguments)
         {
             Process p = Create(fileName, arguments);
@@ -44,7 +46,7 @@ namespace YouTubeDownload
             p.Exited -= DL_Process_Exited;
         }
 
-        private static Process Create(string fileName, string arguments)
+        public static Process Create(string fileName, string arguments)
         {
             return new Process
             {
@@ -53,8 +55,10 @@ namespace YouTubeDownload
                 {
                     CreateNoWindow = true,
                     UseShellExecute = false,
+                    RedirectStandardInput = true,
                     RedirectStandardOutput = true,
-                    RedirectStandardError = true
+                    RedirectStandardError = true,
+                    //StandardOutputEncoding = Encoding.GetEncoding(437)
                 }
             };
         }
