@@ -34,7 +34,26 @@ namespace YouTubeDownload
         public bool AudioOnly { get; set; } = false;
         public string Url { get; set; } = "";
         public double Progress { get; set; } = 0;
-    }
+        public Encoding Encoding { get; set; } = Encoding.UTF8;
+
+        public DownloadData Clone()
+        {
+            return new DownloadData()
+            {
+                State = State,
+                OutputFolder = OutputFolder,
+                Description = Description,
+                PlayListDescription = PlayListDescription,
+                PlayListProgress = PlayListProgress,
+                FileNameTemplate = FileNameTemplate,
+                NoPlayList = NoPlayList,
+                AudioOnly = AudioOnly,
+                Url = Url,
+                Progress = Progress,
+                Encoding = Encoding
+            };
+        }
+}
 
     //https://github.com/ytdl-org/youtube-dl/blob/master/README.md#readme
     public class YouTube_DL
@@ -60,7 +79,7 @@ namespace YouTubeDownload
             string exePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), DL);
             _DL_Process = ProcessHelper.Create(exePath,
                 string.Format(" \"{0}\" {1} -o \"{2}\\{3}\"",
-                Data.Url, parameters, Data.OutputFolder, Data.FileNameTemplate));
+                Data.Url, parameters, Data.OutputFolder, Data.FileNameTemplate), Data.Encoding);
 
             _DL_Process.OutputDataReceived += DL_Process_OutputDataReceived;
             _DL_Process.Exited += DL_Process_Exited;

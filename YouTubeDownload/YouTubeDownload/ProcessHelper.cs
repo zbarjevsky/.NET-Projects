@@ -20,7 +20,7 @@ namespace YouTubeDownload
         //https://stackoverflow.com/questions/38533903/set-c-sharp-console-application-to-unicode-output
         private List<string> GetStdOutImpl(string fileName, string arguments)
         {
-            Process p = Create(fileName, arguments);
+            Process p = Create(fileName, arguments, Encoding.UTF8);
 
             p.OutputDataReceived += DL_Process_OutputDataReceived;
             p.Exited += DL_Process_Exited;
@@ -46,7 +46,7 @@ namespace YouTubeDownload
             p.Exited -= DL_Process_Exited;
         }
 
-        public static Process Create(string fileName, string arguments)
+        public static Process Create(string fileName, string arguments, Encoding enc)
         {
             return new Process
             {
@@ -58,7 +58,7 @@ namespace YouTubeDownload
                     RedirectStandardInput = true,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
-                    //StandardOutputEncoding = Encoding.GetEncoding(437)
+                    StandardOutputEncoding = enc
                 }
             };
         }

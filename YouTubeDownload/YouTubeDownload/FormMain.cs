@@ -74,14 +74,19 @@ namespace YouTubeDownload
 
             _pause = false;
 
-            frm.Data.State = DownloadState.InQueue;
+            //foreach (EncodingInfo enc in Encoding.GetEncodings())
+            //{
+                DownloadData data = frm.Data.Clone();
+                data.State = DownloadState.InQueue;
+                //data.Encoding = enc.GetEncoding();
 
-            ListViewItem item = new ListViewItem(frm.Data.State.ToString());
-            item.SubItems.Add(frm.Data.Description);
-            item.SubItems.Add(frm.Data.Url);
-            item.Tag = frm.Data;
+                ListViewItem item = new ListViewItem(data.State.ToString());
+                item.SubItems.Add(data.Description);
+                item.SubItems.Add(data.Url);
+                item.Tag = data;
 
-            m_listUrls.Items.Add(item);
+                m_listUrls.Items.Add(item);
+            //}
 
             UpdateButtonsState();
             StartDownloadNext();
