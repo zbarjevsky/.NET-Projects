@@ -169,8 +169,8 @@ namespace RulerWPF
 
             double wpfScale = Utils.ScaleWPF;
 
-            _txtBounds.Text = string.Format("X: {0:0}, Y: {1:0}, Length: {2:0.0} {3}, Angle: {4:0.0}°, Cursor: {5:0.00}, Scale: {6:0.00}, WPF Scale: {7:0.00}",
-                loc.X, loc.Y, r.WidthInSelectedUnits(width),  units, _vm.oAngle, scale * _vm.oCursorPosX, scale, wpfScale);
+            _txtBounds.Text = string.Format("X: {0:0}, Y: {1:0}, Length: {2:0.0} {3}, Angle: {4:0.0}°, Cursor: {5:0}, Scale: {6:0.00}, WPF Scale: {7:0.00}",
+                loc.X, loc.Y, r.WidthInSelectedUnits(width),  units, _vm.oAngle, scale * _vm.oCursorPosX - 1, scale, wpfScale);
 
             Properties.Settings.Default.Location = new System.Drawing.Point((int)loc.X, (int)loc.Y);
         }
