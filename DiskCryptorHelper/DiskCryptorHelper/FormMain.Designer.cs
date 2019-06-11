@@ -30,20 +30,6 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
-            this.m_listDrives = new System.Windows.Forms.ListView();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.m_btnMountAll = new System.Windows.Forms.Button();
-            this.m_btnUnmoutAll = new System.Windows.Forms.Button();
-            this.m_txtPwd = new System.Windows.Forms.TextBox();
-            this.m_btnMount = new System.Windows.Forms.Button();
-            this.m_lblSelected = new System.Windows.Forms.Label();
-            this.m_cmbAvailableDriveLetters = new System.Windows.Forms.ComboBox();
-            this.m_btnReload = new System.Windows.Forms.Button();
-            this.m_txtLog = new System.Windows.Forms.RichTextBox();
-            this.m_btnUnmount = new System.Windows.Forms.Button();
             this.m_sysIcon = new System.Windows.Forms.NotifyIcon(this.components);
             this.m_sysIconMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.m_mnuShow = new System.Windows.Forms.ToolStripMenuItem();
@@ -57,20 +43,6 @@
             this.m_mnuFileCreateVHD = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.m_mnuExit = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_btnUnmountAllandBSOD = new System.Windows.Forms.Button();
-            this.m_btnEject = new System.Windows.Forms.Button();
-            this.m_splitDiskCryptorInfo = new System.Windows.Forms.SplitContainer();
-            this.m_btnBrowseDisk = new System.Windows.Forms.Button();
-            this.m_pnlSeparate1 = new System.Windows.Forms.Panel();
-            this.m_splitOperations = new System.Windows.Forms.SplitContainer();
-            this.m_pnlVHD = new System.Windows.Forms.Panel();
-            this.m_pnlPassword = new System.Windows.Forms.Panel();
-            this.m_grpPwd = new System.Windows.Forms.GroupBox();
-            this.m_grpBSOD = new System.Windows.Forms.GroupBox();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.m_treeDrives = new System.Windows.Forms.TreeView();
-            this.label1 = new System.Windows.Forms.Label();
             this.m_menuStripMain = new System.Windows.Forms.MenuStrip();
             this.m_mnuFile = new System.Windows.Forms.ToolStripMenuItem();
             this.m_mnuOptions = new System.Windows.Forms.ToolStripMenuItem();
@@ -82,16 +54,54 @@
             this.m_status1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.m_status2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.m_tabMain = new System.Windows.Forms.TabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.m_VHD_MountUnMountUserControl = new DiskCryptorHelper.VHD.VHD_MountUnMountUserControl();
-            this.hideDriveLetterControl1 = new DiskCryptorHelper.HideDriveLetterControl();
+            this.m_tabMain = new System.Windows.Forms.TabControl();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
             this.m_pnlTemp1 = new System.Windows.Forms.Panel();
+            this.m_splitDiskCryptorInfo = new System.Windows.Forms.SplitContainer();
+            this.m_btnBrowseDisk = new System.Windows.Forms.Button();
+            this.m_btnUnmount = new System.Windows.Forms.Button();
+            this.m_cmbAvailableDriveLetters = new System.Windows.Forms.ComboBox();
+            this.m_btnMount = new System.Windows.Forms.Button();
+            this.m_listDrives = new System.Windows.Forms.ListView();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.m_lblSelected = new System.Windows.Forms.Label();
+            this.m_btnMountAll = new System.Windows.Forms.Button();
+            this.m_btnReload = new System.Windows.Forms.Button();
+            this.m_btnUnmoutAll = new System.Windows.Forms.Button();
+            this.m_txtLog = new System.Windows.Forms.RichTextBox();
+            this.m_pnlSeparate1 = new System.Windows.Forms.Panel();
+            this.m_splitOperations = new System.Windows.Forms.SplitContainer();
+            this.m_pnlVHD = new System.Windows.Forms.Panel();
+            this.m_VHD_MountUnMountUserControl = new DiskCryptorHelper.VHD.VHD_MountUnMountUserControl();
+            this.m_pnlPassword = new System.Windows.Forms.Panel();
+            this.m_grpPwd = new System.Windows.Forms.GroupBox();
+            this.m_txtPwd = new System.Windows.Forms.TextBox();
+            this.m_grpBSOD = new System.Windows.Forms.GroupBox();
+            this.m_btnUnmountAllandBSOD = new System.Windows.Forms.Button();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.m_treeDrives = new System.Windows.Forms.TreeView();
+            this.label1 = new System.Windows.Forms.Label();
+            this.m_btnEject = new System.Windows.Forms.Button();
+            this.hideDriveLetterControl1 = new DiskCryptorHelper.HideDriveLetterControl();
+            this.panel2 = new System.Windows.Forms.Panel();
             this.m_sysIconMenu.SuspendLayout();
+            this.m_menuStripMain.SuspendLayout();
+            this.statusStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
+            this.m_tabMain.SuspendLayout();
+            this.tabPage1.SuspendLayout();
+            this.m_pnlTemp1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitDiskCryptorInfo)).BeginInit();
             this.m_splitDiskCryptorInfo.Panel1.SuspendLayout();
             this.m_splitDiskCryptorInfo.Panel2.SuspendLayout();
@@ -104,178 +114,12 @@
             this.m_pnlPassword.SuspendLayout();
             this.m_grpPwd.SuspendLayout();
             this.m_grpBSOD.SuspendLayout();
-            this.panel1.SuspendLayout();
-            this.m_menuStripMain.SuspendLayout();
-            this.statusStrip1.SuspendLayout();
-            this.m_tabMain.SuspendLayout();
-            this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
-            this.splitContainer2.Panel1.SuspendLayout();
-            this.splitContainer2.Panel2.SuspendLayout();
-            this.splitContainer2.SuspendLayout();
-            this.m_pnlTemp1.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // m_listDrives
-            // 
-            this.m_listDrives.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_listDrives.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader3,
-            this.columnHeader4});
-            this.m_listDrives.FullRowSelect = true;
-            this.m_listDrives.GridLines = true;
-            this.m_listDrives.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
-            this.m_listDrives.HideSelection = false;
-            this.m_listDrives.Location = new System.Drawing.Point(14, 17);
-            this.m_listDrives.Margin = new System.Windows.Forms.Padding(2);
-            this.m_listDrives.MultiSelect = false;
-            this.m_listDrives.Name = "m_listDrives";
-            this.m_listDrives.Size = new System.Drawing.Size(434, 223);
-            this.m_listDrives.TabIndex = 0;
-            this.m_listDrives.UseCompatibleStateImageBehavior = false;
-            this.m_listDrives.View = System.Windows.Forms.View.Details;
-            this.m_listDrives.SelectedIndexChanged += new System.EventHandler(this.m_listDrives_SelectedIndexChanged);
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = "Volume";
-            this.columnHeader1.Width = 89;
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "Mount Point";
-            this.columnHeader2.Width = 102;
-            // 
-            // columnHeader3
-            // 
-            this.columnHeader3.Text = "Size";
-            this.columnHeader3.Width = 71;
-            // 
-            // columnHeader4
-            // 
-            this.columnHeader4.Text = "Status";
-            this.columnHeader4.Width = 139;
-            // 
-            // m_btnMountAll
-            // 
-            this.m_btnMountAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnMountAll.Location = new System.Drawing.Point(453, 185);
-            this.m_btnMountAll.Margin = new System.Windows.Forms.Padding(2);
-            this.m_btnMountAll.Name = "m_btnMountAll";
-            this.m_btnMountAll.Size = new System.Drawing.Size(74, 26);
-            this.m_btnMountAll.TabIndex = 2;
-            this.m_btnMountAll.Text = "Mount All";
-            this.toolTip1.SetToolTip(this.m_btnMountAll, "Mount All DiskCryptor Drives");
-            this.m_btnMountAll.UseVisualStyleBackColor = true;
-            this.m_btnMountAll.Click += new System.EventHandler(this.m_btnMountAll_Click);
-            // 
-            // m_btnUnmoutAll
-            // 
-            this.m_btnUnmoutAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnUnmoutAll.Location = new System.Drawing.Point(453, 215);
-            this.m_btnUnmoutAll.Margin = new System.Windows.Forms.Padding(2);
-            this.m_btnUnmoutAll.Name = "m_btnUnmoutAll";
-            this.m_btnUnmoutAll.Size = new System.Drawing.Size(74, 26);
-            this.m_btnUnmoutAll.TabIndex = 3;
-            this.m_btnUnmoutAll.Text = "UnMount All";
-            this.toolTip1.SetToolTip(this.m_btnUnmoutAll, "Unmount All DiskCryptor Drives");
-            this.m_btnUnmoutAll.UseVisualStyleBackColor = true;
-            this.m_btnUnmoutAll.Click += new System.EventHandler(this.m_btnUnmoutAll_Click);
-            // 
-            // m_txtPwd
-            // 
-            this.m_txtPwd.Location = new System.Drawing.Point(13, 15);
-            this.m_txtPwd.Margin = new System.Windows.Forms.Padding(2);
-            this.m_txtPwd.Name = "m_txtPwd";
-            this.m_txtPwd.Size = new System.Drawing.Size(131, 22);
-            this.m_txtPwd.TabIndex = 1;
-            this.m_txtPwd.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.m_txtPwd.UseSystemPasswordChar = true;
-            this.m_txtPwd.TextChanged += new System.EventHandler(this.m_txtPwd_TextChanged);
-            // 
-            // m_btnMount
-            // 
-            this.m_btnMount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnMount.Location = new System.Drawing.Point(453, 83);
-            this.m_btnMount.Margin = new System.Windows.Forms.Padding(2);
-            this.m_btnMount.Name = "m_btnMount";
-            this.m_btnMount.Size = new System.Drawing.Size(74, 26);
-            this.m_btnMount.TabIndex = 0;
-            this.m_btnMount.Text = "Mount As:";
-            this.m_btnMount.UseVisualStyleBackColor = true;
-            this.m_btnMount.Click += new System.EventHandler(this.m_btnMount_Click);
-            // 
-            // m_lblSelected
-            // 
-            this.m_lblSelected.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.m_lblSelected.AutoSize = true;
-            this.m_lblSelected.Location = new System.Drawing.Point(15, 247);
-            this.m_lblSelected.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.m_lblSelected.Name = "m_lblSelected";
-            this.m_lblSelected.Size = new System.Drawing.Size(87, 17);
-            this.m_lblSelected.TabIndex = 4;
-            this.m_lblSelected.Text = "Slected: ???";
-            // 
-            // m_cmbAvailableDriveLetters
-            // 
-            this.m_cmbAvailableDriveLetters.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_cmbAvailableDriveLetters.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.m_cmbAvailableDriveLetters.FormattingEnabled = true;
-            this.m_cmbAvailableDriveLetters.Location = new System.Drawing.Point(453, 59);
-            this.m_cmbAvailableDriveLetters.Margin = new System.Windows.Forms.Padding(2);
-            this.m_cmbAvailableDriveLetters.Name = "m_cmbAvailableDriveLetters";
-            this.m_cmbAvailableDriveLetters.Size = new System.Drawing.Size(75, 24);
-            this.m_cmbAvailableDriveLetters.TabIndex = 3;
-            this.m_cmbAvailableDriveLetters.SelectedIndexChanged += new System.EventHandler(this.m_cmbAvailableDriveLetters_SelectedIndexChanged);
-            // 
-            // m_btnReload
-            // 
-            this.m_btnReload.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnReload.Location = new System.Drawing.Point(453, 17);
-            this.m_btnReload.Margin = new System.Windows.Forms.Padding(2);
-            this.m_btnReload.Name = "m_btnReload";
-            this.m_btnReload.Size = new System.Drawing.Size(74, 26);
-            this.m_btnReload.TabIndex = 1;
-            this.m_btnReload.Text = "Reload";
-            this.toolTip1.SetToolTip(this.m_btnReload, "Reload DiskCryptor Drive List");
-            this.m_btnReload.UseVisualStyleBackColor = true;
-            this.m_btnReload.Click += new System.EventHandler(this.m_btnReload_Click);
-            // 
-            // m_txtLog
-            // 
-            this.m_txtLog.BackColor = System.Drawing.Color.Black;
-            this.m_txtLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_txtLog.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.m_txtLog.ForeColor = System.Drawing.Color.LimeGreen;
-            this.m_txtLog.Location = new System.Drawing.Point(0, 0);
-            this.m_txtLog.Margin = new System.Windows.Forms.Padding(2);
-            this.m_txtLog.Name = "m_txtLog";
-            this.m_txtLog.ReadOnly = true;
-            this.m_txtLog.Size = new System.Drawing.Size(331, 271);
-            this.m_txtLog.TabIndex = 0;
-            this.m_txtLog.Text = "";
-            this.m_txtLog.WordWrap = false;
-            // 
-            // m_btnUnmount
-            // 
-            this.m_btnUnmount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnUnmount.Location = new System.Drawing.Point(453, 113);
-            this.m_btnUnmount.Margin = new System.Windows.Forms.Padding(2);
-            this.m_btnUnmount.Name = "m_btnUnmount";
-            this.m_btnUnmount.Size = new System.Drawing.Size(74, 26);
-            this.m_btnUnmount.TabIndex = 1;
-            this.m_btnUnmount.Text = "UnMount";
-            this.m_btnUnmount.UseVisualStyleBackColor = true;
-            this.m_btnUnmount.Click += new System.EventHandler(this.m_btnUnmount_Click);
             // 
             // m_sysIcon
             // 
@@ -374,204 +218,6 @@
             this.m_mnuExit.Text = "E&xit";
             this.m_mnuExit.Click += new System.EventHandler(this.m_mnuExit_Click);
             // 
-            // m_btnUnmountAllandBSOD
-            // 
-            this.m_btnUnmountAllandBSOD.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnUnmountAllandBSOD.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("m_btnUnmountAllandBSOD.BackgroundImage")));
-            this.m_btnUnmountAllandBSOD.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.m_btnUnmountAllandBSOD.Location = new System.Drawing.Point(43, 36);
-            this.m_btnUnmountAllandBSOD.Margin = new System.Windows.Forms.Padding(2);
-            this.m_btnUnmountAllandBSOD.Name = "m_btnUnmountAllandBSOD";
-            this.m_btnUnmountAllandBSOD.Size = new System.Drawing.Size(123, 101);
-            this.m_btnUnmountAllandBSOD.TabIndex = 0;
-            this.toolTip1.SetToolTip(this.m_btnUnmountAllandBSOD, "Generate BSOD");
-            this.m_btnUnmountAllandBSOD.UseVisualStyleBackColor = true;
-            this.m_btnUnmountAllandBSOD.Click += new System.EventHandler(this.m_btnUnmountAllandBSOD_Click);
-            // 
-            // m_btnEject
-            // 
-            this.m_btnEject.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.m_btnEject.Location = new System.Drawing.Point(0, 438);
-            this.m_btnEject.Margin = new System.Windows.Forms.Padding(2);
-            this.m_btnEject.Name = "m_btnEject";
-            this.m_btnEject.Size = new System.Drawing.Size(464, 35);
-            this.m_btnEject.TabIndex = 0;
-            this.m_btnEject.Text = "UnMount and Eject";
-            this.m_btnEject.UseVisualStyleBackColor = true;
-            this.m_btnEject.Click += new System.EventHandler(this.m_btnEject_Click);
-            // 
-            // m_splitDiskCryptorInfo
-            // 
-            this.m_splitDiskCryptorInfo.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.m_splitDiskCryptorInfo.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_splitDiskCryptorInfo.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
-            this.m_splitDiskCryptorInfo.Location = new System.Drawing.Point(0, 198);
-            this.m_splitDiskCryptorInfo.Margin = new System.Windows.Forms.Padding(2);
-            this.m_splitDiskCryptorInfo.Name = "m_splitDiskCryptorInfo";
-            // 
-            // m_splitDiskCryptorInfo.Panel1
-            // 
-            this.m_splitDiskCryptorInfo.Panel1.BackColor = System.Drawing.SystemColors.Control;
-            this.m_splitDiskCryptorInfo.Panel1.Controls.Add(this.m_btnBrowseDisk);
-            this.m_splitDiskCryptorInfo.Panel1.Controls.Add(this.m_btnUnmount);
-            this.m_splitDiskCryptorInfo.Panel1.Controls.Add(this.m_cmbAvailableDriveLetters);
-            this.m_splitDiskCryptorInfo.Panel1.Controls.Add(this.m_btnMount);
-            this.m_splitDiskCryptorInfo.Panel1.Controls.Add(this.m_listDrives);
-            this.m_splitDiskCryptorInfo.Panel1.Controls.Add(this.m_lblSelected);
-            this.m_splitDiskCryptorInfo.Panel1.Controls.Add(this.m_btnMountAll);
-            this.m_splitDiskCryptorInfo.Panel1.Controls.Add(this.m_btnReload);
-            this.m_splitDiskCryptorInfo.Panel1.Controls.Add(this.m_btnUnmoutAll);
-            // 
-            // m_splitDiskCryptorInfo.Panel2
-            // 
-            this.m_splitDiskCryptorInfo.Panel2.Controls.Add(this.m_txtLog);
-            this.m_splitDiskCryptorInfo.Size = new System.Drawing.Size(879, 275);
-            this.m_splitDiskCryptorInfo.SplitterDistance = 541;
-            this.m_splitDiskCryptorInfo.SplitterWidth = 3;
-            this.m_splitDiskCryptorInfo.TabIndex = 0;
-            // 
-            // m_btnBrowseDisk
-            // 
-            this.m_btnBrowseDisk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnBrowseDisk.Location = new System.Drawing.Point(453, 154);
-            this.m_btnBrowseDisk.Margin = new System.Windows.Forms.Padding(2);
-            this.m_btnBrowseDisk.Name = "m_btnBrowseDisk";
-            this.m_btnBrowseDisk.Size = new System.Drawing.Size(74, 26);
-            this.m_btnBrowseDisk.TabIndex = 5;
-            this.m_btnBrowseDisk.Text = "Browse...";
-            this.m_btnBrowseDisk.UseVisualStyleBackColor = true;
-            this.m_btnBrowseDisk.Click += new System.EventHandler(this.m_btnBrowseDisk_Click);
-            // 
-            // m_pnlSeparate1
-            // 
-            this.m_pnlSeparate1.BackColor = System.Drawing.Color.LightSlateGray;
-            this.m_pnlSeparate1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.m_pnlSeparate1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.m_pnlSeparate1.Location = new System.Drawing.Point(0, 181);
-            this.m_pnlSeparate1.Margin = new System.Windows.Forms.Padding(2);
-            this.m_pnlSeparate1.Name = "m_pnlSeparate1";
-            this.m_pnlSeparate1.Size = new System.Drawing.Size(879, 17);
-            this.m_pnlSeparate1.TabIndex = 5;
-            // 
-            // m_splitOperations
-            // 
-            this.m_splitOperations.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.m_splitOperations.Dock = System.Windows.Forms.DockStyle.Top;
-            this.m_splitOperations.Location = new System.Drawing.Point(0, 0);
-            this.m_splitOperations.Margin = new System.Windows.Forms.Padding(2);
-            this.m_splitOperations.Name = "m_splitOperations";
-            // 
-            // m_splitOperations.Panel1
-            // 
-            this.m_splitOperations.Panel1.Controls.Add(this.m_pnlVHD);
-            this.m_splitOperations.Panel1.Controls.Add(this.m_pnlPassword);
-            // 
-            // m_splitOperations.Panel2
-            // 
-            this.m_splitOperations.Panel2.BackColor = System.Drawing.Color.Ivory;
-            this.m_splitOperations.Panel2.Controls.Add(this.m_grpBSOD);
-            this.m_splitOperations.Size = new System.Drawing.Size(879, 181);
-            this.m_splitOperations.SplitterDistance = 662;
-            this.m_splitOperations.SplitterWidth = 3;
-            this.m_splitOperations.TabIndex = 6;
-            // 
-            // m_pnlVHD
-            // 
-            this.m_pnlVHD.BackColor = System.Drawing.Color.LightGoldenrodYellow;
-            this.m_pnlVHD.Controls.Add(this.m_VHD_MountUnMountUserControl);
-            this.m_pnlVHD.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_pnlVHD.Location = new System.Drawing.Point(0, 54);
-            this.m_pnlVHD.Margin = new System.Windows.Forms.Padding(2);
-            this.m_pnlVHD.Name = "m_pnlVHD";
-            this.m_pnlVHD.Size = new System.Drawing.Size(658, 123);
-            this.m_pnlVHD.TabIndex = 5;
-            // 
-            // m_pnlPassword
-            // 
-            this.m_pnlPassword.BackColor = System.Drawing.SystemColors.Control;
-            this.m_pnlPassword.Controls.Add(this.m_grpPwd);
-            this.m_pnlPassword.Dock = System.Windows.Forms.DockStyle.Top;
-            this.m_pnlPassword.Location = new System.Drawing.Point(0, 0);
-            this.m_pnlPassword.Margin = new System.Windows.Forms.Padding(2);
-            this.m_pnlPassword.Name = "m_pnlPassword";
-            this.m_pnlPassword.Size = new System.Drawing.Size(658, 54);
-            this.m_pnlPassword.TabIndex = 5;
-            // 
-            // m_grpPwd
-            // 
-            this.m_grpPwd.Controls.Add(this.m_txtPwd);
-            this.m_grpPwd.Location = new System.Drawing.Point(8, 6);
-            this.m_grpPwd.Margin = new System.Windows.Forms.Padding(2);
-            this.m_grpPwd.Name = "m_grpPwd";
-            this.m_grpPwd.Padding = new System.Windows.Forms.Padding(2);
-            this.m_grpPwd.Size = new System.Drawing.Size(170, 41);
-            this.m_grpPwd.TabIndex = 2;
-            this.m_grpPwd.TabStop = false;
-            this.m_grpPwd.Text = "Password:";
-            // 
-            // m_grpBSOD
-            // 
-            this.m_grpBSOD.Controls.Add(this.m_btnUnmountAllandBSOD);
-            this.m_grpBSOD.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_grpBSOD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.m_grpBSOD.ForeColor = System.Drawing.Color.SaddleBrown;
-            this.m_grpBSOD.Location = new System.Drawing.Point(0, 0);
-            this.m_grpBSOD.Margin = new System.Windows.Forms.Padding(2);
-            this.m_grpBSOD.Name = "m_grpBSOD";
-            this.m_grpBSOD.Padding = new System.Windows.Forms.Padding(2);
-            this.m_grpBSOD.Size = new System.Drawing.Size(210, 177);
-            this.m_grpBSOD.TabIndex = 6;
-            this.m_grpBSOD.TabStop = false;
-            this.m_grpBSOD.Text = "BSOD";
-            // 
-            // panel2
-            // 
-            this.panel2.BackColor = System.Drawing.SystemColors.Control;
-            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel2.Location = new System.Drawing.Point(0, 0);
-            this.panel2.Margin = new System.Windows.Forms.Padding(2);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(285, 33);
-            this.panel2.TabIndex = 0;
-            // 
-            // panel1
-            // 
-            this.panel1.Controls.Add(this.m_treeDrives);
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.m_btnEject);
-            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel1.Location = new System.Drawing.Point(0, 0);
-            this.panel1.Margin = new System.Windows.Forms.Padding(2);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(464, 473);
-            this.panel1.TabIndex = 3;
-            // 
-            // m_treeDrives
-            // 
-            this.m_treeDrives.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_treeDrives.FullRowSelect = true;
-            this.m_treeDrives.HideSelection = false;
-            this.m_treeDrives.Location = new System.Drawing.Point(0, 38);
-            this.m_treeDrives.Margin = new System.Windows.Forms.Padding(2);
-            this.m_treeDrives.Name = "m_treeDrives";
-            this.m_treeDrives.Size = new System.Drawing.Size(464, 400);
-            this.m_treeDrives.TabIndex = 1;
-            this.m_treeDrives.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.m_treeDrives_AfterSelect);
-            // 
-            // label1
-            // 
-            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label1.Location = new System.Drawing.Point(0, 0);
-            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(464, 38);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Plugged USB Drives:";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // m_menuStripMain
             // 
             this.m_menuStripMain.ImageScalingSize = new System.Drawing.Size(20, 20);
@@ -581,7 +227,7 @@
             this.m_menuStripMain.Location = new System.Drawing.Point(0, 0);
             this.m_menuStripMain.Name = "m_menuStripMain";
             this.m_menuStripMain.Padding = new System.Windows.Forms.Padding(5, 2, 0, 2);
-            this.m_menuStripMain.Size = new System.Drawing.Size(1184, 28);
+            this.m_menuStripMain.Size = new System.Drawing.Size(1182, 28);
             this.m_menuStripMain.TabIndex = 0;
             this.m_menuStripMain.Text = "menuStrip1";
             // 
@@ -635,10 +281,10 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_status1,
             this.m_status2});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 536);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 628);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 11, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(1184, 25);
+            this.statusStrip1.Size = new System.Drawing.Size(1182, 25);
             this.statusStrip1.TabIndex = 2;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -651,7 +297,7 @@
             // m_status2
             // 
             this.m_status2.Name = "m_status2";
-            this.m_status2.Size = new System.Drawing.Size(1122, 20);
+            this.m_status2.Size = new System.Drawing.Size(1120, 20);
             this.m_status2.Spring = true;
             this.m_status2.Text = "...";
             // 
@@ -662,6 +308,29 @@
             this.toolTip1.IsBalloon = true;
             this.toolTip1.ReshowDelay = 100;
             // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
+            // 
+            // splitContainer2
+            // 
+            this.splitContainer2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.Location = new System.Drawing.Point(0, 28);
+            this.splitContainer2.Name = "splitContainer2";
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.m_tabMain);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.hideDriveLetterControl1);
+            this.splitContainer2.Panel2.Controls.Add(this.panel2);
+            this.splitContainer2.Size = new System.Drawing.Size(1182, 600);
+            this.splitContainer2.SplitterDistance = 891;
+            this.splitContainer2.TabIndex = 3;
+            // 
             // m_tabMain
             // 
             this.m_tabMain.Controls.Add(this.tabPage1);
@@ -671,7 +340,7 @@
             this.m_tabMain.Margin = new System.Windows.Forms.Padding(2);
             this.m_tabMain.Name = "m_tabMain";
             this.m_tabMain.SelectedIndex = 0;
-            this.m_tabMain.Size = new System.Drawing.Size(891, 506);
+            this.m_tabMain.Size = new System.Drawing.Size(889, 598);
             this.m_tabMain.TabIndex = 1;
             // 
             // tabPage1
@@ -681,10 +350,328 @@
             this.tabPage1.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPage1.Size = new System.Drawing.Size(883, 477);
+            this.tabPage1.Size = new System.Drawing.Size(881, 569);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Moun/Unmount";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // m_pnlTemp1
+            // 
+            this.m_pnlTemp1.Controls.Add(this.m_splitDiskCryptorInfo);
+            this.m_pnlTemp1.Controls.Add(this.m_pnlSeparate1);
+            this.m_pnlTemp1.Controls.Add(this.m_splitOperations);
+            this.m_pnlTemp1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_pnlTemp1.Location = new System.Drawing.Point(2, 2);
+            this.m_pnlTemp1.Name = "m_pnlTemp1";
+            this.m_pnlTemp1.Size = new System.Drawing.Size(877, 565);
+            this.m_pnlTemp1.TabIndex = 0;
+            // 
+            // m_splitDiskCryptorInfo
+            // 
+            this.m_splitDiskCryptorInfo.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.m_splitDiskCryptorInfo.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_splitDiskCryptorInfo.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
+            this.m_splitDiskCryptorInfo.Location = new System.Drawing.Point(0, 198);
+            this.m_splitDiskCryptorInfo.Margin = new System.Windows.Forms.Padding(2);
+            this.m_splitDiskCryptorInfo.Name = "m_splitDiskCryptorInfo";
+            // 
+            // m_splitDiskCryptorInfo.Panel1
+            // 
+            this.m_splitDiskCryptorInfo.Panel1.BackColor = System.Drawing.SystemColors.Control;
+            this.m_splitDiskCryptorInfo.Panel1.Controls.Add(this.m_btnBrowseDisk);
+            this.m_splitDiskCryptorInfo.Panel1.Controls.Add(this.m_btnUnmount);
+            this.m_splitDiskCryptorInfo.Panel1.Controls.Add(this.m_cmbAvailableDriveLetters);
+            this.m_splitDiskCryptorInfo.Panel1.Controls.Add(this.m_btnMount);
+            this.m_splitDiskCryptorInfo.Panel1.Controls.Add(this.m_listDrives);
+            this.m_splitDiskCryptorInfo.Panel1.Controls.Add(this.m_lblSelected);
+            this.m_splitDiskCryptorInfo.Panel1.Controls.Add(this.m_btnMountAll);
+            this.m_splitDiskCryptorInfo.Panel1.Controls.Add(this.m_btnReload);
+            this.m_splitDiskCryptorInfo.Panel1.Controls.Add(this.m_btnUnmoutAll);
+            // 
+            // m_splitDiskCryptorInfo.Panel2
+            // 
+            this.m_splitDiskCryptorInfo.Panel2.Controls.Add(this.m_txtLog);
+            this.m_splitDiskCryptorInfo.Size = new System.Drawing.Size(877, 367);
+            this.m_splitDiskCryptorInfo.SplitterDistance = 541;
+            this.m_splitDiskCryptorInfo.SplitterWidth = 3;
+            this.m_splitDiskCryptorInfo.TabIndex = 0;
+            // 
+            // m_btnBrowseDisk
+            // 
+            this.m_btnBrowseDisk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnBrowseDisk.Location = new System.Drawing.Point(453, 154);
+            this.m_btnBrowseDisk.Margin = new System.Windows.Forms.Padding(2);
+            this.m_btnBrowseDisk.Name = "m_btnBrowseDisk";
+            this.m_btnBrowseDisk.Size = new System.Drawing.Size(74, 26);
+            this.m_btnBrowseDisk.TabIndex = 5;
+            this.m_btnBrowseDisk.Text = "Browse...";
+            this.m_btnBrowseDisk.UseVisualStyleBackColor = true;
+            this.m_btnBrowseDisk.Click += new System.EventHandler(this.m_btnBrowseDisk_Click);
+            // 
+            // m_btnUnmount
+            // 
+            this.m_btnUnmount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnUnmount.Location = new System.Drawing.Point(453, 113);
+            this.m_btnUnmount.Margin = new System.Windows.Forms.Padding(2);
+            this.m_btnUnmount.Name = "m_btnUnmount";
+            this.m_btnUnmount.Size = new System.Drawing.Size(74, 26);
+            this.m_btnUnmount.TabIndex = 1;
+            this.m_btnUnmount.Text = "UnMount";
+            this.m_btnUnmount.UseVisualStyleBackColor = true;
+            this.m_btnUnmount.Click += new System.EventHandler(this.m_btnUnmount_Click);
+            // 
+            // m_cmbAvailableDriveLetters
+            // 
+            this.m_cmbAvailableDriveLetters.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_cmbAvailableDriveLetters.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.m_cmbAvailableDriveLetters.FormattingEnabled = true;
+            this.m_cmbAvailableDriveLetters.Location = new System.Drawing.Point(453, 59);
+            this.m_cmbAvailableDriveLetters.Margin = new System.Windows.Forms.Padding(2);
+            this.m_cmbAvailableDriveLetters.Name = "m_cmbAvailableDriveLetters";
+            this.m_cmbAvailableDriveLetters.Size = new System.Drawing.Size(75, 24);
+            this.m_cmbAvailableDriveLetters.TabIndex = 3;
+            this.m_cmbAvailableDriveLetters.SelectedIndexChanged += new System.EventHandler(this.m_cmbAvailableDriveLetters_SelectedIndexChanged);
+            // 
+            // m_btnMount
+            // 
+            this.m_btnMount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnMount.Location = new System.Drawing.Point(453, 83);
+            this.m_btnMount.Margin = new System.Windows.Forms.Padding(2);
+            this.m_btnMount.Name = "m_btnMount";
+            this.m_btnMount.Size = new System.Drawing.Size(74, 26);
+            this.m_btnMount.TabIndex = 0;
+            this.m_btnMount.Text = "Mount As:";
+            this.m_btnMount.UseVisualStyleBackColor = true;
+            this.m_btnMount.Click += new System.EventHandler(this.m_btnMount_Click);
+            // 
+            // m_listDrives
+            // 
+            this.m_listDrives.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_listDrives.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader3,
+            this.columnHeader4});
+            this.m_listDrives.FullRowSelect = true;
+            this.m_listDrives.GridLines = true;
+            this.m_listDrives.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.m_listDrives.HideSelection = false;
+            this.m_listDrives.Location = new System.Drawing.Point(14, 17);
+            this.m_listDrives.Margin = new System.Windows.Forms.Padding(2);
+            this.m_listDrives.MultiSelect = false;
+            this.m_listDrives.Name = "m_listDrives";
+            this.m_listDrives.Size = new System.Drawing.Size(434, 315);
+            this.m_listDrives.TabIndex = 0;
+            this.m_listDrives.UseCompatibleStateImageBehavior = false;
+            this.m_listDrives.View = System.Windows.Forms.View.Details;
+            this.m_listDrives.SelectedIndexChanged += new System.EventHandler(this.m_listDrives_SelectedIndexChanged);
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = "Volume";
+            this.columnHeader1.Width = 89;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Mount Point";
+            this.columnHeader2.Width = 102;
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "Size";
+            this.columnHeader3.Width = 71;
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "Status";
+            this.columnHeader4.Width = 139;
+            // 
+            // m_lblSelected
+            // 
+            this.m_lblSelected.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.m_lblSelected.AutoSize = true;
+            this.m_lblSelected.Location = new System.Drawing.Point(15, 339);
+            this.m_lblSelected.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.m_lblSelected.Name = "m_lblSelected";
+            this.m_lblSelected.Size = new System.Drawing.Size(87, 17);
+            this.m_lblSelected.TabIndex = 4;
+            this.m_lblSelected.Text = "Slected: ???";
+            // 
+            // m_btnMountAll
+            // 
+            this.m_btnMountAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnMountAll.Location = new System.Drawing.Point(453, 277);
+            this.m_btnMountAll.Margin = new System.Windows.Forms.Padding(2);
+            this.m_btnMountAll.Name = "m_btnMountAll";
+            this.m_btnMountAll.Size = new System.Drawing.Size(74, 26);
+            this.m_btnMountAll.TabIndex = 2;
+            this.m_btnMountAll.Text = "Mount All";
+            this.toolTip1.SetToolTip(this.m_btnMountAll, "Mount All DiskCryptor Drives");
+            this.m_btnMountAll.UseVisualStyleBackColor = true;
+            this.m_btnMountAll.Click += new System.EventHandler(this.m_btnMountAll_Click);
+            // 
+            // m_btnReload
+            // 
+            this.m_btnReload.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnReload.Location = new System.Drawing.Point(453, 17);
+            this.m_btnReload.Margin = new System.Windows.Forms.Padding(2);
+            this.m_btnReload.Name = "m_btnReload";
+            this.m_btnReload.Size = new System.Drawing.Size(74, 26);
+            this.m_btnReload.TabIndex = 1;
+            this.m_btnReload.Text = "Reload";
+            this.toolTip1.SetToolTip(this.m_btnReload, "Reload DiskCryptor Drive List");
+            this.m_btnReload.UseVisualStyleBackColor = true;
+            this.m_btnReload.Click += new System.EventHandler(this.m_btnReload_Click);
+            // 
+            // m_btnUnmoutAll
+            // 
+            this.m_btnUnmoutAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnUnmoutAll.Location = new System.Drawing.Point(453, 307);
+            this.m_btnUnmoutAll.Margin = new System.Windows.Forms.Padding(2);
+            this.m_btnUnmoutAll.Name = "m_btnUnmoutAll";
+            this.m_btnUnmoutAll.Size = new System.Drawing.Size(74, 26);
+            this.m_btnUnmoutAll.TabIndex = 3;
+            this.m_btnUnmoutAll.Text = "UnMount All";
+            this.toolTip1.SetToolTip(this.m_btnUnmoutAll, "Unmount All DiskCryptor Drives");
+            this.m_btnUnmoutAll.UseVisualStyleBackColor = true;
+            this.m_btnUnmoutAll.Click += new System.EventHandler(this.m_btnUnmoutAll_Click);
+            // 
+            // m_txtLog
+            // 
+            this.m_txtLog.BackColor = System.Drawing.Color.Black;
+            this.m_txtLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_txtLog.Font = new System.Drawing.Font("Courier New", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.m_txtLog.ForeColor = System.Drawing.Color.LimeGreen;
+            this.m_txtLog.Location = new System.Drawing.Point(0, 0);
+            this.m_txtLog.Margin = new System.Windows.Forms.Padding(2);
+            this.m_txtLog.Name = "m_txtLog";
+            this.m_txtLog.ReadOnly = true;
+            this.m_txtLog.Size = new System.Drawing.Size(329, 363);
+            this.m_txtLog.TabIndex = 0;
+            this.m_txtLog.Text = "";
+            this.m_txtLog.WordWrap = false;
+            // 
+            // m_pnlSeparate1
+            // 
+            this.m_pnlSeparate1.BackColor = System.Drawing.Color.LightSlateGray;
+            this.m_pnlSeparate1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.m_pnlSeparate1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.m_pnlSeparate1.Location = new System.Drawing.Point(0, 181);
+            this.m_pnlSeparate1.Margin = new System.Windows.Forms.Padding(2);
+            this.m_pnlSeparate1.Name = "m_pnlSeparate1";
+            this.m_pnlSeparate1.Size = new System.Drawing.Size(877, 17);
+            this.m_pnlSeparate1.TabIndex = 5;
+            // 
+            // m_splitOperations
+            // 
+            this.m_splitOperations.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.m_splitOperations.Dock = System.Windows.Forms.DockStyle.Top;
+            this.m_splitOperations.Location = new System.Drawing.Point(0, 0);
+            this.m_splitOperations.Margin = new System.Windows.Forms.Padding(2);
+            this.m_splitOperations.Name = "m_splitOperations";
+            // 
+            // m_splitOperations.Panel1
+            // 
+            this.m_splitOperations.Panel1.Controls.Add(this.m_pnlVHD);
+            this.m_splitOperations.Panel1.Controls.Add(this.m_pnlPassword);
+            // 
+            // m_splitOperations.Panel2
+            // 
+            this.m_splitOperations.Panel2.BackColor = System.Drawing.Color.Ivory;
+            this.m_splitOperations.Panel2.Controls.Add(this.m_grpBSOD);
+            this.m_splitOperations.Size = new System.Drawing.Size(877, 181);
+            this.m_splitOperations.SplitterDistance = 660;
+            this.m_splitOperations.SplitterWidth = 3;
+            this.m_splitOperations.TabIndex = 6;
+            // 
+            // m_pnlVHD
+            // 
+            this.m_pnlVHD.BackColor = System.Drawing.Color.LightGoldenrodYellow;
+            this.m_pnlVHD.Controls.Add(this.m_VHD_MountUnMountUserControl);
+            this.m_pnlVHD.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_pnlVHD.Location = new System.Drawing.Point(0, 54);
+            this.m_pnlVHD.Margin = new System.Windows.Forms.Padding(2);
+            this.m_pnlVHD.Name = "m_pnlVHD";
+            this.m_pnlVHD.Size = new System.Drawing.Size(656, 123);
+            this.m_pnlVHD.TabIndex = 5;
+            // 
+            // m_VHD_MountUnMountUserControl
+            // 
+            this.m_VHD_MountUnMountUserControl.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.m_VHD_MountUnMountUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_VHD_MountUnMountUserControl.Location = new System.Drawing.Point(0, 0);
+            this.m_VHD_MountUnMountUserControl.Margin = new System.Windows.Forms.Padding(4);
+            this.m_VHD_MountUnMountUserControl.MinimumSize = new System.Drawing.Size(441, 81);
+            this.m_VHD_MountUnMountUserControl.Name = "m_VHD_MountUnMountUserControl";
+            this.m_VHD_MountUnMountUserControl.Size = new System.Drawing.Size(656, 123);
+            this.m_VHD_MountUnMountUserControl.TabIndex = 0;
+            // 
+            // m_pnlPassword
+            // 
+            this.m_pnlPassword.BackColor = System.Drawing.SystemColors.Control;
+            this.m_pnlPassword.Controls.Add(this.m_grpPwd);
+            this.m_pnlPassword.Dock = System.Windows.Forms.DockStyle.Top;
+            this.m_pnlPassword.Location = new System.Drawing.Point(0, 0);
+            this.m_pnlPassword.Margin = new System.Windows.Forms.Padding(2);
+            this.m_pnlPassword.Name = "m_pnlPassword";
+            this.m_pnlPassword.Size = new System.Drawing.Size(656, 54);
+            this.m_pnlPassword.TabIndex = 5;
+            // 
+            // m_grpPwd
+            // 
+            this.m_grpPwd.Controls.Add(this.m_txtPwd);
+            this.m_grpPwd.Location = new System.Drawing.Point(8, 3);
+            this.m_grpPwd.Margin = new System.Windows.Forms.Padding(2);
+            this.m_grpPwd.Name = "m_grpPwd";
+            this.m_grpPwd.Padding = new System.Windows.Forms.Padding(2);
+            this.m_grpPwd.Size = new System.Drawing.Size(170, 46);
+            this.m_grpPwd.TabIndex = 2;
+            this.m_grpPwd.TabStop = false;
+            this.m_grpPwd.Text = "Password:";
+            // 
+            // m_txtPwd
+            // 
+            this.m_txtPwd.Location = new System.Drawing.Point(13, 17);
+            this.m_txtPwd.Margin = new System.Windows.Forms.Padding(2);
+            this.m_txtPwd.Name = "m_txtPwd";
+            this.m_txtPwd.Size = new System.Drawing.Size(131, 22);
+            this.m_txtPwd.TabIndex = 1;
+            this.m_txtPwd.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.m_txtPwd.UseSystemPasswordChar = true;
+            this.m_txtPwd.TextChanged += new System.EventHandler(this.m_txtPwd_TextChanged);
+            // 
+            // m_grpBSOD
+            // 
+            this.m_grpBSOD.Controls.Add(this.m_btnUnmountAllandBSOD);
+            this.m_grpBSOD.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_grpBSOD.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.m_grpBSOD.ForeColor = System.Drawing.Color.SaddleBrown;
+            this.m_grpBSOD.Location = new System.Drawing.Point(0, 0);
+            this.m_grpBSOD.Margin = new System.Windows.Forms.Padding(2);
+            this.m_grpBSOD.Name = "m_grpBSOD";
+            this.m_grpBSOD.Padding = new System.Windows.Forms.Padding(2);
+            this.m_grpBSOD.Size = new System.Drawing.Size(210, 177);
+            this.m_grpBSOD.TabIndex = 6;
+            this.m_grpBSOD.TabStop = false;
+            this.m_grpBSOD.Text = "BSOD";
+            // 
+            // m_btnUnmountAllandBSOD
+            // 
+            this.m_btnUnmountAllandBSOD.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnUnmountAllandBSOD.BackgroundImage = ((System.Drawing.Image)(resources.GetObject("m_btnUnmountAllandBSOD.BackgroundImage")));
+            this.m_btnUnmountAllandBSOD.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.m_btnUnmountAllandBSOD.Location = new System.Drawing.Point(43, 36);
+            this.m_btnUnmountAllandBSOD.Margin = new System.Windows.Forms.Padding(2);
+            this.m_btnUnmountAllandBSOD.Name = "m_btnUnmountAllandBSOD";
+            this.m_btnUnmountAllandBSOD.Size = new System.Drawing.Size(123, 101);
+            this.m_btnUnmountAllandBSOD.TabIndex = 0;
+            this.toolTip1.SetToolTip(this.m_btnUnmountAllandBSOD, "Generate BSOD");
+            this.m_btnUnmountAllandBSOD.UseVisualStyleBackColor = true;
+            this.m_btnUnmountAllandBSOD.Click += new System.EventHandler(this.m_btnUnmountAllandBSOD_Click);
             // 
             // tabPage2
             // 
@@ -713,39 +700,52 @@
             this.splitContainer1.SplitterWidth = 3;
             this.splitContainer1.TabIndex = 0;
             // 
-            // errorProvider1
+            // panel1
             // 
-            this.errorProvider1.ContainerControl = this;
+            this.panel1.Controls.Add(this.m_treeDrives);
+            this.panel1.Controls.Add(this.label1);
+            this.panel1.Controls.Add(this.m_btnEject);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Margin = new System.Windows.Forms.Padding(2);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(464, 473);
+            this.panel1.TabIndex = 3;
             // 
-            // splitContainer2
+            // m_treeDrives
             // 
-            this.splitContainer2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer2.Location = new System.Drawing.Point(0, 28);
-            this.splitContainer2.Name = "splitContainer2";
+            this.m_treeDrives.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_treeDrives.FullRowSelect = true;
+            this.m_treeDrives.HideSelection = false;
+            this.m_treeDrives.Location = new System.Drawing.Point(0, 38);
+            this.m_treeDrives.Margin = new System.Windows.Forms.Padding(2);
+            this.m_treeDrives.Name = "m_treeDrives";
+            this.m_treeDrives.Size = new System.Drawing.Size(464, 400);
+            this.m_treeDrives.TabIndex = 1;
+            this.m_treeDrives.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.m_treeDrives_AfterSelect);
             // 
-            // splitContainer2.Panel1
+            // label1
             // 
-            this.splitContainer2.Panel1.Controls.Add(this.m_tabMain);
+            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label1.Location = new System.Drawing.Point(0, 0);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(464, 38);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Plugged USB Drives:";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // splitContainer2.Panel2
+            // m_btnEject
             // 
-            this.splitContainer2.Panel2.Controls.Add(this.hideDriveLetterControl1);
-            this.splitContainer2.Panel2.Controls.Add(this.panel2);
-            this.splitContainer2.Size = new System.Drawing.Size(1184, 508);
-            this.splitContainer2.SplitterDistance = 893;
-            this.splitContainer2.TabIndex = 3;
-            // 
-            // m_VHD_MountUnMountUserControl
-            // 
-            this.m_VHD_MountUnMountUserControl.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.m_VHD_MountUnMountUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_VHD_MountUnMountUserControl.Location = new System.Drawing.Point(0, 0);
-            this.m_VHD_MountUnMountUserControl.Margin = new System.Windows.Forms.Padding(4);
-            this.m_VHD_MountUnMountUserControl.MinimumSize = new System.Drawing.Size(441, 81);
-            this.m_VHD_MountUnMountUserControl.Name = "m_VHD_MountUnMountUserControl";
-            this.m_VHD_MountUnMountUserControl.Size = new System.Drawing.Size(658, 123);
-            this.m_VHD_MountUnMountUserControl.TabIndex = 0;
+            this.m_btnEject.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.m_btnEject.Location = new System.Drawing.Point(0, 438);
+            this.m_btnEject.Margin = new System.Windows.Forms.Padding(2);
+            this.m_btnEject.Name = "m_btnEject";
+            this.m_btnEject.Size = new System.Drawing.Size(464, 35);
+            this.m_btnEject.TabIndex = 0;
+            this.m_btnEject.Text = "UnMount and Eject";
+            this.m_btnEject.UseVisualStyleBackColor = true;
+            this.m_btnEject.Click += new System.EventHandler(this.m_btnEject_Click);
             // 
             // hideDriveLetterControl1
             // 
@@ -753,24 +753,24 @@
             this.hideDriveLetterControl1.Location = new System.Drawing.Point(0, 33);
             this.hideDriveLetterControl1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.hideDriveLetterControl1.Name = "hideDriveLetterControl1";
-            this.hideDriveLetterControl1.Size = new System.Drawing.Size(285, 473);
+            this.hideDriveLetterControl1.Size = new System.Drawing.Size(285, 565);
             this.hideDriveLetterControl1.TabIndex = 0;
             // 
-            // m_pnlTemp1
+            // panel2
             // 
-            this.m_pnlTemp1.Controls.Add(this.m_splitDiskCryptorInfo);
-            this.m_pnlTemp1.Controls.Add(this.m_pnlSeparate1);
-            this.m_pnlTemp1.Controls.Add(this.m_splitOperations);
-            this.m_pnlTemp1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_pnlTemp1.Location = new System.Drawing.Point(2, 2);
-            this.m_pnlTemp1.Name = "m_pnlTemp1";
-            this.m_pnlTemp1.Size = new System.Drawing.Size(879, 473);
-            this.m_pnlTemp1.TabIndex = 0;
+            this.panel2.BackColor = System.Drawing.SystemColors.Control;
+            this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel2.Location = new System.Drawing.Point(0, 0);
+            this.panel2.Margin = new System.Windows.Forms.Padding(2);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(285, 33);
+            this.panel2.TabIndex = 0;
             // 
             // FormMain
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(1184, 561);
+            this.ClientSize = new System.Drawing.Size(1182, 653);
             this.Controls.Add(this.splitContainer2);
             this.Controls.Add(this.m_menuStripMain);
             this.Controls.Add(this.statusStrip1);
@@ -786,6 +786,18 @@
             this.Load += new System.EventHandler(this.FormMain_Load);
             this.SizeChanged += new System.EventHandler(this.FormMain_SizeChanged);
             this.m_sysIconMenu.ResumeLayout(false);
+            this.m_menuStripMain.ResumeLayout(false);
+            this.m_menuStripMain.PerformLayout();
+            this.statusStrip1.ResumeLayout(false);
+            this.statusStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
+            this.splitContainer2.ResumeLayout(false);
+            this.m_tabMain.ResumeLayout(false);
+            this.tabPage1.ResumeLayout(false);
+            this.m_pnlTemp1.ResumeLayout(false);
             this.m_splitDiskCryptorInfo.Panel1.ResumeLayout(false);
             this.m_splitDiskCryptorInfo.Panel1.PerformLayout();
             this.m_splitDiskCryptorInfo.Panel2.ResumeLayout(false);
@@ -800,23 +812,11 @@
             this.m_grpPwd.ResumeLayout(false);
             this.m_grpPwd.PerformLayout();
             this.m_grpBSOD.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
-            this.m_menuStripMain.ResumeLayout(false);
-            this.m_menuStripMain.PerformLayout();
-            this.statusStrip1.ResumeLayout(false);
-            this.statusStrip1.PerformLayout();
-            this.m_tabMain.ResumeLayout(false);
-            this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
-            this.splitContainer2.Panel1.ResumeLayout(false);
-            this.splitContainer2.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
-            this.splitContainer2.ResumeLayout(false);
-            this.m_pnlTemp1.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
