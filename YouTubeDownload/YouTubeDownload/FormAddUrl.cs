@@ -22,7 +22,7 @@ namespace YouTubeDownload
             InitializeComponent();
 
             Data.OutputFolder = outputFolder;
-            m_chkNoPlayList.Checked = Properties.Settings.Default.NoPlayList;
+            m_chkNoPlayList.Checked = true; // Properties.Settings.Default.NoPlayList;
         }
 
         private void FormAddUrl_Load(object sender, EventArgs e)

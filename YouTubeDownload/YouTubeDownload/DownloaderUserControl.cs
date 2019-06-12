@@ -36,21 +36,34 @@ namespace YouTubeDownload
             _youTube_DL.ProcessExited = DL_Process_Exited;
 
             m_lnkDestination.LinkArea = new LinkArea();
+            m_lnkDestination.Text = "...";
+
+            m_lblPlayListStatus.Text = "";
+            m_lblStatus.Text = "";
         }
 
         private void m_lnkDestination_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            if(!File.Exists(_youTube_DL.Data.Description.Trim('"')))
-            {
-                if(!string.IsNullOrWhiteSpace(_youTube_DL.Data.Description))
-                    MessageBox.Show(this, "Not Ready: \n"+ _youTube_DL.Data.Description, Text, 
-                        MessageBoxButtons.OK, MessageBoxIcon.Error);
+            string link = m_lnkDestination.Text.Substring(m_lnkDestination.LinkArea.Start);
+            if (string.IsNullOrWhiteSpace(link))
                 return;
+            
+            if(!File.Exists(link))
+            {
+                if (MessageBox.Show(this, "File Not Found: " + link + "\nOpen Output Directory Instead?", 
+                    "Open File",
+                    MessageBoxButtons.OKCancel, MessageBoxIcon.Question) != DialogResult.OK)
+                    return;
+
+                string dir = Path.GetDirectoryName(link);
+                if(!Directory.Exists(dir))
+                    return;
+
+                link = dir;
             }
 
             try
             {
-                string link = m_lnkDestination.Text.Substring(m_lnkDestination.LinkArea.Start);
                 Process.Start(link);
             }
             catch (Exception err)

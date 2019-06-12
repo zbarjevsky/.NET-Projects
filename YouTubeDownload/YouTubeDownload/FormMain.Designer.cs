@@ -72,6 +72,7 @@
             // 
             // m_statusStrip
             // 
+            this.m_statusStrip.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.m_statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_Status1,
             this.m_Status2,
@@ -86,13 +87,13 @@
             // m_Status1
             // 
             this.m_Status1.Name = "m_Status1";
-            this.m_Status1.Size = new System.Drawing.Size(42, 26);
+            this.m_Status1.Size = new System.Drawing.Size(53, 26);
             this.m_Status1.Text = "Ready.";
             // 
             // m_Status2
             // 
             this.m_Status2.Name = "m_Status2";
-            this.m_Status2.Size = new System.Drawing.Size(767, 26);
+            this.m_Status2.Size = new System.Drawing.Size(756, 26);
             this.m_Status2.Spring = true;
             this.m_Status2.Text = "...";
             // 
@@ -109,7 +110,7 @@
             this.m_btnUpdate.Location = new System.Drawing.Point(835, 29);
             this.m_btnUpdate.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnUpdate.Name = "m_btnUpdate";
-            this.m_btnUpdate.Size = new System.Drawing.Size(136, 29);
+            this.m_btnUpdate.Size = new System.Drawing.Size(136, 33);
             this.m_btnUpdate.TabIndex = 0;
             this.m_btnUpdate.Text = "Update DL";
             this.m_btnUpdate.UseVisualStyleBackColor = true;
@@ -117,13 +118,14 @@
             // 
             // menuStrip1
             // 
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_mnuFile,
             this.m_mnuTools,
             this.m_mnuHelp});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(984, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(984, 28);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -134,25 +136,25 @@
             this.toolStripMenuItem1,
             this.m_mnuFileExit});
             this.m_mnuFile.Name = "m_mnuFile";
-            this.m_mnuFile.Size = new System.Drawing.Size(37, 20);
+            this.m_mnuFile.Size = new System.Drawing.Size(44, 24);
             this.m_mnuFile.Text = "&File";
             // 
             // m_mnuFileAdd
             // 
             this.m_mnuFileAdd.Name = "m_mnuFileAdd";
-            this.m_mnuFileAdd.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuFileAdd.Size = new System.Drawing.Size(219, 26);
             this.m_mnuFileAdd.Text = "Add New Download";
             this.m_mnuFileAdd.Click += new System.EventHandler(this.m_mnuFileAdd_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(216, 6);
             // 
             // m_mnuFileExit
             // 
             this.m_mnuFileExit.Name = "m_mnuFileExit";
-            this.m_mnuFileExit.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuFileExit.Size = new System.Drawing.Size(219, 26);
             this.m_mnuFileExit.Text = "E&xit";
             this.m_mnuFileExit.Click += new System.EventHandler(this.m_mnuFileExit_Click);
             // 
@@ -164,32 +166,32 @@
             this.toolStripMenuItem2,
             this.m_mnuToolsOutputFolder});
             this.m_mnuTools.Name = "m_mnuTools";
-            this.m_mnuTools.Size = new System.Drawing.Size(48, 20);
+            this.m_mnuTools.Size = new System.Drawing.Size(56, 24);
             this.m_mnuTools.Text = "&Tools";
             // 
             // m_mnuToolsSettings
             // 
             this.m_mnuToolsSettings.Name = "m_mnuToolsSettings";
-            this.m_mnuToolsSettings.Size = new System.Drawing.Size(174, 22);
+            this.m_mnuToolsSettings.Size = new System.Drawing.Size(210, 26);
             this.m_mnuToolsSettings.Text = "&Settings";
             this.m_mnuToolsSettings.Click += new System.EventHandler(this.m_mnuToolsSettings_Click);
             // 
             // m_mnuToolsUpdateDL
             // 
             this.m_mnuToolsUpdateDL.Name = "m_mnuToolsUpdateDL";
-            this.m_mnuToolsUpdateDL.Size = new System.Drawing.Size(174, 22);
+            this.m_mnuToolsUpdateDL.Size = new System.Drawing.Size(210, 26);
             this.m_mnuToolsUpdateDL.Text = "Update youtube-dl";
             this.m_mnuToolsUpdateDL.Click += new System.EventHandler(this.m_mnuToolsUpdateDL_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(171, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(207, 6);
             // 
             // m_mnuToolsOutputFolder
             // 
             this.m_mnuToolsOutputFolder.Name = "m_mnuToolsOutputFolder";
-            this.m_mnuToolsOutputFolder.Size = new System.Drawing.Size(174, 22);
+            this.m_mnuToolsOutputFolder.Size = new System.Drawing.Size(210, 26);
             this.m_mnuToolsOutputFolder.Text = "Output Folder...";
             this.m_mnuToolsOutputFolder.Click += new System.EventHandler(this.m_mnuToolsOutputFolder_Click);
             // 
@@ -198,13 +200,13 @@
             this.m_mnuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_mnuHelpAbout});
             this.m_mnuHelp.Name = "m_mnuHelp";
-            this.m_mnuHelp.Size = new System.Drawing.Size(44, 20);
+            this.m_mnuHelp.Size = new System.Drawing.Size(53, 24);
             this.m_mnuHelp.Text = "Help";
             // 
             // m_mnuHelpAbout
             // 
             this.m_mnuHelpAbout.Name = "m_mnuHelpAbout";
-            this.m_mnuHelpAbout.Size = new System.Drawing.Size(107, 22);
+            this.m_mnuHelpAbout.Size = new System.Drawing.Size(125, 26);
             this.m_mnuHelpAbout.Text = "About";
             this.m_mnuHelpAbout.Click += new System.EventHandler(this.m_mnuHelpAbout_Click);
             // 
@@ -249,7 +251,7 @@
             this.m_btnAddUrl.Location = new System.Drawing.Point(10, 29);
             this.m_btnAddUrl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnAddUrl.Name = "m_btnAddUrl";
-            this.m_btnAddUrl.Size = new System.Drawing.Size(136, 29);
+            this.m_btnAddUrl.Size = new System.Drawing.Size(136, 33);
             this.m_btnAddUrl.TabIndex = 1;
             this.m_btnAddUrl.Text = "Add && Start";
             this.m_btnAddUrl.UseVisualStyleBackColor = true;
@@ -283,7 +285,7 @@
             this.m_btnClearList.Location = new System.Drawing.Point(298, 64);
             this.m_btnClearList.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnClearList.Name = "m_btnClearList";
-            this.m_btnClearList.Size = new System.Drawing.Size(136, 29);
+            this.m_btnClearList.Size = new System.Drawing.Size(136, 33);
             this.m_btnClearList.TabIndex = 4;
             this.m_btnClearList.Text = "Remove All";
             this.m_btnClearList.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -294,13 +296,14 @@
             // 
             this.m_lnkOutputFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_lnkOutputFolder.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.m_lnkOutputFolder.Location = new System.Drawing.Point(441, 67);
+            this.m_lnkOutputFolder.BackColor = System.Drawing.SystemColors.Window;
+            this.m_lnkOutputFolder.Location = new System.Drawing.Point(441, 65);
             this.m_lnkOutputFolder.Name = "m_lnkOutputFolder";
-            this.m_lnkOutputFolder.Size = new System.Drawing.Size(411, 25);
+            this.m_lnkOutputFolder.Size = new System.Drawing.Size(411, 32);
             this.m_lnkOutputFolder.TabIndex = 6;
             this.m_lnkOutputFolder.TabStop = true;
             this.m_lnkOutputFolder.Text = "Output Folder";
+            this.m_lnkOutputFolder.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.m_lnkOutputFolder.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.m_lnkOutputFolder_LinkClicked);
             // 
             // m_btnPause
@@ -311,7 +314,7 @@
             this.m_btnPause.Location = new System.Drawing.Point(10, 64);
             this.m_btnPause.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnPause.Name = "m_btnPause";
-            this.m_btnPause.Size = new System.Drawing.Size(136, 29);
+            this.m_btnPause.Size = new System.Drawing.Size(136, 33);
             this.m_btnPause.TabIndex = 2;
             this.m_btnPause.Text = "Start";
             this.m_btnPause.UseVisualStyleBackColor = true;
@@ -332,7 +335,7 @@
             this.m_btnRemove.Location = new System.Drawing.Point(154, 64);
             this.m_btnRemove.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnRemove.Name = "m_btnRemove";
-            this.m_btnRemove.Size = new System.Drawing.Size(136, 29);
+            this.m_btnRemove.Size = new System.Drawing.Size(136, 33);
             this.m_btnRemove.TabIndex = 3;
             this.m_btnRemove.Text = "Remove Sel";
             this.m_btnRemove.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -344,7 +347,7 @@
             this.m_btnBrowseForFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnBrowseForFolder.Location = new System.Drawing.Point(858, 65);
             this.m_btnBrowseForFolder.Name = "m_btnBrowseForFolder";
-            this.m_btnBrowseForFolder.Size = new System.Drawing.Size(111, 29);
+            this.m_btnBrowseForFolder.Size = new System.Drawing.Size(111, 33);
             this.m_btnBrowseForFolder.TabIndex = 5;
             this.m_btnBrowseForFolder.Text = "Change...";
             this.m_btnBrowseForFolder.UseVisualStyleBackColor = true;
@@ -358,13 +361,14 @@
             // 
             this.m_DownloaderUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_DownloaderUserControl.Location = new System.Drawing.Point(0, 0);
+            this.m_DownloaderUserControl.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_DownloaderUserControl.Name = "m_DownloaderUserControl";
             this.m_DownloaderUserControl.Size = new System.Drawing.Size(959, 254);
             this.m_DownloaderUserControl.TabIndex = 0;
             // 
             // FormMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(984, 562);
             this.Controls.Add(this.m_btnBrowseForFolder);
