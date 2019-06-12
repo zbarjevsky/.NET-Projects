@@ -119,4 +119,7 @@
     <Content Include="youtube.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /s /f /r /y $(TargetPath) $(SolutionDir)\..\Binaries</PostBuildEvent>
+  </PropertyGroup>
 </Project>
