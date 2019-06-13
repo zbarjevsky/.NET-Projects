@@ -73,7 +73,8 @@ namespace YouTubeDownload
             Data = data;
             Data.State = DownloadState.Working;
 
-            string parameters = Data.NoPlayList ? "--no-playlist" : "";
+            string parameters = "--encoding UTF8 ";
+            parameters += Data.NoPlayList ? "--no-playlist" : "";
             parameters += Data.AudioOnly ? " --extract-audio --audio-format mp3" : "";
 
             string exePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), DL);
