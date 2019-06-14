@@ -46,7 +46,7 @@ namespace MeditationStopWatch
 			}
 		}
 
-        public void AddToFileList(string[] files, bool bPlayFirst)
+        public void AddToFileList(List<string> files, bool bPlayFirst)
         {
             m_playLists.PL.AddToFileList(files, bPlayFirst);
             m_playLists.PL.OP.OnListChanged();

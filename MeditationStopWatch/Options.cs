@@ -42,6 +42,31 @@ namespace MeditationStopWatch
             return Name;
         }
 
+        public bool ListEquals(PlayList list)
+        {
+            if (!ListEquals(list.List))
+                return false;
+
+            if (Name != list.Name)
+                return false;
+
+            return true;
+        }
+
+        public bool ListEquals(List<string> files)
+        {
+            if (files.Count != List.Count)
+                return false;
+
+            for (int i = 0; i < files.Count; i++)
+            {
+                if (files[i] != List[i])
+                    return false;
+            }
+
+            return true;
+        }
+
         internal class PlayListTypeConverter : ExpandableObjectConverter
         {
             public override object ConvertTo(ITypeDescriptorContext context,

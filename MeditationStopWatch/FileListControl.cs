@@ -78,7 +78,7 @@ namespace MeditationStopWatch
             if (DialogResult.OK != m_openFileDialog.ShowDialog(this))
                 return;
 
-            AddToFileList(m_openFileDialog.FileNames, true);
+            AddToFileList(new List<string>(m_openFileDialog.FileNames), true);
             OnListChanged(_playingIdx);
         }
 
@@ -118,21 +118,24 @@ namespace MeditationStopWatch
                 _playingIdx++;
         }
 
-        public void ReloadList(string[] files, bool bPlayFirst)
+        public void ReloadList(PlayList list, bool bPlayFirst)
         {
+            if (list.ListEquals(GetFilelist()))
+                return;
+
             OP.StopAction();
             m_listFiles.Items.Clear();
-            AddToFileList(files, bPlayFirst);
+            AddToFileList(list.List, bPlayFirst);
             OnListChanged();
         }
 
-        public void AddToFileList(string[] files, bool bPlayFirst)
+        public void AddToFileList(List<string> list, bool bPlayFirst)
         {
-            if (files == null || files.Length == 0)
+            if (list == null || list.Count == 0)
                 return;
 
             int iFirstIdx = -1;
-            foreach (string s in files)
+            foreach (string s in list)
             {
                 FileInfo f = new FileInfo(s);
                 if (!f.Exists)

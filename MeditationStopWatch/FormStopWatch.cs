@@ -183,7 +183,7 @@ namespace MeditationStopWatch
 			try
 			{
 				string[] files = (string[])e.Data.GetData(DataFormats.FileDrop, true);
-				AddToFileList(files, true);
+				AddToFileList(new List<string>(files), true);
 			}
 			catch (Exception ex)
 			{
@@ -194,7 +194,7 @@ namespace MeditationStopWatch
 			}
 		}
 
-		private void AddToFileList(string[] files, bool bPlayFirst)
+		private void AddToFileList(List<string> files, bool bPlayFirst)
 		{
 			m_audioPlayerControl.AddToFileList(files, bPlayFirst);
 		}
@@ -313,7 +313,7 @@ namespace MeditationStopWatch
 		private void FavoriteItem_Click(object sender, EventArgs e)
 		{
 			ToolStripMenuItem mnu = sender as ToolStripMenuItem;
-			m_audioPlayerControl.AddToFileList(new string [] {mnu.Text}, true);
+			m_audioPlayerControl.AddToFileList(new List<string>() {mnu.Text}, true);
 		}
 
 		private void m_mnuFavorites_Add_Click(object sender, EventArgs e)

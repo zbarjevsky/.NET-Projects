@@ -40,8 +40,11 @@ namespace MeditationStopWatch
             m_mp3List.Font = m_Options.PlayListFont;
             m_mp3List.AdjustToNewSize();
 
+            if (HasSameTabs(m_Options.PlayListCollection) && m_tabPlayLists.SelectedIndex == m_Options.PlayListCollection.SelectedIndex)
+                return;
+
+            int selectTab = m_Options.PlayListCollection.SelectedIndex;
             m_tabPlayLists.TabPages.Clear();
-            m_tabPlayLists.SelectedIndex = -1;
 
             for (int i = 0; i < opt.PlayListCollection.Count; i++)
             {
@@ -51,9 +54,24 @@ namespace MeditationStopWatch
                 m_tabPlayLists.TabPages.Add(tab);
             }
 
-            if (m_tabPlayLists.TabPages.Count > 0 && m_Options.PlayListCollection.SelectedIndex < m_tabPlayLists.TabPages.Count)
-                m_tabPlayLists.SelectedIndex = m_Options.PlayListCollection.SelectedIndex;
+            if (m_tabPlayLists.TabPages.Count > 0 && selectTab < m_tabPlayLists.TabPages.Count)
+                m_tabPlayLists.SelectedIndex = selectTab;
             m_tabPlayLists_SelectedIndexChanged(this, null);
+        }
+
+        private bool HasSameTabs(PlayLists collection)
+        {
+            if (m_tabPlayLists.TabCount != collection.Count)
+                return false;
+
+            for (int i = 0; i < collection.Count; i++)
+            {
+                PlayList list = m_tabPlayLists.TabPages[i].Tag as PlayList;
+                if (!list.ListEquals(collection[i]))
+                    return false;
+            }
+
+            return true;
         }
 
         private void m_tabPlayLists_SelectedIndexChanged(object sender, EventArgs e)
@@ -66,7 +84,7 @@ namespace MeditationStopWatch
 
             m_Options.PlayListCollection.SelectedIndex = m_tabPlayLists.SelectedIndex;
             PlayList list = m_tabPlayLists.SelectedTab.Tag as PlayList;
-            m_mp3List.ReloadList(list.List.ToArray(), false);
+            m_mp3List.ReloadList(list, false);
         }
 
         private void m_btnAddTab_Click(object sender, EventArgs e)

@@ -131,8 +131,8 @@ namespace MeditationStopWatch
 
 		private void OptionForm_Load(object sender, EventArgs e)
 		{
-			m_PropertyGrid_PropertyValueChanged(null, null);
-			m_PropertyGrid.VerticalScroll.Value = m_PropertyGrid.VerticalScroll.Maximum;
+            m_PropertyGrid.HelpBackColor = ((Options)m_PropertyGrid.SelectedObject).Background;
+            m_PropertyGrid.VerticalScroll.Value = m_PropertyGrid.VerticalScroll.Maximum;
             m_PropertyGrid.MoveSplitterTo(200);
 
         }//end OptionForm_Load
