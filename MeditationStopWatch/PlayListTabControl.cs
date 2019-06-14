@@ -38,6 +38,7 @@ namespace MeditationStopWatch
 
             m_tabPlayLists.Font = m_Options.PlayListFont;
             m_mp3List.Font = m_Options.PlayListFont;
+            m_mp3List.AdjustToNewSize();
 
             m_tabPlayLists.TabPages.Clear();
             m_tabPlayLists.SelectedIndex = -1;
