@@ -39,6 +39,7 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.m_btnDelete = new System.Windows.Forms.Button();
+            this.label2 = new System.Windows.Forms.Label();
             this.m_tabMain.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.SuspendLayout();
@@ -57,6 +58,7 @@
             // 
             // tabPage1
             // 
+            this.tabPage1.Controls.Add(this.label2);
             this.tabPage1.Controls.Add(this.m_btnDelete);
             this.tabPage1.Controls.Add(this.m_brtnRenameMove);
             this.tabPage1.Controls.Add(this.m_txtDestination);
@@ -110,6 +112,7 @@
             this.m_txtOriginal.Name = "m_txtOriginal";
             this.m_txtOriginal.Size = new System.Drawing.Size(444, 22);
             this.m_txtOriginal.TabIndex = 1;
+            this.m_txtOriginal.TextChanged += new System.EventHandler(this.m_txtOriginal_TextChanged);
             // 
             // label1
             // 
@@ -151,6 +154,15 @@
             this.m_btnDelete.UseVisualStyleBackColor = true;
             this.m_btnDelete.Click += new System.EventHandler(this.m_btnDelete_Click);
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(28, 82);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(80, 17);
+            this.label2.TabIndex = 6;
+            this.label2.Text = "New Name:";
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
@@ -182,6 +194,7 @@
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.Button m_btnDelete;
+        private System.Windows.Forms.Label label2;
     }
 }
 

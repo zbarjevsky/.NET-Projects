@@ -24,6 +24,11 @@ namespace FileSystemHelper
 
         }
 
+        private void m_txtOriginal_TextChanged(object sender, EventArgs e)
+        {
+            m_txtDestination.Text = m_txtOriginal.Text;
+        }
+
         private void m_btnBrowse_Click(object sender, EventArgs e)
         {
             MessageBox.Show("Not Implemented");

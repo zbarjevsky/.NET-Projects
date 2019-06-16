@@ -142,6 +142,9 @@ namespace MeditationStopWatch
 
         private void timer1_Tick(object sender, EventArgs e)
         {
+            if (this.DesignMode)
+                return;
+
             if (_stopwatch.Elapsed.TotalMilliseconds > 10000)
                 ShowControls(false);
         }

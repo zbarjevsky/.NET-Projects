@@ -33,7 +33,9 @@
             this.m_btnCancel = new System.Windows.Forms.Button();
             this.m_lblVolume = new MeditationStopWatch.Tools.LabelWithTimeout();
             this.m_analogClock = new MeditationStopWatch.AnalogClock();
+            this.m_pnlMain = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.m_analogClock)).BeginInit();
+            this.m_pnlMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // pictureBox1
@@ -41,7 +43,7 @@
             this.pictureBox1.BackColor = System.Drawing.Color.Black;
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(1067, 738);
             this.pictureBox1.TabIndex = 0;
@@ -58,7 +60,7 @@
             this.m_btnCancel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.m_btnCancel.Image = ((System.Drawing.Image)(resources.GetObject("m_btnCancel.Image")));
             this.m_btnCancel.Location = new System.Drawing.Point(1017, 15);
-            this.m_btnCancel.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.m_btnCancel.Margin = new System.Windows.Forms.Padding(4);
             this.m_btnCancel.Name = "m_btnCancel";
             this.m_btnCancel.Size = new System.Drawing.Size(33, 32);
             this.m_btnCancel.TabIndex = 2;
@@ -82,25 +84,34 @@
             // 
             this.m_analogClock.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_analogClock.BackColor = System.Drawing.Color.Black;
-            this.m_analogClock.Location = new System.Drawing.Point(489, 41);
-            this.m_analogClock.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.m_analogClock.Location = new System.Drawing.Point(486, 41);
+            this.m_analogClock.Margin = new System.Windows.Forms.Padding(4);
             this.m_analogClock.MinimumSize = new System.Drawing.Size(27, 25);
             this.m_analogClock.Name = "m_analogClock";
             this.m_analogClock.Size = new System.Drawing.Size(520, 464);
             this.m_analogClock.TabIndex = 3;
             this.m_analogClock.TabStop = false;
             // 
+            // m_pnlMain
+            // 
+            this.m_pnlMain.Controls.Add(this.m_btnCancel);
+            this.m_pnlMain.Controls.Add(this.m_lblVolume);
+            this.m_pnlMain.Controls.Add(this.m_analogClock);
+            this.m_pnlMain.Controls.Add(this.pictureBox1);
+            this.m_pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_pnlMain.Location = new System.Drawing.Point(0, 0);
+            this.m_pnlMain.Name = "m_pnlMain";
+            this.m_pnlMain.Size = new System.Drawing.Size(1067, 738);
+            this.m_pnlMain.TabIndex = 5;
+            // 
             // FormFullScreenImage
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.CancelButton = this.m_btnCancel;
             this.ClientSize = new System.Drawing.Size(1067, 738);
-            this.Controls.Add(this.m_btnCancel);
-            this.Controls.Add(this.m_lblVolume);
-            this.Controls.Add(this.m_analogClock);
-            this.Controls.Add(this.pictureBox1);
+            this.Controls.Add(this.m_pnlMain);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FormFullScreenImage";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
@@ -109,8 +120,9 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormFullScreenImage_FormClosed);
             this.Load += new System.EventHandler(this.FormFullScreenImage_Load);
             ((System.ComponentModel.ISupportInitialize)(this.m_analogClock)).EndInit();
+            this.m_pnlMain.ResumeLayout(false);
+            this.m_pnlMain.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -120,5 +132,6 @@
         private System.Windows.Forms.Button m_btnCancel;
         private AnalogClock m_analogClock;
         private Tools.LabelWithTimeout m_lblVolume;
+        private System.Windows.Forms.Panel m_pnlMain;
     }
 }

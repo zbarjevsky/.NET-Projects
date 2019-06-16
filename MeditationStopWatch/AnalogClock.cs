@@ -23,6 +23,7 @@ namespace MeditationStopWatch
 
         DateTime _dateTime = DateTime.Now;
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public AnalogClockSettings Settings { get; set; } = new AnalogClockSettings();
 
         float _fRadius;
