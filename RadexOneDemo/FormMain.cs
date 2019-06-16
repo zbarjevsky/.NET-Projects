@@ -21,6 +21,8 @@ namespace RadexOneDemo
         private double _maxLive = 0;
         private DateTime _maxCPMTime, _maxDOSETime;
 
+        public const string TITLE = "Radex Demo v1.01";
+
         private readonly RadexOneConnection _radexDevice = new RadexOneConnection();
         private List<RadexComPortDesc> _radexPorts = new List<RadexComPortDesc>();
         private readonly RadexOneConfig _radexConfig = new RadexOneConfig();
@@ -38,6 +40,8 @@ namespace RadexOneDemo
             LogReader.Test();
 
             InitializeComponent();
+
+            this.Text = TITLE;
 
             _radiationOn = Properties.Resources.radiation_symbol;
             _radiationOff = Properties.Resources.OkEmoji;

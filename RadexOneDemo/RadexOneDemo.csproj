@@ -62,6 +62,9 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\ClipboardListener\Utils\SingleInstanceHelper.cs">
+      <Link>Utils\SingleInstanceHelper.cs</Link>
+    </Compile>
     <Compile Include="RadiationLog.cs" />
     <Compile Include="Commands.cs" />
     <Compile Include="CommDataModel.cs" />
@@ -200,6 +203,9 @@
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>xcopy /s /f /r /y $(TargetPath) $(SolutionDir)\..\Binaries</PostBuildEvent>
+  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

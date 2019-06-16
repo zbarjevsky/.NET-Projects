@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea1 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
-            System.Windows.Forms.DataVisualization.Charting.Legend legend1 = new System.Windows.Forms.DataVisualization.Charting.Legend();
-            System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series2 = new System.Windows.Forms.DataVisualization.Charting.Series();
-            System.Windows.Forms.DataVisualization.Charting.Series series3 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.ChartArea chartArea2 = new System.Windows.Forms.DataVisualization.Charting.ChartArea();
+            System.Windows.Forms.DataVisualization.Charting.Legend legend2 = new System.Windows.Forms.DataVisualization.Charting.Legend();
+            System.Windows.Forms.DataVisualization.Charting.Series series4 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series5 = new System.Windows.Forms.DataVisualization.Charting.Series();
+            System.Windows.Forms.DataVisualization.Charting.Series series6 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.m_pnlTools = new System.Windows.Forms.Panel();
             this.m_pnlStatus = new System.Windows.Forms.Panel();
             this.m_hScrollBarZoom = new System.Windows.Forms.HScrollBar();
@@ -48,8 +48,9 @@
             // 
             this.m_pnlTools.Dock = System.Windows.Forms.DockStyle.Top;
             this.m_pnlTools.Location = new System.Drawing.Point(0, 0);
+            this.m_pnlTools.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_pnlTools.Name = "m_pnlTools";
-            this.m_pnlTools.Size = new System.Drawing.Size(600, 24);
+            this.m_pnlTools.Size = new System.Drawing.Size(641, 30);
             this.m_pnlTools.TabIndex = 0;
             // 
             // m_pnlStatus
@@ -59,9 +60,10 @@
             this.m_pnlStatus.Controls.Add(this.m_chkCPM);
             this.m_pnlStatus.Controls.Add(this.m_chkRate);
             this.m_pnlStatus.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.m_pnlStatus.Location = new System.Drawing.Point(0, 371);
+            this.m_pnlStatus.Location = new System.Drawing.Point(0, 251);
+            this.m_pnlStatus.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_pnlStatus.Name = "m_pnlStatus";
-            this.m_pnlStatus.Size = new System.Drawing.Size(600, 29);
+            this.m_pnlStatus.Size = new System.Drawing.Size(641, 36);
             this.m_pnlStatus.TabIndex = 1;
             // 
             // m_hScrollBarZoom
@@ -69,10 +71,10 @@
             this.m_hScrollBarZoom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_hScrollBarZoom.LargeChange = 20;
-            this.m_hScrollBarZoom.Location = new System.Drawing.Point(28, 5);
+            this.m_hScrollBarZoom.Location = new System.Drawing.Point(37, 6);
             this.m_hScrollBarZoom.Maximum = 40;
             this.m_hScrollBarZoom.Name = "m_hScrollBarZoom";
-            this.m_hScrollBarZoom.Size = new System.Drawing.Size(349, 17);
+            this.m_hScrollBarZoom.Size = new System.Drawing.Size(306, 17);
             this.m_hScrollBarZoom.TabIndex = 26;
             this.m_hScrollBarZoom.Value = 10;
             this.m_hScrollBarZoom.Scroll += new System.Windows.Forms.ScrollEventHandler(this.m_hScrollBarZoom_Scroll);
@@ -83,9 +85,10 @@
             this.m_chkAlert.AutoSize = true;
             this.m_chkAlert.Checked = true;
             this.m_chkAlert.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.m_chkAlert.Location = new System.Drawing.Point(532, 5);
+            this.m_chkAlert.Location = new System.Drawing.Point(554, 6);
+            this.m_chkAlert.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_chkAlert.Name = "m_chkAlert";
-            this.m_chkAlert.Size = new System.Drawing.Size(47, 17);
+            this.m_chkAlert.Size = new System.Drawing.Size(59, 21);
             this.m_chkAlert.TabIndex = 2;
             this.m_chkAlert.Text = "Alert";
             this.m_chkAlert.UseVisualStyleBackColor = true;
@@ -97,9 +100,10 @@
             this.m_chkCPM.AutoSize = true;
             this.m_chkCPM.Checked = true;
             this.m_chkCPM.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.m_chkCPM.Location = new System.Drawing.Point(464, 5);
+            this.m_chkCPM.Location = new System.Drawing.Point(466, 6);
+            this.m_chkCPM.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_chkCPM.Name = "m_chkCPM";
-            this.m_chkCPM.Size = new System.Drawing.Size(49, 17);
+            this.m_chkCPM.Size = new System.Drawing.Size(59, 21);
             this.m_chkCPM.TabIndex = 1;
             this.m_chkCPM.Text = "CPM";
             this.m_chkCPM.UseVisualStyleBackColor = true;
@@ -111,9 +115,10 @@
             this.m_chkRate.AutoSize = true;
             this.m_chkRate.Checked = true;
             this.m_chkRate.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.m_chkRate.Location = new System.Drawing.Point(392, 5);
+            this.m_chkRate.Location = new System.Drawing.Point(369, 6);
+            this.m_chkRate.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_chkRate.Name = "m_chkRate";
-            this.m_chkRate.Size = new System.Drawing.Size(49, 17);
+            this.m_chkRate.Size = new System.Drawing.Size(60, 21);
             this.m_chkRate.TabIndex = 0;
             this.m_chkRate.Text = "Rate";
             this.m_chkRate.UseVisualStyleBackColor = true;
@@ -128,52 +133,53 @@
             this.m_chart1.BorderSkin.BorderColor = System.Drawing.Color.Empty;
             this.m_chart1.BorderSkin.PageColor = System.Drawing.SystemColors.Control;
             this.m_chart1.BorderSkin.SkinStyle = System.Windows.Forms.DataVisualization.Charting.BorderSkinStyle.Sunken;
-            chartArea1.AxisX.LabelStyle.Format = "HH:mm:ss";
-            chartArea1.AxisX.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
-            chartArea1.AxisY.LabelStyle.ForeColor = System.Drawing.Color.DodgerBlue;
-            chartArea1.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
-            chartArea1.AxisY2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.True;
-            chartArea1.AxisY2.LabelStyle.ForeColor = System.Drawing.Color.DarkOrange;
-            chartArea1.AxisY2.MajorGrid.Enabled = false;
-            chartArea1.BackColor = System.Drawing.Color.White;
-            chartArea1.BackSecondaryColor = System.Drawing.Color.White;
-            chartArea1.Name = "ChartArea1";
-            this.m_chart1.ChartAreas.Add(chartArea1);
-            legend1.Name = "Legend1";
-            this.m_chart1.Legends.Add(legend1);
-            this.m_chart1.Location = new System.Drawing.Point(6, 24);
+            chartArea2.AxisX.LabelStyle.Format = "HH:mm:ss";
+            chartArea2.AxisX.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
+            chartArea2.AxisY.LabelStyle.ForeColor = System.Drawing.Color.DodgerBlue;
+            chartArea2.AxisY.MajorGrid.LineDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
+            chartArea2.AxisY2.Enabled = System.Windows.Forms.DataVisualization.Charting.AxisEnabled.True;
+            chartArea2.AxisY2.LabelStyle.ForeColor = System.Drawing.Color.DarkOrange;
+            chartArea2.AxisY2.MajorGrid.Enabled = false;
+            chartArea2.BackColor = System.Drawing.Color.White;
+            chartArea2.BackSecondaryColor = System.Drawing.Color.White;
+            chartArea2.Name = "ChartArea1";
+            this.m_chart1.ChartAreas.Add(chartArea2);
+            legend2.Name = "Legend1";
+            this.m_chart1.Legends.Add(legend2);
+            this.m_chart1.Location = new System.Drawing.Point(8, 30);
+            this.m_chart1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_chart1.Name = "m_chart1";
-            series1.BorderWidth = 2;
-            series1.ChartArea = "ChartArea1";
-            series1.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series1.Color = System.Drawing.Color.DodgerBlue;
-            series1.Legend = "Legend1";
-            series1.LegendText = "Rate µSv/h";
-            series1.Name = "SeriesDOSE";
-            series1.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.DateTime;
-            series2.BorderWidth = 2;
-            series2.ChartArea = "ChartArea1";
-            series2.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series2.Color = System.Drawing.Color.Orange;
-            series2.Legend = "Legend1";
-            series2.LegendText = "CPM";
-            series2.Name = "SeriesCPM";
-            series2.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.DateTime;
-            series2.YAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
-            series3.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
-            series3.BorderWidth = 2;
-            series3.ChartArea = "ChartArea1";
-            series3.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
-            series3.Color = System.Drawing.Color.Orange;
-            series3.Legend = "Legend1";
-            series3.LegendText = "Alert Threshold";
-            series3.Name = "SeriesThreshold";
-            series3.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.DateTime;
-            series3.YAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
-            this.m_chart1.Series.Add(series1);
-            this.m_chart1.Series.Add(series2);
-            this.m_chart1.Series.Add(series3);
-            this.m_chart1.Size = new System.Drawing.Size(591, 349);
+            series4.BorderWidth = 2;
+            series4.ChartArea = "ChartArea1";
+            series4.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series4.Color = System.Drawing.Color.DodgerBlue;
+            series4.Legend = "Legend1";
+            series4.LegendText = "Rate µSv/h";
+            series4.Name = "SeriesDOSE";
+            series4.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.DateTime;
+            series5.BorderWidth = 2;
+            series5.ChartArea = "ChartArea1";
+            series5.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series5.Color = System.Drawing.Color.Orange;
+            series5.Legend = "Legend1";
+            series5.LegendText = "CPM";
+            series5.Name = "SeriesCPM";
+            series5.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.DateTime;
+            series5.YAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
+            series6.BorderDashStyle = System.Windows.Forms.DataVisualization.Charting.ChartDashStyle.Dot;
+            series6.BorderWidth = 2;
+            series6.ChartArea = "ChartArea1";
+            series6.ChartType = System.Windows.Forms.DataVisualization.Charting.SeriesChartType.Line;
+            series6.Color = System.Drawing.Color.Orange;
+            series6.Legend = "Legend1";
+            series6.LegendText = "Alert Threshold";
+            series6.Name = "SeriesThreshold";
+            series6.XValueType = System.Windows.Forms.DataVisualization.Charting.ChartValueType.DateTime;
+            series6.YAxisType = System.Windows.Forms.DataVisualization.Charting.AxisType.Secondary;
+            this.m_chart1.Series.Add(series4);
+            this.m_chart1.Series.Add(series5);
+            this.m_chart1.Series.Add(series6);
+            this.m_chart1.Size = new System.Drawing.Size(629, 225);
             this.m_chart1.TabIndex = 8;
             this.m_chart1.Text = "chart1";
             this.m_chart1.Click += new System.EventHandler(this.m_chart1_Click);
@@ -181,13 +187,15 @@
             // 
             // RadiationGraphControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.m_chart1);
             this.Controls.Add(this.m_pnlStatus);
             this.Controls.Add(this.m_pnlTools);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.MinimumSize = new System.Drawing.Size(640, 280);
             this.Name = "RadiationGraphControl";
-            this.Size = new System.Drawing.Size(600, 400);
+            this.Size = new System.Drawing.Size(641, 287);
             this.Load += new System.EventHandler(this.RadiationGraphControl_Load);
             this.m_pnlStatus.ResumeLayout(false);
             this.m_pnlStatus.PerformLayout();

@@ -15,9 +15,17 @@ namespace RadexOneDemo
         [STAThread]
         static void Main()
         {
+            if (!SingleInstance())
+                return; //already running
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new FormMain());
         }
+
+        private static bool SingleInstance()
+        {
+            return !(MZ.Utils.SingleInstanceHelper.GlobalShowWindow(FormMain.TITLE));
+        }//end SingleInstance
     }
 }
