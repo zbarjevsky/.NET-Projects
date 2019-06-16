@@ -13,7 +13,10 @@ namespace MeditationStopWatch
 		[STAThread]
 		static void Main()
 		{
-			Application.EnableVisualStyles();
+            if (!SingleInstance())
+                return; //already running
+
+            Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 			try
 			{
@@ -25,5 +28,10 @@ namespace MeditationStopWatch
 				MessageBox.Show(err.Message, "Meditation");
 			}
 		}
-	}
+
+        private static bool SingleInstance()
+        {
+            return !(MZ.Utils.SingleInstanceHelper.GlobalShowWindow(FormStopWatch.TITLE));
+        }//end SingleInstance
+    }
 }

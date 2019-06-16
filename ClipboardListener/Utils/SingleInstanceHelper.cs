@@ -27,7 +27,7 @@ namespace MZ.Utils
             IntPtr wnd = FindWindow(null, title);
             if (wnd != IntPtr.Zero)
             {
-                MessageBox.Show("Already Opened! Show Running Instance.", title);
+                MessageBox.Show(title + "\nAlready Opened! Showing Running Instance...", title);
                 ShowWindow(wnd, SW_RESTORE);
                 SetForegroundWindow(wnd);
             }

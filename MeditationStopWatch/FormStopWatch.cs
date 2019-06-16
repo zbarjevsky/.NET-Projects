@@ -15,7 +15,9 @@ namespace MeditationStopWatch
 {
 	public partial class FormStopWatch : Form
 	{
-		public Options m_Options = new Options();
+        internal const string TITLE = "Meditation...";
+
+        public Options m_Options = new Options();
 		private string m_sSettingsFile = "MeditationStopWatch.mz";
 		private IList<string> m_FavoritesList = new List<string>();
 		ImageFileUtil ImageInfo = new ImageFileUtil();
@@ -28,6 +30,8 @@ namespace MeditationStopWatch
             Application.AddMessageFilter(gmh);
 
             InitializeComponent();
+
+            this.Text = TITLE;
 
 			//designer problems
 			this.m_splitContainerMain.Panel2MinSize = 220;
@@ -400,6 +404,7 @@ namespace MeditationStopWatch
         }
 
         private Point _prevMouseMovePoint = new Point();
+
         private void OnMouseMove(Point pt)
         {
             int x = Math.Abs(pt.X - _prevMouseMovePoint.X);

@@ -75,6 +75,9 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\ClipboardListener\Utils\SingleInstanceHelper.cs">
+      <Link>Tools\SingleInstanceHelper.cs</Link>
+    </Compile>
     <Compile Include="AnalogClock.cs">
       <SubType>Component</SubType>
     </Compile>
