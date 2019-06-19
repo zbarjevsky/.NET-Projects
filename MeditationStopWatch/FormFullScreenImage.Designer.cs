@@ -116,7 +116,6 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "FullScreenImage";
-            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormFullScreenImage_FormClosed);
             this.Load += new System.EventHandler(this.FormFullScreenImage_Load);
             ((System.ComponentModel.ISupportInitialize)(this.m_analogClock)).EndInit();

@@ -40,19 +40,10 @@ namespace MeditationStopWatch
 
         private void FormFullScreenImage_Load(object sender, EventArgs e)
         {
-            //this.WindowState = FormWindowState.Minimized;
-            //this.Location = new Point(Owner.Location.X + 100, Owner.Location.Y + 100);
-            //this.WindowState = FormWindowState.Maximized;
-
             m_lblVolume.Parent = pictureBox1.PictureBox;
             m_lblVolume.Draggable(true);
             if (!DesignMode)
                 m_lblVolume.Visible = false;
-
-            m_analogClock.Bounds = _stopWatch.m_Options.ClockFullScreenBounds;
-            pictureBox1.PictureBox.Focus();
-            pictureBox1.PictureBox.Refresh();
-            m_btnCancel.BringToFront();
 
             pictureBox1.OnSizeChangedAction = (bounds) =>
             {
@@ -63,8 +54,12 @@ namespace MeditationStopWatch
 
             pictureBox1.ShowControlsAction = (show) => { m_btnCancel.Visible = show; };
 
-            this.WindowState = FormWindowState.Normal;
             this.WindowState = FormWindowState.Maximized;
+
+            m_analogClock.Bounds = _stopWatch.m_Options.ClockFullScreenBounds;
+            pictureBox1.PictureBox.Focus();
+            pictureBox1.PictureBox.Refresh();
+            m_btnCancel.BringToFront();
         }
 
         private void FormFullScreenImage_FormClosed(object sender, FormClosedEventArgs e)
