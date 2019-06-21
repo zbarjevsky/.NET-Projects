@@ -16,8 +16,8 @@ namespace YouTubeDownload
 {
     public partial class FormMain : Form
     {
-        const string DNL_PREFIX = "Output Folder: ";
-        string _folderName = "C:\\Temp\\YouTube2";
+        private const string DNL_PREFIX = "Output Folder: ";
+        private string _folderName = "C:\\Temp\\YouTube2";
 
         private bool _pause = false;
 
@@ -40,8 +40,8 @@ namespace YouTubeDownload
         {
             if (m_DownloaderUserControl.State == DownloadState.Working)
             {
-               DialogResult res = MessageBox.Show(this, "Download in progress, Terminate?", "Closing...", 
-                   MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
+                DialogResult res = MessageBox.Show(this, "Download in progress, Terminate?", "Closing...",
+                    MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
                 if (res == DialogResult.Cancel)
                 {
                     e.Cancel = true;
@@ -60,7 +60,7 @@ namespace YouTubeDownload
         private void m_btnAddUrl_Click(object sender, EventArgs e)
         {
             FormAddUrl frm = new FormAddUrl(_folderName);
-            if(frm.ShowDialog(this) != DialogResult.OK)
+            if (frm.ShowDialog(this) != DialogResult.OK)
                 return;
 
             int urlIdx = FindDataInList(frm.Data.Url);
@@ -76,16 +76,16 @@ namespace YouTubeDownload
 
             //foreach (EncodingInfo enc in Encoding.GetEncodings())
             //{
-                DownloadData data = frm.Data.Clone();
-                data.State = DownloadState.InQueue;
-                //data.Encoding = enc.GetEncoding();
+            DownloadData data = frm.Data.Clone();
+            data.State = DownloadState.InQueue;
+            //data.Encoding = enc.GetEncoding();
 
-                ListViewItem item = new ListViewItem(data.State.ToString());
-                item.SubItems.Add(data.Description);
-                item.SubItems.Add(data.Url);
-                item.Tag = data;
+            ListViewItem item = new ListViewItem(data.State.ToString());
+            item.SubItems.Add(data.Description);
+            item.SubItems.Add(data.Url);
+            item.Tag = data;
 
-                m_listUrls.Items.Add(item);
+            m_listUrls.Items.Add(item);
             //}
 
             UpdateButtonsState();
@@ -102,7 +102,7 @@ namespace YouTubeDownload
             foreach (ListViewItem item in m_listUrls.Items)
             {
                 DownloadData data = item.Tag as DownloadData;
-                if(data.State == DownloadState.InQueue)
+                if (data.State == DownloadState.InQueue)
                 {
                     this.Cursor = Cursors.AppStarting;
                     m_DownloaderUserControl.Start(data);
@@ -137,6 +137,11 @@ namespace YouTubeDownload
             m_btnRemove.Enabled = bHasSelection;
             m_btnClearList.Enabled = m_listUrls.Items.Count > 0;
 
+            m_ctxmnuAddUrl.Enabled = m_btnAddUrl.Enabled;
+            m_ctxmnuOpenOutputFolder.Enabled = bHasSelection;
+            m_ctxmnuOpenSelectedFile.Enabled = bHasSelection;
+            m_ctxmnuRemoveSelected.Enabled = bHasSelection;
+
             int queueIdx = FindStateInList(DownloadState.InQueue);
             int workIdx = FindStateInList(DownloadState.Working);
             m_btnPause.Enabled = queueIdx >= 0 || workIdx >= 0; //there are items in queue
@@ -156,7 +161,7 @@ namespace YouTubeDownload
         {
             for (int i = 0; i < m_listUrls.Items.Count; i++)
             {
-                ListViewItem item = (ListViewItem)m_listUrls.Items[i];
+                ListViewItem item = (ListViewItem) m_listUrls.Items[i];
                 DownloadData data = item.Tag as DownloadData;
                 if (data.Url == url)
                     return i;
@@ -168,7 +173,7 @@ namespace YouTubeDownload
         {
             for (int i = 0; i < m_listUrls.Items.Count; i++)
             {
-                ListViewItem item = (ListViewItem)m_listUrls.Items[i];
+                ListViewItem item = (ListViewItem) m_listUrls.Items[i];
                 DownloadData data = item.Tag as DownloadData;
                 if (data.State == state)
                     return i;
@@ -208,7 +213,7 @@ namespace YouTubeDownload
 
             m_Status2.Text = line;
 
-            m_StatusProgress.Value = (int)m_DownloaderUserControl.Progress;
+            m_StatusProgress.Value = (int) m_DownloaderUserControl.Progress;
             m_Status1.Text = m_DownloaderUserControl.Description;
 
             UpdateUrlList();
@@ -309,9 +314,49 @@ namespace YouTubeDownload
             UpdateButtonsState();
         }
 
-        private void m_txtUrl_TextChanged(object sender, EventArgs e)
+        //private void m_txtUrl_TextChanged(object sender, EventArgs e)
+        //{
+        //    UpdateButtonsState();
+        //}
+
+        private void m_mnuOpenSelectedFile_Click(object sender, EventArgs e)
         {
-            UpdateButtonsState();
+            if (m_listUrls.SelectedItems.Count == 0)
+                return;
+
+            DownloadData data = m_listUrls.SelectedItems[0].Tag as DownloadData;
+            if (data != null && data.State != DownloadState.Failed)
+            {
+                Process.Start(data.Description);
+            }
+        }
+
+        private void m_mnuOpenOutputFolder_Click(object sender, EventArgs e)
+        {
+            if (m_listUrls.SelectedItems.Count == 0)
+                return;
+
+            DownloadData data = m_listUrls.SelectedItems[0].Tag as DownloadData;
+            if (data != null && data.State != DownloadState.Failed)
+            {
+                Process.Start(data.OutputFolder);
+            }
+        }
+
+        private void m_listUrls_DoubleClick(object sender, EventArgs e)
+        {
+        }
+
+        private void m_listUrls_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            if (m_listUrls.SelectedItems.Count == 0)
+            {
+                m_mnuFileAdd_Click(sender, e);
+            }
+            else
+            {
+                m_mnuOpenSelectedFile_Click(sender, e);
+            }
         }
     }
 }

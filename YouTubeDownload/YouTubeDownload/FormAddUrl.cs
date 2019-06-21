@@ -50,6 +50,7 @@ namespace YouTubeDownload
             Data.Url = m_txtUrl.Text;
             Data.NoPlayList = m_chkNoPlayList.Checked;
             Data.AudioOnly = m_chkAudioOnly.Checked;
+            Data.AdditionalParameters = m_cmbAdditionalParameters.Text;
 
             if (!string.IsNullOrWhiteSpace(m_cmbFileName.Text))
                 Data.FileNameTemplate = m_cmbFileName.Text;

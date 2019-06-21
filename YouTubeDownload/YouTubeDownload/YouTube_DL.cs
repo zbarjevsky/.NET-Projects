@@ -33,6 +33,7 @@ namespace YouTubeDownload
         public bool NoPlayList { get; set; } = true;
         public bool AudioOnly { get; set; } = false;
         public string Url { get; set; } = "";
+        public string AdditionalParameters { get; set; } = "";
         public double Progress { get; set; } = 0;
         public Encoding Encoding { get; set; } = Encoding.UTF8;
 
@@ -49,6 +50,7 @@ namespace YouTubeDownload
                 NoPlayList = NoPlayList,
                 AudioOnly = AudioOnly,
                 Url = Url,
+                AdditionalParameters = AdditionalParameters,
                 Progress = Progress,
                 Encoding = Encoding
             };
