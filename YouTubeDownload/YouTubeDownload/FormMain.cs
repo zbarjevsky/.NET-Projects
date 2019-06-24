@@ -193,7 +193,7 @@ namespace YouTubeDownload
             if (!StartDownloadNext())
             {
                 this.Cursor = Cursors.Arrow;
-                MessageBox.Show(this, "Operation Finished!", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
+                //MessageBox.Show(this, "Operation Finished!", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
