@@ -139,7 +139,11 @@ namespace DiskCryptorHelper
                 {
                     e.Cancel = true;
                     if (res == PopUp.PopUpResult.Btn3)
+                    {
                         this.Visible = false; //hide
+                        this.FormBorderStyle = FormBorderStyle.SizableToolWindow;
+                        this.ShowInTaskbar = false; //hide from ALT+TAB
+                    }
                 }
             }
             else if (e.CloseReason == CloseReason.ApplicationExitCall)
@@ -508,6 +512,8 @@ namespace DiskCryptorHelper
 
         private void m_mnuShow_Click(object sender, EventArgs e)
         {
+            this.FormBorderStyle = FormBorderStyle.Sizable;
+            this.ShowInTaskbar = true;
             SingleInstanceHelper.GlobalShowWindow(TITLE);
         }
 
