@@ -44,7 +44,7 @@ namespace YouTubeDownload
 
         private void m_lnkDestination_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            string link = m_lnkDestination.Text.Substring(m_lnkDestination.LinkArea.Start);
+            string link = m_lnkDestination.Text.Substring(m_lnkDestination.LinkArea.Start).Trim('"');
             if (string.IsNullOrWhiteSpace(link))
                 return;
             

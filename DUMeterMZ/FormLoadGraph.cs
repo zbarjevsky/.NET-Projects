@@ -137,12 +137,19 @@ namespace DUMeterMZ
 
         private bool HasCounterCategory(string sCat)
         {
-            PerformanceCounterCategory[] vCat = PerformanceCounterCategory.GetCategories();
-            foreach (PerformanceCounterCategory c in vCat)
+            try
             {
-                if ( c.CategoryName == sCat )
-                    return true;
-            }//end foreach
+                PerformanceCounterCategory[] vCat = PerformanceCounterCategory.GetCategories();
+                foreach (PerformanceCounterCategory c in vCat)
+                {
+                    if (c.CategoryName == sCat)
+                        return true;
+                }//end foreach
+            }
+            catch (Exception err)
+            {
+            }
+
             return false;
         }//end HasCounterCategory
 
@@ -279,13 +286,13 @@ namespace DUMeterMZ
             this.menuItemSep3,
             this.menu_Exit});
             this.m_ContextMenuMain.Name = "m_ContextMenuMain";
-            this.m_ContextMenuMain.Size = new System.Drawing.Size(186, 256);
+            this.m_ContextMenuMain.Size = new System.Drawing.Size(218, 284);
             // 
             // menuShowHide
             // 
             this.menuShowHide.Image = global::DUMeterMZ.Properties.Resources.screen;
             this.menuShowHide.Name = "menuShowHide";
-            this.menuShowHide.Size = new System.Drawing.Size(185, 26);
+            this.menuShowHide.Size = new System.Drawing.Size(217, 26);
             this.menuShowHide.Text = "Hide";
             this.menuShowHide.Click += new System.EventHandler(this.menuShowHide_Click);
             // 
@@ -294,7 +301,7 @@ namespace DUMeterMZ
             this.menu_resetPosition.Image = ((System.Drawing.Image)(resources.GetObject("menu_resetPosition.Image")));
             this.menu_resetPosition.ImageTransparentColor = System.Drawing.Color.Transparent;
             this.menu_resetPosition.Name = "menu_resetPosition";
-            this.menu_resetPosition.Size = new System.Drawing.Size(185, 26);
+            this.menu_resetPosition.Size = new System.Drawing.Size(217, 26);
             this.menu_resetPosition.Text = "&Reset Position";
             this.menu_resetPosition.Click += new System.EventHandler(this.menu_resetPosition_Click);
             // 
@@ -302,14 +309,14 @@ namespace DUMeterMZ
             // 
             this.menu_Pop.Image = global::DUMeterMZ.Properties.Resources.IconMain;
             this.menu_Pop.Name = "menu_Pop";
-            this.menu_Pop.Size = new System.Drawing.Size(185, 26);
+            this.menu_Pop.Size = new System.Drawing.Size(217, 26);
             this.menu_Pop.Text = "&Pop!";
             this.menu_Pop.Click += new System.EventHandler(this.menu_Pop_Click);
             // 
             // menuItemSep1
             // 
             this.menuItemSep1.Name = "menuItemSep1";
-            this.menuItemSep1.Size = new System.Drawing.Size(182, 6);
+            this.menuItemSep1.Size = new System.Drawing.Size(214, 6);
             // 
             // menu_Reports
             // 
@@ -322,14 +329,14 @@ namespace DUMeterMZ
             this.menu_Reports_Last3Days});
             this.menu_Reports.Image = ((System.Drawing.Image)(resources.GetObject("menu_Reports.Image")));
             this.menu_Reports.Name = "menu_Reports";
-            this.menu_Reports.Size = new System.Drawing.Size(185, 26);
+            this.menu_Reports.Size = new System.Drawing.Size(217, 26);
             this.menu_Reports.Text = "Reports";
             // 
             // menu_Reports_LastHour
             // 
             this.menu_Reports_LastHour.Image = global::DUMeterMZ.Properties.Resources._1_hour;
             this.menu_Reports_LastHour.Name = "menu_Reports_LastHour";
-            this.menu_Reports_LastHour.Size = new System.Drawing.Size(143, 22);
+            this.menu_Reports_LastHour.Size = new System.Drawing.Size(170, 26);
             this.menu_Reports_LastHour.Text = "Last Hour";
             this.menu_Reports_LastHour.Click += new System.EventHandler(this.menu_Reports_LastHour_Click);
             // 
@@ -337,7 +344,7 @@ namespace DUMeterMZ
             // 
             this.menu_Reports_Last3Hours.Image = global::DUMeterMZ.Properties.Resources._3_hours;
             this.menu_Reports_Last3Hours.Name = "menu_Reports_Last3Hours";
-            this.menu_Reports_Last3Hours.Size = new System.Drawing.Size(143, 22);
+            this.menu_Reports_Last3Hours.Size = new System.Drawing.Size(170, 26);
             this.menu_Reports_Last3Hours.Text = "Last 3 hours";
             this.menu_Reports_Last3Hours.Click += new System.EventHandler(this.menu_Reports_Last3Hours_Click);
             // 
@@ -345,7 +352,7 @@ namespace DUMeterMZ
             // 
             this.menu_Reports_Last6Hours.Image = global::DUMeterMZ.Properties.Resources._6_hours;
             this.menu_Reports_Last6Hours.Name = "menu_Reports_Last6Hours";
-            this.menu_Reports_Last6Hours.Size = new System.Drawing.Size(143, 22);
+            this.menu_Reports_Last6Hours.Size = new System.Drawing.Size(170, 26);
             this.menu_Reports_Last6Hours.Text = "Last 6 hours";
             this.menu_Reports_Last6Hours.Click += new System.EventHandler(this.menu_Reports_Last6Hours_Click);
             // 
@@ -353,7 +360,7 @@ namespace DUMeterMZ
             // 
             this.menu_Reports_Last12Hours.Image = global::DUMeterMZ.Properties.Resources._12_hours;
             this.menu_Reports_Last12Hours.Name = "menu_Reports_Last12Hours";
-            this.menu_Reports_Last12Hours.Size = new System.Drawing.Size(143, 22);
+            this.menu_Reports_Last12Hours.Size = new System.Drawing.Size(170, 26);
             this.menu_Reports_Last12Hours.Text = "Last 12 hours";
             this.menu_Reports_Last12Hours.Click += new System.EventHandler(this.menu_Reports_Last12Hours_Click);
             // 
@@ -361,7 +368,7 @@ namespace DUMeterMZ
             // 
             this.menu_Reports_Last24Hours.Image = global::DUMeterMZ.Properties.Resources._24_hours;
             this.menu_Reports_Last24Hours.Name = "menu_Reports_Last24Hours";
-            this.menu_Reports_Last24Hours.Size = new System.Drawing.Size(143, 22);
+            this.menu_Reports_Last24Hours.Size = new System.Drawing.Size(170, 26);
             this.menu_Reports_Last24Hours.Text = "Last 24 hours";
             this.menu_Reports_Last24Hours.Click += new System.EventHandler(this.menu_Reports_Last24Hours_Click);
             // 
@@ -369,7 +376,7 @@ namespace DUMeterMZ
             // 
             this.menu_Reports_Last3Days.Image = global::DUMeterMZ.Properties.Resources._3_days;
             this.menu_Reports_Last3Days.Name = "menu_Reports_Last3Days";
-            this.menu_Reports_Last3Days.Size = new System.Drawing.Size(143, 22);
+            this.menu_Reports_Last3Days.Size = new System.Drawing.Size(170, 26);
             this.menu_Reports_Last3Days.Text = "Last 3 days";
             this.menu_Reports_Last3Days.Click += new System.EventHandler(this.menu_Reports_Last3Days_Click);
             // 
@@ -377,7 +384,7 @@ namespace DUMeterMZ
             // 
             this.menu_ShowText.Image = ((System.Drawing.Image)(resources.GetObject("menu_ShowText.Image")));
             this.menu_ShowText.Name = "menu_ShowText";
-            this.menu_ShowText.Size = new System.Drawing.Size(185, 26);
+            this.menu_ShowText.Size = new System.Drawing.Size(217, 26);
             this.menu_ShowText.Text = "Show Text";
             this.menu_ShowText.Click += new System.EventHandler(this.menu_ShowText_Click);
             // 
@@ -385,40 +392,40 @@ namespace DUMeterMZ
             // 
             this.menu_Ping.Image = ((System.Drawing.Image)(resources.GetObject("menu_Ping.Image")));
             this.menu_Ping.Name = "menu_Ping";
-            this.menu_Ping.Size = new System.Drawing.Size(185, 26);
+            this.menu_Ping.Size = new System.Drawing.Size(217, 26);
             this.menu_Ping.Text = "Start Ping";
             this.menu_Ping.Click += new System.EventHandler(this.menu_Ping_Click);
             // 
             // menuItemSep2
             // 
             this.menuItemSep2.Name = "menuItemSep2";
-            this.menuItemSep2.Size = new System.Drawing.Size(182, 6);
+            this.menuItemSep2.Size = new System.Drawing.Size(214, 6);
             // 
             // menu_Options
             // 
             this.menu_Options.Image = ((System.Drawing.Image)(resources.GetObject("menu_Options.Image")));
             this.menu_Options.Name = "menu_Options";
-            this.menu_Options.Size = new System.Drawing.Size(185, 26);
-            this.menu_Options.Text = "Properties";
+            this.menu_Options.Size = new System.Drawing.Size(217, 26);
+            this.menu_Options.Text = "Settings";
             this.menu_Options.Click += new System.EventHandler(this.menu_Options_Click);
             // 
             // menu_About
             // 
             this.menu_About.Name = "menu_About";
-            this.menu_About.Size = new System.Drawing.Size(185, 26);
+            this.menu_About.Size = new System.Drawing.Size(217, 26);
             this.menu_About.Text = "About DU Meter MZ";
             this.menu_About.Click += new System.EventHandler(this.menu_About_Click);
             // 
             // menuItemSep3
             // 
             this.menuItemSep3.Name = "menuItemSep3";
-            this.menuItemSep3.Size = new System.Drawing.Size(182, 6);
+            this.menuItemSep3.Size = new System.Drawing.Size(214, 6);
             // 
             // menu_Exit
             // 
             this.menu_Exit.Image = ((System.Drawing.Image)(resources.GetObject("menu_Exit.Image")));
             this.menu_Exit.Name = "menu_Exit";
-            this.menu_Exit.Size = new System.Drawing.Size(185, 26);
+            this.menu_Exit.Size = new System.Drawing.Size(217, 26);
             this.menu_Exit.Text = "Exit";
             this.menu_Exit.Click += new System.EventHandler(this.menu_Exit_Click);
             // 
@@ -484,7 +491,7 @@ namespace DUMeterMZ
             this.m_lblScale.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.m_lblScale.Location = new System.Drawing.Point(0, 0);
             this.m_lblScale.Name = "m_lblScale";
-            this.m_lblScale.Size = new System.Drawing.Size(21, 60);
+            this.m_lblScale.Size = new System.Drawing.Size(26, 60);
             this.m_lblScale.TabIndex = 1;
             this.m_lblScale.Text = "1500 k";
             this.m_lblScale.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -497,9 +504,9 @@ namespace DUMeterMZ
             this.m_PictureBoxGraph.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.m_PictureBoxGraph.ContextMenuStrip = this.m_ContextMenuMain;
             this.m_PictureBoxGraph.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_PictureBoxGraph.Location = new System.Drawing.Point(21, 0);
+            this.m_PictureBoxGraph.Location = new System.Drawing.Point(26, 0);
             this.m_PictureBoxGraph.Name = "m_PictureBoxGraph";
-            this.m_PictureBoxGraph.Size = new System.Drawing.Size(159, 60);
+            this.m_PictureBoxGraph.Size = new System.Drawing.Size(154, 60);
             this.m_PictureBoxGraph.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.m_PictureBoxGraph.TabIndex = 0;
             this.m_PictureBoxGraph.TabStop = false;
@@ -514,7 +521,7 @@ namespace DUMeterMZ
             // 
             // FormLoadGraph
             // 
-            this.AutoScaleBaseSize = new System.Drawing.Size(18, 39);
+            this.AutoScaleBaseSize = new System.Drawing.Size(22, 49);
             this.ClientSize = new System.Drawing.Size(180, 60);
             this.ControlBox = false;
             this.Controls.Add(this.m_PictureBoxGraph);
@@ -525,7 +532,7 @@ namespace DUMeterMZ
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.MinimumSize = new System.Drawing.Size(50, 42);
+            this.MinimumSize = new System.Drawing.Size(61, 53);
             this.Name = "FormLoadGraph";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;
