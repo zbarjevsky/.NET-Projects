@@ -220,17 +220,9 @@ namespace YouTubeDownload
             }
         }
 
-        public static int Update()
+        public static List<string> Update()
         {
-
-            Process p = Process.Start(new ProcessStartInfo(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, DL), "-U")
-            {
-                CreateNoWindow = true,
-                UseShellExecute = false
-            });
-
-            p.WaitForExit();
-            return p.ExitCode;
+            return ProcessHelper.GetStdOut(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, DL), "-U");
         }
 
         public static string GetVersion()

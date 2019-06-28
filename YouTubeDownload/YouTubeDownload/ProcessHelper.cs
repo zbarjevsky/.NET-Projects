@@ -13,12 +13,12 @@ namespace YouTubeDownload
 
         public static List<string> GetStdOut(string fileName, string arguments)
         {
-            return new ProcessHelper().GetStdOutImpl(fileName, arguments);
+            return new ProcessHelper().GetStdOutImpl(fileName, arguments, -1);
         }
 
         //https://stackoverflow.com/questions/1259084/what-encoding-code-page-is-cmd-exe-using/17177904#17177904
         //https://stackoverflow.com/questions/38533903/set-c-sharp-console-application-to-unicode-output
-        private List<string> GetStdOutImpl(string fileName, string arguments)
+        private List<string> GetStdOutImpl(string fileName, string arguments, int timeoutMs)
         {
             Process p = Create(fileName, arguments, Encoding.UTF8);
 
@@ -27,7 +27,7 @@ namespace YouTubeDownload
             p.Start();
             p.BeginOutputReadLine();
 
-            p.WaitForExit(3000);
+            p.WaitForExit(timeoutMs);
 
             return _lines;
         }

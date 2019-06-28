@@ -221,8 +221,17 @@ namespace YouTubeDownload
 
         private void m_btnUpdate_Click(object sender, EventArgs e)
         {
-            int result = YouTube_DL.Update();
-            MessageBox.Show("Update DL finished: " + result, "Update DL");
+            Cursor = Cursors.WaitCursor;
+            string ver1 = YouTube_DL.GetVersion();
+            List<string> result = YouTube_DL.Update();
+            string ver2 = YouTube_DL.GetVersion();
+
+            string message = "Update DL finished.\nWas: " + ver1 + "\nNew: " + ver2 + "\n\nUpdater Output:";
+            foreach (string line in result)
+                message += "\n " + line;
+
+            Cursor = Cursors.Arrow;
+            MessageBox.Show(message, "Update DL", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void m_mnuToolsUpdateDL_Click(object sender, EventArgs e)
