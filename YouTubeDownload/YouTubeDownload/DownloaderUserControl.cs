@@ -110,13 +110,16 @@ namespace YouTubeDownload
 
         private void DL_Process_OutputDataReceived(string line)
         {
-            this.BeginInvoke(new MethodInvoker(() =>
+            lock (this)
             {
-                this.Cursor = Cursors.AppStarting;
+                this.BeginInvoke(new MethodInvoker(() =>
+                {
+                    this.Cursor = Cursors.AppStarting;
 
-                UpdateOutput(line);
-                OutputDataReceived(line);
-            }));
+                    UpdateOutput(line);
+                    OutputDataReceived(line);
+                }));
+            }
         }
 
         private void UpdateOutput(string line)
@@ -124,7 +127,10 @@ namespace YouTubeDownload
             _stopwatch.Restart();
             m_lblTime.Text = "Downloading... ";
 
-           m_txtOutput.Text = (line + "\n") + m_txtOutput.Text;
+            if (m_txtOutput.Text.Length > 64000)
+                m_txtOutput.Text = m_txtOutput.Text.Substring(0, 64000);
+
+            m_txtOutput.Text = (line + "\n") + m_txtOutput.Text;
 
             m_lblStatus.Text = "Status: " + line;
 

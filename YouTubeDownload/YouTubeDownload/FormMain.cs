@@ -141,6 +141,7 @@ namespace YouTubeDownload
             m_ctxmnuOpenOutputFolder.Enabled = bHasSelection;
             m_ctxmnuOpenSelectedFile.Enabled = bHasSelection;
             m_ctxmnuRemoveSelected.Enabled = bHasSelection;
+            m_ctxmnuDownloadAgain.Enabled = bHasSelection;
 
             int queueIdx = FindStateInList(DownloadState.InQueue);
             int workIdx = FindStateInList(DownloadState.Working);
@@ -365,6 +366,20 @@ namespace YouTubeDownload
             else
             {
                 m_mnuOpenSelectedFile_Click(sender, e);
+            }
+        }
+
+        private void m_ctxmnuDownloadAgain_Click(object sender, EventArgs e)
+        {
+            if (m_listUrls.SelectedItems.Count == 0)
+                return;
+
+            DownloadData data = m_listUrls.SelectedItems[0].Tag as DownloadData;
+            if(data != null)
+            {
+                data.State = DownloadState.InQueue;
+                UpdateButtonsState();
+                StartDownloadNext();
             }
         }
     }

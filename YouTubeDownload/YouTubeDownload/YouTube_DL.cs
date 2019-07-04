@@ -97,12 +97,17 @@ namespace YouTubeDownload
                 _DL_Process.Kill();
         }
 
+        private string _line = "";
         private void DL_Process_OutputDataReceived(object sender, DataReceivedEventArgs e)
         {
             if (e == null || e.Data == null)
                 return;
 
-            ProcessOutputLine(e.Data);
+            if (_line == e.Data)
+                return;
+            _line = e.Data;
+
+            ProcessOutputLine(_line);
         }
 
         private void ProcessOutputLine(string line)

@@ -68,6 +68,7 @@
             this.m_btnRemove = new System.Windows.Forms.Button();
             this.m_btnBrowseForFolder = new System.Windows.Forms.Button();
             this.m_errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
+            this.m_ctxmnuDownloadAgain = new System.Windows.Forms.ToolStripMenuItem();
             this.m_DownloaderUserControl = new YouTubeDownload.DownloaderUserControl();
             this.m_statusStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
@@ -96,13 +97,13 @@
             // m_Status1
             // 
             this.m_Status1.Name = "m_Status1";
-            this.m_Status1.Size = new System.Drawing.Size(42, 26);
+            this.m_Status1.Size = new System.Drawing.Size(53, 26);
             this.m_Status1.Text = "Ready.";
             // 
             // m_Status2
             // 
             this.m_Status2.Name = "m_Status2";
-            this.m_Status2.Size = new System.Drawing.Size(767, 26);
+            this.m_Status2.Size = new System.Drawing.Size(756, 26);
             this.m_Status2.Spring = true;
             this.m_Status2.Text = "...";
             // 
@@ -134,7 +135,7 @@
             this.m_mnuHelp});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(984, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(984, 28);
             this.menuStrip1.TabIndex = 0;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -145,25 +146,25 @@
             this.toolStripMenuItem1,
             this.m_mnuFileExit});
             this.m_mnuFile.Name = "m_mnuFile";
-            this.m_mnuFile.Size = new System.Drawing.Size(37, 20);
+            this.m_mnuFile.Size = new System.Drawing.Size(44, 24);
             this.m_mnuFile.Text = "&File";
             // 
             // m_mnuFileAdd
             // 
             this.m_mnuFileAdd.Name = "m_mnuFileAdd";
-            this.m_mnuFileAdd.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuFileAdd.Size = new System.Drawing.Size(219, 26);
             this.m_mnuFileAdd.Text = "Add New Download";
             this.m_mnuFileAdd.Click += new System.EventHandler(this.m_mnuFileAdd_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(216, 6);
             // 
             // m_mnuFileExit
             // 
             this.m_mnuFileExit.Name = "m_mnuFileExit";
-            this.m_mnuFileExit.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuFileExit.Size = new System.Drawing.Size(219, 26);
             this.m_mnuFileExit.Text = "E&xit";
             this.m_mnuFileExit.Click += new System.EventHandler(this.m_mnuFileExit_Click);
             // 
@@ -175,32 +176,32 @@
             this.toolStripMenuItem2,
             this.m_mnuToolsOutputFolder});
             this.m_mnuTools.Name = "m_mnuTools";
-            this.m_mnuTools.Size = new System.Drawing.Size(47, 20);
+            this.m_mnuTools.Size = new System.Drawing.Size(56, 24);
             this.m_mnuTools.Text = "&Tools";
             // 
             // m_mnuToolsSettings
             // 
             this.m_mnuToolsSettings.Name = "m_mnuToolsSettings";
-            this.m_mnuToolsSettings.Size = new System.Drawing.Size(174, 22);
+            this.m_mnuToolsSettings.Size = new System.Drawing.Size(210, 26);
             this.m_mnuToolsSettings.Text = "&Settings";
             this.m_mnuToolsSettings.Click += new System.EventHandler(this.m_mnuToolsSettings_Click);
             // 
             // m_mnuToolsUpdateDL
             // 
             this.m_mnuToolsUpdateDL.Name = "m_mnuToolsUpdateDL";
-            this.m_mnuToolsUpdateDL.Size = new System.Drawing.Size(174, 22);
+            this.m_mnuToolsUpdateDL.Size = new System.Drawing.Size(210, 26);
             this.m_mnuToolsUpdateDL.Text = "Update youtube-dl";
             this.m_mnuToolsUpdateDL.Click += new System.EventHandler(this.m_mnuToolsUpdateDL_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(171, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(207, 6);
             // 
             // m_mnuToolsOutputFolder
             // 
             this.m_mnuToolsOutputFolder.Name = "m_mnuToolsOutputFolder";
-            this.m_mnuToolsOutputFolder.Size = new System.Drawing.Size(174, 22);
+            this.m_mnuToolsOutputFolder.Size = new System.Drawing.Size(210, 26);
             this.m_mnuToolsOutputFolder.Text = "Output Folder...";
             this.m_mnuToolsOutputFolder.Click += new System.EventHandler(this.m_mnuToolsOutputFolder_Click);
             // 
@@ -209,13 +210,13 @@
             this.m_mnuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_mnuHelpAbout});
             this.m_mnuHelp.Name = "m_mnuHelp";
-            this.m_mnuHelp.Size = new System.Drawing.Size(44, 20);
+            this.m_mnuHelp.Size = new System.Drawing.Size(53, 24);
             this.m_mnuHelp.Text = "Help";
             // 
             // m_mnuHelpAbout
             // 
             this.m_mnuHelpAbout.Name = "m_mnuHelpAbout";
-            this.m_mnuHelpAbout.Size = new System.Drawing.Size(107, 22);
+            this.m_mnuHelpAbout.Size = new System.Drawing.Size(125, 26);
             this.m_mnuHelpAbout.Text = "About";
             this.m_mnuHelpAbout.Click += new System.EventHandler(this.m_mnuHelpAbout_Click);
             // 
@@ -258,59 +259,62 @@
             // 
             // m_ContextMenuList
             // 
+            this.m_ContextMenuList.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.m_ContextMenuList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.m_ctxmnuAddUrl,
+            this.toolStripMenuItem3,
             this.m_ctxmnuOpenSelectedFile,
             this.m_ctxmnuOpenOutputFolder,
             this.m_ctxmnuRemoveSelected,
-            this.toolStripMenuItem3,
-            this.m_ctxmnuAddUrl,
+            this.m_ctxmnuDownloadAgain,
             this.toolStripMenuItem4,
             this.m_ctxmnuExit});
             this.m_ContextMenuList.Name = "contextMenuStrip1";
-            this.m_ContextMenuList.Size = new System.Drawing.Size(140, 126);
+            this.m_ContextMenuList.Size = new System.Drawing.Size(195, 200);
             // 
             // m_ctxmnuOpenSelectedFile
             // 
             this.m_ctxmnuOpenSelectedFile.Name = "m_ctxmnuOpenSelectedFile";
-            this.m_ctxmnuOpenSelectedFile.Size = new System.Drawing.Size(139, 22);
+            this.m_ctxmnuOpenSelectedFile.Size = new System.Drawing.Size(194, 26);
             this.m_ctxmnuOpenSelectedFile.Text = "Open File";
             this.m_ctxmnuOpenSelectedFile.Click += new System.EventHandler(this.m_mnuOpenSelectedFile_Click);
             // 
             // m_ctxmnuOpenOutputFolder
             // 
             this.m_ctxmnuOpenOutputFolder.Name = "m_ctxmnuOpenOutputFolder";
-            this.m_ctxmnuOpenOutputFolder.Size = new System.Drawing.Size(139, 22);
+            this.m_ctxmnuOpenOutputFolder.Size = new System.Drawing.Size(194, 26);
             this.m_ctxmnuOpenOutputFolder.Text = "Open Folder";
             this.m_ctxmnuOpenOutputFolder.Click += new System.EventHandler(this.m_mnuOpenOutputFolder_Click);
             // 
             // m_ctxmnuRemoveSelected
             // 
             this.m_ctxmnuRemoveSelected.Name = "m_ctxmnuRemoveSelected";
-            this.m_ctxmnuRemoveSelected.Size = new System.Drawing.Size(139, 22);
+            this.m_ctxmnuRemoveSelected.Size = new System.Drawing.Size(194, 26);
             this.m_ctxmnuRemoveSelected.Text = "Remove";
             this.m_ctxmnuRemoveSelected.Click += new System.EventHandler(this.m_btnRemove_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(136, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(191, 6);
             // 
             // m_ctxmnuAddUrl
             // 
             this.m_ctxmnuAddUrl.Name = "m_ctxmnuAddUrl";
-            this.m_ctxmnuAddUrl.Size = new System.Drawing.Size(139, 22);
+            this.m_ctxmnuAddUrl.Size = new System.Drawing.Size(194, 26);
             this.m_ctxmnuAddUrl.Text = "Add";
             this.m_ctxmnuAddUrl.Click += new System.EventHandler(this.m_mnuFileAdd_Click);
             // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(136, 6);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(191, 6);
             // 
             // m_ctxmnuExit
             // 
+            this.m_ctxmnuExit.Image = ((System.Drawing.Image)(resources.GetObject("m_ctxmnuExit.Image")));
             this.m_ctxmnuExit.Name = "m_ctxmnuExit";
-            this.m_ctxmnuExit.Size = new System.Drawing.Size(139, 22);
+            this.m_ctxmnuExit.Size = new System.Drawing.Size(194, 26);
             this.m_ctxmnuExit.Text = "E&xit";
             this.m_ctxmnuExit.Click += new System.EventHandler(this.m_mnuFileExit_Click);
             // 
@@ -427,18 +431,26 @@
             // 
             this.m_errorProvider.ContainerControl = this;
             // 
+            // m_ctxmnuDownloadAgain
+            // 
+            this.m_ctxmnuDownloadAgain.Image = ((System.Drawing.Image)(resources.GetObject("m_ctxmnuDownloadAgain.Image")));
+            this.m_ctxmnuDownloadAgain.Name = "m_ctxmnuDownloadAgain";
+            this.m_ctxmnuDownloadAgain.Size = new System.Drawing.Size(194, 26);
+            this.m_ctxmnuDownloadAgain.Text = "Download Again";
+            this.m_ctxmnuDownloadAgain.Click += new System.EventHandler(this.m_ctxmnuDownloadAgain_Click);
+            // 
             // m_DownloaderUserControl
             // 
             this.m_DownloaderUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_DownloaderUserControl.Location = new System.Drawing.Point(0, 0);
-            this.m_DownloaderUserControl.Margin = new System.Windows.Forms.Padding(4);
+            this.m_DownloaderUserControl.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_DownloaderUserControl.Name = "m_DownloaderUserControl";
             this.m_DownloaderUserControl.Size = new System.Drawing.Size(959, 254);
             this.m_DownloaderUserControl.TabIndex = 0;
             // 
             // FormMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(984, 562);
             this.Controls.Add(this.m_btnBrowseForFolder);
@@ -516,6 +528,7 @@
         private System.Windows.Forms.ToolStripMenuItem m_ctxmnuAddUrl;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem4;
         private System.Windows.Forms.ToolStripMenuItem m_ctxmnuExit;
+        private System.Windows.Forms.ToolStripMenuItem m_ctxmnuDownloadAgain;
     }
 }
 
