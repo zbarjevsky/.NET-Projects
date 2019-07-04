@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Globalization;
 using ClipboardManager.Properties;
+using MZ.Utils;
 
 namespace ClipboardManager
 {

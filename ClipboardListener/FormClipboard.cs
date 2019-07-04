@@ -417,9 +417,9 @@ namespace ClipboardManager
 				this.r = r;
 			}//end constructor
 
-			public Point GetCenterPos(Size sz, bool bRelativePos)
+			public Point GetCenterPos(Size sz)
 			{
-				return CalculateCenter(r, sz, bRelativePos);
+				return CalculateCenter(r, sz);
 			}//end GetCenterPos
 		}//end class Pos
 
@@ -480,7 +480,7 @@ namespace ClipboardManager
 			if ( rectangle == null )
 				rectangle = new Pos(rc);
 
-			m_contextMenuStripClipboard.Show(rectangle.GetCenterPos(m_contextMenuStripClipboard.Size, false));
+			m_contextMenuStripClipboard.Show(rectangle.GetCenterPos(m_contextMenuStripClipboard.Size));
 		}//end ProcessHotkey
 
 		//build main clipboard history menu
@@ -528,16 +528,17 @@ namespace ClipboardManager
 			return list;
 		}//end BuildFavoritesList
 
-		private static Point CalculateCenter(NativeWIN32.RECT r, Size szMenu, bool bRelativePos)
+		private static Point CalculateCenter(NativeWIN32.RECT r, Size szMenu)
 		{
-			int x = ((r.Right - r.Left) - szMenu.Width) / 2;
-			int y = ((r.Bottom - r.Top) - szMenu.Height) / 2;
-			if (x < 0 && !bRelativePos) x = 200;
-			if (y < 0 && !bRelativePos) y = 150;
-			if ( bRelativePos )
-				return new Point(x, y);
-			else
-				return new Point(r.Left + x, r.Top + y);
+			int deltaX = ((r.Right - r.Left) - szMenu.Width) / 2;
+			int deltaY = ((r.Bottom - r.Top) - szMenu.Height) / 2;
+            int x = r.Left + deltaX;
+            int y = r.Top + deltaY;
+
+            if (x < 0) x = 200;
+			if (y < 0) y = 150;
+
+    		return new Point(x, y);
 		}//end CalculateCenter
 
 		private void m_toolStripButton_OnTop_Click(object sender, EventArgs e)
