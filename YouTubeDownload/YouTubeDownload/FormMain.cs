@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using YouTubeDownload.Utils;
 
 namespace YouTubeDownload
 {
@@ -20,10 +21,20 @@ namespace YouTubeDownload
         private string _folderName = "C:\\Temp\\YouTube2";
 
         private bool _pause = false;
+        private ProgressBar _progressBarInPlace;
 
         public FormMain()
         {
             InitializeComponent();
+
+            m_listUrls.SetDoubleBuffered(true);
+
+            _progressBarInPlace = new ProgressBar();
+            _progressBarInPlace.Parent = m_listUrls;
+            _progressBarInPlace.Name = "progr1";
+            _progressBarInPlace.Visible = false;
+            _progressBarInPlace.Maximum = 100;
+            _progressBarInPlace.Step = 1;
         }
 
         private void FormMain_Load(object sender, EventArgs e)
@@ -66,7 +77,7 @@ namespace YouTubeDownload
             int urlIdx = FindDataInList(frm.Data.Url);
             if (urlIdx >= 0)
             {
-                m_listUrls.Items[urlIdx].Tag = frm.Data;
+                //m_listUrls.Items[urlIdx].Tag = frm.Data;
 
                 MessageBox.Show(this, "Url already in list", Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
@@ -90,6 +101,29 @@ namespace YouTubeDownload
 
             UpdateButtonsState();
             StartDownloadNext();
+        }
+
+        public void ListViewShowProgress(ListViewItem item = null)
+        {
+            if(item == null)
+            {
+                _progressBarInPlace.Visible = false;
+                return;
+            }
+
+            DownloadData data = item.Tag as DownloadData;
+
+            Rectangle r = item.Bounds;
+            //position progress bar at the bottom of the cell
+            r.X += 4;
+            r.Width = m_listUrls.Columns[0].Width - 8;
+            r.Y += r.Height - 4;
+            r.Height = 4;
+
+            _progressBarInPlace.Bounds = r;
+            _progressBarInPlace.Value = (int)data.Progress;
+            _progressBarInPlace.Style = _progressBarInPlace.Value == 0 ? ProgressBarStyle.Marquee : ProgressBarStyle.Continuous;
+            _progressBarInPlace.Visible = true;
         }
 
         private bool StartDownloadNext()
@@ -117,13 +151,20 @@ namespace YouTubeDownload
 
         private void UpdateUrlList()
         {
+            ListViewItem activeData = null;
             foreach (ListViewItem item in m_listUrls.Items)
             {
                 DownloadData data = item.Tag as DownloadData;
                 item.SubItems[0].Text = data.State.ToString();
                 item.SubItems[1].Text = Path.GetFileName(data.Description.Trim('"'));
                 item.SubItems[2].Text = data.Url;
+
+                if (data.State == DownloadState.Working)
+                    activeData = item;
             }
+
+            ListViewShowProgress(activeData);
+
             UpdateButtonsState();
         }
 
@@ -377,6 +418,10 @@ namespace YouTubeDownload
             DownloadData data = m_listUrls.SelectedItems[0].Tag as DownloadData;
             if(data != null)
             {
+                if(data.State == DownloadState.Working )
+                {
+                    m_DownloaderUserControl.Stop();
+                }
                 data.State = DownloadState.InQueue;
                 UpdateButtonsState();
                 StartDownloadNext();

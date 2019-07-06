@@ -78,6 +78,7 @@
     <Compile Include="ProcessHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Utils\Utils.cs" />
     <Compile Include="YouTube_DL.cs" />
     <EmbeddedResource Include="DownloaderUserControl.resx">
       <DependentUpon>DownloaderUserControl.cs</DependentUpon>

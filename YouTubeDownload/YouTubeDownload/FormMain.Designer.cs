@@ -52,15 +52,17 @@
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.m_ContextMenuList = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.m_ctxmnuAddUrl = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.m_ctxmnuOpenSelectedFile = new System.Windows.Forms.ToolStripMenuItem();
             this.m_ctxmnuOpenOutputFolder = new System.Windows.Forms.ToolStripMenuItem();
             this.m_ctxmnuRemoveSelected = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
-            this.m_ctxmnuAddUrl = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_ctxmnuDownloadAgain = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
             this.m_ctxmnuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.m_btnAddUrl = new System.Windows.Forms.Button();
             this.m_spliMain = new System.Windows.Forms.SplitContainer();
+            this.m_DownloaderUserControl = new YouTubeDownload.DownloaderUserControl();
             this.m_btnClearList = new System.Windows.Forms.Button();
             this.m_lnkOutputFolder = new System.Windows.Forms.LinkLabel();
             this.m_btnPause = new System.Windows.Forms.Button();
@@ -68,8 +70,6 @@
             this.m_btnRemove = new System.Windows.Forms.Button();
             this.m_btnBrowseForFolder = new System.Windows.Forms.Button();
             this.m_errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
-            this.m_ctxmnuDownloadAgain = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_DownloaderUserControl = new YouTubeDownload.DownloaderUserControl();
             this.m_statusStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.m_ContextMenuList.SuspendLayout();
@@ -117,10 +117,10 @@
             this.m_btnUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnUpdate.Image = ((System.Drawing.Image)(resources.GetObject("m_btnUpdate.Image")));
             this.m_btnUpdate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnUpdate.Location = new System.Drawing.Point(706, 29);
+            this.m_btnUpdate.Location = new System.Drawing.Point(661, 29);
             this.m_btnUpdate.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnUpdate.Name = "m_btnUpdate";
-            this.m_btnUpdate.Size = new System.Drawing.Size(265, 33);
+            this.m_btnUpdate.Size = new System.Drawing.Size(310, 33);
             this.m_btnUpdate.TabIndex = 0;
             this.m_btnUpdate.Text = "Update youtube-dl engine...";
             this.m_btnUpdate.UseVisualStyleBackColor = true;
@@ -270,7 +270,19 @@
             this.toolStripMenuItem4,
             this.m_ctxmnuExit});
             this.m_ContextMenuList.Name = "contextMenuStrip1";
-            this.m_ContextMenuList.Size = new System.Drawing.Size(195, 200);
+            this.m_ContextMenuList.Size = new System.Drawing.Size(195, 172);
+            // 
+            // m_ctxmnuAddUrl
+            // 
+            this.m_ctxmnuAddUrl.Name = "m_ctxmnuAddUrl";
+            this.m_ctxmnuAddUrl.Size = new System.Drawing.Size(194, 26);
+            this.m_ctxmnuAddUrl.Text = "Add";
+            this.m_ctxmnuAddUrl.Click += new System.EventHandler(this.m_mnuFileAdd_Click);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(191, 6);
             // 
             // m_ctxmnuOpenSelectedFile
             // 
@@ -293,17 +305,13 @@
             this.m_ctxmnuRemoveSelected.Text = "Remove";
             this.m_ctxmnuRemoveSelected.Click += new System.EventHandler(this.m_btnRemove_Click);
             // 
-            // toolStripMenuItem3
+            // m_ctxmnuDownloadAgain
             // 
-            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(191, 6);
-            // 
-            // m_ctxmnuAddUrl
-            // 
-            this.m_ctxmnuAddUrl.Name = "m_ctxmnuAddUrl";
-            this.m_ctxmnuAddUrl.Size = new System.Drawing.Size(194, 26);
-            this.m_ctxmnuAddUrl.Text = "Add";
-            this.m_ctxmnuAddUrl.Click += new System.EventHandler(this.m_mnuFileAdd_Click);
+            this.m_ctxmnuDownloadAgain.Image = ((System.Drawing.Image)(resources.GetObject("m_ctxmnuDownloadAgain.Image")));
+            this.m_ctxmnuDownloadAgain.Name = "m_ctxmnuDownloadAgain";
+            this.m_ctxmnuDownloadAgain.Size = new System.Drawing.Size(194, 26);
+            this.m_ctxmnuDownloadAgain.Text = "Download Again";
+            this.m_ctxmnuDownloadAgain.Click += new System.EventHandler(this.m_ctxmnuDownloadAgain_Click);
             // 
             // toolStripMenuItem4
             // 
@@ -325,7 +333,7 @@
             this.m_btnAddUrl.Location = new System.Drawing.Point(10, 29);
             this.m_btnAddUrl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnAddUrl.Name = "m_btnAddUrl";
-            this.m_btnAddUrl.Size = new System.Drawing.Size(136, 33);
+            this.m_btnAddUrl.Size = new System.Drawing.Size(289, 33);
             this.m_btnAddUrl.TabIndex = 1;
             this.m_btnAddUrl.Text = "Add && Start";
             this.m_btnAddUrl.UseVisualStyleBackColor = true;
@@ -337,6 +345,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_spliMain.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.m_spliMain.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
             this.m_spliMain.Location = new System.Drawing.Point(8, 103);
             this.m_spliMain.Name = "m_spliMain";
             this.m_spliMain.Orientation = System.Windows.Forms.Orientation.Horizontal;
@@ -352,14 +361,23 @@
             this.m_spliMain.SplitterDistance = 159;
             this.m_spliMain.TabIndex = 7;
             // 
+            // m_DownloaderUserControl
+            // 
+            this.m_DownloaderUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_DownloaderUserControl.Location = new System.Drawing.Point(0, 0);
+            this.m_DownloaderUserControl.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.m_DownloaderUserControl.Name = "m_DownloaderUserControl";
+            this.m_DownloaderUserControl.Size = new System.Drawing.Size(959, 254);
+            this.m_DownloaderUserControl.TabIndex = 0;
+            // 
             // m_btnClearList
             // 
             this.m_btnClearList.Image = ((System.Drawing.Image)(resources.GetObject("m_btnClearList.Image")));
             this.m_btnClearList.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnClearList.Location = new System.Drawing.Point(298, 64);
+            this.m_btnClearList.Location = new System.Drawing.Point(319, 64);
             this.m_btnClearList.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnClearList.Name = "m_btnClearList";
-            this.m_btnClearList.Size = new System.Drawing.Size(136, 33);
+            this.m_btnClearList.Size = new System.Drawing.Size(139, 33);
             this.m_btnClearList.TabIndex = 4;
             this.m_btnClearList.Text = "Remove All";
             this.m_btnClearList.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -371,9 +389,9 @@
             this.m_lnkOutputFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_lnkOutputFolder.BackColor = System.Drawing.SystemColors.Window;
-            this.m_lnkOutputFolder.Location = new System.Drawing.Point(441, 65);
+            this.m_lnkOutputFolder.Location = new System.Drawing.Point(465, 65);
             this.m_lnkOutputFolder.Name = "m_lnkOutputFolder";
-            this.m_lnkOutputFolder.Size = new System.Drawing.Size(411, 32);
+            this.m_lnkOutputFolder.Size = new System.Drawing.Size(387, 32);
             this.m_lnkOutputFolder.TabIndex = 6;
             this.m_lnkOutputFolder.TabStop = true;
             this.m_lnkOutputFolder.Text = "Output Folder";
@@ -409,7 +427,7 @@
             this.m_btnRemove.Location = new System.Drawing.Point(154, 64);
             this.m_btnRemove.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnRemove.Name = "m_btnRemove";
-            this.m_btnRemove.Size = new System.Drawing.Size(136, 33);
+            this.m_btnRemove.Size = new System.Drawing.Size(145, 33);
             this.m_btnRemove.TabIndex = 3;
             this.m_btnRemove.Text = "Remove Sel";
             this.m_btnRemove.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -430,23 +448,6 @@
             // m_errorProvider
             // 
             this.m_errorProvider.ContainerControl = this;
-            // 
-            // m_ctxmnuDownloadAgain
-            // 
-            this.m_ctxmnuDownloadAgain.Image = ((System.Drawing.Image)(resources.GetObject("m_ctxmnuDownloadAgain.Image")));
-            this.m_ctxmnuDownloadAgain.Name = "m_ctxmnuDownloadAgain";
-            this.m_ctxmnuDownloadAgain.Size = new System.Drawing.Size(194, 26);
-            this.m_ctxmnuDownloadAgain.Text = "Download Again";
-            this.m_ctxmnuDownloadAgain.Click += new System.EventHandler(this.m_ctxmnuDownloadAgain_Click);
-            // 
-            // m_DownloaderUserControl
-            // 
-            this.m_DownloaderUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_DownloaderUserControl.Location = new System.Drawing.Point(0, 0);
-            this.m_DownloaderUserControl.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.m_DownloaderUserControl.Name = "m_DownloaderUserControl";
-            this.m_DownloaderUserControl.Size = new System.Drawing.Size(959, 254);
-            this.m_DownloaderUserControl.TabIndex = 0;
             // 
             // FormMain
             // 
