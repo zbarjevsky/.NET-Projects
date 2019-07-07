@@ -109,6 +109,8 @@ namespace DiskCryptorHelper.VHD
         }
     }
 
+    #region COM Interfaces
+
     [ComImport, Guid("118610b7-8d94-4030-b5b8-500889788e4e"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface IEnumVdsObject
     {
@@ -349,4 +351,6 @@ namespace DiskCryptorHelper.VHD
         VDS_VST_DELETED,
         VDS_VST_MAX
     }
+
+    #endregion
 }
