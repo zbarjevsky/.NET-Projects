@@ -11,31 +11,37 @@ namespace DiskCryptorHelper.VHD
     //https://stackoverflow.com/questions/2755458/retrieving-virtual-disk-file-name-from-disk-number
     public class VirtualDiskService
     {
-        public static List<string> GetVirtualDisksImagePaths()
-        {
-            List<string> paths = new List<string>(4);
+        private IVdsService _service;
 
+        //create service before shutdown process started
+        //it cannot be created during shutdown
+        public VirtualDiskService()
+        {
             // Create the service loader
             VdsServiceLoader loaderClass = new VdsServiceLoader();
             IVdsServiceLoader loader = (IVdsServiceLoader)loaderClass;
             Debug.WriteLine("Got Loader");
 
             // Load the service
-            IVdsService service;
-            loader.LoadService(null, out service);
+            loader.LoadService(null, out _service);
             Debug.WriteLine("Got Service");
 
             // Wait for readyness
-            service.WaitForServiceReady();
+            _service.WaitForServiceReady();
             Debug.WriteLine("Service is ready");
+        }
+
+        public List<string> GetVirtualDisksImagePaths()
+        {
+            List<string> paths = new List<string>(4);
 
             // Query for vdisk providers
             IEnumVdsObject providerEnum;
-            service.QueryProviders(VDS_QUERY_PROVIDER_FLAG.VDS_QUERY_VIRTUALDISK_PROVIDERS, out providerEnum);
+            _service.QueryProviders(VDS_QUERY_PROVIDER_FLAG.VDS_QUERY_VIRTUALDISK_PROVIDERS, out providerEnum);
             Debug.WriteLine("Got Providers");
 
             // Iterate
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 12; i++)
             {
                 uint fetched;
                 object unknown;
@@ -64,13 +70,14 @@ namespace DiskCryptorHelper.VHD
             Debug.WriteLine("Got VDisks");
 
             // Iterate
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 12; i++)
             {
                 uint fetched;
                 object unknown;
                 diskEnum.Next(1, out unknown, out fetched);
 
-                if (fetched == 0) break;
+                if (fetched == 0)
+                    break; //no more info
 
                 // Cast to the required type
                 IVdsVDisk vDisk = (IVdsVDisk)unknown;

@@ -29,7 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VHD_MountUnMountUserControl));
             this.m_grpVHD = new System.Windows.Forms.GroupBox();
+            this.m_btnDetachAll = new System.Windows.Forms.Button();
             this.m_cmbAvailableDriveLetters = new System.Windows.Forms.ComboBox();
             this.m_lblVHD_File = new System.Windows.Forms.Label();
             this.m_btnAttachVHD = new System.Windows.Forms.Button();
@@ -38,7 +40,6 @@
             this.m_chkPermanent = new System.Windows.Forms.CheckBox();
             this.m_btnDetach = new System.Windows.Forms.Button();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.m_btnDetachAll = new System.Windows.Forms.Button();
             this.m_grpVHD.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -64,6 +65,20 @@
             this.m_grpVHD.TabIndex = 6;
             this.m_grpVHD.TabStop = false;
             this.m_grpVHD.Text = "Virtual Hard Drive (VHD)";
+            // 
+            // m_btnDetachAll
+            // 
+            this.m_btnDetachAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnDetachAll.Image = ((System.Drawing.Image)(resources.GetObject("m_btnDetachAll.Image")));
+            this.m_btnDetachAll.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.m_btnDetachAll.Location = new System.Drawing.Point(526, 64);
+            this.m_btnDetachAll.Margin = new System.Windows.Forms.Padding(4);
+            this.m_btnDetachAll.Name = "m_btnDetachAll";
+            this.m_btnDetachAll.Size = new System.Drawing.Size(135, 28);
+            this.m_btnDetachAll.TabIndex = 7;
+            this.m_btnDetachAll.Text = "Detach &All";
+            this.m_btnDetachAll.UseVisualStyleBackColor = true;
+            this.m_btnDetachAll.Click += new System.EventHandler(this.m_btnDetachAll_Click);
             // 
             // m_cmbAvailableDriveLetters
             // 
@@ -144,18 +159,6 @@
             this.m_btnDetach.Text = "UnMount && Detach";
             this.m_btnDetach.UseVisualStyleBackColor = true;
             this.m_btnDetach.Click += new System.EventHandler(this.m_btnUnmountAndDetach_Click);
-            // 
-            // m_btnDetachAll
-            // 
-            this.m_btnDetachAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnDetachAll.Location = new System.Drawing.Point(526, 64);
-            this.m_btnDetachAll.Margin = new System.Windows.Forms.Padding(4);
-            this.m_btnDetachAll.Name = "m_btnDetachAll";
-            this.m_btnDetachAll.Size = new System.Drawing.Size(135, 28);
-            this.m_btnDetachAll.TabIndex = 7;
-            this.m_btnDetachAll.Text = "Detach &All";
-            this.m_btnDetachAll.UseVisualStyleBackColor = true;
-            this.m_btnDetachAll.Click += new System.EventHandler(this.m_btnDetachAll_Click);
             // 
             // VHD_MountUnMountUserControl
             // 

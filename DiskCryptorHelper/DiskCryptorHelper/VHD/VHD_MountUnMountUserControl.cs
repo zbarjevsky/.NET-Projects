@@ -18,6 +18,7 @@ namespace DiskCryptorHelper.VHD
     public partial class VHD_MountUnMountUserControl : UserControl
     {
         private DiskCryptor _diskCryptor;
+        private VirtualDiskService _virtualDiskService;
         private ToolStripMenuItem m_mnuFileAttachVHD;
         private RecentFilesList _recentFiles = new RecentFilesList();
 
@@ -28,6 +29,8 @@ namespace DiskCryptorHelper.VHD
         public VHD_MountUnMountUserControl()
         {
             InitializeComponent();
+
+            _virtualDiskService = new VirtualDiskService();
         }
 
         private void VHD_MountUnMountUserControl_Load(object sender, EventArgs e)
@@ -171,10 +174,12 @@ namespace DiskCryptorHelper.VHD
 
         public void UnmountAndDetachAll()
         {
-            List<string> paths = VirtualDiskService.GetVirtualDisksImagePaths();
+            Log.WriteLine("UnmountAndDetachAll(1)");
+            List<string> paths = _virtualDiskService.GetVirtualDisksImagePaths();
 
             for (int i = 0; i < paths.Count; i++)
             {
+                Log.WriteLine("UnmountAndDetachAll({0}:{1})", i, paths[i]);
                 UnmountAndDetach(paths[i]);
             }
         }

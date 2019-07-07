@@ -125,7 +125,8 @@ namespace DiskCryptorHelper
                 e.CloseReason == CloseReason.TaskManagerClosing)
             {
                 Log.WriteLine("FormMain_FormClosing: " + e.CloseReason);
-                m_VHD_MountUnMountUserControl.UnmountAndDetachAll();
+                try { m_VHD_MountUnMountUserControl.UnmountAndDetachAll(); }
+                catch (Exception err) { Log.WriteLine("m_VHD_MountUnMountUserControl.UnmountAndDetachAll - Exception: {0}", err); }
                 //_diskCryptor.ExecuteUnMountAll();
             }
             else if(e.CloseReason == CloseReason.UserClosing) //user clicked close button
