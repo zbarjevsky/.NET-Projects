@@ -56,7 +56,7 @@ namespace Medo.IO
         /// Opens connection to file.
         /// </summary>
         [SecurityPermission(SecurityAction.Demand)]
-        public void Open()
+        public void Open(NativeMethods.VIRTUAL_DISK_ACCESS_MASK virtualDiskAccessMask = NativeMethods.VIRTUAL_DISK_ACCESS_MASK.VIRTUAL_DISK_ACCESS_ALL)
         {
             var parameters = new NativeMethods.OPEN_VIRTUAL_DISK_PARAMETERS();
             parameters.Version = NativeMethods.OPEN_VIRTUAL_DISK_VERSION.OPEN_VIRTUAL_DISK_VERSION_1;
@@ -66,7 +66,7 @@ namespace Medo.IO
             storageType.DeviceId = NativeMethods.VIRTUAL_STORAGE_TYPE_DEVICE_VHD;
             storageType.VendorId = NativeMethods.VIRTUAL_STORAGE_TYPE_VENDOR_MICROSOFT;
 
-            int res = NativeMethods.OpenVirtualDisk(ref storageType, this.FileName, NativeMethods.VIRTUAL_DISK_ACCESS_MASK.VIRTUAL_DISK_ACCESS_ALL, NativeMethods.OPEN_VIRTUAL_DISK_FLAG.OPEN_VIRTUAL_DISK_FLAG_NONE, ref parameters, ref _handle);
+            int res = NativeMethods.OpenVirtualDisk(ref storageType, this.FileName, virtualDiskAccessMask, NativeMethods.OPEN_VIRTUAL_DISK_FLAG.OPEN_VIRTUAL_DISK_FLAG_NONE, ref parameters, ref _handle);
             if (res == NativeMethods.ERROR_SUCCESS)
             {
             }
@@ -332,7 +332,7 @@ namespace Medo.IO
         public string GetAttachedPath()
         {
             int res = 0;
-            int pathSize = 200; //size in bytes (200) - not in chars (100)
+            int pathSize = 2000; //size in bytes (200) - not in chars (100)
             var path = new StringBuilder(pathSize / 2); //unicode
 
             res = NativeMethods.GetVirtualDiskPhysicalPath(_handle, ref pathSize, path);
@@ -348,7 +348,7 @@ namespace Medo.IO
             }
             else if (res == NativeMethods.ERROR_DEV_NOT_EXIST)
             {
-                throw new IOException("Device could not be accessed.");
+                return null; // throw new IOException("Device could not be accessed.");
             }
             else
             {
@@ -422,7 +422,7 @@ namespace Medo.IO
         #endregion
 
 
-        private static class NativeMethods
+        public static class NativeMethods
         {
 
             #region VHD Constants

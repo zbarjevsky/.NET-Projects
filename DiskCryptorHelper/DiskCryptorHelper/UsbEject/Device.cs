@@ -247,28 +247,39 @@ namespace UsbEject.Library
         /// </summary>
         /// <param name="allowUI">Pass true to allow the Windows shell to display any related UI element, false otherwise.</param>
         /// <returns>null if no error occured, otherwise a contextual text.</returns>
+        public static string Eject(Device device, bool allowUI)
+        {
+            if (allowUI)
+            {
+                Native.CM_Request_Device_Eject_NoUi(device.InstanceHandle, IntPtr.Zero, null, 0, 0);
+                // don't handle errors, there should be a UI for this
+            }
+            else
+            {
+                StringBuilder sb = new StringBuilder(1024);
+
+                Native.PNP_VETO_TYPE veto;
+                int hr = Native.CM_Request_Device_Eject(device.InstanceHandle, out veto, sb, sb.Capacity, 0);
+                if (hr != 0)
+                    throw new Win32Exception(hr);
+
+                if (veto != Native.PNP_VETO_TYPE.Ok)
+                    return veto.ToString();
+            }
+
+            return ""; //no errors
+        }
+
+        /// <summary>
+        /// Ejects the device.
+        /// </summary>
+        /// <param name="allowUI">Pass true to allow the Windows shell to display any related UI element, false otherwise.</param>
+        /// <returns>null if no error occured, otherwise a contextual text.</returns>
         public string Eject(bool allowUI)
         {
             foreach (Device device in RemovableDevices)
             {
-                if (allowUI)
-                {
-                    Native.CM_Request_Device_Eject_NoUi(device.InstanceHandle, IntPtr.Zero, null, 0, 0);
-                    // don't handle errors, there should be a UI for this
-                }
-                else
-                {
-                    StringBuilder sb = new StringBuilder(1024);
-
-                    Native.PNP_VETO_TYPE veto;
-                    int hr = Native.CM_Request_Device_Eject(device.InstanceHandle, out veto, sb, sb.Capacity, 0);
-                    if (hr != 0)
-                        throw new Win32Exception(hr);
-
-                    if (veto != Native.PNP_VETO_TYPE.Ok)
-                        return veto.ToString();
-                }
-
+                Eject(device, allowUI);
             }
             return null;
         }

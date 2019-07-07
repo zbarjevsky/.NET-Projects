@@ -32,6 +32,7 @@
             this.m_clmnDriveLetter = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.m_clmnDescription = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.label2 = new System.Windows.Forms.Label();
+            this.m_clmnDescription2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.SuspendLayout();
             // 
             // m_listDriveLetters
@@ -39,14 +40,15 @@
             this.m_listDriveLetters.CheckBoxes = true;
             this.m_listDriveLetters.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.m_clmnDriveLetter,
-            this.m_clmnDescription});
+            this.m_clmnDescription,
+            this.m_clmnDescription2});
             this.m_listDriveLetters.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_listDriveLetters.FullRowSelect = true;
             this.m_listDriveLetters.GridLines = true;
             this.m_listDriveLetters.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.m_listDriveLetters.Location = new System.Drawing.Point(0, 18);
             this.m_listDriveLetters.Name = "m_listDriveLetters";
-            this.m_listDriveLetters.Size = new System.Drawing.Size(98, 384);
+            this.m_listDriveLetters.Size = new System.Drawing.Size(355, 384);
             this.m_listDriveLetters.TabIndex = 8;
             this.m_listDriveLetters.UseCompatibleStateImageBehavior = false;
             this.m_listDriveLetters.View = System.Windows.Forms.View.Details;
@@ -67,10 +69,15 @@
             this.label2.Dock = System.Windows.Forms.DockStyle.Top;
             this.label2.Location = new System.Drawing.Point(0, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(98, 18);
+            this.label2.Size = new System.Drawing.Size(355, 18);
             this.label2.TabIndex = 7;
             this.label2.Text = "Hide Drives:";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // m_clmnDescription2
+            // 
+            this.m_clmnDescription2.Text = "Additional Data";
+            this.m_clmnDescription2.Width = 600;
             // 
             // HideDriveLetterControl
             // 
@@ -79,7 +86,7 @@
             this.Controls.Add(this.m_listDriveLetters);
             this.Controls.Add(this.label2);
             this.Name = "HideDriveLetterControl";
-            this.Size = new System.Drawing.Size(98, 402);
+            this.Size = new System.Drawing.Size(355, 402);
             this.Load += new System.EventHandler(this.HideDriveLetterControl_Load);
             this.ResumeLayout(false);
 
@@ -91,5 +98,6 @@
         private System.Windows.Forms.ColumnHeader m_clmnDriveLetter;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ColumnHeader m_clmnDescription;
+        private System.Windows.Forms.ColumnHeader m_clmnDescription2;
     }
 }

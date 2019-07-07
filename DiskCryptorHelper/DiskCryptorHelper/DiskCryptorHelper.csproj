@@ -104,6 +104,7 @@
       <DependentUpon>VHD_MountUnMountUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="VHD\VirtualDiskManager.cs" />
+    <Compile Include="VHD\VirtualDiskService.cs" />
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>

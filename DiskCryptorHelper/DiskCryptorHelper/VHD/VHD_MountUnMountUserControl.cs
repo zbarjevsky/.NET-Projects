@@ -152,6 +152,11 @@ namespace DiskCryptorHelper.VHD
             m_btnAttachVHD.Text = "Attach && Mount As: " + _selectedDriveLetter;
         }
 
+        private void m_btnDetachAll_Click(object sender, EventArgs e)
+        {
+            ExecuteClickAction(() => UnmountAndDetachAll(), sender);
+        }
+
         private void m_btnUnmountAndDetach_Click(object sender, EventArgs e)
         {
             string vhdFileName = m_cmbVHD_FileName.Text;
@@ -161,9 +166,31 @@ namespace DiskCryptorHelper.VHD
                 return;
             }
 
-            ExecuteClickAction(() =>
+            ExecuteClickAction(() => UnmountAndDetach(vhdFileName), sender);
+        }
+
+        public void UnmountAndDetachAll()
+        {
+            List<string> paths = VirtualDiskService.GetVirtualDisksImagePaths();
+
+            for (int i = 0; i < paths.Count; i++)
             {
-                if (_virtualDisk != null && _virtualDisk.FileName.CompareTo(vhdFileName) != 0)
+                UnmountAndDetach(paths[i]);
+            }
+        }
+
+        private void UnmountAndDetach(string vhdFileName)
+        {
+            FileInfo fi = new FileInfo(vhdFileName);
+            if (!fi.Exists)
+                return;
+
+            Log.WriteLine("UnmountAndDetach({0})", vhdFileName);
+            fi.IsReadOnly = false; //unlock file to enable load
+
+            try
+            {
+                if (_virtualDisk != null) // && _virtualDisk.FileName.CompareTo(vhdFileName) != 0)
                 {
                     _virtualDisk.Close();
                     _virtualDisk = null;
@@ -175,15 +202,37 @@ namespace DiskCryptorHelper.VHD
                     _virtualDisk.Open();
                 }
 
-                string path = _virtualDisk.GetAttachedPath();
-                DiskCryptor.DriveInfo drive = FindDriveInfo(path);
-                if (drive != null)
-                    UnmountDiscryptorDrive(drive);
+                string diskPath = _virtualDisk.GetAttachedPath();
+                if (!string.IsNullOrWhiteSpace(diskPath)) //if device is attached
+                {
+                    DiskCryptor.DriveInfo drive = FindDriveInfo(diskPath);
+                    if (drive != null)
+                    {
+                        try { UnmountDiscryptorDrive(drive); }
+                        catch (Exception err)
+                        {
+                            Log.WriteLine("UnmountDiscryptorDrive({0}) - Error: {1}", diskPath, err);
+                        }
+                    }
 
-                _virtualDisk.Detach();
-                _virtualDisk.Close();
-                _virtualDisk = null;
-            }, sender);
+                    _virtualDisk.Detach();
+                }
+            }
+            catch (Exception err)
+            {
+                Log.WriteLine("UnmountAndDetach({0}): {1}", vhdFileName, err.ToString());
+                throw;
+            }
+            finally
+            {
+                if (_virtualDisk != null)
+                {
+                    _virtualDisk.Close();
+                    _virtualDisk = null;
+                }
+
+                fi.IsReadOnly = true; //lock file to improve security
+            }
         }
 
         private DiskCryptor.DriveInfo FindDriveInfo(string attachedPath)
@@ -196,7 +245,7 @@ namespace DiskCryptorHelper.VHD
             int diskNumber = int.Parse(attachedPath.Substring(pos));
 
             UsbEject.Library.Volume vol = null;
-            foreach (UsbEject.Library.Volume device in removable_volumes)
+            foreach (UsbEject.Library.Volume device in list)
             {
                 if (device.Disks[0].DiskNumber == diskNumber)
                 {

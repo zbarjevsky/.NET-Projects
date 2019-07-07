@@ -45,11 +45,14 @@
             this.m_mnuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.m_menuStripMain = new System.Windows.Forms.MenuStrip();
             this.m_mnuFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuView = new System.Windows.Forms.ToolStripMenuItem();
             this.m_mnuOptions = new System.Windows.Forms.ToolStripMenuItem();
             this.m_mnuOptionsHideWhenMinimized = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
             this.m_mnuOptionsVHD = new System.Windows.Forms.ToolStripMenuItem();
             this.m_mnuOpenDiskCryptor = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuHelp = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuHelpAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.m_status1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.m_status2 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -91,9 +94,6 @@
             this.m_btnEject = new System.Windows.Forms.Button();
             this.hideDriveLetterControl1 = new DiskCryptorHelper.HideDriveLetterControl();
             this.panel2 = new System.Windows.Forms.Panel();
-            this.m_mnuHelp = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_mnuHelpAbout = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_mnuView = new System.Windows.Forms.ToolStripMenuItem();
             this.m_sysIconMenu.SuspendLayout();
             this.m_menuStripMain.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -242,6 +242,12 @@
             this.m_mnuFile.Size = new System.Drawing.Size(37, 20);
             this.m_mnuFile.Text = "&File";
             // 
+            // m_mnuView
+            // 
+            this.m_mnuView.Name = "m_mnuView";
+            this.m_mnuView.Size = new System.Drawing.Size(44, 20);
+            this.m_mnuView.Text = "View";
+            // 
             // m_mnuOptions
             // 
             this.m_mnuOptions.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -256,19 +262,19 @@
             // m_mnuOptionsHideWhenMinimized
             // 
             this.m_mnuOptionsHideWhenMinimized.Name = "m_mnuOptionsHideWhenMinimized";
-            this.m_mnuOptionsHideWhenMinimized.Size = new System.Drawing.Size(206, 26);
+            this.m_mnuOptionsHideWhenMinimized.Size = new System.Drawing.Size(202, 22);
             this.m_mnuOptionsHideWhenMinimized.Text = "Hide When Minimized";
             this.m_mnuOptionsHideWhenMinimized.Click += new System.EventHandler(this.m_mnuOptionsHideWhenMinimized_Click);
             // 
             // toolStripMenuItem5
             // 
             this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(203, 6);
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(199, 6);
             // 
             // m_mnuOptionsVHD
             // 
             this.m_mnuOptionsVHD.Name = "m_mnuOptionsVHD";
-            this.m_mnuOptionsVHD.Size = new System.Drawing.Size(206, 26);
+            this.m_mnuOptionsVHD.Size = new System.Drawing.Size(202, 22);
             this.m_mnuOptionsVHD.Text = "Virtual Hard Drive (VHD)";
             this.m_mnuOptionsVHD.Click += new System.EventHandler(this.m_mnuOptionsVHD_Click);
             // 
@@ -276,9 +282,23 @@
             // 
             this.m_mnuOpenDiskCryptor.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuOpenDiskCryptor.Image")));
             this.m_mnuOpenDiskCryptor.Name = "m_mnuOpenDiskCryptor";
-            this.m_mnuOpenDiskCryptor.Size = new System.Drawing.Size(206, 26);
+            this.m_mnuOpenDiskCryptor.Size = new System.Drawing.Size(202, 22);
             this.m_mnuOpenDiskCryptor.Text = "Open DiskCryptor...";
             this.m_mnuOpenDiskCryptor.Click += new System.EventHandler(this.m_mnuOpenDiskCryptor_Click);
+            // 
+            // m_mnuHelp
+            // 
+            this.m_mnuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.m_mnuHelpAbout});
+            this.m_mnuHelp.Name = "m_mnuHelp";
+            this.m_mnuHelp.Size = new System.Drawing.Size(44, 20);
+            this.m_mnuHelp.Text = "Help";
+            // 
+            // m_mnuHelpAbout
+            // 
+            this.m_mnuHelpAbout.Name = "m_mnuHelpAbout";
+            this.m_mnuHelpAbout.Size = new System.Drawing.Size(107, 22);
+            this.m_mnuHelpAbout.Text = "About";
             // 
             // statusStrip1
             // 
@@ -685,7 +705,7 @@
             this.tabPage2.Margin = new System.Windows.Forms.Padding(2);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(2);
-            this.tabPage2.Size = new System.Drawing.Size(881, 572);
+            this.tabPage2.Size = new System.Drawing.Size(881, 579);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "USB";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -700,7 +720,7 @@
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.panel1);
-            this.splitContainer1.Size = new System.Drawing.Size(877, 568);
+            this.splitContainer1.Size = new System.Drawing.Size(877, 575);
             this.splitContainer1.SplitterDistance = 462;
             this.splitContainer1.SplitterWidth = 3;
             this.splitContainer1.TabIndex = 0;
@@ -714,7 +734,7 @@
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Margin = new System.Windows.Forms.Padding(2);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(462, 568);
+            this.panel1.Size = new System.Drawing.Size(462, 575);
             this.panel1.TabIndex = 3;
             // 
             // m_treeDrives
@@ -725,7 +745,7 @@
             this.m_treeDrives.Location = new System.Drawing.Point(0, 38);
             this.m_treeDrives.Margin = new System.Windows.Forms.Padding(2);
             this.m_treeDrives.Name = "m_treeDrives";
-            this.m_treeDrives.Size = new System.Drawing.Size(462, 495);
+            this.m_treeDrives.Size = new System.Drawing.Size(462, 502);
             this.m_treeDrives.TabIndex = 1;
             this.m_treeDrives.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.m_treeDrives_AfterSelect);
             // 
@@ -743,7 +763,7 @@
             // m_btnEject
             // 
             this.m_btnEject.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.m_btnEject.Location = new System.Drawing.Point(0, 533);
+            this.m_btnEject.Location = new System.Drawing.Point(0, 540);
             this.m_btnEject.Margin = new System.Windows.Forms.Padding(2);
             this.m_btnEject.Name = "m_btnEject";
             this.m_btnEject.Size = new System.Drawing.Size(462, 35);
@@ -771,26 +791,6 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(285, 33);
             this.panel2.TabIndex = 0;
-            // 
-            // m_mnuHelp
-            // 
-            this.m_mnuHelp.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.m_mnuHelpAbout});
-            this.m_mnuHelp.Name = "m_mnuHelp";
-            this.m_mnuHelp.Size = new System.Drawing.Size(44, 20);
-            this.m_mnuHelp.Text = "Help";
-            // 
-            // m_mnuHelpAbout
-            // 
-            this.m_mnuHelpAbout.Name = "m_mnuHelpAbout";
-            this.m_mnuHelpAbout.Size = new System.Drawing.Size(152, 22);
-            this.m_mnuHelpAbout.Text = "About";
-            // 
-            // m_mnuView
-            // 
-            this.m_mnuView.Name = "m_mnuView";
-            this.m_mnuView.Size = new System.Drawing.Size(44, 20);
-            this.m_mnuView.Text = "View";
             // 
             // FormMain
             // 

@@ -125,7 +125,8 @@ namespace DiskCryptorHelper
                 e.CloseReason == CloseReason.TaskManagerClosing)
             {
                 Log.WriteLine("FormMain_FormClosing: " + e.CloseReason);
-                _diskCryptor.ExecuteUnMountAll();
+                m_VHD_MountUnMountUserControl.UnmountAndDetachAll();
+                //_diskCryptor.ExecuteUnMountAll();
             }
             else if(e.CloseReason == CloseReason.UserClosing) //user clicked close button
             {
@@ -248,22 +249,22 @@ namespace DiskCryptorHelper
             }, this);
         }
 
-        private bool DetachVHDDrive(string driveLetter)
-        {
-            List<UsbEject.Library.Device> list = DriveTools.GetUsbDriveList();
-            List<UsbEject.Library.Volume> removable_volumes = DriveTools.GetRemovableDriveList(list);
+        //private bool DetachVHDDrive(string driveLetter)
+        //{
+        //    List<UsbEject.Library.Device> list = DriveTools.GetUsbDriveList();
+        //    List<UsbEject.Library.Volume> removable_volumes = DriveTools.GetRemovableDriveList(list);
 
-            foreach (UsbEject.Library.Volume vol in removable_volumes)
-            {
-                if(vol.LogicalDrive == driveLetter)
-                {
+        //    foreach (UsbEject.Library.Volume vol in removable_volumes)
+        //    {
+        //        if(vol.LogicalDrive == driveLetter)
+        //        {
 
-                    return true;
-                }
-            }
+        //            return true;
+        //        }
+        //    }
 
-            return false;
-        }
+        //    return false;
+        //}
 
         private string GetDriveDescription(string driveLetter, DriveInfo [] driveInfoList)
         {
