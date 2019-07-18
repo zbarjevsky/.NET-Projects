@@ -9,6 +9,7 @@ using System.Diagnostics;
 using System.Xml;
 using System.IO;
 using ClipboardManager.Zip;
+using System.Threading;
 
 namespace ClipboardManager
 {
@@ -21,7 +22,18 @@ namespace ClipboardManager
 			private static RichTextBox m_RtfBox = new RichTextBox();
 			public static ImageList m_ImageList = null;
 
-			public class DropEffect
+			public int _icoItemType		= 5;
+			public Image _icoAppFrom { get; private set; } = null;
+			public string _dataType		= DataFormats.Text;
+			public object _data			= null;
+			public string _ownerType	= "";
+			private string _desc		= "--empty--";
+
+            public IDataObject ClipboardDataObject { get; private set; } = null; //not valid for loaded from xml
+            public string[] _svFormats { get; private set; } = null;
+
+
+            public class DropEffect
 			{
 				public static int DROPEFFECT_NONE { get { return 0; } }
 				public static int DROPEFFECT_COPY { get { return 1; } }
@@ -34,14 +46,20 @@ namespace ClipboardManager
 			{
 				_icoAppFrom = (Image)ico.Clone();
 
-				IDataObject objData = Clipboard.GetDataObject();
-				string[] svFormats = objData.GetFormats(true);
+                ClipboardDataObject = Clipboard.GetDataObject();
+				_svFormats = ClipboardDataObject.GetFormats(true);
+                if (_svFormats == null || _svFormats.Length == 0)
+                {
+                    Thread.Sleep(100);
+                    ClipboardDataObject = Clipboard.GetDataObject();
+                    _svFormats = ClipboardDataObject.GetFormats(true);
+                }
 
-				_desc = "[Clipboard data is not RTF or ASCII Text]";
-				if ( Clipboard.ContainsText(TextDataFormat.Rtf) )
+                _desc = "[Clipboard data is not RTF or ASCII Text]";
+				if (ClipboardDataObject.GetDataPresent(DataFormats.Rtf.ToString())) // Clipboard.ContainsText(TextDataFormat.Rtf) )
 				{
 					_dataType = DataFormats.Rtf;
-					_data = Clipboard.GetText(TextDataFormat.Rtf);
+                    _data = ClipboardDataObject.GetData(DataFormats.Rtf.ToString());// Clipboard.GetText(TextDataFormat.Rtf);
 					_icoItemType = 2;
 
 					m_RtfBox.Rtf = (string)_data;
@@ -50,44 +68,45 @@ namespace ClipboardManager
 						_desc = "--Rtf Binary--";
 
 					//if there is 'international' string that cannot be translated
-					if ( _desc.IndexOf("???") >= 0 && Clipboard.ContainsText(TextDataFormat.UnicodeText) )
-						UnicodeTextInit();
+					if ( _desc.IndexOf("???") >= 0 && ClipboardDataObject.GetDataPresent(DataFormats.UnicodeText.ToString()))
+						UnicodeTextInit(ClipboardDataObject);
 				}//end if
-				else if ( Clipboard.ContainsText(TextDataFormat.UnicodeText) )
+				else if (ClipboardDataObject.GetDataPresent(DataFormats.UnicodeText.ToString())) //Clipboard.ContainsText(TextDataFormat.UnicodeText) )
 				{
-					UnicodeTextInit();
+					UnicodeTextInit(ClipboardDataObject);
 				}//end else if
-				else if ( Clipboard.ContainsText(TextDataFormat.Text) )
-				{
+				else if (ClipboardDataObject.GetDataPresent(DataFormats.Text.ToString())) // Clipboard.ContainsText(TextDataFormat.Text) )
+                {
 					_dataType = DataFormats.Text;
-					_data = Clipboard.GetText(TextDataFormat.Text);
-					_icoItemType = 0;
+					_data = ClipboardDataObject.GetData(DataFormats.Text.ToString());//  Clipboard.GetText(TextDataFormat.Text);
+                    _icoItemType = 0;
 
 					_desc = (string)_data;
 				}//end else if
-				else if ( Clipboard.ContainsImage() )
-				{
+				else if (ClipboardDataObject.GetDataPresent(DataFormats.Bitmap.ToString())) //  Clipboard.ContainsImage() )
+                {
 					_dataType = DataFormats.Bitmap;
-					_data = Clipboard.GetImage();
-					_icoItemType = 3;
+					_data = ClipboardDataObject.GetData(DataFormats.Bitmap.ToString());// Clipboard.GetImage();
+                    _icoItemType = 3;
 
 					Image bmp = (Image)_data;
 					_desc = "Bitmap: " + bmp.Width + "x" + bmp.Height;
 				}//end else if
-				else if ( Clipboard.ContainsFileDropList() )
-				{
+				else if (ClipboardDataObject.GetDataPresent(DataFormats.FileDrop.ToString())) //  Clipboard.ContainsFileDropList() )
+                {
 					int flag = 0;
-					MemoryStream streamType = (MemoryStream)Clipboard.GetData("Preferred DropEffect");
-					if ( streamType != null )
+                    //MemoryStream streamType = (MemoryStream)Clipboard.GetData("Preferred DropEffect");
+                    MemoryStream streamType = (MemoryStream)ClipboardDataObject.GetData("Preferred DropEffect"); 
+                    if ( streamType != null )
 						flag = streamType.ReadByte();
 
 					bool move = (flag & DropEffect.DROPEFFECT_MOVE) > 0 ;
 					bool copy = (flag & DropEffect.DROPEFFECT_COPY) > 0 ;
 
 					_dataType = DataFormats.FileDrop;
-					_data = Clipboard.GetData(DataFormats.FileDrop);
-					
-					string[] svFiles = (string[])_data;
+					_data = ClipboardDataObject.GetData(DataFormats.FileDrop.ToString());// Clipboard.GetData(DataFormats.FileDrop);
+
+                    string[] svFiles = (string[])_data;
 					_icoItemType = 4;
 					if ( copy )
 						_icoItemType = svFiles.Length == 1 ? 6 : 8;
@@ -96,13 +115,13 @@ namespace ClipboardManager
 
 					_desc = FileDropListDesc(svFiles);
 				}//end else if
-				else //Unsupported format == empty
+				else //Unsupported format or empty
 				{
 					_data			= null;
 					_icoItemType	= 5;
 
-					if ( svFormats.Length > 0 )
-						_desc = "--Unsupported format: "+svFormats[0]+"--";
+					if ( _svFormats.Length > 0 )
+						_desc = "--Unsupported format: "+_svFormats[0]+"--";
 					else
 						_desc = "--Empty--";
 					
@@ -116,6 +135,8 @@ namespace ClipboardManager
 			public ClipboardEntry(XmlNode nd, string sOwnerType, Image icoDefault)
 			{
 				_dataType = XmlUtil.GetStrAtt(nd, "Type", DataFormats.Text);
+                _svFormats = new string[] { _dataType };
+
 				_ownerType = XmlUtil.GetStrAtt(nd, "OwnerType", "");
 				if (_ownerType != sOwnerType)
 					throw new Exception(OWNER_TYPE_MISMATCH);
@@ -180,14 +201,14 @@ namespace ClipboardManager
             }
 
             //constructor for unicode text
-            private void UnicodeTextInit()
+            private void UnicodeTextInit(IDataObject objData)
 			{
-				if ( !Clipboard.ContainsText(TextDataFormat.UnicodeText) )
+				if (!objData.GetDataPresent(DataFormats.UnicodeText.ToString()))
 					return;
 
 				_dataType = DataFormats.UnicodeText;
-				_data = Clipboard.GetText(TextDataFormat.UnicodeText);
-				_icoItemType = 1;
+				_data = objData.GetData(DataFormats.UnicodeText.ToString());
+                _icoItemType = 1;
 				
 				_desc = (string)_data;
 			}//end UnicodeTextInit
@@ -317,6 +338,7 @@ namespace ClipboardManager
 			}//end FileDropListDesc
 
             public string ShortDesc() { return ShortDesc(60, true); }
+
             public string ShortDesc(int iMaxChars, bool bSingleLine)
             {
                 string s = bSingleLine ? _desc.Trim(' ', '\n', '\r', '\t') : _desc;
@@ -391,21 +413,17 @@ namespace ClipboardManager
 			{
 				ClipboardEntry clp = new ClipboardEntry(_ownerType);
 
-				clp._icoItemType	= _icoItemType;
-				clp._icoAppFrom		= (Image)_icoAppFrom.Clone();
-				clp._dataType		= _dataType;
-				clp._data			= _data;
-				clp._desc			= _desc;
+				clp._icoItemType	    = _icoItemType;
+				clp._icoAppFrom		    = (Image)_icoAppFrom.Clone();
+				clp._dataType		    = _dataType;
+				clp._data			    = _data;
+				clp._desc			    = _desc;
+
+                clp.ClipboardDataObject = ClipboardDataObject;
+                clp._svFormats          = _svFormats;
 
 				return clp;
 			}//end Clone
-
-			public int _icoItemType		= 5;
-			public Image _icoAppFrom { get; private set; } = null;
-			public string _dataType		= DataFormats.Text;
-			public object _data			= null;
-			public string _ownerType	= "";
-			private string _desc		= "--empty--";
 
             internal void SetAppIcon(Image icoAppFrom)
             {

@@ -51,7 +51,7 @@
             // m_btnBrowseForFolder
             // 
             this.m_btnBrowseForFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnBrowseForFolder.Location = new System.Drawing.Point(479, 54);
+            this.m_btnBrowseForFolder.Location = new System.Drawing.Point(602, 54);
             this.m_btnBrowseForFolder.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnBrowseForFolder.Name = "m_btnBrowseForFolder";
             this.m_btnBrowseForFolder.Size = new System.Drawing.Size(115, 29);
@@ -64,10 +64,10 @@
             // 
             this.m_chkAudioOnly.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_chkAudioOnly.AutoSize = true;
-            this.m_chkAudioOnly.Location = new System.Drawing.Point(615, 47);
+            this.m_chkAudioOnly.Location = new System.Drawing.Point(757, 52);
             this.m_chkAudioOnly.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_chkAudioOnly.Name = "m_chkAudioOnly";
-            this.m_chkAudioOnly.Size = new System.Drawing.Size(168, 24);
+            this.m_chkAudioOnly.Size = new System.Drawing.Size(207, 29);
             this.m_chkAudioOnly.TabIndex = 3;
             this.m_chkAudioOnly.Text = "Extract Audio (mp3)";
             this.m_chkAudioOnly.UseVisualStyleBackColor = true;
@@ -78,10 +78,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_lnkOutputFolder.AutoEllipsis = true;
             this.m_lnkOutputFolder.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.m_lnkOutputFolder.Location = new System.Drawing.Point(144, 54);
+            this.m_lnkOutputFolder.Location = new System.Drawing.Point(184, 54);
             this.m_lnkOutputFolder.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.m_lnkOutputFolder.Name = "m_lnkOutputFolder";
-            this.m_lnkOutputFolder.Size = new System.Drawing.Size(327, 28);
+            this.m_lnkOutputFolder.Size = new System.Drawing.Size(403, 28);
             this.m_lnkOutputFolder.TabIndex = 5;
             this.m_lnkOutputFolder.TabStop = true;
             this.m_lnkOutputFolder.Text = "Output Folder: ";
@@ -94,7 +94,7 @@
             this.m_lblUrl.Location = new System.Drawing.Point(18, 14);
             this.m_lblUrl.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.m_lblUrl.Name = "m_lblUrl";
-            this.m_lblUrl.Size = new System.Drawing.Size(115, 20);
+            this.m_lblUrl.Size = new System.Drawing.Size(142, 25);
             this.m_lblUrl.TabIndex = 0;
             this.m_lblUrl.Text = "YouTube URL:";
             // 
@@ -104,10 +104,10 @@
             this.m_chkNoPlayList.AutoSize = true;
             this.m_chkNoPlayList.Checked = true;
             this.m_chkNoPlayList.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.m_chkNoPlayList.Location = new System.Drawing.Point(615, 13);
+            this.m_chkNoPlayList.Location = new System.Drawing.Point(757, 13);
             this.m_chkNoPlayList.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_chkNoPlayList.Name = "m_chkNoPlayList";
-            this.m_chkNoPlayList.Size = new System.Drawing.Size(110, 24);
+            this.m_chkNoPlayList.Size = new System.Drawing.Size(137, 29);
             this.m_chkNoPlayList.TabIndex = 2;
             this.m_chkNoPlayList.Text = "No Play List";
             this.m_chkNoPlayList.UseVisualStyleBackColor = true;
@@ -116,10 +116,10 @@
             // 
             this.m_txtUrl.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_txtUrl.Location = new System.Drawing.Point(144, 11);
+            this.m_txtUrl.Location = new System.Drawing.Point(184, 11);
             this.m_txtUrl.Margin = new System.Windows.Forms.Padding(6, 8, 6, 8);
             this.m_txtUrl.Name = "m_txtUrl";
-            this.m_txtUrl.Size = new System.Drawing.Size(450, 26);
+            this.m_txtUrl.Size = new System.Drawing.Size(533, 30);
             this.m_txtUrl.TabIndex = 1;
             this.m_txtUrl.TextChanged += new System.EventHandler(this.m_txtUrl_TextChanged);
             // 
@@ -129,7 +129,7 @@
             this.m_btnAddUrl.DialogResult = System.Windows.Forms.DialogResult.OK;
             this.m_btnAddUrl.Image = ((System.Drawing.Image)(resources.GetObject("m_btnAddUrl.Image")));
             this.m_btnAddUrl.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnAddUrl.Location = new System.Drawing.Point(238, 14);
+            this.m_btnAddUrl.Location = new System.Drawing.Point(329, 14);
             this.m_btnAddUrl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnAddUrl.Name = "m_btnAddUrl";
             this.m_btnAddUrl.Size = new System.Drawing.Size(136, 31);
@@ -148,7 +148,7 @@
             this.m_btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.m_btnCancel.Image = ((System.Drawing.Image)(resources.GetObject("m_btnCancel.Image")));
             this.m_btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnCancel.Location = new System.Drawing.Point(406, 14);
+            this.m_btnCancel.Location = new System.Drawing.Point(497, 14);
             this.m_btnCancel.Name = "m_btnCancel";
             this.m_btnCancel.Size = new System.Drawing.Size(136, 31);
             this.m_btnCancel.TabIndex = 7;
@@ -164,9 +164,9 @@
             "%(title)s-%(id)s.%(ext)s",
             "%(title)s.%(ext)s",
             "%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s"});
-            this.m_cmbFileName.Location = new System.Drawing.Point(231, 103);
+            this.m_cmbFileName.Location = new System.Drawing.Point(281, 103);
             this.m_cmbFileName.Name = "m_cmbFileName";
-            this.m_cmbFileName.Size = new System.Drawing.Size(363, 28);
+            this.m_cmbFileName.Size = new System.Drawing.Size(436, 33);
             this.m_cmbFileName.TabIndex = 9;
             // 
             // m_lnkOutputFileName
@@ -174,7 +174,7 @@
             this.m_lnkOutputFileName.AutoSize = true;
             this.m_lnkOutputFileName.Location = new System.Drawing.Point(18, 106);
             this.m_lnkOutputFileName.Name = "m_lnkOutputFileName";
-            this.m_lnkOutputFileName.Size = new System.Drawing.Size(207, 20);
+            this.m_lnkOutputFileName.Size = new System.Drawing.Size(257, 25);
             this.m_lnkOutputFileName.TabIndex = 10;
             this.m_lnkOutputFileName.TabStop = true;
             this.m_lnkOutputFileName.Text = "Output File Name Template:";
@@ -188,7 +188,7 @@
             this.m_pnlButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.m_pnlButtons.Location = new System.Drawing.Point(0, 206);
             this.m_pnlButtons.Name = "m_pnlButtons";
-            this.m_pnlButtons.Size = new System.Drawing.Size(783, 58);
+            this.m_pnlButtons.Size = new System.Drawing.Size(964, 58);
             this.m_pnlButtons.TabIndex = 11;
             // 
             // m_cmbAdditionalParameters
@@ -198,9 +198,9 @@
             this.m_cmbAdditionalParameters.FormattingEnabled = true;
             this.m_cmbAdditionalParameters.Items.AddRange(new object[] {
             "--embed-thumbnail "});
-            this.m_cmbAdditionalParameters.Location = new System.Drawing.Point(231, 154);
+            this.m_cmbAdditionalParameters.Location = new System.Drawing.Point(281, 154);
             this.m_cmbAdditionalParameters.Name = "m_cmbAdditionalParameters";
-            this.m_cmbAdditionalParameters.Size = new System.Drawing.Size(363, 28);
+            this.m_cmbAdditionalParameters.Size = new System.Drawing.Size(436, 33);
             this.m_cmbAdditionalParameters.TabIndex = 14;
             // 
             // linkLabel1
@@ -208,7 +208,7 @@
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.Location = new System.Drawing.Point(56, 157);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(169, 20);
+            this.linkLabel1.Size = new System.Drawing.Size(209, 25);
             this.linkLabel1.TabIndex = 15;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "Additional Parameters:";
@@ -217,10 +217,10 @@
             // FormAddUrl
             // 
             this.AcceptButton = this.m_btnAddUrl;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.m_btnCancel;
-            this.ClientSize = new System.Drawing.Size(783, 264);
+            this.ClientSize = new System.Drawing.Size(964, 264);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.m_cmbAdditionalParameters);
             this.Controls.Add(this.m_pnlButtons);

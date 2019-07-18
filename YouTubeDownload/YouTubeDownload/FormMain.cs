@@ -23,6 +23,8 @@ namespace YouTubeDownload
         private bool _pause = false;
         private ProgressBar _progressBarInPlace;
 
+        public System.Windows.Shell.TaskbarItemInfo TaskbarItemInfo = new System.Windows.Shell.TaskbarItemInfo();
+
         public FormMain()
         {
             InitializeComponent();
@@ -108,6 +110,7 @@ namespace YouTubeDownload
             if(item == null)
             {
                 _progressBarInPlace.Visible = false;
+                TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None;
                 return;
             }
 
@@ -124,6 +127,9 @@ namespace YouTubeDownload
             _progressBarInPlace.Value = (int)data.Progress;
             _progressBarInPlace.Style = _progressBarInPlace.Value == 0 ? ProgressBarStyle.Marquee : ProgressBarStyle.Continuous;
             _progressBarInPlace.Visible = true;
+
+            TaskbarItemInfo.ProgressState = _progressBarInPlace.Value == 0 ? System.Windows.Shell.TaskbarItemProgressState.Indeterminate : System.Windows.Shell.TaskbarItemProgressState.Normal;
+            TaskbarItemInfo.ProgressValue = data.Progress / 100.0;
         }
 
         private bool StartDownloadNext()

@@ -303,18 +303,20 @@ namespace ClipboardManager
                         m_bModified = true;
 				}//end if
 
+                ClipboardList.ClipboardEntry currentEntry = m_ClipboardListMain.GetCurrentEntry();
+
                 m_listHistory.UpdateHistoryList(m_ClipboardListMain);
-                FillFormatsCombo(m_ClipboardListMain.GetCurrentEntry()._dataType);
+                FillFormatsCombo(currentEntry);
 
 				SetFontSize(-1); //reset font size menu
-				m_ClipboardListMain.GetCurrentEntry().SetRichText(m_richTextBoxClipboard, m_icoClipboardApp, m_lblClipboardType);
+                currentEntry.SetRichText(m_richTextBoxClipboard, m_icoClipboardApp, m_lblClipboardType);
 				if ( !m_bCopyFromSnapShot )
-					m_ClipboardListMain.GetCurrentEntry().SetRichText(m_richTextBoxSnapShot, m_icoSnapShotApp, m_lblSnapShotType);
+                    currentEntry.SetRichText(m_richTextBoxSnapShot, m_icoSnapShotApp, m_lblSnapShotType);
 
 				LogMethod("ProcessClipboardData", "Clipboard Current Entry: {0}",
-					m_ClipboardListMain.GetCurrentEntry().ShortDesc());
+                    currentEntry.ShortDesc());
 
-				m_toolStripStatusLabel1.Image = m_ClipboardListMain.GetCurrentEntry()._icoAppFrom;
+				m_toolStripStatusLabel1.Image = currentEntry._icoAppFrom;
 				m_toolStripStatusLabel1.Text = "From: " + sAppTitle;
 			}//end try
 			catch ( Exception e )
@@ -328,28 +330,30 @@ namespace ClipboardManager
 			return true;
 		}//end ProcessClipboardData
 
-		private void FillFormatsCombo(string sCurrentType)
+		private void FillFormatsCombo(ClipboardList.ClipboardEntry entry)
 		{
-			IDataObject objData = Clipboard.GetDataObject();
-			string[] svFormats = objData.GetFormats(true);
+			//IDataObject objData = Clipboard.GetDataObject();
+			//string[] svFormats = objData.GetFormats(true);
 
 			m_ToolStripComboBox_CFormats.Items.Clear();
-			if ( svFormats != null && svFormats.Length > 0 )
+			if (entry._svFormats != null && entry._svFormats.Length > 0 )
 			{
-				m_ToolStripComboBox_CFormats.Items.AddRange(svFormats);
-				m_ToolStripComboBox_CFormats.SelectedItem = sCurrentType;
+				m_ToolStripComboBox_CFormats.Items.AddRange(entry._svFormats);
+				m_ToolStripComboBox_CFormats.SelectedItem = entry._dataType;
 			}//end if
 		}//end FillFormatsCombo()
 
 		private void m_ToolStripComboBox_CFormats_SelectedIndexChanged(object sender, EventArgs e)
 		{
+            const int MAX_LOG = 2048;
 			try
 			{
 				string sFormat = m_ToolStripComboBox_CFormats.Text;
 				object data = Clipboard.GetData(sFormat);
-                string sData = data == null ? "null" : data.ToString();
-                if (sData.Length > 1024)
-                    sData = sData.Substring(0, 1024) + " ...";
+                string sData = data == null ? "<null>" : data.ToString();
+                m_richTextBoxClipboard.Text = sData;
+                if (sData.Length > MAX_LOG)
+                    sData = sData.Substring(0, MAX_LOG) + " ...";
 				LogMethod("CFormats_SelectedIndexChanged", "Clipboard Format: '{0}', Data: {1}", sFormat, sData);
 			}//end try
 			catch ( Exception err)
