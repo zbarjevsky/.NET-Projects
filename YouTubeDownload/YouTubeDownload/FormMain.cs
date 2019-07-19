@@ -11,7 +11,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Shell;
 using YouTubeDownload.Utils;
+using YouTubeDownload.Windows7ProgressBar;
 
 namespace YouTubeDownload
 {
@@ -21,9 +23,7 @@ namespace YouTubeDownload
         private string _folderName = "C:\\Temp\\YouTube2";
 
         private bool _pause = false;
-        private ProgressBar _progressBarInPlace;
-
-        public System.Windows.Shell.TaskbarItemInfo TaskbarItemInfo = new System.Windows.Shell.TaskbarItemInfo();
+        private Windows7ProgressBar.Windows7ProgressBar _progressBarInPlace;
 
         public FormMain()
         {
@@ -31,12 +31,15 @@ namespace YouTubeDownload
 
             m_listUrls.SetDoubleBuffered(true);
 
-            _progressBarInPlace = new ProgressBar();
+            _progressBarInPlace = new Windows7ProgressBar.Windows7ProgressBar(this);
             _progressBarInPlace.Parent = m_listUrls;
             _progressBarInPlace.Name = "progr1";
             _progressBarInPlace.Visible = false;
             _progressBarInPlace.Maximum = 100;
             _progressBarInPlace.Step = 1;
+
+            _progressBarInPlace.ShowInTaskbar = true;
+            _progressBarInPlace.State = ProgressBarState.Normal;
         }
 
         private void FormMain_Load(object sender, EventArgs e)
@@ -110,7 +113,6 @@ namespace YouTubeDownload
             if(item == null)
             {
                 _progressBarInPlace.Visible = false;
-                TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.None;
                 return;
             }
 
@@ -127,9 +129,6 @@ namespace YouTubeDownload
             _progressBarInPlace.Value = (int)data.Progress;
             _progressBarInPlace.Style = _progressBarInPlace.Value == 0 ? ProgressBarStyle.Marquee : ProgressBarStyle.Continuous;
             _progressBarInPlace.Visible = true;
-
-            TaskbarItemInfo.ProgressState = _progressBarInPlace.Value == 0 ? System.Windows.Shell.TaskbarItemProgressState.Indeterminate : System.Windows.Shell.TaskbarItemProgressState.Normal;
-            TaskbarItemInfo.ProgressValue = data.Progress / 100.0;
         }
 
         private bool StartDownloadNext()
