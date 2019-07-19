@@ -284,15 +284,21 @@ namespace ClipboardManager
 
 				try
 				{
-					if ( _dataType == DataFormats.Rtf )
-					{
-						m_RtfBox.Rtf = (string)_data;
-						m_RtfBox.SelectAll();
-						m_RtfBox.Copy();
-						//Clipboard.SetText(m_RtfBox.Rtf, TextDataFormat.Rtf);
-					}//end if
-					else
-						Clipboard.SetData(_dataType, _data);
+                    if (ClipboardDataObject != null)
+                    {
+                        Clipboard.SetDataObject(ClipboardDataObject, true);
+                    }
+                    else if (_dataType == DataFormats.Rtf)
+                    {
+                        m_RtfBox.Rtf = (string)_data;
+                        m_RtfBox.SelectAll();
+                        m_RtfBox.Copy();
+                        //Clipboard.SetText(m_RtfBox.Rtf, TextDataFormat.Rtf);
+                    }//end if
+                    else
+                    {
+                        Clipboard.SetData(_dataType, _data);
+                    }
 				}//end try
 				catch ( Exception err)
 				{
