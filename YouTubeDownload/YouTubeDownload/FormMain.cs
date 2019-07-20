@@ -113,6 +113,7 @@ namespace YouTubeDownload
             if(item == null)
             {
                 _progressBarInPlace.Visible = false;
+                _progressBarInPlace.ShowInTaskbar = false;
                 return;
             }
 
