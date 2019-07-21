@@ -23,7 +23,7 @@ namespace YouTubeDownload
         private string _folderName = "C:\\Temp\\YouTube2";
 
         private bool _pause = false;
-        private Windows7ProgressBar.Windows7ProgressBar _progressBarInPlace;
+        private ProgressBar _progressBarInPlace;
 
         public FormMain()
         {
@@ -31,15 +31,12 @@ namespace YouTubeDownload
 
             m_listUrls.SetDoubleBuffered(true);
 
-            _progressBarInPlace = new Windows7ProgressBar.Windows7ProgressBar(this);
+            _progressBarInPlace = new ProgressBar();
             _progressBarInPlace.Parent = m_listUrls;
             _progressBarInPlace.Name = "progr1";
             _progressBarInPlace.Visible = false;
             _progressBarInPlace.Maximum = 100;
             _progressBarInPlace.Step = 1;
-
-            _progressBarInPlace.ShowInTaskbar = true;
-            _progressBarInPlace.State = ProgressBarState.Normal;
         }
 
         private void FormMain_Load(object sender, EventArgs e)
@@ -113,7 +110,6 @@ namespace YouTubeDownload
             if(item == null)
             {
                 _progressBarInPlace.Visible = false;
-                _progressBarInPlace.ShowInTaskbar = false;
                 return;
             }
 

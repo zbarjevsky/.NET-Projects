@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.Windows.Forms;
@@ -15,60 +16,10 @@ namespace YouTubeDownload.Windows7ProgressBar
     [ToolboxBitmap(typeof(ProgressBar))]
     public class Windows7ProgressBar : ProgressBar
     {
-        bool showInTaskbar;
+        private bool _showInTaskbar;
         private ProgressBarState m_State = ProgressBarState.Normal;
-        private ContainerControl _ownerForm = null;
 
         public Windows7ProgressBar () {}
-
-        public Windows7ProgressBar(ContainerControl parentControl)
-        {
-            ContainerControl = parentControl;
-        }
-
-        public ContainerControl ContainerControl
-        {
-            get { return _ownerForm; }
-            set
-            {
-                _ownerForm = value;
-
-                if(_ownerForm != null && !_ownerForm.Visible)
-                    ((Form)_ownerForm).Shown += Windows7ProgressBar_Shown;
-            }
-        }
-
-        public override ISite Site
-        {
-            set
-            {
-                // Runs at design time, ensures designer initializes ContainerControl
-                base.Site = value;
-                if (value == null)
-                    return;
-                IDesignerHost service = value.GetService(typeof(IDesignerHost)) as IDesignerHost;
-                if (service == null) return;
-                IComponent rootComponent = service.RootComponent;
-
-                ContainerControl = rootComponent as ContainerControl;
-            }
-        }
-
-        private void Windows7ProgressBar_Shown(object sender, System.EventArgs e)
-        {
-            if (_ownerForm == null)
-                return;
-
-            if (ShowInTaskbar)
-            {
-                if (Style != ProgressBarStyle.Marquee)
-                    SetValueInTB();
-
-                SetStateInTB();
-            }
-
-            ((Form)_ownerForm).Shown -= Windows7ProgressBar_Shown;
-        }
 
         /// <summary>
         /// Show progress in taskbar
@@ -78,14 +29,14 @@ namespace YouTubeDownload.Windows7ProgressBar
         {
             get
             {
-                return showInTaskbar;
+                return _showInTaskbar;
             }
 
             set
             {
-                if (showInTaskbar != value)
+                if (_showInTaskbar != value)
                 {
-                    showInTaskbar = value;
+                    _showInTaskbar = value;
 
                     // send signal to the taskbar.
                     if (Style != ProgressBarStyle.Marquee)
@@ -130,7 +81,7 @@ namespace YouTubeDownload.Windows7ProgressBar
                 base.Style = value;
 
                 // set the style of the progress bar
-                if (showInTaskbar)
+                if (_showInTaskbar)
                 {
                     SetStateInTB();
                 }
@@ -191,28 +142,33 @@ namespace YouTubeDownload.Windows7ProgressBar
             SetValueInTB();
         }
 
+        private IntPtr MainWindowHandle
+        {
+            get { return Application.OpenForms.Count > 0 ? Application.OpenForms[0].Handle : IntPtr.Zero; }
+        }
+
         private void SetValueInTB()
         {
-            if (_ownerForm == null)
+            if (MainWindowHandle == IntPtr.Zero)
                 return;
 
-            if (showInTaskbar)
+            if (_showInTaskbar)
             {
                 ulong maximum = (ulong) (Maximum - Minimum);
                 ulong progress = (ulong) (Value - Minimum);
 
-                Windows7Taskbar.SetProgressValue(_ownerForm.Handle, progress, maximum);
+                Windows7Taskbar.SetProgressValue(MainWindowHandle, progress, maximum);
             }
         }
 
         private void SetStateInTB()
         {
-            if (_ownerForm == null)
+            if (MainWindowHandle == IntPtr.Zero)
                 return;
 
             ThumbnailProgressState thmState = ThumbnailProgressState.Normal;
 
-            if (!showInTaskbar)
+            if (!_showInTaskbar)
                 thmState = ThumbnailProgressState.NoProgress;
             else if (Style == ProgressBarStyle.Marquee)
                 thmState = ThumbnailProgressState.Indeterminate;
@@ -221,7 +177,7 @@ namespace YouTubeDownload.Windows7ProgressBar
             else if (m_State == ProgressBarState.Pause)
                 thmState = ThumbnailProgressState.Paused;
 
-            Windows7Taskbar.SetProgressState(_ownerForm.Handle, thmState);
+            Windows7Taskbar.SetProgressState(MainWindowHandle, thmState);
         }
     }
 

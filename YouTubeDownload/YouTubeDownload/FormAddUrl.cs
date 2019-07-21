@@ -28,8 +28,9 @@ namespace YouTubeDownload
         private void FormAddUrl_Load(object sender, EventArgs e)
         {
             string text = m_txtUrl.Text;
-            if (Clipboard.ContainsText(TextDataFormat.Text))
-                text = Clipboard.GetText();
+
+            try { text = (string)Clipboard.GetData(DataFormats.UnicodeText.ToString()); }
+            catch {}
 
             if (IsValidYouTubeUrl(text))
                 m_txtUrl.Text = text;
