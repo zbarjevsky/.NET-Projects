@@ -429,5 +429,29 @@ namespace YouTubeDownload
                 StartDownloadNext();
             }
         }
+
+        private void m_ctxmnuCoypyFileName_Click(object sender, EventArgs e)
+        {
+            if (m_listUrls.SelectedItems.Count == 0)
+                return;
+
+            DownloadData data = m_listUrls.SelectedItems[0].Tag as DownloadData;
+            if (data != null)
+            {
+                Clipboard.SetText(data.Description);
+            }
+        }
+
+        private void m_ctxmnuCoypyURL_Click(object sender, EventArgs e)
+        {
+            if (m_listUrls.SelectedItems.Count == 0)
+                return;
+
+            DownloadData data = m_listUrls.SelectedItems[0].Tag as DownloadData;
+            if (data != null)
+            {
+                Clipboard.SetText(data.Url);
+            }
+        }
     }
 }
