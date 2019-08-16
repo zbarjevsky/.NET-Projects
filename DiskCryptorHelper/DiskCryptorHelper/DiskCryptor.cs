@@ -1,7 +1,9 @@
-﻿using System;
+﻿using MZ.WPF.MessageBox;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -264,25 +266,36 @@ namespace DiskCryptorHelper
             if(args == "-enum") //if enum command
                 DriveList.Clear();
 
-            ProcessStartInfo startInfo = new ProcessStartInfo();
-            Process p = new Process();
+            try
+            {
+                if (!File.Exists(DiskCryptorConsolePath))
+                    throw new FileNotFoundException("File Not Found: " + DiskCryptorConsolePath);
 
-            startInfo.CreateNoWindow = true;
-            startInfo.RedirectStandardOutput = true;
-            startInfo.RedirectStandardInput = true;
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                Process p = new Process();
 
-            startInfo.UseShellExecute = false;
-            startInfo.Arguments = args;
-            startInfo.FileName = DiskCryptorConsolePath;
+                startInfo.CreateNoWindow = true;
+                startInfo.RedirectStandardOutput = true;
+                startInfo.RedirectStandardInput = true;
 
-            p.StartInfo = startInfo;
+                startInfo.UseShellExecute = false;
+                startInfo.Arguments = args;
+                startInfo.FileName = DiskCryptorConsolePath;
 
-            p.StartInfo.UseShellExecute = false;
-            p.StartInfo.RedirectStandardOutput = true;
-            p.OutputDataReceived += OutputDataReceived;
+                p.StartInfo = startInfo;
 
-            p.Start();
-            p.BeginOutputReadLine();
+                p.StartInfo.UseShellExecute = false;
+                p.StartInfo.RedirectStandardOutput = true;
+                p.OutputDataReceived += OutputDataReceived;
+
+                p.Start();
+                p.BeginOutputReadLine();
+
+            }
+            catch (Exception err)
+            {
+                PopUp.Error(err.Message);
+            }
         }
 
         private void OutputDataReceived(object sender, DataReceivedEventArgs e)
