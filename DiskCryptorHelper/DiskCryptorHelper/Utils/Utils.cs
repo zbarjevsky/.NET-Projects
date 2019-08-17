@@ -61,35 +61,5 @@ namespace DiskCryptorHelper.Utils
             }
             else return source.ToString();
         }
-
-        [DllImport("User32.dll")]
-        private static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
-        [DllImport("User32.dll")]
-        private static extern int GetWindowLong(IntPtr hWnd, int nIndex);
-
-        [DllImport("user32.dll")]
-        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
-        private const int SW_HIDE = 0x00;
-        private const int SW_SHOW = 0x05;
-
-        private const int WS_EX_APPWINDOW = 0x40000;
-        private const int GWL_EXSTYLE = -0x14;
-
-        public static void ShowWindowInTaskbar(IntPtr pMainWindow)
-        {
-            SetWindowLong(pMainWindow, GWL_EXSTYLE, GetWindowLong(pMainWindow, GWL_EXSTYLE) | WS_EX_APPWINDOW);
-
-            ShowWindow(pMainWindow, SW_HIDE);
-            ShowWindow(pMainWindow, SW_SHOW);
-        }
-
-        public static void HideWindowFromTaskbar(IntPtr pMainWindow)
-        {
-            SetWindowLong(pMainWindow, GWL_EXSTYLE, GetWindowLong(pMainWindow, GWL_EXSTYLE) & ~WS_EX_APPWINDOW);
-
-            ShowWindow(pMainWindow, SW_HIDE);
-            ShowWindow(pMainWindow, SW_SHOW);
-        }
     }
 }
