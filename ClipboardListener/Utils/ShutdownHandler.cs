@@ -48,7 +48,7 @@ namespace ClipboardManager
 
                 DialogResult res = MessageBox.Show("Allow Windows Shutdown/Reboot/Log off?", Environment.UserName, 
                     MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, 
-                    MessageBoxDefaultButton.Button2, MessageBoxOptions.ServiceNotification);
+                    MessageBoxDefaultButton.Button1, MessageBoxOptions.ServiceNotification);
 
                 if (res == DialogResult.Yes)
                 {
