@@ -12,6 +12,7 @@ using MZ.WPF.MessageBox;
 using System.Windows;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
+using DiskCryptorHelper.Utils;
 
 namespace DiskCryptorHelper.VHD
 {
@@ -316,7 +317,7 @@ namespace DiskCryptorHelper.VHD
             foreach (string drive in drives)
                 driveLetters.Remove(drive[0]); // removed used drive letters from possible drive letters
 
-            Utils.ExecuteOnUIThread(() =>
+            CommonUtils.ExecuteOnUIThread(() =>
             {
                 cmbAvailableDriveLetters.Items.Clear();
 

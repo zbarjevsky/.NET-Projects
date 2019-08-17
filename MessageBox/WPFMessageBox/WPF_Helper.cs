@@ -39,32 +39,12 @@ namespace MZ.WPF.MessageBox
 
         public static Window GetMainWindow()
         {
-            System.Windows.Forms.Form topmostForm = TopmostForm();
-            if (topmostForm != null) //Call is from WinForm application
+            Process.GetCurrentProcess().Refresh();
+            IntPtr mainWindowHandle = Process.GetCurrentProcess().MainWindowHandle;
+            if (mainWindowHandle != IntPtr.Zero) //Call is from WinForm application
             {
                 //create WPF window to use as Owner
-                if (_window == null)
-                {
-                    _window = new Window();
-                    WindowInteropHelper helper = new WindowInteropHelper(_window);
-                    helper.Owner = topmostForm.Handle;
-
-                    _window.Closed += _window_Closed;
-
-                    _window.ShowInTaskbar = false;
-                    _window.WindowState = WindowState.Normal;
-
-                    _window.WindowStyle = WindowStyle.None;
-                    _window.AllowsTransparency = true;
-                    _window.Background = Brushes.Transparent;
-
-                    //out of screen
-                    _window.Left = -100;
-                    _window.Top = -100;    
-                    _window.Width = 10;
-                    _window.Height = 10;
-                }
-
+                _window = WrapWindow(_window, mainWindowHandle);
                 _window.Show();
 
                 return _window;
@@ -78,10 +58,48 @@ namespace MZ.WPF.MessageBox
             return null;
         }
 
+        private static Window WrapWindow(Window wnd, IntPtr handle)
+        {
+            if (wnd != null)
+            {
+                WindowInteropHelper helperExisting = new WindowInteropHelper(wnd);
+                if (helperExisting.Owner == handle)
+                    return wnd;
+
+                wnd.Close();
+            }
+
+            wnd = new Window();
+            WindowInteropHelper helper = new WindowInteropHelper(wnd);
+            helper.Owner = handle;
+
+            wnd.Closed += _window_Closed;
+
+            wnd.Title = "Owner" + handle;
+            wnd.ShowInTaskbar = false;
+            wnd.WindowState = WindowState.Normal;
+
+            wnd.WindowStyle = WindowStyle.None;
+            wnd.AllowsTransparency = true;
+            wnd.Background = Brushes.Transparent;
+
+            //out of screen
+            wnd.Left = -100;
+            wnd.Top = -100;
+            wnd.Width = 10;
+            wnd.Height = 10;
+
+            return wnd;
+        }
+
         private static void _window_Closed(object sender, EventArgs e)
         {
-            _window.Closed -= _window_Closed;
-            _window = null;
+            Window wnd = sender as Window;
+            if (wnd != null)
+            {
+                wnd.Closed -= _window_Closed;
+                wnd = null;
+            }
         }
 
         public static Point CenterToRectangle(Size sizeToCenter, Rect rOwner)
@@ -129,7 +147,14 @@ namespace MZ.WPF.MessageBox
             }
 
             //no main window - use current screen
-            return VirtualScreenBounds(); 
+            return GetMainWindowRectFromHandle();
+        }
+
+        public static Rect GetMainWindowRectFromHandle()
+        {
+            Process.GetCurrentProcess().Refresh();
+            IntPtr mainWindowHandle = Process.GetCurrentProcess().MainWindowHandle;
+            return Win32.GetWindowRect(mainWindowHandle);
         }
 
         //get scale from visual and store it in static variable

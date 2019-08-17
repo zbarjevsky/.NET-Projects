@@ -20,10 +20,11 @@ namespace DiskCryptorHelper
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            UpdateDependencies();
-
             try
             {
+                UpdateDependencies();
+                UpdateMessageIconType();
+
                 Application.Run(new FormMain(cmd_line));
             }
             catch (Exception err)
@@ -41,7 +42,10 @@ namespace DiskCryptorHelper
             string fileName = Path.Combine(dir, "MZ.WPF.MessageBox.dll");
             if (!File.Exists(fileName))
                 File.WriteAllBytes(fileName, Properties.Resources.MZ_WPF_MessageBox);
+        }
 
+        private static void UpdateMessageIconType()
+        {
             MZ.WPF.MessageBox.PopUp.IconType = MZ.WPF.MessageBox.PopUp.IconStyle.RegularImages;
         }
     }

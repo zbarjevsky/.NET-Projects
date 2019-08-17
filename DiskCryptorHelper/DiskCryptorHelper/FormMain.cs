@@ -17,6 +17,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 using DiskCryptorHelper.Properties;
+using DiskCryptorHelper.Utils;
 using VhdApiExample;
 using System.Reflection;
 using MZ.WPF.MessageBox;
@@ -40,7 +41,7 @@ namespace DiskCryptorHelper
 
             _diskCryptor.OnDataReceived = () =>
             {
-                Utils.ExecuteOnUIThread(() =>
+                CommonUtils.ExecuteOnUIThread(() =>
                 {
                     m_txtLog.Text = _diskCryptor.Log.ToString();
                     m_listDrives.Items.Clear();
@@ -61,6 +62,11 @@ namespace DiskCryptorHelper
                     SmartSelectFirstAvailableDrive();
                 }, this);
             };
+        }
+
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
         }
 
         const int WM_DEVICECHANGE = 0x0219;
@@ -189,7 +195,7 @@ namespace DiskCryptorHelper
 
         private void ReloadDriveData(int millisecodsTimeout = 800)
         {
-            Utils.ExecuteOnUIThread(() => m_btnReload.Enabled = false, this);
+            CommonUtils.ExecuteOnUIThread(() => m_btnReload.Enabled = false, this);
 
             Task.Factory.StartNew(() =>
             {
@@ -203,7 +209,7 @@ namespace DiskCryptorHelper
                     _diskCryptor.ExecuteEnum();
                 }
 
-                Utils.ExecuteOnUIThread(() => m_btnReload.Enabled = true, this);
+                CommonUtils.ExecuteOnUIThread(() => m_btnReload.Enabled = true, this);
             });
         }
 
@@ -212,7 +218,7 @@ namespace DiskCryptorHelper
             List<UsbEject.Library.Device> list = DriveTools.GetUsbDriveList();
             List<UsbEject.Library.Volume> removable_volumes = DriveTools.GetRemovableDriveList(list);
 
-            Utils.ExecuteOnUIThread(() =>
+            CommonUtils.ExecuteOnUIThread(() =>
             {
                 m_treeDrives.Nodes.Clear();
                 m_mnuEject.DropDownItems.Clear();

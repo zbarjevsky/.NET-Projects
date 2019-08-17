@@ -61,6 +61,7 @@
     <Compile Include="UserControlFootSwitchIcon.xaml.cs">
       <DependentUpon>UserControlFootSwitchIcon.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Win32.cs" />
     <Compile Include="WPF_Helper.cs" />
   </ItemGroup>
   <ItemGroup>
