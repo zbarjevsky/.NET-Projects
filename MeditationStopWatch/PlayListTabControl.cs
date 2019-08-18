@@ -27,6 +27,11 @@ namespace MeditationStopWatch
                 if (m_tabPlayLists.SelectedIndex >= 0)
                 {
                     PlayList list = m_tabPlayLists.SelectedTab.Tag as PlayList;
+                    if (list == null)
+                    {
+                        list = new PlayList();
+                        m_tabPlayLists.SelectedTab.Tag = list;
+                    }
                     list.List = m_mp3List.GetFilelist();
                 }
             };
@@ -67,7 +72,7 @@ namespace MeditationStopWatch
             for (int i = 0; i < collection.Count; i++)
             {
                 PlayList list = m_tabPlayLists.TabPages[i].Tag as PlayList;
-                if (!list.ListEquals(collection[i]))
+                if (list != null && !list.ListEquals(collection[i]))
                     return false;
             }
 
