@@ -72,7 +72,7 @@ namespace MeditationStopWatch
             for (int i = 0; i < collection.Count; i++)
             {
                 PlayList list = m_tabPlayLists.TabPages[i].Tag as PlayList;
-                if (list != null && !list.ListEquals(collection[i]))
+                if (list == null || !list.ListEquals(collection[i]))
                     return false;
             }
 

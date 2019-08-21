@@ -103,7 +103,7 @@
             this.tabPage1.Padding = new System.Windows.Forms.Padding(4);
             this.tabPage1.Size = new System.Drawing.Size(384, 8);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Music";
+            this.tabPage1.Text = "<<Test>>";
             // 
             // m_pnlTabs
             // 
