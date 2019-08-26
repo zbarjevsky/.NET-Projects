@@ -5,8 +5,6 @@ VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DiskCryptorHelper", "DiskCryptorHelper\DiskCryptorHelper.csproj", "{447C2FC9-76A8-4C2A-88D0-D32B94D2DD7A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFMessageBox", "..\MessageBox\WPFMessageBox\WPFMessageBox.csproj", "{6F425EFB-7F0D-4530-941C-98533782832F}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,10 +15,6 @@ Global
 		{447C2FC9-76A8-4C2A-88D0-D32B94D2DD7A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{447C2FC9-76A8-4C2A-88D0-D32B94D2DD7A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{447C2FC9-76A8-4C2A-88D0-D32B94D2DD7A}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6F425EFB-7F0D-4530-941C-98533782832F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6F425EFB-7F0D-4530-941C-98533782832F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6F425EFB-7F0D-4530-941C-98533782832F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6F425EFB-7F0D-4530-941C-98533782832F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
