@@ -284,7 +284,7 @@ namespace ClipboardManager
 
 				try
 				{
-                    if (ClipboardDataObject != null)
+                    if (ClipboardDataObject != null && !IsTextType)
                     {
                         Clipboard.SetDataObject(ClipboardDataObject, true);
                     }
@@ -305,6 +305,18 @@ namespace ClipboardManager
 					throw new Exception("ClipboardList("+_ownerType+")::Put::Error: "+err.Message, err);
 				}//end catch
 			}//end Put
+
+            public bool IsTextType
+            {
+                get
+                {
+                    return _dataType == DataFormats.Text
+                        || _dataType == DataFormats.UnicodeText
+                        || _dataType == DataFormats.Html
+                        || _dataType == DataFormats.OemText
+                        || _dataType == DataFormats.Rtf;
+                }
+            }
 
 			public void SetRichText(RichTextBox box, PictureBox lblApp, Label lblType)
 			{
