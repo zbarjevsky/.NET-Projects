@@ -152,9 +152,18 @@ namespace MZ.WPF.MessageBox
 
         public static Rect GetMainWindowRectFromHandle()
         {
-            Process.GetCurrentProcess().Refresh();
-            IntPtr mainWindowHandle = Process.GetCurrentProcess().MainWindowHandle;
-            return Win32.GetWindowRect(mainWindowHandle);
+            Process p = Process.GetCurrentProcess();
+            p.Refresh();
+            if (p.MainWindowHandle != IntPtr.Zero)
+            {
+                return Win32.GetWindowRect(p.MainWindowHandle);
+            }
+            else
+            {
+                return new Rect(
+                    new Point(SystemParameters.VirtualScreenLeft, SystemParameters.VirtualScreenTop),
+                    new Size(SystemParameters.PrimaryScreenWidth, SystemParameters.PrimaryScreenHeight));
+            }
         }
 
         //get scale from visual and store it in static variable

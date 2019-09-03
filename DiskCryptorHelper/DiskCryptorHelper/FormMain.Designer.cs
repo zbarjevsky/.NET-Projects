@@ -81,7 +81,6 @@
             this.m_pnlSeparate1 = new System.Windows.Forms.Panel();
             this.m_splitOperations = new System.Windows.Forms.SplitContainer();
             this.m_pnlVHD = new System.Windows.Forms.Panel();
-            this.m_VHD_MountUnMountUserControl = new DiskCryptorHelper.VHD.VHD_MountUnMountUserControl();
             this.m_pnlPassword = new System.Windows.Forms.Panel();
             this.m_grpPwd = new System.Windows.Forms.GroupBox();
             this.m_txtPwd = new System.Windows.Forms.TextBox();
@@ -92,8 +91,9 @@
             this.m_treeDrives = new System.Windows.Forms.TreeView();
             this.label1 = new System.Windows.Forms.Label();
             this.m_btnEject = new System.Windows.Forms.Button();
-            this.hideDriveLetterControl1 = new DiskCryptorHelper.HideDriveLetterControl();
             this.panel2 = new System.Windows.Forms.Panel();
+            this.m_VHD_MountUnMountUserControl = new DiskCryptorHelper.VHD.VHD_MountUnMountUserControl();
+            this.hideDriveLetterControl1 = new DiskCryptorHelper.HideDriveLetterControl();
             this.m_sysIconMenu.SuspendLayout();
             this.m_menuStripMain.SuspendLayout();
             this.statusStrip1.SuspendLayout();
@@ -638,17 +638,6 @@
             this.m_pnlVHD.Size = new System.Drawing.Size(656, 123);
             this.m_pnlVHD.TabIndex = 5;
             // 
-            // m_VHD_MountUnMountUserControl
-            // 
-            this.m_VHD_MountUnMountUserControl.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.m_VHD_MountUnMountUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_VHD_MountUnMountUserControl.Location = new System.Drawing.Point(0, 0);
-            this.m_VHD_MountUnMountUserControl.Margin = new System.Windows.Forms.Padding(4);
-            this.m_VHD_MountUnMountUserControl.MinimumSize = new System.Drawing.Size(441, 81);
-            this.m_VHD_MountUnMountUserControl.Name = "m_VHD_MountUnMountUserControl";
-            this.m_VHD_MountUnMountUserControl.Size = new System.Drawing.Size(656, 123);
-            this.m_VHD_MountUnMountUserControl.TabIndex = 0;
-            // 
             // m_pnlPassword
             // 
             this.m_pnlPassword.BackColor = System.Drawing.SystemColors.Control;
@@ -772,15 +761,6 @@
             this.m_btnEject.UseVisualStyleBackColor = true;
             this.m_btnEject.Click += new System.EventHandler(this.m_btnEject_Click);
             // 
-            // hideDriveLetterControl1
-            // 
-            this.hideDriveLetterControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hideDriveLetterControl1.Location = new System.Drawing.Point(0, 33);
-            this.hideDriveLetterControl1.Margin = new System.Windows.Forms.Padding(4);
-            this.hideDriveLetterControl1.Name = "hideDriveLetterControl1";
-            this.hideDriveLetterControl1.Size = new System.Drawing.Size(285, 572);
-            this.hideDriveLetterControl1.TabIndex = 0;
-            // 
             // panel2
             // 
             this.panel2.BackColor = System.Drawing.SystemColors.Control;
@@ -791,6 +771,26 @@
             this.panel2.Name = "panel2";
             this.panel2.Size = new System.Drawing.Size(285, 33);
             this.panel2.TabIndex = 0;
+            // 
+            // m_VHD_MountUnMountUserControl
+            // 
+            this.m_VHD_MountUnMountUserControl.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.m_VHD_MountUnMountUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_VHD_MountUnMountUserControl.Location = new System.Drawing.Point(0, 0);
+            this.m_VHD_MountUnMountUserControl.Margin = new System.Windows.Forms.Padding(4);
+            this.m_VHD_MountUnMountUserControl.MinimumSize = new System.Drawing.Size(441, 81);
+            this.m_VHD_MountUnMountUserControl.Name = "m_VHD_MountUnMountUserControl";
+            this.m_VHD_MountUnMountUserControl.Size = new System.Drawing.Size(656, 123);
+            this.m_VHD_MountUnMountUserControl.TabIndex = 0;
+            // 
+            // hideDriveLetterControl1
+            // 
+            this.hideDriveLetterControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.hideDriveLetterControl1.Location = new System.Drawing.Point(0, 33);
+            this.hideDriveLetterControl1.Margin = new System.Windows.Forms.Padding(4);
+            this.hideDriveLetterControl1.Name = "hideDriveLetterControl1";
+            this.hideDriveLetterControl1.Size = new System.Drawing.Size(285, 572);
+            this.hideDriveLetterControl1.TabIndex = 0;
             // 
             // FormMain
             // 
@@ -810,6 +810,7 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormMain_FormClosed);
             this.Load += new System.EventHandler(this.FormMain_Load);
             this.SizeChanged += new System.EventHandler(this.FormMain_SizeChanged);
+            this.VisibleChanged += new System.EventHandler(this.FormMain_VisibleChanged);
             this.m_sysIconMenu.ResumeLayout(false);
             this.m_menuStripMain.ResumeLayout(false);
             this.m_menuStripMain.PerformLayout();

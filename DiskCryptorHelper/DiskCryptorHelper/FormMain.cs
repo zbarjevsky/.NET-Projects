@@ -148,9 +148,8 @@ namespace DiskCryptorHelper
                     e.Cancel = true;
                     if (res == PopUp.PopUpResult.Btn3)
                     {
+                        this.WindowState = FormWindowState.Minimized;
                         this.Visible = false; //hide
-                        this.FormBorderStyle = FormBorderStyle.SizableToolWindow;
-                        this.ShowInTaskbar = false; //hide from ALT+TAB
                     }
                 }
             }
@@ -163,6 +162,21 @@ namespace DiskCryptorHelper
         private void FormMain_FormClosed(object sender, FormClosedEventArgs e)
         {
             m_sysIcon.Visible = false;
+        }
+
+        private void FormMain_VisibleChanged(object sender, EventArgs e)
+        {
+            if (this.Visible)
+            {
+                this.FormBorderStyle = FormBorderStyle.Sizable;
+                this.ShowInTaskbar = true; 
+                this.BringToFront();
+            }
+            else
+            {
+                this.FormBorderStyle = FormBorderStyle.SizableToolWindow;
+                this.ShowInTaskbar = false; //hide from ALT+TAB
+            }
         }
 
         private void ProcessCommanLine(string[] cmd_line)
@@ -520,8 +534,7 @@ namespace DiskCryptorHelper
 
         private void m_mnuShow_Click(object sender, EventArgs e)
         {
-            this.FormBorderStyle = FormBorderStyle.Sizable;
-            this.ShowInTaskbar = true;
+            this.Visible = true;
             SingleInstanceHelper.GlobalShowWindow(TITLE);
         }
 
@@ -542,6 +555,11 @@ namespace DiskCryptorHelper
             if (WindowState == FormWindowState.Minimized && Settings.Default.HideWhenMinimized)
             {
                 Visible = false; //hide
+            }
+
+            if (WindowState == FormWindowState.Maximized || WindowState == FormWindowState.Normal)
+            {
+                Visible = true;
             }
         }
 
