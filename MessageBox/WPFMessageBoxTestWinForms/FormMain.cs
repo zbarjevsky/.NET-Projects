@@ -90,10 +90,11 @@ namespace WPFMessageBoxTestWinForms
 
         private void m_btnSpecial_Click(object sender, EventArgs e)
         {
-            MZ.WPF.MessageBox.PopUp.PopUpResult res = MZ.WPF.MessageBox.PopUp.MessageBox(richTextBox1.Text, "Title", MessageBoxImage.Question, TextAlignment.Center, 
+            MZ.WPF.MessageBox.PopUp.PopUpResult res = MZ.WPF.MessageBox.PopUp.MessageBox(richTextBox1.Text, "Title", 
+                MessageBoxImage.Question, TextAlignment.Center, 
                 new MZ.WPF.MessageBox.PopUp.PopUpButtons(
-                "Cancel - Da Da Da Da Long Text", "No - Long Long Long Text", "Yes - Long Text", 
-                MZ.WPF.MessageBox.PopUp.PopUpResult.Btn2));
+                    "Cancel - Da Da Da Da Long Text", "No - Long Long Long Text", "Yes - Long Text", 
+                    MZ.WPF.MessageBox.PopUp.PopUpResult.Btn2));
 
             MZ.WPF.MessageBox.PopUp.Information("Result = "+res);
         }
@@ -104,6 +105,21 @@ namespace WPFMessageBoxTestWinForms
             if(MZ.WPF.MessageBox.PopUp.InputBox(ref inputText, "Title") == MZ.WPF.MessageBox.PopUp.PopUpResult.OK)
                 MZ.WPF.MessageBox.PopUp.Information(inputText, Text, 
                     MessageBoxImage.Information, TextAlignment.Justify);
+        }
+
+        private void m_btnTimeout_Click(object sender, EventArgs e)
+        {
+            MZ.WPF.MessageBox.PopUp.PopUpResult res = MZ.WPF.MessageBox.PopUp.MessageBox(richTextBox1.Text, "Title", 
+                MessageBoxImage.Question, TextAlignment.Center,
+                new MZ.WPF.MessageBox.PopUp.PopUpButtons("Cancel ", "No", "Yes", MZ.WPF.MessageBox.PopUp.PopUpResult.Btn2),
+                timeout: (int)m_numTimeout.Value);
+
+            MZ.WPF.MessageBox.PopUp.Information("Result = " + res);
+        }
+
+        private void m_numTimeout_ValueChanged(object sender, EventArgs e)
+        {
+            m_btnTimeout.Text = "Timeout: " + (m_numTimeout.Value/1000) + " sec...";
         }
     }
 }

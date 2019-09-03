@@ -101,17 +101,18 @@ namespace MZ.WPF.MessageBox
         /// <param name="icon"></param>
         /// <param name="textAlignment"></param>
         /// <param name="buttons"></param>
+        /// <param name="timeout"></param>
         /// <returns></returns>
         public static PopUpResult MessageBox(string message, string title,
             MessageBoxImage icon = MessageBoxImage.Information, TextAlignment textAlignment = TextAlignment.Center,
-            PopUpButtons buttons = null)
+            PopUpButtons buttons = null, int timeout = Timeout.Infinite)
         {
             if (buttons == null)
                 buttons = new PopUpButtons(PopUpButtonsType.OK);
 
             return WPF_Helper.ExecuteOnUIThread(() =>
             {
-                return MessageWindow.MessageBox(null, ref message, title, icon, textAlignment, buttons);
+                return MessageWindow.MessageBox(null, ref message, title, icon, textAlignment, buttons, timeout);
             });
         }
 

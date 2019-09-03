@@ -288,13 +288,47 @@ namespace MZ.WPF.MessageBox
 
             Thread t = new Thread(() =>
                 {
-                    Thread.Sleep(timeout);
+                    if (timeout < 2000)
+                    {
+                        Thread.Sleep(timeout);
+                    }
+                    else
+                    {
+                        int count = timeout/300;
+                        for (int i = 0; i < count; i++)
+                        {
+                            Thread.Sleep(300);
+                            int idx = i;
+                            WPF_Helper.ExecuteOnUIThread(() => { UpdateDefaultButtonTimeout(idx * 300, timeout); return 0; });
+                        }
+                    }
+
                     if (IsVisible)
                         WPF_Helper.ExecuteOnUIThread(() => { DefaultCommand.Execute(this); return 0; });
                 });
             t.Name = "AutoCloseMessage";
             t.Start();
             return t;
+        }
+
+        //update default button text
+        private void UpdateDefaultButtonTimeout(int elapsedMs, int totalMs)
+        {
+            int remaining = 1 + ((totalMs - elapsedMs)/1000);
+            string suffix = " (" + remaining  + ")";
+
+            if (_buttons.btn1.IsDefault)
+            {
+                this.btn1.Content = _buttons.btn1.Text + suffix;
+            }
+            else if (_buttons.btn2.IsDefault)
+            {
+                this.btn2.Content = _buttons.btn2.Text + suffix;
+            }
+            else if (_buttons.btn3.IsDefault)
+            {
+                this.btn3.Content = _buttons.btn3.Text + suffix;
+            }
         }
 
         private static Window GetWindowImpl(UIElement owner)
