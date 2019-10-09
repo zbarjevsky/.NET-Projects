@@ -197,7 +197,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_cmbAdditionalParameters.FormattingEnabled = true;
             this.m_cmbAdditionalParameters.Items.AddRange(new object[] {
-            "--embed-thumbnail "});
+            " --embed-thumbnail ",
+            " --postprocessor-args \"-ss 00:01:00.00\""});
             this.m_cmbAdditionalParameters.Location = new System.Drawing.Point(281, 154);
             this.m_cmbAdditionalParameters.Name = "m_cmbAdditionalParameters";
             this.m_cmbAdditionalParameters.Size = new System.Drawing.Size(436, 28);
