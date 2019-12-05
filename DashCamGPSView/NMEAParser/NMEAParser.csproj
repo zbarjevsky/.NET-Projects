@@ -1,11 +1,71 @@
-<Project Sdk="Microsoft.NET.Sdk">
-
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{08FD88C1-418B-4376-806D-F3ED46BA3C0C}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>NMEAParser</RootNamespace>
+    <AssemblyName>NMEAParser</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
-
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
   <ItemGroup>
-    <Folder Include="NMEA\" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
-
+  <ItemGroup>
+    <Compile Include="IMultiPartMessage.cs" />
+    <Compile Include="NmeaMessageReceivedEventArgs.cs" />
+    <Compile Include="NMEAParser.cs" />
+    <Compile Include="NMEA\Bod.cs" />
+    <Compile Include="NMEA\Garmin\PGRME.cs" />
+    <Compile Include="NMEA\Garmin\PGRMZ.cs" />
+    <Compile Include="NMEA\Gga.cs" />
+    <Compile Include="NMEA\Gll.cs" />
+    <Compile Include="NMEA\Gns.cs" />
+    <Compile Include="NMEA\Gsa.cs" />
+    <Compile Include="NMEA\Gst.cs" />
+    <Compile Include="NMEA\Gsv.cs" />
+    <Compile Include="NMEA\LaserRange\LaserRangeMessage.cs" />
+    <Compile Include="NMEA\LaserRange\LaserTech\PLTIT.cs" />
+    <Compile Include="NMEA\LaserRange\Trimble\PTNLA.cs" />
+    <Compile Include="NMEA\LaserRange\Trimble\PTNLB.cs" />
+    <Compile Include="NMEA\NmeaMessage.cs" />
+    <Compile Include="NMEA\Rmb.cs" />
+    <Compile Include="NMEA\Rmc.cs" />
+    <Compile Include="NMEA\Rte.cs" />
+    <Compile Include="NMEA\Talker.cs" />
+    <Compile Include="NMEA\UnknownMessage.cs" />
+    <Compile Include="NMEA\Vtg.cs" />
+    <Compile Include="NMEA\Zda.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

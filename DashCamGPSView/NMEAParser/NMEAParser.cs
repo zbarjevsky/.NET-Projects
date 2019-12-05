@@ -20,6 +20,9 @@ namespace NMEAParser
             MultiPartMessageCache.Clear();
             foreach (string line in lines)
             {
+                if (!line.StartsWith("$GP"))
+                    continue;
+
                 NmeaMessage msg = NmeaMessage.Parse(line);
                 if (msg != null)
                     OnMessageReceived(msg, messages);
@@ -71,7 +74,7 @@ namespace NMEAParser
 
         private static void MessageReceived(NmeaMessage msg, List<NmeaMessage> messageParts, List<NmeaMessage> messages)
         {
-            Debug.WriteLine(msg.MessageType + ": " + msg.ToString());
+            //Debug.WriteLine(msg.MessageType + ": " + msg.ToString());
 
             //output.Text = string.Join("\n", messages.ToArray());
             //output.Select(output.Text.Length - 1, 0); //scroll to bottom

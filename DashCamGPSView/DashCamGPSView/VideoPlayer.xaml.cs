@@ -61,6 +61,18 @@ namespace DashCamGPSView
             set { mePlayer.Position = value; } 
         }
 
+        public Size NaturalSize
+        {
+            get
+            {
+                if (mePlayer.Source != null)
+                {
+                    return new Size(mePlayer.NaturalVideoWidth, mePlayer.NaturalVideoHeight);
+                }
+                return new Size(1920, 1080);
+            }
+        }
+
         public double NaturalDuration
         {
             get
@@ -98,7 +110,13 @@ namespace DashCamGPSView
 
         internal void UpdateVideoSize()
         {
-            mePlayer.Width = this.ActualWidth - 8;
+            //Size sz = NaturalSize;
+            //mePlayer.Width = sz.Width;
+            //mePlayer.Height = sz.Height;
+
+            mePlayer.Width = this.ActualWidth - 18;
+            mePlayer.Height = this.ActualHeight - 18;
+
             ScrollToCenter();
         }
     }

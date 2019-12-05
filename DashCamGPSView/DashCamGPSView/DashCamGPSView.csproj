@@ -84,6 +84,7 @@
     <Compile Include="PercentageConverter.cs" />
     <Compile Include="ScrollDragZoom.cs" />
     <Compile Include="Tools\DashCamFileInfo.cs" />
+    <Compile Include="Tools\DashCamFileTree.cs" />
     <Compile Include="VideoPlayer.xaml.cs">
       <DependentUpon>VideoPlayer.xaml</DependentUpon>
     </Compile>
@@ -190,7 +191,7 @@
       <Name>GMap.NET.WindowsPresentation</Name>
     </ProjectReference>
     <ProjectReference Include="..\NMEAParser\NMEAParser.csproj">
-      <Project>{573785cf-fdef-4cba-853b-13c8fd4a00aa}</Project>
+      <Project>{08fd88c1-418b-4376-806d-f3ed46ba3c0c}</Project>
       <Name>NMEAParser</Name>
     </ProjectReference>
   </ItemGroup>

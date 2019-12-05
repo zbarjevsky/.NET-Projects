@@ -70,6 +70,8 @@ namespace DashCamGPSView
             openFileDialog.Filter = "Media files (*.mp3;*.mp4;*.mpg;*.mpeg)|*.mp3;*.mp4;*.mpg;*.mpeg|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
             {
+                DashCamFileTree test = new DashCamFileTree(openFileDialog.FileName);
+
                 _dashCamFileInfo = new DashCamFileInfo(openFileDialog.FileName);
 
                 txtFileName.Text = _dashCamFileInfo.FrontFileName;

@@ -5,13 +5,15 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NmeaParser.Nmea;
 
 namespace DashCamGPSView.Tools
 {
     public class DashCamFileInfo
     {
         public string FrontFileName, BackFileName, NmeaFileName;
-        public readonly List<NmeaParser.Nmea.NmeaMessage> GpsInfo = null;
+        public readonly List<NmeaMessage> GpsInfo = null;
+        public DateTime FileDate { get; private set; } = DateTime.MinValue;
 
         private double _dGpsDelaySeconds = 2.3;
         private int _iGpsTimeZoneHours = 0;
@@ -45,16 +47,16 @@ namespace DashCamGPSView.Tools
         /// <param name="name"></param>
         private void CalculateDelay(string name)
         {
+            string date_time = name.Substring(name.Length - 13); //191121-141124
+            FileDate = DateTime.ParseExact(date_time, "yyMMdd-HHmmss", CultureInfo.InvariantCulture);
+
             if (GpsInfo == null || GpsInfo.Count == 0)
                 return;
 
-            NmeaParser.Nmea.Rmc inf = GpsInfo[0] as NmeaParser.Nmea.Rmc;
-            string date_time = name.Substring(name.Length - 13); //191121-141124
-            DateTime dt = DateTime.ParseExact(date_time, "yyMMdd-HHmmss", CultureInfo.InvariantCulture);
-
+            Rmc inf = GpsInfo[0] as Rmc;
             //timezone correction 
-            TimeSpan delta = dt - inf.FixTime;
-            _iGpsTimeZoneHours = (int)delta.TotalHours;
+            TimeSpan delta = FileDate - inf.FixTime;
+            _iGpsTimeZoneHours = (int)Math.Round(delta.TotalHours);
             delta -= TimeSpan.FromHours(_iGpsTimeZoneHours);
 
             _dGpsDelaySeconds = delta.TotalSeconds;
@@ -62,28 +64,39 @@ namespace DashCamGPSView.Tools
 
         internal string GetLocationInfoForTime(double totalSeconds)
         {
-            NmeaParser.Nmea.Rmc inf = FindGpsInfo(totalSeconds);
+            Rmc inf = FindGpsInfo(totalSeconds);
             if (inf == null)
                 return "No GPS info...";
-            string info = "Time: " + inf.FixTime.AddHours(_iGpsTimeZoneHours).ToString("yyyy/MM/dd HH:mm:ss") + ", Lon: " + inf.Longitude + ", Lat: " + inf.Latitude + ", Speed: " + inf.Speed + ", Azimuth: " + inf.Course;
+            string info = "Time: " + inf.FixTime.AddHours(_iGpsTimeZoneHours).ToString("yyyy/MM/dd HH:mm:ss") + 
+                ", Lon: " + inf.Longitude + 
+                ", Lat: " + inf.Latitude + 
+                ", Speed: " + inf.Speed + 
+                ", Azimuth: " + inf.Course;
             return info;
         }
 
-        internal NmeaParser.Nmea.Rmc FindGpsInfo(double elapsedSeconds)
+        internal Rmc FindGpsInfo(double elapsedSeconds)
         {
             if (GpsInfo == null || GpsInfo.Count == 0)
                 return null;
 
             elapsedSeconds += _dGpsDelaySeconds; //correct for GPS delay
 
-            NmeaParser.Nmea.Rmc first = GpsInfo[0] as NmeaParser.Nmea.Rmc;
-            foreach (NmeaParser.Nmea.Rmc i in GpsInfo)
+            Rmc first = GpsInfo[0] as Rmc;
+            foreach (Rmc i in GpsInfo)
             {
                 TimeSpan delta = i.FixTime - first.FixTime;
                 if (delta.TotalSeconds >= (elapsedSeconds))
                     return i;
             }
             return first;
+        }
+
+        public override string ToString()
+        {
+            string name = Path.GetFileName(FrontFileName);
+            string gps = GpsInfo == null ? "No Data" : GpsInfo.Count.ToString();
+            return "N: " + name + ", GPS Data: " + gps;
         }
     }
 }
