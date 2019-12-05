@@ -31,6 +31,7 @@ namespace DashCamGPSView
     public partial class MainWindow : Window
     {
         private bool mediaPlayerIsPlaying = false;
+        private bool mediaPlayerIsPaused = false;
         private bool userIsDraggingSlider = false;
 
         private DashCamFileInfo _dashCamFileInfo;
@@ -96,6 +97,7 @@ namespace DashCamGPSView
                 //}
 
                 mediaPlayerIsPlaying = true;
+                mediaPlayerIsPaused = false;
             }
         }
 
@@ -110,17 +112,20 @@ namespace DashCamGPSView
             playerR.Play();
 
             mediaPlayerIsPlaying = true;
+            mediaPlayerIsPaused = false;
         }
 
         private void Pause_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = mediaPlayerIsPlaying;
+            e.CanExecute = mediaPlayerIsPlaying && !mediaPlayerIsPaused;
         }
 
         private void Pause_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             playerF.Pause();
             playerR.Pause();
+
+            mediaPlayerIsPaused = true;
         }
 
         private void Stop_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -133,6 +138,7 @@ namespace DashCamGPSView
             playerF.Stop();
             playerR.Stop();
             mediaPlayerIsPlaying = false;
+            mediaPlayerIsPaused = false;
         }
 
         private void sliProgress_DragStarted(object sender, DragStartedEventArgs e)
@@ -143,34 +149,44 @@ namespace DashCamGPSView
         private void sliProgress_DragCompleted(object sender, DragCompletedEventArgs e)
         {
             userIsDraggingSlider = false;
-            playerF.Position = TimeSpan.FromSeconds(sliProgress.Value);
-            playerR.Position = TimeSpan.FromSeconds(sliProgress.Value);
+            //playerF.Position = TimeSpan.FromSeconds(sliProgress.Value);
+            //playerR.Position = TimeSpan.FromSeconds(sliProgress.Value);
+            //UpdateGpsInfo();
         }
 
         private void sliProgress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             lblProgressStatus.Text = TimeSpan.FromSeconds(sliProgress.Value).ToString(@"hh\:mm\:ss");
+            playerF.Position = TimeSpan.FromSeconds(sliProgress.Value);
+            playerR.Position = TimeSpan.FromSeconds(sliProgress.Value);
+            UpdateGpsInfo();
         }
 
         private void timer_Tick(object sender, EventArgs e)
         {
-            if (!mediaPlayerIsPlaying)
+            if (!mediaPlayerIsPlaying || mediaPlayerIsPaused || userIsDraggingSlider)
                 return;
 
-            if (playerF.NaturalDuration != 0 && (!userIsDraggingSlider))
+            UpdateGpsInfo();
+        }
+
+        private void UpdateGpsInfo()
+        {
+            sliProgress.Minimum = 0;
+
+            if (playerF.NaturalDuration != 0)
             {
-                sliProgress.Minimum = 0;
                 sliProgress.Maximum = playerF.NaturalDuration;
                 sliProgress.Value = playerF.Position.TotalSeconds;
+            }
 
-                txtGPSInfo.Text = _dashCamFileInfo.GetLocationInfoForTime(playerF.Position.TotalSeconds);
+            txtGPSInfo.Text = _dashCamFileInfo.GetLocationInfoForTime(playerF.Position.TotalSeconds);
 
-                NmeaParser.Nmea.Rmc inf = _dashCamFileInfo.FindGpsInfo(playerF.Position.TotalSeconds);
-                if (inf != null)
-                {
-                    compass.Direction = inf.Course;
-                    MainMap.Position = new PointLatLng(inf.Latitude, inf.Longitude);
-                }
+            NmeaParser.Nmea.Rmc inf = _dashCamFileInfo.FindGpsInfo(playerF.Position.TotalSeconds);
+            if (inf != null)
+            {
+                compass.Direction = inf.Course;
+                MainMap.Position = new PointLatLng(inf.Latitude, inf.Longitude);
             }
         }
 

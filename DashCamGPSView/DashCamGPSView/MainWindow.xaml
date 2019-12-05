@@ -29,16 +29,16 @@
             <RowDefinition Height="120"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        <Border Grid.Column="0" Grid.Row="0" BorderThickness="5" BorderBrush="YellowGreen">
+        <Border Grid.Column="0" Grid.Row="0" BorderThickness="2" BorderBrush="Yellow">
             <local:VideoPlayer x:Name="playerF"/>
         </Border>
         <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" DragCompleted="GridSplitter1_DragCompleted"/>
-        <Border Grid.Column="2" Grid.Row="0" BorderThickness="5" BorderBrush="Gray">
+        <Border Grid.Column="2" Grid.Row="0" BorderThickness="2" BorderBrush="Gray">
             <local:VideoPlayer x:Name="playerR"/>
         </Border>
         <GridSplitter Grid.Column="3" HorizontalAlignment="Stretch"/>
-        <Border Grid.Column="4" Grid.Row="0" BorderThickness="5" BorderBrush="LightPink">
-            <local:Map  x:Name="MainMap" Zoom="13" MaxZoom="24" MinZoom="1" />
+        <Border Grid.Column="4" Grid.Row="0" BorderThickness="2" BorderBrush="YellowGreen">
+            <local:Map x:Name="MainMap" Zoom="13" MaxZoom="24" MinZoom="1" />
         </Border>
         <Border Grid.Column="4" Grid.Row="1" Grid.RowSpan="3" BorderThickness="2" BorderBrush="Goldenrod">
             <local:CompassUserControl x:Name="compass"/>
@@ -81,6 +81,7 @@
             </StatusBarItem>
             <StatusBarItem Grid.Column="1" HorizontalContentAlignment="Stretch">
                 <Slider Name="sliProgress" 
+                        SmallChange="1" LargeChange="10"
                         Thumb.DragStarted="sliProgress_DragStarted"  
                         Thumb.DragCompleted="sliProgress_DragCompleted" 
                         ValueChanged="sliProgress_ValueChanged" />

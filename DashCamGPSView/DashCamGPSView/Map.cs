@@ -24,8 +24,8 @@ namespace DashCamGPSView
     {
         public long ElapsedMilliseconds;
 
-        PointLatLng start;
-        PointLatLng end;
+        //PointLatLng start;
+        //PointLatLng end;
 
         // marker
         GMapMarker currentMarker;
