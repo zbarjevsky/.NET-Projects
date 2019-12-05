@@ -38,14 +38,10 @@ namespace DashCamGPSView
             double deltaX = _content.Width * ((e.Delta > 0) ? 0.1 : -0.1);
             double deltaY = _content.Height * ((e.Delta > 0) ? 0.1 : -0.1);
 
-            var newVOffset = e.GetPosition(_scrollViewer).Y + deltaY/2;
-            _scrollViewer.ScrollToVerticalOffset(newVOffset);
-
-            var newHOffset = e.GetPosition(_scrollViewer).X + deltaX/2;
-            _scrollViewer.ScrollToHorizontalOffset(newHOffset);
-
             _content.Width += deltaX;
             _content.Height += deltaY;
+
+            ScrollToCenter();
         }
 
         private void scrollViewer_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
