@@ -5,21 +5,22 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DashCamGPSView"
              mc:Ignorable="d" 
-             d:DesignHeight="200" d:DesignWidth="200">
+             d:DesignHeight="200" d:DesignWidth="400">
     <UserControl.Resources>
         <ResourceDictionary>
             <BitmapImage x:Key="Compass" UriSource="pack://application:,,,/DashCamGPSView;component/Images/Compass.png" />
-            <BitmapImage x:Key="CompassArrow" UriSource="pack://application:,,,/DashCamGPSView;component/Images/CompassArrow.png" />
+            <BitmapImage x:Key="CompassArrow" UriSource="pack://application:,,,/DashCamGPSView;component/Images/CompassCarRed.png" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid x:Name="compassGrid">
-        <Grid.Background>
+        <!--<Grid.Background>
             <ImageBrush ImageSource="{StaticResource Compass}" Stretch="Uniform"/>
-        </Grid.Background>
+        </Grid.Background>-->
+        <Image x:Name="compassBackground" Source="{StaticResource Compass}" Stretch="Uniform"/>
         <Image Grid.Row="0" Grid.Column="0" 
                Source="{StaticResource CompassArrow}" 
-               Width="{Binding Path=ActualWidth, ElementName=compassGrid, Converter={local:PercentageConverter}, ConverterParameter='0.08'}"
-               Height="{Binding Path=ActualHeight, ElementName=compassGrid, Converter={local:PercentageConverter}, ConverterParameter='0.45'}"
+               Width="{Binding Path=ActualWidth, ElementName=compassBackground, Converter={local:PercentageConverter}, ConverterParameter='0.20'}"
+               Height="{Binding Path=ActualHeight, ElementName=compassBackground, Converter={local:PercentageConverter}, ConverterParameter='0.35'}"
                HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Fill">
             <Image.LayoutTransform>
                 <TransformGroup>

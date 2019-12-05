@@ -202,5 +202,9 @@
     <Resource Include="Images\Compass.png" />
     <Resource Include="Images\CompassArrow.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\CompassCarRed.png" />
+    <Resource Include="Images\CompassCarYellow.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
