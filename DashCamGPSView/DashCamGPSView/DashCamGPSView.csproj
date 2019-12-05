@@ -57,6 +57,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AutoGreyableImage.cs" />
+    <Compile Include="CompassUserControl.xaml.cs">
+      <DependentUpon>CompassUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CustomMarkers\Circle.xaml.cs">
       <DependentUpon>Circle.xaml</DependentUpon>
     </Compile>
@@ -78,10 +81,16 @@
     </Compile>
     <Compile Include="DemoStuff.cs" />
     <Compile Include="Map.cs" />
+    <Compile Include="PercentageConverter.cs" />
     <Compile Include="ScrollDragZoom.cs" />
+    <Compile Include="Tools\DashCamFileInfo.cs" />
     <Compile Include="VideoPlayer.xaml.cs">
       <DependentUpon>VideoPlayer.xaml</DependentUpon>
     </Compile>
+    <Page Include="CompassUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="CustomMarkers\Circle.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -180,10 +189,18 @@
       <Project>{644fe7d4-0184-400f-b2d7-99cb41360658}</Project>
       <Name>GMap.NET.WindowsPresentation</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NMEAParser\NMEAParser.csproj">
+      <Project>{573785cf-fdef-4cba-853b-13c8fd4a00aa}</Project>
+      <Name>NMEAParser</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="CustomMarkers\bigMarkerGreen.png" />
     <Resource Include="CustomMarkers\red-dot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Compass.png" />
+    <Resource Include="Images\CompassArrow.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

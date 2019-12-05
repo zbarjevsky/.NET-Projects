@@ -7,34 +7,12 @@
              mc:Ignorable="d" 
              Loaded="UserControl_Loaded"
              d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.CommandBindings>
-        <CommandBinding Command="ApplicationCommands.Open" CanExecute="Open_CanExecute" Executed="Open_Executed" />
-        <CommandBinding Command="MediaCommands.Play" CanExecute="Play_CanExecute" Executed="Play_Executed" />
-        <CommandBinding Command="MediaCommands.Pause" CanExecute="Pause_CanExecute" Executed="Pause_Executed" />
-        <CommandBinding Command="MediaCommands.Stop" CanExecute="Stop_CanExecute" Executed="Stop_Executed" />
-    </UserControl.CommandBindings>
     <Grid MouseWheel="Grid_MouseWheel">
         <Grid.RowDefinitions>
             <RowDefinition Height="40" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <ToolBar Grid.Column="0" Grid.Row="0" Background="Pink">
-            <Button Command="ApplicationCommands.Open" ToolTip="Open">
-                <local:AutoGreyableImage Source="/DashCamGPSView;component/Images/map_32px.png" />
-            </Button>
-            <Separator />
-            <Button Command="MediaCommands.Play" ToolTip="Play" >
-                <local:AutoGreyableImage  Source="/Images/PlayE.png" />
-            </Button>
-            <Button Command="MediaCommands.Pause" ToolTip="Pause" >
-                <local:AutoGreyableImage Source="/Images/PauseE.png" />
-            </Button>
-            <Button Command="MediaCommands.Stop" ToolTip="Stop" >
-                <local:AutoGreyableImage Source="/Images/StopE.png" />
-            </Button>
-            <TextBlock Name="txtFileName"  Text="Hello" VerticalAlignment="Center" Margin="10,0" FontSize="16"/>
-        </ToolBar>
 
         <ScrollViewer Name="scrollPlayer" Grid.Row="1" 
                       HorizontalScrollBarVisibility="Visible" VerticalScrollBarVisibility="Visible" >
@@ -42,28 +20,5 @@
                           Width="1920" Height="1080"
                           MouseWheel="mePlayer_MouseWheel" />
         </ScrollViewer>
-
-        <StatusBar Grid.Row="2">
-            <StatusBar.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                    </Grid>
-                </ItemsPanelTemplate>
-            </StatusBar.ItemsPanel>
-            <StatusBarItem>
-                <TextBlock Name="lblProgressStatus">00:00:00</TextBlock>
-            </StatusBarItem>
-            <StatusBarItem Grid.Column="1" HorizontalContentAlignment="Stretch">
-                <Slider Name="sliProgress" Thumb.DragStarted="sliProgress_DragStarted"  Thumb.DragCompleted="sliProgress_DragCompleted" ValueChanged="sliProgress_ValueChanged" />
-            </StatusBarItem>
-            <StatusBarItem Grid.Column="2">
-                <ProgressBar Name="pbVolume" Width="50" Height="12" Maximum="1" Value="{Binding ElementName=mePlayer, Path=Volume}" />
-            </StatusBarItem>
-        </StatusBar>
     </Grid>
 </UserControl>

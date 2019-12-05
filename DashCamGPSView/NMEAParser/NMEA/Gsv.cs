@@ -12,6 +12,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************
 
+using NMEAParser;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -47,6 +48,16 @@ namespace NmeaParser.Nmea
                     continue;
                 else
                     svs.Add(new SatelliteVehicle(message, i));
+            }
+            this.SVs = svs.ToArray();
+        }
+
+        public Gsv(List<NmeaMessage> messageParts) : this(messageParts[0].MessageType, (string[])(messageParts[0] as Gsv).MessageParts)
+        {
+            List<SatelliteVehicle> svs = new List<SatelliteVehicle>();
+            foreach (Gsv gsv in messageParts)
+            {
+                svs.AddRange(gsv.SVs);
             }
             this.SVs = svs.ToArray();
         }

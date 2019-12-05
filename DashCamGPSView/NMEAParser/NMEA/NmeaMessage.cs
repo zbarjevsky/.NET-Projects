@@ -100,6 +100,7 @@ namespace NmeaParser.Nmea
             int checksum = -1;
             if (message[0] != '$')
                 throw new ArgumentException("Invalid nmea message: Missing starting character '$'");
+
             var idx = message.IndexOf('*');
             if (idx >= 0)
             {

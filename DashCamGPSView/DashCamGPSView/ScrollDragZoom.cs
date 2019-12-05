@@ -27,6 +27,12 @@ namespace DashCamGPSView
             content.MouseWheel += content_MouseWheel;
         }
 
+        public void ScrollToCenter()
+        {
+            _scrollViewer.ScrollToVerticalOffset(_scrollViewer.ScrollableHeight / 2);
+            _scrollViewer.ScrollToHorizontalOffset(_scrollViewer.ScrollableWidth / 2);
+        }
+
         private void content_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             double deltaX = _content.Width * ((e.Delta > 0) ? 0.1 : -0.1);

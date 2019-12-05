@@ -12,6 +12,7 @@
 //  *   limitations under the License.
 //  ******************************************************************************
 
+using NMEAParser;
 using System;
 using System.Collections.Generic;
 using System.Globalization;

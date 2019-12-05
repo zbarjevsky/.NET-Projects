@@ -16,13 +16,13 @@ namespace Demo.WindowsPresentation.CustomMarkers
       Popup Popup;
       Label Label;
       GMapMarker Marker;
-      MainWindow MainWindow;
+        GMapControl MainMap;
 
-      public CustomMarkerRed(MainWindow window, GMapMarker marker, string title)
+      public CustomMarkerRed(GMapControl map, GMapMarker marker, string title)
       {
          this.InitializeComponent();
 
-         this.MainWindow = window;
+         this.MainMap = map;
          this.Marker = marker;
 
          Popup = new Popup();
@@ -66,8 +66,8 @@ namespace Demo.WindowsPresentation.CustomMarkers
       {
          if(e.LeftButton == MouseButtonState.Pressed && IsMouseCaptured)
          {
-            Point p = e.GetPosition(MainWindow.MainMap);
-            Marker.Position = MainWindow.MainMap.FromLocalToLatLng((int) p.X, (int) p.Y);
+            Point p = e.GetPosition(MainMap);
+            Marker.Position = MainMap.FromLocalToLatLng((int) p.X, (int) p.Y);
          }
       }
 
