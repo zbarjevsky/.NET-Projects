@@ -15,6 +15,7 @@ namespace DashCamGPSView.Tools
         public string FrontFileName, BackFileName, NmeaFileName;
         public readonly List<NmeaMessage> GpsInfo = null;
         public DateTime FileDate { get; private set; } = DateTime.MinValue;
+        public int TimeZone { get { return _iGpsTimeZoneHours; } }
 
         private double _dGpsDelaySeconds = 2.3;
         private int _iGpsTimeZoneHours = 0;

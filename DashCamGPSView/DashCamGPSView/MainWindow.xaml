@@ -48,10 +48,10 @@
         </Border>
         <GridSplitter Grid.Column="3" Grid.Row="1" Grid.RowSpan="3" HorizontalAlignment="Stretch"/>
         <Border Grid.Column="4" Grid.ColumnSpan="3" Grid.Row="1" Grid.RowSpan="3" BorderThickness="2" BorderBrush="YellowGreen">
-            <local:Map x:Name="MainMap" MaxZoom="24" MinZoom="1" />
+            <controls:Map x:Name="MainMap" MaxZoom="24" MinZoom="1" />
         </Border>
         <Border Grid.Column="4" Grid.Row="4" Grid.RowSpan="3" BorderThickness="2" BorderBrush="Goldenrod">
-            <local:CompassUserControl x:Name="compass"/>
+            <controls:GpsInfoUserControl x:Name="gpsInfo"/>
         </Border>
         <ToolBar Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="3" >
             <Button Command="ApplicationCommands.Open" ToolTip="Open">

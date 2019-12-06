@@ -56,8 +56,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="AutoGreyableImage.cs" />
-    <Compile Include="CompassUserControl.xaml.cs">
+    <Compile Include="Controls\GpsInfoUserControl.xaml.cs">
+      <DependentUpon>GpsInfoUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Tools\AutoGreyableImage.cs" />
+    <Compile Include="Controls\CompassUserControl.xaml.cs">
       <DependentUpon>CompassUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\FilesTreeUserControl.xaml.cs">
@@ -82,20 +85,24 @@
     <Compile Include="CustomMarkers\TrolleyTooltip.xaml.cs">
       <DependentUpon>TrolleyTooltip.xaml</DependentUpon>
     </Compile>
-    <Compile Include="DemoStuff.cs" />
-    <Compile Include="Map.cs" />
-    <Compile Include="PercentageConverter.cs" />
-    <Compile Include="ScrollDragZoom.cs" />
+    <Compile Include="Tools\DemoStuff.cs" />
+    <Compile Include="Controls\Map.cs" />
+    <Compile Include="Controls\PercentageConverter.cs" />
+    <Compile Include="Controls\ScrollDragZoom.cs" />
     <Compile Include="Tools\DashCamFileInfo.cs" />
     <Compile Include="Tools\DashCamFileTree.cs" />
-    <Compile Include="VideoPlayer.xaml.cs">
+    <Compile Include="Controls\VideoPlayer.xaml.cs">
       <DependentUpon>VideoPlayer.xaml</DependentUpon>
     </Compile>
-    <Page Include="CompassUserControl.xaml">
+    <Page Include="Controls\CompassUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\FilesTreeUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\GpsInfoUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -135,7 +142,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="VideoPlayer.xaml">
+    <Page Include="Controls\VideoPlayer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

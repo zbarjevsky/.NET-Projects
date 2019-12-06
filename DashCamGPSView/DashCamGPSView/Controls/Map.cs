@@ -4,6 +4,7 @@ using GMap.NET.MapProviders;
 using GMap.NET.WindowsPresentation;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -15,7 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
-namespace DashCamGPSView
+namespace DashCamGPSView.Controls
 {
     /// <summary>
     /// the custom map f GMapControl 
@@ -35,6 +36,9 @@ namespace DashCamGPSView
 
         public Map()
         {
+            if (DesignerProperties.GetIsInDesignMode(this))
+                return;
+
             // set cache mode only if no internet avaible
             if (!Stuff.PingNetwork("pingtest.com"))
             {

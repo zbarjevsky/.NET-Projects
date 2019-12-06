@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows.Data;
 using System.Windows.Markup;
 
-namespace DashCamGPSView
+namespace DashCamGPSView.Controls
 {
     public class PercentageConverter : MarkupExtension, IValueConverter
     {

@@ -222,9 +222,9 @@ namespace DashCamGPSView
             txtGPSInfo.Text = _dashCamFileInfo.GetLocationInfoForTime(playerF.Position.TotalSeconds);
 
             NmeaParser.Nmea.Rmc inf = _dashCamFileInfo.FindGpsInfo(playerF.Position.TotalSeconds);
+            gpsInfo.UpdateInfo(inf, _dashCamFileInfo.TimeZone);
             if (inf != null)
             {
-                compass.Direction = inf.Course;
                 MainMap.Position = new PointLatLng(inf.Latitude, inf.Longitude);
             }
         }

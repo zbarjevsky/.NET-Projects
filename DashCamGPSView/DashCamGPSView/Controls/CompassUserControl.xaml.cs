@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace DashCamGPSView
+namespace DashCamGPSView.Controls
 {
     /// <summary>
     /// Interaction logic for CompassUserControl.xaml
