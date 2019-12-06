@@ -60,6 +60,9 @@
     <Compile Include="CompassUserControl.xaml.cs">
       <DependentUpon>CompassUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\FilesTreeUserControl.xaml.cs">
+      <DependentUpon>FilesTreeUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="CustomMarkers\Circle.xaml.cs">
       <DependentUpon>Circle.xaml</DependentUpon>
     </Compile>
@@ -89,6 +92,10 @@
       <DependentUpon>VideoPlayer.xaml</DependentUpon>
     </Compile>
     <Page Include="CompassUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\FilesTreeUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -206,6 +213,10 @@
   <ItemGroup>
     <Resource Include="Images\CompassCarRed.png" />
     <Resource Include="Images\CompassCarYellow.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\NextE.png" />
+    <Resource Include="Images\PrevE.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

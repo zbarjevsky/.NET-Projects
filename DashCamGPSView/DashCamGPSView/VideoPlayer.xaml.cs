@@ -34,6 +34,8 @@ namespace DashCamGPSView
 
             //refresh view when change position
             mePlayer.ScrubbingEnabled = true;
+
+            mePlayer.MediaOpened += (s, e) => { FitWidth(); };
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -90,14 +92,20 @@ namespace DashCamGPSView
             _scrollDragger.ScrollToCenter();
         }
 
-        public void Open(string fileName)
+        public void Open(string fileName, double volume)
         {
-            mePlayer.Source = new Uri(fileName);
+            mePlayer.Source = string.IsNullOrEmpty(fileName)? null : new Uri(fileName);
+            Volume = volume;
         }
 
-        public void Play() { mePlayer.Play(); }
-        public void Pause() { mePlayer.Pause(); }
-        public void Stop() { mePlayer.Stop(); }
+        internal void Close()
+        {
+            mePlayer.Source = null;
+        }
+
+        public void Play() { if(mePlayer.Source != null) mePlayer.Play(); }
+        public void Pause() { if (mePlayer.Source != null) mePlayer.Pause(); }
+        public void Stop() { if (mePlayer.Source != null) mePlayer.Stop(); }
 
         private void Grid_MouseWheel(object sender, MouseWheelEventArgs e)
         {
@@ -108,14 +116,30 @@ namespace DashCamGPSView
         {
         }
 
-        internal void UpdateVideoSize()
+        private void FitWidth()
         {
-            //Size sz = NaturalSize;
-            //mePlayer.Width = sz.Width;
-            //mePlayer.Height = sz.Height;
+            mePlayer.Width = this.ActualWidth - 18;
 
+            //proportionally change height
+            Size sz = NaturalSize;
+            mePlayer.Height = mePlayer.Width * sz.Height / sz.Width;
+
+            ScrollToCenter();
+        }
+
+        internal void FitWindow()
+        {
             mePlayer.Width = this.ActualWidth - 18;
             mePlayer.Height = this.ActualHeight - 18;
+
+            ScrollToCenter();
+        }
+
+        internal void ResizeToActualSize()
+        {
+            Size sz = NaturalSize;
+            mePlayer.Width = sz.Width;
+            mePlayer.Height = sz.Height;
 
             ScrollToCenter();
         }

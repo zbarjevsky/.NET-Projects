@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DashCamGPSView"
+        xmlns:controls="clr-namespace:DashCamGPSView.Controls"
         mc:Ignorable="d"
         Loaded="Window_Loaded" Closed="Window_Closed"
         WindowStartupLocation="Manual"
@@ -19,31 +20,40 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
             <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="5*"/>
             <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="400"/>
+            <ColumnDefinition Width="500"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="2"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="5*"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="120"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        <Border Grid.Column="0" Grid.Row="0" BorderThickness="2" BorderBrush="Yellow" Background="Black">
-            <local:VideoPlayer x:Name="playerF"/>
+        <Border Grid.Column="0" Grid.Row="1" BorderThickness="2" BorderBrush="Red" Background="Beige">
+            <controls:FilesTreeUserControl x:Name="treeGroups"/>
         </Border>
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" DragCompleted="GridSplitter1_DragCompleted"/>
-		<Border Grid.Column="2" Grid.Row="0" BorderThickness="2" BorderBrush="Gray" Background="Black">
+        <GridSplitter Grid.Column="1" Grid.Row="1" Grid.RowSpan="1" HorizontalAlignment="Stretch"/>
+        <Border Grid.Column="2" Grid.Row="1" BorderThickness="2" BorderBrush="YellowGreen" Background="Black">
             <local:VideoPlayer x:Name="playerR"/>
         </Border>
-        <GridSplitter Grid.Column="3" HorizontalAlignment="Stretch"/>
-        <Border Grid.Column="4" Grid.Row="0" BorderThickness="2" BorderBrush="YellowGreen">
-            <local:Map x:Name="MainMap" Zoom="13" MaxZoom="24" MinZoom="1" />
+        <GridSplitter Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2" 
+                      HorizontalAlignment="Stretch"
+                      DragCompleted="GridSplitter1_DragCompleted"/>
+        <Border Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="3" BorderThickness="2" BorderBrush="YellowGreen" Background="Black">
+            <local:VideoPlayer x:Name="playerF"/>
         </Border>
-        <Border Grid.Column="4" Grid.Row="1" Grid.RowSpan="3" BorderThickness="2" BorderBrush="Goldenrod">
+        <GridSplitter Grid.Column="3" Grid.Row="1" Grid.RowSpan="3" HorizontalAlignment="Stretch"/>
+        <Border Grid.Column="4" Grid.ColumnSpan="3" Grid.Row="1" Grid.RowSpan="3" BorderThickness="2" BorderBrush="YellowGreen">
+            <local:Map x:Name="MainMap" MaxZoom="24" MinZoom="1" />
+        </Border>
+        <Border Grid.Column="4" Grid.Row="4" Grid.RowSpan="3" BorderThickness="2" BorderBrush="Goldenrod">
             <local:CompassUserControl x:Name="compass"/>
         </Border>
-        <ToolBar Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" >
+        <ToolBar Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="3" >
             <Button Command="ApplicationCommands.Open" ToolTip="Open">
                 <local:AutoGreyableImage Source="/DashCamGPSView;component/Images/map_32px.png" />
             </Button>
@@ -60,11 +70,11 @@
             <TextBlock Name="txtFileName"  Text="..." VerticalAlignment="Center" Margin="10,0" FontSize="16"/>
         </ToolBar>
         
-        <TextBlock Name="txtGPSInfo" Grid.Row="2" Grid.ColumnSpan="3"  
+        <TextBlock Name="txtGPSInfo" Grid.Row="5" Grid.ColumnSpan="3"  
                    Text="GPS Info" 
                    VerticalAlignment="Center" Margin="10,0" FontSize="22"/>
 
-        <StatusBar Grid.Row="3" Grid.ColumnSpan="3">
+        <StatusBar Grid.Row="6" Grid.ColumnSpan="3">
             <StatusBar.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid>

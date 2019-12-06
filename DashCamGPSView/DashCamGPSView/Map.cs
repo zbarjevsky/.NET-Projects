@@ -44,6 +44,7 @@ namespace DashCamGPSView
 
             // config map
             this.MapProvider = GMapProviders.GoogleMap;
+            this.Zoom = 15;
             this.Position = new PointLatLng(45, -93);
 
             //this.ScaleMode = ScaleModes.Dynamic;

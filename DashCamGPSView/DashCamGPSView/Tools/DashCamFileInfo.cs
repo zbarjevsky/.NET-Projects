@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using GMap.NET;
 using NmeaParser.Nmea;
 
 namespace DashCamGPSView.Tools
@@ -68,8 +69,7 @@ namespace DashCamGPSView.Tools
             if (inf == null)
                 return "No GPS info...";
             string info = "Time: " + inf.FixTime.AddHours(_iGpsTimeZoneHours).ToString("yyyy/MM/dd HH:mm:ss") + 
-                ", Lon: " + inf.Longitude + 
-                ", Lat: " + inf.Latitude + 
+                ", " + new PointLatLng(inf.Latitude, inf.Longitude).ToString() + 
                 ", Speed: " + inf.Speed + 
                 ", Azimuth: " + inf.Course;
             return info;

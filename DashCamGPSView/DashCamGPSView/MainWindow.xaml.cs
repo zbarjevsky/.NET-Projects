@@ -8,6 +8,7 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -44,6 +45,11 @@ namespace DashCamGPSView
             timer.Interval = TimeSpan.FromSeconds(1);
             timer.Tick += timer_Tick;
             timer.Start();
+
+            treeGroups.TreeItemDoubleClickAction = (fileName) => 
+            {
+                PlayFile(fileName);
+            };
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -59,6 +65,43 @@ namespace DashCamGPSView
             Settings.Default.Save();
         }
 
+        private void PlayFile(string fileName)
+        {
+            playerF.Close();
+            playerR.Close();
+
+            mediaPlayerIsPlaying = false;
+            mediaPlayerIsPaused = false;
+
+           if (!File.Exists(fileName))
+                return;
+
+            treeGroups.SelectFile(fileName);
+
+            _dashCamFileInfo = new DashCamFileInfo(fileName);
+
+            txtFileName.Text = _dashCamFileInfo.FrontFileName;
+            playerF.Open(_dashCamFileInfo.FrontFileName, 0.5);
+            playerR.Open(_dashCamFileInfo.BackFileName, 0);
+            playerF.Play();
+            playerR.Play();
+
+            if (_dashCamFileInfo.GpsInfo != null && _dashCamFileInfo.GpsInfo.Count > 0)
+            {
+                MainMap.Zoom = 17;
+                NmeaParser.Nmea.Rmc first = _dashCamFileInfo.GpsInfo[0] as NmeaParser.Nmea.Rmc;
+                MainMap.Position = new PointLatLng(first.Latitude, first.Longitude);
+            }
+            //else
+            //{
+            //    MainMap.Zoom = 2;
+            //    MainMap.Position = new PointLatLng(first.Latitude, first.Longitude);
+            //}
+
+            mediaPlayerIsPlaying = true;
+            mediaPlayerIsPaused = false;
+        }
+
         private void Open_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             e.CanExecute = true;
@@ -70,36 +113,9 @@ namespace DashCamGPSView
             openFileDialog.Filter = "Media files (*.mp3;*.mp4;*.mpg;*.mpeg)|*.mp3;*.mp4;*.mpg;*.mpeg|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
             {
-                DashCamFileTree test = new DashCamFileTree(openFileDialog.FileName);
-
-                _dashCamFileInfo = new DashCamFileInfo(openFileDialog.FileName);
-
-                txtFileName.Text = _dashCamFileInfo.FrontFileName;
-                playerF.Open(_dashCamFileInfo.FrontFileName);
-                playerR.Open(_dashCamFileInfo.BackFileName);
-
-                playerF.Volume = 0.5;
-                playerF.UpdateVideoSize();
-                playerF.Play();
-
-                playerR.Volume = 0;
-                playerR.UpdateVideoSize();
-                playerR.Play();
-
-                if(_dashCamFileInfo.GpsInfo != null && _dashCamFileInfo.GpsInfo.Count > 0)
-                {
-                    MainMap.Zoom = 17;
-                    NmeaParser.Nmea.Rmc first = _dashCamFileInfo.GpsInfo[0] as NmeaParser.Nmea.Rmc;
-                    MainMap.Position = new PointLatLng(first.Latitude, first.Longitude);
-                }
-                //else
-                //{
-                //    MainMap.Zoom = 2;
-                //    MainMap.Position = new PointLatLng(first.Latitude, first.Longitude);
-                //}
-
-                mediaPlayerIsPlaying = true;
-                mediaPlayerIsPaused = false;
+                DashCamFileTree groups = new DashCamFileTree(openFileDialog.FileName);
+                treeGroups.LoadTree(groups, openFileDialog.FileName);
+                PlayFile(openFileDialog.FileName);
             }
         }
 
@@ -194,8 +210,8 @@ namespace DashCamGPSView
 
         private void GridSplitter1_DragCompleted(object sender, DragCompletedEventArgs e)
         {
-            playerF.UpdateVideoSize();
-            playerR.UpdateVideoSize();
+            playerF.FitWindow();
+            playerR.FitWindow();
         }
     }
 }
