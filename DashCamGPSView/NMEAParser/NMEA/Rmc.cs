@@ -78,10 +78,20 @@ namespace NmeaParser.Nmea
 		/// </summary>
 		public double Speed { get; }
 
-		/// <summary>
-		/// Track angle in degrees True
-		/// </summary>
-		public double Course { get; }
+        public double SpeedMph
+        {
+            get { return Speed * 1.15078; }
+        }
+
+        public double SpeedKmh
+        {
+            get { return Speed * 1.852; }
+        }
+
+        /// <summary>
+        /// Track angle in degrees True
+        /// </summary>
+        public double Course { get; }
 
 		/// <summary>
 		/// Magnetic Variation

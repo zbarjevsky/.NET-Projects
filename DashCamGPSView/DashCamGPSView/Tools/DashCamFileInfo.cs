@@ -70,7 +70,7 @@ namespace DashCamGPSView.Tools
                 return "No GPS info...";
             string info = "Time: " + inf.FixTime.AddHours(_iGpsTimeZoneHours).ToString("yyyy/MM/dd HH:mm:ss") + 
                 ", " + new PointLatLng(inf.Latitude, inf.Longitude).ToString() + 
-                ", Speed: " + inf.Speed + 
+                ", Speed: " + inf.SpeedMph + 
                 ", Azimuth: " + inf.Course;
             return info;
         }

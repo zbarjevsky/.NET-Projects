@@ -26,14 +26,14 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="2"/>
-            <RowDefinition Height="4*"/>
+            <RowDefinition Height="3*"/>
             <RowDefinition Height="5"/>
             <RowDefinition Height="5*"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="120"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        <Border Grid.Column="0" Grid.Row="1" BorderThickness="2" BorderBrush="Red" Background="Beige">
+        <Border Grid.Column="0" Grid.Row="1" BorderThickness="2" BorderBrush="Brown" Background="Beige">
             <controls:FilesTreeUserControl x:Name="treeGroups"/>
         </Border>
         <GridSplitter Grid.Column="1" Grid.Row="1" Grid.RowSpan="1" HorizontalAlignment="Stretch"/>

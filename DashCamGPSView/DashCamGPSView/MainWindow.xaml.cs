@@ -50,6 +50,13 @@ namespace DashCamGPSView
             {
                 PlayFile(fileName);
             };
+
+            treeGroups.OpenFileAction = () =>
+            {
+                OpenVideoFile();
+            };
+
+            playerF.VideoEnded = () => { PlayNext(); };
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -102,12 +109,15 @@ namespace DashCamGPSView
             mediaPlayerIsPaused = false;
         }
 
-        private void Open_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        private void PlayNext()
         {
-            e.CanExecute = true;
+            string fileName = treeGroups.FindNextFile(_dashCamFileInfo.FrontFileName);
+            if (string.IsNullOrWhiteSpace(fileName))
+                return;
+            PlayFile(fileName);
         }
 
-        private void Open_Executed(object sender, ExecutedRoutedEventArgs e)
+        private void OpenVideoFile()
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Media files (*.mp3;*.mp4;*.mpg;*.mpeg)|*.mp3;*.mp4;*.mpg;*.mpeg|All files (*.*)|*.*";
@@ -117,6 +127,16 @@ namespace DashCamGPSView
                 treeGroups.LoadTree(groups, openFileDialog.FileName);
                 PlayFile(openFileDialog.FileName);
             }
+        }
+
+        private void Open_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void Open_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            OpenVideoFile();
         }
 
         private void Play_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -162,6 +182,7 @@ namespace DashCamGPSView
         private void sliProgress_DragStarted(object sender, DragStartedEventArgs e)
         {
             userIsDraggingSlider = true;
+            Pause_Executed(sender, null);
         }
 
         private void sliProgress_DragCompleted(object sender, DragCompletedEventArgs e)

@@ -26,6 +26,8 @@ namespace DashCamGPSView
     {
         private ScrollDragZoom _scrollDragger;
 
+        public Action VideoEnded = () => { };
+
         public VideoPlayer()
         {
             InitializeComponent();
@@ -36,6 +38,7 @@ namespace DashCamGPSView
             mePlayer.ScrubbingEnabled = true;
 
             mePlayer.MediaOpened += (s, e) => { FitWidth(); };
+            mePlayer.MediaEnded += (s, e) => { VideoEnded(); };
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -100,6 +103,9 @@ namespace DashCamGPSView
 
         internal void Close()
         {
+            if (mePlayer.Source != null)
+                mePlayer.Stop();
+
             mePlayer.Source = null;
         }
 

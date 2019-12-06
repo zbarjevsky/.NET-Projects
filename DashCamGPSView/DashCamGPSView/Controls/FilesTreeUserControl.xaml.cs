@@ -23,6 +23,7 @@ namespace DashCamGPSView.Controls
     public partial class FilesTreeUserControl : UserControl
     {
         public Action<string> TreeItemDoubleClickAction = (fileName) => { };
+        public Action OpenFileAction = () => { };
 
         public FilesTreeUserControl()
         {
@@ -46,7 +47,34 @@ namespace DashCamGPSView.Controls
 
         internal void SelectFile(string fileName)
         {
-            
+            foreach (VideoGroup group in treeFiles.Items)
+            {
+                var tvi = treeFiles.ItemContainerGenerator.ContainerFromItem(group) as TreeViewItem;
+                foreach (VideoFile v in group.Members)
+                {
+                    v.IsSelected = (string.Compare(fileName, v.FileName, true) == 0);
+                    if (v.IsSelected)
+                        tvi.BringIntoView();
+                }
+            }
+        }
+
+        internal string FindNextFile(string fileName)
+        {
+            foreach (VideoGroup group in treeFiles.Items)
+            {
+                var tvi = treeFiles.ItemContainerGenerator.ContainerFromItem(group) as TreeViewItem;
+                for (int i = 0; i < group.Members.Count; i++)
+                {
+                    VideoFile v = group.Members[i];
+                    if (string.Compare(fileName, v.FileName, true) == 0)
+                    {
+                        if (i + 1 < group.Members.Count) //has next
+                            return group.Members[i + 1].FileName;
+                    }
+                }
+            }
+            return null;
         }
 
         private void TreeViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -57,12 +85,19 @@ namespace DashCamGPSView.Controls
                 {
                     TreeItemDoubleClickAction(v.FileName);
                 }
+                else if (item.DataContext is VideoGroup g)
+                {
+                    if (g.Members.Count == 0)
+                        OpenFileAction();
+                }
             }
         }
     }
 
     public class VideoGroup
     {
+        public bool IsSelected { get; set; } = false;
+
         public string GroupName { get; set; }
 
         public ObservableCollection<VideoFile> Members { get; set; } = new ObservableCollection<VideoFile>();
@@ -89,6 +124,8 @@ namespace DashCamGPSView.Controls
 
     public class VideoFile
     {
+        public bool IsSelected { get; set; } = false;
+
         public string FileName { get; set; }
 
         public int GpsPointsCount { get; set; }
