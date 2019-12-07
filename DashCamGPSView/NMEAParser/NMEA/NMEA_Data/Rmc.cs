@@ -24,6 +24,11 @@ namespace NmeaParser.Nmea
     [NmeaMessageType("--RMC")]
     public class Rmc : NmeaMessage
 	{
+        public Rmc() : base("GPRMC", null)
+        {
+
+        }
+
         /// <summary>
         /// Initializes a new instance of the <see cref="Rmc"/> class.
         /// </summary>

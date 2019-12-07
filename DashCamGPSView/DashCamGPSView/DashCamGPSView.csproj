@@ -204,9 +204,9 @@
       <Project>{644fe7d4-0184-400f-b2d7-99cb41360658}</Project>
       <Name>GMap.NET.WindowsPresentation</Name>
     </ProjectReference>
-    <ProjectReference Include="..\NMEAParser\NMEAParser.csproj">
+    <ProjectReference Include="..\NMEAParser\GpsInfoParser.csproj">
       <Project>{08fd88c1-418b-4376-806d-f3ed46ba3c0c}</Project>
-      <Name>NMEAParser</Name>
+      <Name>GpsInfoParser</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

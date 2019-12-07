@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using GMap.NET;
 using NmeaParser.Nmea;
+using NovatekViofoGPSParser;
 
 namespace DashCamGPSView.Tools
 {
@@ -28,17 +29,28 @@ namespace DashCamGPSView.Tools
             string dirF = Path.Combine(dirParent, "F");
             string dirR = Path.Combine(dirParent, "R");
 
-            FrontFileName = Path.Combine(dirF, name + "F.MP4");
-            if (!File.Exists(FrontFileName))
-                FrontFileName = null;
-            NmeaFileName = Path.Combine(dirF, name + "F.NMEA");
-            if (!File.Exists(NmeaFileName))
-                NmeaFileName = null;
-            BackFileName = Path.Combine(dirR, name + "R.MP4");
-            if (!File.Exists(BackFileName))
-                BackFileName = null;
-            if(File.Exists(NmeaFileName))
-                GpsInfo = NMEAParser.NMEAParser.ReadFile(NmeaFileName);
+            if (Directory.Exists(dirF) && Directory.Exists(dirR))
+            {
+                FrontFileName = Path.Combine(dirF, name + "F.MP4");
+                if (!File.Exists(FrontFileName))
+                    FrontFileName = null;
+                NmeaFileName = Path.Combine(dirF, name + "F.NMEA");
+                if (!File.Exists(NmeaFileName))
+                    NmeaFileName = null;
+                BackFileName = Path.Combine(dirR, name + "R.MP4");
+                if (!File.Exists(BackFileName))
+                    BackFileName = null;
+                if (File.Exists(NmeaFileName))
+                    GpsInfo = NMEAParser.NMEAParser.ReadFile(NmeaFileName);
+            }
+            else //different format
+            {
+                FrontFileName = fileName;
+
+                NovatekViofoGPSParser.Parser parser = new NovatekViofoGPSParser.Parser();
+                GpsInfo = ConvertGpsInfo(parser.ReadMP4FileGpsInfo(fileName));
+
+            }
 
             CalculateDelay(name);
         }
@@ -91,6 +103,25 @@ namespace DashCamGPSView.Tools
                     return i;
             }
             return first;
+        }
+
+        private List<NmeaMessage> ConvertGpsInfo(List<GpsPointInfo> list)
+        {
+            List<NmeaMessage> points = new List<NmeaMessage>();
+            foreach (GpsPointInfo gps in list)
+            {
+                points.Add(ConvertGpsInfo(gps));
+            }
+        }
+
+        private NmeaMessage ConvertGpsInfo(GpsPointInfo gps)
+        {
+            Rmc msg = new Rmc() 
+            {
+                FixTime = gps.Date,
+
+            };
+            return msg;
         }
 
         public override string ToString()

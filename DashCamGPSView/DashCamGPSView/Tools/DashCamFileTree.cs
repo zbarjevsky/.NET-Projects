@@ -45,6 +45,8 @@ namespace DashCamGPSView.Tools
                     group.Add(info);
                 }
             }
+            if (group.Count > 0)
+                fileGroups.Add(group);
         }
     }
 }

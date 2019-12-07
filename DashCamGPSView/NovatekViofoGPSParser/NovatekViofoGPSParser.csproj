@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{08FD88C1-418B-4376-806D-F3ED46BA3C0C}</ProjectGuid>
+    <ProjectGuid>{3B6829AF-7A34-4C81-BBA8-22B9ECF481C8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NMEAParser</RootNamespace>
-    <AssemblyName>NMEAParser</AssemblyName>
+    <RootNamespace>NovatekViofoGPSParser</RootNamespace>
+    <AssemblyName>NovatekViofoGPSParser</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -41,30 +41,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IMultiPartMessage.cs" />
-    <Compile Include="NmeaMessageReceivedEventArgs.cs" />
-    <Compile Include="NMEAParser.cs" />
-    <Compile Include="NMEA\Bod.cs" />
-    <Compile Include="NMEA\Garmin\PGRME.cs" />
-    <Compile Include="NMEA\Garmin\PGRMZ.cs" />
-    <Compile Include="NMEA\Gga.cs" />
-    <Compile Include="NMEA\Gll.cs" />
-    <Compile Include="NMEA\Gns.cs" />
-    <Compile Include="NMEA\Gsa.cs" />
-    <Compile Include="NMEA\Gst.cs" />
-    <Compile Include="NMEA\Gsv.cs" />
-    <Compile Include="NMEA\LaserRange\LaserRangeMessage.cs" />
-    <Compile Include="NMEA\LaserRange\LaserTech\PLTIT.cs" />
-    <Compile Include="NMEA\LaserRange\Trimble\PTNLA.cs" />
-    <Compile Include="NMEA\LaserRange\Trimble\PTNLB.cs" />
-    <Compile Include="NMEA\NmeaMessage.cs" />
-    <Compile Include="NMEA\Rmb.cs" />
-    <Compile Include="NMEA\Rmc.cs" />
-    <Compile Include="NMEA\Rte.cs" />
-    <Compile Include="NMEA\Talker.cs" />
-    <Compile Include="NMEA\UnknownMessage.cs" />
-    <Compile Include="NMEA\Vtg.cs" />
-    <Compile Include="NMEA\Zda.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
