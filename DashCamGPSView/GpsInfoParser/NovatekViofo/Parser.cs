@@ -10,7 +10,7 @@ namespace NovatekViofoGPSParser
 {
     public class Parser
     {
-        public List<ViofoGpsPoint> ReadMP4FileGpsInfo(string fileName)
+        public static List<ViofoGpsPoint> ReadMP4FileGpsInfo(string fileName)
         {
             byte[] buff = File.ReadAllBytes(fileName);
             List<Box> boxes = new List<Box>(1024);
@@ -47,7 +47,7 @@ namespace NovatekViofoGPSParser
         /// <param name="g"></param>
         /// <param name="file"></param>
         /// <returns>list of gps points</returns>
-        private List<ViofoGpsPoint> ParseGpsCatalog(Box g, byte [] file)
+        private static List<ViofoGpsPoint> ParseGpsCatalog(Box g, byte [] file)
         {
             LocationsList list = new LocationsList(g);
             List<ViofoGpsPoint> gpsPoints = new List<ViofoGpsPoint>();

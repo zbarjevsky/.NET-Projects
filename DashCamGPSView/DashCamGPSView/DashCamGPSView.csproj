@@ -225,5 +225,9 @@
     <Resource Include="Images\NextE.png" />
     <Resource Include="Images\PrevE.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Folder48.png" />
+    <Resource Include="Images\Movie48.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

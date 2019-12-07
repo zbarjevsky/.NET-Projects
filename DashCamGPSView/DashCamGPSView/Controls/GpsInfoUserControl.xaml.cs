@@ -33,8 +33,8 @@ namespace DashCamGPSView.Controls
                 compass.Direction = inf.Course;
 
                 txtSpeed.Text = "Speed: " + inf.SpeedMph.ToString("0.0 mph");
-                txtLat.Text = new GMap.NET.PointLatLng(inf.Latitude, inf.Longitude).ToString();
-                txtLon.Text = new GMap.NET.PointLatLng(inf.Latitude, inf.Longitude).ToString();
+                txtLat.Text = "Lat: " + SexagesimalAngle.ToString(inf.Latitude);
+                txtLon.Text = "Lon: " + SexagesimalAngle.ToString(inf.Longitude);
                 txtTime.Text = "Time: " + inf.FixTime.AddHours(timeZone).ToString("yyyy/MM/dd HH:mm:ss");
             }
             else

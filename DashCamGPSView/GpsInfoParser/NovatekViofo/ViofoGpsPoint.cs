@@ -91,8 +91,13 @@ namespace NovatekViofoGPSParser
                 gps.Latitude_hemisphere = (char)data[pos]; pos++;
                 gps.Longtitude_hemisphere = (char)data[pos]; pos++;
                 gps.Unknown = data[pos]; pos++;
-                gps.Latitude = Box.ReadFloatLE(data, pos); pos += 4;
-                gps.Longtitude = Box.ReadFloatLE(data, pos); pos += 4;
+                
+                float lat = Box.ReadFloatLE(data, pos); pos += 4;
+                gps.Latitude = FixCoordinate(lat, gps.Latitude_hemisphere);
+
+                float lon = Box.ReadFloatLE(data, pos); pos += 4;
+                gps.Longtitude = FixCoordinate(lon, gps.Longtitude_hemisphere);
+
                 gps.Speed = Box.ReadFloatLE(data, pos); pos += 4;
                 gps.Bearing = Box.ReadFloatLE(data, pos); pos += 4;
 
@@ -100,6 +105,24 @@ namespace NovatekViofoGPSParser
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// # Novatek stores coordinates in odd DDDmm.mmmm format
+        /// </summary>
+        /// <param name="coord"></param>
+        /// <param name="hemisphere"></param>
+        /// <returns></returns>
+        private static double FixCoordinate(double coord, char hemisphere)
+        {
+            double minutes = coord % 100.0;
+            double degrees = coord - minutes;
+
+            double coordinate = degrees / 100.0 + (minutes / 60.0);
+            if (hemisphere == 'S' || hemisphere == 'W')
+                return -1 * (coordinate);
+            else
+                return (coordinate);
         }
 
         public override string ToString()
