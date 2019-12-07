@@ -4,6 +4,7 @@ using Demo.WindowsPresentation.CustomMarkers;
 using GMap.NET;
 using GMap.NET.MapProviders;
 using GMap.NET.WindowsPresentation;
+using GPSDataParser;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -90,20 +91,20 @@ namespace DashCamGPSView
             txtFileName.Text = _dashCamFileInfo.FrontFileName;
             playerF.Open(_dashCamFileInfo.FrontFileName, 0.5);
             playerR.Open(_dashCamFileInfo.BackFileName, 0);
-            playerF.Play();
-            playerR.Play();
 
             if (_dashCamFileInfo.GpsInfo != null && _dashCamFileInfo.GpsInfo.Count > 0)
             {
                 MainMap.Zoom = 17;
-                NmeaParser.Nmea.Rmc first = _dashCamFileInfo.GpsInfo[0] as NmeaParser.Nmea.Rmc;
-                MainMap.Position = new PointLatLng(first.Latitude, first.Longitude);
+                UpdateGpsInfo();
             }
             //else
             //{
             //    MainMap.Zoom = 2;
             //    MainMap.Position = new PointLatLng(first.Latitude, first.Longitude);
             //}
+
+            playerF.Play();
+            playerR.Play();
 
             mediaPlayerIsPlaying = true;
             mediaPlayerIsPaused = false;
@@ -221,7 +222,7 @@ namespace DashCamGPSView
 
             txtGPSInfo.Text = _dashCamFileInfo.GetLocationInfoForTime(playerF.Position.TotalSeconds);
 
-            NmeaParser.Nmea.Rmc inf = _dashCamFileInfo.FindGpsInfo(playerF.Position.TotalSeconds);
+            GpsPointData inf = _dashCamFileInfo.FindGpsInfo(playerF.Position.TotalSeconds);
             gpsInfo.UpdateInfo(inf, _dashCamFileInfo.TimeZone);
             if (inf != null)
             {

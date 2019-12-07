@@ -27,7 +27,7 @@ namespace NovatekViofoGPSParser
     /// speed: little-endian float (4 bytes) # Knots (the nautical kind)
     /// bearing: little-endian float (4 bytes) # degrees, not used in GPX.
     /// </summary>
-    public class GpsPointInfo
+    public class ViofoGpsPoint
     {
         public DateTime Date;
         public bool IsActive;
@@ -37,7 +37,7 @@ namespace NovatekViofoGPSParser
         public double Speed;
         public double Bearing;
 
-        public static GpsPointInfo Parse(uint offset, uint size, byte[] file)
+        public static ViofoGpsPoint Parse(uint offset, uint size, byte[] file)
         {
             byte[] data = new byte[size];
             Array.Copy(file, offset, data, 0, size);
@@ -51,7 +51,7 @@ namespace NovatekViofoGPSParser
             if (size != size1 || type != "free" || magic != "GPS ")
                 return null;
 
-            GpsPointInfo gps = new GpsPointInfo();
+            ViofoGpsPoint gps = new ViofoGpsPoint();
 
             //# checking for weird Azdome 0xAA XOR "encrypted" GPS data. 
             //This portion is a quick fix.
@@ -81,7 +81,8 @@ namespace NovatekViofoGPSParser
                 int month = (int)Box.ReadUintLE(data, pos); pos += 4;
                 int day = (int)Box.ReadUintLE(data, pos); pos += 4;
 
-                gps.Date = new DateTime(year, month, day, hour, minute, second);
+                try { gps.Date = new DateTime(2000 + year, month, day, hour, minute, second); }
+                catch (Exception err) { Debug.WriteLine(err.ToString()); return null; }
 
                 //# Coordinate data
                 char active = (char)data[pos]; pos++;
@@ -94,9 +95,11 @@ namespace NovatekViofoGPSParser
                 gps.Longtitude = Box.ReadFloatLE(data, pos); pos += 4;
                 gps.Speed = Box.ReadFloatLE(data, pos); pos += 4;
                 gps.Bearing = Box.ReadFloatLE(data, pos); pos += 4;
+
+                return gps;
             }
 
-            return gps;
+            return null;
         }
 
         public override string ToString()

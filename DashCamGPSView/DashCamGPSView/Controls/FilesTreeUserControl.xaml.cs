@@ -108,9 +108,7 @@ namespace DashCamGPSView.Controls
             {
                 foreach (DashCamFileInfo info in group)
                 {
-                    int count = info.GpsInfo != null ? info.GpsInfo.Count : 0;
-                    VideoFile v = new VideoFile() { FileName = info.FrontFileName, GpsPointsCount = count };
-                    Members.Add(v);
+                    Members.Add(new VideoFile(info));
                 }
 
                 GroupName = group[0].FileDate.ToString() + ", (Count: " + Members.Count + ")";
@@ -124,10 +122,23 @@ namespace DashCamGPSView.Controls
 
     public class VideoFile
     {
+        private DashCamFileInfo _dashCamFileInfo = null;
+
         public bool IsSelected { get; set; } = false;
 
-        public string FileName { get; set; }
+        public string FileName { get { return _dashCamFileInfo.FrontFileName; } }
 
-        public int GpsPointsCount { get; set; }
+        public int GpsPointsCount 
+        { 
+            get 
+            {
+                return 0; // _dashCamFileInfo.GpsInfo != null ? _dashCamFileInfo.GpsInfo.Count : 0;
+            }
+        }
+
+        public VideoFile(DashCamFileInfo info)
+        {
+            _dashCamFileInfo = info;
+        }
     }
 }

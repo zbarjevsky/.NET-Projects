@@ -83,16 +83,6 @@ namespace NmeaParser.Nmea
 		/// </summary>
 		public double Speed { get; }
 
-        public double SpeedMph
-        {
-            get { return Speed * 1.15078; }
-        }
-
-        public double SpeedKmh
-        {
-            get { return Speed * 1.852; }
-        }
-
         /// <summary>
         /// Track angle in degrees True
         /// </summary>

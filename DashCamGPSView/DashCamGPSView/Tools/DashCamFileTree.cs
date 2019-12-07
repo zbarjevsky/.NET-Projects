@@ -15,8 +15,8 @@ namespace DashCamGPSView.Tools
         /// Sort and group files by date inside specific interval
         /// </summary>
         /// <param name="fileName"></param>
-        /// <param name="groupMinutes"></param>
-        public DashCamFileTree(string fileName, double groupMinutes = 10.0)
+        /// <param name="deltaMinutesBetweenGroups"></param>
+        public DashCamFileTree(string fileName, double deltaMinutesBetweenGroups = 10.0)
         {
             string dirParent = Path.GetDirectoryName(fileName);
             string [] fileList = Directory.GetFiles(dirParent, "*.MP4");
@@ -34,7 +34,7 @@ namespace DashCamGPSView.Tools
             //if date difference more than 'groupMinutes' minutes - start new group
             foreach (DashCamFileInfo info in infoList)
             {
-                if (group.Count == 0 || (info.FileDate - group.Last().FileDate).TotalMinutes < groupMinutes)
+                if (group.Count == 0 || (info.FileDate - group.Last().FileDate).TotalMinutes < deltaMinutesBetweenGroups)
                 {
                     group.Add(info);
                 }

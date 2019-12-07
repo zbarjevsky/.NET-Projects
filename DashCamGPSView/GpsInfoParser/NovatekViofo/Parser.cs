@@ -10,7 +10,7 @@ namespace NovatekViofoGPSParser
 {
     public class Parser
     {
-        public List<GpsPointInfo> ReadMP4FileGpsInfo(string fileName)
+        public List<ViofoGpsPoint> ReadMP4FileGpsInfo(string fileName)
         {
             byte[] buff = File.ReadAllBytes(fileName);
             List<Box> boxes = new List<Box>(1024);
@@ -19,6 +19,9 @@ namespace NovatekViofoGPSParser
             while(offset < buff.Length)
             {
                 Box x = new Box(buff, offset);
+                if (x.Size > buff.Length)
+                    return null; //corrupt file
+
                 offset += x.Size;
 
                 if (x.Kind == "moov")
@@ -28,14 +31,11 @@ namespace NovatekViofoGPSParser
                     {
                         Box g = new Box(x.Data, off);
                         if (g.Kind == "gps ")
-                            boxes.Add(g); //gps catalog - position and size list
+                            return ParseGpsCatalog(g, buff); //gps catalog - position and size list
                         off += g.Size;
                     }
                 }
             }
-
-            if (boxes.Count > 0)
-                return ParseGpsCatalog(boxes[0], buff);
 
             return null;
         }
@@ -47,13 +47,17 @@ namespace NovatekViofoGPSParser
         /// <param name="g"></param>
         /// <param name="file"></param>
         /// <returns>list of gps points</returns>
-        private List<GpsPointInfo> ParseGpsCatalog(Box g, byte [] file)
+        private List<ViofoGpsPoint> ParseGpsCatalog(Box g, byte [] file)
         {
             LocationsList list = new LocationsList(g);
-            List<GpsPointInfo> gpsPoints = new List<GpsPointInfo>();
+            List<ViofoGpsPoint> gpsPoints = new List<ViofoGpsPoint>();
             foreach (Location loc in list.locations)
             {
-                GpsPointInfo i = GpsPointInfo.Parse(loc.Offset, loc.Length, file);
+                if (loc.Offset == 0 || loc.Length == 0)
+                    continue;
+                ViofoGpsPoint i = ViofoGpsPoint.Parse(loc.Offset, loc.Length, file);
+                if (i == null)
+                    continue;
                 gpsPoints.Add(i);
             }
             return gpsPoints;
@@ -78,6 +82,9 @@ namespace NovatekViofoGPSParser
             Start = start;
             Size = ReadUintBE(file, start);
             Kind = Encoding.ASCII.GetString(file, (int)start + 4, 4);
+
+            if (Size > file.Length - Start)
+                return; //bad offset or size
 
             Data = new byte[Size - 8];
             Array.Copy(file, start + 8, Data, 0, Size - 8);

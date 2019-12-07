@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GPSDataParser;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,7 +26,7 @@ namespace DashCamGPSView.Controls
             InitializeComponent();
         }
 
-        public void UpdateInfo(NmeaParser.Nmea.Rmc inf, int timeZone)
+        public void UpdateInfo(GpsPointData inf, int timeZone)
         {
             if (inf != null)
             {
