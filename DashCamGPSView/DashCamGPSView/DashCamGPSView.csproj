@@ -95,7 +95,6 @@
       <DependentUpon>TrolleyTooltip.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tools\DemoStuff.cs" />
-    <Compile Include="Controls\Map.cs" />
     <Compile Include="Controls\PercentageConverter.cs" />
     <Compile Include="Controls\ScrollDragZoom.cs" />
     <Compile Include="Tools\DashCamFileInfo.cs" />

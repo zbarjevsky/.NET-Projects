@@ -52,6 +52,6 @@
                     </StackPanel>
                 </DataTemplate>
             </TreeView.Resources>
-        </TreeView>     
+        </TreeView>
     </Grid>
 </UserControl>

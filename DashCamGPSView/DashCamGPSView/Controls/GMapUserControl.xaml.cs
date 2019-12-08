@@ -29,8 +29,6 @@ namespace DashCamGPSView.Controls
     /// </summary>
     public partial class GMapUserControl : UserControl, INotifyPropertyChanged
     {
-        public long ElapsedMilliseconds;
-
         //PointLatLng start;
         //PointLatLng end;
 
@@ -76,6 +74,22 @@ namespace DashCamGPSView.Controls
             if (DesignerProperties.GetIsInDesignMode(this))
                 return;
 
+            cmbMapType.Items.Add(GMapProviders.GoogleMap);
+            cmbMapType.Items.Add(GMapProviders.GoogleTerrainMap);
+            cmbMapType.Items.Add(GMapProviders.GoogleSatelliteMap);
+            cmbMapType.Items.Add(GMapProviders.BingMap);
+            cmbMapType.Items.Add(GMapProviders.BingHybridMap);
+            cmbMapType.Items.Add(GMapProviders.BingSatelliteMap);
+            cmbMapType.Items.Add(GMapProviders.YahooMap);
+            cmbMapType.Items.Add(GMapProviders.YahooHybridMap);
+            cmbMapType.Items.Add(GMapProviders.YahooSatelliteMap);
+            cmbMapType.Items.Add(GMapProviders.OviMap);
+            cmbMapType.Items.Add(GMapProviders.OviHybridMap);
+            cmbMapType.Items.Add(GMapProviders.OviSatelliteMap);
+            cmbMapType.Items.Add(GMapProviders.NearMap);
+            cmbMapType.Items.Add(GMapProviders.NearHybridMap);
+            cmbMapType.Items.Add(GMapProviders.NearSatelliteMap);
+
             // set cache mode only if no internet avaible
             if (!Stuff.PingNetwork("pingtest.com"))
             {
@@ -91,7 +105,6 @@ namespace DashCamGPSView.Controls
             // map events
             GMap.Loaded += MainMap_Loaded;
             GMap.OnPositionChanged += MainMap_OnCurrentPositionChanged;
-            GMap.OnTileLoadComplete += MainMap_OnTileLoadComplete;
             GMap.OnTileLoadStart += MainMap_OnTileLoadStart;
             GMap.OnMapTypeChanged += MainMap_OnMapTypeChanged;
             GMap.MouseMove += MainMap_MouseMove;
@@ -453,10 +466,38 @@ namespace DashCamGPSView.Controls
             //}
         }
 
-        // tile loading stops
-        void MainMap_OnTileLoadComplete(long ElapsedMilliseconds)
+        // current location changed
+        void MainMap_OnCurrentPositionChanged(PointLatLng point)
         {
-            //MainMap.ElapsedMilliseconds = ElapsedMilliseconds;
+            //mapgroup.Header = "gmap: " + point;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+    }
+
+    public class Map: GMapControl
+    {
+#if DEBUG
+        private long _elapsedMilliseconds;
+
+        private int _counter;
+        readonly Typeface _tf = new Typeface("GenericSansSerif");
+
+        public Map()
+        {
+            this.OnTileLoadComplete += MainMap_OnTileLoadComplete;
+        }
+
+        // tile loading stops
+        void MainMap_OnTileLoadComplete(long elapsedMilliseconds)
+        {
+            _elapsedMilliseconds = elapsedMilliseconds;
 
             //System.Windows.Forms.MethodInvoker m = delegate ()
             //{
@@ -473,24 +514,6 @@ namespace DashCamGPSView.Controls
             //}
         }
 
-        // current location changed
-        void MainMap_OnCurrentPositionChanged(PointLatLng point)
-        {
-            //mapgroup.Header = "gmap: " + point;
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-        {
-            if (PropertyChanged != null)
-                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-#if DEBUG
-        private int counter;
-        readonly Typeface tf = new Typeface("GenericSansSerif");
-        readonly System.Windows.FlowDirection fd = new System.Windows.FlowDirection();
-
         /// <summary>
         /// any custom drawing here
         /// </summary>
@@ -504,10 +527,15 @@ namespace DashCamGPSView.Controls
             DateTime _end = DateTime.Now;
             int _delta = (int)((_end - _start).TotalMilliseconds);
 
-            FormattedText text = new FormattedText(string.Format(CultureInfo.InvariantCulture, "{0:0.0}", GMap.Zoom) + "z, " +
-                GMap.MapProvider + ", refresh: " + counter++ + ", load: " + ElapsedMilliseconds + "ms, render: " + _delta + "ms",
-                CultureInfo.InvariantCulture, fd, tf, 20, Brushes.Blue);
-            drawingContext.DrawText(text, new Point(text.Height, text.Height));
+            string msg = string.Format(CultureInfo.InvariantCulture,
+               "{0:0.0} z, {1}, refresh: {2}, load: {3} ms, render: {4} ms",
+               Zoom, this.MapProvider, _counter++, _elapsedMilliseconds, _delta);
+
+            FormattedText text = new FormattedText(msg, CultureInfo.InvariantCulture,
+                FlowDirection.LeftToRight, _tf, 20, Brushes.Blue);
+
+            drawingContext.DrawText(text, new Point(4, 50));
+
             text = null;
         }
 #endif

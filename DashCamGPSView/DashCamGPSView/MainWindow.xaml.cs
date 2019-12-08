@@ -99,6 +99,7 @@ namespace DashCamGPSView
 
         private void Window_Closed(object sender, EventArgs e)
         {
+            ClosePayer();
             Settings.Default.InitialLocation = new System.Drawing.Point((int)this.Left, (int)this.Top);
             Settings.Default.Save();
         }
