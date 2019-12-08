@@ -39,7 +39,7 @@ namespace DashCamGPSView
             //refresh view when change position
             mePlayer.ScrubbingEnabled = true;
 
-            mePlayer.MediaOpened += (s, e) => { FitWidth(); };
+            mePlayer.MediaOpened += (s, e) => { /*FitWidth();*/ };
             mePlayer.MediaEnded += (s, e) => { VideoEnded(); };
         }
 
@@ -124,7 +124,7 @@ namespace DashCamGPSView
         {
         }
 
-        private void FitWidth()
+        public void FitWidth()
         {
             mePlayer.Width = this.ActualWidth - 18;
 

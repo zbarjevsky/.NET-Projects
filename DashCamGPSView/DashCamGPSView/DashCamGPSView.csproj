@@ -37,6 +37,9 @@
   <PropertyGroup>
     <ApplicationIcon>DashMap.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -244,4 +247,8 @@
     <Resource Include="Images\Screenshot.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if "$(ConfigurationName)" == "Release" xcopy /s /f /r /y $(TargetDir)\*.* $(SolutionDir)\..\Binaries\$(ProjectName)\
+</PostBuildEvent>
+  </PropertyGroup>
 </Project>

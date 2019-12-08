@@ -175,6 +175,8 @@ namespace DashCamGPSView
                 DashCamFileTree groups = new DashCamFileTree(openFileDialog.FileName);
                 treeGroups.LoadTree(groups, openFileDialog.FileName);
                 PlayFile(openFileDialog.FileName);
+                playerF.FitWidth();
+                playerR.FitWidth();
             }
         }
 
