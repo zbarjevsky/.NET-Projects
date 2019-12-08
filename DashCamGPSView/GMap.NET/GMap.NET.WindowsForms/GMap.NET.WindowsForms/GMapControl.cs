@@ -9,11 +9,12 @@ namespace GMap.NET.WindowsForms
     using System.IO;
     using System.Threading;
     using System.Windows.Forms;
-    using GMap.NET;
-    using GMap.NET.Internals;
-    using GMap.NET.ObjectModel;
     using System.Diagnostics;
     using System.Drawing.Text;
+
+    using GMap.NET;
+    //using GMap.NET.Internals;
+    using GMap.NET.ObjectModel;
     using GMap.NET.MapProviders;
 
 #if !PocketPC
@@ -27,7 +28,7 @@ namespace GMap.NET.WindowsForms
     /// <summary>
     /// GMap.NET control for Windows Forms
     /// </summary>   
-    public partial class GMapControl : UserControl, Interface
+    public partial class GMapControl : UserControl, IGMapInterface
     {
 #if !PocketPC
         /// <summary>
@@ -528,7 +529,7 @@ namespace GMap.NET.WindowsForms
 #endif
 
         // internal stuff
-        internal readonly Core Core = new Core();
+        internal readonly Internals.Core Core = new Internals.Core();
 
         internal readonly Font CopyrightFont = new Font(FontFamily.GenericSansSerif, 7, FontStyle.Regular);
 #if !PocketPC
@@ -1323,7 +1324,7 @@ namespace GMap.NET.WindowsForms
                         {
                             bool found = false;
 
-                            Tile t = Core.Matrix.GetTileWithNoLock(Core.Zoom, tilePoint.PosXY);
+                            Internals.Tile t = Core.Matrix.GetTileWithNoLock(Core.Zoom, tilePoint.PosXY);
                             if (t.NotEmpty)
                             {
                                 // render tile
@@ -1369,7 +1370,7 @@ namespace GMap.NET.WindowsForms
                             {
                                 #region -- fill empty lines --
                                 int zoomOffset = 1;
-                                Tile parentTile = Tile.Empty;
+                                Internals.Tile parentTile = Internals.Tile.Empty;
                                 long Ix = 0;
 
                                 while (!parentTile.NotEmpty && zoomOffset < Core.Zoom && zoomOffset <= LevelsKeepInMemmory)
@@ -1409,7 +1410,7 @@ namespace GMap.NET.WindowsForms
                             {
                                 lock (Core.FailedLoads)
                                 {
-                                    var lt = new LoadTask(tilePoint.PosXY, Core.Zoom);
+                                    var lt = new Internals.LoadTask(tilePoint.PosXY, Core.Zoom);
                                     if (Core.FailedLoads.ContainsKey(lt))
                                     {
                                         var ex = Core.FailedLoads[lt];
@@ -2412,7 +2413,7 @@ namespace GMap.NET.WindowsForms
                     if (!GMaps.Instance.IsRunningOnMono)
                     {
                         System.Drawing.Point p = PointToScreen(new System.Drawing.Point(Width / 2, Height / 2));
-                        Stuff.SetCursorPos((int)p.X, (int)p.Y);
+                        Internals.Stuff.SetCursorPos((int)p.X, (int)p.Y);
                     }
                 }
 
@@ -2794,7 +2795,7 @@ namespace GMap.NET.WindowsForms
             get
             {
 #if !DESIGN
-                return CacheLocator.Location;
+                return Internals.CacheLocator.Location;
 #else
             return string.Empty;
 #endif
@@ -2802,7 +2803,7 @@ namespace GMap.NET.WindowsForms
             set
             {
 #if !DESIGN
-                CacheLocator.Location = value;
+                Internals.CacheLocator.Location = value;
 #endif
             }
         }

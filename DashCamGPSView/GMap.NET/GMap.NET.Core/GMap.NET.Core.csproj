@@ -333,7 +333,7 @@
     <Compile Include="GMap.NET\gpx.cs" />
     <Compile Include="GMap.NET\LanguageType.cs" />
     <Compile Include="GMap.NET\PureProjection.cs" />
-    <Compile Include="GMap.NET\Interface.cs" />
+    <Compile Include="GMap.NET\IGMapInterface.cs" />
     <Compile Include="GMap.NET\AccessMode.cs" />
     <Compile Include="GMap.NET\Delegates.cs" />
     <Compile Include="GMap.NET\MapRoute.cs" />

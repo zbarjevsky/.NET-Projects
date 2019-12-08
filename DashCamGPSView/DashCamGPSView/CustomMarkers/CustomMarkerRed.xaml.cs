@@ -6,7 +6,7 @@ using System.Windows.Media;
 using DashCamGPSView;
 using GMap.NET.WindowsPresentation;
 
-namespace Demo.WindowsPresentation.CustomMarkers
+namespace DashCamGPSView.CustomMarkers
 {
    /// <summary>
    /// Interaction logic for CustomMarkerDemo.xaml
@@ -16,7 +16,7 @@ namespace Demo.WindowsPresentation.CustomMarkers
       Popup Popup;
       Label Label;
       GMapMarker Marker;
-        GMapControl MainMap;
+      GMapControl MainMap;
 
       public CustomMarkerRed(GMapControl map, GMapMarker marker, string title)
       {

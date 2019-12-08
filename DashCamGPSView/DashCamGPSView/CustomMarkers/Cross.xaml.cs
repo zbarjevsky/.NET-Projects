@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace Demo.WindowsPresentation.CustomMarkers
+namespace DashCamGPSView.CustomMarkers
 {
    /// <summary>
    /// Interaction logic for Cross.xaml

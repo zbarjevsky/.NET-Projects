@@ -1,11 +1,4 @@
-﻿using DashCamGPSView.Properties;
-using DashCamGPSView.Tools;
-using Demo.WindowsPresentation.CustomMarkers;
-using GMap.NET;
-using GMap.NET.MapProviders;
-using GMap.NET.WindowsPresentation;
-using GPSDataParser;
-using Microsoft.Win32;
+﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -25,6 +18,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+
+using DashCamGPSView.Properties;
+using DashCamGPSView.Tools;
+using GMap.NET;
+using GMap.NET.MapProviders;
+using GMap.NET.WindowsPresentation;
 
 namespace DashCamGPSView
 {
@@ -274,9 +273,14 @@ namespace DashCamGPSView
 
         private void sliProgress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            lblProgressStatus.Text = TimeSpan.FromSeconds(sliProgress.Value).ToString(@"hh\:mm\:ss");
-            playerF.Position = TimeSpan.FromSeconds(sliProgress.Value);
-            playerR.Position = TimeSpan.FromSeconds(sliProgress.Value);
+            TimeSpan tsPos = TimeSpan.FromSeconds(sliProgress.Value);
+            TimeSpan tsMax = TimeSpan.FromSeconds(playerF.NaturalDuration);
+
+            playerF.Position = tsPos;
+            playerR.Position = tsPos;
+            
+            lblProgressStatus.Text = tsPos.ToString(@"hh\:mm\:ss") + "/" + tsMax.ToString(@"hh\:mm\:ss");
+
             UpdateGpsInfo();
         }
 
@@ -309,7 +313,7 @@ namespace DashCamGPSView
 
             txtGPSInfo.Text = _dashCamFileInfo.GetLocationInfoForTime(playerF.Position.TotalSeconds);
 
-            GpsPointData inf = _dashCamFileInfo.FindGpsInfo(playerF.Position.TotalSeconds);
+            GPSDataParser.GpsPointData inf = _dashCamFileInfo.FindGpsInfo(playerF.Position.TotalSeconds);
             gpsInfo.UpdateInfo(inf, _dashCamFileInfo.TimeZone);
             if (inf != null)
             {

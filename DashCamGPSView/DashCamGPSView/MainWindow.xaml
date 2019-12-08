@@ -40,26 +40,34 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
-        <Border Grid.Column="0" Grid.Row="1" BorderThickness="2" BorderBrush="Brown" Background="Beige">
+        <Border Grid.Column="0" Grid.Row="1" BorderThickness="2" BorderBrush="Gray" Background="Beige">
             <controls:FilesTreeUserControl x:Name="treeGroups"/>
         </Border>
         <GridSplitter Grid.Column="1" Grid.Row="1" Grid.RowSpan="1" HorizontalAlignment="Stretch"/>
-        <Border Grid.Column="2" Grid.Row="1" BorderThickness="2" BorderBrush="YellowGreen" Background="Black">
+        <Border Grid.Column="2" Grid.Row="1" BorderThickness="2" BorderBrush="Gray" Background="Black">
             <local:VideoPlayer x:Name="playerR"/>
         </Border>
         <GridSplitter Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2" 
                       HorizontalAlignment="Stretch"
                       DragCompleted="GridSplitter1_DragCompleted"/>
-        <Border Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="3" BorderThickness="2" BorderBrush="YellowGreen" Background="Black">
+        <Border Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="3" BorderThickness="2" BorderBrush="Gray" Background="Black">
             <local:VideoPlayer x:Name="playerF"/>
         </Border>
-        <GridSplitter Grid.Column="3" Grid.Row="1" Grid.RowSpan="3" HorizontalAlignment="Stretch"/>
-        <Border Grid.Column="4" Grid.ColumnSpan="3" Grid.Row="1" Grid.RowSpan="3" BorderThickness="2" BorderBrush="YellowGreen">
-            <controls:Map x:Name="MainMap" MaxZoom="24" MinZoom="1" />
-        </Border>
-        <Border Grid.Column="4" Grid.Row="4" Grid.RowSpan="3" BorderThickness="2" BorderBrush="Goldenrod">
-            <controls:GpsInfoUserControl x:Name="gpsInfo"/>
-        </Border>
+        <GridSplitter Grid.Column="3" Grid.Row="1" Grid.RowSpan="6" HorizontalAlignment="Stretch"/>
+        <Grid Grid.Row="1" Grid.RowSpan="6" Grid.Column="4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="5*"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="200"/>
+            </Grid.RowDefinitions>
+            <Border BorderThickness="2" BorderBrush="Gray">
+                <controls:GMapUserControl x:Name="MainMap" MaxZoom="24" MinZoom="1" />
+            </Border>
+            <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch"/>
+            <Border Grid.Row="2" BorderThickness="2" BorderBrush="Gray">
+                <controls:GpsInfoUserControl x:Name="gpsInfo"/>
+            </Border>
+        </Grid>
         <ToolBar Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="3" >
             <Button Command="ApplicationCommands.Open" ToolTip="Open">
                 <local:AutoGreyableImage Source="/DashCamGPSView;component/Images/map_32px.png" />
@@ -105,7 +113,7 @@
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
             <StatusBarItem>
-                <TextBlock Name="lblProgressStatus" FontSize="16">00:00:00</TextBlock>
+                <TextBlock Name="lblProgressStatus" FontSize="16">00:00:00/00:00:00</TextBlock>
             </StatusBarItem>
             <StatusBarItem Grid.Column="1" HorizontalContentAlignment="Stretch">
                 <Slider Name="sliProgress" 

@@ -3,27 +3,31 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 using System.Windows.Threading;
 
 using GMap.NET;
 using GMap.NET.MapProviders;
 using GMap.NET.WindowsPresentation;
-
 using DashCamGPSView.CustomMarkers;
 
 namespace DashCamGPSView.Controls
 {
     /// <summary>
-    /// the custom map f GMapControl 
+    /// Interaction logic for GMapUserControl.xaml
     /// </summary>
-    public class Map : GMapControl
+    public partial class GMapUserControl : UserControl, INotifyPropertyChanged
     {
         public long ElapsedMilliseconds;
 
@@ -36,52 +40,83 @@ namespace DashCamGPSView.Controls
         // zones list
         List<GMapMarker> Circles = new List<GMapMarker>();
 
-        public Map()
+        public double Zoom
         {
+            get { return GMap.Zoom; }
+            set { GMap.Zoom = value; OnPropertyChanged(); }
+        }
+
+        public int MinZoom
+        {
+            get { return GMap.MinZoom; }
+            set { GMap.MinZoom = value; OnPropertyChanged(); }
+        }
+
+        public int MaxZoom
+        {
+            get { return GMap.MaxZoom; }
+            set { GMap.MaxZoom = value; OnPropertyChanged(); }
+        }
+
+        public PointLatLng Position
+        {
+            get { return GMap.Position; }
+            set { GMap.Position = value; OnPropertyChanged(); }
+        }
+
+        public PointLatLng FromLocalToLatLng(int x, int y)
+        {
+            return GMap.FromLocalToLatLng(x, y);
+        }
+
+        public GMapUserControl()
+        {
+            InitializeComponent();
+
             if (DesignerProperties.GetIsInDesignMode(this))
                 return;
 
             // set cache mode only if no internet avaible
             if (!Stuff.PingNetwork("pingtest.com"))
             {
-                this.Manager.Mode = AccessMode.CacheOnly;
+                GMap.Manager.Mode = AccessMode.CacheOnly;
                 MessageBox.Show("No internet connection available, going to CacheOnly mode.", "GMap.NET - Demo.WindowsPresentation", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
 
             // config map
-            this.MapProvider = GMapProviders.GoogleMap;
+            GMap.MapProvider = GMapProviders.GoogleMap;
 
             //this.ScaleMode = ScaleModes.Dynamic;
 
             // map events
-            this.Loaded += MainMap_Loaded;
-            this.OnPositionChanged += MainMap_OnCurrentPositionChanged;
-            this.OnTileLoadComplete += MainMap_OnTileLoadComplete;
-            this.OnTileLoadStart += MainMap_OnTileLoadStart;
-            this.OnMapTypeChanged += MainMap_OnMapTypeChanged;
-            this.MouseMove += MainMap_MouseMove;
-            this.MouseLeftButtonDown += MainMap_MouseLeftButtonDown;
-            this.MouseEnter += MainMap_MouseEnter;
+            GMap.Loaded += MainMap_Loaded;
+            GMap.OnPositionChanged += MainMap_OnCurrentPositionChanged;
+            GMap.OnTileLoadComplete += MainMap_OnTileLoadComplete;
+            GMap.OnTileLoadStart += MainMap_OnTileLoadStart;
+            GMap.OnMapTypeChanged += MainMap_OnMapTypeChanged;
+            GMap.MouseMove += MainMap_MouseMove;
+            GMap.MouseLeftButtonDown += MainMap_MouseLeftButtonDown;
+            GMap.MouseEnter += MainMap_MouseEnter;
 
             // set current marker
-            currentMarker = new GMapMarker(this.Position);
+            currentMarker = new GMapMarker(GMap.Position);
             {
-                currentMarker.Shape = new CustomMarkerRed(this, currentMarker, "custom position marker");
+                currentMarker.Shape = new CustomMarkerRed(GMap, currentMarker, "custom position marker");
                 currentMarker.Offset = new System.Windows.Point(-15, -15);
                 currentMarker.ZIndex = int.MaxValue;
-                this.Markers.Add(currentMarker);
+                GMap.Markers.Add(currentMarker);
             }
         }
 
         private void MainMap_Loaded(object sender, RoutedEventArgs e)
         {
-            this.Zoom = 4;
-            this.Position = new PointLatLng(45, -93);
+            GMap.Zoom = 4;
+            GMap.Position = new PointLatLng(45, -93);
         }
 
         void MainMap_MouseEnter(object sender, MouseEventArgs e)
         {
-            this.Focus();
+            GMap.Focus();
         }
 
         #region -- performance test--
@@ -369,7 +404,7 @@ namespace DashCamGPSView.Controls
         void MainMap_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             System.Windows.Point p = e.GetPosition(this);
-            currentMarker.Position = this.FromLocalToLatLng((int)p.X, (int)p.Y);
+            currentMarker.Position = GMap.FromLocalToLatLng((int)p.X, (int)p.Y);
         }
 
         // move current marker with left holding
@@ -378,14 +413,14 @@ namespace DashCamGPSView.Controls
             if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
             {
                 System.Windows.Point p = e.GetPosition(this);
-                currentMarker.Position = this.FromLocalToLatLng((int)p.X, (int)p.Y);
+                currentMarker.Position = GMap.FromLocalToLatLng((int)p.X, (int)p.Y);
             }
         }
 
         // zoo max & center markers
         private void button13_Click(object sender, RoutedEventArgs e)
         {
-            this.ZoomAndCenterMarkers(null);
+            GMap.ZoomAndCenterMarkers(null);
 
             /*
             PointAnimation panMap = new PointAnimation();
@@ -444,6 +479,13 @@ namespace DashCamGPSView.Controls
             //mapgroup.Header = "gmap: " + point;
         }
 
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
 #if DEBUG
         private int counter;
         readonly Typeface tf = new Typeface("GenericSansSerif");
@@ -462,8 +504,8 @@ namespace DashCamGPSView.Controls
             DateTime _end = DateTime.Now;
             int _delta = (int)((_end - _start).TotalMilliseconds);
 
-            FormattedText text = new FormattedText(string.Format(CultureInfo.InvariantCulture, "{0:0.0}", Zoom) + "z, " + 
-                MapProvider + ", refresh: " + counter++ + ", load: " + ElapsedMilliseconds + "ms, render: " + _delta + "ms", 
+            FormattedText text = new FormattedText(string.Format(CultureInfo.InvariantCulture, "{0:0.0}", GMap.Zoom) + "z, " +
+                GMap.MapProvider + ", refresh: " + counter++ + ", load: " + ElapsedMilliseconds + "ms, render: " + _delta + "ms",
                 CultureInfo.InvariantCulture, fd, tf, 20, Brushes.Blue);
             drawingContext.DrawText(text, new Point(text.Height, text.Height));
             text = null;

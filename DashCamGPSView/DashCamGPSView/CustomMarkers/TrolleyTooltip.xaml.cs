@@ -3,7 +3,7 @@ using GMap.NET;
 //using Demo.WindowsForms;
 using DashCamGPSView;
 
-namespace Demo.WindowsPresentation.Controls
+namespace DashCamGPSView.Controls
 {
    /// <summary>
    /// Interaction logic for TrolleyTooltip.xaml

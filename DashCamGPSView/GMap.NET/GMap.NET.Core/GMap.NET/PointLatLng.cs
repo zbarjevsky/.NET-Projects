@@ -1,9 +1,9 @@
 ﻿
+using System;
+using System.Globalization;
+
 namespace GMap.NET
 {
-   using System;
-   using System.Globalization;
-
     /// <summary>
     /// the point of coordinates
     /// </summary>
@@ -11,6 +11,7 @@ namespace GMap.NET
     public struct PointLatLng
     {
         public static readonly PointLatLng Empty = new PointLatLng();
+        
         private double lat;
         private double lng;
 

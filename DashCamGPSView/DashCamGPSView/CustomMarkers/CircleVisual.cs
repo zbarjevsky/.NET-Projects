@@ -5,11 +5,13 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Effects;
-using Demo.WindowsPresentation.Controls;
+
+using DashCamGPSView.Controls;
+//using Demo.WindowsPresentation.Controls;
 //using Demo.WindowsPresentation.Controls;
 using GMap.NET.WindowsPresentation;
 
-namespace Demo.WindowsPresentation.CustomMarkers
+namespace DashCamGPSView.CustomMarkers
 {
    public class CircleVisual : FrameworkElement
    {

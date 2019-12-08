@@ -13,7 +13,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using GMap.NET;
 
-namespace Demo.WindowsPresentation.CustomMarkers
+namespace DashCamGPSView.CustomMarkers
 {
    /// <summary>
    /// Interaction logic for Circle.xaml

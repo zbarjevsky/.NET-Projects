@@ -1,9 +1,9 @@
 ﻿
+using GMap.NET.MapProviders;
+
 namespace GMap.NET
 {
-   using GMap.NET.MapProviders;
-
-   public interface Interface
+   public interface IGMapInterface
    {
       PointLatLng Position
       {
@@ -60,6 +60,7 @@ namespace GMap.NET
       void ReloadMap();
 
       PointLatLng FromLocalToLatLng(int x, int y);
+
       GPoint FromLatLngToLocal(PointLatLng point);
 
 #if !PocketPC

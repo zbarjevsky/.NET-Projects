@@ -1,7 +1,7 @@
-﻿using DashCamGPSView.Tools;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,7 +13,8 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
-using System.Windows.Shapes;
+
+using DashCamGPSView.Tools;
 
 namespace DashCamGPSView.Controls
 {
@@ -24,13 +25,14 @@ namespace DashCamGPSView.Controls
     {
         public Action<string> TreeItemDoubleClickAction = (fileName) => { };
         public Action OpenFileAction = () => { };
+        public Action ExportGPSAction = () => { };
 
         public FilesTreeUserControl()
         {
             InitializeComponent();
 
             //inser empty group - as prompt
-            treeFiles.ItemsSource = new List<VideoGroup>() { new VideoGroup(null) };
+            treeFiles.ItemsSource = new List<VideoGroup>() { new VideoGroup(null, "") };
         }
 
         public void LoadTree(DashCamFileTree tree, string selectedFileName)
@@ -39,7 +41,7 @@ namespace DashCamGPSView.Controls
 
             foreach (List<DashCamFileInfo> group in tree.fileGroups)
             {
-                fileGroups.Add(new VideoGroup(group));
+                fileGroups.Add(new VideoGroup(group, selectedFileName));
             }
             
             treeFiles.ItemsSource = fileGroups;
@@ -115,6 +117,48 @@ namespace DashCamGPSView.Controls
                 }
             }
         }
+
+        private void TreeViewItem_PreviewMouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is TreeViewItem item)
+            {
+                item.IsSelected = true;
+            }
+        }
+
+        private void GroupMenu_Export_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem item)
+            {
+                if (item.DataContext is VideoGroup g)
+                {
+                    if (g.Members.Count == 0)
+                        ExportGPSAction();
+                }
+            }
+        }
+
+        private void GroupMenu_Open_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem item)
+            {
+                if (item.DataContext is VideoGroup g)
+                {
+                    OpenFileAction();
+                }
+            }
+        }
+
+        private void FileMenu_Play_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem item)
+            {
+                if (item.DataContext is VideoFile v)
+                {
+                    TreeItemDoubleClickAction(v.FileName);
+                }
+            }
+        }
     }
 
     public class VideoGroup
@@ -125,16 +169,17 @@ namespace DashCamGPSView.Controls
 
         public ObservableCollection<VideoFile> Members { get; set; } = new ObservableCollection<VideoFile>();
 
-        public VideoGroup(List<DashCamFileInfo> group)
+        public VideoGroup(List<DashCamFileInfo> group, string selectedFileName)
         {
             if (group != null && group.Count > 0)
             {
-                foreach (DashCamFileInfo info in group)
+                for (int i = 0; i < group.Count; i++)
                 {
-                    Members.Add(new VideoFile(info));
+                    Members.Add(new VideoFile(i, group[i], selectedFileName));
                 }
 
-                GroupName = group[0].FileDate.ToString() + ", (Count: " + Members.Count + ")";
+                string dir = Path.GetDirectoryName(group[0].FrontFileName);
+                GroupName = group[0].FileDate.ToString("yyyy/MM/dd HH:mm:ss") + ", " + dir;
             }
             else
             {
@@ -151,17 +196,18 @@ namespace DashCamGPSView.Controls
 
         public string FileName { get { return _dashCamFileInfo.FrontFileName; } }
 
-        public int GpsPointsCount 
-        { 
-            get 
-            {
-                return 0; // _dashCamFileInfo.GpsInfo != null ? _dashCamFileInfo.GpsInfo.Count : 0;
-            }
-        }
+        public string FileNameForDisplay { get; private set; }
 
-        public VideoFile(DashCamFileInfo info)
+        public string Description { get; private set; } = "";
+
+        public VideoFile(int indexInGroup, DashCamFileInfo info, string selectedFileName)
         {
             _dashCamFileInfo = info;
+            IsSelected = (FileName == selectedFileName);
+            FileNameForDisplay = string.Format("{0:000}. {1}", indexInGroup+1, Path.GetFileNameWithoutExtension(FileName));
+
+            FileInfo fi = new FileInfo(FileName);
+            Description = string.Format(" ({0:###,###.0} KB)", fi.Length / 1024.0);
         }
     }
 }

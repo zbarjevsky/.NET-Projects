@@ -25,7 +25,7 @@
    /// <summary>
    /// GMap.NET control for Windows Presentation
    /// </summary>
-   public partial class GMapControl : ItemsControl, Interface, IDisposable
+   public partial class GMapControl : ItemsControl, IGMapInterface, IDisposable
    {
       #region DependencyProperties and related stuff
 

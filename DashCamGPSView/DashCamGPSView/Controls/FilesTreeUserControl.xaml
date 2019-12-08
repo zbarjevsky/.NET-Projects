@@ -13,11 +13,21 @@
                     <Setter Property="IsExpanded" Value="True" />
                     <Setter Property="IsSelected" Value="{Binding IsSelected}" />
                     <EventSetter Event="MouseDoubleClick" Handler="TreeViewItem_MouseDoubleClick" />
+                    <EventSetter Event="PreviewMouseRightButtonDown" Handler="TreeViewItem_PreviewMouseRightButtonDown" />
                 </Style>
             </TreeView.ItemContainerStyle>
             <TreeView.Resources>
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightBrushKey}" Color="DarkOliveGreen" />
+                <SolidColorBrush x:Key="{x:Static SystemColors.InactiveSelectionHighlightTextBrushKey}" Color="White" />
                 <HierarchicalDataTemplate DataType="{x:Type local:VideoGroup}" ItemsSource="{Binding Members}">
                     <StackPanel Orientation="Horizontal">
+                        <StackPanel.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Open Recordings..." Click="GroupMenu_Open_Click"/>
+                                <Separator/>
+                                <MenuItem Header="Export GPS data..." Click="GroupMenu_Export_Click" />
+                            </ContextMenu>
+                        </StackPanel.ContextMenu>
                         <Image Source="/Images/Folder48.png" Margin="0,0,5,0" Width="18" Height="18" />
                         <TextBlock Text="{Binding GroupName}" />
                         <TextBlock Text=" [" Foreground="Blue" />
@@ -26,12 +36,19 @@
                     </StackPanel>
                 </HierarchicalDataTemplate>
                 <DataTemplate DataType="{x:Type local:VideoFile}">
-                    <StackPanel Orientation="Horizontal">
+                    <StackPanel Orientation="Horizontal" Margin="1">
+                        <StackPanel.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Play" Click="FileMenu_Play_Click">
+                                    <MenuItem.Icon>
+                                        <Image Source="/Images/PlayE.png" Width="16" Height="16" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </ContextMenu>
+                        </StackPanel.ContextMenu>
                         <Image Source="/Images/Movie48.png" Margin="0,0,5,0"  Width="18" Height="18" />
-                        <TextBlock Text="{Binding FileName}" />
-                        <TextBlock Text=" (" Foreground="Green" />
-                        <TextBlock Text="{Binding GpsPointsCount}" Foreground="Green" />
-                        <TextBlock Text=" GPS Points)" Foreground="Brown" />
+                        <TextBlock Text="{Binding FileNameForDisplay}" FontFamily="Courier New" VerticalAlignment="Center"/>
+                        <TextBlock Text="{Binding Description}" Foreground="Goldenrod" VerticalAlignment="Center" />
                     </StackPanel>
                 </DataTemplate>
             </TreeView.Resources>

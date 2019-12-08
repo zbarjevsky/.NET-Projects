@@ -7,7 +7,7 @@ using GMap.NET.WindowsPresentation;
 using System.Diagnostics;
 using DashCamGPSView;
 
-namespace Demo.WindowsPresentation.CustomMarkers
+namespace DashCamGPSView.CustomMarkers
 {
    /// <summary>
    /// Interaction logic for CustomMarkerDemo.xaml
