@@ -2,7 +2,9 @@
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,7 +24,7 @@ namespace DashCamGPSView
     /// <summary>
     /// Interaction logic for VideoPlayer.xaml
     /// </summary>
-    public partial class VideoPlayer : UserControl
+    public partial class VideoPlayer : UserControl, INotifyPropertyChanged
     {
         private ScrollDragZoom _scrollDragger;
 
@@ -57,13 +59,13 @@ namespace DashCamGPSView
         public double Volume
         {
             get { return mePlayer.Volume; }
-            set { mePlayer.Volume = value; }
+            set { mePlayer.Volume = value; OnPropertyChanged(); }
         }
 
         public TimeSpan Position 
         { 
             get { return mePlayer.Position; }
-            set { mePlayer.Position = value; } 
+            set { mePlayer.Position = value; OnPropertyChanged(); } 
         }
 
         public Size NaturalSize
@@ -148,6 +150,13 @@ namespace DashCamGPSView
             mePlayer.Height = sz.Height;
 
             ScrollToCenter();
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }

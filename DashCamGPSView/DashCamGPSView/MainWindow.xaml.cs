@@ -60,6 +60,36 @@ namespace DashCamGPSView
             playerF.VideoEnded = () => { PlayNext(); };
         }
 
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Space)
+            {
+                if (!mediaPlayerIsPlaying)
+                    return;
+
+                if (mediaPlayerIsPaused)
+                    Play_Executed(this, null);
+                else
+                    Pause_Executed(this, null);
+            }
+            else if (e.Key == Key.Up || e.Key == Key.VolumeUp)
+            {
+                playerF.Volume += 0.1 * playerF.Volume;
+            }
+            else if (e.Key == Key.Down || e.Key == Key.VolumeDown)
+            {
+                playerF.Volume -= 0.1 * playerF.Volume;
+            }
+            else if (e.Key == Key.Left)
+            {
+                sliProgress.Value -= sliProgress.SmallChange;
+            }
+            else if (e.Key == Key.Right)
+            {
+                sliProgress.Value += sliProgress.SmallChange;
+            }
+        }
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             this.Left = Settings.Default.InitialLocation.X;
@@ -75,12 +105,7 @@ namespace DashCamGPSView
 
         private void PlayFile(string fileName)
         {
-            playerF.Close();
-            playerR.Close();
-
-            mediaPlayerIsPlaying = false;
-            mediaPlayerIsPaused = false;
-
+            ClosePayer();
            if (!File.Exists(fileName))
                 return;
 
@@ -110,11 +135,33 @@ namespace DashCamGPSView
             mediaPlayerIsPaused = false;
         }
 
+        private void ClosePayer()
+        {
+            playerF.Close();
+            playerR.Close();
+            mediaPlayerIsPlaying = false;
+            mediaPlayerIsPaused = false;
+        }
+
         private void PlayNext()
         {
+            ClosePayer();
+
             string fileName = treeGroups.FindNextFile(_dashCamFileInfo.FrontFileName);
-            if (string.IsNullOrWhiteSpace(fileName))
+            if (!File.Exists(fileName))
                 return;
+
+            PlayFile(fileName);
+        }
+
+        private void PlayPrev()
+        {
+            ClosePayer();
+
+            string fileName = treeGroups.FindPrevFile(_dashCamFileInfo.FrontFileName);
+            if (!File.Exists(fileName))
+                return;
+
             PlayFile(fileName);
         }
 
@@ -138,6 +185,34 @@ namespace DashCamGPSView
         private void Open_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             OpenVideoFile();
+        }
+
+        private void Next_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            string fileName = null;
+            if (_dashCamFileInfo != null)
+                fileName = treeGroups.FindNextFile(_dashCamFileInfo.FrontFileName);
+
+            e.CanExecute = !string.IsNullOrWhiteSpace(fileName);
+        }
+
+        private void Next_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            PlayNext();
+        }
+
+        private void Prev_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            string fileName = null;
+            if (_dashCamFileInfo != null)
+                fileName = treeGroups.FindPrevFile(_dashCamFileInfo.FrontFileName);
+
+            e.CanExecute = !string.IsNullOrWhiteSpace(fileName);
+        }
+
+        private void Prev_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            PlayPrev();
         }
 
         private void Play_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -212,12 +287,21 @@ namespace DashCamGPSView
 
         private void UpdateGpsInfo()
         {
+            if (_dashCamFileInfo == null)
+                return;
+
             sliProgress.Minimum = 0;
 
             if (playerF.NaturalDuration != 0)
             {
                 sliProgress.Maximum = playerF.NaturalDuration;
                 sliProgress.Value = playerF.Position.TotalSeconds;
+                if (sliProgress.Maximum >= 60)
+                    sliProgress.SmallChange = 1;
+                else //if less than minute - have 60 tics
+                    sliProgress.SmallChange = sliProgress.Maximum / 60.0;
+
+                sliProgress.LargeChange = sliProgress.Maximum / 10.0;
             }
 
             txtGPSInfo.Text = _dashCamFileInfo.GetLocationInfoForTime(playerF.Position.TotalSeconds);

@@ -50,11 +50,16 @@ namespace DashCamGPSView.Controls
             foreach (VideoGroup group in treeFiles.Items)
             {
                 var tvi = treeFiles.ItemContainerGenerator.ContainerFromItem(group) as TreeViewItem;
-                foreach (VideoFile v in group.Members)
+                foreach (var subItem in tvi.Items)
                 {
-                    v.IsSelected = (string.Compare(fileName, v.FileName, true) == 0);
-                    if (v.IsSelected)
-                        tvi.BringIntoView();
+                    TreeViewItem childItem = tvi.ItemContainerGenerator.ContainerFromItem(subItem) as TreeViewItem;
+                    if (childItem != null)
+                    {
+                        VideoFile v = childItem.DataContext as VideoFile;
+                        childItem.IsSelected = (string.Compare(fileName, v.FileName, true) == 0);
+                        if (childItem.IsSelected)
+                            childItem.BringIntoView();
+                    }
                 }
             }
         }
@@ -71,6 +76,24 @@ namespace DashCamGPSView.Controls
                     {
                         if (i + 1 < group.Members.Count) //has next
                             return group.Members[i + 1].FileName;
+                    }
+                }
+            }
+            return null;
+        }
+
+        internal string FindPrevFile(string fileName)
+        {
+            foreach (VideoGroup group in treeFiles.Items)
+            {
+                var tvi = treeFiles.ItemContainerGenerator.ContainerFromItem(group) as TreeViewItem;
+                for (int i = 0; i < group.Members.Count; i++)
+                {
+                    VideoFile v = group.Members[i];
+                    if (string.Compare(fileName, v.FileName, true) == 0)
+                    {
+                        if (i - 1 >= 0) //has prev
+                            return group.Members[i - 1].FileName;
                     }
                 }
             }

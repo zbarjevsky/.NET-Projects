@@ -99,7 +99,7 @@ namespace DashCamGPSView.Tools
 
             //timezone correction 
             TimeSpan delta = fileDateTime - _gpsInfo[0].FixTime;
-            _iGpsTimeZoneHours = (int)Math.Round(delta.TotalHours);
+            _iGpsTimeZoneHours = delta.Hours;
             delta -= TimeSpan.FromHours(_iGpsTimeZoneHours);
 
             _dGpsDelaySeconds = delta.TotalSeconds;

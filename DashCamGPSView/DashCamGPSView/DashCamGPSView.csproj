@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>DashMap.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -94,6 +97,7 @@
     <Compile Include="Controls\VideoPlayer.xaml.cs">
       <DependentUpon>VideoPlayer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tools\RelayCommand.cs" />
     <Page Include="Controls\CompassUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -228,6 +232,12 @@
   <ItemGroup>
     <Resource Include="Images\Folder48.png" />
     <Resource Include="Images\Movie48.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\GpsNav.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="DashMap.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

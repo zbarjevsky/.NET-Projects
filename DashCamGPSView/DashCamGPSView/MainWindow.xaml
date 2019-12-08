@@ -6,16 +6,23 @@
         xmlns:local="clr-namespace:DashCamGPSView"
         xmlns:controls="clr-namespace:DashCamGPSView.Controls"
         mc:Ignorable="d"
-        Loaded="Window_Loaded" Closed="Window_Closed"
+        Loaded="Window_Loaded" Closed="Window_Closed" PreviewKeyDown="Window_PreviewKeyDown"
         WindowStartupLocation="Manual"
         Left="10" Top="10"
-        Title="DashCam GPS Viewer" Height="750" Width="1600">
+        Title="DashCam GPS Viewer" Icon="DashMap.ico"
+        Height="750" Width="1600">
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.Open" CanExecute="Open_CanExecute" Executed="Open_Executed" />
         <CommandBinding Command="MediaCommands.Play" CanExecute="Play_CanExecute" Executed="Play_Executed" />
         <CommandBinding Command="MediaCommands.Pause" CanExecute="Pause_CanExecute" Executed="Pause_Executed" />
         <CommandBinding Command="MediaCommands.Stop" CanExecute="Stop_CanExecute" Executed="Stop_Executed" />
+        <CommandBinding Command="MediaCommands.NextTrack" CanExecute="Next_CanExecute" Executed="Next_Executed" />
+        <CommandBinding Command="MediaCommands.PreviousTrack" CanExecute="Prev_CanExecute" Executed="Prev_Executed" />
     </Window.CommandBindings>
+    <!--<Window.InputBindings>
+        <KeyBinding  Gesture="Space" Command="{Binding MediaCommands.Pause}"/>
+        <KeyBinding Key="Escape" Command="{Binding EscapeKeyCommand}"/>
+    </Window.InputBindings>-->
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="3*"/>
@@ -30,7 +37,7 @@
             <RowDefinition Height="5"/>
             <RowDefinition Height="5*"/>
             <RowDefinition Height="40"/>
-            <RowDefinition Height="120"/>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
         <Border Grid.Column="0" Grid.Row="1" BorderThickness="2" BorderBrush="Brown" Background="Beige">
@@ -58,6 +65,10 @@
                 <local:AutoGreyableImage Source="/DashCamGPSView;component/Images/map_32px.png" />
             </Button>
             <Separator />
+            <Button Command="MediaCommands.PreviousTrack" ToolTip="Previous File" >
+                <local:AutoGreyableImage Source="/Images/PrevE.png" />
+            </Button>
+            <Separator />
             <Button Command="MediaCommands.Play" ToolTip="Play" >
                 <local:AutoGreyableImage  Source="/Images/PlayE.png" />
             </Button>
@@ -67,11 +78,15 @@
             <Button Command="MediaCommands.Stop" ToolTip="Stop" >
                 <local:AutoGreyableImage Source="/Images/StopE.png" />
             </Button>
+            <Separator />
+            <Button Command="MediaCommands.NextTrack" ToolTip="Next File" >
+                <local:AutoGreyableImage Source="/Images/nextE.png" />
+            </Button>
             <TextBlock Name="txtFileName"  Text="..." VerticalAlignment="Center" Margin="10,0" FontSize="16"/>
         </ToolBar>
         
-        <TextBlock Name="txtGPSInfo" Grid.Row="5" Grid.ColumnSpan="3"  
-                   Text="GPS Info" 
+        <TextBox Name="txtGPSInfo" Grid.Row="5" Grid.ColumnSpan="3"  
+                   Text="GPS Info" IsReadOnly="True"
                    VerticalAlignment="Center" Margin="10,0" FontSize="22"/>
 
         <StatusBar Grid.Row="6" Grid.ColumnSpan="3">
@@ -87,7 +102,7 @@
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
             <StatusBarItem>
-                <TextBlock Name="lblProgressStatus">00:00:00</TextBlock>
+                <TextBlock Name="lblProgressStatus" FontSize="16">00:00:00</TextBlock>
             </StatusBarItem>
             <StatusBarItem Grid.Column="1" HorizontalContentAlignment="Stretch">
                 <Slider Name="sliProgress" 
@@ -97,7 +112,12 @@
                         ValueChanged="sliProgress_ValueChanged" />
             </StatusBarItem>
             <StatusBarItem Grid.Column="2">
-                <ProgressBar Name="pbVolume" Width="50" Height="12" Maximum="1" Value="{Binding ElementName=mePlayer, Path=Volume}" />
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Volume: " FontSize="16" />
+                    <Slider Name="pbVolume" Width="110" 
+                            Maximum="1" SmallChange="0.05" LargeChange="0.1"
+                            Value="{Binding ElementName=playerF, Path=Volume}" />
+                </StackPanel>
             </StatusBarItem>
         </StatusBar>
     </Grid>
