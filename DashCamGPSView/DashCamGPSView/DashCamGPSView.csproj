@@ -98,6 +98,7 @@
       <DependentUpon>VideoPlayer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tools\RelayCommand.cs" />
+    <Compile Include="Tools\Tools.cs" />
     <Page Include="Controls\CompassUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -238,6 +239,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="DashMap.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Screenshot.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

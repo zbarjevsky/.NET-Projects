@@ -9,6 +9,7 @@ using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -318,6 +319,17 @@ namespace DashCamGPSView
         {
             playerF.FitWindow();
             playerR.FitWindow();
+        }
+
+        private void Screenshot_Click(object sender, RoutedEventArgs e)
+        {
+            string fileName = @"C:\Temp\Screenshot.png";
+            if (_dashCamFileInfo != null)
+                fileName = _dashCamFileInfo.GetScreenshotFileName();
+
+            fileName = string.Format("{0}_at{1:0.00}.png", fileName, playerF.Position.TotalSeconds);
+            Tools.Tools.SaveWindowScreenshotToFile(this, fileName);
+            Process.Start(fileName);
         }
     }
 }

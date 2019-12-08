@@ -148,6 +148,22 @@ namespace DashCamGPSView.Tools
             return first;
         }
 
+        internal string GetScreenshotFileName()
+        {
+            string dirParent = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
+            if (GpsFileFormat == GpsFileFormat.DuDuBell)
+                dirParent = Path.Combine(dirParent, "DuDuBell");
+            else //if(GpsFileFormat == GpsFileFormat.Viofo)
+                dirParent = Path.Combine(dirParent, "DashcamScreenshots");
+
+            Directory.CreateDirectory(dirParent);
+
+            string fileName = Path.GetFileNameWithoutExtension(FrontFileName);
+            fileName = Path.Combine(dirParent, fileName);
+
+            return fileName;
+        }
+
         public override string ToString()
         {
             string name = Path.GetFileName(FrontFileName);
