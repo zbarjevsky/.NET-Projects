@@ -72,6 +72,9 @@
     <Compile Include="CustomMarkers\CustomMarkerCar.xaml.cs">
       <DependentUpon>CustomMarkerCar.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CustomMarkers\CustomMarkerRoute.xaml.cs">
+      <DependentUpon>CustomMarkerRoute.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Tools\AutoGreyableImage.cs" />
     <Compile Include="Controls\CompassUserControl.xaml.cs">
       <DependentUpon>CompassUserControl.xaml</DependentUpon>
@@ -143,6 +146,10 @@
     <Page Include="CustomMarkers\CustomMarkerRed.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="CustomMarkers\CustomMarkerRoute.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="CustomMarkers\Test.xaml">
       <Generator>MSBuild:Compile</Generator>

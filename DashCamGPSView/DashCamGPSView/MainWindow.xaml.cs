@@ -107,7 +107,7 @@ namespace DashCamGPSView
         private void PlayFile(string fileName)
         {
             ClosePayer();
-           if (!File.Exists(fileName))
+            if (!File.Exists(fileName))
                 return;
 
             treeGroups.SelectFile(fileName);
@@ -142,6 +142,7 @@ namespace DashCamGPSView
             playerR.Close();
             mediaPlayerIsPlaying = false;
             mediaPlayerIsPaused = false;
+            MainMap.UpdateRouteAndCar(null, 0);
         }
 
         private void PlayNext()
@@ -316,11 +317,7 @@ namespace DashCamGPSView
 
             GPSDataParser.GpsPointData inf = _dashCamFileInfo.FindGpsInfo(playerF.Position.TotalSeconds);
             gpsInfo.UpdateInfo(inf, _dashCamFileInfo.TimeZone);
-            if (inf != null)
-            {
-                //MainMap.Position = new PointLatLng(inf.Latitude, inf.Longitude);
-                MainMap.SetCarPosition(new PointLatLng(inf.Latitude, inf.Longitude), inf.Course);
-            }
+            MainMap.UpdateRouteAndCar(_dashCamFileInfo, playerF.Position.TotalSeconds);
         }
 
         private void GridSplitter1_DragCompleted(object sender, DragCompletedEventArgs e)

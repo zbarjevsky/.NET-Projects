@@ -21,6 +21,8 @@ using GMap.NET;
 using GMap.NET.MapProviders;
 using GMap.NET.WindowsPresentation;
 using DashCamGPSView.CustomMarkers;
+using GPSDataParser;
+using DashCamGPSView.Tools;
 
 namespace DashCamGPSView.Controls
 {
@@ -33,8 +35,7 @@ namespace DashCamGPSView.Controls
         //PointLatLng end;
 
         // marker
-        GMapMarker _currentMarker, _carMarker;
-        CustomMarkerCar _carMarkerUI;
+        GMapMarker _currentMarker;
         CustomMarkerRed _currentMarkerUI;
 
         // zones list
@@ -68,13 +69,26 @@ namespace DashCamGPSView.Controls
             }
         }
 
-        public void SetCarPosition(PointLatLng pos, double direction)
+        public void UpdateRouteAndCar(DashCamFileInfo dashCamFileInfo, double currentPlayingSecons)
         {
-            Position = pos;
-            _carMarker.Position = pos;
-            _carMarkerUI.Direction = direction;
-            _currentMarkerUI.Visibility = Visibility.Visible;
+            if (dashCamFileInfo == null || dashCamFileInfo.GpsInfo == null)
+            {
+                _route.UpdateRouteAndCar(null, null, null);
+                return;
+            }
+
+            GPSDataParser.GpsPointData inf = dashCamFileInfo.FindGpsInfo(currentPlayingSecons);
+            PointLatLng currentPosition = new PointLatLng(inf.Latitude, inf.Longitude);
+            GMap.Position = currentPosition;
+            _route.UpdateRouteAndCar(dashCamFileInfo.GpsInfo, inf, GMap);
         }
+
+        //internal void UpdateCarPosition(PointLatLng pointLatLng, double course)
+        //{
+        //    GPoint pt = GMap.FromLatLngToLocal(pointLatLng);
+        //    _car.UpdatePosition(pt.X, pt.Y, course);
+        //    GMap.Position = pointLatLng;
+        //}
 
         public PointLatLng FromLocalToLatLng(int x, int y)
         {
@@ -132,12 +146,6 @@ namespace DashCamGPSView.Controls
             _currentMarkerUI.Visibility = Visibility.Hidden;
             _currentMarker.ZIndex = int.MaxValue;
             GMap.Markers.Add(_currentMarker);
-
-            // set current marker
-            _carMarker = new GMapMarker(GMap.Position);
-            _carMarkerUI = new CustomMarkerCar(GMap, _carMarker, "car position marker");
-            _carMarker.ZIndex = int.MaxValue;
-            GMap.Markers.Add(_carMarker);
         }
 
         private void MainMap_Loaded(object sender, RoutedEventArgs e)

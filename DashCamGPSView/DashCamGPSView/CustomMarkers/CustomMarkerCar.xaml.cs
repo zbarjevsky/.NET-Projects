@@ -20,29 +20,19 @@ namespace DashCamGPSView.CustomMarkers
     /// <summary>
     /// Interaction logic for CustomMarkerCar.xaml
     /// </summary>
-    public partial class CustomMarkerCar : CustomMarkerBase
+    public partial class CustomMarkerCar : UserControl
     {
-        public double Direction
-        {
-            get { return arrowDirection.Angle; }
-            set { arrowDirection.Angle = value; }
-        }
-
-        public CustomMarkerCar(GMapControl map, GMapMarker marker, string title) 
-            : base(map, marker, title)
+        public CustomMarkerCar()
         {
             InitializeComponent();
-
-            base.SetImage(icon);
-
-            marker.Offset = new Point();
-
-            IsDraggable = false; //do not allow to drag control
         }
 
-        public override void UpdateOffset(double width, double heigth)
+        public void UpdatePosition(double top, double left, double direction)
         {
-            _marker.Offset = new Point(-width / 2, -heigth / 2); //center
+            arrowDirection.Angle = direction;
+
+            Canvas.SetTop(_car, top);
+            Canvas.SetLeft(_car, left);
         }
     }
 }
