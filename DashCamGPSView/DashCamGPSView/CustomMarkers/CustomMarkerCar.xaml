@@ -1,0 +1,17 @@
+﻿<local:CustomMarkerBase x:Class="DashCamGPSView.CustomMarkers.CustomMarkerCar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DashCamGPSView.CustomMarkers"
+             mc:Ignorable="d" 
+             Height="40" Width="40" Opacity="0.7">
+    <Image Name="icon" Source="/Images/CompassCarRed.png" VerticalAlignment="Center" HorizontalAlignment="Center" >
+        <Image.LayoutTransform>
+            <TransformGroup>
+                <ScaleTransform/>
+                <RotateTransform x:Name="arrowDirection" Angle="90" />
+            </TransformGroup>
+        </Image.LayoutTransform>
+    </Image>
+</local:CustomMarkerBase>

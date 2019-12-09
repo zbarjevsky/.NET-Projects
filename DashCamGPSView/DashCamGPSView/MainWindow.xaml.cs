@@ -318,7 +318,8 @@ namespace DashCamGPSView
             gpsInfo.UpdateInfo(inf, _dashCamFileInfo.TimeZone);
             if (inf != null)
             {
-                MainMap.Position = new PointLatLng(inf.Latitude, inf.Longitude);
+                //MainMap.Position = new PointLatLng(inf.Latitude, inf.Longitude);
+                MainMap.SetCarPosition(new PointLatLng(inf.Latitude, inf.Longitude), inf.Course);
             }
         }
 

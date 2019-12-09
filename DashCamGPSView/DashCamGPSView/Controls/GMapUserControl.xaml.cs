@@ -33,7 +33,9 @@ namespace DashCamGPSView.Controls
         //PointLatLng end;
 
         // marker
-        GMapMarker currentMarker;
+        GMapMarker _currentMarker, _carMarker;
+        CustomMarkerCar _carMarkerUI;
+        CustomMarkerRed _currentMarkerUI;
 
         // zones list
         List<GMapMarker> Circles = new List<GMapMarker>();
@@ -59,7 +61,18 @@ namespace DashCamGPSView.Controls
         public PointLatLng Position
         {
             get { return GMap.Position; }
-            set { GMap.Position = value; OnPropertyChanged(); }
+            set 
+            { 
+                GMap.Position = value; 
+                OnPropertyChanged(); 
+            }
+        }
+
+        public void SetCarPosition(PointLatLng pos, double direction)
+        {
+            Position = pos;
+            _carMarker.Position = pos;
+            _carMarkerUI.Direction = direction;
         }
 
         public PointLatLng FromLocalToLatLng(int x, int y)
@@ -80,15 +93,15 @@ namespace DashCamGPSView.Controls
             cmbMapType.Items.Add(GMapProviders.BingMap);
             cmbMapType.Items.Add(GMapProviders.BingHybridMap);
             cmbMapType.Items.Add(GMapProviders.BingSatelliteMap);
-            cmbMapType.Items.Add(GMapProviders.YahooMap);
-            cmbMapType.Items.Add(GMapProviders.YahooHybridMap);
-            cmbMapType.Items.Add(GMapProviders.YahooSatelliteMap);
-            cmbMapType.Items.Add(GMapProviders.OviMap);
-            cmbMapType.Items.Add(GMapProviders.OviHybridMap);
-            cmbMapType.Items.Add(GMapProviders.OviSatelliteMap);
-            cmbMapType.Items.Add(GMapProviders.NearMap);
-            cmbMapType.Items.Add(GMapProviders.NearHybridMap);
-            cmbMapType.Items.Add(GMapProviders.NearSatelliteMap);
+            //cmbMapType.Items.Add(GMapProviders.YahooMap);
+            //cmbMapType.Items.Add(GMapProviders.YahooHybridMap);
+            //cmbMapType.Items.Add(GMapProviders.YahooSatelliteMap);
+            //cmbMapType.Items.Add(GMapProviders.OviMap);
+            //cmbMapType.Items.Add(GMapProviders.OviHybridMap);
+            //cmbMapType.Items.Add(GMapProviders.OviSatelliteMap);
+            //cmbMapType.Items.Add(GMapProviders.NearMap);
+            //cmbMapType.Items.Add(GMapProviders.NearHybridMap);
+            //cmbMapType.Items.Add(GMapProviders.NearSatelliteMap);
 
             // set cache mode only if no internet avaible
             if (!Stuff.PingNetwork("pingtest.com"))
@@ -97,10 +110,11 @@ namespace DashCamGPSView.Controls
                 MessageBox.Show("No internet connection available, going to CacheOnly mode.", "GMap.NET - Demo.WindowsPresentation", MessageBoxButton.OK, MessageBoxImage.Warning);
             }
 
-            // config map
+            //default config map
             GMap.MapProvider = GMapProviders.GoogleMap;
 
             //this.ScaleMode = ScaleModes.Dynamic;
+            GMap.ShowCenter = false;
 
             // map events
             GMap.Loaded += MainMap_Loaded;
@@ -112,13 +126,16 @@ namespace DashCamGPSView.Controls
             GMap.MouseEnter += MainMap_MouseEnter;
 
             // set current marker
-            currentMarker = new GMapMarker(GMap.Position);
-            {
-                currentMarker.Shape = new CustomMarkerRed(GMap, currentMarker, "custom position marker");
-                currentMarker.Offset = new System.Windows.Point(-15, -15);
-                currentMarker.ZIndex = int.MaxValue;
-                GMap.Markers.Add(currentMarker);
-            }
+            _currentMarker = new GMapMarker(GMap.Position);
+            _currentMarkerUI = new CustomMarkerRed(GMap, _currentMarker, "custom position marker");
+            _currentMarker.ZIndex = int.MaxValue;
+            GMap.Markers.Add(_currentMarker);
+
+            // set current marker
+            _carMarker = new GMapMarker(GMap.Position);
+            _carMarkerUI = new CustomMarkerCar(GMap, _carMarker, "car position marker");
+            _carMarker.ZIndex = int.MaxValue;
+            GMap.Markers.Add(_carMarker);
         }
 
         private void MainMap_Loaded(object sender, RoutedEventArgs e)
@@ -416,8 +433,8 @@ namespace DashCamGPSView.Controls
 
         void MainMap_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
-            System.Windows.Point p = e.GetPosition(this);
-            currentMarker.Position = GMap.FromLocalToLatLng((int)p.X, (int)p.Y);
+            System.Windows.Point p = e.GetPosition(GMap);
+            _currentMarker.Position = GMap.FromLocalToLatLng((int)p.X, (int)p.Y);
         }
 
         // move current marker with left holding
@@ -426,7 +443,7 @@ namespace DashCamGPSView.Controls
             if (e.LeftButton == System.Windows.Input.MouseButtonState.Pressed)
             {
                 System.Windows.Point p = e.GetPosition(this);
-                currentMarker.Position = GMap.FromLocalToLatLng((int)p.X, (int)p.Y);
+                _currentMarker.Position = GMap.FromLocalToLatLng((int)p.X, (int)p.Y);
             }
         }
 

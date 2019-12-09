@@ -68,6 +68,10 @@
     <Compile Include="Controls\GpsInfoUserControl.xaml.cs">
       <DependentUpon>GpsInfoUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CustomMarkers\CustomMarkerBase.cs" />
+    <Compile Include="CustomMarkers\CustomMarkerCar.xaml.cs">
+      <DependentUpon>CustomMarkerCar.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Tools\AutoGreyableImage.cs" />
     <Compile Include="Controls\CompassUserControl.xaml.cs">
       <DependentUpon>CompassUserControl.xaml</DependentUpon>
@@ -82,8 +86,8 @@
     <Compile Include="CustomMarkers\Cross.xaml.cs">
       <DependentUpon>Cross.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CustomMarkers\CustomMarkerDemo.xaml.cs">
-      <DependentUpon>CustomMarkerDemo.xaml</DependentUpon>
+    <Compile Include="CustomMarkers\CustomMarkerGreen.xaml.cs">
+      <DependentUpon>CustomMarkerGreen.xaml</DependentUpon>
     </Compile>
     <Compile Include="CustomMarkers\CustomMarkerRed.xaml.cs">
       <DependentUpon>CustomMarkerRed.xaml</DependentUpon>
@@ -128,7 +132,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="CustomMarkers\CustomMarkerDemo.xaml">
+    <Page Include="CustomMarkers\CustomMarkerCar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="CustomMarkers\CustomMarkerGreen.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
