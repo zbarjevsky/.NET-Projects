@@ -22,6 +22,8 @@ namespace DashCamGPSView.CustomMarkers
 
         protected GMapMarker _marker;
 
+        public bool IsDraggable = true; //allow to drag control
+
         public void SetImage(Image image)
         {
             _image = image;
@@ -34,13 +36,14 @@ namespace DashCamGPSView.CustomMarkers
 
         public CustomMarkerBase(GMapControl map, GMapMarker marker, string title)
         {
-            this._map = map;
-            this._marker = marker;
+            _map = map;
+
+            _marker = marker;
+            _marker.Shape = this;
 
             _popup = new Popup();
             _label = new Label();
 
-            marker.Shape = this;
 
             this.Loaded += new RoutedEventHandler(MarkerControl_Loaded);
             this.Unloaded += new RoutedEventHandler(MarkerControl_Unloaded);
@@ -99,7 +102,7 @@ namespace DashCamGPSView.CustomMarkers
 
         void MarkerControl_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed && IsMouseCaptured)
+            if (e.LeftButton == MouseButtonState.Pressed && IsMouseCaptured && IsDraggable)
             {
                 Point p = e.GetPosition(_map);
                 _marker.Position = _map.FromLocalToLatLng((int)p.X, (int)p.Y);

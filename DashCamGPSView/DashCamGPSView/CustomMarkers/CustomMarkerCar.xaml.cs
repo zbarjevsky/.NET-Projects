@@ -36,6 +36,8 @@ namespace DashCamGPSView.CustomMarkers
             base.SetImage(icon);
 
             marker.Offset = new Point();
+
+            IsDraggable = false; //do not allow to drag control
         }
 
         public override void UpdateOffset(double width, double heigth)

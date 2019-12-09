@@ -73,6 +73,7 @@ namespace DashCamGPSView.Controls
             Position = pos;
             _carMarker.Position = pos;
             _carMarkerUI.Direction = direction;
+            _currentMarkerUI.Visibility = Visibility.Visible;
         }
 
         public PointLatLng FromLocalToLatLng(int x, int y)
@@ -111,7 +112,7 @@ namespace DashCamGPSView.Controls
             }
 
             //default config map
-            GMap.MapProvider = GMapProviders.GoogleMap;
+            GMap.MapProvider = GMapProviders.GoogleTerrainMap;
 
             //this.ScaleMode = ScaleModes.Dynamic;
             GMap.ShowCenter = false;
@@ -128,6 +129,7 @@ namespace DashCamGPSView.Controls
             // set current marker
             _currentMarker = new GMapMarker(GMap.Position);
             _currentMarkerUI = new CustomMarkerRed(GMap, _currentMarker, "custom position marker");
+            _currentMarkerUI.Visibility = Visibility.Hidden;
             _currentMarker.ZIndex = int.MaxValue;
             GMap.Markers.Add(_currentMarker);
 
