@@ -1,4 +1,5 @@
-﻿using GMap.NET.WindowsPresentation;
+﻿using DashCamGPSView.Tools;
+using GMap.NET.WindowsPresentation;
 using GPSDataParser;
 using System;
 using System.Collections.Generic;
@@ -27,6 +28,8 @@ namespace DashCamGPSView.CustomMarkers
     {
         public List<GpsPointData> Route = new List<GpsPointData>();
 
+        private int _iCurrentPointIndex = -1;
+
         //public Point StartPoint { get; set; } = new Point();
         //public ObservableCollection<Point> Points { get; set; } = new ObservableCollection<Point>();
 
@@ -34,32 +37,49 @@ namespace DashCamGPSView.CustomMarkers
         {
             InitializeComponent();
 
-            UpdateRouteAndCar(null, null, null);
+            UpdateRouteAndCar(null, -1, null);
         }
 
-        public void UpdateRouteAndCar(List<GpsPointData> route, GPSDataParser.GpsPointData inf, GMapControl map)
+        public void UpdateRouteAndCar(List<GpsPointData> data, int idx, GMapControl map)
         {
             Route.Clear();
             _figure.StartPoint = new Point();
             _segment.Points.Clear();
+            _iCurrentPointIndex = -1;
             Visibility = Visibility.Hidden;
-            if (route == null || route.Count < 3)
+
+            if (data == null || data.Count == 0)
                 return;
 
-            Route.Add(route[0]);
-            _figure.StartPoint = GetPoint(route[0], map);
-            for (int i = 1; i < route.Count; i++)
+            _iCurrentPointIndex = idx;
+            Route = new List<GpsPointData>(data); //copy
+
+            UpdateRouteAndCarRefresh(map);
+        }
+
+        /// <summary>
+        /// Map moved to new position by dragging
+        /// </summary>
+        /// <param name="point"></param>
+        public void UpdateRouteAndCarRefresh(GMapControl map)
+        {
+            _segment.Points.Clear();
+            if (Route.Count == 0)
+                return;
+
+            _figure.StartPoint = GetPoint(Route[0], map);
+            for (int i = 1; i < Route.Count; i++)
             {
-                Route.Add(route[i]);
-                _segment.Points.Add(GetPoint(route[i], map));
+                _segment.Points.Add(GetPoint(Route[i], map));
             }
 
-            GMap.NET.PointLatLng currentPosition = new GMap.NET.PointLatLng(inf.Latitude, inf.Longitude);
-            GMap.NET.GPoint ptCar = map.FromLatLngToLocal(currentPosition);
+            GMap.NET.PointLatLng currentPosition = new GMap.NET.PointLatLng(Route[_iCurrentPointIndex].Latitude, Route[_iCurrentPointIndex].Longitude);
+            GMap.NET.GPoint pt0 = map.FromLatLngToLocal(currentPosition);
+            Point ptCar = new Point(pt0.X, pt0.Y);
 
             Canvas.SetLeft(_car, ptCar.X - 20);
             Canvas.SetTop(_car, ptCar.Y - 20);
-            arrowDirection.Angle = inf.Course;
+            arrowDirection.Angle = Route[_iCurrentPointIndex].Course;
 
             Visibility = Visibility.Visible;
         }

@@ -315,9 +315,9 @@ namespace DashCamGPSView
 
             txtGPSInfo.Text = _dashCamFileInfo.GetLocationInfoForTime(playerF.Position.TotalSeconds);
 
-            GPSDataParser.GpsPointData inf = _dashCamFileInfo.FindGpsInfo(playerF.Position.TotalSeconds);
-            gpsInfo.UpdateInfo(inf, _dashCamFileInfo.TimeZone);
-            MainMap.UpdateRouteAndCar(_dashCamFileInfo, playerF.Position.TotalSeconds);
+            int idx = _dashCamFileInfo.FindGpsInfo(playerF.Position.TotalSeconds);
+            gpsInfo.UpdateInfo(_dashCamFileInfo.GpsInfo[idx], _dashCamFileInfo.TimeZone);
+            MainMap.UpdateRouteAndCar(_dashCamFileInfo, idx);
         }
 
         private void GridSplitter1_DragCompleted(object sender, DragCompletedEventArgs e)

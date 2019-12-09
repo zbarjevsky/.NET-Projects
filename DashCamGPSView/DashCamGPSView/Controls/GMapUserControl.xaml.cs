@@ -69,18 +69,19 @@ namespace DashCamGPSView.Controls
             }
         }
 
-        public void UpdateRouteAndCar(DashCamFileInfo dashCamFileInfo, double currentPlayingSecons)
+        public void UpdateRouteAndCar(DashCamFileInfo dashCamFileInfo, int idx)
         {
             if (dashCamFileInfo == null || dashCamFileInfo.GpsInfo == null)
             {
-                _route.UpdateRouteAndCar(null, null, null);
+                _route.UpdateRouteAndCar(null, -1, null);
                 return;
             }
 
-            GPSDataParser.GpsPointData inf = dashCamFileInfo.FindGpsInfo(currentPlayingSecons);
+            GPSDataParser.GpsPointData inf = dashCamFileInfo.GpsInfo[idx];
             PointLatLng currentPosition = new PointLatLng(inf.Latitude, inf.Longitude);
             GMap.Position = currentPosition;
-            _route.UpdateRouteAndCar(dashCamFileInfo.GpsInfo, inf, GMap);
+
+            _route.UpdateRouteAndCar(dashCamFileInfo.GpsInfo, idx, GMap);
         }
 
         //internal void UpdateCarPosition(PointLatLng pointLatLng, double course)
@@ -126,7 +127,7 @@ namespace DashCamGPSView.Controls
             }
 
             //default config map
-            GMap.MapProvider = GMapProviders.GoogleTerrainMap;
+            GMap.MapProvider = GMapProviders.GoogleMap;
 
             //this.ScaleMode = ScaleModes.Dynamic;
             GMap.ShowCenter = false;
@@ -139,6 +140,7 @@ namespace DashCamGPSView.Controls
             GMap.MouseMove += MainMap_MouseMove;
             GMap.MouseLeftButtonDown += MainMap_MouseLeftButtonDown;
             GMap.MouseEnter += MainMap_MouseEnter;
+            GMap.OnMapZoomChanged += MainMap_ZoomChanged;
 
             // set current marker
             _currentMarker = new GMapMarker(GMap.Position);
@@ -441,6 +443,14 @@ namespace DashCamGPSView.Controls
             //sliderZoom.Maximum = MainMap.MaxZoom;
         }
 
+        void MainMap_ZoomChanged()
+        {
+             _route.UpdateRouteAndCarRefresh(GMap);
+
+           //sliderZoom.Minimum = MainMap.MinZoom;
+            //sliderZoom.Maximum = MainMap.MaxZoom;
+        }
+
         void MainMap_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             System.Windows.Point p = e.GetPosition(GMap);
@@ -496,6 +506,7 @@ namespace DashCamGPSView.Controls
         // current location changed
         void MainMap_OnCurrentPositionChanged(PointLatLng point)
         {
+            _route.UpdateRouteAndCarRefresh(GMap);
             //mapgroup.Header = "gmap: " + point;
         }
 

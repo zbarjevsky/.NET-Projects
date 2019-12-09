@@ -121,31 +121,31 @@ namespace DashCamGPSView.Tools
 
         internal string GetLocationInfoForTime(double totalSeconds)
         {
-            GpsPointData inf = FindGpsInfo(totalSeconds);
-            if (inf == null)
+            int idx = FindGpsInfo(totalSeconds);
+            if (idx < 0)
                 return "No GPS info...";
-            string info = "Time: " + inf.FixTime.AddHours(_iGpsTimeZoneHours).ToString("yyyy/MM/dd HH:mm:ss") + 
-                ", " + new PointLatLng(inf.Latitude, inf.Longitude).ToString() + 
-                ", Speed: " + inf.SpeedMph.ToString("0.0") + 
-                ", Azimuth: " + inf.Course;
+
+            string info = "Time: " + GpsInfo[idx].FixTime.AddHours(_iGpsTimeZoneHours).ToString("yyyy/MM/dd HH:mm:ss") + 
+                ", " + new PointLatLng(GpsInfo[idx].Latitude, GpsInfo[idx].Longitude).ToString() + 
+                ", Speed: " + GpsInfo[idx].SpeedMph.ToString("0.0") + 
+                ", Azimuth: " + GpsInfo[idx].Course;
             return info;
         }
 
-        internal GpsPointData FindGpsInfo(double elapsedSeconds)
+        internal int FindGpsInfo(double elapsedSeconds)
         {
             if (_gpsInfo == null || _gpsInfo.Count == 0)
-                return null;
+                return -1;
 
             elapsedSeconds += _dGpsDelaySeconds; //correct for GPS delay
 
-            GpsPointData first = _gpsInfo[0] as GpsPointData;
-            foreach (GpsPointData i in _gpsInfo)
+            for (int i = 0; i < _gpsInfo.Count; i++)
             {
-                TimeSpan delta = i.FixTime - first.FixTime;
+                TimeSpan delta = _gpsInfo[i].FixTime - _gpsInfo[0].FixTime;
                 if (delta.TotalSeconds >= (elapsedSeconds))
                     return i;
             }
-            return first;
+            return 0;
         }
 
         internal string GetScreenshotFileName()
