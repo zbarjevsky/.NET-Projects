@@ -16,7 +16,7 @@ namespace ZipOutput
             {
                 if (args == null || args.Length < 2)
                 {
-                    Console.WriteLine("Not enough parameters - need: DirectoryName ZipFileName");
+                    Console.WriteLine("Error: Not enough parameters - need: DirectoryName ZipFileName");
                     return;
                 }
 
@@ -27,7 +27,7 @@ namespace ZipOutput
 
                 if(!Directory.Exists(DirectoryName))
                 {
-                    Console.WriteLine("Directry does not exists: " + DirectoryName);
+                    Console.WriteLine("Error: Directry does not exists: " + DirectoryName);
                     return;
                 }
 
