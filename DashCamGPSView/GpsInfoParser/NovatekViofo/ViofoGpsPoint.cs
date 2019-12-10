@@ -71,7 +71,8 @@ namespace NovatekViofoGPSParser
             }
             else if ((char)data[pos] == 'L')
             {
-                pos = 48;
+                const uint OFFSET_V2 = 48, OFFSET_V1 = 16; 
+                pos = OFFSET_V2;
 
                 //# Datetime data
                 int hour = (int)Box.ReadUintLE(data, pos); pos += 4;
