@@ -15,6 +15,28 @@ namespace CommandsProcessor
         //Regex="(\d+)\.(\d+)\.(\d+)\.(\d+)"
         //ReplacementText="$1.$2.$3.$(Revision)"
 
+
+        public static void UpdateVersionWithTodaysDate(string assemblyInfoFileName)
+        {
+            if (!File.Exists(assemblyInfoFileName))
+            {
+                Console.WriteLine("Error - AssemblyInfo file not found: " + assemblyInfoFileName);
+                return;
+            }
+
+            //"[assembly: AssemblyFileVersion(\"1.03.2019.28356\")]";
+            string info = File.ReadAllText(assemblyInfoFileName);
+
+            //Match m = Regex.Match(assemblyInfoFileText, @"(?<major>\d{1,3})\.(?<minor>\d{1,3})\.(?<build>\d{1,3})\.(?<revision>\d{1,3})");
+            string newVersionFormat = string.Format(@"$1.$2.{0}", DateTime.Now.ToString("yyyy.MMdd"));
+            string res = Regex.Replace(info, @"(\d+)\.(\d+)\.(\d+)\.(\d+)", newVersionFormat);
+
+            File.WriteAllText(assemblyInfoFileName, res);
+
+            Match m = Regex.Match(res, @"(\d+)\.(\d+)\.(\d+)\.(\d+)");
+            Console.WriteLine("Version Updated Successfully to: " + m.ToString());
+        }
+
         public static void SetVersionAsYYYYMMDD_InAssemblyVersion(string fileName)
         {
             FileInfo fi = new FileInfo(fileName);

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using CommandsProcessor;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
@@ -8,7 +10,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace ZipOutput
+namespace CommandsProcessor
 {
     class Program
     {
@@ -22,7 +24,7 @@ namespace ZipOutput
                     return;
                 }
 
-                if (args[0] == "zip")
+                if (args[0] == "ZipBinaries")
                 {
                     string DirectoryName = Path.GetFullPath(args[1]);
                     string ZipFileName = Path.GetFullPath(args[2]);
@@ -46,17 +48,10 @@ namespace ZipOutput
 
                     ZipFile.CreateFromDirectory(DirectoryName, ZipFileName);
                 }
-                else if (args[0] == "ver")
+                else if (args[0] == "UpdateVersion")
                 {
                     string assemblyInfoFileName = args[1];
-                    if (!File.Exists(assemblyInfoFileName))
-                    {
-                        Console.WriteLine("Error: assemblyInfoFileName does not exists: " + assemblyInfoFileName);
-                        return;
-                    }
-
-                    string assemblyInfoFileText = File.ReadAllText(assemblyInfoFileName);
-                    Match m = Regex.Match(assemblyInfoFileText, @"(?<major>\d{1,3})\.(?<minor>\d{1,3})\.(?<build>\d{1,3})\.(?<revision>\d{1,3})");
+                    AssemblyInfoTools.UpdateVersionWithTodaysDate(assemblyInfoFileName);
                 }
             }
             catch (Exception err)

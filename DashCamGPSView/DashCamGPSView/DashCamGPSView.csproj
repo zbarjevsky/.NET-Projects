@@ -38,7 +38,7 @@
     <ApplicationIcon>DashMap.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup>
-    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+    <RunPostBuildEvent>Always</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -271,5 +271,8 @@
   <PropertyGroup>
     <PostBuildEvent>if "$(ConfigurationName)" == "Release" xcopy /s /f /r /y $(TargetDir)\*.* $(SolutionDir)\..\Binaries\$(ProjectName)\
 </PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>$(SolutionDir)CommandLineProcessor\bin\$(ConfigurationName)\CmdProc.exe UpdateVersion $(ProjectDir)Properties\AssemblyInfo.cs</PreBuildEvent>
   </PropertyGroup>
 </Project>

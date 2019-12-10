@@ -75,4 +75,7 @@
     <None Include="NovatekViofo\nvtk_mp42gpx.py" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>$(SolutionDir)CommandLineProcessor\bin\$(ConfigurationName)\CmdProc.exe UpdateVersion $(ProjectDir)Properties\AssemblyInfo.cs</PreBuildEvent>
+  </PropertyGroup>
 </Project>
