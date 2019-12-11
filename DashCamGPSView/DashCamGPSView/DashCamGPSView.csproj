@@ -109,6 +109,7 @@
     <Compile Include="Controls\VideoPlayer.xaml.cs">
       <DependentUpon>VideoPlayer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tools\ExportUtils.cs" />
     <Compile Include="Tools\RelayCommand.cs" />
     <Compile Include="Tools\Tools.cs" />
     <Page Include="Controls\CompassUserControl.xaml">
@@ -237,6 +238,10 @@
       <Project>{08fd88c1-418b-4376-806d-f3ed46ba3c0c}</Project>
       <Name>GpsInfoParser</Name>
     </ProjectReference>
+    <ProjectReference Include="..\SharpKml\SharpKml.csproj">
+      <Project>{B6DAB18D-4A2A-4FC8-882D-40485251670D}</Project>
+      <Name>SharpKml</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="CustomMarkers\bigMarkerGreen.png" />
@@ -266,6 +271,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Screenshot.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <SplashScreen Include="SplashScreen.png" />
+    <Resource Include="SplashScreen1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -41,6 +41,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FileFormats\gpx.cs" />
+    <Compile Include="FileFormats\GPX\GpsLocation.cs" />
+    <Compile Include="FileFormats\GPX\Gpx.cs" />
+    <Compile Include="FileFormats\GPX\GpxProperties.cs" />
+    <Compile Include="FileFormats\GPX\GpxReader.cs" />
+    <Compile Include="FileFormats\GPX\GpxWriter.cs" />
     <Compile Include="GpsPointData.cs" />
     <Compile Include="NMEA\IMultiPartMessage.cs" />
     <Compile Include="NMEA\NmeaMessageReceivedEventArgs.cs" />
@@ -73,6 +79,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="NovatekViofo\nvtk_mp42gpx.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="FileFormats\GPX\licence.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="FileFormats\KML\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

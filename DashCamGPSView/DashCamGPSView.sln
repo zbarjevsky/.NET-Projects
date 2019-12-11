@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GpsInfoParser", "GpsInfoPar
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommandLineProcessor", "CommandLineProcessor\CommandLineProcessor.csproj", "{3176A30D-CE85-4326-951D-0357870ABBA6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SharpKml", "SharpKml\SharpKml.csproj", "{B6DAB18D-4A2A-4FC8-882D-40485251670D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,14 @@ Global
 		{3176A30D-CE85-4326-951D-0357870ABBA6}.v4.0-Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3176A30D-CE85-4326-951D-0357870ABBA6}.v4.0-Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3176A30D-CE85-4326-951D-0357870ABBA6}.v4.0-Release|Any CPU.Build.0 = Release|Any CPU
+		{B6DAB18D-4A2A-4FC8-882D-40485251670D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6DAB18D-4A2A-4FC8-882D-40485251670D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6DAB18D-4A2A-4FC8-882D-40485251670D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6DAB18D-4A2A-4FC8-882D-40485251670D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B6DAB18D-4A2A-4FC8-882D-40485251670D}.v4.0-Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B6DAB18D-4A2A-4FC8-882D-40485251670D}.v4.0-Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B6DAB18D-4A2A-4FC8-882D-40485251670D}.v4.0-Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B6DAB18D-4A2A-4FC8-882D-40485251670D}.v4.0-Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

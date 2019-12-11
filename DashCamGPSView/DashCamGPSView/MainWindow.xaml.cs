@@ -24,6 +24,7 @@ using DashCamGPSView.Tools;
 using GMap.NET;
 using GMap.NET.MapProviders;
 using GMap.NET.WindowsPresentation;
+using GPSDataParser;
 
 namespace DashCamGPSView
 {
@@ -55,6 +56,11 @@ namespace DashCamGPSView
             treeGroups.OpenFileAction = () =>
             {
                 OpenVideoFile();
+            };
+
+            treeGroups.ExportGPSAction = (infos) =>
+            {
+                ExportGPSData(infos);
             };
 
             playerF.VideoEnded = () => { PlayNext(); };
@@ -178,6 +184,36 @@ namespace DashCamGPSView
                 PlayFile(openFileDialog.FileName);
                 playerF.FitWidth();
                 playerR.FitWidth();
+            }
+        }
+
+        private void ExportGPSData(List<DashCamFileInfo> infos)
+        {
+            if (infos == null || infos.Count == 0)
+                return;
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.Filter = "Google GPS Format (KML) (*.kml)|*.kml|GPS Exchange Format (GPX) (*.gpx)|*.gpx";
+            saveFileDialog.FilterIndex = 1;
+            string baseFileName = System.IO.Path.GetFileNameWithoutExtension(infos[0].FrontFileName);
+            saveFileDialog.FileName = string.Format("TrackData_{0}.kml", baseFileName);
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                List<GpsPointData> list = new List<GpsPointData>();
+                foreach (DashCamFileInfo info in infos)
+                {
+                    if(info.GpsInfo != null && info.GpsInfo.Count > 0)
+                        list.AddRange(info.GpsInfo);
+                }
+                try
+                {
+                    ExportUtils.SaveGPSData(list, saveFileDialog.FileName);
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show(this, err.Message, "Error");
+                }            
             }
         }
 
@@ -316,7 +352,8 @@ namespace DashCamGPSView
             txtGPSInfo.Text = _dashCamFileInfo.GetLocationInfoForTime(playerF.Position.TotalSeconds);
 
             int idx = _dashCamFileInfo.FindGpsInfo(playerF.Position.TotalSeconds);
-            gpsInfo.UpdateInfo(_dashCamFileInfo.GpsInfo[idx], _dashCamFileInfo.TimeZone);
+            if(_dashCamFileInfo.GpsInfo != null && _dashCamFileInfo.GpsInfo.Count > idx)
+                gpsInfo.UpdateInfo(_dashCamFileInfo.GpsInfo[idx], _dashCamFileInfo.TimeZone);
             MainMap.UpdateRouteAndCar(_dashCamFileInfo, idx);
         }
 

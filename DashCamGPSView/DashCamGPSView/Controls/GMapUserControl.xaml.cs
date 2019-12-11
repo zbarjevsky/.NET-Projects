@@ -570,7 +570,7 @@ namespace DashCamGPSView.Controls
                Zoom, this.MapProvider, _counter++, _elapsedMilliseconds, _delta);
 
             FormattedText text = new FormattedText(msg, CultureInfo.InvariantCulture,
-                FlowDirection.LeftToRight, _tf, 20, Brushes.Blue);
+                FlowDirection.LeftToRight, _tf, 20, Brushes.DarkOliveGreen);
 
             drawingContext.DrawText(text, new Point(4, 50));
 

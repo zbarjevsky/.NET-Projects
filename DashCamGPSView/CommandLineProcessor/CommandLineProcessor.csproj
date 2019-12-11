@@ -59,6 +59,12 @@
     <PostBuildEvent>if "$(ConfigurationName)" == "Release" (
  $(TargetPath) ZipBinaries $(SolutionDir)\..\Binaries\DashCamGPSView $(SolutionDir)\..\Binaries\DashCamGPSView.zip
 )
+
 </PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>if exist "$(TargetPath)" (
+$(TargetPath) UpdateVersion $(ProjectDir)Properties\AssemblyInfo.cs 
+)</PreBuildEvent>
   </PropertyGroup>
 </Project>

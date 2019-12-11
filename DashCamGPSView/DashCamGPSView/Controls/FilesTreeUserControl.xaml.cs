@@ -25,7 +25,7 @@ namespace DashCamGPSView.Controls
     {
         public Action<string> TreeItemDoubleClickAction = (fileName) => { };
         public Action OpenFileAction = () => { };
-        public Action ExportGPSAction = () => { };
+        public Action<List<DashCamFileInfo>> ExportGPSAction = (infos) => { };
 
         public FilesTreeUserControl()
         {
@@ -132,8 +132,18 @@ namespace DashCamGPSView.Controls
             {
                 if (item.DataContext is VideoGroup g)
                 {
-                    if (g.Members.Count == 0)
-                        ExportGPSAction();
+                    if (g.Members.Count > 0)
+                    {
+                        List<DashCamFileInfo> infos = new List<DashCamFileInfo>();
+                        foreach (VideoFile v in g.Members)
+                            infos.Add(v._dashCamFileInfo);
+
+                        ExportGPSAction(infos);
+                    }
+                }
+                else if (item.DataContext is VideoFile v)
+                {
+                    ExportGPSAction(new List<DashCamFileInfo>() { v._dashCamFileInfo });
                 }
             }
         }
@@ -190,7 +200,7 @@ namespace DashCamGPSView.Controls
 
     public class VideoFile
     {
-        private DashCamFileInfo _dashCamFileInfo = null;
+        public DashCamFileInfo _dashCamFileInfo { get; } = null;
 
         public bool IsSelected { get; set; } = false;
 
