@@ -28,7 +28,7 @@ namespace DashCamGPSView.Controls
         public Action<List<DashCamFileInfo>> ExportGPSAction = (infos) => { };
         public Action<ObservableCollection<VideoFile>> DeleteRecordingsAction = (videos) => { };
 
-        private List<VideoGroup> _itemsSource = new List<VideoGroup>();
+        private ObservableCollection<VideoGroup> _itemsSource = new ObservableCollection<VideoGroup>();
 
         public FilesTreeUserControl()
         {
@@ -238,7 +238,6 @@ namespace DashCamGPSView.Controls
                     }
                     else
                     {
-                        int idx = _itemsSource.IndexOf(g);
                         _itemsSource.Remove(g);
                     }
                 }
