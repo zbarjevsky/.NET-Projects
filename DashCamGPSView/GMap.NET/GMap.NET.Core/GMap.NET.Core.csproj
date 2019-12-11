@@ -12,7 +12,8 @@
     <AssemblyName>GMap.NET.Core</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <SignAssembly>false</SignAssembly>
-    <AssemblyOriginatorKeyFile>sn.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -376,7 +377,6 @@
     <None Include="Resources\System.Data.SQLite.x64.NET4.dll.gz" />
     <None Include="Resources\System.Data.SQLite.x86.NET2.dll.gz" />
     <None Include="Resources\System.Data.SQLite.x86.NET4.dll.gz" />
-    <None Include="sn.snk" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">

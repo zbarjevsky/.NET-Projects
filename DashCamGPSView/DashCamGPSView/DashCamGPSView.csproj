@@ -309,7 +309,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if "$(ConfigurationName)" == "Release" xcopy /s /f /r /y $(TargetDir)\*.* $(SolutionDir)\..\Binaries\$(ProjectName)\
+    <PostBuildEvent>if "$(ConfigurationName)" == "Release" (
+xcopy /s /f /r /y $(TargetDir)\*.* $(SolutionDir)\..\Binaries\$(ProjectName)\
+$(SolutionDir)CommandLineProcessor\bin\$(ConfigurationName)\CmdProc.exe ZipBinaries $(SolutionDir)\..\Binaries\DashCamGPSView $(SolutionDir)\..\Binaries\DashCamGPSView.zip
+)
 </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
