@@ -272,6 +272,10 @@
     <SplashScreen Include="SplashScreen.png" />
     <Resource Include="SplashScreen1.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Delete.png" />
+    <Resource Include="Images\Delete1.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if "$(ConfigurationName)" == "Release" xcopy /s /f /r /y $(TargetDir)\*.* $(SolutionDir)\..\Binaries\$(ProjectName)\

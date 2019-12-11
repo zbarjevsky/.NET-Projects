@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -85,6 +86,23 @@ namespace DashCamGPSView.Tools
                 FileDate = FromViofoFileName(fileName);
 
                 FrontFileName = fileName;
+            }
+        }
+
+        internal void DeleteRecording()
+        {
+            try
+            {
+                if (File.Exists(FrontFileName))
+                    File.Delete(FrontFileName);
+                if (File.Exists(NmeaFileName))
+                    File.Delete(NmeaFileName);
+                if (File.Exists(BackFileName))
+                    File.Delete(BackFileName);
+            }
+            catch (Exception err)
+            {
+                Debug.WriteLine("Exception deleting files: " + err);
             }
         }
 

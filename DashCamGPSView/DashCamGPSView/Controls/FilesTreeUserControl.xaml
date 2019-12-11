@@ -26,6 +26,12 @@
                                 <MenuItem Header="Play This Route Recordings..." Click="GroupMenu_Open_Click"/>
                                 <Separator/>
                                 <MenuItem Header="Export GPS Data As..." Click="GroupMenu_Export_Click" />
+                                <Separator/>
+                                <MenuItem Header="Delete Route Recordings" Click="GroupMenu_Delete_Click" >
+                                    <MenuItem.Icon>
+                                        <Image Source="/Images/Delete.png" Width="16" Height="16" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
                             </ContextMenu>
                         </StackPanel.ContextMenu>
                         <Image Source="/Images/Folder48.png" Margin="0,0,5,0" Width="18" Height="18" />
@@ -46,6 +52,12 @@
                                 </MenuItem>
                                 <Separator/>
                                 <MenuItem Header="Export GPS Data As..." Click="GroupMenu_Export_Click" />
+                                <Separator/>
+                                <MenuItem Header="Delete Selected Recordings" Click="GroupMenu_Delete_Click" >
+                                    <MenuItem.Icon>
+                                        <Image Source="/Images/Delete.png" Width="16" Height="16" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
                             </ContextMenu>
                         </StackPanel.ContextMenu>
                         <Image Source="/Images/Movie48.png" Margin="0,0,5,0"  Width="18" Height="18" />

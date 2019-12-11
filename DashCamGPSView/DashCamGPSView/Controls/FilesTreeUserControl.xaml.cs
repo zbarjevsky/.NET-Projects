@@ -26,6 +26,9 @@ namespace DashCamGPSView.Controls
         public Action<string> TreeItemDoubleClickAction = (fileName) => { };
         public Action OpenFileAction = () => { };
         public Action<List<DashCamFileInfo>> ExportGPSAction = (infos) => { };
+        public Action<ObservableCollection<VideoFile>> DeleteRecordingsAction = (videos) => { };
+
+        private List<VideoGroup> _itemsSource = new List<VideoGroup>();
 
         public FilesTreeUserControl()
         {
@@ -33,18 +36,30 @@ namespace DashCamGPSView.Controls
 
             //inser empty group - as prompt
             treeFiles.ItemsSource = new List<VideoGroup>() { new VideoGroup(null, "") };
+            
+            this.DeleteRecordingsAction = (videos) =>
+            {
+                if (MessageBoxResult.OK != MessageBox.Show(
+                    "Confirm Deletion of " + videos.Count + " Recordings", "Delete Recordings",
+                    MessageBoxButton.OKCancel, MessageBoxImage.Exclamation))
+                    return;
+
+                foreach (VideoFile v in videos)
+                {
+                    DeleteVideoFile(v);
+                }
+            };
         }
 
         public void LoadTree(DashCamFileTree tree, string selectedFileName)
         {
-            List<VideoGroup> fileGroups = new List<VideoGroup>();
-
+            _itemsSource.Clear();
             foreach (List<DashCamFileInfo> group in tree.fileGroups)
             {
-                fileGroups.Add(new VideoGroup(group, selectedFileName));
+                _itemsSource.Add(new VideoGroup(group, selectedFileName));
             }
             
-            treeFiles.ItemsSource = fileGroups;
+            treeFiles.ItemsSource = _itemsSource;
         }
 
         internal void SelectFile(string fileName)
@@ -62,6 +77,47 @@ namespace DashCamGPSView.Controls
                         if (childItem.IsSelected)
                             childItem.BringIntoView();
                     }
+                }
+            }
+        }
+
+        internal TreeViewItem FindFile(string fileName)
+        {
+            foreach (VideoGroup group in treeFiles.Items)
+            {
+                var tvi = treeFiles.ItemContainerGenerator.ContainerFromItem(group) as TreeViewItem;
+                foreach (var subItem in tvi.Items)
+                {
+                    TreeViewItem childItem = tvi.ItemContainerGenerator.ContainerFromItem(subItem) as TreeViewItem;
+                    if (childItem != null)
+                    {
+                        VideoFile v = childItem.DataContext as VideoFile;
+                        if (string.Compare(fileName, v.FileName, true) == 0)
+                            return childItem;
+                    }
+                }
+            }
+            return null;
+        }
+
+        internal void DeleteVideoFile(VideoFile file)
+        {
+            foreach (VideoGroup g in _itemsSource)
+            {
+                foreach (VideoFile v in g.Members)
+                {
+                    if(v.FileName == file.FileName)
+                    {
+                        v._dashCamFileInfo.DeleteRecording();
+                        g.Members.Remove(v);
+                        break;
+                    }
+                }
+                //remove group if all files were removed
+                if (g.Members.Count == 0)
+                {
+                    _itemsSource.Remove(g);
+                    break;
                 }
             }
         }
@@ -134,11 +190,7 @@ namespace DashCamGPSView.Controls
                 {
                     if (g.Members.Count > 0)
                     {
-                        List<DashCamFileInfo> infos = new List<DashCamFileInfo>();
-                        foreach (VideoFile v in g.Members)
-                            infos.Add(v._dashCamFileInfo);
-
-                        ExportGPSAction(infos);
+                        ExportGPSAction(g.InfoList);
                     }
                 }
                 else if (item.DataContext is VideoFile v)
@@ -169,6 +221,29 @@ namespace DashCamGPSView.Controls
                 }
             }
         }
+
+        private void GroupMenu_Delete_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem item)
+            {
+                if (item.DataContext is VideoFile v)
+                {
+                    DeleteRecordingsAction(new ObservableCollection<VideoFile>() { v });
+                }
+                else if (item.DataContext is VideoGroup g)
+                {
+                    if (g.Members.Count > 0)
+                    {
+                        DeleteRecordingsAction(new ObservableCollection<VideoFile>(g.Members));
+                    }
+                    else
+                    {
+                        int idx = _itemsSource.IndexOf(g);
+                        _itemsSource.Remove(g);
+                    }
+                }
+            }
+        }
     }
 
     public class VideoGroup
@@ -194,6 +269,17 @@ namespace DashCamGPSView.Controls
             else
             {
                 GroupName = "Please select file";
+            }
+        }
+
+        public List<DashCamFileInfo> InfoList
+        {
+            get
+            {
+                List<DashCamFileInfo> infos = new List<DashCamFileInfo>();
+                foreach (VideoFile v in Members)
+                    infos.Add(v._dashCamFileInfo);
+                return infos;
             }
         }
     }
