@@ -40,59 +40,62 @@ namespace DashCamGPSView.Tools
             }
             else if (exportType == ExportType.kml)
             {
-                var coordinates = new SharpKml.Dom.CoordinateCollection();
-                foreach (GpsPointData i in points)
-                {
-                    coordinates.Add(new SharpKml.Base.Vector(i.Latitude, i.Longitude));
-                }
+                GPSDataParser.FileFormats.KML.kml kml = new GPSDataParser.FileFormats.KML.kml();
+                kml.SaveToFile(points, fileName);
 
-                var style = new SharpKml.Dom.Style()
-                {
-                    Id = "lineStyleNormal",
-                    Line = new SharpKml.Dom.LineStyle() 
-                    { 
-                        Color = new SharpKml.Base.Color32(255, 255, 0, 0),
-                        Width = 4
-                    },
-                    Polygon = new SharpKml.Dom.PolygonStyle()
-                    {
-                        Color = new SharpKml.Base.Color32(255, 0, 255, 0)
-                    }
-                };
+                //var coordinates = new SharpKml.Dom.CoordinateCollection();
+                //foreach (GpsPointData i in points)
+                //{
+                //    coordinates.Add(new SharpKml.Base.Vector(i.Latitude, i.Longitude));
+                //}
 
-                var lineString = new SharpKml.Dom.LineString()
-                {
-                    Extrude = true,
-                    Tessellate = true,
-                    AltitudeMode = SharpKml.Dom.AltitudeMode.Absolute,
-                    Coordinates = coordinates
-                };
+                //var style = new SharpKml.Dom.Style()
+                //{
+                //    Id = "lineStyleNormal",
+                //    Line = new SharpKml.Dom.LineStyle() 
+                //    { 
+                //        Color = new SharpKml.Base.Color32(255, 255, 0, 0),
+                //        Width = 4
+                //    },
+                //    Polygon = new SharpKml.Dom.PolygonStyle()
+                //    {
+                //        Color = new SharpKml.Base.Color32(255, 0, 255, 0)
+                //    }
+                //};
 
-                var placemark = new SharpKml.Dom.Placemark
-                {
-                    Name = Path.GetFileNameWithoutExtension(fileName),
-                    StyleUrl = new Uri("#lineStyleNormal", UriKind.Relative),
-                    Geometry = lineString
-                };
+                //var lineString = new SharpKml.Dom.LineString()
+                //{
+                //    Extrude = true,
+                //    Tessellate = true,
+                //    AltitudeMode = SharpKml.Dom.AltitudeMode.Absolute,
+                //    Coordinates = coordinates
+                //};
 
-                placemark.AddStyle(style);
+                //var placemark = new SharpKml.Dom.Placemark
+                //{
+                //    Name = Path.GetFileNameWithoutExtension(fileName),
+                //    StyleUrl = new Uri("#lineStyleNormal", UriKind.Relative),
+                //    Geometry = lineString
+                //};
 
-                // This is the root element of the file
-                var kml = new SharpKml.Dom.Kml
-                {
-                    Feature = placemark,
-                };
+                //placemark.AddStyle(style);
 
-                // Package it all together...
-                //var document = new SharpKml.Dom.Document();
-                //document.AddFeature(placemark);
-                //document.AddStyle(style);
+                //// This is the root element of the file
+                //var kml = new SharpKml.Dom.Kml
+                //{
+                //    Feature = placemark,
+                //};
 
-                var serializer = new SharpKml.Base.Serializer();
-                serializer.Serialize(kml);
-                Console.WriteLine(serializer.Xml);
+                //// Package it all together...
+                ////var document = new SharpKml.Dom.Document();
+                ////document.AddFeature(placemark);
+                ////document.AddStyle(style);
 
-                File.WriteAllText(fileName, serializer.Xml);
+                //var serializer = new SharpKml.Base.Serializer();
+                //serializer.Serialize(kml);
+                //Console.WriteLine(serializer.Xml);
+
+                //File.WriteAllText(fileName, serializer.Xml);
             }
         }
 
