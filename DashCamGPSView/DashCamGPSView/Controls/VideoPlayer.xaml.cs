@@ -29,6 +29,7 @@ namespace DashCamGPSView
         private ScrollDragZoom _scrollDragger;
 
         public Action VideoEnded = () => { };
+        public Action VideoStarted = () => { };
 
         public VideoPlayer()
         {
@@ -39,7 +40,7 @@ namespace DashCamGPSView
             //refresh view when change position
             mePlayer.ScrubbingEnabled = true;
 
-            mePlayer.MediaOpened += (s, e) => { /*FitWidth();*/ };
+            mePlayer.MediaOpened += (s, e) => { VideoStarted(); };
             mePlayer.MediaEnded += (s, e) => { VideoEnded(); };
         }
 
@@ -105,15 +106,14 @@ namespace DashCamGPSView
 
         internal void Close()
         {
-            if (mePlayer.Source != null)
-                mePlayer.Stop();
-
+            Stop();
             mePlayer.Source = null;
+            this.Background = Brushes.Wheat;
         }
 
-        public void Play() { if(mePlayer.Source != null) mePlayer.Play(); }
-        public void Pause() { if (mePlayer.Source != null) mePlayer.Pause(); }
-        public void Stop() { if (mePlayer.Source != null) mePlayer.Stop(); }
+        public void Play() { if (mePlayer.Source != null) { mePlayer.Play(); this.Background = Brushes.Black; } }
+        public void Pause() { if (mePlayer.Source != null) { mePlayer.Pause(); this.Background = Brushes.Black; } }
+        public void Stop() { if (mePlayer.Source != null) { mePlayer.Stop(); this.Background = Brushes.Black; } }
 
         private void Grid_MouseWheel(object sender, MouseWheelEventArgs e)
         {

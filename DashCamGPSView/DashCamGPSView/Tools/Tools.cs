@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace DashCamGPSView.Tools
 {
@@ -43,6 +44,19 @@ namespace DashCamGPSView.Tools
             {
                 png.Save(stm);
             }
+        }
+
+        public static void ForceUIToUpdate()
+        {
+            DispatcherFrame frame = new DispatcherFrame();
+
+            Dispatcher.CurrentDispatcher.BeginInvoke(DispatcherPriority.Render, new DispatcherOperationCallback(delegate (object parameter)
+            {
+                frame.Continue = false;
+                return null;
+            }), null);
+
+            Dispatcher.PushFrame(frame);
         }
     }
 

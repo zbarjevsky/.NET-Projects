@@ -63,6 +63,8 @@ namespace DashCamGPSView
                 ExportGPSData(infos);
             };
 
+            playerF.VideoStarted = () => { waitScreen.Visibility = Visibility.Collapsed; };
+
             playerF.VideoEnded = () => { PlayNext(); };
         }
 
@@ -101,6 +103,8 @@ namespace DashCamGPSView
             this.Left = Settings.Default.InitialLocation.X;
             this.Top = Settings.Default.InitialLocation.Y;
             this.WindowState = WindowState.Maximized;
+
+            //waitScreen.Visibility = Visibility.Collapsed;
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -175,6 +179,7 @@ namespace DashCamGPSView
 
         private void OpenVideoFile()
         {
+            waitScreen.Visibility = Visibility.Visible;
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Media files (*.mp3;*.mp4;*.mpg;*.mpeg)|*.mp3;*.mp4;*.mpg;*.mpeg|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
