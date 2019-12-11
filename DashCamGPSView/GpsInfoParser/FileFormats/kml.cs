@@ -41,8 +41,7 @@ namespace GPSDataParser.FileFormats
         public Style Style;
         public LineString LineString;
 
-        public Placemark()
-        {
+        public Placemark() {
 
         }
 
@@ -68,6 +67,8 @@ namespace GPSDataParser.FileFormats
         //System.Drawing.ColorTranslator.ToHtml
         public string color = "ffff0000";
         public double width = 4;
+
+        public LineStyle() { }
     }
 
     public class LineString

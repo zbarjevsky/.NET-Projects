@@ -23,7 +23,7 @@
                     <StackPanel Orientation="Horizontal">
                         <StackPanel.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="Open Recordings..." Click="GroupMenu_Open_Click"/>
+                                <MenuItem Header="Play This Route Recordings..." Click="GroupMenu_Open_Click"/>
                                 <Separator/>
                                 <MenuItem Header="Export GPS Data As..." Click="GroupMenu_Export_Click" />
                             </ContextMenu>

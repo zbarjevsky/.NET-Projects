@@ -238,10 +238,6 @@
       <Project>{08fd88c1-418b-4376-806d-f3ed46ba3c0c}</Project>
       <Name>GpsInfoParser</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SharpKml\SharpKml.csproj">
-      <Project>{B6DAB18D-4A2A-4FC8-882D-40485251670D}</Project>
-      <Name>SharpKml</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="CustomMarkers\bigMarkerGreen.png" />
