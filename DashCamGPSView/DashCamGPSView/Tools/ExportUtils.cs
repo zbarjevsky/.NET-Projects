@@ -40,7 +40,7 @@ namespace DashCamGPSView.Tools
             }
             else if (exportType == ExportType.kml)
             {
-                GPSDataParser.FileFormats.KML.kml kml = new GPSDataParser.FileFormats.KML.kml();
+                kml kml = new kml();
                 kml.SaveToFile(points, fileName);
 
                 //var coordinates = new SharpKml.Dom.CoordinateCollection();

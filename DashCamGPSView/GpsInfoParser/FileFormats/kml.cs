@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace GPSDataParser.FileFormats.KML
+namespace GPSDataParser.FileFormats
 {
     [XmlRoot("kml", Namespace = "http://www.opengis.net/kml/2.2")]
     public class kml
@@ -65,6 +65,7 @@ namespace GPSDataParser.FileFormats.KML
 
     public class LineStyle
     {
+        //System.Drawing.ColorTranslator.ToHtml
         public string color = "ffff0000";
         public double width = 4;
     }

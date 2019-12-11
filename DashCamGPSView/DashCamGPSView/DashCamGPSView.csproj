@@ -282,6 +282,8 @@
 </PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>$(SolutionDir)CommandLineProcessor\bin\$(ConfigurationName)\CmdProc.exe UpdateVersion $(ProjectDir)Properties\AssemblyInfo.cs</PreBuildEvent>
+    <PreBuildEvent>if exist $(SolutionDir)CommandLineProcessor\bin\$(ConfigurationName)\CmdProc.exe (
+$(SolutionDir)CommandLineProcessor\bin\$(ConfigurationName)\CmdProc.exe UpdateVersion $(ProjectDir)Properties\AssemblyInfo.cs
+)</PreBuildEvent>
   </PropertyGroup>
 </Project>

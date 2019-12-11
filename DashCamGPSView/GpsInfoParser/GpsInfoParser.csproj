@@ -42,12 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="FileFormats\gpx.cs" />
-    <Compile Include="FileFormats\GPX\GpsLocation.cs" />
-    <Compile Include="FileFormats\GPX\Gpx.cs" />
-    <Compile Include="FileFormats\GPX\GpxProperties.cs" />
-    <Compile Include="FileFormats\GPX\GpxReader.cs" />
-    <Compile Include="FileFormats\GPX\GpxWriter.cs" />
-    <Compile Include="FileFormats\KML\kml.cs" />
+    <Compile Include="FileFormats\kml.cs" />
     <Compile Include="GpsPointData.cs" />
     <Compile Include="NMEA\IMultiPartMessage.cs" />
     <Compile Include="NMEA\NmeaMessageReceivedEventArgs.cs" />
@@ -81,12 +76,11 @@
   <ItemGroup>
     <None Include="NovatekViofo\nvtk_mp42gpx.py" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="FileFormats\GPX\licence.txt" />
-  </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PreBuildEvent>$(SolutionDir)CommandLineProcessor\bin\$(ConfigurationName)\CmdProc.exe UpdateVersion $(ProjectDir)Properties\AssemblyInfo.cs</PreBuildEvent>
+    <PreBuildEvent>if exist $(SolutionDir)CommandLineProcessor\bin\$(ConfigurationName)\CmdProc.exe (
+$(SolutionDir)CommandLineProcessor\bin\$(ConfigurationName)\CmdProc.exe UpdateVersion $(ProjectDir)Properties\AssemblyInfo.cs
+)</PreBuildEvent>
   </PropertyGroup>
 </Project>
