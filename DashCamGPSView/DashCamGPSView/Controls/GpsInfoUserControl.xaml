@@ -18,19 +18,19 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Border Grid.Column="1" Grid.Row="0" Grid.RowSpan="4" BorderThickness="0" BorderBrush="Gray" CornerRadius="5">
-            <local:CompassUserControl x:Name="compass"/>
+            <local:CompassUserControl x:Name="compass" Direction="10" />
         </Border>
         <TextBox Grid.Row="0" x:Name="txtSpeed" IsReadOnly="True" FontSize="22"  FontWeight="Bold"
                  VerticalContentAlignment="Center" HorizontalContentAlignment="Center" 
                  Text="Speed: N/A"/>
         <TextBox Grid.Row="1" x:Name="txtLat" IsReadOnly="True" FontSize="16" 
-                 VerticalContentAlignment="Center" 
-                 Text="Position: N/A"/>
+                 VerticalContentAlignment="Center" Padding="10"
+                 Text="Lattitude: N/A"/>
         <TextBox Grid.Row="2" x:Name="txtLon" IsReadOnly="True" FontSize="16" 
-                 VerticalContentAlignment="Center" 
-                 Text="Position: N/A"/>
+                 VerticalContentAlignment="Center" Padding="10"
+                 Text="Longtitude: N/A"/>
         <TextBox Grid.Row="3" x:Name="txtTime" IsReadOnly="True" FontSize="22" 
-                 VerticalContentAlignment="Center" 
+                 VerticalContentAlignment="Center" Padding="10" 
                  Text="Time: N/A"/>
     </Grid>
 </UserControl>

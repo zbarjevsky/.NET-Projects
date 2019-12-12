@@ -1,4 +1,5 @@
-﻿using DashCamGPSView.Tools;
+﻿using DashCamGPSView.Properties;
+using DashCamGPSView.Tools;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -31,17 +32,12 @@ namespace DashCamGPSView
         public Action VideoEnded = () => { };
         public Action VideoStarted = () => { };
 
+        MediaElement mePlayer = null;
+
         public VideoPlayer()
         {
             InitializeComponent();
-
-            _scrollDragger = new ScrollDragZoom(mePlayer, scrollPlayer);
-
-            //refresh view when change position
-            mePlayer.ScrubbingEnabled = true;
-
-            mePlayer.MediaOpened += (s, e) => { VideoStarted(); };
-            mePlayer.MediaEnded += (s, e) => { VideoEnded(); };
+            RecreateMediaElement();
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -137,8 +133,11 @@ namespace DashCamGPSView
 
         internal void FitWindow()
         {
-            mePlayer.Width = this.ActualWidth - 18;
-            mePlayer.Height = this.ActualHeight - 18;
+            if (this.ActualHeight > 18 && this.ActualWidth > 18)
+            {
+                mePlayer.Width = this.ActualWidth - 18;
+                mePlayer.Height = this.ActualHeight - 18;
+            }
 
             ScrollToCenter();
         }
@@ -157,6 +156,43 @@ namespace DashCamGPSView
         {
             if (PropertyChanged != null)
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        /// <summary>
+        /// Sometimes MediaElement crashes - black window
+        /// I will replace it with the new one
+        /// </summary>
+        internal void RecreateMediaElement()
+        {
+            if (mePlayer != null)
+            {
+                mePlayer.Stop();
+                mePlayer.Source = null;
+                mePlayer.Volume = 0;
+            }
+
+            mePlayer = new MediaElement();
+            mePlayer.Width = 1920;
+            mePlayer.Height = 1080;
+            mePlayer.LoadedBehavior = MediaState.Manual;
+            mePlayer.Stretch = Stretch.Uniform;
+            mePlayer.MouseWheel += mePlayer_MouseWheel;
+
+            scrollPlayer.Content = mePlayer;
+
+            double vOff = Settings.Default.RearPlayerVerticalOffset;
+            if (_scrollDragger != null)
+                vOff = _scrollDragger.VerticalOffset;
+
+            _scrollDragger = new ScrollDragZoom(mePlayer, scrollPlayer);
+            _scrollDragger.VerticalOffset = vOff;
+
+            //refresh view when change position
+            mePlayer.ScrubbingEnabled = true;
+
+            mePlayer.MediaOpened += (s, e) => { VideoStarted(); };
+            mePlayer.MediaEnded += (s, e) => { VideoEnded(); };
+            mePlayer.MediaFailed += (s, e) => { MessageBox.Show("Media Failed: " + e.ErrorException); };
         }
     }
 }

@@ -16,9 +16,9 @@
 
         <ScrollViewer Name="scrollPlayer" Grid.Row="1"
                       HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
-            <MediaElement Name="mePlayer" LoadedBehavior="Manual" Stretch="Uniform" 
+            <!--<MediaElement Name="mePlayer" LoadedBehavior="Manual" Stretch="Uniform" 
                           Width="1920" Height="1080"
-                          MouseWheel="mePlayer_MouseWheel" />
+                          MouseWheel="mePlayer_MouseWheel" />-->
         </ScrollViewer>
     </Grid>
 </UserControl>

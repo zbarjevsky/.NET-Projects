@@ -48,6 +48,8 @@ namespace DashCamGPSView
             timer.Tick += timer_Tick;
             timer.Start();
 
+            playerF.Volume = Settings.Default.SoundVolume;
+
             treeGroups.TreeItemDoubleClickAction = (fileName) => 
             {
                 PlayFile(fileName);
@@ -65,7 +67,9 @@ namespace DashCamGPSView
 
             playerF.VideoStarted = () => { waitScreen.Visibility = Visibility.Collapsed; };
 
-            playerF.VideoEnded = () => { PlayNext(); };
+            playerF.VideoEnded = () => { if (chkAutoPlay.IsChecked.Value) PlayNext(); };
+            
+            waitScreen.Visibility = Visibility.Visible;
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -110,34 +114,52 @@ namespace DashCamGPSView
         private void Window_Closed(object sender, EventArgs e)
         {
             ClosePayer();
+            Settings.Default.SoundVolume = playerF.Volume;
             Settings.Default.InitialLocation = new System.Drawing.Point((int)this.Left, (int)this.Top);
             Settings.Default.Save();
         }
 
+        private bool _bMapWasCollapsed = false;
         private void PlayFile(string fileName)
         {
-            ClosePayer();
-            if (!File.Exists(fileName))
-                return;
+            string prev = treeGroups.FindPrevFile(fileName);
+            if(_dashCamFileInfo != null && prev != _dashCamFileInfo.FrontFileName)
+            {
+                MainMap.SetRouteAndCar(null); //reset route 
+            }
+
+            gpsInfo.UpdateInfo(null); //reset GPS Info control
 
             treeGroups.SelectFile(fileName);
 
             _dashCamFileInfo = new DashCamFileInfo(fileName);
 
             txtFileName.Text = _dashCamFileInfo.FrontFileName;
-            playerF.Open(_dashCamFileInfo.FrontFileName, 0.5);
+            playerF.Open(_dashCamFileInfo.FrontFileName, playerF.Volume);
             playerR.Open(_dashCamFileInfo.BackFileName, 0);
 
             if (_dashCamFileInfo.GpsInfo != null && _dashCamFileInfo.GpsInfo.Count > 0)
             {
-                MainMap.Zoom = 17;
+                MainMap.SetRouteAndCar(_dashCamFileInfo);
                 UpdateGpsInfo();
+
+                if (_bMapWasCollapsed)// && mapColumn.Width.Value < 300)
+                {
+                    _bMapWasCollapsed = false;
+                    MainMap.Zoom = 17;
+                    GridLengthAnimation.AnimateColumn(mapColumn, mapColumn.Width, 500);
+                }
             }
-            //else
-            //{
-            //    MainMap.Zoom = 2;
-            //    MainMap.Position = new PointLatLng(first.Latitude, first.Longitude);
-            //}
+            else //no GPS info
+            {
+                //MainMap.Position = new PointLatLng(first.Latitude, first.Longitude);
+                if (!_bMapWasCollapsed)// && mapColumn.Width.Value > 300)
+                {
+                    _bMapWasCollapsed = true;
+                    MainMap.Zoom = 2;
+                    GridLengthAnimation.AnimateColumn(mapColumn, mapColumn.Width, 0);
+                }
+            }
 
             playerF.Play();
             playerR.Play();
@@ -152,13 +174,11 @@ namespace DashCamGPSView
             playerR.Close();
             mediaPlayerIsPlaying = false;
             mediaPlayerIsPaused = false;
-            MainMap.UpdateRouteAndCar(null, 0);
+            MainMap.SetRouteAndCar(null);
         }
 
         private void PlayNext()
         {
-            ClosePayer();
-
             string fileName = treeGroups.FindNextFile(_dashCamFileInfo.FrontFileName);
             if (!File.Exists(fileName))
                 return;
@@ -168,11 +188,9 @@ namespace DashCamGPSView
 
         private void PlayPrev()
         {
-            ClosePayer();
-
             string fileName = treeGroups.FindPrevFile(_dashCamFileInfo.FrontFileName);
             if (!File.Exists(fileName))
-                return;
+              return;
 
             PlayFile(fileName);
         }
@@ -186,9 +204,16 @@ namespace DashCamGPSView
             {
                 DashCamFileTree groups = new DashCamFileTree(openFileDialog.FileName);
                 treeGroups.LoadTree(groups, openFileDialog.FileName);
+
+                MainMap.SetRouteAndCar(null); //reset
+
                 PlayFile(openFileDialog.FileName);
+                
                 playerF.FitWidth();
                 playerR.FitWidth();
+
+                if (_dashCamFileInfo.GpsInfo != null && _dashCamFileInfo.GpsInfo.Count > 0)
+                    MainMap.Zoom = 17;
             }
         }
 
@@ -357,15 +382,19 @@ namespace DashCamGPSView
             txtGPSInfo.Text = _dashCamFileInfo.GetLocationInfoForTime(playerF.Position.TotalSeconds);
 
             int idx = _dashCamFileInfo.FindGpsInfo(playerF.Position.TotalSeconds);
-            if(_dashCamFileInfo.GpsInfo != null && _dashCamFileInfo.GpsInfo.Count > idx)
+            if (_dashCamFileInfo.GpsInfo != null && _dashCamFileInfo.GpsInfo.Count > idx)
+            {
                 gpsInfo.UpdateInfo(_dashCamFileInfo.GpsInfo[idx], _dashCamFileInfo.TimeZone);
-            MainMap.UpdateRouteAndCar(_dashCamFileInfo, idx);
+                
+                PointLatLng currentPosition = new PointLatLng(_dashCamFileInfo.GpsInfo[idx].Latitude, _dashCamFileInfo.GpsInfo[idx].Longitude);
+                MainMap.UpdateRouteAndCar(currentPosition, idx);
+            }
         }
 
         private void GridSplitter1_DragCompleted(object sender, DragCompletedEventArgs e)
         {
-            playerF.FitWindow();
-            playerR.FitWindow();
+            playerF.FitWidth();
+            playerR.FitWidth();
         }
 
         private void Screenshot_Click(object sender, RoutedEventArgs e)
@@ -377,6 +406,13 @@ namespace DashCamGPSView
             fileName = string.Format("{0}_at{1:0.00}.png", fileName, playerF.Position.TotalSeconds);
             Tools.Tools.SaveWindowScreenshotToFile(this, fileName);
             Process.Start(fileName);
+        }
+
+        private void Test_Click(object sender, RoutedEventArgs e)
+        {
+            playerF.RecreateMediaElement();
+            if (_dashCamFileInfo != null)
+                PlayFile(_dashCamFileInfo.FrontFileName);
         }
     }
 }

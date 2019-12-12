@@ -16,6 +16,12 @@ namespace DashCamGPSView
         private Point _scrollMousePoint;
         private double _vOff = 1, _hOff = 1;
 
+        public double VerticalOffset
+        {
+            get { return _scrollViewer.VerticalOffset; }
+            set { _scrollViewer.ScrollToVerticalOffset(value); }
+        }
+
         public ScrollDragZoom(FrameworkElement content, ScrollViewer scrollViewer)
         {
             _scrollViewer = scrollViewer;

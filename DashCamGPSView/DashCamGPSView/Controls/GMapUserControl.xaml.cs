@@ -69,19 +69,15 @@ namespace DashCamGPSView.Controls
             }
         }
 
-        public void UpdateRouteAndCar(DashCamFileInfo dashCamFileInfo, int idx)
+        public void SetRouteAndCar(DashCamFileInfo dashCamFileInfo)
         {
-            if (dashCamFileInfo == null || dashCamFileInfo.GpsInfo == null)
-            {
-                _route.UpdateRouteAndCar(null, -1, null);
-                return;
-            }
+            _route.SetRouteAndCar(dashCamFileInfo);
+        }
 
-            GPSDataParser.GpsPointData inf = dashCamFileInfo.GpsInfo[idx];
-            PointLatLng currentPosition = new PointLatLng(inf.Latitude, inf.Longitude);
+        public void UpdateRouteAndCar(PointLatLng currentPosition, int idx)
+        {
             GMap.Position = currentPosition;
-
-            _route.UpdateRouteAndCar(dashCamFileInfo.GpsInfo, idx, GMap);
+            _route.UpdateRouteAndCar(idx, GMap);
         }
 
         //internal void UpdateCarPosition(PointLatLng pointLatLng, double course)

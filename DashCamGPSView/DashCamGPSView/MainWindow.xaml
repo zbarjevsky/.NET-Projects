@@ -29,7 +29,7 @@
             <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="5*"/>
             <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="500"/>
+            <ColumnDefinition Width="500" x:Name="mapColumn"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="2"/>
@@ -93,7 +93,11 @@
             <Button  ToolTip="Screen Shot" Click="Screenshot_Click" >
                 <local:AutoGreyableImage Source="/Images/Screenshot.png" />
             </Button>
+            <Button  ToolTip="Test" Content="Test" Click="Test_Click" />
             <TextBlock Name="txtFileName"  Text="..." VerticalAlignment="Center" Margin="10,0" FontSize="16"/>
+            <Viewbox Margin="6">
+                <CheckBox x:Name="chkAutoPlay" IsChecked="True" Content="Auto Play Next"/>
+            </Viewbox>
         </ToolBar>
         
         <TextBox Name="txtGPSInfo" Grid.Row="5" Grid.ColumnSpan="3"  
@@ -132,6 +136,6 @@
             </StatusBarItem>
         </StatusBar>
 
-        <controls:WaitScreenUserControl x:Name="waitScreen" Grid.RowSpan="7" Grid.ColumnSpan="5" />
+        <controls:WaitScreenUserControl x:Name="waitScreen" Grid.RowSpan="7" Grid.ColumnSpan="5" Visibility="Hidden" />
     </Grid>
 </Window>

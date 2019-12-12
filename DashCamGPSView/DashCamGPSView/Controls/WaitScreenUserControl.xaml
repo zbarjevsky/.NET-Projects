@@ -10,11 +10,16 @@
     <Grid>
         <Border Margin="10" BorderThickness="3" BorderBrush="Black" Background="LightGray" Opacity="0.8">
             <Border Margin="10" Opacity="0.5">
-                <Image Stretch="None" 
-                       gif:ImageBehavior.AnimationCompleted="Image_AnimationCompleted"
-                       gif:ImageBehavior.AnimateInDesignMode="True"
-                       gif:ImageBehavior.RepeatBehavior="15x"
-                       gif:ImageBehavior.AnimatedSource="/Images/CatAni.gif"/>
+                <StackPanel VerticalAlignment="Center">
+                    <Image Stretch="None" 
+                           gif:ImageBehavior.AnimationCompleted="Image_AnimationCompleted"
+                           gif:ImageBehavior.AnimateInDesignMode="True"
+                           gif:ImageBehavior.RepeatBehavior="10x"
+                           gif:ImageBehavior.AnimatedSource="/Images/CatAni.gif"/>
+                    <TextBlock Text="Wait for Meow..."
+                               FontSize="23" FontWeight="Bold"
+                               HorizontalAlignment="Center" />
+                </StackPanel>
             </Border>
         </Border>
     </Grid>

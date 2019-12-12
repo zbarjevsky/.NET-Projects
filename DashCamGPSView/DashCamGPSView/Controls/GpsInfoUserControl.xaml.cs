@@ -26,15 +26,15 @@ namespace DashCamGPSView.Controls
             InitializeComponent();
         }
 
-        public void UpdateInfo(GpsPointData inf, int timeZone)
+        public void UpdateInfo(GpsPointData inf, int timeZone = 0)
         {
             if (inf != null)
             {
                 compass.Direction = inf.Course;
 
                 txtSpeed.Text = "Speed: " + inf.SpeedMph.ToString("0.0 mph");
-                txtLat.Text = "Lat: " + SexagesimalAngle.ToString(inf.Latitude);
-                txtLon.Text = "Lon: " + SexagesimalAngle.ToString(inf.Longitude);
+                txtLat.Text = "Lattitude:  " + SexagesimalAngle.ToString(inf.Latitude);
+                txtLon.Text = "Longtitude: " + SexagesimalAngle.ToString(inf.Longitude);
                 txtTime.Text = "Time: " + inf.FixTime.AddHours(timeZone).ToString("yyyy/MM/dd HH:mm:ss");
             }
             else
@@ -42,9 +42,9 @@ namespace DashCamGPSView.Controls
                 compass.Direction = 0;
 
                 txtSpeed.Text = "Speed: N/A";
-                txtLat.Text = "N/A";
-                txtLon.Text = "";
-                txtTime.Text = "Time: N/A";
+                txtLat.Text = "...";
+                txtLon.Text = "...";
+                txtTime.Text = "...";
             }
         }
     }

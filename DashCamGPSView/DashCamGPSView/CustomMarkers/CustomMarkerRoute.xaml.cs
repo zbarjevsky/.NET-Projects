@@ -26,7 +26,8 @@ namespace DashCamGPSView.CustomMarkers
     /// </summary>
     public partial class CustomMarkerRoute : UserControl, INotifyPropertyChanged
     {
-        public List<GpsPointData> Route = new List<GpsPointData>();
+        public List<GpsPointData> RouteMain = new List<GpsPointData>();
+        public List<GpsPointData> RoutePrev = new List<GpsPointData>();
 
         private int _iCurrentPointIndex = -1;
 
@@ -37,23 +38,54 @@ namespace DashCamGPSView.CustomMarkers
         {
             InitializeComponent();
 
-            UpdateRouteAndCar(null, -1, null);
+            SetRouteAndCar(null);
         }
 
-        public void UpdateRouteAndCar(List<GpsPointData> data, int idx, GMapControl map)
+        public void SetRouteAndCar(DashCamFileInfo dashCamFileInfo)
         {
-            Route.Clear();
-            _figure.StartPoint = new Point();
-            _segment.Points.Clear();
-            _iCurrentPointIndex = -1;
-            Visibility = Visibility.Hidden;
+            if (dashCamFileInfo == null || dashCamFileInfo.GpsInfo == null || dashCamFileInfo.GpsInfo.Count == 0)
+            {
+                RoutePrev.Clear();
+                _figurePrev.StartPoint = new Point();
+                _segmentPrev.Points.Clear();
 
-            if (data == null || data.Count == 0)
+                RouteMain.Clear();
+                _figureMain.StartPoint = new Point();
+                _segmentMain.Points.Clear();
+
+                _iCurrentPointIndex = -1;
+
+                Visibility = Visibility.Hidden;
+
                 return;
+            }
+
+            RoutePrev = new List<GpsPointData>(RouteMain); //copy
+            _figurePrev.StartPoint = _figureMain.StartPoint;
+            _segmentPrev.Points = new PointCollection(_segmentMain.Points);
+
+            RouteMain = new List<GpsPointData>(dashCamFileInfo.GpsInfo); //copy
+
+            if (RouteMain.Count > 0)
+            {
+                if(RoutePrev.Count > 0)
+                    RoutePrev.Add(RouteMain[0]); //add first point of current route to prev route
+
+                _iCurrentPointIndex = 0;
+            }
+        }
+
+        //update route when index change
+        public void UpdateRouteAndCar(int idx, GMapControl map)
+        {
+            if (RouteMain == null || RouteMain.Count == 0)
+            {
+                _iCurrentPointIndex = -1;
+                Visibility = Visibility.Hidden;
+                return;
+            }
 
             _iCurrentPointIndex = idx;
-            Route = new List<GpsPointData>(data); //copy
-
             UpdateRouteAndCarRefresh(map);
         }
 
@@ -63,25 +95,38 @@ namespace DashCamGPSView.CustomMarkers
         /// <param name="point"></param>
         public void UpdateRouteAndCarRefresh(GMapControl map)
         {
-            _segment.Points.Clear();
-            if (Route.Count == 0)
-                return;
-
-            _figure.StartPoint = GetPoint(Route[0], map);
-            for (int i = 1; i < Route.Count; i++)
+            if (RouteMain.Count == 0)
             {
-                _segment.Points.Add(GetPoint(Route[i], map));
+                Visibility = Visibility.Hidden;
+                return;
             }
 
-            GMap.NET.PointLatLng currentPosition = new GMap.NET.PointLatLng(Route[_iCurrentPointIndex].Latitude, Route[_iCurrentPointIndex].Longitude);
+            UpdateRouteAndCarRefresh(_segmentMain, _figureMain, RouteMain, map);
+            UpdateRouteAndCarRefresh(_segmentPrev, _figurePrev, RoutePrev, map);
+
+            //update car position
+            GMap.NET.PointLatLng currentPosition = new GMap.NET.PointLatLng(RouteMain[_iCurrentPointIndex].Latitude, RouteMain[_iCurrentPointIndex].Longitude);
             GMap.NET.GPoint pt0 = map.FromLatLngToLocal(currentPosition);
             Point ptCar = new Point(pt0.X, pt0.Y);
 
             Canvas.SetLeft(_car, ptCar.X - 20);
             Canvas.SetTop(_car, ptCar.Y - 20);
-            arrowDirection.Angle = Route[_iCurrentPointIndex].Course;
+            arrowDirection.Angle = RouteMain[_iCurrentPointIndex].Course;
 
             Visibility = Visibility.Visible;
+        }
+
+        private void UpdateRouteAndCarRefresh(PolyBezierSegment segment, PathFigure figure, List<GpsPointData> route, GMapControl map)
+        {
+            segment.Points.Clear();
+            if (route.Count == 0)
+                return;
+
+            figure.StartPoint = GetPoint(route[0], map);
+            for (int i = 0; i < route.Count; i++)
+            {
+                segment.Points.Add(GetPoint(route[i], map));
+            }
         }
 
         private Point GetPoint(GpsPointData data, GMapControl map)

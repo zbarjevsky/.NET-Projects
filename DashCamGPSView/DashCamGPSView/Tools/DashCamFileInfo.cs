@@ -163,7 +163,7 @@ namespace DashCamGPSView.Tools
                 if (delta.TotalSeconds >= (elapsedSeconds))
                     return i;
             }
-            return 0;
+            return _gpsInfo.Count - 1; //last index
         }
 
         internal string GetScreenshotFileName()
