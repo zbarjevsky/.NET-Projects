@@ -22,14 +22,20 @@ namespace DashCamGPSView
             set { _scrollViewer.ScrollToVerticalOffset(value); }
         }
 
+        private double Zoom = 1.0;
+        private double _origWidth, _origHeight;
+
         public ScrollDragZoom(FrameworkElement content, ScrollViewer scrollViewer)
         {
             _scrollViewer = scrollViewer;
             _content = content;
 
-            content.MouseLeftButtonDown += scrollViewer_MouseLeftButtonDown;
+            _origWidth = _content.Width;
+            _origHeight = _content.Height;
+
+            content.MouseRightButtonDown += scrollViewer_MouseRightButtonDown;
             content.PreviewMouseMove += scrollViewer_PreviewMouseMove;
-            content.PreviewMouseLeftButtonUp += scrollViewer_PreviewMouseLeftButtonUp;
+            content.PreviewMouseRightButtonUp += scrollViewer_PreviewMouseRightButtonUp;
             content.MouseWheel += content_MouseWheel;
         }
 
@@ -41,16 +47,19 @@ namespace DashCamGPSView
 
         private void content_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            double deltaX = _content.Width * ((e.Delta > 0) ? 0.1 : -0.1);
-            double deltaY = _content.Height * ((e.Delta > 0) ? 0.1 : -0.1);
+            Zoom *= ((e.Delta > 0) ? 1.1 : 0.9);
+            if (Zoom < 0.1)
+                Zoom = 0.1;
+            if (Zoom > 10)
+                Zoom = 10;
 
-            _content.Width += deltaX;
-            _content.Height += deltaY;
+            _content.Width = Zoom * _origWidth;
+            _content.Height = Zoom * _origHeight;
 
             ScrollToCenter();
         }
 
-        private void scrollViewer_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void scrollViewer_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             _content.CaptureMouse();
             _scrollMousePoint = e.GetPosition(_scrollViewer);
@@ -70,7 +79,7 @@ namespace DashCamGPSView
             }
         }
 
-        private void scrollViewer_PreviewMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void scrollViewer_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
             _content.ReleaseMouseCapture();
         }
