@@ -129,7 +129,8 @@ namespace YouTubeDownload
             {
                 _DL_Process.OutputDataReceived -= DL_Process_OutputDataReceived;
                 _DL_Process.Exited -= DL_Process_Exited;
-                exitCode = _DL_Process.ExitCode;
+                try { exitCode = _DL_Process.ExitCode; }
+                catch (Exception err) { Debug.WriteLine("DL_Process_Exited: " + err); }            
             }
 
             Data.Progress = 0;
