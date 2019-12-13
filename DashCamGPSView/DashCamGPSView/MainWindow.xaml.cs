@@ -120,7 +120,7 @@ namespace DashCamGPSView
         }
 
         private bool _bMapWasCollapsed = false;
-        private void PlayFile(string fileName)
+        private void PlayFile(string fileName, double startFrom = 0)
         {
             string prev = treeGroups.FindPrevFile(fileName);
             if(_dashCamFileInfo != null && prev != _dashCamFileInfo.FrontFileName)
@@ -163,6 +163,12 @@ namespace DashCamGPSView
 
             playerF.Play();
             playerR.Play();
+
+            if(startFrom > 1)
+            {
+                sliProgress.Value = startFrom;
+                sliProgress_ValueChanged(sliProgress, null);
+            }
 
             mediaPlayerIsPlaying = true;
             mediaPlayerIsPaused = false;
@@ -412,7 +418,7 @@ namespace DashCamGPSView
         {
             playerF.RecreateMediaElement();
             if (_dashCamFileInfo != null)
-                PlayFile(_dashCamFileInfo.FrontFileName);
+                PlayFile(_dashCamFileInfo.FrontFileName, sliProgress.Value);
         }
     }
 }

@@ -124,7 +124,7 @@ namespace GMap.NET
 
         public override string ToString()
         {
-            return string.Format(CultureInfo.CurrentCulture, "{{Lat={0}, Lng={1}}}", this.Lat, this.Lng);
+            return string.Format(CultureInfo.CurrentCulture, "{{Lat={0:0.000000}, Lng={1:0.000000}}}", this.Lat, this.Lng);
         }
     }
 }

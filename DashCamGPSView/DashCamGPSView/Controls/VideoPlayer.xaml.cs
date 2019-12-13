@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -190,9 +191,18 @@ namespace DashCamGPSView
             //refresh view when change position
             mePlayer.ScrubbingEnabled = true;
 
-            mePlayer.MediaOpened += (s, e) => { VideoStarted(); };
+            mePlayer.MediaOpened += (s, e) => { VideoStarted(); MediaState state = GetMediaState(mePlayer); };
             mePlayer.MediaEnded += (s, e) => { VideoEnded(); };
             mePlayer.MediaFailed += (s, e) => { MessageBox.Show("Media Failed: " + e.ErrorException); };
+        }
+
+        private MediaState GetMediaState(MediaElement myMedia)
+        {
+            FieldInfo hlp = typeof(MediaElement).GetField("_helper", BindingFlags.NonPublic | BindingFlags.Instance);
+            object helperObject = hlp.GetValue(myMedia);
+            FieldInfo stateField = helperObject.GetType().GetField("_currentState", BindingFlags.NonPublic | BindingFlags.Instance);
+            MediaState state = (MediaState)stateField.GetValue(helperObject);
+            return state;
         }
     }
 }

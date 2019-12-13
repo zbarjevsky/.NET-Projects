@@ -35,7 +35,7 @@ namespace DashCamGPSView.Controls
                 txtSpeed.Text = "Speed: " + inf.SpeedMph.ToString("0.0 mph");
                 txtLat.Text = "Lattitude:  " + SexagesimalAngle.ToString(inf.Latitude);
                 txtLon.Text = "Longtitude: " + SexagesimalAngle.ToString(inf.Longitude);
-                txtTime.Text = "Time: " + inf.FixTime.AddHours(timeZone).ToString("yyyy/MM/dd HH:mm:ss");
+                txtTime.Text = inf.FixTime.AddHours(timeZone).ToString("yyyy/MM/dd HH:mm:ss");
             }
             else
             {

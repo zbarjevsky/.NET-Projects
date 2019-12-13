@@ -146,7 +146,7 @@ namespace DashCamGPSView.Tools
             string info = "Time: " + GpsInfo[idx].FixTime.AddHours(_iGpsTimeZoneHours).ToString("yyyy/MM/dd HH:mm:ss") + 
                 ", " + new PointLatLng(GpsInfo[idx].Latitude, GpsInfo[idx].Longitude).ToString() + 
                 ", Speed: " + GpsInfo[idx].SpeedMph.ToString("0.0") + 
-                ", Azimuth: " + GpsInfo[idx].Course;
+                ", Azimuth: " + GpsInfo[idx].Course.ToString("0.0");
             return info;
         }
 

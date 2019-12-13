@@ -15,7 +15,8 @@
                             <PathFigure x:Name="_figurePrev" StartPoint="-100,80">
                                 <PathFigure.Segments>
                                     <PathSegmentCollection>
-                                        <PolyBezierSegment x:Name="_segmentPrev" Points="90,210 140,210 160,210 180,220 430,170 430,200" />
+                                        <!--<PolyBezierSegment x:Name="_segmentPrev" Points="90,210 140,210 160,210 180,220 430,170 430,200" />-->
+                                        <PolyLineSegment x:Name="_segmentPrev" Points="90,210 140,210 160,210 180,220 430,170 430,200" />
                                     </PathSegmentCollection>
                                 </PathFigure.Segments>
                             </PathFigure>
@@ -32,7 +33,8 @@
                             <PathFigure x:Name="_figureMain" StartPoint="200,80">
                                 <PathFigure.Segments>
                                     <PathSegmentCollection>
-                                        <PolyBezierSegment x:Name="_segmentMain" Points="90,200 140,200 160,200 180,200 430,190 430,280" />
+                                        <!--<PolyBezierSegment x:Name="_segmentMain" Points="90,200 140,200 160,200 180,200 430,190 430,280" />-->
+                                        <PolyLineSegment x:Name="_segmentMain" Points="90,200 140,200 160,200 180,200 430,190 430,280" />
                                     </PathSegmentCollection>
                                 </PathFigure.Segments>
                             </PathFigure>

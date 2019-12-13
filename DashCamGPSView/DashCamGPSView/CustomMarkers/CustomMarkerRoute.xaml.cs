@@ -116,7 +116,7 @@ namespace DashCamGPSView.CustomMarkers
             Visibility = Visibility.Visible;
         }
 
-        private void UpdateRouteAndCarRefresh(PolyBezierSegment segment, PathFigure figure, List<GpsPointData> route, GMapControl map)
+        private void UpdateRouteAndCarRefresh(PolyLineSegment segment, PathFigure figure, List<GpsPointData> route, GMapControl map)
         {
             segment.Points.Clear();
             if (route.Count == 0)
@@ -125,7 +125,14 @@ namespace DashCamGPSView.CustomMarkers
             figure.StartPoint = GetPoint(route[0], map);
             for (int i = 0; i < route.Count; i++)
             {
-                segment.Points.Add(GetPoint(route[i], map));
+                Point pt = GetPoint(route[i], map);
+                if(i>0)
+                {
+                    Vector v = pt - segment.Points.Last();
+                    if (v.Length < 4)
+                        continue; //skip points too close to each other
+                }
+                segment.Points.Add(pt);
             }
         }
 
