@@ -27,6 +27,7 @@ namespace DashCamGPSView.Controls
         public Action OpenFileAction = () => { };
         public Action<List<DashCamFileInfo>> ExportGPSAction = (infos) => { };
         public Action<ObservableCollection<VideoFile>> DeleteRecordingsAction = (videos) => { };
+        public Action<ObservableCollection<VideoFile>> FileTreeUpdatedAction = (deletedVideos) => { };
 
         private ObservableCollection<VideoGroup> _itemsSource = new ObservableCollection<VideoGroup>();
 
@@ -48,6 +49,7 @@ namespace DashCamGPSView.Controls
                 {
                     DeleteVideoFile(v);
                 }
+                FileTreeUpdatedAction(videos);
             };
         }
 
@@ -60,6 +62,7 @@ namespace DashCamGPSView.Controls
             }
             
             treeFiles.ItemsSource = _itemsSource;
+            treeFiles.UpdateLayout();
         }
 
         internal void SelectFile(string fileName)

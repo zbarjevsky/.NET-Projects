@@ -62,8 +62,12 @@ namespace DashCamGPSView.Tools
             string name = Path.GetFileNameWithoutExtension(fileName);
             name = name.Substring(0, name.Length - 1);
             string dirParent = Path.GetDirectoryName(Path.GetDirectoryName(fileName));
-            string dirF = Path.Combine(dirParent, "F");
-            string dirR = Path.Combine(dirParent, "R");
+            string dirF = "", dirR = "";
+            if (!string.IsNullOrWhiteSpace(dirParent))
+            {
+                dirF = Path.Combine(dirParent, "F");
+                dirR = Path.Combine(dirParent, "R");
+            }
 
             if (Directory.Exists(dirF) && Directory.Exists(dirR))
             {
@@ -126,8 +130,17 @@ namespace DashCamGPSView.Tools
         private DateTime FromViofoFileName(string fileName)
         {
             fileName = Path.GetFileNameWithoutExtension(fileName);
-            string date_time = fileName.Substring(0, 20); //"2019_0624_075333_296P"
-            return DateTime.ParseExact(date_time, "yyyy_MMdd_HHmmss_fff", CultureInfo.InvariantCulture);
+            if (fileName.Length >= 16)
+            {
+                string date_time = fileName.Substring(0, 16); //"2019_0624_075333_296P"
+                return DateTime.ParseExact(date_time, "yyyy_MMdd_HHmmss", CultureInfo.InvariantCulture);
+            }
+            else if (fileName.Length == 15)
+            {
+                string date_time = fileName.Substring(0, 15); //"20190624_075333"
+                return DateTime.ParseExact(date_time, "yyyyMMdd_HHmmss", CultureInfo.InvariantCulture);
+            }
+            return DateTime.MinValue;
         }
 
         private DateTime FromDuDuBellFileName(string fileName)
@@ -145,7 +158,7 @@ namespace DashCamGPSView.Tools
 
             string info = "Time: " + GpsInfo[idx].FixTime.AddHours(_iGpsTimeZoneHours).ToString("yyyy/MM/dd HH:mm:ss") + 
                 ", " + new PointLatLng(GpsInfo[idx].Latitude, GpsInfo[idx].Longitude).ToString() + 
-                ", Speed: " + GpsInfo[idx].SpeedMph.ToString("0.0") + 
+                ", Speed: " + GpsInfo[idx].SpeedMph.ToString("0.0 mph") + 
                 ", Azimuth: " + GpsInfo[idx].Course.ToString("0.0");
             return info;
         }

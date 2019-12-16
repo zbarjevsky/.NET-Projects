@@ -33,6 +33,8 @@ namespace DashCamGPSView
         public Action VideoEnded = () => { };
         public Action VideoStarted = () => { };
 
+        public MediaState MediaState { get; private set; } = MediaState.Manual;
+
         MediaElement mePlayer = null;
 
         public VideoPlayer()
@@ -99,6 +101,7 @@ namespace DashCamGPSView
         {
             mePlayer.Source = string.IsNullOrEmpty(fileName)? null : new Uri(fileName);
             Volume = volume;
+            MediaState = MediaState.Manual;
         }
 
         internal void Close()
@@ -106,11 +109,38 @@ namespace DashCamGPSView
             Stop();
             mePlayer.Source = null;
             this.Background = Brushes.Wheat;
+            MediaState = MediaState.Close;
         }
 
-        public void Play() { if (mePlayer.Source != null) { mePlayer.Play(); this.Background = Brushes.Black; } }
-        public void Pause() { if (mePlayer.Source != null) { mePlayer.Pause(); this.Background = Brushes.Black; } }
-        public void Stop() { if (mePlayer.Source != null) { mePlayer.Stop(); this.Background = Brushes.Black; } }
+        public void Play() 
+        { 
+            if (mePlayer.Source != null) 
+            { 
+                mePlayer.Play(); 
+                this.Background = Brushes.Black;
+                MediaState = MediaState.Play;
+            }
+        }
+
+        public void Pause()
+        {
+            if (mePlayer.Source != null)
+            { 
+                mePlayer.Pause(); 
+                this.Background = Brushes.Black;
+                MediaState = MediaState.Pause;
+            }
+        }
+
+        public void Stop() 
+        { 
+            if (mePlayer.Source != null) 
+            { 
+                mePlayer.Stop(); 
+                this.Background = Brushes.Black;
+                MediaState = MediaState.Stop;
+            }
+        }
 
         private void Grid_MouseWheel(object sender, MouseWheelEventArgs e)
         {
@@ -172,6 +202,8 @@ namespace DashCamGPSView
                 mePlayer.Volume = 0;
             }
 
+            MediaState = MediaState.Manual;
+
             mePlayer = new MediaElement();
             mePlayer.Width = 1920;
             mePlayer.Height = 1080;
@@ -193,7 +225,22 @@ namespace DashCamGPSView
 
             mePlayer.MediaOpened += (s, e) => { VideoStarted(); MediaState state = GetMediaState(mePlayer); };
             mePlayer.MediaEnded += (s, e) => { VideoEnded(); };
-            mePlayer.MediaFailed += (s, e) => { MessageBox.Show("Media Failed: " + e.ErrorException); };
+            mePlayer.MediaFailed += (s, e) => 
+            {
+                e.Handled = true;
+                MessageBox.Show("Media Failed: " + e.ErrorException.Message + 
+                    "\nMediaState: " + GetMediaState(mePlayer) +  
+                    "\nSource: "+mePlayer.Source + 
+                    "\n" + e.ErrorException,
+                    "Media Failed", MessageBoxButton.OK, MessageBoxImage.Error); 
+            };
+            mePlayer.MouseLeftButtonDown += (s, e) =>
+            {
+                if (MediaState == MediaState.Play)
+                    Pause();
+                else if (MediaState == MediaState.Pause)
+                    Play();
+            };
         }
 
         private MediaState GetMediaState(MediaElement myMedia)

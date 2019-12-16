@@ -33,8 +33,6 @@ namespace DashCamGPSView
     /// </summary>
     public partial class MainWindow : Window
     {
-        private bool mediaPlayerIsPlaying = false;
-        private bool mediaPlayerIsPaused = false;
         private bool userIsDraggingSlider = false;
 
         private DashCamFileInfo _dashCamFileInfo;
@@ -50,7 +48,7 @@ namespace DashCamGPSView
 
             playerF.Volume = Settings.Default.SoundVolume;
 
-            treeGroups.TreeItemDoubleClickAction = (fileName) => 
+            treeGroups.TreeItemDoubleClickAction = (fileName) =>
             {
                 PlayFile(fileName);
             };
@@ -65,10 +63,15 @@ namespace DashCamGPSView
                 ExportGPSData(infos);
             };
 
+            treeGroups.FileTreeUpdatedAction = (deletedFiles) =>
+            {
+                ClosePayer();
+            };
+
             playerF.VideoStarted = () => { waitScreen.Visibility = Visibility.Collapsed; };
 
             playerF.VideoEnded = () => { if (chkAutoPlay.IsChecked.Value) PlayNext(); };
-            
+
             waitScreen.Visibility = Visibility.Visible;
         }
 
@@ -76,12 +79,9 @@ namespace DashCamGPSView
         {
             if(e.Key == Key.Space)
             {
-                if (!mediaPlayerIsPlaying)
-                    return;
-
-                if (mediaPlayerIsPaused)
+                if (playerF.MediaState == MediaState.Pause)
                     Play_Executed(this, null);
-                else
+                else if (playerF.MediaState == MediaState.Play)
                     Pause_Executed(this, null);
             }
             else if (e.Key == Key.Up || e.Key == Key.VolumeUp)
@@ -169,17 +169,13 @@ namespace DashCamGPSView
                 sliProgress.Value = startFrom;
                 sliProgress_ValueChanged(sliProgress, null);
             }
-
-            mediaPlayerIsPlaying = true;
-            mediaPlayerIsPaused = false;
         }
 
         private void ClosePayer()
         {
             playerF.Close();
             playerR.Close();
-            mediaPlayerIsPlaying = false;
-            mediaPlayerIsPaused = false;
+
             MainMap.SetRouteAndCar(null);
         }
 
@@ -300,35 +296,28 @@ namespace DashCamGPSView
         {
             playerF.Play();
             playerR.Play();
-
-            mediaPlayerIsPlaying = true;
-            mediaPlayerIsPaused = false;
         }
 
         private void Pause_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = mediaPlayerIsPlaying && !mediaPlayerIsPaused;
+            e.CanExecute = (playerF.MediaState == MediaState.Play);
         }
 
         private void Pause_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             playerF.Pause();
             playerR.Pause();
-
-            mediaPlayerIsPaused = true;
         }
 
         private void Stop_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = mediaPlayerIsPlaying;
+            e.CanExecute = (playerF.MediaState == MediaState.Play) || (playerF.MediaState == MediaState.Pause); 
         }
 
         private void Stop_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             playerF.Stop();
             playerR.Stop();
-            mediaPlayerIsPlaying = false;
-            mediaPlayerIsPaused = false;
         }
 
         private void sliProgress_DragStarted(object sender, DragStartedEventArgs e)
@@ -360,10 +349,8 @@ namespace DashCamGPSView
 
         private void timer_Tick(object sender, EventArgs e)
         {
-            if (!mediaPlayerIsPlaying || mediaPlayerIsPaused || userIsDraggingSlider)
-                return;
-
-            UpdateGpsInfo();
+            if(playerF.MediaState == MediaState.Play)
+                UpdateGpsInfo();
         }
 
         private void UpdateGpsInfo()
