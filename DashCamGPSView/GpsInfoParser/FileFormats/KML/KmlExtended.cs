@@ -55,15 +55,29 @@ namespace GPSDataParser.FileFormats.KML
         public string description { get; set; } = "";
 
         [XmlElement("Style", Order = 3)]
-        public StyleGroupIcon style1 { get; set; }
+        public StyleIcon style1IconNormal;
         [XmlElement("Style", Order = 4)]
-        public StyleGroupIcon style2 { get; set; }
-        [XmlElement("Style", Order = 5)]
-        public StyleGroupLine style3 { get; set; }
+        public StyleIcon style1IconHighLight;
+        [XmlElement("StyleMap", Order = 5)]
+        public StyleMap style1Map;
 
-        [XmlElement("Folder", Order = 6)]
+        [XmlElement("Style", Order = 6)]
+        public StyleIcon style2IconNormal;
+        [XmlElement("Style", Order = 7)]
+        public StyleIcon style2IconHighLight;
+        [XmlElement("StyleMap", Order = 8)]
+        public StyleMap style2Map;
+
+        [XmlElement("Style", Order = 9)]
+        public StyleLine style3LineNormal;
+        [XmlElement("Style", Order = 10)]
+        public StyleLine style3LineHighLight;
+        [XmlElement("StyleMap", Order = 11)]
+        public StyleMap style3Map;
+
+        [XmlElement("Folder", Order = 12)]
         public FolderPath path { get; set; }
-        [XmlElement("Folder", Order = 7)]
+        [XmlElement("Folder", Order = 13)]
         public FolderPoints points { get; set; }
 
         public Document() { }
@@ -73,12 +87,12 @@ namespace GPSDataParser.FileFormats.KML
             name = Path.GetFileNameWithoutExtension(fileName);
             description = name;
 
-            style1 = new StyleGroupIcon("icon-1739-0288D1");
-            style2 = new StyleGroupIcon("icon-1899-0288D1");
-            style3 = new StyleGroupLine("line-FF0000-1000");
+            StyleGroupIcon.ConfigureGroup("icon-1739-0288D1", ref style1IconNormal, ref style1IconHighLight, ref style1Map);
+            StyleGroupIcon.ConfigureGroup("icon-1899-0288D1", ref style2IconNormal, ref style2IconHighLight, ref style2Map);
+            StyleGroupLine.ConfigureGroup("line-FF0000-1000", ref style3LineNormal, ref style3LineHighLight, ref style3Map);
 
-            path = new FolderPath(route, style1.name);
-            points = new FolderPoints(route, style2.name);
+            path = new FolderPath(route, style3Map.id);
+            points = new FolderPoints(route, style1Map.id);
         }
     }
 }

@@ -7,28 +7,11 @@ using System.Xml.Serialization;
 
 namespace GPSDataParser.FileFormats.KML
 {
-    public class StyleGroup
+    public class StyleGroupIcon
     {
-        [XmlIgnore]
-        public string name = "";
-    }
-
-    [Serializable]
-    //[XmlInclude(typeof(StyleIcon)), XmlInclude(typeof(StyleMap))]
-    public class StyleGroupIcon : StyleGroup
-    {
-        [XmlElement("Style", Order = 1)]
-        public StyleIcon styleIconNormal = new StyleIcon();
-        [XmlElement("Style", Order = 2)]
-        public StyleIcon styleIconHighLight = new StyleIcon();
-        [XmlElement("StyleMap", Order = 3)]
-        public StyleMap styleMap = new StyleMap();
-
-        public StyleGroupIcon() { }
-
-        public StyleGroupIcon(string name = "icon-1739-0288D1")
+        public static void ConfigureGroup(string name, 
+            ref StyleIcon styleIconNormal, ref StyleIcon styleIconHighLight, ref StyleMap styleMap)
         {
-            base.name = name;
             styleIconNormal = new StyleIcon("1", "0") { id = name + "-normal" };
             styleIconHighLight = new StyleIcon("1", "1") { id = name + "-highlight" };
             styleMap = new StyleMap(styleIconNormal.id, styleIconHighLight.id) { id = name };
@@ -77,21 +60,11 @@ namespace GPSDataParser.FileFormats.KML
         public string scale = "0";
     }
 
-    [Serializable]
-    public class StyleGroupLine : StyleGroup
+    public class StyleGroupLine
     {
-        [XmlElement("Style", Order = 1)]
-        public StyleLine styleLineNormal = new StyleLine();
-        [XmlElement("Style", Order = 2)]
-        public StyleLine styleLineHighLight = new StyleLine();
-        [XmlElement("StyleMap", Order = 3)]
-        public StyleMap styleMap = new StyleMap();
-
-        public StyleGroupLine() { }
-
-        public StyleGroupLine(string name = "line-FF0000-1000")
+        public static void ConfigureGroup(string name,
+            ref StyleLine styleLineNormal, ref StyleLine styleLineHighLight, ref StyleMap styleMap)
         {
-            base.name = name;
             styleLineNormal = new StyleLine(1) { id = name + "-normal" };
             styleLineHighLight = new StyleLine(1.5) { id = name + "-highlight" };
             styleMap = new StyleMap(styleLineNormal.id, styleLineHighLight.id) { id = name };

@@ -31,17 +31,17 @@ namespace GPSDataParser.FileFormats.KML
             this.description = description;
         }
 
-        [Serializable]
+        [XmlType("ExtendedData")]
         public class ExtendedData
         {
-            [XmlArrayItem("Data")]
+            [XmlElement("Data")]
             public KmlData[] data = new KmlData[0];
 
             public class KmlData
             {
                 [XmlAttribute("name")]
                 public string name = "";
-                [XmlText]
+                [XmlElement("value")]
                 public string value = "";
             }
         }
@@ -65,7 +65,7 @@ namespace GPSDataParser.FileFormats.KML
                 data = new ExtendedData.KmlData[]
                 {
                     new ExtendedData.KmlData() { name = "TimeStamp", value = gps.FixTime.ToString() },
-                    new ExtendedData.KmlData() { name = "Speed", value = gps.SpeedMph + " mph" },
+                    new ExtendedData.KmlData() { name = "Speed", value = gps.SpeedMph.ToString("0.0 mph") },
                     new ExtendedData.KmlData() { name = "Heading", value = gps.Course.ToString("0.0") },
                     new ExtendedData.KmlData() { name = "Lattitude", value = gps.Latitude.ToString("0.000000")},
                     new ExtendedData.KmlData() { name = "Longtitude", value = gps.Longitude.ToString("0.000000")}
@@ -84,7 +84,7 @@ namespace GPSDataParser.FileFormats.KML
             public KmlPoint(GpsPointData gps = null)
             {
                 if (gps != null)
-                    coordinates = string.Format("{0} {1}", gps.Longitude, gps.Latitude);
+                    coordinates = string.Format("{0},{1}", gps.Longitude, gps.Latitude);
             }
         }
     }
