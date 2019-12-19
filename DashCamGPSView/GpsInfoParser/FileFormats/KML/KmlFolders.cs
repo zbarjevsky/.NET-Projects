@@ -15,7 +15,7 @@ namespace GPSDataParser.FileFormats.KML
         public string name = "route";
 
         [XmlElement("Placemark")]
-        public PlacemarkPath placemarkPath = new PlacemarkPath();
+        public PlacemarkRoute placemarkPath = new PlacemarkRoute();
 
         public FolderPath() //: base("Route")
         {
@@ -24,7 +24,7 @@ namespace GPSDataParser.FileFormats.KML
 
         public FolderPath(List<GpsPointData> route, string lineStyleMapId) : this()
         {
-            placemarkPath = new PlacemarkPath(route, lineStyleMapId);
+            placemarkPath = new PlacemarkRoute(route, lineStyleMapId);
         }
     }
 
@@ -45,7 +45,7 @@ namespace GPSDataParser.FileFormats.KML
             placemarkPoint = new PlacemarkPoint[route.Count];
             for (int i = 0; i < route.Count; i++)
             {
-                placemarkPoint[i] = new PlacemarkPoint(route[i], i, iconStyleMapName);
+                placemarkPoint[i] = new PlacemarkPoint(route, i, iconStyleMapName);
             }
         }
     }

@@ -55,23 +55,25 @@ namespace GPSDataParser.FileFormats.KML
 
         public PlacemarkPoint() : base("Point", "One Point") { }
 
-        public PlacemarkPoint(GpsPointData gps, int idx, string iconStyleMapId) : this()
+        public PlacemarkPoint(List<GpsPointData> gps, int idx, string iconStyleMapId) : this()
         {
-            name = "Point: " + idx;
-            description = "1 route point";
+            TimeSpan duration = (gps[idx].FixTime - gps[0].FixTime);
+            
+            name = "Location: " + idx;
+            description = string.Format("Point {0} from start", duration);
             styleUrl = "#" + iconStyleMapId;
             extendedData = new ExtendedData()
             {
                 data = new ExtendedData.KmlData[]
                 {
-                    new ExtendedData.KmlData() { name = "TimeStamp", value = gps.FixTime.ToString() },
-                    new ExtendedData.KmlData() { name = "Speed", value = gps.SpeedMph.ToString("0.0 mph") },
-                    new ExtendedData.KmlData() { name = "Heading", value = gps.Course.ToString("0.0") },
-                    new ExtendedData.KmlData() { name = "Lattitude", value = gps.Latitude.ToString("0.000000")},
-                    new ExtendedData.KmlData() { name = "Longtitude", value = gps.Longitude.ToString("0.000000")}
+                    new ExtendedData.KmlData() { name = "TimeStamp", value = gps[idx].FixTime.ToString() },
+                    new ExtendedData.KmlData() { name = "Speed", value = gps[idx].SpeedMph.ToString("0.0 mph") },
+                    new ExtendedData.KmlData() { name = "Heading", value = gps[idx].Course.ToString("0.0") },
+                    new ExtendedData.KmlData() { name = "Lattitude", value = gps[idx].Latitude.ToString("0.000000")},
+                    new ExtendedData.KmlData() { name = "Longtitude", value = gps[idx].Longitude.ToString("0.000000")}
                 }
             };
-            point = new KmlPoint(gps);
+            point = new KmlPoint(gps[idx]);
         }
 
         [Serializable]
@@ -90,30 +92,43 @@ namespace GPSDataParser.FileFormats.KML
     }
 
     [Serializable]
-    public class PlacemarkPath : Placemark
+    public class PlacemarkRoute : Placemark
     {
         [XmlElement("LineString", Order = 5)]
         public LineString lineString = new LineString();
 
-        public PlacemarkPath() : base("Route", "Navigation Line")
+        public PlacemarkRoute() : base("Route", "Navigation Line")
         {
 
         }
 
-        public PlacemarkPath(List<GpsPointData> route, string lineStyleMapId) : this()
+        public PlacemarkRoute(List<GpsPointData> route, string lineStyleMapId) : this()
         {
+            TimeSpan duration = route.Last().FixTime - route.First().FixTime;
+
             name = "Route";
-            description = "1 minute route";
+            description = "Duration: " + duration;
             styleUrl = "#" + lineStyleMapId;
             extendedData = new ExtendedData()
             {
                 data = new ExtendedData.KmlData[]
                 {
-                    new ExtendedData.KmlData() { name = "TimeStamp", value = "First Point time here"},
-                    new ExtendedData.KmlData() { name = "Average Speed", value = "First Point Speed here"},
+                    new ExtendedData.KmlData() { name = "Start Time", value = route.First().FixTime.ToString("s") },
+                    new ExtendedData.KmlData() { name = "Average Speed", value = AverageSpeed(route).ToString("0.0 mph") },
                 }
             };
             lineString = new LineString(route);
+        }
+
+        private double AverageSpeed(List<GpsPointData> route)
+        {
+            double speed = 0;
+            foreach (GpsPointData item in route)
+            {
+                speed += item.SpeedMph;
+            }
+            speed /= route.Count;
+            return speed;
         }
 
         public class LineString

@@ -225,7 +225,7 @@ namespace DashCamGPSView
                 return;
 
             SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.Filter = "Google GPS Format (KML) (*.kml)|*.kml|GPS Exchange Format (GPX) (*.gpx)|*.gpx";
+            saveFileDialog.Filter = "Google GPS Format (Extended KML) (*.kml)|*.kml|Google GPS Format (Simple KML) (*.kml)|*.kml|GPS Exchange Format (GPX) (*.gpx)|*.gpx";
             saveFileDialog.FilterIndex = 1;
             string baseFileName = System.IO.Path.GetFileNameWithoutExtension(infos[0].FrontFileName);
             saveFileDialog.FileName = string.Format("TrackData_{0}.kml", baseFileName);
@@ -240,7 +240,7 @@ namespace DashCamGPSView
                 }
                 try
                 {
-                    ExportUtils.SaveGPSData(list, saveFileDialog.FileName);
+                    ExportUtils.SaveGPSData(list, saveFileDialog.FilterIndex, saveFileDialog.FileName);
                 }
                 catch (Exception err)
                 {

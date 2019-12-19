@@ -7,13 +7,41 @@ using System.Xml.Serialization;
 
 namespace GPSDataParser.FileFormats.KML
 {
+    public enum ExtendedIconCode
+    {
+        Star = 1502,
+        Drink = 1517,
+        Bike = 1522,
+        Camera = 1535,
+        Diner = 1577,
+        Question = 1594,
+        Walk = 1596,
+        Home = 1603,
+        Parking = 1644,
+        SmallDot = 1739,
+        Marker = 1899
+    }
+
+    public class KmlStyles
+    {
+        public static String HexConverter(System.Drawing.Color c)
+        {
+            return c.R.ToString("X2") + c.G.ToString("X2") + c.B.ToString("X2");
+        }
+
+        public static String RGBConverter(System.Drawing.Color c)
+        {
+            return "RGB(" + c.R.ToString() + "," + c.G.ToString() + "," + c.B.ToString() + ")";
+        }
+    }
     public class StyleGroupIcon
     {
-        public static void ConfigureGroup(string name, 
+        public static void ConfigureGroup(ExtendedIconCode iconIndex, System.Drawing.Color c,
             ref StyleIcon styleIconNormal, ref StyleIcon styleIconHighLight, ref StyleMap styleMap)
         {
-            styleIconNormal = new StyleIcon("1", "0") { id = name + "-normal" };
-            styleIconHighLight = new StyleIcon("1", "1") { id = name + "-highlight" };
+            string name = "icon-" + (int)iconIndex + "-" + KmlStyles.HexConverter(c);
+            styleIconNormal = new StyleIcon("1", "0", c) { id = name + "-normal" };
+            styleIconHighLight = new StyleIcon("1", "1", c) { id = name + "-highlight" };
             styleMap = new StyleMap(styleIconNormal.id, styleIconHighLight.id) { id = name };
         }
     }
@@ -28,7 +56,7 @@ namespace GPSDataParser.FileFormats.KML
 
         public StyleIcon() { }
 
-        public StyleIcon(string scaleIcon, string scaleLabel, string color = "ff00ff00")
+        public StyleIcon(string scaleIcon, string scaleLabel, System.Drawing.Color color)
         {
             iconStyle = new IconStyle(scaleIcon, color);
             labelStyle.scale = scaleLabel;
@@ -37,16 +65,16 @@ namespace GPSDataParser.FileFormats.KML
 
     public class IconStyle
     {
-        public string color = "ff00ff00";
+        public string color = "ff000000";
         public string scale = "1";
         public KmlIcon Icon = new KmlIcon();
 
         public IconStyle() { }
 
-        public IconStyle(string scale, string color = "ff00ff00")
+        public IconStyle(string scale, System.Drawing.Color color)
         {
             this.scale = scale;
-            this.color = color;
+            this.color = KmlStyles.HexConverter(color);
         }
 
         public class KmlIcon
@@ -62,11 +90,11 @@ namespace GPSDataParser.FileFormats.KML
 
     public class StyleGroupLine
     {
-        public static void ConfigureGroup(string name,
+        public static void ConfigureGroup(string name, System.Drawing.Color c,
             ref StyleLine styleLineNormal, ref StyleLine styleLineHighLight, ref StyleMap styleMap)
         {
-            styleLineNormal = new StyleLine(1) { id = name + "-normal" };
-            styleLineHighLight = new StyleLine(1.5) { id = name + "-highlight" };
+            styleLineNormal = new StyleLine(c, 4) { id = name + "-normal" };
+            styleLineHighLight = new StyleLine(c, 8) { id = name + "-highlight" };
             styleMap = new StyleMap(styleLineNormal.id, styleLineHighLight.id) { id = name };
         }
     }
@@ -79,9 +107,9 @@ namespace GPSDataParser.FileFormats.KML
 
         public StyleLine() { }
 
-        public StyleLine(double width = 1)
+        public StyleLine(System.Drawing.Color color, double width = 1)
         {
-            lineStyle = new LineStyle(width);
+            lineStyle = new LineStyle(color, width);
         }
     }
 
@@ -89,15 +117,15 @@ namespace GPSDataParser.FileFormats.KML
     public class LineStyle
     {
         //System.Drawing.ColorTranslator.ToHtml
-        public string color = "ffff0000";
+        public string color = "ff000000";
         public double width = 4;
 
         public LineStyle() { }
 
-        public LineStyle(double width = 1, string color = "ff00ff00")
+        public LineStyle(System.Drawing.Color color, double width = 1)
         {
+            this.color = KmlStyles.HexConverter(color);
             this.width = width;
-            this.color = color;
         }
     }
 

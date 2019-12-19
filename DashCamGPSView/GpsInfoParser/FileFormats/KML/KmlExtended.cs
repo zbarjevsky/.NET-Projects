@@ -87,9 +87,12 @@ namespace GPSDataParser.FileFormats.KML
             name = Path.GetFileNameWithoutExtension(fileName);
             description = name;
 
-            StyleGroupIcon.ConfigureGroup("icon-1739-0288D1", ref style1IconNormal, ref style1IconHighLight, ref style1Map);
-            StyleGroupIcon.ConfigureGroup("icon-1899-0288D1", ref style2IconNormal, ref style2IconHighLight, ref style2Map);
-            StyleGroupLine.ConfigureGroup("line-FF0000-1000", ref style3LineNormal, ref style3LineHighLight, ref style3Map);
+            StyleGroupIcon.ConfigureGroup(ExtendedIconCode.SmallDot, System.Drawing.Color.DarkGoldenrod, 
+                ref style1IconNormal, ref style1IconHighLight, ref style1Map);
+            StyleGroupIcon.ConfigureGroup(ExtendedIconCode.SmallDot, System.Drawing.Color.Green,
+                ref style2IconNormal, ref style2IconHighLight, ref style2Map);
+            StyleGroupLine.ConfigureGroup("bb22-style", System.Drawing.Color.DarkOliveGreen,
+                ref style3LineNormal, ref style3LineHighLight, ref style3Map);
 
             path = new FolderPath(route, style3Map.id);
             points = new FolderPoints(route, style1Map.id);
