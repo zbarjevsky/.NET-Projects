@@ -72,6 +72,15 @@ namespace DashCamGPSView
 
             playerF.VideoEnded = () => { if (chkAutoPlay.IsChecked.Value) PlayNext(); };
 
+            playerF.LeftButtonClick = TogglePlayPauseState;
+            playerR.LeftButtonClick = TogglePlayPauseState;
+
+            playerF.LeftButtonDoubleClick = () => { };
+            playerR.LeftButtonDoubleClick = () => { };
+
+            playerF.VideoFailed = (e, player) => VideoFailed(e, player);
+            playerR.VideoFailed = (e, player) => VideoFailed(e, player);
+
             waitScreen.Visibility = Visibility.Visible;
         }
 
@@ -79,26 +88,28 @@ namespace DashCamGPSView
         {
             if(e.Key == Key.Space)
             {
-                if (playerF.MediaState == MediaState.Pause)
-                    Play_Executed(this, null);
-                else if (playerF.MediaState == MediaState.Play)
-                    Pause_Executed(this, null);
+                TogglePlayPauseState();
+                e.Handled = true;
             }
             else if (e.Key == Key.Up || e.Key == Key.VolumeUp)
             {
                 playerF.Volume += 0.1 * playerF.Volume;
+                e.Handled = true;
             }
             else if (e.Key == Key.Down || e.Key == Key.VolumeDown)
             {
                 playerF.Volume -= 0.1 * playerF.Volume;
+                e.Handled = true;
             }
             else if (e.Key == Key.Left)
             {
                 sliProgress.Value -= sliProgress.SmallChange;
+                e.Handled = true;
             }
             else if (e.Key == Key.Right)
             {
                 sliProgress.Value += sliProgress.SmallChange;
+                e.Handled = true;
             }
         }
 
@@ -117,6 +128,14 @@ namespace DashCamGPSView
             Settings.Default.SoundVolume = playerF.Volume;
             Settings.Default.InitialLocation = new System.Drawing.Point((int)this.Left, (int)this.Top);
             Settings.Default.Save();
+        }
+
+        private void TogglePlayPauseState()
+        {
+            if (playerF.MediaState == MediaState.Pause)
+                Play_Executed(this, null);
+            else if (playerF.MediaState == MediaState.Play)
+                Pause_Executed(this, null);
         }
 
         private bool _bMapWasCollapsed = false;
@@ -238,6 +257,7 @@ namespace DashCamGPSView
                     if(info.GpsInfo != null && info.GpsInfo.Count > 0)
                         list.AddRange(info.GpsInfo);
                 }
+
                 try
                 {
                     ExportUtils.SaveGPSData(list, saveFileDialog.FilterIndex, saveFileDialog.FileName);
@@ -403,9 +423,35 @@ namespace DashCamGPSView
 
         private void Test_Click(object sender, RoutedEventArgs e)
         {
+            RecreateMediaElements();
+        }
+
+        private void RecreateMediaElements()
+        {
+            MediaState state = playerF.MediaState;
+            double position = sliProgress.Value;
+            Settings.Default.SoundVolume = playerF.Volume;
+
             playerF.RecreateMediaElement();
+            playerR.RecreateMediaElement();
             if (_dashCamFileInfo != null)
-                PlayFile(_dashCamFileInfo.FrontFileName, sliProgress.Value);
+            {
+                PlayFile(_dashCamFileInfo.FrontFileName, position); //load file - move to specific position
+                if (state != MediaState.Play) //pause if was not playing
+                {
+                    Pause_Executed(this, null);
+                }
+            }
+        }
+
+        private bool VideoFailed(ExceptionRoutedEventArgs e, MediaElement player)
+        {
+            MessageBox.Show("Media Failed: " + e.ErrorException.Message +
+                "\nMediaState: " + playerF.MediaState +
+                "\nSource: " + player.Source +
+                "\n" + e.ErrorException,
+                "Media Failed", MessageBoxButton.OK, MessageBoxImage.Error);
+            return true;
         }
     }
 }

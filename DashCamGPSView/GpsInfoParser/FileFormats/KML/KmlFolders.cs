@@ -40,12 +40,14 @@ namespace GPSDataParser.FileFormats.KML
 
         public FolderPoints() { }
 
-        public FolderPoints(List<GpsPointData> route, string iconStyleMapName) : this()
+        public FolderPoints(List<GpsPointData> route, 
+            string iconStyleMapNameGreen, string iconStyleMapNameYellow, string iconStyleMapNameRed) 
+            : this()
         {
             placemarkPoint = new PlacemarkPoint[route.Count];
             for (int i = 0; i < route.Count; i++)
             {
-                placemarkPoint[i] = new PlacemarkPoint(route, i, iconStyleMapName);
+                placemarkPoint[i] = new PlacemarkPoint(route, i, iconStyleMapNameGreen, iconStyleMapNameYellow, iconStyleMapNameRed);
             }
         }
     }

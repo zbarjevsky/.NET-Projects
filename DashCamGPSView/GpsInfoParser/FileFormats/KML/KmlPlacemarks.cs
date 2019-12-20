@@ -55,13 +55,15 @@ namespace GPSDataParser.FileFormats.KML
 
         public PlacemarkPoint() : base("Point", "One Point") { }
 
-        public PlacemarkPoint(List<GpsPointData> gps, int idx, string iconStyleMapId) : this()
+        public PlacemarkPoint(List<GpsPointData> gps, int idx,
+            string iconStyleMapNameGreen, string iconStyleMapNameYellow, string iconStyleMapNameRed) 
+            : this()
         {
             TimeSpan duration = (gps[idx].FixTime - gps[0].FixTime);
             
             name = "Location: " + idx;
             description = string.Format("Point {0} from start", duration);
-            styleUrl = "#" + iconStyleMapId;
+            styleUrl = "#" + PointColor(gps[idx], iconStyleMapNameGreen, iconStyleMapNameYellow,  iconStyleMapNameRed);
             extendedData = new ExtendedData()
             {
                 data = new ExtendedData.KmlData[]
@@ -74,6 +76,15 @@ namespace GPSDataParser.FileFormats.KML
                 }
             };
             point = new KmlPoint(gps[idx]);
+        }
+
+        private string PointColor(GpsPointData gps, string iconStyleMapNameGreen, string iconStyleMapNameYellow, string iconStyleMapNameRed)
+        {
+            if (gps.SpeedMph < 20)
+                return iconStyleMapNameGreen;
+            if (gps.SpeedMph > 60)
+                return iconStyleMapNameRed;
+            return iconStyleMapNameYellow;
         }
 
         [Serializable]

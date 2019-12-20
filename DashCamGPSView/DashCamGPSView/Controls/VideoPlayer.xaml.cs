@@ -32,6 +32,9 @@ namespace DashCamGPSView
 
         public Action VideoEnded = () => { };
         public Action VideoStarted = () => { };
+        public Func<ExceptionRoutedEventArgs, MediaElement, bool> VideoFailed = (e, player) => true;
+        public Action LeftButtonClick = () => { };
+        public Action LeftButtonDoubleClick = () => { };
 
         public MediaState MediaState { get; private set; } = MediaState.Manual;
 
@@ -46,6 +49,18 @@ namespace DashCamGPSView
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             DataContext = this;
+        }
+
+        private void UserControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+                LeftButtonDoubleClick();
+        }
+
+        private void UserControl_PreviewMouseButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+                LeftButtonClick();
         }
 
         public bool Play_CanExecute 
@@ -97,7 +112,7 @@ namespace DashCamGPSView
             _scrollDragger.ScrollToCenter();
         }
 
-        public void Open(string fileName, double volume)
+        public void Open(string fileName, double volume = 0)
         {
             mePlayer.Source = string.IsNullOrEmpty(fileName)? null : new Uri(fileName);
             Volume = volume;
@@ -195,52 +210,48 @@ namespace DashCamGPSView
         /// </summary>
         internal void RecreateMediaElement()
         {
-            if (mePlayer != null)
+            try
             {
-                mePlayer.Stop();
-                mePlayer.Source = null;
-                mePlayer.Volume = 0;
+                if (mePlayer != null)
+                {
+                    Settings.Default.SoundVolume = mePlayer.Volume;
+
+                    mePlayer.Stop();
+                    mePlayer.Source = null;
+                    mePlayer.Volume = 0;
+                }
+
+                MediaState = MediaState.Manual;
+
+                mePlayer = new MediaElement();
+                mePlayer.Width = 1920;
+                mePlayer.Height = 1080;
+                mePlayer.LoadedBehavior = MediaState.Manual;
+                mePlayer.Stretch = Stretch.Uniform;
+                mePlayer.MouseWheel += mePlayer_MouseWheel;
+                
+                Volume = Settings.Default.SoundVolume; //restore
+
+                scrollPlayer.Content = mePlayer;
+
+                double vOff = Settings.Default.RearPlayerVerticalOffset;
+                if (_scrollDragger != null)
+                    vOff = _scrollDragger.VerticalOffset;
+
+                _scrollDragger = new ScrollDragZoom(mePlayer, scrollPlayer);
+                _scrollDragger.VerticalOffset = vOff;
+
+                //refresh view when change position
+                mePlayer.ScrubbingEnabled = true;
+
+                mePlayer.MediaOpened += (s, e) => { MediaState = GetMediaState(mePlayer); VideoStarted(); };
+                mePlayer.MediaEnded += (s, e) => { VideoEnded(); };
+                mePlayer.MediaFailed += (s, e) => { e.Handled = VideoFailed(e, mePlayer); };
             }
-
-            MediaState = MediaState.Manual;
-
-            mePlayer = new MediaElement();
-            mePlayer.Width = 1920;
-            mePlayer.Height = 1080;
-            mePlayer.LoadedBehavior = MediaState.Manual;
-            mePlayer.Stretch = Stretch.Uniform;
-            mePlayer.MouseWheel += mePlayer_MouseWheel;
-
-            scrollPlayer.Content = mePlayer;
-
-            double vOff = Settings.Default.RearPlayerVerticalOffset;
-            if (_scrollDragger != null)
-                vOff = _scrollDragger.VerticalOffset;
-
-            _scrollDragger = new ScrollDragZoom(mePlayer, scrollPlayer);
-            _scrollDragger.VerticalOffset = vOff;
-
-            //refresh view when change position
-            mePlayer.ScrubbingEnabled = true;
-
-            mePlayer.MediaOpened += (s, e) => { VideoStarted(); MediaState state = GetMediaState(mePlayer); };
-            mePlayer.MediaEnded += (s, e) => { VideoEnded(); };
-            mePlayer.MediaFailed += (s, e) => 
+            catch (Exception err)
             {
-                e.Handled = true;
-                MessageBox.Show("Media Failed: " + e.ErrorException.Message + 
-                    "\nMediaState: " + GetMediaState(mePlayer) +  
-                    "\nSource: "+mePlayer.Source + 
-                    "\n" + e.ErrorException,
-                    "Media Failed", MessageBoxButton.OK, MessageBoxImage.Error); 
-            };
-            mePlayer.MouseLeftButtonDown += (s, e) =>
-            {
-                if (MediaState == MediaState.Play)
-                    Pause();
-                else if (MediaState == MediaState.Pause)
-                    Play();
-            };
+                MessageBox.Show(err.ToString());
+            }        
         }
 
         private MediaState GetMediaState(MediaElement myMedia)

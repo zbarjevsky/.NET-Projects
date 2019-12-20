@@ -34,8 +34,27 @@ namespace GPSDataParser.FileFormats.KML
             return "RGB(" + c.R.ToString() + "," + c.G.ToString() + "," + c.B.ToString() + ")";
         }
     }
+
     public class StyleGroupIcon
     {
+        //[XmlElement("Style", Order = 1)]
+        public StyleIcon style1IconNormal;
+        //[XmlElement("Style", Order = 2)]
+        public StyleIcon style1IconHighLight;
+        //[XmlElement("StyleMap", Order = 3)]
+        public StyleMap style1Map;
+
+        public StyleGroupIcon(System.Drawing.Color color)
+        {
+            ConfigureGroup(ExtendedIconCode.SmallDot, color,
+                ref style1IconNormal, ref style1IconHighLight, ref style1Map);
+        }
+
+        public BaseIdTag [] ToArray()
+        {
+            return new BaseIdTag[] { style1IconNormal, style1IconHighLight, style1Map };
+        }
+
         public static void ConfigureGroup(ExtendedIconCode iconIndex, System.Drawing.Color c,
             ref StyleIcon styleIconNormal, ref StyleIcon styleIconHighLight, ref StyleMap styleMap)
         {
@@ -47,6 +66,7 @@ namespace GPSDataParser.FileFormats.KML
     }
 
     [Serializable]
+    [XmlRoot("Style")]
     public class StyleIcon : BaseIdTag
     {
         [XmlElement("IconStyle")]
@@ -90,6 +110,24 @@ namespace GPSDataParser.FileFormats.KML
 
     public class StyleGroupLine
     {
+        //[XmlElement("Style", Order = 9)]
+        public StyleLine style3LineNormal;
+        //[XmlElement("Style", Order = 10)]
+        public StyleLine style3LineHighLight;
+        //[XmlElement("StyleMap", Order = 11)]
+        public StyleMap style3Map;
+
+        public StyleGroupLine(System.Drawing.Color color)
+        {
+            ConfigureGroup("MZ22-style", color,
+                ref style3LineNormal, ref style3LineHighLight, ref style3Map);
+        }
+
+        public BaseIdTag[] ToArray()
+        {
+            return new BaseIdTag[] { style3LineNormal, style3LineHighLight, style3Map };
+        }
+
         public static void ConfigureGroup(string name, System.Drawing.Color c,
             ref StyleLine styleLineNormal, ref StyleLine styleLineHighLight, ref StyleMap styleMap)
         {
@@ -129,7 +167,7 @@ namespace GPSDataParser.FileFormats.KML
         }
     }
 
-    [XmlType("StyleMap")]
+    [XmlRoot("StyleMap")]
     public class StyleMap : BaseIdTag
     {
         [XmlElement("Pair")]
