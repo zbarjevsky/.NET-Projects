@@ -12,8 +12,8 @@ namespace TestApp
     {
         static void Main(string[] args)
         {
-            string inFilename = @"c:\Temp\DashcamDuDuBell\Parking\F\PARK191121-184210F.NMEA";
-            string outFilename = @"c:\Temp\DashcamDuDuBell\PARK191121-184210F.NMEA.kml";
+            string inFilename = @"c:\Temp\DashcamDuDuBell\Parking\F\PARK191127-023323F.NMEA";// PARK191121-184210F.NMEA";
+            string outFilename = @"c:\Temp\DashcamDuDuBell\PARK191127-023323F.NMEA.kml";// PARK191121-184210F.NMEA.kml";
 
             try
             {

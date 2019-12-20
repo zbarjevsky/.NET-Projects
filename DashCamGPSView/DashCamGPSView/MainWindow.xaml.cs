@@ -432,8 +432,8 @@ namespace DashCamGPSView
             double position = sliProgress.Value;
             Settings.Default.SoundVolume = playerF.Volume;
 
-            playerF.RecreateMediaElement();
-            playerR.RecreateMediaElement();
+            playerF.RecreateMediaElement(false);
+            playerR.RecreateMediaElement(true);
             if (_dashCamFileInfo != null)
             {
                 PlayFile(_dashCamFileInfo.FrontFileName, position); //load file - move to specific position

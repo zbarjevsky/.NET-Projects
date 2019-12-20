@@ -43,7 +43,7 @@ namespace DashCamGPSView
         public VideoPlayer()
         {
             InitializeComponent();
-            RecreateMediaElement();
+            RecreateMediaElement(false);
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -208,7 +208,7 @@ namespace DashCamGPSView
         /// Sometimes MediaElement crashes - black window
         /// I will replace it with the new one
         /// </summary>
-        internal void RecreateMediaElement()
+        internal void RecreateMediaElement(bool flipHorizontally)
         {
             try
             {
@@ -244,6 +244,9 @@ namespace DashCamGPSView
                 //refresh view when change position
                 mePlayer.ScrubbingEnabled = true;
 
+                if (flipHorizontally)
+                    AddFlipXRenderTransform(mePlayer);
+
                 mePlayer.MediaOpened += (s, e) => { MediaState = GetMediaState(mePlayer); VideoStarted(); };
                 mePlayer.MediaEnded += (s, e) => { VideoEnded(); };
                 mePlayer.MediaFailed += (s, e) => { e.Handled = VideoFailed(e, mePlayer); };
@@ -252,6 +255,22 @@ namespace DashCamGPSView
             {
                 MessageBox.Show(err.ToString());
             }        
+        }
+
+        internal void AddFlipXRenderTransform(UIElement element)
+        {
+            element.RenderTransformOrigin = new Point(0.5, 0.5);
+
+            ScaleTransform myScaleTransform = new ScaleTransform();
+            myScaleTransform.ScaleY = 1;
+            myScaleTransform.ScaleX = -1;
+
+            //// Create a TransformGroup to contain the transforms 
+            //// and add the transforms to it. 
+            //TransformGroup myTransformGroup = new TransformGroup();
+            //myTransformGroup.Children.Add(myScaleTransform);
+
+            element.RenderTransform = myScaleTransform; // myTransformGroup;
         }
 
         private MediaState GetMediaState(MediaElement myMedia)
