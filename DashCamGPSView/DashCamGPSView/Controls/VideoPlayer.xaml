@@ -11,16 +11,34 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid MouseWheel="Grid_MouseWheel">
         <Grid.RowDefinitions>
-            <RowDefinition Height="4" />
+            <RowDefinition Height="40" />
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <ScrollViewer Name="scrollPlayer" Grid.Row="1"
+        <ScrollViewer Name="scrollPlayer" Grid.Row="0" Grid.RowSpan="3"
                       HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
             <!--<MediaElement Name="mePlayer" LoadedBehavior="Manual" Stretch="Uniform" 
                           Width="1920" Height="1080"
                           MouseWheel="mePlayer_MouseWheel" />-->
         </ScrollViewer>
+
+        <StackPanel Orientation="Horizontal">
+            <Button x:Name="btnMaximize"  Margin="6"
+                    Content="MAX" ToolTip="Maximize"
+                    Click="btnMaximize_Click" />
+            <Button x:Name="btnOriginalSize"  Margin="6"
+                    Content="1:1" ToolTip="Original Size"
+                    Click="btnOriginalSize_Click" />
+            <Button x:Name="btnFitWidth"  Margin="6"
+                    Content="Fit Width" ToolTip="Fit Width"
+                    Click="btnFitWidth_Click" />
+            <Button x:Name="btnFitWindow"  Margin="6"
+                    Content="Fit Window" ToolTip="Fit Window"
+                    Click="btnFitWindow_Click" />
+            <Button x:Name="btnFlipHorizontally"  Margin="6"
+                    Content="Flip Horizontally" ToolTip="Flip Horizontally"
+                    Click="btnFlipHorizontally_Click" />
+        </StackPanel>
     </Grid>
 </UserControl>

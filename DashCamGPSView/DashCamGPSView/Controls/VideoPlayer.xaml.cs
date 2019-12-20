@@ -59,7 +59,7 @@ namespace DashCamGPSView
 
         private void UserControl_PreviewMouseButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.ChangedButton == MouseButton.Left)
+            if (e.ChangedButton == MouseButton.Left && (e.OriginalSource is MediaElement))
                 LeftButtonClick();
         }
 
@@ -168,33 +168,19 @@ namespace DashCamGPSView
 
         public void FitWidth()
         {
-            mePlayer.Width = this.ActualWidth - 18;
+            _scrollDragger.FitWidth();  
+            ScrollToCenter();
+        }
 
-            //proportionally change height
-            Size sz = NaturalSize;
-            mePlayer.Height = mePlayer.Width * sz.Height / sz.Width;
-
+        public void OriginalSize()
+        {
+            _scrollDragger.OriginalSize();
             ScrollToCenter();
         }
 
         internal void FitWindow()
         {
-            if (this.ActualHeight > 18 && this.ActualWidth > 18)
-            {
-                mePlayer.Width = this.ActualWidth - 18;
-                mePlayer.Height = this.ActualHeight - 18;
-            }
-
-            ScrollToCenter();
-        }
-
-        internal void ResizeToActualSize()
-        {
-            Size sz = NaturalSize;
-            mePlayer.Width = sz.Width;
-            mePlayer.Height = sz.Height;
-
-            ScrollToCenter();
+            _scrollDragger.FitWindow();
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -244,8 +230,7 @@ namespace DashCamGPSView
                 //refresh view when change position
                 mePlayer.ScrubbingEnabled = true;
 
-                if (flipHorizontally)
-                    AddFlipXRenderTransform(mePlayer);
+                AddFlipXRenderTransform(mePlayer, flipHorizontally);
 
                 mePlayer.MediaOpened += (s, e) => { MediaState = GetMediaState(mePlayer); VideoStarted(); };
                 mePlayer.MediaEnded += (s, e) => { VideoEnded(); };
@@ -257,20 +242,20 @@ namespace DashCamGPSView
             }        
         }
 
-        internal void AddFlipXRenderTransform(UIElement element)
+        internal void AddFlipXRenderTransform(UIElement element, bool bFlipHorizontally)
         {
             element.RenderTransformOrigin = new Point(0.5, 0.5);
 
-            ScaleTransform myScaleTransform = new ScaleTransform();
-            myScaleTransform.ScaleY = 1;
-            myScaleTransform.ScaleX = -1;
+            ScaleTransform scaleTransform = new ScaleTransform();
+            scaleTransform.ScaleY = 1;
+            scaleTransform.ScaleX = bFlipHorizontally ? -1 : 1;
 
             //// Create a TransformGroup to contain the transforms 
             //// and add the transforms to it. 
             //TransformGroup myTransformGroup = new TransformGroup();
             //myTransformGroup.Children.Add(myScaleTransform);
 
-            element.RenderTransform = myScaleTransform; // myTransformGroup;
+            element.RenderTransform = scaleTransform; // myTransformGroup;
         }
 
         private MediaState GetMediaState(MediaElement myMedia)
@@ -280,6 +265,32 @@ namespace DashCamGPSView
             FieldInfo stateField = helperObject.GetType().GetField("_currentState", BindingFlags.NonPublic | BindingFlags.Instance);
             MediaState state = (MediaState)stateField.GetValue(helperObject);
             return state;
+        }
+
+        private void btnFitWidth_Click(object sender, RoutedEventArgs e)
+        {
+            FitWidth();
+        }
+
+        private void btnMaximize_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void btnOriginalSize_Click(object sender, RoutedEventArgs e)
+        {
+            OriginalSize();
+        }
+
+        private void btnFitWindow_Click(object sender, RoutedEventArgs e)
+        {
+            FitWindow();
+        }
+
+        private void btnFlipHorizontally_Click(object sender, RoutedEventArgs e)
+        {
+            if (mePlayer.RenderTransform is ScaleTransform scale)
+                scale.ScaleX *= -1; //Flip Horizontally
         }
     }
 }

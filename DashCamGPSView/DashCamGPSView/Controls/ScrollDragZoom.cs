@@ -22,8 +22,24 @@ namespace DashCamGPSView
             set { _scrollViewer.ScrollToVerticalOffset(value); }
         }
 
-        private double Zoom = 1.0;
+        private double _zoom = 1.0;
+        public double Zoom
+        {
+            get { return _zoom; }
+            set
+            {
+                _zoom = value;
+                _content.Width = _zoom * _origWidth;
+                _content.Height = _zoom * _origHeight;
+            }
+        }
+
         private double _origWidth, _origHeight;
+        public Size NaturalSize
+        {
+            get { return new Size(_origWidth, _origHeight); }
+            set { _origWidth = value.Width; _origHeight = value.Height; }
+        }
 
         public ScrollDragZoom(FrameworkElement content, ScrollViewer scrollViewer)
         {
@@ -41,22 +57,50 @@ namespace DashCamGPSView
 
         public void ScrollToCenter()
         {
+            _scrollViewer.UpdateLayout();
             _scrollViewer.ScrollToVerticalOffset(_scrollViewer.ScrollableHeight / 2);
             _scrollViewer.ScrollToHorizontalOffset(_scrollViewer.ScrollableWidth / 2);
         }
 
-        private void content_MouseWheel(object sender, MouseWheelEventArgs e)
+        public void FitWidth(double margin = 18)
         {
-            Zoom *= ((e.Delta > 0) ? 1.1 : 0.9);
-            if (Zoom < 0.1)
-                Zoom = 0.1;
-            if (Zoom > 10)
-                Zoom = 10;
+            _content.Width = _scrollViewer.ActualWidth - margin;
 
-            _content.Width = Zoom * _origWidth;
-            _content.Height = Zoom * _origHeight;
+            //proportionally change height
+            _content.Height = _content.Width * NaturalSize.Height / NaturalSize.Width;
+
+            _zoom = _content.Width / NaturalSize.Width;
+        }
+
+        public void OriginalSize()
+        {
+            _content.Width = NaturalSize.Width;
+            _content.Height = NaturalSize.Height;
+            _zoom = 1;
+        }
+
+        internal void FitWindow(double margin = 18)
+        {
+            if (_scrollViewer.ActualHeight > margin && _scrollViewer.ActualWidth > margin)
+            {
+                _content.Width = _scrollViewer.ActualWidth - 18;
+                _content.Height = _scrollViewer.ActualHeight - 18;
+            }
 
             ScrollToCenter();
+        }
+
+        private void content_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            double zoom = _zoom * ((e.Delta > 0) ? 1.1 : 0.9);
+            if (zoom < 0.1)
+                zoom = 0.1;
+            if (zoom > 10)
+                zoom = 10;
+
+            Zoom = zoom; //update control
+
+            //ScrollToCenter();
         }
 
         private void scrollViewer_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
