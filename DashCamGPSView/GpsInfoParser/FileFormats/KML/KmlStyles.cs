@@ -35,33 +35,23 @@ namespace GPSDataParser.FileFormats.KML
         }
     }
 
-    public class StyleGroupIcon
+    public class StyleGroupIcon : BaseIdTag
     {
-        //[XmlElement("Style", Order = 1)]
-        public StyleIcon style1IconNormal;
-        //[XmlElement("Style", Order = 2)]
-        public StyleIcon style1IconHighLight;
-        //[XmlElement("StyleMap", Order = 3)]
-        public StyleMap style1Map;
+        public StyleIcon styleIconNormal;
+        public StyleIcon styleIconHighLight;
+        public StyleMap styleMap;
 
-        public StyleGroupIcon(System.Drawing.Color color)
+        public StyleGroupIcon(ExtendedIconCode iconIndex, System.Drawing.Color color)
         {
-            ConfigureGroup(ExtendedIconCode.SmallDot, color,
-                ref style1IconNormal, ref style1IconHighLight, ref style1Map);
+            id = "icon-" + (int)iconIndex + "-" + KmlStyles.HexConverter(color);
+            styleIconNormal = new StyleIcon("1", "0", color) { id = id + "-normal" };
+            styleIconHighLight = new StyleIcon("1", "1", color) { id = id + "-highlight" };
+            styleMap = new StyleMap(styleIconNormal.id, styleIconHighLight.id) { id = id };
         }
 
         public BaseIdTag [] ToArray()
         {
-            return new BaseIdTag[] { style1IconNormal, style1IconHighLight, style1Map };
-        }
-
-        public static void ConfigureGroup(ExtendedIconCode iconIndex, System.Drawing.Color c,
-            ref StyleIcon styleIconNormal, ref StyleIcon styleIconHighLight, ref StyleMap styleMap)
-        {
-            string name = "icon-" + (int)iconIndex + "-" + KmlStyles.HexConverter(c);
-            styleIconNormal = new StyleIcon("1", "0", c) { id = name + "-normal" };
-            styleIconHighLight = new StyleIcon("1", "1", c) { id = name + "-highlight" };
-            styleMap = new StyleMap(styleIconNormal.id, styleIconHighLight.id) { id = name };
+            return new BaseIdTag[] { styleIconNormal, styleIconHighLight, styleMap };
         }
     }
 
@@ -108,32 +98,23 @@ namespace GPSDataParser.FileFormats.KML
         public string scale = "0";
     }
 
-    public class StyleGroupLine
+    public class StyleGroupLine : BaseIdTag
     {
-        //[XmlElement("Style", Order = 9)]
-        public StyleLine style3LineNormal;
-        //[XmlElement("Style", Order = 10)]
-        public StyleLine style3LineHighLight;
-        //[XmlElement("StyleMap", Order = 11)]
-        public StyleMap style3Map;
+        public StyleLine styleLineNormal;
+        public StyleLine styleLineHighLight;
+        public StyleMap styleMap;
 
         public StyleGroupLine(System.Drawing.Color color)
         {
-            ConfigureGroup("MZ22-style", color,
-                ref style3LineNormal, ref style3LineHighLight, ref style3Map);
+            this.id = "MZ22-style";
+            styleLineNormal = new StyleLine(color, 4) { id = this.id + "-normal" };
+            styleLineHighLight = new StyleLine(color, 8) { id = this.id + "-highlight" };
+            styleMap = new StyleMap(styleLineNormal.id, styleLineHighLight.id) { id = this.id };
         }
 
         public BaseIdTag[] ToArray()
         {
-            return new BaseIdTag[] { style3LineNormal, style3LineHighLight, style3Map };
-        }
-
-        public static void ConfigureGroup(string name, System.Drawing.Color c,
-            ref StyleLine styleLineNormal, ref StyleLine styleLineHighLight, ref StyleMap styleMap)
-        {
-            styleLineNormal = new StyleLine(c, 4) { id = name + "-normal" };
-            styleLineHighLight = new StyleLine(c, 8) { id = name + "-highlight" };
-            styleMap = new StyleMap(styleLineNormal.id, styleLineHighLight.id) { id = name };
+            return new BaseIdTag[] { styleLineNormal, styleLineHighLight, styleMap };
         }
     }
 

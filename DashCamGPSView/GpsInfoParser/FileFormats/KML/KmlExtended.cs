@@ -93,20 +93,20 @@ namespace GPSDataParser.FileFormats.KML
             name = Path.GetFileNameWithoutExtension(fileName);
             description = name;
 
-            StyleGroupIcon grpIconGreen = new StyleGroupIcon(System.Drawing.Color.Green);
+            StyleGroupIcon grpIconGreen = new StyleGroupIcon(ExtendedIconCode.SmallDot, System.Drawing.Color.Green);
             StylesIcons.AddRange(grpIconGreen.ToArray());
 
-            StyleGroupIcon grpIconYellow = new StyleGroupIcon(System.Drawing.Color.Yellow);
+            StyleGroupIcon grpIconYellow = new StyleGroupIcon(ExtendedIconCode.SmallDot, System.Drawing.Color.Yellow);
             StylesIcons.AddRange(grpIconYellow.ToArray());
 
-            StyleGroupIcon grpIconRed = new StyleGroupIcon(System.Drawing.Color.Red);
+            StyleGroupIcon grpIconRed = new StyleGroupIcon(ExtendedIconCode.SmallDot, System.Drawing.Color.Red);
             StylesIcons.AddRange(grpIconRed.ToArray());
 
-            StyleGroupLine grpLine = new StyleGroupLine(System.Drawing.Color.DarkOliveGreen);
+            StyleGroupLine grpLine = new StyleGroupLine(System.Drawing.Color.DarkViolet);
             StylesLines.AddRange(grpLine.ToArray());
 
-            path = new FolderPath(route, grpLine.style3Map.id);
-            points = new FolderPoints(route, grpIconGreen.style1Map.id, grpIconYellow.style1Map.id, grpIconRed.style1Map.id);
+            path = new FolderPath(route, grpLine.styleMap.id);
+            points = new FolderPoints(route, grpIconGreen.styleMap.id, grpIconYellow.styleMap.id, grpIconRed.styleMap.id);
         }
     }
 }
