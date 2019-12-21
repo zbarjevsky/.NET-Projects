@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
@@ -34,6 +35,58 @@ namespace DashCamGPSView.Tools
                         BitmapSizeOptions.FromEmptyOptions());
                 }
             }
+        }
+        public static void UIElementToPng(UIElement element, string filename)
+        {
+            //var rect = new Rect(element.RenderSize);
+            //var visual = new DrawingVisual();
+
+            //using (var dc = visual.RenderOpen())
+            //{
+            //    dc.DrawRectangle(new VisualBrush(element), null, rect);
+            //}
+
+            //var bitmap = new RenderTargetBitmap(
+            //    (int)rect.Width, (int)rect.Height, 96, 96, PixelFormats.Default);
+            //bitmap.Render(visual);
+
+            var bitmap = UIElementToBitmap(element);
+
+            var encoder = new PngBitmapEncoder();
+            encoder.Frames.Add(BitmapFrame.Create(bitmap));
+
+            using (var file = File.OpenWrite(filename))
+            {
+                encoder.Save(file);
+            }
+        }
+
+        public static BitmapSource UIElementToBitmap(UIElement element)
+        {
+            var rect = new Rect(element.RenderSize);
+            var visual = new DrawingVisual();
+
+            using (var dc = visual.RenderOpen())
+            {
+                dc.DrawRectangle(new VisualBrush(element), null, rect);
+            }
+
+            RenderTargetBitmap bitmap = new RenderTargetBitmap(
+                (int)rect.Width, (int)rect.Height, 96, 96, PixelFormats.Default);
+            bitmap.Render(visual);
+
+            return bitmap;
+        }
+
+        public static void Snapshot(GpsFileFormat format, string videoFileName, TimeSpan position, UIElement element)
+        {
+            string fileName = @"C:\Temp\Screenshot.png";
+            if (File.Exists(videoFileName))
+                fileName = DashCamFileInfo.GetScreenshotFileName(format, videoFileName);
+
+            fileName = string.Format("{0}_at{1}.png", fileName, position.ToString("hh\\.mm\\.ss"));
+            UIElementToPng(element, fileName);
+            Process.Start(fileName);
         }
 
         public static void Screenshot(GpsFileFormat format, string videoFileName, TimeSpan position, Window mainWindow)

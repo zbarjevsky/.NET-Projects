@@ -37,6 +37,8 @@ namespace DashCamGPSView
         public Action LeftButtonClick = () => { };
         public Action LeftButtonDoubleClick = () => { };
 
+        public MediaElement VideoPlayerElement { get; private set; } = null;
+
         public MediaState MediaState { get; private set; } = MediaState.Manual;
 
         private string _title;
@@ -57,20 +59,18 @@ namespace DashCamGPSView
         {
             get
             {
-                if (mePlayer.RenderTransform is ScaleTransform scale)
+                if (VideoPlayerElement.RenderTransform is ScaleTransform scale)
                     return  scale.ScaleX == -1; //Flip Horizontally
                 return false;
             }
             set
             {
-                if (mePlayer.RenderTransform is ScaleTransform scale)
+                if (VideoPlayerElement.RenderTransform is ScaleTransform scale)
                     scale.ScaleX = value ? -1 : 1; //Flip Horizontally
                 Title = _title; //update flipped
                 OnPropertyChanged();
             }
         } 
-
-        MediaElement mePlayer = null;
 
         public VideoPlayer()
         {
@@ -86,7 +86,7 @@ namespace DashCamGPSView
         public void CopyState(VideoPlayer player, double volume, bool copySource)
         {
             if(copySource)
-                mePlayer.Source = player.mePlayer.Source;
+                VideoPlayerElement.Source = player.VideoPlayerElement.Source;
 
             Volume = volume;
             MediaState = player.MediaState;
@@ -119,29 +119,29 @@ namespace DashCamGPSView
         { 
             get
             {
-                return (mePlayer != null) && (mePlayer.Source != null);
+                return (VideoPlayerElement != null) && (VideoPlayerElement.Source != null);
             } 
         }
 
         public double Volume
         {
-            get { return mePlayer.Volume; }
-            set { mePlayer.Volume = value; OnPropertyChanged(); }
+            get { return VideoPlayerElement.Volume; }
+            set { VideoPlayerElement.Volume = value; OnPropertyChanged(); }
         }
 
         public TimeSpan Position 
         { 
-            get { return mePlayer.Position; }
-            set { mePlayer.Position = value; OnPropertyChanged(); } 
+            get { return VideoPlayerElement.Position; }
+            set { VideoPlayerElement.Position = value; OnPropertyChanged(); } 
         }
 
         public Size NaturalSize
         {
             get
             {
-                if (mePlayer.Source != null)
+                if (VideoPlayerElement.Source != null)
                 {
-                    return new Size(mePlayer.NaturalVideoWidth, mePlayer.NaturalVideoHeight);
+                    return new Size(VideoPlayerElement.NaturalVideoWidth, VideoPlayerElement.NaturalVideoHeight);
                 }
                 return new Size(1920, 1080);
             }
@@ -151,9 +151,9 @@ namespace DashCamGPSView
         {
             get
             {
-                if ((mePlayer.Source != null) && (mePlayer.NaturalDuration.HasTimeSpan))
+                if ((VideoPlayerElement.Source != null) && (VideoPlayerElement.NaturalDuration.HasTimeSpan))
                 {
-                    return mePlayer.NaturalDuration.TimeSpan.TotalSeconds;
+                    return VideoPlayerElement.NaturalDuration.TimeSpan.TotalSeconds;
                 }
                 return 0;
             }
@@ -167,7 +167,7 @@ namespace DashCamGPSView
         public void Open(string fileName, double volume = 0)
         {
             FileName = fileName;
-            mePlayer.Source = string.IsNullOrEmpty(fileName)? null : new Uri(fileName);
+            VideoPlayerElement.Source = string.IsNullOrEmpty(fileName)? null : new Uri(fileName);
             Volume = volume;
             MediaState = MediaState.Manual;
         }
@@ -175,38 +175,38 @@ namespace DashCamGPSView
         internal void Close()
         {
             Stop();
-            mePlayer.Source = null;
+            VideoPlayerElement.Source = null;
             FileName = "";
-            this.Background = Brushes.Wheat;
+            this.Background = Brushes.LightGray;
             MediaState = MediaState.Close;
         }
 
         public void Play() 
         { 
-            if (mePlayer.Source != null) 
+            if (VideoPlayerElement.Source != null) 
             { 
-                mePlayer.Play(); 
-                this.Background = Brushes.Black;
+                VideoPlayerElement.Play(); 
+                this.Background = Brushes.Gray;
                 MediaState = MediaState.Play;
             }
         }
 
         public void Pause()
         {
-            if (mePlayer.Source != null)
+            if (VideoPlayerElement.Source != null)
             { 
-                mePlayer.Pause(); 
-                this.Background = Brushes.Black;
+                VideoPlayerElement.Pause(); 
+                this.Background = Brushes.DarkGray;
                 MediaState = MediaState.Pause;
             }
         }
 
         public void Stop() 
         { 
-            if (mePlayer.Source != null) 
+            if (VideoPlayerElement.Source != null) 
             { 
-                mePlayer.Stop(); 
-                this.Background = Brushes.Black;
+                VideoPlayerElement.Stop(); 
+                this.Background = Brushes.DarkGray;
                 MediaState = MediaState.Stop;
             }
         }
@@ -252,43 +252,43 @@ namespace DashCamGPSView
         {
             try
             {
-                if (mePlayer != null)
+                if (VideoPlayerElement != null)
                 {
-                    Settings.Default.SoundVolume = mePlayer.Volume;
+                    Settings.Default.SoundVolume = VideoPlayerElement.Volume;
 
-                    mePlayer.Stop();
-                    mePlayer.Source = null;
-                    mePlayer.Volume = 0;
+                    VideoPlayerElement.Stop();
+                    VideoPlayerElement.Source = null;
+                    VideoPlayerElement.Volume = 0;
                 }
 
                 MediaState = MediaState.Manual;
 
-                mePlayer = new MediaElement();
-                mePlayer.Width = 1920;
-                mePlayer.Height = 1080;
-                mePlayer.LoadedBehavior = MediaState.Manual;
-                mePlayer.Stretch = Stretch.Uniform;
-                mePlayer.MouseWheel += mePlayer_MouseWheel;
+                VideoPlayerElement = new MediaElement();
+                VideoPlayerElement.Width = 1920;
+                VideoPlayerElement.Height = 1080;
+                VideoPlayerElement.LoadedBehavior = MediaState.Manual;
+                VideoPlayerElement.Stretch = Stretch.Uniform;
+                VideoPlayerElement.MouseWheel += mePlayer_MouseWheel;
                 
                 Volume = Settings.Default.SoundVolume; //restore
 
-                scrollPlayer.Content = mePlayer;
+                scrollPlayer.Content = VideoPlayerElement;
 
                 double vOff = Settings.Default.RearPlayerVerticalOffset;
                 if (_scrollDragger != null)
                     vOff = _scrollDragger.VerticalOffset;
 
-                _scrollDragger = new ScrollDragZoom(mePlayer, scrollPlayer);
+                _scrollDragger = new ScrollDragZoom(VideoPlayerElement, scrollPlayer);
                 _scrollDragger.VerticalOffset = vOff;
 
                 //refresh view when change position
-                mePlayer.ScrubbingEnabled = true;
+                VideoPlayerElement.ScrubbingEnabled = true;
 
-                AddFlipXRenderTransform(mePlayer, flipHorizontally);
+                AddFlipXRenderTransform(VideoPlayerElement, flipHorizontally);
 
-                mePlayer.MediaOpened += (s, e) => { MediaState = GetMediaState(mePlayer); VideoStarted(); };
-                mePlayer.MediaEnded += (s, e) => { VideoEnded(); };
-                mePlayer.MediaFailed += (s, e) => { e.Handled = VideoFailed(e, mePlayer); };
+                VideoPlayerElement.MediaOpened += (s, e) => { MediaState = GetMediaState(VideoPlayerElement); VideoStarted(); };
+                VideoPlayerElement.MediaEnded += (s, e) => { VideoEnded(); };
+                VideoPlayerElement.MediaFailed += (s, e) => { e.Handled = VideoFailed(e, VideoPlayerElement); };
             }
             catch (Exception err)
             {

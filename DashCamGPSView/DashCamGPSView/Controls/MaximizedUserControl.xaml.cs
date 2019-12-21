@@ -69,6 +69,8 @@ namespace DashCamGPSView.Controls
             sliProgress.Value = player.Position.TotalSeconds;
             sliProgress_ValueChanged(null, null);
 
+            thumbnails.StartCreateThumbnailsFromVideoFile(player.FileName);
+
             _timer.Start();
 
             Player.btnMaximize.IsEnabled = false;
@@ -77,7 +79,8 @@ namespace DashCamGPSView.Controls
         private void btnScreenshot_Click(object sender, RoutedEventArgs e)
         {
             Player.Pause();
-            Tools.Tools.Screenshot(Tools.GpsFileFormat.Unkn, Player.FileName, Player.Position, Application.Current.MainWindow);
+            //Tools.Tools.Screenshot(Tools.GpsFileFormat.Unkn, Player.FileName, Player.Position, Application.Current.MainWindow);
+            Tools.Tools.Snapshot(Tools.GpsFileFormat.Unkn, Player.FileName, Player.Position, Player.VideoPlayerElement);
         }
 
         private void btnClose_Click(object sender, RoutedEventArgs e)

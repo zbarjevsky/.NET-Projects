@@ -4,11 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DashCamGPSView"
+             xmlns:controls="clr-namespace:DashCamGPSView.Controls"
              mc:Ignorable="d" 
              Loaded="UserControl_Loaded"
              MouseDoubleClick="UserControl_MouseDoubleClick"
              PreviewMouseDown="UserControl_PreviewMouseButtonDown"
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="150" d:DesignWidth="800">
     <Grid MouseWheel="Grid_MouseWheel">
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
@@ -22,6 +23,19 @@
                           Width="1920" Height="1080"
                           MouseWheel="mePlayer_MouseWheel" />-->
         </ScrollViewer>
+
+        <TextBox x:Name="txtTitle" BorderThickness="0" Margin="3" Padding="100,0"
+                     Foreground="Navy"
+                     HorizontalContentAlignment="Center"
+                     FontSize="22" FontWeight="Bold" FontFamily="Times New Roman" 
+                     Text="Title" IsReadOnly="True" >
+            <TextBox.BitmapEffect>
+                <DropShadowBitmapEffect Color="DarkViolet" Direction="320" ShadowDepth="6" Opacity="1" Softness="1" />
+            </TextBox.BitmapEffect>
+            <TextBox.Background>
+                <SolidColorBrush Color="White" Opacity="0.2" />
+            </TextBox.Background>
+        </TextBox>
 
         <StackPanel Orientation="Horizontal" >
             <Button x:Name="btnMaximize"  Margin="6"
@@ -39,10 +53,6 @@
             <Button x:Name="btnFlipHorizontally"  Margin="6"
                     Content="Flip Horizontally" ToolTip="Flip Horizontally"
                     Click="btnFlipHorizontally_Click" />
-            <TextBox x:Name="txtTitle" Background="Transparent" BorderThickness="0"
-                     Width="500" HorizontalContentAlignment="Center"
-                     FontSize="22" FontWeight="Bold" 
-                     Text="Title" IsReadOnly="True" />
         </StackPanel>
     </Grid>
 </UserControl>

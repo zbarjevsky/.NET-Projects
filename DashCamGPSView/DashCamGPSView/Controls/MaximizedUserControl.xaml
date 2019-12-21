@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:DashCamGPSView.Controls"
              xmlns:dashcamgpsview="clr-namespace:DashCamGPSView"
              mc:Ignorable="d" 
-             d:DesignHeight="150" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Background>
         <SolidColorBrush Opacity="0.5" Color="White" />
     </UserControl.Background>
@@ -15,15 +15,23 @@
             <Border.Background>
                 <SolidColorBrush Opacity="0.5" Color="White" />
             </Border.Background>
-            <Border  BorderBrush="Gray" CornerRadius="8" Margin="6" BorderThickness="2" Background="Black">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="30" />
-                        <RowDefinition Height="*" />
-                        <RowDefinition Height="30" />
-                    </Grid.RowDefinitions>
-                    <dashcamgpsview:VideoPlayer x:Name="Player"  Grid.Row="0" Grid.RowSpan="2" Margin="4" />
-                    <StatusBar Grid.Row="2" Margin="4,1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                
+                <dashcamgpsview:VideoPlayer x:Name="Player"  Grid.Row="0" Grid.RowSpan="2" Margin="4" />
+                
+                <GridSplitter Grid.Row="2" HorizontalAlignment="Stretch"/>
+
+                <local:ThumbnailsUserControl x:Name="thumbnails" Grid.Row="3" VerticalAlignment="Bottom"/>
+                
+                <Border Grid.Row="4" CornerRadius="0,0,8,8" BorderThickness="1" Background="LightGray" >
+                    <StatusBar Margin="4,1" Background="LightGray">
                         <StatusBar.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <Grid>
@@ -39,28 +47,28 @@
                             <TextBlock Name="lblProgressStatus" FontSize="16">00:00:00/00:00:00</TextBlock>
                         </StatusBarItem>
                         <StatusBarItem Grid.Column="1" HorizontalContentAlignment="Stretch">
-                            <Slider Name="sliProgress" 
-                            SmallChange="1" LargeChange="10"
-                            ValueChanged="sliProgress_ValueChanged" />
+                            <Slider Name="sliProgress" Foreground="Black"
+                                    SmallChange="1" LargeChange="10" TickPlacement="TopLeft" 
+                                    ValueChanged="sliProgress_ValueChanged" />
                         </StatusBarItem>
                         <StatusBarItem Grid.Column="2">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Volume: " FontSize="16" />
-                                <Slider Name="pbVolume" Width="110" 
-                                Maximum="1" SmallChange="0.05" LargeChange="0.1"
-                                Value="{Binding ElementName=Player, Path=Volume}" />
+                                <Slider Name="pbVolume" Width="110" TickPlacement="BottomRight" 
+                                    Maximum="1" SmallChange="0.05" LargeChange="0.1"
+                                    Value="{Binding ElementName=Player, Path=Volume}" />
                             </StackPanel>
                         </StatusBarItem>
                     </StatusBar>
-                </Grid>
-            </Border>
+                </Border>
+            </Grid>
         </Border>
-        <Button x:Name="btnScreenshot" Content="Screen Shot" ToolTip="Screen Shot"
-                Width="92" Height="24" Margin="70,20" 
+        <Button x:Name="btnScreenshot" Content="SnapShot" ToolTip="SnapShot"
+                Width="65" Height="20" Margin="70,16" 
                 VerticalAlignment="Top" HorizontalAlignment="Right"
                 Click="btnScreenshot_Click" />
         <Button x:Name="btnClose" Content="X" ToolTip="Close"
-                Width="24" Height="24" Margin="40, 20" 
+                Width="24" Height="20" Margin="40, 16" 
                 VerticalAlignment="Top" HorizontalAlignment="Right"
                 Click="btnClose_Click" />
     </Grid>

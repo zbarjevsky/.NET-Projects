@@ -50,6 +50,7 @@
         <Border x:Name="borderPlayerF" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="3" BorderThickness="2" BorderBrush="Gray">
             <local:VideoPlayer x:Name="playerF" Title="Front View" />
         </Border>
+
         <GridSplitter Grid.Column="3" Grid.Row="1" Grid.RowSpan="6" HorizontalAlignment="Stretch"/>
         <Grid Grid.Row="1" Grid.RowSpan="6" Grid.Column="4">
             <Grid.RowDefinitions>
@@ -97,7 +98,8 @@
                 <local:AutoGreyableImage Source="/Images/Screenshot.png" />
             </Button>
             <Button  ToolTip="Test" Content="Test" Click="Test_Click" />
-            <TextBlock Name="txtFileName"  Text="..." VerticalAlignment="Center" Margin="10,0" FontSize="16"/>
+            <TextBox Name="txtFileName"  Text="..." IsReadOnly="True"
+                     VerticalAlignment="Center" Margin="10,0" FontSize="16"/>
             <Viewbox Margin="6">
                 <CheckBox x:Name="chkAutoPlay" IsChecked="True" Content="Auto Play Next"/>
             </Viewbox>
