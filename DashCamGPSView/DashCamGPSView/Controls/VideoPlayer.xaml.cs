@@ -39,6 +39,10 @@ namespace DashCamGPSView
 
         public MediaState MediaState { get; private set; } = MediaState.Manual;
 
+        public string Title { get { return txtTitle.Text;  } set { txtTitle.Text = value; } }
+
+        public string FileName { get; private set; }
+
         MediaElement mePlayer = null;
 
         public VideoPlayer()
@@ -57,10 +61,13 @@ namespace DashCamGPSView
             if(copySource)
                 mePlayer.Source = player.mePlayer.Source;
 
-            Position = player.Position;
             Volume = volume;
             MediaState = player.MediaState;
+            Title = player.Title;
+            FileName = player.FileName;
+
             Play();
+            
             Position = player.Position;
             if (player.MediaState == MediaState.Stop)
                 Stop();
@@ -131,6 +138,7 @@ namespace DashCamGPSView
 
         public void Open(string fileName, double volume = 0)
         {
+            FileName = fileName;
             mePlayer.Source = string.IsNullOrEmpty(fileName)? null : new Uri(fileName);
             Volume = volume;
             MediaState = MediaState.Manual;
@@ -140,6 +148,7 @@ namespace DashCamGPSView
         {
             Stop();
             mePlayer.Source = null;
+            FileName = "";
             this.Background = Brushes.Wheat;
             MediaState = MediaState.Close;
         }

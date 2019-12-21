@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DashCamGPSView.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="200" d:DesignWidth="400">
+             d:DesignHeight="200" d:DesignWidth="600">
     <UserControl.Resources>
         <ResourceDictionary>
             <BitmapImage x:Key="Compass" UriSource="pack://application:,,,/DashCamGPSView;component/Images/Compass.png" />
@@ -13,16 +13,14 @@
         </ResourceDictionary>
     </UserControl.Resources>
     <Grid x:Name="compassGrid">
-        <Grid.Background>
-            <ImageBrush ImageSource="{StaticResource Compass}" Stretch="Uniform"/>
-        </Grid.Background>
+        <Image x:Name="compass" Source="{StaticResource Compass}" Stretch="Uniform" />
         <Image Source="{StaticResource CompassArrow}" 
-               Width="{Binding Path=ActualWidth, ElementName=compassGrid, Converter={local:PercentageConverter}, ConverterParameter='0.20'}"
-               Height="{Binding Path=ActualHeight, ElementName=compassGrid, Converter={local:PercentageConverter}, ConverterParameter='0.35'}"
-               HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Fill">
+               Height="{Binding Path=ActualHeight, ElementName=compass, Converter={local:PercentageConverter}, ConverterParameter='0.35'}"
+               Width="{Binding Path=ActualWidth, ElementName=compass, Converter={local:PercentageConverter}, ConverterParameter='0.20'}"
+               HorizontalAlignment="Center" VerticalAlignment="Center">
             <Image.LayoutTransform>
                 <TransformGroup>
-                    <ScaleTransform/>
+                    <!--<ScaleTransform/>-->
                     <RotateTransform x:Name="arrowDirection" Angle="0" />
                 </TransformGroup>
             </Image.LayoutTransform>

@@ -73,6 +73,11 @@ namespace DashCamGPSView.Controls
             Player.btnMaximize.IsEnabled = false;
         }
 
+        private void btnScreenshot_Click(object sender, RoutedEventArgs e)
+        {
+            Tools.Tools.Screenshot(Tools.GpsFileFormat.Unkn, Player.FileName, Player.Position, Application.Current.MainWindow);
+        }
+
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
             _sourcePlayer.CopyState(Player, Player.Volume, false);

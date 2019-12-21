@@ -51,8 +51,12 @@
                 </StatusBar>
             </Grid>
        </Border>
+        <Button x:Name="btnScreenshot" Content="Screen Shot" ToolTip="Screen Shot"
+                Width="92" Height="24" Margin="50,20" 
+                VerticalAlignment="Top" HorizontalAlignment="Right"
+                Click="btnScreenshot_Click" />
         <Button x:Name="btnClose" Content="X" ToolTip="Close"
-                Width="24" Height="24" Margin="20" 
+                Width="24" Height="24" Margin="20, 20" 
                 VerticalAlignment="Top" HorizontalAlignment="Right"
                 Click="btnClose_Click" />
     </Grid>

@@ -23,7 +23,7 @@
                           MouseWheel="mePlayer_MouseWheel" />-->
         </ScrollViewer>
 
-        <StackPanel Orientation="Horizontal">
+        <StackPanel Orientation="Horizontal" >
             <Button x:Name="btnMaximize"  Margin="6"
                     Content="MAX" ToolTip="Maximize"
                     Click="btnMaximize_Click" />
@@ -39,6 +39,10 @@
             <Button x:Name="btnFlipHorizontally"  Margin="6"
                     Content="Flip Horizontally" ToolTip="Flip Horizontally"
                     Click="btnFlipHorizontally_Click" />
+            <TextBox x:Name="txtTitle" Background="Transparent" BorderThickness="0"
+                     Width="500" HorizontalContentAlignment="Center"
+                     FontSize="22" FontWeight="Bold" 
+                     Text="Title" IsReadOnly="True" />
         </StackPanel>
     </Grid>
 </UserControl>

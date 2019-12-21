@@ -23,15 +23,15 @@ namespace DashCamGPSView.Tools
             EasingFunctionProperty = DependencyProperty.Register("EasingFunction", typeof(IEasingFunction), typeof(GridLengthAnimation));
         }
 
-        public static void AnimateColumn(ColumnDefinition col, GridLength from, double to, Action postAction = null)
+        public static void AnimateColumn(ColumnDefinition col, GridLength from, GridLength to, Action postAction = null)
         {
             var da = new GridLengthAnimation();
-            
+
             da.Duration = TimeSpan.FromMilliseconds(300);
 
             da.From = from;
-            da.To = new GridLength(to);
-            
+            da.To = to;
+
             //var ef = new BounceEase();
             //ef.EasingMode = EasingMode.EaseOut;
             //da.EasingFunction = ef;
@@ -42,6 +42,27 @@ namespace DashCamGPSView.Tools
             da.Completed += (s, e) => { if (postAction != null) postAction(); };
 
             col.BeginAnimation(ColumnDefinition.WidthProperty, da);
+        }
+
+        public static void AnimateRow(RowDefinition row, GridLength from, GridLength to, Action postAction = null)
+        {
+            var da = new GridLengthAnimation();
+
+            da.Duration = TimeSpan.FromMilliseconds(500);
+
+            da.From = from;
+            da.To = to;
+
+            //var ef = new BounceEase();
+            //ef.EasingMode = EasingMode.EaseOut;
+            //da.EasingFunction = ef;
+
+            da.FillBehavior = FillBehavior.Stop;
+            row.Height = da.To;
+
+            da.Completed += (s, e) => { if (postAction != null) postAction(); };
+
+            row.BeginAnimation(RowDefinition.HeightProperty, da);
         }
 
         protected override Freezable CreateInstanceCore()

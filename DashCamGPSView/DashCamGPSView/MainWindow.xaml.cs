@@ -68,8 +68,8 @@ namespace DashCamGPSView
             };
 
             maxScreen.CloseAction = (player) => CloseMaximizedPlayer(player);
-            playerF.MaximizeAction = () => MaximizePlayer(playerF, borderPlayerF);
-            playerR.MaximizeAction = () => MaximizePlayer(playerR, borderPlayerR);
+            playerF.MaximizeAction = () => MaximizePlayer(playerF);
+            playerR.MaximizeAction = () => MaximizePlayer(playerR);
 
             playerF.VideoStarted = () => { waitScreen.Visibility = Visibility.Collapsed; };
 
@@ -78,8 +78,8 @@ namespace DashCamGPSView
             playerF.LeftButtonClick = TogglePlayPauseState;
             playerR.LeftButtonClick = TogglePlayPauseState;
 
-            playerF.LeftButtonDoubleClick = () => { };
-            playerR.LeftButtonDoubleClick = () => { };
+            playerF.LeftButtonDoubleClick = () => MaximizePlayer(playerF);
+            playerR.LeftButtonDoubleClick = () => MaximizePlayer(playerR);
 
             playerF.VideoFailed = (e, player) => VideoFailed(e, player);
             playerR.VideoFailed = (e, player) => VideoFailed(e, player);
@@ -168,8 +168,12 @@ namespace DashCamGPSView
                 if (_bMapWasCollapsed)// && mapColumn.Width.Value < 300)
                 {
                     _bMapWasCollapsed = false;
-                    MainMap.Zoom = 17;
-                    GridLengthAnimation.AnimateColumn(mapColumn, mapColumn.Width, 500);
+                    MainMap.Zoom = 16;
+                    //GridLengthAnimation.AnimateColumn(mapColumn, mapColumn.Width, 500);
+                    GridLengthAnimation.AnimateRow(rowMaps, rowMaps.Height, new GridLength(5, GridUnitType.Star),
+                        () => { rowMaps.Height = new GridLength(5, GridUnitType.Star); });
+                    GridLengthAnimation.AnimateRow(rowGpsInfo, rowGpsInfo.Height, new GridLength(2, GridUnitType.Star),
+                        () => { rowGpsInfo.Height = new GridLength(2, GridUnitType.Star); });
                 }
             }
             else //no GPS info
@@ -179,8 +183,19 @@ namespace DashCamGPSView
                 {
                     _bMapWasCollapsed = true;
                     MainMap.Zoom = 2;
-                    GridLengthAnimation.AnimateColumn(mapColumn, mapColumn.Width, 0);
+
+                    GridLengthAnimation.AnimateRow(rowMaps, rowMaps.Height, new GridLength(0));
+                    GridLengthAnimation.AnimateRow(rowGpsInfo, rowGpsInfo.Height, new GridLength(0));
                 }
+            }
+
+            if(File.Exists(_dashCamFileInfo.BackFileName))
+            {
+                GridLengthAnimation.AnimateRow(rowRearView, rowRearView.Height, new GridLength(3, GridUnitType.Star));
+            }
+            else
+            {
+                GridLengthAnimation.AnimateRow(rowRearView, rowRearView.Height, new GridLength(0));
             }
 
             playerF.Play();
@@ -238,7 +253,7 @@ namespace DashCamGPSView
                 playerR.FitWidth();
 
                 if (_dashCamFileInfo.GpsInfo != null && _dashCamFileInfo.GpsInfo.Count > 0)
-                    MainMap.Zoom = 17;
+                    MainMap.Zoom = 16;
             }
         }
 
@@ -346,10 +361,10 @@ namespace DashCamGPSView
             playerR.Stop();
         }
 
-        private void MaximizePlayer(VideoPlayer player, Border container)
+        private void MaximizePlayer(VideoPlayer player)
         {
-            Pause_Executed(this, null);
             maxScreen.ShowWithControl(player, playerF.Volume);
+            Pause_Executed(this, null);
         }
 
         private void CloseMaximizedPlayer(VideoPlayer player)
@@ -431,13 +446,15 @@ namespace DashCamGPSView
 
         private void Screenshot_Click(object sender, RoutedEventArgs e)
         {
+            GpsFileFormat format = GpsFileFormat.Unkn;
             string fileName = @"C:\Temp\Screenshot.png";
             if (_dashCamFileInfo != null)
-                fileName = _dashCamFileInfo.GetScreenshotFileName();
+            {
+                fileName = _dashCamFileInfo.FrontFileName;
+                format = _dashCamFileInfo.GpsFileFormat;
+            }
 
-            fileName = string.Format("{0}_at{1:0.00}.png", fileName, playerF.Position.TotalSeconds);
-            Tools.Tools.SaveWindowScreenshotToFile(this, fileName);
-            Process.Start(fileName);
+            Tools.Tools.Screenshot(format, fileName, playerF.Position, this);
         }
 
         private void Test_Click(object sender, RoutedEventArgs e)

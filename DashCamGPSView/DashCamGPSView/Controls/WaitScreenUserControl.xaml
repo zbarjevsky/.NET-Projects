@@ -14,7 +14,7 @@
                     <Image Stretch="None" 
                            gif:ImageBehavior.AnimationCompleted="Image_AnimationCompleted"
                            gif:ImageBehavior.AnimateInDesignMode="True"
-                           gif:ImageBehavior.RepeatBehavior="10x"
+                           gif:ImageBehavior.RepeatBehavior="1x"
                            gif:ImageBehavior.AnimatedSource="/Images/CatAni.gif"/>
                     <TextBlock Text="Wait for Meow..."
                                FontSize="23" FontWeight="Bold"

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -33,6 +34,17 @@ namespace DashCamGPSView.Tools
                         BitmapSizeOptions.FromEmptyOptions());
                 }
             }
+        }
+
+        public static void Screenshot(GpsFileFormat format, string videoFileName, TimeSpan position, Window mainWindow)
+        {
+            string fileName = @"C:\Temp\Screenshot.png";
+            if (File.Exists(videoFileName))
+                fileName = DashCamFileInfo.GetScreenshotFileName(format, videoFileName);
+
+            fileName = string.Format("{0}_at{1}.png", fileName, position.ToString("hh\\.mm\\.ss"));
+            SaveWindowScreenshotToFile(mainWindow, fileName);
+            Process.Start(fileName);
         }
 
         public static void SaveWindowScreenshotToFile(Window wnd, string fileName)

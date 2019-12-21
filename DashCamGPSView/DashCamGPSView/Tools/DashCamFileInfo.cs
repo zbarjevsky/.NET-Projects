@@ -179,17 +179,17 @@ namespace DashCamGPSView.Tools
             return _gpsInfo.Count - 1; //last index
         }
 
-        internal string GetScreenshotFileName()
+        public static string GetScreenshotFileName(GpsFileFormat format, string videoFileName)
         {
             string dirParent = Environment.GetFolderPath(Environment.SpecialFolder.MyPictures);
-            if (GpsFileFormat == GpsFileFormat.DuDuBell)
+            if (format == GpsFileFormat.DuDuBell)
                 dirParent = Path.Combine(dirParent, "DuDuBell");
             else //if(GpsFileFormat == GpsFileFormat.Viofo)
                 dirParent = Path.Combine(dirParent, "DashcamScreenshots");
 
             Directory.CreateDirectory(dirParent);
 
-            string fileName = Path.GetFileNameWithoutExtension(FrontFileName);
+            string fileName = Path.GetFileNameWithoutExtension(videoFileName);
             fileName = Path.Combine(dirParent, fileName);
 
             return fileName;
