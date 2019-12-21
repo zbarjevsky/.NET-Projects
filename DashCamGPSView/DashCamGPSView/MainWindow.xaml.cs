@@ -46,7 +46,10 @@ namespace DashCamGPSView
             _timer.Tick += timer_Tick;
 
             playerF.Volume = Settings.Default.SoundVolume;
+            playerR.Volume = 0;
 
+            playerR.IsFlipHorizontally = true;
+            
             treeGroups.TreeItemDoubleClickAction = (fileName) =>
             {
                 PlayFile(fileName);

@@ -39,9 +39,36 @@ namespace DashCamGPSView
 
         public MediaState MediaState { get; private set; } = MediaState.Manual;
 
-        public string Title { get { return txtTitle.Text;  } set { txtTitle.Text = value; } }
+        private string _title;
+        public string Title 
+        { 
+            get { return _title; } 
+            set 
+            { 
+                _title = value; 
+                txtTitle.Text = value + (IsFlipHorizontally?" (Flipped)": ""); 
+                OnPropertyChanged(); 
+            }
+        }
 
         public string FileName { get; private set; }
+
+        public bool IsFlipHorizontally 
+        {
+            get
+            {
+                if (mePlayer.RenderTransform is ScaleTransform scale)
+                    return  scale.ScaleX == -1; //Flip Horizontally
+                return false;
+            }
+            set
+            {
+                if (mePlayer.RenderTransform is ScaleTransform scale)
+                    scale.ScaleX = value ? -1 : 1; //Flip Horizontally
+                Title = _title; //update flipped
+                OnPropertyChanged();
+            }
+        } 
 
         MediaElement mePlayer = null;
 
@@ -65,6 +92,7 @@ namespace DashCamGPSView
             MediaState = player.MediaState;
             Title = player.Title;
             FileName = player.FileName;
+            IsFlipHorizontally = player.IsFlipHorizontally;
 
             Play();
             
@@ -315,8 +343,7 @@ namespace DashCamGPSView
 
         private void btnFlipHorizontally_Click(object sender, RoutedEventArgs e)
         {
-            if (mePlayer.RenderTransform is ScaleTransform scale)
-                scale.ScaleX *= -1; //Flip Horizontally
+            IsFlipHorizontally = !IsFlipHorizontally;
         }
     }
 }

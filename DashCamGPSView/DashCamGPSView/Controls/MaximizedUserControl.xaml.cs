@@ -65,6 +65,7 @@ namespace DashCamGPSView.Controls
             this.Visibility = Visibility.Visible;
             Player.FitWidth();
 
+            sliProgress.Maximum = player.NaturalDuration;
             sliProgress.Value = player.Position.TotalSeconds;
             sliProgress_ValueChanged(null, null);
 
@@ -75,6 +76,7 @@ namespace DashCamGPSView.Controls
 
         private void btnScreenshot_Click(object sender, RoutedEventArgs e)
         {
+            Player.Pause();
             Tools.Tools.Screenshot(Tools.GpsFileFormat.Unkn, Player.FileName, Player.Position, Application.Current.MainWindow);
         }
 
