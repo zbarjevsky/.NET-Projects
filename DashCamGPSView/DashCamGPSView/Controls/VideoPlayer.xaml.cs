@@ -30,6 +30,7 @@ namespace DashCamGPSView
     {
         private ScrollDragZoom _scrollDragger;
 
+        public Action MaximizeAction = () => { };
         public Action VideoEnded = () => { };
         public Action VideoStarted = () => { };
         public Func<ExceptionRoutedEventArgs, MediaElement, bool> VideoFailed = (e, player) => true;
@@ -49,6 +50,22 @@ namespace DashCamGPSView
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             DataContext = this;
+        }
+
+        public void CopyState(VideoPlayer player, double volume, bool copySource)
+        {
+            if(copySource)
+                mePlayer.Source = player.mePlayer.Source;
+
+            Position = player.Position;
+            Volume = volume;
+            MediaState = player.MediaState;
+            Play();
+            Position = player.Position;
+            if (player.MediaState == MediaState.Stop)
+                Stop();
+            if (player.MediaState == MediaState.Pause)
+                Pause();
         }
 
         private void UserControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -274,7 +291,7 @@ namespace DashCamGPSView
 
         private void btnMaximize_Click(object sender, RoutedEventArgs e)
         {
-
+            MaximizeAction();
         }
 
         private void btnOriginalSize_Click(object sender, RoutedEventArgs e)

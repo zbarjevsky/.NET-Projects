@@ -445,7 +445,7 @@ namespace GMap.NET.Internals
                     skiped = false;
 
                     w.ReportProgress(1);
-                    Debug.WriteLine("Invalidate delta: " + (int)delta.TotalMilliseconds + "ms");
+                    //Debug.WriteLine("Invalidate delta: " + (int)delta.TotalMilliseconds + "ms");
                 }
                 else
                 {
@@ -854,7 +854,7 @@ namespace GMap.NET.Internals
                 {
                     while (tileLoadQueue.Count == 0)
                     {
-                        Debug.WriteLine(ctid + " - Wait " + loadWaitCount + " - " + DateTime.Now.TimeOfDay);
+                        //Debug.WriteLine(ctid + " - Wait " + loadWaitCount + " - " + DateTime.Now.TimeOfDay);
 
                         if (++loadWaitCount >= GThreadPoolSize)
                         {

@@ -68,6 +68,9 @@
     <Compile Include="Controls\GpsInfoUserControl.xaml.cs">
       <DependentUpon>GpsInfoUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\MaximizedUserControl.xaml.cs">
+      <DependentUpon>MaximizedUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\WaitScreenUserControl.xaml.cs">
       <DependentUpon>WaitScreenUserControl.xaml</DependentUpon>
     </Compile>
@@ -149,6 +152,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\GpsInfoUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MaximizedUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

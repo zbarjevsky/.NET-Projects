@@ -36,15 +36,14 @@ namespace DashCamGPSView
         private bool userIsDraggingSlider = false;
 
         private DashCamFileInfo _dashCamFileInfo;
+        DispatcherTimer _timer = new DispatcherTimer();
 
         public MainWindow()
         {
             InitializeComponent();
 
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1);
-            timer.Tick += timer_Tick;
-            timer.Start();
+            _timer.Interval = TimeSpan.FromSeconds(1);
+            _timer.Tick += timer_Tick;
 
             playerF.Volume = Settings.Default.SoundVolume;
 
@@ -67,6 +66,10 @@ namespace DashCamGPSView
             {
                 ClosePayer();
             };
+
+            maxScreen.CloseAction = (player) => CloseMaximizedPlayer(player);
+            playerF.MaximizeAction = () => MaximizePlayer(playerF, borderPlayerF);
+            playerR.MaximizeAction = () => MaximizePlayer(playerR, borderPlayerR);
 
             playerF.VideoStarted = () => { waitScreen.Visibility = Visibility.Collapsed; };
 
@@ -182,8 +185,9 @@ namespace DashCamGPSView
 
             playerF.Play();
             playerR.Play();
+            _timer.Start();
 
-            if(startFrom > 1)
+            if (startFrom > 1)
             {
                 sliProgress.Value = startFrom;
                 sliProgress_ValueChanged(sliProgress, null);
@@ -316,6 +320,7 @@ namespace DashCamGPSView
         {
             playerF.Play();
             playerR.Play();
+            _timer.Start();
         }
 
         private void Pause_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -327,6 +332,7 @@ namespace DashCamGPSView
         {
             playerF.Pause();
             playerR.Pause();
+            _timer.Stop();
         }
 
         private void Stop_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -338,6 +344,19 @@ namespace DashCamGPSView
         {
             playerF.Stop();
             playerR.Stop();
+        }
+
+        private void MaximizePlayer(VideoPlayer player, Border container)
+        {
+            Pause_Executed(this, null);
+            maxScreen.ShowWithControl(player, playerF.Volume);
+        }
+
+        private void CloseMaximizedPlayer(VideoPlayer player)
+        {
+            playerF.CopyState(player, player.Volume, false);
+            UpdateGpsInfo();
+            _timer.Start();
         }
 
         private void sliProgress_DragStarted(object sender, DragStartedEventArgs e)
