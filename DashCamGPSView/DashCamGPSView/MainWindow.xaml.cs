@@ -92,29 +92,41 @@ namespace DashCamGPSView
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
-            if(e.Key == Key.Space)
+            if(maxScreen.Visibility == Visibility.Visible)
             {
-                TogglePlayPauseState();
+                ProcessKeyDown(maxScreen.sliProgress, maxScreen.Player, e, maxScreen.TogglePlayPauseState);
+            }
+            else
+            {
+                ProcessKeyDown(this.sliProgress, this.playerF, e, this.TogglePlayPauseState);
+            }
+        }
+
+        public static void ProcessKeyDown(Slider s, VideoPlayer player, KeyEventArgs e, Action processSpaceKey)
+        {
+            if (e.Key == Key.Space)
+            {
+                processSpaceKey();
                 e.Handled = true;
             }
             else if (e.Key == Key.Up || e.Key == Key.VolumeUp)
             {
-                playerF.Volume += 0.1 * playerF.Volume;
+                player.Volume += 0.1 * player.Volume;
                 e.Handled = true;
             }
             else if (e.Key == Key.Down || e.Key == Key.VolumeDown)
             {
-                playerF.Volume -= 0.1 * playerF.Volume;
+                player.Volume -= 0.1 * player.Volume;
                 e.Handled = true;
             }
             else if (e.Key == Key.Left)
             {
-                sliProgress.Value -= sliProgress.SmallChange;
+                s.Value -= s.SmallChange;
                 e.Handled = true;
             }
             else if (e.Key == Key.Right)
             {
-                sliProgress.Value += sliProgress.SmallChange;
+                s.Value += s.SmallChange;
                 e.Handled = true;
             }
         }

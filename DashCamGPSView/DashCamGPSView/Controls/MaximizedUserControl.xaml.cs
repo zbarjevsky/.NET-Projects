@@ -35,6 +35,17 @@ namespace DashCamGPSView.Controls
 
             Player.LeftButtonClick = TogglePlayPauseState;
             Player.LeftButtonDoubleClick = () => { };
+
+            thumbnails.OnItemSelectedAction = (item) => 
+            {
+                if(item != null)
+                {
+                    double volume = Player.Volume;
+                    Player.Volume = 0;
+                    sliProgress.Value = item.seconds;
+                    Player.Volume = volume;
+                }
+            };
         }
 
         private void timer_Tick(object sender, EventArgs e)
@@ -45,12 +56,9 @@ namespace DashCamGPSView.Controls
             }
         }
 
-        private void TogglePlayPauseState()
+        public void TogglePlayPauseState()
         {
-            if (Player.MediaState == MediaState.Pause)
-                Player.Play();
-            else if (Player.MediaState == MediaState.Play)
-                Player.Pause();
+            Player.TogglePlayPauseState();
         }
 
         public void ShowWithControl(VideoPlayer player, double volume)

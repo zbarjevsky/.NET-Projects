@@ -211,6 +211,14 @@ namespace DashCamGPSView
             }
         }
 
+        public void TogglePlayPauseState()
+        {
+            if (MediaState == MediaState.Pause)
+                Play();
+            else if (MediaState == MediaState.Play)
+                Pause();
+        }
+
         private void Grid_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             //mePlayer.Volume += (e.Delta > 0) ? 0.1 : -0.1;
