@@ -4,35 +4,65 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DashCamGPSView.Controls"
-             mc:Ignorable="d"
-             d:DesignHeight="150" d:DesignWidth="800">
+             mc:Ignorable="d" MinHeight="64"
+             d:DesignHeight="100" d:DesignWidth="800">
+    <UserControl.Resources>
+        <DataTemplate x:Key="ItemTemplate">
+            <Border BorderBrush="Gray" BorderThickness="1" Background="Black">
+                <Grid>
+                    <Image Source="{Binding bmp}" Height="{Binding height}" Width="{Binding width}" Margin="1"/>
+                    <TextBlock Text="{Binding txt}" Foreground="White" FontWeight="Bold"
+                                       VerticalAlignment="Bottom" HorizontalAlignment="Center" />
+                </Grid>
+            </Border>
+        </DataTemplate>
+        <DataTemplate x:Key="SelectedTemplate">
+            <Border BorderBrush="Goldenrod" BorderThickness="3" CornerRadius="3" Background="Black">
+                <Grid>
+                    <Image Source="{Binding bmp}" Height="{Binding height}" Width="{Binding width}" Margin="1"/>
+                    <TextBlock Text="{Binding txt}" Foreground="Yellow" FontWeight="Bold"
+                                       VerticalAlignment="Bottom" HorizontalAlignment="Center" />
+                </Grid>
+            </Border>
+        </DataTemplate>
+        <Style TargetType="{x:Type ListViewItem}" x:Key="ContainerStyle">
+            <Setter Property="ContentTemplate" Value="{StaticResource ItemTemplate}" />
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="ContentTemplate" Value="{StaticResource SelectedTemplate}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+    </UserControl.Resources>
+    
     <Grid Background="Transparent">
-        <ListView Name="Thumbnails" ItemsSource="{Binding Images}" SelectionChanged="Thumbnails_SelectionChanged">
-            <ListView.ItemTemplate>
+        <ScrollViewer Margin="-690,0,0,0" Width="640" Height="320" HorizontalAlignment="Left">
+            <MediaElement x:Name="player" Width="640" Height="320" 
+                          HorizontalAlignment="Left" ClipToBounds="False"
+                          LoadedBehavior="Manual" Stretch="Uniform" 
+                          ScrubbingEnabled="True" Volume="0" />
+        </ScrollViewer>
+        <ListView Name="Thumbnails" SelectionMode="Single"
+                  ItemsSource="{Binding Images}" ItemContainerStyle="{StaticResource ContainerStyle}"
+                  ScrollViewer.CanContentScroll="False"
+                  SizeChanged="Thumbnails_SizeChanged"
+                  SelectionChanged="Thumbnails_SelectionChanged">
+            <!--<ListView.ItemTemplate>
                 <DataTemplate>
                     <Border BorderBrush="Aqua" BorderThickness="1" Background="Black">
                         <Grid>
-                            <Image Source="{Binding bmp}" Height="108" Width="192" Margin="1"/>
+                            <Image Source="{Binding bmp}" Height="{Binding height}" Width="{Binding width}" Margin="1"/>
                             <TextBlock Text="{Binding txt}" Foreground="White" FontWeight="Bold"
                                        VerticalAlignment="Bottom" HorizontalAlignment="Center" />
                         </Grid>
                     </Border>
                 </DataTemplate>
-            </ListView.ItemTemplate>
+            </ListView.ItemTemplate>-->
             <ListView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <StackPanel Orientation="Horizontal" />
-                    <!--<UniformGrid Columns="120"/>-->
-                    <!--<WrapPanel Width="{Binding (FrameworkElement.ActualWidth), RelativeSource={RelativeSource AncestorType=ScrollContentPresenter}}"
-                               ItemWidth="{Binding (ListView.View).ItemWidth, RelativeSource={RelativeSource AncestorType=ListView}}"
-                               MinWidth="{Binding ItemWidth, RelativeSource={RelativeSource Self}}"
-                               ItemHeight="{Binding (ListView.View).ItemHeight, RelativeSource={RelativeSource AncestorType=ListView}}" />-->
                 </ItemsPanelTemplate>
             </ListView.ItemsPanel>
         </ListView>
-        <MediaElement x:Name="player" Height="108" Width="192" 
-                      Margin="-250,0,0,0" HorizontalAlignment="Left"
-                      LoadedBehavior="Manual" Stretch="Uniform" 
-                      ScrubbingEnabled="True" Volume="0" />
     </Grid>
 </UserControl>

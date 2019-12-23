@@ -140,6 +140,7 @@
     </Compile>
     <Compile Include="Tools\ExportUtils.cs" />
     <Compile Include="Tools\GridLengthAnimation.cs" />
+    <Compile Include="Tools\ItemsControlExtensions.cs" />
     <Compile Include="Tools\RelayCommand.cs" />
     <Compile Include="Tools\Tools.cs" />
     <Page Include="Controls\CompassUserControl.xaml">

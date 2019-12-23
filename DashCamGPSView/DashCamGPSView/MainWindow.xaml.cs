@@ -86,8 +86,6 @@ namespace DashCamGPSView
 
             playerF.VideoFailed = (e, player) => VideoFailed(e, player);
             playerR.VideoFailed = (e, player) => VideoFailed(e, player);
-
-            waitScreen.Visibility = Visibility.Visible;
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -252,11 +250,13 @@ namespace DashCamGPSView
 
         private void OpenVideoFile()
         {
-            waitScreen.Visibility = Visibility.Visible;
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Media files (*.mp3;*.mp4;*.mpg;*.mpeg)|*.mp3;*.mp4;*.mpg;*.mpeg|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
             {
+                waitScreen.Visibility = Visibility.Visible;
+                Tools.Tools.ForceUIToUpdate();
+
                 DashCamFileTree groups = new DashCamFileTree(openFileDialog.FileName);
                 treeGroups.LoadTree(groups, openFileDialog.FileName);
 

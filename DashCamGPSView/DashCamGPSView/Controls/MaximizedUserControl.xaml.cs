@@ -40,10 +40,8 @@ namespace DashCamGPSView.Controls
             {
                 if(item != null)
                 {
-                    double volume = Player.Volume;
-                    Player.Volume = 0;
+                    Player.Pause();
                     sliProgress.Value = item.seconds;
-                    Player.Volume = volume;
                 }
             };
         }
@@ -122,6 +120,7 @@ namespace DashCamGPSView.Controls
                 sliProgress.LargeChange = sliProgress.Maximum / 10.0;
             }
 
+            thumbnails.SelectItem(sliProgress.Value);
             lblProgressStatus.Text = tsPos.ToString(@"hh\:mm\:ss") + "/" + tsMax.ToString(@"hh\:mm\:ss");
         }
     }
