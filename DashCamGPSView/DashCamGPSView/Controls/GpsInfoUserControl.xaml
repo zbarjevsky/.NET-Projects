@@ -3,9 +3,33 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:local="clr-namespace:DashCamGPSView.Controls"
              mc:Ignorable="d" 
              d:DesignHeight="250" d:DesignWidth="500">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <Style TargetType="{x:Type TextBox}" >
+                <Setter Property="FontSize">
+                    <Setter.Value>
+                        <MultiBinding Converter="{local:PercentageConverter}">
+                            <MultiBinding.ConverterParameter>
+                                <x:Array Type="sys:Double">
+                                    <sys:Double>0.6</sys:Double>
+                                    <sys:Double>0.07</sys:Double>
+                                </x:Array>
+                            </MultiBinding.ConverterParameter>
+                            <Binding RelativeSource="{RelativeSource Self}" Path="ActualHeight" />
+                            <Binding RelativeSource="{RelativeSource Self}" Path="ActualWidth" />
+                        </MultiBinding>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="VerticalContentAlignment" Value="Center" />
+                <Setter Property="Padding" Value="10,0,10,4" />
+                <Setter Property="IsReadOnly" Value="True" />
+            </Style>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid x:Name="main">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="5*"/>
@@ -20,22 +44,11 @@
         <Border Grid.Column="1" Grid.Row="0" Grid.RowSpan="4" BorderThickness="0" BorderBrush="Gray" CornerRadius="5">
             <local:CompassUserControl x:Name="compass" Direction="10" />
         </Border>
-        <TextBox Grid.Row="0" x:Name="txtSpeed" IsReadOnly="True" 
-                 FontSize="{Binding Path=ActualHeight, ElementName=main, Converter={local:PercentageConverter}, ConverterParameter='0.1'}"  
-                 FontWeight="Bold"
-                 VerticalContentAlignment="Center" HorizontalContentAlignment="Center" 
-                 Text="Speed: N/A"/>
-        <TextBox Grid.Row="1" x:Name="txtLat" IsReadOnly="True" 
-                 FontSize="{Binding Path=ActualHeight, ElementName=main, Converter={local:PercentageConverter}, ConverterParameter='0.1'}"  
-                 VerticalContentAlignment="Center" Padding="10,0"
-                 Text="Lattitude: N/A"/>
-        <TextBox Grid.Row="2" x:Name="txtLon" IsReadOnly="True" 
-                 FontSize="{Binding Path=ActualHeight, ElementName=main, Converter={local:PercentageConverter}, ConverterParameter='0.1'}"  
-                 VerticalContentAlignment="Center" Padding="10,0"
-                 Text="Longtitude: N/A"/>
-        <TextBox Grid.Row="3" x:Name="txtTime" IsReadOnly="True" 
-                 FontSize="{Binding Path=ActualHeight, ElementName=main, Converter={local:PercentageConverter}, ConverterParameter='0.1'}"  
-                 VerticalContentAlignment="Center" Padding="10,0" 
-                 Text="Time: N/A"/>
+        <TextBox Grid.Row="0" x:Name="txtSpeed" Text="Speed: N/A"
+                 FontWeight="Bold" HorizontalContentAlignment="Center" />
+        <TextBox Grid.Row="1" x:Name="txtLat" Text="Lattitude: N/A"/>
+        <TextBox Grid.Row="2" x:Name="txtLon" Text="Longtitude: N/A"/>
+        <TextBox Grid.Row="3" x:Name="txtTime" Text="Time: N/A">
+        </TextBox>
     </Grid>
 </UserControl>
