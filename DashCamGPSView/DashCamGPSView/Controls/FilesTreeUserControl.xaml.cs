@@ -62,7 +62,7 @@ namespace DashCamGPSView.Controls
             }
             
             treeFiles.ItemsSource = _itemsSource;
-            treeFiles.UpdateLayout();
+            //treeFiles.UpdateLayout();
         }
 
         internal void SelectFile(string fileName)

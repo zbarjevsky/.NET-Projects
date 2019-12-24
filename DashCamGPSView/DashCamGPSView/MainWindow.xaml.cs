@@ -25,6 +25,7 @@ using GMap.NET;
 using GMap.NET.MapProviders;
 using GMap.NET.WindowsPresentation;
 using GPSDataParser;
+using System.Windows.Media.Animation;
 
 namespace DashCamGPSView
 {
@@ -41,6 +42,8 @@ namespace DashCamGPSView
         public MainWindow()
         {
             InitializeComponent();
+
+            waitScreen.Show(RepeatBehavior.Forever);
 
             _timer.Interval = TimeSpan.FromSeconds(1);
             _timer.Tick += timer_Tick;
@@ -74,7 +77,7 @@ namespace DashCamGPSView
             playerF.MaximizeAction = () => MaximizePlayer(playerF);
             playerR.MaximizeAction = () => MaximizePlayer(playerR);
 
-            playerF.VideoStarted = () => { waitScreen.Visibility = Visibility.Collapsed; };
+            playerF.VideoStarted = () => { waitScreen.Hide(); };
 
             playerF.VideoEnded = () => { if (chkAutoPlay.IsChecked.Value) PlayNext(); };
 
@@ -86,6 +89,23 @@ namespace DashCamGPSView
 
             playerF.VideoFailed = (e, player) => VideoFailed(e, player);
             playerR.VideoFailed = (e, player) => VideoFailed(e, player);
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            this.Left = Settings.Default.InitialLocation.X;
+            this.Top = Settings.Default.InitialLocation.Y;
+            this.WindowState = WindowState.Maximized;
+
+            waitScreen.Hide();
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            ClosePayer();
+            Settings.Default.SoundVolume = playerF.Volume;
+            Settings.Default.InitialLocation = new System.Drawing.Point((int)this.Left, (int)this.Top);
+            Settings.Default.Save();
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -127,23 +147,6 @@ namespace DashCamGPSView
                 s.Value += s.SmallChange;
                 e.Handled = true;
             }
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            this.Left = Settings.Default.InitialLocation.X;
-            this.Top = Settings.Default.InitialLocation.Y;
-            this.WindowState = WindowState.Maximized;
-
-            //waitScreen.Visibility = Visibility.Collapsed;
-        }
-
-        private void Window_Closed(object sender, EventArgs e)
-        {
-            ClosePayer();
-            Settings.Default.SoundVolume = playerF.Volume;
-            Settings.Default.InitialLocation = new System.Drawing.Point((int)this.Left, (int)this.Top);
-            Settings.Default.Save();
         }
 
         private void TogglePlayPauseState()
@@ -250,12 +253,15 @@ namespace DashCamGPSView
 
         private void OpenVideoFile()
         {
+            waitScreen.Show();
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Media files (*.mp3;*.mp4;*.mpg;*.mpeg)|*.mp3;*.mp4;*.mpg;*.mpeg|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
             {
-                waitScreen.Visibility = Visibility.Visible;
                 Tools.Tools.ForceUIToUpdate();
+
+                //Task myTask = Task.Factory.StartNew(() => { });
+                //myTask.Wait();
 
                 DashCamFileTree groups = new DashCamFileTree(openFileDialog.FileName);
                 treeGroups.LoadTree(groups, openFileDialog.FileName);
@@ -269,6 +275,10 @@ namespace DashCamGPSView
 
                 if (_dashCamFileInfo.GpsInfo != null && _dashCamFileInfo.GpsInfo.Count > 0)
                     MainMap.Zoom = 16;
+            }
+            else
+            {
+                waitScreen.Hide();
             }
         }
 

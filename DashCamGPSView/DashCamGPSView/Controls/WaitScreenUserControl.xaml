@@ -7,14 +7,19 @@
              xmlns:gif="clr-namespace:WpfAnimatedGif"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Background>
+        <SolidColorBrush Color="White" Opacity="0.7"/>
+    </UserControl.Background>
     <Grid>
-        <Border Margin="10" BorderThickness="3" BorderBrush="Black" Background="LightGray" Opacity="0.8">
-            <Border Margin="10" Opacity="0.5">
+        <Border Margin="10" BorderThickness="3" BorderBrush="Black" >
+            <Border.Background>
+                <SolidColorBrush Color="Gray" Opacity="0.7"/>
+            </Border.Background>
+            <Border Margin="10">
                 <StackPanel VerticalAlignment="Center">
-                    <Image Stretch="None" 
-                           gif:ImageBehavior.AnimationCompleted="Image_AnimationCompleted"
+                    <Image x:Name="animatedImage" Stretch="None" Opacity="0.2" 
                            gif:ImageBehavior.AnimateInDesignMode="True"
-                           gif:ImageBehavior.RepeatBehavior="1x"
+                           gif:ImageBehavior.RepeatBehavior="Forever"
                            gif:ImageBehavior.AnimatedSource="/Images/CatAni.gif"/>
                     <TextBlock Text="Wait for Meow..."
                                FontSize="23" FontWeight="Bold"
