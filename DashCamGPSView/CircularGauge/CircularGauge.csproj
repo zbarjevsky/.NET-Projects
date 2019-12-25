@@ -63,6 +63,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="SpeedGauge\Gauge180UserControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SpeedGauge\Gauge360UserControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SpeedGauge\GaugeTestWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Themes\Generic.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -87,6 +99,17 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="SpeedGauge\Gauge180UserControl.xaml.cs">
+      <DependentUpon>Gauge180UserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SpeedGauge\Gauge180ViewModel.cs" />
+    <Compile Include="SpeedGauge\Gauge360UserControl.xaml.cs">
+      <DependentUpon>Gauge360UserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SpeedGauge\Gauge360ViewModel.cs" />
+    <Compile Include="SpeedGauge\GaugeTestWindow.xaml.cs">
+      <DependentUpon>GaugeTestWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="TypeConverters.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">

@@ -5,6 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:DashCamGPSView"
         xmlns:controls="clr-namespace:DashCamGPSView.Controls"
+        xmlns:gauge="clr-namespace:CircularGauge;assembly=CircularGauge"
+        xmlns:speedGauge="clr-namespace:SpeedGauge;assembly=CircularGauge"
         mc:Ignorable="d"
         Loaded="Window_Loaded" Closed="Window_Closed" PreviewKeyDown="Window_PreviewKeyDown"
         WindowStartupLocation="Manual"
@@ -47,9 +49,57 @@
         <GridSplitter Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2" 
                       HorizontalAlignment="Stretch"
                       DragCompleted="GridSplitter1_DragCompleted"/>
+        
         <Border x:Name="borderPlayerF" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="3" BorderThickness="2" BorderBrush="Gray">
             <local:VideoPlayer x:Name="playerF" Title="Front View" />
         </Border>
+
+        <speedGauge:Gauge180UserControl x:Name="speedGauge"  Grid.Column="2" Grid.Row="3" 
+                 Width="180" Height="100" MaxSpeed="140"
+                 HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="40,0,40,20"/>
+        <!--<Viewbox Grid.Column="2" Grid.Row="3" 
+                 Width="150" Height="150"
+                 HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="40">
+            <gauge:CircularGaugeControl x:Name="speedGauge" 
+                                            OuterFrameThickness="4"
+                                            Radius="150" 
+                                            ScaleRadius="140" 
+                                            ScaleStartAngle="150" 
+                                            ScaleSweepAngle="240"
+                                            PointerLength="85" 
+                                            PointerCapRadius="45" 
+                                            MinValue="0" 
+                                            MaxValue="140" 
+                                            MajorDivisionsCount="7" 
+                                            MinorDivisionsCount="10" 
+                                            CurrentValue="{Binding Score, FallbackValue=80}"
+                                            ImageSource="/Images/map_32px.png"
+                                            ImageSize="40,50"
+                                            RangeIndicatorThickness="8"
+                                            RangeIndicatorRadius="80"
+                                            RangeIndicatorLightRadius="10"
+                                            RangeIndicatorLightOffset="60"
+                                            OptimalRangeStartValue="25"
+                                            OptimalRangeEndValue="80" 
+                                            ScaleLabelRadius="120"
+                                            ScaleLabelSize="40,30"
+                                            ScaleLabelFontSize="20"
+                                            ScaleLabelForeground="WhiteSmoke"
+                                            MajorTickSize="10,3"
+                                            MinorTickSize="3,1"
+                                            MajorTickColor="LightGray"
+                                            MinorTickColor="LightGray"
+                                            ImageOffset="-50"
+                                            GaugeBackgroundColor="Black"
+                                            PointerThickness ="16"
+                                            DialTextOffset="90" 
+                                            DialText="Speed MPH"
+                                            DialTextColor="Wheat"
+                                            DialTextFontSize="24"
+                                            >
+
+            </gauge:CircularGaugeControl>
+        </Viewbox>-->
 
         <GridSplitter Grid.Column="3" Grid.Row="1" Grid.RowSpan="6" HorizontalAlignment="Stretch"/>
         <Grid Grid.Row="1" Grid.RowSpan="6" Grid.Column="4">

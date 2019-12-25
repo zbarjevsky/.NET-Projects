@@ -456,10 +456,20 @@ namespace DashCamGPSView
             int idx = _dashCamFileInfo.FindGpsInfo(playerF.Position.TotalSeconds);
             if (_dashCamFileInfo.GpsInfo != null && _dashCamFileInfo.GpsInfo.Count > idx)
             {
+                speedGauge.Visibility = Visibility.Visible;
+                speedGauge.Speed = _dashCamFileInfo.GpsInfo[idx].SpeedMph;
+                //speedGauge.DialText = string.Format("{0:0} mph", _dashCamFileInfo.GpsInfo[idx].SpeedMph);
+
                 gpsInfo.UpdateInfo(_dashCamFileInfo.GpsInfo[idx], _dashCamFileInfo.TimeZone);
                 
                 PointLatLng currentPosition = new PointLatLng(_dashCamFileInfo.GpsInfo[idx].Latitude, _dashCamFileInfo.GpsInfo[idx].Longitude);
                 MainMap.UpdateRouteAndCar(currentPosition, idx);
+            }
+            else
+            {
+                //speedGauge.DialText = "Speed Mph";
+                speedGauge.Speed = 0;
+                speedGauge.Visibility = Visibility.Hidden;
             }
         }
 

@@ -94,7 +94,7 @@ DAMAGE.-->
                                    HorizontalAlignment="Center" VerticalAlignment="Center"  
                                    Foreground="{Binding RelativeSource={RelativeSource TemplatedParent}, 
                             Path=DialTextColor, Converter={StaticResource colorToSolidColorBrushConverter}}"
-                                   FontSize="{TemplateBinding DialTextFontSize}"                             
+                                   FontSize="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=DialTextFontSize}"                             
                                    FontWeight="Bold"
                                                          
                               RenderTransform="{Binding RelativeSource={RelativeSource TemplatedParent}, 
