@@ -138,6 +138,7 @@
     <Compile Include="Controls\VideoPlayer.xaml.cs">
       <DependentUpon>VideoPlayer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tools\DraggableExtension.cs" />
     <Compile Include="Tools\ExportUtils.cs" />
     <Compile Include="Tools\GridLengthAnimation.cs" />
     <Compile Include="Tools\ItemsControlExtensions.cs" />

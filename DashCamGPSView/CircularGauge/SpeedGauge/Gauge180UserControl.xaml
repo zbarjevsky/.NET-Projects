@@ -9,15 +9,18 @@
     <Viewbox>
         <Grid Width="320" Height="180">
             <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10"
-                    BorderBrush="Navy" Background="Black"
-                    BorderThickness="3 3 3 0" CornerRadius="320 320 0 0">
+                    BorderBrush="Navy"
+                    BorderThickness="3 3 3 3" CornerRadius="320 320 0 0">
                 <Border.Effect>
                     <DropShadowEffect Color="Navy" BlurRadius="10" ShadowDepth="0"/>
                 </Border.Effect>
             </Border>
             <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="15" 
-                    BorderBrush="Navy" Background="Black"
-                    BorderThickness="2 2 2 0" CornerRadius="300 300 0 0">
+                    BorderBrush="Navy"
+                    BorderThickness="2 2 2 2" CornerRadius="300 300 0 0">
+                <Border.Background>
+                    <SolidColorBrush Color="Black" Opacity="0.3"/>
+                </Border.Background>
                 <Border.Effect>
                     <DropShadowEffect Color="Blue" BlurRadius="10" ShadowDepth="0"/>
                 </Border.Effect>
