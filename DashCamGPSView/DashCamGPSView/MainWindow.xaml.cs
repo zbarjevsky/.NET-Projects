@@ -46,7 +46,7 @@ namespace DashCamGPSView
             waitScreen.Show(RepeatBehavior.Forever);
             speedGauge.Draggable(true);
 
-            _timer.Interval = TimeSpan.FromSeconds(1);
+            _timer.Interval = TimeSpan.FromSeconds(0.3);
             _timer.Tick += timer_Tick;
 
             playerF.Volume = Settings.Default.SoundVolume;
@@ -73,6 +73,9 @@ namespace DashCamGPSView
             {
                 ClosePayer();
             };
+
+            playerF.VerticalOffset = Settings.Default.FrontPlayerVerticalOffset;
+            playerR.VerticalOffset = Settings.Default.RearPlayerVerticalOffset;
 
             maxScreen.CloseAction = (player) => CloseMaximizedPlayer(player);
             playerF.MaximizeAction = () => MaximizePlayer(playerF);
@@ -105,6 +108,10 @@ namespace DashCamGPSView
         {
             ClosePayer();
             Settings.Default.SoundVolume = playerF.Volume;
+
+            Settings.Default.FrontPlayerVerticalOffset = playerF.VerticalOffset;
+            Settings.Default.RearPlayerVerticalOffset = playerR.VerticalOffset;
+
             Settings.Default.InitialLocation = new System.Drawing.Point((int)this.Left, (int)this.Top);
             Settings.Default.Save();
         }
@@ -271,8 +278,8 @@ namespace DashCamGPSView
 
                 PlayFile(openFileDialog.FileName);
                 
-                playerF.FitWidth();
-                playerR.FitWidth();
+                playerF.FitWidth(false);
+                playerR.FitWidth(false);
 
                 if (_dashCamFileInfo.GpsInfo != null && _dashCamFileInfo.GpsInfo.Count > 0)
                     MainMap.Zoom = 16;
@@ -424,23 +431,21 @@ namespace DashCamGPSView
             
             lblProgressStatus.Text = tsPos.ToString(@"hh\:mm\:ss") + "/" + tsMax.ToString(@"hh\:mm\:ss");
 
-            UpdateGpsInfo();
+            UpdateGpsInfo(false);
         }
 
         private void timer_Tick(object sender, EventArgs e)
         {
-            if(playerF.MediaState == MediaState.Play)
+            if (playerF.MediaState == MediaState.Play)
                 UpdateGpsInfo();
         }
 
-        private void UpdateGpsInfo()
+        private void UpdateGpsInfo(bool updateSlider = true)
         {
             if (_dashCamFileInfo == null)
                 return;
 
-            sliProgress.Minimum = 0;
-
-            if (playerF.NaturalDuration != 0)
+            if (updateSlider && playerF.NaturalDuration != 0)
             {
                 sliProgress.Maximum = playerF.NaturalDuration;
                 sliProgress.Value = playerF.Position.TotalSeconds;
@@ -452,10 +457,10 @@ namespace DashCamGPSView
                 sliProgress.LargeChange = sliProgress.Maximum / 10.0;
             }
 
-            txtGPSInfo.Text = _dashCamFileInfo.GetLocationInfoForTime(playerF.Position.TotalSeconds);
+            txtGPSInfo.Text = _dashCamFileInfo.GetLocationInfoForTime(playerF.Position.TotalSeconds, playerF.NaturalDuration);
 
-            int idx = _dashCamFileInfo.FindGpsInfo(playerF.Position.TotalSeconds);
-            if (_dashCamFileInfo.GpsInfo != null && _dashCamFileInfo.GpsInfo.Count > idx)
+            int idx = _dashCamFileInfo.FindGpsInfo(playerF.Position.TotalSeconds, playerF.NaturalDuration);
+            if (idx >= 0 && _dashCamFileInfo.GpsInfo != null && _dashCamFileInfo.GpsInfo.Count > idx)
             {
                 speedGauge.Visibility = Visibility.Visible;
                 speedGauge.Speed = _dashCamFileInfo.GpsInfo[idx].SpeedMph;
@@ -476,8 +481,8 @@ namespace DashCamGPSView
 
         private void GridSplitter1_DragCompleted(object sender, DragCompletedEventArgs e)
         {
-            playerF.FitWidth();
-            playerR.FitWidth();
+            playerF.FitWidth(false);
+            playerR.FitWidth(false);
         }
 
         private void Screenshot_Click(object sender, RoutedEventArgs e)

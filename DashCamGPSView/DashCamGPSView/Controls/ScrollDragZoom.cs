@@ -41,18 +41,26 @@ namespace DashCamGPSView
             set { _origWidth = value.Width; _origHeight = value.Height; }
         }
 
+        public ScrollDragZoom()
+        {
+
+        }
+
         public ScrollDragZoom(FrameworkElement content, ScrollViewer scrollViewer)
         {
             _scrollViewer = scrollViewer;
             _content = content;
 
-            _origWidth = _content.Width;
-            _origHeight = _content.Height;
+            if (_content != null)
+            {
+                _origWidth = _content.Width;
+                _origHeight = _content.Height;
 
-            content.MouseRightButtonDown += scrollViewer_MouseRightButtonDown;
-            content.PreviewMouseMove += scrollViewer_PreviewMouseMove;
-            content.PreviewMouseRightButtonUp += scrollViewer_PreviewMouseRightButtonUp;
-            content.MouseWheel += content_MouseWheel;
+                content.MouseRightButtonDown += scrollViewer_MouseRightButtonDown;
+                content.PreviewMouseMove += scrollViewer_PreviewMouseMove;
+                content.PreviewMouseRightButtonUp += scrollViewer_PreviewMouseRightButtonUp;
+                content.MouseWheel += content_MouseWheel;
+            }
         }
 
         public void ScrollToCenter()

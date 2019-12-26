@@ -49,7 +49,7 @@ namespace DashCamGPSView.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("640")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.5")]
         public double RearPlayerVerticalOffset {
             get {
                 return ((double)(this["RearPlayerVerticalOffset"]));
@@ -68,6 +68,18 @@ namespace DashCamGPSView.Properties {
             }
             set {
                 this["UpgradeRequired"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.5")]
+        public double FrontPlayerVerticalOffset {
+            get {
+                return ((double)(this["FrontPlayerVerticalOffset"]));
+            }
+            set {
+                this["FrontPlayerVerticalOffset"] = value;
             }
         }
     }

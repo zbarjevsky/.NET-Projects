@@ -70,11 +70,47 @@ namespace DashCamGPSView
                 Title = _title; //update flipped
                 OnPropertyChanged();
             }
-        } 
+        }
+
+        public double VerticalOffset
+        {
+            get
+            {
+                return _scrollDragger.VerticalOffset;
+            }
+
+            set
+            {
+                if (value < 1) //relative to Height
+                {
+                    _scrollDragger.VerticalOffset = value * scrollPlayer.ScrollableHeight;
+                }
+                else
+                {
+                    _scrollDragger.VerticalOffset = value;
+                }
+            }
+        }
+
+        public double Zoom
+        {
+            get
+            {
+                return _scrollDragger.Zoom;
+            }
+
+            set
+            {
+                _scrollDragger.Zoom = value;
+            }
+        }
 
         public VideoPlayer()
         {
             InitializeComponent();
+
+            _scrollDragger = new ScrollDragZoom(null, scrollPlayer);
+
             RecreateMediaElement(false);
         }
 
@@ -93,6 +129,8 @@ namespace DashCamGPSView
             Title = player.Title;
             FileName = player.FileName;
             IsFlipHorizontally = player.IsFlipHorizontally;
+            Zoom = player.Zoom;
+            VerticalOffset = player.VerticalOffset;
 
             Play();
             
@@ -228,16 +266,18 @@ namespace DashCamGPSView
         {
         }
 
-        public void FitWidth()
+        public void FitWidth(bool adjustScroll)
         {
-            _scrollDragger.FitWidth();  
-            ScrollToCenter();
+            _scrollDragger.FitWidth(); 
+            if(adjustScroll)
+                ScrollToCenter();
         }
 
-        public void OriginalSize()
+        public void OriginalSize(bool adjustScroll)
         {
             _scrollDragger.OriginalSize();
-            ScrollToCenter();
+            if (adjustScroll)
+                ScrollToCenter();
         }
 
         internal void FitWindow()
@@ -282,11 +322,11 @@ namespace DashCamGPSView
 
                 scrollPlayer.Content = VideoPlayerElement;
 
-                double vOff = Settings.Default.RearPlayerVerticalOffset;
-                if (_scrollDragger != null)
-                    vOff = _scrollDragger.VerticalOffset;
+                double vOff = _scrollDragger.VerticalOffset;
+                double zoom = _scrollDragger.Zoom;
 
                 _scrollDragger = new ScrollDragZoom(VideoPlayerElement, scrollPlayer);
+                _scrollDragger.Zoom = zoom;
                 _scrollDragger.VerticalOffset = vOff;
 
                 //refresh view when change position
@@ -331,7 +371,7 @@ namespace DashCamGPSView
 
         private void btnFitWidth_Click(object sender, RoutedEventArgs e)
         {
-            FitWidth();
+            FitWidth(true);
         }
 
         private void btnMaximize_Click(object sender, RoutedEventArgs e)
@@ -341,7 +381,7 @@ namespace DashCamGPSView
 
         private void btnOriginalSize_Click(object sender, RoutedEventArgs e)
         {
-            OriginalSize();
+            OriginalSize(true);
         }
 
         private void btnFitWindow_Click(object sender, RoutedEventArgs e)

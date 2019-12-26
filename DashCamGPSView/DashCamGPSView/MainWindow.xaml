@@ -159,7 +159,7 @@
                    Text="GPS Info" IsReadOnly="True"
                    VerticalAlignment="Center" Margin="10,0" FontSize="22"/>
 
-        <StatusBar Grid.Row="6" Grid.ColumnSpan="3">
+        <StatusBar Grid.Row="6" Grid.ColumnSpan="3"  Background="Gray">
             <StatusBar.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid>
@@ -175,8 +175,8 @@
                 <TextBlock Name="lblProgressStatus" FontSize="16">00:00:00/00:00:00</TextBlock>
             </StatusBarItem>
             <StatusBarItem Grid.Column="1" HorizontalContentAlignment="Stretch">
-                <Slider Name="sliProgress" 
-                        SmallChange="1" LargeChange="10"
+                <Slider Name="sliProgress" Foreground="Black" Minimum="0"
+                        SmallChange="1" LargeChange="10" TickPlacement="TopLeft" 
                         Thumb.DragStarted="sliProgress_DragStarted"  
                         Thumb.DragCompleted="sliProgress_DragCompleted" 
                         ValueChanged="sliProgress_ValueChanged" />

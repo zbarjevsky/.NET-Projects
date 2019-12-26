@@ -150,9 +150,9 @@ namespace DashCamGPSView.Tools
             return DateTime.ParseExact(date_time, "yyMMdd-HHmmss", CultureInfo.InvariantCulture);
         }
 
-        internal string GetLocationInfoForTime(double totalSeconds)
+        internal string GetLocationInfoForTime(double elapsedSeconds, double totalSeconds)
         {
-            int idx = FindGpsInfo(totalSeconds);
+            int idx = FindGpsInfo(elapsedSeconds, totalSeconds);
             if (idx < 0)
                 return "No GPS info...";
 
@@ -163,12 +163,14 @@ namespace DashCamGPSView.Tools
             return info;
         }
 
-        internal int FindGpsInfo(double elapsedSeconds)
+        internal int FindGpsInfo(double elapsedSeconds, double totalSeconds)
         {
-            if (_gpsInfo == null || _gpsInfo.Count == 0)
+            if (_gpsInfo == null || _gpsInfo.Count == 0 || totalSeconds == 0)
                 return -1;
 
             elapsedSeconds += _dGpsDelaySeconds; //correct for GPS delay
+
+            TimeSpan duration = (_gpsInfo.Last().FixTime - _gpsInfo.First().FixTime);
 
             for (int i = 0; i < _gpsInfo.Count; i++)
             {

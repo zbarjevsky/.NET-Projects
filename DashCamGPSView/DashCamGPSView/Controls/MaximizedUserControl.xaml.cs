@@ -30,7 +30,7 @@ namespace DashCamGPSView.Controls
         {
             InitializeComponent();
             
-            _timer.Interval = TimeSpan.FromSeconds(1);
+            _timer.Interval = TimeSpan.FromSeconds(0.3);
             _timer.Tick += timer_Tick;
 
             Player.LeftButtonClick = TogglePlayPauseState;
@@ -69,7 +69,7 @@ namespace DashCamGPSView.Controls
             Player.CopyState(player, volume, true);
 
             this.Visibility = Visibility.Visible;
-            Player.FitWidth();
+            Player.FitWidth(false);
 
             sliProgress.Maximum = player.NaturalDuration;
             sliProgress.Value = player.Position.TotalSeconds;
