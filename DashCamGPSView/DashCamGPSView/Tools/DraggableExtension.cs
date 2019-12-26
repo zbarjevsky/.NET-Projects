@@ -37,10 +37,49 @@ namespace DashCamGPSView.Tools
                 }
             }
 
+            public TranslateTransform Translate { get; private set; }
+
             public DraggableData(FrameworkElement element, double marginX, double marginY)
             {
                 Element = element;
                 _margin = new Size(marginX, marginY);
+                InitTransform();
+            }
+
+            private void InitTransform()
+            {
+                if (Element.RenderTransform == null)
+                {
+                    Element.RenderTransform = Translate = new TranslateTransform();
+                }
+                else if (Element.RenderTransform is TranslateTransform t1)
+                {
+                    Translate = t1;
+                }
+                else if (Element.RenderTransform is TransformGroup group1)
+                {
+                    foreach (Transform item in group1.Children)
+                    {
+                        if (item is TranslateTransform t2)
+                            Translate = t2;
+                    }
+
+                    //not found - create
+                    if(Translate == null)
+                    {
+                        Translate = new TranslateTransform();
+                        group1.Children.Add(Translate);
+                    }
+                }
+                else if (Element.RenderTransform != null)
+                {
+                    Transform t3 = Element.RenderTransform;
+                    Translate = new TranslateTransform();
+                    TransformGroup group2 = new TransformGroup();
+                    group2.Children.Add(t3);
+                    group2.Children.Add(Translate);
+                    Element.RenderTransform = group2;
+                }
             }
         }
 
@@ -61,8 +100,6 @@ namespace DashCamGPSView.Tools
                 {   // return if control is already draggable
                     return;
                 }
-
-                element.RenderTransform = new TranslateTransform();
 
                 // 'false' - initial state is 'not dragging'
                 _draggables.Add(element, new DraggableData(element, marginX, marginY));
@@ -93,7 +130,7 @@ namespace DashCamGPSView.Tools
             if (element == null)
                 return;
 
-            TranslateTransform translate = element.RenderTransform as TranslateTransform;
+            TranslateTransform translate = _draggables[element].Translate;
             if (translate == null)
                 return;
 
@@ -101,7 +138,7 @@ namespace DashCamGPSView.Tools
             _initialTranslateOffset = new Vector(translate.X, translate.Y);
 
             // turning on dragging
-            _draggables[(FrameworkElement)sender].IsDragging = true;
+            _draggables[element].IsDragging = true;
 
             element.CaptureMouse();
         }
@@ -121,14 +158,14 @@ namespace DashCamGPSView.Tools
             if (element == null)
                 return;
 
-            TranslateTransform translate = element.RenderTransform as TranslateTransform;
+            if (!_draggables[element].IsDragging || !element.IsMouseCaptured)
+                return;
+
+            TranslateTransform translate = _draggables[element].Translate;
             if (translate == null)
                 return;
 
             // only if dragging is turned on
-            if (!_draggables[element].IsDragging || !element.IsMouseCaptured)
-                return;
-
             // calculations of control's new position
             Point pt = element.PointToScreen(e.GetPosition(element));
             Vector offset = pt - _initialMouseOffset;
