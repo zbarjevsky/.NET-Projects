@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
@@ -107,34 +108,16 @@ namespace DashCamGPSView.Tools
             if (offset.Length < 0.0001)
                 return;
 
-            FrameworkElement parent = element.Parent as FrameworkElement;
-            Size parentSize = parent.RenderSize;
-            Point location = RelativeLocation(element, parent, translate);
-            Debug.WriteLine("location: " + location);
+            Rect bounds = RelativeLocation(element);
+            Debug.WriteLine("location: " + bounds);
 
             Vector offsetDelta = new Vector(offset.X, offset.Y) - (new Vector(translate.X, translate.Y) - _translateOffset);
             
-            if (IsNewOffsetInsideMargin(location.X, offsetDelta.X, element.RenderSize.Width, parentSize.Width, MARGIN))
+            if (IsNewOffsetInsideMargin(bounds.X, offsetDelta.X, element.RenderSize.Width, bounds.Width, MARGIN))
                 translate.X = _translateOffset.X + offset.X;
-            if (IsNewOffsetInsideMargin(location.Y, offsetDelta.Y, element.RenderSize.Height, parentSize.Height, MARGIN))
+            if (IsNewOffsetInsideMargin(bounds.Y, offsetDelta.Y, element.RenderSize.Height, bounds.Height, MARGIN))
                 translate.Y = _translateOffset.Y + offset.Y;
         }
-
-        //const int HARD_MARGIN = 200;
-        //private static Point UpdateOffset(FrameworkElement element, TranslateTransform translate, Vector offset, double margin = HARD_MARGIN)
-        //{
-        //    FrameworkElement parent = element.Parent as FrameworkElement;
-        //    Size parentSize = parent.RenderSize;
-        //    Point location = RelativeLocation(element);
-        //    Debug.WriteLine("location: " + location);
-
-        //    Point newOffset = new Point();
-        //    newOffset.X = UpdateOffset(location.X, offset.X, translate.X, element.RenderSize.Width, parentSize.Width, margin);
-        //    newOffset.Y = UpdateOffset(location.Y, offset.Y, translate.Y, element.RenderSize.Height, parentSize.Height, margin);
-        //    Debug.WriteLine("new offset: " + newOffset);
-
-        //    return newOffset;
-        //}
 
         private static bool IsNewOffsetInsideMargin(double pos, double offsetDelta, double ctrlSize, double parentSize, double margin)
         {
@@ -143,25 +126,71 @@ namespace DashCamGPSView.Tools
 
             if (pos + offsetDelta <= -margin)
             {
-                //offset = -margin - pos;
                 return false; //no move
             }
 
             double end = pos + ctrlSize;
             if (end + offsetDelta >= parentSize + margin)
             {
-                //offset = parentSize + margin - end;
                 return false; //no move
             }
 
             return true;
         }
 
-        private static Point RelativeLocation(FrameworkElement element, FrameworkElement parent, TranslateTransform translate)
+        //rect.TopLeft is elemnt relative position to container grid row/column
+        //rect.Size - is cell size counting rowSpan and column span 
+        private static Rect RelativeLocation(FrameworkElement element)
         {
+            FrameworkElement parent = element.Parent as FrameworkElement;
+
             Point pos = element.TransformToAncestor(parent).Transform(new Point(0, 0));
-            //pos.Offset(translate.X, translate.Y);
-            return pos;
+            
+            Rect bounds = GetParentBoundRectFromElement(element);
+            bounds.X = pos.X - bounds.X; //correct to row/col location
+            bounds.Y = pos.Y - bounds.Y;
+            return bounds;
+        }
+
+        private static Rect GetParentBoundRectFromElement(FrameworkElement element)
+        {
+            FrameworkElement parent = element.Parent as FrameworkElement;
+
+            if (parent is Grid grid)
+            {
+                Rect r = new Rect();
+                if (grid.ColumnDefinitions.Count == 0)
+                    r.Width = parent.RenderSize.Width;
+                if (grid.RowDefinitions.Count == 0)
+                    r.Height = parent.RenderSize.Height;
+
+                int rowIdx = Grid.GetRow(element);
+                int colIdx = Grid.GetColumn(element);
+                int rowSpan = Grid.GetRowSpan(element);
+                int colSpan = Grid.GetColumnSpan(element);
+
+                for (int col = 0; col < grid.ColumnDefinitions.Count; col++)
+                {
+                    if (col < colIdx)
+                        r.X += grid.ColumnDefinitions[col].ActualWidth;
+                    if (col >= colIdx && col < colIdx + colSpan)
+                        r.Width += grid.ColumnDefinitions[col].ActualWidth;
+                }
+
+                for (int row = 0; row < grid.RowDefinitions.Count; row++)
+                {
+                    if (row < rowIdx)
+                        r.Y += grid.RowDefinitions[row].ActualHeight;
+                    if (row >= rowIdx && row < rowIdx + rowSpan)
+                        r.Height += grid.RowDefinitions[row].ActualHeight;
+                }
+
+                return r;
+            }
+            else
+            {
+                return new Rect(new Point(), parent.RenderSize);
+            }
         }
     }
 }

@@ -54,7 +54,7 @@
             <local:VideoPlayer x:Name="playerF" Title="Front View" />
         </Border>
 
-        <speedGauge:Gauge180UserControl x:Name="speedGauge"  Grid.Column="2" Grid.Row="3" 
+        <speedGauge:Gauge180UserControl x:Name="speedGauge" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="3" 
                  Width="180" Height="100" MaxSpeed="140"
                  HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="40,0,40,20"/>
         <!--<Viewbox Grid.Column="2" Grid.Row="3" 
