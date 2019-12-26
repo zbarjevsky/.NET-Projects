@@ -21,6 +21,6 @@
             <RowDefinition Height="150"/>
         </Grid.RowDefinitions>-->
         <speedGauge:Gauge180UserControl x:Name="speedGauge" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2"
-                                         Width="300" Height="150" ShowTestSlider="True" />
+                                         Width="200" Height="120" ShowTestSlider="True" />
     </Grid>
 </Window>

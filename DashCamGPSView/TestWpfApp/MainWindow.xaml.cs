@@ -25,7 +25,7 @@ namespace TestWpfApp
         {
             InitializeComponent();
 
-            speedGauge.Draggable(true, 30);
+            speedGauge.Draggable(true, 0.5, 0.8);
         }
     }
 }

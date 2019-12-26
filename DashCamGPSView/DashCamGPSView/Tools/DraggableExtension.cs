@@ -13,20 +13,47 @@ namespace DashCamGPSView.Tools
 {
     public static class DraggableExtension
     {
-        // TKey is control to drag, TValue is a flag used while dragging
-        private static Dictionary<FrameworkElement, bool> _draggables = new Dictionary<FrameworkElement, bool>();
-        private static Point _mouseOffset;
-        private static Vector _translateOffset;
+        private class DraggableData
+        {
+            public FrameworkElement Element;
+            public bool IsDragging = false;
 
-        private static double MARGIN = 5000; //do not let drag it beyond margin
+            private Size _margin = new Size();
+
+            /// <summary>
+            /// If dimention is less than one use it as fraction of element dimention
+            /// like: if _margin.Width == 0.5 use half of elements width
+            /// </summary>
+            public Size Margin
+            {
+                get 
+                {
+                    Size margin = _margin;
+                    if (_margin.Width > -1 && _margin.Width < 1)
+                        margin.Width = _margin.Width * Element.RenderSize.Width;
+                    if (_margin.Height > -1 && _margin.Height < 1)
+                        margin.Height = _margin.Height * Element.RenderSize.Height;
+                    return margin;
+                }
+            }
+
+            public DraggableData(FrameworkElement element, double marginX, double marginY)
+            {
+                Element = element;
+                _margin = new Size(marginX, marginY);
+            }
+        }
+
+        // TKey is control to drag, TValue is a flag used while dragging
+        private static Dictionary<FrameworkElement, DraggableData> _draggables = new Dictionary<FrameworkElement, DraggableData>();
+        private static Point _initialMouseOffset;
+        private static Vector _initialTranslateOffset;
 
         /// <summary>
         /// Enabling/disabling dragging for control
         /// </summary>
-        public static void Draggable(this FrameworkElement element, bool Enable = true, double margin = 5000)
+        public static void Draggable(this FrameworkElement element, bool Enable = true, double marginX = 0, double marginY = 0)
         {
-            MARGIN = margin;
-
             if (Enable)
             {
                 // enable drag feature
@@ -38,7 +65,7 @@ namespace DashCamGPSView.Tools
                 element.RenderTransform = new TranslateTransform();
 
                 // 'false' - initial state is 'not dragging'
-                _draggables.Add(element, false);
+                _draggables.Add(element, new DraggableData(element, marginX, marginY));
 
                 // assign required event handlersnnn
                 element.MouseDown += control_MouseDown;
@@ -70,11 +97,11 @@ namespace DashCamGPSView.Tools
             if (translate == null)
                 return;
 
-            _mouseOffset = element.PointToScreen(e.GetPosition(element));
-            _translateOffset = new Vector(translate.X, translate.Y);
+            _initialMouseOffset = element.PointToScreen(e.GetPosition(element));
+            _initialTranslateOffset = new Vector(translate.X, translate.Y);
 
             // turning on dragging
-            _draggables[(FrameworkElement)sender] = true;
+            _draggables[(FrameworkElement)sender].IsDragging = true;
 
             element.CaptureMouse();
         }
@@ -82,7 +109,7 @@ namespace DashCamGPSView.Tools
         static void control_MouseUp(object sender, MouseButtonEventArgs e)
         {
             // turning off dragging
-            _draggables[(FrameworkElement)sender] = false;
+            _draggables[(FrameworkElement)sender].IsDragging = false;
 
             FrameworkElement element = sender as FrameworkElement;
             element.ReleaseMouseCapture();
@@ -99,24 +126,26 @@ namespace DashCamGPSView.Tools
                 return;
 
             // only if dragging is turned on
-            if (!_draggables[element] || !element.IsMouseCaptured)
+            if (!_draggables[element].IsDragging || !element.IsMouseCaptured)
                 return;
 
             // calculations of control's new position
             Point pt = element.PointToScreen(e.GetPosition(element));
-            Vector offset = pt - _mouseOffset;
+            Vector offset = pt - _initialMouseOffset;
             if (offset.Length < 0.0001)
                 return;
+
+            Size margin = _draggables[element].Margin;
 
             Rect bounds = RelativeLocation(element);
             Debug.WriteLine("location: " + bounds);
 
-            Vector offsetDelta = new Vector(offset.X, offset.Y) - (new Vector(translate.X, translate.Y) - _translateOffset);
+            Vector offsetDelta = new Vector(offset.X, offset.Y) - (new Vector(translate.X, translate.Y) - _initialTranslateOffset);
             
-            if (IsNewOffsetInsideMargin(bounds.X, offsetDelta.X, element.RenderSize.Width, bounds.Width, MARGIN))
-                translate.X = _translateOffset.X + offset.X;
-            if (IsNewOffsetInsideMargin(bounds.Y, offsetDelta.Y, element.RenderSize.Height, bounds.Height, MARGIN))
-                translate.Y = _translateOffset.Y + offset.Y;
+            if (IsNewOffsetInsideMargin(bounds.X, offsetDelta.X, element.RenderSize.Width, bounds.Width, margin.Width))
+                translate.X = _initialTranslateOffset.X + offset.X;
+            if (IsNewOffsetInsideMargin(bounds.Y, offsetDelta.Y, element.RenderSize.Height, bounds.Height, margin.Height))
+                translate.Y = _initialTranslateOffset.Y + offset.Y;
         }
 
         private static bool IsNewOffsetInsideMargin(double pos, double offsetDelta, double ctrlSize, double parentSize, double margin)
