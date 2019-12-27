@@ -38,9 +38,10 @@
             <RowDefinition Height="3*" x:Name="rowRearView"/>
             <RowDefinition Height="5"/>
             <RowDefinition Height="5*"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="30"/>
+            <RowDefinition Height="40" MaxHeight="40" MinHeight="40"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="1.3*"/>
+            <RowDefinition Height="30" MaxHeight="30" MinHeight="30"/>
         </Grid.RowDefinitions>
         <Border x:Name="borderPlayerR" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" 
                 BorderThickness="2" BorderBrush="Gray" >
@@ -154,12 +155,12 @@
                 <CheckBox x:Name="chkAutoPlay" IsChecked="True" Content="Auto Play Next"/>
             </Viewbox>
         </ToolBar>
-        
-        <TextBox Name="txtGPSInfo" Grid.Row="5" Grid.ColumnSpan="3"  
-                   Text="GPS Info" IsReadOnly="True"
-                   VerticalAlignment="Center" Margin="10,0" FontSize="22"/>
 
-        <StatusBar Grid.Row="6" Grid.ColumnSpan="3"  Background="Gray">
+        <GridSplitter Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" 
+                      HorizontalAlignment="Stretch"/>
+        <controls:SpeedChartUserControl x:Name="graphSpeedInfo" Grid.Row="6" Grid.ColumnSpan="3" />
+
+        <StatusBar Grid.Row="7" Grid.ColumnSpan="3"  Background="Gray">
             <StatusBar.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Grid>
@@ -191,7 +192,7 @@
             </StatusBarItem>
         </StatusBar>
 
-        <controls:MaximizedUserControl x:Name="maxScreen" Grid.RowSpan="7" Grid.ColumnSpan="5" Visibility="Hidden" />
-        <controls:WaitScreenUserControl x:Name="waitScreen" Grid.RowSpan="7" Grid.ColumnSpan="5" Visibility="Hidden" />
+        <controls:MaximizedUserControl x:Name="maxScreen" Grid.RowSpan="8" Grid.ColumnSpan="5" Visibility="Hidden" />
+        <controls:WaitScreenUserControl x:Name="waitScreen" Grid.RowSpan="8" Grid.ColumnSpan="5" Visibility="Hidden" />
     </Grid>
 </Window>

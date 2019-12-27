@@ -184,6 +184,8 @@ namespace DashCamGPSView
             playerF.Open(_dashCamFileInfo.FrontFileName, playerF.Volume);
             playerR.Open(_dashCamFileInfo.BackFileName, 0);
 
+            graphSpeedInfo.SetGpsInfo(_dashCamFileInfo.GpsInfo);
+
             if (_dashCamFileInfo.GpsInfo != null && _dashCamFileInfo.GpsInfo.Count > 0)
             {
                 MainMap.SetRouteAndCar(_dashCamFileInfo);
@@ -457,8 +459,6 @@ namespace DashCamGPSView
                 sliProgress.LargeChange = sliProgress.Maximum / 10.0;
             }
 
-            txtGPSInfo.Text = _dashCamFileInfo.GetLocationInfoForTime(playerF.Position.TotalSeconds, playerF.NaturalDuration);
-
             int idx = _dashCamFileInfo.FindGpsInfo(playerF.Position.TotalSeconds, playerF.NaturalDuration);
             if (idx >= 0 && _dashCamFileInfo.GpsInfo != null && _dashCamFileInfo.GpsInfo.Count > idx)
             {
@@ -477,6 +477,8 @@ namespace DashCamGPSView
                 speedGauge.Speed = 0;
                 speedGauge.Visibility = Visibility.Hidden;
             }
+
+            graphSpeedInfo.SetCarPosition(idx);
         }
 
         private void GridSplitter1_DragCompleted(object sender, DragCompletedEventArgs e)
@@ -523,6 +525,7 @@ namespace DashCamGPSView
 
         private bool VideoFailed(ExceptionRoutedEventArgs e, MediaElement player)
         {
+            waitScreen.Hide();
             MessageBox.Show("Media Failed: " + e.ErrorException.Message +
                 "\nMediaState: " + playerF.MediaState +
                 "\nSource: " + player.Source +

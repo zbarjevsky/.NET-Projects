@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
 
@@ -20,7 +21,7 @@ namespace SpeedGauge
         public double Speed
         {
             get { return _viewModel.Value; }
-            set { _viewModel.Value = (int)value; OnPropertyChanged(); }
+            set { _viewModel.Value = (int)Math.Round(value, 0); OnPropertyChanged(); }
         }
 
         public double MaxSpeed

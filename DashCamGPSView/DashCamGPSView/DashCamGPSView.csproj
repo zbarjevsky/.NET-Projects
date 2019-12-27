@@ -62,6 +62,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\SpeedChartUserControl.xaml.cs">
+      <DependentUpon>SpeedChartUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\GMapUserControl.xaml.cs">
       <DependentUpon>GMapUserControl.xaml</DependentUpon>
     </Compile>
@@ -144,6 +147,10 @@
     <Compile Include="Tools\ItemsControlExtensions.cs" />
     <Compile Include="Tools\RelayCommand.cs" />
     <Compile Include="Tools\Tools.cs" />
+    <Page Include="Controls\SpeedChartUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\CompassUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
