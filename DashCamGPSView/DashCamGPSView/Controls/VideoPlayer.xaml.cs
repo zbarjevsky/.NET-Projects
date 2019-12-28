@@ -305,11 +305,16 @@ namespace DashCamGPSView
             {
                 if (VideoPlayerElement != null)
                 {
-                    Settings.Default.SoundVolume = VideoPlayerElement.Volume;
-
                     VideoPlayerElement.Stop();
+                    VideoPlayerElement.Close();
+                    VideoPlayerElement.Clock = null;
                     VideoPlayerElement.Source = null;
                     VideoPlayerElement.Volume = 0;
+                    VideoPlayerElement = null;
+                    scrollPlayer.Content = null;
+
+                    GC.Collect();
+                    GC.WaitForPendingFinalizers();
                 }
 
                 MediaState = MediaState.Manual;
@@ -321,7 +326,7 @@ namespace DashCamGPSView
                 VideoPlayerElement.Stretch = Stretch.Uniform;
                 VideoPlayerElement.MouseWheel += mePlayer_MouseWheel;
                 
-                Volume = Settings.Default.SoundVolume; //restore
+                Volume = 0; //reset
 
                 scrollPlayer.Content = VideoPlayerElement;
 
@@ -335,7 +340,7 @@ namespace DashCamGPSView
                 _scrollDragger.SizeChangedAction = () => 
                 {
                     txtVideoResolution.Text = string.Format("{0:0}x{1:0} ({2:0.0}%)",
-                        VideoPlayerElement.Width, VideoPlayerElement.Height, 100.0 * _scrollDragger.Zoom);
+                        VideoPlayerElement.ActualWidth, VideoPlayerElement.ActualHeight, 100.0 * _scrollDragger.Zoom);
                 };
 
                 //refresh view when change position
@@ -345,7 +350,9 @@ namespace DashCamGPSView
 
                 VideoPlayerElement.MediaOpened += (s, e) => 
                 {
+                    double zoom1 = _scrollDragger.Zoom;
                     _scrollDragger.NaturalSize = new Size(VideoPlayerElement.NaturalVideoWidth, VideoPlayerElement.NaturalVideoHeight);
+                    _scrollDragger.Zoom = zoom1; //force redraw - fix recreate 'blank' problem
                     MediaState = GetMediaState(VideoPlayerElement); 
                     VideoStarted(); 
                 };

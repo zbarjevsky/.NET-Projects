@@ -44,25 +44,31 @@ namespace DashCamGPSView.Tools
             col.BeginAnimation(ColumnDefinition.WidthProperty, da);
         }
 
-        public static void AnimateRow(RowDefinition row, GridLength from, GridLength to, Action postAction = null)
+        public static void AnimateRow(RowDefinition row, GridLength to, Action postAction = null)
         {
-            var da = new GridLengthAnimation();
+            var animation = new GridLengthAnimation();
 
-            da.Duration = TimeSpan.FromMilliseconds(500);
+            animation.Duration = TimeSpan.FromMilliseconds(500);
 
-            da.From = from;
-            da.To = to;
+            animation.From = row.Height;
+            animation.To = to;
 
             //var ef = new BounceEase();
             //ef.EasingMode = EasingMode.EaseOut;
             //da.EasingFunction = ef;
 
-            da.FillBehavior = FillBehavior.Stop;
-            row.Height = da.To;
+            animation.FillBehavior = FillBehavior.Stop;
+            //row.Height = animation.To;
 
-            da.Completed += (s, e) => { if (postAction != null) postAction(); };
+            animation.Completed += (s, e) => 
+            {
+                if (postAction != null)
+                    postAction();
+                else
+                    row.Height = to;
+            };
 
-            row.BeginAnimation(RowDefinition.HeightProperty, da);
+            row.BeginAnimation(RowDefinition.HeightProperty, animation);
         }
 
         protected override Freezable CreateInstanceCore()

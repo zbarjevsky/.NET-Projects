@@ -44,7 +44,7 @@ namespace DashCamGPSView
             { 
                 _origWidth = value.Width; 
                 _origHeight = value.Height;
-                _zoom = _content.Width / _origWidth;
+                _zoom = _content.ActualWidth / _origWidth;
             }
         }
 
@@ -83,12 +83,16 @@ namespace DashCamGPSView
 
         public void FitWidth(double margin = 18)
         {
+            if (_scrollViewer.ActualWidth < margin)
+                return;
+
             _content.Width = _scrollViewer.ActualWidth - margin;
 
             //proportionally change height
             _content.Height = _content.Width * NaturalSize.Height / NaturalSize.Width;
+            _content.UpdateLayout();
 
-            _zoom = _content.Width / NaturalSize.Width;
+            _zoom = _content.ActualWidth / NaturalSize.Width;
 
             SizeChangedAction();
         }
@@ -108,9 +112,10 @@ namespace DashCamGPSView
             {
                 _content.Width = _scrollViewer.ActualWidth - 18;
                 _content.Height = _scrollViewer.ActualHeight - 18;
+                _content.UpdateLayout();
             }
 
-            _zoom = _content.Width / NaturalSize.Width;
+            _zoom = _content.ActualWidth / NaturalSize.Width;
 
             ScrollToCenter();
 

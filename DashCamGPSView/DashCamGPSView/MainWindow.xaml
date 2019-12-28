@@ -81,7 +81,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="3*" x:Name="rowRearView"/>
                 <RowDefinition Height="5"/>
-                <RowDefinition Height="5*"/>
+                <RowDefinition Height="5*" x:Name="rowFrontView"/>
             </Grid.RowDefinitions>
             <Border x:Name="borderPlayerR" Grid.Row="0"
                 BorderThickness="2" BorderBrush="Gray" >

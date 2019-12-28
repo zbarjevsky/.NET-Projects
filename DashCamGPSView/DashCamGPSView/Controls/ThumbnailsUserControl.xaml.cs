@@ -17,21 +17,25 @@ namespace DashCamGPSView.Controls
         {
             public BitmapSource bmp { get; set; }
             public string txt { get; set; }
-            public double seconds { get; set; }
+            public double start { get; set; }
+            public double end { get; set; }
             public double width { get; set; } = 160;
             public double height { get; set; } = 120;
 
-            public ThumbnailData(BitmapSource image, double sec)
+            public ThumbnailData(BitmapSource image, double start, double duration)
             {
                 bmp = image;
-                txt = TimeSpan.FromSeconds(sec).ToString();
-                seconds = sec;
+                txt = TimeSpan.FromSeconds(start).ToString();
+                this.start = start;
+                this.end = start + duration;
             }
         }
 
         public Action<ThumbnailData> OnItemSelectedAction = (item) => { };
 
         public ObservableCollection<ThumbnailData> Images { get; set; } = new ObservableCollection<ThumbnailData>();
+
+        private double _selectedPosition = 0;
 
         public ThumbnailsUserControl()
         {
@@ -46,6 +50,7 @@ namespace DashCamGPSView.Controls
         private bool _selectFromThis = false;
         public void SelectItem(double second)
         {
+            _selectedPosition = second;
             if (_selectFromThis)
                 return;
             _selectFromThis = true;
@@ -67,7 +72,7 @@ namespace DashCamGPSView.Controls
         {
             for (int i = 0; i < Images.Count; i++)
             {
-                if (Images[i].seconds >= second)
+                if (second >= Images[i].start && second <= Images[i].end)
                     return i;
             }
             return -1;
@@ -78,7 +83,9 @@ namespace DashCamGPSView.Controls
             if (_selectFromThis)
                 return;
             _selectFromThis = true;
-            OnItemSelectedAction(Thumbnails.SelectedItem as ThumbnailData);
+            ThumbnailData item = Thumbnails.SelectedItem as ThumbnailData;
+            _selectedPosition = item != null ? item.start : 0;
+            OnItemSelectedAction(item);
             _selectFromThis = false;
         }
 
@@ -138,9 +145,10 @@ namespace DashCamGPSView.Controls
                         Tools.Tools.ForceUIToUpdate();
 
                         BitmapSource bmp = Tools.Tools.UIElementToBitmap(player);
-                        Images.Add(new ThumbnailData(bmp, (int)position) { width = size.Width, height = size.Height });
+                        Images.Add(new ThumbnailData(bmp, position, interval) { width = size.Width, height = size.Height });
                     }
-                    //Thumbnails_SizeChanged(sender, null);
+
+                    SelectItem(_selectedPosition);
                     this.UpdateLayout();
                 }
             }
@@ -156,15 +164,17 @@ namespace DashCamGPSView.Controls
             }
         }
 
-        public void StartCreateThumbnailsFromVideoFile(string fileName)
+        public void StartCreateThumbnailsFromVideoFile(VideoPlayer playerSrc)
         {
-            if (string.IsNullOrWhiteSpace(fileName))
+            if (string.IsNullOrWhiteSpace(playerSrc.FileName))
                 return;
 
             try
             {
+                _selectedPosition = playerSrc.Position.TotalSeconds;
+
                 Images.Clear();
-                player.Source = new System.Uri(fileName);
+                player.Source = new System.Uri(playerSrc.FileName);
                 player.Play();
             }
             catch (System.Exception err)

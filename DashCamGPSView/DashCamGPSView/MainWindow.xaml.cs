@@ -81,7 +81,7 @@ namespace DashCamGPSView
             playerF.MaximizeAction = () => MaximizePlayer(playerF);
             playerR.MaximizeAction = () => MaximizePlayer(playerR);
 
-            playerF.VideoStarted = () => { waitScreen.Hide(); };
+            playerF.VideoStarted = () => { UpdateGpsInfo(); waitScreen.Hide(); };
 
             playerF.VideoEnded = () => { if (chkAutoPlay.IsChecked.Value) PlayNext(); };
 
@@ -166,10 +166,11 @@ namespace DashCamGPSView
         }
 
         private bool _bMapWasCollapsed = false;
+        private bool _bRearViewWasCollapsed = false;
         private void PlayFile(string fileName, double startFrom = 0)
         {
-            string prev = treeGroups.FindPrevFile(fileName);
-            if(_dashCamFileInfo != null && prev != _dashCamFileInfo.FrontFileName)
+            string prevFile = treeGroups.FindPrevFile(fileName);
+            if(_dashCamFileInfo != null && prevFile != _dashCamFileInfo.FrontFileName)
             {
                 MainMap.SetRouteAndCar(null); //reset route 
             }
@@ -196,12 +197,9 @@ namespace DashCamGPSView
                     _bMapWasCollapsed = false;
                     MainMap.Zoom = 16;
                     //GridLengthAnimation.AnimateColumn(mapColumn, mapColumn.Width, 500);
-                    GridLengthAnimation.AnimateRow(rowMaps, rowMaps.Height, new GridLength(5, GridUnitType.Star),
-                        () => { rowMaps.Height = new GridLength(5, GridUnitType.Star); });
-                    GridLengthAnimation.AnimateRow(rowGpsInfo, rowGpsInfo.Height, new GridLength(2, GridUnitType.Star),
-                        () => { rowGpsInfo.Height = new GridLength(2, GridUnitType.Star); });
-                    GridLengthAnimation.AnimateRow(rowSpeedGraph, rowSpeedGraph.Height, new GridLength(1.3, GridUnitType.Star),
-                        () => { rowSpeedGraph.Height = new GridLength(1.3, GridUnitType.Star); });
+                    GridLengthAnimation.AnimateRow(rowMaps, new GridLength(5, GridUnitType.Star));
+                    GridLengthAnimation.AnimateRow(rowGpsInfo, new GridLength(2, GridUnitType.Star));
+                    GridLengthAnimation.AnimateRow(rowSpeedGraph, new GridLength(1.3, GridUnitType.Star));
                 }
             }
             else //no GPS info
@@ -212,19 +210,30 @@ namespace DashCamGPSView
                     _bMapWasCollapsed = true;
                     MainMap.Zoom = 2;
 
-                    GridLengthAnimation.AnimateRow(rowMaps, rowMaps.Height, new GridLength(0));
-                    GridLengthAnimation.AnimateRow(rowGpsInfo, rowGpsInfo.Height, new GridLength(0));
-                    GridLengthAnimation.AnimateRow(rowSpeedGraph, rowSpeedGraph.Height, new GridLength(0));
+                    GridLengthAnimation.AnimateRow(rowMaps, new GridLength(0));
+                    GridLengthAnimation.AnimateRow(rowGpsInfo, new GridLength(0));
+                    GridLengthAnimation.AnimateRow(rowSpeedGraph, new GridLength(0));
                 }
             }
 
+
             if(File.Exists(_dashCamFileInfo.BackFileName))
             {
-                GridLengthAnimation.AnimateRow(rowRearView, rowRearView.Height, new GridLength(3, GridUnitType.Star));
+                if (_bRearViewWasCollapsed)
+                {
+                    _bRearViewWasCollapsed = false;
+                    GridLengthAnimation.AnimateRow(rowFrontView, new GridLength(5, GridUnitType.Star));
+                    GridLengthAnimation.AnimateRow(rowRearView, new GridLength(3, GridUnitType.Star));
+                }
             }
             else
             {
-                GridLengthAnimation.AnimateRow(rowRearView, rowRearView.Height, new GridLength(0));
+                if(!_bRearViewWasCollapsed)
+                {
+                    _bRearViewWasCollapsed = true;
+                    GridLengthAnimation.AnimateRow(rowFrontView, new GridLength(5, GridUnitType.Star));
+                    GridLengthAnimation.AnimateRow(rowRearView, new GridLength(0));
+                }
             }
 
             playerF.Play();

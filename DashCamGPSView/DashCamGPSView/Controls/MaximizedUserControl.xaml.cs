@@ -35,13 +35,14 @@ namespace DashCamGPSView.Controls
 
             Player.LeftButtonClick = TogglePlayPauseState;
             Player.LeftButtonDoubleClick = () => btnClose_Click(this, null);
+            Player.VideoEnded = () => { Player.Pause(); };
 
             thumbnails.OnItemSelectedAction = (item) => 
             {
                 if(item != null)
                 {
                     Player.Pause();
-                    sliProgress.Value = item.seconds;
+                    sliProgress.Value = item.start;
                 }
             };
         }
@@ -75,7 +76,7 @@ namespace DashCamGPSView.Controls
             this.Visibility = Visibility.Visible;
             Player.FitWidth(false);
 
-            thumbnails.StartCreateThumbnailsFromVideoFile(player.FileName);
+            thumbnails.StartCreateThumbnailsFromVideoFile(player);
 
             sliProgress.Maximum = player.NaturalDuration;
             sliProgress.Value = player.Position.TotalSeconds;
