@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GPSDataParser;
+using GPSDataParser.Tools;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -37,70 +39,63 @@ namespace NovatekViofoGPSParser
         public double Speed;
         public double Bearing;
 
-        public static ViofoGpsPoint Parse(uint offset, uint size, byte[] file)
+        public static ViofoGpsPoint Parse(byte [] buffer)
         {
-            byte[] data = new byte[size];
-            Array.Copy(file, offset, data, 0, size);
+            BufferReader reader = new BufferReader(buffer);
 
-            uint pos = 0;
+            uint size = reader.ReadUintBE();
+            string type = reader.ReadString(4);
+            string magic = reader.ReadString(4);
 
-            uint size1 = Box.ReadUintBE(data, pos); pos += 4;
-            string type = Encoding.ASCII.GetString(data, (int)pos, 4); pos += 4;
-            string magic = Encoding.ASCII.GetString(data, (int)pos, 4); pos += 4;
-
-            if (size != size1 || type != "free" || magic != "GPS ")
+            if (buffer.Length != size || type != "free" || magic != "GPS ")
                 return null;
 
             ViofoGpsPoint gps = new ViofoGpsPoint();
 
             //# checking for weird Azdome 0xAA XOR "encrypted" GPS data. 
             //This portion is a quick fix.
-            uint payload_size = 254;
-            if (data[pos] == 0x05)
+            int payload_size = 254;
+            byte c = reader.ReadByte();
+            if (c == 0x05)
             {
                 if (size < 254)
-                    payload_size = size;
+                    payload_size = (int)+size;
 
-                byte[] payload = new byte[payload_size];
-
-                pos += 6; //???
-                for (int i = 0; i < payload_size; i++)
-                {
-                    payload[i] = (byte)(file[pos + i] ^ 0xAA);
-                }
+                reader.Position += 5; //???
+                byte[] payload = reader.ReadBuffer(payload_size);
             }
-            else if ((char)data[pos] == 'L')
+            else if ((char)c == 'L')
             {
                 const uint OFFSET_V2 = 48, OFFSET_V1 = 16; 
-                pos = OFFSET_V2;
+                reader.Position = OFFSET_V2;
 
                 //# Datetime data
-                int hour = (int)Box.ReadUintLE(data, pos); pos += 4;
-                int minute = (int)Box.ReadUintLE(data, pos); pos += 4;
-                int second = (int)Box.ReadUintLE(data, pos); pos += 4;
-                int year = (int)Box.ReadUintLE(data, pos); pos += 4;
-                int month = (int)Box.ReadUintLE(data, pos); pos += 4;
-                int day = (int)Box.ReadUintLE(data, pos); pos += 4;
+                int hour = (int)reader.ReadUintLE();
+                int minute = (int)reader.ReadUintLE();
+                int second = (int)reader.ReadUintLE();
+                int year = (int)reader.ReadUintLE();
+                int month = (int)reader.ReadUintLE();
+                int day = (int)reader.ReadUintLE();
 
                 try { gps.Date = new DateTime(2000 + year, month, day, hour, minute, second); }
                 catch (Exception err) { Debug.WriteLine(err.ToString()); return null; }
 
                 //# Coordinate data
-                char active = (char)data[pos]; pos++;
+                char active = (char)reader.ReadByte();
                 gps.IsActive = (active == 'A');
 
-                gps.Latitude_hemisphere = (char)data[pos]; pos++;
-                gps.Longtitude_hemisphere = (char)data[pos]; pos++;
-                gps.Unknown = data[pos]; pos++;
-                
-                float lat = Box.ReadFloatLE(data, pos); pos += 4;
+                gps.Latitude_hemisphere = (char)reader.ReadByte(); 
+                gps.Longtitude_hemisphere = (char)reader.ReadByte();
+                gps.Unknown = reader.ReadByte();
+
+                float lat = reader.ReadFloatLE();
                 gps.Latitude = FixCoordinate(lat, gps.Latitude_hemisphere);
 
-                float lon = Box.ReadFloatLE(data, pos); pos += 4;
+                float lon = reader.ReadFloatLE();
                 gps.Longtitude = FixCoordinate(lon, gps.Longtitude_hemisphere);
 
-                gps.Speed = Box.ReadFloatLE(data, pos); pos += 4;
-                gps.Bearing = Box.ReadFloatLE(data, pos); pos += 4;
+                gps.Speed = reader.ReadFloatLE();
+                gps.Bearing = reader.ReadFloatLE();
 
                 return gps;
             }

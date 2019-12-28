@@ -1,43 +1,47 @@
-﻿using System;
+﻿using GPSDataParser;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
+using System.IO.MemoryMappedFiles;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace NovatekViofoGPSParser
 {
-    public class Parser
+    public class NovatekParser
     {
         public static List<ViofoGpsPoint> ReadMP4FileGpsInfo(string fileName)
         {
-            byte[] buff = File.ReadAllBytes(fileName);
-            List<Box> boxes = new List<Box>(1024);
-
-            uint offset = 0;
-            while(offset < buff.Length)
+            using (MemoryMappedFileReader reader = new MemoryMappedFileReader(fileName))
             {
-                Box x = new Box(buff, offset);
-                if (x.Size > buff.Length)
-                    return null; //corrupt file
 
-                offset += x.Size;
+                //byte[] buff = File.ReadAllBytes(fileName);
+                List<Box> boxes = new List<Box>(1024);
 
-                if (x.Kind == "moov")
+                while (reader.Position < reader.Length)
                 {
-                    uint off = 0;
-                    while(off < x.Size - 8)
+                    Box x = new Box(reader);
+                    if (x.Size > reader.Length)
+                        return null; //corrupt file
+
+                    if (x.Kind == "moov")
                     {
-                        Box g = new Box(x.Data, off);
-                        if (g.Kind == "gps ")
-                            return ParseGpsCatalog(g, buff); //gps catalog - position and size list
-                        off += g.Size;
+                        uint off = 0;
+                        while (off < x.Size - 8)
+                        {
+                            Box g = new Box(x.Data, off);
+                            if (g.Kind == "gps ")
+                                return ParseGpsCatalog(g, reader); //gps catalog - position and size list
+                            off += g.Size;
+                        }
                     }
                 }
-            }
 
-            return null;
+                return null;
+            }
         }
 
         /// <summary>
@@ -47,7 +51,7 @@ namespace NovatekViofoGPSParser
         /// <param name="g"></param>
         /// <param name="file"></param>
         /// <returns>list of gps points</returns>
-        private static List<ViofoGpsPoint> ParseGpsCatalog(Box g, byte [] file)
+        private static List<ViofoGpsPoint> ParseGpsCatalog(Box g, MemoryMappedFileReader reader)
         {
             LocationsList list = new LocationsList(g);
             List<ViofoGpsPoint> gpsPoints = new List<ViofoGpsPoint>();
@@ -55,11 +59,15 @@ namespace NovatekViofoGPSParser
             {
                 if (loc.Offset == 0 || loc.Length == 0)
                     continue;
-                ViofoGpsPoint i = ViofoGpsPoint.Parse(loc.Offset, loc.Length, file);
+
+                reader.Position = loc.Offset;
+                byte[] buffer = reader.ReadBuffer((int)loc.Length);
+                ViofoGpsPoint i = ViofoGpsPoint.Parse(buffer);
                 if (i == null)
                     continue;
                 gpsPoints.Add(i);
             }
+
             return gpsPoints;
         }
     }
@@ -72,49 +80,34 @@ namespace NovatekViofoGPSParser
     //Basically MP4 container can be treated as some rudimentary file system.
     public class Box
     {
-        public uint Start, Size;
+        public uint Size;
         public string Kind;
 
         public byte[] Data;
 
-        public Box(byte[] file, uint start)
+        public Box(MemoryMappedFileReader reader)
         {
-            Start = start;
-            Size = ReadUintBE(file, start);
-            Kind = Encoding.ASCII.GetString(file, (int)start + 4, 4);
+            const uint maxSize = 1024 * 1024 * 1024;
 
-            if (Size > file.Length - Start)
+            Size = reader.ReadUintBE();
+            Kind = reader.ReadString(4);
+
+            if (Size > reader.Length || Size > maxSize)
+                return; //bad offset or size
+
+            Data = reader.ReadBuffer((int)Size - 8);
+        }
+
+        public Box(byte[] buffer, uint start)
+        {
+            Size = MemoryMappedFileReader.ConvertToUintBE(buffer, start);
+            Kind = Encoding.ASCII.GetString(buffer, (int)start + 4, 4);
+
+            if (Size > buffer.Length - start)
                 return; //bad offset or size
 
             Data = new byte[Size - 8];
-            Array.Copy(file, start + 8, Data, 0, Size - 8);
-        }
-
-        public static uint ReadUintBE(byte[] buff, uint offset)
-        {
-            byte[] number = new byte[4];
-            Array.Copy(buff, offset, number, 0, 4);
-            if (BitConverter.IsLittleEndian)
-                number = number.Reverse().ToArray();
-            return BitConverter.ToUInt32(number, 0);
-        }
-
-        public static uint ReadUintLE(byte[] buff, uint offset)
-        {
-            byte[] number = new byte[4];
-            Array.Copy(buff, offset, number, 0, 4);
-            if (!BitConverter.IsLittleEndian)
-                number = number.Reverse().ToArray();
-            return BitConverter.ToUInt32(number, 0);
-        }
-
-        public static float ReadFloatLE(byte[] buff, uint offset)
-        {
-            byte[] number = new byte[4];
-            Array.Copy(buff, offset, number, 0, 4);
-            if (!BitConverter.IsLittleEndian)
-                number = number.Reverse().ToArray();
-            return BitConverter.ToSingle(number, 0);
+            Array.Copy(buffer, start + 8, Data, 0, Size - 8);
         }
     }
 
@@ -124,9 +117,9 @@ namespace NovatekViofoGPSParser
 
         public uint Read(byte [] data, uint pos)
         {
-            Offset = Box.ReadUintBE(data, pos);
+            Offset = MemoryMappedFileReader.ConvertToUintBE(data, pos);
             pos += 4;
-            Length = Box.ReadUintBE(data, pos);
+            Length = MemoryMappedFileReader.ConvertToUintBE(data, pos);
             pos += 4;
 
             return pos;
@@ -146,9 +139,9 @@ namespace NovatekViofoGPSParser
         public LocationsList(Box gpsCatalog)
         {
             uint off = 0;
-            Version = Box.ReadUintBE(gpsCatalog.Data, off);
+            Version = MemoryMappedFileReader.ConvertToUintBE(gpsCatalog.Data, off);
             off += 4;
-            EncodedDate = Box.ReadUintBE(gpsCatalog.Data, off);
+            EncodedDate = MemoryMappedFileReader.ConvertToUintBE(gpsCatalog.Data, off);
             off += 4;
 
             while (off < gpsCatalog.Data.Length)

@@ -334,7 +334,12 @@ namespace DashCamGPSView
 
                 AddFlipXRenderTransform(VideoPlayerElement, flipHorizontally);
 
-                VideoPlayerElement.MediaOpened += (s, e) => { MediaState = GetMediaState(VideoPlayerElement); VideoStarted(); };
+                VideoPlayerElement.MediaOpened += (s, e) => 
+                {
+                    _scrollDragger.NaturalSize = new Size(VideoPlayerElement.NaturalVideoWidth, VideoPlayerElement.NaturalVideoHeight);
+                    MediaState = GetMediaState(VideoPlayerElement); 
+                    VideoStarted(); 
+                };
                 VideoPlayerElement.MediaEnded += (s, e) => { VideoEnded(); };
                 VideoPlayerElement.MediaFailed += (s, e) => { e.Handled = VideoFailed(e, VideoPlayerElement); };
             }

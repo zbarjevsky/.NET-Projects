@@ -38,7 +38,12 @@ namespace DashCamGPSView
         public Size NaturalSize
         {
             get { return new Size(_origWidth, _origHeight); }
-            set { _origWidth = value.Width; _origHeight = value.Height; }
+            set 
+            { 
+                _origWidth = value.Width; 
+                _origHeight = value.Height;
+                _zoom = _content.Width / _origWidth;
+            }
         }
 
         public ScrollDragZoom()

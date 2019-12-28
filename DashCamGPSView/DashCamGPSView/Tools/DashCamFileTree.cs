@@ -19,7 +19,9 @@ namespace DashCamGPSView.Tools
         public DashCamFileTree(string fileName, double deltaMinutesBetweenGroups = 10.0)
         {
             string dirParent = Path.GetDirectoryName(fileName);
-            string [] fileList = Directory.GetFiles(dirParent, "*.MP4");
+            string ext = Path.GetExtension(fileName);
+
+            string [] fileList = Directory.GetFiles(dirParent, "*"+ext);
 
             Array.Sort(fileList, StringComparer.InvariantCultureIgnoreCase);
 

@@ -51,6 +51,7 @@
     <Compile Include="FileFormats\KML\KmlPlacemarks.cs" />
     <Compile Include="FileFormats\KML\KmlStyles.cs" />
     <Compile Include="GpsPointData.cs" />
+    <Compile Include="Tools\MemoryMappedFileReader.cs" />
     <Compile Include="MOV\MovParser.cs" />
     <Compile Include="NMEA\IMultiPartMessage.cs" />
     <Compile Include="NMEA\NmeaMessageReceivedEventArgs.cs" />
@@ -76,10 +77,12 @@
     <Compile Include="NMEA\NMEA_Data\UnknownMessage.cs" />
     <Compile Include="NMEA\NMEA_Data\Vtg.cs" />
     <Compile Include="NMEA\NMEA_Data\Zda.cs" />
+    <Compile Include="NovatekViofo\ViofoParser.cs" />
     <Compile Include="NovatekViofo\ViofoGpsPoint.cs" />
-    <Compile Include="NovatekViofo\Parser.cs" />
+    <Compile Include="NovatekViofo\NovatekParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SexagesimalAngle.cs" />
+    <Compile Include="Tools\SexagesimalAngle.cs" />
+    <Compile Include="Tools\BufferReader.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="NovatekViofo\nvtk_mp42gpx.py" />

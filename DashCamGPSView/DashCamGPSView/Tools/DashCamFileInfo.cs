@@ -26,12 +26,13 @@ namespace DashCamGPSView.Tools
 
         public string FrontFileName, BackFileName, NmeaFileName;
 
+        private bool _isGpsInfoInitialized = false;
         private List<GpsPointData> _gpsInfo = null;
         public List<GpsPointData> GpsInfo 
         {
             get 
             {
-                if(_gpsInfo == null)
+                if(!_isGpsInfoInitialized)
                 {
                     if(GpsFileFormat == GpsFileFormat.DuDuBell)
                     {
@@ -40,11 +41,12 @@ namespace DashCamGPSView.Tools
                     }
                     else if(GpsFileFormat == GpsFileFormat.Viofo)
                     {
-
-                        _gpsInfo = GpsPointData.Convert(NovatekViofoGPSParser.Parser.ReadMP4FileGpsInfo(FrontFileName));
+                        _gpsInfo = GpsPointData.Convert(NovatekViofoGPSParser.NovatekParser.ReadMP4FileGpsInfo(FrontFileName));
                     }
 
                     CalculateDelay(FileDate);
+
+                    _isGpsInfoInitialized = true;
                 }
                 return _gpsInfo;
             } 
@@ -130,7 +132,7 @@ namespace DashCamGPSView.Tools
         private DateTime FromViofoFileName(string fileName)
         {
             fileName = Path.GetFileNameWithoutExtension(fileName);
-            if (fileName.Length >= 16)
+            if (fileName.Length >= 16 && fileName.Length < 22)
             {
                 string date_time = fileName.Substring(0, 16); //"2019_0624_075333_296P"
                 return DateTime.ParseExact(date_time, "yyyy_MMdd_HHmmss", CultureInfo.InvariantCulture);

@@ -425,21 +425,25 @@ namespace DashCamGPSView
 
         private void sliProgress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            TimeSpan tsPos = TimeSpan.FromSeconds(sliProgress.Value);
-            TimeSpan tsMax = TimeSpan.FromSeconds(playerF.NaturalDuration);
+            if (!_isInTimer) //if updated from UI by iser dragging slider
+            {
+                TimeSpan tsPos = TimeSpan.FromSeconds(sliProgress.Value);
+                TimeSpan tsMax = TimeSpan.FromSeconds(playerF.NaturalDuration);
 
-            playerF.Position = tsPos;
-            playerR.Position = tsPos;
-            
-            lblProgressStatus.Text = tsPos.ToString(@"hh\:mm\:ss") + "/" + tsMax.ToString(@"hh\:mm\:ss");
+                playerF.Position = tsPos;
+                playerR.Position = tsPos;
+            }
 
             UpdateGpsInfo(false);
         }
 
+        private bool _isInTimer = false;
         private void timer_Tick(object sender, EventArgs e)
         {
+            _isInTimer = true;
             if (playerF.MediaState == MediaState.Play)
                 UpdateGpsInfo();
+            _isInTimer = false;
         }
 
         private void UpdateGpsInfo(bool updateSlider = true)
@@ -459,6 +463,17 @@ namespace DashCamGPSView
                 sliProgress.LargeChange = sliProgress.Maximum / 10.0;
             }
 
+            if(playerF.NaturalDuration > 0)
+            {
+                TimeSpan tsPos = TimeSpan.FromSeconds(sliProgress.Value);
+                TimeSpan tsMax = TimeSpan.FromSeconds(playerF.NaturalDuration);
+                lblProgressStatus.Text = tsPos.ToString(@"hh\:mm\:ss") + "/" + tsMax.ToString(@"hh\:mm\:ss");
+            }
+            else
+            {
+                lblProgressStatus.Text = "--:--:--/--:--:--";
+            }
+
             int idx = _dashCamFileInfo.FindGpsInfo(playerF.Position.TotalSeconds, playerF.NaturalDuration);
             if (idx >= 0 && _dashCamFileInfo.GpsInfo != null && _dashCamFileInfo.GpsInfo.Count > idx)
             {
@@ -467,7 +482,7 @@ namespace DashCamGPSView
                 //speedGauge.DialText = string.Format("{0:0} mph", _dashCamFileInfo.GpsInfo[idx].SpeedMph);
 
                 gpsInfo.UpdateInfo(_dashCamFileInfo.GpsInfo[idx], _dashCamFileInfo.TimeZone);
-                
+
                 PointLatLng currentPosition = new PointLatLng(_dashCamFileInfo.GpsInfo[idx].Latitude, _dashCamFileInfo.GpsInfo[idx].Longitude);
                 MainMap.UpdateRouteAndCar(currentPosition, idx);
             }

@@ -46,12 +46,15 @@ namespace DashCamGPSView.Controls
             };
         }
 
+        private bool _isInTimer = false;
         private void timer_Tick(object sender, EventArgs e)
         {
+            _isInTimer = true;
             if (Player != null && Player.MediaState == MediaState.Play)
             {
                 sliProgress.Value = Player.Position.TotalSeconds;
             }
+            _isInTimer = false;
         }
 
         public void TogglePlayPauseState()
@@ -105,13 +108,14 @@ namespace DashCamGPSView.Controls
             TimeSpan tsPos = TimeSpan.FromSeconds(sliProgress.Value);
             TimeSpan tsMax = TimeSpan.FromSeconds(Player.NaturalDuration);
 
-            Player.Position = tsPos;
+            if(!_isInTimer)
+                Player.Position = tsPos;
 
             sliProgress.Minimum = 0;
             if (Player.NaturalDuration != 0)
             {
                 sliProgress.Maximum = Player.NaturalDuration;
-                sliProgress.Value = Player.Position.TotalSeconds;
+                //sliProgress.Value = Player.Position.TotalSeconds;
                 if (sliProgress.Maximum >= 60)
                     sliProgress.SmallChange = 1;
                 else //if less than minute - have 60 tics
