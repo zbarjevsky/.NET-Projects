@@ -32,7 +32,7 @@ namespace DashCamGPSView
 
         public Action MaximizeAction = () => { };
         public Action VideoEnded = () => { };
-        public Action VideoStarted = () => { };
+        public Action<VideoPlayer> VideoStarted = (player) => { };
         public Func<ExceptionRoutedEventArgs, MediaElement, bool> VideoFailed = (e, player) => true;
         public Action LeftButtonClick = () => { };
         public Action LeftButtonDoubleClick = () => { };
@@ -350,11 +350,11 @@ namespace DashCamGPSView
 
                 VideoPlayerElement.MediaOpened += (s, e) => 
                 {
-                    double zoom1 = _scrollDragger.Zoom;
+                    double zoom_save = _scrollDragger.Zoom;
                     _scrollDragger.NaturalSize = new Size(VideoPlayerElement.NaturalVideoWidth, VideoPlayerElement.NaturalVideoHeight);
-                    _scrollDragger.Zoom = zoom1; //force redraw - fix recreate 'blank' problem
+                    _scrollDragger.Zoom = zoom_save; 
                     MediaState = GetMediaState(VideoPlayerElement); 
-                    VideoStarted(); 
+                    VideoStarted(this); 
                 };
                 VideoPlayerElement.MediaEnded += (s, e) => { VideoEnded(); };
                 VideoPlayerElement.MediaFailed += (s, e) => { e.Handled = VideoFailed(e, VideoPlayerElement); };

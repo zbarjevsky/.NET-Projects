@@ -22,6 +22,8 @@ namespace DashCamGPSView
             set { _scrollViewer.ScrollToVerticalOffset(value); }
         }
 
+        private const double MIN_ZOOM = 0.1;
+        private const double MAX_ZOOM = 10.0;
         private double _zoom = 1.0;
         public double Zoom
         {
@@ -29,11 +31,22 @@ namespace DashCamGPSView
             set
             {
                 _zoom = value;
+                if (_zoom < MIN_ZOOM) _zoom = MIN_ZOOM;
+                if (_zoom > MAX_ZOOM) _zoom = MAX_ZOOM;
+
                 _content.Width = _zoom * _origWidth;
                 _content.Height = _zoom * _origHeight;
 
                 SizeChangedAction();
             }
+        }
+
+        private void InternalUpdateZoomFromContent()
+        {
+            double width = _content.ActualWidth > 16 ? _content.ActualWidth : _content.Width;
+            _zoom = width / _origWidth;
+            if (_zoom < MIN_ZOOM) _zoom = MIN_ZOOM;
+            if (_zoom > MAX_ZOOM) _zoom = MAX_ZOOM;
         }
 
         private double _origWidth, _origHeight;
@@ -44,16 +57,11 @@ namespace DashCamGPSView
             { 
                 _origWidth = value.Width; 
                 _origHeight = value.Height;
-                _zoom = _content.ActualWidth / _origWidth;
+                InternalUpdateZoomFromContent();
             }
         }
 
         public Action SizeChangedAction { get; internal set; } = () => { };
-
-        public ScrollDragZoom()
-        {
-
-        }
 
         public ScrollDragZoom(FrameworkElement content, ScrollViewer scrollViewer)
         {
@@ -92,7 +100,7 @@ namespace DashCamGPSView
             _content.Height = _content.Width * NaturalSize.Height / NaturalSize.Width;
             _content.UpdateLayout();
 
-            _zoom = _content.ActualWidth / NaturalSize.Width;
+            InternalUpdateZoomFromContent();
 
             SizeChangedAction();
         }
@@ -115,7 +123,7 @@ namespace DashCamGPSView
                 _content.UpdateLayout();
             }
 
-            _zoom = _content.ActualWidth / NaturalSize.Width;
+            InternalUpdateZoomFromContent();
 
             ScrollToCenter();
 
@@ -125,14 +133,7 @@ namespace DashCamGPSView
         private void content_MouseWheel(object sender, MouseWheelEventArgs e)
         {
             double zoom = _zoom * ((e.Delta > 0) ? 1.1 : 0.9);
-            if (zoom < 0.1)
-                zoom = 0.1;
-            if (zoom > 10)
-                zoom = 10;
-
             Zoom = zoom; //update control
-
-            //ScrollToCenter();
         }
 
         private void scrollViewer_MouseRightButtonDown(object sender, MouseButtonEventArgs e)

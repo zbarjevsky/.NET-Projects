@@ -23,13 +23,13 @@ namespace DashCamGPSView.Tools
             EasingFunctionProperty = DependencyProperty.Register("EasingFunction", typeof(IEasingFunction), typeof(GridLengthAnimation));
         }
 
-        public static void AnimateColumn(ColumnDefinition col, GridLength from, GridLength to, Action postAction = null)
+        public static void AnimateColumn(ColumnDefinition col, GridLength to, Action postAction = null)
         {
             var da = new GridLengthAnimation();
 
             da.Duration = TimeSpan.FromMilliseconds(300);
 
-            da.From = from;
+            da.From = col.Width;
             da.To = to;
 
             //var ef = new BounceEase();
@@ -37,25 +37,38 @@ namespace DashCamGPSView.Tools
             //da.EasingFunction = ef;
 
             da.FillBehavior = FillBehavior.Stop;
-            col.Width = da.To;
+            //col.Width = da.To;
 
-            da.Completed += (s, e) => { if (postAction != null) postAction(); };
+            da.Completed += (s, e) => 
+            {
+                if (postAction != null)
+                    postAction();
+                else
+                    col.Width = to;
+            };
 
             col.BeginAnimation(ColumnDefinition.WidthProperty, da);
         }
 
-        public static void AnimateRow(RowDefinition row, GridLength to, Action postAction = null)
+        public static void AnimateRow(RowDefinition row, GridLength to, double duration = 500, Action postAction = null)
+        {
+            GridLength from = new GridLength(row.ActualHeight, GridUnitType.Pixel);
+            AnimateRow(row, from, to, duration, postAction);
+        }
+
+        public static void AnimateRow(RowDefinition row, GridLength from, GridLength to, double duration = 500, Action postAction = null)
         {
             var animation = new GridLengthAnimation();
 
-            animation.Duration = TimeSpan.FromMilliseconds(500);
+            animation.Duration = TimeSpan.FromMilliseconds(duration);
 
-            animation.From = row.Height;
+            animation.From = from;
             animation.To = to;
 
-            //var ef = new BounceEase();
-            //ef.EasingMode = EasingMode.EaseOut;
-            //da.EasingFunction = ef;
+            //https://docs.microsoft.com/en-us/dotnet/framework/wpf/graphics-multimedia/easing-functions
+            var ef = new CubicEase();
+            ef.EasingMode = EasingMode.EaseOut;
+            animation.EasingFunction = ef;
 
             animation.FillBehavior = FillBehavior.Stop;
             //row.Height = animation.To;

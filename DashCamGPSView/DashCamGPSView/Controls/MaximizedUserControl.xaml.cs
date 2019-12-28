@@ -21,7 +21,7 @@ namespace DashCamGPSView.Controls
     /// </summary>
     public partial class MaximizedUserControl : UserControl
     {
-        public Action<VideoPlayer, VideoPlayer> CloseAction = (playerMax, playerSrc) => { };
+        public Action<double, MediaState, double> CloseAction = (position, state, volume) => { };
 
         DispatcherTimer _timer = new DispatcherTimer();
         private VideoPlayer _sourcePlayer = null;
@@ -96,11 +96,18 @@ namespace DashCamGPSView.Controls
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
-            CloseAction(Player, _sourcePlayer);
-            
+            MediaState state = Player.MediaState;
+            Player.Pause();
+
+            double pos1 = sliProgress.Value;
+            double position = Player.Position.TotalSeconds;
+            double volume = Player.Volume;
+
             Player.Close();
             _sourcePlayer = null;
             this.Visibility = Visibility.Collapsed;
+
+            CloseAction(pos1, state, volume);
         }
 
         private void sliProgress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

@@ -39,6 +39,9 @@ namespace DashCamGPSView
         private DashCamFileInfo _dashCamFileInfo;
         DispatcherTimer _timer = new DispatcherTimer();
 
+        //this action needed to Update View Once file is loaded
+        private Action<VideoPlayer, bool> AfterVideoStartedAction = (player, reset) => { };
+
         public MainWindow()
         {
             InitializeComponent();
@@ -77,11 +80,17 @@ namespace DashCamGPSView
             playerF.VerticalOffset = Settings.Default.FrontPlayerVerticalOffset;
             playerR.VerticalOffset = Settings.Default.RearPlayerVerticalOffset;
 
-            maxScreen.CloseAction = (playerMax, playerSrc) => CloseMaximizedPlayer(playerMax, playerSrc);
+            maxScreen.CloseAction = (position, state, volume) => CloseMaximizedPlayer(position, state, volume);
             playerF.MaximizeAction = () => MaximizePlayer(playerF);
             playerR.MaximizeAction = () => MaximizePlayer(playerR);
 
-            playerF.VideoStarted = () => { UpdateGpsInfo(); waitScreen.Hide(); };
+            playerF.VideoStarted = (player) => 
+            { 
+                UpdateGpsInfo(false); 
+                AfterVideoStartedAction(player, false); 
+                waitScreen.Hide(); 
+            };
+            playerR.VideoStarted = (player) => { AfterVideoStartedAction(player, true); };
 
             playerF.VideoEnded = () => { if (chkAutoPlay.IsChecked.Value) PlayNext(); };
 
@@ -277,11 +286,9 @@ namespace DashCamGPSView
         {
             waitScreen.Show();
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Media files (*.mp3;*.mp4;*.mpg;*.mpeg)|*.mp3;*.mp4;*.mpg;*.mpeg|All files (*.*)|*.*";
+            openFileDialog.Filter = "Media files (*.mp3;*.mp4;*.mpg;*.mpeg)|*.mp3;*.mp4;*.mpg;*.mpeg;*.webm|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
             {
-                Tools.Tools.ForceUIToUpdate();
-
                 //Task myTask = Task.Factory.StartNew(() => { });
                 //myTask.Wait();
 
@@ -290,10 +297,16 @@ namespace DashCamGPSView
 
                 MainMap.SetRouteAndCar(null); //reset
 
+                AfterVideoStartedAction = (player, reset) => 
+                {
+                    player.FitWidth(false);
+
+                    //reset this action until next time
+                    if(reset)
+                        AfterVideoStartedAction = (p, r) => { };
+                };
+
                 PlayFile(openFileDialog.FileName);
-                
-                playerF.FitWidth(false);
-                playerR.FitWidth(false);
 
                 if (_dashCamFileInfo.GpsInfo != null && _dashCamFileInfo.GpsInfo.Count > 0)
                     MainMap.Zoom = 16;
@@ -415,21 +428,21 @@ namespace DashCamGPSView
             Pause_Executed(this, null);
         }
 
-        private void CloseMaximizedPlayer(VideoPlayer playerMax, VideoPlayer playerSrc)
+        private void CloseMaximizedPlayer(double position, MediaState state, double volume)
         {
-            playerSrc.CopyState(playerMax, 0, false);
-
-            playerF.Volume = playerMax.Volume;
+            playerF.Volume = volume;
             playerR.Volume = 0;
+            
+            playerF.Position = TimeSpan.FromSeconds(position);
+            playerR.Position = TimeSpan.FromSeconds(position);
 
-            sliProgress.Value = playerMax.Position.TotalSeconds;
+            sliProgress.Value = position;
 
-            if (playerMax.MediaState == MediaState.Stop)
+            Play_Executed(this, null);
+            if (state == MediaState.Stop)
                 Stop_Executed(this, null);
-            if (playerMax.MediaState == MediaState.Pause)
+            if (state == MediaState.Pause)
                 Pause_Executed(this, null);
-            if (playerMax.MediaState == MediaState.Play)
-                Play_Executed(this, null);
 
             UpdateGpsInfo();
         }
