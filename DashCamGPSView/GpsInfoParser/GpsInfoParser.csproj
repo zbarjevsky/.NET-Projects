@@ -51,6 +51,7 @@
     <Compile Include="FileFormats\KML\KmlPlacemarks.cs" />
     <Compile Include="FileFormats\KML\KmlStyles.cs" />
     <Compile Include="GpsPointData.cs" />
+    <Compile Include="Tools\IBufferReader.cs" />
     <Compile Include="Tools\MemoryMappedFileReader.cs" />
     <Compile Include="MOV\MovParser.cs" />
     <Compile Include="NMEA\IMultiPartMessage.cs" />

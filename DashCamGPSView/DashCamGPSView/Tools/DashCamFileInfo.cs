@@ -41,7 +41,7 @@ namespace DashCamGPSView.Tools
                     }
                     else if(GpsFileFormat == GpsFileFormat.Viofo)
                     {
-                        _gpsInfo = GpsPointData.Convert(NovatekViofoGPSParser.NovatekParser.ReadMP4FileGpsInfo(FrontFileName));
+                        _gpsInfo = GpsPointData.Convert(NovatekViofoGPSParser.ViofoParser.ReadMP4FileGpsInfo(FrontFileName));
                     }
 
                     CalculateDelay(FileDate);

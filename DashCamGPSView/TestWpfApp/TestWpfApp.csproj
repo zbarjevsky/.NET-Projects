@@ -103,6 +103,10 @@
       <Project>{538a1cff-e4e6-4a34-8b0d-4d17ead89995}</Project>
       <Name>DashCamGPSView</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GpsInfoParser\GpsInfoParser.csproj">
+      <Project>{08fd88c1-418b-4376-806d-f3ed46ba3c0c}</Project>
+      <Name>GpsInfoParser</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

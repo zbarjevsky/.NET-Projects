@@ -1,4 +1,5 @@
-﻿using GPSDataParser.Tools;
+﻿using GPSDataParser;
+using GPSDataParser.Tools;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -19,29 +20,33 @@ namespace NovatekViofoGPSParser
             if (info.Length > maxSize) //more than 1 GB
                 return null;
 
-            byte[] buff = File.ReadAllBytes(fileName);
-            BufferReader reader = new BufferReader(buff);
+            //byte[] buff = File.ReadAllBytes(fileName);
+            //IBufferReader reader = new BufferReader(buff);
+            IBufferReader reader = new MemoryMappedFileReader(fileName);
 
-            while(reader.Position < reader.Length)
+            while (reader.Position < reader.Length)
             {
-                uint size = reader.ReadUintLE();
+                uint size = reader.ReadUintBE();
                 string kind = reader.ReadString(4);
                 if (size > reader.Length)
                     return null; //corrupt file
 
-                reader.Position += (size - 8);
                 if (kind == "moov")
                 {
-                    long off = reader.Position;
-                    while(reader.Position < off + size)
+                    long end = reader.Position + size - 8;
+                    while(reader.Position < end)
                     {
-                        uint size1 = reader.ReadUintLE();
+                        uint size1 = reader.ReadUintBE();
                         string kind1 = reader.ReadString(4);
                         if (kind1 == "gps ")
-                            return ParseGpsCatalog(reader, size1); //gps catalog - position and size list
+                            return ParseGpsCatalog(reader, size1 - 8); //gps catalog - position and size list
 
                         reader.Position += (size1 - 8);
                     }
+                }
+                else
+                {
+                    reader.Position += (size - 8);
                 }
             }
 
@@ -55,7 +60,7 @@ namespace NovatekViofoGPSParser
         /// <param name="g"></param>
         /// <param name="file"></param>
         /// <returns>list of gps points</returns>
-        private static List<ViofoGpsPoint> ParseGpsCatalog(BufferReader reader, long size)
+        private static List<ViofoGpsPoint> ParseGpsCatalog(IBufferReader reader, long size)
         {
             LocationsList list = new LocationsList(reader, size);
             List<ViofoGpsPoint> gpsPoints = new List<ViofoGpsPoint>();
@@ -65,10 +70,10 @@ namespace NovatekViofoGPSParser
                     continue;
 
                 reader.Position = loc.Offset;
-                byte[] buffer = reader.ReadBuffer(loc.Length);
-                ViofoGpsPoint i = ViofoGpsPoint.Parse(buffer);
+                ViofoGpsPoint i = ViofoGpsPoint.Parse(reader, loc.Length);
                 if (i == null)
                     continue;
+
                 gpsPoints.Add(i);
             }
             return gpsPoints;
@@ -89,7 +94,7 @@ namespace NovatekViofoGPSParser
             public uint Version, EncodedDate;
             public List<Location> locations = new List<Location>();
 
-            public LocationsList(BufferReader reader, long size)
+            public LocationsList(IBufferReader reader, long size)
             {
                 long last = reader.Position + size;
 

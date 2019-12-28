@@ -13,5 +13,14 @@ namespace TestWpfApp
     /// </summary>
     public partial class App : Application
     {
+        public App()
+        {
+            //test
+            string fileName = @"D:\Archive\BackUp\DashCam\DCIM\Movie\2019_0624_075501_298.MP4";
+            NovatekViofoGPSParser.ViofoParser.ReadMP4FileGpsInfo(fileName);
+            //NovatekViofoGPSParser.NovatekParser.ReadMP4FileGpsInfo(fileName);
+
+            Environment.Exit(-1);
+        }
     }
 }

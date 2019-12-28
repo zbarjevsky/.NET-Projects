@@ -6,13 +6,9 @@ using System.Threading.Tasks;
 
 namespace GPSDataParser.Tools
 {
-    public class BufferReader
+    public class BufferReader : IBufferReader
     {
         private byte[] _buffer = null;
-
-        public long Length { get; private set; } = 0;
-
-        public long Position { get; set; } = -1;
 
         public BufferReader(byte [] buffer, long start = 0, long length = 0)
         {
@@ -32,14 +28,14 @@ namespace GPSDataParser.Tools
             Length = length;
         }
 
-        public byte ReadByte()
+        public override byte ReadByte()
         {
             byte b = _buffer[Position];
             Position++;
             return b;
         }
 
-        public byte[] ReadBuffer(long length)
+        public override byte[] ReadBuffer(long length)
         {
             byte[] buffer = new byte[length];
             Array.Copy(_buffer, Position, buffer, 0, length);
@@ -47,60 +43,9 @@ namespace GPSDataParser.Tools
             return buffer;
         }
 
-        public uint ReadUintLE()
+        public override void Dispose()
         {
-            uint n = ConvertToUintLE(_buffer, Position);
-            Position += 4;
-            return n;
-        }
-
-        public uint ReadUintBE()
-        {
-            uint n = ConvertToUintBE(_buffer, Position);
-            Position += 4;
-            return n;
-        }
-
-        public string ReadString(int characterCount)
-        {
-            byte[] str = ReadBuffer(characterCount);
-            if (str != null)
-                return Encoding.ASCII.GetString(str, 0, characterCount);
-            return "";
-        }
-
-        public float ReadFloatLE()
-        {
-            float f = ConvertToFloatLE(_buffer, Position);
-            Position += 4;
-            return f;
-        }
-
-        public static uint ConvertToUintBE(byte[] buff, long offset)
-        {
-            byte[] number = new byte[4];
-            Array.Copy(buff, offset, number, 0, 4);
-            if (BitConverter.IsLittleEndian)
-                number = number.Reverse().ToArray();
-            return BitConverter.ToUInt32(number, 0);
-        }
-
-        public static uint ConvertToUintLE(byte[] buff, long offset)
-        {
-            byte[] number = new byte[4];
-            Array.Copy(buff, offset, number, 0, 4);
-            if (!BitConverter.IsLittleEndian)
-                number = number.Reverse().ToArray();
-            return BitConverter.ToUInt32(number, 0);
-        }
-
-        public static float ConvertToFloatLE(byte[] buff, long offset)
-        {
-            byte[] number = new byte[4];
-            Array.Copy(buff, offset, number, 0, 4);
-            if (!BitConverter.IsLittleEndian)
-                number = number.Reverse().ToArray();
-            return BitConverter.ToSingle(number, 0);
+            _buffer = null;
         }
     }
 }

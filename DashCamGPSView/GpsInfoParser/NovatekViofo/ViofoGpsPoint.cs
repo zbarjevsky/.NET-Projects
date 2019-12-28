@@ -39,15 +39,13 @@ namespace NovatekViofoGPSParser
         public double Speed;
         public double Bearing;
 
-        public static ViofoGpsPoint Parse(byte [] buffer)
+        public static ViofoGpsPoint Parse(IBufferReader reader, uint expectedSize)
         {
-            BufferReader reader = new BufferReader(buffer);
-
             uint size = reader.ReadUintBE();
             string type = reader.ReadString(4);
             string magic = reader.ReadString(4);
 
-            if (buffer.Length != size || type != "free" || magic != "GPS ")
+            if (expectedSize != size || type != "free" || magic != "GPS ")
                 return null;
 
             ViofoGpsPoint gps = new ViofoGpsPoint();

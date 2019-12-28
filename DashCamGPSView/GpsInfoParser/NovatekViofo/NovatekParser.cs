@@ -1,4 +1,5 @@
 ﻿using GPSDataParser;
+using GPSDataParser.Tools;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -17,8 +18,6 @@ namespace NovatekViofoGPSParser
         {
             using (MemoryMappedFileReader reader = new MemoryMappedFileReader(fileName))
             {
-
-                //byte[] buff = File.ReadAllBytes(fileName);
                 List<Box> boxes = new List<Box>(1024);
 
                 while (reader.Position < reader.Length)
@@ -61,8 +60,7 @@ namespace NovatekViofoGPSParser
                     continue;
 
                 reader.Position = loc.Offset;
-                byte[] buffer = reader.ReadBuffer((int)loc.Length);
-                ViofoGpsPoint i = ViofoGpsPoint.Parse(buffer);
+                ViofoGpsPoint i = ViofoGpsPoint.Parse(reader, loc.Length);
                 if (i == null)
                     continue;
                 gpsPoints.Add(i);
