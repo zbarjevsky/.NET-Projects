@@ -53,6 +53,8 @@
             <Button x:Name="btnFlipHorizontally"  Margin="6"
                     Content="Flip Horizontally" ToolTip="Flip Horizontally"
                     Click="btnFlipHorizontally_Click" />
+            <TextBlock x:Name="txtVideoResolution" Text="1920x1080"
+                       VerticalAlignment="Center"/>
         </StackPanel>
     </Grid>
 </UserControl>

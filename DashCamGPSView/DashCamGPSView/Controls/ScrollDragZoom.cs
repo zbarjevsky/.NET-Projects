@@ -31,6 +31,8 @@ namespace DashCamGPSView
                 _zoom = value;
                 _content.Width = _zoom * _origWidth;
                 _content.Height = _zoom * _origHeight;
+
+                SizeChangedAction();
             }
         }
 
@@ -46,6 +48,8 @@ namespace DashCamGPSView
             }
         }
 
+        public Action SizeChangedAction { get; internal set; } = () => { };
+
         public ScrollDragZoom()
         {
 
@@ -60,6 +64,8 @@ namespace DashCamGPSView
             {
                 _origWidth = _content.Width;
                 _origHeight = _content.Height;
+
+                _zoom = 1;
 
                 content.MouseRightButtonDown += scrollViewer_MouseRightButtonDown;
                 content.PreviewMouseMove += scrollViewer_PreviewMouseMove;
@@ -83,6 +89,8 @@ namespace DashCamGPSView
             _content.Height = _content.Width * NaturalSize.Height / NaturalSize.Width;
 
             _zoom = _content.Width / NaturalSize.Width;
+
+            SizeChangedAction();
         }
 
         public void OriginalSize()
@@ -90,6 +98,8 @@ namespace DashCamGPSView
             _content.Width = NaturalSize.Width;
             _content.Height = NaturalSize.Height;
             _zoom = 1;
+
+            SizeChangedAction();
         }
 
         internal void FitWindow(double margin = 18)
@@ -100,7 +110,11 @@ namespace DashCamGPSView
                 _content.Height = _scrollViewer.ActualHeight - 18;
             }
 
+            _zoom = _content.Width / NaturalSize.Width;
+
             ScrollToCenter();
+
+            SizeChangedAction();
         }
 
         private void content_MouseWheel(object sender, MouseWheelEventArgs e)

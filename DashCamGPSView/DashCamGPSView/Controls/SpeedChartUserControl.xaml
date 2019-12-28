@@ -23,7 +23,7 @@
             <Border Grid.Row="4" BorderBrush="White" Opacity="0.3" BorderThickness="0 0.8 0 0"/>
             <Border Grid.Row="5" BorderBrush="White" Opacity="0.3" BorderThickness="0 0.8 0 1"/>
             <Path x:Name="_pathMain" Grid.RowSpan="6" ClipToBounds="False" 
-                  Stroke="DarkViolet" StrokeThickness="3" Opacity="1">
+                  Stroke="DarkBlue" StrokeThickness="3" Opacity="1">
                 <Path.Data>
                     <PathGeometry>
                         <PathGeometry.Figures>

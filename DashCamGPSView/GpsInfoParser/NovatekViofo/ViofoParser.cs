@@ -20,33 +20,34 @@ namespace NovatekViofoGPSParser
             if (info.Length > maxSize) //more than 1 GB
                 return null;
 
-            //byte[] buff = File.ReadAllBytes(fileName);
-            //IBufferReader reader = new BufferReader(buff);
-            IBufferReader reader = new MemoryMappedFileReader(fileName);
-
-            while (reader.Position < reader.Length)
+            byte[] buff = File.ReadAllBytes(fileName);
+            using (IBufferReader reader = new BufferReader(buff))
+            //using (IBufferReader reader = new MemoryMappedFileReader(fileName))
             {
-                uint size = reader.ReadUintBE();
-                string kind = reader.ReadString(4);
-                if (size > reader.Length)
-                    return null; //corrupt file
-
-                if (kind == "moov")
+                while (reader.Position < reader.Length)
                 {
-                    long end = reader.Position + size - 8;
-                    while(reader.Position < end)
+                    uint size = reader.ReadUintBE();
+                    string kind = reader.ReadString(4);
+                    if (size > reader.Length)
+                        return null; //corrupt file
+
+                    if (kind == "moov")
                     {
-                        uint size1 = reader.ReadUintBE();
-                        string kind1 = reader.ReadString(4);
-                        if (kind1 == "gps ")
-                            return ParseGpsCatalog(reader, size1 - 8); //gps catalog - position and size list
+                        long end = reader.Position + size - 8;
+                        while (reader.Position < end)
+                        {
+                            uint size1 = reader.ReadUintBE();
+                            string kind1 = reader.ReadString(4);
+                            if (kind1 == "gps ")
+                                return ParseGpsCatalog(reader, size1 - 8); //gps catalog - position and size list
 
-                        reader.Position += (size1 - 8);
+                            reader.Position += (size1 - 8);
+                        }
                     }
-                }
-                else
-                {
-                    reader.Position += (size - 8);
+                    else
+                    {
+                        reader.Position += (size - 8);
+                    }
                 }
             }
 

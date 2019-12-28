@@ -80,7 +80,6 @@
     <Compile Include="NMEA\NMEA_Data\Zda.cs" />
     <Compile Include="NovatekViofo\ViofoParser.cs" />
     <Compile Include="NovatekViofo\ViofoGpsPoint.cs" />
-    <Compile Include="NovatekViofo\NovatekParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\SexagesimalAngle.cs" />
     <Compile Include="Tools\BufferReader.cs" />

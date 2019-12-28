@@ -329,6 +329,12 @@ namespace DashCamGPSView
                 _scrollDragger.Zoom = zoom;
                 _scrollDragger.VerticalOffset = vOff;
 
+                _scrollDragger.SizeChangedAction = () => 
+                {
+                    txtVideoResolution.Text = string.Format("{0:0}x{1:0} ({2:0.0}%)",
+                        VideoPlayerElement.Width, VideoPlayerElement.Height, 100.0 * _scrollDragger.Zoom);
+                };
+
                 //refresh view when change position
                 VideoPlayerElement.ScrubbingEnabled = true;
 
