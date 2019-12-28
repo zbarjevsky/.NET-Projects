@@ -25,16 +25,33 @@ namespace CommandsProcessor
             }
 
             //"[assembly: AssemblyFileVersion(\"1.03.2019.28356\")]";
-            string info = File.ReadAllText(assemblyInfoFileName);
+            string assemblyInfo = File.ReadAllText(assemblyInfoFileName);
 
-            //Match m = Regex.Match(assemblyInfoFileText, @"(?<major>\d{1,3})\.(?<minor>\d{1,3})\.(?<build>\d{1,3})\.(?<revision>\d{1,3})");
-            string newVersionFormat = string.Format(@"$1.$2.{0}", DateTime.Now.ToString("yyyy.MMdd"));
-            string res = Regex.Replace(info, @"(\d+)\.(\d+)\.(\d+)\.(\d+)", newVersionFormat);
+            string findPattern = @"(?<major>\d+)\.(?<minor>\d+)\.(?<build>\d+)\.(?<revision>\d+)";
+            Match m = Regex.Match(assemblyInfo, findPattern);
+            if (m.Success) //check if update needed
+            {
+                string year = DateTime.Now.ToString("yyyy");
+                string month_day = DateTime.Now.ToString("MMdd");
+                if (m.Groups["build"].Value != year || m.Groups["revision"].Value != month_day)
+                {
+                    string replacement = string.Format(@"$1.$2.{0}", DateTime.Now.ToString("yyyy.MMdd"));
+                    string res = Regex.Replace(assemblyInfo, findPattern, replacement);
 
-            File.WriteAllText(assemblyInfoFileName, res);
+                    File.WriteAllText(assemblyInfoFileName, res);
 
-            Match m = Regex.Match(res, @"(\d+)\.(\d+)\.(\d+)\.(\d+)");
-            Console.WriteLine("Version Updated Successfully to: " + m.ToString());
+                    m = Regex.Match(res, findPattern);
+                    Console.WriteLine("Version Updated Successfully to: " + m.ToString());
+                }
+                else
+                {
+                    Console.WriteLine("No Version Update Needed: " + m.ToString());
+                }
+            }
+            else
+            {
+                Console.WriteLine("Error: Version info not found in file: " + assemblyInfoFileName);
+            }
         }
 
         public static void SetVersionAsYYYYMMDD_InAssemblyVersion(string fileName)
