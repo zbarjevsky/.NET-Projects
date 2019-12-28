@@ -34,31 +34,72 @@
             <ColumnDefinition Width="500" x:Name="mapColumn"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="2"/>
-            <RowDefinition Height="3*" x:Name="rowRearView"/>
-            <RowDefinition Height="5"/>
-            <RowDefinition Height="5*"/>
             <RowDefinition Height="40" MaxHeight="40" MinHeight="40"/>
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="5"/>
-            <RowDefinition Height="1.3*"/>
+            <RowDefinition Height="1.3*" x:Name="rowSpeedGraph"/>
             <RowDefinition Height="30" MaxHeight="30" MinHeight="30"/>
         </Grid.RowDefinitions>
-        <Border x:Name="borderPlayerR" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="1" 
+        
+        <ToolBar Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" >
+            <Button Command="ApplicationCommands.Open" ToolTip="Open">
+                <local:AutoGreyableImage Source="/DashCamGPSView;component/Images/map_32px.png" />
+            </Button>
+            <Separator />
+            <Button Command="MediaCommands.PreviousTrack" ToolTip="Previous File" >
+                <local:AutoGreyableImage Source="/Images/PrevE.png" />
+            </Button>
+            <Separator />
+            <Button Command="MediaCommands.Play" ToolTip="Play" >
+                <local:AutoGreyableImage  Source="/Images/PlayE.png" />
+            </Button>
+            <Button Command="MediaCommands.Pause" ToolTip="Pause" >
+                <local:AutoGreyableImage Source="/Images/PauseE.png" />
+            </Button>
+            <Button Command="MediaCommands.Stop" ToolTip="Stop" >
+                <local:AutoGreyableImage Source="/Images/StopE.png" />
+            </Button>
+            <Separator />
+            <Button Command="MediaCommands.NextTrack" ToolTip="Next File" >
+                <local:AutoGreyableImage Source="/Images/nextE.png" />
+            </Button>
+            <Button  ToolTip="Screen Shot" Click="Screenshot_Click" >
+                <local:AutoGreyableImage Source="/Images/Screenshot.png" />
+            </Button>
+            <Button  ToolTip="Test" Content="Test" Click="Test_Click" />
+            <TextBox Name="txtFileName"  Text="..." IsReadOnly="True"
+                     VerticalAlignment="Center" Margin="10,0" FontSize="16"/>
+            <Viewbox Margin="6">
+                <CheckBox x:Name="chkAutoPlay" IsChecked="True" Content="Auto Play Next"/>
+            </Viewbox>
+        </ToolBar>
+
+        <Grid x:Name="_gridPlayers" Grid.Row="1" Grid.RowSpan="4" Grid.Column="0" Grid.ColumnSpan="3" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*" x:Name="rowRearView"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="5*"/>
+            </Grid.RowDefinitions>
+            <Border x:Name="borderPlayerR" Grid.Row="0"
                 BorderThickness="2" BorderBrush="Gray" >
-            <local:VideoPlayer x:Name="playerR" Title="Rear View" />
-        </Border>
-        <GridSplitter Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="2" 
+                <local:VideoPlayer x:Name="playerR" Title="Rear View" />
+            </Border>
+            <GridSplitter Grid.Row="1" 
                       HorizontalAlignment="Stretch"
                       DragCompleted="GridSplitter1_DragCompleted"/>
-        
-        <Border x:Name="borderPlayerF" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="3" BorderThickness="2" BorderBrush="Gray">
-            <local:VideoPlayer x:Name="playerF" Title="Front View" />
-        </Border>
 
-        <speedGauge:Gauge180UserControl x:Name="speedGauge" Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="3" 
+            <Border x:Name="borderPlayerF" Grid.Row="2" BorderThickness="2" BorderBrush="Gray">
+                <local:VideoPlayer x:Name="playerF" Title="Front View" />
+            </Border>
+
+            <speedGauge:Gauge180UserControl x:Name="speedGauge" Grid.RowSpan="3" 
                  Width="180" Height="100" MaxSpeed="140"
                  HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="40,0,40,20"/>
-        <!--<Viewbox Grid.Column="2" Grid.Row="3" 
+            
+            <!--<Viewbox Grid.Column="2" Grid.Row="3" 
                  Width="150" Height="150"
                  HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="40">
             <gauge:CircularGaugeControl x:Name="speedGauge" 
@@ -101,9 +142,11 @@
 
             </gauge:CircularGaugeControl>
         </Viewbox>-->
+        </Grid>
 
         <GridSplitter Grid.Column="3" Grid.Row="1" Grid.RowSpan="6" HorizontalAlignment="Stretch"/>
-        <Grid Grid.Row="1" Grid.RowSpan="6" Grid.Column="4">
+        
+        <Grid Grid.Row="1" Grid.RowSpan="7" Grid.Column="4">
             <Grid.RowDefinitions>
                 <RowDefinition Height="2*" x:Name="rowFilesTree" />
                 <RowDefinition Height="5"/>
@@ -123,41 +166,9 @@
                 <controls:GpsInfoUserControl x:Name="gpsInfo"/>
             </Border>
         </Grid>
-        <ToolBar Grid.Column="0" Grid.Row="4" Grid.ColumnSpan="3" >
-            <Button Command="ApplicationCommands.Open" ToolTip="Open">
-                <local:AutoGreyableImage Source="/DashCamGPSView;component/Images/map_32px.png" />
-            </Button>
-            <Separator />
-            <Button Command="MediaCommands.PreviousTrack" ToolTip="Previous File" >
-                <local:AutoGreyableImage Source="/Images/PrevE.png" />
-            </Button>
-            <Separator />
-            <Button Command="MediaCommands.Play" ToolTip="Play" >
-                <local:AutoGreyableImage  Source="/Images/PlayE.png" />
-            </Button>
-            <Button Command="MediaCommands.Pause" ToolTip="Pause" >
-                <local:AutoGreyableImage Source="/Images/PauseE.png" />
-            </Button>
-            <Button Command="MediaCommands.Stop" ToolTip="Stop" >
-                <local:AutoGreyableImage Source="/Images/StopE.png" />
-            </Button>
-            <Separator />
-            <Button Command="MediaCommands.NextTrack" ToolTip="Next File" >
-                <local:AutoGreyableImage Source="/Images/nextE.png" />
-            </Button>
-            <Button  ToolTip="Screen Shot" Click="Screenshot_Click" >
-                <local:AutoGreyableImage Source="/Images/Screenshot.png" />
-            </Button>
-            <Button  ToolTip="Test" Content="Test" Click="Test_Click" />
-            <TextBox Name="txtFileName"  Text="..." IsReadOnly="True"
-                     VerticalAlignment="Center" Margin="10,0" FontSize="16"/>
-            <Viewbox Margin="6">
-                <CheckBox x:Name="chkAutoPlay" IsChecked="True" Content="Auto Play Next"/>
-            </Viewbox>
-        </ToolBar>
-
-        <GridSplitter Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" 
-                      HorizontalAlignment="Stretch"/>
+        
+        <GridSplitter Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Stretch"/>
+        
         <controls:SpeedChartUserControl x:Name="graphSpeedInfo" Grid.Row="6" Grid.ColumnSpan="3" />
 
         <StatusBar Grid.Row="7" Grid.ColumnSpan="3"  Background="Gray">

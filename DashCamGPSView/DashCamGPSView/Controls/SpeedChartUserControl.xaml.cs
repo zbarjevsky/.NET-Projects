@@ -33,11 +33,15 @@ namespace DashCamGPSView.Controls
             RouteMain.Clear();
             if(points != null)
                 RouteMain = new List<GpsPointData>(points); //copy
-            UpdateRoute(_segmentMain, _figureMain);
+            SetCarPosition(0);
         }
 
         public void SetCarPosition(int index)
         {
+            if (this.ActualHeight < 30)
+                return; //do not update if too small
+
+            UpdateRoute(_segmentMain, _figureMain);
             if (index >= 0 && index < RouteMain.Count)
             {
                 double maxSpeed = FindMaxSpeed(RouteMain);
@@ -91,8 +95,6 @@ namespace DashCamGPSView.Controls
                 Point pt = GetPoint(i, maxSpeed, interval);
                 segment.Points.Add(pt);
             }
-
-            SetCarPosition(0);
         }
 
         private Point GetPoint(int idx, double maxSpeed, TimeSpan interval)

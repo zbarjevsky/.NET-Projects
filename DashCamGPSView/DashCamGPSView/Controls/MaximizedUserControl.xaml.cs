@@ -21,7 +21,7 @@ namespace DashCamGPSView.Controls
     /// </summary>
     public partial class MaximizedUserControl : UserControl
     {
-        public Action<VideoPlayer> CloseAction = (player) => { };
+        public Action<VideoPlayer, VideoPlayer> CloseAction = (playerMax, playerSrc) => { };
 
         DispatcherTimer _timer = new DispatcherTimer();
         private VideoPlayer _sourcePlayer = null;
@@ -34,7 +34,7 @@ namespace DashCamGPSView.Controls
             _timer.Tick += timer_Tick;
 
             Player.LeftButtonClick = TogglePlayPauseState;
-            Player.LeftButtonDoubleClick = () => { };
+            Player.LeftButtonDoubleClick = () => btnClose_Click(this, null);
 
             thumbnails.OnItemSelectedAction = (item) => 
             {
@@ -70,15 +70,16 @@ namespace DashCamGPSView.Controls
             _sourcePlayer = player;
 
             Player.CopyState(player, volume, true);
+            Player.RestoreMediaState(player.MediaState, player.Position);
 
             this.Visibility = Visibility.Visible;
             Player.FitWidth(false);
 
+            thumbnails.StartCreateThumbnailsFromVideoFile(player.FileName);
+
             sliProgress.Maximum = player.NaturalDuration;
             sliProgress.Value = player.Position.TotalSeconds;
             sliProgress_ValueChanged(null, null);
-
-            thumbnails.StartCreateThumbnailsFromVideoFile(player.FileName);
 
             _timer.Start();
 
@@ -94,9 +95,7 @@ namespace DashCamGPSView.Controls
 
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
-            _sourcePlayer.CopyState(Player, Player.Volume, false);
-            
-            CloseAction(Player);
+            CloseAction(Player, _sourcePlayer);
             
             Player.Close();
             _sourcePlayer = null;

@@ -131,13 +131,16 @@ namespace DashCamGPSView
             IsFlipHorizontally = player.IsFlipHorizontally;
             Zoom = player.Zoom;
             VerticalOffset = player.VerticalOffset;
-
-            Play();
-            
             Position = player.Position;
-            if (player.MediaState == MediaState.Stop)
+        }
+
+        public void RestoreMediaState(MediaState state, TimeSpan position)
+        {
+            Play();
+            Position = position;
+            if (state == MediaState.Stop)
                 Stop();
-            if (player.MediaState == MediaState.Pause)
+            if (state == MediaState.Pause)
                 Pause();
         }
 

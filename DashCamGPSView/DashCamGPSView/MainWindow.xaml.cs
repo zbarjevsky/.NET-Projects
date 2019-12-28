@@ -77,7 +77,7 @@ namespace DashCamGPSView
             playerF.VerticalOffset = Settings.Default.FrontPlayerVerticalOffset;
             playerR.VerticalOffset = Settings.Default.RearPlayerVerticalOffset;
 
-            maxScreen.CloseAction = (player) => CloseMaximizedPlayer(player);
+            maxScreen.CloseAction = (playerMax, playerSrc) => CloseMaximizedPlayer(playerMax, playerSrc);
             playerF.MaximizeAction = () => MaximizePlayer(playerF);
             playerR.MaximizeAction = () => MaximizePlayer(playerR);
 
@@ -200,6 +200,8 @@ namespace DashCamGPSView
                         () => { rowMaps.Height = new GridLength(5, GridUnitType.Star); });
                     GridLengthAnimation.AnimateRow(rowGpsInfo, rowGpsInfo.Height, new GridLength(2, GridUnitType.Star),
                         () => { rowGpsInfo.Height = new GridLength(2, GridUnitType.Star); });
+                    GridLengthAnimation.AnimateRow(rowSpeedGraph, rowSpeedGraph.Height, new GridLength(1.3, GridUnitType.Star),
+                        () => { rowSpeedGraph.Height = new GridLength(1.3, GridUnitType.Star); });
                 }
             }
             else //no GPS info
@@ -212,6 +214,7 @@ namespace DashCamGPSView
 
                     GridLengthAnimation.AnimateRow(rowMaps, rowMaps.Height, new GridLength(0));
                     GridLengthAnimation.AnimateRow(rowGpsInfo, rowGpsInfo.Height, new GridLength(0));
+                    GridLengthAnimation.AnimateRow(rowSpeedGraph, rowSpeedGraph.Height, new GridLength(0));
                 }
             }
 
@@ -363,7 +366,7 @@ namespace DashCamGPSView
 
         private void Play_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = playerF.Play_CanExecute;
+            e.CanExecute = playerF!= null?playerF.Play_CanExecute:false;
         }
 
         private void Play_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -375,7 +378,7 @@ namespace DashCamGPSView
 
         private void Pause_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = (playerF.MediaState == MediaState.Play);
+            e.CanExecute = playerF != null?(playerF.MediaState == MediaState.Play):false;
         }
 
         private void Pause_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -387,13 +390,14 @@ namespace DashCamGPSView
 
         private void Stop_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = (playerF.MediaState == MediaState.Play) || (playerF.MediaState == MediaState.Pause); 
+            e.CanExecute = playerF != null ? (playerF.MediaState == MediaState.Play) || (playerF.MediaState == MediaState.Pause) : false; 
         }
 
         private void Stop_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             playerF.Stop();
             playerR.Stop();
+            _timer.Stop();
         }
 
         private void MaximizePlayer(VideoPlayer player)
@@ -402,11 +406,23 @@ namespace DashCamGPSView
             Pause_Executed(this, null);
         }
 
-        private void CloseMaximizedPlayer(VideoPlayer player)
+        private void CloseMaximizedPlayer(VideoPlayer playerMax, VideoPlayer playerSrc)
         {
-            playerF.CopyState(player, player.Volume, false);
+            playerSrc.CopyState(playerMax, 0, false);
+
+            playerF.Volume = playerMax.Volume;
+            playerR.Volume = 0;
+
+            sliProgress.Value = playerMax.Position.TotalSeconds;
+
+            if (playerMax.MediaState == MediaState.Stop)
+                Stop_Executed(this, null);
+            if (playerMax.MediaState == MediaState.Pause)
+                Pause_Executed(this, null);
+            if (playerMax.MediaState == MediaState.Play)
+                Play_Executed(this, null);
+
             UpdateGpsInfo();
-            _timer.Start();
         }
 
         private void sliProgress_DragStarted(object sender, DragStartedEventArgs e)

@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="150" d:DesignWidth="800">
     <Border BorderBrush="Gray" BorderThickness="2" CornerRadius="4" Background="Black">
-        <Grid ShowGridLines="False" Margin="10">
+        <Grid x:Name="gridMain" ShowGridLines="False" Margin="10">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
@@ -54,8 +54,9 @@
             </Image>
             <TextBox x:Name="_txtInfo" Grid.RowSpan="6" Background="Transparent" BorderBrush="Transparent" 
                      VerticalAlignment="Center" HorizontalAlignment="Left" HorizontalContentAlignment="Center"
-                     RenderTransformOrigin="0.5 0.5"
-                     Text="Information" Foreground="White" FontSize="22" FontWeight="Bold" Opacity="0.5">
+                     RenderTransformOrigin="0.5 0.5" 
+                     FontSize="{Binding Path=ActualHeight, ElementName=gridMain, Converter={local:PercentageConverter}, ConverterParameter='0.2'}"
+                     Text="Information" Foreground="White" FontWeight="SemiBold" Opacity="0.5">
                 <TextBox.RenderTransform>
                     <TranslateTransform x:Name="_textPosition" />
                 </TextBox.RenderTransform>
