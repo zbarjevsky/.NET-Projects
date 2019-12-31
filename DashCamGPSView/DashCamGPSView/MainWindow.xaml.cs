@@ -40,7 +40,7 @@ namespace DashCamGPSView
         DispatcherTimer _timer = new DispatcherTimer();
 
         //this action needed to Update View Once file is loaded
-        private Action<VideoPlayer, bool> AfterVideoStartedAction = (player, reset) => { };
+        private Action<VideoPlayer, bool> VideoStartedPostAction = (player, reset) => { };
 
         public MainWindow()
         {
@@ -87,10 +87,10 @@ namespace DashCamGPSView
             playerF.VideoStarted = (player) => 
             { 
                 UpdateGpsInfo(false); 
-                AfterVideoStartedAction(player, false); 
+                VideoStartedPostAction(player, false); 
                 waitScreen.Hide(); 
             };
-            playerR.VideoStarted = (player) => { AfterVideoStartedAction(player, true); };
+            playerR.VideoStarted = (player) => { VideoStartedPostAction(player, true); };
 
             playerF.VideoEnded = () => { if (chkAutoPlay.IsChecked.Value) PlayNext(); };
 
@@ -109,6 +109,23 @@ namespace DashCamGPSView
             this.Left = Settings.Default.InitialLocation.X;
             this.Top = Settings.Default.InitialLocation.Y;
             this.WindowState = WindowState.Maximized;
+
+            if (File.Exists(Settings.Default.LastFileName))
+            {
+                DashCamFileTree groups = new DashCamFileTree(Settings.Default.LastFileName);
+                treeGroups.LoadTree(groups, Settings.Default.LastFileName);
+            }
+
+            //FIRST time ONLY - fit width after file opened
+            //I need <reset> to remove this action after both controls adjusted
+            VideoStartedPostAction = (player, reset) =>
+            {
+                player.FitWidth(false);
+
+                //reset this action until next time
+                if (reset)
+                    VideoStartedPostAction = (p, r) => { };
+            };
 
             waitScreen.Hide();
         }
@@ -186,13 +203,14 @@ namespace DashCamGPSView
 
             gpsInfo.UpdateInfo(null); //reset GPS Info control
 
-            treeGroups.SelectFile(fileName);
-
             _dashCamFileInfo = new DashCamFileInfo(fileName);
 
             txtFileName.Text = _dashCamFileInfo.FrontFileName;
             playerF.Open(_dashCamFileInfo.FrontFileName, playerF.Volume);
             playerR.Open(_dashCamFileInfo.BackFileName, 0);
+
+            Settings.Default.LastFileName = playerF.FileName;
+            Settings.Default.Save();
 
             graphSpeedInfo.SetGpsInfo(_dashCamFileInfo.GpsInfo);
 
@@ -206,7 +224,8 @@ namespace DashCamGPSView
                     _bMapWasCollapsed = false;
                     MainMap.Zoom = 16;
                     //GridLengthAnimation.AnimateColumn(mapColumn, mapColumn.Width, 500);
-                    GridLengthAnimation.AnimateRow(rowMaps, new GridLength(5, GridUnitType.Star));
+                    //select file AFTER map is expanded
+                    GridLengthAnimation.AnimateRow(rowMaps, new GridLength(5, GridUnitType.Star), 500, () => treeGroups.SelectFile(fileName));
                     GridLengthAnimation.AnimateRow(rowGpsInfo, new GridLength(2, GridUnitType.Star));
                     GridLengthAnimation.AnimateRow(rowSpeedGraph, new GridLength(1.3, GridUnitType.Star));
                 }
@@ -224,7 +243,6 @@ namespace DashCamGPSView
                     GridLengthAnimation.AnimateRow(rowSpeedGraph, new GridLength(0));
                 }
             }
-
 
             if(File.Exists(_dashCamFileInfo.BackFileName))
             {
@@ -244,6 +262,8 @@ namespace DashCamGPSView
                     GridLengthAnimation.AnimateRow(rowRearView, new GridLength(0));
                 }
             }
+
+            treeGroups.SelectFile(fileName);
 
             playerF.Play();
             playerR.Play();
@@ -296,15 +316,6 @@ namespace DashCamGPSView
                 treeGroups.LoadTree(groups, openFileDialog.FileName);
 
                 MainMap.SetRouteAndCar(null); //reset
-
-                AfterVideoStartedAction = (player, reset) => 
-                {
-                    player.FitWidth(false);
-
-                    //reset this action until next time
-                    if(reset)
-                        AfterVideoStartedAction = (p, r) => { };
-                };
 
                 PlayFile(openFileDialog.FileName);
 

@@ -82,5 +82,17 @@ namespace DashCamGPSView.Properties {
                 this["FrontPlayerVerticalOffset"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastFileName {
+            get {
+                return ((string)(this["LastFileName"]));
+            }
+            set {
+                this["LastFileName"] = value;
+            }
+        }
     }
 }

@@ -37,6 +37,8 @@ namespace DashCamGPSView
                 _content.Width = _zoom * _origWidth;
                 _content.Height = _zoom * _origHeight;
 
+                _content.UpdateLayout();
+
                 SizeChangedAction();
             }
         }
@@ -80,6 +82,15 @@ namespace DashCamGPSView
                 content.PreviewMouseRightButtonUp += scrollViewer_PreviewMouseRightButtonUp;
                 content.MouseWheel += content_MouseWheel;
             }
+        }
+
+        public void UpdateLayout()
+        {
+            if (_content != null)
+                _content.UpdateLayout();
+
+            if(_scrollViewer  != null)
+                _scrollViewer.UpdateLayout();
         }
 
         public void ScrollToCenter()

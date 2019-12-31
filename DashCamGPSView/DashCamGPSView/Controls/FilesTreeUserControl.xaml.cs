@@ -36,7 +36,7 @@ namespace DashCamGPSView.Controls
             InitializeComponent();
 
             //inser empty group - as prompt
-            treeFiles.ItemsSource = new List<VideoGroup>() { new VideoGroup(null, "") };
+            treeFiles.ItemsSource = new List<VideoGroup>() { VideoGroup.Empty() };
             
             this.DeleteRecordingsAction = (videos) =>
             {
@@ -58,11 +58,12 @@ namespace DashCamGPSView.Controls
             _itemsSource.Clear();
             foreach (List<DashCamFileInfo> group in tree.fileGroups)
             {
-                _itemsSource.Add(new VideoGroup(group, selectedFileName));
+                _itemsSource.Add(new VideoGroup(group));
             }
             
             treeFiles.ItemsSource = _itemsSource;
-            //treeFiles.UpdateLayout();
+            treeFiles.UpdateLayout();
+            SelectFile(selectedFileName);
         }
 
         internal void SelectFile(string fileName)
@@ -70,13 +71,12 @@ namespace DashCamGPSView.Controls
             foreach (VideoGroup group in treeFiles.Items)
             {
                 var tvi = treeFiles.ItemContainerGenerator.ContainerFromItem(group) as TreeViewItem;
-                foreach (var subItem in tvi.Items)
+                foreach (VideoFile videoFile in tvi.Items)
                 {
-                    TreeViewItem childItem = tvi.ItemContainerGenerator.ContainerFromItem(subItem) as TreeViewItem;
+                    TreeViewItem childItem = tvi.ItemContainerGenerator.ContainerFromItem(videoFile) as TreeViewItem;
                     if (childItem != null)
                     {
-                        VideoFile v = childItem.DataContext as VideoFile;
-                        childItem.IsSelected = (string.Compare(fileName, v.FileName, true) == 0);
+                        childItem.IsSelected = (string.Compare(fileName, videoFile.FileName, true) == 0);
                         if (childItem.IsSelected)
                             childItem.BringIntoView();
                     }
@@ -256,13 +256,18 @@ namespace DashCamGPSView.Controls
 
         public ObservableCollection<VideoFile> Members { get; set; } = new ObservableCollection<VideoFile>();
 
-        public VideoGroup(List<DashCamFileInfo> group, string selectedFileName)
+        public static VideoGroup Empty()
+        {
+            return new VideoGroup();
+        }
+
+        public VideoGroup(List<DashCamFileInfo> group = null)
         {
             if (group != null && group.Count > 0)
             {
                 for (int i = 0; i < group.Count; i++)
                 {
-                    Members.Add(new VideoFile(i, group[i], selectedFileName));
+                    Members.Add(new VideoFile(i, group[i]));
                 }
 
                 string dir = Path.GetDirectoryName(group[0].FrontFileName);
@@ -298,10 +303,10 @@ namespace DashCamGPSView.Controls
 
         public string Description { get; private set; } = "";
 
-        public VideoFile(int indexInGroup, DashCamFileInfo info, string selectedFileName)
+        public VideoFile(int indexInGroup, DashCamFileInfo info)
         {
             _dashCamFileInfo = info;
-            IsSelected = (FileName == selectedFileName);
+            IsSelected = false;
             FileNameForDisplay = string.Format("{0:000}. {1}", indexInGroup+1, Path.GetFileNameWithoutExtension(FileName));
 
             FileInfo fi = new FileInfo(FileName);

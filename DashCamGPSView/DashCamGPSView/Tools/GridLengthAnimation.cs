@@ -75,10 +75,9 @@ namespace DashCamGPSView.Tools
 
             animation.Completed += (s, e) => 
             {
+                row.Height = to;
                 if (postAction != null)
                     postAction();
-                else
-                    row.Height = to;
             };
 
             row.BeginAnimation(RowDefinition.HeightProperty, animation);
