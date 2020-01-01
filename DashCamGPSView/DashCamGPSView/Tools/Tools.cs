@@ -137,6 +137,9 @@ namespace DashCamGPSView.Tools
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern bool GetMonitorInfo(HandleRef hmonitor, [In, Out] MONITORINFOEX info);
 
+        [DllImport("User32.dll")]
+        public static extern bool SetCursorPos(int X, int Y);
+
         [DllImport("user32.dll")]
         public static extern IntPtr MonitorFromWindow(HandleRef handle, int flags);
 
@@ -162,7 +165,7 @@ namespace DashCamGPSView.Tools
         }
     }
 
-    static class WPFExtensionMethods
+    public static class WPFExtensionMethods
     {
         public static System.Windows.Point GetAbsolutePosition(this Window w)
         {
@@ -187,5 +190,15 @@ namespace DashCamGPSView.Tools
             }
             return new System.Windows.Point(r.X, r.Y);
         }
+
+        public static bool SetMousePosition(this UIElement element, System.Windows.Point point)
+        {
+            System.Windows.Point ptOnScreen = element.PointToScreen(point);
+            bool res = OSInterop.SetCursorPos((int)ptOnScreen.X, (int)ptOnScreen.Y);
+            if (res)
+                element.UpdateLayout();
+            return res;
+        }
+
     }
 }

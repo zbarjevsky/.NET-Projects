@@ -136,7 +136,7 @@
     </Compile>
     <Compile Include="Tools\DemoStuff.cs" />
     <Compile Include="Controls\PercentageConverter.cs" />
-    <Compile Include="Controls\ScrollDragZoom.cs" />
+    <Compile Include="Tools\ScrollDragZoom.cs" />
     <Compile Include="Tools\DashCamFileInfo.cs" />
     <Compile Include="Tools\DashCamFileTree.cs" />
     <Compile Include="Controls\VideoPlayer.xaml.cs">

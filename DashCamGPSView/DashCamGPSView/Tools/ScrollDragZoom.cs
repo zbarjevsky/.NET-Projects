@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace DashCamGPSView
+namespace DashCamGPSView.Tools
 {
     public class ScrollDragZoom
     {
@@ -143,8 +143,43 @@ namespace DashCamGPSView
 
         private void content_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            double zoom = _zoom * ((e.Delta > 0) ? 1.1 : 0.9);
-            Zoom = zoom; //update control
+            e.Handled = true;
+
+            Point mousePosContent = e.GetPosition(_content);
+            Point mousePos = e.GetPosition(_scrollViewer);
+            Point center = new Point(_scrollViewer.ActualWidth / 2, _scrollViewer.ActualHeight / 2);
+            Vector deltaMouse = center - mousePos; //for mouse pointer to move to center
+
+            //try scroll from mouse pointer to center as close as possible
+            Vector newDelta = TryMoveScroll(deltaMouse);
+            _scrollViewer.SetMousePosition(mousePos + newDelta);
+
+            double deltaZoom = ((e.Delta > 0) ? 1.1 : 0.9);
+            Zoom = _zoom * deltaZoom;
+
+            Point mousePosContent1 = e.GetPosition(_content);
+
+            //if it is scrollable
+            if (_scrollViewer.ScrollableWidth > 0 && _scrollViewer.ScrollableHeight > 0)
+            {
+                //Point posAfterZoom = new Point(mousePosContent.X * deltaZoom, mousePosContent.Y * deltaZoom);
+                //Vector deltaVideoPointAfterZoom = posAfterZoom - mousePosContent; //for video point that was under mouse
+                //Vector deltaToMoveTocenter = deltaMouse;// - deltaVideoPointAfterZoom;
+
+                //Vector deltaChange = newDelta - deltaToMoveTocenter;
+               
+                ////move content from mouse point to same point in content
+                //if (deltaChange.Length < 0.0001) //moved to center - was no correction
+                //{
+                //    _scrollViewer.SetMousePosition(center);
+                //}
+                //else if(newDelta.X != 0 && newDelta.Y != 0) //was scroll
+                //{
+
+                //    Point newMousePos = mousePosContent + newDelta;
+                //    _content.SetMousePosition(newMousePos);
+                //}
+            }
         }
 
         private void scrollViewer_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
@@ -170,6 +205,33 @@ namespace DashCamGPSView
         private void scrollViewer_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
             _content.ReleaseMouseCapture();
+        }
+
+        private Vector TryMoveScroll(Vector delta)
+        {
+            double hOff = _scrollViewer.HorizontalOffset - delta.X;
+            if (hOff < 0)
+                hOff = 0;
+            if (hOff > _scrollViewer.ScrollableWidth)
+                hOff = _scrollViewer.ScrollableWidth;
+
+            double vOff = _scrollViewer.VerticalOffset - delta.Y;
+            if (vOff < 0)
+                vOff = 0;
+            if (vOff > _scrollViewer.ScrollableHeight)
+                vOff = _scrollViewer.ScrollableHeight;
+
+            Vector newDelta = new Vector(
+                _scrollViewer.HorizontalOffset - hOff,
+                _scrollViewer.VerticalOffset - vOff);
+
+            if(hOff != _scrollViewer.HorizontalOffset)
+                _scrollViewer.ScrollToHorizontalOffset(hOff);
+
+            if(vOff != _scrollViewer.VerticalOffset)
+                _scrollViewer.ScrollToVerticalOffset(vOff);
+
+            return newDelta;
         }
     }
 }
