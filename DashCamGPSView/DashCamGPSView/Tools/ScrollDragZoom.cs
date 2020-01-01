@@ -145,41 +145,12 @@ namespace DashCamGPSView.Tools
         {
             e.Handled = true;
 
-            Point mousePosContent = e.GetPosition(_content);
-            Point mousePos = e.GetPosition(_scrollViewer);
-            Point center = new Point(_scrollViewer.ActualWidth / 2, _scrollViewer.ActualHeight / 2);
-            Vector deltaMouse = center - mousePos; //for mouse pointer to move to center
-
-            //try scroll from mouse pointer to center as close as possible
-            Vector newDelta = TryMoveScroll(deltaMouse);
-            _scrollViewer.SetMousePosition(mousePos + newDelta);
+            //Vector delta = MoveContentAndMouseToCenterBeforeZoom(e);
 
             double deltaZoom = ((e.Delta > 0) ? 1.1 : 0.9);
             Zoom = _zoom * deltaZoom;
 
-            Point mousePosContent1 = e.GetPosition(_content);
-
-            //if it is scrollable
-            if (_scrollViewer.ScrollableWidth > 0 && _scrollViewer.ScrollableHeight > 0)
-            {
-                //Point posAfterZoom = new Point(mousePosContent.X * deltaZoom, mousePosContent.Y * deltaZoom);
-                //Vector deltaVideoPointAfterZoom = posAfterZoom - mousePosContent; //for video point that was under mouse
-                //Vector deltaToMoveTocenter = deltaMouse;// - deltaVideoPointAfterZoom;
-
-                //Vector deltaChange = newDelta - deltaToMoveTocenter;
-               
-                ////move content from mouse point to same point in content
-                //if (deltaChange.Length < 0.0001) //moved to center - was no correction
-                //{
-                //    _scrollViewer.SetMousePosition(center);
-                //}
-                //else if(newDelta.X != 0 && newDelta.Y != 0) //was scroll
-                //{
-
-                //    Point newMousePos = mousePosContent + newDelta;
-                //    _content.SetMousePosition(newMousePos);
-                //}
-            }
+            Vector delta = MoveContentAndMouseToCenterAfterZoom(deltaZoom, e); 
         }
 
         private void scrollViewer_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
@@ -205,6 +176,41 @@ namespace DashCamGPSView.Tools
         private void scrollViewer_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
             _content.ReleaseMouseCapture();
+        }
+
+        private Vector MoveContentAndMouseToCenterAfterZoom(double deltaZoom, MouseWheelEventArgs e)
+        {
+            Point mousePosContent = e.GetPosition(_content);
+            Point mousePos = e.GetPosition(_scrollViewer);
+            Point center = new Point(_scrollViewer.ActualWidth / 2, _scrollViewer.ActualHeight / 2);
+            Vector deltaMouse = center - mousePos; //for mouse pointer to move to center
+
+            Point posAfterZoom = new Point(mousePosContent.X * deltaZoom, mousePosContent.Y * deltaZoom);
+            Vector deltaVideoPointAfterZoom = posAfterZoom - mousePosContent; //for video point that was under mouse
+            Vector deltaToMoveTocenter = deltaMouse - deltaVideoPointAfterZoom;
+
+            //try scroll from mouse pointer to center as close as possible
+            Vector newDelta = TryMoveScroll(deltaToMoveTocenter);
+
+            Vector deltaChange = deltaToMoveTocenter - newDelta;
+            Point newMousePos = mousePos + deltaMouse - deltaChange;
+            _scrollViewer.SetMousePosition(newMousePos);
+
+            return deltaChange;
+        }
+
+        private Vector MoveContentAndMouseToCenterBeforeZoom(MouseWheelEventArgs e)
+        {
+            Point mousePosContent = e.GetPosition(_content);
+            Point mousePos = e.GetPosition(_scrollViewer);
+            Point center = new Point(_scrollViewer.ActualWidth / 2, _scrollViewer.ActualHeight / 2);
+            Vector deltaMouse = center - mousePos; //for mouse pointer to move to center
+
+            //try scroll from mouse pointer to center as close as possible
+            Vector newDelta = TryMoveScroll(deltaMouse);
+            _scrollViewer.SetMousePosition(mousePos + newDelta);
+
+            return newDelta;
         }
 
         private Vector TryMoveScroll(Vector delta)
