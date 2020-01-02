@@ -122,6 +122,9 @@ namespace DashCamGPSView
             {
                 player.FitWidth(false);
 
+                if (_dashCamFileInfo.GpsInfo != null && _dashCamFileInfo.GpsInfo.Count > 0)
+                    MainMap.Zoom = 16;
+
                 //reset this action until next time
                 if (reset)
                     VideoStartedPostAction = (p, r) => { };
