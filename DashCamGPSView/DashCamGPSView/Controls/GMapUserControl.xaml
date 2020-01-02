@@ -12,7 +12,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="2*" />
-            <ColumnDefinition Width="80" />
+            <ColumnDefinition Width="180" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
@@ -25,13 +25,41 @@
         <Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" 
                 CornerRadius="4" HorizontalAlignment="Right" Margin="10">
             <Border.Background>
-                <SolidColorBrush Color="White" Opacity="0.3"/>
+                <SolidColorBrush Color="White" Opacity="0.2"/>
             </Border.Background>
-            <Slider x:Name="sliderZoom"
+            <StackPanel Orientation="Horizontal" Width="130" >
+                <UniformGrid Rows="{Binding MaxZoom, ElementName=GMap}">
+                    <TextBlock Text="24" HorizontalAlignment="Right"/>
+                    <TextBlock Text="23" HorizontalAlignment="Right"/>
+                    <TextBlock Text="22" HorizontalAlignment="Right"/>
+                    <TextBlock Text="Human 21" HorizontalAlignment="Right"/>
+                    <TextBlock Text="20" HorizontalAlignment="Right"/>
+                    <TextBlock Text="19" HorizontalAlignment="Right"/>
+                    <TextBlock Text="18" HorizontalAlignment="Right"/>
+                    <TextBlock Text="17" HorizontalAlignment="Right"/>
+                    <TextBlock Text="Street 16" HorizontalAlignment="Right"/>
+                    <TextBlock Text="15" HorizontalAlignment="Right"/>
+                    <TextBlock Text="Neibourhood 14" HorizontalAlignment="Right"/>
+                    <TextBlock Text="13" HorizontalAlignment="Right"/>
+                    <TextBlock Text="12" HorizontalAlignment="Right"/>
+                    <TextBlock Text="11" HorizontalAlignment="Right"/>
+                    <TextBlock Text="City 10" HorizontalAlignment="Right"/>
+                    <TextBlock Text=" 9" HorizontalAlignment="Right"/>
+                    <TextBlock Text=" 8" HorizontalAlignment="Right"/>
+                    <TextBlock Text=" 7" HorizontalAlignment="Right"/>
+                    <TextBlock Text="Country 6" HorizontalAlignment="Right"/>
+                    <TextBlock Text=" 5" HorizontalAlignment="Right"/>
+                    <TextBlock Text="Continent 4" HorizontalAlignment="Right"/>
+                    <TextBlock Text=" 3" HorizontalAlignment="Right"/>
+                    <TextBlock Text=" 2" HorizontalAlignment="Right"/>
+                    <TextBlock Text="World 1" HorizontalAlignment="Right"/>
+                </UniformGrid>
+                <Slider x:Name="sliderZoom" Margin="14,4"
                     Orientation="Vertical"
                     Value="{Binding Zoom, ElementName=GMap}"
                     SmallChange="1" LargeChange="3" TickPlacement="TopLeft" Foreground="Black"
                     Minimum="{Binding MinZoom, ElementName=GMap}" Maximum="{Binding MaxZoom, ElementName=GMap}" />
+            </StackPanel>
         </Border>
 
         <ComboBox x:Name="cmbMapType" Margin="4" 
