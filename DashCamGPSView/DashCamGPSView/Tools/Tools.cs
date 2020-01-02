@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -195,8 +196,7 @@ namespace DashCamGPSView.Tools
         {
             System.Windows.Point ptOnScreen = element.PointToScreen(point);
             bool res = OSInterop.SetCursorPos((int)ptOnScreen.X, (int)ptOnScreen.Y);
-            if (res)
-                element.UpdateLayout();
+            Mouse.UpdateCursor();
             return res;
         }
 
