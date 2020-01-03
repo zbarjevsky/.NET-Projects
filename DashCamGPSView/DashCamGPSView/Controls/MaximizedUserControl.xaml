@@ -24,14 +24,14 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 
-                <dashcamgpsview:VideoPlayerControl x:Name="_player"  Grid.Row="0" Grid.RowSpan="2" Margin="4" />
+                <local:VideoPlayerControl x:Name="_player"  Grid.Row="0" Grid.RowSpan="2" Margin="4" />
                 
                 <GridSplitter Grid.Row="2" HorizontalAlignment="Stretch"/>
 
                 <local:ThumbnailsUserControl x:Name="thumbnails" Grid.Row="3" VerticalAlignment="Bottom"/>
                 
                 <Border Grid.Row="4" CornerRadius="0,0,8,8" BorderThickness="1" Background="LightGray" >
-                    <local:PlayerStatusBarUserControl x:Name="statusBar" 
+                    <local:PlayerTimelineBarUserControl x:Name="statusBar" 
                            ExternalPlayer="{Binding Player, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                 </Border>
             </Grid>

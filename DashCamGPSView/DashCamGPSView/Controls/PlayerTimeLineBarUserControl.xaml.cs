@@ -19,9 +19,9 @@ using System.Windows.Threading;
 namespace DashCamGPSView.Controls
 {
     /// <summary>
-    /// Interaction logic for PlayerStatusBarUserControl.xaml
+    /// Interaction logic for PlayerTimelineBarUserControl.xaml
     /// </summary>
-    public partial class PlayerStatusBarUserControl : UserControl, INotifyPropertyChanged
+    public partial class PlayerTimelineBarUserControl : UserControl, INotifyPropertyChanged
     {
         DispatcherTimer _timer = new DispatcherTimer();
 
@@ -29,19 +29,19 @@ namespace DashCamGPSView.Controls
         /// Dependency property to Get/Set the Maximum Value 
         /// </summary>
         public static readonly DependencyProperty ExternalPlayerProperty =
-            DependencyProperty.Register("ExternalPlayer", typeof(VideoPlayerControl), typeof(PlayerStatusBarUserControl), 
+            DependencyProperty.Register("ExternalPlayer", typeof(IVideoPlayer), typeof(PlayerTimelineBarUserControl), 
             new PropertyMetadata(OnItemsSourceChanged));
 
         private static void OnItemsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
-            VideoPlayerControl value = (VideoPlayerControl)e.NewValue;
-            PlayerStatusBarUserControl thisControl = d as PlayerStatusBarUserControl;
+            IVideoPlayer value = (IVideoPlayer)e.NewValue;
+            PlayerTimelineBarUserControl thisControl = d as PlayerTimelineBarUserControl;
             thisControl.ExternalPlayerBinded();
         }
 
-        public VideoPlayerControl ExternalPlayer
+        public IVideoPlayer ExternalPlayer
         {
-            get { return (VideoPlayerControl)GetValue(ExternalPlayerProperty); }
+            get { return (IVideoPlayer)GetValue(ExternalPlayerProperty); }
             set { SetValue(ExternalPlayerProperty, value); } 
         }
 
@@ -60,7 +60,7 @@ namespace DashCamGPSView.Controls
             }
         }
 
-        public PlayerStatusBarUserControl()
+        public PlayerTimelineBarUserControl()
         {
             InitializeComponent();
 

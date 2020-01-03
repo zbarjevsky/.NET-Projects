@@ -26,13 +26,15 @@ using GMap.NET.MapProviders;
 using GMap.NET.WindowsPresentation;
 using GPSDataParser;
 using System.Windows.Media.Animation;
+using DashCamGPSView.Controls;
+using System.Runtime.CompilerServices;
 
 namespace DashCamGPSView
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IVideoPlayer
     {
         private bool userIsDraggingSlider = false;
 
@@ -40,9 +42,7 @@ namespace DashCamGPSView
         DispatcherTimer _timer = new DispatcherTimer();
 
         //this action needed to Update View Once file is loaded
-        private Action<VideoPlayerControl, bool> VideoStartedPostAction = (player, reset) => { };
-
-        public VideoPlayerControl MainPlayer { get { return playerF; } }
+        private Action<IVideoPlayer, bool> VideoStartedPostAction = (player, reset) => { };
 
         public MainWindow()
         {
@@ -89,7 +89,8 @@ namespace DashCamGPSView
             playerF.VideoStarted = (player) => 
             { 
                 UpdateGpsInfo(false); 
-                VideoStartedPostAction(player, false); 
+                VideoStartedPostAction(player, false);
+                VideoStarted(player);
                 waitScreen.Hide(); 
             };
             playerR.VideoStarted = (player) => { VideoStartedPostAction(player, true); };
@@ -104,6 +105,8 @@ namespace DashCamGPSView
 
             playerF.VideoFailed = (e, player) => VideoFailed(e, player);
             playerR.VideoFailed = (e, player) => VideoFailed(e, player);
+
+            playerF.PropertyChanged += (s, e) => { OnPropertyChanged(e.PropertyName); }; //delegate property changes from player
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -188,13 +191,63 @@ namespace DashCamGPSView
             }
         }
 
-        private void TogglePlayPauseState()
+        #region IVideoPlayer
+
+        public IVideoPlayer MainPlayer { get { return this; } }
+
+        public Action<IVideoPlayer> VideoStarted { get; set; } = (player) => { };
+
+        public MediaState MediaState { get { return playerF.MediaState; } }
+        public string FileName { get { return playerF.FileName; } }
+        public double SpeedRatio { get; set; }
+        public double Volume { get { return playerF.Volume; } set { playerF.Volume = value; } }
+        public TimeSpan Position { get { return playerF.Position; } set { playerF.Position = playerR.Position = value; } }
+        public Size NaturalSize { get { return playerF.NaturalSize; } }
+        public double NaturalDuration { get { return playerF.NaturalDuration; } }
+
+        public void Play()
         {
-            if (playerF.MediaState == MediaState.Pause)
-                Play_Executed(this, null);
-            else if (playerF.MediaState == MediaState.Play)
-                Pause_Executed(this, null);
+            playerF.Play();
+            playerR.Play();
+            _timer.Start();
         }
+
+        public void Pause()
+        {
+            playerF.Pause();
+            playerR.Pause();
+            _timer.Stop();
+        }
+
+        public void Stop()
+        {
+            playerF.Stop();
+            playerR.Stop();
+            _timer.Stop();
+        }
+
+        public void TogglePlayPauseState()
+        {
+            if (MediaState == MediaState.Pause)
+                Play();
+            else if (MediaState == MediaState.Play)
+                Pause();
+        }
+
+        public void FitWidth(bool adjustScroll)
+        {
+            playerF.FitWidth(adjustScroll);
+            playerR.FitWidth(adjustScroll);
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
 
         private bool _bMapWasCollapsed = false;
         private bool _bRearViewWasCollapsed = false;
@@ -409,9 +462,7 @@ namespace DashCamGPSView
 
         private void Play_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            playerF.Play();
-            playerR.Play();
-            _timer.Start();
+            Play();
         }
 
         private void Pause_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -421,9 +472,7 @@ namespace DashCamGPSView
 
         private void Pause_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            playerF.Pause();
-            playerR.Pause();
-            _timer.Stop();
+            Pause();
         }
 
         private void Stop_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -433,9 +482,7 @@ namespace DashCamGPSView
 
         private void Stop_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            playerF.Stop();
-            playerR.Stop();
-            _timer.Stop();
+            Stop();
         }
 
         private void MaximizePlayer(VideoPlayerControl player)

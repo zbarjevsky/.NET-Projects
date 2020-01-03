@@ -21,18 +21,18 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
-namespace DashCamGPSView
+namespace DashCamGPSView.Controls
 {
     /// <summary>
     /// Interaction logic for VideoPlayer.xaml
     /// </summary>
-    public partial class VideoPlayerControl : UserControl, INotifyPropertyChanged
+    public partial class VideoPlayerControl : UserControl, INotifyPropertyChanged, IVideoPlayer
     {
         private ScrollDragZoom _scrollDragger;
 
         public Action MaximizeAction = () => { };
         public Action VideoEnded = () => { };
-        public Action<VideoPlayerControl> VideoStarted = (player) => { };
+        public Action<IVideoPlayer> VideoStarted { get; set; } = (player) => { };
         public Func<ExceptionRoutedEventArgs, MediaElement, bool> VideoFailed = (e, player) => true;
         public Action LeftButtonClick = () => { };
         public Action LeftButtonDoubleClick = () => { };
@@ -43,7 +43,7 @@ namespace DashCamGPSView
         public MediaState MediaState 
         {
             get { return _mediaState; }
-            private set { _mediaState = value; OnPropertyChanged(); }
+            protected set { _mediaState = value; OnPropertyChanged(); }
         }
 
         private string _title;

@@ -64,8 +64,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Controls\PlayerStatusBarUserControl.xaml.cs">
-      <DependentUpon>PlayerStatusBarUserControl.xaml</DependentUpon>
+    <Compile Include="Controls\IVideoPlayer.cs" />
+    <Compile Include="Controls\PlayerTimeLineBarUserControl.xaml.cs">
+      <DependentUpon>PlayerTimeLineBarUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\SpeedChartUserControl.xaml.cs">
       <DependentUpon>SpeedChartUserControl.xaml</DependentUpon>
@@ -152,7 +153,7 @@
     <Compile Include="Tools\ItemsControlExtensions.cs" />
     <Compile Include="Tools\RelayCommand.cs" />
     <Compile Include="Tools\Tools.cs" />
-    <Page Include="Controls\PlayerStatusBarUserControl.xaml">
+    <Page Include="Controls\PlayerTimeLineBarUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

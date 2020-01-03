@@ -123,7 +123,7 @@ namespace DashCamGPSView.Tools
 
             //timezone correction 
             TimeSpan delta = fileDateTime - _gpsInfo[0].FixTime;
-            _iGpsTimeZoneHours = delta.Hours;
+            _iGpsTimeZoneHours = (int)Math.Round(delta.TotalHours);
             delta -= TimeSpan.FromHours(_iGpsTimeZoneHours);
 
             _dGpsDelaySeconds = delta.TotalSeconds;
@@ -172,11 +172,12 @@ namespace DashCamGPSView.Tools
 
             elapsedSeconds += _dGpsDelaySeconds; //correct for GPS delay
 
-            TimeSpan duration = (_gpsInfo.Last().FixTime - _gpsInfo.First().FixTime);
+            DateTime start = _gpsInfo.First().FixTime;
+            TimeSpan duration = (_gpsInfo.Last().FixTime - start);
 
             for (int i = 0; i < _gpsInfo.Count; i++)
             {
-                TimeSpan delta = _gpsInfo[i].FixTime - _gpsInfo[0].FixTime;
+                TimeSpan delta = _gpsInfo[i].FixTime - start;
                 if (delta.TotalSeconds >= (elapsedSeconds))
                     return i;
             }

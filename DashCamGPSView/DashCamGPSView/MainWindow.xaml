@@ -85,14 +85,14 @@
             </Grid.RowDefinitions>
             <Border x:Name="borderPlayerR" Grid.Row="0"
                 BorderThickness="2" BorderBrush="Gray" >
-                <local:VideoPlayerControl x:Name="playerR" Title="Rear View" />
+                <controls:VideoPlayerControl x:Name="playerR" Title="Rear View" />
             </Border>
             <GridSplitter Grid.Row="1" 
                       HorizontalAlignment="Stretch"
                       DragCompleted="GridSplitter1_DragCompleted"/>
 
             <Border x:Name="borderPlayerF" Grid.Row="2" BorderThickness="2" BorderBrush="Gray">
-                <local:VideoPlayerControl x:Name="playerF" Title="Front View" />
+                <controls:VideoPlayerControl x:Name="playerF" Title="Front View" />
             </Border>
 
             <speedGauge:Gauge180UserControl x:Name="speedGauge" Grid.RowSpan="3" 
@@ -171,7 +171,7 @@
         
         <controls:SpeedChartUserControl x:Name="graphSpeedInfo" Grid.Row="6" Grid.ColumnSpan="3" />
 
-        <controls:PlayerStatusBarUserControl x:Name="statusBar" Grid.Row="7" Grid.ColumnSpan="3"  Background="Gray" 
+        <controls:PlayerTimelineBarUserControl x:Name="statusBar" Grid.Row="7" Grid.ColumnSpan="3"  Background="Gray" 
                            ExternalPlayer="{Binding MainPlayer, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
 
         <!--<StatusBar Grid.Row="7" Grid.ColumnSpan="3"  Background="Gray">
