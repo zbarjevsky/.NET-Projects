@@ -33,59 +33,6 @@
                 <Border Grid.Row="4" CornerRadius="0,0,8,8" BorderThickness="1" Background="LightGray" >
                     <local:PlayerStatusBarUserControl x:Name="statusBar" 
                            ExternalPlayer="{Binding Player, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
-                    <!--<StatusBar Margin="4,1" Background="LightGray">
-                        <StatusBar.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                </Grid>
-                            </ItemsPanelTemplate>
-                        </StatusBar.ItemsPanel>
-                        <StatusBarItem Grid.Column="0">
-                            <TextBlock Name="lblProgressStatus" FontSize="16">00:00:00/00:00:00</TextBlock>
-                        </StatusBarItem>
-                        <StatusBarItem Grid.Column="1">
-                            <Button FontSize="16" ToolTip="Next Frame" Click="btnNextFrame_Click" >ᗈ</Button>
-                        </StatusBarItem>
-                        <StatusBarItem Grid.Column="2" HorizontalContentAlignment="Stretch">
-                            <StackPanel Orientation="Vertical">
-                                <UniformGrid Columns="8">
-                                    <TextBlock Text=".1"/>
-                                    <TextBlock Text=".25"/>
-                                    <TextBlock Text=".5"/>
-                                    <TextBlock Text="1"/>
-                                    <TextBlock Text="2"/>
-                                    <TextBlock Text="4"/>
-                                    <TextBlock Text="8"/>
-                                    <TextBlock Text="16"/>
-                                </UniformGrid>
-                                <Slider Name="sliSpeed" Foreground="Black" Width="140"
-                                        Minimum="0" Maximum="8" Value="{Binding SpeedRatio, ElementName=Player, FallbackValue=1}"
-                                        SmallChange="0.1" LargeChange="1" TickPlacement="TopLeft" 
-                                         />
-                                
-                            </StackPanel>
-                        </StatusBarItem>
-                        <StatusBarItem Grid.Column="3" HorizontalContentAlignment="Stretch">
-                            <Slider Name="sliProgress" Foreground="Black"
-                                    SmallChange="1" LargeChange="10" TickPlacement="TopLeft" 
-                                    ValueChanged="sliProgress_ValueChanged" />
-                        </StatusBarItem>
-                        <StatusBarItem Grid.Column="4">
-                            <StackPanel Orientation="Horizontal">
-                                <TextBlock Text="Volume: " FontSize="16" />
-                                <Slider Name="pbVolume" Width="110" TickPlacement="BottomRight" 
-                                    Maximum="1" SmallChange="0.05" LargeChange="0.1"
-                                    Value="{Binding ElementName=Player, Path=Volume}" />
-                            </StackPanel>
-                        </StatusBarItem>
-                    </StatusBar>-->
                 </Border>
             </Grid>
         </Border>

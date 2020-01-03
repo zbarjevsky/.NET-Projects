@@ -42,6 +42,8 @@ namespace DashCamGPSView
         //this action needed to Update View Once file is loaded
         private Action<VideoPlayerControl, bool> VideoStartedPostAction = (player, reset) => { };
 
+        public VideoPlayerControl MainPlayer { get { return playerF; } }
+
         public MainWindow()
         {
             InitializeComponent();
@@ -153,7 +155,7 @@ namespace DashCamGPSView
             }
             else
             {
-                ProcessKeyDown(this.sliProgress, this.playerF, e, this.TogglePlayPauseState);
+                ProcessKeyDown(statusBar.sliProgress, this.playerF, e, this.TogglePlayPauseState);
             }
         }
 
@@ -272,11 +274,11 @@ namespace DashCamGPSView
             playerR.Play();
             _timer.Start();
 
-            if (startFrom > 1)
-            {
-                sliProgress.Value = startFrom;
-                sliProgress_ValueChanged(sliProgress, null);
-            }
+            //if (startFrom > 1)
+            //{
+            //    sliProgress.Value = startFrom;
+            //    sliProgress_ValueChanged(sliProgress, null);
+            //}
         }
 
         private void ClosePayer()
@@ -450,7 +452,7 @@ namespace DashCamGPSView
             playerF.Position = TimeSpan.FromSeconds(position);
             playerR.Position = TimeSpan.FromSeconds(position);
 
-            sliProgress.Value = position;
+            //sliProgress.Value = position;
 
             Play_Executed(this, null);
             if (state == MediaState.Stop)
@@ -475,19 +477,19 @@ namespace DashCamGPSView
             //UpdateGpsInfo();
         }
 
-        private void sliProgress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (!_isInTimer) //if updated from UI by iser dragging slider
-            {
-                TimeSpan tsPos = TimeSpan.FromSeconds(sliProgress.Value);
-                TimeSpan tsMax = TimeSpan.FromSeconds(playerF.NaturalDuration);
+        //private void sliProgress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        //{
+        //    if (!_isInTimer) //if updated from UI by iser dragging slider
+        //    {
+        //        TimeSpan tsPos = TimeSpan.FromSeconds(sliProgress.Value);
+        //        TimeSpan tsMax = TimeSpan.FromSeconds(playerF.NaturalDuration);
 
-                playerF.Position = tsPos;
-                playerR.Position = tsPos;
-            }
+        //        playerF.Position = tsPos;
+        //        playerR.Position = tsPos;
+        //    }
 
-            UpdateGpsInfo(false);
-        }
+        //    UpdateGpsInfo(false);
+        //}
 
         private bool _isInTimer = false;
         private void timer_Tick(object sender, EventArgs e)
@@ -503,28 +505,28 @@ namespace DashCamGPSView
             if (_dashCamFileInfo == null)
                 return;
 
-            if (updateSlider && playerF.NaturalDuration != 0)
-            {
-                sliProgress.Maximum = playerF.NaturalDuration;
-                sliProgress.Value = playerF.Position.TotalSeconds;
-                if (sliProgress.Maximum >= 60)
-                    sliProgress.SmallChange = 1;
-                else //if less than minute - have 60 tics
-                    sliProgress.SmallChange = sliProgress.Maximum / 60.0;
+            //if (updateSlider && playerF.NaturalDuration != 0)
+            //{
+            //    sliProgress.Maximum = playerF.NaturalDuration;
+            //    sliProgress.Value = playerF.Position.TotalSeconds;
+            //    if (sliProgress.Maximum >= 60)
+            //        sliProgress.SmallChange = 1;
+            //    else //if less than minute - have 60 tics
+            //        sliProgress.SmallChange = sliProgress.Maximum / 60.0;
 
-                sliProgress.LargeChange = sliProgress.Maximum / 10.0;
-            }
+            //    sliProgress.LargeChange = sliProgress.Maximum / 10.0;
+            //}
 
-            if(playerF.NaturalDuration > 0)
-            {
-                TimeSpan tsPos = TimeSpan.FromSeconds(sliProgress.Value);
-                TimeSpan tsMax = TimeSpan.FromSeconds(playerF.NaturalDuration);
-                lblProgressStatus.Text = tsPos.ToString(@"hh\:mm\:ss") + "/" + tsMax.ToString(@"hh\:mm\:ss");
-            }
-            else
-            {
-                lblProgressStatus.Text = "--:--:--/--:--:--";
-            }
+            //if(playerF.NaturalDuration > 0)
+            //{
+            //    TimeSpan tsPos = TimeSpan.FromSeconds(sliProgress.Value);
+            //    TimeSpan tsMax = TimeSpan.FromSeconds(playerF.NaturalDuration);
+            //    lblProgressStatus.Text = tsPos.ToString(@"hh\:mm\:ss") + "/" + tsMax.ToString(@"hh\:mm\:ss");
+            //}
+            //else
+            //{
+            //    lblProgressStatus.Text = "--:--:--/--:--:--";
+            //}
 
             int idx = _dashCamFileInfo.FindGpsInfo(playerF.Position.TotalSeconds, playerF.NaturalDuration);
             if (idx >= 0 && _dashCamFileInfo.GpsInfo != null && _dashCamFileInfo.GpsInfo.Count > idx)
@@ -575,7 +577,7 @@ namespace DashCamGPSView
         private void RecreateMediaElements()
         {
             MediaState state = playerF.MediaState;
-            double position = sliProgress.Value;
+            double position = statusBar.sliProgress.Value;
             Settings.Default.SoundVolume = playerF.Volume;
 
             playerF.RecreateMediaElement(false);

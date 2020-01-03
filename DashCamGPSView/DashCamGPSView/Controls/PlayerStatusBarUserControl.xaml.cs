@@ -121,7 +121,10 @@ namespace DashCamGPSView.Controls
                     sliProgress.Value = ExternalPlayer.Position.TotalSeconds;
             }
 
-            lblProgressStatus.Text = tsPos.ToString(@"hh\:mm\:ss\.fff") + "/" + tsMax.ToString(@"hh\:mm\:ss");
+            if(ExternalPlayer.NaturalDuration > 0)
+                lblProgressStatus.Text = tsPos.ToString(@"hh\:mm\:ss\.fff") + "/" + tsMax.ToString(@"hh\:mm\:ss");
+            else
+                lblProgressStatus.Text = "--:--:--/--:--:--";
         }
 
         private void UpdateTimeLineSliderLimits()
