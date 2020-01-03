@@ -64,6 +64,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\PlayerStatusBarUserControl.xaml.cs">
+      <DependentUpon>PlayerStatusBarUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SpeedChartUserControl.xaml.cs">
       <DependentUpon>SpeedChartUserControl.xaml</DependentUpon>
     </Compile>
@@ -140,8 +143,8 @@
     <Compile Include="Tools\ScrollDragZoom.cs" />
     <Compile Include="Tools\DashCamFileInfo.cs" />
     <Compile Include="Tools\DashCamFileTree.cs" />
-    <Compile Include="Controls\VideoPlayer.xaml.cs">
-      <DependentUpon>VideoPlayer.xaml</DependentUpon>
+    <Compile Include="Controls\VideoPlayerControl.xaml.cs">
+      <DependentUpon>VideoPlayerControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tools\DraggableExtension.cs" />
     <Compile Include="Tools\ExportUtils.cs" />
@@ -149,6 +152,10 @@
     <Compile Include="Tools\ItemsControlExtensions.cs" />
     <Compile Include="Tools\RelayCommand.cs" />
     <Compile Include="Tools\Tools.cs" />
+    <Page Include="Controls\PlayerStatusBarUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\SpeedChartUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -225,7 +232,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Controls\VideoPlayer.xaml">
+    <Page Include="Controls\VideoPlayerControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

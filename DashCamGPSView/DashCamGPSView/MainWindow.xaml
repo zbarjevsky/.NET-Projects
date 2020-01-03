@@ -85,14 +85,14 @@
             </Grid.RowDefinitions>
             <Border x:Name="borderPlayerR" Grid.Row="0"
                 BorderThickness="2" BorderBrush="Gray" >
-                <local:VideoPlayer x:Name="playerR" Title="Rear View" />
+                <local:VideoPlayerControl x:Name="playerR" Title="Rear View" />
             </Border>
             <GridSplitter Grid.Row="1" 
                       HorizontalAlignment="Stretch"
                       DragCompleted="GridSplitter1_DragCompleted"/>
 
             <Border x:Name="borderPlayerF" Grid.Row="2" BorderThickness="2" BorderBrush="Gray">
-                <local:VideoPlayer x:Name="playerF" Title="Front View" />
+                <local:VideoPlayerControl x:Name="playerF" Title="Front View" />
             </Border>
 
             <speedGauge:Gauge180UserControl x:Name="speedGauge" Grid.RowSpan="3" 

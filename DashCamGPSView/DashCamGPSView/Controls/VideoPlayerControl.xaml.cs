@@ -26,20 +26,25 @@ namespace DashCamGPSView
     /// <summary>
     /// Interaction logic for VideoPlayer.xaml
     /// </summary>
-    public partial class VideoPlayer : UserControl, INotifyPropertyChanged
+    public partial class VideoPlayerControl : UserControl, INotifyPropertyChanged
     {
         private ScrollDragZoom _scrollDragger;
 
         public Action MaximizeAction = () => { };
         public Action VideoEnded = () => { };
-        public Action<VideoPlayer> VideoStarted = (player) => { };
+        public Action<VideoPlayerControl> VideoStarted = (player) => { };
         public Func<ExceptionRoutedEventArgs, MediaElement, bool> VideoFailed = (e, player) => true;
         public Action LeftButtonClick = () => { };
         public Action LeftButtonDoubleClick = () => { };
 
         public MediaElement VideoPlayerElement { get; private set; } = null;
 
-        public MediaState MediaState { get; private set; } = MediaState.Manual;
+        private MediaState _mediaState = MediaState.Manual;
+        public MediaState MediaState 
+        {
+            get { return _mediaState; }
+            private set { _mediaState = value; OnPropertyChanged(); }
+        }
 
         private string _title;
         public string Title 
@@ -105,7 +110,7 @@ namespace DashCamGPSView
             }
         }
 
-        public VideoPlayer()
+        public VideoPlayerControl()
         {
             InitializeComponent();
 
@@ -119,7 +124,7 @@ namespace DashCamGPSView
             DataContext = this;
         }
 
-        public void CopyState(VideoPlayer player, double volume, bool copySource)
+        public void CopyState(VideoPlayerControl player, double volume, bool copySource)
         {
             if(copySource)
                 VideoPlayerElement.Source = player.VideoPlayerElement.Source;
@@ -162,6 +167,12 @@ namespace DashCamGPSView
             {
                 return (VideoPlayerElement != null) && (VideoPlayerElement.Source != null);
             } 
+        }
+
+        public double SpeedRatio
+        {
+            get { return VideoPlayerElement.SpeedRatio; }
+            set { VideoPlayerElement.SpeedRatio = value; OnPropertyChanged(); }
         }
 
         public double Volume

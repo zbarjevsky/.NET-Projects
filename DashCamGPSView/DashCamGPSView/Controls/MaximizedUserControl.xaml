@@ -24,18 +24,21 @@
                     <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 
-                <dashcamgpsview:VideoPlayer x:Name="Player"  Grid.Row="0" Grid.RowSpan="2" Margin="4" />
+                <dashcamgpsview:VideoPlayerControl x:Name="_player"  Grid.Row="0" Grid.RowSpan="2" Margin="4" />
                 
                 <GridSplitter Grid.Row="2" HorizontalAlignment="Stretch"/>
 
                 <local:ThumbnailsUserControl x:Name="thumbnails" Grid.Row="3" VerticalAlignment="Bottom"/>
                 
                 <Border Grid.Row="4" CornerRadius="0,0,8,8" BorderThickness="1" Background="LightGray" >
-                    <StatusBar Margin="4,1" Background="LightGray">
+                    <local:PlayerStatusBarUserControl x:Name="statusBar" 
+                           ExternalPlayer="{Binding Player, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
+                    <!--<StatusBar Margin="4,1" Background="LightGray">
                         <StatusBar.ItemsPanel>
                             <ItemsPanelTemplate>
                                 <Grid>
                                     <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="*" />
@@ -51,11 +54,30 @@
                             <Button FontSize="16" ToolTip="Next Frame" Click="btnNextFrame_Click" >ᗈ</Button>
                         </StatusBarItem>
                         <StatusBarItem Grid.Column="2" HorizontalContentAlignment="Stretch">
+                            <StackPanel Orientation="Vertical">
+                                <UniformGrid Columns="8">
+                                    <TextBlock Text=".1"/>
+                                    <TextBlock Text=".25"/>
+                                    <TextBlock Text=".5"/>
+                                    <TextBlock Text="1"/>
+                                    <TextBlock Text="2"/>
+                                    <TextBlock Text="4"/>
+                                    <TextBlock Text="8"/>
+                                    <TextBlock Text="16"/>
+                                </UniformGrid>
+                                <Slider Name="sliSpeed" Foreground="Black" Width="140"
+                                        Minimum="0" Maximum="8" Value="{Binding SpeedRatio, ElementName=Player, FallbackValue=1}"
+                                        SmallChange="0.1" LargeChange="1" TickPlacement="TopLeft" 
+                                         />
+                                
+                            </StackPanel>
+                        </StatusBarItem>
+                        <StatusBarItem Grid.Column="3" HorizontalContentAlignment="Stretch">
                             <Slider Name="sliProgress" Foreground="Black"
                                     SmallChange="1" LargeChange="10" TickPlacement="TopLeft" 
                                     ValueChanged="sliProgress_ValueChanged" />
                         </StatusBarItem>
-                        <StatusBarItem Grid.Column="3">
+                        <StatusBarItem Grid.Column="4">
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock Text="Volume: " FontSize="16" />
                                 <Slider Name="pbVolume" Width="110" TickPlacement="BottomRight" 
@@ -63,7 +85,7 @@
                                     Value="{Binding ElementName=Player, Path=Volume}" />
                             </StackPanel>
                         </StatusBarItem>
-                    </StatusBar>
+                    </StatusBar>-->
                 </Border>
             </Grid>
         </Border>

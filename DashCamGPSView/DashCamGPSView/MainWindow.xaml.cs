@@ -40,7 +40,7 @@ namespace DashCamGPSView
         DispatcherTimer _timer = new DispatcherTimer();
 
         //this action needed to Update View Once file is loaded
-        private Action<VideoPlayer, bool> VideoStartedPostAction = (player, reset) => { };
+        private Action<VideoPlayerControl, bool> VideoStartedPostAction = (player, reset) => { };
 
         public MainWindow()
         {
@@ -149,7 +149,7 @@ namespace DashCamGPSView
         {
             if(maxScreen.Visibility == Visibility.Visible)
             {
-                ProcessKeyDown(maxScreen.sliProgress, maxScreen.Player, e, maxScreen.TogglePlayPauseState);
+                ProcessKeyDown(maxScreen.sliProgress, maxScreen._player, e, maxScreen.TogglePlayPauseState);
             }
             else
             {
@@ -157,7 +157,7 @@ namespace DashCamGPSView
             }
         }
 
-        public static void ProcessKeyDown(Slider s, VideoPlayer player, KeyEventArgs e, Action processSpaceKey)
+        public static void ProcessKeyDown(Slider s, VideoPlayerControl player, KeyEventArgs e, Action processSpaceKey)
         {
             if (e.Key == Key.Space)
             {
@@ -436,7 +436,7 @@ namespace DashCamGPSView
             _timer.Stop();
         }
 
-        private void MaximizePlayer(VideoPlayer player)
+        private void MaximizePlayer(VideoPlayerControl player)
         {
             maxScreen.ShowWithControl(player, playerF.Volume);
             Pause_Executed(this, null);

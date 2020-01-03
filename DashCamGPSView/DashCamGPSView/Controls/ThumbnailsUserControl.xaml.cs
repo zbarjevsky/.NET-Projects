@@ -25,7 +25,7 @@ namespace DashCamGPSView.Controls
             public ThumbnailData(BitmapSource image, double start, double duration)
             {
                 bmp = image;
-                txt = TimeSpan.FromSeconds(start).ToString();
+                txt = TimeSpan.FromSeconds(start).ToString(@"hh\:mm\:ss");
                 this.start = start;
                 this.end = start + duration;
             }
@@ -164,7 +164,7 @@ namespace DashCamGPSView.Controls
             }
         }
 
-        public void StartCreateThumbnailsFromVideoFile(VideoPlayer playerSrc)
+        public void StartCreateThumbnailsFromVideoFile(VideoPlayerControl playerSrc)
         {
             if (string.IsNullOrWhiteSpace(playerSrc.FileName))
                 return;
