@@ -47,7 +47,7 @@ namespace DashCamGPSView
             InitializeComponent();
 
             waitScreen.Show(RepeatBehavior.Forever);
-            speedGauge.Draggable(true);
+            speedGauge.Draggable(true, new Thickness(-10));
 
             _timer.Interval = TimeSpan.FromSeconds(0.3);
             _timer.Tick += timer_Tick;

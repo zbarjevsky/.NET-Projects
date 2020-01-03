@@ -177,23 +177,27 @@
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
                     </Grid>
                 </ItemsPanelTemplate>
             </StatusBar.ItemsPanel>
-            <StatusBarItem>
+            <StatusBarItem Grid.Column="0">
                 <TextBlock Name="lblProgressStatus" FontSize="16">00:00:00/00:00:00</TextBlock>
             </StatusBarItem>
-            <StatusBarItem Grid.Column="1" HorizontalContentAlignment="Stretch">
+            <!--<StatusBarItem Grid.Column="1">
+                <Button FontSize="16" ToolTip="Next Frame" Click="btnNextFrame_Click" >ᗈ</Button>
+            </StatusBarItem>-->
+            <StatusBarItem Grid.Column="2" HorizontalContentAlignment="Stretch">
                 <Slider Name="sliProgress" Foreground="Black" Minimum="0"
                         SmallChange="1" LargeChange="10" TickPlacement="TopLeft" 
                         Thumb.DragStarted="sliProgress_DragStarted"  
                         Thumb.DragCompleted="sliProgress_DragCompleted" 
                         ValueChanged="sliProgress_ValueChanged" />
             </StatusBarItem>
-            <StatusBarItem Grid.Column="2">
+            <StatusBarItem Grid.Column="3">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Volume: " FontSize="16" />
                     <Slider Name="pbVolume" Width="110" 

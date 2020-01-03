@@ -20,7 +20,11 @@
             <RowDefinition Height="150"/>
             <RowDefinition Height="150"/>
         </Grid.RowDefinitions>-->
-        <speedGauge:Gauge180UserControl x:Name="speedGauge" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2"
-                                         Width="200" Height="120" ShowTestSlider="True" />
+        <Border Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2"
+                BorderThickness="1" BorderBrush="Red">
+             <speedGauge:Gauge180UserControl x:Name="speedGauge"
+                                             Width="200" Height="120" ShowTestSlider="True" />
+           
+        </Border>
     </Grid>
 </Window>

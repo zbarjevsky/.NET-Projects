@@ -18,31 +18,32 @@ namespace DashCamGPSView.Tools
             public FrameworkElement Element;
             public bool IsDragging = false;
 
-            private Size _margin = new Size();
+            private Thickness _margin = new Thickness();
 
             /// <summary>
             /// If dimention is less than one use it as fraction of element dimention
             /// like: if _margin.Width == 0.5 use half of elements width
             /// </summary>
-            public Size Margin
+            public Thickness Margin
             {
                 get 
                 {
-                    Size margin = _margin;
-                    if (_margin.Width > -1 && _margin.Width < 1)
-                        margin.Width = _margin.Width * Element.RenderSize.Width;
-                    if (_margin.Height > -1 && _margin.Height < 1)
-                        margin.Height = _margin.Height * Element.RenderSize.Height;
-                    return margin;
+                    return new Thickness() 
+                    {
+                        Left = EvaluateMargin(_margin.Left, Element.RenderSize.Width),
+                        Right = EvaluateMargin(_margin.Right, Element.RenderSize.Width),
+                        Top = EvaluateMargin(_margin.Top, Element.RenderSize.Height),
+                        Bottom = EvaluateMargin(_margin.Bottom, Element.RenderSize.Height),
+                    };
                 }
             }
 
             public TranslateTransform Translate { get; private set; }
 
-            public DraggableData(FrameworkElement element, double marginX, double marginY)
+            public DraggableData(FrameworkElement element, Thickness margin)
             {
                 Element = element;
-                _margin = new Size(marginX, marginY);
+                _margin = margin;
                 InitTransform();
             }
 
@@ -81,6 +82,13 @@ namespace DashCamGPSView.Tools
                     Element.RenderTransform = group2;
                 }
             }
+
+            private double EvaluateMargin(double margin, double length)
+            {
+                if (margin > -1 && margin < 1)
+                    margin = margin * length;
+                return margin;
+            }
         }
 
         // TKey is control to drag, TValue is a flag used while dragging
@@ -91,7 +99,7 @@ namespace DashCamGPSView.Tools
         /// <summary>
         /// Enabling/disabling dragging for control
         /// </summary>
-        public static void Draggable(this FrameworkElement element, bool Enable = true, double marginX = 0, double marginY = 0)
+        public static void Draggable(this FrameworkElement element, bool Enable = true, Thickness margin = default(Thickness))
         {
             if (Enable)
             {
@@ -102,7 +110,7 @@ namespace DashCamGPSView.Tools
                 }
 
                 // 'false' - initial state is 'not dragging'
-                _draggables.Add(element, new DraggableData(element, marginX, marginY));
+                _draggables.Add(element, new DraggableData(element, margin));
 
                 // assign required event handlersnnn
                 element.MouseDown += control_MouseDown;
@@ -172,36 +180,40 @@ namespace DashCamGPSView.Tools
             if (offset.Length < 0.0001)
                 return;
 
-            Size margin = _draggables[element].Margin;
+            Thickness margin = _draggables[element].Margin;
 
             Rect bounds = RelativeLocation(element);
             Debug.WriteLine("location: " + bounds);
 
             Vector offsetDelta = new Vector(offset.X, offset.Y) - (new Vector(translate.X, translate.Y) - _initialTranslateOffset);
-            
-            if (IsNewOffsetInsideMargin(bounds.X, offsetDelta.X, element.RenderSize.Width, bounds.Width, margin.Width))
-                translate.X = _initialTranslateOffset.X + offset.X;
-            if (IsNewOffsetInsideMargin(bounds.Y, offsetDelta.Y, element.RenderSize.Height, bounds.Height, margin.Height))
-                translate.Y = _initialTranslateOffset.Y + offset.Y;
+
+            double corrX = CalculateCorrectionInsideMargin(bounds.X, offsetDelta.X, element.RenderSize.Width, bounds.Width, margin.Left, margin.Right);
+            translate.X = _initialTranslateOffset.X + offset.X - corrX;
+            double corrY = CalculateCorrectionInsideMargin(bounds.Y, offsetDelta.Y, element.RenderSize.Height, bounds.Height, margin.Top, margin.Bottom);
+            translate.Y = _initialTranslateOffset.Y + offset.Y - corrY;
         }
 
-        private static bool IsNewOffsetInsideMargin(double pos, double offsetDelta, double ctrlSize, double parentSize, double margin)
+        //calculate correction to stay inside margin
+        private static double CalculateCorrectionInsideMargin(
+            double pos, double offsetDelta, 
+            double ctrlSize, double parentSize, 
+            double marginLo, double marginHi)
         {
             if (offsetDelta == 0)
-                return false;
+                return 0;
 
-            if (pos + offsetDelta <= -margin)
+            if (pos + offsetDelta < marginLo)
             {
-                return false; //no move
+                return offsetDelta - (marginLo - pos); //move upto margin
             }
 
             double end = pos + ctrlSize;
-            if (end + offsetDelta >= parentSize + margin)
+            if (end + offsetDelta > parentSize - marginHi)
             {
-                return false; //no move
+                return offsetDelta - (parentSize - marginHi - end); //move upto margin
             }
 
-            return true;
+            return 0; //no correction
         }
 
         //rect.TopLeft is elemnt relative position to container grid row/column

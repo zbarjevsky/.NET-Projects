@@ -26,6 +26,9 @@ namespace DashCamGPSView.Controls
         DispatcherTimer _timer = new DispatcherTimer();
         private VideoPlayer _sourcePlayer = null;
 
+        public void Play() { Player.Play(); _timer.Start(); }
+        public void Pause() { Player.Pause(); _timer.Stop(); }
+
         public MaximizedUserControl()
         {
             InitializeComponent();
@@ -41,7 +44,7 @@ namespace DashCamGPSView.Controls
             {
                 if(item != null)
                 {
-                    Player.Pause();
+                    Pause();
                     sliProgress.Value = item.start;
                 }
             };
@@ -58,9 +61,18 @@ namespace DashCamGPSView.Controls
             _isInTimer = false;
         }
 
+        private void UpdateTimerState()
+        {
+            if (Player.MediaState == MediaState.Play)
+                _timer.Start();
+            else
+                _timer.Stop();
+        }
+
         public void TogglePlayPauseState()
         {
             Player.TogglePlayPauseState();
+            UpdateTimerState();
         }
 
         public void ShowWithControl(VideoPlayer player, double volume)
@@ -82,14 +94,14 @@ namespace DashCamGPSView.Controls
             sliProgress.Value = player.Position.TotalSeconds;
             sliProgress_ValueChanged(null, null);
 
-            _timer.Start();
+            UpdateTimerState();
 
             Player.btnMaximize.IsEnabled = false;
         }
 
         private void btnScreenshot_Click(object sender, RoutedEventArgs e)
         {
-            Player.Pause();
+            Pause();
             //Tools.Tools.Screenshot(Tools.GpsFileFormat.Unkn, Player.FileName, Player.Position, Application.Current.MainWindow);
             Tools.Tools.Snapshot(Tools.GpsFileFormat.Unkn, Player.FileName, Player.Position, Player.VideoPlayerElement);
         }
@@ -97,7 +109,7 @@ namespace DashCamGPSView.Controls
         private void btnClose_Click(object sender, RoutedEventArgs e)
         {
             MediaState state = Player.MediaState;
-            Player.Pause();
+            Pause();
 
             double pos1 = sliProgress.Value;
             double position = Player.Position.TotalSeconds;
@@ -115,24 +127,39 @@ namespace DashCamGPSView.Controls
             TimeSpan tsPos = TimeSpan.FromSeconds(sliProgress.Value);
             TimeSpan tsMax = TimeSpan.FromSeconds(Player.NaturalDuration);
 
-            if(!_isInTimer)
-                Player.Position = tsPos;
-
-            sliProgress.Minimum = 0;
-            if (Player.NaturalDuration != 0)
+            if (!_isInTimer)
             {
-                sliProgress.Maximum = Player.NaturalDuration;
-                //sliProgress.Value = Player.Position.TotalSeconds;
-                if (sliProgress.Maximum >= 60)
-                    sliProgress.SmallChange = 1;
-                else //if less than minute - have 60 tics
-                    sliProgress.SmallChange = sliProgress.Maximum / 60.0;
+                if (Player.Position == tsPos)
+                    return; //no update needed
 
-                sliProgress.LargeChange = sliProgress.Maximum / 10.0;
+                Player.Position = tsPos;
+                if (sliProgress.Value != Player.Position.TotalSeconds)
+                    sliProgress.Value = Player.Position.TotalSeconds;
             }
 
+            //sliProgress.Minimum = 0;
+            //if (Player.NaturalDuration != 0)
+            //{
+            //    sliProgress.Maximum = Player.NaturalDuration;
+            //    //sliProgress.Value = Player.Position.TotalSeconds;
+            //    if (sliProgress.Maximum >= 60)
+            //        sliProgress.SmallChange = 1;
+            //    else //if less than minute - have 60 tics
+            //        sliProgress.SmallChange = sliProgress.Maximum / 60.0;
+
+            //    sliProgress.LargeChange = sliProgress.Maximum / 10.0;
+            //}
+
             thumbnails.SelectItem(sliProgress.Value);
-            lblProgressStatus.Text = tsPos.ToString(@"hh\:mm\:ss") + "/" + tsMax.ToString(@"hh\:mm\:ss");
+            lblProgressStatus.Text = tsPos.ToString(@"hh\:mm\:ss\.fff") + "/" + tsMax.ToString(@"hh\:mm\:ss");
+        }
+
+        private void btnNextFrame_Click(object sender, RoutedEventArgs e)
+        {
+            if (Player.MediaState == MediaState.Play)
+                Pause();
+
+            sliProgress.Value += 0.064;
         }
     }
 }
