@@ -231,13 +231,13 @@ namespace DashCamGPSView.Controls
             {
                 if (item.DataContext is VideoFile v)
                 {
-                    System.Diagnostics.Process.Start(Path.GetDirectoryName(v.FileName));
+                    OpenFolderWithSelectedFile(v.FileName);
                 }
                 else if (item.DataContext is VideoGroup g)
                 {
                     if (g.Members.Count > 0)
                     {
-                        System.Diagnostics.Process.Start(Path.GetDirectoryName(g.Members[0].FileName));
+                        OpenFolderWithSelectedFile(g.Members[0].FileName);
                     }
                     else
                     {
@@ -245,6 +245,20 @@ namespace DashCamGPSView.Controls
                     }
                 }
             }
+        }
+
+        private void OpenFolderWithSelectedFile(string filePath)
+        {
+            if (!File.Exists(filePath))
+            {
+                return;
+            }
+
+            // combine the arguments together
+            // it doesn't matter if there is a space after ','
+            string argument = "/select, \"" + filePath + "\"";
+
+            System.Diagnostics.Process.Start("explorer.exe", argument);
         }
 
         private void GroupMenu_Delete_Click(object sender, RoutedEventArgs e)
