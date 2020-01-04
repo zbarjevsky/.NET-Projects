@@ -1,4 +1,5 @@
-﻿using GPSDataParser;
+﻿using DashCamGPSView.Tools;
+using GPSDataParser;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,16 +27,18 @@ namespace DashCamGPSView.Controls
             InitializeComponent();
         }
 
-        public void UpdateInfo(GpsPointData inf, int timeZone = 0)
+        public void UpdateInfo(DashCamFileInfo gps, int pointIdx)
         {
-            if (inf != null)
+            if (pointIdx >= 0)
             {
+                GpsPointData inf = gps.GpsInfo[pointIdx];
+
                 compass.Direction = inf.Course;
 
                 txtSpeed.Text = "Speed: " + inf.SpeedMph.ToString("0.0 mph");
                 txtLat.Text = "Lattitude:  " + SexagesimalAngle.ToString(inf.Latitude);
                 txtLon.Text = "Longtitude: " + SexagesimalAngle.ToString(inf.Longitude);
-                txtTime.Text = inf.FixTime.AddHours(timeZone).ToString("yyyy/MM/dd HH:mm:ss");
+                txtTime.Text = inf.FixTime.AddHours(gps.TimeZone).ToString("yyyy/MM/dd HH:mm:ss");
             }
             else
             {

@@ -44,8 +44,8 @@
             </Path.Data>
         </Path>
         <Image Name="_car" Source="/Images/CompassCarRed.png" 
-               Canvas.Left="120" Canvas.Top="180"
-               Height="40" Width="40" >
+               Canvas.Left="120" Canvas.Top="180" RenderTransformOrigin=".5 .5"
+               Height="40" Width="20" >
             <Image.LayoutTransform>
                 <TransformGroup>
                     <ScaleTransform/>

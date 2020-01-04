@@ -199,9 +199,9 @@ namespace DashCamGPSView
 
         public MediaState MediaState { get { return playerF.MediaState; } }
         public string FileName { get { return playerF.FileName; } }
-        public double SpeedRatio { get; set; }
+        public double SpeedRatio { get { return playerF.SpeedRatio; } set { playerF.SpeedRatio = playerR.SpeedRatio = value; } }
         public double Volume { get { return playerF.Volume; } set { playerF.Volume = value; } }
-        public TimeSpan Position { get { return playerF.Position; } set { playerF.Position = playerR.Position = value; } }
+        public TimeSpan Position { get { return playerF.Position; } set { playerF.Position = playerR.Position = value; UpdateGpsInfo(); } }
         public Size NaturalSize { get { return playerF.NaturalSize; } }
         public double NaturalDuration { get { return playerF.NaturalDuration; } }
 
@@ -259,7 +259,7 @@ namespace DashCamGPSView
                 MainMap.SetRouteAndCar(null); //reset route 
             }
 
-            gpsInfo.UpdateInfo(null); //reset GPS Info control
+            gpsInfo.UpdateInfo(null, -1); //reset GPS Info control
 
             _dashCamFileInfo = new DashCamFileInfo(fileName);
 
@@ -547,50 +547,37 @@ namespace DashCamGPSView
             _isInTimer = false;
         }
 
+        private PointLatLng _lastValidPosition;
         private void UpdateGpsInfo(bool updateSlider = true)
         {
             if (_dashCamFileInfo == null)
                 return;
 
-            //if (updateSlider && playerF.NaturalDuration != 0)
-            //{
-            //    sliProgress.Maximum = playerF.NaturalDuration;
-            //    sliProgress.Value = playerF.Position.TotalSeconds;
-            //    if (sliProgress.Maximum >= 60)
-            //        sliProgress.SmallChange = 1;
-            //    else //if less than minute - have 60 tics
-            //        sliProgress.SmallChange = sliProgress.Maximum / 60.0;
-
-            //    sliProgress.LargeChange = sliProgress.Maximum / 10.0;
-            //}
-
-            //if(playerF.NaturalDuration > 0)
-            //{
-            //    TimeSpan tsPos = TimeSpan.FromSeconds(sliProgress.Value);
-            //    TimeSpan tsMax = TimeSpan.FromSeconds(playerF.NaturalDuration);
-            //    lblProgressStatus.Text = tsPos.ToString(@"hh\:mm\:ss") + "/" + tsMax.ToString(@"hh\:mm\:ss");
-            //}
-            //else
-            //{
-            //    lblProgressStatus.Text = "--:--:--/--:--:--";
-            //}
-
             int idx = _dashCamFileInfo.FindGpsInfo(playerF.Position.TotalSeconds, playerF.NaturalDuration);
-            if (idx >= 0 && _dashCamFileInfo.GpsInfo != null && _dashCamFileInfo.GpsInfo.Count > idx)
+            if (_dashCamFileInfo.GpsInfo != null && _dashCamFileInfo.GpsInfo.Count > 0)
             {
                 speedGauge.Visibility = Visibility.Visible;
-                speedGauge.Speed = _dashCamFileInfo.GpsInfo[idx].SpeedMph;
-                //speedGauge.DialText = string.Format("{0:0} mph", _dashCamFileInfo.GpsInfo[idx].SpeedMph);
 
-                gpsInfo.UpdateInfo(_dashCamFileInfo.GpsInfo[idx], _dashCamFileInfo.TimeZone);
+                if (idx >= 0 && idx < _dashCamFileInfo.GpsInfo.Count)
+                {
+                    speedGauge.SpeedUnits = "mph";
+                    speedGauge.Speed = _dashCamFileInfo.GpsInfo[idx].SpeedMph.ToString("0");
+                    //speedGauge.DialText = string.Format("{0:0} mph", _dashCamFileInfo.GpsInfo[idx].SpeedMph);
+                    _lastValidPosition = new PointLatLng(_dashCamFileInfo.GpsInfo[idx].Latitude, _dashCamFileInfo.GpsInfo[idx].Longitude);
+                }
+                else
+                {
+                    speedGauge.Speed = "---";
+                }
 
-                PointLatLng currentPosition = new PointLatLng(_dashCamFileInfo.GpsInfo[idx].Latitude, _dashCamFileInfo.GpsInfo[idx].Longitude);
-                MainMap.UpdateRouteAndCar(currentPosition, idx);
+                gpsInfo.UpdateInfo(_dashCamFileInfo, idx);
+
+                MainMap.UpdateRouteAndCar(_lastValidPosition, idx);
             }
             else
             {
                 //speedGauge.DialText = "Speed Mph";
-                speedGauge.Speed = 0;
+                speedGauge.Speed = "?";
                 speedGauge.Visibility = Visibility.Hidden;
             }
 

@@ -1,7 +1,9 @@
-﻿using System;
+﻿using CircularGauge;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace SpeedGauge
 {
@@ -18,10 +20,22 @@ namespace SpeedGauge
             InitializeComponent();
         }
 
-        public double Speed
+        public string Speed
         {
-            get { return _viewModel.Value; }
-            set { _viewModel.Value = (int)Math.Round(value, 0); OnPropertyChanged(); }
+            get { return _viewModel.SpeedValue; }
+            set { _viewModel.SpeedValue = value; OnPropertyChanged(); }
+        }
+
+        public string SpeedUnits
+        {
+            get { return _viewModel.SpeedUnits; }
+            set { _viewModel.SpeedUnits = value; OnPropertyChanged(); }
+        }
+
+        public HighlightBrush.HighlightColor SpeedColor
+        {
+            get { return _viewModel.SpeedHighlightBrush; }
+            set { _viewModel.SpeedHighlightBrush = value; OnPropertyChanged(); }
         }
 
         public double MaxSpeed

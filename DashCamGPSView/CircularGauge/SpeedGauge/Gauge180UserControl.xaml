@@ -44,14 +44,14 @@
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,80,0,0">
                 <TextBlock x:Name="txtSpeed"  Margin="50,0,0,0"
                            FontSize="80" FontWeight="SemiBold" FontFamily="Agency FB" 
-                           Foreground="#FF01FF01" Text="{Binding Path=Value, Mode=TwoWay, FallbackValue=147}">
+                           Foreground="{Binding SpeedBrush, FallbackValue=Cyan}" Text="{Binding Path=SpeedValue, Mode=TwoWay, FallbackValue=147}">
                     <TextBlock.Effect>
                         <DropShadowEffect BlurRadius="20" Color="YellowGreen" ShadowDepth="0"/>
                     </TextBlock.Effect>
                 </TextBlock>
                 <TextBlock x:Name="txtSpeedUnits" VerticalAlignment="Bottom" Margin="10,0,0,10"
                            FontSize="40" FontWeight="SemiBold" FontFamily="Agency FB" 
-                           Foreground="DarkGray" Text="mph">
+                           Foreground="DarkGray" Text="{Binding SpeedUnits, FallbackValue=mph}">
                     <TextBlock.Effect>
                         <DropShadowEffect BlurRadius="20" Color="YellowGreen" ShadowDepth="0"/>
                     </TextBlock.Effect>

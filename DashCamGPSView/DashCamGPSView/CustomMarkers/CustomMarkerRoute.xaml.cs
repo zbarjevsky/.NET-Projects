@@ -101,22 +101,31 @@ namespace DashCamGPSView.CustomMarkers
                 return;
             }
 
-            UpdateRouteAndCarRefresh(_segmentMain, _figureMain, RouteMain, map);
-            UpdateRouteAndCarRefresh(_segmentPrev, _figurePrev, RoutePrev, map);
+            UpdateRouteUIPoints(_segmentMain, _figureMain, RouteMain, map);
+            UpdateRouteUIPoints(_segmentPrev, _figurePrev, RoutePrev, map);
 
             //update car position
-            GMap.NET.PointLatLng currentPosition = new GMap.NET.PointLatLng(RouteMain[_iCurrentPointIndex].Latitude, RouteMain[_iCurrentPointIndex].Longitude);
-            GMap.NET.GPoint pt0 = map.FromLatLngToLocal(currentPosition);
-            Point ptCar = new Point(pt0.X, pt0.Y);
+            if (_iCurrentPointIndex >= 0)
+            {
+                _car.Opacity = 0.8;
 
-            Canvas.SetLeft(_car, ptCar.X - 20);
-            Canvas.SetTop(_car, ptCar.Y - 20);
-            arrowDirection.Angle = RouteMain[_iCurrentPointIndex].Course;
+                GMap.NET.PointLatLng currentPosition = new GMap.NET.PointLatLng(RouteMain[_iCurrentPointIndex].Latitude, RouteMain[_iCurrentPointIndex].Longitude);
+                GMap.NET.GPoint pt0 = map.FromLatLngToLocal(currentPosition);
+                Point ptCar = new Point(pt0.X, pt0.Y);
+
+                Canvas.SetLeft(_car, ptCar.X - _car.ActualWidth / 2);
+                Canvas.SetTop(_car, ptCar.Y - _car.ActualHeight / 2);
+                arrowDirection.Angle = RouteMain[_iCurrentPointIndex].Course;
+            }
+            else
+            {
+                _car.Opacity = 0.1;
+            }
 
             Visibility = Visibility.Visible;
         }
 
-        private void UpdateRouteAndCarRefresh(PolyLineSegment segment, PathFigure figure, List<GpsPointData> route, GMapControl map)
+        private void UpdateRouteUIPoints(PolyLineSegment segment, PathFigure figure, List<GpsPointData> route, GMapControl map)
         {
             segment.Points.Clear();
             if (route.Count == 0)
@@ -126,7 +135,7 @@ namespace DashCamGPSView.CustomMarkers
             for (int i = 0; i < route.Count; i++)
             {
                 Point pt = GetPoint(route[i], map);
-                if(i>0)
+                if(i>0) //not first point
                 {
                     Vector v = pt - segment.Points.Last();
                     if (v.Length < 4)

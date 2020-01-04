@@ -96,7 +96,7 @@
             </Border>
 
             <speedGauge:Gauge180UserControl x:Name="speedGauge" Grid.RowSpan="3" 
-                 Width="180" Height="100" MaxSpeed="140"
+                 Width="180" Height="100" MaxSpeed="140" SpeedColor="Cyan"
                  HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="40,0,40,20"/>
             
             <!--<Viewbox Grid.Column="2" Grid.Row="3" 

@@ -225,6 +225,28 @@ namespace DashCamGPSView.Controls
             }
         }
 
+        private void GroupMenu_OpenFolder_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem item)
+            {
+                if (item.DataContext is VideoFile v)
+                {
+                    System.Diagnostics.Process.Start(Path.GetDirectoryName(v.FileName));
+                }
+                else if (item.DataContext is VideoGroup g)
+                {
+                    if (g.Members.Count > 0)
+                    {
+                        System.Diagnostics.Process.Start(Path.GetDirectoryName(g.Members[0].FileName));
+                    }
+                    else
+                    {
+                        _itemsSource.Remove(g);
+                    }
+                }
+            }
+        }
+
         private void GroupMenu_Delete_Click(object sender, RoutedEventArgs e)
         {
             if (sender is MenuItem item)

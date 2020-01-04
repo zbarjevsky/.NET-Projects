@@ -7,11 +7,23 @@
              xmlns:windowspresentation="clr-namespace:GMap.NET.WindowsPresentation;assembly=GMap.NET.WindowsPresentation"
              xmlns:custommarkers="clr-namespace:DashCamGPSView.CustomMarkers"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="450">
+    <UserControl.Resources>
+        <Rectangle x:Key="gradientBorder" Stroke="White">
+            <Rectangle.OpacityMask>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Color="#00000000" Offset="0"/>
+                    <GradientStop Color="#88000000" Offset="0.5"/>
+                    <GradientStop Color="#FF000000" Offset="1"/>
+                </LinearGradientBrush>
+            </Rectangle.OpacityMask>
+        </Rectangle>
+        <VisualBrush x:Key="gradientTransparentBrush" Visual="{StaticResource gradientBorder}" />
+    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
             <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="*" />
             <ColumnDefinition Width="180" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -20,13 +32,11 @@
         </Grid.RowDefinitions>
 
         <local:Map x:Name="GMap" MaxZoom="24" MinZoom="1" Grid.ColumnSpan="3" Grid.RowSpan="2"/>
-        <custommarkers:CustomMarkerRoute x:Name="_route" Grid.ColumnSpan="2" Grid.RowSpan="2" />
+        <custommarkers:CustomMarkerRoute x:Name="_route" Grid.ColumnSpan="3" Grid.RowSpan="2" />
 
         <Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="2" 
+                Background="{StaticResource gradientTransparentBrush}"
                 CornerRadius="4" HorizontalAlignment="Right" Margin="10">
-            <Border.Background>
-                <SolidColorBrush Color="White" Opacity="0.2"/>
-            </Border.Background>
             <StackPanel Orientation="Horizontal" Width="130" >
                 <UniformGrid Rows="{Binding MaxZoom, ElementName=GMap}">
                     <TextBlock Text="24" HorizontalAlignment="Right"/>
@@ -58,7 +68,8 @@
                     Orientation="Vertical"
                     Value="{Binding Zoom, ElementName=GMap}"
                     SmallChange="1" LargeChange="3" TickPlacement="TopLeft" Foreground="Black"
-                    Minimum="{Binding MinZoom, ElementName=GMap}" Maximum="{Binding MaxZoom, ElementName=GMap}" />
+                    Minimum="{Binding MinZoom, ElementName=GMap}" Maximum="{Binding MaxZoom, ElementName=GMap}" >
+                </Slider>
             </StackPanel>
         </Border>
 
