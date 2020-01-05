@@ -113,8 +113,8 @@ namespace DashCamGPSView.CustomMarkers
                 GMap.NET.GPoint pt0 = map.FromLatLngToLocal(currentPosition);
                 Point ptCar = new Point(pt0.X, pt0.Y);
 
-                Canvas.SetLeft(_car, ptCar.X - _car.ActualWidth / 2);
-                Canvas.SetTop(_car, ptCar.Y - _car.ActualHeight / 2);
+                Canvas.SetLeft(_car, ptCar.X - _car.ActualWidth * _car.RenderTransformOrigin.X); //middle width
+                Canvas.SetTop(_car, ptCar.Y - _car.ActualHeight * _car.RenderTransformOrigin.Y); //toward the front of car
                 arrowDirection.Angle = RouteMain[_iCurrentPointIndex].Course;
             }
             else

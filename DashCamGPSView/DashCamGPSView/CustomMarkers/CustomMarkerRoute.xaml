@@ -44,14 +44,15 @@
             </Path.Data>
         </Path>
         <Image Name="_car" Source="/Images/CompassCarRed.png" 
-               Canvas.Left="120" Canvas.Top="180" RenderTransformOrigin=".5 .5"
+               Canvas.Left="80" Canvas.Top="190"
+               Opacity="0.4" RenderTransformOrigin=".5,.25"
                Height="40" Width="20" >
-            <Image.LayoutTransform>
+            <Image.RenderTransform>
                 <TransformGroup>
-                    <ScaleTransform/>
-                    <RotateTransform x:Name="arrowDirection" CenterX="0.5" CenterY="0.5" Angle="-45" />
+                    <!--<ScaleTransform/>-->
+                    <RotateTransform x:Name="arrowDirection" Angle="-40" />
                 </TransformGroup>
-            </Image.LayoutTransform>
+            </Image.RenderTransform>
         </Image>
     </Canvas>
 </UserControl>

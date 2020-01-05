@@ -43,11 +43,11 @@
             </Path>
             <Image Name="_car" Grid.RowSpan="6" Height="40" Width="20"
                    HorizontalAlignment="Left" VerticalAlignment="Top"
-                   RenderTransformOrigin="0.5 0.5"
+                   RenderTransformOrigin="0.5,0.25"
                    Source="/Images/CompassCarRed.png" >
                 <Image.RenderTransform>
                     <TransformGroup>
-                        <RotateTransform x:Name="_carDirection" CenterX="0.5" CenterY="0.5" Angle="-145" />
+                        <RotateTransform x:Name="_carDirection" Angle="-145" />
                         <TranslateTransform x:Name="_carPosition"  X="100" Y="50" />
                     </TransformGroup>
                 </Image.RenderTransform>

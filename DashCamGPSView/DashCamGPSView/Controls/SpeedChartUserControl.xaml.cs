@@ -48,8 +48,8 @@ namespace DashCamGPSView.Controls
                 TimeSpan interval = RouteMain.Last().FixTime - RouteMain.First().FixTime;
 
                 Point car = GetPoint(index, maxSpeed, interval);
-                _carPosition.X = GetValidPosition(car.X - _car.Width / 2, 0, _car.Width, this.ActualWidth);
-                _carPosition.Y = GetValidPosition(car.Y - _car.Height / 2, -10, -10, this.ActualHeight);
+                _carPosition.X = GetValidPosition(car.X - _car.Width * _car.RenderTransformOrigin.X, 0, _car.Width, this.ActualWidth);
+                _carPosition.Y = GetValidPosition(car.Y - _car.Height * _car.RenderTransformOrigin.Y, -10, -10, this.ActualHeight);
 
                 _txtInfo.Text = string.Format("Speed: {0:0.0} mph\n{1}\nMax Speed: {2:0.0} mph", 
                     RouteMain[index].SpeedMph, 
