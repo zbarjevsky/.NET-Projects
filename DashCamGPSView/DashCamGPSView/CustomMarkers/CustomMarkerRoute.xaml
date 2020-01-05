@@ -49,8 +49,8 @@
                Height="40" Width="20" >
             <Image.RenderTransform>
                 <TransformGroup>
-                    <!--<ScaleTransform/>-->
-                    <RotateTransform x:Name="arrowDirection" Angle="-40" />
+                    <ScaleTransform x:Name="carScale"/>
+                    <RotateTransform x:Name="carDirection" Angle="-40" />
                 </TransformGroup>
             </Image.RenderTransform>
         </Image>

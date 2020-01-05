@@ -88,8 +88,9 @@ namespace DashCamGPSView
 
             playerF.VideoStarted = (player) => 
             { 
-                UpdateGpsInfo(false); 
-                VideoStartedPostAction(player, false);
+                UpdateGpsInfo(false);
+                bool isFrontPlayerOnly = string.IsNullOrWhiteSpace(playerR.FileName);
+                VideoStartedPostAction(player, isFrontPlayerOnly); //reset now if there is no R player
                 VideoStarted(player);
                 waitScreen.Hide(); 
             };

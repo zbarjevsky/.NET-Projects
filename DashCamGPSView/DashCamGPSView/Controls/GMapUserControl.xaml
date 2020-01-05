@@ -65,7 +65,7 @@
                     <TextBlock Text="World 1" HorizontalAlignment="Right"/>
                 </UniformGrid>
                 <Slider x:Name="sliderZoom" Margin="14,4"
-                    Orientation="Vertical"
+                    Orientation="Vertical" IsSnapToTickEnabled="True"
                     Value="{Binding Zoom, ElementName=GMap}"
                     SmallChange="1" LargeChange="3" TickPlacement="TopLeft" Foreground="Black"
                     Minimum="{Binding MinZoom, ElementName=GMap}" Maximum="{Binding MaxZoom, ElementName=GMap}" >

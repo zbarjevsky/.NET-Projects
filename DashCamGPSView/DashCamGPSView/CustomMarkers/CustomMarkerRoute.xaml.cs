@@ -115,7 +115,8 @@ namespace DashCamGPSView.CustomMarkers
 
                 Canvas.SetLeft(_car, ptCar.X - _car.ActualWidth * _car.RenderTransformOrigin.X); //middle width
                 Canvas.SetTop(_car, ptCar.Y - _car.ActualHeight * _car.RenderTransformOrigin.Y); //toward the front of car
-                arrowDirection.Angle = RouteMain[_iCurrentPointIndex].Course;
+                carDirection.Angle = RouteMain[_iCurrentPointIndex].Course;
+                UpdateCarScale(map.Zoom);
             }
             else
             {
@@ -123,6 +124,34 @@ namespace DashCamGPSView.CustomMarkers
             }
 
             Visibility = Visibility.Visible;
+        }
+
+        private void UpdateCarScale(double zoom)
+        {
+            const double MAX_ZOOM = 24;
+            const double MIN_ZOOM = 10;
+
+            const double MAX_SCALE = 3;
+            const double MIN_SCALE = 0.5;
+
+            if (zoom < MIN_ZOOM) //state level
+            {
+                carScale.ScaleX = MIN_SCALE;
+                carScale.ScaleY = MIN_SCALE;
+            }
+            else if(zoom >= MIN_ZOOM && zoom < MAX_ZOOM)
+            {
+                double range = MAX_ZOOM - MIN_ZOOM;
+                double val = zoom - MIN_ZOOM;
+                double scale = MIN_SCALE + (MAX_SCALE - MIN_SCALE) * val / range;
+                carScale.ScaleX = scale;
+                carScale.ScaleY = scale;
+            }
+            else
+            {
+                carScale.ScaleX = MAX_SCALE;
+                carScale.ScaleY = MAX_SCALE;
+            }
         }
 
         private void UpdateRouteUIPoints(PolyLineSegment segment, PathFigure figure, List<GpsPointData> route, GMapControl map)

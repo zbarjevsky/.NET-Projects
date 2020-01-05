@@ -127,6 +127,8 @@ namespace DashCamGPSView.Controls
 
             //this.ScaleMode = ScaleModes.Dynamic;
             GMap.ShowCenter = false;
+            GMap.IgnoreMarkerOnMouseWheel = true;
+            GMap.MouseWheelZoomType = MouseWheelZoomType.ViewCenter;
 
             // map events
             GMap.Loaded += MainMap_Loaded;
@@ -144,6 +146,8 @@ namespace DashCamGPSView.Controls
             _currentMarkerUI.Visibility = Visibility.Hidden;
             _currentMarker.ZIndex = int.MaxValue;
             GMap.Markers.Add(_currentMarker);
+
+            _route.MouseWheel += (s, e) => { GMap.RaiseEvent(e); }; //routing event to GMap under car image
         }
 
         private void MainMap_Loaded(object sender, RoutedEventArgs e)
