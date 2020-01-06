@@ -26,32 +26,33 @@ namespace DashCamGPSView.Tools
 
         public string FrontFileName, BackFileName, NmeaFileName;
 
-        private bool _isGpsInfoInitialized = false;
-        private List<GpsPointData> _gpsInfo = null;
-        public List<GpsPointData> GpsInfo 
+        private List<GpsPointData> _gpsInfo = new List<GpsPointData>();
+        public List<GpsPointData> GpsInfo
         {
-            get 
+            get
             {
-                if(!_isGpsInfoInitialized)
-                {
-                    if(GpsFileFormat == GpsFileFormat.DuDuBell)
-                    {
-                        if (File.Exists(NmeaFileName))
-                            _gpsInfo = GpsPointData.Convert(NMEAParser.NMEAParser.ReadFile(NmeaFileName));
-                    }
-                    else if(GpsFileFormat == GpsFileFormat.Viofo)
-                    {
-                        _gpsInfo = GpsPointData.Convert(NovatekViofoGPSParser.ViofoParser.ReadMP4FileGpsInfo(FrontFileName));
-                    }
-
-                    CalculateDelay(FileDate);
-
-                    _isGpsInfoInitialized = true;
-                }
+                InitGpsInfo();
                 return _gpsInfo;
-            } 
+            }
         }
-        
+
+        public bool HasGpsInfo
+        {
+            get
+            {
+                InitGpsInfo();
+                return _gpsInfo != null && _gpsInfo.Count > 0;
+            }
+        }
+
+        public GpsPointData this[int index] { get { return GpsInfo[index]; } }
+
+        public PointLatLng Position(int i) { return new PointLatLng(this[i].Latitude, this[i].Longitude); }
+
+        public SpeedUnits SpeedUnits { get; set; } = SpeedUnits.mph;
+
+        public double GetSpeed(int idx) { return this[idx].GetSpeed(SpeedUnits); }
+
         public DateTime FileDate { get; private set; } = DateTime.MinValue;
         
         public int TimeZone { get { return _iGpsTimeZoneHours; } }
@@ -59,8 +60,10 @@ namespace DashCamGPSView.Tools
         private double _dGpsDelaySeconds = 2.3;
         private int _iGpsTimeZoneHours = 0;
 
-        public DashCamFileInfo(string fileName)
+        public DashCamFileInfo(string fileName, string speedUnits)
         {
+            SpeedUnits = (SpeedUnits)Enum.Parse(typeof(SpeedUnits), speedUnits);
+
             string name = Path.GetFileNameWithoutExtension(fileName);
             name = name.Substring(0, name.Length - 1);
             string dirParent = Path.GetDirectoryName(Path.GetDirectoryName(fileName));
@@ -92,6 +95,31 @@ namespace DashCamGPSView.Tools
                 FileDate = FromViofoFileName(fileName);
 
                 FrontFileName = fileName;
+            }
+        }
+
+        private bool _isGpsInfoInitialized = false;
+        private void InitGpsInfo()
+        {
+            if (!_isGpsInfoInitialized)
+            {
+                if (GpsFileFormat == GpsFileFormat.DuDuBell)
+                {
+                    if (File.Exists(NmeaFileName))
+                        _gpsInfo = GpsPointData.Convert(NMEAParser.NMEAParser.ReadFile(NmeaFileName));
+                }
+                else if (GpsFileFormat == GpsFileFormat.Viofo)
+                {
+                    _gpsInfo = GpsPointData.Convert(NovatekViofoGPSParser.ViofoParser.ReadMP4FileGpsInfo(FrontFileName));
+                }
+                else
+                {
+                    _gpsInfo = new List<GpsPointData>(); //empty
+                }
+
+                CalculateDelay(FileDate);
+
+                _isGpsInfoInitialized = true;
             }
         }
 

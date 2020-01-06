@@ -148,12 +148,13 @@ namespace DashCamGPSView.Controls
             GMap.Markers.Add(_currentMarker);
 
             _route.MouseWheel += (s, e) => { GMap.RaiseEvent(e); }; //routing event to GMap under car image
+
+            GMap.Position = new PointLatLng(40.754910, -73.994100); //Time Square, NYC
         }
 
         private void MainMap_Loaded(object sender, RoutedEventArgs e)
         {
-            GMap.Zoom = 4;
-            GMap.Position = new PointLatLng(45, -93);
+            //GMap.Position = new PointLatLng(45, -93);
         }
 
         void MainMap_MouseEnter(object sender, MouseEventArgs e)

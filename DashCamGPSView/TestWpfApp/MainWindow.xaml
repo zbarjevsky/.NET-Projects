@@ -23,6 +23,7 @@
         <Border Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2"
                 BorderThickness="1" BorderBrush="Red">
              <speedGauge:Gauge180UserControl x:Name="speedGauge"
+                                             SpeedColor="Gold"
                                              Width="200" Height="120" ShowTestSlider="True" />
            
         </Border>

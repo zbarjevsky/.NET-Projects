@@ -53,7 +53,7 @@ namespace DashCamGPSView.Controls
             };
         }
 
-        public void LoadTree(DashCamFileTree tree, string selectedFileName)
+        public VideoFile LoadTree(DashCamFileTree tree, string selectedFileName)
         {
             _itemsSource.Clear();
             foreach (List<DashCamFileInfo> group in tree.fileGroups)
@@ -63,11 +63,12 @@ namespace DashCamGPSView.Controls
             
             treeFiles.ItemsSource = _itemsSource;
             treeFiles.UpdateLayout();
-            SelectFile(selectedFileName);
+            return SelectFile(selectedFileName);
         }
 
-        internal void SelectFile(string fileName)
+        internal VideoFile SelectFile(string fileName)
         {
+            VideoFile v = null;
             foreach (VideoGroup group in treeFiles.Items)
             {
                 var tvi = treeFiles.ItemContainerGenerator.ContainerFromItem(group) as TreeViewItem;
@@ -78,10 +79,14 @@ namespace DashCamGPSView.Controls
                     {
                         childItem.IsSelected = (string.Compare(fileName, videoFile.FileName, true) == 0);
                         if (childItem.IsSelected)
+                        {
+                            v = videoFile;
                             childItem.BringIntoView();
+                        }
                     }
                 }
             }
+            return v;
         }
 
         internal TreeViewItem FindFile(string fileName)

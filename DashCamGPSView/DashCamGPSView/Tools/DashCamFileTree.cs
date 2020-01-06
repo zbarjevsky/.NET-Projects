@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DashCamGPSView.Properties;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -28,7 +29,7 @@ namespace DashCamGPSView.Tools
             List<DashCamFileInfo> infoList = new List<DashCamFileInfo>();
             foreach (string file in fileList)
             {
-                infoList.Add(new DashCamFileInfo(file));
+                infoList.Add(new DashCamFileInfo(file, Settings.Default.SpeedUnits));
             }
 
             List<DashCamFileInfo> group = new List<DashCamFileInfo>();

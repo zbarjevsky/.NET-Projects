@@ -31,7 +31,7 @@ namespace DashCamGPSView.Controls
         {
             if (pointIdx >= 0)
             {
-                GpsPointData inf = gps.GpsInfo[pointIdx];
+                GpsPointData inf = gps[pointIdx];
 
                 compass.Direction = inf.Course;
 

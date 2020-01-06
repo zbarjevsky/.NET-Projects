@@ -119,7 +119,12 @@ namespace DashCamGPSView
             if (File.Exists(Settings.Default.LastFileName))
             {
                 DashCamFileTree groups = new DashCamFileTree(Settings.Default.LastFileName);
-                treeGroups.LoadTree(groups, Settings.Default.LastFileName);
+                VideoFile v =treeGroups.LoadTree(groups, Settings.Default.LastFileName);
+                if (v != null && v._dashCamFileInfo.HasGpsInfo) //initial location
+                {
+                    MainMap.Position = v._dashCamFileInfo.Position(0);
+                    MainMap.Zoom = 16;
+                }
             }
 
             //FIRST time ONLY - fit width after file opened
@@ -128,8 +133,11 @@ namespace DashCamGPSView
             {
                 player.FitWidth(false);
 
-                if (_dashCamFileInfo.GpsInfo != null && _dashCamFileInfo.GpsInfo.Count > 0)
+                if (_dashCamFileInfo.HasGpsInfo)
+                {
+                    MainMap.Position = _dashCamFileInfo.Position(0);
                     MainMap.Zoom = 16;
+                }
 
                 //reset this action until next time
                 if (reset)
@@ -146,6 +154,9 @@ namespace DashCamGPSView
 
             Settings.Default.FrontPlayerVerticalOffset = playerF.VerticalOffset;
             Settings.Default.RearPlayerVerticalOffset = playerR.VerticalOffset;
+
+            if (_dashCamFileInfo != null)
+                Settings.Default.SpeedUnits = _dashCamFileInfo.SpeedUnits.ToString();
 
             Settings.Default.InitialLocation = new System.Drawing.Point((int)this.Left, (int)this.Top);
             Settings.Default.Save();
@@ -262,7 +273,7 @@ namespace DashCamGPSView
 
             gpsInfo.UpdateInfo(null, -1); //reset GPS Info control
 
-            _dashCamFileInfo = new DashCamFileInfo(fileName);
+            _dashCamFileInfo = new DashCamFileInfo(fileName, Settings.Default.SpeedUnits);
 
             txtFileName.Text = _dashCamFileInfo.FrontFileName;
             playerF.Open(_dashCamFileInfo.FrontFileName, playerF.Volume);
@@ -273,7 +284,7 @@ namespace DashCamGPSView
 
             graphSpeedInfo.SetGpsInfo(_dashCamFileInfo.GpsInfo);
 
-            if (_dashCamFileInfo.GpsInfo != null && _dashCamFileInfo.GpsInfo.Count > 0)
+            if (_dashCamFileInfo.HasGpsInfo)
             {
                 MainMap.SetRouteAndCar(_dashCamFileInfo);
                 UpdateGpsInfo();
@@ -378,7 +389,7 @@ namespace DashCamGPSView
 
                 PlayFile(openFileDialog.FileName);
 
-                if (_dashCamFileInfo.GpsInfo != null && _dashCamFileInfo.GpsInfo.Count > 0)
+                if (_dashCamFileInfo.HasGpsInfo)
                     MainMap.Zoom = 16;
             }
             else
@@ -403,7 +414,7 @@ namespace DashCamGPSView
                 List<GpsPointData> list = new List<GpsPointData>();
                 foreach (DashCamFileInfo info in infos)
                 {
-                    if(info.GpsInfo != null && info.GpsInfo.Count > 0)
+                    if(info.HasGpsInfo)
                         list.AddRange(info.GpsInfo);
                 }
 
@@ -555,16 +566,16 @@ namespace DashCamGPSView
                 return;
 
             int idx = _dashCamFileInfo.FindGpsInfo(playerF.Position.TotalSeconds, playerF.NaturalDuration);
-            if (_dashCamFileInfo.GpsInfo != null && _dashCamFileInfo.GpsInfo.Count > 0)
+            if (_dashCamFileInfo.HasGpsInfo)
             {
                 speedGauge.Visibility = Visibility.Visible;
 
                 if (idx >= 0 && idx < _dashCamFileInfo.GpsInfo.Count)
                 {
-                    speedGauge.SpeedUnits = "mph";
-                    speedGauge.Speed = _dashCamFileInfo.GpsInfo[idx].SpeedMph.ToString("0");
-                    //speedGauge.DialText = string.Format("{0:0} mph", _dashCamFileInfo.GpsInfo[idx].SpeedMph);
-                    _lastValidPosition = new PointLatLng(_dashCamFileInfo.GpsInfo[idx].Latitude, _dashCamFileInfo.GpsInfo[idx].Longitude);
+                    speedGauge.SpeedUnits = _dashCamFileInfo.SpeedUnits.ToString();
+                    speedGauge.Speed = _dashCamFileInfo.GetSpeed(idx).ToString("0");
+
+                    _lastValidPosition = _dashCamFileInfo.Position(idx);
                 }
                 else
                 {

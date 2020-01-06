@@ -20,5 +20,8 @@
     <Setting Name="LastFileName" Type="System.String" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="SpeedUnits" Type="System.String" Scope="User">
+      <Value Profile="(Default)">mph</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

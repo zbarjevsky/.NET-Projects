@@ -94,5 +94,17 @@ namespace DashCamGPSView.Properties {
                 this["LastFileName"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("mph")]
+        public string SpeedUnits {
+            get {
+                return ((string)(this["SpeedUnits"]));
+            }
+            set {
+                this["SpeedUnits"] = value;
+            }
+        }
     }
 }
