@@ -39,7 +39,6 @@ namespace DashCamGPSView
         private bool userIsDraggingSlider = false;
 
         private DashCamFileInfo _dashCamFileInfo;
-        DispatcherTimer _timer = new DispatcherTimer();
 
         //this action needed to Update View Once file is loaded
         private Action<IVideoPlayer, bool> VideoStartedPostAction = (player, reset) => { };
@@ -50,9 +49,6 @@ namespace DashCamGPSView
 
             waitScreen.Show(RepeatBehavior.Forever);
             speedGauge.Draggable(true, new Thickness(-10));
-
-            _timer.Interval = TimeSpan.FromSeconds(0.3);
-            _timer.Tick += timer_Tick;
 
             playerF.Volume = Settings.Default.SoundVolume;
             playerR.Volume = 0;
@@ -108,6 +104,8 @@ namespace DashCamGPSView
             playerR.VideoFailed = (e, player) => VideoFailed(e, player);
 
             playerF.PropertyChanged += (s, e) => { OnPropertyChanged(e.PropertyName); }; //delegate property changes from player
+
+            statusBar.OnVideoPositionChanged = (position) => { UpdateGpsInfo(); };
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -221,21 +219,18 @@ namespace DashCamGPSView
         {
             playerF.Play();
             playerR.Play();
-            _timer.Start();
         }
 
         public void Pause()
         {
             playerF.Pause();
             playerR.Pause();
-            _timer.Stop();
         }
 
         public void Stop()
         {
             playerF.Stop();
             playerR.Stop();
-            _timer.Stop();
         }
 
         public void TogglePlayPauseState()
@@ -337,13 +332,6 @@ namespace DashCamGPSView
 
             playerF.Play();
             playerR.Play();
-            _timer.Start();
-
-            //if (startFrom > 1)
-            //{
-            //    sliProgress.Value = startFrom;
-            //    sliProgress_ValueChanged(sliProgress, null);
-            //}
         }
 
         private void ClosePayer()
@@ -520,43 +508,6 @@ namespace DashCamGPSView
                 Pause_Executed(this, null);
 
             UpdateGpsInfo();
-        }
-
-        private void sliProgress_DragStarted(object sender, DragStartedEventArgs e)
-        {
-            userIsDraggingSlider = true;
-            Pause_Executed(sender, null);
-        }
-
-        private void sliProgress_DragCompleted(object sender, DragCompletedEventArgs e)
-        {
-            userIsDraggingSlider = false;
-            //playerF.Position = TimeSpan.FromSeconds(sliProgress.Value);
-            //playerR.Position = TimeSpan.FromSeconds(sliProgress.Value);
-            //UpdateGpsInfo();
-        }
-
-        //private void sliProgress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        //{
-        //    if (!_isInTimer) //if updated from UI by iser dragging slider
-        //    {
-        //        TimeSpan tsPos = TimeSpan.FromSeconds(sliProgress.Value);
-        //        TimeSpan tsMax = TimeSpan.FromSeconds(playerF.NaturalDuration);
-
-        //        playerF.Position = tsPos;
-        //        playerR.Position = tsPos;
-        //    }
-
-        //    UpdateGpsInfo(false);
-        //}
-
-        private bool _isInTimer = false;
-        private void timer_Tick(object sender, EventArgs e)
-        {
-            _isInTimer = true;
-            if (playerF.MediaState == MediaState.Play)
-                UpdateGpsInfo();
-            _isInTimer = false;
         }
 
         private PointLatLng _lastValidPosition;

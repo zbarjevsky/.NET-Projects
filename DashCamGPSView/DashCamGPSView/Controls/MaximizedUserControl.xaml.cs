@@ -23,11 +23,10 @@ namespace DashCamGPSView.Controls
     {
         public Action<double, MediaState, double> CloseAction = (position, state, volume) => { };
 
-        DispatcherTimer _timer = new DispatcherTimer();
         private VideoPlayerControl _sourcePlayer = null;
 
-        public void Play() { _player.Play(); _timer.Start(); }
-        public void Pause() { _player.Pause(); _timer.Stop(); }
+        public void Play() { _player.Play(); }
+        public void Pause() { _player.Pause(); }
 
         public VideoPlayerControl Player { get { return _player; } }
 
@@ -37,9 +36,6 @@ namespace DashCamGPSView.Controls
         {
             InitializeComponent();
             
-            _timer.Interval = TimeSpan.FromSeconds(0.3);
-            _timer.Tick += timer_Tick;
-
             _player.LeftButtonClick = TogglePlayPauseState;
             _player.LeftButtonDoubleClick = () => btnClose_Click(this, null);
             _player.VideoEnded = () => { _player.Pause(); };
@@ -57,29 +53,9 @@ namespace DashCamGPSView.Controls
             };
         }
 
-        private bool _isInTimer = false;
-        private void timer_Tick(object sender, EventArgs e)
-        {
-            _isInTimer = true;
-            if (_player != null && _player.MediaState == MediaState.Play)
-            {
-                //sliProgress.Value = Player.Position.TotalSeconds;
-            }
-            _isInTimer = false;
-        }
-
-        private void UpdateTimerState()
-        {
-            if (_player.MediaState == MediaState.Play)
-                _timer.Start();
-            else
-                _timer.Stop();
-        }
-
         public void TogglePlayPauseState()
         {
             _player.TogglePlayPauseState();
-            UpdateTimerState();
         }
 
         public void ShowWithControl(VideoPlayerControl player, double volume)
@@ -96,8 +72,6 @@ namespace DashCamGPSView.Controls
             _player.FitWidth(false);
 
             thumbnails.StartCreateThumbnailsFromVideoFile(player);
-
-            UpdateTimerState();
 
             _player.btnMaximize.IsEnabled = false;
         }

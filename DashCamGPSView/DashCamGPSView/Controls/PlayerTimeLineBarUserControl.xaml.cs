@@ -25,6 +25,8 @@ namespace DashCamGPSView.Controls
     {
         DispatcherTimer _timer = new DispatcherTimer();
 
+        public Action<TimeSpan> OnVideoPositionChanged = (position) => { };
+
         /// <summary>
         /// Dependency property to Get/Set the Maximum Value 
         /// </summary>
@@ -86,6 +88,7 @@ namespace DashCamGPSView.Controls
             if (ExternalPlayer != null)
             {
                 sliProgress.Value = ExternalPlayer.Position.TotalSeconds;
+                OnVideoPositionChanged(ExternalPlayer.Position);
             }
             _isInTimer = false;
         }
