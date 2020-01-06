@@ -36,8 +36,6 @@ namespace DashCamGPSView
     /// </summary>
     public partial class MainWindow : Window, IVideoPlayer
     {
-        private bool userIsDraggingSlider = false;
-
         private DashCamFileInfo _dashCamFileInfo;
 
         //this action needed to Update View Once file is loaded
