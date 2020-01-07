@@ -36,6 +36,7 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.IO.Compression.FileSystem" />
+    <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -52,6 +53,8 @@
     <Compile Include="FileFormats\KML\KmlStyles.cs" />
     <Compile Include="GpsPointData.cs" />
     <Compile Include="Tools\IBufferReader.cs" />
+    <Compile Include="Tools\IpInfo.cs" />
+    <Compile Include="Tools\JsonParser.cs" />
     <Compile Include="Tools\MemoryMappedFileReader.cs" />
     <Compile Include="MOV\MovParser.cs" />
     <Compile Include="NMEA\IMultiPartMessage.cs" />
