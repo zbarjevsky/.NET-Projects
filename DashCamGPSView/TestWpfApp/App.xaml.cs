@@ -46,6 +46,8 @@ namespace TestWpfApp
         public static void GetCountryByIP()
         {
             IpInfo ipInfo = IpInfo.Get();
+            double lat = ipInfo.GetLatitude();
+            double lon = ipInfo.GetLongitude();
         }
 
         public static string GetLocalIPAddress()

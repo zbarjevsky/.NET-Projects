@@ -37,6 +37,18 @@ namespace GPSDataParser.Tools
         //[JsonProperty("Timezone")]
         public string Timezone { get; set; }
 
+        public double GetLatitude()
+        {
+            string lat = Loc.Split(',')[0];
+            return double.Parse(lat);
+        }
+
+        public double GetLongitude()
+        {
+            string lon = Loc.Split(',')[1];
+            return double.Parse(lon);
+        }
+
         public static IpInfo Parse(string json)
         {
             return json.FromJson<IpInfo>();
@@ -44,7 +56,7 @@ namespace GPSDataParser.Tools
 
         public static IpInfo Get()
         {
-            string info = new WebClient().DownloadString("http://ipinfo.io");
+            string info = DownloadString("http://ipinfo.io");
             return info.FromJson<IpInfo>();
         }
 
@@ -69,8 +81,9 @@ namespace GPSDataParser.Tools
                     return client.DownloadString(address);
                 }
             }
-            catch
+            catch(Exception err)
             {
+                System.Diagnostics.Debug.WriteLine("WebClient.DownloadString: "+err);
                 return string.Empty;
             }
         }

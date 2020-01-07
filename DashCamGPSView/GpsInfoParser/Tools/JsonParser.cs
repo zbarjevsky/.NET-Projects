@@ -34,6 +34,9 @@ namespace TinyJson
 
         public static T FromJson<T>(this string json)
         {
+            if (string.IsNullOrWhiteSpace(json))
+                return default(T);
+
             // Initialize, if needed, the ThreadStatic variables
             if (propertyInfoCache == null) propertyInfoCache = new Dictionary<Type, Dictionary<string, PropertyInfo>>();
             if (fieldInfoCache == null) fieldInfoCache = new Dictionary<Type, Dictionary<string, FieldInfo>>();
