@@ -392,7 +392,10 @@ namespace YouTubeDownload
             DownloadData data = m_listUrls.SelectedItems[0].Tag as DownloadData;
             if (data != null && data.State != DownloadState.Failed)
             {
-                Process.Start(data.OutputFolder);
+                if(File.Exists(data.Description.Trim('"')))
+                    OpenFolderWithSelectedFile(data.Description.Trim('"'));
+                else
+                    Process.Start(data.OutputFolder);
             }
         }
 
@@ -452,6 +455,20 @@ namespace YouTubeDownload
             {
                 Clipboard.SetText(data.Url);
             }
+        }
+
+        private void OpenFolderWithSelectedFile(string filePath)
+        {
+            if (!File.Exists(filePath))
+            {
+                return;
+            }
+
+            // combine the arguments together
+            // it doesn't matter if there is a space after ','
+            string argument = "/select, \"" + filePath + "\"";
+
+            System.Diagnostics.Process.Start("explorer.exe", argument);
         }
     }
 }
