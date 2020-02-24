@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Collections.Generic;
+using MeditationStopWatch.Tools;
 
 namespace MeditationStopWatch
 {
@@ -9,11 +10,11 @@ namespace MeditationStopWatch
 		public FileInfo ImageInfo { get; set; }
 		public IList<FileInfo> AllImages { get; set; }
 
-		public void OpenImageDirectory(string sFileName)
+		public void OpenImageDirectory(string sFileName, params string[] extensions)
 		{
 			FileInfo image = new FileInfo(sFileName);
 
-			AllImages = new List<FileInfo>(image.Directory.GetFiles("*.jpg"));
+			AllImages = new List<FileInfo>(image.Directory.GetFilesByExtensions(extensions));
 			int idx = IndexOf(image);
 			if (idx >= 0) ImageInfo = AllImages[idx];
 			else ImageInfo = image;

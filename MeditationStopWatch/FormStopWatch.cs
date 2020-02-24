@@ -216,7 +216,10 @@ namespace MeditationStopWatch
 			if (string.IsNullOrEmpty(sFileName) || !File.Exists(sFileName))
 				return;
 
-			ImageInfo.OpenImageDirectory(sFileName);
+			string[] extentions = m_openFileDialog.Filter.Split('|');
+			extentions = extentions[1].Replace("*", "").Split(';');
+
+			ImageInfo.OpenImageDirectory(sFileName, extentions);
 			m_listThumbnails.VirtualListSize = ImageInfo.AllImages.Count;
 			OpenImage(ImageInfo.ImageInfo);
 
@@ -496,6 +499,8 @@ namespace MeditationStopWatch
 		private void EnsureVisible()
 		{
 			int idx = ImageInfo.IndexOf(ImageInfo.ImageInfo);
+			if (idx < 0)
+				return;
 			m_listThumbnails.Items[idx].Selected = true;
 			m_listThumbnails.EnsureVisible(idx);
 		}
