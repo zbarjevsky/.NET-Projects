@@ -60,3 +60,5 @@ MessageBox/Binaries/MZ.WPF.MessageBox.dll
 /Binaries/DashCamGPSView
 /YouTubeDownload/.vs/YouTubeDownload/v16/Server/sqlite3
 /MeditationStopWatch/.vs/MeditationStopWatch/v16/Server/sqlite3
+/DesktopManager/.vs/DesktopManager/v16/Server/sqlite3
+/RulerWPF/.vs/RulerWPF/v16/Server/sqlite3
