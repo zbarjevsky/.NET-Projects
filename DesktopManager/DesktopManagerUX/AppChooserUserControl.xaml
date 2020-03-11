@@ -12,17 +12,17 @@
 
         <Label x:Name="txtInfo" Content="Select Application" Foreground="Red" FontSize="16" />
 
-        <Border>
+        <Border BorderThickness="2" BorderBrush="Yellow" CornerRadius="5"
+                Margin="20" Padding="2" MinWidth="200" 
+                HorizontalAlignment="Center" VerticalAlignment="Center">
             <Border.Effect>
                 <DropShadowEffect BlurRadius="10" Opacity="0.7" Direction="280" />
             </Border.Effect>
-            <ComboBox x:Name="cmbApps" SelectionChanged="cmbApps_SelectionChanged"
-                      Margin="20" MinWidth="200" MinHeight="40" MaxWidth="400" MaxHeight="120" 
-                      HorizontalAlignment="Right" VerticalAlignment="Top">
+            <ComboBox x:Name="cmbApps" SelectionChanged="cmbApps_SelectionChanged" FontSize="14" >
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Rectangle Fill="{Binding Color}" Width="16" Height="16" Margin="0,2,5,2" />
+                            <Image Source="{Binding Icon}" Width="16" Height="16" Margin="0,2,5,2" />
                             <TextBlock Text="{Binding Name}" />
                         </StackPanel>
                     </DataTemplate>

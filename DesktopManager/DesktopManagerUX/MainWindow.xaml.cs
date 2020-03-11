@@ -73,6 +73,8 @@ namespace DesktopManagerUX
                     Apply(row, col, bounds);
                 }
             }
+
+            this.Activate();
         }
 
         private void Apply(int row, int col, Rect bounds)
@@ -84,7 +86,7 @@ namespace DesktopManagerUX
             int rows = _VM.AppChoosers.GetLength(0);
             int cols = _VM.AppChoosers.GetLength(1);
 
-            double width = bounds.Width / cols;
+            double width = 7 + bounds.Width / cols;
             double height = bounds.Height / rows;
 
             double left = bounds.Left + col * width;

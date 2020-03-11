@@ -10,7 +10,7 @@ namespace DesktopManagerUX.Utils
     //https://stackoverflow.com/questions/6450223/windows-aero-peek-api
     //InvokeAeroPeek(enterPeekMode, target, caller, pType, new IntPtr(32), 0x3244);
 
-    class AeroPeek
+    public class AeroPeek
     {
         ///<summary>
         /// These flags are used in conjunction with the Aero Peek API.

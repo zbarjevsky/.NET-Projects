@@ -46,11 +46,16 @@ namespace DesktopManagerUX
 
         private void cmbApps_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (!HasSelection) 
-                return;
-
-             imagePreview.Source = Logic.CaptureApplication(SelectedApp.Process, _VM.DPI);
-            txtInfo.Content = imagePreview.Source.Width + "x" + imagePreview.Source.Height;
+            if (HasSelection)
+            {
+                imagePreview.Source = Logic.CaptureApplication(SelectedApp.Process, _VM.DPI);
+                txtInfo.Content = imagePreview.Source.Width + "x" + imagePreview.Source.Height;
+            }
+            else
+            {
+                imagePreview.Source = null;
+                txtInfo.Content = "Select Application";
+            }
         }
 
         private int FindApp(string title)

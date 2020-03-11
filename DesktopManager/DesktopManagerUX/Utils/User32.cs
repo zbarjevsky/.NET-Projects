@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -39,6 +40,29 @@ namespace DesktopManagerUX.Utils
             public Int32 y;
         }
 
+        //http://kenneththorman.blogspot.com/2010/08/c-net-active-windows-size-helper.html
+        [StructLayout(LayoutKind.Sequential)]
+        public struct WINDOWINFO
+        {
+            public uint cbSize;
+            public RECT rcWindow;
+            public RECT rcClient;
+            public uint dwStyle;
+            public uint dwExStyle;
+            public uint dwWindowStatus;
+            public uint cxWindowBorders;
+            public uint cyWindowBorders;
+            public ushort atomWindowType;
+            public ushort wCreatorVersion;
+
+            public WINDOWINFO(Boolean? filler)
+             : this()   // Allows automatic initialization of "cbSize" with "new WINDOWINFO(null/true/false)".
+            {
+                cbSize = (UInt32)(Marshal.SizeOf(typeof(WINDOWINFO)));
+            }
+
+        }
+
         [DllImport("user32.dll")]
         public static extern IntPtr GetWindowRect(IntPtr hWnd, ref RECT rect);
         [DllImport("user32.dll")]
@@ -52,6 +76,34 @@ namespace DesktopManagerUX.Utils
         [DllImport("User32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool PrintWindow(IntPtr hwnd, IntPtr hDC, uint nFlags);
+
+        /// <summary>
+        /// Gets the window info.
+        /// </summary>
+        /// <param name="hwnd">The HWND.</param>
+        /// <param name="pwi">The pwi.</param>
+        /// <returns></returns>
+        [return: MarshalAs(UnmanagedType.Bool)]
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool GetWindowInfo(IntPtr hwnd, ref WINDOWINFO pwi);
+
+        public static WINDOWINFO GetWindowInfo(IntPtr hWnd)
+        {
+            WINDOWINFO pwi = new WINDOWINFO();
+            if (GetWindowInfo(hWnd, ref pwi))
+                return pwi;
+            return new WINDOWINFO();
+        }
+
+        /// <summary>
+        /// Gets the window text.
+        /// </summary>
+        /// <param name="hWnd">The h WND.</param>
+        /// <param name="text">The text.</param>
+        /// <param name="count">The count.</param>
+        /// <returns></returns>
+        [DllImport("user32.dll")]
+        public static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
 
         public struct WINDOWPLACEMENT
         {
@@ -120,9 +172,27 @@ namespace DesktopManagerUX.Utils
         {
             PROCESS_DPI_UNAWARE = 0,
             PROCESS_SYSTEM_DPI_AWARE = 1,
-            PROCESS_PER_MONITOR_DPI_AWARE = 2
+            PROCESS_PER_MONITOR_DPI_AWARE = 2,
+            PROCESS_DPI_ERROR = 3
         }
-        [DllImport("Shcore.dll")]
-        public static extern int GetProcessDpiAwareness(IntPtr hprocess, out PROCESS_DPI_AWARENESS value);
+        [DllImport("Shcore.dll", SetLastError = true)]
+        private static extern int GetProcessDpiAwareness(IntPtr hprocess, out PROCESS_DPI_AWARENESS value);
+
+        public static PROCESS_DPI_AWARENESS GetProcessDpiAwareness(IntPtr hprocess)
+        {
+            PROCESS_DPI_AWARENESS pda = PROCESS_DPI_AWARENESS.PROCESS_DPI_UNAWARE;
+            if(GetProcessDpiAwareness(hprocess, out pda) != 0)
+            {
+                int error = Marshal.GetLastWin32Error();
+                var exception = new System.ComponentModel.Win32Exception(error);
+                Debug.WriteLine("ERROR: " + error + ": " + exception.Message);
+                return PROCESS_DPI_AWARENESS.PROCESS_DPI_ERROR;
+            }
+            return pda;
+        }
+
+        [DllImport("SHCore.dll", SetLastError = true)]
+        private static extern bool SetProcessDpiAwareness(PROCESS_DPI_AWARENESS awareness);
+
     }
 }

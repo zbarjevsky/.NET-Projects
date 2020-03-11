@@ -17,7 +17,7 @@ namespace DesktopManagerUX
     public class Logic
     {
 
-        public static List<AppInfo> ListTasks()
+        public static List<AppInfo> GetProcessesWithUI()
         {
             Process[] processes = Process.GetProcesses();
             List<Process> pp = Process.GetProcesses().Where(p => !string.IsNullOrEmpty(p.MainWindowTitle)).ToList();
@@ -59,16 +59,13 @@ namespace DesktopManagerUX
 
         public static BitmapSource CaptureApplication(Process process, System.Windows.Point DPI)
         {
-            User32.RECT rect = User32.RestoreWindow(process.MainWindowHandle);
+            User32.RestoreWindow(process.MainWindowHandle); //to get snapshot
 
-            //User32.PROCESS_DPI_AWARENESS value;
-            //int result = User32.GetProcessDpiAwareness(process.Handle, out value);
+            User32.PROCESS_DPI_AWARENESS pda = User32.GetProcessDpiAwareness(process.Handle);
 
-            //var rect = new User32.RECT();
-            //User32.GetWindowRect(process.MainWindowHandle, ref rect);
-
-            int width = (int)((rect.right - rect.left));// / DPI.X);
-            int height = (int)((rect.bottom - rect.top));// / DPI.Y);
+            User32.WINDOWINFO wi = User32.GetWindowInfo(process.MainWindowHandle);
+            int width = (int)((wi.rcWindow.right - wi.rcWindow.left));// / DPI.X);
+            int height = (int)((wi.rcWindow.bottom - wi.rcWindow.top));// / DPI.Y);
 
             using (Bitmap bmp = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
             {
@@ -76,16 +73,14 @@ namespace DesktopManagerUX
                 {
                     graphics.Clear(Color.Wheat);
 
-                    //graphics.CopyFromScreen(rect.left, rect.top, 0, 0, new Size(width, height), CopyPixelOperation.SourceCopy);
                     IntPtr hdc = graphics.GetHdc();
                     if (!User32.PrintWindow(process.MainWindowHandle, hdc, User32.PW_RENDERFULLCONTENT))// User32.PW_CLIENTONLY))
                     {
                         int error = Marshal.GetLastWin32Error();
                         var exception = new System.ComponentModel.Win32Exception(error);
                         Debug.WriteLine("ERROR: " + error + ": " + exception.Message);
-                        // TODO: Throw the exception?
-                        return null;
                     }
+
                     graphics.ReleaseHdc(hdc);
                     graphics.Dispose();
                 }
@@ -94,17 +89,24 @@ namespace DesktopManagerUX
                 BitmapSource b = GetImageSourceFromBitmap(bmp);
                 return b;
             }
+        }
 
+        public static BitmapSource GetImageSourceFromIcon(Icon ico)
+        {
+            using (Bitmap bmp = ico.ToBitmap())
+            {
+                return GetImageSourceFromBitmap(bmp);
+            }
         }
 
         public static BitmapSource GetImageSourceFromBitmap(Bitmap bmp)
         {
-            BitmapSource bs = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
+            BitmapSource src = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
                                   bmp.GetHbitmap(),
                                   IntPtr.Zero,
                                   System.Windows.Int32Rect.Empty,
                                   BitmapSizeOptions.FromWidthAndHeight(bmp.Width, bmp.Height));
-            return bs;
+            return src;
         }
     }
 }

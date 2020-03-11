@@ -14,7 +14,7 @@ namespace DesktopManagerUX
     {
         private MainWindow _wnd;
 
-        public List<AppInfo> Apps { get; set; } = Logic.ListTasks();
+        public List<AppInfo> Apps { get; set; } = Logic.GetProcessesWithUI();
 
         public AppChooserUserControl[,] AppChoosers = new AppChooserUserControl[2,2];
 

@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 
 namespace DesktopManagerUX
 {
@@ -16,11 +17,14 @@ namespace DesktopManagerUX
     public class AppInfo
     {
         private Process p;
-
+        
         public AppInfo(Process p)
         {
             this.p = p;
             Name = p.MainWindowTitle + " (" + p.ProcessName + ")";
+
+            System.Drawing.Icon ico = System.Drawing.Icon.ExtractAssociatedIcon(p.MainModule.FileName);
+            Icon = Logic.GetImageSourceFromIcon(ico);
         }
 
         public AppInfo()
@@ -34,11 +38,12 @@ namespace DesktopManagerUX
         public Process Process { get { return p; } private set { p = value; } }
         public string Name { get; private set;}
         public SolidColorBrush Color { get; set; } = Brushes.AliceBlue;
+        public BitmapSource Icon { get; }
     }
 
     public class DisplayInfo
     {
-        public string Name { get { return screen.DeviceName + " - " + Bounds.ToString(); } }
+        public string Name { get { return screen.DeviceName + " - " + Bounds.Width + "x" + Bounds.Height; } }
         public System.Windows.Rect Bounds { get { return screen.WorkingArea; } }
 
         public SolidColorBrush Color { get; } = Brushes.Yellow;
