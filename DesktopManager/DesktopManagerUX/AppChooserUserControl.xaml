@@ -11,7 +11,9 @@
 
             <Image  x:Name="imagePreview" Stretch="Fill"/>
 
-            <Label x:Name="txtInfo" Content="Select Application" Foreground="Red" FontSize="16" />
+            <Label x:Name="txtInfo" Content="Select Application" 
+                   VerticalAlignment="Top" HorizontalAlignment="Left" Opacity="0.7"
+                   Foreground="Navy" Background="AliceBlue" FontSize="16" />
 
             <Border BorderThickness="2" BorderBrush="Yellow" CornerRadius="5"
                     Margin="20" Padding="2" MinWidth="200" 

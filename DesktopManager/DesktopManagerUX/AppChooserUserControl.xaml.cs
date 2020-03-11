@@ -53,7 +53,10 @@ namespace DesktopManagerUX
             if (HasSelection)
             {
                 imagePreview.Source = Logic.CaptureApplication(SelectedApp.Process, _VM.DPI);
-                txtInfo.Content = imagePreview.Source.Width + "x" + imagePreview.Source.Height;
+                if (imagePreview.Source != null)
+                    txtInfo.Content = "Current Size: " + imagePreview.Source.Width + "x" + imagePreview.Source.Height;
+                else
+                    txtInfo.Content = "Select Another Application";
             }
             else
             {

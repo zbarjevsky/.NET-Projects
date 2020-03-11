@@ -96,6 +96,9 @@ namespace DesktopManagerUX
             int width = (int)((wi.rcWindow.right - wi.rcWindow.left));// / DPI.X);
             int height = (int)((wi.rcWindow.bottom - wi.rcWindow.top));// / DPI.Y);
 
+            if (width == 0 || height == 0)
+                return null;
+
             using (Bitmap bmp = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format32bppArgb))
             {
                 using (Graphics graphics = Graphics.FromImage(bmp))
