@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         MinWidth="800" MinHeight="600"
+        Closed="Window_Closed"
         Title="Desktop Manager" Width="1920" Height="1080">
     <Grid>
         <Grid.RowDefinitions>
@@ -24,18 +25,28 @@
                 <ComboBoxItem>2x2</ComboBoxItem>
                 <ComboBoxItem>2x3</ComboBoxItem>
             </ComboBox>
+            <ComboBox x:Name="cmbDisplays" Width="200" Margin="6,0,6,0">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Rectangle Fill="{Binding Color}" Width="16" Height="16" Margin="0,2,5,2" />
+                            <TextBlock Text="{Binding Name}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
             <Button Margin="10,0" Click="Apply_Click">Apply</Button>
         </StackPanel>
-        <Border Grid.Row="1" Grid.Column="0" BorderThickness="3" BorderBrush="AliceBlue">
+        <Border Grid.Row="1" Grid.Column="0" BorderThickness="3" BorderBrush="Navy">
             <local:AppChooserUserControl x:Name="app0x0"/>
         </Border>
-        <Border Grid.Row="1" Grid.Column="1" BorderThickness="0,3,3,3" BorderBrush="AliceBlue">
+        <Border Grid.Row="1" Grid.Column="1" BorderThickness="0,3,3,3" BorderBrush="Navy">
             <local:AppChooserUserControl x:Name="app0x1"/>
         </Border>
-        <Border Grid.Row="2" Grid.Column="0" BorderThickness="3,0,3,3" BorderBrush="AliceBlue">
+        <Border Grid.Row="2" Grid.Column="0" BorderThickness="3,0,3,3" BorderBrush="Navy">
             <local:AppChooserUserControl x:Name="app1x0"/>
         </Border>
-        <Border Grid.Row="2" Grid.Column="1" BorderThickness="0,0,3,3" BorderBrush="AliceBlue">
+        <Border Grid.Row="2" Grid.Column="1" BorderThickness="0,0,3,3" BorderBrush="Navy">
             <local:AppChooserUserControl x:Name="app1x1"/>
         </Border>
     </Grid>

@@ -6,21 +6,28 @@
              xmlns:local="clr-namespace:DesktopManagerUX"
              mc:Ignorable="d" 
              d:DesignHeight="540" d:DesignWidth="960">
-    <Grid>
-        <Grid.Background>
-            <ImageBrush/>
-        </Grid.Background>
-        <ComboBox x:Name="cmbApps" 
-                  Margin="20" MinWidth="200" MinHeight="40" MaxWidth="400" MaxHeight="120" 
-                  HorizontalAlignment="Center" VerticalAlignment="Top">
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <Rectangle Fill="{Binding Color}" Width="16" Height="16" Margin="0,2,5,2" />
-                        <TextBlock Text="{Binding Name}" />
-                    </StackPanel>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
+    <Grid x:Name="gridMain">
+
+        <Image  x:Name="imagePreview" Stretch="Uniform"/>
+
+        <Label x:Name="txtInfo" Content="Select Application" Foreground="Red" FontSize="16" />
+
+        <Border>
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="10" Opacity="0.7" Direction="280" />
+            </Border.Effect>
+            <ComboBox x:Name="cmbApps" SelectionChanged="cmbApps_SelectionChanged"
+                      Margin="20" MinWidth="200" MinHeight="40" MaxWidth="400" MaxHeight="120" 
+                      HorizontalAlignment="Right" VerticalAlignment="Top">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Rectangle Fill="{Binding Color}" Width="16" Height="16" Margin="0,2,5,2" />
+                            <TextBlock Text="{Binding Name}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </Border>
     </Grid>
 </UserControl>
