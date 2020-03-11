@@ -29,12 +29,16 @@ namespace DesktopManagerUX
             InitializeComponent();
         }
 
-        public void SetVM(ViewModel vm, string selectedTitle)
+        public void Init(ViewModel vm, int row, int col)
         {
             _VM = vm;
             this.DataContext = vm;
             cmbApps.ItemsSource = vm.Apps;
+
+            string selectedTitle = Logic.SettingGet(row, col);
             cmbApps.SelectedIndex = FindApp(selectedTitle);
+
+            borderMain.BorderThickness = ThicknessFromRowCol(row, col);
         }
 
         public bool HasSelection { get { return cmbApps.SelectedIndex > 0 && cmbApps.SelectedIndex < _VM.Apps.Count; } }
@@ -74,6 +78,21 @@ namespace DesktopManagerUX
                     return i;
             }
             return 0;
+        }
+
+        private Thickness ThicknessFromRowCol(int row, int col)
+        {
+            int rows = _VM.AppChoosers.GetLength(0);
+            int cols = _VM.AppChoosers.GetLength(1);
+
+            const double thin = 1, thick = 3;
+
+            double left = (col == 0) ? thick: thin;
+            double right = (col == cols-1) ? thick : thin;
+            double top = (row == 0) ? thick : thin;
+            double bottom = (row == rows - 1) ? thick: thin;
+
+            return new Thickness(left, top, right, bottom);
         }
     }
 }

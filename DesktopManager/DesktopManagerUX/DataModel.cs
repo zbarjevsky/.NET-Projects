@@ -43,16 +43,41 @@ namespace DesktopManagerUX
 
     public class DisplayInfo
     {
-        public string Name { get { return screen.DeviceName + " - " + Bounds.Width + "x" + Bounds.Height; } }
+        public int Index { get; }
+        public string Name { get { return Index + " - " + Bounds.Width + "x" + Bounds.Height + (screen.IsPrimary?" (Primary)":""); } }
         public System.Windows.Rect Bounds { get { return screen.WorkingArea; } }
 
         public SolidColorBrush Color { get; } = Brushes.Yellow;
 
         private WpfScreen screen;
 
-        public DisplayInfo(WpfScreen screen)
+        public DisplayInfo(WpfScreen screen, int index)
         {
+            Index = index;
             this.screen = screen;
         }
+    }
+
+    public class AppChooserData
+    {
+        public AppChooserUserControl AppChooser;
+        public string AppTitle;
+    }
+
+    public class AppChoosersGrid
+    {
+        private AppChooserData[,] AppChoosers;
+
+        public AppChoosersGrid(int rows, int cols)
+        {
+            AppChoosers = new AppChooserData[rows, cols];
+        }
+
+        public AppChooserData this[int row, int col]
+        {
+            get { return AppChoosers[row, col]; }
+            set { AppChoosers[row, col] = value; }
+        }
+
     }
 }

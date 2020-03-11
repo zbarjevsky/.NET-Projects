@@ -7,21 +7,19 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         MinWidth="800" MinHeight="600"
+        LocationChanged="Window_LocationChanged"
         Closed="Window_Closed"
         Title="Desktop Manager" Width="1920" Height="1080">
-    <Grid>
+    <Grid x:Name="gridMain">
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
             <RowDefinition/>
-            <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
         <StackPanel Orientation="Horizontal" Margin="6">
-            <ComboBox Width="200" SelectedIndex="1">
+            <ComboBox x:Name="cmbGridSize" Width="200" SelectedIndex="1"
+                      SelectionChanged="cmbGridSize_SelectionChanged">
                 <ComboBoxItem>2x1</ComboBoxItem>
+                <ComboBoxItem>1x2</ComboBoxItem>
                 <ComboBoxItem>2x2</ComboBoxItem>
                 <ComboBoxItem>2x3</ComboBoxItem>
             </ComboBox>
@@ -37,17 +35,28 @@
             </ComboBox>
             <Button Margin="10,0" Click="Apply_Click">Apply</Button>
         </StackPanel>
-        <Border Grid.Row="1" Grid.Column="0" BorderThickness="3" BorderBrush="Navy">
-            <local:AppChooserUserControl x:Name="app0x0"/>
-        </Border>
-        <Border Grid.Row="1" Grid.Column="1" BorderThickness="0,3,3,3" BorderBrush="Navy">
-            <local:AppChooserUserControl x:Name="app0x1"/>
-        </Border>
-        <Border Grid.Row="2" Grid.Column="0" BorderThickness="3,0,3,3" BorderBrush="Navy">
-            <local:AppChooserUserControl x:Name="app1x0"/>
-        </Border>
-        <Border Grid.Row="2" Grid.Column="1" BorderThickness="0,0,3,3" BorderBrush="Navy">
-            <local:AppChooserUserControl x:Name="app1x1"/>
-        </Border>
+        
+        <Grid x:Name="gridApps" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Border Grid.Row="0" Grid.Column="0" BorderThickness="3" BorderBrush="Navy">
+                <local:AppChooserUserControl x:Name="app0x0"/>
+            </Border>
+            <Border Grid.Row="0" Grid.Column="1" BorderThickness="0,3,3,3" BorderBrush="Navy">
+                <local:AppChooserUserControl x:Name="app0x1"/>
+            </Border>
+            <Border Grid.Row="1" Grid.Column="0" BorderThickness="3,0,3,3" BorderBrush="Navy">
+                <local:AppChooserUserControl x:Name="app1x0"/>
+            </Border>
+            <Border Grid.Row="1" Grid.Column="1" BorderThickness="0,0,3,3" BorderBrush="Navy">
+                <local:AppChooserUserControl x:Name="app1x1"/>
+            </Border>
+        </Grid>
     </Grid>
 </Window>

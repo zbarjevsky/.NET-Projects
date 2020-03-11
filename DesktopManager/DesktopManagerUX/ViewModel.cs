@@ -16,18 +16,28 @@ namespace DesktopManagerUX
 
         public List<AppInfo> Apps { get; set; } = Logic.GetProcessesWithUI();
 
-        public AppChooserUserControl[,] AppChoosers = new AppChooserUserControl[2,2];
+        public AppChooserUserControl[,] AppChoosers = new AppChooserUserControl[2, 2];
 
         public ViewModel(MainWindow wnd)
         {
             _wnd = wnd;
+
+            //if version changed - settings location changed - get settings from previous location/version
+            if (Properties.Settings.Default.UpgradeNeeded)
+            {
+                Properties.Settings.Default.Upgrade();
+                Properties.Settings.Default.UpgradeNeeded = false;
+                Properties.Settings.Default.Save();
+                Properties.Settings.Default.Reload();
+            }
         }
 
-        public void AddAppChooser(AppChooserUserControl ctrl, int row, int col, string selectedTitle)
-        {
-            AppChoosers[row,col] = ctrl;
-            ctrl.SetVM(this, selectedTitle);
-        }
+        //public void AddAppChooser(AppChooserUserControl ctrl, int row, int col)
+        //{
+        //    string selectedTitle = AppChoosersGrid.GetSetting(row, col);
+        //    AppChoosers[row,col] = ctrl;
+        //    ctrl.SetVM(this, selectedTitle);
+        //}
 
         public System.Windows.Point DPI
         {

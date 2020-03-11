@@ -10,12 +10,14 @@ namespace DesktopManagerUX.Utils
 {
     public class WpfScreen
     {
-        public static IEnumerable<WpfScreen> AllScreens()
+        public static List<WpfScreen> AllScreens()
         {
+            List<WpfScreen> screens = new List<WpfScreen>();
             foreach (System.Windows.Forms.Screen screen in System.Windows.Forms.Screen.AllScreens)
             {
-                yield return new WpfScreen(screen);
+                screens.Add(new WpfScreen(screen));
             }
+            return screens;
         }
 
         public static WpfScreen GetScreenFrom(Window window)

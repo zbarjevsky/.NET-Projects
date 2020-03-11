@@ -16,7 +16,6 @@ namespace DesktopManagerUX
 {
     public class Logic
     {
-
         public static List<AppInfo> GetProcessesWithUI()
         {
             Process[] processes = Process.GetProcesses();
@@ -34,9 +33,10 @@ namespace DesktopManagerUX
         public static List<DisplayInfo> GetDisplays()
         {
             List<DisplayInfo> list = new List<DisplayInfo>();
-            foreach (WpfScreen screen in WpfScreen.AllScreens())
+            List<WpfScreen> screens = WpfScreen.AllScreens();
+            for (int i=0; i<screens.Count; i++)
             {
-                list.Add(new DisplayInfo(screen));
+                list.Add(new DisplayInfo(screens[i], i));
             }
             return list;
         }
@@ -51,11 +51,40 @@ namespace DesktopManagerUX
             }
         }
 
-        public static double SystemScale
+        public static string SettingGet(int row, int col)
         {
-            get { return SystemParameters.VirtualScreenHeight / SystemParameters.PrimaryScreenHeight; }
+            if (row == 0 && col == 0)
+                return Properties.Settings.Default.AppTitle0x0;
+            if (row == 0 && col == 1)
+                return Properties.Settings.Default.AppTitle0x1;
+            if (row == 0 && col == 2)
+                return Properties.Settings.Default.AppTitle0x2;
+            if (row == 1 && col == 0)
+                return Properties.Settings.Default.AppTitle1x0;
+            if (row == 1 && col == 1)
+                return Properties.Settings.Default.AppTitle1x1;
+            if (row == 1 && col == 2)
+                return Properties.Settings.Default.AppTitle1x2;
+            return null;
         }
 
+        public static void SettingSave(string appTitle, int row, int col)
+        {
+            if (row == 0 && col == 0)
+                Properties.Settings.Default.AppTitle0x0 = appTitle;
+            if (row == 0 && col == 1)
+                Properties.Settings.Default.AppTitle0x1 = appTitle;
+            if (row == 0 && col == 2)
+                Properties.Settings.Default.AppTitle0x2 = appTitle;
+            if (row == 1 && col == 0)
+                Properties.Settings.Default.AppTitle1x0 = appTitle;
+            if (row == 1 && col == 1)
+                Properties.Settings.Default.AppTitle1x1 = appTitle;
+            if (row == 1 && col == 2)
+                Properties.Settings.Default.AppTitle1x2 = appTitle;
+
+            Properties.Settings.Default.Save();
+        }
 
         public static BitmapSource CaptureApplication(Process process, System.Windows.Point DPI)
         {

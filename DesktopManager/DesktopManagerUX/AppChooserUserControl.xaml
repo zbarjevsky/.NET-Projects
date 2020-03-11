@@ -6,28 +6,30 @@
              xmlns:local="clr-namespace:DesktopManagerUX"
              mc:Ignorable="d" 
              d:DesignHeight="540" d:DesignWidth="960">
-    <Grid x:Name="gridMain">
+    <Border x:Name="borderMain" BorderThickness="1" BorderBrush="Goldenrod">
+        <Grid x:Name="gridMain">
 
-        <Image  x:Name="imagePreview" Stretch="Uniform"/>
+            <Image  x:Name="imagePreview" Stretch="Fill"/>
 
-        <Label x:Name="txtInfo" Content="Select Application" Foreground="Red" FontSize="16" />
+            <Label x:Name="txtInfo" Content="Select Application" Foreground="Red" FontSize="16" />
 
-        <Border BorderThickness="2" BorderBrush="Yellow" CornerRadius="5"
-                Margin="20" Padding="2" MinWidth="200" 
-                HorizontalAlignment="Center" VerticalAlignment="Center">
-            <Border.Effect>
-                <DropShadowEffect BlurRadius="10" Opacity="0.7" Direction="280" />
-            </Border.Effect>
-            <ComboBox x:Name="cmbApps" SelectionChanged="cmbApps_SelectionChanged" FontSize="14" >
-                <ComboBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <Image Source="{Binding Icon}" Width="16" Height="16" Margin="0,2,5,2" />
-                            <TextBlock Text="{Binding Name}" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ComboBox.ItemTemplate>
-            </ComboBox>
-        </Border>
-    </Grid>
+            <Border BorderThickness="2" BorderBrush="Yellow" CornerRadius="5"
+                    Margin="20" Padding="2" MinWidth="200" 
+                    HorizontalAlignment="Center" VerticalAlignment="Center">
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="10" Opacity="0.7" Direction="280" />
+                </Border.Effect>
+                <ComboBox x:Name="cmbApps" SelectionChanged="cmbApps_SelectionChanged" FontSize="14" >
+                    <ComboBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="{Binding Icon}" Width="16" Height="16" Margin="0,2,5,2" />
+                                <TextBlock Text="{Binding Name}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ComboBox.ItemTemplate>
+                </ComboBox>
+            </Border>
+        </Grid>
+    </Border>
 </UserControl>
