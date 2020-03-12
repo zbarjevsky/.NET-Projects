@@ -62,6 +62,7 @@
     <Compile Include="DataModel.cs" />
     <Compile Include="Logic.cs" />
     <Compile Include="Utils\AeroPeek.cs" />
+    <Compile Include="Utils\DesktopWindowManager.cs" />
     <Compile Include="Utils\User32.cs" />
     <Compile Include="Utils\WpfScreen.cs" />
     <Compile Include="ViewModel.cs" />

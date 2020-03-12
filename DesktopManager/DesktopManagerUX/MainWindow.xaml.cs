@@ -50,8 +50,8 @@ namespace DesktopManagerUX
             Rect bounds = screen.WorkingArea;
             if (this.ActualWidth > bounds.Width || this.ActualHeight > bounds.Height)
             {
-                this.Width = bounds.Width / 2;
-                this.Height = bounds.Height / 2;
+                //this.Width = bounds.Width / 2;
+                //this.Height = bounds.Height / 2;
             }
         }
 
@@ -92,11 +92,16 @@ namespace DesktopManagerUX
             int rows = _VM.AppChoosers.GetLength(0);
             int cols = _VM.AppChoosers.GetLength(1);
 
-            double width = 7 + bounds.Width / cols;
-            double height = bounds.Height / rows;
+            double width = 3 + bounds.Width / cols;
+            double height = 3 + bounds.Height / rows;
 
             double left = bounds.Left + col * width;
             double top = bounds.Top + row * height;
+
+            if (col == 0)
+                left += 3;
+            if (col == cols - 1)
+                left -= 7;
 
             Logic.MoveWindow(app.Process, left, top, width, height);
             Logic.SettingSave(app.Name, row, col);
