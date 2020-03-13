@@ -24,6 +24,9 @@ namespace DesktopManagerUX
     {
         private ViewModel _VM = null;
 
+        public int Row { get; private set; }
+        public int Col { get; private set; }
+
         public AppChooserUserControl()
         {
             InitializeComponent();
@@ -34,6 +37,8 @@ namespace DesktopManagerUX
             _VM = vm;
             this.DataContext = vm;
             cmbApps.ItemsSource = vm.Apps;
+            Row = row;
+            Col = col;
 
             string selectedTitle = Logic.SettingGet(row, col);
             cmbApps.SelectedIndex = AppInfo.FindApp(selectedTitle, _VM.Apps);
@@ -57,13 +62,14 @@ namespace DesktopManagerUX
                     txtInfo.Content = "Current Size: " + imagePreview.Source.Width + "x" + imagePreview.Source.Height;
                 else
                     txtInfo.Content = "Select Another Application";
-                
-                //Logic.SettingSave()
+
+                Logic.SettingSave(SelectedApp.Title, Row, Col);
             }
             else
             {
                 imagePreview.Source = null;
-                txtInfo.Content = "Select Window";
+                txtInfo.Content = "? Select Window ?";
+                Logic.SettingSave("", Row, Col);
             }
         }
 

@@ -17,15 +17,8 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Margin="6">
-            <Button x:Name="btnRefresh" Content="Refresh" Margin="4,0"
+            <Button x:Name="btnRefresh" Content="Refresh" Margin="4,0" Padding="4"
                     Click="btnRefresh_Click"/>
-            <ComboBox x:Name="cmbGridSize" Width="200" SelectedIndex="1"
-                      SelectionChanged="cmbGridSize_SelectionChanged">
-                <ComboBoxItem>2x1</ComboBoxItem>
-                <ComboBoxItem>1x2</ComboBoxItem>
-                <ComboBoxItem>2x2</ComboBoxItem>
-                <ComboBoxItem>2x3</ComboBoxItem>
-            </ComboBox>
             <ComboBox x:Name="cmbDisplays" Width="200" Margin="6,0,6,0">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
@@ -36,7 +29,15 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
-            <Button Margin="10,0" Click="Apply_Click">Apply</Button>
+            <ComboBox x:Name="cmbGridSize" SelectedIndex="1" VerticalContentAlignment="Center"
+                      SelectionChanged="cmbGridSize_SelectionChanged">
+                <ComboBoxItem>2x1</ComboBoxItem>
+                <ComboBoxItem>1x2</ComboBoxItem>
+                <ComboBoxItem>2x2</ComboBoxItem>
+                <ComboBoxItem>2x3</ComboBoxItem>
+            </ComboBox>
+            <Button Margin="10,0" Padding="4" Click="Apply_Click">Apply</Button>
+            <Button Margin="10,0" Padding="4" Click="CloseSelected_Click">Close Selected</Button>
         </StackPanel>
         
         <Grid x:Name="gridApps" Grid.Row="1">

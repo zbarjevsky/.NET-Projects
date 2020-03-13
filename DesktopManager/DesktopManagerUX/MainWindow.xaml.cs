@@ -87,7 +87,10 @@ namespace DesktopManagerUX
         {
             AppInfo app = _VM.AppChoosers[row, col].SelectedApp;
             if (app == null)
+            {
+                Logic.SettingSave("", row, col);
                 return;
+            }
 
             int rows = _VM.AppChoosers.GetLength(0);
             int cols = _VM.AppChoosers.GetLength(1);
@@ -157,6 +160,24 @@ namespace DesktopManagerUX
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
             RebuildAppsGrid();
+        }
+
+        private void CloseSelected_Click(object sender, RoutedEventArgs e)
+        {
+            int rows = _VM.AppChoosers.GetLength(0);
+            int cols = _VM.AppChoosers.GetLength(1);
+            for (int row = 0; row < rows; row++)
+            {
+                for (int col = 0; col < cols; col++)
+                {
+                    AppInfo app = _VM.AppChoosers[row, col].SelectedApp;
+                    if (app == null)
+                        continue;
+
+                    User32.CloseWindow(app.HWND);
+                }
+            }
+            this.Activate();
         }
     }
 }

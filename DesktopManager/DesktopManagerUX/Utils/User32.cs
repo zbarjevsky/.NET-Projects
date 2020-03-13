@@ -20,6 +20,8 @@ namespace DesktopManagerUX.Utils
         public const uint SW_SHOWMINNOACTIVE = 7;
         public const uint SW_SHOWMINIMIZED = 2;
 
+        public const UInt32 WM_CLOSE = 0x0010;
+
         //Print Window
         public const uint PW_CLIENTONLY = 1;
         public const uint PW_RENDERFULLCONTENT = 0x00000002;
@@ -63,6 +65,8 @@ namespace DesktopManagerUX.Utils
 
         }
 
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        private static extern IntPtr SendMessage(IntPtr hWnd, UInt32 Msg, IntPtr wParam, IntPtr lParam);
         [DllImport("user32.dll")]
         public static extern IntPtr GetWindowRect(IntPtr hWnd, ref RECT rect);
         [DllImport("user32.dll")]
@@ -76,6 +80,11 @@ namespace DesktopManagerUX.Utils
         [DllImport("User32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool PrintWindow(IntPtr hwnd, IntPtr hDC, uint nFlags);
+
+        public static void CloseWindow(IntPtr hwnd)
+        {
+            SendMessage(hwnd, WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
+        }
 
         /// <summary>
         /// Gets the window info.
