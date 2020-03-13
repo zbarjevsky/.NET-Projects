@@ -57,6 +57,8 @@ namespace DesktopManagerUX
                     txtInfo.Content = "Current Size: " + imagePreview.Source.Width + "x" + imagePreview.Source.Height;
                 else
                     txtInfo.Content = "Select Another Application";
+                
+                //Logic.SettingSave()
             }
             else
             {

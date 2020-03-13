@@ -63,15 +63,21 @@ namespace DesktopManagerUX
 
             string processInTitle = title.Substring(pos + 1, end - pos - 1);
 
+            //search first by title
             for (int i = 1; i < apps.Count; i++)
             {
                 if (title == apps[i].Title)
                     return i;
+            }
 
+            //then by process name
+            for (int i = 1; i < apps.Count; i++)
+            {
                 string processName = apps[i].ProcessName;
                 if (processInTitle == processName)
                     return i;
             }
+
             return 0;
         }
 
