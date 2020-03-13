@@ -18,14 +18,18 @@ namespace DesktopManagerUX
     {
         public static List<AppInfo> GetProcessesWithUI()
         {
-            Process[] processes = Process.GetProcesses();
-            List<Process> pp = Process.GetProcesses().Where(p => !string.IsNullOrEmpty(p.MainWindowTitle)).ToList();
-
             List<AppInfo> apps = new List<AppInfo>();
-            apps.Add(AppInfo.GetEmptyAppInfo());
+            //apps.Add(AppInfo.GetEmptyAppInfo());
+            apps.AddRange(EnumOpenWindows.GetOpenWindows());
+            apps.Sort((a1, a2) => string.Compare(a1.ProcessName, a2.ProcessName, true));
+            apps.Insert(0, AppInfo.GetEmptyAppInfo());
 
-            foreach (Process p in pp)
-                apps.Add(new AppInfo(p));
+            //Process[] processes = Process.GetProcesses();
+            //List<Process> pp = processes.Where(p => !string.IsNullOrEmpty(p.MainWindowTitle)).ToList();
+            //pp = processes.Where(p => p.MainWindowHandle != IntPtr.Zero).ToList();
+
+            //foreach (Process p in pp)
+            //    apps.Add(new AppInfo(p));
 
             return apps;
         }
@@ -41,13 +45,13 @@ namespace DesktopManagerUX
             return list;
         }
 
-        public static void MoveWindow(Process p, double X, double Y, double nWidth, double nHeight)
+        public static void MoveWindow(IntPtr hWnd, double X, double Y, double nWidth, double nHeight)
         {
-            if (p != null && !p.HasExited)
+            if (hWnd != IntPtr.Zero)
             {
-                User32.ShowWindow(p.MainWindowHandle, User32.SWP_SHOWWINDOW);
-                User32.SetForegroundWindow(p.MainWindowHandle);
-                User32.MoveWindow(p.MainWindowHandle, (int)X, (int)Y, (int)nWidth, (int)nHeight, false);
+                User32.ShowWindow(hWnd, User32.SWP_SHOWWINDOW);
+                User32.SetForegroundWindow(hWnd);
+                User32.MoveWindow(hWnd, (int)X, (int)Y, (int)nWidth, (int)nHeight, false);
             }
         }
 
@@ -86,13 +90,13 @@ namespace DesktopManagerUX
             Properties.Settings.Default.Save();
         }
 
-        public static BitmapSource CaptureApplication(Process process, System.Windows.Point DPI)
+        public static BitmapSource CaptureApplication(IntPtr hWnd, System.Windows.Point DPI)
         {
-            User32.RestoreWindow(process.MainWindowHandle); //to get snapshot
+            User32.RestoreWindow(hWnd); //to get snapshot
 
-            User32.PROCESS_DPI_AWARENESS pda = User32.GetProcessDpiAwareness(process.Handle);
+            //User32.PROCESS_DPI_AWARENESS pda = User32.GetProcessDpiAwareness(process.Handle);
 
-            User32.WINDOWINFO wi = User32.GetWindowInfo(process.MainWindowHandle);
+            User32.WINDOWINFO wi = User32.GetWindowInfo(hWnd);
             int width = (int)((wi.rcWindow.right - wi.rcWindow.left));// / DPI.X);
             int height = (int)((wi.rcWindow.bottom - wi.rcWindow.top));// / DPI.Y);
 
@@ -106,7 +110,7 @@ namespace DesktopManagerUX
                     graphics.Clear(Color.Wheat);
 
                     IntPtr hdc = graphics.GetHdc();
-                    if (!User32.PrintWindow(process.MainWindowHandle, hdc, User32.PW_RENDERFULLCONTENT))// User32.PW_CLIENTONLY))
+                    if (!User32.PrintWindow(hWnd, hdc, User32.PW_RENDERFULLCONTENT))// User32.PW_CLIENTONLY))
                     {
                         int error = Marshal.GetLastWin32Error();
                         var exception = new System.ComponentModel.Win32Exception(error);

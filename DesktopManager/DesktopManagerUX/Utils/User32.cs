@@ -194,5 +194,8 @@ namespace DesktopManagerUX.Utils
         [DllImport("SHCore.dll", SetLastError = true)]
         private static extern bool SetProcessDpiAwareness(PROCESS_DPI_AWARENESS awareness);
 
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern int GetWindowThreadProcessId(IntPtr handle, out uint processId);
     }
 }

@@ -14,7 +14,7 @@ namespace DesktopManagerUX
     {
         private MainWindow _wnd;
 
-        public List<AppInfo> Apps { get; set; } = Logic.GetProcessesWithUI();
+        public List<AppInfo> Apps { get; private set; } 
 
         public AppChooserUserControl[,] AppChoosers = new AppChooserUserControl[2, 2];
 
@@ -30,7 +30,11 @@ namespace DesktopManagerUX
                 Properties.Settings.Default.Save();
                 Properties.Settings.Default.Reload();
             }
+
+            ReloadApps();
         }
+
+        public void ReloadApps() { Apps = Logic.GetProcessesWithUI(); }
 
         //public void AddAppChooser(AppChooserUserControl ctrl, int row, int col)
         //{

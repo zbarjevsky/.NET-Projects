@@ -36,7 +36,7 @@ namespace DesktopManagerUX
             cmbApps.ItemsSource = vm.Apps;
 
             string selectedTitle = Logic.SettingGet(row, col);
-            cmbApps.SelectedIndex = FindApp(selectedTitle);
+            cmbApps.SelectedIndex = AppInfo.FindApp(selectedTitle, _VM.Apps);
 
             borderMain.BorderThickness = ThicknessFromRowCol(row, col);
         }
@@ -52,7 +52,7 @@ namespace DesktopManagerUX
         {
             if (HasSelection)
             {
-                imagePreview.Source = Logic.CaptureApplication(SelectedApp.Process, _VM.DPI);
+                imagePreview.Source = Logic.CaptureApplication(SelectedApp.HWND, _VM.DPI);
                 if (imagePreview.Source != null)
                     txtInfo.Content = "Current Size: " + imagePreview.Source.Width + "x" + imagePreview.Source.Height;
                 else
@@ -61,26 +61,8 @@ namespace DesktopManagerUX
             else
             {
                 imagePreview.Source = null;
-                txtInfo.Content = "Select Application";
+                txtInfo.Content = "Select Window";
             }
-        }
-
-        private int FindApp(string title)
-        {
-            int pos = title.LastIndexOf("(");
-            int end = title.LastIndexOf(")");
-            if (pos < 0 || end < 0)
-                return 0;
-
-            string processInTitle = title.Substring(pos + 1, end - pos - 1);
-
-            for (int i = 1; i < _VM.Apps.Count; i++)
-            {
-                string processName = _VM.Apps[i].Process.ProcessName;
-                if (processInTitle == processName)
-                    return i;
-            }
-            return 0;
         }
 
         private Thickness ThicknessFromRowCol(int row, int col)

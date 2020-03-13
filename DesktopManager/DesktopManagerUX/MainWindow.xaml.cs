@@ -103,14 +103,16 @@ namespace DesktopManagerUX
             if (col == cols - 1)
                 left -= 7;
 
-            Logic.MoveWindow(app.Process, left, top, width, height);
-            Logic.SettingSave(app.Name, row, col);
+            Logic.MoveWindow(app.HWND, left, top, width, height);
+            Logic.SettingSave(app.Title, row, col);
         }
 
         private void RebuildAppsGrid()
         {
             if (gridApps == null)
                 return;
+
+            _VM.ReloadApps();
 
             string txtSize = (cmbGridSize.SelectedItem as ComboBoxItem).Content.ToString();
             Properties.Settings.Default.SelectedGridSize = txtSize;
@@ -150,6 +152,11 @@ namespace DesktopManagerUX
                     grid.Children.Add(ctrl);
                 }
             }
+        }
+
+        private void btnRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            RebuildAppsGrid();
         }
     }
 }
