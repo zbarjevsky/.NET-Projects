@@ -104,16 +104,6 @@ namespace DesktopManagerUX.Utils
             return new WINDOWINFO();
         }
 
-        /// <summary>
-        /// Gets the window text.
-        /// </summary>
-        /// <param name="hWnd">The h WND.</param>
-        /// <param name="text">The text.</param>
-        /// <param name="count">The count.</param>
-        /// <returns></returns>
-        [DllImport("user32.dll")]
-        public static extern int GetWindowText(IntPtr hWnd, StringBuilder text, int count);
-
         public struct WINDOWPLACEMENT
         {
 
@@ -206,5 +196,34 @@ namespace DesktopManagerUX.Utils
 
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern int GetWindowThreadProcessId(IntPtr handle, out uint processId);
+
+        public delegate bool EnumWindowsProc(IntPtr IntPtr, int lParam);
+
+        [DllImport("user32.dll")]
+        public static extern bool EnumWindows(EnumWindowsProc enumFunc, int lParam);
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        private static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+        private static extern int GetWindowTextLength(IntPtr hWnd);
+
+        public static string GetWindowText(IntPtr hWnd)
+        {
+            int length = User32.GetWindowTextLength(hWnd);
+            if (length == 0) 
+                return "";
+
+            StringBuilder builder = new StringBuilder(length);
+            User32.GetWindowText(hWnd, builder, length + 1);
+            
+            return builder.ToString();
+        }
+
+        [DllImport("user32.dll")]
+        public static extern bool IsWindowVisible(IntPtr IntPtr);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetShellWindow();
     }
 }

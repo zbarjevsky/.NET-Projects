@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
@@ -28,30 +30,17 @@ namespace DesktopManagerUX
     }
 
     [Serializable]
-    public class AppInfo
+    public class AppInfo : INotifyPropertyChanged
     {
         public AppInfo(Process p)
         {
-            HWND = p.MainWindowHandle;
-            ProcessName = p.ProcessName;
-            ProcessPath = p.MainModule.FileName;
-            Title = "[" + ProcessName + "] - " + p.MainWindowTitle;
-
-            System.Drawing.Icon ico = System.Drawing.Icon.ExtractAssociatedIcon(ProcessPath);
-            Icon = Logic.GetImageSourceFromIcon(ico);
+            Init(p, p.MainWindowHandle);
         }
 
-        public AppInfo(string title, IntPtr hWnd)
+        public AppInfo(IntPtr hWnd)
         {
             Process p = GetProcessForWindow(hWnd);
-
-            HWND = hWnd;
-            ProcessName = p.ProcessName;
-            ProcessPath = p.MainModule.FileName;
-            Title = "[" + ProcessName + "] - " + title;
-
-            System.Drawing.Icon ico = System.Drawing.Icon.ExtractAssociatedIcon(ProcessPath);
-            Icon = Logic.GetImageSourceFromIcon(ico);
+            Init(p, hWnd);
         }
 
         public AppInfo()
@@ -69,12 +58,17 @@ namespace DesktopManagerUX
 
         [XmlIgnore]
         public IntPtr HWND { get; private set; }
+        [XmlIgnore]
+        public Process Process { get; private set; }
+
         [XmlAttribute]
         public string Title { get; set; }
         public string ProcessName { get; set; }
         public string ProcessPath { get; set; }
         public Color Color { get; set; } = Colors.AliceBlue;
-        public BitmapSource Icon { get; }
+
+        [XmlIgnore]
+        public BitmapSource Icon { get; private set; }
 
         public static int FindApp(string title, ObservableCollection<AppInfo> apps)
         {
@@ -103,6 +97,30 @@ namespace DesktopManagerUX
             return 0;
         }
 
+        public void Refresh()
+        {
+            if (Process == null || Process.HasExited)
+                return;
+
+            Init(Process, HWND);
+        }
+
+        private void Init(Process p, IntPtr hWnd)
+        {
+            string title = User32.GetWindowText(hWnd);
+
+            Process = p;
+            HWND = hWnd;
+            ProcessName = Process.ProcessName;
+            ProcessPath = Process.MainModule.FileName;
+            Title = "[" + ProcessName + "] - " + title;
+
+            System.Drawing.Icon ico = System.Drawing.Icon.ExtractAssociatedIcon(ProcessPath);
+            Icon = Logic.GetImageSourceFromIcon(ico);
+
+            OnPropertyChanged(nameof(Title));
+        }
+
         private Process GetProcessForWindow(IntPtr hWnd)
         {
             uint pid;
@@ -114,6 +132,13 @@ namespace DesktopManagerUX
         public override string ToString()
         {
             return Title;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 

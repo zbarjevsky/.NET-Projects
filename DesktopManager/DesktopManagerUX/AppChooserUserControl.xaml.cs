@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,6 +15,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Threading;
+using System.Windows.Threading;
 
 namespace DesktopManagerUX
 {
@@ -24,12 +25,22 @@ namespace DesktopManagerUX
     /// </summary>
     public partial class AppChooserUserControl : UserControl
     {
+        private DispatcherTimer _timer = new DispatcherTimer(DispatcherPriority.Background);
+
         public int Row { get; private set; }
         public int Col { get; private set; }
 
         public AppChooserUserControl()
         {
             InitializeComponent();
+
+            _timer.Interval = TimeSpan.FromSeconds(3);
+            _timer.Tick += _timer_Tick;
+        }
+
+        private void _timer_Tick(object sender, EventArgs e)
+        {
+            RefreshSnapshot();
         }
 
         public void Init(int row, int col)
@@ -56,6 +67,8 @@ namespace DesktopManagerUX
 
             //save
             AppContext.Configuration[row, col] = SelectedApp;
+            
+            _timer.Start();
         }
 
         public bool HasSelection { get { return cmbApps.SelectedIndex > 0 && cmbApps.SelectedIndex < AppContext.ViewModel.Apps.Count; } }
@@ -67,8 +80,15 @@ namespace DesktopManagerUX
 
         private void cmbApps_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            RefreshSnapshot();
+        }
+
+        private void RefreshSnapshot()
+        {
             if (HasSelection)
             {
+                SelectedApp.Refresh();
+
                 imagePreview.Source = Logic.CaptureApplication(SelectedApp.HWND, AppContext.ViewModel.DPI);
                 if (imagePreview.Source != null)
                     txtInfo.Content = "Current Size: " + imagePreview.Source.Width + "x" + imagePreview.Source.Height;
@@ -96,9 +116,13 @@ namespace DesktopManagerUX
             if (File.Exists(SelectedApp.ProcessPath))
             {
                 Process p = Process.Start(SelectedApp.ProcessPath);
-                while (p.MainWindowHandle == IntPtr.Zero)
-                    Thread.Sleep(330);
-                p.WaitForInputIdle(1000);
+                for (int i = 0; i < 30; i++)
+                {
+                    if(p.MainWindowHandle == IntPtr.Zero)
+                        Thread.Sleep(330);
+                } 
+                p.WaitForInputIdle(10000);
+                Thread.Sleep(330);
                 AppContext.ViewModel.ReloadApps();
                 Init(Row, Col);
             }
