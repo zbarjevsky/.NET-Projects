@@ -23,21 +23,18 @@
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
-                            <Rectangle Fill="{Binding Color}" Width="16" Height="16" Margin="0,2,5,2" />
+                            <Rectangle Fill="{Binding Brush}" Width="16" Height="16" Margin="0,2,5,2" />
                             <TextBlock Text="{Binding Name}" />
                         </StackPanel>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
             <ComboBox x:Name="cmbGridSize" SelectedIndex="1" VerticalContentAlignment="Center"
-                      SelectionChanged="cmbGridSize_SelectionChanged">
-                <ComboBoxItem>2x1</ComboBoxItem>
-                <ComboBoxItem>1x2</ComboBoxItem>
-                <ComboBoxItem>2x2</ComboBoxItem>
-                <ComboBoxItem>2x3</ComboBoxItem>
-            </ComboBox>
+                      SelectionChanged="cmbGridSize_SelectionChanged"/>
+
             <Button Margin="10,0" Padding="4" Click="Apply_Click">Apply</Button>
-            <Button Margin="10,0" Padding="4" Click="CloseSelected_Click">Close Selected</Button>
+            <Button Margin="10,0" Padding="4" Click="OpenSelected_Click">Open All</Button>
+            <Button Margin="10,0" Padding="4" Click="CloseSelected_Click">Close All</Button>
         </StackPanel>
         
         <Grid x:Name="gridApps" Grid.Row="1">

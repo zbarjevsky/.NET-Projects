@@ -21,25 +21,28 @@ namespace DesktopManagerUX
     /// </summary>
     public partial class MainWindow : Window
     {
-        private ViewModel _VM;
+        private bool _isInitialized = false;
 
         public MainWindow()
         {
-            _VM = new ViewModel(this);
+            AppContext.Init(this);
 
             InitializeComponent();
 
-            this.DataContext = _VM;
+            this.DataContext = AppContext.ViewModel;
 
             cmbDisplays.ItemsSource = Logic.GetDisplays();
-            cmbDisplays.SelectedIndex = 0;
+            cmbDisplays.SelectedIndex = AppContext.Configuration.SelectedDisplayInfo.Index;
 
-            foreach (ComboBoxItem item in cmbGridSize.Items)
+            string selectedGridSize = AppContext.Configuration.GetSelectedGridSizeText();
+            cmbGridSize.ItemsSource = GridSizeData.GetAllSizes();
+            foreach (string txtSize in cmbGridSize.Items)
             {
-                string txtSize = item.Content.ToString();
-                if (txtSize == Properties.Settings.Default.SelectedGridSize)
-                    cmbGridSize.SelectedItem = item;
+                if (txtSize.EndsWith(selectedGridSize))
+                    cmbGridSize.SelectedItem = txtSize;
             }
+
+            _isInitialized = true;
 
             RebuildAppsGrid();
         }
@@ -62,21 +65,33 @@ namespace DesktopManagerUX
 
         private void Window_Closed(object sender, EventArgs e)
         {
+            AppContext.Configuration.SelectedDisplayInfo = cmbDisplays.SelectedItem as DisplayInfo;
+            AppContext.Configuration.Save();
             Properties.Settings.Default.Save();
+        }
+
+        private AppChooserUserControl GetAppChooser(int row, int col)
+        {
+            foreach (AppChooserUserControl item in gridApps.Children)
+            {
+                if (Grid.GetRow(item) == row && Grid.GetColumn(item) == col)
+                    return item;
+            }
+            return null;
         }
 
         private void Apply_Click(object sender, RoutedEventArgs e)
         {
-            DisplayInfo itm = cmbDisplays.SelectedItem as DisplayInfo;
+            AppContext.Configuration.SelectedDisplayInfo = cmbDisplays.SelectedItem as DisplayInfo;
 
-            int rows = _VM.AppChoosers.GetLength(0);
-            int cols = _VM.AppChoosers.GetLength(1);
+            int rows = AppContext.Configuration.GridSize.Rows;
+            int cols = AppContext.Configuration.GridSize.Cols;
 
             for (int row = 0; row < rows; row++)
             {
                 for (int col = 0; col < cols; col++)
                 {
-                    Apply(row, col, itm.Bounds);
+                    Apply(row, col, AppContext.Configuration.SelectedDisplayInfo.Bounds);
                 }
             }
 
@@ -85,15 +100,12 @@ namespace DesktopManagerUX
 
         private void Apply(int row, int col, Rect bounds)
         {
-            AppInfo app = _VM.AppChoosers[row, col].SelectedApp;
+            AppInfo app = GetAppChooser(row, col).SelectedApp;
             if (app == null)
-            {
-                Logic.SettingSave("", row, col);
                 return;
-            }
 
-            int rows = _VM.AppChoosers.GetLength(0);
-            int cols = _VM.AppChoosers.GetLength(1);
+            int rows = AppContext.Configuration.GridSize.Rows;
+            int cols = AppContext.Configuration.GridSize.Cols;
 
             double width = 3 + bounds.Width / cols;
             double height = 3 + bounds.Height / rows;
@@ -107,22 +119,22 @@ namespace DesktopManagerUX
                 left -= 7;
 
             Logic.MoveWindow(app.HWND, left, top, width, height);
-            Logic.SettingSave(app.Title, row, col);
         }
 
         private void RebuildAppsGrid()
         {
-            if (gridApps == null)
+            if (!_isInitialized)
                 return;
 
-            _VM.ReloadApps();
+            AppContext.ViewModel.ReloadApps();
 
-            string txtSize = (cmbGridSize.SelectedItem as ComboBoxItem).Content.ToString();
-            Properties.Settings.Default.SelectedGridSize = txtSize;
+            string txtSize = (cmbGridSize.SelectedItem as string);
+            AppContext.Configuration.SetSelectedgridSizeText(txtSize);
 
-            int rows = int.Parse(txtSize.Substring(0, 1));
-            int cols = int.Parse(txtSize.Substring(2, 1));
-            RebuildAppsGrid(gridApps, rows, cols, _VM);
+            int rows = AppContext.Configuration.GridSize.Rows;
+            int cols = AppContext.Configuration.GridSize.Cols;
+
+            RebuildAppsGrid(gridApps, rows, cols, AppContext.ViewModel);
         }
 
         private static void RebuildAppsGrid(Grid grid, int rows, int cols, ViewModel vm)
@@ -139,17 +151,14 @@ namespace DesktopManagerUX
                 grid.RowDefinitions.Add(new RowDefinition());
             }
 
-            vm.AppChoosers = new AppChooserUserControl[rows, cols];
-
             grid.Children.Clear();
             for (int row = 0; row < rows; row++)
             {
                 for (int col = 0; col < cols; col++)
                 {
                     AppChooserUserControl ctrl = new AppChooserUserControl();
-                    ctrl.Init(vm, row, col);
-                    vm.AppChoosers[row, col] = ctrl;
-
+                    ctrl.Init(row, col);
+                    
                     Grid.SetRow(ctrl, row);
                     Grid.SetColumn(ctrl, col);
                     grid.Children.Add(ctrl);
@@ -164,17 +173,35 @@ namespace DesktopManagerUX
 
         private void CloseSelected_Click(object sender, RoutedEventArgs e)
         {
-            int rows = _VM.AppChoosers.GetLength(0);
-            int cols = _VM.AppChoosers.GetLength(1);
+            int rows = gridApps.RowDefinitions.Count;
+            int cols = gridApps.ColumnDefinitions.Count;
             for (int row = 0; row < rows; row++)
             {
                 for (int col = 0; col < cols; col++)
                 {
-                    AppInfo app = _VM.AppChoosers[row, col].SelectedApp;
+                    AppInfo app = GetAppChooser(row, col).SelectedApp;
                     if (app == null)
                         continue;
 
                     User32.CloseWindow(app.HWND);
+                }
+            }
+            this.Activate();
+        }
+
+        private void OpenSelected_Click(object sender, RoutedEventArgs e)
+        {
+            int rows = gridApps.RowDefinitions.Count;
+            int cols = gridApps.ColumnDefinitions.Count;
+            for (int row = 0; row < rows; row++)
+            {
+                for (int col = 0; col < cols; col++)
+                {
+                    AppInfo app = GetAppChooser(row, col).SelectedApp;
+                    if (app == null)
+                        continue;
+
+                    AppContext.Logic.RunApp(app);
                 }
             }
             this.Activate();

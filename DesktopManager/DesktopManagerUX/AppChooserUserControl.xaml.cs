@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,8 +24,6 @@ namespace DesktopManagerUX
     /// </summary>
     public partial class AppChooserUserControl : UserControl
     {
-        private ViewModel _VM = null;
-
         public int Row { get; private set; }
         public int Col { get; private set; }
 
@@ -32,51 +32,82 @@ namespace DesktopManagerUX
             InitializeComponent();
         }
 
-        public void Init(ViewModel vm, int row, int col)
+        public void Init(int row, int col)
         {
-            _VM = vm;
-            this.DataContext = vm;
-            cmbApps.ItemsSource = vm.Apps;
+            string selectedTitle = AppContext.Configuration[row, col].Title;
+
+            this.DataContext = AppContext.ViewModel;
+            cmbApps.ItemsSource = AppContext.ViewModel.Apps;
             Row = row;
             Col = col;
 
-            string selectedTitle = Logic.SettingGet(row, col);
-            cmbApps.SelectedIndex = AppInfo.FindApp(selectedTitle, _VM.Apps);
+            int idx = AppInfo.FindApp(selectedTitle, AppContext.ViewModel.Apps);
+            if(idx == 0) //not found, but exists in configuration
+            {
+                if (File.Exists(AppContext.Configuration[row, col].ProcessPath))
+                {
+                    AppContext.ViewModel.Apps.Add(AppContext.Configuration[row, col]);
+                    idx = AppContext.ViewModel.Apps.Count - 1;
+                }
+            }
+            cmbApps.SelectedIndex = idx;
 
             borderMain.BorderThickness = ThicknessFromRowCol(row, col);
+
+            //save
+            AppContext.Configuration[row, col] = SelectedApp;
         }
 
-        public bool HasSelection { get { return cmbApps.SelectedIndex > 0 && cmbApps.SelectedIndex < _VM.Apps.Count; } }
+        public bool HasSelection { get { return cmbApps.SelectedIndex > 0 && cmbApps.SelectedIndex < AppContext.ViewModel.Apps.Count; } }
 
         public AppInfo SelectedApp
         {
-            get { if(HasSelection) return _VM.Apps[cmbApps.SelectedIndex]; return null; }
+            get { if(HasSelection) return AppContext.ViewModel.Apps[cmbApps.SelectedIndex]; return null; }
         }
 
         private void cmbApps_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (HasSelection)
             {
-                imagePreview.Source = Logic.CaptureApplication(SelectedApp.HWND, _VM.DPI);
+                imagePreview.Source = Logic.CaptureApplication(SelectedApp.HWND, AppContext.ViewModel.DPI);
                 if (imagePreview.Source != null)
                     txtInfo.Content = "Current Size: " + imagePreview.Source.Width + "x" + imagePreview.Source.Height;
                 else
                     txtInfo.Content = "Select Another Application";
 
-                Logic.SettingSave(SelectedApp.Title, Row, Col);
+                btnRun.ToolTip = "Open " + SelectedApp.ProcessName;
+                btnRun.IsEnabled = File.Exists(SelectedApp.ProcessPath);
+                AppContext.Configuration[Row, Col] = SelectedApp;
+                AppContext.Configuration.Save();
             }
             else
             {
+                btnRun.ToolTip = "";
+                btnRun.IsEnabled = false;
                 imagePreview.Source = null;
                 txtInfo.Content = "? Select Window ?";
-                Logic.SettingSave("", Row, Col);
+                AppContext.Configuration[Row, Col] = AppInfo.GetEmptyAppInfo();
+                AppContext.Configuration.Save();
+            }
+        }
+
+        private void RunApp_Click(object sender, RoutedEventArgs e)
+        {
+            if (File.Exists(SelectedApp.ProcessPath))
+            {
+                Process p = Process.Start(SelectedApp.ProcessPath);
+                while (p.MainWindowHandle == IntPtr.Zero)
+                    Thread.Sleep(330);
+                p.WaitForInputIdle(1000);
+                AppContext.ViewModel.ReloadApps();
+                Init(Row, Col);
             }
         }
 
         private Thickness ThicknessFromRowCol(int row, int col)
         {
-            int rows = _VM.AppChoosers.GetLength(0);
-            int cols = _VM.AppChoosers.GetLength(1);
+            int rows = AppContext.Configuration.GridSize.Rows;
+            int cols = AppContext.Configuration.GridSize.Cols;
 
             const double thin = 1, thick = 3;
 

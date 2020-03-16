@@ -16,21 +16,25 @@
                    Foreground="Navy" Background="AliceBlue" FontSize="16" />
 
             <Border BorderThickness="2" BorderBrush="Yellow" CornerRadius="5"
-                    Margin="20" Padding="2" MinWidth="200" 
+                    Margin="20" Padding="2" 
                     HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Border.Effect>
                     <DropShadowEffect BlurRadius="10" Opacity="0.7" Direction="280" />
                 </Border.Effect>
-                <ComboBox x:Name="cmbApps" SelectionChanged="cmbApps_SelectionChanged" FontSize="14" >
-                    <ComboBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel Orientation="Horizontal">
-                                <Image Source="{Binding Icon}" Width="16" Height="16" Margin="0,2,5,2" />
-                                <TextBlock Text="{Binding Title}" />
-                            </StackPanel>
-                        </DataTemplate>
-                    </ComboBox.ItemTemplate>
-                </ComboBox>
+                <StackPanel Orientation="Horizontal">
+                    <Button x:Name="btnRun" Content="..." Margin="0,0,4,0" HorizontalAlignment="Right" ToolTip="Run..."
+                            Click="RunApp_Click"/>
+                     <ComboBox x:Name="cmbApps" SelectionChanged="cmbApps_SelectionChanged" FontSize="14" >
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="{Binding Icon}" Width="16" Height="16" Margin="0,2,5,2" />
+                                    <TextBlock Text="{Binding Title}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                </StackPanel>
             </Border>
         </Grid>
     </Border>

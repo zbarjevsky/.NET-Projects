@@ -40,7 +40,7 @@ namespace DesktopManagerUX.Utils
         [DllImport("USER32.DLL")]
         private static extern bool EnumWindows(EnumWindowsProc enumFunc, int lParam);
 
-        [DllImport("USER32.DLL")]
+        [DllImport("USER32.DLL", CharSet = CharSet.Unicode, SetLastError = true)]
         private static extern int GetWindowText(IntPtr IntPtr, StringBuilder lpString, int nMaxCount);
 
         [DllImport("USER32.DLL")]

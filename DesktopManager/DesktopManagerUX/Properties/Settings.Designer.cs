@@ -25,54 +25,6 @@ namespace DesktopManagerUX.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string AppTitle0x0 {
-            get {
-                return ((string)(this["AppTitle0x0"]));
-            }
-            set {
-                this["AppTitle0x0"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string AppTitle0x1 {
-            get {
-                return ((string)(this["AppTitle0x1"]));
-            }
-            set {
-                this["AppTitle0x1"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string AppTitle1x0 {
-            get {
-                return ((string)(this["AppTitle1x0"]));
-            }
-            set {
-                this["AppTitle1x0"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string AppTitle1x1 {
-            get {
-                return ((string)(this["AppTitle1x1"]));
-            }
-            set {
-                this["AppTitle1x1"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
         public bool UpgradeNeeded {
             get {
@@ -80,42 +32,6 @@ namespace DesktopManagerUX.Properties {
             }
             set {
                 this["UpgradeNeeded"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2x2")]
-        public string SelectedGridSize {
-            get {
-                return ((string)(this["SelectedGridSize"]));
-            }
-            set {
-                this["SelectedGridSize"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string AppTitle0x2 {
-            get {
-                return ((string)(this["AppTitle0x2"]));
-            }
-            set {
-                this["AppTitle0x2"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string AppTitle1x2 {
-            get {
-                return ((string)(this["AppTitle1x2"]));
-            }
-            set {
-                this["AppTitle1x2"] = value;
             }
         }
     }

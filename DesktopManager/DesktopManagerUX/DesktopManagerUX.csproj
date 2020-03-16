@@ -63,6 +63,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AppContext.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="DataModel.cs" />
     <Compile Include="Logic.cs" />
     <Compile Include="Utils\AeroPeek.cs" />
@@ -70,6 +72,7 @@
     <Compile Include="Utils\EnumOpenWindows.cs" />
     <Compile Include="Utils\User32.cs" />
     <Compile Include="Utils\WpfScreen.cs" />
+    <Compile Include="Utils\XmlSerializerHelper.cs" />
     <Compile Include="ViewModel.cs" />
     <Page Include="AppChooserUserControl.xaml">
       <SubType>Designer</SubType>

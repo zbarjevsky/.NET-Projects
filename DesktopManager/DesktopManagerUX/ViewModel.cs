@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
@@ -14,13 +15,13 @@ namespace DesktopManagerUX
     {
         private MainWindow _wnd;
 
-        public List<AppInfo> Apps { get; private set; } 
+        public ObservableCollection<AppInfo> Apps { get; private set; } 
 
-        public AppChooserUserControl[,] AppChoosers = new AppChooserUserControl[2, 2];
-
-        public ViewModel(MainWindow wnd)
+        public ViewModel(Window wnd)
         {
-            _wnd = wnd;
+            Debug.Assert(wnd != null);
+
+            _wnd = wnd as MainWindow;
 
             //if version changed - settings location changed - get settings from previous location/version
             if (Properties.Settings.Default.UpgradeNeeded)
@@ -34,7 +35,7 @@ namespace DesktopManagerUX
             ReloadApps();
         }
 
-        public void ReloadApps() { Apps = Logic.GetProcessesWithUI(); }
+        public void ReloadApps() { Apps = Logic.GetAppsWithUI(); }
 
         //public void AddAppChooser(AppChooserUserControl ctrl, int row, int col)
         //{

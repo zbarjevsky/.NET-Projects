@@ -1,6 +1,7 @@
 ﻿using DesktopManagerUX.Utils;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -16,7 +17,7 @@ namespace DesktopManagerUX
 {
     public class Logic
     {
-        public static List<AppInfo> GetProcessesWithUI()
+        public static ObservableCollection<AppInfo> GetAppsWithUI()
         {
             List<AppInfo> apps = new List<AppInfo>();
             //apps.Add(AppInfo.GetEmptyAppInfo());
@@ -31,7 +32,7 @@ namespace DesktopManagerUX
             //foreach (Process p in pp)
             //    apps.Add(new AppInfo(p));
 
-            return apps;
+            return new ObservableCollection<AppInfo>(apps);
         }
 
         public static List<DisplayInfo> GetDisplays()
@@ -55,40 +56,40 @@ namespace DesktopManagerUX
             }
         }
 
-        public static string SettingGet(int row, int col)
-        {
-            if (row == 0 && col == 0)
-                return Properties.Settings.Default.AppTitle0x0;
-            if (row == 0 && col == 1)
-                return Properties.Settings.Default.AppTitle0x1;
-            if (row == 0 && col == 2)
-                return Properties.Settings.Default.AppTitle0x2;
-            if (row == 1 && col == 0)
-                return Properties.Settings.Default.AppTitle1x0;
-            if (row == 1 && col == 1)
-                return Properties.Settings.Default.AppTitle1x1;
-            if (row == 1 && col == 2)
-                return Properties.Settings.Default.AppTitle1x2;
-            return null;
-        }
+        //public static string SettingGet(int row, int col)
+        //{
+        //    if (row == 0 && col == 0)
+        //        return Properties.Settings.Default.AppTitle0x0;
+        //    if (row == 0 && col == 1)
+        //        return Properties.Settings.Default.AppTitle0x1;
+        //    if (row == 0 && col == 2)
+        //        return Properties.Settings.Default.AppTitle0x2;
+        //    if (row == 1 && col == 0)
+        //        return Properties.Settings.Default.AppTitle1x0;
+        //    if (row == 1 && col == 1)
+        //        return Properties.Settings.Default.AppTitle1x1;
+        //    if (row == 1 && col == 2)
+        //        return Properties.Settings.Default.AppTitle1x2;
+        //    return null;
+        //}
 
-        public static void SettingSave(string appTitle, int row, int col)
-        {
-            if (row == 0 && col == 0)
-                Properties.Settings.Default.AppTitle0x0 = appTitle;
-            if (row == 0 && col == 1)
-                Properties.Settings.Default.AppTitle0x1 = appTitle;
-            if (row == 0 && col == 2)
-                Properties.Settings.Default.AppTitle0x2 = appTitle;
-            if (row == 1 && col == 0)
-                Properties.Settings.Default.AppTitle1x0 = appTitle;
-            if (row == 1 && col == 1)
-                Properties.Settings.Default.AppTitle1x1 = appTitle;
-            if (row == 1 && col == 2)
-                Properties.Settings.Default.AppTitle1x2 = appTitle;
+        //public static void SettingSave(string appTitle, int row, int col)
+        //{
+        //    if (row == 0 && col == 0)
+        //        Properties.Settings.Default.AppTitle0x0 = appTitle;
+        //    if (row == 0 && col == 1)
+        //        Properties.Settings.Default.AppTitle0x1 = appTitle;
+        //    if (row == 0 && col == 2)
+        //        Properties.Settings.Default.AppTitle0x2 = appTitle;
+        //    if (row == 1 && col == 0)
+        //        Properties.Settings.Default.AppTitle1x0 = appTitle;
+        //    if (row == 1 && col == 1)
+        //        Properties.Settings.Default.AppTitle1x1 = appTitle;
+        //    if (row == 1 && col == 2)
+        //        Properties.Settings.Default.AppTitle1x2 = appTitle;
 
-            Properties.Settings.Default.Save();
-        }
+        //    Properties.Settings.Default.Save();
+        //}
 
         public static BitmapSource CaptureApplication(IntPtr hWnd, System.Windows.Point DPI)
         {
@@ -143,6 +144,11 @@ namespace DesktopManagerUX
                                   System.Windows.Int32Rect.Empty,
                                   BitmapSizeOptions.FromWidthAndHeight(bmp.Width, bmp.Height));
             return src;
+        }
+
+        public void RunApp(AppInfo app)
+        {
+            //app.ProcessPath;
         }
     }
 }
