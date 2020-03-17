@@ -40,42 +40,79 @@ namespace DesktopManagerUX
 
         private void _timer_Tick(object sender, EventArgs e)
         {
-            RefreshSnapshot();
+            //if (AppContext.Sync == false)
+                RefreshSnapshot();
         }
 
         public void Init(int row, int col)
         {
-            string selectedTitle = AppContext.Configuration[row, col].Title;
+            AppInfo savedInfo = AppContext.Configuration[row, col];
 
             this.DataContext = AppContext.ViewModel;
             cmbApps.ItemsSource = AppContext.ViewModel.Apps;
+            
             Row = row;
             Col = col;
 
-            int idx = AppInfo.FindApp(selectedTitle, AppContext.ViewModel.Apps);
-            if(idx == 0) //not found, but exists in configuration
-            {
-                if (File.Exists(AppContext.Configuration[row, col].ProcessPath))
-                {
-                    AppContext.ViewModel.Apps.Add(AppContext.Configuration[row, col]);
-                    idx = AppContext.ViewModel.Apps.Count - 1;
-                }
-            }
-            cmbApps.SelectedIndex = idx;
+            RestoreSelected(savedInfo);
 
             borderMain.BorderThickness = ThicknessFromRowCol(row, col);
 
             //save
-            AppContext.Configuration[row, col] = SelectedApp;
+            AppContext.Configuration[row, col] = cmbApps.SelectedItem as AppInfo;
             
             _timer.Start();
         }
 
+        public void Dispose()
+        {
+            if(_timer != null)
+            {
+                _timer.Stop();
+            }
+            _timer = null;
+            Row = -1;
+            Col = -1;
+
+            this.DataContext = null;
+            cmbApps.ItemsSource = null;
+            txtInfo.Content = "<<DISPOSED>>";
+        }
+
         public bool HasSelection { get { return cmbApps.SelectedIndex > 0 && cmbApps.SelectedIndex < AppContext.ViewModel.Apps.Count; } }
+
+        private void RestoreSelected(AppInfo savedInfo)
+        {
+            int idx = AppInfo.FindApp(savedInfo.Title, AppContext.ViewModel.Apps);
+            if (idx == 0) //not found, but exists in configuration
+            {
+                if (File.Exists(savedInfo.ProcessPath))
+                {
+                    AppContext.ViewModel.Apps.Add(savedInfo);
+                    idx = AppContext.ViewModel.Apps.Count - 1;
+                }
+            }
+            cmbApps.SelectedIndex = idx;
+        }
+
+        private AppInfo FindAppInCombo(AppInfo a)
+        {
+            foreach (AppInfo item in cmbApps.Items)
+            {
+                if (a.Title == item.Title)
+                    return item;
+            }
+            return AppInfo.GetEmptyAppInfo();
+        }
 
         public AppInfo SelectedApp
         {
-            get { if(HasSelection) return AppContext.ViewModel.Apps[cmbApps.SelectedIndex]; return null; }
+            get 
+            { 
+                if(HasSelection) 
+                    return AppContext.ViewModel.Apps[cmbApps.SelectedIndex]; 
+                return null; 
+            }
         }
 
         private void cmbApps_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -85,6 +122,9 @@ namespace DesktopManagerUX
 
         private void RefreshSnapshot()
         {
+            if (_timer == null) //disposed
+                return;
+
             if (HasSelection)
             {
                 SelectedApp.Refresh();
@@ -93,7 +133,7 @@ namespace DesktopManagerUX
                 if (imagePreview.Source != null)
                     txtInfo.Content = "Current Size: " + imagePreview.Source.Width + "x" + imagePreview.Source.Height;
                 else
-                    txtInfo.Content = "Select Another Application";
+                    txtInfo.Content = "No Snaphot";
 
                 btnRun.ToolTip = "Open " + SelectedApp.ProcessName;
                 btnRun.IsEnabled = File.Exists(SelectedApp.ProcessPath);
@@ -115,6 +155,13 @@ namespace DesktopManagerUX
         {
             if (File.Exists(SelectedApp.ProcessPath))
             {
+                List<Process> exist = Logic.FindProcess(SelectedApp.ProcessName);
+                if(exist.Count > 0)
+                {
+                    MessageBox.Show("Process alredy running: " + SelectedApp.ProcessName);
+                    return;
+                }
+
                 Process p = Process.Start(SelectedApp.ProcessPath);
                 for (int i = 0; i < 30; i++)
                 {
@@ -133,7 +180,7 @@ namespace DesktopManagerUX
             int rows = AppContext.Configuration.GridSize.Rows;
             int cols = AppContext.Configuration.GridSize.Cols;
 
-            const double thin = 1, thick = 3;
+            const double thin = 4, thick = 2 * thin;
 
             double left = (col == 0) ? thick: thin;
             double right = (col == cols-1) ? thick : thin;

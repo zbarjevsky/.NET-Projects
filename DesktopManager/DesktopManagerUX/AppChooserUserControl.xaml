@@ -24,7 +24,8 @@
                 <StackPanel Orientation="Horizontal">
                     <Button x:Name="btnRun" Content="..." Margin="0,0,4,0" HorizontalAlignment="Right" ToolTip="Run..."
                             Click="RunApp_Click"/>
-                     <ComboBox x:Name="cmbApps" SelectionChanged="cmbApps_SelectionChanged" FontSize="14" >
+                     <ComboBox x:Name="cmbApps" 
+                               SelectionChanged="cmbApps_SelectionChanged" FontSize="14" >
                         <ComboBox.ItemTemplate>
                             <DataTemplate>
                                 <StackPanel Orientation="Horizontal">

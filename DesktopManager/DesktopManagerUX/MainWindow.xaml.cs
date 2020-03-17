@@ -126,15 +126,19 @@ namespace DesktopManagerUX
             if (!_isInitialized)
                 return;
 
-            AppContext.ViewModel.ReloadApps();
+            AppContext.Sync = true;
+            {
+                AppContext.ViewModel.ReloadApps();
 
-            string txtSize = (cmbGridSize.SelectedItem as string);
-            AppContext.Configuration.SetSelectedgridSizeText(txtSize);
+                string txtSize = (cmbGridSize.SelectedItem as string);
+                AppContext.Configuration.SetSelectedgridSizeText(txtSize);
 
-            int rows = AppContext.Configuration.GridSize.Rows;
-            int cols = AppContext.Configuration.GridSize.Cols;
+                int rows = AppContext.Configuration.GridSize.Rows;
+                int cols = AppContext.Configuration.GridSize.Cols;
 
-            RebuildAppsGrid(gridApps, rows, cols, AppContext.ViewModel);
+                RebuildAppsGrid(gridApps, rows, cols, AppContext.ViewModel);
+            }
+            AppContext.Sync = false;
         }
 
         private static void RebuildAppsGrid(Grid grid, int rows, int cols, ViewModel vm)
@@ -149,6 +153,12 @@ namespace DesktopManagerUX
             for (int row = 0; row < rows; row++)
             {
                 grid.RowDefinitions.Add(new RowDefinition());
+            }
+
+            foreach (UIElement ul in grid.Children)
+            {
+                if(ul is AppChooserUserControl app)
+                    app.Dispose();
             }
 
             grid.Children.Clear();
@@ -168,7 +178,9 @@ namespace DesktopManagerUX
 
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
+            this.Cursor = Cursors.Wait;
             RebuildAppsGrid();
+            this.Cursor = Cursors.Arrow;
         }
 
         private void CloseSelected_Click(object sender, RoutedEventArgs e)

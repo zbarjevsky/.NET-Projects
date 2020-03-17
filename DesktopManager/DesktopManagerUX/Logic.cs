@@ -35,6 +35,17 @@ namespace DesktopManagerUX
             return new ObservableCollection<AppInfo>(apps);
         }
 
+        public static List<Process> FindProcess(string processName)
+        {
+            return FindProcess(p => p.ProcessName == processName);
+        }
+
+        public static List<Process> FindProcess(Func<Process, bool> predicate)
+        {
+            Process[] processes = Process.GetProcesses();
+            return processes.Where(predicate).ToList();
+        }
+
         public static List<DisplayInfo> GetDisplays()
         {
             List<DisplayInfo> list = new List<DisplayInfo>();
@@ -138,11 +149,13 @@ namespace DesktopManagerUX
 
         public static BitmapSource GetImageSourceFromBitmap(Bitmap bmp)
         {
+            IntPtr hBmp = bmp.GetHbitmap();
             BitmapSource src = System.Windows.Interop.Imaging.CreateBitmapSourceFromHBitmap(
-                                  bmp.GetHbitmap(),
+                                  hBmp,
                                   IntPtr.Zero,
                                   System.Windows.Int32Rect.Empty,
                                   BitmapSizeOptions.FromWidthAndHeight(bmp.Width, bmp.Height));
+            Gdi32.DeleteObject(hBmp);
             return src;
         }
 

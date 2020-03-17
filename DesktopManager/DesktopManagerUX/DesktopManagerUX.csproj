@@ -70,6 +70,8 @@
     <Compile Include="Utils\AeroPeek.cs" />
     <Compile Include="Utils\DesktopWindowManager.cs" />
     <Compile Include="Utils\EnumOpenWindows.cs" />
+    <Compile Include="Utils\Gdi32.cs" />
+    <Compile Include="Utils\SmartCollection.cs" />
     <Compile Include="Utils\User32.cs" />
     <Compile Include="Utils\WpfScreen.cs" />
     <Compile Include="Utils\XmlSerializerHelper.cs" />

@@ -16,6 +16,8 @@ namespace DesktopManagerUX
             Logic = new Logic();
         }
 
+        public static volatile bool Sync = false;
+
         public static ViewModel ViewModel { get; private set; } 
 
         public static Logic Logic { get; private set; }

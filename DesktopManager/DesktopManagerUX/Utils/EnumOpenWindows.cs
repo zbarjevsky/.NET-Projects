@@ -20,11 +20,16 @@ namespace DesktopManagerUX.Utils
             {
                 if (hWnd == shellWindow) 
                     return true;
+
                 if (!User32.IsWindowVisible(hWnd)) 
                     return true;
 
                 string title = User32.GetWindowText(hWnd);
                 if (string.IsNullOrWhiteSpace(title))
+                    return true;
+
+                User32.WindowStylesEx ex = User32.GetWindowLong(hWnd, User32.WindowLongIndex.GWL_EX_STYLE);
+                if (ex.HasFlag(User32.WindowStylesEx.WS_EX_TOOLWINDOW))
                     return true;
 
                 windows.Add(new AppInfo(hWnd));
@@ -33,6 +38,30 @@ namespace DesktopManagerUX.Utils
             }, 0);
 
             return windows;
+        }
+
+        public static bool IsAltTabWindow(IntPtr hWnd)
+        {
+            User32.WindowStylesEx ex = User32.GetWindowLong(hWnd, User32.WindowLongIndex.GWL_EX_STYLE);
+            if (ex.HasFlag(User32.WindowStylesEx.WS_EX_TOOLWINDOW))
+                return false;
+
+            if (!User32.IsWindowVisible(hWnd))
+                return true;
+
+            // Start at the root owner
+            IntPtr hWndWalk = User32.GetAncestor(hWnd, User32.GetAncestorFlags.GA_ROOTOWNER);
+            
+            // See if we are the last active visible popup
+            IntPtr hWndTry;
+            while ((hWndTry = User32.GetLastActivePopup(hWndWalk)) != hWndTry)
+            {
+                if (User32.IsWindowVisible(hWndTry)) 
+                    break;
+                hWndWalk = hWndTry;
+            }
+
+            return hWndWalk == hWnd;
         }
     }
 }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -46,6 +47,7 @@ namespace DesktopManagerUX
         public AppInfo()
         {
             HWND = IntPtr.Zero;
+            Process = null;
             Title = "? Select Window ?";
             ProcessName = "";
             Icon = null;
@@ -70,7 +72,7 @@ namespace DesktopManagerUX
         [XmlIgnore]
         public BitmapSource Icon { get; private set; }
 
-        public static int FindApp(string title, ObservableCollection<AppInfo> apps)
+        public static int FindApp(string title, SmartCollection<AppInfo> apps)
         {
             int pos = title.IndexOf("[");
             int end = title.IndexOf("]");
@@ -99,26 +101,34 @@ namespace DesktopManagerUX
 
         public void Refresh()
         {
-            if (Process == null || Process.HasExited)
-                return;
-
             Init(Process, HWND);
         }
 
         private void Init(Process p, IntPtr hWnd)
         {
-            string title = User32.GetWindowText(hWnd);
-
             Process = p;
-            HWND = hWnd;
-            ProcessName = Process.ProcessName;
-            ProcessPath = Process.MainModule.FileName;
-            Title = "[" + ProcessName + "] - " + title;
+            if(Process != null && !Process.HasExited) //process is alive
+            {
+                ProcessName = Process.ProcessName;
+                ProcessPath = Process.MainModule.FileName;
 
-            System.Drawing.Icon ico = System.Drawing.Icon.ExtractAssociatedIcon(ProcessPath);
-            Icon = Logic.GetImageSourceFromIcon(ico);
+                string title = User32.GetWindowText(hWnd);
+                if (!string.IsNullOrEmpty(title))
+                {
+                    HWND = hWnd;
+                    Title = "[" + ProcessName + "] - " + title;
+                }
+            
+                OnPropertyChanged(nameof(Title));
+            }
 
-            OnPropertyChanged(nameof(Title));
+            
+            if (Icon == null && File.Exists(ProcessPath))
+            {
+                System.Drawing.Icon ico = System.Drawing.Icon.ExtractAssociatedIcon(ProcessPath);
+                Icon = Logic.GetImageSourceFromIcon(ico);
+                OnPropertyChanged(nameof(Icon));
+            }
         }
 
         private Process GetProcessForWindow(IntPtr hWnd)
@@ -127,6 +137,23 @@ namespace DesktopManagerUX
             User32.GetWindowThreadProcessId(hWnd, out pid);
             Process p = Process.GetProcessById((int)pid);
             return p;
+        }
+
+        public override bool Equals(object obj)
+        {
+            AppInfo app = obj as AppInfo;
+            if (app == null)
+                return false;
+
+            if(!string.IsNullOrWhiteSpace(Title) && !string.IsNullOrWhiteSpace(app.Title))
+                return app.Title == Title;
+
+            return app.ProcessName == ProcessName;
+        }
+
+        public override int GetHashCode()
+        {
+            return Title.GetHashCode();
         }
 
         public override string ToString()

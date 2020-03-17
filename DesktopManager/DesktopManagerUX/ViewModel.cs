@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DesktopManagerUX.Utils;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -15,7 +16,7 @@ namespace DesktopManagerUX
     {
         private MainWindow _wnd;
 
-        public ObservableCollection<AppInfo> Apps { get; private set; } 
+        public SmartCollection<AppInfo> Apps { get; } = new SmartCollection<AppInfo>();
 
         public ViewModel(Window wnd)
         {
@@ -35,7 +36,10 @@ namespace DesktopManagerUX
             ReloadApps();
         }
 
-        public void ReloadApps() { Apps = Logic.GetAppsWithUI(); }
+        public void ReloadApps() 
+        {
+            Apps.UpdateAndAdd(Logic.GetAppsWithUI());
+        }
 
         //public void AddAppChooser(AppChooserUserControl ctrl, int row, int col)
         //{
