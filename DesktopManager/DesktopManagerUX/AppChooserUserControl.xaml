@@ -11,9 +11,19 @@
 
             <Image  x:Name="imagePreview" Stretch="Uniform"/>
 
-            <Label x:Name="txtInfo" Content="Select Application" 
-                   VerticalAlignment="Top" HorizontalAlignment="Left" Opacity="0.7"
-                   Foreground="Navy" Background="AliceBlue" FontSize="16" />
+            <Border BorderThickness="3" BorderBrush="Goldenrod" CornerRadius="4"
+                    Background="Wheat" Opacity="0.8"
+                    VerticalAlignment="Top" HorizontalAlignment="Left" Margin="6">
+                <StackPanel Orientation="Horizontal"
+                           >
+                    <Viewbox Width="30" Height="30">
+                        <CheckBox x:Name="chkSelected" IsChecked="True"/>
+                    </Viewbox>
+                    <Label x:Name="txtInfo" Margin="8,0"
+                           Content="Select Application" 
+                           Foreground="Navy" FontSize="16" />
+                </StackPanel>
+            </Border>
 
             <Border BorderThickness="2" BorderBrush="Yellow" CornerRadius="5"
                     Margin="20" Padding="2" 

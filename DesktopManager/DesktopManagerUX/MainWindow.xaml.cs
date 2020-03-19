@@ -63,6 +63,12 @@ namespace DesktopManagerUX
             RebuildAppsGrid();
         }
 
+        private void cmbDisplays_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            AppContext.Configuration.SelectedDisplayInfo = cmbDisplays.SelectedItem as DisplayInfo;
+            Apply_ActionOnAll((chooser, row, col) => chooser.UpdateInfo());
+        }
+
         private void Window_Closed(object sender, EventArgs e)
         {
             AppContext.Configuration.SelectedDisplayInfo = cmbDisplays.SelectedItem as DisplayInfo;
@@ -80,21 +86,23 @@ namespace DesktopManagerUX
             return null;
         }
 
-        private void Apply_ActionOnAll(Action<AppInfo, int, int> action)
+        private void Apply_ActionOnAll(Action<AppChooserUserControl, int, int> action)
         {
-            AppContext.Configuration.SelectedDisplayInfo = cmbDisplays.SelectedItem as DisplayInfo;
-
             int rows = gridApps.RowDefinitions.Count;
             int cols = gridApps.ColumnDefinitions.Count;
             for (int row = 0; row < rows; row++)
             {
                 for (int col = 0; col < cols; col++)
                 {
-                    AppInfo app = GetAppChooser(row, col).SelectedApp;
-                    if (app == null)
+                    AppChooserUserControl chooser = GetAppChooser(row, col);
+                    if (!chooser.IsSelected)
                         continue;
 
-                    action(app, row, col);
+                    //AppInfo app = chooser.SelectedApp;
+                    //if (chooser.SelectedApp == null)
+                    //    continue;
+
+                    action(chooser, row, col);
                 }
             }
             this.Activate();
@@ -103,28 +111,29 @@ namespace DesktopManagerUX
 
         private void Apply_Click(object sender, RoutedEventArgs e)
         {
-            Apply_ActionOnAll((app, row, col) => Apply(app, row, col));
+            Apply_ActionOnAll((chooser, row, col) => Apply(chooser, row, col));
         }
 
-        private void Apply(AppInfo app, int row, int col)
+        private void Apply(AppChooserUserControl chooser, int row, int col)
         {
+            if (chooser.SelectedApp == null || !chooser.SelectedApp.IsActive)
+                return;
+
             Rect bounds = AppContext.Configuration.SelectedDisplayInfo.Bounds;
 
-            int rows = AppContext.Configuration.GridSize.Rows;
-            int cols = AppContext.Configuration.GridSize.Cols;
-
-            double width = 3 + bounds.Width / cols;
-            double height = 3 + bounds.Height / rows;
+            double width = 3 + AppContext.Configuration.CellSize.Width;
+            double height = 3 + AppContext.Configuration.CellSize.Height;
 
             double left = bounds.Left + col * width;
             double top = bounds.Top + row * height;
 
-            if (col == 0)
+            int cols = AppContext.Configuration.GridSize.Cols;
+            if (col == 0) //first column
                 left += 3;
-            if (col == cols - 1)
+            else if (col == cols - 1) //last column
                 left -= 7;
 
-            Logic.MoveWindow(app.HWND, left, top, width, height);
+            Logic.MoveWindow(chooser.SelectedApp.HWND, left, top, width, height);
         }
 
         private void RebuildAppsGrid()
@@ -191,12 +200,18 @@ namespace DesktopManagerUX
 
         private void CloseSelected_Click(object sender, RoutedEventArgs e)
         {
-            Apply_ActionOnAll((app, row, col) => User32.CloseWindow(app.HWND));
+            Apply_ActionOnAll((chooser, row, col) =>
+            {
+                if (!chooser.SelectedApp.IsActive)
+                    return;
+
+                User32.CloseWindow(chooser.SelectedApp.HWND);
+            });
         }
 
         private void OpenSelected_Click(object sender, RoutedEventArgs e)
         {
-            Apply_ActionOnAll((app, row, col) => AppContext.Logic.RunApp(app));
+            Apply_ActionOnAll((chooser, row, col) => AppContext.Logic.RunApp(chooser.SelectedApp));
         }
 
         private void Test_Click(object sender, RoutedEventArgs e)
@@ -206,7 +221,7 @@ namespace DesktopManagerUX
 
         private void Minimize_Click(object sender, RoutedEventArgs e)
         {
-            Apply_ActionOnAll((app, row, col) => User32.MinimizeWindow(app.HWND));
+            Apply_ActionOnAll((chooser, row, col) => User32.MinimizeWindow(chooser.SelectedApp.HWND));
         }
     }
 }

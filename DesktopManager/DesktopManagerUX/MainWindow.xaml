@@ -23,7 +23,8 @@
                     <TextBlock Text="Refresh" VerticalAlignment="Center" Margin="2"/>
                 </StackPanel>
             </Button>
-            <ComboBox x:Name="cmbDisplays" Width="200" Margin="6,0,6,0">
+            <ComboBox x:Name="cmbDisplays" Width="200" Margin="6,0,6,0"
+                      SelectionChanged="cmbDisplays_SelectionChanged">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
@@ -39,7 +40,7 @@
             <Button Margin="10,0" Padding="4" Click="Apply_Click">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="Images\AppIcon.ico"/>
-                    <TextBlock Text="Restore All" VerticalAlignment="Center" Margin="2" FontWeight="SemiBold"/>
+                    <TextBlock Text="Restore Selected" VerticalAlignment="Center" Margin="2" FontWeight="SemiBold"/>
                 </StackPanel>
             </Button>
              <Button Margin="10,0" Padding="4" Click="Test_Click">
@@ -51,19 +52,19 @@
            <Button Margin="100,0,0,0" Padding="4" Click="Minimize_Click">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="_ " Width="18" Background="Navy" Foreground="Wheat" VerticalAlignment="Bottom" TextAlignment="Center"/>
-                    <TextBlock Text="Minimize All" VerticalAlignment="Center" Margin="2"/>
+                    <TextBlock Text="Minimize Selected" VerticalAlignment="Center" Margin="2"/>
                 </StackPanel>
             </Button>
             <Button Margin="10,0,0,0" Padding="4" Click="OpenSelected_Click">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="☐" Width="18" Background="Navy" Foreground="Wheat" VerticalAlignment="Bottom" TextAlignment="Center"/>
-                    <TextBlock Text="Start All" VerticalAlignment="Center" Margin="2"/>
+                    <TextBlock Text="Start Selected" VerticalAlignment="Center" Margin="2"/>
                 </StackPanel>
             </Button>
             <Button Margin="10,0" Padding="4" Click="CloseSelected_Click">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="☒" Width="18" Background="Red" Foreground="Wheat" VerticalAlignment="Center" TextAlignment="Center"/>
-                    <TextBlock Text="Close All" VerticalAlignment="Center" Margin="2"/>
+                    <TextBlock Text="Close Selected" VerticalAlignment="Center" Margin="2"/>
                 </StackPanel>
             </Button>
         </StackPanel>
@@ -77,18 +78,10 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Border Grid.Row="0" Grid.Column="0" BorderThickness="3" BorderBrush="Navy">
-                <local:AppChooserUserControl x:Name="app0x0"/>
-            </Border>
-            <Border Grid.Row="0" Grid.Column="1" BorderThickness="0,3,3,3" BorderBrush="Navy">
-                <local:AppChooserUserControl x:Name="app0x1"/>
-            </Border>
-            <Border Grid.Row="1" Grid.Column="0" BorderThickness="3,0,3,3" BorderBrush="Navy">
-                <local:AppChooserUserControl x:Name="app1x0"/>
-            </Border>
-            <Border Grid.Row="1" Grid.Column="1" BorderThickness="0,0,3,3" BorderBrush="Navy">
-                <local:AppChooserUserControl x:Name="app1x1"/>
-            </Border>
+            <local:AppChooserUserControl x:Name="app0x0" Grid.Row="0" Grid.Column="0"/>
+            <local:AppChooserUserControl x:Name="app0x1" Grid.Row="0" Grid.Column="1"/>
+            <local:AppChooserUserControl x:Name="app1x0" Grid.Row="1" Grid.Column="0"/>
+            <local:AppChooserUserControl x:Name="app1x1" Grid.Row="1" Grid.Column="1"/>
         </Grid>
     </Grid>
 </Window>

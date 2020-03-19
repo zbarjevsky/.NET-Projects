@@ -31,6 +31,8 @@ namespace DesktopManagerUX
         public int Row { get; private set; }
         public int Col { get; private set; }
 
+        public bool IsSelected { get { return chkSelected.IsChecked.Value; } set { chkSelected.IsChecked = value; } }
+
         public AppChooserUserControl()
         {
             InitializeComponent();
@@ -77,6 +79,15 @@ namespace DesktopManagerUX
             this.DataContext = null;
             cmbApps.ItemsSource = null;
             txtInfo.Content = "<<DISPOSED>>";
+        }
+
+        public void UpdateInfo()
+        {
+            txtInfo.Content = "Expected: "+ AppContext.Configuration.CellSize.Width + "x" + AppContext.Configuration.CellSize.Height + ", ";
+            if (imagePreview.Source != null)
+                txtInfo.Content += "Snapshot Size: " + imagePreview.Source.Width + "x" + imagePreview.Source.Height;
+            else
+                txtInfo.Content += "No Snaphot";
         }
 
         public bool HasSelection { get { return cmbApps.SelectedIndex > 0 && cmbApps.SelectedIndex < AppContext.ViewModel.Apps.Count; } }
@@ -135,10 +146,7 @@ namespace DesktopManagerUX
                     if (bRestoreBeforeSnapshot || !User32.IsMinimized(SelectedApp.HWND))
                     {
                         imagePreview.Source = Logic.CaptureApplication(SelectedApp.HWND, bRestoreBeforeSnapshot);
-                        if (imagePreview.Source != null)
-                            txtInfo.Content = "Current Size: " + imagePreview.Source.Width + "x" + imagePreview.Source.Height;
-                        else
-                            txtInfo.Content = "No Snaphot";
+                        UpdateInfo();
                     }
                     else if(imagePreview == null) //no snapshot
                     {

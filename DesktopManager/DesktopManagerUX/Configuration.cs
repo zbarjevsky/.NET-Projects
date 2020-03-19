@@ -15,7 +15,18 @@ namespace DesktopManagerUX
         public DisplayInfo SelectedDisplayInfo { get; set; }
 
         private GridSizeData _gridSize = new GridSizeData() { Rows=2, Cols=2 };
+
         public GridSizeData GridSize { get { return _gridSize; } set { _gridSize = value; } }
+
+        public System.Drawing.Size CellSize
+        {
+            get
+            {
+                int width = (int)(SelectedDisplayInfo.Bounds.Width / _gridSize.Cols);
+                int height = (int)(SelectedDisplayInfo.Bounds.Height / _gridSize.Rows);
+                return new System.Drawing.Size(width, height);
+            }
+        }
 
         //should be before SelectedGridSize - to avoid doubling when loading from XML
         public List<AppInfo> SelectedApps { get; set; }
