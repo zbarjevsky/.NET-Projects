@@ -29,7 +29,7 @@ namespace DesktopManagerUX.Utils
                     return true;
 
                 User32.WindowStylesEx ex = User32.GetWindowLong(hWnd, User32.WindowLongIndex.GWL_EX_STYLE);
-                if (ex.HasFlag(User32.WindowStylesEx.WS_EX_TOOLWINDOW))
+                if (ex.HasFlag(User32.WindowStylesEx.WS_EX_TOOLWINDOW) || ex.HasFlag(User32.WindowStylesEx.WS_EX_NOREDIRECTIONBITMAP))
                     return true;
 
                 windows.Add(new AppInfo(hWnd));

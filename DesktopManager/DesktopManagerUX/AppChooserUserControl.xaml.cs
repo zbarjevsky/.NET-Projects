@@ -17,6 +17,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Threading;
 using System.Windows.Threading;
+using DesktopManagerUX.Utils;
 
 namespace DesktopManagerUX
 {
@@ -40,8 +41,7 @@ namespace DesktopManagerUX
 
         private void _timer_Tick(object sender, EventArgs e)
         {
-            //if (AppContext.Sync == false)
-                RefreshSnapshot();
+            RefreshSnapshot(false);
         }
 
         public void Init(int row, int col)
@@ -117,10 +117,11 @@ namespace DesktopManagerUX
 
         private void cmbApps_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            RefreshSnapshot();
+            RefreshSnapshot(true);
+            AppContext.Configuration.Save();
         }
 
-        private void RefreshSnapshot()
+        private void RefreshSnapshot(bool bRestoreBeforeSnapshot)
         {
             if (_timer == null) //disposed
                 return;
@@ -129,16 +130,25 @@ namespace DesktopManagerUX
             {
                 SelectedApp.Refresh();
 
-                imagePreview.Source = Logic.CaptureApplication(SelectedApp.HWND, AppContext.ViewModel.DPI);
-                if (imagePreview.Source != null)
-                    txtInfo.Content = "Current Size: " + imagePreview.Source.Width + "x" + imagePreview.Source.Height;
-                else
-                    txtInfo.Content = "No Snaphot";
+                if (SelectedApp.IsActive)
+                {
+                    if (bRestoreBeforeSnapshot || !User32.IsMinimized(SelectedApp.HWND))
+                    {
+                        imagePreview.Source = Logic.CaptureApplication(SelectedApp.HWND, bRestoreBeforeSnapshot);
+                        if (imagePreview.Source != null)
+                            txtInfo.Content = "Current Size: " + imagePreview.Source.Width + "x" + imagePreview.Source.Height;
+                        else
+                            txtInfo.Content = "No Snaphot";
+                    }
+                    else if(imagePreview == null) //no snapshot
+                    {
+
+                    }
+                }
 
                 btnRun.ToolTip = "Open " + SelectedApp.ProcessName;
                 btnRun.IsEnabled = File.Exists(SelectedApp.ProcessPath);
                 AppContext.Configuration[Row, Col] = SelectedApp;
-                AppContext.Configuration.Save();
             }
             else
             {
@@ -147,7 +157,6 @@ namespace DesktopManagerUX
                 imagePreview.Source = null;
                 txtInfo.Content = "? Select Window ?";
                 AppContext.Configuration[Row, Col] = AppInfo.GetEmptyAppInfo();
-                AppContext.Configuration.Save();
             }
         }
 

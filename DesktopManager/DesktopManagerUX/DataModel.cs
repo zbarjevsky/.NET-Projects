@@ -71,6 +71,8 @@ namespace DesktopManagerUX
 
         [XmlIgnore]
         public BitmapSource Icon { get; private set; }
+        [XmlIgnore]
+        public bool IsActive { get { return Process != null && !Process.HasExited && HWND != IntPtr.Zero; } }
 
         public static int FindApp(string title, SmartCollection<AppInfo> apps)
         {

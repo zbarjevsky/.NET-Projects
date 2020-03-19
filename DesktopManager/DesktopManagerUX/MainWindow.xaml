@@ -8,7 +8,7 @@
         WindowStartupLocation="CenterScreen"
         MinWidth="800" MinHeight="600"
         LocationChanged="Window_LocationChanged"
-        Icon="Images\AppIcon.ico"
+        Icon="Images\AppIcon.ico" FontSize="16"
         Closed="Window_Closed"
         Title="Desktop Manager" Width="1920" Height="1080">
     <Grid x:Name="gridMain">
@@ -17,8 +17,12 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" Margin="6">
-            <Button x:Name="btnRefresh" Content="Refresh" Margin="4,0" Padding="4"
-                    Click="btnRefresh_Click"/>
+            <Button x:Name="btnRefresh" Margin="4,0" Padding="4" Click="btnRefresh_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="↻" Width="18" Background="DarkGreen" Foreground="Wheat" VerticalAlignment="Bottom" TextAlignment="Center"/>
+                    <TextBlock Text="Refresh" VerticalAlignment="Center" Margin="2"/>
+                </StackPanel>
+            </Button>
             <ComboBox x:Name="cmbDisplays" Width="200" Margin="6,0,6,0">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
@@ -32,9 +36,36 @@
             <ComboBox x:Name="cmbGridSize" SelectedIndex="1" VerticalContentAlignment="Center"
                       SelectionChanged="cmbGridSize_SelectionChanged"/>
 
-            <Button Margin="10,0" Padding="4" Click="Apply_Click">Apply</Button>
-            <Button Margin="10,0" Padding="4" Click="OpenSelected_Click">Open All</Button>
-            <Button Margin="10,0" Padding="4" Click="CloseSelected_Click">Close All</Button>
+            <Button Margin="10,0" Padding="4" Click="Apply_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="Images\AppIcon.ico"/>
+                    <TextBlock Text="Restore All" VerticalAlignment="Center" Margin="2" FontWeight="SemiBold"/>
+                </StackPanel>
+            </Button>
+             <Button Margin="10,0" Padding="4" Click="Test_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="☢" Background="Yellow" Foreground="DarkGreen" VerticalAlignment="Center" TextAlignment="Center"/>
+                    <TextBlock Text="Test" VerticalAlignment="Center" Margin="2"/>
+                </StackPanel>
+            </Button>
+           <Button Margin="100,0,0,0" Padding="4" Click="Minimize_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="_ " Width="18" Background="Navy" Foreground="Wheat" VerticalAlignment="Bottom" TextAlignment="Center"/>
+                    <TextBlock Text="Minimize All" VerticalAlignment="Center" Margin="2"/>
+                </StackPanel>
+            </Button>
+            <Button Margin="10,0,0,0" Padding="4" Click="OpenSelected_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="☐" Width="18" Background="Navy" Foreground="Wheat" VerticalAlignment="Bottom" TextAlignment="Center"/>
+                    <TextBlock Text="Start All" VerticalAlignment="Center" Margin="2"/>
+                </StackPanel>
+            </Button>
+            <Button Margin="10,0" Padding="4" Click="CloseSelected_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="☒" Width="18" Background="Red" Foreground="Wheat" VerticalAlignment="Center" TextAlignment="Center"/>
+                    <TextBlock Text="Close All" VerticalAlignment="Center" Margin="2"/>
+                </StackPanel>
+            </Button>
         </StackPanel>
         
         <Grid x:Name="gridApps" Grid.Row="1">

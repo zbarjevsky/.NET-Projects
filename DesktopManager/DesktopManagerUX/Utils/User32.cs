@@ -86,6 +86,11 @@ namespace DesktopManagerUX.Utils
             SendMessage(hwnd, WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
         }
 
+        public static void MinimizeWindow(IntPtr hWnd)
+        {
+            ShowWindow(hWnd, SW_MINIMIZE);
+        }
+
         /// <summary>
         /// Gets the window info.
         /// </summary>
@@ -145,7 +150,19 @@ namespace DesktopManagerUX.Utils
         [DllImport("user32.dll")]
         public static extern bool GetWindowPlacement(IntPtr hWnd, out WINDOWPLACEMENT lpwndpl);
 
-        public static RECT RestoreWindow(IntPtr handle)
+        public static bool IsMinimized(IntPtr hWnd)
+        {
+            WINDOWPLACEMENT WinPlacement = new WINDOWPLACEMENT();
+            if (!GetWindowPlacement(hWnd, out WinPlacement))
+                return true; //window not found
+
+            return (WinPlacement.showCmd == SW_FORCEMINIMIZE
+                || WinPlacement.showCmd == SW_SHOWMINIMIZED
+                || WinPlacement.showCmd == SW_SHOWMINNOACTIVE
+                || WinPlacement.showCmd == SW_MINIMIZE);
+        }
+
+        public static void RestoreWindow(IntPtr handle)
         {
             WINDOWPLACEMENT WinPlacement = new WINDOWPLACEMENT();
             GetWindowPlacement(handle, out WinPlacement);
@@ -153,7 +170,7 @@ namespace DesktopManagerUX.Utils
                 && WinPlacement.showCmd != SW_SHOWMINIMIZED
                 && WinPlacement.showCmd != SW_SHOWMINNOACTIVE
                 && WinPlacement.showCmd != SW_MINIMIZE)
-                return WinPlacement.rcNormalPosition;
+                return;
 
             if (WinPlacement.flags.HasFlag(WINDOWPLACEMENT.Flags.WPF_RESTORETOMAXIMIZED))
             {
@@ -163,7 +180,6 @@ namespace DesktopManagerUX.Utils
             {
                 ShowWindow(handle, (int)SW_SHOWNOACTIVATE);// SW_RESTORE);
             }
-            return WinPlacement.rcNormalPosition;
         }
 
         private const int S_OK = 0;

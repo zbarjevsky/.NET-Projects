@@ -9,7 +9,7 @@
     <Border x:Name="borderMain" BorderThickness="1" BorderBrush="Goldenrod">
         <Grid x:Name="gridMain">
 
-            <Image  x:Name="imagePreview" Stretch="Fill"/>
+            <Image  x:Name="imagePreview" Stretch="Uniform"/>
 
             <Label x:Name="txtInfo" Content="Select Application" 
                    VerticalAlignment="Top" HorizontalAlignment="Left" Opacity="0.7"

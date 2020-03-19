@@ -80,29 +80,35 @@ namespace DesktopManagerUX
             return null;
         }
 
-        private void Apply_Click(object sender, RoutedEventArgs e)
+        private void Apply_ActionOnAll(Action<AppInfo, int, int> action)
         {
             AppContext.Configuration.SelectedDisplayInfo = cmbDisplays.SelectedItem as DisplayInfo;
 
-            int rows = AppContext.Configuration.GridSize.Rows;
-            int cols = AppContext.Configuration.GridSize.Cols;
-
+            int rows = gridApps.RowDefinitions.Count;
+            int cols = gridApps.ColumnDefinitions.Count;
             for (int row = 0; row < rows; row++)
             {
                 for (int col = 0; col < cols; col++)
                 {
-                    Apply(row, col, AppContext.Configuration.SelectedDisplayInfo.Bounds);
+                    AppInfo app = GetAppChooser(row, col).SelectedApp;
+                    if (app == null)
+                        continue;
+
+                    action(app, row, col);
                 }
             }
-
             this.Activate();
+
         }
 
-        private void Apply(int row, int col, Rect bounds)
+        private void Apply_Click(object sender, RoutedEventArgs e)
         {
-            AppInfo app = GetAppChooser(row, col).SelectedApp;
-            if (app == null)
-                return;
+            Apply_ActionOnAll((app, row, col) => Apply(app, row, col));
+        }
+
+        private void Apply(AppInfo app, int row, int col)
+        {
+            Rect bounds = AppContext.Configuration.SelectedDisplayInfo.Bounds;
 
             int rows = AppContext.Configuration.GridSize.Rows;
             int cols = AppContext.Configuration.GridSize.Cols;
@@ -185,38 +191,22 @@ namespace DesktopManagerUX
 
         private void CloseSelected_Click(object sender, RoutedEventArgs e)
         {
-            int rows = gridApps.RowDefinitions.Count;
-            int cols = gridApps.ColumnDefinitions.Count;
-            for (int row = 0; row < rows; row++)
-            {
-                for (int col = 0; col < cols; col++)
-                {
-                    AppInfo app = GetAppChooser(row, col).SelectedApp;
-                    if (app == null)
-                        continue;
-
-                    User32.CloseWindow(app.HWND);
-                }
-            }
-            this.Activate();
+            Apply_ActionOnAll((app, row, col) => User32.CloseWindow(app.HWND));
         }
 
         private void OpenSelected_Click(object sender, RoutedEventArgs e)
         {
-            int rows = gridApps.RowDefinitions.Count;
-            int cols = gridApps.ColumnDefinitions.Count;
-            for (int row = 0; row < rows; row++)
-            {
-                for (int col = 0; col < cols; col++)
-                {
-                    AppInfo app = GetAppChooser(row, col).SelectedApp;
-                    if (app == null)
-                        continue;
+            Apply_ActionOnAll((app, row, col) => AppContext.Logic.RunApp(app));
+        }
 
-                    AppContext.Logic.RunApp(app);
-                }
-            }
-            this.Activate();
+        private void Test_Click(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("Not Implemented");
+        }
+
+        private void Minimize_Click(object sender, RoutedEventArgs e)
+        {
+            Apply_ActionOnAll((app, row, col) => User32.MinimizeWindow(app.HWND));
         }
     }
 }

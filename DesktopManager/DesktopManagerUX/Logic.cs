@@ -102,15 +102,16 @@ namespace DesktopManagerUX
         //    Properties.Settings.Default.Save();
         //}
 
-        public static BitmapSource CaptureApplication(IntPtr hWnd, System.Windows.Point DPI)
+        public static BitmapSource CaptureApplication(IntPtr hWnd, bool bRestoreBeforeSnapshot)
         {
-            User32.RestoreWindow(hWnd); //to get snapshot
+            if(bRestoreBeforeSnapshot)
+                User32.RestoreWindow(hWnd); //to get snapshot
 
             //User32.PROCESS_DPI_AWARENESS pda = User32.GetProcessDpiAwareness(process.Handle);
 
             User32.WINDOWINFO wi = User32.GetWindowInfo(hWnd);
-            int width = (int)((wi.rcWindow.right - wi.rcWindow.left));// / DPI.X);
-            int height = (int)((wi.rcWindow.bottom - wi.rcWindow.top));// / DPI.Y);
+            int width = (int)((wi.rcWindow.right - wi.rcWindow.left));
+            int height = (int)((wi.rcWindow.bottom - wi.rcWindow.top));
 
             if (width == 0 || height == 0)
                 return null;
@@ -162,6 +163,7 @@ namespace DesktopManagerUX
         public void RunApp(AppInfo app)
         {
             //app.ProcessPath;
+            MessageBox.Show("Not Implemented");
         }
     }
 }
