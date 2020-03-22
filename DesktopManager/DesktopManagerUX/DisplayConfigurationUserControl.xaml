@@ -1,0 +1,83 @@
+﻿<UserControl x:Class="DesktopManagerUX.DisplayConfigurationUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DesktopManagerUX"
+             mc:Ignorable="d" 
+             Loaded="UserControl_Loaded"
+             d:DesignHeight="450" d:DesignWidth="1200">
+    <Grid x:Name="gridMain">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Margin="6">
+            <Button x:Name="btnRefresh" Margin="4,0" Padding="4" Click="btnRefresh_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="↻" Width="18" Background="DarkGreen" Foreground="Wheat" VerticalAlignment="Bottom" TextAlignment="Center"/>
+                    <TextBlock Text="Refresh" VerticalAlignment="Center" Margin="2"/>
+                </StackPanel>
+            </Button>
+            <!--<ComboBox x:Name="cmbDisplays" Width="200" Margin="6,0,6,0"
+                      SelectionChanged="cmbDisplays_SelectionChanged">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <Rectangle Fill="{Binding Brush}" Width="16" Height="16" Margin="0,2,5,2" />
+                            <TextBlock Text="{Binding Name}" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>-->
+            <ComboBox x:Name="cmbGridSize" SelectedIndex="1" VerticalContentAlignment="Center"
+                      SelectionChanged="cmbGridSize_SelectionChanged"/>
+
+            <Button Margin="10,0" Padding="4" Click="Apply_Click">
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="Images\AppIcon.ico"/>
+                    <TextBlock Text="Restore Selected" VerticalAlignment="Center" Margin="2" FontWeight="SemiBold"/>
+                </StackPanel>
+            </Button>
+            <Button Margin="10,0" Padding="4" Click="Test_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="☢" Background="Yellow" Foreground="DarkGreen" VerticalAlignment="Center" TextAlignment="Center"/>
+                    <TextBlock Text="Test" VerticalAlignment="Center" Margin="2"/>
+                </StackPanel>
+            </Button>
+            <Button Margin="100,0,0,0" Padding="4" Click="Minimize_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="_ " Width="18" Background="Navy" Foreground="Wheat" VerticalAlignment="Bottom" TextAlignment="Center"/>
+                    <TextBlock Text="Minimize Selected" VerticalAlignment="Center" Margin="2"/>
+                </StackPanel>
+            </Button>
+            <Button Margin="10,0,0,0" Padding="4" Click="OpenSelected_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="☐" Width="18" Background="Navy" Foreground="Wheat" VerticalAlignment="Bottom" TextAlignment="Center"/>
+                    <TextBlock Text="Start Selected" VerticalAlignment="Center" Margin="2"/>
+                </StackPanel>
+            </Button>
+            <Button Margin="10,0" Padding="4" Click="CloseSelected_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="☒" Width="18" Background="Red" Foreground="Wheat" VerticalAlignment="Center" TextAlignment="Center"/>
+                    <TextBlock Text="Close Selected" VerticalAlignment="Center" Margin="2"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+
+        <Grid x:Name="gridApps" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <local:AppChooserUserControl x:Name="app0x0" Grid.Row="0" Grid.Column="0"/>
+            <local:AppChooserUserControl x:Name="app0x1" Grid.Row="0" Grid.Column="1"/>
+            <local:AppChooserUserControl x:Name="app1x0" Grid.Row="1" Grid.Column="0"/>
+            <local:AppChooserUserControl x:Name="app1x1" Grid.Row="1" Grid.Column="1"/>
+        </Grid>
+    </Grid>
+</UserControl>

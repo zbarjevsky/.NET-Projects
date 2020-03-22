@@ -177,7 +177,7 @@ namespace DesktopManagerUX
         public int Index { get; set; }
 
         [XmlIgnore]
-        public string Name { get { return Index + " - " + Bounds.Width + "x" + Bounds.Height + (screen.IsPrimary ? " (Primary)" : ""); } }
+        public string Name { get { return "Display " +Index + " - " + Bounds.Width + "x" + Bounds.Height + (screen.IsPrimary ? " (Primary)" : ""); } }
         [XmlIgnore]
         public System.Windows.Rect Bounds { get { return screen.WorkingArea; } set { } }
 

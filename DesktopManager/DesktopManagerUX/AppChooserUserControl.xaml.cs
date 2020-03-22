@@ -33,6 +33,14 @@ namespace DesktopManagerUX
 
         public bool IsSelected { get { return chkSelected.IsChecked.Value; } set { chkSelected.IsChecked = value; } }
 
+        public DisplayConfiguration DisplayConfiguration
+        {
+            get { return (DisplayConfiguration)this.GetValue(DisplayConfigurationProperty); }
+            set { this.SetValue(DisplayConfigurationProperty, value); }
+        }
+        public static readonly DependencyProperty DisplayConfigurationProperty = DependencyProperty.Register(
+          nameof(DisplayConfiguration), typeof(DisplayConfiguration), typeof(AppChooserUserControl), new PropertyMetadata(new DisplayConfiguration()));
+
         public AppChooserUserControl()
         {
             InitializeComponent();
@@ -48,7 +56,7 @@ namespace DesktopManagerUX
 
         public void Init(int row, int col)
         {
-            AppInfo savedInfo = AppContext.Configuration[row, col];
+            AppInfo savedInfo = DisplayConfiguration[row, col];
 
             this.DataContext = AppContext.ViewModel;
             cmbApps.ItemsSource = AppContext.ViewModel.Apps;
@@ -61,7 +69,7 @@ namespace DesktopManagerUX
             borderMain.BorderThickness = ThicknessFromRowCol(row, col);
 
             //save
-            AppContext.Configuration[row, col] = cmbApps.SelectedItem as AppInfo;
+            DisplayConfiguration[row, col] = cmbApps.SelectedItem as AppInfo;
             
             _timer.Start();
         }
@@ -83,7 +91,7 @@ namespace DesktopManagerUX
 
         public void UpdateInfo()
         {
-            txtInfo.Content = "Expected: "+ AppContext.Configuration.CellSize.Width + "x" + AppContext.Configuration.CellSize.Height + ", ";
+            txtInfo.Content = "Expected: "+ DisplayConfiguration.CellSize.Width + "x" + DisplayConfiguration.CellSize.Height + ", ";
             if (imagePreview.Source != null)
                 txtInfo.Content += "Snapshot Size: " + imagePreview.Source.Width + "x" + imagePreview.Source.Height;
             else
@@ -156,7 +164,7 @@ namespace DesktopManagerUX
 
                 btnRun.ToolTip = "Open " + SelectedApp.ProcessName;
                 btnRun.IsEnabled = File.Exists(SelectedApp.ProcessPath);
-                AppContext.Configuration[Row, Col] = SelectedApp;
+                DisplayConfiguration[Row, Col] = SelectedApp;
             }
             else
             {
@@ -164,7 +172,7 @@ namespace DesktopManagerUX
                 btnRun.IsEnabled = false;
                 imagePreview.Source = null;
                 txtInfo.Content = "? Select Window ?";
-                AppContext.Configuration[Row, Col] = AppInfo.GetEmptyAppInfo();
+                DisplayConfiguration[Row, Col] = AppInfo.GetEmptyAppInfo();
             }
         }
 
@@ -194,8 +202,8 @@ namespace DesktopManagerUX
 
         private Thickness ThicknessFromRowCol(int row, int col)
         {
-            int rows = AppContext.Configuration.GridSize.Rows;
-            int cols = AppContext.Configuration.GridSize.Cols;
+            int rows = DisplayConfiguration.GridSize.Rows;
+            int cols = DisplayConfiguration.GridSize.Cols;
 
             const double thin = 4, thick = 2 * thin;
 

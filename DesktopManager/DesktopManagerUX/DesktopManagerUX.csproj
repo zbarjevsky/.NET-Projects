@@ -66,6 +66,9 @@
     <Compile Include="AppContext.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="DataModel.cs" />
+    <Compile Include="DisplayConfigurationUserControl.xaml.cs">
+      <DependentUpon>DisplayConfigurationUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Logic.cs" />
     <Compile Include="Utils\AeroPeek.cs" />
     <Compile Include="Utils\DesktopWindowManager.cs" />
@@ -77,6 +80,10 @@
     <Compile Include="Utils\XmlSerializerHelper.cs" />
     <Compile Include="ViewModel.cs" />
     <Page Include="AppChooserUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="DisplayConfigurationUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

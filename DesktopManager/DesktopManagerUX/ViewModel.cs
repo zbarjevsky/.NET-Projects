@@ -36,6 +36,11 @@ namespace DesktopManagerUX
             ReloadApps();
         }
 
+        public void ActivateMainWindow()
+        {
+            _wnd.Activate();
+        }
+
         public void ReloadApps() 
         {
             Apps.UpdateAndAdd(Logic.GetAppsWithUI());
