@@ -271,7 +271,7 @@ namespace MeditationStopWatch
             UpdateInfo();
         }
 
-        private void Next()
+        public void Next()
         {
             if (Count == 0)
                 return;
@@ -279,7 +279,7 @@ namespace MeditationStopWatch
             PlaySelected(m_playLists.PL.NextIdx());
         }
 
-        private void Prev()
+        public void Prev()
         {
             if (Count == 0)
                 return;

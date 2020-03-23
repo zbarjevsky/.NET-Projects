@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using MeditationStopWatch.Tools;
+using Microsoft.WindowsAPICodePack.Taskbar;
 
 namespace MeditationStopWatch
 {
@@ -22,6 +23,10 @@ namespace MeditationStopWatch
 		private IList<string> m_FavoritesList = new List<string>();
 		ImageFileUtil ImageInfo = new ImageFileUtil();
 		ThumbnailCache m_ThumbnailCache;
+
+		private ThumbnailToolBarButton buttonPrevious;
+		private ThumbnailToolBarButton buttonNext;
+		private ThumbnailToolBarButton buttonPlay;
 
 		public FormStopWatch()
 		{
@@ -94,6 +99,7 @@ namespace MeditationStopWatch
 			m_audioPlayerControl.ValueChanged += m_audioPlayerControl_ValueChanged;
 
             AutoCloseThumbnailsPanel();
+			InitThumbnailToolBarButtons();
 		}
 
 		private void FormStopWatch_FormClosing(object sender, FormClosingEventArgs e)
@@ -107,6 +113,23 @@ namespace MeditationStopWatch
 
 		private void FormStopWatch_FormClosed(object sender, FormClosedEventArgs e)
 		{
+		}
+
+		private void InitThumbnailToolBarButtons()
+		{
+			buttonPrevious = new ThumbnailToolBarButton(Properties.Resources.previus_on, "Previous");
+			buttonPrevious.Click += (s,e) => { m_audioPlayerControl.Prev(); };
+			buttonPrevious.Visible = true;
+
+			buttonNext = new ThumbnailToolBarButton(Properties.Resources.next_on, "Next");
+			buttonNext.Click += (s, e) => { m_audioPlayerControl.Next(); };
+			buttonNext.Visible = true;
+
+			buttonPlay = new ThumbnailToolBarButton(Properties.Resources.play_on, "Play/Pause");
+			buttonPlay.Click += (s, e) => { m_audioPlayerControl.PauseResume(); };
+			buttonPlay.Visible = true;
+
+			TaskbarManager.Instance.ThumbnailToolBars.AddButtons(this.Handle, buttonPrevious, buttonPlay, buttonNext);
 		}
 
 		private void m_ThumbnailCache_ProgressChanged(object sender, CacheEventArgs e)

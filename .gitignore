@@ -63,3 +63,5 @@ MessageBox/Binaries/MZ.WPF.MessageBox.dll
 /DesktopManager/.vs/DesktopManager/v16/Server/sqlite3
 /RulerWPF/.vs/RulerWPF/v16/Server/sqlite3
 /CashFlowGame101/.vs/CashFlowGame101/v16/Server/sqlite3
+/MeditationStopWatch/packages/WindowsAPICodePack-Core.1.1.1
+/MeditationStopWatch/packages/WindowsAPICodePack-Shell.1.1.1
