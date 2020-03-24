@@ -170,6 +170,8 @@ namespace DesktopManagerUX
                 int rows = AppContext.Configuration.Displays[0].GridSize.Rows;
                 int cols = AppContext.Configuration.Displays[0].GridSize.Cols;
 
+                gridSizeSelector.SelectedSize = new GridSizeData(rows, cols);
+
                 RebuildAppsGrid(gridApps, rows, cols, this.DisplayConfiguration, AppContext.ViewModel);
             }
             AppContext.Sync = false;

@@ -1,0 +1,81 @@
+﻿<UserControl x:Class="DesktopManagerUX.Controls.SelectTableSizeUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DesktopManagerUX.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="40" d:DesignWidth="90">
+    <UserControl.Resources>
+        <Style x:Key="cellStyle" TargetType="DataGridCell">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Background" Value="AliceBlue" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridCell">
+                        <Border Background="Red" BorderThickness="0">
+                            <Border x:Name="border"
+                              BorderBrush="Goldenrod"
+                              BorderThickness="2"
+                              Background="LightBlue"
+                              CornerRadius="1">
+                                <ContentPresenter />
+                            </Border>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=IsSelected}" Value="true">
+                                <Setter TargetName="border" Property="Background" Value="Blue"/>
+                            </DataTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="rowStyle" TargetType="DataGridRow">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Height" Value="30" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Background" Value="LightBlue" />
+        </Style>
+    </UserControl.Resources>
+    <Grid>
+        <ToggleButton Grid.Column="1" x:Name="dgDropdown" 
+                      HorizontalAlignment="Stretch" Padding="4,2" Margin="0">
+            <ToggleButton.Content>
+                <StackPanel>
+                    <TextBlock>                      
+                    <Run Text="{Binding SelectedSizeText, FallbackValue=Select}" />                       
+                    <Run Text="q" FontFamily="Wingdings 3" />
+                    </TextBlock>
+                </StackPanel>
+            </ToggleButton.Content>
+        </ToggleButton>
+
+        <Popup IsOpen="{Binding IsChecked, Mode=TwoWay, ElementName=dgDropdown}" StaysOpen="True"
+               PlacementTarget="{Binding ElementName=dgDropdown}" 
+               Placement="Bottom" PopupAnimation="Slide">
+            <Border BorderBrush="Goldenrod" BorderThickness="1"  CornerRadius="2" >
+                <DataGrid x:Name="dataGrid" Grid.Row="1" Width="120" Height="92"
+                          RowStyle="{StaticResource rowStyle}" CellStyle="{StaticResource cellStyle}" 
+                          HeadersVisibility="None" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False"
+                          AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="All"
+                          Loaded="dataGrid_Loaded"
+                          LostFocus="dataGrid_LostFocus"
+                          PreviewMouseLeftButtonDown="dataGrid_PreviewMouseLeftButtonDown"
+                          SelectedCellsChanged="dataGrid_SelectedCellsChanged"
+                          MouseLeftButtonUp="dataGrid_MouseLeftButtonUp"
+                          SelectionMode="Extended" SelectionUnit="Cell">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Binding="{Binding col1}" Width="*"/>
+                        <DataGridTextColumn Binding="{Binding col2}" Width="*"/>
+                        <DataGridTextColumn Binding="{Binding col3}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Border>
+        </Popup>
+
+    </Grid>
+</UserControl>
