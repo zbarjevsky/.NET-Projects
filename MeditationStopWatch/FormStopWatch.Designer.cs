@@ -78,6 +78,8 @@
             this.m_lblImageDesc = new System.Windows.Forms.ToolStripLabel();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.m_btnSlideShow = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.m_cmbAudioOutDevices = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.m_imageListFullScreen = new System.Windows.Forms.ImageList(this.components);
             this.m_pnlMain.SuspendLayout();
@@ -170,7 +172,7 @@
             this.m_toolStripContainerPictureInfo.ContentPanel.Controls.Add(this.m_lblVolume);
             this.m_toolStripContainerPictureInfo.ContentPanel.Controls.Add(this.m_btnHideSumbnails);
             this.m_toolStripContainerPictureInfo.ContentPanel.Controls.Add(this.m_pictureBox1);
-            this.m_toolStripContainerPictureInfo.ContentPanel.Size = new System.Drawing.Size(590, 312);
+            this.m_toolStripContainerPictureInfo.ContentPanel.Size = new System.Drawing.Size(590, 307);
             this.m_toolStripContainerPictureInfo.Dock = System.Windows.Forms.DockStyle.Fill;
             // 
             // m_toolStripContainerPictureInfo.LeftToolStripPanel
@@ -232,7 +234,7 @@
             this.m_btnHideSumbnails.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.m_btnHideSumbnails.ImageIndex = 0;
             this.m_btnHideSumbnails.ImageList = this.m_imageListBtnHide;
-            this.m_btnHideSumbnails.Location = new System.Drawing.Point(3, 287);
+            this.m_btnHideSumbnails.Location = new System.Drawing.Point(3, 282);
             this.m_btnHideSumbnails.Name = "m_btnHideSumbnails";
             this.m_btnHideSumbnails.Size = new System.Drawing.Size(118, 22);
             this.m_btnHideSumbnails.TabIndex = 1;
@@ -254,7 +256,7 @@
             this.m_pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.m_pictureBox1.Name = "m_pictureBox1";
-            this.m_pictureBox1.Size = new System.Drawing.Size(590, 312);
+            this.m_pictureBox1.Size = new System.Drawing.Size(590, 307);
             this.m_pictureBox1.TabIndex = 0;
             this.m_pictureBox1.TabStop = false;
             // 
@@ -355,7 +357,7 @@
             this.m_audioPlayerControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_audioPlayerControl.Location = new System.Drawing.Point(0, 0);
             this.m_audioPlayerControl.Loop = true;
-            this.m_audioPlayerControl.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.m_audioPlayerControl.Margin = new System.Windows.Forms.Padding(4);
             this.m_audioPlayerControl.Name = "m_audioPlayerControl";
             this.m_audioPlayerControl.Size = new System.Drawing.Size(344, 232);
             this.m_audioPlayerControl.TabIndex = 0;
@@ -535,7 +537,9 @@
             this.m_txtImageIndex,
             this.m_lblImageDesc,
             this.toolStripSeparator3,
-            this.m_btnSlideShow});
+            this.m_btnSlideShow,
+            this.toolStripSeparator4,
+            this.m_cmbAudioOutDevices});
             this.m_toolStripMain.Location = new System.Drawing.Point(0, 28);
             this.m_toolStripMain.Name = "m_toolStripMain";
             this.m_toolStripMain.Size = new System.Drawing.Size(946, 29);
@@ -619,6 +623,17 @@
             this.m_btnSlideShow.Size = new System.Drawing.Size(90, 26);
             this.m_btnSlideShow.Text = "Slide Show";
             this.m_btnSlideShow.Click += new System.EventHandler(this.m_btnSlideShow_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(6, 29);
+            // 
+            // m_cmbAudioOutDevices
+            // 
+            this.m_cmbAudioOutDevices.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.m_cmbAudioOutDevices.Name = "m_cmbAudioOutDevices";
+            this.m_cmbAudioOutDevices.Size = new System.Drawing.Size(300, 29);
             // 
             // toolStripButton1
             // 
@@ -747,6 +762,8 @@
         private Tools.LabelWithTimeout m_lblVolume;
         private System.Windows.Forms.ToolStripMenuItem m_mnuViewFullScreen;
         private System.Windows.Forms.ImageList m_imageListFullScreen;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripComboBox m_cmbAudioOutDevices;
     }
 }
 

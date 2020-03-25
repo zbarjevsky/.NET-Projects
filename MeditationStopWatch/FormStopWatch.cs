@@ -93,6 +93,9 @@ namespace MeditationStopWatch
 			
 			ApplyOptions();
 
+			m_cmbAudioOutDevices.Items.AddRange(SoundUtils.GetOutDevices().ToArray<object>());
+			m_cmbAudioOutDevices.SelectedIndex = 0;
+
 			this.Visible = true;
 			OpenImageDirectory(m_Options.LastImageFile);
 
@@ -125,7 +128,7 @@ namespace MeditationStopWatch
 			buttonNext.Click += (s, e) => { m_audioPlayerControl.Next(); };
 			buttonNext.Visible = true;
 
-			buttonPlay = new ThumbnailToolBarButton(Properties.Resources.play_on, "Play/Pause");
+			buttonPlay = new ThumbnailToolBarButton(Properties.Resources.pause_on, "Play/Pause");
 			buttonPlay.Click += (s, e) => { m_audioPlayerControl.PauseResume(); };
 			buttonPlay.Visible = true;
 
