@@ -8,7 +8,7 @@
         WindowStartupLocation="CenterScreen"
         MinWidth="800" MinHeight="600"
         LocationChanged="Window_LocationChanged"
-        Icon="Images\AppIcon.ico" FontSize="16" Background="Wheat"
+        Icon="Images\AppIcon.ico" FontSize="16" Background="LightGray"
         Closed="Window_Closed"
         Title="Desktop Manager" Width="1920" Height="1080">
     <Grid x:Name="gridMain">

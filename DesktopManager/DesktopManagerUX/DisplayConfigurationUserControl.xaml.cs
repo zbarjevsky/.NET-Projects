@@ -42,9 +42,12 @@ namespace DesktopManagerUX
                     cmbGridSize.SelectedItem = txtSize;
             }
 
+            gridSizeSelector.OnSelectedSizeChangedAction = (size) => { RebuildAppsGrid(size); };
+
             _isInitialized = true;
 
-            RebuildAppsGrid();
+            string txt = (cmbGridSize.SelectedItem as string);
+            RebuildAppsGrid(GridSizeData.Parse(txt));
         }
 
         public DisplayConfigurationUserControl()
@@ -59,7 +62,8 @@ namespace DesktopManagerUX
 
         private void cmbGridSize_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            RebuildAppsGrid();
+            string txtSize = (cmbGridSize.SelectedItem as string);
+            RebuildAppsGrid(GridSizeData.Parse(txtSize));
         }
 
         private AppChooserUserControl GetAppChooser(int row, int col)
@@ -125,7 +129,8 @@ namespace DesktopManagerUX
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
             this.Cursor = Cursors.Wait;
-            RebuildAppsGrid();
+            string txtSize = (cmbGridSize.SelectedItem as string);
+            RebuildAppsGrid(GridSizeData.Parse(txtSize));
             this.Cursor = Cursors.Arrow;
         }
 
@@ -155,7 +160,7 @@ namespace DesktopManagerUX
             Apply_ActionOnAll((chooser, row, col) => User32.MinimizeWindow(chooser.SelectedApp.HWND));
         }
 
-        private void RebuildAppsGrid()
+        private void RebuildAppsGrid(GridSizeData newGridSize)
         {
             if (!_isInitialized)
                 return;
@@ -164,8 +169,7 @@ namespace DesktopManagerUX
             {
                 AppContext.ViewModel.ReloadApps();
 
-                string txtSize = (cmbGridSize.SelectedItem as string);
-                AppContext.Configuration.Displays[0].SetSelectedgridSizeText(txtSize);
+                AppContext.Configuration.Displays[0].UpdateApps(newGridSize);
 
                 int rows = AppContext.Configuration.Displays[0].GridSize.Rows;
                 int cols = AppContext.Configuration.Displays[0].GridSize.Cols;

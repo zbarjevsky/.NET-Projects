@@ -45,6 +45,11 @@ namespace DesktopManagerUX.Controls
             }
         }
 
+        /// <summary>
+        /// Use this action to apply new size
+        /// </summary>
+        public Action<GridSizeData> OnSelectedSizeChangedAction = (size) => { }; 
+
         public SelectTableSizeUserControl()
         {
             this.DataContext = this;
@@ -61,49 +66,60 @@ namespace DesktopManagerUX.Controls
             dataGrid.ItemsSource = list;
         }
 
-        private bool _wasSelectionChange = false;
+        private bool _canClose = true;
         private void dataGrid_Loaded(object sender, RoutedEventArgs e)
         {
             SetSelectCellsInGrid();
-            this.Focus();
             Keyboard.Focus(dataGrid);
-            _wasSelectionChange = false;
+            _canClose = true;
+        }
+
+        private void UserControl_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Escape)
+            {
+                dgDropdown.IsChecked = false;
+                dgDropdown.Focus();
+            }
         }
 
         private void dataGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            _wasSelectionChange = true;
+            _canClose = false; //start selection cells
         }
 
         private void dataGrid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             GetSelectedSize(new List<DataGridCellInfo>(dataGrid.SelectedCells));
             dgDropdown.IsChecked = false;
+            OnSelectedSizeChangedAction(SelectedSize);
+            dgDropdown.Focus();
         }
 
         private void dataGrid_LostFocus(object sender, RoutedEventArgs e)
         {
             //if there was no change in selection
-            if (_wasSelectionChange == false)
+            if (_canClose)
                 dgDropdown.IsChecked = false;
         }
 
         private void dataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
-            Debug.WriteLine("==========================================================");
+            _canClose = false;
             GetSelectedSize(new List<DataGridCellInfo>(dataGrid.SelectedCells));
-            _wasSelectionChange = true;
         }
 
         private void SetSelectCellsInGrid()
         {
-            GridSizeData size = new GridSizeData(_selectedSize.Rows, _selectedSize.Cols);
+            //remember BEFORE selection change
+            int rows = _selectedSize.Rows;
+            int cols = _selectedSize.Cols;
 
             dataGrid.SelectedCells.Clear();
 
-            for (int row = 0; row < size.Rows; row++)
+            for (int row = 0; row < rows; row++)
             {
-                for (int col = 0; col < size.Cols; col++)
+                for (int col = 0; col < cols; col++)
                 {
                     DataGridCell cell = dataGrid.GetCell(row, col);
                     if(cell != null)
@@ -114,6 +130,8 @@ namespace DesktopManagerUX.Controls
 
         private void GetSelectedSize(List<DataGridCellInfo> list)
         {
+            Debug.WriteLine("==========================================================");
+
             int max_row = 0;
             int max_col = 0;
             int min_row = 3;
@@ -148,9 +166,9 @@ namespace DesktopManagerUX.Controls
 
     public class GridSelection
     {
-        public string col1 { get; } = "1";
-        public string col2 { get; } = "2";
-        public string col3 { get; } = "3";
+        public string col1 { get; }
+        public string col2 { get; }
+        public string col3 { get; }
 
         public int Row = 0;
 
