@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DesktopManagerUX.Controls"
              mc:Ignorable="d" 
-             PreviewKeyDown="UserControl_PreviewKeyDown"
              d:DesignHeight="40" d:DesignWidth="90">
     <UserControl.Resources>
         <Style x:Key="cellStyle" TargetType="DataGridCell">
@@ -56,16 +55,14 @@
         </ToggleButton>
 
         <Popup IsOpen="{Binding IsChecked, Mode=TwoWay, ElementName=dgDropdown}" StaysOpen="True"
-               PlacementTarget="{Binding ElementName=dgDropdown}" 
-               Placement="Bottom" PopupAnimation="Slide">
+               PlacementTarget="{Binding ElementName=dgDropdown}" Placement="Bottom" PopupAnimation="Slide"
+               MouseLeave="Popup_MouseLeave">
             <Border BorderBrush="Goldenrod" BorderThickness="1"  CornerRadius="2" >
                 <DataGrid x:Name="dataGrid" Grid.Row="1" Width="120" Height="92"
                           RowStyle="{StaticResource rowStyle}" CellStyle="{StaticResource cellStyle}" 
                           HeadersVisibility="None" CanUserAddRows="False" CanUserDeleteRows="False" CanUserReorderColumns="False"
                           AutoGenerateColumns="False" IsReadOnly="True" GridLinesVisibility="All"
                           Loaded="dataGrid_Loaded"
-                          LostFocus="dataGrid_LostFocus"
-                          PreviewMouseLeftButtonDown="dataGrid_PreviewMouseLeftButtonDown"
                           SelectedCellsChanged="dataGrid_SelectedCellsChanged"
                           MouseLeftButtonUp="dataGrid_MouseLeftButtonUp"
                           SelectionMode="Extended" SelectionUnit="Cell">

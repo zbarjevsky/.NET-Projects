@@ -114,7 +114,6 @@
     </Compile>
     <Compile Include="DirectSoundAPI\Dmo\AudioMediaSubtypes.cs" />
     <Compile Include="DirectSoundAPI\Utils\MarshalHelpers.cs" />
-    <Compile Include="DirectSoundAPI\Utils\SoundUtils.cs" />
     <Compile Include="DirectSoundAPI\WaveFormats\AdpcmWaveFormat.cs" />
     <Compile Include="DirectSoundAPI\WaveFormats\Gsm610WaveFormat.cs" />
     <Compile Include="DirectSoundAPI\WaveFormats\ImaAdpcmWaveFormat.cs" />

@@ -66,26 +66,28 @@ namespace DesktopManagerUX.Controls
             dataGrid.ItemsSource = list;
         }
 
-        private bool _canClose = true;
         private void dataGrid_Loaded(object sender, RoutedEventArgs e)
         {
             SetSelectCellsInGrid();
             Keyboard.Focus(dataGrid);
-            _canClose = true;
         }
 
-        private void UserControl_PreviewKeyDown(object sender, KeyEventArgs e)
+        //private void UserControl_PreviewKeyDown(object sender, KeyEventArgs e)
+        //{
+        //    if(e.Key == Key.Escape)
+        //    {
+        //        dgDropdown.IsChecked = false;
+        //        dgDropdown.Focus();
+        //    }
+        //}
+
+        private void Popup_MouseLeave(object sender, MouseEventArgs e)
         {
-            if(e.Key == Key.Escape)
+            if (dgDropdown.IsChecked.Value)
             {
                 dgDropdown.IsChecked = false;
                 dgDropdown.Focus();
             }
-        }
-
-        private void dataGrid_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            _canClose = false; //start selection cells
         }
 
         private void dataGrid_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
@@ -96,16 +98,8 @@ namespace DesktopManagerUX.Controls
             dgDropdown.Focus();
         }
 
-        private void dataGrid_LostFocus(object sender, RoutedEventArgs e)
-        {
-            //if there was no change in selection
-            if (_canClose)
-                dgDropdown.IsChecked = false;
-        }
-
         private void dataGrid_SelectedCellsChanged(object sender, SelectedCellsChangedEventArgs e)
         {
-            _canClose = false;
             GetSelectedSize(new List<DataGridCellInfo>(dataGrid.SelectedCells));
         }
 
