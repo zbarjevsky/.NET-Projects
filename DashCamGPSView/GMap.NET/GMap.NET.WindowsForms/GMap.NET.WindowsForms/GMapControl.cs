@@ -376,7 +376,7 @@ namespace GMap.NET.WindowsForms
         /// map dragg button
         /// </summary>
         [Category("GMap.NET")]
-        public MouseButtons DragButton = MouseButtons.Right;
+        public MouseButtons DragButton = MouseButtons.Left;
 
         private bool showTileGridLines = false;
 

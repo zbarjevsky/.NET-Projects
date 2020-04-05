@@ -410,7 +410,7 @@
       /// map dragg button
       /// </summary>
       [Category("GMap.NET")]
-      public MouseButton DragButton = MouseButton.Right;
+      public MouseButton DragButton = MouseButton.Left;
 
       /// <summary>
       /// use circle for selection
