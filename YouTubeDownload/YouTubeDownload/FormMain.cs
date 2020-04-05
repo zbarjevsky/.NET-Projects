@@ -377,10 +377,20 @@ namespace YouTubeDownload
             if (m_listUrls.SelectedItems.Count == 0)
                 return;
 
-            DownloadData data = m_listUrls.SelectedItems[0].Tag as DownloadData;
-            if (data != null && data.State != DownloadState.Failed)
+            try
             {
-                Process.Start(data.Description);
+                DownloadData data = m_listUrls.SelectedItems[0].Tag as DownloadData;
+                if (data != null && data.State != DownloadState.Failed)
+                {
+                    if (File.Exists(data.Description))
+                        Process.Start(data.Description);
+                    else
+                        Process.Start(Path.GetDirectoryName(data.Description));
+                }
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
         }
 
