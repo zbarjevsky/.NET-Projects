@@ -4,9 +4,26 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WinIRRemote"
+        Loaded="Window_Loaded"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" Height="40">
+            <Button x:Name="btnStart" Content="Start..." Margin="4" Click="btnStart_Click"/>
+            <Button x:Name="btnStop" Content="Stop..." Margin="4" Click="btnStop_Click"/>
+            <Button x:Name="btnTest" Content="Test..." Margin="4" Click="btnTest_Click"/>
+        </StackPanel>
+        <RichTextBox x:Name="txtOutput" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" Grid.RowSpan="2"
+                     Background="Wheat"/>
     </Grid>
 </Window>

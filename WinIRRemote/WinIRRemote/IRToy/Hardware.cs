@@ -27,20 +27,30 @@ namespace WinIRRemote.IRToy
 		public ulong code_length { get; set; }
 		public uint resolution { get; set; }
 
-		public abstract bool decode_func(ir_remote remote,
+		public delegate bool decode_func_delegate(ir_remote remote,
 			ref ir_code prep, ref ir_code codep, ref ir_code postp,
 			ref bool repeat_flag,
 			ref lirc_t min_remaining_gapp,
 			ref lirc_t max_remaining_gapp);
+		public decode_func_delegate decode_func;
 
-		public abstract lirc_t readdata(lirc_t timeout);
-		public abstract void wait_for_data(lirc_t timeout);
-		public abstract int data_ready();
-		public abstract ir_code get_ir_code();
+		public delegate lirc_t readdata_delegate(lirc_t timeout);
+		public readdata_delegate readdata;
+
+		public delegate void wait_for_data_delegate(lirc_t timeout);
+		public wait_for_data_delegate wait_for_data;
+
+		public delegate int data_ready_delegate();
+		public data_ready_delegate data_ready;
+
+		public delegate ir_code get_ir_code_delegate();
+		public get_ir_code_delegate get_ir_code;
 	}
 
 	public class Hardware : IHardware
 	{
+		public static SendReceiveData sendReceiveData { get; set; }
+
 		static Hardware()
 		{
 			Instance = new Hardware();
@@ -49,38 +59,36 @@ namespace WinIRRemote.IRToy
 
 		public static IHardware Instance { get; }
 
-		public lirc_t readData(lirc_t timeout)
+		public static lirc_t readdata_impl(int timeout)
 		{
 
 			//==========
-			lirc_t data;
+			lirc_t data = 0;
 			//==========
 
-			data = 0;
+			if (sendReceiveData == null) return 0;
 
-			if (!sendReceiveData) return 0;
+			sendReceiveData.waitTillDataIsReady(timeout);
 
-			sendReceiveData->waitTillDataIsReady(timeout);
-
-			sendReceiveData->getData(&data);
+			sendReceiveData.getData(out data);
 
 			return data;
 		}
 
-		public void wait_for_data(lirc_t timeout)
+		public static void wait_for_data_impl(int timeout)
 		{
 
-			if (!sendReceiveData) return;
+			if (sendReceiveData == null) return;
 
-			sendReceiveData->waitTillDataIsReady(timeout);
+			sendReceiveData.waitTillDataIsReady(timeout);
 		}
 
-		int data_ready()
+	 public static int data_ready_impl()
 		{
 
-			if (!sendReceiveData) return 0;
+			if (sendReceiveData == null) return 0;
 
-			if (sendReceiveData->dataReady()) return 1;
+			if (sendReceiveData.dataReady()) return 1;
 
 			return 0;
 		}
@@ -89,11 +97,11 @@ namespace WinIRRemote.IRToy
 
 		public static void initHardwareStruct()
 		{
-			Instance.decode_func = &receive_decode;
-			Instance.readdata = &readData;
-			Instance.wait_for_data = &wait_for_data;
-			Instance.data_ready = &data_ready;
-			Instance.get_ir_code = NULL;
+			Instance.decode_func = null; // &receive_decode;
+			Instance.readdata = readdata_impl;
+			Instance.wait_for_data = wait_for_data_impl;
+			Instance.data_ready = data_ready_impl;
+			Instance.get_ir_code = null;
 
 			Instance.features = LIRC_CAN_REC_MODE2;
 			Instance.send_mode = 0;
@@ -101,8 +109,8 @@ namespace WinIRRemote.IRToy
 			Instance.code_length = 0;
 			Instance.resolution = 0;
 
-			strcpy(hw.device, "hw");
-			strcpy(hw.name, "IRToy");
+			Instance.device = "hw";
+			Instance.name = "IRToy";
 		}
 	}
 }
