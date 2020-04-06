@@ -38,19 +38,10 @@ namespace MeditationStopWatch
         public void EnsureVisible(Control ctrl, AnchorStyles ancors, int margin = 20, bool bAlways = false)
         {
             //visible bounds in picture box coordinates
-            int left = pictureBox1.Left > 0 ? 0 : -pictureBox1.Left;
-            int top = pictureBox1.Top > 0 ? 0 : -pictureBox1.Top;
-            int right = pictureBox1.Right > this.Width ? this.Width - pictureBox1.Left : pictureBox1.Width;
-            int bottom = pictureBox1.Bottom > this.Height ? this.Height - pictureBox1.Top : pictureBox1.Height;
-
-            //if (ctrl.Left < left)
-            //    ctrl.Left = left;
-            //if (ctrl.Top < top)
-            //    ctrl.Top = top;
-            //if (ctrl.Right > right)
-            //    ctrl.Left = right - ctrl.Width;
-            //if (ctrl.Bottom > bottom)
-            //    ctrl.Top = bottom - ctrl.Height;
+            int left = -pictureBox1.Left;
+            int top = -pictureBox1.Top;
+            int right = this.Width - pictureBox1.Left;
+            int bottom = this.Height - pictureBox1.Top;
 
             if (bAlways || ctrl.Left < left || ctrl.Top < top || ctrl.Right > right || ctrl.Bottom > bottom)
             {

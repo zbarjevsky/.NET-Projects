@@ -45,18 +45,15 @@ namespace MeditationStopWatch
             if (!DesignMode)
                 m_lblVolume.Visible = false;
 
-            pictureBox1.OnSizeChangedAction = (bounds) =>
-            {
-                pictureBox1.EnsureVisible(m_lblVolume, AnchorStyles.Top | AnchorStyles.Right, 50);
-                pictureBox1.EnsureVisible(m_btnCancel, AnchorStyles.Top | AnchorStyles.Right, 4, true);
-                pictureBox1.EnsureVisible(m_analogClock, AnchorStyles.None, 50);
-            };
+            pictureBox1.OnSizeChangedAction = (bounds) => EnsureVisibleControls();
 
             pictureBox1.ShowControlsAction = (show) => { m_btnCancel.Visible = show; m_lblUsage.Visible = show; };
 
             this.WindowState = FormWindowState.Maximized;
 
             m_analogClock.Bounds = _stopWatchForm.m_Options.ClockFullScreenBounds;
+
+            EnsureVisibleControls();
             pictureBox1.PictureBox.Focus();
             pictureBox1.PictureBox.Refresh();
             m_btnCancel.BringToFront();
@@ -65,6 +62,13 @@ namespace MeditationStopWatch
         private void FormFullScreenImage_FormClosed(object sender, FormClosedEventArgs e)
         {
             _stopWatchForm.m_Options.ClockFullScreenBounds = m_analogClock.Bounds;
+        }
+
+        private void EnsureVisibleControls()
+        {
+            pictureBox1.EnsureVisible(m_lblVolume, AnchorStyles.Top | AnchorStyles.Right, 50, true);
+            pictureBox1.EnsureVisible(m_btnCancel, AnchorStyles.Top | AnchorStyles.Right, 4, true);
+            pictureBox1.EnsureVisible(m_analogClock, AnchorStyles.Top | AnchorStyles.Right, 100, true);
         }
 
         protected override void OnMouseWheel(MouseEventArgs e)
@@ -103,9 +107,11 @@ namespace MeditationStopWatch
                     return true;
                 case Keys.Left:
                     pictureBox1.LoadImage(_stopWatchForm.ShowPrevImage().FullName);
+                    EnsureVisibleControls();
                     return true;
                 case Keys.Right:
                     pictureBox1.LoadImage(_stopWatchForm.ShowNextImage().FullName);
+                    EnsureVisibleControls();
                     return true;
                 default:
                     break;

@@ -162,5 +162,41 @@ namespace MeditationStopWatch.Tools
 
             return newLocationOffset;
         }
+
+        //ensure child is visible in the container using parent coordinates
+        //where child.Parent == parent and parent.Parent == container
+        public static void EnsureVisibleChild(this Control container, Control innerCtrl, Control innerCtrlChild, AnchorStyles ancors, int margin = 20, bool bAlways = false)
+        {
+            //visible bounds in innerCtrl coordinates
+            int left = -innerCtrl.Left;
+            int top = -innerCtrl.Top;
+            int right = container.Width - innerCtrl.Left;
+            int bottom = container.Height - innerCtrl.Top;
+
+            if (bAlways || innerCtrlChild.Left < left || innerCtrlChild.Top < top || innerCtrlChild.Right > right || innerCtrlChild.Bottom > bottom)
+            {
+                if (ancors == AnchorStyles.None) //center child if out of view
+                {
+                    innerCtrlChild.Left = left + (right - left - innerCtrlChild.Width) / 2;
+                    innerCtrlChild.Top = top + (bottom - top - innerCtrlChild.Height) / 2;
+                }
+                if (ancors.HasFlag(AnchorStyles.Left))
+                {
+                    innerCtrlChild.Left = left + margin;
+                }
+                if (ancors.HasFlag(AnchorStyles.Right))
+                {
+                    innerCtrlChild.Left = right - innerCtrlChild.Width - margin;
+                }
+                if (ancors.HasFlag(AnchorStyles.Top))
+                {
+                    innerCtrlChild.Top = top + margin;
+                }
+                if (ancors.HasFlag(AnchorStyles.Bottom))
+                {
+                    innerCtrlChild.Top = bottom - innerCtrlChild.Height - margin;
+                }
+            }
+        }
     }
 }

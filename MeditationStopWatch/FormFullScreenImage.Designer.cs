@@ -71,9 +71,10 @@
             // 
             // m_lblUsage
             // 
+            this.m_lblUsage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.m_lblUsage.BackColor = System.Drawing.SystemColors.Info;
             this.m_lblUsage.Font = new System.Drawing.Font("Courier New", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.m_lblUsage.Location = new System.Drawing.Point(26, 41);
+            this.m_lblUsage.Location = new System.Drawing.Point(527, 538);
             this.m_lblUsage.Name = "m_lblUsage";
             this.m_lblUsage.Size = new System.Drawing.Size(498, 155);
             this.m_lblUsage.TabIndex = 5;
@@ -87,7 +88,7 @@
             this.m_lblVolume.BackColor = System.Drawing.Color.Transparent;
             this.m_lblVolume.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.m_lblVolume.ForeColor = System.Drawing.Color.Lime;
-            this.m_lblVolume.Location = new System.Drawing.Point(603, 608);
+            this.m_lblVolume.Location = new System.Drawing.Point(746, 406);
             this.m_lblVolume.Margin = new System.Windows.Forms.Padding(16, 15, 16, 15);
             this.m_lblVolume.Name = "m_lblVolume";
             this.m_lblVolume.Size = new System.Drawing.Size(305, 42);
