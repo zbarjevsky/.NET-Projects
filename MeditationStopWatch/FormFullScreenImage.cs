@@ -12,7 +12,7 @@ namespace MeditationStopWatch
 {
     public partial class FormFullScreenImage : Form
     {
-        FormStopWatch _stopWatch;
+        FormStopWatch _stopWatchForm;
 
         public Image Picture
         {
@@ -22,7 +22,7 @@ namespace MeditationStopWatch
 
         public FormFullScreenImage(FormStopWatch parent)
         {
-            _stopWatch = parent;
+            _stopWatchForm = parent;
 
             InitializeComponent();
 
@@ -52,11 +52,11 @@ namespace MeditationStopWatch
                 pictureBox1.EnsureVisible(m_analogClock, AnchorStyles.None, 50);
             };
 
-            pictureBox1.ShowControlsAction = (show) => { m_btnCancel.Visible = show; };
+            pictureBox1.ShowControlsAction = (show) => { m_btnCancel.Visible = show; m_lblUsage.Visible = show; };
 
             this.WindowState = FormWindowState.Maximized;
 
-            m_analogClock.Bounds = _stopWatch.m_Options.ClockFullScreenBounds;
+            m_analogClock.Bounds = _stopWatchForm.m_Options.ClockFullScreenBounds;
             pictureBox1.PictureBox.Focus();
             pictureBox1.PictureBox.Refresh();
             m_btnCancel.BringToFront();
@@ -64,7 +64,7 @@ namespace MeditationStopWatch
 
         private void FormFullScreenImage_FormClosed(object sender, FormClosedEventArgs e)
         {
-            _stopWatch.m_Options.ClockFullScreenBounds = m_analogClock.Bounds;
+            _stopWatchForm.m_Options.ClockFullScreenBounds = m_analogClock.Bounds;
         }
 
         protected override void OnMouseWheel(MouseEventArgs e)
@@ -72,7 +72,7 @@ namespace MeditationStopWatch
             if (ModifierKeys.HasFlag(Keys.Alt))
                 AdjustClockSize(e.Delta);
             else if (!ModifierKeys.HasFlag(Keys.Control))
-                m_lblVolume.Show(_stopWatch.AdjustVolume(e.Delta), 4000);
+                m_lblVolume.Show(_stopWatchForm.AdjustVolume(e.Delta), 4000);
 
             base.OnMouseWheel(e);
         }
@@ -93,19 +93,19 @@ namespace MeditationStopWatch
                     Close();
                     return true;
                 case Keys.Space:
-                    _stopWatch.PauseResume();
+                    _stopWatchForm.PauseResume();
                     return true;
                 case Keys.Up:
-                    m_lblVolume.Show(_stopWatch.AdjustVolume(1), 4000);
+                    m_lblVolume.Show(_stopWatchForm.AdjustVolume(1), 4000);
                     return true;
                 case Keys.Down:
-                    m_lblVolume.Show(_stopWatch.AdjustVolume(-1), 4000);
+                    m_lblVolume.Show(_stopWatchForm.AdjustVolume(-1), 4000);
                     return true;
                 case Keys.Left:
-                    pictureBox1.LoadImage(_stopWatch.ShowPrevImage().FullName);
+                    pictureBox1.LoadImage(_stopWatchForm.ShowPrevImage().FullName);
                     return true;
                 case Keys.Right:
-                    pictureBox1.LoadImage(_stopWatch.ShowNextImage().FullName);
+                    pictureBox1.LoadImage(_stopWatchForm.ShowNextImage().FullName);
                     return true;
                 default:
                     break;

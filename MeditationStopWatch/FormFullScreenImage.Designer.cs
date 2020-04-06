@@ -34,6 +34,7 @@
             this.m_lblVolume = new MeditationStopWatch.Tools.LabelWithTimeout();
             this.m_analogClock = new MeditationStopWatch.AnalogClock();
             this.m_pnlMain = new System.Windows.Forms.Panel();
+            this.m_lblUsage = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.m_analogClock)).BeginInit();
             this.m_pnlMain.SuspendLayout();
             this.SuspendLayout();
@@ -76,7 +77,7 @@
             this.m_lblVolume.Location = new System.Drawing.Point(603, 608);
             this.m_lblVolume.Margin = new System.Windows.Forms.Padding(16, 15, 16, 15);
             this.m_lblVolume.Name = "m_lblVolume";
-            this.m_lblVolume.Size = new System.Drawing.Size(378, 54);
+            this.m_lblVolume.Size = new System.Drawing.Size(305, 42);
             this.m_lblVolume.TabIndex = 4;
             this.m_lblVolume.Text = "Volume 100.0 %";
             // 
@@ -94,6 +95,7 @@
             // 
             // m_pnlMain
             // 
+            this.m_pnlMain.Controls.Add(this.m_lblUsage);
             this.m_pnlMain.Controls.Add(this.m_btnCancel);
             this.m_pnlMain.Controls.Add(this.m_lblVolume);
             this.m_pnlMain.Controls.Add(this.m_analogClock);
@@ -103,6 +105,18 @@
             this.m_pnlMain.Name = "m_pnlMain";
             this.m_pnlMain.Size = new System.Drawing.Size(1067, 738);
             this.m_pnlMain.TabIndex = 5;
+            // 
+            // m_lblUsage
+            // 
+            this.m_lblUsage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.m_lblUsage.BackColor = System.Drawing.SystemColors.Info;
+            this.m_lblUsage.Font = new System.Drawing.Font("Courier New", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.m_lblUsage.Location = new System.Drawing.Point(12, 574);
+            this.m_lblUsage.Name = "m_lblUsage";
+            this.m_lblUsage.Size = new System.Drawing.Size(498, 155);
+            this.m_lblUsage.TabIndex = 5;
+            this.m_lblUsage.Text = "\n Resize Clock -- Alt + Mouse Scroll \n Resize Image -- Ctrl + Mouse Scroll \n Volu" +
+    "me       -- Mouse Scroll \n Pause/Resume -- Space \n Close        -- Esc";
             // 
             // FormFullScreenImage
             // 
@@ -132,5 +146,6 @@
         private AnalogClock m_analogClock;
         private Tools.LabelWithTimeout m_lblVolume;
         private System.Windows.Forms.Panel m_pnlMain;
+        private System.Windows.Forms.Label m_lblUsage;
     }
 }

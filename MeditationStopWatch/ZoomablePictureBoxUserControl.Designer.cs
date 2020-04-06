@@ -48,7 +48,7 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(435, 367);
+            this.panel1.Size = new System.Drawing.Size(743, 506);
             this.panel1.TabIndex = 0;
             this.panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Control_MouseMove);
             // 
@@ -57,7 +57,7 @@
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(435, 367);
+            this.pictureBox1.Size = new System.Drawing.Size(743, 506);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
@@ -126,7 +126,7 @@
             this.Controls.Add(this.m_btnOrigSize);
             this.Controls.Add(this.panel1);
             this.Name = "ZoomablePictureBoxUserControl";
-            this.Size = new System.Drawing.Size(435, 367);
+            this.Size = new System.Drawing.Size(743, 506);
             this.Load += new System.EventHandler(this.ZoomablePictureBoxUserControl_Load);
             this.MouseMove += new System.Windows.Forms.MouseEventHandler(this.Control_MouseMove);
             this.panel1.ResumeLayout(false);
