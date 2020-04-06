@@ -29,26 +29,15 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormFullScreenImage));
-            this.pictureBox1 = new MeditationStopWatch.ZoomablePictureBoxUserControl();
             this.m_btnCancel = new System.Windows.Forms.Button();
-            this.m_lblVolume = new MeditationStopWatch.Tools.LabelWithTimeout();
-            this.m_analogClock = new MeditationStopWatch.AnalogClock();
             this.m_pnlMain = new System.Windows.Forms.Panel();
             this.m_lblUsage = new System.Windows.Forms.Label();
-            ((System.ComponentModel.ISupportInitialize)(this.m_analogClock)).BeginInit();
+            this.m_lblVolume = new MeditationStopWatch.Tools.LabelWithTimeout();
+            this.m_analogClock = new MeditationStopWatch.AnalogClock();
+            this.pictureBox1 = new MeditationStopWatch.ZoomablePictureBoxUserControl();
             this.m_pnlMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.m_analogClock)).BeginInit();
             this.SuspendLayout();
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.BackColor = System.Drawing.Color.Black;
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(1067, 738);
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
             // 
             // m_btnCancel
             // 
@@ -66,6 +55,30 @@
             this.m_btnCancel.Size = new System.Drawing.Size(33, 32);
             this.m_btnCancel.TabIndex = 2;
             this.m_btnCancel.UseVisualStyleBackColor = false;
+            // 
+            // m_pnlMain
+            // 
+            this.m_pnlMain.Controls.Add(this.m_lblUsage);
+            this.m_pnlMain.Controls.Add(this.m_btnCancel);
+            this.m_pnlMain.Controls.Add(this.m_lblVolume);
+            this.m_pnlMain.Controls.Add(this.m_analogClock);
+            this.m_pnlMain.Controls.Add(this.pictureBox1);
+            this.m_pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_pnlMain.Location = new System.Drawing.Point(0, 0);
+            this.m_pnlMain.Name = "m_pnlMain";
+            this.m_pnlMain.Size = new System.Drawing.Size(1067, 738);
+            this.m_pnlMain.TabIndex = 5;
+            // 
+            // m_lblUsage
+            // 
+            this.m_lblUsage.BackColor = System.Drawing.SystemColors.Info;
+            this.m_lblUsage.Font = new System.Drawing.Font("Courier New", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.m_lblUsage.Location = new System.Drawing.Point(26, 41);
+            this.m_lblUsage.Name = "m_lblUsage";
+            this.m_lblUsage.Size = new System.Drawing.Size(498, 155);
+            this.m_lblUsage.TabIndex = 5;
+            this.m_lblUsage.Text = "\n Resize Clock -- Alt + Mouse Scroll \n Resize Image -- Ctrl + Mouse Scroll \n Volu" +
+    "me       -- Mouse Scroll \n Pause/Resume -- Space \n Close        -- Esc";
             // 
             // m_lblVolume
             // 
@@ -93,30 +106,16 @@
             this.m_analogClock.TabIndex = 3;
             this.m_analogClock.TabStop = false;
             // 
-            // m_pnlMain
+            // pictureBox1
             // 
-            this.m_pnlMain.Controls.Add(this.m_lblUsage);
-            this.m_pnlMain.Controls.Add(this.m_btnCancel);
-            this.m_pnlMain.Controls.Add(this.m_lblVolume);
-            this.m_pnlMain.Controls.Add(this.m_analogClock);
-            this.m_pnlMain.Controls.Add(this.pictureBox1);
-            this.m_pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_pnlMain.Location = new System.Drawing.Point(0, 0);
-            this.m_pnlMain.Name = "m_pnlMain";
-            this.m_pnlMain.Size = new System.Drawing.Size(1067, 738);
-            this.m_pnlMain.TabIndex = 5;
-            // 
-            // m_lblUsage
-            // 
-            this.m_lblUsage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.m_lblUsage.BackColor = System.Drawing.SystemColors.Info;
-            this.m_lblUsage.Font = new System.Drawing.Font("Courier New", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.m_lblUsage.Location = new System.Drawing.Point(12, 574);
-            this.m_lblUsage.Name = "m_lblUsage";
-            this.m_lblUsage.Size = new System.Drawing.Size(498, 155);
-            this.m_lblUsage.TabIndex = 5;
-            this.m_lblUsage.Text = "\n Resize Clock -- Alt + Mouse Scroll \n Resize Image -- Ctrl + Mouse Scroll \n Volu" +
-    "me       -- Mouse Scroll \n Pause/Resume -- Space \n Close        -- Esc";
+            this.pictureBox1.BackColor = System.Drawing.Color.Black;
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox1.Margin = new System.Windows.Forms.Padding(4);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(1067, 738);
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
             // 
             // FormFullScreenImage
             // 
@@ -132,9 +131,9 @@
             this.Text = "FullScreenImage";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormFullScreenImage_FormClosed);
             this.Load += new System.EventHandler(this.FormFullScreenImage_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.m_analogClock)).EndInit();
             this.m_pnlMain.ResumeLayout(false);
             this.m_pnlMain.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.m_analogClock)).EndInit();
             this.ResumeLayout(false);
 
         }
