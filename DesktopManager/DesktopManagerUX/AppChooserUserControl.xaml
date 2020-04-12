@@ -25,15 +25,36 @@
                 </StackPanel>
             </Border>
 
-            <Border BorderThickness="2" BorderBrush="Yellow" CornerRadius="5"
+            <Border BorderThickness="3" BorderBrush="Goldenrod" CornerRadius="5"
                     Margin="20" Padding="2" 
                     HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Border.Effect>
                     <DropShadowEffect BlurRadius="10" Opacity="0.7" Direction="280" />
                 </Border.Effect>
                 <StackPanel Orientation="Horizontal">
-                    <Button x:Name="btnRun" Content="..." Margin="0,0,4,0" HorizontalAlignment="Right" ToolTip="Run..."
-                            Click="RunApp_Click"/>
+                    <Menu Margin="1" >
+                        <MenuItem Height="25">
+                            <MenuItem.Header>
+                                <TextBlock Text="..." />
+                            </MenuItem.Header>
+                            <MenuItem x:Name="mnuRun" Header="Run..." Click="RunApp_Click" />
+                            <Separator/>
+                            <MenuItem x:Name="mnuMinimize" Header="Minimize" Click="Minimize_Click" />
+                            <MenuItem x:Name="mnuRestore" Header="Restore..." Click="Restore_Click"/>
+                        </MenuItem>
+                    </Menu>
+                    <Separator/>
+                    <!--<Button x:Name="btnRun" Content="..." Margin="0,0,4,0" HorizontalAlignment="Right" ToolTip="Run..."
+                            Click="RunApp_Click">
+                        <Button.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Run..."/>
+                                <Separator/>
+                                <MenuItem Header="Minimize"/>
+                                <MenuItem Header="Restore..."/>
+                            </ContextMenu>
+                        </Button.ContextMenu>
+                    </Button>-->
                      <ComboBox x:Name="cmbApps" 
                                SelectionChanged="cmbApps_SelectionChanged" FontSize="14" >
                         <ComboBox.ItemTemplate>

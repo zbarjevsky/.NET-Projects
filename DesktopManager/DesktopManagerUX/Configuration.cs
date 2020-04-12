@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Xml.Serialization;
 
 namespace DesktopManagerUX
@@ -73,13 +74,13 @@ namespace DesktopManagerUX
 
         public GridSizeData GridSize { get { return _gridSize; } set { _gridSize = value; } }
 
-        public System.Drawing.Size CellSize
+        public Rect CellSize
         {
             get
             {
-                int width = (int)(SelectedDisplayInfo.Bounds.Width / _gridSize.Cols);
-                int height = (int)(SelectedDisplayInfo.Bounds.Height / _gridSize.Rows);
-                return new System.Drawing.Size(width, height);
+                double width = (SelectedDisplayInfo.Bounds.Width / _gridSize.Cols);
+                double height = (SelectedDisplayInfo.Bounds.Height / _gridSize.Rows);
+                return new Rect(0, 0, width, height);
             }
         }
 

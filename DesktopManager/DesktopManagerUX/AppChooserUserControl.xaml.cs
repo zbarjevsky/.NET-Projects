@@ -156,20 +156,36 @@ namespace DesktopManagerUX
                         imagePreview.Source = Logic.CaptureApplication(SelectedApp.HWND, bRestoreBeforeSnapshot);
                         UpdateInfo();
                     }
-                    else if(imagePreview == null) //no snapshot
+                    else if (imagePreview == null) //no snapshot
                     {
 
                     }
                 }
+            }
 
-                btnRun.ToolTip = "Open " + SelectedApp.ProcessName;
-                btnRun.IsEnabled = File.Exists(SelectedApp.ProcessPath);
+            UpdateUI();
+        }
+
+        private void UpdateUI()
+        {
+            if (HasSelection)
+            {
+                //btnRun.ToolTip = "Open " + SelectedApp.ProcessName;
+                //btnRun.IsEnabled = File.Exists(SelectedApp.ProcessPath);
+                mnuRun.IsEnabled = File.Exists(SelectedApp.ProcessPath);
+                mnuMinimize.IsEnabled = SelectedApp.IsActive;
+                mnuRestore.IsEnabled = SelectedApp.IsActive;
+
                 DisplayConfiguration[Row, Col] = SelectedApp;
             }
             else
             {
-                btnRun.ToolTip = "";
-                btnRun.IsEnabled = false;
+                //btnRun.ToolTip = "";
+                //btnRun.IsEnabled = false;
+                mnuRun.IsEnabled = false;
+                mnuMinimize.IsEnabled = false;
+                mnuRestore.IsEnabled = false;
+
                 imagePreview.Source = null;
                 txtInfo.Content = "? Select Window ?";
                 DisplayConfiguration[Row, Col] = AppInfo.GetEmptyAppInfo();
@@ -198,6 +214,16 @@ namespace DesktopManagerUX
                 AppContext.ViewModel.ReloadApps();
                 Init(Row, Col);
             }
+        }
+
+        private void Restore_Click(object sender, RoutedEventArgs e)
+        {
+            User32.RestoreWindow(SelectedApp.HWND);
+        }
+
+        private void Minimize_Click(object sender, RoutedEventArgs e)
+        {
+            User32.MinimizeWindow(SelectedApp.HWND);
         }
 
         private Thickness ThicknessFromRowCol(int row, int col)

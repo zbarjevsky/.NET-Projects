@@ -11,15 +11,15 @@ namespace DesktopManagerUX.Utils
     public class DesktopWindowManager
     {
         [DllImport("dwmapi.dll")]
-        public static extern int DwmGetWindowAttribute(IntPtr hwnd, int dwAttribute, out RECT pvAttribute, int cbAttribute);
+        public static extern int DwmGetWindowAttribute(IntPtr hwnd, int dwAttribute, out User32.RECT pvAttribute, int cbAttribute);
 
-        public struct RECT
-        {
-            public int Left;
-            public int Top;
-            public int Right;
-            public int Bottom;
-        }
+        //public struct RECT
+        //{
+        //    public int Left;
+        //    public int Top;
+        //    public int Right;
+        //    public int Bottom;
+        //}
 
         [Flags]
         private enum DwmWindowAttribute : uint
@@ -42,14 +42,36 @@ namespace DesktopManagerUX.Utils
             DWMWA_LAST
         }
 
-        public static RECT GetWindowRectangle(IntPtr hWnd)
+        public static User32.RECT GetWindowRectangle(IntPtr hWnd)
         {
-            RECT rect;
+            User32.RECT rect;
 
-            int size = Marshal.SizeOf(typeof(RECT));
+            int size = Marshal.SizeOf(typeof(User32.RECT));
             DwmGetWindowAttribute(hWnd, (int)DwmWindowAttribute.DWMWA_EXTENDED_FRAME_BOUNDS, out rect, size);
 
             return rect;
+        }
+
+        //https://stackoverflow.com/questions/34139450/getwindowrect-returns-a-size-including-invisible-borders
+        public static User32.RECT GetWindowBorderSize(IntPtr hWnd)
+        {
+            User32.RECT rect, frame;
+            User32.GetWindowRect(hWnd, out rect);
+
+            int size = Marshal.SizeOf(typeof(User32.RECT));
+            DwmGetWindowAttribute(hWnd, (int)DwmWindowAttribute.DWMWA_EXTENDED_FRAME_BOUNDS, out frame, size);
+
+            //rect should be `0, 0, 1280, 1024`
+            //frame should be `7, 0, 1273, 1017`
+
+            User32.RECT border;
+            border.left = frame.left - rect.left;
+            border.top = frame.top - rect.top;
+            border.right = rect.right - frame.right;
+            border.bottom = rect.bottom - frame.bottom;
+
+            //border should be `7, 0, 7, 7`
+            return border;
         }
     }
 }

@@ -9,11 +9,11 @@ using System.Windows.Media;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("DesktopManagerUX")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Arrange Windows in Desktop")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("MKZ")]
 [assembly: AssemblyProduct("DesktopManagerUX")]
-[assembly: AssemblyCopyright("Copyright ©  2020")]
+[assembly: AssemblyCopyright("Copyright MarkZ ©  2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

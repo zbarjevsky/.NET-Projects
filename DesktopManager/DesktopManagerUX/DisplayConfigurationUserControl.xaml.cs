@@ -109,19 +109,25 @@ namespace DesktopManagerUX
             if (chooser.SelectedApp == null || !chooser.SelectedApp.IsActive)
                 return;
 
-            Rect bounds = AppContext.Configuration.Displays[0].SelectedDisplayInfo.Bounds;
+            DisplayConfiguration activeDisplay = AppContext.Configuration.Displays[0];
 
-            double width = 3 + AppContext.Configuration.Displays[0].CellSize.Width;
-            double height = 3 + AppContext.Configuration.Displays[0].CellSize.Height;
+            double width = activeDisplay.CellSize.Width;
+            double height = activeDisplay.CellSize.Height;
+            double left = activeDisplay.SelectedDisplayInfo.Bounds.Left + col * width;
+            double top = activeDisplay.SelectedDisplayInfo.Bounds.Top + row * height;
 
-            double left = bounds.Left + col * width;
-            double top = bounds.Top + row * height;
+            User32.RECT border = DesktopWindowManager.GetWindowBorderSize(chooser.SelectedApp.HWND);
 
-            int cols = AppContext.Configuration.Displays[0].GridSize.Cols;
-            if (col == 0) //first column
-                left += 3;
-            else if (col == cols - 1) //last column
-                left -= 7;
+            left -= border.left;
+            top -= border.top;
+            width += border.left + border.right;
+            height += border.top + border.bottom;
+
+            //int cols = AppContext.Configuration.Displays[0].GridSize.Cols;
+            //if (col == 0) //first column
+            //    left += 3;
+            //else if (col == cols - 1) //last column
+            //    left -= 7;
 
             Logic.MoveWindow(chooser.SelectedApp.HWND, left, top, width, height);
         }
