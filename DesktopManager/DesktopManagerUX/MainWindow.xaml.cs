@@ -32,6 +32,20 @@ namespace DesktopManagerUX
             tabDisplays.Items.Clear();
             tabDisplays.ItemsSource = AppContext.Configuration.Displays;
             tabDisplays.SelectedIndex = 0; //AppContext.Configuration.SelectedDisplayInfo.Index;
+
+            Microsoft.Win32.SystemEvents.DisplaySettingsChanged += SystemEvents_DisplaySettingsChanged;
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            //AppContext.Configuration.SelectedDisplayInfo = cmbDisplays.SelectedItem as DisplayInfo;
+            AppContext.Configuration.Save();
+            Properties.Settings.Default.Save();
+        }
+
+        private void SystemEvents_DisplaySettingsChanged(object sender, EventArgs e)
+        {
+            AppContext.Configuration.UpdateDisplays();
         }
 
         private void Window_LocationChanged(object sender, EventArgs e)
@@ -43,19 +57,6 @@ namespace DesktopManagerUX
                 //this.Width = bounds.Width / 2;
                 //this.Height = bounds.Height / 2;
             }
-        }
-
-        //private void cmbDisplays_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    //AppContext.Configuration.SelectedDisplayInfo = cmbDisplays.SelectedItem as DisplayInfo;
-        //    //Apply_ActionOnAll((chooser, row, col) => chooser.UpdateInfo());
-        //}
-
-        private void Window_Closed(object sender, EventArgs e)
-        {
-            //AppContext.Configuration.SelectedDisplayInfo = cmbDisplays.SelectedItem as DisplayInfo;
-            AppContext.Configuration.Save();
-            Properties.Settings.Default.Save();
         }
 
         private void Minimize_Click(object sender, RoutedEventArgs e)

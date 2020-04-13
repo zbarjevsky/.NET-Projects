@@ -42,12 +42,12 @@
                         <local:DisplayConfigurationUserControl DisplayConfiguration="{Binding}"/>
                     </DataTemplate>
                 </TabControl.ContentTemplate>
-                <TabItem Header="Test 1 (3840x2160)">
+                <!--<TabItem Header="Test 1 (3840x2160)">
                     <local:DisplayConfigurationUserControl/>
                 </TabItem>
                 <TabItem Header="Test 2 (1920x1080)">
                     <local:DisplayConfigurationUserControl/>
-                </TabItem>
+                </TabItem>-->
             </TabControl>
         </Grid>
     </Grid>

@@ -1,6 +1,8 @@
 ﻿using DesktopManagerUX.Utils;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -14,7 +16,7 @@ namespace DesktopManagerUX
     [Serializable]
     public class Configuration
     {
-        public List<DisplayConfiguration> Displays { get; set; } = new List<DisplayConfiguration>();
+        public ObservableCollection<DisplayConfiguration> Displays { get; set; } = new ObservableCollection<DisplayConfiguration>();
 
         public Configuration()
         {
@@ -32,7 +34,7 @@ namespace DesktopManagerUX
             }
         }
 
-        private void UpdateDisplays()
+        public void UpdateDisplays()
         {
             List<DisplayInfo> info = Logic.GetDisplays();
 
@@ -63,12 +65,12 @@ namespace DesktopManagerUX
     }
 
     [Serializable]
-    public class DisplayConfiguration
+    public class DisplayConfiguration : NotifyPropertyChangedImpl
     {
         [XmlIgnore]
-        public string Name { get { return SelectedDisplayInfo.Name; } }
+        public string Name { get { return MonitorInfo.Name; } }
 
-        public DisplayInfo SelectedDisplayInfo { get; set; }
+        public DisplayInfo MonitorInfo { get; set; }
 
         private GridSizeData _gridSize = new GridSizeData() { Rows = 2, Cols = 2 };
 
@@ -78,8 +80,8 @@ namespace DesktopManagerUX
         {
             get
             {
-                double width = (SelectedDisplayInfo.Bounds.Width / _gridSize.Cols);
-                double height = (SelectedDisplayInfo.Bounds.Height / _gridSize.Rows);
+                double width = (MonitorInfo.Bounds.Width / _gridSize.Cols);
+                double height = (MonitorInfo.Bounds.Height / _gridSize.Rows);
                 return new Rect(0, 0, width, height);
             }
         }
@@ -126,11 +128,13 @@ namespace DesktopManagerUX
 
         public void UpdateDisplayInfo(DisplayInfo displayInfo)
         {
-            SelectedDisplayInfo = displayInfo;
+            MonitorInfo = displayInfo;
 
             if(SelectedApps.Count == 0) //not loaded from config file
                 for (int i = 0; i < _gridSize.CellCount; i++)
                     SelectedApps.Add(AppInfo.GetEmptyAppInfo());
+
+            OnPropertyChanged(nameof(Name));
         }
 
         public AppInfo this[int row, int col]
@@ -154,6 +158,11 @@ namespace DesktopManagerUX
             SelectedApps = new List<AppInfo>(GridSize.CellCount);
             //for (int i = 0; i < Rows*Columns; i++)
             //    SelectedApps.Add(AppInfo.GetEmptyAppInfo());
+        }
+
+        public override string ToString()
+        {
+            return Name + " - " + GridSize;
         }
     }
 }

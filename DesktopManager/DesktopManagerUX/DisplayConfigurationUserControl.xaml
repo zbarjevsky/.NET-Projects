@@ -31,15 +31,15 @@
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>-->
-            <ComboBox x:Name="cmbGridSize" SelectedIndex="1" VerticalContentAlignment="Center"
-                      SelectionChanged="cmbGridSize_SelectionChanged"/>
+            <!--<ComboBox x:Name="cmbGridSize" SelectedIndex="1" VerticalContentAlignment="Center"
+                      SelectionChanged="cmbGridSize_SelectionChanged"/>-->
 
             <controls:SelectTableSizeUserControl x:Name="gridSizeSelector" Margin="6,0"/>
 
-            <Button Margin="10,0" Padding="4" Click="Apply_Click">
+            <Button Margin="10,0" Padding="2" Click="Apply_Click">
                 <StackPanel Orientation="Horizontal">
                     <Image Source="Images\AppIcon.ico"/>
-                    <TextBlock Text="Restore Selected" VerticalAlignment="Center" Margin="2" FontWeight="SemiBold"/>
+                    <TextBlock Text="Apply Layout" VerticalAlignment="Center" Margin="2,0" FontWeight="SemiBold"/>
                 </StackPanel>
             </Button>
             <Button Margin="10,0" Padding="4" Click="Test_Click">

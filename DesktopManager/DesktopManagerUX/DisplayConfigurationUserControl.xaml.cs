@@ -30,24 +30,31 @@ namespace DesktopManagerUX
         }
 
         public static readonly DependencyProperty DisplayConfigurationProperty = DependencyProperty.Register(
-          nameof(DisplayConfiguration), typeof(DisplayConfiguration), typeof(DisplayConfigurationUserControl), new PropertyMetadata(null));// new DisplayConfiguration()));
+          nameof(DisplayConfiguration), typeof(DisplayConfiguration), typeof(DisplayConfigurationUserControl), new PropertyMetadata(DisplayConfigurationPropertyChanged));// new DisplayConfiguration()));
+
+        private static void DisplayConfigurationPropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        {
+            if (obj is DisplayConfigurationUserControl This)
+                This.OnDisplayConfigurationChanged();
+        }
 
         private void OnDisplayConfigurationChanged()
         {
-            string selectedGridSize = DisplayConfiguration.GetSelectedGridSizeText();
-            cmbGridSize.ItemsSource = GridSizeData.GetAllSizes();
-            foreach (string txtSize in cmbGridSize.Items)
-            {
-                if (txtSize.EndsWith(selectedGridSize))
-                    cmbGridSize.SelectedItem = txtSize;
-            }
+            if (DisplayConfiguration == null)
+                return;
 
-            gridSizeSelector.OnSelectedSizeChangedAction = (size) => { RebuildAppsGrid(size); };
+            string selectedGridSize = DisplayConfiguration.GetSelectedGridSizeText();
+            //cmbGridSize.ItemsSource = GridSizeData.GetAllSizes();
+            //foreach (string txtSize in cmbGridSize.Items)
+            //{
+            //    if (txtSize.EndsWith(selectedGridSize))
+            //        cmbGridSize.SelectedItem = txtSize;
+            //}
+
 
             _isInitialized = true;
 
-            string txt = (cmbGridSize.SelectedItem as string);
-            RebuildAppsGrid(GridSizeData.Parse(txt));
+            RebuildAppsGrid(DisplayConfiguration.GridSize);
         }
 
         public DisplayConfigurationUserControl()
@@ -57,14 +64,14 @@ namespace DesktopManagerUX
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            OnDisplayConfigurationChanged();
+            gridSizeSelector.OnSelectedSizeChangedAction = (size) => { RebuildAppsGrid(size); };
         }
 
-        private void cmbGridSize_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            string txtSize = (cmbGridSize.SelectedItem as string);
-            RebuildAppsGrid(GridSizeData.Parse(txtSize));
-        }
+        //private void cmbGridSize_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    string txtSize = (cmbGridSize.SelectedItem as string);
+        //    RebuildAppsGrid(GridSizeData.Parse(txtSize));
+        //}
 
         private AppChooserUserControl GetAppChooser(int row, int col)
         {
@@ -96,7 +103,6 @@ namespace DesktopManagerUX
                 }
             }
             AppContext.ViewModel.ActivateMainWindow();
-
         }
 
         private void Apply_Click(object sender, RoutedEventArgs e)
@@ -109,12 +115,12 @@ namespace DesktopManagerUX
             if (chooser.SelectedApp == null || !chooser.SelectedApp.IsActive)
                 return;
 
-            DisplayConfiguration activeDisplay = AppContext.Configuration.Displays[0];
+            DisplayConfiguration activeDisplay = this.DisplayConfiguration; // AppContext.Configuration.Displays[0];
 
             double width = activeDisplay.CellSize.Width;
             double height = activeDisplay.CellSize.Height;
-            double left = activeDisplay.SelectedDisplayInfo.Bounds.Left + col * width;
-            double top = activeDisplay.SelectedDisplayInfo.Bounds.Top + row * height;
+            double left = activeDisplay.MonitorInfo.Bounds.Left + col * width;
+            double top = activeDisplay.MonitorInfo.Bounds.Top + row * height;
 
             User32.RECT border = DesktopWindowManager.GetWindowBorderSize(chooser.SelectedApp.HWND);
 
@@ -123,20 +129,14 @@ namespace DesktopManagerUX
             width += border.left + border.right;
             height += border.top + border.bottom;
 
-            //int cols = AppContext.Configuration.Displays[0].GridSize.Cols;
-            //if (col == 0) //first column
-            //    left += 3;
-            //else if (col == cols - 1) //last column
-            //    left -= 7;
-
             Logic.MoveWindow(chooser.SelectedApp.HWND, left, top, width, height);
         }
 
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
             this.Cursor = Cursors.Wait;
-            string txtSize = (cmbGridSize.SelectedItem as string);
-            RebuildAppsGrid(GridSizeData.Parse(txtSize));
+            AppContext.Configuration.UpdateDisplays();
+            RebuildAppsGrid(this.DisplayConfiguration.GridSize);
             this.Cursor = Cursors.Arrow;
         }
 
@@ -175,10 +175,10 @@ namespace DesktopManagerUX
             {
                 AppContext.ViewModel.ReloadApps();
 
-                AppContext.Configuration.Displays[0].UpdateApps(newGridSize);
+                this.DisplayConfiguration.UpdateApps(newGridSize);
 
-                int rows = AppContext.Configuration.Displays[0].GridSize.Rows;
-                int cols = AppContext.Configuration.Displays[0].GridSize.Cols;
+                int rows = this.DisplayConfiguration.GridSize.Rows;
+                int cols = this.DisplayConfiguration.GridSize.Cols;
 
                 gridSizeSelector.SelectedSize = new GridSizeData(rows, cols);
 
