@@ -52,8 +52,23 @@ namespace MeditationStopWatch
 
 		private void FormStopWatch_Load(object sender, EventArgs e)
 		{
-			if ( File.Exists(m_sSettingsFile) )
+			if (File.Exists(m_sSettingsFile))
+			{
 				OptionsSerializer.Load(m_sSettingsFile, m_Options);
+
+				//check files exists - may be network disk is unmounted
+			CheckFiles:
+				DialogResult res = CheckFilesExist();
+				if (res == DialogResult.Abort)
+				{
+					this.Close();
+					return;
+				}
+				else if (res == DialogResult.Retry)
+				{
+					goto CheckFiles;
+				}
+			}
 
             m_analogClock.Settings = m_Options.AnalogClockSettings;
 
@@ -116,6 +131,23 @@ namespace MeditationStopWatch
 
 		private void FormStopWatch_FormClosed(object sender, FormClosedEventArgs e)
 		{
+		}
+
+		private DialogResult CheckFilesExist()
+		{
+			foreach (PlayList list in m_Options.PlayListCollection.Collection)
+			{
+				foreach (string file in list.List)
+				{
+					if (!File.Exists(file))
+					{
+						DialogResult res = MessageBox.Show(this, "Cannot find file:\n" + file, "Load",
+							MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Asterisk);
+						return res;
+					}
+				}
+			}
+			return DialogResult.Ignore;
 		}
 
 		private void InitThumbnailToolBarButtons()
