@@ -50,6 +50,7 @@ namespace MeditationStopWatch
             m_Options.AnalogClockSettings = m_analogClock.Settings;
 		}
 
+		private bool _isInitialized = false;
 		private void FormStopWatch_Load(object sender, EventArgs e)
 		{
 			if (File.Exists(m_sSettingsFile))
@@ -118,10 +119,15 @@ namespace MeditationStopWatch
 
             AutoCloseThumbnailsPanel();
 			InitThumbnailToolBarButtons();
+
+			_isInitialized = true;
 		}
 
 		private void FormStopWatch_FormClosing(object sender, FormClosingEventArgs e)
 		{
+			if (!_isInitialized)
+				return;
+
 			m_ThumbnailCache.ProgressChanged -= m_ThumbnailCache_ProgressChanged;
 			m_audioPlayerControl.ValueChanged -= m_audioPlayerControl_ValueChanged;
 			m_ThumbnailCache.CancelLoadingThumbnails = true;
