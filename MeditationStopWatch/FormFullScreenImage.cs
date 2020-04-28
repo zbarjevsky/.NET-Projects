@@ -13,6 +13,8 @@ namespace MeditationStopWatch
     public partial class FormFullScreenImage : Form
     {
         FormStopWatch _stopWatchForm;
+        ZoomablePictureBoxUserControl.MarginRect _clockMargin = new ZoomablePictureBoxUserControl.MarginRect(100);
+        static double _zoomScale = 1;
 
         public Image Picture
         {
@@ -32,7 +34,7 @@ namespace MeditationStopWatch
             m_analogClock.BackColor = Color.Transparent; 
 
             m_analogClock.Draggable(true);
-            m_analogClock.Parent = pictureBox1.PictureBox;
+            m_analogClock.Parent = pictureBox1.PictureBox; //to show picture as background
 
             m_btnCancel.BackColor = Color.Transparent;
             m_btnCancel.Parent = pictureBox1.PictureBox;
@@ -46,14 +48,16 @@ namespace MeditationStopWatch
                 m_lblVolume.Visible = false;
 
             pictureBox1.OnSizeChangedAction = (bounds) => EnsureVisibleControls();
-
+            pictureBox1.OnMouseWheelAction = (delta) => EnsureVisibleControls();
             pictureBox1.ShowControlsAction = (show) => { m_btnCancel.Visible = show; m_lblUsage.Visible = show; };
 
             this.WindowState = FormWindowState.Maximized;
 
             m_analogClock.Bounds = _stopWatchForm.m_Options.ClockFullScreenBounds;
+            _clockMargin.FromRectangle(_stopWatchForm.m_Options.ClockFullScreenBounds, this.Bounds);
 
             EnsureVisibleControls();
+            pictureBox1.Zoom(_zoomScale);
             pictureBox1.PictureBox.Focus();
             pictureBox1.PictureBox.Refresh();
             m_btnCancel.BringToFront();
@@ -61,14 +65,22 @@ namespace MeditationStopWatch
 
         private void FormFullScreenImage_FormClosed(object sender, FormClosedEventArgs e)
         {
-            _stopWatchForm.m_Options.ClockFullScreenBounds = m_analogClock.Bounds;
+            _stopWatchForm.m_Options.ClockFullScreenBounds = new Rectangle()
+            {
+                X = pictureBox1.PictureBox.Left + m_analogClock.Left,
+                Y = pictureBox1.PictureBox.Top + m_analogClock.Top,
+                Width = m_analogClock.Width,
+                Height = m_analogClock.Height
+            };
+
+            _zoomScale = (double)pictureBox1.PictureBox.Width / (double)pictureBox1.Width;
         }
 
         private void EnsureVisibleControls()
         {
             pictureBox1.EnsureVisible(m_lblVolume, AnchorStyles.Top | AnchorStyles.Right, 50, true);
             pictureBox1.EnsureVisible(m_btnCancel, AnchorStyles.Top | AnchorStyles.Right, 4, true);
-            pictureBox1.EnsureVisible(m_analogClock, AnchorStyles.Top | AnchorStyles.Right, 100, true);
+            pictureBox1.EnsureVisible(m_analogClock, AnchorStyles.Top | AnchorStyles.Right, _clockMargin, true);
         }
 
         protected override void OnMouseWheel(MouseEventArgs e)
@@ -85,6 +97,7 @@ namespace MeditationStopWatch
         {
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1.PictureBox)).BeginInit();
             m_analogClock.AdjustClockSize(delta, pictureBox1.Bounds);
+            pictureBox1.EnsureVisible(m_analogClock, AnchorStyles.Top | AnchorStyles.Right, _clockMargin, true);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1.PictureBox)).EndInit();
         }
 
