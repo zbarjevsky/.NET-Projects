@@ -155,6 +155,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\Utils.cs" />
     <Content Include="app.ico" />
     <Content Include="Log.xsd">
       <Generator>MSDataSetGenerator</Generator>
@@ -243,6 +244,9 @@
     </Compile>
     <Compile Include="EventLogWrap.cs" />
     <Compile Include="ForegroundWindow.cs" />
+    <Compile Include="FormLoadGraph.Designer.cs">
+      <DependentUpon>FormLoadGraph.cs</DependentUpon>
+    </Compile>
     <Compile Include="Options.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -280,6 +284,9 @@
     </Compile>
     <Compile Include="ReportForm.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReportForm.Designer.cs">
+      <DependentUpon>ReportForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SendEmail.cs" />
     <Compile Include="TrayIconList.cs">

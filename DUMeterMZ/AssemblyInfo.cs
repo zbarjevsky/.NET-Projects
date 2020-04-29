@@ -12,7 +12,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("*****")]
 [assembly: AssemblyProduct("DUMeterMZ")]
-[assembly: AssemblyCopyright("Zbarjevsky 2003-2011")]
+[assembly: AssemblyCopyright("Copyright © Mark Z. 2003-2020")]
 [assembly: AssemblyTrademark("MarkZ")]
 [assembly: AssemblyCulture("")]		
 
