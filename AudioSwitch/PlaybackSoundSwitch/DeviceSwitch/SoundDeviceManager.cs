@@ -34,18 +34,18 @@ namespace PlaybackSoundSwitch.DeviceSwitch
                 if (SwitchForegroundProgram)
                 {
                     switch1.ResetProcessDeviceConfiguration();
-                    switch1.SwitchProcessTo(device.Id, Role.Console, (EDataFlow)device.Type);
-                    switch1.SwitchProcessTo(device.Id, Role.Multimedia, (EDataFlow)device.Type);
+                    switch1.SwitchProcessTo(device.Id, Role.Console, device.DeviceType);
+                    switch1.SwitchProcessTo(device.Id, Role.Multimedia, device.DeviceType);
                 }
             }
             else
             {
                 //Log.Information("Set Default Communication device: {Device}", device);
-                switch1.SwitchTo(device.Id, Role.Count);
+                switch1.SwitchTo(device.Id, Role.All);
                 if (SwitchForegroundProgram)
                 {
                     switch1.ResetProcessDeviceConfiguration();
-                    switch1.SwitchProcessTo(device.Id, Role.Count, (EDataFlow)device.Type);
+                    switch1.SwitchProcessTo(device.Id, Role.All, device.DeviceType);
                 }
             }
             return true;

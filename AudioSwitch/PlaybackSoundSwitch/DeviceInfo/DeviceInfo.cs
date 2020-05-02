@@ -7,28 +7,28 @@ namespace PlaybackSoundSwitch.Device
     {
         public string Name { get;  }
         public string Id { get; }
-        public EDataFlow Type { get; }
+        public EDataFlow DeviceType { get; }
 
         //[JsonConstructor]
         public DeviceInfo(string name, string id, EDataFlow type)
         {
             Name = name;
             Id = id;
-            Type = type;
+            DeviceType = type;
         }
 
         public DeviceInfo(MMDevice device)
         {
             Name = device.FriendlyName;
             Id = device.ID;
-            Type = device.DataFlow;
+            DeviceType = device.DataFlow;
         }
 
         public bool Equals(DeviceInfo other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Id == other.Id && Type == other.Type;
+            return Id == other.Id && DeviceType == other.DeviceType;
         }
 
         public override bool Equals(object obj)
@@ -43,7 +43,7 @@ namespace PlaybackSoundSwitch.Device
         {
             unchecked
             {
-                return ((Id != null ? Id.GetHashCode() : 0) * 397) ^ (int) Type;
+                return ((Id != null ? Id.GetHashCode() : 0) * 397) ^ (int) DeviceType;
             }
         }
 
@@ -64,7 +64,7 @@ namespace PlaybackSoundSwitch.Device
             if (ReferenceEquals(null, other)) return 1;
             var idComparison = string.Compare(Id, other.Id, StringComparison.Ordinal);
             if (idComparison != 0) return idComparison;
-            return Type.CompareTo(other.Type);
+            return DeviceType.CompareTo(other.DeviceType);
         }
 
         public override string ToString()

@@ -50,6 +50,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AudioVolume\AudioEndpointVolume.cs" />
+    <Compile Include="AudioVolume\AudioEndpointVolumeCallback.cs" />
+    <Compile Include="AudioVolume\AudioEndpointVolumeChannel.cs" />
+    <Compile Include="AudioVolume\AudioEndpointVolumeChannels.cs" />
+    <Compile Include="AudioVolume\AudioEndpointVolumeStepInformation.cs" />
+    <Compile Include="AudioVolume\AudioEndpointVolumeVolumeRange.cs" />
+    <Compile Include="AudioVolume\AudioVolumeNotificationData.cs" />
+    <Compile Include="AudioVolume\AudioVolumeNotificationDataStruct.cs" />
+    <Compile Include="AudioVolume\EEndpointHardwareSupport.cs" />
+    <Compile Include="AudioVolume\IAudioEndpointVolume.cs" />
+    <Compile Include="AudioVolume\IAudioEndpointVolumeCallback.cs" />
     <Compile Include="ComObjects\ComBase.cs" />
     <Compile Include="ComObjects\ComIIds.cs" />
     <Compile Include="ComObjects\ComTaskScheduler.cs" />

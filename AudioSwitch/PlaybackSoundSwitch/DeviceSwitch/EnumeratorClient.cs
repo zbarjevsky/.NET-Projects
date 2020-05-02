@@ -26,7 +26,7 @@ namespace PlaybackSoundSwitch.DeviceSwitch
 
         public bool IsDefault(string deviceId, EDataFlow flow, Role role)
         {
-            if (role == Role.Count)
+            if (role == Role.All)
             {
                 var result = true;
                 result &= IsDefault(deviceId, flow, Role.Communications);

@@ -9,8 +9,8 @@ namespace PlaybackSoundSwitch.Device
         public string IconPath { get; }
         public EDeviceState State { get; }
 
-        public System.Drawing.Icon LargeIcon => AudioDeviceIconExtractor.ExtractIconFromPath(IconPath, Type, true);
-        public System.Drawing.Icon SmallIcon => AudioDeviceIconExtractor.ExtractIconFromPath(IconPath, Type, false);
+        public System.Drawing.Icon LargeIcon => AudioDeviceIconExtractor.ExtractIconFromPath(IconPath, DeviceType, true);
+        public System.Drawing.Icon SmallIcon => AudioDeviceIconExtractor.ExtractIconFromPath(IconPath, DeviceType, false);
 
         public DeviceFullInfo(string name, string id, EDataFlow type, string iconPath, EDeviceState state) : base(name, id, type)
         {

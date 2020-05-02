@@ -52,7 +52,7 @@ namespace PlaybackSoundSwitch.DeviceSwitch
         /// <param name="role"></param>
         public void SwitchTo(string deviceId, Role role)
         {
-            if (role != Role.Count)
+            if (role != Role.All)
             {
                 ComThread.Invoke((() =>
                 {
@@ -89,7 +89,7 @@ namespace PlaybackSoundSwitch.DeviceSwitch
                 Role.Multimedia
             };
 
-            if (role != Role.Count)
+            if (role != Role.All)
             {
                 roles = new Role[]
                 {

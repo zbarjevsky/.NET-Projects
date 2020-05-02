@@ -26,6 +26,9 @@ namespace PlaybackSoundSwitch.ComObjects
         /// </summary>
         Communications = Multimedia + 1,
 
-        Count = Communications + 1
+        /// <summary>
+        ///  for all combined
+        /// </summary>
+        All = Communications + 1
     }
 }
