@@ -59,7 +59,7 @@
             this.m_listDevices.MultiSelect = false;
             this.m_listDevices.Name = "m_listDevices";
             this.m_listDevices.Size = new System.Drawing.Size(565, 268);
-            this.m_listDevices.TabIndex = 1;
+            this.m_listDevices.TabIndex = 2;
             this.m_listDevices.UseCompatibleStateImageBehavior = false;
             this.m_listDevices.View = System.Windows.Forms.View.Details;
             this.m_listDevices.SelectedIndexChanged += new System.EventHandler(this.m_listDevices_SelectedIndexChanged);
@@ -109,7 +109,7 @@
             this.m_trackVolume.Name = "m_trackVolume";
             this.m_trackVolume.Orientation = System.Windows.Forms.Orientation.Vertical;
             this.m_trackVolume.Size = new System.Drawing.Size(45, 212);
-            this.m_trackVolume.TabIndex = 2;
+            this.m_trackVolume.TabIndex = 3;
             this.m_trackVolume.TickFrequency = 10;
             this.m_trackVolume.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
             this.m_trackVolume.Scroll += new System.EventHandler(this.m_trackVolume_Scroll);
@@ -122,7 +122,7 @@
             this.m_btnMute.Location = new System.Drawing.Point(590, 269);
             this.m_btnMute.Name = "m_btnMute";
             this.m_btnMute.Size = new System.Drawing.Size(48, 43);
-            this.m_btnMute.TabIndex = 3;
+            this.m_btnMute.TabIndex = 4;
             this.m_btnMute.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.m_btnMute.UseVisualStyleBackColor = true;
             this.m_btnMute.Click += new System.EventHandler(this.m_btnMute_Click);
@@ -135,7 +135,7 @@
             this.m_btnActivate.Location = new System.Drawing.Point(108, 12);
             this.m_btnActivate.Name = "m_btnActivate";
             this.m_btnActivate.Size = new System.Drawing.Size(469, 25);
-            this.m_btnActivate.TabIndex = 4;
+            this.m_btnActivate.TabIndex = 1;
             this.m_btnActivate.Text = "Set Active: ";
             this.m_btnActivate.UseVisualStyleBackColor = true;
             this.m_btnActivate.Click += new System.EventHandler(this.m_btnActivate_Click);
@@ -154,7 +154,7 @@
             this.MinimumSize = new System.Drawing.Size(600, 250);
             this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Select Default Active Audio Device";
+            this.Text = "Select Active Audio End Point";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormMain_FormClosed);
             this.Load += new System.EventHandler(this.FormMain_Load);
             ((System.ComponentModel.ISupportInitialize)(this.m_trackVolume)).EndInit();

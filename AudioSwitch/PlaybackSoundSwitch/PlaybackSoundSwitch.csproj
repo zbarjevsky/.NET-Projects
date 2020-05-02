@@ -34,7 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>Speaker1.ico</ApplicationIcon>
+    <ApplicationIcon>Speaker3.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -143,6 +143,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Speaker3.ico" />
     <None Include="Images\SpeakerImgList.png" />
     <Content Include="Speaker1.ico" />
   </ItemGroup>

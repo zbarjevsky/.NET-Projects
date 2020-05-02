@@ -13,6 +13,7 @@ using System.Data;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -156,6 +157,7 @@ namespace PlaybackSoundSwitch
         private void m_trackVolume_Scroll(object sender, EventArgs e)
         {
             _activeDevice.AudioEndpointVolume.MasterVolumeLevelScalar = m_trackVolume.Value / 100f;
+            //SystemSounds.Beep.Play();
         }
 
         private void m_trackVolume_ValueChanged(object sender, EventArgs e)
