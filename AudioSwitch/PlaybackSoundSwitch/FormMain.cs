@@ -1,6 +1,9 @@
 ﻿using PlaybackSoundSwitch.ComObjects;
 using PlaybackSoundSwitch.Device;
 using PlaybackSoundSwitch.DeviceSwitch;
+using PlaybackSoundSwitch.Interfaces;
+using PlaybackSoundSwitch.Notifications;
+using PlaybackSoundSwitch.Properties;
 using PlaybackSoundSwitch.Tools;
 
 using System;
@@ -35,7 +38,13 @@ namespace PlaybackSoundSwitch
                 ColorDepth = ColorDepth.Depth32Bit
             };
 
+            m_imageListSpeakers.Images.AddStrip(Resources.SpeakerImgList);
+            m_btnRefresh.ImageIndex = 1;
+
             m_listDevices.SetDoubleBuffered(true);
+
+            _mmd.DevicesChanged = OnDevicesChanged;
+            _mmd.DefaultDeviceChanged = OnDefaultDeviceChanged;
         }
 
         private void FormMain_Load(object sender, EventArgs e)
@@ -48,32 +57,44 @@ namespace PlaybackSoundSwitch
             _mmd.Dispose();
         }
 
+        private void OnDevicesChanged(string deviceId = "")
+        {
+            EnumDevices();
+        }
+
+        private void OnDefaultDeviceChanged(MMDevice device)
+        {
+            EnumDevices();
+        }
+
         private void EnumDevices()
         {
-            try
-            {
-                m_listDevices.Items.Clear();
-
-                MMDeviceCollection coll = _mmd.EnumerateAudioEndPoints(EDataFlow.Render, DeviceState.Active);
-                IReadOnlyCollection<DeviceFullInfo> devs = CreateDeviceList(coll);
-
-                foreach (DeviceFullInfo dev in devs)
+            CommonUtils.ExecuteOnUIThread(() => {
+                try
                 {
-                    AddDeviceIconSmallImage(dev);
+                    m_listDevices.Items.Clear();
 
-                    Debug.WriteLine("Dev: " + dev.Name);
-                    ListViewItem lvi = m_listDevices.Items.Add(dev.Name);
-                    lvi.ImageKey = dev.IconPath;
-                    lvi.SubItems.Add("N/A");
-                    lvi.Tag = dev;
+                    MMDeviceCollection coll = _mmd.EnumerateAudioEndPoints(EDataFlow.Render, DeviceState.Active);
+                    IReadOnlyCollection<DeviceFullInfo> devs = CreateDeviceList(coll);
+
+                    foreach (DeviceFullInfo dev in devs)
+                    {
+                        AddDeviceIconSmallImage(dev);
+
+                        Debug.WriteLine("Dev: " + dev.Name);
+                        ListViewItem lvi = m_listDevices.Items.Add(dev.Name);
+                        lvi.ImageKey = dev.IconPath;
+                        lvi.SubItems.Add("N/A");
+                        lvi.Tag = dev;
+                    }
+
+                    SetActiveDeviceToBold();
                 }
-                
-                SetActiveDeviceToBold();
-            }
-            catch (Exception err)
-            {
-                MessageBox.Show(err.Message);
-            }        
+                catch (Exception err)
+                {
+                    MessageBox.Show(err.Message);
+                }
+            }, this);
         }
 
         private void SetActiveDeviceToBold()

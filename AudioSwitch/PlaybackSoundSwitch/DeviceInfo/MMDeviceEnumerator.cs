@@ -7,24 +7,40 @@ using System.Threading.Tasks;
 using PlaybackSoundSwitch.ComObjects;
 using PlaybackSoundSwitch.Device;
 using PlaybackSoundSwitch.Interfaces;
+using PlaybackSoundSwitch.Notifications;
 
 namespace PlaybackSoundSwitch
 {
-	public class MMDeviceEnumerator
+	public class MMDeviceEnumerator : IDisposable
 	{
 		IMMDeviceEnumerator _realEnumerator;
+        MMNotificationClient _notificationClient;
 
-		/// <summary>
-		/// Creates a new MM Device Enumerator
-		/// </summary>
-		public MMDeviceEnumerator()
+        public Action<MMDevice> DefaultDeviceChanged
+        {
+            get { return _notificationClient.DefaultDeviceChanged; }
+            set { _notificationClient.DefaultDeviceChanged = value; }
+        }
+
+        public Action<string> DevicesChanged
+        {
+            get { return _notificationClient.DevicesChanged; }
+            set { _notificationClient.DevicesChanged = value; }
+        }
+
+        /// <summary>
+        /// Creates a new MM Device Enumerator
+        /// </summary>
+        public MMDeviceEnumerator()
 		{
 			if (Environment.OSVersion.Version.Major < 6)
 			{
 				throw new NotSupportedException("This functionality is only supported on Windows Vista or newer.");
 			}
 			_realEnumerator = new MMDeviceEnumeratorComObject() as IMMDeviceEnumerator;
-		}
+            
+            _notificationClient = new MMNotificationClient(this);
+        }
 
         /// <summary>
         /// Enumerate Audio Endpoints
@@ -119,12 +135,19 @@ namespace PlaybackSoundSwitch
         {
             if (disposing)
             {
+                if(_notificationClient != null)
+                {
+                    _notificationClient.Dispose();
+                    _notificationClient = null;
+                }
+
                 if (_realEnumerator != null)
                 {
                     // although GC would do this for us, we want it done now
                     Marshal.ReleaseComObject(_realEnumerator);
                     _realEnumerator = null;
                 }
+
             }
         }
     }

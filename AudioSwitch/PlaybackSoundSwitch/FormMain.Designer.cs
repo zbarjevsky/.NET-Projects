@@ -28,11 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.m_listDevices = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.m_btnRefresh = new System.Windows.Forms.Button();
+            this.m_imageListSpeakers = new System.Windows.Forms.ImageList(this.components);
             this.SuspendLayout();
             // 
             // m_listDevices
@@ -46,10 +48,11 @@
             this.columnHeader2});
             this.m_listDevices.GridLines = true;
             this.m_listDevices.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.m_listDevices.HideSelection = false;
             this.m_listDevices.Location = new System.Drawing.Point(12, 27);
             this.m_listDevices.MultiSelect = false;
             this.m_listDevices.Name = "m_listDevices";
-            this.m_listDevices.Size = new System.Drawing.Size(479, 201);
+            this.m_listDevices.Size = new System.Drawing.Size(454, 201);
             this.m_listDevices.TabIndex = 0;
             this.m_listDevices.UseCompatibleStateImageBehavior = false;
             this.m_listDevices.View = System.Windows.Forms.View.Details;
@@ -68,13 +71,22 @@
             // m_btnRefresh
             // 
             this.m_btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnRefresh.Location = new System.Drawing.Point(497, 25);
+            this.m_btnRefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.m_btnRefresh.ImageList = this.m_imageListSpeakers;
+            this.m_btnRefresh.Location = new System.Drawing.Point(482, 25);
             this.m_btnRefresh.Name = "m_btnRefresh";
-            this.m_btnRefresh.Size = new System.Drawing.Size(75, 23);
+            this.m_btnRefresh.Size = new System.Drawing.Size(90, 34);
             this.m_btnRefresh.TabIndex = 1;
             this.m_btnRefresh.Text = "Refresh";
+            this.m_btnRefresh.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.m_btnRefresh.UseVisualStyleBackColor = true;
             this.m_btnRefresh.Click += new System.EventHandler(this.m_btnRefresh_Click);
+            // 
+            // m_imageListSpeakers
+            // 
+            this.m_imageListSpeakers.ColorDepth = System.Windows.Forms.ColorDepth.Depth24Bit;
+            this.m_imageListSpeakers.ImageSize = new System.Drawing.Size(32, 32);
+            this.m_imageListSpeakers.TransparentColor = System.Drawing.Color.Transparent;
             // 
             // FormMain
             // 
@@ -100,6 +112,7 @@
         private System.Windows.Forms.ColumnHeader columnHeader1;
         private System.Windows.Forms.ColumnHeader columnHeader2;
         private System.Windows.Forms.Button m_btnRefresh;
+        private System.Windows.Forms.ImageList m_imageListSpeakers;
     }
 }
 

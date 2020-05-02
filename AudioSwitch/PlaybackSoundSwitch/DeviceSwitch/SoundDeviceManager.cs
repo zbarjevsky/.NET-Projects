@@ -8,6 +8,11 @@ using PlaybackSoundSwitch.Device;
 
 namespace PlaybackSoundSwitch.DeviceSwitch
 {
+    /// <summary>
+    /// https://github.com/cdhunt/AudioSwitcher
+    /// https://github.com/sirWest/AudioSwitch
+    /// https://github.com/Belphemur/SoundSwitch
+    /// </summary>
     public class SoundDeviceManager
     {
         public static bool IsSwitchDefaultDevice { get; set; } = true;
