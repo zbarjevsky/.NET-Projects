@@ -12,7 +12,8 @@ namespace PlaybackSoundSwitch.Device
     /// </summary>
     public class PropertyStore
     {
-        private readonly IPropertyStore storeInterface;
+        private readonly IPropertyStore _storeInterface;
+        private Dictionary<uint, PropertyKey> _propertyKeys = new Dictionary<uint, PropertyKey>();
 
         /// <summary>
         /// Property Count
@@ -21,7 +22,7 @@ namespace PlaybackSoundSwitch.Device
         {
             get
             {
-                Marshal.ThrowExceptionForHR(storeInterface.GetCount(out var result));
+                Marshal.ThrowExceptionForHR(_storeInterface.GetCount(out var result));
                 return (int)result;
             }
         }
@@ -35,8 +36,8 @@ namespace PlaybackSoundSwitch.Device
         {
             get
             {
-                PropertyKey key = Get(index);
-                Marshal.ThrowExceptionForHR(storeInterface.GetValue(ref key, out var result));
+                PropertyKey key = _propertyKeys[index];
+                Marshal.ThrowExceptionForHR(_storeInterface.GetValue(ref key, out var result));
                 return new PropertyStoreProperty(key, result);
             }
         }
@@ -48,9 +49,10 @@ namespace PlaybackSoundSwitch.Device
         /// <returns>True if found</returns>
         public bool Contains(PropertyKey key)
         {
-            for (uint i = 0; i < Count; i++)
+            int count = Count; 
+            for (uint i = 0; i < count; i++)
             {
-                PropertyKey ikey = Get(i);
+                PropertyKey ikey = _propertyKeys[i];
                 if ((ikey.formatId == key.formatId) && (ikey.propertyId == key.propertyId))
                 {
                     return true;
@@ -68,12 +70,13 @@ namespace PlaybackSoundSwitch.Device
         {
             get
             {
-                for (uint i = 0; i < Count; i++)
+                int count = Count;
+                for (uint i = 0; i < count; i++)
                 {
-                    PropertyKey ikey = Get(i);
+                    PropertyKey ikey = _propertyKeys[i];
                     if ((ikey.formatId == key.formatId) && (ikey.propertyId == key.propertyId))
                     {
-                        Marshal.ThrowExceptionForHR(storeInterface.GetValue(ref ikey, out var result));
+                        Marshal.ThrowExceptionForHR(_storeInterface.GetValue(ref ikey, out var result));
                         return new PropertyStoreProperty(ikey, result);
                     }
                 }
@@ -86,9 +89,9 @@ namespace PlaybackSoundSwitch.Device
         /// </summary>
         /// <param name="index">Index</param>
         /// <returns>Property key</returns>
-        public PropertyKey Get(uint index)
+        private PropertyKey Get(uint index)
         {
-            Marshal.ThrowExceptionForHR(storeInterface.GetAt(index, out var key));
+            Marshal.ThrowExceptionForHR(_storeInterface.GetAt(index, out var key));
             return key;
         }
 
@@ -99,8 +102,8 @@ namespace PlaybackSoundSwitch.Device
         /// <returns>Property value</returns>
         public PropVariant GetValue(uint index)
         {
-            PropertyKey key = Get(index);
-            Marshal.ThrowExceptionForHR(storeInterface.GetValue(ref key, out var result));
+            PropertyKey key = _propertyKeys[index];
+            Marshal.ThrowExceptionForHR(_storeInterface.GetValue(ref key, out var result));
             return result;
         }
 
@@ -111,7 +114,7 @@ namespace PlaybackSoundSwitch.Device
         /// <param name="value">Value to write.</param>
         public void SetValue(PropertyKey key, PropVariant value)
         {
-            Marshal.ThrowExceptionForHR(storeInterface.SetValue(ref key, ref value));
+            Marshal.ThrowExceptionForHR(_storeInterface.SetValue(ref key, ref value));
         }
 
         /// <summary>
@@ -119,7 +122,7 @@ namespace PlaybackSoundSwitch.Device
         /// </summary>
         public void Commit()
         {
-            Marshal.ThrowExceptionForHR(storeInterface.Commit());
+            Marshal.ThrowExceptionForHR(_storeInterface.Commit());
         }
 
         /// <summary>
@@ -128,7 +131,11 @@ namespace PlaybackSoundSwitch.Device
         /// <param name="store">IPropertyStore COM interface</param>
         internal PropertyStore(IPropertyStore store)
         {
-            storeInterface = store;
+            _storeInterface = store;
+
+            int count = Count;
+            for (uint i = 0; i < count; i++)
+                _propertyKeys.Add(i, Get(i));
         }
     }
 }

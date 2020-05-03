@@ -168,6 +168,7 @@ namespace PlaybackSoundSwitch.Device
                 {
                     GetPropertyInformation();
                 }
+
                 if (_propertyStore.Contains(PropertyKeys.PKEY_DEVICE_FRIENDLY_NAME))
                 {
                     return (string)_propertyStore[PropertyKeys.PKEY_DEVICE_FRIENDLY_NAME].Value;

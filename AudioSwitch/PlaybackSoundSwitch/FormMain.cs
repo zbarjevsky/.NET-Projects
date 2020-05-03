@@ -50,7 +50,10 @@ namespace PlaybackSoundSwitch
 
         private void FormMain_Load(object sender, EventArgs e)
         {
-            EnumDevices();
+            m_listDevices.CollapseAllGroups();
+            m_listDevices.ExpandGroup(0);
+
+            EnumDevices("Loaded");
         }
 
         private void FormMain_FormClosed(object sender, FormClosedEventArgs e)
@@ -60,24 +63,35 @@ namespace PlaybackSoundSwitch
 
         private void OnDevicesChanged(string deviceId = "")
         {
-            EnumDevices();
+            EnumDevices("Devices changed: " + deviceId);
         }
 
         private void OnDefaultDeviceChanged(MMDevice device)
         {
-            EnumDevices();
+            EnumDevices("Default Device Changed: " + device.FriendlyName);
         }
 
-        private void EnumDevices()
+        bool _isEnumerating = false;
+        private void EnumDevices(string status)
         {
+            m_status1.Text = status;
+            
+            if (_isEnumerating)
+                return;
+            _isEnumerating = true;
             CommonUtils.ExecuteOnUIThread(() => {
                 try
                 {
-                    m_listDevices.Items.Clear();
+                    this.Cursor = Cursors.WaitCursor;
+                    m_btnRefresh.Enabled = false;
 
-                    MMDeviceCollection coll = _mmd.EnumerateAudioEndPoints(EDataFlow.Render, DeviceState.Active);
+                    MMDeviceCollection coll = _mmd.EnumerateAudioEndPoints(EDataFlow.Render, DeviceState.All);
                     IReadOnlyCollection<DeviceFullInfo> devs = CreateDeviceList(coll);
 
+                    Application.DoEvents();
+                    m_listDevices.Items.Clear();
+
+                    m_listDevices.BeginUpdate();
                     foreach (DeviceFullInfo dev in devs)
                     {
                         AddDeviceIconSmallImage(dev);
@@ -88,15 +102,43 @@ namespace PlaybackSoundSwitch
                         lvi.SubItems.Add("N/A");
                         lvi.SubItems.Add("N/A");
                         lvi.Tag = dev;
+                        lvi.Group = GetItemGroup(dev);
+                        lvi.ToolTipText = GetDeviceTooltip(dev);
                     }
 
                     SetActiveDeviceToBold();
+                    m_listDevices.EndUpdate();
                 }
                 catch (Exception err)
                 {
+                    this.Cursor = Cursors.Arrow;
                     MessageBox.Show(err.Message);
                 }
+                this.Cursor = Cursors.Arrow;
+                m_btnRefresh.Enabled = true;
+                _isEnumerating = false;
             }, this);
+        }
+
+        private string GetDeviceTooltip(DeviceFullInfo dev)
+        {
+            return dev.Name + "\n" + dev.State + "\n" + dev.Id;
+        }
+
+        private ListViewGroup GetItemGroup(DeviceFullInfo dev)
+        {
+            switch (dev.State)
+            {
+                case EDeviceState.Active:
+                    return m_listDevices.Groups[0];
+                case EDeviceState.Unplugged:
+                    return m_listDevices.Groups[1];
+                case EDeviceState.Disabled:
+                    return m_listDevices.Groups[2];
+                case EDeviceState.NotPresent:
+                default:
+                    return m_listDevices.Groups[3];
+            }
         }
 
         private void SetActiveDeviceToBold()
@@ -117,15 +159,17 @@ namespace PlaybackSoundSwitch
                 item.Font = isActive ? _fontBold : _fontNorm;
                 item.SubItems[1].Text = isActive ? "Active" : "";
                 item.Selected = false; // dev.Id == sel.ID;
+                item.ForeColor = dev.State == EDeviceState.Active ? Color.Black : Color.DarkGray;
+                item.Group = GetItemGroup(dev);
             }
 
             m_trackVolume.Value = (int)(100f * _activeDevice.AudioEndpointVolume.MasterVolumeLevelScalar);
-            UpdateUI();
+            UpdateUI(null);
         }
 
         private static IReadOnlyCollection<DeviceFullInfo> CreateDeviceList(MMDeviceCollection collection)
         {
-            var sortedDevices = new SortedList<string, DeviceFullInfo>();
+            var sortedDevices = new List<DeviceFullInfo>();
             foreach (var device in collection)
             {
                 try
@@ -137,7 +181,7 @@ namespace PlaybackSoundSwitch
                         continue;
                     }
 
-                    sortedDevices.Add(d.ID, deviceInfo);
+                    sortedDevices.Add(deviceInfo);
                 }
                 catch (Exception e)
                 {
@@ -146,12 +190,12 @@ namespace PlaybackSoundSwitch
                 }
             }
 
-            return sortedDevices.Values.ToArray();
+            return sortedDevices.OrderBy(dev => dev.Name).ToArray();
         }
 
         private void m_btnRefresh_Click(object sender, EventArgs e)
         {
-            EnumDevices();
+            EnumDevices("Refresh");
         }
 
         private void m_trackVolume_Scroll(object sender, EventArgs e)
@@ -162,17 +206,20 @@ namespace PlaybackSoundSwitch
 
         private void m_trackVolume_ValueChanged(object sender, EventArgs e)
         {
-            UpdateUI();
+            UpdateUI("Volume: "+m_trackVolume.Value);
         }
 
         private void m_btnMute_Click(object sender, EventArgs e)
         {
             _activeDevice.AudioEndpointVolume.Mute = !_activeDevice.AudioEndpointVolume.Mute;
-            UpdateUI();
+            UpdateUI("Mute");
         }
 
-        private void UpdateUI()
+        private void UpdateUI(string status)
         {
+            if(status != null)
+                m_status1.Text = status;
+
             float volume = m_trackVolume.Value / 100f;
             foreach (ListViewItem item in m_listDevices.Items)
             {
@@ -200,8 +247,9 @@ namespace PlaybackSoundSwitch
 
             if (m_listDevices.SelectedItems.Count > 0)
             {
-                m_btnActivate.Enabled = (m_listDevices.SelectedItems[0].Font.Bold == false);
-                m_btnActivate.Text = "Set Active: " + m_listDevices.SelectedItems[0].Text;
+                var device = GetSelectedDevice();
+                m_btnActivate.Enabled = (m_listDevices.SelectedItems[0].Font.Bold == false && device.State == EDeviceState.Active);
+                m_btnActivate.Text = "Set Active: " + GetSelectedName();
             }
             else
             {
@@ -212,7 +260,21 @@ namespace PlaybackSoundSwitch
 
         private void m_listDevices_SelectedIndexChanged(object sender, EventArgs e)
         {
-            UpdateUI();
+            UpdateUI("Selected: "+ GetSelectedName());
+        }
+
+        private DeviceFullInfo GetSelectedDevice()
+        {
+            if (m_listDevices.SelectedItems.Count > 0)
+                return m_listDevices.SelectedItems[0].Tag as DeviceFullInfo;
+            return null;
+        }
+
+        private string GetSelectedName()
+        {
+            if (m_listDevices.SelectedItems.Count > 0)
+                return m_listDevices.SelectedItems[0].Text;
+            return "N?A";
         }
 
         private void m_btnActivate_Click(object sender, EventArgs e)
@@ -234,10 +296,11 @@ namespace PlaybackSoundSwitch
                 if (m_listDevices.SelectedItems.Count == 0)
                     return;
 
-                ListViewItem item = m_listDevices.SelectedItems[0];
-                DeviceFullInfo audioDevice = item.Tag as DeviceFullInfo;
+                var device = GetSelectedDevice();
+                if (device.State != EDeviceState.Active)
+                    return;
 
-                SoundDeviceManager.SetActiveDevice(audioDevice);
+                SoundDeviceManager.SetActiveDevice(device);
             
                 SetActiveDeviceToBold();
             }

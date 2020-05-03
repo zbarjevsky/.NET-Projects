@@ -39,6 +39,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -115,6 +116,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\ControlExtension.cs" />
+    <Compile Include="Tools\ListViewCollapsibleGroups.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Tools\Utils.cs" />
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
@@ -143,6 +147,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\refresh.ico" />
+    <None Include="Images\Refresh1.ico" />
+    <None Include="Images\Refresh2.ico" />
+    <None Include="Images\Mic1.png" />
+    <None Include="Images\Speaker1.png" />
     <Content Include="Speaker3.ico" />
     <None Include="Images\SpeakerImgList.png" />
     <Content Include="Speaker1.ico" />

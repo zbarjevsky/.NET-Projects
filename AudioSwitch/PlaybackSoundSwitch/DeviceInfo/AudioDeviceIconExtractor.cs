@@ -13,6 +13,8 @@
 ********************************************************************/
 
 using System;
+using System.Drawing;
+using System.Runtime.Caching;
 //using System.Runtime.Caching;
 //using NAudio.CoreAudioApi;
 using PlaybackSoundSwitch.Device;
@@ -27,33 +29,33 @@ namespace PlaybackSoundSwitch.Device
     public class AudioDeviceIconExtractor
     {
 
-        //    //private static readonly System.Drawing.Icon DefaultSpeakers = Resources.defaultSpeakers;
-        //    //private static readonly System.Drawing.Icon DefaultMicrophone = Resources.defaultMicrophone;
+        private static readonly System.Drawing.Icon DefaultSpeakers = Icon.FromHandle(Resources.defaultSpeakers.GetHicon());
+        private static readonly System.Drawing.Icon DefaultMicrophone = Icon.FromHandle(Resources.defaultMicrophone.GetHicon());
 
-        //    //private static readonly MemoryCache IconCache = new MemoryCache("_iconCache");
-        //    //private static readonly CacheItemPolicy CacheItemPolicy = new CacheItemPolicy
-        //    //{
-        //    //    RemovedCallback = CleanupIcon,
-        //    //    SlidingExpiration = TimeSpan.FromMinutes(30)
-        //    //};
+        private static readonly MemoryCache IconCache = new MemoryCache("_iconCache");
+        private static readonly CacheItemPolicy CacheItemPolicy = new CacheItemPolicy
+        {
+            RemovedCallback = CleanupIcon,
+            SlidingExpiration = TimeSpan.FromMinutes(30)
+        };
 
-        //    //private static void CleanupIcon(CacheEntryRemovedArguments arg)
-        //    //{
-        //    //    if (!(arg.CacheItem.Value is IDisposable item)) return;
-        //    //    try
-        //    //    {
-        //    //        item.Dispose();
-        //    //    }
-        //    //    catch (ObjectDisposedException)
-        //    //    {
+        private static void CleanupIcon(CacheEntryRemovedArguments arg)
+        {
+            if (!(arg.CacheItem.Value is IDisposable item)) return;
+            try
+            {
+                item.Dispose();
+            }
+            catch (ObjectDisposedException)
+            {
 
-        //    //    }
-        //    //}
+            }
+        }
 
-        //    private static string GetKey(MMDevice audioDevice, bool largeIcon)
-        //    {
-        //        return $"{audioDevice.IconPath}-${largeIcon}";
-        //    }
+        private static string GetKey(MMDevice audioDevice, bool largeIcon)
+        {
+            return $"{audioDevice.IconPath}-${largeIcon}";
+        }
 
         /// <summary>
         /// Extract an Icon form a given path
@@ -67,10 +69,11 @@ namespace PlaybackSoundSwitch.Device
             System.Drawing.Icon ico = null;
             var key = $"{path}-${largeIcon}";
 
-            //if (IconCache.Contains(key))
-            //{
-            //    return (System.Drawing.Icon)IconCache.Get(key);
-            //}
+            if (IconCache.Contains(key))
+            {
+                return (System.Drawing.Icon)IconCache.Get(key);
+            }
+
             try
             {
                 if (path.EndsWith(".ico"))
@@ -88,18 +91,19 @@ namespace PlaybackSoundSwitch.Device
             catch (Exception e)
             {
                 //Log.Error(e, "Can't extract icon from {path}", path);
-                //switch (dataFlow)
-                //{
-                //    case DataFlow.Capture:
-                //        return DefaultMicrophone;
-                //    case DataFlow.Render:
-                //        return DefaultSpeakers;
-                //    default:
-                //        throw new ArgumentOutOfRangeException();
-                //}
+                switch (dataFlow)
+                {
+                    case EDataFlow.Capture:
+                        return DefaultMicrophone;
+                    case EDataFlow.Render:
+                        return DefaultSpeakers;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
             }
 
-            //IconCache.Add(key, ico, CacheItemPolicy);
+            IconCache.Add(key, ico, CacheItemPolicy);
+            
             return ico;
         }
 
