@@ -247,6 +247,9 @@
     <Compile Include="FormLoadGraph.Designer.cs">
       <DependentUpon>FormLoadGraph.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormProperties.Designer.cs">
+      <DependentUpon>FormProperties.cs</DependentUpon>
+    </Compile>
     <Compile Include="Options.cs">
       <SubType>Code</SubType>
     </Compile>

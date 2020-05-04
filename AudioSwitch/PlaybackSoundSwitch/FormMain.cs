@@ -97,7 +97,7 @@ namespace PlaybackSoundSwitch
                         AddDeviceIconSmallImage(dev);
 
                         Debug.WriteLine("Dev: " + dev.Name);
-                        ListViewItem lvi = m_listDevices.Items.Add(dev.Name);
+                        ListViewItem lvi = m_listDevices.Items.Add(dev.FriendlyName);
                         lvi.ImageKey = dev.IconPath;
                         lvi.SubItems.Add("N/A");
                         lvi.SubItems.Add("N/A");
@@ -190,7 +190,7 @@ namespace PlaybackSoundSwitch
                 }
             }
 
-            return sortedDevices.OrderBy(dev => dev.Name).ToArray();
+            return sortedDevices.OrderBy(dev => dev.Name).ThenBy(dev => dev.FriendlyName).ToArray();
         }
 
         private void m_btnRefresh_Click(object sender, EventArgs e)

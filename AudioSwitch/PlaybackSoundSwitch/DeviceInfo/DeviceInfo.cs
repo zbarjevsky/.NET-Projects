@@ -5,7 +5,8 @@ namespace PlaybackSoundSwitch.Device
 {
     public class DeviceInfo : IEquatable<DeviceInfo>, IComparable<DeviceInfo>
     {
-        public string Name { get;  }
+        public string Name { get; }
+        public string FriendlyName { get; }
         public string Id { get; }
         public EDataFlow DeviceType { get; }
 
@@ -19,7 +20,8 @@ namespace PlaybackSoundSwitch.Device
 
         public DeviceInfo(MMDevice device)
         {
-            Name = device.FriendlyName;
+            Name = device.DeviceFriendlyName;
+            FriendlyName = device.FriendlyName;
             Id = device.ID;
             DeviceType = device.DataFlow;
         }

@@ -71,11 +71,13 @@ namespace DUMeterMZ
             this.m_logger = new DUMeterMZ.Log();
             this.m_lblScale = new OrientableText.OrientedTextLabel();
             this.m_PictureBoxGraph = new System.Windows.Forms.PictureBox();
+            this.m_pnlMain = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.m_PerformanceCounterRecv)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_PerformanceCounterSend)).BeginInit();
             this.m_ContextMenuMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_logger)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_PictureBoxGraph)).BeginInit();
+            this.m_pnlMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // m_Timer
@@ -321,12 +323,11 @@ namespace DUMeterMZ
             // m_lblScale
             // 
             this.m_lblScale.BackColor = System.Drawing.Color.Silver;
-            this.m_lblScale.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.m_lblScale.Dock = System.Windows.Forms.DockStyle.Left;
             this.m_lblScale.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.m_lblScale.Location = new System.Drawing.Point(0, 0);
             this.m_lblScale.Name = "m_lblScale";
-            this.m_lblScale.Size = new System.Drawing.Size(21, 60);
+            this.m_lblScale.Size = new System.Drawing.Size(21, 58);
             this.m_lblScale.TabIndex = 1;
             this.m_lblScale.Text = "1500 k";
             this.m_lblScale.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -336,12 +337,11 @@ namespace DUMeterMZ
             // 
             // m_PictureBoxGraph
             // 
-            this.m_PictureBoxGraph.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.m_PictureBoxGraph.ContextMenuStrip = this.m_ContextMenuMain;
             this.m_PictureBoxGraph.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_PictureBoxGraph.Location = new System.Drawing.Point(21, 0);
             this.m_PictureBoxGraph.Name = "m_PictureBoxGraph";
-            this.m_PictureBoxGraph.Size = new System.Drawing.Size(163, 60);
+            this.m_PictureBoxGraph.Size = new System.Drawing.Size(161, 58);
             this.m_PictureBoxGraph.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.m_PictureBoxGraph.TabIndex = 0;
             this.m_PictureBoxGraph.TabStop = false;
@@ -354,16 +354,26 @@ namespace DUMeterMZ
             this.m_PictureBoxGraph.MouseUp += new System.Windows.Forms.MouseEventHandler(this.m_PictureBoxGraph_MouseUp);
             this.m_PictureBoxGraph.Resize += new System.EventHandler(this.m_PictureBoxGraph_Resize);
             // 
+            // m_pnlMain
+            // 
+            this.m_pnlMain.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.m_pnlMain.Controls.Add(this.m_PictureBoxGraph);
+            this.m_pnlMain.Controls.Add(this.m_lblScale);
+            this.m_pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_pnlMain.Location = new System.Drawing.Point(0, 0);
+            this.m_pnlMain.Name = "m_pnlMain";
+            this.m_pnlMain.Size = new System.Drawing.Size(184, 60);
+            this.m_pnlMain.TabIndex = 2;
+            // 
             // FormLoadGraph
             // 
             this.AutoScaleBaseSize = new System.Drawing.Size(18, 39);
             this.ClientSize = new System.Drawing.Size(184, 60);
             this.ControlBox = false;
-            this.Controls.Add(this.m_PictureBoxGraph);
-            this.Controls.Add(this.m_lblScale);
+            this.Controls.Add(this.m_pnlMain);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Tahoma", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.SizableToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -381,6 +391,7 @@ namespace DUMeterMZ
             this.m_ContextMenuMain.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.m_logger)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_PictureBoxGraph)).EndInit();
+            this.m_pnlMain.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -422,5 +433,6 @@ namespace DUMeterMZ
         private System.Diagnostics.PerformanceCounter m_PerformanceCounterSend;
         private System.Windows.Forms.PictureBox m_PictureBoxGraph;
         private System.Windows.Forms.NotifyIcon m_NotifyIcon;
+        private Panel m_pnlMain;
     }
 }

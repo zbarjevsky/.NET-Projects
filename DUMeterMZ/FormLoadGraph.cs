@@ -549,6 +549,11 @@ namespace DUMeterMZ
 		private void ShowOptions()
 		{
 			FormProperties opt = new FormProperties(m_Options);
+			opt.OnPropertyChangedAction = (propertyName) => 
+			{
+				ReApplyOptions();
+			};
+
 			opt.ShowDialog(this);
 			opt.Dispose();
 			if (m_Options.Interface == "")
