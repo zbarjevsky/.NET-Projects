@@ -1,0 +1,131 @@
+﻿using MarkZ.Utils;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using System.Xml.Serialization;
+
+namespace SmartBackup.Settings
+{
+    public class BackupEntry
+    {
+        public string FolderSrc { get; set; }
+        public string FolderDst { get; set; }
+        public string FolderIncludeTypes { get; set; }
+        public string FolderExcludeTypes { get; set; }
+        public bool IsImportant { get; set; }
+
+        public BackupEntry()
+        {
+            IsImportant = false;
+            FolderIncludeTypes = "*.*";
+            FolderExcludeTypes = "";
+        }
+
+        public bool IsValid()
+        {
+            if (!Directory.Exists(FolderSrc))
+                return false;
+            if (string.IsNullOrWhiteSpace(FolderDst))
+                return false;
+            string rootSrc = Path.GetPathRoot(FolderSrc);
+            string rootDst = Path.GetPathRoot(FolderDst);
+            if (rootDst == rootSrc)
+                return false;
+
+            return true;
+        }
+    }
+
+    public class BackupGroup
+    {
+        public string Name { get; set; }
+
+        public string Description { get; set; }
+
+        public List<BackupEntry> BackupList { get; set; } = new List<BackupEntry>();
+
+        public BackupGroup(string name)
+        {
+            this.Name = name;
+            Description = name;
+        }
+
+        public BackupGroup()
+        {
+            Name = "Default";
+            Description = Name;
+        }
+
+        internal void Add(BackupEntry entry)
+        {
+            BackupEntry found = FindEntry(entry);
+            if (found == null)
+                BackupList.Add(entry);
+            else
+                MessageBox.Show("Already exists:\n" + entry.FolderSrc);
+        }
+
+        internal void Remove(BackupEntry entry)
+        {
+            BackupList.Remove(entry);
+        }
+
+        internal BackupEntry FindEntry(BackupEntry entry)
+        {
+            return BackupList.SingleOrDefault(e => e.FolderSrc == entry.FolderSrc);
+        }
+    }
+
+    public class BackupSettings
+    {
+        private const string _fileName = "BackupSettings.xml";
+
+        [XmlIgnore]
+        public static string ConfigurationFileName { get; private set; }
+
+        public List<BackupGroup> BackupGroups { get; set; } = new List<BackupGroup>();
+
+        static BackupSettings()
+        {
+            string currentFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            ConfigurationFileName = Path.Combine(currentFolder, _fileName);
+        }
+
+        internal static BackupSettings Load()
+        {
+            BackupSettings cnf = SerializerHelper.Open<BackupSettings>(ConfigurationFileName);
+            if (cnf.BackupGroups.Count == 0)
+                cnf.BackupGroups.Add(new BackupGroup());
+            return cnf;
+        }
+
+        internal void Save()
+        {
+            SerializerHelper.Save<BackupSettings>(ConfigurationFileName, this);
+        }
+
+        internal void Add(BackupGroup entry)
+        {
+            BackupGroup found = FindEntry(entry);
+            if (found == null)
+                BackupGroups.Add(entry);
+            else
+                MessageBox.Show("Already exists:\n" + entry.Name);
+        }
+
+        internal void Remove(BackupGroup entry)
+        {
+            BackupGroups.Remove(entry);
+        }
+    
+        internal BackupGroup FindEntry(BackupGroup entry)
+        {
+            return BackupGroups.SingleOrDefault(e => e.Name == entry.Name);
+        }
+}
+}
