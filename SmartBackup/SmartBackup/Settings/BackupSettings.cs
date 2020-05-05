@@ -1,6 +1,7 @@
 ﻿using MarkZ.Utils;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -43,9 +44,20 @@ namespace SmartBackup.Settings
 
     public class BackupGroup
     {
+        private const string DATE_FORMAT = "yyyy_MMdd_HHmmss";
+
         public string Name { get; set; }
 
         public string Description { get; set; }
+
+        public string LastBackupTimeStr { get; set; }
+
+        [XmlIgnore]
+        public DateTime LastBackupTime
+        {
+            get { return DateTime.ParseExact(LastBackupTimeStr, DATE_FORMAT, CultureInfo.InvariantCulture); }
+            set { LastBackupTimeStr = value.ToString(DATE_FORMAT, CultureInfo.InvariantCulture); }
+        }
 
         public List<BackupEntry> BackupList { get; set; } = new List<BackupEntry>();
 

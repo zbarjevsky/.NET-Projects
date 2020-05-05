@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using SmartBackup.Settings;
+using System.Media;
 
 namespace SmartBackup
 {
@@ -113,6 +114,13 @@ namespace SmartBackup
                 m_btnEdit.Enabled = false;
                 m_btnRemove.Enabled = false;
             }
+        }
+
+        private void m_btnBackupAll_Click(object sender, EventArgs e)
+        {
+            FormBackupProgress frm = new FormBackupProgress(_settings);
+            frm.ShowDialog(this);
+            SystemSounds.Beep.Play();
         }
     }
 }

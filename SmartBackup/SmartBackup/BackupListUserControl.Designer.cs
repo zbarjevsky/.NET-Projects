@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("Priority", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("Other", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup3 = new System.Windows.Forms.ListViewGroup("Priority", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup4 = new System.Windows.Forms.ListViewGroup("Other", System.Windows.Forms.HorizontalAlignment.Left);
             this.m_btnBackupAll = new System.Windows.Forms.Button();
             this.m_btnBackupImportant = new System.Windows.Forms.Button();
             this.m_btnEdit = new System.Windows.Forms.Button();
@@ -50,6 +50,7 @@
             this.m_btnBackupAll.TabIndex = 11;
             this.m_btnBackupAll.Text = "Full Backup...";
             this.m_btnBackupAll.UseVisualStyleBackColor = true;
+            this.m_btnBackupAll.Click += new System.EventHandler(this.m_btnBackupAll_Click);
             // 
             // m_btnBackupImportant
             // 
@@ -102,13 +103,13 @@
             this.columnHeader3});
             this.m_listBackup.FullRowSelect = true;
             this.m_listBackup.GridLines = true;
-            listViewGroup1.Header = "Priority";
-            listViewGroup1.Name = "listViewGroup1";
-            listViewGroup2.Header = "Other";
-            listViewGroup2.Name = "listViewGroup2";
+            listViewGroup3.Header = "Priority";
+            listViewGroup3.Name = "listViewGroup1";
+            listViewGroup4.Header = "Other";
+            listViewGroup4.Name = "listViewGroup2";
             this.m_listBackup.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup1,
-            listViewGroup2});
+            listViewGroup3,
+            listViewGroup4});
             this.m_listBackup.HideSelection = false;
             this.m_listBackup.Location = new System.Drawing.Point(3, 32);
             this.m_listBackup.Name = "m_listBackup";

@@ -71,6 +71,12 @@
     <Compile Include="FormBackupFolderProperties.Designer.cs">
       <DependentUpon>FormBackupFolderProperties.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormBackupProgress.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormBackupProgress.Designer.cs">
+      <DependentUpon>FormBackupProgress.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -90,6 +96,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormBackupFolderProperties.resx">
       <DependentUpon>FormBackupFolderProperties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormBackupProgress.resx">
+      <DependentUpon>FormBackupProgress.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>

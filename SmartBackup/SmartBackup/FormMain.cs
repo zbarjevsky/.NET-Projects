@@ -33,7 +33,7 @@ namespace SmartBackup
             _settings.Save();
         }
 
-        private void ReloadTabs()
+        private void ReloadTabs(BackupGroup group = null)
         {
             m_tabMain.TabPages.Clear();
             foreach (BackupGroup item in _settings.BackupGroups)
@@ -44,17 +44,25 @@ namespace SmartBackup
                 ctrl.Dock = DockStyle.Fill;
                 page.Controls.Add(ctrl);
                 m_tabMain.TabPages.Add(page);
+
+                if (group != null && item.Name == group.Name)
+                {
+                    m_tabMain.SelectTab(page);
+                }
             }
         }
 
         private void m_btnAdd_Click(object sender, EventArgs e)
         {
-
+            BackupGroup group = new BackupGroup("New Group");
+            _settings.Add(group);
+            ReloadTabs(group);
         }
 
         private void m_btnRemove_Click(object sender, EventArgs e)
         {
-
+            if (m_tabMain.TabPages.Count > 1)
+                m_tabMain.TabPages.Remove(m_tabMain.SelectedTab);
         }
 
         private void m_btnEdit_Click(object sender, EventArgs e)
