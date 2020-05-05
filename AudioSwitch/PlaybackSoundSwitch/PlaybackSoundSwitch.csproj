@@ -51,6 +51,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\ClipboardListener\Utils\SingleInstanceHelper.cs">
+      <Link>Tools\SingleInstanceHelper.cs</Link>
+    </Compile>
     <Compile Include="AudioVolume\AudioEndpointVolume.cs" />
     <Compile Include="AudioVolume\AudioEndpointVolumeCallback.cs" />
     <Compile Include="AudioVolume\AudioEndpointVolumeChannel.cs" />

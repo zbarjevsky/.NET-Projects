@@ -22,6 +22,8 @@ namespace PlaybackSoundSwitch
 {
     public partial class FormMain : Form
     {
+        public const string TITLE = "Select Active Audio End Point";
+
         private Font _fontNorm;
         private Font _fontBold;
         MMDeviceEnumerator _mmd = new MMDeviceEnumerator();
@@ -46,6 +48,8 @@ namespace PlaybackSoundSwitch
 
             _mmd.DevicesChanged = OnDevicesChanged;
             _mmd.DefaultDeviceChanged = OnDefaultDeviceChanged;
+
+            this.Text = TITLE;
         }
 
         private void FormMain_Load(object sender, EventArgs e)
