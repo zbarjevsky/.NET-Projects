@@ -24,6 +24,8 @@ namespace MeditationStopWatch
 		ImageFileUtil ImageInfo = new ImageFileUtil();
 		ThumbnailCache m_ThumbnailCache;
 
+		//https://stackoverflow.com/questions/18327185/c-sharp-showing-buttons-on-taskbar-thumbnails
+		//https://www.codeproject.com/articles/65185/windows-7-taskbar-c-quick-reference
 		private ThumbnailToolBarButton buttonPrevious;
 		private ThumbnailToolBarButton buttonNext;
 		private ThumbnailToolBarButton buttonPlay;

@@ -1,12 +1,4 @@
-﻿using PlaybackSoundSwitch.ComObjects;
-using PlaybackSoundSwitch.Device;
-using PlaybackSoundSwitch.DeviceSwitch;
-using PlaybackSoundSwitch.Interfaces;
-using PlaybackSoundSwitch.Notifications;
-using PlaybackSoundSwitch.Properties;
-using PlaybackSoundSwitch.Tools;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -18,6 +10,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using Microsoft.WindowsAPICodePack.Taskbar;
+using PlaybackSoundSwitch.ComObjects;
+using PlaybackSoundSwitch.Device;
+using PlaybackSoundSwitch.DeviceSwitch;
+using PlaybackSoundSwitch.Interfaces;
+using PlaybackSoundSwitch.Notifications;
+using PlaybackSoundSwitch.Properties;
+using PlaybackSoundSwitch.Tools;
+
 namespace PlaybackSoundSwitch
 {
     public partial class FormMain : Form
@@ -28,6 +29,9 @@ namespace PlaybackSoundSwitch
         private Font _fontBold;
         MMDeviceEnumerator _mmd = new MMDeviceEnumerator();
         MMDevice _activeDevice = null;
+
+        //http://www.java2s.com/Open-Source/CSharp_Free_Code/API/Download_C4F_Managed_Taskbar_Sample.htm
+        private ThumbnailToolbarButton _btnNext, _btnRefresh;
 
         public FormMain()
         {
@@ -48,6 +52,18 @@ namespace PlaybackSoundSwitch
 
             _mmd.DevicesChanged = OnDevicesChanged;
             _mmd.DefaultDeviceChanged = OnDefaultDeviceChanged;
+
+            Icon icoRefresh = Icon.FromHandle(Properties.Resources.Refresh1.GetHicon());
+            _btnRefresh = new ThumbnailToolbarButton(icoRefresh, "Refresh Device List");
+            _btnRefresh.Click += (s, e) => { EnumDevices("Refresh from Toolbar"); };
+            _btnRefresh.Visible = true;
+
+            Icon next = Icon.FromHandle(Properties.Resources.defaultSpeakers.GetHicon());
+            _btnNext = new ThumbnailToolbarButton(next, "Next Device");
+            _btnNext.Click += (s, e) => { ActivateNextDevice(); };
+            _btnNext.Visible = true;
+
+            TaskbarManager.Instance.ThumbnailToolbars.AddButtons(this.Handle, _btnRefresh, _btnNext);
 
             this.Text = TITLE;
         }
@@ -80,12 +96,13 @@ namespace PlaybackSoundSwitch
         {
             m_status1.Text = status;
             
-            if (_isEnumerating)
-                return;
-            _isEnumerating = true;
             CommonUtils.ExecuteOnUIThread(() => {
                 try
                 {
+                    if (_isEnumerating)
+                        return;
+                    _isEnumerating = true;
+
                     this.Cursor = Cursors.WaitCursor;
                     m_btnRefresh.Enabled = false;
 
@@ -122,6 +139,31 @@ namespace PlaybackSoundSwitch
                 m_btnRefresh.Enabled = true;
                 _isEnumerating = false;
             }, this);
+        }
+
+        private void ActivateNextDevice()
+        {
+            SetActiveDevice(FindNextActiveDevice());
+        }
+
+        private DeviceFullInfo FindNextActiveDevice()
+        {
+            int count = m_listDevices.Groups[0].Items.Count;
+            if (count > 1)
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    if (m_listDevices.Groups[0].Items[i].Font.Bold)
+                    {
+                        if (i == count - 1)
+                            i = -1;
+                        i++;
+                        DeviceFullInfo dev = m_listDevices.Groups[0].Items[i].Tag as DeviceFullInfo;
+                        return dev;
+                    }
+                }
+            }
+            return null;
         }
 
         private string GetDeviceTooltip(DeviceFullInfo dev)
@@ -166,6 +208,13 @@ namespace PlaybackSoundSwitch
                 item.ForeColor = dev.State == EDeviceState.Active ? Color.Black : Color.DarkGray;
                 item.Group = GetItemGroup(dev);
             }
+
+            DeviceFullInfo next = FindNextActiveDevice();
+            if (next != null)
+                _btnNext.Tooltip = "Next Device: " + next.FriendlyName;
+            else
+                _btnNext.Tooltip = "N/A";
+
 
             m_trackVolume.Value = (int)(100f * _activeDevice.AudioEndpointVolume.MasterVolumeLevelScalar);
             UpdateUI(null);
@@ -294,18 +343,21 @@ namespace PlaybackSoundSwitch
 
         private void SetActiveDevice()
         {
+            SetActiveDevice(GetSelectedDevice());
+        }
+
+        private void SetActiveDevice(DeviceFullInfo device)
+        {
+            if (_isEnumerating)
+                return;
+
             try
             {
-                m_btnActivate.Enabled = false;
-                if (m_listDevices.SelectedItems.Count == 0)
-                    return;
-
-                var device = GetSelectedDevice();
-                if (device.State != EDeviceState.Active)
+                if (device == null || device.State != EDeviceState.Active)
                     return;
 
                 SoundDeviceManager.SetActiveDevice(device);
-            
+
                 SetActiveDeviceToBold();
             }
             catch (Exception err)
