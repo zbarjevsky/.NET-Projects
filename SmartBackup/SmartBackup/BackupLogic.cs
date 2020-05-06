@@ -243,8 +243,10 @@ namespace SmartBackup
 
             foreach (BackupEntry entry in group.BackupList)
             {
-                if(priority.HasFlag(entry.Priority))
-                    CollectFiles(entry);
+                if (priority.HasFlag(entry.Priority))
+                {
+                    FileList.AddRange(CollectFiles(entry));
+                }
             }
         }
 
@@ -287,16 +289,23 @@ namespace SmartBackup
             return null;
         }
 
-        private void CollectFiles(BackupEntry entry)
+        public static List<BackupFile> CollectFiles(BackupEntry entry)
         {
-            if (!Directory.Exists(entry.FolderSrc))
-                return;
+            List<BackupFile> fileList = new List<BackupFile>();
+            if (string.IsNullOrWhiteSpace(entry.FolderSrc))
+                return fileList;
 
-            string [] files = Directory.GetFiles(entry.FolderSrc, entry.FolderIncludeTypes, SearchOption.AllDirectories);
+            DirectoryInfo dir = new DirectoryInfo(entry.FolderSrc);
+            if (!dir.Exists)
+                return fileList;
+
+            string [] files = Directory.GetFiles(dir.FullName, entry.FolderIncludeTypes, SearchOption.AllDirectories);
             foreach (string file in files)
             {
-                FileList.Add(new BackupFile(file, entry));
+                fileList.Add(new BackupFile(file, entry));
             }
+
+            return fileList;
         }
     }
 }

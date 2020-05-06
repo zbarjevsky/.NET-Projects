@@ -70,6 +70,38 @@ namespace SmartBackup
             };
 
             m_btnOk.Enabled = entry.IsValid();
+            UpdateInfo(entry);
+        }
+
+        private Thread _threadUpdateInfo = null;
+        private void UpdateInfo(BackupEntry entry)
+        {
+            m_txtInfo.Text = "Calculating Folder Size...";
+
+            if (_threadUpdateInfo != null && _threadUpdateInfo.IsAlive)
+                _threadUpdateInfo.Abort();
+
+            _threadUpdateInfo = new Thread(() => 
+            {
+                long size = 0;
+                List<BackupFile> fileList = BackupLogic.CollectFiles(entry);
+                int count = fileList.Count;
+               foreach (BackupFile file in fileList)
+                {
+                    size += file.SrcIfo.Length;
+                }
+                fileList.Clear();
+                GC.Collect();
+
+                Utils.ExecuteOnUIThread(() => 
+                {
+                    m_txtInfo.Text = string.Format("Selected SRC files: {0:###,##0} size: {1:###,##0.0} k", count, size);
+                }, this);
+            });
+
+            _threadUpdateInfo.IsBackground = true;
+            _threadUpdateInfo.Name = "Update Info Thread";
+            _threadUpdateInfo.Start();
         }
     }
 }
