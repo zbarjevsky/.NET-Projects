@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace PlaybackSoundSwitch.Tools
+namespace MarkZ.Tools
 {
     public static class ControlExtension
     {

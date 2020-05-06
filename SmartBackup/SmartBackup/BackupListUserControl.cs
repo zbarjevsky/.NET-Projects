@@ -118,9 +118,16 @@ namespace SmartBackup
 
         private void m_btnBackupAll_Click(object sender, EventArgs e)
         {
+            this.Cursor = Cursors.WaitCursor;
+            m_btnBackupAll.Enabled = false;
+            Application.DoEvents();
+
             FormBackupProgress frm = new FormBackupProgress(_settings);
             frm.ShowDialog(this);
+
             SystemSounds.Beep.Play();
+            this.Cursor = Cursors.Arrow;
+            m_btnBackupAll.Enabled = true;
         }
     }
 }
