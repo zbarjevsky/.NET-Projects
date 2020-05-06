@@ -1,5 +1,6 @@
 ﻿using MarkZ.Tools;
 using SmartBackup.Settings;
+using SmartBackup.Tools;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -53,35 +54,66 @@ namespace SmartBackup
             e.Item.ImageIndex = (int)_logic.FileList[e.ItemIndex].Status;
         }
 
-        private void m_btnStart_Click(object sender, EventArgs e)
+        private void PerformBackup(int startIndex)
         {
             _abort = false;
-            m_btnStart.Enabled = false;
+            _pause = false;
+
             Stopwatch stopper = new Stopwatch();
-
             stopper.Start();
-            for (int i = 0; i < _logic.FileList.Count; i++)
+
+            Task task = new Task(() =>
             {
-                if (_abort)
-                    break;
-
-                _logic.FileList[i].PerformBackup(m_progrFile);
-
-                if(i%33 == 0)
+                for (int i = startIndex; i < _logic.FileList.Count; i++)
                 {
-                    m_progressBar1.Value = (int)m_progressBar1.Maximum * i / _logic.FileList.Count;
-                    m_listFiles.EnsureVisible(i);
-                    TimeSpan estimate = TimeSpan.FromMilliseconds(m_progressBar1.Maximum * stopper.ElapsedMilliseconds / (m_progressBar1.Value+1));
-                    m_txtStatus.Text = string.Format("Backing up file {0:###,###} of {1:###,###}, Time {2}, Estimated {3}", 
-                        i, _logic.FileList.Count, stopper.Elapsed, estimate);
-                    Application.DoEvents();
-                }
-            }
+                    if (_abort || _pause)
+                        break;
 
-            stopper.Stop();
-            SystemSounds.Beep.Play();
-            m_progressBar1.Value = 0;
-            m_btnStart.Enabled = true;
+                    _startIndex = i;
+                    _logic.FileList[i].PerformBackup(m_progrFile, this);
+
+                    if (i % 33 == 0)
+                    {
+                        _elapsed += stopper.Elapsed;
+                        stopper.Restart();
+                        UpdateUI(true);
+                    }
+                }
+
+                stopper.Stop();
+                SystemSounds.Beep.Play();
+                UpdateUI(false);
+            });
+            task.Start();
+        }
+
+        TimeSpan _elapsed = TimeSpan.FromSeconds(0);
+
+        private void UpdateUI(bool isRunning)
+        {
+            Utils.ExecuteOnUIThread(() =>
+            {
+                m_btnStart.Enabled = !isRunning;
+                m_btnContinue.Enabled = !isRunning;
+                m_btnAbort.Enabled = isRunning;
+                m_btnPause.Enabled = isRunning;
+
+                m_progressBar1.Value = (int)((long)m_progressBar1.Maximum * (long)_startIndex / _logic.FileList.Count);
+                m_listFiles.EnsureVisible(_startIndex);
+                TimeSpan estimate = TimeSpan.FromMilliseconds(m_progressBar1.Maximum * _elapsed.TotalMilliseconds / (m_progressBar1.Value + 1));
+                m_txtStatus.Text = string.Format("Backing up file {0:###,###} of {1:###,###}, Time {2}, Estimated {3}",
+                    _startIndex, _logic.FileList.Count, _elapsed, estimate);
+
+                if (_abort)
+                    m_progressBar1.Value = 0;
+            }, this);
+        }
+
+        private int _startIndex = 0;
+        private void m_btnStart_Click(object sender, EventArgs e)
+        {
+            _elapsed = TimeSpan.FromSeconds(0);
+            PerformBackup(0);
         }
 
         bool _abort = false;
@@ -90,14 +122,15 @@ namespace SmartBackup
             _abort = true;
         }
 
+        bool _pause = false;
         private void m_btnPause_Click(object sender, EventArgs e)
         {
-            _abort = true;
+            _pause = true;
         }
 
         private void m_btnContinue_Click(object sender, EventArgs e)
         {
-
+            PerformBackup(_startIndex);
         }
     }
 }

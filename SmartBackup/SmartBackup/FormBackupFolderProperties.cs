@@ -37,12 +37,12 @@ namespace SmartBackup
 
         private void m_btnBrowseSrc_Click(object sender, EventArgs e)
         {
-            this.Browse(m_txtSource, "Select Backup Source Folder");
+            this.BrowseForFolder(m_txtSource, "Select Backup Source Folder");
         }
 
         private void m_btnBrowseDst_Click(object sender, EventArgs e)
         {
-            this.Browse(m_txtDstFolder, "Select Backup Folder");
+            this.BrowseForFolder(m_txtDstFolder, "Select Backup Folder");
         }
 
         private void m_btnOk_Click(object sender, EventArgs e)

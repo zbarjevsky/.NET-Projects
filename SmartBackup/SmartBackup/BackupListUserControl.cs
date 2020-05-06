@@ -125,7 +125,6 @@ namespace SmartBackup
             FormBackupProgress frm = new FormBackupProgress(_settings);
             frm.ShowDialog(this);
 
-            SystemSounds.Beep.Play();
             this.Cursor = Cursors.Arrow;
             m_btnBackupAll.Enabled = true;
         }

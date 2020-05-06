@@ -1,6 +1,8 @@
 ﻿using SmartBackup.Settings;
+using SmartBackup.Tools;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
@@ -105,7 +107,7 @@ namespace SmartBackup
             //DstIfo = new FileInfo(Dst);
         }
 
-        public void PerformBackup(ProgressBar progress, BackupOption option = BackupOption.OverwriteAllOlder)
+        public void PerformBackup(ProgressBar progress, Form owner, BackupOption option = BackupOption.OverwriteAllOlder)
         {
             try
             {
@@ -124,10 +126,10 @@ namespace SmartBackup
 
                 Status = BackupStatus.InProgress;
 
-                if (SrcIfo.Length < 1024 * 1024) //less than 1M
+                if (SrcIfo.Length < 6 * 1024 * 1024) //less than 1M
                     File.Copy(Src, Dst, true);
                 else
-                    CopyWithProgress(progress);
+                    CopyWithProgress(progress, owner);
 
                 DstIfo = new FileInfo(Dst);
                 DstIfo.CreationTime = SrcIfo.CreationTime;
@@ -143,7 +145,7 @@ namespace SmartBackup
             }        
         }
 
-        private void CopyWithProgress(ProgressBar progress)
+        private void CopyWithProgress(ProgressBar progress, Form owner)
         {
             int bufferSize = 1024 * 64;
             byte[] bytes = new byte[bufferSize];
@@ -159,8 +161,11 @@ namespace SmartBackup
                         fileStream.Write(bytes, 0, bytesRead);
 
                         totalWrite += bytesRead;
-                        progress.Value = (int)(totalWrite * 100 / SrcIfo.Length);
-                        Application.DoEvents();
+
+                        Utils.ExecuteOnUIThread(() =>
+                        {
+                            progress.Value = (int)(totalWrite * 100 / SrcIfo.Length);
+                        }, owner);
                     }
                 }
             }
