@@ -15,6 +15,7 @@ namespace SmartBackup
     public partial class FormMain : Form
     {
         private readonly BackupSettings _settings;
+        public const string TITLE = "Smart Backup MZ";
 
         public FormMain()
         {
@@ -22,6 +23,8 @@ namespace SmartBackup
 
             _settings = BackupSettings.Load();
             ReloadTabs();
+
+            this.Text = TITLE;
         }
 
         private void FormMain_Load(object sender, EventArgs e)
@@ -40,6 +43,7 @@ namespace SmartBackup
             {
                 TabPage page = new TabPage(item.Name);
                 page.Tag = item;
+                page.ImageIndex = 5;
                 BackupListUserControl ctrl = new BackupListUserControl(item);
                 ctrl.Dock = DockStyle.Fill;
                 page.Controls.Add(ctrl);

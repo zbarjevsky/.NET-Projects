@@ -11,6 +11,7 @@ using System.IO;
 using System.Linq;
 using System.Media;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -36,10 +37,35 @@ namespace SmartBackup
             _logic = new BackupLogic(_group);
             m_listFiles.VirtualListSize = _logic.FileList.Count;
             m_txtStatus.Text = "Prepared " + _logic.FileList.Count.ToString("###,###,###") + " files for Backup";
+
+            m_txtInfo.Text = "Loading...";
+            Task task = new Task(() => 
+            { 
+                string stat = _logic.GetDiskStatistics();
+                long size = _logic.CalculateSpaceNeeded();
+                Utils.ExecuteOnUIThread(() => 
+                {
+                    m_txtInfo.Text = string.Format("{0} - Estimated Space Needed: {1:###,##0.0} MB", stat, size/BackupLogic.i1MB);
+               }, this);
+            });
+            task.Start();
         }
 
         private void FormBackupProgress_FormClosing(object sender, FormClosingEventArgs e)
         {
+            if (_working)
+            {
+                DialogResult res = MessageBox.Show(this, "Backup In Progress, Abort?", "Warning",
+                    MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
+
+                if (res == DialogResult.Cancel)
+                {
+                    e.Cancel = true;
+                    return;
+                }
+                m_btnAbort_Click(sender, e);
+            }
+
             m_listFiles.VirtualListSize = 0;
             _logic.FileList.Clear();
             GC.Collect();
@@ -47,22 +73,26 @@ namespace SmartBackup
 
         private void m_listFiles_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
         {
-            e.Item = new ListViewItem("" + e.ItemIndex);
-            e.Item.SubItems.Add(_logic.FileList[e.ItemIndex].Src);
-            e.Item.SubItems.Add(_logic.FileList[e.ItemIndex].Dst);
-            e.Item.SubItems.Add((_logic.FileList[e.ItemIndex].SrcIfo.Length/1024.0).ToString("###,##0.0 k"));
-            e.Item.ImageIndex = (int)_logic.FileList[e.ItemIndex].Status;
+            BackupFile file = _logic.FileList[e.ItemIndex];
+
+            e.Item = new ListViewItem(e.ItemIndex + ". " + file.Err);
+            e.Item.SubItems.Add(file.Src);
+            e.Item.SubItems.Add(file.Dst);
+            e.Item.SubItems.Add((file.SrcIfo.Length/1024.0).ToString("###,##0.0 k"));
+            e.Item.ImageIndex = (int)file.Status;
         }
 
+        bool _working = false;
         private void PerformBackup(int startIndex)
         {
             _abort = false;
             _pause = false;
+            _working = true;
 
             Stopwatch stopper = new Stopwatch();
             stopper.Start();
 
-            Task task = new Task(() =>
+            Thread threadBackup = new Thread(() =>
             {
                 for (int i = startIndex; i < _logic.FileList.Count; i++)
                 {
@@ -77,14 +107,20 @@ namespace SmartBackup
                         _elapsed += stopper.Elapsed;
                         stopper.Restart();
                         UpdateUI(true);
+                        Application.DoEvents();
+                        System.Threading.Thread.Sleep(0);
                     }
                 }
 
                 stopper.Stop();
                 SystemSounds.Beep.Play();
                 UpdateUI(false);
+                _working = false;
             });
-            task.Start();
+            threadBackup.IsBackground = true;
+            threadBackup.Name = "Backup Thread";
+            threadBackup.Priority = ThreadPriority.Lowest;
+            threadBackup.Start();
         }
 
         TimeSpan _elapsed = TimeSpan.FromSeconds(0);
@@ -98,11 +134,11 @@ namespace SmartBackup
                 m_btnAbort.Enabled = isRunning;
                 m_btnPause.Enabled = isRunning;
 
-                m_progressBar1.Value = (int)((long)m_progressBar1.Maximum * (long)_startIndex / _logic.FileList.Count);
+                m_progressBar1.Value = (int)((long)m_progressBar1.Maximum * (long)(_startIndex+1) / _logic.FileList.Count);
                 m_listFiles.EnsureVisible(_startIndex);
                 TimeSpan estimate = TimeSpan.FromMilliseconds(m_progressBar1.Maximum * _elapsed.TotalMilliseconds / (m_progressBar1.Value + 1));
-                m_txtStatus.Text = string.Format("Backing up file {0:###,###} of {1:###,###}, Time {2}, Estimated {3}",
-                    _startIndex, _logic.FileList.Count, _elapsed, estimate);
+                m_txtStatus.Text = string.Format("Backing up file {0:###,###} of {1:###,###}, Elapsed {2}, Total {3}",
+                    (_startIndex+1), _logic.FileList.Count, _elapsed.ToString("mm':'ss"), estimate.ToString("mm':'ss"));
 
                 if (_abort)
                     m_progressBar1.Value = 0;
@@ -113,6 +149,8 @@ namespace SmartBackup
         private void m_btnStart_Click(object sender, EventArgs e)
         {
             _elapsed = TimeSpan.FromSeconds(0);
+            _logic.ResetStatus();
+
             PerformBackup(0);
         }
 

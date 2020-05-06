@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>sldd.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -52,6 +55,9 @@
     <Compile Include="..\..\AudioSwitch\PlaybackSoundSwitch\Tools\ListViewCollapsibleGroups.cs">
       <Link>Controls\ListViewCollapsibleGroups.cs</Link>
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="..\..\ClipboardListener\Utils\SingleInstanceHelper.cs">
+      <Link>Tools\SingleInstanceHelper.cs</Link>
     </Compile>
     <Compile Include="..\..\DesktopManager\DesktopManagerUX\Utils\XmlSerializerHelper.cs">
       <Link>Tools\XmlSerializerHelper.cs</Link>
@@ -133,5 +139,21 @@
   <ItemGroup>
     <None Include="Resources\pause_on.PNG" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="Images\Blacklisted.ico" />
+    <Content Include="Images\computer.ico" />
+    <Content Include="Images\config.ico" />
+    <Content Include="Images\folder.ico" />
+    <Content Include="Images\propertysheets.ico" />
+    <Content Include="Images\Provider.ico" />
+    <Content Include="Images\Shared.ico" />
+    <Content Include="Images\sldd.ico" />
+    <Content Include="Images\Syncing.ico" />
+    <None Include="Resources\play_on.PNG" />
+    <Content Include="sldd.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if "$(ConfigurationName)" == "Release" xcopy /s /f /r /y $(TargetPath) $(SolutionDir)\..\Binaries</PostBuildEvent>
+  </PropertyGroup>
 </Project>

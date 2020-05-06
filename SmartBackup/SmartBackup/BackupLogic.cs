@@ -145,6 +145,13 @@ namespace SmartBackup
             }        
         }
 
+        public void ResetStatus()
+        {
+            _dstIfo = null;
+            Err = "";
+            Status = BackupStatus.None;
+        }
+
         private void CopyWithProgress(ProgressBar progress, Form owner)
         {
             int bufferSize = 1024 * 64;
@@ -190,14 +197,57 @@ namespace SmartBackup
 
     internal class BackupLogic
     {
+        private readonly BackupGroup _group;
+
         public List<BackupFile> FileList = new List<BackupFile>();
 
         public BackupLogic(BackupGroup group)
         {
+            _group = group;
+
             foreach (BackupEntry entry in group.BackupList)
             {
                 CollectFiles(entry);
             }
+        }
+
+        public void ResetStatus()
+        {
+            foreach (BackupFile file in FileList)
+            {
+                file.ResetStatus();
+            }
+        }
+
+        public const double i1MB = 1024 * 1024;
+
+        public string GetDiskStatistics()
+        {
+            string root = Path.GetPathRoot(_group.BackupList[0].FolderDst);
+            DriveInfo drive = GetDriveInfo(root);
+            return string.Format("Free Space on Destination Drive {0} is {1:###,##0.0} MB", root, drive.TotalFreeSpace/ i1MB);
+        }
+
+        public long CalculateSpaceNeeded()
+        {
+            long size = 0;
+            foreach (BackupFile file in FileList)
+            {
+                size += file.SrcIfo.Length;
+            }
+            return size;
+        }
+
+        private DriveInfo GetDriveInfo(string driveName)
+        {
+            foreach (DriveInfo drive in DriveInfo.GetDrives())
+            {
+                if (drive.IsReady && drive.Name == driveName)
+                {
+                    return drive;
+                }
+            }
+            return null;
         }
 
         private void CollectFiles(BackupEntry entry)
