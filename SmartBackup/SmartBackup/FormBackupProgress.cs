@@ -29,14 +29,17 @@ namespace SmartBackup
             InitializeComponent();
 
             m_listFiles.SetDoubleBuffered(true);
-            m_cmbOption.SelectedIndex = 0;
+
+            m_cmbOption.Items.Clear();
+            m_cmbOption.Items.AddRange(Enum.GetNames(typeof(BackupOptions)).ToArray());
+            m_cmbOption.SelectedIndex = 1;
         }
 
         private void FormBackupProgress_Load(object sender, EventArgs e)
         {
             _logic = new BackupLogic(_group);
             m_listFiles.VirtualListSize = _logic.FileList.Count;
-            m_txtStatus.Text = "Prepared " + _logic.FileList.Count.ToString("###,###,###") + " files for Backup";
+            m_txtStatus.Text = "Found " + _logic.FileList.Count.ToString("###,###,###") + " files to Backup";
 
             m_txtInfo.Text = "Loading...";
             Task task = new Task(() => 
@@ -100,9 +103,13 @@ namespace SmartBackup
                         break;
 
                     _startIndex = i;
-                    _logic.FileList[i].PerformBackup(m_progrFile, this);
+                    if (_logic.FileList[i].PerformBackup(m_progrFile, this) == BackupStatus.Error)
+                    {
+                        Thread.Sleep(10);
+                        _logic.FileList[i].PerformBackup(m_progrFile, this);
+                    }
 
-                    if (i % 33 == 0)
+                    if (i % 33 == 0 || _logic.FileList[i].IsBigFile())
                     {
                         _elapsed += stopper.Elapsed;
                         stopper.Restart();
@@ -115,6 +122,7 @@ namespace SmartBackup
                 stopper.Stop();
                 SystemSounds.Beep.Play();
                 UpdateUI(false);
+                UpdateBackupStatus();
                 _working = false;
             });
             threadBackup.IsBackground = true;
@@ -137,11 +145,28 @@ namespace SmartBackup
                 m_progressBar1.Value = (int)((long)m_progressBar1.Maximum * (long)(_startIndex+1) / _logic.FileList.Count);
                 m_listFiles.EnsureVisible(_startIndex);
                 TimeSpan estimate = TimeSpan.FromMilliseconds(m_progressBar1.Maximum * _elapsed.TotalMilliseconds / (m_progressBar1.Value + 1));
+
                 m_txtStatus.Text = string.Format("Backing up file {0:###,###} of {1:###,###}, Elapsed {2}, Total {3}",
-                    (_startIndex+1), _logic.FileList.Count, _elapsed.ToString("mm':'ss"), estimate.ToString("mm':'ss"));
+                    (_startIndex + 1), _logic.FileList.Count, _elapsed.ToString("mm':'ss"), estimate.ToString("mm':'ss"));
 
                 if (_abort)
                     m_progressBar1.Value = 0;
+            }, this);
+        }
+
+        private void UpdateBackupStatus()
+        {
+            Utils.ExecuteOnUIThread(() =>
+            {
+                int errCount = 0;
+                for (int i = 0; i < _logic.FileList.Count; i++)
+                {
+                    if (_logic.FileList[i].Status == BackupStatus.Error)
+                        errCount++;
+                }
+
+                m_txtStatus.Text = string.Format("Backup status done: {0:###,###} of {1:###,###}, Errors: {2:###,###}",
+                    (_startIndex + 1), _logic.FileList.Count, errCount);
             }, this);
         }
 

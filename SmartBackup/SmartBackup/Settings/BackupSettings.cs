@@ -95,7 +95,7 @@ namespace SmartBackup.Settings
 
     public class BackupSettings
     {
-        private const string _fileName = "BackupSettings.xml";
+        private const string _fileName = "SmartBackup.Config.xml";
 
         [XmlIgnore]
         public static string ConfigurationFileName { get; private set; }

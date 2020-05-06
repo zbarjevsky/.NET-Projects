@@ -149,6 +149,9 @@
     <Content Include="Images\Shared.ico" />
     <Content Include="Images\sldd.ico" />
     <Content Include="Images\Syncing.ico" />
+    <None Include="Images\Text.ico" />
+    <None Include="Resources\Hide Detail.ico" />
+    <None Include="Resources\Show Detail.ico" />
     <None Include="Resources\play_on.PNG" />
     <Content Include="sldd.ico" />
   </ItemGroup>

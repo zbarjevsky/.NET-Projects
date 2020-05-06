@@ -21,12 +21,12 @@ namespace SmartBackup
     }
 
     [Flags]
-    internal enum BackupOption
+    internal enum BackupOptions
     {
         OverwriteAll = 0,
         OverwriteAllOlder = 2,
-        OverwriteNone = 4,
-        OverwriteIfSizeDifferent = 8
+        SkipExisting = 4,
+        SkipReadonly = 8
     }
 
     internal class BackupFile
@@ -89,6 +89,11 @@ namespace SmartBackup
             }
         }
 
+        public bool IsBigFile()
+        {
+            return (SrcIfo.Length > 12 * 1024 * 1024); //less than 13MB
+        }
+
         private readonly BackupEntry _entry;
 
         public BackupFile(string file, BackupEntry entry)
@@ -107,41 +112,48 @@ namespace SmartBackup
             //DstIfo = new FileInfo(Dst);
         }
 
-        public void PerformBackup(ProgressBar progress, Form owner, BackupOption option = BackupOption.OverwriteAllOlder)
+        public BackupStatus PerformBackup(ProgressBar progress, Form owner, BackupOptions option = BackupOptions.OverwriteAllOlder)
         {
             try
             {
+                Err = "OK";
+                Status = BackupStatus.None;
+                Utils.ExecuteOnUIThread(() => { progress.Value = progress.Minimum; }, owner);
+
                 if (!DstIfo.Exists)
                 {
                     Directory.CreateDirectory(DstFolder);
                 }
-                else //check overwrite options
+                else if(!option.HasFlag(BackupOptions.OverwriteAll)) //check overwrite options
                 {
-                    if (option.HasFlag(BackupOption.OverwriteAllOlder) && SrcIfo.CreationTimeUtc <= DstIfo.CreationTimeUtc)
-                    { Status = BackupStatus.Done; return; }
+                    if (option.HasFlag(BackupOptions.OverwriteAllOlder) && SrcIfo.CreationTimeUtc <= DstIfo.CreationTimeUtc)
+                    { return Status = BackupStatus.Done; }
 
-                    if (option.HasFlag(BackupOption.OverwriteIfSizeDifferent) && SrcIfo.Length == DstIfo.Length)
-                    { Status = BackupStatus.Done; return; }
+                    if (option.HasFlag(BackupOptions.SkipExisting) && DstIfo.Exists)
+                    { return Status = BackupStatus.Done; }
+
+                    if (option.HasFlag(BackupOptions.SkipReadonly) && DstIfo.Exists && DstIfo.IsReadOnly)
+                    { return Status = BackupStatus.Done; }
                 }
 
                 Status = BackupStatus.InProgress;
 
-                if (SrcIfo.Length < 6 * 1024 * 1024) //less than 1M
-                    File.Copy(Src, Dst, true);
-                else
+                if (DstIfo.Exists && DstIfo.IsReadOnly)
+                    DstIfo.IsReadOnly = false;
+
+                if (IsBigFile()) //more than 12M
                     CopyWithProgress(progress, owner);
+                else
+                    File.Copy(Src, Dst, true);
 
-                DstIfo = new FileInfo(Dst);
-                DstIfo.CreationTime = SrcIfo.CreationTime;
-                DstIfo.LastWriteTime = SrcIfo.LastWriteTime;
-                DstIfo.LastAccessTime = SrcIfo.LastAccessTime;
+                RestoreTimestamp();
 
-                Status = BackupStatus.Done;
+                return Status = BackupStatus.Done;
             }
             catch (Exception err)
             {
-                Err = err.Message;
-                Status = BackupStatus.Error;
+                Err = "Copy Err: " + err.Message;
+                return Status = BackupStatus.Error;
             }        
         }
 
@@ -150,6 +162,30 @@ namespace SmartBackup
             _dstIfo = null;
             Err = "";
             Status = BackupStatus.None;
+        }
+
+        private BackupStatus RestoreTimestamp()
+        {
+            try
+            {
+                DstIfo = new FileInfo(Dst);
+                if (DstIfo.IsReadOnly)
+                    DstIfo.IsReadOnly = false;
+
+                if(DstIfo.CreationTime != SrcIfo.CreationTime)
+                    DstIfo.CreationTime = SrcIfo.CreationTime;
+                if(DstIfo.LastWriteTime != SrcIfo.LastWriteTime)
+                    DstIfo.LastWriteTime = SrcIfo.LastWriteTime;
+                if(DstIfo.LastAccessTime != SrcIfo.LastAccessTime)
+                    DstIfo.LastAccessTime = SrcIfo.LastAccessTime;
+
+                return Status;
+            }
+            catch (Exception err)
+            {
+                Err = "Timestamp Err: " + err.Message;
+                return Status = BackupStatus.Error;
+            }
         }
 
         private void CopyWithProgress(ProgressBar progress, Form owner)

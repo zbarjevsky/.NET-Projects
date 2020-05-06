@@ -28,8 +28,8 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.Windows.Forms.ListViewGroup listViewGroup3 = new System.Windows.Forms.ListViewGroup("Priority", System.Windows.Forms.HorizontalAlignment.Left);
-            System.Windows.Forms.ListViewGroup listViewGroup4 = new System.Windows.Forms.ListViewGroup("Other", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("Priority", System.Windows.Forms.HorizontalAlignment.Left);
+            System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("Other", System.Windows.Forms.HorizontalAlignment.Left);
             this.m_btnBackupAll = new System.Windows.Forms.Button();
             this.m_btnBackupImportant = new System.Windows.Forms.Button();
             this.m_btnEdit = new System.Windows.Forms.Button();
@@ -44,7 +44,7 @@
             // m_btnBackupAll
             // 
             this.m_btnBackupAll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnBackupAll.Location = new System.Drawing.Point(427, 4);
+            this.m_btnBackupAll.Location = new System.Drawing.Point(455, 4);
             this.m_btnBackupAll.Name = "m_btnBackupAll";
             this.m_btnBackupAll.Size = new System.Drawing.Size(142, 23);
             this.m_btnBackupAll.TabIndex = 11;
@@ -55,7 +55,7 @@
             // m_btnBackupImportant
             // 
             this.m_btnBackupImportant.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnBackupImportant.Location = new System.Drawing.Point(261, 4);
+            this.m_btnBackupImportant.Location = new System.Drawing.Point(289, 4);
             this.m_btnBackupImportant.Name = "m_btnBackupImportant";
             this.m_btnBackupImportant.Size = new System.Drawing.Size(160, 23);
             this.m_btnBackupImportant.TabIndex = 10;
@@ -103,17 +103,17 @@
             this.columnHeader3});
             this.m_listBackup.FullRowSelect = true;
             this.m_listBackup.GridLines = true;
-            listViewGroup3.Header = "Priority";
-            listViewGroup3.Name = "listViewGroup1";
-            listViewGroup4.Header = "Other";
-            listViewGroup4.Name = "listViewGroup2";
+            listViewGroup1.Header = "Priority";
+            listViewGroup1.Name = "listViewGroup1";
+            listViewGroup2.Header = "Other";
+            listViewGroup2.Name = "listViewGroup2";
             this.m_listBackup.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            listViewGroup3,
-            listViewGroup4});
+            listViewGroup1,
+            listViewGroup2});
             this.m_listBackup.HideSelection = false;
             this.m_listBackup.Location = new System.Drawing.Point(3, 32);
             this.m_listBackup.Name = "m_listBackup";
-            this.m_listBackup.Size = new System.Drawing.Size(567, 265);
+            this.m_listBackup.Size = new System.Drawing.Size(594, 165);
             this.m_listBackup.TabIndex = 6;
             this.m_listBackup.UseCompatibleStateImageBehavior = false;
             this.m_listBackup.View = System.Windows.Forms.View.Details;
@@ -145,9 +145,9 @@
             this.Controls.Add(this.m_btnRemove);
             this.Controls.Add(this.m_btnAdd);
             this.Controls.Add(this.m_listBackup);
-            this.MinimumSize = new System.Drawing.Size(700, 300);
+            this.MinimumSize = new System.Drawing.Size(600, 200);
             this.Name = "BackupListUserControl";
-            this.Size = new System.Drawing.Size(700, 300);
+            this.Size = new System.Drawing.Size(600, 200);
             this.Load += new System.EventHandler(this.BackupListUserControl_Load);
             this.ResumeLayout(false);
 
