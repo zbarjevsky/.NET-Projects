@@ -21,10 +21,12 @@ namespace SmartBackup
     {
         BackupGroup _group;
         BackupLogic _logic;
+        readonly BackupPriority _Priority = BackupPriority.All;
 
-        public FormBackupProgress(BackupGroup group)
+        public FormBackupProgress(BackupGroup group, BackupPriority priority)
         {
             _group = group;
+            _Priority = priority;
 
             InitializeComponent();
 
@@ -37,7 +39,7 @@ namespace SmartBackup
 
         private void FormBackupProgress_Load(object sender, EventArgs e)
         {
-            _logic = new BackupLogic(_group);
+            _logic = new BackupLogic(_group, _Priority);
             m_listFiles.VirtualListSize = _logic.FileList.Count;
             m_txtStatus.Text = "Found " + _logic.FileList.Count.ToString("###,###,###") + " files to Backup";
 
@@ -86,7 +88,7 @@ namespace SmartBackup
         }
 
         bool _working = false;
-        private void PerformBackup(int startIndex)
+        private void PerformBackup(int startIndex, BackupOptions options)
         {
             _abort = false;
             _pause = false;
@@ -103,13 +105,23 @@ namespace SmartBackup
                         break;
 
                     _startIndex = i;
-                    if (_logic.FileList[i].PerformBackup(m_progrFile, this) == BackupStatus.Error)
+                    BackupFile file = _logic.FileList[i];
+                    if (file.IsBigFile())
                     {
-                        Thread.Sleep(10);
-                        _logic.FileList[i].PerformBackup(m_progrFile, this);
+                        Utils.ExecuteOnUIThread(() =>
+                        {
+                            file.Status = BackupStatus.InProgress;
+                            m_listFiles.EnsureVisible(_startIndex);
+                        }, this);
                     }
 
-                    if (i % 33 == 0 || _logic.FileList[i].IsBigFile())
+                    if (file.PerformBackup(m_progrFile, this, options) == BackupStatus.Error)
+                    {
+                        Thread.Sleep(10);
+                        file.PerformBackup(m_progrFile, this, options);
+                    }
+
+                    if (i % 33 == 0 || file.IsBigFile())
                     {
                         _elapsed += stopper.Elapsed;
                         stopper.Restart();
@@ -165,8 +177,8 @@ namespace SmartBackup
                         errCount++;
                 }
 
-                m_txtStatus.Text = string.Format("Backup status done: {0:###,###} of {1:###,###}, Errors: {2:###,###}",
-                    (_startIndex + 1), _logic.FileList.Count, errCount);
+                m_txtStatus.Text = string.Format("Backup status done: {0:###,##0} of {1:###,##0}, Errors: {2:###,##0}, Elapsed {3}",
+                    (_startIndex + 1), _logic.FileList.Count, errCount, _elapsed.ToString("mm':'ss"));
             }, this);
         }
 
@@ -176,7 +188,8 @@ namespace SmartBackup
             _elapsed = TimeSpan.FromSeconds(0);
             _logic.ResetStatus();
 
-            PerformBackup(0);
+            BackupOptions options = (BackupOptions)Enum.Parse(typeof(BackupOptions), m_cmbOption.SelectedItem.ToString());
+            PerformBackup(0, options);
         }
 
         bool _abort = false;
@@ -193,7 +206,8 @@ namespace SmartBackup
 
         private void m_btnContinue_Click(object sender, EventArgs e)
         {
-            PerformBackup(_startIndex);
+            BackupOptions options = (BackupOptions)Enum.Parse(typeof(BackupOptions), m_cmbOption.SelectedItem.ToString());
+            PerformBackup(_startIndex, options);
         }
     }
 }

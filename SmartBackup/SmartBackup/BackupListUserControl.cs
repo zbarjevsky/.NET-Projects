@@ -84,11 +84,11 @@ namespace SmartBackup
             m_listBackup.Items.Clear();
             foreach (BackupEntry entry in _settings.BackupList)
             {
-                ListViewItem item = m_listBackup.Items.Add(entry.IsImportant.ToString());
+                ListViewItem item = m_listBackup.Items.Add(entry.Priority.ToString());
                 item.Tag = entry;
                 item.SubItems.Add(entry.FolderSrc);
                 item.SubItems.Add(entry.FolderDst);
-                item.Group = entry.IsImportant ? m_listBackup.Groups[0] : m_listBackup.Groups[1];
+                item.Group = GroupFromPriority(entry.Priority);
                 if (selectEntry != null && selectEntry.FolderSrc == entry.FolderSrc)
                 {
                     item.Selected = true;
@@ -100,6 +100,20 @@ namespace SmartBackup
                 m_listBackup.EnsureVisible(selectedIdx);
 
             UpdateUI();
+        }
+
+        private ListViewGroup GroupFromPriority(BackupPriority priority)
+        {
+            switch (priority)
+            {
+                case BackupPriority.High:
+                    return m_listBackup.Groups[0];
+                case BackupPriority.Normal:
+                    return m_listBackup.Groups[1];
+                case BackupPriority.Low:
+                default:
+                    return m_listBackup.Groups[2];
+            }
         }
 
         private void UpdateUI()
@@ -118,11 +132,21 @@ namespace SmartBackup
 
         private void m_btnBackupAll_Click(object sender, EventArgs e)
         {
+            OpenBackupProgress(BackupPriority.All);
+        }
+
+        private void m_btnBackupImportant_Click(object sender, EventArgs e)
+        {
+            OpenBackupProgress(BackupPriority.High);
+        }
+
+        private void OpenBackupProgress(BackupPriority priority)
+        {
             this.Cursor = Cursors.WaitCursor;
             m_btnBackupAll.Enabled = false;
             Application.DoEvents();
 
-            FormBackupProgress frm = new FormBackupProgress(_settings);
+            FormBackupProgress frm = new FormBackupProgress(_settings, priority);
             frm.ShowDialog(this);
 
             this.Cursor = Cursors.Arrow;

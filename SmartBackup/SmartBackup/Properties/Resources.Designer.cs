@@ -93,6 +93,16 @@ namespace SmartBackup.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Shared {
+            get {
+                object obj = ResourceManager.GetObject("Shared", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Show_Detail {
             get {
                 object obj = ResourceManager.GetObject("Show Detail", resourceCulture);

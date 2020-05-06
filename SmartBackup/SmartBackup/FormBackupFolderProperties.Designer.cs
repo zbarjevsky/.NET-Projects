@@ -35,13 +35,14 @@
             this.m_btnBrowseDst = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.m_txtDstFolder = new System.Windows.Forms.TextBox();
-            this.m_chkImportant = new System.Windows.Forms.CheckBox();
             this.m_btnOk = new System.Windows.Forms.Button();
             this.m_btnCancel = new System.Windows.Forms.Button();
             this.m_txtFileType = new System.Windows.Forms.TextBox();
             this.m_txtExcludeType = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.m_cmbPriority = new System.Windows.Forms.ComboBox();
             this.SuspendLayout();
             // 
             // m_txtSource
@@ -104,16 +105,6 @@
             this.m_txtDstFolder.TabIndex = 3;
             this.m_txtDstFolder.TextChanged += new System.EventHandler(this.ValidateInput);
             // 
-            // m_chkImportant
-            // 
-            this.m_chkImportant.AutoSize = true;
-            this.m_chkImportant.Location = new System.Drawing.Point(71, 132);
-            this.m_chkImportant.Name = "m_chkImportant";
-            this.m_chkImportant.Size = new System.Drawing.Size(70, 17);
-            this.m_chkImportant.TabIndex = 6;
-            this.m_chkImportant.Text = "Important";
-            this.m_chkImportant.UseVisualStyleBackColor = true;
-            // 
             // m_btnOk
             // 
             this.m_btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -170,6 +161,24 @@
             this.label4.TabIndex = 12;
             this.label4.Text = "Exclude File Types";
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(9, 132);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(38, 13);
+            this.label5.TabIndex = 13;
+            this.label5.Text = "Priority";
+            // 
+            // m_cmbPriority
+            // 
+            this.m_cmbPriority.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.m_cmbPriority.FormattingEnabled = true;
+            this.m_cmbPriority.Location = new System.Drawing.Point(68, 132);
+            this.m_cmbPriority.Name = "m_cmbPriority";
+            this.m_cmbPriority.Size = new System.Drawing.Size(121, 21);
+            this.m_cmbPriority.TabIndex = 14;
+            // 
             // FormBackupFolderProperties
             // 
             this.AcceptButton = this.m_btnOk;
@@ -177,13 +186,14 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.m_btnCancel;
             this.ClientSize = new System.Drawing.Size(484, 201);
+            this.Controls.Add(this.m_cmbPriority);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.m_txtExcludeType);
             this.Controls.Add(this.m_txtFileType);
             this.Controls.Add(this.m_btnCancel);
             this.Controls.Add(this.m_btnOk);
-            this.Controls.Add(this.m_chkImportant);
             this.Controls.Add(this.m_btnBrowseDst);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.m_txtDstFolder);
@@ -209,12 +219,13 @@
         private System.Windows.Forms.Button m_btnBrowseDst;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox m_txtDstFolder;
-        private System.Windows.Forms.CheckBox m_chkImportant;
         private System.Windows.Forms.Button m_btnOk;
         private System.Windows.Forms.Button m_btnCancel;
         private System.Windows.Forms.TextBox m_txtFileType;
         private System.Windows.Forms.TextBox m_txtExcludeType;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.ComboBox m_cmbPriority;
     }
 }

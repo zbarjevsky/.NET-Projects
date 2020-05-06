@@ -23,17 +23,26 @@ namespace SmartBackup
     [Flags]
     internal enum BackupOptions
     {
-        OverwriteAll = 0,
+        OverwriteAll = 1,
         OverwriteAllOlder = 2,
         SkipExisting = 4,
         SkipReadonly = 8
     }
 
+    [Flags]
+    public enum BackupPriority : int
+    {
+        High = 1,
+        Normal = 2,
+        Low = 4,
+        All = 7
+    }
+
     internal class BackupFile
     {
-        public string Src;
-        public string Err;
-        public BackupStatus Status;
+        public string Src = "";
+        public string Err = "OK";
+        public BackupStatus Status = BackupStatus.None;
 
         private string _dst = null;
         public string Dst 
@@ -99,17 +108,8 @@ namespace SmartBackup
         public BackupFile(string file, BackupEntry entry)
         {
             _entry = entry;
-
             Status = BackupStatus.None;
             Src = file;
-
-            //string fileName = Path.GetFileName(file);
-            //string subFolders = FindSubFolders(entry.FolderSrc, file);
-            //DstFolder = Path.Combine(entry.FolderDst, subFolders);
-            //Dst = Path.Combine(DstFolder, fileName);
-
-            //SrcIfo = new FileInfo(Src);
-            //DstIfo = new FileInfo(Dst);
         }
 
         public BackupStatus PerformBackup(ProgressBar progress, Form owner, BackupOptions option = BackupOptions.OverwriteAllOlder)
@@ -237,13 +237,14 @@ namespace SmartBackup
 
         public List<BackupFile> FileList = new List<BackupFile>();
 
-        public BackupLogic(BackupGroup group)
+        public BackupLogic(BackupGroup group, BackupPriority priority)
         {
             _group = group;
 
             foreach (BackupEntry entry in group.BackupList)
             {
-                CollectFiles(entry);
+                if(priority.HasFlag(entry.Priority))
+                    CollectFiles(entry);
             }
         }
 

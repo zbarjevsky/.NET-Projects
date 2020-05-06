@@ -22,6 +22,10 @@ namespace SmartBackup
             _entry = entry;
 
             InitializeComponent();
+
+            m_cmbPriority.Items.Clear();
+            m_cmbPriority.Items.AddRange(Enum.GetValues(typeof(BackupPriority)).Cast<Object>().ToArray());
+            m_cmbPriority.SelectedIndex = 1;
         }
 
         private void FormBackupFolderProperties_Load(object sender, EventArgs e)
@@ -30,7 +34,7 @@ namespace SmartBackup
             m_txtSource.Text = _entry.FolderSrc;
             m_txtFileType.Text = _entry.FolderIncludeTypes;
             m_txtExcludeType.Text = _entry.FolderExcludeTypes;
-            m_chkImportant.Checked = _entry.IsImportant;
+            m_cmbPriority.SelectedItem = _entry.Priority;
 
             ValidateInput();
         }
@@ -51,7 +55,7 @@ namespace SmartBackup
             _entry.FolderSrc = m_txtSource.Text;
             _entry.FolderIncludeTypes = m_txtFileType.Text;
             _entry.FolderExcludeTypes = m_txtExcludeType.Text;
-            _entry.IsImportant = m_chkImportant.Checked;
+            _entry.Priority = (BackupPriority)m_cmbPriority.SelectedItem;
         }
 
         private void ValidateInput(object sender = null, EventArgs e = null)
@@ -62,7 +66,7 @@ namespace SmartBackup
                 FolderSrc = m_txtSource.Text,
                 FolderIncludeTypes = m_txtFileType.Text,
                 FolderExcludeTypes = m_txtExcludeType.Text,
-                IsImportant = m_chkImportant.Checked
+                Priority = (BackupPriority)m_cmbPriority.SelectedItem
             };
 
             m_btnOk.Enabled = entry.IsValid();

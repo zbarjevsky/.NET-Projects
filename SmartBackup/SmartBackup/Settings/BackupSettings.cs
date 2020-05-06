@@ -18,11 +18,11 @@ namespace SmartBackup.Settings
         public string FolderDst { get; set; }
         public string FolderIncludeTypes { get; set; }
         public string FolderExcludeTypes { get; set; }
-        public bool IsImportant { get; set; }
+        public BackupPriority Priority { get; set; }
 
         public BackupEntry()
         {
-            IsImportant = false;
+            Priority = BackupPriority.Normal;
             FolderIncludeTypes = "*.*";
             FolderExcludeTypes = "";
         }
