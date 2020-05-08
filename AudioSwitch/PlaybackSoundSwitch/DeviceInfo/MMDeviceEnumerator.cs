@@ -4,6 +4,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using MarkZ.Timer;
 using PlaybackSoundSwitch.ComObjects;
 using PlaybackSoundSwitch.Device;
 using PlaybackSoundSwitch.Interfaces;
@@ -22,7 +23,7 @@ namespace PlaybackSoundSwitch
             set { _notificationClient.DefaultDeviceChanged = value; }
         }
 
-        public Action<string> DevicesChanged
+        public Action<string, object> DevicesChanged
         {
             get { return _notificationClient.DevicesChanged; }
             set { _notificationClient.DevicesChanged = value; }

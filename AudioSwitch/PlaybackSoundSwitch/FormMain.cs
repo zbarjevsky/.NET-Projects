@@ -9,7 +9,7 @@ using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-
+using MarkZ.Tools;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using PlaybackSoundSwitch.ComObjects;
 using PlaybackSoundSwitch.Device;
@@ -81,24 +81,34 @@ namespace PlaybackSoundSwitch
             _mmd.Dispose();
         }
 
-        private void OnDevicesChanged(string deviceId = "")
+        private void OnDevicesChanged(string deviceId = "", object additionalData = null)
         {
-            EnumDevices("Devices changed: " + deviceId);
+            string log = Log("Device Changed: {0}, Data: {1}\n", deviceId, additionalData);
+            EnumDevices(log);
         }
 
         private void OnDefaultDeviceChanged(MMDevice device)
         {
-            EnumDevices("Default Device Changed: " + device.FriendlyName);
+            string log = Log("Default Device Changed: {0}\n", device);
+            EnumDevices(log);
+        }
+
+        public string Log(string format, params object [] parameters)
+        {
+            string log = string.Format("{0} - ", DateTime.Now.ToString("s"));
+            log += string.Format(format, parameters);
+            CommonUtils.ExecuteOnUIThread(() => { m_txtLog.Text = log + m_txtLog.Text; }, this);
+            return log;
         }
 
         bool _isEnumerating = false;
         private void EnumDevices(string status)
         {
-            m_status1.Text = status;
-            
             CommonUtils.ExecuteOnUIThread(() => {
                 try
                 {
+                    m_status1.Text = status.Trim();
+
                     if (_isEnumerating)
                         return;
                     _isEnumerating = true;

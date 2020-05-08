@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using MarkZ.Timer;
 using PlaybackSoundSwitch.ComObjects;
 using PlaybackSoundSwitch.Device;
 using PlaybackSoundSwitch.Interfaces;
@@ -9,9 +10,10 @@ namespace PlaybackSoundSwitch.Notifications
     public class MMNotificationClient : IMMNotificationClient, IDisposable
     {
         private MMDeviceEnumerator _enumerator = null;
+        private readonly DebounceDispatcher _dispatcher = new DebounceDispatcher();
 
         public Action<MMDevice> DefaultDeviceChanged = (device) => { };
-        public Action<string> DevicesChanged = (deviceId) => { };
+        public Action<string, object> DevicesChanged = (deviceId, param) => { };
 
         public MMNotificationClient(MMDeviceEnumerator enumerator)
         {
@@ -41,23 +43,23 @@ namespace PlaybackSoundSwitch.Notifications
 
         public void OnDeviceStateChanged(string deviceId, DeviceState newState)
         {
-            DevicesChanged(deviceId);
+            _dispatcher.Debounce(300, (o) => DevicesChanged(deviceId, newState));
         }
 
         public void OnDeviceAdded(string deviceId)
         {
-            DevicesChanged(deviceId);
+            _dispatcher.Debounce(300, (o) => DevicesChanged(deviceId, "Added"));
         }
 
         public void OnDeviceRemoved(string deviceId)
         {
-            DevicesChanged(deviceId);
+            _dispatcher.Debounce(300, (o) => DevicesChanged(deviceId, "Removed"));
         }
 
         public void OnDefaultDeviceChanged(DataFlow flow, Role role, string defaultDeviceId)
         {
             var device = _enumerator.GetDevice(defaultDeviceId);
-            DefaultDeviceChanged(device);
+            _dispatcher.Debounce(300, (o) => DefaultDeviceChanged(device));
         }
 
         public void OnPropertyValueChanged(string deviceId, PropertyKey key)
@@ -71,7 +73,7 @@ namespace PlaybackSoundSwitch.Notifications
                 return;
             }
 
-            DevicesChanged(deviceId);
+            _dispatcher.Debounce(300, (o) => DevicesChanged(deviceId, key.formatId));
         }
 
         /// <inheritdoc/>

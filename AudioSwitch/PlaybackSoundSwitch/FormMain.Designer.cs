@@ -43,6 +43,8 @@
             this.m_status1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.m_status2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.m_txtLog = new System.Windows.Forms.RichTextBox();
             this.m_listDevices = new ListViewExtensions.ListViewCollapsibleGroups();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -50,6 +52,10 @@
             ((System.ComponentModel.ISupportInitialize)(this.m_trackVolume)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // m_imageListSpeakers
@@ -68,7 +74,7 @@
             this.m_trackVolume.MinimumSize = new System.Drawing.Size(45, 80);
             this.m_trackVolume.Name = "m_trackVolume";
             this.m_trackVolume.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.m_trackVolume.Size = new System.Drawing.Size(45, 195);
+            this.m_trackVolume.Size = new System.Drawing.Size(45, 192);
             this.m_trackVolume.TabIndex = 3;
             this.m_trackVolume.TickFrequency = 10;
             this.m_trackVolume.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
@@ -79,7 +85,7 @@
             // 
             this.m_btnMute.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnMute.ImageList = this.m_imageListSpeakers;
-            this.m_btnMute.Location = new System.Drawing.Point(4, 238);
+            this.m_btnMute.Location = new System.Drawing.Point(4, 235);
             this.m_btnMute.Name = "m_btnMute";
             this.m_btnMute.Size = new System.Drawing.Size(48, 43);
             this.m_btnMute.TabIndex = 4;
@@ -92,9 +98,9 @@
             this.m_btnActivate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnActivate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnActivate.Location = new System.Drawing.Point(108, 12);
+            this.m_btnActivate.Location = new System.Drawing.Point(104, 16);
             this.m_btnActivate.Name = "m_btnActivate";
-            this.m_btnActivate.Size = new System.Drawing.Size(469, 25);
+            this.m_btnActivate.Size = new System.Drawing.Size(467, 25);
             this.m_btnActivate.TabIndex = 1;
             this.m_btnActivate.Text = "Set Active: ";
             this.m_btnActivate.UseVisualStyleBackColor = true;
@@ -104,7 +110,7 @@
             // 
             this.m_btnRefresh.Image = global::PlaybackSoundSwitch.Properties.Resources.Refresh21;
             this.m_btnRefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnRefresh.Location = new System.Drawing.Point(12, 12);
+            this.m_btnRefresh.Location = new System.Drawing.Point(8, 16);
             this.m_btnRefresh.Name = "m_btnRefresh";
             this.m_btnRefresh.Size = new System.Drawing.Size(90, 25);
             this.m_btnRefresh.TabIndex = 0;
@@ -118,7 +124,7 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_status1,
             this.m_status2});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 303);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 328);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(653, 22);
             this.statusStrip1.TabIndex = 5;
@@ -133,7 +139,7 @@
             // m_status2
             // 
             this.m_status2.Name = "m_status2";
-            this.m_status2.Size = new System.Drawing.Size(568, 17);
+            this.m_status2.Size = new System.Drawing.Size(599, 17);
             this.m_status2.Spring = true;
             this.m_status2.Text = "...";
             // 
@@ -143,13 +149,48 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.m_btnMute);
             this.groupBox1.Controls.Add(this.m_trackVolume);
-            this.groupBox1.Location = new System.Drawing.Point(584, 7);
+            this.groupBox1.Location = new System.Drawing.Point(578, 11);
             this.groupBox1.MaximumSize = new System.Drawing.Size(57, 400);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(57, 287);
+            this.groupBox1.Size = new System.Drawing.Size(57, 284);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Volume";
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
+            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Name = "splitContainer1";
+            this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.m_btnActivate);
+            this.splitContainer1.Panel1.Controls.Add(this.groupBox1);
+            this.splitContainer1.Panel1.Controls.Add(this.m_listDevices);
+            this.splitContainer1.Panel1.Controls.Add(this.m_btnRefresh);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.m_txtLog);
+            this.splitContainer1.Panel2MinSize = 1;
+            this.splitContainer1.Size = new System.Drawing.Size(653, 328);
+            this.splitContainer1.SplitterDistance = 304;
+            this.splitContainer1.TabIndex = 7;
+            // 
+            // m_txtLog
+            // 
+            this.m_txtLog.BackColor = System.Drawing.SystemColors.Info;
+            this.m_txtLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.m_txtLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_txtLog.Location = new System.Drawing.Point(0, 0);
+            this.m_txtLog.Name = "m_txtLog";
+            this.m_txtLog.Size = new System.Drawing.Size(651, 18);
+            this.m_txtLog.TabIndex = 0;
+            this.m_txtLog.Text = "";
             // 
             // m_listDevices
             // 
@@ -177,11 +218,11 @@
             listViewGroup4});
             this.m_listDevices.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.m_listDevices.HideSelection = false;
-            this.m_listDevices.Location = new System.Drawing.Point(12, 44);
+            this.m_listDevices.Location = new System.Drawing.Point(8, 48);
             this.m_listDevices.MultiSelect = false;
             this.m_listDevices.Name = "m_listDevices";
             this.m_listDevices.ShowItemToolTips = true;
-            this.m_listDevices.Size = new System.Drawing.Size(565, 250);
+            this.m_listDevices.Size = new System.Drawing.Size(563, 247);
             this.m_listDevices.TabIndex = 2;
             this.m_listDevices.UseCompatibleStateImageBehavior = false;
             this.m_listDevices.View = System.Windows.Forms.View.Details;
@@ -210,12 +251,9 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.ClientSize = new System.Drawing.Size(653, 325);
-            this.Controls.Add(this.groupBox1);
+            this.ClientSize = new System.Drawing.Size(653, 350);
+            this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.statusStrip1);
-            this.Controls.Add(this.m_btnActivate);
-            this.Controls.Add(this.m_btnRefresh);
-            this.Controls.Add(this.m_listDevices);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(600, 250);
             this.Name = "FormMain";
@@ -228,6 +266,10 @@
             this.statusStrip1.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -248,6 +290,8 @@
         private System.Windows.Forms.ToolStripStatusLabel m_status1;
         private System.Windows.Forms.ToolStripStatusLabel m_status2;
         private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.RichTextBox m_txtLog;
     }
 }
 
