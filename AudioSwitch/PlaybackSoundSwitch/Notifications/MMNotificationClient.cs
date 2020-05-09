@@ -13,7 +13,7 @@ namespace PlaybackSoundSwitch.Notifications
         private readonly DebounceDispatcher _dispatcher = new DebounceDispatcher();
 
         public Action<MMDevice> DefaultDeviceChanged = (device) => { };
-        public Action<string, object> DevicesChanged = (deviceId, param) => { };
+        public Action<MMDevice, object> DevicesChanged = (device, param) => { };
 
         public MMNotificationClient(MMDeviceEnumerator enumerator)
         {
@@ -43,22 +43,25 @@ namespace PlaybackSoundSwitch.Notifications
 
         public void OnDeviceStateChanged(string deviceId, DeviceState newState)
         {
-            _dispatcher.Debounce(300, (o) => DevicesChanged(deviceId, newState));
+            var device = _enumerator.GetDevice(deviceId);
+            _dispatcher.Debounce(300, (o) => DevicesChanged(device, newState));
         }
 
         public void OnDeviceAdded(string deviceId)
         {
-            _dispatcher.Debounce(300, (o) => DevicesChanged(deviceId, "Added"));
+            var device = _enumerator.GetDevice(deviceId);
+            _dispatcher.Debounce(300, (o) => DevicesChanged(device, "Added"));
         }
 
         public void OnDeviceRemoved(string deviceId)
         {
-            _dispatcher.Debounce(300, (o) => DevicesChanged(deviceId, "Removed"));
+            var device = _enumerator.GetDevice(deviceId);
+            _dispatcher.Debounce(300, (o) => DevicesChanged(device, "Removed"));
         }
 
-        public void OnDefaultDeviceChanged(DataFlow flow, Role role, string defaultDeviceId)
+        public void OnDefaultDeviceChanged(DataFlow flow, Role role, string deviceId)
         {
-            var device = _enumerator.GetDevice(defaultDeviceId);
+            var device = _enumerator.GetDevice(deviceId);
             _dispatcher.Debounce(300, (o) => DefaultDeviceChanged(device));
         }
 
@@ -73,7 +76,8 @@ namespace PlaybackSoundSwitch.Notifications
                 return;
             }
 
-            _dispatcher.Debounce(300, (o) => DevicesChanged(deviceId, key.formatId));
+            var device = _enumerator.GetDevice(deviceId);
+            _dispatcher.Debounce(300, (o) => DevicesChanged(device, key.formatId));
         }
 
         /// <inheritdoc/>

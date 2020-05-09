@@ -23,7 +23,7 @@ namespace PlaybackSoundSwitch
             set { _notificationClient.DefaultDeviceChanged = value; }
         }
 
-        public Action<string, object> DevicesChanged
+        public Action<MMDevice, object> DevicesChanged
         {
             get { return _notificationClient.DevicesChanged; }
             set { _notificationClient.DevicesChanged = value; }

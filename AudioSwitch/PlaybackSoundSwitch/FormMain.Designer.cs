@@ -44,11 +44,12 @@
             this.m_status2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.m_txtLog = new System.Windows.Forms.RichTextBox();
             this.m_listDevices = new ListViewExtensions.ListViewCollapsibleGroups();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.m_txtLog = new System.Windows.Forms.RichTextBox();
+            this.m_pnlMain = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.m_trackVolume)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -56,6 +57,7 @@
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            this.m_pnlMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // m_imageListSpeakers
@@ -161,7 +163,6 @@
             // 
             this.splitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer1.FixedPanel = System.Windows.Forms.FixedPanel.Panel1;
             this.splitContainer1.Location = new System.Drawing.Point(0, 0);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
@@ -178,19 +179,8 @@
             this.splitContainer1.Panel2.Controls.Add(this.m_txtLog);
             this.splitContainer1.Panel2MinSize = 1;
             this.splitContainer1.Size = new System.Drawing.Size(653, 328);
-            this.splitContainer1.SplitterDistance = 304;
+            this.splitContainer1.SplitterDistance = 299;
             this.splitContainer1.TabIndex = 7;
-            // 
-            // m_txtLog
-            // 
-            this.m_txtLog.BackColor = System.Drawing.SystemColors.Info;
-            this.m_txtLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.m_txtLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_txtLog.Location = new System.Drawing.Point(0, 0);
-            this.m_txtLog.Name = "m_txtLog";
-            this.m_txtLog.Size = new System.Drawing.Size(651, 18);
-            this.m_txtLog.TabIndex = 0;
-            this.m_txtLog.Text = "";
             // 
             // m_listDevices
             // 
@@ -202,6 +192,7 @@
             this.columnHeader1,
             this.columnHeader2,
             this.columnHeader3});
+            this.m_listDevices.FullRowSelect = true;
             this.m_listDevices.GridLines = true;
             listViewGroup1.Header = "Connected";
             listViewGroup1.Name = "listViewGroup1";
@@ -246,16 +237,37 @@
             this.columnHeader3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.columnHeader3.Width = 73;
             // 
+            // m_txtLog
+            // 
+            this.m_txtLog.BackColor = System.Drawing.SystemColors.Info;
+            this.m_txtLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.m_txtLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_txtLog.Location = new System.Drawing.Point(0, 0);
+            this.m_txtLog.Name = "m_txtLog";
+            this.m_txtLog.Size = new System.Drawing.Size(651, 23);
+            this.m_txtLog.TabIndex = 0;
+            this.m_txtLog.Text = "";
+            // 
+            // m_pnlMain
+            // 
+            this.m_pnlMain.AutoScroll = true;
+            this.m_pnlMain.Controls.Add(this.splitContainer1);
+            this.m_pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_pnlMain.Location = new System.Drawing.Point(0, 0);
+            this.m_pnlMain.Name = "m_pnlMain";
+            this.m_pnlMain.Size = new System.Drawing.Size(653, 328);
+            this.m_pnlMain.TabIndex = 7;
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
             this.ClientSize = new System.Drawing.Size(653, 350);
-            this.Controls.Add(this.splitContainer1);
+            this.Controls.Add(this.m_pnlMain);
             this.Controls.Add(this.statusStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(600, 250);
+            this.MinimumSize = new System.Drawing.Size(660, 360);
             this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Select Active Audio End Point";
@@ -270,6 +282,7 @@
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
+            this.m_pnlMain.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -292,6 +305,7 @@
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.RichTextBox m_txtLog;
+        private System.Windows.Forms.Panel m_pnlMain;
     }
 }
 

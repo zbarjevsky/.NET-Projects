@@ -81,9 +81,9 @@ namespace PlaybackSoundSwitch
             _mmd.Dispose();
         }
 
-        private void OnDevicesChanged(string deviceId = "", object additionalData = null)
+        private void OnDevicesChanged(MMDevice device, object additionalData = null)
         {
-            string log = Log("Device Changed: {0}, Data: {1}\n", deviceId, additionalData);
+            string log = Log("Device Changed: {0}, Data: {1}\n", device, additionalData);
             EnumDevices(log);
         }
 
@@ -122,6 +122,8 @@ namespace PlaybackSoundSwitch
                     Application.DoEvents();
                     m_listDevices.Items.Clear();
 
+                    AlternateColorTool altenateColor = new AlternateColorTool();
+
                     m_listDevices.BeginUpdate();
                     foreach (DeviceFullInfo dev in devs)
                     {
@@ -129,6 +131,7 @@ namespace PlaybackSoundSwitch
 
                         Debug.WriteLine("Dev: " + dev.Name);
                         ListViewItem lvi = m_listDevices.Items.Add(dev.FriendlyName);
+                        lvi.BackColor = altenateColor.GetColor(dev.Name);
                         lvi.ImageKey = dev.IconPath;
                         lvi.SubItems.Add("N/A");
                         lvi.SubItems.Add("N/A");
