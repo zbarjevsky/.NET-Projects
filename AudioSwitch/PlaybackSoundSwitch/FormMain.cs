@@ -122,8 +122,6 @@ namespace PlaybackSoundSwitch
                     Application.DoEvents();
                     m_listDevices.Items.Clear();
 
-                    AlternateColorTool altenateColor = new AlternateColorTool();
-
                     m_listDevices.BeginUpdate();
                     foreach (DeviceFullInfo dev in devs)
                     {
@@ -131,7 +129,6 @@ namespace PlaybackSoundSwitch
 
                         Debug.WriteLine("Dev: " + dev.Name);
                         ListViewItem lvi = m_listDevices.Items.Add(dev.FriendlyName);
-                        lvi.BackColor = altenateColor.GetColor(dev.Name);
                         lvi.ImageKey = dev.IconPath;
                         lvi.SubItems.Add("N/A");
                         lvi.SubItems.Add("N/A");
@@ -211,15 +208,22 @@ namespace PlaybackSoundSwitch
                 , this);
             };
 
-            foreach (ListViewItem item in m_listDevices.Items)
+            AlternateColorTool altenateColor = new AlternateColorTool();
+
+            foreach (ListViewGroup group in m_listDevices.Groups)
             {
-                DeviceFullInfo dev = item.Tag as DeviceFullInfo;
-                bool isActive = dev.Id == _activeDevice.ID;
-                item.Font = isActive ? _fontBold : _fontNorm;
-                item.SubItems[1].Text = isActive ? "Active" : "";
-                item.Selected = false; // dev.Id == sel.ID;
-                item.ForeColor = dev.State == EDeviceState.Active ? Color.Black : Color.DarkGray;
-                item.Group = GetItemGroup(dev);
+                foreach (ListViewItem item in group.Items)
+                {
+                    DeviceFullInfo dev = item.Tag as DeviceFullInfo;
+                    bool isActive = dev.Id == _activeDevice.ID;
+                    item.Font = isActive ? _fontBold : _fontNorm;
+                    item.SubItems[1].Text = isActive ? "Active" : "";
+                    item.Selected = false; // dev.Id == sel.ID;
+                    item.ForeColor = dev.State == EDeviceState.Active ? Color.Black : Color.DarkGray;
+                    //alternate color inside each group
+                    item.BackColor = altenateColor.GetColor(dev.Name);
+                    //item.Group = GetItemGroup(dev);
+                }
             }
 
             DeviceFullInfo next = FindNextActiveDevice();

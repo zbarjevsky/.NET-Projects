@@ -11,6 +11,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading;
 using DUMeterMZ.Common;
+using MarkZ.Common;
 
 namespace DUMeterMZ
 {
@@ -31,7 +32,9 @@ namespace DUMeterMZ
 		private SendEmail m_SendIPEmail;
 
 		private string	m_sGraphText = "Initializing...";
-      
+
+		private ScreenSaver _screenSaver;
+
 		public FormLoadGraph()
 		{
             if ( !HasCounterCategory("Network Interface") )
@@ -119,6 +122,8 @@ namespace DUMeterMZ
 				{
 					this.CenterToScreen();
 				}
+
+				_screenSaver = new ScreenSaver(this);
 
 				ReApplyOptions();
 				ShowWindowBorder(m_Options.ShowWindowBorder);
@@ -232,6 +237,7 @@ namespace DUMeterMZ
 				if (m_iCheckIpCount % 1000 == 0)
 				{
 					m_SendIPEmail.SendIPEmailMessageThread();
+					_screenSaver.PerformScreenSaving();
 				}
 				m_iCheckIpCount++;
 
@@ -249,21 +255,21 @@ namespace DUMeterMZ
             }
         }//end m_Timer_Tick
 
-        //private float GetAvg(List<float> log)
-        //{
-        //    if (log == null || log.Count == 0)
-        //        return 0F;
+		//private float GetAvg(List<float> log)
+		//{
+		//    if (log == null || log.Count == 0)
+		//        return 0F;
 
-        //    float total = 0;
-        //    foreach (float n in log)
-        //        total += n;
-        //    float avg = total/log.Count;
-        //    log.Clear();
-        //    return avg;
-        //}//end GetAvg
+		//    float total = 0;
+		//    foreach (float n in log)
+		//        total += n;
+		//    float avg = total/log.Count;
+		//    log.Clear();
+		//    return avg;
+		//}//end GetAvg
 
-        //private DateTime m_lastLog = DateTime.Now;
-        private Stopwatch _stopper = new Stopwatch();
+		//private DateTime m_lastLog = DateTime.Now;
+		private Stopwatch _stopper = new Stopwatch();
         private TimeSpan m_EllapsedSec = new TimeSpan(); //update queue every second
         private TimeSpan m_EllapsedMin = new TimeSpan(); //update queue every second
 

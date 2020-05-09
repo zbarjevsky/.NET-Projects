@@ -155,6 +155,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\ScreenSaver.cs" />
     <Compile Include="Common\Utils.cs" />
     <Content Include="app.ico" />
     <Content Include="Log.xsd">
