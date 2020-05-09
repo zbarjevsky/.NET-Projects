@@ -50,6 +50,7 @@ namespace MeditationStopWatch
             pictureBox1.OnSizeChangedAction = (bounds) => EnsureVisibleControls();
             pictureBox1.OnMouseWheelAction = (delta) => EnsureVisibleControls();
             pictureBox1.ShowControlsAction = (show) => { m_btnCancel.Visible = show; m_lblUsage.Visible = show; };
+            pictureBox1.OnClickAction = () => { _stopWatchForm.PauseResume(); };
 
             this.WindowState = FormWindowState.Maximized;
 
