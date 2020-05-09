@@ -50,6 +50,7 @@ namespace MarkZ.Common
             if (_index >= _locations.Length)
                 _index = 0;
 
+            //move DELTA around original location
             Point newLocation = new Point(_originalLocation.X, _originalLocation.Y);
             newLocation.Offset(_locations[_index]);
             _owner.Location = newLocation;

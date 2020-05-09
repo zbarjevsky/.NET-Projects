@@ -557,12 +557,12 @@
             // 
             // m_btnFullScreen
             // 
-            this.m_btnFullScreen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
             this.m_btnFullScreen.Image = ((System.Drawing.Image)(resources.GetObject("m_btnFullScreen.Image")));
+            this.m_btnFullScreen.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.m_btnFullScreen.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.m_btnFullScreen.Name = "m_btnFullScreen";
-            this.m_btnFullScreen.Size = new System.Drawing.Size(26, 26);
-            this.m_btnFullScreen.Text = "View Full Screen";
+            this.m_btnFullScreen.Size = new System.Drawing.Size(155, 26);
+            this.m_btnFullScreen.Text = "Full Screen Image (F11)";
             this.m_btnFullScreen.Click += new System.EventHandler(this.m_btnFullScreen_Click);
             // 
             // toolStripSeparator1
