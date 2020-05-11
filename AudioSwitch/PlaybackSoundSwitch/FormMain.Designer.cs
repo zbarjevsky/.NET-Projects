@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             System.Windows.Forms.ListViewGroup listViewGroup1 = new System.Windows.Forms.ListViewGroup("Connected", System.Windows.Forms.HorizontalAlignment.Left);
             System.Windows.Forms.ListViewGroup listViewGroup2 = new System.Windows.Forms.ListViewGroup("Unplugged", System.Windows.Forms.HorizontalAlignment.Left);
             System.Windows.Forms.ListViewGroup listViewGroup3 = new System.Windows.Forms.ListViewGroup("Disabled", System.Windows.Forms.HorizontalAlignment.Left);
             System.Windows.Forms.ListViewGroup listViewGroup4 = new System.Windows.Forms.ListViewGroup("Not Present", System.Windows.Forms.HorizontalAlignment.Left);
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.m_imageListSpeakers = new System.Windows.Forms.ImageList(this.components);
             this.m_trackVolume = new System.Windows.Forms.TrackBar();
             this.m_btnMute = new System.Windows.Forms.Button();
@@ -44,12 +44,12 @@
             this.m_status2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.m_txtLog = new System.Windows.Forms.RichTextBox();
+            this.m_pnlMain = new System.Windows.Forms.Panel();
             this.m_listDevices = new ListViewExtensions.ListViewCollapsibleGroups();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.m_txtLog = new System.Windows.Forms.RichTextBox();
-            this.m_pnlMain = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.m_trackVolume)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -62,9 +62,9 @@
             // 
             // m_imageListSpeakers
             // 
-            this.m_imageListSpeakers.ColorDepth = System.Windows.Forms.ColorDepth.Depth24Bit;
-            this.m_imageListSpeakers.ImageSize = new System.Drawing.Size(32, 32);
+            this.m_imageListSpeakers.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_imageListSpeakers.ImageStream")));
             this.m_imageListSpeakers.TransparentColor = System.Drawing.Color.Transparent;
+            this.m_imageListSpeakers.Images.SetKeyName(0, "Speaker5_16x16.png");
             // 
             // m_trackVolume
             // 
@@ -182,6 +182,27 @@
             this.splitContainer1.SplitterDistance = 299;
             this.splitContainer1.TabIndex = 7;
             // 
+            // m_txtLog
+            // 
+            this.m_txtLog.BackColor = System.Drawing.SystemColors.Info;
+            this.m_txtLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.m_txtLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_txtLog.Location = new System.Drawing.Point(0, 0);
+            this.m_txtLog.Name = "m_txtLog";
+            this.m_txtLog.Size = new System.Drawing.Size(651, 23);
+            this.m_txtLog.TabIndex = 0;
+            this.m_txtLog.Text = "";
+            // 
+            // m_pnlMain
+            // 
+            this.m_pnlMain.AutoScroll = true;
+            this.m_pnlMain.Controls.Add(this.splitContainer1);
+            this.m_pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_pnlMain.Location = new System.Drawing.Point(0, 0);
+            this.m_pnlMain.Name = "m_pnlMain";
+            this.m_pnlMain.Size = new System.Drawing.Size(653, 328);
+            this.m_pnlMain.TabIndex = 7;
+            // 
             // m_listDevices
             // 
             this.m_listDevices.Activation = System.Windows.Forms.ItemActivation.OneClick;
@@ -236,27 +257,6 @@
             this.columnHeader3.Text = "Volume";
             this.columnHeader3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.columnHeader3.Width = 73;
-            // 
-            // m_txtLog
-            // 
-            this.m_txtLog.BackColor = System.Drawing.SystemColors.Info;
-            this.m_txtLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.m_txtLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_txtLog.Location = new System.Drawing.Point(0, 0);
-            this.m_txtLog.Name = "m_txtLog";
-            this.m_txtLog.Size = new System.Drawing.Size(651, 23);
-            this.m_txtLog.TabIndex = 0;
-            this.m_txtLog.Text = "";
-            // 
-            // m_pnlMain
-            // 
-            this.m_pnlMain.AutoScroll = true;
-            this.m_pnlMain.Controls.Add(this.splitContainer1);
-            this.m_pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_pnlMain.Location = new System.Drawing.Point(0, 0);
-            this.m_pnlMain.Name = "m_pnlMain";
-            this.m_pnlMain.Size = new System.Drawing.Size(653, 328);
-            this.m_pnlMain.TabIndex = 7;
             // 
             // FormMain
             // 

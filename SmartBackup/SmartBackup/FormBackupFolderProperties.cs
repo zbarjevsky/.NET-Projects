@@ -76,6 +76,7 @@ namespace SmartBackup
         private Thread _threadUpdateInfo = null;
         private void UpdateInfo(BackupEntry entry)
         {
+            const double s1MB = 1024 * 1024;
             m_txtInfo.Text = "Calculating Folder Size...";
 
             if (_threadUpdateInfo != null && _threadUpdateInfo.IsAlive)
@@ -95,7 +96,7 @@ namespace SmartBackup
 
                 Utils.ExecuteOnUIThread(() => 
                 {
-                    m_txtInfo.Text = string.Format("Selected SRC files: {0:###,##0} size: {1:###,##0.0} k", count, size);
+                    m_txtInfo.Text = string.Format("Selected SRC files: {0:###,##0} size: {1:###,##0.0} MB", count, size/s1MB);
                 }, this);
             });
 

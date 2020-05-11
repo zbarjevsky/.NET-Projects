@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MarkZ.Tools;
 using Microsoft.WindowsAPICodePack.Taskbar;
+using MZ.Tools;
 using PlaybackSoundSwitch.ComObjects;
 using PlaybackSoundSwitch.Device;
 using PlaybackSoundSwitch.DeviceSwitch;
@@ -98,6 +99,7 @@ namespace PlaybackSoundSwitch
             string log = string.Format("{0} - ", DateTime.Now.ToString("s"));
             log += string.Format(format, parameters);
             CommonUtils.ExecuteOnUIThread(() => { m_txtLog.Text = log + m_txtLog.Text; }, this);
+            MZ.Tools.Trace.Debug(log);
             return log;
         }
 
@@ -207,6 +209,8 @@ namespace PlaybackSoundSwitch
                 }
                 , this);
             };
+
+            this.Text = _activeDevice.FriendlyName + " - " + TITLE;
 
             AlternateColorTool altenateColor = new AlternateColorTool();
 

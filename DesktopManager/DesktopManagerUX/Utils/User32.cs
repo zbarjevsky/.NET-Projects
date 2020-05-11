@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DesktopManagerUX.Utils
+namespace MZ.Utils
 {
     public class User32
     {
@@ -71,7 +71,10 @@ namespace DesktopManagerUX.Utils
         public static extern IntPtr GetWindowRect(IntPtr hWnd, out RECT rect);
         [DllImport("user32.dll")]
         public static extern bool GetClientRect(IntPtr hWnd, out RECT rect);
-        [DllImport("User32.dll")]
+        [DllImport("user32.dll")]
+        public static extern IntPtr FindWindow(string className, string windowTitle);
+        [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool ShowWindow(IntPtr hWnd, uint nCmdShow);
         [DllImport("User32.dll")]
         public static extern bool SetForegroundWindow(IntPtr hWnd);

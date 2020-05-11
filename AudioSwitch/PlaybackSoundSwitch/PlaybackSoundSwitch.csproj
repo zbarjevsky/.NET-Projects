@@ -63,6 +63,9 @@
     <Compile Include="..\..\ClipboardListener\Utils\SingleInstanceHelper.cs">
       <Link>Tools\SingleInstanceHelper.cs</Link>
     </Compile>
+    <Compile Include="..\..\DesktopManager\DesktopManagerUX\Utils\User32.cs">
+      <Link>Tools\User32.cs</Link>
+    </Compile>
     <Compile Include="AudioVolume\AudioEndpointVolume.cs" />
     <Compile Include="AudioVolume\AudioEndpointVolumeCallback.cs" />
     <Compile Include="AudioVolume\AudioEndpointVolumeChannel.cs" />
@@ -133,6 +136,7 @@
     <Compile Include="Tools\ListViewCollapsibleGroups.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Tools\Trace.cs" />
     <Compile Include="Tools\Utils.cs" />
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
