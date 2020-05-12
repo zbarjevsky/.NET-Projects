@@ -24,7 +24,7 @@ namespace DUMeterMZ
         private bool _close = false;
 
         private Bitmap              m_bmp;
-        private int					linespeed	= (int)LineSpeed.DSL_1M;
+        private int					linespeed	= (int)LineSpeed.DSL_1MB;
         private Options				m_Options;
 
         private string m_sSettingsFile = "DUMeterMZ.config";

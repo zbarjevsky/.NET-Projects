@@ -117,6 +117,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\DesktopManager\DesktopManagerUX\Utils\User32.cs">
+      <Link>Utils\User32.cs</Link>
+    </Compile>
     <Compile Include="AnimEffect.cs" />
     <Compile Include="ClipboardList.cs" />
     <Compile Include="ClipboardMessageFilter.cs" />

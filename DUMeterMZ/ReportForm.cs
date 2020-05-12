@@ -155,12 +155,12 @@ namespace DUMeterMZ
 		{
 			//performance lines count for current line speed - horizontal lines/grid lines
 			double iSpeedLinesCount = (8F * m_linespeed) / (float)LineSpeed.ISDN_128k;
-			if (8F * m_linespeed >= (float)LineSpeed.LAN_10M) //for big bandwidths line per 1M
-				iSpeedLinesCount = (8F * m_linespeed) / (float)LineSpeed.DSL_1M;
-			if (8F * m_linespeed >= (float)LineSpeed.LAN_100M) //for big bandwidths line per 10M
-				iSpeedLinesCount = (8F * m_linespeed) / (float)LineSpeed.LAN_10M;
+			if (8F * m_linespeed >= (float)LineSpeed.LAN_10MB) //for big bandwidths line per 1M
+				iSpeedLinesCount = (8F * m_linespeed) / (float)LineSpeed.DSL_1MB;
+			if (8F * m_linespeed >= (float)LineSpeed.LAN_100MB) //for big bandwidths line per 10M
+				iSpeedLinesCount = (8F * m_linespeed) / (float)LineSpeed.LAN_10MB;
 			if (8F * m_linespeed >= (float)LineSpeed.LAN_1GB) //for big bandwidths line per 100M
-				iSpeedLinesCount = (8F * m_linespeed) / (float)LineSpeed.LAN_100M;
+				iSpeedLinesCount = (8F * m_linespeed) / (float)LineSpeed.LAN_100MB;
 
 			//pixel count interval between lines
 			double iYPixelsPerLine = m_bmpGraph.Height / (iSpeedLinesCount * (1 + m_Options.Overflow));

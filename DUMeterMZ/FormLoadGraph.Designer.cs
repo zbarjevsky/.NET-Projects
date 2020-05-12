@@ -323,6 +323,7 @@ namespace DUMeterMZ
             // m_lblScale
             // 
             this.m_lblScale.BackColor = System.Drawing.Color.Silver;
+            this.m_lblScale.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.m_lblScale.Dock = System.Windows.Forms.DockStyle.Left;
             this.m_lblScale.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.m_lblScale.Location = new System.Drawing.Point(0, 0);

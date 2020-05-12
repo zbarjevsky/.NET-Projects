@@ -17,12 +17,12 @@ namespace DUMeterMZ
 		Modem_16k		= 16640,
 		Modem_56k		= 56000,
 		ISDN_128k		= 128000,
-		DSL_1M			= 1024 * 1024,
-		LAN_10M			= 10 * DSL_1M,
-		LAN_50M		    = 50 * DSL_1M,
-		LAN_100M		= 100 * DSL_1M,
-		LAN_256M		= 256 * DSL_1M,
-		LAN_1GB			= 1024 * DSL_1M,
+		DSL_1MB			= 1024 * 1024,
+		LAN_10MB		= 10 * DSL_1MB,
+		LAN_50MB	    = 50 * DSL_1MB,
+		LAN_100MB		= 100 * DSL_1MB,
+		LAN_256MB		= 256 * DSL_1MB,
+		LAN_1GB			= 1024 * DSL_1MB,
 	}//end enum LineSpeed
 
 	public enum SpeedUnits
@@ -41,7 +41,7 @@ namespace DUMeterMZ
 			UploadScaling = 1;
 		}//end Constructor
 
-		private LineSpeed speed = LineSpeed.DSL_1M;
+		private LineSpeed speed = LineSpeed.DSL_1MB;
 
 		[Category("1. Interface Options")]
 		[DisplayName("Line Speed")]
