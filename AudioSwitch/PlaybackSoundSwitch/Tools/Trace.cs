@@ -10,12 +10,14 @@ namespace MZ.Tools
 {
     public static class Trace
     {
-        private static string _fileName = "PlaybackSoundSwitch.log";
+        private static string _fileName;
 
         static Trace()
         {
-            string path = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            _fileName = Path.Combine(path, _fileName);
+            string fullName = Assembly.GetExecutingAssembly().Location;
+            string fileName = Path.GetFileNameWithoutExtension(fullName) + ".log";
+            string path = Path.GetDirectoryName(fullName);
+            _fileName = Path.Combine(path, fileName);
         }
 
         public static void Debug(string format, params object [] args)

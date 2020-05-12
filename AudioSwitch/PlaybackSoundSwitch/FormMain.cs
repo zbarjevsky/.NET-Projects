@@ -31,9 +31,6 @@ namespace PlaybackSoundSwitch
         MMDeviceEnumerator _mmd = new MMDeviceEnumerator();
         MMDevice _activeDevice = null;
 
-        //http://www.java2s.com/Open-Source/CSharp_Free_Code/API/Download_C4F_Managed_Taskbar_Sample.htm
-        private ThumbnailToolbarButton _btnNext, _btnRefresh;
-
         public FormMain()
         {
             InitializeComponent();
@@ -54,17 +51,8 @@ namespace PlaybackSoundSwitch
             _mmd.DevicesChanged = OnDevicesChanged;
             _mmd.DefaultDeviceChanged = OnDefaultDeviceChanged;
 
-            Icon icoRefresh = Icon.FromHandle(Properties.Resources.Refresh1.GetHicon());
-            _btnRefresh = new ThumbnailToolbarButton(icoRefresh, "Refresh Device List");
-            _btnRefresh.Click += (s, e) => { EnumDevices("Refresh from Toolbar"); };
-            _btnRefresh.Visible = true;
-
-            Icon next = Icon.FromHandle(Properties.Resources.defaultSpeakers.GetHicon());
-            _btnNext = new ThumbnailToolbarButton(next, "Next Device");
-            _btnNext.Click += (s, e) => { ActivateNextDevice(); };
-            _btnNext.Visible = true;
-
-            TaskbarManager.Instance.ThumbnailToolbars.AddButtons(this.Handle, _btnRefresh, _btnNext);
+            TaskbarManagerHelper.Init(this.Handle);
+            TaskbarManagerHelper.ButtonClicked = (friendlyName) => { SetActiveDevice(friendlyName); };
 
             this.Text = TITLE;
         }
@@ -230,15 +218,18 @@ namespace PlaybackSoundSwitch
                 }
             }
 
-            DeviceFullInfo next = FindNextActiveDevice();
-            if (next != null)
-                _btnNext.Tooltip = "Next Device: " + next.FriendlyName;
-            else
-                _btnNext.Tooltip = "N/A";
-
+            UpdateTaskbarButtons(_activeDevice.FriendlyName);
 
             m_trackVolume.Value = (int)(100f * _activeDevice.AudioEndpointVolume.MasterVolumeLevelScalar);
             UpdateUI(null);
+        }
+
+        private void UpdateTaskbarButtons(string activeName)
+        {
+            List<string> deviceNames = new List<string>();
+
+            ListViewGroup activeGroup = m_listDevices.Groups[0];
+            TaskbarManagerHelper.UpdateButtons(activeGroup.Items, activeName);
         }
 
         private static IReadOnlyCollection<DeviceFullInfo> CreateDeviceList(MMDeviceCollection collection)
@@ -365,6 +356,18 @@ namespace PlaybackSoundSwitch
         private void SetActiveDevice()
         {
             SetActiveDevice(GetSelectedDevice());
+        }
+
+        private void SetActiveDevice(string friendlyName)
+        {
+            ListViewGroup activeGroup = m_listDevices.Groups[0];
+            for (int i = 0; i < activeGroup.Items.Count; i++)
+            {
+                ListViewItem item = activeGroup.Items[i];
+                DeviceFullInfo dev = item.Tag as DeviceFullInfo;
+                if(friendlyName == dev.FriendlyName)
+                    SetActiveDevice(dev);
+            }
         }
 
         private void SetActiveDevice(DeviceFullInfo device)

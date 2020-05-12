@@ -136,6 +136,7 @@
     <Compile Include="Tools\ListViewCollapsibleGroups.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="Tools\TaskbarManagerHelper.cs" />
     <Compile Include="Tools\Trace.cs" />
     <Compile Include="Tools\Utils.cs" />
     <EmbeddedResource Include="FormMain.resx">
@@ -170,6 +171,7 @@
     <None Include="Images\Refresh2.ico" />
     <None Include="Images\Mic1.png" />
     <None Include="Images\Speaker1.png" />
+    <None Include="Images\Speaker3.png" />
     <Content Include="Speaker3.ico" />
     <None Include="Images\SpeakerImgList.png" />
     <Content Include="Speaker1.ico" />
