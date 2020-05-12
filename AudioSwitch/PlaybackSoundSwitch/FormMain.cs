@@ -44,6 +44,7 @@ namespace PlaybackSoundSwitch
                 ColorDepth = ColorDepth.Depth32Bit
             };
 
+            m_imageListSpeakers.Images.Clear();
             m_imageListSpeakers.Images.AddStrip(Resources.SpeakerImgList);
 
             m_listDevices.SetDoubleBuffered(true);
@@ -133,7 +134,7 @@ namespace PlaybackSoundSwitch
                 catch (Exception err)
                 {
                     this.Cursor = Cursors.Arrow;
-                    MessageBox.Show(err.Message);
+                    MessageBox.Show(err.Message, "Enum Devices", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 }
                 this.Cursor = Cursors.Arrow;
                 m_btnRefresh.Enabled = true;
@@ -250,8 +251,10 @@ namespace PlaybackSoundSwitch
                 }
                 catch (Exception e)
                 {
-                    //Log.Warning("Can't get name of device {device}", device.ID);
-                    throw;
+                    string id;
+                    device.GetId(out id);
+                    MZ.Tools.Trace.Debug("Can't get name of device {0}", id);
+                    //throw;
                 }
             }
 

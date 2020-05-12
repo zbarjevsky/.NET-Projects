@@ -23,6 +23,7 @@ namespace MZ.Tools
         public static void Debug(string format, params object [] args)
         {
             string msg = string.Format(format, args);
+            System.Diagnostics.Debug.Write(msg);
             File.AppendAllText(_fileName, msg);
         }
     }

@@ -20,10 +20,18 @@ namespace PlaybackSoundSwitch.Device
 
         public DeviceInfo(MMDevice device)
         {
-            Name = device.DeviceFriendlyName;
-            FriendlyName = device.FriendlyName;
-            Id = device.ID;
-            DeviceType = device.DataFlow;
+            try
+            {
+                Id = device.ID;
+                DeviceType = device.DataFlow;
+                Name = device.DeviceFriendlyName;
+                FriendlyName = device.FriendlyName;
+            }
+            catch (Exception err)
+            {
+                Name = "Error" + err.Message;
+                FriendlyName = err.ToString();
+            }
         }
 
         public bool Equals(DeviceInfo other)

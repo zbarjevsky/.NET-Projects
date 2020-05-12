@@ -41,7 +41,10 @@ namespace PlaybackSoundSwitch.Device
 
         private static void CleanupIcon(CacheEntryRemovedArguments arg)
         {
-            if (!(arg.CacheItem.Value is IDisposable item)) return;
+            IDisposable item = arg.CacheItem.Value as IDisposable;
+            if (item == null) 
+                return;
+
             try
             {
                 item.Dispose();

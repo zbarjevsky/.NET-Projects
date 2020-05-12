@@ -41,7 +41,8 @@ namespace PlaybackSoundSwitch.Device
         /// <remarks>Administrative client is required for Write and ReadWrite modes.</remarks>
         public void GetPropertyInformation(StorageAccessMode stgmAccess = StorageAccessMode.Read)
         {
-            Marshal.ThrowExceptionForHR(deviceInterface.OpenPropertyStore(stgmAccess, out var propstore));
+            IPropertyStore propstore;
+            Marshal.ThrowExceptionForHR(deviceInterface.OpenPropertyStore(stgmAccess, out propstore));
             _propertyStore = new PropertyStore(propstore);
         }
 
@@ -59,7 +60,8 @@ namespace PlaybackSoundSwitch.Device
 
         private void GetAudioEndpointVolume()
         {
-            Marshal.ThrowExceptionForHR(deviceInterface.Activate(ref IID_IAudioEndpointVolume, ClsCtx.All, IntPtr.Zero, out var result));
+            object result;
+            Marshal.ThrowExceptionForHR(deviceInterface.Activate(ref IID_IAudioEndpointVolume, ClsCtx.All, IntPtr.Zero, out result));
             audioEndpointVolume = new AudioEndpointVolume(result as IAudioEndpointVolume);
         }
 
@@ -164,17 +166,24 @@ namespace PlaybackSoundSwitch.Device
         {
             get
             {
-                if (_propertyStore == null)
+                try
                 {
-                    GetPropertyInformation();
-                }
+                    if (_propertyStore == null)
+                    {
+                        GetPropertyInformation();
+                    }
 
-                if (_propertyStore.Contains(PropertyKeys.PKEY_DEVICE_FRIENDLY_NAME))
-                {
-                    return (string)_propertyStore[PropertyKeys.PKEY_DEVICE_FRIENDLY_NAME].Value;
-                }
-                else
+                    if (_propertyStore.Contains(PropertyKeys.PKEY_DEVICE_FRIENDLY_NAME))
+                    {
+                        return (string)_propertyStore[PropertyKeys.PKEY_DEVICE_FRIENDLY_NAME].Value;
+                    }
+
                     return "Unknown";
+                }
+                catch (Exception err)
+                {
+                    return "Error: " + err.Message;
+                }
             }
         }
 
@@ -185,18 +194,22 @@ namespace PlaybackSoundSwitch.Device
         {
             get
             {
-                if (_propertyStore == null)
+                try
                 {
-                    GetPropertyInformation();
-                }
-                if (_propertyStore.Contains(PropertyKeys.PKEY_DEVICE_INTERFACE_FRIENDLY_NAME))
-                {
-                    return (string)_propertyStore[PropertyKeys.PKEY_DEVICE_INTERFACE_FRIENDLY_NAME].Value;
-                }
-                else
-                {
+                    if (_propertyStore == null)
+                    {
+                        GetPropertyInformation();
+                    }
+                    if (_propertyStore.Contains(PropertyKeys.PKEY_DEVICE_INTERFACE_FRIENDLY_NAME))
+                    {
+                        return (string)_propertyStore[PropertyKeys.PKEY_DEVICE_INTERFACE_FRIENDLY_NAME].Value;
+                    }
                     return "Unknown";
                 }
+                catch (Exception err)
+                {
+                    return "Error: " + err.Message;
+                }   
             }
         }
 
@@ -247,7 +260,8 @@ namespace PlaybackSoundSwitch.Device
         {
             get
             {
-                Marshal.ThrowExceptionForHR(deviceInterface.GetId(out var result));
+                string result;
+                Marshal.ThrowExceptionForHR(deviceInterface.GetId(out result));
                 return result;
             }
         }
@@ -259,8 +273,9 @@ namespace PlaybackSoundSwitch.Device
         {
             get
             {
+                EDataFlow result;
                 var ep = deviceInterface as IMMEndpoint;
-                ep.GetDataFlow(out var result);
+                ep.GetDataFlow(out result);
                 return result;
             }
         }
@@ -272,7 +287,8 @@ namespace PlaybackSoundSwitch.Device
         {
             get
             {
-                Marshal.ThrowExceptionForHR(deviceInterface.GetState(out var result));
+                EDeviceState result;
+                Marshal.ThrowExceptionForHR(deviceInterface.GetState(out result));
                 return result;
             }
         }

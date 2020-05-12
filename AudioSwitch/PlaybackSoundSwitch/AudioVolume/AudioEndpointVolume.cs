@@ -38,9 +38,10 @@ namespace PlaybackSoundSwitch.Audio
         /// <summary>
         /// GUID to pass to AudioEndpointVolumeCallback
         /// </summary>
-        public Guid NotificationGuid {
-            get => notificationGuid;
-            set => notificationGuid = value;
+        public Guid NotificationGuid
+        {
+            get { return notificationGuid; }
+            set { notificationGuid = value; }
         }
 
         /// <summary>
@@ -75,8 +76,9 @@ namespace PlaybackSoundSwitch.Audio
         {
             get
             {
-                Marshal.ThrowExceptionForHR(audioEndPointVolume.GetMasterVolumeLevel(out var result));
-                return result;
+                float level;
+                Marshal.ThrowExceptionForHR(audioEndPointVolume.GetMasterVolumeLevel(out level));
+                return level;
             }
             set
             {
@@ -91,7 +93,8 @@ namespace PlaybackSoundSwitch.Audio
         {
             get
             {
-                Marshal.ThrowExceptionForHR(audioEndPointVolume.GetMasterVolumeLevelScalar(out var result));
+                float result;
+                Marshal.ThrowExceptionForHR(audioEndPointVolume.GetMasterVolumeLevelScalar(out result));
                 return result;
             }
             set
@@ -107,7 +110,8 @@ namespace PlaybackSoundSwitch.Audio
         {
             get
             {
-                Marshal.ThrowExceptionForHR(audioEndPointVolume.GetMute(out var result));
+                bool result;
+                Marshal.ThrowExceptionForHR(audioEndPointVolume.GetMute(out result));
                 return result;
             }
             set
@@ -141,7 +145,8 @@ namespace PlaybackSoundSwitch.Audio
             audioEndPointVolume = realEndpointVolume;
             Channels = new AudioEndpointVolumeChannels(audioEndPointVolume);
             StepInformation = new AudioEndpointVolumeStepInformation(audioEndPointVolume);
-            Marshal.ThrowExceptionForHR(audioEndPointVolume.QueryHardwareSupport(out var hardwareSupp));
+            uint hardwareSupp;
+            Marshal.ThrowExceptionForHR(audioEndPointVolume.QueryHardwareSupport(out hardwareSupp));
             HardwareSupport = (EEndpointHardwareSupport)hardwareSupp;
             VolumeRange = new AudioEndpointVolumeVolumeRange(audioEndPointVolume);
             callBack = new AudioEndpointVolumeCallback(this);

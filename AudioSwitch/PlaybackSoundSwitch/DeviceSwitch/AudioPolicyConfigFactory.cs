@@ -7,7 +7,8 @@ namespace PlaybackSoundSwitch.DeviceSwitch
         public static IAudioPolicyConfigFactory Create()
         {
             var iid = typeof(IAudioPolicyConfigFactory).GUID;
-            ComBase.RoGetActivationFactory("Windows.Media.Internal.AudioPolicyConfig", ref iid, out object factory);
+            object factory;
+            ComBase.RoGetActivationFactory("Windows.Media.Internal.AudioPolicyConfig", ref iid, out factory);
             return (IAudioPolicyConfigFactory)factory;
         }
     }

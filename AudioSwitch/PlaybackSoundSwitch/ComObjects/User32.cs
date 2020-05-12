@@ -29,7 +29,8 @@ namespace PlaybackSoundSwitch.ComObjects
             get
             {
                 var activeWindowHandle = NativeMethods.GetForegroundWindow();
-                NativeMethods.GetWindowThreadProcessId(activeWindowHandle, out var processId);
+                uint processId;
+                NativeMethods.GetWindowThreadProcessId(activeWindowHandle, out processId);
                 return processId;
             }
         }

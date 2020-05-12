@@ -40,7 +40,8 @@ namespace PlaybackSoundSwitch.Audio
         {
             get
             {
-                Marshal.ThrowExceptionForHR(audioEndPointVolume.GetChannelCount(out var result));
+                int result;
+                Marshal.ThrowExceptionForHR(audioEndPointVolume.GetChannelCount(out result));
                 return result;
             }
         }

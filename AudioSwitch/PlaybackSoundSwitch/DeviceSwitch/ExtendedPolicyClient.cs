@@ -71,7 +71,8 @@ namespace PlaybackSoundSwitch.DeviceSwitch
         {
             try
             {
-                PolicyConfig.GetPersistedDefaultAudioEndpoint(processId, flow, role, out string deviceId);
+                string deviceId;
+                PolicyConfig.GetPersistedDefaultAudioEndpoint(processId, flow, role, out deviceId);
                 return UnpackDeviceId(deviceId);
             }
             catch (Exception ex)

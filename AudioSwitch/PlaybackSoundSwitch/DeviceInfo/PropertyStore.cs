@@ -22,8 +22,9 @@ namespace PlaybackSoundSwitch.Device
         {
             get
             {
-                Marshal.ThrowExceptionForHR(_storeInterface.GetCount(out var result));
-                return (int)result;
+                uint count;
+                Marshal.ThrowExceptionForHR(_storeInterface.GetCount(out count));
+                return (int)count;
             }
         }
 
@@ -37,7 +38,8 @@ namespace PlaybackSoundSwitch.Device
             get
             {
                 PropertyKey key = _propertyKeys[index];
-                Marshal.ThrowExceptionForHR(_storeInterface.GetValue(ref key, out var result));
+                PropVariant result;
+                Marshal.ThrowExceptionForHR(_storeInterface.GetValue(ref key, out result));
                 return new PropertyStoreProperty(key, result);
             }
         }
@@ -76,7 +78,8 @@ namespace PlaybackSoundSwitch.Device
                     PropertyKey ikey = _propertyKeys[i];
                     if ((ikey.formatId == key.formatId) && (ikey.propertyId == key.propertyId))
                     {
-                        Marshal.ThrowExceptionForHR(_storeInterface.GetValue(ref ikey, out var result));
+                        PropVariant result;
+                        Marshal.ThrowExceptionForHR(_storeInterface.GetValue(ref ikey, out result));
                         return new PropertyStoreProperty(ikey, result);
                     }
                 }
@@ -91,7 +94,8 @@ namespace PlaybackSoundSwitch.Device
         /// <returns>Property key</returns>
         private PropertyKey Get(uint index)
         {
-            Marshal.ThrowExceptionForHR(_storeInterface.GetAt(index, out var key));
+            PropertyKey key;
+            Marshal.ThrowExceptionForHR(_storeInterface.GetAt(index, out key));
             return key;
         }
 
@@ -103,7 +107,8 @@ namespace PlaybackSoundSwitch.Device
         public PropVariant GetValue(uint index)
         {
             PropertyKey key = _propertyKeys[index];
-            Marshal.ThrowExceptionForHR(_storeInterface.GetValue(ref key, out var result));
+            PropVariant result;
+            Marshal.ThrowExceptionForHR(_storeInterface.GetValue(ref key, out result));
             return result;
         }
 

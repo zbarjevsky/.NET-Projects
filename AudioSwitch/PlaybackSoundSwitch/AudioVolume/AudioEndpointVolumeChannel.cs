@@ -40,8 +40,8 @@ namespace PlaybackSoundSwitch.Audio
         /// </summary>
         public Guid NotificationGuid
         {
-            get => notificationGuid;
-            set => notificationGuid = value;
+            get { return notificationGuid; }
+            set { notificationGuid = value; }
         }
 
         internal AudioEndpointVolumeChannel(IAudioEndpointVolume parent, int channel)
@@ -57,8 +57,9 @@ namespace PlaybackSoundSwitch.Audio
         {
             get
             {
-                Marshal.ThrowExceptionForHR(audioEndpointVolume.GetChannelVolumeLevel(channel,out var result));
-                return result;
+                float level;
+                Marshal.ThrowExceptionForHR(audioEndpointVolume.GetChannelVolumeLevel(channel, out level));
+                return level;
             }
             set
             {
@@ -73,7 +74,8 @@ namespace PlaybackSoundSwitch.Audio
         {
             get
             {
-                Marshal.ThrowExceptionForHR(audioEndpointVolume.GetChannelVolumeLevelScalar(channel, out var result));
+                float result;
+                Marshal.ThrowExceptionForHR(audioEndpointVolume.GetChannelVolumeLevelScalar(channel, out result));
                 return result;
             }
             set
