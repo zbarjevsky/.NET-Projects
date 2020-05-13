@@ -66,7 +66,7 @@ namespace MZ.Utils
         }
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        private static extern IntPtr SendMessage(IntPtr hWnd, UInt32 Msg, IntPtr wParam, IntPtr lParam);
+        public static extern IntPtr SendMessage(IntPtr hWnd, uint msg, uint wParam, uint lParam);
         [DllImport("user32.dll")]
         public static extern IntPtr GetWindowRect(IntPtr hWnd, out RECT rect);
         [DllImport("user32.dll")]
@@ -83,10 +83,24 @@ namespace MZ.Utils
         [DllImport("User32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool PrintWindow(IntPtr hwnd, IntPtr hDC, uint nFlags);
+        //[DllImport("user32.dll")]
+        //public static extern IntPtr GetWindowThreadProcessId([In] IntPtr hWnd, [Out] out uint ProcessId);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetForegroundWindow();
+
+        internal delegate void WinEventDelegate(IntPtr hWinEventHook, uint eventType, IntPtr hwnd, int idObject, int idChild, uint dwEventThread, uint dwmsEventTime);
+
+        //[DllImport("user32.dll")]
+        //public static extern IntPtr SetWinEventHook(uint eventMin, uint eventMax, IntPtr hmodWinEventProc, WinEventDelegate lpfnWinEventProc, uint idProcess, uint idThread, uint dwFlags);
+
+        internal const uint WINEVENT_OUTOFCONTEXT = 0;
+        internal const uint EVENT_SYSTEM_FOREGROUND = 0x0003;
+        internal const uint EVENT_SYSTEM_MINIMIZEEND = 0x0017;
 
         public static void CloseWindow(IntPtr hwnd)
         {
-            SendMessage(hwnd, WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
+            SendMessage(hwnd, WM_CLOSE, 0, 0);
         }
 
         public static void MinimizeWindow(IntPtr hWnd)
@@ -182,6 +196,17 @@ namespace MZ.Utils
             else
             {
                 ShowWindow(handle, (int)SW_SHOWNOACTIVATE);// SW_RESTORE);
+            }
+        }
+
+        public static uint ForegroundProcessId
+        {
+            get
+            {
+                var activeWindowHandle = GetForegroundWindow();
+                uint processId;
+                GetWindowThreadProcessId(activeWindowHandle, out processId);
+                return processId;
             }
         }
 

@@ -87,7 +87,6 @@
     <Compile Include="ComObjects\IMMDeviceEnumerator.cs" />
     <Compile Include="ComObjects\MMDeviceEnumeratorComObject.cs" />
     <Compile Include="ComObjects\Role.cs" />
-    <Compile Include="ComObjects\User32.cs" />
     <Compile Include="DeviceInfo\AudioMeterInformation.cs" />
     <Compile Include="DeviceInfo\AudioMeterInformationChannels.cs" />
     <Compile Include="DeviceInfo\IAudioMeterInformation.cs" />

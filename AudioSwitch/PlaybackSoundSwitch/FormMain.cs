@@ -78,6 +78,13 @@ namespace PlaybackSoundSwitch
                 return;
 
             float peak = _activeMic.AudioMeterInformation.MasterPeakValue * 100f;
+            //if(peak < 30)
+            //    m_progrLevels.SetColorGreen();
+            //else if (peak >= 30 && peak <= 80)
+                m_progrLevels.SetColorYellow();
+            //else if (peak > 80)
+            //    m_progrLevels.SetColorRed();
+
             m_progrLevels.Value = (int)peak;
             //Debug.WriteLine("Mic Level: " + peak);
         }

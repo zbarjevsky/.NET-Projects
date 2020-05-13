@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using MZ.Utils;
 using PlaybackSoundSwitch.ComObjects;
 using PlaybackSoundSwitch.Device;
 
