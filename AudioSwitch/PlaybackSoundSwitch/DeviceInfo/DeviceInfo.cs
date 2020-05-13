@@ -9,6 +9,7 @@ namespace PlaybackSoundSwitch.Device
         public string FriendlyName { get; }
         public string Id { get; }
         public EDataFlow DeviceType { get; }
+        public MMDevice Device { get; }
 
         //[JsonConstructor]
         public DeviceInfo(string name, string id, EDataFlow type)
@@ -22,6 +23,7 @@ namespace PlaybackSoundSwitch.Device
         {
             try
             {
+                Device = device;
                 Id = device.ID;
                 DeviceType = device.DataFlow;
                 Name = device.DeviceFriendlyName;

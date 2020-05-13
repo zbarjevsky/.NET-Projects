@@ -43,6 +43,34 @@ namespace PlaybackSoundSwitch
             _notificationClient = new MMNotificationClient(this);
         }
 
+        public static IReadOnlyCollection<DeviceFullInfo> CreateDeviceList(MMDeviceCollection collection)
+        {
+            var sortedDevices = new List<DeviceFullInfo>();
+            foreach (var device in collection)
+            {
+                try
+                {
+                    MMDevice d = new MMDevice(device);
+                    var deviceInfo = new DeviceFullInfo(d);
+                    if (string.IsNullOrEmpty(deviceInfo.Name))
+                    {
+                        continue;
+                    }
+
+                    sortedDevices.Add(deviceInfo);
+                }
+                catch (Exception e)
+                {
+                    string id;
+                    device.GetId(out id);
+                    MZ.Tools.Trace.Debug("Can't get name of device {0}", id);
+                    //throw;
+                }
+            }
+
+            return sortedDevices.OrderBy(dev => dev.Name).ThenBy(dev => dev.FriendlyName).ToArray();
+        }
+
         /// <summary>
         /// Enumerate Audio Endpoints
         /// </summary>
