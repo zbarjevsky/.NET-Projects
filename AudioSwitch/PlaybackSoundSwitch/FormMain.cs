@@ -58,8 +58,11 @@ namespace PlaybackSoundSwitch
 
         private void FormMain_Load(object sender, EventArgs e)
         {
-            m_progrLevels.Value = 0;
-            m_progrLevels.SetColorYellow();
+            m_progrLevelsMic.Value = 0;
+            m_progrLevelsMic.SetColorYellow();
+
+            m_progrLevelSpk.Value = 0;
+            m_progrLevelSpk.SetColorGreen();
 
             EnumDevices("Loaded");
         }
@@ -71,20 +74,20 @@ namespace PlaybackSoundSwitch
 
         private void m_timer_Tick(object sender, EventArgs e)
         {
-            MMDevice activeMic = m_DeviceListRecording.ActiveDevice;
-            if (activeMic == null || activeMic.State != EDeviceState.Active)
+            UpdatePeakLevel(m_progrLevelSpk, m_DeviceListPlayback.ActiveDevice);
+            UpdatePeakLevel(m_progrLevelsMic, m_DeviceListRecording.ActiveDevice);
+        }
+
+        private void UpdatePeakLevel(ProgressBar progr, MMDevice dev)
+        {
+            if (dev == null || dev.State != EDeviceState.Active)
+            {
+                progr.Value = 0;
                 return;
+            }
 
-            float peak = activeMic.AudioMeterInformation.MasterPeakValue * 100f;
-            //if(peak < 30)
-            //    m_progrLevels.SetColorGreen();
-            //else if (peak >= 30 && peak <= 80)
-                m_progrLevels.SetColorYellow();
-            //else if (peak > 80)
-            //    m_progrLevels.SetColorRed();
-
-            m_progrLevels.Value = (int)peak;
-            //Debug.WriteLine("Mic Level: " + peak);
+            float peak = dev.AudioMeterInformation.MasterPeakValue * 100f;
+            progr.Value = (int)peak;
         }
 
         private void OnDevicesChanged(MMDevice device, object additionalData = null)
@@ -129,8 +132,6 @@ namespace PlaybackSoundSwitch
             {
                 try
                 {
-                    m_status1.Text = status.Trim();
-
                     if (_isEnumerating)
                         return;
                     _isEnumerating = true;
@@ -161,7 +162,6 @@ namespace PlaybackSoundSwitch
                     UpdateTaskbarButtons();
 
                     m_trackVolume.Value = (int)(100f * m_DeviceListPlayback.ActiveDevice.AudioEndpointVolume.MasterVolumeLevelScalar);
-                    UpdateUI(null);
                 }
                 catch (Exception err)
                 {
@@ -169,6 +169,7 @@ namespace PlaybackSoundSwitch
                     MessageBox.Show(err.Message, "Enum Devices", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 }
 
+                UpdateUI(status);
                 this.Cursor = Cursors.Arrow;
                 //m_btnRefresh.Enabled = true;
                 _isEnumerating = false;

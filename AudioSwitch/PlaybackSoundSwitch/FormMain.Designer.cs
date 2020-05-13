@@ -36,8 +36,6 @@
             this.m_status2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.m_imageListMic = new System.Windows.Forms.ImageList(this.components);
             this.m_pnlMain = new System.Windows.Forms.Panel();
-            this.m_timer = new System.Windows.Forms.Timer(this.components);
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.m_tabDevices = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -45,12 +43,15 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.m_DeviceListRecording = new PlaybackSoundSwitch.MediaDeviceListUserControl();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.m_progrLevels = new MZ.Controls.VerticalProgressBar();
+            this.m_progrLevelsMic = new MZ.Controls.VerticalProgressBar();
             this.m_btnMicMute = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.m_progrLevelSpk = new MZ.Controls.VerticalProgressBar();
             this.m_btnMute = new System.Windows.Forms.Button();
             this.m_trackVolume = new System.Windows.Forms.TrackBar();
             this.m_txtLog = new System.Windows.Forms.RichTextBox();
+            this.m_timer = new System.Windows.Forms.Timer(this.components);
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.statusStrip1.SuspendLayout();
             this.m_pnlMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
@@ -113,11 +114,6 @@
             this.m_pnlMain.Size = new System.Drawing.Size(717, 414);
             this.m_pnlMain.TabIndex = 7;
             // 
-            // m_timer
-            // 
-            this.m_timer.Enabled = true;
-            this.m_timer.Tick += new System.EventHandler(this.m_timer_Tick);
-            // 
             // splitContainer1
             // 
             this.splitContainer1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -178,7 +174,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(554, 342);
+            this.tabPage2.Size = new System.Drawing.Size(568, 342);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Recording Devices";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -188,14 +184,14 @@
             this.m_DeviceListRecording.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_DeviceListRecording.Location = new System.Drawing.Point(3, 3);
             this.m_DeviceListRecording.Name = "m_DeviceListRecording";
-            this.m_DeviceListRecording.Size = new System.Drawing.Size(548, 336);
+            this.m_DeviceListRecording.Size = new System.Drawing.Size(562, 336);
             this.m_DeviceListRecording.TabIndex = 0;
             // 
             // groupBox2
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this.m_progrLevels);
+            this.groupBox2.Controls.Add(this.m_progrLevelsMic);
             this.groupBox2.Controls.Add(this.m_btnMicMute);
             this.groupBox2.Location = new System.Drawing.Point(654, 11);
             this.groupBox2.MaximumSize = new System.Drawing.Size(57, 400);
@@ -205,16 +201,16 @@
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "  Mic Level";
             // 
-            // m_progrLevels
+            // m_progrLevelsMic
             // 
-            this.m_progrLevels.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.m_progrLevelsMic.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_progrLevels.Location = new System.Drawing.Point(17, 44);
-            this.m_progrLevels.Name = "m_progrLevels";
-            this.m_progrLevels.Size = new System.Drawing.Size(17, 255);
-            this.m_progrLevels.TabIndex = 5;
-            this.m_progrLevels.Value = 10;
+            this.m_progrLevelsMic.Location = new System.Drawing.Point(40, 45);
+            this.m_progrLevelsMic.Name = "m_progrLevelsMic";
+            this.m_progrLevelsMic.Size = new System.Drawing.Size(9, 255);
+            this.m_progrLevelsMic.TabIndex = 5;
+            this.m_progrLevelsMic.Value = 10;
             // 
             // m_btnMicMute
             // 
@@ -234,6 +230,7 @@
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.m_progrLevelSpk);
             this.groupBox1.Controls.Add(this.m_btnMute);
             this.groupBox1.Controls.Add(this.m_trackVolume);
             this.groupBox1.Location = new System.Drawing.Point(589, 11);
@@ -243,6 +240,17 @@
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Volume";
+            // 
+            // m_progrLevelSpk
+            // 
+            this.m_progrLevelSpk.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_progrLevelSpk.Location = new System.Drawing.Point(40, 45);
+            this.m_progrLevelSpk.Name = "m_progrLevelSpk";
+            this.m_progrLevelSpk.Size = new System.Drawing.Size(10, 255);
+            this.m_progrLevelSpk.TabIndex = 6;
+            this.m_progrLevelSpk.Value = 10;
             // 
             // m_btnMute
             // 
@@ -283,6 +291,11 @@
             this.m_txtLog.Size = new System.Drawing.Size(715, 32);
             this.m_txtLog.TabIndex = 0;
             this.m_txtLog.Text = "";
+            // 
+            // m_timer
+            // 
+            this.m_timer.Enabled = true;
+            this.m_timer.Tick += new System.EventHandler(this.m_timer_Tick);
             // 
             // FormMain
             // 
@@ -331,7 +344,7 @@
         private System.Windows.Forms.Panel m_pnlMain;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Button m_btnMicMute;
-        private MZ.Controls.VerticalProgressBar m_progrLevels;
+        private MZ.Controls.VerticalProgressBar m_progrLevelsMic;
         private System.Windows.Forms.Timer m_timer;
         private System.Windows.Forms.ImageList m_imageListMic;
         private System.Windows.Forms.ToolTip toolTip1;
@@ -340,6 +353,7 @@
         private System.Windows.Forms.TabPage tabPage2;
         private MediaDeviceListUserControl m_DeviceListPlayback;
         private MediaDeviceListUserControl m_DeviceListRecording;
+        private MZ.Controls.VerticalProgressBar m_progrLevelSpk;
     }
 }
 
