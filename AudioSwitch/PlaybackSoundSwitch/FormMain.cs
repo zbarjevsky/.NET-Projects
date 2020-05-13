@@ -219,9 +219,6 @@ namespace PlaybackSoundSwitch
 
             //MMDeviceCollection micList = _mmd.EnumerateAudioEndPoints(EDataFlow.Capture, DeviceState.Active);
             _activeMic = _mmd.GetDefaultAudioEndpoint(EDataFlow.Capture, Role.Multimedia);
-            m_btnMicMute.ImageIndex = _activeMic.AudioEndpointVolume.Mute ? 1 : 0;
-
-            this.Text = _activeDevice.FriendlyName + " - " + TITLE;
 
             AlternateColorTool altenateColor = new AlternateColorTool();
 
@@ -302,19 +299,27 @@ namespace PlaybackSoundSwitch
         private void m_btnMute_Click(object sender, EventArgs e)
         {
             _activeDevice.AudioEndpointVolume.Mute = !_activeDevice.AudioEndpointVolume.Mute;
-            UpdateUI("Mute");
+            UpdateUI("Mute: "+_activeDevice.FriendlyName);
         }
 
         private void m_btnMicMute_Click(object sender, EventArgs e)
         {
             _activeMic.AudioEndpointVolume.Mute = !_activeMic.AudioEndpointVolume.Mute;
-            m_btnMicMute.ImageIndex = _activeMic.AudioEndpointVolume.Mute ? 1 : 0;
+            UpdateUI("MicMute: "+_activeMic.FriendlyName);
         }
 
         private void UpdateUI(string status)
         {
             if(status != null)
                 m_status1.Text = status;
+
+            this.Text = _activeDevice.FriendlyName + " - " + TITLE;
+
+            string mute = _activeDevice.AudioEndpointVolume.Mute ? "Muted: " : "Mute: ";
+            toolTip1.SetToolTip(m_btnMute, mute + _activeDevice.FriendlyName);
+            
+            mute = _activeMic.AudioEndpointVolume.Mute ? "Muted: " : "Mute: ";
+            toolTip1.SetToolTip(m_btnMicMute, mute + _activeMic.FriendlyName);
 
             float volume = m_trackVolume.Value / 100f;
             foreach (ListViewItem item in m_listDevices.Items)
@@ -328,6 +333,8 @@ namespace PlaybackSoundSwitch
                     item.SubItems[2].Text = "---";
                 }
             }
+
+            m_btnMicMute.ImageIndex = _activeMic.AudioEndpointVolume.Mute ? 1 : 0;
 
             if (volume >= 0.7)
                 m_btnMute.ImageIndex = 0;

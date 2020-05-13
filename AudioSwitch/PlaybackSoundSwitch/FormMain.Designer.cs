@@ -44,17 +44,18 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.m_btnMicMute = new System.Windows.Forms.Button();
-            this.m_btnRefresh = new System.Windows.Forms.Button();
-            this.m_txtLog = new System.Windows.Forms.RichTextBox();
-            this.m_pnlMain = new System.Windows.Forms.Panel();
-            this.m_timer = new System.Windows.Forms.Timer(this.components);
-            this.m_imageListMic = new System.Windows.Forms.ImageList(this.components);
             this.m_progrLevels = new MZ.Controls.VerticalProgressBar();
+            this.m_btnMicMute = new System.Windows.Forms.Button();
+            this.m_imageListMic = new System.Windows.Forms.ImageList(this.components);
             this.m_listDevices = new ListViewExtensions.ListViewCollapsibleGroups();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.m_btnRefresh = new System.Windows.Forms.Button();
+            this.m_txtLog = new System.Windows.Forms.RichTextBox();
+            this.m_pnlMain = new System.Windows.Forms.Panel();
+            this.m_timer = new System.Windows.Forms.Timer(this.components);
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.m_trackVolume)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -189,7 +190,18 @@
             this.groupBox2.Size = new System.Drawing.Size(57, 284);
             this.groupBox2.TabIndex = 7;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Levels";
+            this.groupBox2.Text = "  Mic Level";
+            // 
+            // m_progrLevels
+            // 
+            this.m_progrLevels.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_progrLevels.Location = new System.Drawing.Point(17, 44);
+            this.m_progrLevels.Name = "m_progrLevels";
+            this.m_progrLevels.Size = new System.Drawing.Size(17, 176);
+            this.m_progrLevels.TabIndex = 5;
+            this.m_progrLevels.Value = 50;
             // 
             // m_btnMicMute
             // 
@@ -201,46 +213,9 @@
             this.m_btnMicMute.Size = new System.Drawing.Size(48, 43);
             this.m_btnMicMute.TabIndex = 4;
             this.m_btnMicMute.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip1.SetToolTip(this.m_btnMicMute, "Mute/Unmute Default Microphone");
             this.m_btnMicMute.UseVisualStyleBackColor = true;
             this.m_btnMicMute.Click += new System.EventHandler(this.m_btnMicMute_Click);
-            // 
-            // m_btnRefresh
-            // 
-            this.m_btnRefresh.Image = global::PlaybackSoundSwitch.Properties.Resources.Refresh21;
-            this.m_btnRefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnRefresh.Location = new System.Drawing.Point(8, 16);
-            this.m_btnRefresh.Name = "m_btnRefresh";
-            this.m_btnRefresh.Size = new System.Drawing.Size(90, 25);
-            this.m_btnRefresh.TabIndex = 0;
-            this.m_btnRefresh.Text = "Refresh";
-            this.m_btnRefresh.UseVisualStyleBackColor = true;
-            this.m_btnRefresh.Click += new System.EventHandler(this.m_btnRefresh_Click);
-            // 
-            // m_txtLog
-            // 
-            this.m_txtLog.BackColor = System.Drawing.SystemColors.Info;
-            this.m_txtLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.m_txtLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_txtLog.Location = new System.Drawing.Point(0, 0);
-            this.m_txtLog.Name = "m_txtLog";
-            this.m_txtLog.Size = new System.Drawing.Size(701, 23);
-            this.m_txtLog.TabIndex = 0;
-            this.m_txtLog.Text = "";
-            // 
-            // m_pnlMain
-            // 
-            this.m_pnlMain.AutoScroll = true;
-            this.m_pnlMain.Controls.Add(this.splitContainer1);
-            this.m_pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_pnlMain.Location = new System.Drawing.Point(0, 0);
-            this.m_pnlMain.Name = "m_pnlMain";
-            this.m_pnlMain.Size = new System.Drawing.Size(703, 328);
-            this.m_pnlMain.TabIndex = 7;
-            // 
-            // m_timer
-            // 
-            this.m_timer.Enabled = true;
-            this.m_timer.Tick += new System.EventHandler(this.m_timer_Tick);
             // 
             // m_imageListMic
             // 
@@ -248,17 +223,6 @@
             this.m_imageListMic.TransparentColor = System.Drawing.Color.Transparent;
             this.m_imageListMic.Images.SetKeyName(0, "Mic1.png");
             this.m_imageListMic.Images.SetKeyName(1, "MicMute1.png");
-            // 
-            // m_progrLevels
-            // 
-            this.m_progrLevels.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_progrLevels.Location = new System.Drawing.Point(17, 45);
-            this.m_progrLevels.Name = "m_progrLevels";
-            this.m_progrLevels.Size = new System.Drawing.Size(17, 174);
-            this.m_progrLevels.TabIndex = 5;
-            this.m_progrLevels.Value = 50;
             // 
             // m_listDevices
             // 
@@ -315,6 +279,44 @@
             this.columnHeader3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.columnHeader3.Width = 73;
             // 
+            // m_btnRefresh
+            // 
+            this.m_btnRefresh.Image = global::PlaybackSoundSwitch.Properties.Resources.Refresh21;
+            this.m_btnRefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.m_btnRefresh.Location = new System.Drawing.Point(8, 16);
+            this.m_btnRefresh.Name = "m_btnRefresh";
+            this.m_btnRefresh.Size = new System.Drawing.Size(90, 25);
+            this.m_btnRefresh.TabIndex = 0;
+            this.m_btnRefresh.Text = "Refresh";
+            this.m_btnRefresh.UseVisualStyleBackColor = true;
+            this.m_btnRefresh.Click += new System.EventHandler(this.m_btnRefresh_Click);
+            // 
+            // m_txtLog
+            // 
+            this.m_txtLog.BackColor = System.Drawing.SystemColors.Info;
+            this.m_txtLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.m_txtLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_txtLog.Location = new System.Drawing.Point(0, 0);
+            this.m_txtLog.Name = "m_txtLog";
+            this.m_txtLog.Size = new System.Drawing.Size(701, 23);
+            this.m_txtLog.TabIndex = 0;
+            this.m_txtLog.Text = "";
+            // 
+            // m_pnlMain
+            // 
+            this.m_pnlMain.AutoScroll = true;
+            this.m_pnlMain.Controls.Add(this.splitContainer1);
+            this.m_pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_pnlMain.Location = new System.Drawing.Point(0, 0);
+            this.m_pnlMain.Name = "m_pnlMain";
+            this.m_pnlMain.Size = new System.Drawing.Size(703, 328);
+            this.m_pnlMain.TabIndex = 7;
+            // 
+            // m_timer
+            // 
+            this.m_timer.Enabled = true;
+            this.m_timer.Tick += new System.EventHandler(this.m_timer_Tick);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -369,6 +371,7 @@
         private MZ.Controls.VerticalProgressBar m_progrLevels;
         private System.Windows.Forms.Timer m_timer;
         private System.Windows.Forms.ImageList m_imageListMic;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }
 
