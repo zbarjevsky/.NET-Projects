@@ -150,6 +150,12 @@
     <Compile Include="Tools\VerticalProgressBar.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="VolumeUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="VolumeUserControl.Designer.cs">
+      <DependentUpon>VolumeUserControl.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>
@@ -166,6 +172,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="VolumeUserControl.resx">
+      <DependentUpon>VolumeUserControl.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

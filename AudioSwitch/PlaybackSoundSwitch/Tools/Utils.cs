@@ -12,7 +12,7 @@ namespace PlaybackSoundSwitch.Tools
 {
     public static class CommonUtils
     {
-        public static void ExecuteOnUIThread(Action action, Form owner)
+        public static void ExecuteOnUIThread(Action action, Control owner)
         {
             owner.BeginInvoke(action);
         }

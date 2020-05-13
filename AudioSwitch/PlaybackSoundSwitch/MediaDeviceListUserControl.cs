@@ -131,11 +131,14 @@ namespace PlaybackSoundSwitch
             UpdateUI(null);
         }
 
-        private void UpdateUI(string status)
+        public void UpdateActiveDeviceVolume(float volume)
         {
-            UpdateStatus(status);
+            if (ActiveDevice == null)
+                return;
 
-            float volume = ActiveDevice.AudioEndpointVolume.MasterVolumeLevelScalar;
+            if(volume == 0)
+                volume = ActiveDevice.AudioEndpointVolume.MasterVolumeLevelScalar;
+
             foreach (ListViewItem item in m_listDevices.Items)
             {
                 if (item.Font.Bold)
@@ -147,6 +150,13 @@ namespace PlaybackSoundSwitch
                     item.SubItems[2].Text = "---";
                 }
             }
+        }
+
+        private void UpdateUI(string status)
+        {
+            UpdateStatus(status);
+
+            UpdateActiveDeviceVolume(0);
 
             if (m_listDevices.SelectedItems.Count > 0)
             {
