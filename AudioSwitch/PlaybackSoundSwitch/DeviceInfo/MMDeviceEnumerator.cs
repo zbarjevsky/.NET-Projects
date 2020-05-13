@@ -77,11 +77,11 @@ namespace PlaybackSoundSwitch
         /// <param name="dataFlow">Desired DataFlow</param>
         /// <param name="dwStateMask">State Mask</param>
         /// <returns>Device Collection</returns>
-        public MMDeviceCollection EnumerateAudioEndPoints(EDataFlow dataFlow, DeviceState dwStateMask)
+        public IReadOnlyCollection<DeviceFullInfo> EnumerateAudioEndPoints(EDataFlow dataFlow, DeviceState dwStateMask)
         {
             IMMDeviceCollection result;
             Marshal.ThrowExceptionForHR(_realEnumerator.EnumAudioEndpoints(dataFlow, dwStateMask, out result));
-            return new MMDeviceCollection(result);
+            return CreateDeviceList(new MMDeviceCollection(result));
         }
 
         /// <summary>

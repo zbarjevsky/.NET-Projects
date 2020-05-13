@@ -31,29 +31,28 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.m_imageListSpeakers = new System.Windows.Forms.ImageList(this.components);
-            this.m_trackVolume = new System.Windows.Forms.TrackBar();
-            this.m_btnMute = new System.Windows.Forms.Button();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.m_status1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.m_status2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.m_imageListMic = new System.Windows.Forms.ImageList(this.components);
+            this.m_pnlMain = new System.Windows.Forms.Panel();
+            this.m_timer = new System.Windows.Forms.Timer(this.components);
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.m_tabDevices = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.m_DeviceListPlayback = new PlaybackSoundSwitch.MediaDeviceListUserControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.m_DeviceListRecording = new PlaybackSoundSwitch.MediaDeviceListUserControl();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.m_progrLevels = new MZ.Controls.VerticalProgressBar();
             this.m_btnMicMute = new System.Windows.Forms.Button();
-            this.m_imageListMic = new System.Windows.Forms.ImageList(this.components);
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.m_btnMute = new System.Windows.Forms.Button();
+            this.m_trackVolume = new System.Windows.Forms.TrackBar();
             this.m_txtLog = new System.Windows.Forms.RichTextBox();
-            this.m_pnlMain = new System.Windows.Forms.Panel();
-            this.m_timer = new System.Windows.Forms.Timer(this.components);
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.m_DeviceListRecording = new PlaybackSoundSwitch.MediaDeviceListUserControl();
-            ((System.ComponentModel.ISupportInitialize)(this.m_trackVolume)).BeginInit();
             this.statusStrip1.SuspendLayout();
-            this.groupBox1.SuspendLayout();
+            this.m_pnlMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -62,7 +61,8 @@
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.groupBox2.SuspendLayout();
-            this.m_pnlMain.SuspendLayout();
+            this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.m_trackVolume)).BeginInit();
             this.SuspendLayout();
             // 
             // m_imageListSpeakers
@@ -71,44 +71,15 @@
             this.m_imageListSpeakers.TransparentColor = System.Drawing.Color.Transparent;
             this.m_imageListSpeakers.Images.SetKeyName(0, "Speaker5_16x16.png");
             // 
-            // m_trackVolume
-            // 
-            this.m_trackVolume.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_trackVolume.LargeChange = 10;
-            this.m_trackVolume.Location = new System.Drawing.Point(7, 37);
-            this.m_trackVolume.Maximum = 100;
-            this.m_trackVolume.MinimumSize = new System.Drawing.Size(45, 80);
-            this.m_trackVolume.Name = "m_trackVolume";
-            this.m_trackVolume.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.m_trackVolume.Size = new System.Drawing.Size(45, 225);
-            this.m_trackVolume.TabIndex = 3;
-            this.m_trackVolume.TickFrequency = 10;
-            this.m_trackVolume.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
-            this.m_trackVolume.Scroll += new System.EventHandler(this.m_trackVolume_Scroll);
-            this.m_trackVolume.ValueChanged += new System.EventHandler(this.m_trackVolume_ValueChanged);
-            // 
-            // m_btnMute
-            // 
-            this.m_btnMute.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnMute.ImageList = this.m_imageListSpeakers;
-            this.m_btnMute.Location = new System.Drawing.Point(4, 268);
-            this.m_btnMute.Name = "m_btnMute";
-            this.m_btnMute.Size = new System.Drawing.Size(48, 43);
-            this.m_btnMute.TabIndex = 4;
-            this.m_btnMute.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.m_btnMute.UseVisualStyleBackColor = true;
-            this.m_btnMute.Click += new System.EventHandler(this.m_btnMute_Click);
-            // 
             // statusStrip1
             // 
             this.statusStrip1.BackColor = System.Drawing.SystemColors.Control;
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_status1,
             this.m_status2});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 363);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 414);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(703, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(717, 22);
             this.statusStrip1.TabIndex = 5;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -121,23 +92,31 @@
             // m_status2
             // 
             this.m_status2.Name = "m_status2";
-            this.m_status2.Size = new System.Drawing.Size(649, 17);
+            this.m_status2.Size = new System.Drawing.Size(663, 17);
             this.m_status2.Spring = true;
             this.m_status2.Text = "...";
             // 
-            // groupBox1
+            // m_imageListMic
             // 
-            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.m_btnMute);
-            this.groupBox1.Controls.Add(this.m_trackVolume);
-            this.groupBox1.Location = new System.Drawing.Point(575, 11);
-            this.groupBox1.MaximumSize = new System.Drawing.Size(57, 400);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(57, 317);
-            this.groupBox1.TabIndex = 6;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Volume";
+            this.m_imageListMic.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_imageListMic.ImageStream")));
+            this.m_imageListMic.TransparentColor = System.Drawing.Color.Transparent;
+            this.m_imageListMic.Images.SetKeyName(0, "Mic1.png");
+            this.m_imageListMic.Images.SetKeyName(1, "MicMute1.png");
+            // 
+            // m_pnlMain
+            // 
+            this.m_pnlMain.AutoScroll = true;
+            this.m_pnlMain.Controls.Add(this.splitContainer1);
+            this.m_pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_pnlMain.Location = new System.Drawing.Point(0, 0);
+            this.m_pnlMain.Name = "m_pnlMain";
+            this.m_pnlMain.Size = new System.Drawing.Size(717, 414);
+            this.m_pnlMain.TabIndex = 7;
+            // 
+            // m_timer
+            // 
+            this.m_timer.Enabled = true;
+            this.m_timer.Tick += new System.EventHandler(this.m_timer_Tick);
             // 
             // splitContainer1
             // 
@@ -157,8 +136,8 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.m_txtLog);
             this.splitContainer1.Panel2MinSize = 1;
-            this.splitContainer1.Size = new System.Drawing.Size(703, 363);
-            this.splitContainer1.SplitterDistance = 330;
+            this.splitContainer1.Size = new System.Drawing.Size(717, 414);
+            this.splitContainer1.SplitterDistance = 376;
             this.splitContainer1.TabIndex = 7;
             // 
             // m_tabDevices
@@ -171,7 +150,7 @@
             this.m_tabDevices.Location = new System.Drawing.Point(2, 3);
             this.m_tabDevices.Name = "m_tabDevices";
             this.m_tabDevices.SelectedIndex = 0;
-            this.m_tabDevices.Size = new System.Drawing.Size(562, 322);
+            this.m_tabDevices.Size = new System.Drawing.Size(576, 368);
             this.m_tabDevices.TabIndex = 8;
             // 
             // tabPage1
@@ -180,7 +159,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(554, 296);
+            this.tabPage1.Size = new System.Drawing.Size(568, 342);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Playback Devices";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -190,7 +169,7 @@
             this.m_DeviceListPlayback.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_DeviceListPlayback.Location = new System.Drawing.Point(3, 3);
             this.m_DeviceListPlayback.Name = "m_DeviceListPlayback";
-            this.m_DeviceListPlayback.Size = new System.Drawing.Size(548, 290);
+            this.m_DeviceListPlayback.Size = new System.Drawing.Size(562, 336);
             this.m_DeviceListPlayback.TabIndex = 0;
             // 
             // tabPage2
@@ -199,10 +178,18 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(554, 296);
+            this.tabPage2.Size = new System.Drawing.Size(554, 342);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Recording Devices";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // m_DeviceListRecording
+            // 
+            this.m_DeviceListRecording.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_DeviceListRecording.Location = new System.Drawing.Point(3, 3);
+            this.m_DeviceListRecording.Name = "m_DeviceListRecording";
+            this.m_DeviceListRecording.Size = new System.Drawing.Size(548, 336);
+            this.m_DeviceListRecording.TabIndex = 0;
             // 
             // groupBox2
             // 
@@ -210,10 +197,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox2.Controls.Add(this.m_progrLevels);
             this.groupBox2.Controls.Add(this.m_btnMicMute);
-            this.groupBox2.Location = new System.Drawing.Point(640, 11);
+            this.groupBox2.Location = new System.Drawing.Point(654, 11);
             this.groupBox2.MaximumSize = new System.Drawing.Size(57, 400);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(57, 317);
+            this.groupBox2.Size = new System.Drawing.Size(57, 363);
             this.groupBox2.TabIndex = 7;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "  Mic Level";
@@ -225,16 +212,16 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_progrLevels.Location = new System.Drawing.Point(17, 44);
             this.m_progrLevels.Name = "m_progrLevels";
-            this.m_progrLevels.Size = new System.Drawing.Size(17, 209);
+            this.m_progrLevels.Size = new System.Drawing.Size(17, 255);
             this.m_progrLevels.TabIndex = 5;
-            this.m_progrLevels.Value = 50;
+            this.m_progrLevels.Value = 10;
             // 
             // m_btnMicMute
             // 
             this.m_btnMicMute.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnMicMute.ImageIndex = 0;
             this.m_btnMicMute.ImageList = this.m_imageListMic;
-            this.m_btnMicMute.Location = new System.Drawing.Point(4, 268);
+            this.m_btnMicMute.Location = new System.Drawing.Point(4, 314);
             this.m_btnMicMute.Name = "m_btnMicMute";
             this.m_btnMicMute.Size = new System.Drawing.Size(48, 43);
             this.m_btnMicMute.TabIndex = 4;
@@ -243,12 +230,48 @@
             this.m_btnMicMute.UseVisualStyleBackColor = true;
             this.m_btnMicMute.Click += new System.EventHandler(this.m_btnMicMute_Click);
             // 
-            // m_imageListMic
+            // groupBox1
             // 
-            this.m_imageListMic.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_imageListMic.ImageStream")));
-            this.m_imageListMic.TransparentColor = System.Drawing.Color.Transparent;
-            this.m_imageListMic.Images.SetKeyName(0, "Mic1.png");
-            this.m_imageListMic.Images.SetKeyName(1, "MicMute1.png");
+            this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.m_btnMute);
+            this.groupBox1.Controls.Add(this.m_trackVolume);
+            this.groupBox1.Location = new System.Drawing.Point(589, 11);
+            this.groupBox1.MaximumSize = new System.Drawing.Size(57, 400);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(57, 363);
+            this.groupBox1.TabIndex = 6;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Volume";
+            // 
+            // m_btnMute
+            // 
+            this.m_btnMute.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnMute.ImageList = this.m_imageListSpeakers;
+            this.m_btnMute.Location = new System.Drawing.Point(4, 314);
+            this.m_btnMute.Name = "m_btnMute";
+            this.m_btnMute.Size = new System.Drawing.Size(48, 43);
+            this.m_btnMute.TabIndex = 4;
+            this.m_btnMute.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.m_btnMute.UseVisualStyleBackColor = true;
+            this.m_btnMute.Click += new System.EventHandler(this.m_btnMute_Click);
+            // 
+            // m_trackVolume
+            // 
+            this.m_trackVolume.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_trackVolume.LargeChange = 10;
+            this.m_trackVolume.Location = new System.Drawing.Point(7, 37);
+            this.m_trackVolume.Maximum = 100;
+            this.m_trackVolume.MinimumSize = new System.Drawing.Size(45, 80);
+            this.m_trackVolume.Name = "m_trackVolume";
+            this.m_trackVolume.Orientation = System.Windows.Forms.Orientation.Vertical;
+            this.m_trackVolume.Size = new System.Drawing.Size(45, 271);
+            this.m_trackVolume.TabIndex = 3;
+            this.m_trackVolume.TickFrequency = 10;
+            this.m_trackVolume.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
+            this.m_trackVolume.Scroll += new System.EventHandler(this.m_trackVolume_Scroll);
+            this.m_trackVolume.ValueChanged += new System.EventHandler(this.m_trackVolume_ValueChanged);
             // 
             // m_txtLog
             // 
@@ -257,39 +280,16 @@
             this.m_txtLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_txtLog.Location = new System.Drawing.Point(0, 0);
             this.m_txtLog.Name = "m_txtLog";
-            this.m_txtLog.Size = new System.Drawing.Size(701, 27);
+            this.m_txtLog.Size = new System.Drawing.Size(715, 32);
             this.m_txtLog.TabIndex = 0;
             this.m_txtLog.Text = "";
-            // 
-            // m_pnlMain
-            // 
-            this.m_pnlMain.AutoScroll = true;
-            this.m_pnlMain.Controls.Add(this.splitContainer1);
-            this.m_pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_pnlMain.Location = new System.Drawing.Point(0, 0);
-            this.m_pnlMain.Name = "m_pnlMain";
-            this.m_pnlMain.Size = new System.Drawing.Size(703, 363);
-            this.m_pnlMain.TabIndex = 7;
-            // 
-            // m_timer
-            // 
-            this.m_timer.Enabled = true;
-            this.m_timer.Tick += new System.EventHandler(this.m_timer_Tick);
-            // 
-            // m_DeviceListRecording
-            // 
-            this.m_DeviceListRecording.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_DeviceListRecording.Location = new System.Drawing.Point(3, 3);
-            this.m_DeviceListRecording.Name = "m_DeviceListRecording";
-            this.m_DeviceListRecording.Size = new System.Drawing.Size(548, 290);
-            this.m_DeviceListRecording.TabIndex = 0;
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.ClientSize = new System.Drawing.Size(703, 385);
+            this.ClientSize = new System.Drawing.Size(717, 436);
             this.Controls.Add(this.m_pnlMain);
             this.Controls.Add(this.statusStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -299,11 +299,9 @@
             this.Text = "Select Active Audio End Point";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormMain_FormClosed);
             this.Load += new System.EventHandler(this.FormMain_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.m_trackVolume)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.m_pnlMain.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
@@ -312,7 +310,9 @@
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
-            this.m_pnlMain.ResumeLayout(false);
+            this.groupBox1.ResumeLayout(false);
+            this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.m_trackVolume)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 

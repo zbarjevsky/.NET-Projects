@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Deployment.Application;
 using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
@@ -49,11 +50,17 @@ namespace PlaybackSoundSwitch
             m_DeviceListPlayback.RefreshDeviceList = (status) => { EnumDevices(status); };
             m_DeviceListRecording.RefreshDeviceList = (status) => { EnumDevices(status); };
 
+            m_DeviceListPlayback.UpdateStatus = (status) => { UpdateUI(status); };
+            m_DeviceListRecording.UpdateStatus = (status) => { UpdateUI(status); };
+
             this.Text = TITLE;
         }
 
         private void FormMain_Load(object sender, EventArgs e)
         {
+            m_progrLevels.Value = 0;
+            m_progrLevels.SetColorYellow();
+
             EnumDevices("Loaded");
         }
 
@@ -131,19 +138,17 @@ namespace PlaybackSoundSwitch
                     this.Cursor = Cursors.WaitCursor;
                     //m_btnRefresh.Enabled = false;
 
-                    MMDeviceCollection coll = _mmd.EnumerateAudioEndPoints(EDataFlow.Render, DeviceState.All);
-                    IReadOnlyCollection<DeviceFullInfo> devsPlayback = MMDeviceEnumerator.CreateDeviceList(coll);
+                    IReadOnlyCollection<DeviceFullInfo> devsPlayback = _mmd.EnumerateAudioEndPoints(EDataFlow.Render, DeviceState.All);
 
-                    MMDeviceCollection micList = _mmd.EnumerateAudioEndPoints(EDataFlow.Capture, DeviceState.All);
-                    IReadOnlyCollection<DeviceFullInfo> devsRecording = MMDeviceEnumerator.CreateDeviceList(micList);
+                    IReadOnlyCollection<DeviceFullInfo> devsRecording = _mmd.EnumerateAudioEndPoints(EDataFlow.Capture, DeviceState.All);
 
                     Application.DoEvents();
 
-                    MMDevice activeDevice = _mmd.GetDefaultAudioEndpoint(EDataFlow.Render, Role.Multimedia);
-                    m_DeviceListPlayback.UpdateDeviceList(devsPlayback, new DeviceFullInfo(activeDevice));
+                    MMDevice activeSpk = _mmd.GetDefaultAudioEndpoint(EDataFlow.Render, Role.Multimedia);
+                    m_DeviceListPlayback.UpdateDeviceList(devsPlayback, activeSpk);
 
                     MMDevice activeMic = _mmd.GetDefaultAudioEndpoint(EDataFlow.Capture, Role.Multimedia);
-                    m_DeviceListRecording.UpdateDeviceList(devsRecording, new DeviceFullInfo(activeMic));
+                    m_DeviceListRecording.UpdateDeviceList(devsRecording, activeMic);
                     
                     m_DeviceListPlayback.ActiveDevice.AudioEndpointVolume.OnVolumeNotification = (notificationData) =>
                     {
@@ -181,30 +186,36 @@ namespace PlaybackSoundSwitch
             if(status != null)
                 m_status1.Text = status;
 
-            this.Text = m_DeviceListPlayback.ActiveDevice.FriendlyName + " - " + TITLE;
-
             //microphone
-            string muteMic = m_DeviceListRecording.ActiveDevice.AudioEndpointVolume.Mute ? "Muted: " : "Mute: ";
-            toolTip1.SetToolTip(m_btnMicMute, muteMic + m_DeviceListRecording.ActiveDevice.FriendlyName);
+            if (m_DeviceListRecording.ActiveDevice != null)
+            {
+                string muteMic = m_DeviceListRecording.ActiveDevice.AudioEndpointVolume.Mute ? "Muted: " : "Mute: ";
+                toolTip1.SetToolTip(m_btnMicMute, muteMic + m_DeviceListRecording.ActiveDevice.FriendlyName);
 
-            m_btnMicMute.ImageIndex = m_DeviceListRecording.ActiveDevice.AudioEndpointVolume.Mute ? 1 : 0;
+                m_btnMicMute.ImageIndex = m_DeviceListRecording.ActiveDevice.AudioEndpointVolume.Mute ? 1 : 0;
+            }
 
             //speaker
-            string muteSpk = m_DeviceListPlayback.ActiveDevice.AudioEndpointVolume.Mute ? "Muted: " : "Mute: ";
-            toolTip1.SetToolTip(m_btnMute, muteSpk + m_DeviceListPlayback.ActiveDevice.FriendlyName);
-            
-            float volume = m_DeviceListPlayback.ActiveDevice.AudioEndpointVolume.MasterVolumeLevelScalar;
-            if (volume >= 0.7)
-                m_btnMute.ImageIndex = 0;
-            else if (volume > 0.3 && volume < 0.7)
-                m_btnMute.ImageIndex = 1;
-            else if (volume > 0 && volume <= 0.3)
-                m_btnMute.ImageIndex = 2;
-            else
-                m_btnMute.ImageIndex = 4;
+            if (m_DeviceListPlayback.ActiveDevice != null)
+            {
+                this.Text = m_DeviceListPlayback.ActiveDevice.FriendlyName + " - " + TITLE;
 
-            if (m_DeviceListPlayback.ActiveDevice.AudioEndpointVolume.Mute)
-                m_btnMute.ImageIndex = 3;
+                string muteSpk = m_DeviceListPlayback.ActiveDevice.AudioEndpointVolume.Mute ? "Muted: " : "Mute: ";
+                toolTip1.SetToolTip(m_btnMute, muteSpk + m_DeviceListPlayback.ActiveDevice.FriendlyName);
+
+                float volume = m_DeviceListPlayback.ActiveDevice.AudioEndpointVolume.MasterVolumeLevelScalar;
+                if (volume >= 0.7)
+                    m_btnMute.ImageIndex = 0;
+                else if (volume > 0.3 && volume < 0.7)
+                    m_btnMute.ImageIndex = 1;
+                else if (volume > 0 && volume <= 0.3)
+                    m_btnMute.ImageIndex = 2;
+                else
+                    m_btnMute.ImageIndex = 4;
+
+                if (m_DeviceListPlayback.ActiveDevice.AudioEndpointVolume.Mute)
+                    m_btnMute.ImageIndex = 3;
+            }
         }
 
         public string Log(string format, params object [] parameters)

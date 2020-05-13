@@ -22,30 +22,30 @@ namespace PlaybackSoundSwitch.DeviceSwitch
         /// Attempts to set active device to the specified name
         /// </summary>
         /// <param name="device"></param>
-        public static bool SetActiveDevice(DeviceFullInfo device)
+        public static bool SetActiveDevice(string deviceId, EDataFlow deviceType)
         {
             AudioSwitcher switch1 = AudioSwitcher.Instance;
 
             //Log.Information("Set Default device: {Device}", device);
             if (!IsSwitchDefaultDevice)
             {
-                switch1.SwitchTo(device.Id, Role.Console);
-                switch1.SwitchTo(device.Id, Role.Multimedia);
+                switch1.SwitchTo(deviceId, Role.Console);
+                switch1.SwitchTo(deviceId, Role.Multimedia);
                 if (SwitchForegroundProgram)
                 {
                     switch1.ResetProcessDeviceConfiguration();
-                    switch1.SwitchProcessTo(device.Id, Role.Console, device.DeviceType);
-                    switch1.SwitchProcessTo(device.Id, Role.Multimedia, device.DeviceType);
+                    switch1.SwitchProcessTo(deviceId, Role.Console, deviceType);
+                    switch1.SwitchProcessTo(deviceId, Role.Multimedia, deviceType);
                 }
             }
             else
             {
                 //Log.Information("Set Default Communication device: {Device}", device);
-                switch1.SwitchTo(device.Id, Role.All);
+                switch1.SwitchTo(deviceId, Role.All);
                 if (SwitchForegroundProgram)
                 {
                     switch1.ResetProcessDeviceConfiguration();
-                    switch1.SwitchProcessTo(device.Id, Role.All, device.DeviceType);
+                    switch1.SwitchProcessTo(deviceId, Role.All, deviceType);
                 }
             }
             return true;

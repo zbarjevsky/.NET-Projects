@@ -7,7 +7,7 @@ namespace PlaybackSoundSwitch.Device
     {
         public string Name { get; }
         public string FriendlyName { get; }
-        public string Id { get; }
+        public string ID { get; }
         public EDataFlow DeviceType { get; }
         public MMDevice Device { get; }
 
@@ -15,7 +15,7 @@ namespace PlaybackSoundSwitch.Device
         public DeviceInfo(string name, string id, EDataFlow type)
         {
             Name = name;
-            Id = id;
+            ID = id;
             DeviceType = type;
         }
 
@@ -24,7 +24,7 @@ namespace PlaybackSoundSwitch.Device
             try
             {
                 Device = device;
-                Id = device.ID;
+                ID = device.ID;
                 DeviceType = device.DataFlow;
                 Name = device.DeviceFriendlyName;
                 FriendlyName = device.FriendlyName;
@@ -40,7 +40,7 @@ namespace PlaybackSoundSwitch.Device
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return Id == other.Id && DeviceType == other.DeviceType;
+            return ID == other.ID && DeviceType == other.DeviceType;
         }
 
         public override bool Equals(object obj)
@@ -55,7 +55,7 @@ namespace PlaybackSoundSwitch.Device
         {
             unchecked
             {
-                return ((Id != null ? Id.GetHashCode() : 0) * 397) ^ (int) DeviceType;
+                return ((ID != null ? ID.GetHashCode() : 0) * 397) ^ (int) DeviceType;
             }
         }
 
@@ -74,7 +74,7 @@ namespace PlaybackSoundSwitch.Device
         {
             if (ReferenceEquals(this, other)) return 0;
             if (ReferenceEquals(null, other)) return 1;
-            var idComparison = string.Compare(Id, other.Id, StringComparison.Ordinal);
+            var idComparison = string.Compare(ID, other.ID, StringComparison.Ordinal);
             if (idComparison != 0) return idComparison;
             return DeviceType.CompareTo(other.DeviceType);
         }

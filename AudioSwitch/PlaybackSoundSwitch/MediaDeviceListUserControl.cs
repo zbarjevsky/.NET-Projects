@@ -20,11 +20,12 @@ namespace PlaybackSoundSwitch
     {
         private Font _fontNorm;
         private Font _fontBold;
-        private DeviceFullInfo _activeDevice = null;
+        private MMDevice _activeDevice = null;
 
-        public MMDevice ActiveDevice { get { if (_activeDevice == null) return null; return _activeDevice.Device; } }
+        public MMDevice ActiveDevice { get { return _activeDevice; } }
 
         public Action<string> RefreshDeviceList = (status) => { };
+        public Action<string> UpdateStatus = (status) => { };
 
         public MediaDeviceListUserControl()
         {
@@ -48,7 +49,7 @@ namespace PlaybackSoundSwitch
             m_listDevices.ExpandGroup(0);
         }
 
-        public void UpdateDeviceList(IReadOnlyCollection<DeviceFullInfo> devs, DeviceFullInfo activeDevice)
+        public void UpdateDeviceList(IReadOnlyCollection<DeviceFullInfo> devs, MMDevice activeDevice)
         {
             _activeDevice = activeDevice;
 
@@ -69,9 +70,8 @@ namespace PlaybackSoundSwitch
                 lvi.ToolTipText = GetDeviceTooltip(dev);
             }
 
-            SetActiveDeviceToBold(activeDevice);
+            SetActiveDeviceToBold(activeDevice.ID);
             m_listDevices.EndUpdate();
-
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace PlaybackSoundSwitch
 
         private string GetDeviceTooltip(DeviceFullInfo dev)
         {
-            return dev.Name + "\n" + dev.State + "\n" + dev.Id;
+            return dev.Name + "\n" + dev.State + "\n" + dev.ID;
         }
 
         public ListViewGroup GetItemGroup(EDeviceState state)
@@ -108,20 +108,8 @@ namespace PlaybackSoundSwitch
             }
         }
 
-        private void SetActiveDeviceToBold(DeviceFullInfo activeDevice)
+        private void SetActiveDeviceToBold(string deviceId)
         {
-            //_activeDevice = _mmd.GetDefaultAudioEndpoint(EDataFlow.Render, Role.Multimedia);
-            //_activeDevice.AudioEndpointVolume.OnVolumeNotification = (notificationData) =>
-            //{
-            //    CommonUtils.ExecuteOnUIThread(() => {
-            //        m_trackVolume.Value = (int)(100f * notificationData.MasterVolume);
-            //    }
-            //    , this);
-            //};
-
-            ////MMDeviceCollection micList = _mmd.EnumerateAudioEndPoints(EDataFlow.Capture, DeviceState.Active);
-            //_activeMic = _mmd.GetDefaultAudioEndpoint(EDataFlow.Capture, Role.Multimedia);
-
             AlternateColorTool altenateColor = new AlternateColorTool();
 
             foreach (ListViewGroup group in m_listDevices.Groups)
@@ -129,7 +117,7 @@ namespace PlaybackSoundSwitch
                 foreach (ListViewItem item in group.Items)
                 {
                     DeviceFullInfo dev = item.Tag as DeviceFullInfo;
-                    bool isActive = dev.Id == activeDevice.Id;
+                    bool isActive = dev.ID == deviceId;
                     item.Font = isActive ? _fontBold : _fontNorm;
                     item.SubItems[1].Text = isActive ? "Active" : "";
                     item.Selected = false; // dev.Id == sel.ID;
@@ -140,34 +128,14 @@ namespace PlaybackSoundSwitch
                 }
             }
 
-            //UpdateTaskbarButtons(_activeDevice.FriendlyName);
-
-            //m_trackVolume.Value = (int)(100f * _activeDevice.AudioEndpointVolume.MasterVolumeLevelScalar);
             UpdateUI(null);
-        }
-
-        private void UpdateTaskbarButtons(string activeName)
-        {
-            List<string> deviceNames = new List<string>();
-
-            ListViewGroup activeGroup = m_listDevices.Groups[0];
-            TaskbarManagerHelper.UpdateButtons(activeGroup.Items, activeName);
         }
 
         private void UpdateUI(string status)
         {
-            //if (status != null)
-            //    m_status1.Text = status;
+            UpdateStatus(status);
 
-            //this.Text = _activeDevice.FriendlyName + " - " + TITLE;
-
-            //string mute = _activeDevice.AudioEndpointVolume.Mute ? "Muted: " : "Mute: ";
-            //toolTip1.SetToolTip(m_btnMute, mute + _activeDevice.FriendlyName);
-
-            //mute = _activeMic.AudioEndpointVolume.Mute ? "Muted: " : "Mute: ";
-            //toolTip1.SetToolTip(m_btnMicMute, mute + _activeMic.FriendlyName);
-
-            float volume = _activeDevice.Device.AudioEndpointVolume.MasterVolumeLevelScalar;
+            float volume = ActiveDevice.AudioEndpointVolume.MasterVolumeLevelScalar;
             foreach (ListViewItem item in m_listDevices.Items)
             {
                 if (item.Font.Bold)
@@ -179,20 +147,6 @@ namespace PlaybackSoundSwitch
                     item.SubItems[2].Text = "---";
                 }
             }
-
-            //m_btnMicMute.ImageIndex = _activeMic.AudioEndpointVolume.Mute ? 1 : 0;
-
-            //if (volume >= 0.7)
-            //    m_btnMute.ImageIndex = 0;
-            //else if (volume > 0.3 && volume < 0.7)
-            //    m_btnMute.ImageIndex = 1;
-            //else if (volume > 0 && volume <= 0.3)
-            //    m_btnMute.ImageIndex = 2;
-            //else
-            //    m_btnMute.ImageIndex = 4;
-
-            //if (_activeDevice.AudioEndpointVolume.Mute)
-            //    m_btnMute.ImageIndex = 3;
 
             if (m_listDevices.SelectedItems.Count > 0)
             {
@@ -261,17 +215,14 @@ namespace PlaybackSoundSwitch
 
         private void SetActiveDevice(DeviceFullInfo device)
         {
-            //if (_isEnumerating)
-            //    return;
-
             try
             {
                 if (device == null || device.State != EDeviceState.Active)
                     return;
 
-                SoundDeviceManager.SetActiveDevice(device);
+                SoundDeviceManager.SetActiveDevice(device.ID, device.DeviceType);
 
-                SetActiveDeviceToBold(device);
+                SetActiveDeviceToBold(device.ID);
             }
             catch (Exception err)
             {
