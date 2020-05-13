@@ -27,6 +27,8 @@ namespace PlaybackSoundSwitch
         public Action<string> RefreshDeviceList = (status) => { };
         public Action<string> UpdateStatus = (status) => { };
 
+        public AlternateColorPalette AlternateColorPalette { get; set; } = AlternateColorPalette.Cold;
+
         public MediaDeviceListUserControl()
         {
             InitializeComponent();
@@ -110,7 +112,7 @@ namespace PlaybackSoundSwitch
 
         private void SetActiveDeviceToBold(string deviceId)
         {
-            AlternateColorTool altenateColor = new AlternateColorTool();
+            AlternateColorTool altenateColor = new AlternateColorTool(AlternateColorPalette);
 
             foreach (ListViewGroup group in m_listDevices.Groups)
             {

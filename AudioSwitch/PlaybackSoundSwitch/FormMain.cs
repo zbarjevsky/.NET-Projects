@@ -48,6 +48,9 @@ namespace PlaybackSoundSwitch
             m_DeviceListPlayback.UpdateStatus = (status) => { UpdateUI(status); };
             m_DeviceListRecording.UpdateStatus = (status) => { UpdateUI(status); };
 
+            m_DeviceListPlayback.AlternateColorPalette = AlternateColorPalette.Cold;
+            m_DeviceListRecording.AlternateColorPalette = AlternateColorPalette.Warm;
+
             m_volumeControlSpk.OnVolumeChanged = (volume) => { UpdateUI(null); };
             m_volumeControlMic.OnVolumeChanged = (volume) => { UpdateUI(null); };
 

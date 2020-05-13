@@ -5,21 +5,37 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PlaybackSoundSwitch.Tools
+namespace MZ.Tools
 {
+    public enum AlternateColorPalette
+    {
+        Cold,
+        Warm
+    }
+
     //alternate colors if name changes significantly
     public class AlternateColorTool
     {
+        public AlternateColorPalette AlternateColorPalette { get; set; }
+
+        public AlternateColorTool(AlternateColorPalette colorSet = AlternateColorPalette.Cold)
+        {
+            AlternateColorPalette = colorSet;
+        }
+
         public Color GetColor(string name)
         {
             _colorIdx = AlternateColor(name, _name, _colorIdx);
             _name = name;
-            return _colors[_colorIdx];
+            if(AlternateColorPalette == AlternateColorPalette.Cold)
+                return _colorSet1[_colorIdx];
+            return _colorSet2[_colorIdx];
         }
 
         private int _colorIdx = 0;
         private string _name = "";
-        private static Color[] _colors = new Color[] { Color.AliceBlue, Color.LightYellow };
+        private static Color[] _colorSet1 = new Color[] { Color.AliceBlue, Color.LightYellow };
+        private static Color[] _colorSet2 = new Color[] { Color.LavenderBlush, Color.Honeydew };
 
         private static int AlternateColor(string name, string prevName, int colorIdx)
         {
@@ -35,7 +51,7 @@ namespace PlaybackSoundSwitch.Tools
                 return colorIdx;
             
             colorIdx++;
-            if (colorIdx >= _colors.Length)
+            if (colorIdx >= _colorSet1.Length)
                 colorIdx = 0;
             
             return colorIdx;
