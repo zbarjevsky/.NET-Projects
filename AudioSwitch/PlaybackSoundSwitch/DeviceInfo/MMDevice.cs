@@ -17,15 +17,15 @@ namespace PlaybackSoundSwitch.Device
         #region Variables
         private readonly IMMDevice deviceInterface;
         private PropertyStore _propertyStore;
-        //private AudioMeterInformation audioMeterInformation;
-        private AudioEndpointVolume audioEndpointVolume;
+        private AudioMeterInformation _audioMeterInformation;
+        private AudioEndpointVolume _audioEndpointVolume;
         //private AudioSessionManager audioSessionManager;
         //private DeviceTopology deviceTopology;
         #endregion
 
         //#region Guids
         //// ReSharper disable InconsistentNaming
-        //private static Guid IID_IAudioMeterInformation = new Guid("C02216F6-8C67-4B5B-9D00-D008E73E0064");
+        private static Guid IID_IAudioMeterInformation = new Guid(ComIIds.AUDIO_METER_INFORMATION_IID); //"C02216F6-8C67-4B5B-9D00-D008E73E0064");
         private static Guid IID_IAudioEndpointVolume = new Guid(ComIIds.AUDIO_ENDPOINT_VOLUME_IID);
         //private static Guid IID_IAudioClient = new Guid("1CB9AD4C-DBFA-4c32-B178-C2F568A703B2");
         //private static Guid IDD_IAudioSessionManager = new Guid("BFA971F1-4D5E-40BB-935E-967039BFBEE4");
@@ -52,17 +52,18 @@ namespace PlaybackSoundSwitch.Device
         //    return new AudioClient(result as IAudioClient);
         //}
 
-        //private void GetAudioMeterInformation()
-        //{
-        //    Marshal.ThrowExceptionForHR(deviceInterface.Activate(ref IID_IAudioMeterInformation, ClsCtx.ALL, IntPtr.Zero, out var result));
-        //    audioMeterInformation = new AudioMeterInformation(result as IAudioMeterInformation);
-        //}
+        private void GetAudioMeterInformation()
+        {
+            object result;
+            Marshal.ThrowExceptionForHR(deviceInterface.Activate(ref IID_IAudioMeterInformation, ClsCtx.All, IntPtr.Zero, out result));
+            _audioMeterInformation = new AudioMeterInformation(result as IAudioMeterInformation);
+        }
 
         private void GetAudioEndpointVolume()
         {
             object result;
             Marshal.ThrowExceptionForHR(deviceInterface.Activate(ref IID_IAudioEndpointVolume, ClsCtx.All, IntPtr.Zero, out result));
-            audioEndpointVolume = new AudioEndpointVolume(result as IAudioEndpointVolume);
+            _audioEndpointVolume = new AudioEndpointVolume(result as IAudioEndpointVolume);
         }
 
         //private void GetAudioSessionManager()
@@ -88,19 +89,19 @@ namespace PlaybackSoundSwitch.Device
         ///// </summary>
         //public AudioClient AudioClient => GetAudioClient();
 
-        ///// <summary>
-        ///// Audio Meter Information
-        ///// </summary>
-        //public AudioMeterInformation AudioMeterInformation
-        //{
-        //    get
-        //    {
-        //        if (audioMeterInformation == null)
-        //            GetAudioMeterInformation();
+        /// <summary>
+        /// Audio Meter Information
+        /// </summary>
+        public AudioMeterInformation AudioMeterInformation
+        {
+            get
+            {
+                if (_audioMeterInformation == null)
+                    GetAudioMeterInformation();
 
-        //        return audioMeterInformation;
-        //    }
-        //}
+                return _audioMeterInformation;
+            }
+        }
 
         /// <summary>
         /// Audio Endpoint Volume
@@ -109,10 +110,10 @@ namespace PlaybackSoundSwitch.Device
         {
             get
             {
-                if (audioEndpointVolume == null)
+                if (_audioEndpointVolume == null)
                     GetAudioEndpointVolume();
 
-                return audioEndpointVolume;
+                return _audioEndpointVolume;
             }
         }
 
@@ -315,8 +316,8 @@ namespace PlaybackSoundSwitch.Device
         /// </summary>
         public void Dispose()
         {
-            this.audioEndpointVolume?.Dispose();
-            this.audioEndpointVolume = null;
+            this._audioEndpointVolume?.Dispose();
+            this._audioEndpointVolume = null;
             //this.audioSessionManager?.Dispose();
             GC.SuppressFinalize(this);
         }

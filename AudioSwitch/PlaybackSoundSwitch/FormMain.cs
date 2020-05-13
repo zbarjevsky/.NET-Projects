@@ -30,6 +30,7 @@ namespace PlaybackSoundSwitch
         private Font _fontBold;
         MMDeviceEnumerator _mmd = new MMDeviceEnumerator();
         MMDevice _activeDevice = null;
+        MMDevice _activeMic = null;
 
         public FormMain()
         {
@@ -69,6 +70,16 @@ namespace PlaybackSoundSwitch
         private void FormMain_FormClosed(object sender, FormClosedEventArgs e)
         {
             _mmd.Dispose();
+        }
+
+        private void m_timer_Tick(object sender, EventArgs e)
+        {
+            if (_activeMic == null || _activeMic.State != EDeviceState.Active)
+                return;
+
+            float peak = _activeMic.AudioMeterInformation.MasterPeakValue * 100f;
+            m_progrLevels.Value = (int)peak;
+            //Debug.WriteLine("Mic Level: " + peak);
         }
 
         private void OnDevicesChanged(MMDevice device, object additionalData = null)
@@ -199,6 +210,10 @@ namespace PlaybackSoundSwitch
                 , this);
             };
 
+            //MMDeviceCollection micList = _mmd.EnumerateAudioEndPoints(EDataFlow.Capture, DeviceState.Active);
+            _activeMic = _mmd.GetDefaultAudioEndpoint(EDataFlow.Capture, Role.Multimedia);
+            m_btnMicMute.ImageIndex = _activeMic.AudioEndpointVolume.Mute ? 1 : 0;
+
             this.Text = _activeDevice.FriendlyName + " - " + TITLE;
 
             AlternateColorTool altenateColor = new AlternateColorTool();
@@ -281,6 +296,12 @@ namespace PlaybackSoundSwitch
         {
             _activeDevice.AudioEndpointVolume.Mute = !_activeDevice.AudioEndpointVolume.Mute;
             UpdateUI("Mute");
+        }
+
+        private void m_btnMicMute_Click(object sender, EventArgs e)
+        {
+            _activeMic.AudioEndpointVolume.Mute = !_activeMic.AudioEndpointVolume.Mute;
+            m_btnMicMute.ImageIndex = _activeMic.AudioEndpointVolume.Mute ? 1 : 0;
         }
 
         private void UpdateUI(string status)
