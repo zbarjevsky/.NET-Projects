@@ -136,7 +136,7 @@ namespace PlaybackSoundSwitch
             UpdatePeakLevel(m_progrLevel, Device);
         }
 
-        private void UpdatePeakLevel(ColorBarsVerticalProgressBar progr, MMDevice dev)
+        private void UpdatePeakLevel(ColorBarsProgressBar progr, MMDevice dev)
         {
             if (dev == null || dev.State != EDeviceState.Active)
             {

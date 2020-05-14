@@ -32,7 +32,6 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VolumeUserControl));
             this.m_grpVolume = new System.Windows.Forms.GroupBox();
             this.m_lbl = new System.Windows.Forms.Label();
-            this.m_progrLevel = new MZ.Controls.ColorBarsVerticalProgressBar();
             this.m_btnMute = new System.Windows.Forms.Button();
             this.m_imgListMic = new System.Windows.Forms.ImageList(this.components);
             this.m_trackVolume = new System.Windows.Forms.TrackBar();
@@ -40,10 +39,11 @@
             this.m_imgListSpk = new System.Windows.Forms.ImageList(this.components);
             this.m_timer = new System.Windows.Forms.Timer(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.m_progrLevel = new MZ.Controls.ColorBarsProgressBar();
             this.m_grpVolume.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.m_progrLevel)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_trackVolume)).BeginInit();
             this.m_pnlMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.m_progrLevel)).BeginInit();
             this.SuspendLayout();
             // 
             // m_grpVolume
@@ -68,20 +68,6 @@
             this.m_lbl.Size = new System.Drawing.Size(27, 13);
             this.m_lbl.TabIndex = 0;
             this.m_lbl.Text = "30%";
-            // 
-            // m_progrLevel
-            // 
-            this.m_progrLevel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_progrLevel.InactiveColorTheme = MZ.Controls.ColorBarsVerticalProgressBar.InactiveColorsTheme.Pale;
-            this.m_progrLevel.Location = new System.Drawing.Point(35, 45);
-            this.m_progrLevel.MinimumSize = new System.Drawing.Size(20, 0);
-            this.m_progrLevel.Name = "m_progrLevel";
-            this.m_progrLevel.Size = new System.Drawing.Size(20, 186);
-            this.m_progrLevel.TabIndex = 3;
-            this.m_progrLevel.TabStop = false;
-            this.m_progrLevel.Value = 80;
             // 
             // m_btnMute
             // 
@@ -143,6 +129,23 @@
             this.m_timer.Enabled = true;
             this.m_timer.Tick += new System.EventHandler(this.m_timer_Tick);
             // 
+            // m_progrLevel
+            // 
+            this.m_progrLevel.ActiveColor = System.Drawing.Color.Magenta;
+            this.m_progrLevel.ActiveColorTheme = MZ.Controls.ColorBarsProgressBar.ActiveColorsTheme.Multicolor;
+            this.m_progrLevel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_progrLevel.InactiveColorTheme = MZ.Controls.ColorBarsProgressBar.InactiveColorsTheme.Pale;
+            this.m_progrLevel.Location = new System.Drawing.Point(35, 45);
+            this.m_progrLevel.MinimumSize = new System.Drawing.Size(20, 0);
+            this.m_progrLevel.Name = "m_progrLevel";
+            this.m_progrLevel.Orientation = System.Windows.Forms.Orientation.Vertical;
+            this.m_progrLevel.Size = new System.Drawing.Size(20, 186);
+            this.m_progrLevel.TabIndex = 3;
+            this.m_progrLevel.TabStop = false;
+            this.m_progrLevel.Value = 30;
+            // 
             // VolumeUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -154,9 +157,9 @@
             this.Load += new System.EventHandler(this.VolumeUserControl_Load);
             this.m_grpVolume.ResumeLayout(false);
             this.m_grpVolume.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.m_progrLevel)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_trackVolume)).EndInit();
             this.m_pnlMain.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.m_progrLevel)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -171,7 +174,7 @@
         private System.Windows.Forms.ImageList m_imgListSpk;
         private System.Windows.Forms.Timer m_timer;
         private System.Windows.Forms.ToolTip toolTip1;
-        private MZ.Controls.ColorBarsVerticalProgressBar m_progrLevel;
+        private MZ.Controls.ColorBarsProgressBar m_progrLevel;
         private System.Windows.Forms.Label m_lbl;
     }
 }

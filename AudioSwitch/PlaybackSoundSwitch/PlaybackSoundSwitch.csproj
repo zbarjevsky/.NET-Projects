@@ -139,7 +139,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\AlternateColorTool.cs" />
-    <Compile Include="Tools\ColorBarsVerticalProgressBar.cs">
+    <Compile Include="Tools\ColorBarsProgressBar.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Tools\ControlExtension.cs" />
