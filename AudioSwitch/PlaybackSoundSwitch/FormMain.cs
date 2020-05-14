@@ -31,9 +31,6 @@ namespace PlaybackSoundSwitch
         {
             InitializeComponent();
 
-            m_imageListSpeakers.Images.Clear();
-            m_imageListSpeakers.Images.AddStrip(Resources.SpeakerImgList);
-
             _mmd.DevicesChanged = OnDevicesChanged;
             _mmd.DefaultDeviceChanged = OnDefaultDeviceChanged;
 

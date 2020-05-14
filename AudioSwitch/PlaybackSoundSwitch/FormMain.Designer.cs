@@ -30,11 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
-            this.m_imageListSpeakers = new System.Windows.Forms.ImageList(this.components);
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.m_status1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.m_status2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.m_imageListMic = new System.Windows.Forms.ImageList(this.components);
             this.m_pnlMain = new System.Windows.Forms.Panel();
             this.m_splitMain = new System.Windows.Forms.SplitContainer();
             this.m_volumeControlSpk = new PlaybackSoundSwitch.VolumeUserControl();
@@ -57,12 +55,6 @@
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // m_imageListSpeakers
-            // 
-            this.m_imageListSpeakers.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_imageListSpeakers.ImageStream")));
-            this.m_imageListSpeakers.TransparentColor = System.Drawing.Color.Transparent;
-            this.m_imageListSpeakers.Images.SetKeyName(0, "Speaker5_16x16.png");
             // 
             // statusStrip1
             // 
@@ -88,13 +80,6 @@
             this.m_status2.Size = new System.Drawing.Size(689, 17);
             this.m_status2.Spring = true;
             this.m_status2.Text = "...";
-            // 
-            // m_imageListMic
-            // 
-            this.m_imageListMic.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_imageListMic.ImageStream")));
-            this.m_imageListMic.TransparentColor = System.Drawing.Color.Transparent;
-            this.m_imageListMic.Images.SetKeyName(0, "Mic1.png");
-            this.m_imageListMic.Images.SetKeyName(1, "MicMute1.png");
             // 
             // m_pnlMain
             // 
@@ -198,7 +183,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 23);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(584, 341);
+            this.tabPage2.Size = new System.Drawing.Size(584, 338);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Recording Devices";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -209,7 +194,7 @@
             this.m_DeviceListRecording.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_DeviceListRecording.Location = new System.Drawing.Point(3, 3);
             this.m_DeviceListRecording.Name = "m_DeviceListRecording";
-            this.m_DeviceListRecording.Size = new System.Drawing.Size(578, 335);
+            this.m_DeviceListRecording.Size = new System.Drawing.Size(578, 332);
             this.m_DeviceListRecording.TabIndex = 0;
             // 
             // m_imageListTabs
@@ -261,14 +246,12 @@
         }
 
         #endregion
-        private System.Windows.Forms.ImageList m_imageListSpeakers;
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel m_status1;
         private System.Windows.Forms.ToolStripStatusLabel m_status2;
         private System.Windows.Forms.SplitContainer m_splitMain;
         private System.Windows.Forms.RichTextBox m_txtLog;
         private System.Windows.Forms.Panel m_pnlMain;
-        private System.Windows.Forms.ImageList m_imageListMic;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.TabControl m_tabDevices;
         private System.Windows.Forms.TabPage tabPage1;

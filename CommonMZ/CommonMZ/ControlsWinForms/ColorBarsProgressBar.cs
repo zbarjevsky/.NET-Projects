@@ -27,6 +27,10 @@ namespace MZ.Controls
 
         private const string CAT = "Color Bars";
 
+        private Brush[] _activeColors = new Brush[] { Brushes.LimeGreen, Brushes.Goldenrod, Brushes.Red };
+        private Brush[] _paleColors = new Brush[] { Brushes.Honeydew, Brushes.PaleGoldenrod, Brushes.MistyRose };
+        private Brush[] _darkColors = new Brush[] { Brushes.DarkGreen, Brushes.DarkGoldenrod, Brushes.DarkRed };
+
         private int _value = 0;
         [Category(CAT)]
         public int Value { get { return _value; } set { _value = value; Refresh(); } }
@@ -41,7 +45,17 @@ namespace MZ.Controls
 
         private SolidBrush _activeColor = (SolidBrush)Brushes.LimeGreen;
         [Category(CAT)]
-        public Color ActiveColor { get { return _activeColor.Color; } set { _activeColor = new SolidBrush(value); Refresh(); } }
+        public Color ActiveColor 
+        { 
+            get { return _activeColor.Color; } 
+            set 
+            { 
+                _activeColor = new SolidBrush(value);
+                _activeColors[0] = _activeColor;
+                //_paleColors[0] = new SolidBrush(ControlPaint.Light(value, 0.98f));
+                Refresh(); 
+            } 
+        }
 
         private Orientation _orientation = Orientation.Vertical;
         [Category(CAT)]
@@ -61,7 +75,7 @@ namespace MZ.Controls
             pe.Graphics.Clear(this.BackColor);
 
             int barsCount = CalcBarsCount();
-            for (int i = 0; i <= barsCount; i++)
+            for (int i = 0; i < barsCount; i++)
                 DrawBarRectangle(i, barsCount, pe.Graphics);
          }
 
@@ -77,9 +91,7 @@ namespace MZ.Controls
             Rectangle rClnt = this.ClientRectangle;
             Rectangle rBar = new Rectangle();
 
-            int valueIndex = barsCount - (int)(_value * barsCount / 100.0);
-            double percent = (barsCount - barIndex) / (double)barsCount;
-            bool isActive = valueIndex < barIndex;
+            int barPercent = (int)Math.Ceiling(100.0 * (barIndex) / (double)barsCount);
 
             if (_orientation == Orientation.Vertical)
             {
@@ -91,6 +103,8 @@ namespace MZ.Controls
                 //if out of bounds
                 if (rBar.Y + rBar.Height + margin > this.Height)
                     rBar.Height = rClnt.Height - rBar.Y - margin;
+
+                barPercent = (int)Math.Ceiling(100.0 * (barsCount - barIndex - 1) / (double)barsCount);
             }
             else
             {
@@ -103,30 +117,25 @@ namespace MZ.Controls
                 if (rBar.X + rBar.Width + margin > this.Width)
                     rBar.Width = rClnt.Width - rBar.X - margin;
 
-                percent = 1 - percent; //left to right
-                isActive = valueIndex < (barsCount - barIndex);
             }
 
-            Brush brush = GetBarColor(percent, isActive);
+            bool isBarActive = _value > 0 && (barPercent) <= _value;
+            Brush brush = GetBarColor(barPercent, isBarActive);
             g.FillRectangle(brush, rBar);
         }
 
-        private Brush GetBarColor(double percent, bool bActive)
+        private Brush GetBarColor(int percent, bool bActive)
         {
             int colorIdx = 0;
-            if (percent < 0.7)
+            if (percent < 70)
                 colorIdx = 0;
-            else if (percent >= 0.7 && percent <= 0.85)
+            else if (percent >= 70 && percent <= 85)
                 colorIdx = 1;
             else
                 colorIdx = 2;
 
             return bActive ? GetActiveColor(colorIdx) : GetInactiveThemeColor(colorIdx);
         }
-
-        private Brush[] _activeColors = new Brush[] { Brushes.LimeGreen, Brushes.Goldenrod, Brushes.Red };
-        private Brush[] _paleColors = new Brush[] { Brushes.Honeydew, Brushes.PaleGoldenrod, Brushes.MistyRose };
-        private Brush[] _darkColors = new Brush[] { Brushes.DarkGreen, Brushes.DarkGoldenrod, Brushes.DarkRed };
 
         private SolidBrush GetActiveColor(int colorIdx)
         {

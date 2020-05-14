@@ -32,13 +32,13 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VolumeUserControl));
             this.m_grpVolume = new System.Windows.Forms.GroupBox();
             this.m_lbl = new System.Windows.Forms.Label();
-            this.m_btnMute = new System.Windows.Forms.Button();
             this.m_imgListMic = new System.Windows.Forms.ImageList(this.components);
             this.m_trackVolume = new System.Windows.Forms.TrackBar();
             this.m_pnlMain = new System.Windows.Forms.Panel();
             this.m_imgListSpk = new System.Windows.Forms.ImageList(this.components);
             this.m_timer = new System.Windows.Forms.Timer(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.m_btnMute = new System.Windows.Forms.Button();
             this.m_progrLevel = new MZ.Controls.ColorBarsProgressBar();
             this.m_grpVolume.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_trackVolume)).BeginInit();
@@ -68,19 +68,6 @@
             this.m_lbl.Size = new System.Drawing.Size(27, 13);
             this.m_lbl.TabIndex = 0;
             this.m_lbl.Text = "30%";
-            // 
-            // m_btnMute
-            // 
-            this.m_btnMute.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
-            this.m_btnMute.ImageIndex = 3;
-            this.m_btnMute.ImageList = this.m_imgListMic;
-            this.m_btnMute.Location = new System.Drawing.Point(8, 245);
-            this.m_btnMute.Name = "m_btnMute";
-            this.m_btnMute.Size = new System.Drawing.Size(48, 43);
-            this.m_btnMute.TabIndex = 0;
-            this.m_btnMute.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.m_btnMute.UseVisualStyleBackColor = true;
-            this.m_btnMute.Click += new System.EventHandler(this.m_btnMute_Click);
             // 
             // m_imgListMic
             // 
@@ -129,9 +116,22 @@
             this.m_timer.Enabled = true;
             this.m_timer.Tick += new System.EventHandler(this.m_timer_Tick);
             // 
+            // m_btnMute
+            // 
+            this.m_btnMute.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
+            this.m_btnMute.ImageIndex = 3;
+            this.m_btnMute.ImageList = this.m_imgListMic;
+            this.m_btnMute.Location = new System.Drawing.Point(7, 240);
+            this.m_btnMute.Name = "m_btnMute";
+            this.m_btnMute.Size = new System.Drawing.Size(48, 48);
+            this.m_btnMute.TabIndex = 0;
+            this.m_btnMute.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.m_btnMute.UseVisualStyleBackColor = true;
+            this.m_btnMute.Click += new System.EventHandler(this.m_btnMute_Click);
+            // 
             // m_progrLevel
             // 
-            this.m_progrLevel.ActiveColor = System.Drawing.Color.Magenta;
+            this.m_progrLevel.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.m_progrLevel.ActiveColorTheme = MZ.Controls.ColorBarsProgressBar.ActiveColorsTheme.Multicolor;
             this.m_progrLevel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
