@@ -139,6 +139,9 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\AlternateColorTool.cs" />
+    <Compile Include="Tools\ColorBarsVerticalProgressBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Tools\ControlExtension.cs" />
     <Compile Include="Tools\DebounceDispatcher.cs" />
     <Compile Include="Tools\ListViewCollapsibleGroups.cs">

@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using PlaybackSoundSwitch.Properties;
 using PlaybackSoundSwitch.Device;
 using PlaybackSoundSwitch.Tools;
+using MZ.Controls;
 
 namespace PlaybackSoundSwitch
 {
@@ -30,7 +31,6 @@ namespace PlaybackSoundSwitch
         {
             m_imgListSpk.Images.Clear();
             m_imgListSpk.Images.AddStrip(Resources.SpeakerImgList);
-            m_progrLevel.SetColorGreen();
         }
 
         public void SetDevice(MMDevice device)
@@ -42,12 +42,10 @@ namespace PlaybackSoundSwitch
             if (Device.DataFlow == EDataFlow.Capture)
             {
                 m_btnMute.ImageList = m_imgListMic;
-                m_progrLevel.SetColorYellow();
             }
 
             if (Device.DataFlow == EDataFlow.Render)
             {
-                m_progrLevel.SetColorGreen();
                 m_btnMute.ImageList = m_imgListSpk;
             }
 
@@ -132,7 +130,7 @@ namespace PlaybackSoundSwitch
             UpdatePeakLevel(m_progrLevel, Device);
         }
 
-        private void UpdatePeakLevel(ProgressBar progr, MMDevice dev)
+        private void UpdatePeakLevel(ColorBarsVerticalProgressBar progr, MMDevice dev)
         {
             if (dev == null || dev.State != EDeviceState.Active)
             {

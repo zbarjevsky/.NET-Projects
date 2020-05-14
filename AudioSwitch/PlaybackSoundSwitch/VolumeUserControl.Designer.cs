@@ -31,7 +31,6 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VolumeUserControl));
             this.m_grpVolume = new System.Windows.Forms.GroupBox();
-            this.m_progrLevel = new MZ.Controls.VerticalProgressBar();
             this.m_btnMute = new System.Windows.Forms.Button();
             this.m_imgListMic = new System.Windows.Forms.ImageList(this.components);
             this.m_trackVolume = new System.Windows.Forms.TrackBar();
@@ -39,9 +38,11 @@
             this.m_imgListSpk = new System.Windows.Forms.ImageList(this.components);
             this.m_timer = new System.Windows.Forms.Timer(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.m_progrLevel = new MZ.Controls.ColorBarsVerticalProgressBar();
             this.m_grpVolume.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_trackVolume)).BeginInit();
             this.m_pnlMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.m_progrLevel)).BeginInit();
             this.SuspendLayout();
             // 
             // m_grpVolume
@@ -52,28 +53,17 @@
             this.m_grpVolume.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_grpVolume.Location = new System.Drawing.Point(0, 0);
             this.m_grpVolume.Name = "m_grpVolume";
-            this.m_grpVolume.Size = new System.Drawing.Size(58, 200);
+            this.m_grpVolume.Size = new System.Drawing.Size(64, 294);
             this.m_grpVolume.TabIndex = 0;
             this.m_grpVolume.TabStop = false;
             this.m_grpVolume.Text = "Volume";
-            // 
-            // m_progrLevel
-            // 
-            this.m_progrLevel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_progrLevel.Location = new System.Drawing.Point(40, 45);
-            this.m_progrLevel.Name = "m_progrLevel";
-            this.m_progrLevel.Size = new System.Drawing.Size(11, 92);
-            this.m_progrLevel.TabIndex = 1;
-            this.m_progrLevel.Value = 10;
             // 
             // m_btnMute
             // 
             this.m_btnMute.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
             this.m_btnMute.ImageIndex = 3;
             this.m_btnMute.ImageList = this.m_imgListMic;
-            this.m_btnMute.Location = new System.Drawing.Point(5, 151);
+            this.m_btnMute.Location = new System.Drawing.Point(8, 245);
             this.m_btnMute.Name = "m_btnMute";
             this.m_btnMute.Size = new System.Drawing.Size(48, 43);
             this.m_btnMute.TabIndex = 2;
@@ -100,7 +90,7 @@
             this.m_trackVolume.MinimumSize = new System.Drawing.Size(45, 80);
             this.m_trackVolume.Name = "m_trackVolume";
             this.m_trackVolume.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.m_trackVolume.Size = new System.Drawing.Size(45, 108);
+            this.m_trackVolume.Size = new System.Drawing.Size(45, 202);
             this.m_trackVolume.TabIndex = 0;
             this.m_trackVolume.TickFrequency = 10;
             this.m_trackVolume.TickStyle = System.Windows.Forms.TickStyle.TopLeft;
@@ -113,7 +103,7 @@
             this.m_pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_pnlMain.Location = new System.Drawing.Point(0, 0);
             this.m_pnlMain.Name = "m_pnlMain";
-            this.m_pnlMain.Size = new System.Drawing.Size(58, 200);
+            this.m_pnlMain.Size = new System.Drawing.Size(64, 294);
             this.m_pnlMain.TabIndex = 8;
             // 
             // m_imgListSpk
@@ -127,6 +117,19 @@
             this.m_timer.Enabled = true;
             this.m_timer.Tick += new System.EventHandler(this.m_timer_Tick);
             // 
+            // m_progrLevel
+            // 
+            this.m_progrLevel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_progrLevel.Location = new System.Drawing.Point(37, 45);
+            this.m_progrLevel.MinimumSize = new System.Drawing.Size(20, 0);
+            this.m_progrLevel.Name = "m_progrLevel";
+            this.m_progrLevel.Size = new System.Drawing.Size(20, 186);
+            this.m_progrLevel.TabIndex = 3;
+            this.m_progrLevel.TabStop = false;
+            this.m_progrLevel.Value = 0;
+            // 
             // VolumeUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -134,12 +137,13 @@
             this.Controls.Add(this.m_pnlMain);
             this.MinimumSize = new System.Drawing.Size(58, 200);
             this.Name = "VolumeUserControl";
-            this.Size = new System.Drawing.Size(58, 200);
+            this.Size = new System.Drawing.Size(64, 294);
             this.Load += new System.EventHandler(this.VolumeUserControl_Load);
             this.m_grpVolume.ResumeLayout(false);
             this.m_grpVolume.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_trackVolume)).EndInit();
             this.m_pnlMain.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.m_progrLevel)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -147,7 +151,6 @@
         #endregion
 
         private System.Windows.Forms.GroupBox m_grpVolume;
-        private MZ.Controls.VerticalProgressBar m_progrLevel;
         private System.Windows.Forms.Button m_btnMute;
         private System.Windows.Forms.TrackBar m_trackVolume;
         private System.Windows.Forms.Panel m_pnlMain;
@@ -155,5 +158,6 @@
         private System.Windows.Forms.ImageList m_imgListSpk;
         private System.Windows.Forms.Timer m_timer;
         private System.Windows.Forms.ToolTip toolTip1;
+        private MZ.Controls.ColorBarsVerticalProgressBar m_progrLevel;
     }
 }

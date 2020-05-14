@@ -37,16 +37,16 @@
             this.m_imageListMic = new System.Windows.Forms.ImageList(this.components);
             this.m_pnlMain = new System.Windows.Forms.Panel();
             this.m_splitMain = new System.Windows.Forms.SplitContainer();
+            this.m_volumeControlSpk = new PlaybackSoundSwitch.VolumeUserControl();
+            this.m_volumeControlMic = new PlaybackSoundSwitch.VolumeUserControl();
             this.m_tabDevices = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.m_DeviceListPlayback = new PlaybackSoundSwitch.MediaDeviceListUserControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.m_DeviceListRecording = new PlaybackSoundSwitch.MediaDeviceListUserControl();
             this.m_imageListTabs = new System.Windows.Forms.ImageList(this.components);
             this.m_txtLog = new System.Windows.Forms.RichTextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.m_volumeControlSpk = new PlaybackSoundSwitch.VolumeUserControl();
-            this.m_volumeControlMic = new PlaybackSoundSwitch.VolumeUserControl();
-            this.m_DeviceListPlayback = new PlaybackSoundSwitch.MediaDeviceListUserControl();
-            this.m_DeviceListRecording = new PlaybackSoundSwitch.MediaDeviceListUserControl();
             this.statusStrip1.SuspendLayout();
             this.m_pnlMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitMain)).BeginInit();
@@ -70,7 +70,7 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_status1,
             this.m_status2});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 414);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 411);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(743, 22);
             this.statusStrip1.TabIndex = 5;
@@ -103,7 +103,7 @@
             this.m_pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_pnlMain.Location = new System.Drawing.Point(0, 0);
             this.m_pnlMain.Name = "m_pnlMain";
-            this.m_pnlMain.Size = new System.Drawing.Size(743, 414);
+            this.m_pnlMain.Size = new System.Drawing.Size(743, 411);
             this.m_pnlMain.TabIndex = 7;
             // 
             // m_splitMain
@@ -124,9 +124,37 @@
             // 
             this.m_splitMain.Panel2.Controls.Add(this.m_txtLog);
             this.m_splitMain.Panel2MinSize = 20;
-            this.m_splitMain.Size = new System.Drawing.Size(743, 414);
-            this.m_splitMain.SplitterDistance = 376;
+            this.m_splitMain.Size = new System.Drawing.Size(743, 411);
+            this.m_splitMain.SplitterDistance = 373;
             this.m_splitMain.TabIndex = 7;
+            // 
+            // m_volumeControlSpk
+            // 
+            this.m_volumeControlSpk.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_volumeControlSpk.Level = 0;
+            this.m_volumeControlSpk.Location = new System.Drawing.Point(601, 19);
+            this.m_volumeControlSpk.MaximumSize = new System.Drawing.Size(62, 600);
+            this.m_volumeControlSpk.MinimumSize = new System.Drawing.Size(58, 200);
+            this.m_volumeControlSpk.Name = "m_volumeControlSpk";
+            this.m_volumeControlSpk.Size = new System.Drawing.Size(62, 350);
+            this.m_volumeControlSpk.TabIndex = 10;
+            this.m_volumeControlSpk.Title = "Spk";
+            this.m_volumeControlSpk.Volume = 0;
+            // 
+            // m_volumeControlMic
+            // 
+            this.m_volumeControlMic.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_volumeControlMic.Level = 0;
+            this.m_volumeControlMic.Location = new System.Drawing.Point(669, 19);
+            this.m_volumeControlMic.MaximumSize = new System.Drawing.Size(62, 600);
+            this.m_volumeControlMic.MinimumSize = new System.Drawing.Size(58, 200);
+            this.m_volumeControlMic.Name = "m_volumeControlMic";
+            this.m_volumeControlMic.Size = new System.Drawing.Size(62, 350);
+            this.m_volumeControlMic.TabIndex = 9;
+            this.m_volumeControlMic.Title = "Mic";
+            this.m_volumeControlMic.Volume = 0;
             // 
             // m_tabDevices
             // 
@@ -139,7 +167,7 @@
             this.m_tabDevices.Location = new System.Drawing.Point(2, 3);
             this.m_tabDevices.Name = "m_tabDevices";
             this.m_tabDevices.SelectedIndex = 0;
-            this.m_tabDevices.Size = new System.Drawing.Size(592, 368);
+            this.m_tabDevices.Size = new System.Drawing.Size(592, 365);
             this.m_tabDevices.TabIndex = 8;
             // 
             // tabPage1
@@ -149,10 +177,19 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 23);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(584, 341);
+            this.tabPage1.Size = new System.Drawing.Size(584, 338);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Playback Devices";
             this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // m_DeviceListPlayback
+            // 
+            this.m_DeviceListPlayback.AlternateColorPalette = MZ.Tools.AlternateColorPalette.Cold;
+            this.m_DeviceListPlayback.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_DeviceListPlayback.Location = new System.Drawing.Point(3, 3);
+            this.m_DeviceListPlayback.Name = "m_DeviceListPlayback";
+            this.m_DeviceListPlayback.Size = new System.Drawing.Size(578, 332);
+            this.m_DeviceListPlayback.TabIndex = 0;
             // 
             // tabPage2
             // 
@@ -165,6 +202,15 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Recording Devices";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // m_DeviceListRecording
+            // 
+            this.m_DeviceListRecording.AlternateColorPalette = MZ.Tools.AlternateColorPalette.Cold;
+            this.m_DeviceListRecording.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_DeviceListRecording.Location = new System.Drawing.Point(3, 3);
+            this.m_DeviceListRecording.Name = "m_DeviceListRecording";
+            this.m_DeviceListRecording.Size = new System.Drawing.Size(578, 335);
+            this.m_DeviceListRecording.TabIndex = 0;
             // 
             // m_imageListTabs
             // 
@@ -184,56 +230,12 @@
             this.m_txtLog.TabIndex = 0;
             this.m_txtLog.Text = "";
             // 
-            // m_volumeControlSpk
-            // 
-            this.m_volumeControlSpk.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_volumeControlSpk.Level = 0;
-            this.m_volumeControlSpk.Location = new System.Drawing.Point(608, 19);
-            this.m_volumeControlSpk.MaximumSize = new System.Drawing.Size(58, 600);
-            this.m_volumeControlSpk.MinimumSize = new System.Drawing.Size(58, 200);
-            this.m_volumeControlSpk.Name = "m_volumeControlSpk";
-            this.m_volumeControlSpk.Size = new System.Drawing.Size(58, 353);
-            this.m_volumeControlSpk.TabIndex = 10;
-            this.m_volumeControlSpk.Title = "Spk";
-            this.m_volumeControlSpk.Volume = 0;
-            // 
-            // m_volumeControlMic
-            // 
-            this.m_volumeControlMic.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_volumeControlMic.Level = 0;
-            this.m_volumeControlMic.Location = new System.Drawing.Point(672, 19);
-            this.m_volumeControlMic.MaximumSize = new System.Drawing.Size(58, 600);
-            this.m_volumeControlMic.MinimumSize = new System.Drawing.Size(58, 200);
-            this.m_volumeControlMic.Name = "m_volumeControlMic";
-            this.m_volumeControlMic.Size = new System.Drawing.Size(58, 353);
-            this.m_volumeControlMic.TabIndex = 9;
-            this.m_volumeControlMic.Title = "Mic";
-            this.m_volumeControlMic.Volume = 0;
-            // 
-            // m_DeviceListPlayback
-            // 
-            this.m_DeviceListPlayback.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_DeviceListPlayback.Location = new System.Drawing.Point(3, 3);
-            this.m_DeviceListPlayback.Name = "m_DeviceListPlayback";
-            this.m_DeviceListPlayback.Size = new System.Drawing.Size(578, 335);
-            this.m_DeviceListPlayback.TabIndex = 0;
-            // 
-            // m_DeviceListRecording
-            // 
-            this.m_DeviceListRecording.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_DeviceListRecording.Location = new System.Drawing.Point(3, 3);
-            this.m_DeviceListRecording.Name = "m_DeviceListRecording";
-            this.m_DeviceListRecording.Size = new System.Drawing.Size(578, 335);
-            this.m_DeviceListRecording.TabIndex = 0;
-            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.ClientSize = new System.Drawing.Size(743, 436);
+            this.ClientSize = new System.Drawing.Size(743, 433);
             this.Controls.Add(this.m_pnlMain);
             this.Controls.Add(this.statusStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
