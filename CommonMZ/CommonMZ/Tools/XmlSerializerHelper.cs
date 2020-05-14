@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace MZ.Utils
+namespace MZ.Tools
 {
     class XmlSerializerHelper
     {

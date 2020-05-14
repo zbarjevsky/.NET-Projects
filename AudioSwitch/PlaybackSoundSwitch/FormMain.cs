@@ -10,7 +10,6 @@ using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MarkZ.Tools;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using MZ.Tools;
 using PlaybackSoundSwitch.ComObjects;
@@ -19,7 +18,6 @@ using PlaybackSoundSwitch.DeviceSwitch;
 using PlaybackSoundSwitch.Interfaces;
 using PlaybackSoundSwitch.Notifications;
 using PlaybackSoundSwitch.Properties;
-using PlaybackSoundSwitch.Tools;
 
 namespace PlaybackSoundSwitch
 {

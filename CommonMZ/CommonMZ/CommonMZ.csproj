@@ -49,6 +49,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class1.cs" />
@@ -64,12 +65,19 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\AlternateColorTool.cs" />
     <Compile Include="Tools\ControlExtension.cs" />
+    <Compile Include="Tools\EnumOpenWindows.cs" />
+    <Compile Include="Tools\NotifyPropertyChangedImpl.cs" />
+    <Compile Include="Tools\SingleInstanceHelper.cs" />
     <Compile Include="Tools\TaskbarManagerHelper.cs" />
     <Compile Include="Tools\User32.cs" />
-    <Compile Include="UtilsWinForms\CommonUtils.cs" />
+    <Compile Include="Tools\WindowInfo.cs" />
+    <Compile Include="Tools\XmlSerializerHelper.cs" />
+    <Compile Include="Tools\CommonUtils.cs" />
+    <Compile Include="UtilsWPF\RelayCommand.cs" />
+    <Compile Include="UtilsWPF\WPFUtils.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="UtilsWPF\" />
+    <Folder Include="UtilsWinForms\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using PlaybackSoundSwitch.Device;
 using System.Diagnostics;
-using PlaybackSoundSwitch.Tools;
 using MZ.Tools;
 using PlaybackSoundSwitch.DeviceSwitch;
 using MarkZ.Tools;

@@ -21,8 +21,7 @@ namespace DesktopManagerUX
         public static ObservableCollection<AppInfo> GetAppsWithUI()
         {
             List<AppInfo> apps = new List<AppInfo>();
-            //apps.Add(AppInfo.GetEmptyAppInfo());
-            apps.AddRange(EnumOpenWindows.GetOpenWindows());
+            apps.AddRange(EnumOpenWindows.GetOpenWindows().Select(w => new AppInfo(w)));
             apps.Sort((a1, a2) => string.Compare(a1.ProcessName, a2.ProcessName, true));
             apps.Insert(0, AppInfo.GetEmptyAppInfo());
 

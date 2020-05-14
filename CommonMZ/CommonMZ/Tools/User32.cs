@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MZ.Utils
+namespace MZ.Tools
 {
     public class User32
     {

@@ -1,21 +1,21 @@
-﻿using MZ.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
-namespace DesktopManagerUX.Utils
+namespace MZ.Tools
 {
     public class EnumOpenWindows
     {
         /// <summary>Returns a dictionary that contains the handle and title of all the open windows.</summary>
         /// <returns>A dictionary that contains the handle and title of all the open windows.</returns>
-        public static List<AppInfo> GetOpenWindows()
+        public static List<WindowInfo> GetOpenWindows()
         {
             IntPtr shellWindow = User32.GetShellWindow();
-            List<AppInfo> windows = new List<AppInfo>();
+            List<WindowInfo> windows = new List<WindowInfo>();
 
             User32.EnumWindows(delegate (IntPtr hWnd, int lParam)
             {
@@ -33,7 +33,7 @@ namespace DesktopManagerUX.Utils
                 if (ex.HasFlag(User32.WindowStylesEx.WS_EX_TOOLWINDOW) || ex.HasFlag(User32.WindowStylesEx.WS_EX_NOREDIRECTIONBITMAP))
                     return true;
 
-                windows.Add(new AppInfo(hWnd));
+                windows.Add(new WindowInfo(hWnd, title));
                 return true;
 
             }, 0);

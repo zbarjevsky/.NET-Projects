@@ -39,10 +39,10 @@ namespace DesktopManagerUX
             Init(p, p.MainWindowHandle);
         }
 
-        public AppInfo(IntPtr hWnd)
+        public AppInfo(WindowInfo wnd)
         {
-            Process p = GetProcessForWindow(hWnd);
-            Init(p, hWnd);
+            Process p = GetProcessForWindow(wnd.hWnd);
+            Init(p, wnd.hWnd);
         }
 
         public AppInfo()

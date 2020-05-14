@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using PlaybackSoundSwitch.Properties;
 using PlaybackSoundSwitch.Device;
-using PlaybackSoundSwitch.Tools;
 using MZ.Controls;
 
 namespace PlaybackSoundSwitch
@@ -53,7 +52,7 @@ namespace PlaybackSoundSwitch
 
             Device.AudioEndpointVolume.OnVolumeNotification = (notificationData) =>
             {
-                CommonUtils.ExecuteOnUIThread(() => {
+                MZ.Tools.CommonUtils.ExecuteOnUIThread(() => {
                     m_trackVolume.Value = (int)Math.Round(100f * notificationData.MasterVolume);
                 }
                 , this);

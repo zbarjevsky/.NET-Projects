@@ -2,7 +2,7 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
-using MZ.Utils;
+using MZ.Tools;
 using PlaybackSoundSwitch.ComObjects;
 using PlaybackSoundSwitch.Device;
 
@@ -59,7 +59,7 @@ namespace PlaybackSoundSwitch.DeviceSwitch
                 {
                     if (_enumerator.IsDefault(deviceId, EDataFlow.Render, role) || _enumerator.IsDefault(deviceId, EDataFlow.Capture, role))
                     {
-                        Trace.WriteLine($"Default endpoint already {deviceId}");
+                        System.Diagnostics.Trace.WriteLine($"Default endpoint already {deviceId}");
                         return;
                     }
 
@@ -103,7 +103,7 @@ namespace PlaybackSoundSwitch.DeviceSwitch
                 var currentEndpoint = roles.Select(eRole => ExtendPolicyClient.GetDefaultEndPoint(flow, eRole, processId)).FirstOrDefault(endpoint => !string.IsNullOrEmpty(endpoint));
                 if (deviceId.Equals(currentEndpoint))
                 {
-                    Trace.WriteLine($"Default endpoint for {processId} already {deviceId}");
+                    System.Diagnostics.Trace.WriteLine($"Default endpoint for {processId} already {deviceId}");
                     return;
                 }
 
