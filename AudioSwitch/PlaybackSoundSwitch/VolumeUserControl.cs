@@ -78,25 +78,31 @@ namespace PlaybackSoundSwitch
         {
             Device.AudioEndpointVolume.MasterVolumeLevelScalar = m_trackVolume.Value / 100f;
             OnVolumeChanged(m_trackVolume.Value / 100f);
-            UpdateMuteButtonUI();
+            UpdateUI();
             //SystemSounds.Beep.Play();
         }
 
         private void m_trackVolume_ValueChanged(object sender, EventArgs e)
         {
             OnVolumeChanged(m_trackVolume.Value / 100f);
-            UpdateMuteButtonUI();
+            UpdateUI();
         }
 
         private void m_btnMute_Click(object sender, EventArgs e)
         {
             Device.AudioEndpointVolume.Mute = !Device.AudioEndpointVolume.Mute;
-            UpdateMuteButtonUI();
+            UpdateUI();
         }
 
-        private void UpdateMuteButtonUI()
+        private void UpdateUI()
         {
+            this.Text = "";
+            this.m_lbl.Text = "N/A";
+            if (Device == null) 
+                return;
+            
             this.Text = Device.FriendlyName;
+            this.m_lbl.Text = m_trackVolume.Value + "%";
 
             string mute = Device.AudioEndpointVolume.Mute ? "Muted: " : "Mute: ";
             toolTip1.SetToolTip(m_btnMute, mute + Device.FriendlyName);
