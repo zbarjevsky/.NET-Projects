@@ -132,7 +132,7 @@ namespace PlaybackSoundSwitch
             UpdateUI(null);
         }
 
-        public void UpdateActiveDeviceVolume(float volume)
+        public void UpdateActiveDeviceVolume(float volume = 0)
         {
             if (ActiveDevice == null)
                 return;
@@ -157,18 +157,57 @@ namespace PlaybackSoundSwitch
         {
             UpdateStatus(status);
 
-            UpdateActiveDeviceVolume(0);
+            UpdateActiveDeviceVolume();
+
+            m_btnActivate.Enabled = false;
+            m_mnuActivate.Enabled = false;
+            m_mnuActivate.Image = null;
+            m_btnActivate.Image = null;
+
+            string activateText = "No Device Selected...";
 
             if (m_listDevices.SelectedItems.Count > 0)
             {
-                var device = GetSelectedDevice();
-                m_btnActivate.Enabled = (m_listDevices.SelectedItems[0].Font.Bold == false && device.State == EDeviceState.Active);
-                m_btnActivate.Text = "Set Active: " + GetSelectedName();
+                m_mnuActivate.Image = m_listDevices.SmallImageList.Images[m_listDevices.SelectedItems[0].ImageKey];
+
+                DeviceFullInfo device = GetSelectedDevice();
+
+                if (m_listDevices.SelectedItems[0].Font.Bold) //is active
+                {
+                    activateText = "Active Device: " + device.FriendlyName;
+                    m_mnuMute.Enabled = true;
+                }
+                else
+                {
+                    if (device.State == EDeviceState.Active)
+                    {
+                        m_mnuActivate.Enabled = true;
+                        m_btnActivate.Enabled = true;
+                        activateText = "Activate: " + device.FriendlyName;
+                    }
+                    else
+                    {
+                        activateText = "Inactive: " + device.FriendlyName;
+                    }
+                }
+            }
+
+            m_btnActivate.Text = activateText;
+            m_mnuActivate.Text = activateText;
+            m_btnActivate.Image = m_mnuActivate.Image;
+
+            if (_activeDevice != null)
+            {
+                m_mnuMute.Enabled = true;
+                m_mnuMute.Text = _activeDevice.AudioEndpointVolume.Mute ? "UnMute: " : "Mute: ";
+                m_mnuMute.Text += _activeDevice.FriendlyName;
+                m_mnuMute.Image = _activeDevice.AudioEndpointVolume.Mute ? m_imageListMute.Images[0] : m_imageListMute.Images[1];
             }
             else
             {
-                m_btnActivate.Enabled = false;
-                m_btnActivate.Text = "Select Device to Activate...";
+                m_mnuMute.Enabled = false;
+                m_mnuMute.Text = "Mute";
+                m_mnuMute.Image = null;
             }
         }
 
@@ -239,6 +278,22 @@ namespace PlaybackSoundSwitch
             {
                 MessageBox.Show(err.Message);
             }
+        }
+
+        private void m_mnuActivate_Click(object sender, EventArgs e)
+        {
+            SetActiveDevice();
+        }
+
+        private void m_mnuMute_Click(object sender, EventArgs e)
+        {
+            if (_activeDevice == null)
+                return;
+
+            string action = _activeDevice.AudioEndpointVolume.Mute ? "Unmute: " : "Mute: ";
+            _activeDevice.AudioEndpointVolume.Mute = !_activeDevice.AudioEndpointVolume.Mute;
+            UpdateUI(action + _activeDevice.FriendlyName);
+            UpdateStatus(action +_activeDevice.FriendlyName);
         }
     }
 }

@@ -93,7 +93,7 @@ namespace PlaybackSoundSwitch
             UpdateUI();
         }
 
-        private void UpdateUI()
+        public void UpdateUI()
         {
             this.Text = "";
             this.m_lbl.Text = "N/A";

@@ -40,8 +40,8 @@ namespace PlaybackSoundSwitch
             m_DeviceListPlayback.RefreshDeviceList = (status) => { EnumDevices(status); };
             m_DeviceListRecording.RefreshDeviceList = (status) => { EnumDevices(status); };
 
-            m_DeviceListPlayback.UpdateStatus = (status) => { UpdateUI(status); };
-            m_DeviceListRecording.UpdateStatus = (status) => { UpdateUI(status); };
+            m_DeviceListPlayback.UpdateStatus = (status) => { UpdateUI(status); m_volumeControlSpk.UpdateUI(); };
+            m_DeviceListRecording.UpdateStatus = (status) => { UpdateUI(status); m_volumeControlMic.UpdateUI(); };
 
             m_DeviceListPlayback.AlternateColorPalette = AlternateColorPalette.Cold;
             m_DeviceListRecording.AlternateColorPalette = AlternateColorPalette.Warm;
