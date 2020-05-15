@@ -354,7 +354,7 @@ namespace RulerWPF
 
         private void _canvasRuler_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if(e.ClickCount == 2)
+            if(e.ClickCount == 2) //DoubleClick
             {
                 switch ((int)_vm.oAngle)
                 {
@@ -387,6 +387,11 @@ namespace RulerWPF
         private void ExitMenuItem_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void Reset_Click(object sender, RoutedEventArgs e)
+        {
+            _vm.Reset();
         }
 
         private void AboutMenuItem_Click(object sender, RoutedEventArgs e)
