@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DesktopManagerUX.Utils
+namespace System.Windows.Desktop
 {
     //https://docs.microsoft.com/en-us/windows/win32/dwm/dwm-overview
     public class DesktopWindowManager

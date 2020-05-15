@@ -48,7 +48,6 @@ namespace DesktopManagerUX.Utils
             return row;
         }
 
-
         public static T GetVisualChild<T>(Visual parent) where T : Visual
         {
             T child = default(T);

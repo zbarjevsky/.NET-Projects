@@ -63,8 +63,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="..\..\CommonMZ\CommonMZ\Tools\EnumOpenWindows.cs">
-      <Link>Utils\EnumOpenWindows.cs</Link>
+    <Compile Include="..\..\CommonMZ\CommonMZ\Tools\DesktopWindowManager.cs">
+      <Link>Utils\DesktopWindowManager.cs</Link>
     </Compile>
     <Compile Include="..\..\CommonMZ\CommonMZ\Tools\NotifyPropertyChangedImpl.cs">
       <Link>Utils\NotifyPropertyChangedImpl.cs</Link>
@@ -93,7 +93,6 @@
     <Compile Include="Logic.cs" />
     <Compile Include="Utils\AeroPeek.cs" />
     <Compile Include="Utils\DataGridHelper.cs" />
-    <Compile Include="Utils\DesktopWindowManager.cs" />
     <Compile Include="Utils\Gdi32.cs" />
     <Compile Include="Utils\SmartCollection.cs" />
     <Compile Include="Utils\WpfScreen.cs" />
