@@ -100,10 +100,10 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\ClipboardListener\Utils\SingleInstanceHelper.cs">
+    <Compile Include="..\CommonMZ\CommonMZ\Tools\SingleInstanceHelper.cs">
       <Link>Tools\SingleInstanceHelper.cs</Link>
     </Compile>
-    <Compile Include="..\DesktopManager\DesktopManagerUX\Utils\User32.cs">
+    <Compile Include="..\CommonMZ\CommonMZ\Tools\User32.cs">
       <Link>Tools\User32.cs</Link>
     </Compile>
     <Compile Include="AnalogClock.cs">

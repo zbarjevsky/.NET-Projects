@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CircularGauge", "CircularGa
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWpfApp", "TestWpfApp\TestWpfApp.csproj", "{45332C57-40C1-4DCB-8F71-816AE07EBA4B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonMZ", "..\CommonMZ\CommonMZ\CommonMZ.csproj", "{A03C89DD-CA87-4C9E-9FF9-F4277372E0F7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +95,14 @@ Global
 		{45332C57-40C1-4DCB-8F71-816AE07EBA4B}.v4.0-Debug|Any CPU.Build.0 = Debug|Any CPU
 		{45332C57-40C1-4DCB-8F71-816AE07EBA4B}.v4.0-Release|Any CPU.ActiveCfg = Release|Any CPU
 		{45332C57-40C1-4DCB-8F71-816AE07EBA4B}.v4.0-Release|Any CPU.Build.0 = Release|Any CPU
+		{A03C89DD-CA87-4C9E-9FF9-F4277372E0F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A03C89DD-CA87-4C9E-9FF9-F4277372E0F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A03C89DD-CA87-4C9E-9FF9-F4277372E0F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A03C89DD-CA87-4C9E-9FF9-F4277372E0F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A03C89DD-CA87-4C9E-9FF9-F4277372E0F7}.v4.0-Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A03C89DD-CA87-4C9E-9FF9-F4277372E0F7}.v4.0-Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A03C89DD-CA87-4C9E-9FF9-F4277372E0F7}.v4.0-Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A03C89DD-CA87-4C9E-9FF9-F4277372E0F7}.v4.0-Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

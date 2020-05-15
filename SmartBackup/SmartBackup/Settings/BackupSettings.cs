@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Serialization;
-using MZ.Utils;
+using MZ.Tools;
 
 namespace SmartBackup.Settings
 {

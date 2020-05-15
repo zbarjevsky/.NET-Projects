@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -34,6 +35,16 @@ namespace MZ.Controls
         private int _value = 0;
         [Category(CAT)]
         public int Value { get { return _value; } set { _value = value; Refresh(); } }
+
+        public int ValuePercent { get { return (100 * (_value - _min)) / (_max - _min); } }
+
+        private int _max = 100;
+        [Category(CAT)]
+        public int Maximum { get { return _max; } set { _max = value; Refresh(); Debug.Assert(_min < _max); } }
+
+        private int _min = 0;
+        [Category(CAT)]
+        public int Minimum { get { return _min; } set { _min = value; Refresh(); Debug.Assert(_min < _max); } }
 
         private InactiveColorsTheme _inactiveColorTheme = InactiveColorsTheme.Pale;
         [Category(CAT)]
@@ -119,7 +130,7 @@ namespace MZ.Controls
 
             }
 
-            bool isBarActive = _value > 0 && (barPercent) <= _value;
+            bool isBarActive = ValuePercent > 0 && (barPercent) <= ValuePercent;
             Brush brush = GetBarColor(barPercent, isBarActive);
             g.FillRectangle(brush, rBar);
         }

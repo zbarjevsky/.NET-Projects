@@ -49,20 +49,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\AudioSwitch\PlaybackSoundSwitch\Tools\ControlExtension.cs">
-      <Link>Controls\ControlExtension.cs</Link>
-    </Compile>
-    <Compile Include="..\..\AudioSwitch\PlaybackSoundSwitch\Tools\ListViewCollapsibleGroups.cs">
+    <Compile Include="..\..\CommonMZ\CommonMZ\ControlsWinForms\ListViewCollapsibleGroups.cs">
       <Link>Controls\ListViewCollapsibleGroups.cs</Link>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="..\..\ClipboardListener\Utils\SingleInstanceHelper.cs">
+    <Compile Include="..\..\CommonMZ\CommonMZ\Tools\ControlExtension.cs">
+      <Link>Controls\ControlExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\..\CommonMZ\CommonMZ\Tools\SingleInstanceHelper.cs">
       <Link>Tools\SingleInstanceHelper.cs</Link>
     </Compile>
-    <Compile Include="..\..\DesktopManager\DesktopManagerUX\Utils\User32.cs">
+    <Compile Include="..\..\CommonMZ\CommonMZ\Tools\User32.cs">
       <Link>Tools\User32.cs</Link>
     </Compile>
-    <Compile Include="..\..\DesktopManager\DesktopManagerUX\Utils\XmlSerializerHelper.cs">
+    <Compile Include="..\..\CommonMZ\CommonMZ\Tools\XmlSerializerHelper.cs">
       <Link>Tools\XmlSerializerHelper.cs</Link>
     </Compile>
     <Compile Include="BackupListUserControl.cs">

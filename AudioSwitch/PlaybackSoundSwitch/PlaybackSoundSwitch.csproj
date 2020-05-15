@@ -86,9 +86,6 @@
     <Compile Include="..\..\CommonMZ\CommonMZ\Tools\User32.cs">
       <Link>Tools\User32.cs</Link>
     </Compile>
-    <Compile Include="..\..\CommonMZ\CommonMZ\Tools\WindowInfo.cs">
-      <Link>Tools\WindowInfo.cs</Link>
-    </Compile>
     <Compile Include="AudioVolume\AudioEndpointVolume.cs" />
     <Compile Include="AudioVolume\AudioEndpointVolumeCallback.cs" />
     <Compile Include="AudioVolume\AudioEndpointVolumeChannel.cs" />

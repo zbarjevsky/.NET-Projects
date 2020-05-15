@@ -8,6 +8,27 @@ using System.Threading.Tasks;
 
 namespace MZ.Tools
 {
+    public class WindowInfo
+    {
+        public IntPtr hWnd { get; set; }
+        public string Title { get; set; }
+
+        public WindowInfo(IntPtr hWnd, string title)
+        {
+            Title = title;
+            this.hWnd = hWnd;
+        }
+
+        public System.Windows.Forms.IWin32Window Win32Window { get { return System.Windows.Forms.Control.FromHandle(hWnd); } }
+
+        public override string ToString()
+        {
+            if (!string.IsNullOrWhiteSpace(Title))
+                return Title;
+            return "---";
+        }
+    }
+
     public class User32
     {
         public const uint SWP_SHOWWINDOW = 0x0001;
@@ -29,10 +50,13 @@ namespace MZ.Tools
         [StructLayout(LayoutKind.Sequential)]
         public struct RECT
         {
-            public Int32 left;
-            public Int32 top;
-            public Int32 right;
-            public Int32 bottom;
+            public int left;
+            public int top;
+            public int right;
+            public int bottom;
+
+            public int width { get { return right - left; } }
+            public int height { get { return bottom - top; } }
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -294,6 +318,34 @@ namespace MZ.Tools
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool SetWindowPos(IntPtr hWnd, IntPtr hWndInsertAfter, int X, int Y, int cx, int cy, SetWindowPosFlags uFlags);
 
+        #region Screen
+        [DllImport("user32.dll")]
+        public static extern int GetSystemMetrics(int smIndex);
+        public const int SM_CMONITORS = 80;
+
+        [DllImport("user32.dll")]
+        public static extern bool SystemParametersInfo(int nAction, int nParam, ref RECT rc, int nUpdate);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern bool GetMonitorInfo(HandleRef hmonitor, [In, Out] MONITORINFOEX info);
+
+        [DllImport("User32.dll")]
+        public static extern bool SetCursorPos(int X, int Y);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr MonitorFromWindow(HandleRef handle, int flags);
+
+        [StructLayout(LayoutKind.Sequential, Pack = 4, CharSet = CharSet.Auto)]
+        public class MONITORINFOEX
+        {
+            public int cbSize = Marshal.SizeOf(typeof(MONITORINFOEX));
+            public RECT rcMonitor = new RECT();
+            public RECT rcWork = new RECT();
+            [MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
+            public char[] szDevice = new char[32];
+            public int dwFlags;
+        }
+        #endregion
 
         [Flags()]
         private enum SetWindowPosFlags : uint

@@ -14,7 +14,7 @@ namespace SmartBackup
         [STAThread]
         static void Main()
         {
-            if (MZ.Utils.SingleInstanceHelper.GlobalShowWindow(FormMain.TITLE))
+            if (MZ.Tools.SingleInstanceHelper.GlobalShowWindow(FormMain.TITLE))
                 return; //already running
 
             Application.EnableVisualStyles();

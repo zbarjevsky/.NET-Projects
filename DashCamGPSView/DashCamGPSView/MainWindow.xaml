@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:DashCamGPSView"
         xmlns:controls="clr-namespace:DashCamGPSView.Controls"
         xmlns:gauge="clr-namespace:CircularGauge;assembly=CircularGauge"
-        xmlns:speedGauge="clr-namespace:SpeedGauge;assembly=CircularGauge"
+        xmlns:speedGauge="clr-namespace:SpeedGauge;assembly=CircularGauge" 
+        xmlns:local1="clr-namespace:MZ.Tools"
         mc:Ignorable="d"
         Loaded="Window_Loaded" Closed="Window_Closed" PreviewKeyDown="Window_PreviewKeyDown"
         WindowStartupLocation="Manual"
@@ -46,28 +47,28 @@
         
         <ToolBar Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" >
             <Button Command="ApplicationCommands.Open" ToolTip="Open">
-                <local:AutoGreyableImage Source="/DashCamGPSView;component/Images/map_32px.png" />
+                <local1:AutoGreyableImage Source="/DashCamGPSView;component/Images/map_32px.png" />
             </Button>
             <Separator />
             <Button Command="MediaCommands.PreviousTrack" ToolTip="Previous File" >
-                <local:AutoGreyableImage Source="/Images/PrevE.png" />
+                <local1:AutoGreyableImage Source="/Images/PrevE.png" />
             </Button>
             <Separator />
             <Button Command="MediaCommands.Play" ToolTip="Play" >
-                <local:AutoGreyableImage  Source="/Images/PlayE.png" />
+                <local1:AutoGreyableImage  Source="/Images/PlayE.png" />
             </Button>
             <Button Command="MediaCommands.Pause" ToolTip="Pause" >
-                <local:AutoGreyableImage Source="/Images/PauseE.png" />
+                <local1:AutoGreyableImage Source="/Images/PauseE.png" />
             </Button>
             <Button Command="MediaCommands.Stop" ToolTip="Stop" >
-                <local:AutoGreyableImage Source="/Images/StopE.png" />
+                <local1:AutoGreyableImage Source="/Images/StopE.png" />
             </Button>
             <Separator />
             <Button Command="MediaCommands.NextTrack" ToolTip="Next File" >
-                <local:AutoGreyableImage Source="/Images/nextE.png" />
+                <local1:AutoGreyableImage Source="/Images/nextE.png" />
             </Button>
             <Button  ToolTip="Screen Shot" Click="Screenshot_Click" >
-                <local:AutoGreyableImage Source="/Images/Screenshot.png" />
+                <local1:AutoGreyableImage Source="/Images/Screenshot.png" />
             </Button>
             <Button  ToolTip="Test" Content="Test" Click="Test_Click" />
             <TextBox Name="txtFileName"  Text="..." IsReadOnly="True"

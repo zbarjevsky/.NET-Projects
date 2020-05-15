@@ -25,7 +25,7 @@ namespace RadexOneDemo
 
         private static bool SingleInstance()
         {
-            return !(MZ.Utils.SingleInstanceHelper.GlobalShowWindow(FormMain.TITLE));
+            return !(MZ.Tools.SingleInstanceHelper.GlobalShowWindow(FormMain.TITLE));
         }//end SingleInstance
     }
 }

@@ -43,6 +43,7 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -70,11 +71,19 @@
     <Compile Include="Tools\SingleInstanceHelper.cs" />
     <Compile Include="Tools\TaskbarManagerHelper.cs" />
     <Compile Include="Tools\User32.cs" />
-    <Compile Include="Tools\WindowInfo.cs" />
+    <Compile Include="Tools\WindowsMessages.cs" />
     <Compile Include="Tools\XmlSerializerHelper.cs" />
     <Compile Include="Tools\CommonUtils.cs" />
+    <Compile Include="UtilsWPF\AutoGreyableImage.cs" />
+    <Compile Include="UtilsWPF\DraggableExtension.cs" />
+    <Compile Include="UtilsWPF\GridLengthAnimation.cs" />
+    <Compile Include="UtilsWPF\ItemsControlExtensions.cs" />
     <Compile Include="UtilsWPF\RelayCommand.cs" />
+    <Compile Include="UtilsWPF\RelayCommand1.cs" />
+    <Compile Include="UtilsWPF\ScrollDragZoom.cs" />
+    <Compile Include="UtilsWPF\WPFExtensionMethods.cs" />
     <Compile Include="UtilsWPF\WPFUtils.cs" />
+    <Compile Include="UtilsWPF\WPF_Helper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="UtilsWinForms\" />

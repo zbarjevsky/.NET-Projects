@@ -117,7 +117,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\DesktopManager\DesktopManagerUX\Utils\User32.cs">
+    <Compile Include="..\CommonMZ\CommonMZ\Tools\SingleInstanceHelper.cs">
+      <Link>Utils\SingleInstanceHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonMZ\CommonMZ\Tools\User32.cs">
       <Link>Utils\User32.cs</Link>
     </Compile>
     <Compile Include="AnimEffect.cs" />
@@ -150,7 +153,6 @@
     <Compile Include="Utils\ListViewColumnSorter.cs" />
     <Compile Include="Utils\ServicesManipulator.cs" />
     <Compile Include="Utils\ShutdownHandler.cs" />
-    <Compile Include="Utils\SingleInstanceHelper.cs" />
     <Compile Include="Utils\Log.cs" />
     <Compile Include="Utils\Settings.cs" />
     <Compile Include="Utils\XmlSerializerHelper.cs" />
@@ -255,7 +257,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Utils\WindowHighlighter.cs" />
-    <Compile Include="Utils\WindowsMessages.cs" />
     <Compile Include="Utils\XmlUtil.cs" />
     <Compile Include="Zip\IZip.cs" />
   </ItemGroup>

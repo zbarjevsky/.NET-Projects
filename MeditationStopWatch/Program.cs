@@ -31,7 +31,7 @@ namespace MeditationStopWatch
 
         private static bool SingleInstance()
         {
-            return !(MZ.Utils.SingleInstanceHelper.GlobalShowWindow(FormStopWatch.TITLE));
+            return !(MZ.Tools.SingleInstanceHelper.GlobalShowWindow(FormStopWatch.TITLE));
         }//end SingleInstance
     }
 }

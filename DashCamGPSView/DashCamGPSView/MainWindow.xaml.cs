@@ -28,6 +28,7 @@ using GPSDataParser;
 using System.Windows.Media.Animation;
 using DashCamGPSView.Controls;
 using System.Runtime.CompilerServices;
+using MZ.Tools;
 
 namespace DashCamGPSView
 {

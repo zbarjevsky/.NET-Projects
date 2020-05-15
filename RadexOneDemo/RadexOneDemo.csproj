@@ -65,6 +65,13 @@
     <Compile Include="..\ClipboardListener\Utils\SingleInstanceHelper.cs">
       <Link>Utils\SingleInstanceHelper.cs</Link>
     </Compile>
+    <Compile Include="..\CommonMZ\CommonMZ\ControlsWinForms\ColorBarsProgressBar.cs">
+      <Link>Utils\ColorBarsProgressBar.cs</Link>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="..\CommonMZ\CommonMZ\Tools\User32.cs">
+      <Link>Utils\User32.cs</Link>
+    </Compile>
     <Compile Include="RadiationLog.cs" />
     <Compile Include="Commands.cs" />
     <Compile Include="CommDataModel.cs" />

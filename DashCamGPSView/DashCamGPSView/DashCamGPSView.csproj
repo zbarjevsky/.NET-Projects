@@ -46,6 +46,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -64,6 +65,27 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="..\..\CommonMZ\CommonMZ\Tools\User32.cs">
+      <Link>Tools\User32.cs</Link>
+    </Compile>
+    <Compile Include="..\..\CommonMZ\CommonMZ\UtilsWPF\AutoGreyableImage.cs">
+      <Link>Tools\AutoGreyableImage.cs</Link>
+    </Compile>
+    <Compile Include="..\..\CommonMZ\CommonMZ\UtilsWPF\DraggableExtension.cs">
+      <Link>Tools\DraggableExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\..\CommonMZ\CommonMZ\UtilsWPF\GridLengthAnimation.cs">
+      <Link>Tools\GridLengthAnimation.cs</Link>
+    </Compile>
+    <Compile Include="..\..\CommonMZ\CommonMZ\UtilsWPF\ItemsControlExtensions.cs">
+      <Link>Tools\ItemsControlExtensions.cs</Link>
+    </Compile>
+    <Compile Include="..\..\CommonMZ\CommonMZ\UtilsWPF\ScrollDragZoom.cs">
+      <Link>Tools\ScrollDragZoom.cs</Link>
+    </Compile>
+    <Compile Include="..\..\CommonMZ\CommonMZ\UtilsWPF\WPFExtensionMethods.cs">
+      <Link>Tools\WPFExtensionMethods.cs</Link>
+    </Compile>
     <Compile Include="Controls\IVideoPlayer.cs" />
     <Compile Include="Controls\PlayerTimeLineBarUserControl.xaml.cs">
       <DependentUpon>PlayerTimeLineBarUserControl.xaml</DependentUpon>
@@ -113,7 +135,6 @@
     <Compile Include="CustomMarkers\CustomMarkerRoute.xaml.cs">
       <DependentUpon>CustomMarkerRoute.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Tools\AutoGreyableImage.cs" />
     <Compile Include="Controls\CompassUserControl.xaml.cs">
       <DependentUpon>CompassUserControl.xaml</DependentUpon>
     </Compile>
@@ -141,17 +162,12 @@
     </Compile>
     <Compile Include="Tools\DemoStuff.cs" />
     <Compile Include="Controls\PercentageConverter.cs" />
-    <Compile Include="Tools\ScrollDragZoom.cs" />
     <Compile Include="Tools\DashCamFileInfo.cs" />
     <Compile Include="Tools\DashCamFileTree.cs" />
     <Compile Include="Controls\VideoPlayerControl.xaml.cs">
       <DependentUpon>VideoPlayerControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Tools\DraggableExtension.cs" />
     <Compile Include="Tools\ExportUtils.cs" />
-    <Compile Include="Tools\GridLengthAnimation.cs" />
-    <Compile Include="Tools\ItemsControlExtensions.cs" />
-    <Compile Include="Tools\RelayCommand.cs" />
     <Compile Include="Tools\Tools.cs" />
     <Page Include="Controls\PlayerTimeLineBarUserControl.xaml">
       <SubType>Designer</SubType>
