@@ -1,11 +1,12 @@
-﻿using Microsoft.WindowsAPICodePack.Taskbar;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+
+using Microsoft.WindowsAPICodePack.Taskbar;
 
 namespace MZ.Tools
 {
@@ -21,7 +22,7 @@ namespace MZ.Tools
             for (int i = 0; i < COUNT; i++)
             {
                 string txt = (i + 1).ToString();
-                _buttons[i] = new ThumbnailToolbarButton(CreateIcon(txt), txt);
+                _buttons[i] = new ThumbnailToolbarButton(CreateTextIcon(txt), txt);
                 _buttons[i].DismissOnClick = false;
                 _buttons[i].IsInteractive = true;
                 _buttons[i].Visible = true;
@@ -30,65 +31,84 @@ namespace MZ.Tools
             }
         }
 
-        public static Action<string> ButtonClicked = (tooltip) => { };
+        public static Action<int> ButtonClicked = (index) => { };
 
         public static void Init(IntPtr hWnd)
         {
             TaskbarManager.Instance.ThumbnailToolbars.AddButtons(hWnd, _buttons);
         }
 
-        public static void UpdateButtons(ListView.ListViewItemCollection items, string disableTooltip)
-        {
-            for (int i = 0; i < COUNT; i++)
-            {
-                if (i < items.Count)
-                {
-                    UpdateButtonText(i, items[i].Text, items[i].Text != disableTooltip, true);
-                    UpdateButtonIcon(i, items[i]);
-                }
-                else //hide
-                    UpdateButtonText(i, "", false, false);
-            }
-        }
-
-        public static void UpdateButtons(List<string> tooltips, string disableTooltip)
+        public static void ShowButtons(List<string> tooltips, List<Icon> icons, string disableButtonWithThisTooltip = "")
         {
             for (int i = 0; i < COUNT; i++)
             {
                 if (i < tooltips.Count)
-                    UpdateButtonText(i, tooltips[i], tooltips[i] != disableTooltip, true);
+                {
+                    _buttons[i].Visible = true;
+                    _buttons[i].Tooltip = tooltips[i];
+                    _buttons[i].Enabled = tooltips[i] != disableButtonWithThisTooltip;
+                    if(icons!=null && icons[i] != null)
+                        _buttons[i].Icon = icons[i];
+                }
                 else //hide
-                    UpdateButtonText(i, "", false, false);
+                {
+                    _buttons[i].Visible = false;
+                    _buttons[i].Enabled = false;
+                }
             }
         }
 
-        private static void UpdateButtonIcon(int idx, ListViewItem item)
+        public static void ShowButtons(ListView.ListViewItemCollection items, string disableButtonWithThisTooltip)
         {
-            Image img = item.ImageList.Images[item.ImageKey];
-            Icon ico = Icon.FromHandle(((Bitmap)img).GetHicon());
-            if (_buttons[idx].Icon != null)
-                _buttons[idx].Icon.Dispose();
-            _buttons[idx].Icon = ico;
+            List<string> tooltips = items.OfType<ListViewItem>().Select(i => i.Text).ToList();
+            List<Image> images = items.OfType<ListViewItem>().Select(item => item.ImageList.Images[item.ImageKey]).ToList();
+            List<Icon> icons = images.Select(img => Icon.FromHandle(((Bitmap)img).GetHicon())).ToList();
+
+            ShowButtons(tooltips, icons, disableButtonWithThisTooltip);
         }
 
-        public static void UpdateButtonText(int idx, string tooltip, bool enable, bool show = true)
-        {
-            if (idx >= 0 && idx < COUNT)
-            {
-                _buttons[idx].Tooltip = tooltip;
-                _buttons[idx].Enabled = enable;
-                _buttons[idx].Visible = show;
-            }
-        }
+        //public static void UpdateButtons(List<string> tooltips, string disableButtonWithThisTooltip)
+        //{
+        //    for (int i = 0; i < COUNT; i++)
+        //    {
+        //        if (i < tooltips.Count)
+        //            UpdateButtonText(i, tooltips[i], tooltips[i] != disableButtonWithThisTooltip, true);
+        //        else //hide
+        //            UpdateButtonText(i, "", false, false);
+        //    }
+        //}
+
+        //private static void UpdateButtonIcon(int idx, ListViewItem item)
+        //{
+        //    Image img = item.ImageList.Images[item.ImageKey];
+        //    Icon ico = Icon.FromHandle(((Bitmap)img).GetHicon());
+        //    if (_buttons[idx].Icon != null)
+        //        _buttons[idx].Icon.Dispose();
+        //    _buttons[idx].Icon = ico;
+        //}
+
+        //public static void UpdateButtonText(int idx, string tooltip, bool enable, bool show = true)
+        //{
+        //    if (idx >= 0 && idx < COUNT)
+        //    {
+        //        _buttons[idx].Tooltip = tooltip;
+        //        _buttons[idx].Enabled = enable;
+        //        _buttons[idx].Visible = show;
+        //    }
+        //}
 
         private static void TaskbarButton_Click(object sender, ThumbnailButtonClickedEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("Button clicked: "+e.ThumbnailButton.Tooltip);
-            e.ThumbnailButton.Enabled = false; //avoid double click
-            ButtonClicked(e.ThumbnailButton.Tooltip);
-        }
+            //e.ThumbnailButton.Enabled = false; //avoid double click
+            for (int i = 0; i < COUNT; i++)
+            {
+                if(_buttons[i] == e.ThumbnailButton)
+                    ButtonClicked(i);
+            }
+         }
 
-        private static Icon CreateIcon(string text, int size = 16)
+        private static Icon CreateTextIcon(string text, int size = 16)
         {
             using (Bitmap bmp = new Bitmap(size, size))
             {

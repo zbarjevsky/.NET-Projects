@@ -74,13 +74,12 @@
     </Reference>
     <Reference Include="Microsoft.VisualC" />
     <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\WindowsAPICodePack-Core.1.1.1\lib\Microsoft.WindowsAPICodePack.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ThirdParty\WindowsAPICodePack\Microsoft.WindowsAPICodePack.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\WindowsAPICodePack-Shell.1.1.1\lib\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.WindowsAPICodePack.ShellExtensions, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.WindowsAPICodePack-Shell.1.1.0.0\lib\Microsoft.WindowsAPICodePack.ShellExtensions.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ThirdParty\WindowsAPICodePack\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -116,6 +115,9 @@
     </Compile>
     <Compile Include="..\CommonMZ\CommonMZ\Tools\SingleInstanceHelper.cs">
       <Link>Tools\SingleInstanceHelper.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonMZ\CommonMZ\Tools\TaskbarManagerHelper.cs">
+      <Link>Tools\TaskbarManagerHelper.cs</Link>
     </Compile>
     <Compile Include="..\CommonMZ\CommonMZ\Tools\User32.cs">
       <Link>Tools\User32.cs</Link>

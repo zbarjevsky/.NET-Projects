@@ -251,16 +251,12 @@ namespace PlaybackSoundSwitch
             SetActiveDevice(GetSelectedDevice());
         }
 
-        public void SetActiveDevice(string friendlyName)
+        public void SetActiveDevice(int index)
         {
             ListViewGroup activeGroup = m_listDevices.Groups[0];
-            for (int i = 0; i < activeGroup.Items.Count; i++)
-            {
-                ListViewItem item = activeGroup.Items[i];
-                DeviceFullInfo dev = item.Tag as DeviceFullInfo;
-                if (friendlyName == dev.FriendlyName)
-                    SetActiveDevice(dev);
-            }
+            ListViewItem item = activeGroup.Items[index];
+            DeviceFullInfo dev = item.Tag as DeviceFullInfo;
+            SetActiveDevice(dev);
         }
 
         private void SetActiveDevice(DeviceFullInfo device)

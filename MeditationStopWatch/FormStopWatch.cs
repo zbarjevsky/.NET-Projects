@@ -13,6 +13,7 @@ using MeditationStopWatch.Tools;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using MZ.Tools.WinForms;
 using MZ.ControlsWinForms;
+using MZ.Tools;
 
 namespace MeditationStopWatch
 {
@@ -25,12 +26,6 @@ namespace MeditationStopWatch
 		private IList<string> m_FavoritesList = new List<string>();
 		ImageFileUtil ImageInfo = new ImageFileUtil();
 		ThumbnailCache m_ThumbnailCache;
-
-		//https://stackoverflow.com/questions/18327185/c-sharp-showing-buttons-on-taskbar-thumbnails
-		//https://www.codeproject.com/articles/65185/windows-7-taskbar-c-quick-reference
-		private ThumbnailToolBarButton buttonPrevious;
-		private ThumbnailToolBarButton buttonNext;
-		private ThumbnailToolBarButton buttonPlay;
 
 		public FormStopWatch()
 		{
@@ -162,19 +157,20 @@ namespace MeditationStopWatch
 
 		private void InitThumbnailToolBarButtons()
 		{
-			buttonPrevious = new ThumbnailToolBarButton(Properties.Resources.previus_on, "Previous");
-			buttonPrevious.Click += (s,e) => { m_audioPlayerControl.Prev(); };
-			buttonPrevious.Visible = true;
-
-			buttonNext = new ThumbnailToolBarButton(Properties.Resources.next_on, "Next");
-			buttonNext.Click += (s, e) => { m_audioPlayerControl.Next(); };
-			buttonNext.Visible = true;
-
-			buttonPlay = new ThumbnailToolBarButton(Properties.Resources.pause_on, "Play/Pause");
-			buttonPlay.Click += (s, e) => { m_audioPlayerControl.PauseResume(); };
-			buttonPlay.Visible = true;
-
-			TaskbarManager.Instance.ThumbnailToolBars.AddButtons(this.Handle, buttonPrevious, buttonPlay, buttonNext);
+			TaskbarManagerHelper.Init(this.Handle);
+			TaskbarManagerHelper.ShowButtons(
+				new List<string>() {"Previous", "Play/Pause",  "Next"}, 
+				new List<Icon>() { Properties.Resources.previus_on, Properties.Resources.pause_on, Properties.Resources.next_on});
+			
+			TaskbarManagerHelper.ButtonClicked = (index) => 
+			{
+				if (index == 0)
+					m_audioPlayerControl.Prev();
+				if (index == 1)
+					m_audioPlayerControl.PauseResume();
+				if (index == 2)
+					m_audioPlayerControl.Next();
+			};
 		}
 
 		private void m_ThumbnailCache_ProgressChanged(object sender, CacheEventArgs e)

@@ -35,7 +35,7 @@ namespace PlaybackSoundSwitch
             _mmd.DefaultDeviceChanged = OnDefaultDeviceChanged;
 
             TaskbarManagerHelper.Init(this.Handle);
-            TaskbarManagerHelper.ButtonClicked = (friendlyName) => { m_DeviceListPlayback.SetActiveDevice(friendlyName); };
+            TaskbarManagerHelper.ButtonClicked = (index) => { m_DeviceListPlayback.SetActiveDevice(index); };
 
             m_DeviceListPlayback.RefreshDeviceList = (status) => { EnumDevices(status); };
             m_DeviceListRecording.RefreshDeviceList = (status) => { EnumDevices(status); };
@@ -122,7 +122,7 @@ namespace PlaybackSoundSwitch
         private void UpdateTaskbarButtons()
         {
             ListViewGroup activeGroup = m_DeviceListPlayback.GetItemGroup(EDeviceState.Active);
-            TaskbarManagerHelper.UpdateButtons(activeGroup.Items, m_DeviceListPlayback.ActiveDevice.FriendlyName);
+            TaskbarManagerHelper.ShowButtons(activeGroup.Items, m_DeviceListPlayback.ActiveDevice.FriendlyName);
         }
 
         private void UpdateUI(string status)
