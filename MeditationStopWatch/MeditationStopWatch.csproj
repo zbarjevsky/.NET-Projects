@@ -100,6 +100,17 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\CommonMZ\CommonMZ\ControlsWinForms\ControlExtension.cs">
+      <Link>Tools\ControlExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonMZ\CommonMZ\ControlsWinForms\FormInPlaceEdit.cs">
+      <Link>FormInPlaceEdit.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\CommonMZ\CommonMZ\ControlsWinForms\FormInPlaceEdit.designer.cs">
+      <Link>FormInPlaceEdit.designer.cs</Link>
+      <DependentUpon>FormInPlaceEdit.cs</DependentUpon>
+    </Compile>
     <Compile Include="..\CommonMZ\CommonMZ\Tools\SingleInstanceHelper.cs">
       <Link>Tools\SingleInstanceHelper.cs</Link>
     </Compile>
@@ -159,12 +170,6 @@
     <Compile Include="FormFullScreenImage.Designer.cs">
       <DependentUpon>FormFullScreenImage.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormInPlaceEdit.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormInPlaceEdit.Designer.cs">
-      <DependentUpon>FormInPlaceEdit.cs</DependentUpon>
-    </Compile>
     <Compile Include="FormOptions.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -200,6 +205,10 @@
     <Compile Include="ZoomablePictureBoxUserControl.Designer.cs">
       <DependentUpon>ZoomablePictureBoxUserControl.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="..\CommonMZ\CommonMZ\ControlsWinForms\FormInPlaceEdit.resx">
+      <Link>FormInPlaceEdit.resx</Link>
+      <DependentUpon>FormInPlaceEdit.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="AnalogClock.resx">
       <DependentUpon>AnalogClock.cs</DependentUpon>
     </EmbeddedResource>
@@ -218,9 +227,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormFullScreenImage.resx">
       <DependentUpon>FormFullScreenImage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormInPlaceEdit.resx">
-      <DependentUpon>FormInPlaceEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormOptions.resx">
       <DependentUpon>FormOptions.cs</DependentUpon>
@@ -270,7 +276,6 @@
     </Compile>
     <Compile Include="ToolStripTrackBar.cs" />
     <Compile Include="ExifTools.cs" />
-    <Compile Include="Tools\ControlExtension.cs" />
     <Compile Include="Tools\LabelWithTimeout.cs">
       <SubType>Component</SubType>
     </Compile>

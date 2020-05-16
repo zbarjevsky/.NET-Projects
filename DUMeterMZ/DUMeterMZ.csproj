@@ -163,6 +163,8 @@
       <LastGenOutput>Log.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
+    <None Include="Resources\SmallX.ico" />
+    <None Include="Resources\RedX.ico" />
     <Content Include="res\bmp\bbabort.bmp" />
     <Content Include="res\bmp\bball.bmp" />
     <Content Include="res\bmp\bbcancel.bmp" />

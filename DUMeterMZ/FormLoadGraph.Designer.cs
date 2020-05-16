@@ -69,15 +69,17 @@ namespace DUMeterMZ
             this.m_oleDbSelectCommand = new System.Data.OleDb.OleDbCommand();
             this.m_oleDbUpdateCommand = new System.Data.OleDb.OleDbCommand();
             this.m_logger = new DUMeterMZ.Log();
-            this.m_lblScale = new OrientableText.OrientedTextLabel();
-            this.m_PictureBoxGraph = new System.Windows.Forms.PictureBox();
             this.m_pnlMain = new System.Windows.Forms.Panel();
+            this.m_btnHide = new System.Windows.Forms.Button();
+            this.m_PictureBoxGraph = new System.Windows.Forms.PictureBox();
+            this.m_lblScale = new OrientableText.OrientedTextLabel();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.m_PerformanceCounterRecv)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_PerformanceCounterSend)).BeginInit();
             this.m_ContextMenuMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_logger)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.m_PictureBoxGraph)).BeginInit();
             this.m_pnlMain.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.m_PictureBoxGraph)).BeginInit();
             this.SuspendLayout();
             // 
             // m_Timer
@@ -123,7 +125,7 @@ namespace DUMeterMZ
             this.menuItemSep3,
             this.menu_Exit});
             this.m_ContextMenuMain.Name = "m_ContextMenuMain";
-            this.m_ContextMenuMain.Size = new System.Drawing.Size(186, 256);
+            this.m_ContextMenuMain.Size = new System.Drawing.Size(186, 278);
             // 
             // menuShowHide
             // 
@@ -260,7 +262,7 @@ namespace DUMeterMZ
             // 
             // menu_Exit
             // 
-            this.menu_Exit.Image = ((System.Drawing.Image)(resources.GetObject("menu_Exit.Image")));
+            this.menu_Exit.Image = global::DUMeterMZ.Properties.Resources.RedX;
             this.menu_Exit.Name = "menu_Exit";
             this.menu_Exit.Size = new System.Drawing.Size(185, 26);
             this.menu_Exit.Text = "Exit";
@@ -320,21 +322,33 @@ namespace DUMeterMZ
             this.m_logger.Locale = new System.Globalization.CultureInfo("en-US");
             this.m_logger.SchemaSerializationMode = System.Data.SchemaSerializationMode.IncludeSchema;
             // 
-            // m_lblScale
+            // m_pnlMain
             // 
-            this.m_lblScale.BackColor = System.Drawing.Color.Silver;
-            this.m_lblScale.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.m_lblScale.Dock = System.Windows.Forms.DockStyle.Left;
-            this.m_lblScale.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.m_lblScale.Location = new System.Drawing.Point(0, 0);
-            this.m_lblScale.Name = "m_lblScale";
-            this.m_lblScale.Size = new System.Drawing.Size(21, 58);
-            this.m_lblScale.TabIndex = 1;
-            this.m_lblScale.Text = "1500 k";
-            this.m_lblScale.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_lblScale.TextDirection = OrientableText.Direction.Clockwise;
-            this.m_lblScale.TextOrientation = OrientableText.Orientation.Rotate;
-            this.m_lblScale.TextRotationAngle = 270D;
+            this.m_pnlMain.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.m_pnlMain.Controls.Add(this.m_btnHide);
+            this.m_pnlMain.Controls.Add(this.m_PictureBoxGraph);
+            this.m_pnlMain.Controls.Add(this.m_lblScale);
+            this.m_pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_pnlMain.Location = new System.Drawing.Point(0, 0);
+            this.m_pnlMain.Name = "m_pnlMain";
+            this.m_pnlMain.Size = new System.Drawing.Size(184, 60);
+            this.m_pnlMain.TabIndex = 2;
+            // 
+            // m_btnHide
+            // 
+            this.m_btnHide.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnHide.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
+            this.m_btnHide.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
+            this.m_btnHide.Font = new System.Drawing.Font("Webdings", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
+            this.m_btnHide.Image = global::DUMeterMZ.Properties.Resources.SmallX;
+            this.m_btnHide.Location = new System.Drawing.Point(161, 3);
+            this.m_btnHide.Name = "m_btnHide";
+            this.m_btnHide.Size = new System.Drawing.Size(18, 18);
+            this.m_btnHide.TabIndex = 3;
+            this.m_btnHide.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.toolTip1.SetToolTip(this.m_btnHide, "Hide");
+            this.m_btnHide.UseVisualStyleBackColor = false;
+            this.m_btnHide.Click += new System.EventHandler(this.m_btnHide_Click);
             // 
             // m_PictureBoxGraph
             // 
@@ -355,16 +369,21 @@ namespace DUMeterMZ
             this.m_PictureBoxGraph.MouseUp += new System.Windows.Forms.MouseEventHandler(this.m_PictureBoxGraph_MouseUp);
             this.m_PictureBoxGraph.Resize += new System.EventHandler(this.m_PictureBoxGraph_Resize);
             // 
-            // m_pnlMain
+            // m_lblScale
             // 
-            this.m_pnlMain.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.m_pnlMain.Controls.Add(this.m_PictureBoxGraph);
-            this.m_pnlMain.Controls.Add(this.m_lblScale);
-            this.m_pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_pnlMain.Location = new System.Drawing.Point(0, 0);
-            this.m_pnlMain.Name = "m_pnlMain";
-            this.m_pnlMain.Size = new System.Drawing.Size(184, 60);
-            this.m_pnlMain.TabIndex = 2;
+            this.m_lblScale.BackColor = System.Drawing.Color.Silver;
+            this.m_lblScale.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.m_lblScale.Dock = System.Windows.Forms.DockStyle.Left;
+            this.m_lblScale.Font = new System.Drawing.Font("Tahoma", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.m_lblScale.Location = new System.Drawing.Point(0, 0);
+            this.m_lblScale.Name = "m_lblScale";
+            this.m_lblScale.Size = new System.Drawing.Size(21, 58);
+            this.m_lblScale.TabIndex = 1;
+            this.m_lblScale.Text = "1500 k";
+            this.m_lblScale.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.m_lblScale.TextDirection = OrientableText.Direction.Clockwise;
+            this.m_lblScale.TextOrientation = OrientableText.Orientation.Rotate;
+            this.m_lblScale.TextRotationAngle = 270D;
             // 
             // FormLoadGraph
             // 
@@ -391,8 +410,8 @@ namespace DUMeterMZ
             ((System.ComponentModel.ISupportInitialize)(this.m_PerformanceCounterSend)).EndInit();
             this.m_ContextMenuMain.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.m_logger)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.m_PictureBoxGraph)).EndInit();
             this.m_pnlMain.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.m_PictureBoxGraph)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -435,5 +454,7 @@ namespace DUMeterMZ
         private System.Windows.Forms.PictureBox m_PictureBoxGraph;
         private System.Windows.Forms.NotifyIcon m_NotifyIcon;
         private Panel m_pnlMain;
+        private Button m_btnHide;
+        private ToolTip toolTip1;
     }
 }

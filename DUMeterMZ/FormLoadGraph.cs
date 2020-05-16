@@ -207,8 +207,9 @@ namespace DUMeterMZ
 		}//end MyMouseWheel
 
 
-        int m_hidecounter = 0;
-		int m_iCheckIpCount = 0;
+		private long m_hidecounter = 0;
+		private long m_iCheckIpCount = 0;
+		private long m_iHideControlsCounter = 0;
         private bool m_bInTimer = false;
         private void m_Timer_Tick(object sender, System.EventArgs e)
 		{
@@ -240,6 +241,9 @@ namespace DUMeterMZ
 					_screenSaver.PerformScreenSaving();
 				}
 				m_iCheckIpCount++;
+
+				if (!_hover && m_iHideControlsCounter++ > 5)
+					m_btnHide.Visible = false;
 
                 //LogData();
                 DrawGraph();
@@ -652,6 +656,11 @@ namespace DUMeterMZ
 			//this.menuShowHide.Text = this.Visible ? "Hide" : "Show";
 		}//end menuShowHide_Click
 
+		private void m_btnHide_Click(object sender, EventArgs e)
+		{
+			menuShowHide_Click(sender, e);
+		}
+
 		private void menu_resetPosition_Click(object sender, EventArgs e)
 		{
 			this.CenterToScreen();
@@ -782,16 +791,18 @@ namespace DUMeterMZ
 			}//end else
 		}//end ShowWindowBorder
 
-		private bool hover = false;
+		private bool _hover = false;
 
 		private void m_PictureBoxGraph_MouseHover(object sender, System.EventArgs e)
 		{
-			hover = true;
+			_hover = true;
+			m_iHideControlsCounter = 0;
+			m_btnHide.Visible = true;
 		}//end m_PictureBoxGraph_MouseHover
 
 		private void m_PictureBoxGraph_MouseLeave(object sender, System.EventArgs e)
 		{
-			hover = false;
+			_hover = false;
 		}//end m_PictureBoxGraph_MouseLeave
 
 		private void m_PictureBoxGraph_Paint(object sender, System.Windows.Forms.PaintEventArgs e)
@@ -822,7 +833,7 @@ namespace DUMeterMZ
 					m_bmp.Width - i, 1, m_bmp.Width - i, m_bmp.Height+1);
 			}//end for
 
-			if ( hover || m_Options.AlwaysShowText )
+			if ( _hover || m_Options.AlwaysShowText )
 			{
 				StringFormat sf = new StringFormat();
 				sf.Alignment = StringAlignment.Center;
@@ -984,7 +995,6 @@ namespace DUMeterMZ
 			m_PingThread = new Thread(new ThreadStart(StartPingThread));
 			m_PingThread.Name = "Pinger";
 		}//end InitThread
-	  #endregion Pinger
-
+		#endregion Pinger
 	}//end class FormLoadGraph
 }//end namespace DUMeterMZ

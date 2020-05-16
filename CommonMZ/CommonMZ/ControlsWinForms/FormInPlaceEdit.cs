@@ -7,11 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace MeditationStopWatch
+namespace MZ.Controls
 {
     public partial class FormInPlaceEdit : Form
     {
         public Action<string> OkAction = (text) => { };
+        public Action<string> CancelAction = (text) => { };
+        public Action<string> EditTextChangedAction = (text) => { };
 
         public string EditText { get { return m_txtInput.Text; } set { m_txtInput.Text = value; } }
 
@@ -24,6 +26,11 @@ namespace MeditationStopWatch
         {
             this.ActiveControl = m_txtInput;
             m_txtInput.SelectAll();
+        }
+
+        private void m_txtInput_TextChanged(object sender, EventArgs e)
+        {
+            EditTextChangedAction(EditText);
         }
 
         private void FormInPlaceEdit_Deactivate(object sender, EventArgs e)
@@ -39,6 +46,7 @@ namespace MeditationStopWatch
 
         private void m_btnCancel_Click(object sender, EventArgs e)
         {
+            CancelAction(EditText);
             this.Close();
         }
     }

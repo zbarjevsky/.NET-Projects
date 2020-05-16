@@ -35,6 +35,7 @@
             this.m_status2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.m_pnlMain = new System.Windows.Forms.Panel();
             this.m_splitMain = new System.Windows.Forms.SplitContainer();
+            this.m_chkTopMost = new System.Windows.Forms.CheckBox();
             this.m_volumeControlSpk = new PlaybackSoundSwitch.VolumeUserControl();
             this.m_volumeControlMic = new PlaybackSoundSwitch.VolumeUserControl();
             this.m_tabDevices = new System.Windows.Forms.TabControl();
@@ -101,6 +102,7 @@
             // 
             // m_splitMain.Panel1
             // 
+            this.m_splitMain.Panel1.Controls.Add(this.m_chkTopMost);
             this.m_splitMain.Panel1.Controls.Add(this.m_volumeControlSpk);
             this.m_splitMain.Panel1.Controls.Add(this.m_volumeControlMic);
             this.m_splitMain.Panel1.Controls.Add(this.m_tabDevices);
@@ -112,6 +114,19 @@
             this.m_splitMain.Size = new System.Drawing.Size(743, 411);
             this.m_splitMain.SplitterDistance = 373;
             this.m_splitMain.TabIndex = 7;
+            // 
+            // m_chkTopMost
+            // 
+            this.m_chkTopMost.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_chkTopMost.AutoSize = true;
+            this.m_chkTopMost.Location = new System.Drawing.Point(509, 3);
+            this.m_chkTopMost.Name = "m_chkTopMost";
+            this.m_chkTopMost.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.m_chkTopMost.Size = new System.Drawing.Size(84, 17);
+            this.m_chkTopMost.TabIndex = 11;
+            this.m_chkTopMost.Text = "Stay on Top";
+            this.m_chkTopMost.UseVisualStyleBackColor = true;
+            this.m_chkTopMost.CheckedChanged += new System.EventHandler(this.m_chkTopMost_CheckedChanged);
             // 
             // m_volumeControlSpk
             // 
@@ -234,6 +249,7 @@
             this.statusStrip1.PerformLayout();
             this.m_pnlMain.ResumeLayout(false);
             this.m_splitMain.Panel1.ResumeLayout(false);
+            this.m_splitMain.Panel1.PerformLayout();
             this.m_splitMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.m_splitMain)).EndInit();
             this.m_splitMain.ResumeLayout(false);
@@ -261,6 +277,7 @@
         private System.Windows.Forms.ImageList m_imageListTabs;
         private VolumeUserControl m_volumeControlSpk;
         private VolumeUserControl m_volumeControlMic;
+        private System.Windows.Forms.CheckBox m_chkTopMost;
     }
 }
 

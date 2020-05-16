@@ -142,5 +142,10 @@ namespace PlaybackSoundSwitch
             MZ.Tools.Trace.Debug(log);
             return log;
         }
+
+        private void m_chkTopMost_CheckedChanged(object sender, EventArgs e)
+        {
+            this.TopMost = m_chkTopMost.Checked;
+        }
     }
 }

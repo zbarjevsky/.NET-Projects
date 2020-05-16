@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MeditationStopWatch.Tools
+namespace MZ.Tools.WinForms
 {
     public static class ControlExtension
     {
