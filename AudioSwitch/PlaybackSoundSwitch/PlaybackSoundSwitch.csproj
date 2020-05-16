@@ -68,14 +68,14 @@
       <Link>Tools\ListViewCollapsibleGroups.cs</Link>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="..\..\CommonMZ\CommonMZ\ControlsWinForms\WinFormsControlExtension.cs">
+      <Link>Tools\WinFormsControlExtension.cs</Link>
+    </Compile>
     <Compile Include="..\..\CommonMZ\CommonMZ\Tools\AlternateColorTool.cs">
       <Link>Tools\AlternateColorTool.cs</Link>
     </Compile>
     <Compile Include="..\..\CommonMZ\CommonMZ\Tools\CommonUtils.cs">
       <Link>Tools\CommonUtils.cs</Link>
-    </Compile>
-    <Compile Include="..\..\CommonMZ\CommonMZ\Tools\ControlExtension.cs">
-      <Link>Tools\ControlExtension.cs</Link>
     </Compile>
     <Compile Include="..\..\CommonMZ\CommonMZ\Tools\SingleInstanceHelper.cs">
       <Link>Tools\SingleInstanceHelper.cs</Link>

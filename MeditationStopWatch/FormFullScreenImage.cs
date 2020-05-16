@@ -1,4 +1,5 @@
 ﻿using MeditationStopWatch.Tools;
+using MZ.ControlsWinForms;
 using MZ.Tools.WinForms;
 using System;
 using System.Collections.Generic;

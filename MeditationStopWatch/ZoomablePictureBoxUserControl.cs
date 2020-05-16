@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using MeditationStopWatch.Tools;
 using System.Diagnostics;
 using MZ.Tools.WinForms;
+using MZ.ControlsWinForms;
 
 namespace MeditationStopWatch
 {

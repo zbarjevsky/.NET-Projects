@@ -91,6 +91,8 @@ namespace MZ.Tools
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern IntPtr SendMessage(IntPtr hWnd, uint msg, uint wParam, uint lParam);
+        [DllImportAttribute("user32.dll")]
+        public static extern bool ReleaseCapture();
         [DllImport("user32.dll")]
         public static extern IntPtr GetWindowRect(IntPtr hWnd, out RECT rect);
         [DllImport("user32.dll")]

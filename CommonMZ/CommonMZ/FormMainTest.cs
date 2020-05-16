@@ -34,25 +34,15 @@ namespace MZ
                 //Font = ctrl.Font,
                 EditText = ctrl.Text
             };
-            frm.Draggable(true);
 
+
+            string oldText = ctrl.Text;
             Point location = this.PointToScreen(ctrl.Location);
             location.Offset(0, ctrl.Height);
             frm.Location = location;
-            frm.OkAction = (text) =>
-            {
-                ctrl.Text = text;
-            };
-            string oldText = ctrl.Text;
-            frm.CancelAction = (text) =>
-            {
-                ctrl.Text = oldText;
-            };
-
-            frm.EditTextChangedAction = (text) =>
-            {
-                ctrl.Text = text;
-            };
+            frm.OkAction = (text) => { ctrl.Text = text; };
+            frm.CancelAction = (text) => { ctrl.Text = oldText; };
+            frm.EditTextChangedAction = (text) => { ctrl.Text = text; };
 
             frm.Show(this);
         }

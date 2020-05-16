@@ -53,8 +53,8 @@
       <Link>Controls\ListViewCollapsibleGroups.cs</Link>
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="..\..\CommonMZ\CommonMZ\Tools\ControlExtension.cs">
-      <Link>Controls\ControlExtension.cs</Link>
+    <Compile Include="..\..\CommonMZ\CommonMZ\ControlsWinForms\WinFormsControlExtension.cs">
+      <Link>Tools\WinFormsControlExtension.cs</Link>
     </Compile>
     <Compile Include="..\..\CommonMZ\CommonMZ\Tools\SingleInstanceHelper.cs">
       <Link>Tools\SingleInstanceHelper.cs</Link>

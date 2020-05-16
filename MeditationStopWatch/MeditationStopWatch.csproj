@@ -100,8 +100,8 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\CommonMZ\CommonMZ\ControlsWinForms\ControlExtension.cs">
-      <Link>Tools\ControlExtension.cs</Link>
+    <Compile Include="..\CommonMZ\CommonMZ\ControlsWinForms\DraggableExtension.cs">
+      <Link>Tools\DraggableExtension.cs</Link>
     </Compile>
     <Compile Include="..\CommonMZ\CommonMZ\ControlsWinForms\FormInPlaceEdit.cs">
       <Link>FormInPlaceEdit.cs</Link>
@@ -111,11 +111,17 @@
       <Link>FormInPlaceEdit.designer.cs</Link>
       <DependentUpon>FormInPlaceEdit.cs</DependentUpon>
     </Compile>
+    <Compile Include="..\CommonMZ\CommonMZ\ControlsWinForms\WinFormsControlExtension.cs">
+      <Link>Tools\WinFormsControlExtension.cs</Link>
+    </Compile>
     <Compile Include="..\CommonMZ\CommonMZ\Tools\SingleInstanceHelper.cs">
       <Link>Tools\SingleInstanceHelper.cs</Link>
     </Compile>
     <Compile Include="..\CommonMZ\CommonMZ\Tools\User32.cs">
       <Link>Tools\User32.cs</Link>
+    </Compile>
+    <Compile Include="..\CommonMZ\CommonMZ\Tools\WindowsMessages.cs">
+      <Link>Tools\WindowsMessages.cs</Link>
     </Compile>
     <Compile Include="AnalogClock.cs">
       <SubType>Component</SubType>

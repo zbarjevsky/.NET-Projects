@@ -56,11 +56,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="ControlsWinForms\ColorBarsProgressBar.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ControlsWinForms\ControlExtension.cs" />
+    <Compile Include="ControlsWinForms\WinFormsControlExtension.cs" />
+    <Compile Include="ControlsWinForms\DraggableExtension.cs" />
     <Compile Include="ControlsWinForms\FormInPlaceEdit.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -111,6 +111,12 @@
     <EmbeddedResource Include="FormMainTest.resx">
       <DependentUpon>FormMainTest.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\SmallX.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\RedX.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

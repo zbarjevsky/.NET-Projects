@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Documents;
 
 namespace MZ.Tools
 {
@@ -234,9 +237,17 @@ namespace MZ.Tools
 
 	public class WindowsMessages
 	{
-		public static string Message(int msg)
+		public static List<WM_Message> MessagesList;
+
+		static WindowsMessages()
 		{
-			foreach (WM_Message m in Enum.GetValues(typeof(WM_Message)))
+			MessagesList = Enum.GetValues(typeof(WM_Message)).OfType<WM_Message>().ToList();
+		}
+
+		public static string MessageNameFromInt(int msg)
+		{
+			//WM_Message res = MessagesList.FirstOrDefault(m => (int)m == msg);
+			foreach (WM_Message m in MessagesList)
 			{
 				if (msg == (int)m)
 					return m.ToString();

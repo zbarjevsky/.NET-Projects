@@ -1,4 +1,7 @@
-﻿using System;
+﻿using MZ.ControlsWinForms;
+using MZ.Tools;
+using MZ.Tools.WinForms;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -24,12 +27,14 @@ namespace MZ.Controls
 
         private void FormInPlaceEdit_Load(object sender, EventArgs e)
         {
+            this.Draggable(true);
             this.ActiveControl = m_txtInput;
             m_txtInput.SelectAll();
         }
 
         private void m_txtInput_TextChanged(object sender, EventArgs e)
         {
+            UpdateSizeCorrespondingToTextLength();
             EditTextChangedAction(EditText);
         }
 
@@ -48,6 +53,13 @@ namespace MZ.Controls
         {
             CancelAction(EditText);
             this.Close();
+        }
+
+        private void UpdateSizeCorrespondingToTextLength()
+        {
+            Size size = TextRenderer.MeasureText(EditText, m_txtInput.Font);
+            int delta = size.Width - m_txtInput.Width;
+            this.Width += delta;
         }
     }
 }
