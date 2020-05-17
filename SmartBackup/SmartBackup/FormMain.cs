@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MZ.Controls;
+using MZ.ControlsWinForms;
 
 namespace SmartBackup
 {
@@ -88,12 +89,21 @@ namespace SmartBackup
                 location.Offset(rect.Height, rect.Height); //image offset
 
                 FormInPlaceEdit.ShowInPlaceEdit(m_tabMain.SelectedTab.Text, m_tabMain.Font, location, this,
-                    (text) => 
+                    (text) =>
                     {
                         m_tabMain.SelectedTab.Text = text;
                         BackupGroup group = m_tabMain.SelectedTab.Tag as BackupGroup;
                         group.Name = text;
                     });
+
+                //InPlaceTextBox.ShowTextBox(m_tabMain.SelectedTab.Text, m_tabMain.Font, m_ToolStripMain, new Point(400,10),
+                //    (text) =>
+                //    {
+                //        m_tabMain.SelectedTab.Text = text;
+                //        BackupGroup group = m_tabMain.SelectedTab.Tag as BackupGroup;
+                //        group.Name = text;
+                //    });
+
             }
         }
 

@@ -48,6 +48,7 @@ namespace MZ.ControlsWinForms
             this.OkAction = OkAction;
 
             _owner.Controls.Add(this);
+            //_owner.Controls.SetChildIndex(this, 100);
 
             UpdateWidthCorrespondingToTextLength(this, _owner);
 

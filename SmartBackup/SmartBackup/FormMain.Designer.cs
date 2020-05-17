@@ -116,12 +116,14 @@
             // 
             // m_btnAddGroup
             // 
+            this.m_btnAddGroup.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
             this.m_btnAddGroup.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_mnuAddGroup,
             this.m_mnuRemoveGroup,
             this.m_mnuRenameGroup});
             this.m_btnAddGroup.Image = ((System.Drawing.Image)(resources.GetObject("m_btnAddGroup.Image")));
             this.m_btnAddGroup.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.m_btnAddGroup.Margin = new System.Windows.Forms.Padding(10, 1, 0, 2);
             this.m_btnAddGroup.Name = "m_btnAddGroup";
             this.m_btnAddGroup.Size = new System.Drawing.Size(124, 22);
             this.m_btnAddGroup.Text = "Add New Group";

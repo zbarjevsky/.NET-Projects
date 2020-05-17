@@ -20,7 +20,7 @@ namespace SmartBackup
         InProgress = 2,
         Done = 4,
         Error = 8,
-        Any = InProgress|Done|Error
+        Any = None|InProgress|Done|Error
     }
 
     [Flags]
@@ -295,15 +295,22 @@ namespace SmartBackup
             return string.Format("Free Space on Destination Drive {0} is {1:###,##0.0} MB", root, drive.TotalFreeSpace/ i1MB);
         }
 
-        public long CalculateSpaceNeeded(BackupStatus backupStatus)
+        public string CalculateSpaceNeeded(BackupStatus backupStatus)
         {
-            long size = 0;
+            long sizeDst = 0, sizeSrc = 0;
             foreach (BackupFile file in FileList)
             {
-                if(backupStatus.HasFlag(file.Status))
-                    size += file.SrcIfo.Length;
+                if (backupStatus.HasFlag(file.Status))
+                {
+                    sizeSrc += file.SrcIfo.Length;
+                    sizeDst += file.SrcIfo.Length;
+                    if(file.DstIfo.Exists)
+                        sizeDst -= file.DstIfo.Length;
+                }
             }
-            return size;
+
+            return string.Format("{0} - Source size {1:###,##0.0} MB, Estimated Space Needed: {2:###,##0.0} MB",
+                backupStatus, sizeSrc / BackupLogic.i1MB, sizeDst / BackupLogic.i1MB);
         }
 
         private DriveInfo GetDriveInfo(string driveName)

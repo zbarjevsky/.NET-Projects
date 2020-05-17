@@ -60,6 +60,10 @@
       <Link>Controls\FormInPlaceEdit.designer.cs</Link>
       <DependentUpon>FormInPlaceEdit.cs</DependentUpon>
     </Compile>
+    <Compile Include="..\..\CommonMZ\CommonMZ\ControlsWinForms\InPlaceTextBox.cs">
+      <Link>Controls\InPlaceTextBox.cs</Link>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="..\..\CommonMZ\CommonMZ\ControlsWinForms\ListViewCollapsibleGroups.cs">
       <Link>Controls\ListViewCollapsibleGroups.cs</Link>
       <SubType>Component</SubType>
@@ -173,6 +177,10 @@
     <None Include="Resources\Show Detail1.ico" />
     <None Include="Resources\Hide Detail1.ico" />
     <None Include="Resources\Properties.ico" />
+    <None Include="Resources\FilesCopy.ico" />
+    <None Include="Resources\Paste.ico" />
+    <None Include="Resources\FileCopy.ico" />
+    <None Include="Resources\Favorites.ico" />
     <Content Include="sldd.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

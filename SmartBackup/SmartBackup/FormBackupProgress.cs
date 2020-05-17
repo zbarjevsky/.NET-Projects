@@ -109,6 +109,9 @@ namespace SmartBackup
             Stopwatch stopper = new Stopwatch();
             stopper.Start();
 
+            if (startIndex == 0)
+                _processedBytes = 0;
+
             Thread threadBackup = new Thread(() =>
             {
                 for (int i = startIndex; i < _backupFilesList.Count; i++)
@@ -130,8 +133,10 @@ namespace SmartBackup
                     if (file.PerformBackup(m_progrFile, this, options) == BackupStatus.Error)
                     {
                         Thread.Sleep(10);
-                        file.PerformBackup(m_progrFile, this, options);
+                        file.PerformBackup(m_progrFile, this, options); //retry
                     }
+
+                    _processedBytes += file.SrcIfo.Length;
 
                     if (i % 33 == 0 || file.IsBigFile())
                     {
@@ -166,13 +171,15 @@ namespace SmartBackup
                 m_btnContinue.Enabled = !isRunning;
                 m_btnAbort.Enabled = isRunning;
                 m_btnPause.Enabled = isRunning;
+                m_cmbViewFilter.Enabled = !isRunning;
 
                 m_progressBar1.Value = (int)((long)m_progressBar1.Maximum * (long)(_startIndex+1) / _backupFilesList.Count);
                 m_listFiles.EnsureVisible(_startIndex);
                 TimeSpan estimate = TimeSpan.FromMilliseconds(m_progressBar1.Maximum * _elapsed.TotalMilliseconds / (m_progressBar1.Value + 1));
 
-                m_txtStatus.Text = string.Format("Backing up file {0:###,###} of {1:###,###}, Elapsed {2}, Total {3}",
-                    (_startIndex + 1), _backupFilesList.Count, _elapsed.ToString("mm':'ss"), estimate.ToString("mm':'ss"));
+                m_txtStatus.Text = string.Format("Backing up file {0:###,##0} of {1:###,##0}, {2:###,##0.0} MB Copyied, Elapsed {3}, Total {4}",
+                    (_startIndex + 1), _backupFilesList.Count, _processedBytes/BackupLogic.i1MB,
+                    _elapsed.ToString("mm':'ss"), estimate.ToString("mm':'ss"));
 
                 if (_abort)
                     m_progressBar1.Value = 0;
@@ -193,12 +200,14 @@ namespace SmartBackup
                 if(errCount>0)
                     m_progressBar1.State = Windows7ProgressBar.ProgressBarState.Error;
 
-                m_txtStatus.Text = string.Format("Backup status done: {0:###,##0} of {1:###,##0}, Errors: {2:###,##0}, Elapsed {3}",
-                    (_startIndex + 1), _backupFilesList.Count, errCount, _elapsed.ToString("mm':'ss"));
+                m_txtStatus.Text = string.Format(
+                    "Backup status done: {0:###,##0} of {1:###,##0} files, {2:###,##0.0} MB Copyied, Errors: {3:###,##0}, Elapsed {4}",
+                    (_startIndex + 1), _backupFilesList.Count, _processedBytes / BackupLogic.i1MB, errCount, _elapsed.ToString("mm':'ss"));
             }, this);
         }
 
         private int _startIndex = 0;
+        private long _processedBytes = 0;
         private void m_btnStart_Click(object sender, EventArgs e)
         {
             m_cmbViewFilter.SelectedIndex = 0; //show all
@@ -259,11 +268,8 @@ namespace SmartBackup
             Task task = new Task(() =>
             {
                 string stat = _logic.GetDiskStatistics();
-                long size = _logic.CalculateSpaceNeeded(backupStatus);
-                CommonUtils.ExecuteOnUIThread(() =>
-                {
-                    m_txtInfo.Text = string.Format("{0} - Estimated Space Needed: {1:###,##0.0} MB", stat, size / BackupLogic.i1MB);
-                }, this);
+                string sizeInfo = _logic.CalculateSpaceNeeded(backupStatus);
+                CommonUtils.ExecuteOnUIThread(() => { m_txtInfo.Text = sizeInfo; }, this);
             });
             task.Start();
 

@@ -121,11 +121,17 @@
   <data name="Hide Detail1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Hide Detail1.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="FileCopy" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FileCopy.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="Text" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Images\Text.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Show Detail1" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Show Detail1.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="FilesCopy" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FilesCopy.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Show Detail" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Show Detail.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -139,10 +145,16 @@
   <data name="Hide Detail" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Hide Detail.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Properties" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Properties.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="play_on" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\play_on.PNG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Properties" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Properties.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="Paste" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Paste.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Favorites" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Favorites.ico;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
