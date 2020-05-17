@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Shell;
 using YouTubeDownload.Utils;
-using YouTubeDownload.Windows7ProgressBar;
 
 namespace YouTubeDownload
 {

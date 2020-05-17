@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             this.m_txtOutput = new System.Windows.Forms.RichTextBox();
             this.m_lnkDestination = new System.Windows.Forms.LinkLabel();
-            this.m_ProgressBar = new YouTubeDownload.Windows7ProgressBar.Windows7ProgressBar();
+            this.m_ProgressBar = new MZ.Tools.Windows7ProgressBar();
             this.m_lblStatus = new System.Windows.Forms.Label();
             this.m_pnlOutput = new System.Windows.Forms.Panel();
             this.m_lblTime = new System.Windows.Forms.Label();
@@ -165,7 +165,7 @@
 
         private System.Windows.Forms.RichTextBox m_txtOutput;
         private System.Windows.Forms.LinkLabel m_lnkDestination;
-        private Windows7ProgressBar.Windows7ProgressBar m_ProgressBar;
+        private MZ.Tools.Windows7ProgressBar m_ProgressBar;
         private System.Windows.Forms.Label m_lblStatus;
         private System.Windows.Forms.Panel m_pnlOutput;
         private System.Windows.Forms.Panel m_pnlLinks;

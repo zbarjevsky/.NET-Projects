@@ -87,6 +87,9 @@
     <Compile Include="Tools\SingleInstanceHelper.cs" />
     <Compile Include="Tools\TaskbarManagerHelper.cs" />
     <Compile Include="Tools\User32.cs" />
+    <Compile Include="Tools\Windows7ProgressBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Tools\WindowsMessages.cs" />
     <Compile Include="Tools\XmlSerializerHelper.cs" />
     <Compile Include="Tools\CommonUtils.cs" />
