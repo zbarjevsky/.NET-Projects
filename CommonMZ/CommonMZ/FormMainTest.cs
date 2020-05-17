@@ -24,7 +24,11 @@ namespace MZ
 
         private void FormMainTest_Load(object sender, EventArgs e)
         {
-
+            foldersTreeUserControl1.OpenFolder = (fullPath) =>
+            {
+                fileExplorerUserControl1.ShowFolder(fullPath);
+            };
+            foldersTreeUserControl1.SelectFolder(@"C:\Dev_Mark\Temp");
         }
 
         private void m_btnTestEdit_Click(object sender, EventArgs e)
@@ -41,6 +45,18 @@ namespace MZ
             //(text) => { ctrl.Text = text; },
             //(text) => { ctrl.Text = text; },
             //(text) => { ctrl.Text = oldText; });
+        }
+
+        private void foldersTreeUserControl1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void m_btnBrowseForFolder_Click(object sender, EventArgs e)
+        {
+            FormBrowseForFolder browse = new FormBrowseForFolder();
+            browse.SelectedFolder = @"C:\Dev_Mark\Temp";
+            browse.ShowDialog(this);
         }
     }
 }

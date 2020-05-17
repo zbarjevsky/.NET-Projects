@@ -45,6 +45,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xaml" />
     <Reference Include="System.Xml.Linq" />
@@ -58,6 +59,24 @@
   <ItemGroup>
     <Compile Include="ControlsWinForms\ColorBarsProgressBar.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="ControlsWinForms\FileExplorerUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ControlsWinForms\FileExplorerUserControl.Designer.cs">
+      <DependentUpon>FileExplorerUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ControlsWinForms\FoldersTreeUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="ControlsWinForms\FoldersTreeUserControl.Designer.cs">
+      <DependentUpon>FoldersTreeUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ControlsWinForms\FormBrowseForFolder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ControlsWinForms\FormBrowseForFolder.Designer.cs">
+      <DependentUpon>FormBrowseForFolder.cs</DependentUpon>
     </Compile>
     <Compile Include="ControlsWinForms\InPlaceTextBox.cs">
       <SubType>Component</SubType>
@@ -111,6 +130,15 @@
     <Folder Include="UtilsWinForms\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="ControlsWinForms\FileExplorerUserControl.resx">
+      <DependentUpon>FileExplorerUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ControlsWinForms\FoldersTreeUserControl.resx">
+      <DependentUpon>FoldersTreeUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ControlsWinForms\FormBrowseForFolder.resx">
+      <DependentUpon>FormBrowseForFolder.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="ControlsWinForms\FormInPlaceEdit.resx">
       <DependentUpon>FormInPlaceEdit.cs</DependentUpon>
     </EmbeddedResource>
@@ -120,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Images\SmallX.ico" />
+    <None Include="My Explorer.csproj" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Images\RedX.ico" />
