@@ -163,7 +163,7 @@ namespace MZ.Tools
             SetValueInTB();
         }
 
-        private IntPtr MainWindowHandle
+        private static IntPtr MainWindowHandle
         {
             get { return Application.OpenForms.Count > 0 ? Application.OpenForms[0].Handle : IntPtr.Zero; }
         }

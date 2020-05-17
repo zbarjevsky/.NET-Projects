@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -12,9 +13,36 @@ namespace MZ.Tools
 {
     public static class CommonUtils
     {
+        public static void BrowseForFolder(this Form owner, TextBox txt, string selectedPath = "", string prompt = "Select Folder")
+        {
+            selectedPath = string.IsNullOrWhiteSpace(selectedPath) ? txt.Text : selectedPath;
+
+            FolderBrowserDialog dlg = new FolderBrowserDialog()
+            {
+                RootFolder = Environment.SpecialFolder.MyComputer,
+                SelectedPath = selectedPath,
+                Description = prompt
+            };
+
+            //select current folder
+            Task.Factory.StartNew(() =>
+            {
+                Thread.Sleep(330);
+                owner.Invoke(new MethodInvoker(() => SendKeys.Send("{TAB}{TAB}{DOWN}{DOWN}{UP}{UP}")));
+            });
+
+            if (dlg.ShowDialog(owner) == DialogResult.OK)
+            {
+                txt.Text = dlg.SelectedPath;
+            }
+        }
+
         public static void ExecuteOnUIThread(Action action, Control owner)
         {
-            owner.BeginInvoke(action);
+            if (owner.Visible)
+                owner.BeginInvoke(action);
+            else
+                TopmostForm().BeginInvoke(action);
         }
 
         public static T ExecuteOnUIThread<T>(Func<T> action, Form owner)

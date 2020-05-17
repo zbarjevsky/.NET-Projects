@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using SmartBackup.Settings;
 using System.Media;
+using System.IO;
 
 namespace SmartBackup
 {
@@ -142,11 +143,35 @@ namespace SmartBackup
 
         private void OpenBackupProgress(BackupPriority priority)
         {
+            OpenBackupProgress(_settings, priority);
+        }
+
+        private void m_mnuBackupSelected_Click(object sender, EventArgs e)
+        {
+            if (m_listBackup.SelectedItems.Count == 0)
+                return;
+            BackupEntry entry = m_listBackup.SelectedItems[0].Tag as BackupEntry;
+
+            BackupGroup group = new BackupGroup("Temp");
+            group.BackupList.Add(entry);
+            OpenBackupProgress(group, BackupPriority.All);
+        }
+
+        private void OpenBackupProgress(BackupGroup group, BackupPriority priority)
+        {
+            string root = Path.GetPathRoot(group.BackupList[0].FolderDst);
+            if (!Directory.Exists(root))
+            {
+                MessageBox.Show(this, "Cannot access backup drive: " + root, "Start Backup",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
             this.Cursor = Cursors.WaitCursor;
             m_btnBackupAll.Enabled = false;
             Application.DoEvents();
 
-            FormBackupProgress frm = new FormBackupProgress(_settings, priority);
+            FormBackupProgress frm = new FormBackupProgress(group, priority);
             frm.ShowDialog(this);
 
             this.Cursor = Cursors.Arrow;

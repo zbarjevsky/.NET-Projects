@@ -16,12 +16,14 @@ namespace SmartBackup.Settings
     {
         public string FolderSrc { get; set; }
         public string FolderDst { get; set; }
+        public SearchOption IncludeSubfolders { get; set; }
         public string FolderIncludeTypes { get; set; }
         public string FolderExcludeTypes { get; set; }
         public BackupPriority Priority { get; set; }
 
         public BackupEntry()
         {
+            IncludeSubfolders = SearchOption.AllDirectories;
             Priority = BackupPriority.Normal;
             FolderIncludeTypes = "*.*";
             FolderExcludeTypes = "";

@@ -38,7 +38,6 @@
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.m_txtStatus = new System.Windows.Forms.TextBox();
             this.m_btnClose = new System.Windows.Forms.Button();
-            this.m_progressBar1 = new System.Windows.Forms.ProgressBar();
             this.m_progrFile = new System.Windows.Forms.ProgressBar();
             this.m_btnContinue = new System.Windows.Forms.Button();
             this.m_cmbOption = new System.Windows.Forms.ComboBox();
@@ -47,6 +46,8 @@
             this.m_btnStart = new System.Windows.Forms.Button();
             this.m_btnAbort = new System.Windows.Forms.Button();
             this.m_txtInfo = new System.Windows.Forms.TextBox();
+            this.m_cmbViewFilter = new System.Windows.Forms.ComboBox();
+            this.m_progressBar1 = new MZ.Tools.Windows7ProgressBar();
             this.SuspendLayout();
             // 
             // m_listFiles
@@ -66,7 +67,7 @@
             this.m_listFiles.Location = new System.Drawing.Point(12, 62);
             this.m_listFiles.MultiSelect = false;
             this.m_listFiles.Name = "m_listFiles";
-            this.m_listFiles.Size = new System.Drawing.Size(769, 253);
+            this.m_listFiles.Size = new System.Drawing.Size(785, 220);
             this.m_listFiles.SmallImageList = this.imageList1;
             this.m_listFiles.TabIndex = 0;
             this.m_listFiles.UseCompatibleStateImageBehavior = false;
@@ -112,10 +113,10 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_txtStatus.BackColor = System.Drawing.SystemColors.Control;
             this.m_txtStatus.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.m_txtStatus.Location = new System.Drawing.Point(13, 368);
+            this.m_txtStatus.Location = new System.Drawing.Point(13, 335);
             this.m_txtStatus.Name = "m_txtStatus";
             this.m_txtStatus.ReadOnly = true;
-            this.m_txtStatus.Size = new System.Drawing.Size(676, 13);
+            this.m_txtStatus.Size = new System.Drawing.Size(692, 13);
             this.m_txtStatus.TabIndex = 3;
             this.m_txtStatus.Text = "Press Start To Begin";
             // 
@@ -123,30 +124,20 @@
             // 
             this.m_btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.m_btnClose.Location = new System.Drawing.Point(706, 363);
+            this.m_btnClose.Location = new System.Drawing.Point(722, 330);
             this.m_btnClose.Name = "m_btnClose";
             this.m_btnClose.Size = new System.Drawing.Size(75, 23);
             this.m_btnClose.TabIndex = 4;
             this.m_btnClose.Text = "Close";
             this.m_btnClose.UseVisualStyleBackColor = true;
             // 
-            // m_progressBar1
-            // 
-            this.m_progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_progressBar1.Location = new System.Drawing.Point(12, 335);
-            this.m_progressBar1.Maximum = 10000;
-            this.m_progressBar1.Name = "m_progressBar1";
-            this.m_progressBar1.Size = new System.Drawing.Size(688, 23);
-            this.m_progressBar1.TabIndex = 5;
-            // 
             // m_progrFile
             // 
             this.m_progrFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_progrFile.Location = new System.Drawing.Point(12, 321);
+            this.m_progrFile.Location = new System.Drawing.Point(12, 288);
             this.m_progrFile.Name = "m_progrFile";
-            this.m_progrFile.Size = new System.Drawing.Size(769, 9);
+            this.m_progrFile.Size = new System.Drawing.Size(785, 9);
             this.m_progrFile.TabIndex = 6;
             // 
             // m_btnContinue
@@ -168,7 +159,7 @@
             "Overwrite All Older",
             "Overwrite All",
             "Skip All Existing"});
-            this.m_cmbOption.Location = new System.Drawing.Point(411, 11);
+            this.m_cmbOption.Location = new System.Drawing.Point(368, 11);
             this.m_cmbOption.Name = "m_cmbOption";
             this.m_cmbOption.Size = new System.Drawing.Size(138, 21);
             this.m_cmbOption.TabIndex = 9;
@@ -176,11 +167,11 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(362, 14);
+            this.label1.Location = new System.Drawing.Point(268, 15);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(43, 13);
+            this.label1.Size = new System.Drawing.Size(94, 13);
             this.label1.TabIndex = 10;
-            this.label1.Text = "Options";
+            this.label1.Text = "Overwrite Options:";
             // 
             // m_btnPause
             // 
@@ -214,7 +205,7 @@
             this.m_btnAbort.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.m_btnAbort.ImageIndex = 5;
             this.m_btnAbort.ImageList = this.imageList1;
-            this.m_btnAbort.Location = new System.Drawing.Point(706, 335);
+            this.m_btnAbort.Location = new System.Drawing.Point(722, 302);
             this.m_btnAbort.Name = "m_btnAbort";
             this.m_btnAbort.Size = new System.Drawing.Size(75, 23);
             this.m_btnAbort.TabIndex = 1;
@@ -231,9 +222,36 @@
             this.m_txtInfo.Location = new System.Drawing.Point(13, 43);
             this.m_txtInfo.Name = "m_txtInfo";
             this.m_txtInfo.ReadOnly = true;
-            this.m_txtInfo.Size = new System.Drawing.Size(768, 13);
+            this.m_txtInfo.Size = new System.Drawing.Size(784, 13);
             this.m_txtInfo.TabIndex = 11;
             this.m_txtInfo.Text = "Disk Free Space: 0k";
+            // 
+            // m_cmbViewFilter
+            // 
+            this.m_cmbViewFilter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_cmbViewFilter.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.m_cmbViewFilter.DropDownWidth = 150;
+            this.m_cmbViewFilter.FormattingEnabled = true;
+            this.m_cmbViewFilter.Items.AddRange(new object[] {
+            "Show All",
+            "Show Errors",
+            "Show Unrocessed"});
+            this.m_cmbViewFilter.Location = new System.Drawing.Point(697, 12);
+            this.m_cmbViewFilter.Name = "m_cmbViewFilter";
+            this.m_cmbViewFilter.Size = new System.Drawing.Size(100, 21);
+            this.m_cmbViewFilter.TabIndex = 12;
+            this.m_cmbViewFilter.SelectionChangeCommitted += new System.EventHandler(this.m_cmbViewFilter_SelectionChangeCommitted);
+            // 
+            // m_progressBar1
+            // 
+            this.m_progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_progressBar1.Location = new System.Drawing.Point(12, 302);
+            this.m_progressBar1.Maximum = 10000;
+            this.m_progressBar1.Name = "m_progressBar1";
+            this.m_progressBar1.ShowInTaskbar = true;
+            this.m_progressBar1.Size = new System.Drawing.Size(704, 23);
+            this.m_progressBar1.TabIndex = 5;
             // 
             // FormBackupProgress
             // 
@@ -241,7 +259,8 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.m_btnClose;
-            this.ClientSize = new System.Drawing.Size(793, 394);
+            this.ClientSize = new System.Drawing.Size(809, 361);
+            this.Controls.Add(this.m_cmbViewFilter);
             this.Controls.Add(this.m_txtInfo);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.m_cmbOption);
@@ -255,8 +274,9 @@
             this.Controls.Add(this.m_btnAbort);
             this.Controls.Add(this.m_listFiles);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(600, 400);
+            this.MinimumSize = new System.Drawing.Size(650, 400);
             this.Name = "FormBackupProgress";
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Backup Progress";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormBackupProgress_FormClosing);
@@ -278,12 +298,13 @@
         private System.Windows.Forms.TextBox m_txtStatus;
         private System.Windows.Forms.Button m_btnClose;
         private System.Windows.Forms.ColumnHeader columnHeader4;
-        private System.Windows.Forms.ProgressBar m_progressBar1;
+        private MZ.Tools.Windows7ProgressBar m_progressBar1;
         private System.Windows.Forms.ProgressBar m_progrFile;
         private System.Windows.Forms.Button m_btnPause;
         private System.Windows.Forms.Button m_btnContinue;
         private System.Windows.Forms.ComboBox m_cmbOption;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox m_txtInfo;
+        private System.Windows.Forms.ComboBox m_cmbViewFilter;
     }
 }

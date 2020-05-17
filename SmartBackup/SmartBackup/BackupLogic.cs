@@ -1,5 +1,6 @@
-﻿using SmartBackup.Settings;
-using SmartBackup.Tools;
+﻿using MZ.Tools;
+using SmartBackup.Settings;
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -12,12 +13,14 @@ using System.Windows.Forms;
 
 namespace SmartBackup
 {
+    [Flags]
     internal enum BackupStatus : int
     {
-        None = 0,
-        InProgress = 1,
-        Done = 2,
-        Error = 3
+        None = 1,
+        InProgress = 2,
+        Done = 4,
+        Error = 8,
+        Any = InProgress|Done|Error
     }
 
     [Flags]
@@ -118,7 +121,7 @@ namespace SmartBackup
             {
                 Err = "OK";
                 Status = BackupStatus.None;
-                Utils.ExecuteOnUIThread(() => { progress.Value = progress.Minimum; }, owner);
+                CommonUtils.ExecuteOnUIThread(() => { progress.Value = progress.Minimum; }, owner);
 
                 if (!DstIfo.Exists)
                 {
@@ -205,7 +208,7 @@ namespace SmartBackup
 
                         totalWrite += bytesRead;
 
-                        Utils.ExecuteOnUIThread(() =>
+                        CommonUtils.ExecuteOnUIThread(() =>
                         {
                             progress.Value = (int)(totalWrite * 100 / SrcIfo.Length);
                         }, owner);
@@ -235,7 +238,7 @@ namespace SmartBackup
     {
         private readonly BackupGroup _group;
 
-        public List<BackupFile> FileList = new List<BackupFile>();
+        private List<BackupFile> FileList = new List<BackupFile>();
 
         public BackupLogic(BackupGroup group, BackupPriority priority)
         {
@@ -248,6 +251,25 @@ namespace SmartBackup
                     FileList.AddRange(CollectFiles(entry));
                 }
             }
+        }
+
+        public void Clear()
+        {
+            FileList.Clear();
+        }
+
+        public List<BackupFile> FilteredFileList(BackupStatus statusFilter = BackupStatus.Any)
+        {
+            if (statusFilter == BackupStatus.Any)
+                return FileList; //improve performance
+
+            List<BackupFile> list = new List<BackupFile>();
+            foreach (BackupFile file in FileList)
+            {
+                if (statusFilter.HasFlag(file.Status))
+                    list.Add(file);
+            }
+            return list;
         }
 
         public void ResetStatus()
@@ -263,16 +285,23 @@ namespace SmartBackup
         public string GetDiskStatistics()
         {
             string root = Path.GetPathRoot(_group.BackupList[0].FolderDst);
+            if(!Directory.Exists(root))
+            {
+                MessageBox.Show("Cannot access backup drive: " + root);
+                return "Drive " + root + " is not accessible";
+            }
+
             DriveInfo drive = GetDriveInfo(root);
             return string.Format("Free Space on Destination Drive {0} is {1:###,##0.0} MB", root, drive.TotalFreeSpace/ i1MB);
         }
 
-        public long CalculateSpaceNeeded()
+        public long CalculateSpaceNeeded(BackupStatus backupStatus)
         {
             long size = 0;
             foreach (BackupFile file in FileList)
             {
-                size += file.SrcIfo.Length;
+                if(backupStatus.HasFlag(file.Status))
+                    size += file.SrcIfo.Length;
             }
             return size;
         }
@@ -299,7 +328,7 @@ namespace SmartBackup
             if (!dir.Exists)
                 return fileList;
 
-            string [] files = Directory.GetFiles(dir.FullName, entry.FolderIncludeTypes, SearchOption.AllDirectories);
+            string [] files = Directory.GetFiles(dir.FullName, entry.FolderIncludeTypes, entry.IncludeSubfolders);
             foreach (string file in files)
             {
                 fileList.Add(new BackupFile(file, entry));
