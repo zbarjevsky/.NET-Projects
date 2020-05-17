@@ -47,6 +47,8 @@ namespace SmartBackup
         public string Err = "OK";
         public BackupStatus Status = BackupStatus.None;
 
+        public long Index { get; }
+
         private string _dst = null;
         public string Dst 
         {
@@ -108,11 +110,35 @@ namespace SmartBackup
 
         private readonly BackupEntry _entry;
 
-        public BackupFile(string file, BackupEntry entry)
+        public BackupFile(long index, string file, BackupEntry entry)
         {
+            Index = index;
             _entry = entry;
             Status = BackupStatus.None;
             Src = file;
+        }
+
+        public bool ValidateBackupNeeded(BackupOptions option, bool createDstFolderIfNotExists = false)
+        {
+            if (!DstIfo.Exists)
+            {
+                if(createDstFolderIfNotExists)
+                    Directory.CreateDirectory(DstFolder);
+                return true;
+            }
+            else if (!option.HasFlag(BackupOptions.OverwriteAll)) //check overwrite options
+            {
+                if (option.HasFlag(BackupOptions.OverwriteAllOlder) && SrcIfo.CreationTimeUtc <= DstIfo.CreationTimeUtc)
+                { Status = BackupStatus.Done; return false; }
+
+                if (option.HasFlag(BackupOptions.SkipExisting) && DstIfo.Exists)
+                { Status = BackupStatus.Done; return false; }
+
+                if (option.HasFlag(BackupOptions.SkipReadonly) && DstIfo.Exists && DstIfo.IsReadOnly)
+                { Status = BackupStatus.Done; return false; }
+            }
+
+            return true;
         }
 
         public BackupStatus PerformBackup(ProgressBar progress, Form owner, BackupOptions option = BackupOptions.OverwriteAllOlder)
@@ -123,21 +149,8 @@ namespace SmartBackup
                 Status = BackupStatus.None;
                 CommonUtils.ExecuteOnUIThread(() => { progress.Value = progress.Minimum; }, owner);
 
-                if (!DstIfo.Exists)
-                {
-                    Directory.CreateDirectory(DstFolder);
-                }
-                else if(!option.HasFlag(BackupOptions.OverwriteAll)) //check overwrite options
-                {
-                    if (option.HasFlag(BackupOptions.OverwriteAllOlder) && SrcIfo.CreationTimeUtc <= DstIfo.CreationTimeUtc)
-                    { return Status = BackupStatus.Done; }
-
-                    if (option.HasFlag(BackupOptions.SkipExisting) && DstIfo.Exists)
-                    { return Status = BackupStatus.Done; }
-
-                    if (option.HasFlag(BackupOptions.SkipReadonly) && DstIfo.Exists && DstIfo.IsReadOnly)
-                    { return Status = BackupStatus.Done; }
-                }
+                if(!ValidateBackupNeeded(option, true))
+                    return Status;
 
                 Status = BackupStatus.InProgress;
 
@@ -258,7 +271,7 @@ namespace SmartBackup
             FileList.Clear();
         }
 
-        public List<BackupFile> FilteredFileList(BackupStatus statusFilter = BackupStatus.Any)
+        public List<BackupFile> FilteredFileList(BackupOptions options, BackupStatus statusFilter = BackupStatus.Any)
         {
             if (statusFilter == BackupStatus.Any)
                 return FileList; //improve performance
@@ -266,6 +279,7 @@ namespace SmartBackup
             List<BackupFile> list = new List<BackupFile>();
             foreach (BackupFile file in FileList)
             {
+                file.ValidateBackupNeeded(options);
                 if (statusFilter.HasFlag(file.Status))
                     list.Add(file);
             }
@@ -336,9 +350,9 @@ namespace SmartBackup
                 return fileList;
 
             string [] files = Directory.GetFiles(dir.FullName, entry.FolderIncludeTypes, entry.IncludeSubfolders);
-            foreach (string file in files)
+            for (int i = 0; i < files.Length; i++)
             {
-                fileList.Add(new BackupFile(file, entry));
+                fileList.Add(new BackupFile(i, files[i], entry));
             }
 
             return fileList;

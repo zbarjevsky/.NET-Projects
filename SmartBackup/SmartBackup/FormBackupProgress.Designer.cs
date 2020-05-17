@@ -79,6 +79,7 @@
             // columnHeader1
             // 
             this.columnHeader1.Text = "Status";
+            this.columnHeader1.Width = 95;
             // 
             // columnHeader2
             // 

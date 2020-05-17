@@ -167,15 +167,23 @@ namespace SmartBackup
                 return;
             }
 
-            this.Cursor = Cursors.WaitCursor;
-            m_btnBackupAll.Enabled = false;
-            Application.DoEvents();
+            try
+            {
+                this.Cursor = Cursors.WaitCursor;
+                m_btnBackupAll.Enabled = false;
+                Application.DoEvents();
 
-            FormBackupProgress frm = new FormBackupProgress(group, priority);
-            frm.ShowDialog(this);
+                FormBackupProgress frm = new FormBackupProgress(group, priority);
+                frm.ShowDialog(this);
 
-            this.Cursor = Cursors.Arrow;
-            m_btnBackupAll.Enabled = true;
+                this.Cursor = Cursors.Arrow;
+                m_btnBackupAll.Enabled = true;
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(this, "Backup error: " + err.Message, "Start Backup",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
