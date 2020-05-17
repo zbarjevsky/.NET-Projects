@@ -54,7 +54,7 @@
             // 
             this.m_btnTestEdit.Location = new System.Drawing.Point(99, 13);
             this.m_btnTestEdit.Name = "m_btnTestEdit";
-            this.m_btnTestEdit.Size = new System.Drawing.Size(144, 23);
+            this.m_btnTestEdit.Size = new System.Drawing.Size(144, 116);
             this.m_btnTestEdit.TabIndex = 1;
             this.m_btnTestEdit.Text = "Test In-Place-Edit Box";
             this.m_btnTestEdit.UseVisualStyleBackColor = true;

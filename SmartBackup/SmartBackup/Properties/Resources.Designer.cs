@@ -73,6 +73,16 @@ namespace SmartBackup.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Hide_Detail1 {
+            get {
+                object obj = ResourceManager.GetObject("Hide Detail1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap pause_on {
             get {
                 object obj = ResourceManager.GetObject("pause_on", resourceCulture);
@@ -93,6 +103,16 @@ namespace SmartBackup.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Properties {
+            get {
+                object obj = ResourceManager.GetObject("Properties", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Shared {
             get {
                 object obj = ResourceManager.GetObject("Shared", resourceCulture);
@@ -106,6 +126,16 @@ namespace SmartBackup.Properties {
         internal static System.Drawing.Bitmap Show_Detail {
             get {
                 object obj = ResourceManager.GetObject("Show Detail", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Show_Detail1 {
+            get {
+                object obj = ResourceManager.GetObject("Show Detail1", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

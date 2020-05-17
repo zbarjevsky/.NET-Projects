@@ -1,5 +1,4 @@
-﻿using MarkZ.Controls;
-using SmartBackup.Settings;
+﻿using SmartBackup.Settings;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using MZ.Controls;
 
 namespace SmartBackup
 {
@@ -56,9 +56,10 @@ namespace SmartBackup
             }
         }
 
+        static int _indexNewGroup = 1;
         private void m_btnAdd_Click(object sender, EventArgs e)
         {
-            BackupGroup group = new BackupGroup("New Group");
+            BackupGroup group = new BackupGroup("New Group " + _indexNewGroup++);
             _settings.Add(group);
             ReloadTabs(group);
         }
@@ -66,31 +67,54 @@ namespace SmartBackup
         private void m_btnRemove_Click(object sender, EventArgs e)
         {
             if (m_tabMain.TabPages.Count > 1)
+            {
+                int next = m_tabMain.SelectedIndex;
+                BackupGroup group = m_tabMain.SelectedTab.Tag as BackupGroup;
+                _settings.Remove(group);
                 m_tabMain.TabPages.Remove(m_tabMain.SelectedTab);
+                if (next >= m_tabMain.TabPages.Count)
+                    next--;
+
+                m_tabMain.SelectedIndex = next;
+            }
         }
 
         private void m_btnEdit_Click(object sender, EventArgs e)
         {
             if (m_tabMain.SelectedIndex >= 0)
             {
-                FormInPlaceEdit frm = new FormInPlaceEdit()
-                {
-                    Font = m_tabMain.Font,
-                    EditText = m_tabMain.SelectedTab.Text
-                };
+                Rectangle rect = m_tabMain.GetTabRect(m_tabMain.SelectedIndex);
+                Point location = m_tabMain.PointToScreen(rect.Location);
+                location.Offset(rect.Height, rect.Height); //image offset
 
-                Point location = m_tabMain.PointToScreen(m_tabMain.GetTabRect(m_tabMain.SelectedIndex).Location);
-                location.Offset(4, 16);
-                frm.Location = location;
-                frm.OkAction = (text) =>
-                {
-                    m_tabMain.SelectedTab.Text = frm.EditText;
-                    BackupGroup group = m_tabMain.SelectedTab.Tag as BackupGroup;
-                    group.Name = frm.EditText;
-                };
-                frm.Show(this);
+                FormInPlaceEdit.ShowInPlaceEdit(m_tabMain.SelectedTab.Text, m_tabMain.Font, location, this,
+                    (text) => 
+                    {
+                        m_tabMain.SelectedTab.Text = text;
+                        BackupGroup group = m_tabMain.SelectedTab.Tag as BackupGroup;
+                        group.Name = text;
+                    });
             }
+        }
 
+        private void m_tabMain_MouseClick(object sender, MouseEventArgs e)
+        {
+
+        }
+
+        private void m_tabMain_MouseDoubleClick(object sender, MouseEventArgs e)
+        {
+            for (int i = 0; i < m_tabMain.TabCount; ++i)
+            {
+                if (m_tabMain.GetTabRect(i).Contains(e.Location))
+                {
+                    int idx = m_tabMain.SelectedIndex;
+                    // Found it, do something
+                    //...
+                    m_btnEdit_Click(sender, e);
+                    break;
+                }
+            }
         }
     }
 }

@@ -19,6 +19,29 @@ namespace MZ.Controls
         public Action<string> EditTextChangedAction = (text) => { };
 
         public string EditText { get { return m_txtInput.Text; } set { m_txtInput.Text = value; } }
+        public Font EditFont { get { return m_txtInput.Font; } set { m_txtInput.Font = value; } }
+
+        public static void ShowInPlaceEdit(string text, Font font, Point location, Form owner, 
+            Action<string> OkAction, 
+            Action<string> TextEditAction = null, 
+            Action<string> CancelAction = null)
+        {
+            FormInPlaceEdit frm = new FormInPlaceEdit()
+            {
+                EditFont = font,
+                EditText = text
+            };
+
+            frm.Location = location;
+            
+            frm.OkAction = OkAction;
+            if (TextEditAction != null)
+                frm.EditTextChangedAction = TextEditAction;
+            if (CancelAction != null)
+                frm.CancelAction = CancelAction;
+
+            frm.Show(owner);
+        }
 
         public FormInPlaceEdit()
         {
@@ -57,7 +80,7 @@ namespace MZ.Controls
 
         private void UpdateSizeCorrespondingToTextLength()
         {
-            Size size = TextRenderer.MeasureText(EditText, m_txtInput.Font);
+            Size size = TextRenderer.MeasureText(m_txtInput.Text, m_txtInput.Font);
             int delta = size.Width - m_txtInput.Width;
             this.Width += delta;
         }

@@ -1,4 +1,5 @@
 ﻿using MZ.Controls;
+using MZ.ControlsWinForms;
 using MZ.Tools.WinForms;
 using System;
 using System.Collections.Generic;
@@ -29,22 +30,17 @@ namespace MZ
         private void m_btnTestEdit_Click(object sender, EventArgs e)
         {
             Control ctrl = m_btnTestEdit;
-            FormInPlaceEdit frm = new FormInPlaceEdit()
-            {
-                //Font = ctrl.Font,
-                EditText = ctrl.Text
-            };
 
-
-            string oldText = ctrl.Text;
             Point location = this.PointToScreen(ctrl.Location);
             location.Offset(0, ctrl.Height);
-            frm.Location = location;
-            frm.OkAction = (text) => { ctrl.Text = text; };
-            frm.CancelAction = (text) => { ctrl.Text = oldText; };
-            frm.EditTextChangedAction = (text) => { ctrl.Text = text; };
+            string oldText = ctrl.Text;
 
-            frm.Show(this);
+            InPlaceTextBox.ShowTextBox(oldText, ctrl.Font, m_btnTestEdit, (text) => { m_btnTestEdit.Text = text; });
+
+            //FormInPlaceEdit.ShowInPlaceEdit(ctrl.Text, ctrl.Font, ctrl.Location, this,
+            //(text) => { ctrl.Text = text; },
+            //(text) => { ctrl.Text = text; },
+            //(text) => { ctrl.Text = oldText; });
         }
     }
 }

@@ -34,10 +34,15 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.m_btnAdd = new System.Windows.Forms.Button();
-            this.m_btnRemove = new System.Windows.Forms.Button();
-            this.m_btnEdit = new System.Windows.Forms.Button();
+            this.m_pnlMain = new System.Windows.Forms.Panel();
+            this.m_ToolStripMain = new System.Windows.Forms.ToolStrip();
+            this.m_btnAddGroup = new System.Windows.Forms.ToolStripSplitButton();
+            this.m_mnuAddGroup = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuRemoveGroup = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuRenameGroup = new System.Windows.Forms.ToolStripMenuItem();
             this.m_tabMain.SuspendLayout();
+            this.m_pnlMain.SuspendLayout();
+            this.m_ToolStripMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // m_tabMain
@@ -48,11 +53,12 @@
             this.m_tabMain.Controls.Add(this.tabPage1);
             this.m_tabMain.Controls.Add(this.tabPage2);
             this.m_tabMain.ImageList = this.imageList1;
-            this.m_tabMain.Location = new System.Drawing.Point(0, 15);
+            this.m_tabMain.Location = new System.Drawing.Point(0, 3);
             this.m_tabMain.Name = "m_tabMain";
             this.m_tabMain.SelectedIndex = 0;
-            this.m_tabMain.Size = new System.Drawing.Size(800, 425);
+            this.m_tabMain.Size = new System.Drawing.Size(800, 413);
             this.m_tabMain.TabIndex = 1;
+            this.m_tabMain.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.m_tabMain_MouseDoubleClick);
             // 
             // tabPage1
             // 
@@ -60,7 +66,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 23);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(792, 398);
+            this.tabPage1.Size = new System.Drawing.Size(792, 386);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "tabPage1";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -71,7 +77,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 23);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(792, 350);
+            this.tabPage2.Size = new System.Drawing.Size(792, 386);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -87,44 +93,63 @@
             this.imageList1.Images.SetKeyName(4, "propertysheets.ico");
             this.imageList1.Images.SetKeyName(5, "computer.ico");
             // 
-            // m_btnAdd
+            // m_pnlMain
             // 
-            this.m_btnAdd.Image = global::SmartBackup.Properties.Resources.Show_Detail;
-            this.m_btnAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnAdd.Location = new System.Drawing.Point(511, 8);
-            this.m_btnAdd.Name = "m_btnAdd";
-            this.m_btnAdd.Size = new System.Drawing.Size(93, 23);
-            this.m_btnAdd.TabIndex = 2;
-            this.m_btnAdd.Text = "Add Group...";
-            this.m_btnAdd.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.m_btnAdd.UseVisualStyleBackColor = true;
-            this.m_btnAdd.Click += new System.EventHandler(this.m_btnAdd_Click);
+            this.m_pnlMain.Controls.Add(this.m_tabMain);
+            this.m_pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_pnlMain.Location = new System.Drawing.Point(0, 25);
+            this.m_pnlMain.Name = "m_pnlMain";
+            this.m_pnlMain.Size = new System.Drawing.Size(800, 416);
+            this.m_pnlMain.TabIndex = 5;
             // 
-            // m_btnRemove
+            // m_ToolStripMain
             // 
-            this.m_btnRemove.Image = global::SmartBackup.Properties.Resources.Hide_Detail;
-            this.m_btnRemove.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnRemove.Location = new System.Drawing.Point(608, 8);
-            this.m_btnRemove.Name = "m_btnRemove";
-            this.m_btnRemove.Size = new System.Drawing.Size(85, 23);
-            this.m_btnRemove.TabIndex = 3;
-            this.m_btnRemove.Text = "Remove...";
-            this.m_btnRemove.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.m_btnRemove.UseVisualStyleBackColor = true;
-            this.m_btnRemove.Click += new System.EventHandler(this.m_btnRemove_Click);
+            this.m_ToolStripMain.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
+            this.m_ToolStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.m_btnAddGroup});
+            this.m_ToolStripMain.Location = new System.Drawing.Point(0, 0);
+            this.m_ToolStripMain.Name = "m_ToolStripMain";
+            this.m_ToolStripMain.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.m_ToolStripMain.Size = new System.Drawing.Size(800, 25);
+            this.m_ToolStripMain.TabIndex = 6;
+            this.m_ToolStripMain.Text = "toolStrip1";
             // 
-            // m_btnEdit
+            // m_btnAddGroup
             // 
-            this.m_btnEdit.Image = global::SmartBackup.Properties.Resources.Text;
-            this.m_btnEdit.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnEdit.Location = new System.Drawing.Point(699, 8);
-            this.m_btnEdit.Name = "m_btnEdit";
-            this.m_btnEdit.Size = new System.Drawing.Size(94, 23);
-            this.m_btnEdit.TabIndex = 4;
-            this.m_btnEdit.Text = "Edit Group...";
-            this.m_btnEdit.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.m_btnEdit.UseVisualStyleBackColor = true;
-            this.m_btnEdit.Click += new System.EventHandler(this.m_btnEdit_Click);
+            this.m_btnAddGroup.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.m_mnuAddGroup,
+            this.m_mnuRemoveGroup,
+            this.m_mnuRenameGroup});
+            this.m_btnAddGroup.Image = ((System.Drawing.Image)(resources.GetObject("m_btnAddGroup.Image")));
+            this.m_btnAddGroup.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.m_btnAddGroup.Name = "m_btnAddGroup";
+            this.m_btnAddGroup.Size = new System.Drawing.Size(124, 22);
+            this.m_btnAddGroup.Text = "Add New Group";
+            this.m_btnAddGroup.ButtonClick += new System.EventHandler(this.m_btnAdd_Click);
+            // 
+            // m_mnuAddGroup
+            // 
+            this.m_mnuAddGroup.Image = global::SmartBackup.Properties.Resources.Show_Detail1;
+            this.m_mnuAddGroup.Name = "m_mnuAddGroup";
+            this.m_mnuAddGroup.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuAddGroup.Text = "Add Group";
+            this.m_mnuAddGroup.Click += new System.EventHandler(this.m_btnAdd_Click);
+            // 
+            // m_mnuRemoveGroup
+            // 
+            this.m_mnuRemoveGroup.Image = global::SmartBackup.Properties.Resources.Hide_Detail1;
+            this.m_mnuRemoveGroup.Name = "m_mnuRemoveGroup";
+            this.m_mnuRemoveGroup.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuRemoveGroup.Text = "Remove Group";
+            this.m_mnuRemoveGroup.Click += new System.EventHandler(this.m_btnRemove_Click);
+            // 
+            // m_mnuRenameGroup
+            // 
+            this.m_mnuRenameGroup.Image = global::SmartBackup.Properties.Resources.Properties;
+            this.m_mnuRenameGroup.Name = "m_mnuRenameGroup";
+            this.m_mnuRenameGroup.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuRenameGroup.Text = "Rename Group";
+            this.m_mnuRenameGroup.Click += new System.EventHandler(this.m_btnEdit_Click);
             // 
             // FormMain
             // 
@@ -132,10 +157,8 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
             this.ClientSize = new System.Drawing.Size(800, 441);
-            this.Controls.Add(this.m_btnAdd);
-            this.Controls.Add(this.m_btnRemove);
-            this.Controls.Add(this.m_btnEdit);
-            this.Controls.Add(this.m_tabMain);
+            this.Controls.Add(this.m_pnlMain);
+            this.Controls.Add(this.m_ToolStripMain);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(640, 480);
             this.Name = "FormMain";
@@ -144,7 +167,11 @@
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormMain_FormClosed);
             this.Load += new System.EventHandler(this.FormMain_Load);
             this.m_tabMain.ResumeLayout(false);
+            this.m_pnlMain.ResumeLayout(false);
+            this.m_ToolStripMain.ResumeLayout(false);
+            this.m_ToolStripMain.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -154,10 +181,13 @@
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
         private BackupListUserControl backupListUserControl1;
-        private System.Windows.Forms.Button m_btnAdd;
-        private System.Windows.Forms.Button m_btnEdit;
-        private System.Windows.Forms.Button m_btnRemove;
         private System.Windows.Forms.ImageList imageList1;
+        private System.Windows.Forms.Panel m_pnlMain;
+        private System.Windows.Forms.ToolStrip m_ToolStripMain;
+        private System.Windows.Forms.ToolStripSplitButton m_btnAddGroup;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuAddGroup;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuRemoveGroup;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuRenameGroup;
     }
 }
 
