@@ -38,6 +38,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -51,6 +52,30 @@
   <ItemGroup>
     <Compile Include="..\..\CommonMZ\CommonMZ\ControlsWinForms\DraggableExtension.cs">
       <Link>Controls\DraggableExtension.cs</Link>
+    </Compile>
+    <Compile Include="..\..\CommonMZ\CommonMZ\ControlsWinForms\FileExplorerUserControl.cs">
+      <Link>Controls\FileExplorerUserControl.cs</Link>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="..\..\CommonMZ\CommonMZ\ControlsWinForms\FileExplorerUserControl.designer.cs">
+      <Link>Controls\FileExplorerUserControl.designer.cs</Link>
+      <DependentUpon>FileExplorerUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\CommonMZ\CommonMZ\ControlsWinForms\FoldersTreeUserControl.cs">
+      <Link>Controls\FoldersTreeUserControl.cs</Link>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="..\..\CommonMZ\CommonMZ\ControlsWinForms\FoldersTreeUserControl.designer.cs">
+      <Link>Controls\FoldersTreeUserControl.designer.cs</Link>
+      <DependentUpon>FoldersTreeUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\CommonMZ\CommonMZ\ControlsWinForms\FormBrowseForFolder.cs">
+      <Link>Controls\FormBrowseForFolder.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\..\CommonMZ\CommonMZ\ControlsWinForms\FormBrowseForFolder.designer.cs">
+      <Link>Controls\FormBrowseForFolder.designer.cs</Link>
+      <DependentUpon>FormBrowseForFolder.cs</DependentUpon>
     </Compile>
     <Compile Include="..\..\CommonMZ\CommonMZ\ControlsWinForms\FormInPlaceEdit.cs">
       <Link>Controls\FormInPlaceEdit.cs</Link>
@@ -73,6 +98,12 @@
     </Compile>
     <Compile Include="..\..\CommonMZ\CommonMZ\Tools\CommonUtils.cs">
       <Link>Tools\CommonUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\CommonMZ\CommonMZ\Tools\FileUtils.cs">
+      <Link>Tools\FileUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\CommonMZ\CommonMZ\Tools\Shell32_Icons.cs">
+      <Link>Tools\Shell32_Icons.cs</Link>
     </Compile>
     <Compile Include="..\..\CommonMZ\CommonMZ\Tools\SingleInstanceHelper.cs">
       <Link>Tools\SingleInstanceHelper.cs</Link>
@@ -118,6 +149,18 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\BackupSettings.cs" />
+    <EmbeddedResource Include="..\..\CommonMZ\CommonMZ\ControlsWinForms\FileExplorerUserControl.resx">
+      <Link>Controls\FileExplorerUserControl.resx</Link>
+      <DependentUpon>FileExplorerUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\CommonMZ\CommonMZ\ControlsWinForms\FoldersTreeUserControl.resx">
+      <Link>Controls\FoldersTreeUserControl.resx</Link>
+      <DependentUpon>FoldersTreeUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\CommonMZ\CommonMZ\ControlsWinForms\FormBrowseForFolder.resx">
+      <Link>Controls\FormBrowseForFolder.resx</Link>
+      <DependentUpon>FormBrowseForFolder.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\CommonMZ\CommonMZ\ControlsWinForms\FormInPlaceEdit.resx">
       <Link>Controls\FormInPlaceEdit.resx</Link>
       <DependentUpon>FormInPlaceEdit.cs</DependentUpon>
@@ -181,6 +224,7 @@
     <None Include="Resources\Paste.ico" />
     <None Include="Resources\FileCopy.ico" />
     <None Include="Resources\Favorites.ico" />
+    <None Include="Resources\refresh.ico" />
     <Content Include="sldd.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -120,6 +120,9 @@ namespace SmartBackup
 
         public bool ValidateBackupNeeded(BackupOptions option, bool createDstFolderIfNotExists = false)
         {
+            if(!SrcIfo.Exists)
+            { Status = BackupStatus.Error; return false; }
+
             if (!DstIfo.Exists)
             {
                 if(createDstFolderIfNotExists)
@@ -204,6 +207,7 @@ namespace SmartBackup
             }
         }
 
+        //http://www.pinvoke.net/default.aspx/kernel32.CopyFileEx
         private void CopyWithProgress(ProgressBar progress, Form owner)
         {
             int bufferSize = 1024 * 64;
@@ -253,7 +257,7 @@ namespace SmartBackup
 
         private List<BackupFile> FileList = new List<BackupFile>();
 
-        public BackupLogic(BackupGroup group, BackupPriority priority)
+        public BackupLogic(BackupGroup group, BackupPriority priority, FileUtils.FileProgress progress)
         {
             _group = group;
 
@@ -261,7 +265,7 @@ namespace SmartBackup
             {
                 if (priority.HasFlag(entry.Priority))
                 {
-                    FileList.AddRange(CollectFiles(entry));
+                    FileList.AddRange(CollectFiles(entry, progress));
                 }
             }
         }
@@ -309,13 +313,29 @@ namespace SmartBackup
             return string.Format("Free Space on Destination Drive {0} is {1:###,##0.0} MB", root, drive.TotalFreeSpace/ i1MB);
         }
 
-        public string CalculateSpaceNeeded(BackupStatus backupStatus)
+        public string CalculateSpaceNeeded(BackupStatus backupStatus, FileUtils.FileProgress progress)
         {
+            if (progress != null)
+                progress.Max = FileList.Count;
+
             long sizeDst = 0, sizeSrc = 0;
-            foreach (BackupFile file in FileList)
+            for(int i=0; i<FileList.Count; i++)
             {
+                BackupFile file = FileList[i];
+
+                if (progress != null)
+                {
+                    if (progress.IsCancel)
+                        break;
+
+                    progress.Val++;
+                }
+
                 if (backupStatus.HasFlag(file.Status))
                 {
+                    if (!file.SrcIfo.Exists)
+                        continue;
+
                     sizeSrc += file.SrcIfo.Length;
                     sizeDst += file.SrcIfo.Length;
                     if(file.DstIfo.Exists)
@@ -339,7 +359,7 @@ namespace SmartBackup
             return null;
         }
 
-        public static List<BackupFile> CollectFiles(BackupEntry entry)
+        public static List<BackupFile> CollectFiles(BackupEntry entry, FileUtils.FileProgress progress = null)
         {
             List<BackupFile> fileList = new List<BackupFile>();
             if (string.IsNullOrWhiteSpace(entry.FolderSrc))
@@ -349,10 +369,42 @@ namespace SmartBackup
             if (!dir.Exists)
                 return fileList;
 
-            string [] files = Directory.GetFiles(dir.FullName, entry.FolderIncludeTypes, entry.IncludeSubfolders);
-            for (int i = 0; i < files.Length; i++)
+            try
             {
-                fileList.Add(new BackupFile(i, files[i], entry));
+                if (progress != null)
+                {
+                    progress.Reset("Collecting Folders and Files: ");
+                    //report per discovered folder
+                    progress.ReportOption = FileUtils.FileProgress.ReportOptions.ReportValueChange;
+                }
+
+                List<string> files = FileUtils.GetFiles(dir.FullName, entry.FolderIncludeTypes, progress, entry.IncludeSubfolders).ToList();
+
+                if (progress != null)
+                {
+                    if (progress.IsCancel)
+                        return fileList;
+                        
+                    //report percentage only - may be too many files
+                    progress.Reset("Calculating Size: ", files.Count, 0, FileUtils.FileProgress.ReportOptions.ReportPercentChange);
+                }
+
+                for (int i = 0; i < files.Count; i++)
+                {
+                    if (progress != null)
+                    {
+                        if (progress.IsCancel)
+                            break;
+                        progress.Val = i;
+                    }
+
+                    if(File.Exists(files[i]))
+                        fileList.Add(new BackupFile(i, files[i], entry));
+                }
+            }
+            catch (Exception err)
+            {
+                Debug.WriteLine("Error enumerating files in: " + dir.FullName);
             }
 
             return fileList;

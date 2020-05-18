@@ -15,7 +15,7 @@ namespace MZ.ControlsWinForms
 {
     public partial class FoldersTreeUserControl : UserControl
     {
-		public Action<string> OpenFolder = (fullPath) => { };
+		public Action<string> AfterSelectAction = (fullPath) => { };
 
         public FoldersTreeUserControl()
         {
@@ -30,18 +30,50 @@ namespace MZ.ControlsWinForms
 		//This procedure populate the TreeView with the Drive list
 		public void SelectFolder(string fullPath)
 		{
+			TreeNode node = FindTreeNode(fullPath);
+			if (node != null)
+			{
+				tvFolders.SelectedNode = node;
+				node.EnsureVisible();
+			}
+		}
+
+		public void RefreshFolder(string fullPath)
+		{
+			TreeNode node = FindTreeNode(fullPath);
+			if (node != null)
+			{
+				PopulateDirectory(node);
+			}
+		}
+
+		public void EditFolder(string fullPath)
+		{
+			TreeNode node = FindTreeNode(fullPath);
+			if (node != null)
+			{
+				node.BeginEdit();
+			}
+		}
+
+		private TreeNode FindTreeNode(string fullPath)
+		{
 			if (tvFolders.Nodes.Count == 0)
-				return;
+				return null;
+			
+			if (string.IsNullOrWhiteSpace(fullPath))
+				return tvFolders.Nodes[0]; //root
 
 			List<string> folders = new List<string>();
-			
+
 			string name = Path.GetFileName(fullPath);
 			string path = Path.GetDirectoryName(fullPath);
 			folders.Add(name);
+			
 			while (!string.IsNullOrWhiteSpace(path))
 			{
 				name = Path.GetFileName(path);
-				if(string.IsNullOrWhiteSpace(name))
+				if (string.IsNullOrWhiteSpace(name))
 				{
 					folders.Add(path);
 					break;
@@ -50,20 +82,18 @@ namespace MZ.ControlsWinForms
 				folders.Add(name);
 				path = Path.GetDirectoryName(path);
 			}
+
 			folders.Reverse();
 
 			TreeNode node = FindSubNode(tvFolders.Nodes[0], folders);
-			if (node != null)
-			{
-				tvFolders.SelectedNode = node;
-				node.EnsureVisible();
-			}
+
+			return node;
 		}
 
 		private TreeNode FindSubNode(TreeNode node, List<string> folders, int index = 0)
 		{
 			if(node.Nodes.Count == 0)
-				PopulateDirectory(node, node.Nodes);
+				PopulateDirectory(node);
 
 			foreach (TreeNode n in node.Nodes)
 			{
@@ -78,7 +108,7 @@ namespace MZ.ControlsWinForms
 			return null;
 		}
 
-		private void PopulateDriveList()
+		private TreeNode PopulateDriveList()
 		{
 			int imageIndex = 0;
 			int selectIndex = 0;
@@ -94,9 +124,6 @@ namespace MZ.ControlsWinForms
 			tvFolders.Nodes.Clear();
 			TreeNode root = new TreeNode("My Computer", 0, 0);
 			tvFolders.Nodes.Add(root);
-
-			//set node collection
-			TreeNodeCollection nodeCollection = root.Nodes;
 
 			//Get Drive list
 			ManagementObjectCollection queryCollection = getDrives();
@@ -130,12 +157,13 @@ namespace MZ.ControlsWinForms
 				TreeNode nodeTreeNode = new TreeNode(drive["Name"].ToString() + "\\", imageIndex, selectIndex);
 
 				//add new node
-				nodeCollection.Add(nodeTreeNode);
+				root.Nodes.Add(nodeTreeNode);
 			}
 
 			root.Expand();
 			this.Cursor = Cursors.Default;
 
+			return root;
 		}
 
 		protected ManagementObjectCollection getDrives()
@@ -147,78 +175,102 @@ namespace MZ.ControlsWinForms
 			return queryCollection;
 		}
 
-		private void tvFolders_AfterSelect(object sender, System.Windows.Forms.TreeViewEventArgs e)
+		private void tvFolders_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
 		{
-			//Populate folders and files when a folder is selected
-			this.Cursor = Cursors.WaitCursor;
-
 			//get current selected drive or folder
-			TreeNode nodeCurrent = e.Node;
-
-			//clear all sub-folders
-			nodeCurrent.Nodes.Clear();
-
-			if (nodeCurrent.SelectedImageIndex == 0)
+			try
 			{
-				//Selected My Computer - repopulate drive list
-				PopulateDriveList();
+				if (!string.IsNullOrWhiteSpace(e.Label))
+				{
+					string path = getFullPath(e.Node.FullPath);
+					string parent = Path.GetDirectoryName(path);
+					string newPath = Path.Combine(parent, e.Label);
+					Directory.Move(path, newPath);
+					AfterSelectAction(newPath);
+				}
 			}
-			else
+			catch (Exception err)
 			{
-				//populate sub-folders and folder files
-				PopulateDirectory(nodeCurrent, nodeCurrent.Nodes);
-				OpenFolder(getFullPath(nodeCurrent.FullPath));
-			}
-
-			this.Cursor = Cursors.Default;
+				e.CancelEdit = true;
+				MessageBox.Show(err.Message, "Rename Folder");
+			}			
 		}
 
-		protected void PopulateDirectory(TreeNode nodeCurrent, TreeNodeCollection nodeCurrentCollection)
+		private void tvFolders_AfterSelect(object sender, System.Windows.Forms.TreeViewEventArgs e)
+		{
+			if (e.Node.Nodes.Count == 0)
+			{
+
+				//Populate folders and files when a folder is selected
+				this.Cursor = Cursors.WaitCursor;
+
+				System.Diagnostics.Debug.WriteLine("tvFolders_AfterSelect: " + e.Node.Text);
+
+				//populate sub-folders and folder files
+				PopulateDirectory(e.Node);
+
+				this.Cursor = Cursors.Default;
+			}
+
+			//notify
+			AfterSelectAction(getFullPath(e.Node.FullPath));
+		}
+
+		private bool IsRootNoode(TreeNode node)
+		{
+			string path = getFullPath(node.FullPath);
+			return string.IsNullOrWhiteSpace(path);
+		}
+
+		protected void PopulateDirectory(TreeNode node)
 		{
 			TreeNode nodeDir;
 			int imageIndex = 2;     //unselected image index
 			int selectIndex = 3;    //selected image index
 
-			if (nodeCurrent.SelectedImageIndex != 0)
+			//populate treeview with folders
+			try
 			{
-				//populate treeview with folders
-				try
+				node.Nodes.Clear();
+
+				if (IsRootNoode(node))
+				{
+					//Selected My Computer - repopulate drive list
+					PopulateDriveList();
+				}
+				else
 				{
 					//check path
-					if (Directory.Exists(getFullPath(nodeCurrent.FullPath)) == false)
+					if (!Directory.Exists(getFullPath(node.FullPath)))
 					{
-						MessageBox.Show("Directory or path " + nodeCurrent.ToString() + " does not exist.");
+						MessageBox.Show("Directory or path " + node.ToString() + " does not exist.");
+						return;
 					}
-					else
+
+					string[] stringDirectories = Directory.GetDirectories(getFullPath(node.FullPath));
+
+					//loop throught all directories
+					foreach (string stringDir in stringDirectories)
 					{
-						//populate files
-						//PopulateFiles(nodeCurrent);
+						string stringPathName = Path.GetFileName(stringDir);
 
-						string[] stringDirectories = Directory.GetDirectories(getFullPath(nodeCurrent.FullPath));
-
-						//loop throught all directories
-						foreach (string stringDir in stringDirectories)
-						{
-							string stringPathName = Path.GetFileName(stringDir);
-
-							//create node for directories
-							nodeDir = new TreeNode(stringPathName, imageIndex, selectIndex);
-							nodeCurrentCollection.Add(nodeDir);
-						}
+						//create node for directories
+						nodeDir = new TreeNode(stringPathName, imageIndex, selectIndex);
+						node.Nodes.Add(nodeDir);
 					}
 				}
-				catch (IOException e)
-				{
-					MessageBox.Show("Error: Drive not ready or directory does not exist.");
-				}
-				catch (UnauthorizedAccessException e)
-				{
-					MessageBox.Show("Error: Drive or directory access denided.");
-				}
-				catch (Exception e)
-				{
-					MessageBox.Show("Error: " + e);
-				}
+			}
+			catch (IOException e)
+			{
+				MessageBox.Show("Error: Drive not ready or directory does not exist.");
+			}
+			catch (UnauthorizedAccessException e)
+			{
+				MessageBox.Show("Error: Drive or directory access denided.");
+			}
+			catch (Exception e)
+			{
+				MessageBox.Show("Error: " + e);
 			}
 		}
 

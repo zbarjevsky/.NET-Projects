@@ -40,11 +40,13 @@
             this.tvFolders.HideSelection = false;
             this.tvFolders.ImageIndex = 0;
             this.tvFolders.ImageList = this.m_imageListTreeView;
+            this.tvFolders.LabelEdit = true;
             this.tvFolders.Location = new System.Drawing.Point(0, 0);
             this.tvFolders.Name = "tvFolders";
             this.tvFolders.SelectedImageIndex = 0;
             this.tvFolders.Size = new System.Drawing.Size(229, 480);
             this.tvFolders.TabIndex = 3;
+            this.tvFolders.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.tvFolders_AfterLabelEdit);
             this.tvFolders.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvFolders_AfterSelect);
             // 
             // m_imageListTreeView

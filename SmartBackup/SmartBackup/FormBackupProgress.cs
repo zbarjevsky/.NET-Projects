@@ -24,6 +24,7 @@ namespace SmartBackup
         BackupLogic _logic;
         readonly BackupPriority _Priority = BackupPriority.All;
         List<BackupFile> _backupFilesList;
+        FileUtils.FileProgress _fileProgress = new FileUtils.FileProgress();
 
         public FormBackupProgress(BackupGroup group, BackupPriority priority)
         {
@@ -39,11 +40,33 @@ namespace SmartBackup
             m_cmbOption.SelectedIndex = 1;
 
             m_cmbViewFilter.SelectedIndex = 0; //all
+            m_listFiles.VirtualListSize = 0;
         }
 
         private void FormBackupProgress_Load(object sender, EventArgs e)
         {
-            _logic = new BackupLogic(_group, _Priority);
+            this.Visible = true;
+
+            _fileProgress.OnPercentChange = (percent) =>
+            {
+                CommonUtils.ExecuteOnUIThread(() =>
+                {
+                    m_txtInfo.Text = _fileProgress.ToString();
+                    m_progrFile.Value = percent;
+                }, this);
+                Application.DoEvents();
+            };
+
+            _fileProgress.OnValueChange = () =>
+            {
+                CommonUtils.ExecuteOnUIThread(() =>
+                {
+                    m_txtInfo.Text = _fileProgress.ToString();
+                }, this);
+                Application.DoEvents();
+            };
+
+            _logic = new BackupLogic(_group, _Priority, _fileProgress);
             UpdateDisplayList();
         }
 
@@ -240,6 +263,7 @@ namespace SmartBackup
         private void m_btnAbort_Click(object sender, EventArgs e)
         {
             _abort = true;
+            _fileProgress.IsCancel = true;
         }
 
         bool _pause = false;
@@ -284,7 +308,8 @@ namespace SmartBackup
             Task task = new Task(() =>
             {
                 string stat = _logic.GetDiskStatistics();
-                string sizeInfo = _logic.CalculateSpaceNeeded(backupStatus);
+                _fileProgress.Reset("Calculate Space Needed: ");
+                string sizeInfo = _logic.CalculateSpaceNeeded(backupStatus, _fileProgress);
                 CommonUtils.ExecuteOnUIThread(() => { m_txtInfo.Text = sizeInfo; }, this);
             });
             task.Start();

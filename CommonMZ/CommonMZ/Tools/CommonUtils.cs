@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MZ.ControlsWinForms;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -17,23 +18,13 @@ namespace MZ.Tools
         {
             selectedPath = string.IsNullOrWhiteSpace(selectedPath) ? txt.Text : selectedPath;
 
-            FolderBrowserDialog dlg = new FolderBrowserDialog()
-            {
-                RootFolder = Environment.SpecialFolder.MyComputer,
-                SelectedPath = selectedPath,
-                Description = prompt
-            };
+            FormBrowseForFolder frm = new FormBrowseForFolder();
+            frm.SelectedFolder = selectedPath;
+            frm.Description = prompt;
 
-            //select current folder
-            Task.Factory.StartNew(() =>
+            if (frm.ShowDialog(owner) == DialogResult.OK)
             {
-                Thread.Sleep(330);
-                owner.Invoke(new MethodInvoker(() => SendKeys.Send("{TAB}{TAB}{DOWN}{DOWN}{UP}{UP}")));
-            });
-
-            if (dlg.ShowDialog(owner) == DialogResult.OK)
-            {
-                txt.Text = dlg.SelectedPath;
+                txt.Text = frm.SelectedFolder;
             }
         }
 

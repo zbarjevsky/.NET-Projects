@@ -105,7 +105,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\AlternateColorTool.cs" />
     <Compile Include="Tools\DesktopWindowManager.cs" />
+    <Compile Include="Tools\FileUtils.cs" />
     <Compile Include="Tools\NotifyPropertyChangedImpl.cs" />
+    <Compile Include="Tools\Shell32_Icons.cs" />
     <Compile Include="Tools\SingleInstanceHelper.cs" />
     <Compile Include="Tools\TaskbarManagerHelper.cs" />
     <Compile Include="Tools\User32.cs" />
@@ -127,6 +129,8 @@
     <Compile Include="UtilsWPF\WPF_Helper.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Images\Shell32\Ico\" />
+    <Folder Include="Images\Shell32\Png\" />
     <Folder Include="UtilsWinForms\" />
   </ItemGroup>
   <ItemGroup>

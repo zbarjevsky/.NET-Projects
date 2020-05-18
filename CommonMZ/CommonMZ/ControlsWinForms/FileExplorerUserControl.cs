@@ -17,7 +17,7 @@ namespace MZ.ControlsWinForms
 		private class FileData
 		{
 			public string FullPath { get; }
-			public string FileName { get; }
+			public string FileName { get; private set; }
 			public bool IsDirectory { get; }
 			public FileInfo FileInfo { get; }
 			public DateTime CreatedTime { get; }
@@ -58,9 +58,17 @@ namespace MZ.ControlsWinForms
 					ModifiedTime = FileInfo.LastWriteTime;
 				}
 			}
+
+			//for special folder name 'up'
+			internal void SetName(string name)
+			{
+				FileName = name;
+			}
 		}
 
 		private List<FileData> _list = new List<FileData>();
+
+		public Action<string> OpenFolderAction = (fullPath) => { };
 
         public FileExplorerUserControl()
         {
@@ -93,6 +101,9 @@ namespace MZ.ControlsWinForms
 
 		private void m_btnRoot_Click(object sender, EventArgs e)
 		{
+			if (string.IsNullOrWhiteSpace(m_txtPath.Text))
+				return;
+
 			string root = Path.GetPathRoot(m_txtPath.Text);
 			if (Directory.Exists(root))
 				PopulateFiles(root);
@@ -100,6 +111,22 @@ namespace MZ.ControlsWinForms
 
 		private void m_btnBrowse_Click(object sender, EventArgs e)
 		{
+			FormBrowseForFolder frm = new FormBrowseForFolder();
+			frm.SelectedFolder = m_txtPath.Text;
+			frm.Description = "Choose folder: ";
+
+			if (frm.ShowDialog(this) == DialogResult.OK)
+			{
+				m_txtPath.Text = frm.SelectedFolder;
+				PopulateFiles(m_txtPath.Text);
+			}
+		}
+
+		private void m_btnUp_Click(object sender, EventArgs e)
+		{
+			if (string.IsNullOrWhiteSpace(m_txtPath.Text))
+				return;
+
 			string parentFolder = Path.GetDirectoryName(m_txtPath.Text);
 			if(Directory.Exists(parentFolder))
 				PopulateFiles(parentFolder);
@@ -107,7 +134,6 @@ namespace MZ.ControlsWinForms
 
 		protected void PopulateFiles(string fullPath)
 		{
-			m_txtPath.Text = fullPath;
 
 			//Populate listview with files
 			string[] lvData = new string[4];
@@ -116,7 +142,7 @@ namespace MZ.ControlsWinForms
 			InitListView();
 
 			//check path
-			if (Directory.Exists(fullPath) == false)
+			if (!Directory.Exists(fullPath))
 			{
 				MessageBox.Show("Directory or path " + fullPath.ToString() + " does not exist.");
 			}
@@ -127,7 +153,9 @@ namespace MZ.ControlsWinForms
 					string parentFolder = Path.GetDirectoryName(fullPath);
 					if (Directory.Exists(parentFolder))
 					{
-						_list.Add(new FileData(parentFolder, true));
+						FileData parent = new FileData(parentFolder, true);
+						parent.SetName("↑");
+						_list.Add(parent);
 						m_btnUp.Enabled = true;
 					}
 					else
@@ -136,15 +164,18 @@ namespace MZ.ControlsWinForms
 					}
 
 					string[] folders = Directory.GetDirectories(fullPath);
-					foreach (string folder in folders)
+					List<string> dirs = folders.OrderBy(s => s).ToList();
+					
+					foreach (string folder in dirs)
 					{
 						_list.Add(new FileData(folder, true));
 					}
 
 					string[] stringFiles = Directory.GetFiles(fullPath);
+					List<string> files = stringFiles.OrderBy(s => s).ToList();
 
 					//loop throught all files
-					foreach (string stringFile in stringFiles)
+					foreach (string stringFile in files)
 					{
 						_list.Add(new FileData(stringFile, false));
 
@@ -154,6 +185,8 @@ namespace MZ.ControlsWinForms
 					}
 
 					m_listFiles.VirtualListSize = _list.Count;
+					m_txtPath.Text = fullPath;
+					OpenFolderAction(fullPath);
 				}
 				catch (IOException e)
 				{

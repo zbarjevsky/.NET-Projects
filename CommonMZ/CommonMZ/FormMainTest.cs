@@ -1,5 +1,6 @@
 ﻿using MZ.Controls;
 using MZ.ControlsWinForms;
+using MZ.Tools;
 using MZ.Tools.WinForms;
 using System;
 using System.Collections.Generic;
@@ -20,15 +21,30 @@ namespace MZ
         public FormMainTest()
         {
             InitializeComponent();
+
+            m_cmbListViewType.Items.AddRange(Enum.GetValues(typeof(View)).Cast<Object>().ToArray());
+            m_cmbListViewType.SelectedIndex = 0;
+
+            //string folder = @"C:\Dev_Mark\GitHub\zbarjevsky\.NET-Projects\CommonMZ\CommonMZ\Images\Shell32";
+            //Shell32_Icons.SaveImages(folder, Shell32_Icons.SmallIconsList);
+            //Shell32_Icons.SaveImages(folder, Shell32_Icons.LargeIconsList);
         }
 
         private void FormMainTest_Load(object sender, EventArgs e)
         {
-            foldersTreeUserControl1.OpenFolder = (fullPath) =>
+            foldersTreeUserControl1.AfterSelectAction = (fullPath) =>
             {
                 fileExplorerUserControl1.ShowFolder(fullPath);
             };
             foldersTreeUserControl1.SelectFolder(@"C:\Dev_Mark\Temp");
+
+            listView1.SmallImageList = Shell32_Icons.SmallImageList;
+            listView1.LargeImageList = Shell32_Icons.LargeImageList;
+
+            for (int i = 0; i < Shell32_Icons.SmallImageList.Images.Count; i++)
+            {
+                listView1.Items.Add("i" + i, i);
+            }
         }
 
         private void m_btnTestEdit_Click(object sender, EventArgs e)
@@ -57,6 +73,11 @@ namespace MZ
             FormBrowseForFolder browse = new FormBrowseForFolder();
             browse.SelectedFolder = @"C:\Dev_Mark\Temp";
             browse.ShowDialog(this);
+        }
+
+        private void m_cmbListViewType_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            listView1.View = (View)m_cmbListViewType.SelectedItem;
         }
     }
 }
