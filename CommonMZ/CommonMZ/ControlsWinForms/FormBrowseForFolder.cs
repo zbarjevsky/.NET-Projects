@@ -29,9 +29,6 @@ namespace MZ.ControlsWinForms
         public FormBrowseForFolder()
         {
             InitializeComponent();
-
-            m_btnRefresh.Image = Shell32_Icons.SmallIconsList[238].ToBitmap();
-            //m_btnRefresh.ImageIndex = 238;
         }
 
         private void FormBrowseForFolder_Load(object sender, EventArgs e)

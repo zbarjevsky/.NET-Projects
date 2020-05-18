@@ -46,10 +46,11 @@
             this.m_txtInfo = new System.Windows.Forms.TextBox();
             this.m_cmbSearchOptions = new System.Windows.Forms.ComboBox();
             this.m_splitFolders = new System.Windows.Forms.SplitContainer();
-            this.m_explorerSrc = new MZ.ControlsWinForms.FileExplorerUserControl();
-            this.m_explorerDst = new MZ.ControlsWinForms.FileExplorerUserControl();
             this.m_pnlOptions = new System.Windows.Forms.Panel();
             this.m_progressBar = new System.Windows.Forms.ProgressBar();
+            this.m_btnStartBackup = new System.Windows.Forms.Button();
+            this.m_explorerSrc = new MZ.ControlsWinForms.FileExplorerUserControl();
+            this.m_explorerDst = new MZ.ControlsWinForms.FileExplorerUserControl();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitFolders)).BeginInit();
             this.m_splitFolders.Panel1.SuspendLayout();
             this.m_splitFolders.Panel2.SuspendLayout();
@@ -211,7 +212,7 @@
             this.m_txtInfo.Location = new System.Drawing.Point(12, 527);
             this.m_txtInfo.Name = "m_txtInfo";
             this.m_txtInfo.ReadOnly = true;
-            this.m_txtInfo.Size = new System.Drawing.Size(891, 13);
+            this.m_txtInfo.Size = new System.Drawing.Size(794, 13);
             this.m_txtInfo.TabIndex = 12;
             this.m_txtInfo.Text = "Calculating Folder Size...";
             // 
@@ -252,26 +253,6 @@
             this.m_splitFolders.SplitterDistance = 540;
             this.m_splitFolders.TabIndex = 20;
             // 
-            // m_explorerSrc
-            // 
-            this.m_explorerSrc.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_explorerSrc.Location = new System.Drawing.Point(3, 40);
-            this.m_explorerSrc.Name = "m_explorerSrc";
-            this.m_explorerSrc.Size = new System.Drawing.Size(532, 417);
-            this.m_explorerSrc.TabIndex = 19;
-            // 
-            // m_explorerDst
-            // 
-            this.m_explorerDst.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_explorerDst.Location = new System.Drawing.Point(3, 40);
-            this.m_explorerDst.Name = "m_explorerDst";
-            this.m_explorerDst.Size = new System.Drawing.Size(532, 417);
-            this.m_explorerDst.TabIndex = 18;
-            // 
             // m_pnlOptions
             // 
             this.m_pnlOptions.Controls.Add(this.m_cmbSearchOptions);
@@ -295,6 +276,41 @@
             this.m_progressBar.Size = new System.Drawing.Size(1084, 10);
             this.m_progressBar.TabIndex = 22;
             // 
+            // m_btnStartBackup
+            // 
+            this.m_btnStartBackup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnStartBackup.DialogResult = System.Windows.Forms.DialogResult.Yes;
+            this.m_btnStartBackup.Image = ((System.Drawing.Image)(resources.GetObject("m_btnStartBackup.Image")));
+            this.m_btnStartBackup.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.m_btnStartBackup.Location = new System.Drawing.Point(798, 522);
+            this.m_btnStartBackup.Name = "m_btnStartBackup";
+            this.m_btnStartBackup.Size = new System.Drawing.Size(105, 23);
+            this.m_btnStartBackup.TabIndex = 23;
+            this.m_btnStartBackup.Text = "Start Backup...";
+            this.m_btnStartBackup.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.m_btnStartBackup.UseVisualStyleBackColor = true;
+            this.m_btnStartBackup.Click += new System.EventHandler(this.m_btnStartBackup_Click);
+            // 
+            // m_explorerSrc
+            // 
+            this.m_explorerSrc.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_explorerSrc.Location = new System.Drawing.Point(3, 40);
+            this.m_explorerSrc.Name = "m_explorerSrc";
+            this.m_explorerSrc.Size = new System.Drawing.Size(532, 417);
+            this.m_explorerSrc.TabIndex = 19;
+            // 
+            // m_explorerDst
+            // 
+            this.m_explorerDst.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_explorerDst.Location = new System.Drawing.Point(3, 40);
+            this.m_explorerDst.Name = "m_explorerDst";
+            this.m_explorerDst.Size = new System.Drawing.Size(532, 417);
+            this.m_explorerDst.TabIndex = 18;
+            // 
             // FormBackupFolderProperties
             // 
             this.AcceptButton = this.m_btnOk;
@@ -302,6 +318,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.m_btnCancel;
             this.ClientSize = new System.Drawing.Size(1084, 561);
+            this.Controls.Add(this.m_btnStartBackup);
             this.Controls.Add(this.m_progressBar);
             this.Controls.Add(this.m_pnlOptions);
             this.Controls.Add(this.m_splitFolders);
@@ -351,5 +368,6 @@
         private System.Windows.Forms.SplitContainer m_splitFolders;
         private System.Windows.Forms.Panel m_pnlOptions;
         private System.Windows.Forms.ProgressBar m_progressBar;
+        private System.Windows.Forms.Button m_btnStartBackup;
     }
 }

@@ -102,7 +102,10 @@ namespace MZ.ControlsWinForms
 					if (index == folders.Count - 1)
 						return n;
 
-					return FindSubNode(n, folders, index + 1);
+					TreeNode found = FindSubNode(n, folders, index + 1);
+					if (found == null)
+						found = n; //if not found - return closest parent
+					return found;
 				}
 			}
 			return null;

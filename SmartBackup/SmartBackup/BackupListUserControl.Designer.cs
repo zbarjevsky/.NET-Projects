@@ -35,8 +35,12 @@
             System.Windows.Forms.ListViewGroup listViewGroup3 = new System.Windows.Forms.ListViewGroup("Low Priority", System.Windows.Forms.HorizontalAlignment.Left);
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.m_ContextMenuList = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.m_mnuEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.m_mnuBackupSelected = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.m_mnuBackupPriority = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuBackupAll = new System.Windows.Forms.ToolStripMenuItem();
             this.m_listBackup = new ListViewExtensions.ListViewCollapsibleGroups();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -46,10 +50,6 @@
             this.m_btnEdit = new System.Windows.Forms.Button();
             this.m_btnRemove = new System.Windows.Forms.Button();
             this.m_btnAdd = new System.Windows.Forms.Button();
-            this.m_mnuEdit = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_mnuBackupSelected = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_mnuBackupPriority = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_mnuBackupAll = new System.Windows.Forms.ToolStripMenuItem();
             this.m_ContextMenuList.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -78,15 +78,48 @@
             this.m_ContextMenuList.Name = "m_ContextMenuList";
             this.m_ContextMenuList.Size = new System.Drawing.Size(193, 104);
             // 
+            // m_mnuEdit
+            // 
+            this.m_mnuEdit.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.m_mnuEdit.Image = global::SmartBackup.Properties.Resources.Properties;
+            this.m_mnuEdit.Name = "m_mnuEdit";
+            this.m_mnuEdit.Size = new System.Drawing.Size(192, 22);
+            this.m_mnuEdit.Text = "Edit...";
+            this.m_mnuEdit.Click += new System.EventHandler(this.m_btnEdit_Click);
+            // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
             this.toolStripMenuItem2.Size = new System.Drawing.Size(189, 6);
             // 
+            // m_mnuBackupSelected
+            // 
+            this.m_mnuBackupSelected.Image = global::SmartBackup.Properties.Resources.FileCopy;
+            this.m_mnuBackupSelected.Name = "m_mnuBackupSelected";
+            this.m_mnuBackupSelected.Size = new System.Drawing.Size(192, 22);
+            this.m_mnuBackupSelected.Text = "Backup Selected...";
+            this.m_mnuBackupSelected.Click += new System.EventHandler(this.m_mnuBackupSelected_Click);
+            // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(189, 6);
+            // 
+            // m_mnuBackupPriority
+            // 
+            this.m_mnuBackupPriority.Image = global::SmartBackup.Properties.Resources.Favorites;
+            this.m_mnuBackupPriority.Name = "m_mnuBackupPriority";
+            this.m_mnuBackupPriority.Size = new System.Drawing.Size(192, 22);
+            this.m_mnuBackupPriority.Text = "Backup High Priority...";
+            this.m_mnuBackupPriority.Click += new System.EventHandler(this.m_btnBackupImportant_Click);
+            // 
+            // m_mnuBackupAll
+            // 
+            this.m_mnuBackupAll.Image = global::SmartBackup.Properties.Resources.FilesCopy;
+            this.m_mnuBackupAll.Name = "m_mnuBackupAll";
+            this.m_mnuBackupAll.Size = new System.Drawing.Size(192, 22);
+            this.m_mnuBackupAll.Text = "Backup All..";
+            this.m_mnuBackupAll.Click += new System.EventHandler(this.m_btnBackupAll_Click);
             // 
             // m_listBackup
             // 
@@ -192,9 +225,8 @@
             // 
             // m_btnAdd
             // 
+            this.m_btnAdd.Image = ((System.Drawing.Image)(resources.GetObject("m_btnAdd.Image")));
             this.m_btnAdd.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnAdd.ImageIndex = 3;
-            this.m_btnAdd.ImageList = this.imageList1;
             this.m_btnAdd.Location = new System.Drawing.Point(3, 4);
             this.m_btnAdd.Name = "m_btnAdd";
             this.m_btnAdd.Size = new System.Drawing.Size(75, 23);
@@ -202,39 +234,6 @@
             this.m_btnAdd.Text = "Add...";
             this.m_btnAdd.UseVisualStyleBackColor = true;
             this.m_btnAdd.Click += new System.EventHandler(this.m_btnAdd_Click);
-            // 
-            // m_mnuEdit
-            // 
-            this.m_mnuEdit.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.m_mnuEdit.Image = global::SmartBackup.Properties.Resources.Properties;
-            this.m_mnuEdit.Name = "m_mnuEdit";
-            this.m_mnuEdit.Size = new System.Drawing.Size(192, 22);
-            this.m_mnuEdit.Text = "Edit...";
-            this.m_mnuEdit.Click += new System.EventHandler(this.m_btnEdit_Click);
-            // 
-            // m_mnuBackupSelected
-            // 
-            this.m_mnuBackupSelected.Image = global::SmartBackup.Properties.Resources.FileCopy;
-            this.m_mnuBackupSelected.Name = "m_mnuBackupSelected";
-            this.m_mnuBackupSelected.Size = new System.Drawing.Size(192, 22);
-            this.m_mnuBackupSelected.Text = "Backup Selected...";
-            this.m_mnuBackupSelected.Click += new System.EventHandler(this.m_mnuBackupSelected_Click);
-            // 
-            // m_mnuBackupPriority
-            // 
-            this.m_mnuBackupPriority.Image = global::SmartBackup.Properties.Resources.Favorites;
-            this.m_mnuBackupPriority.Name = "m_mnuBackupPriority";
-            this.m_mnuBackupPriority.Size = new System.Drawing.Size(192, 22);
-            this.m_mnuBackupPriority.Text = "Backup High Priority...";
-            this.m_mnuBackupPriority.Click += new System.EventHandler(this.m_btnBackupImportant_Click);
-            // 
-            // m_mnuBackupAll
-            // 
-            this.m_mnuBackupAll.Image = global::SmartBackup.Properties.Resources.FilesCopy;
-            this.m_mnuBackupAll.Name = "m_mnuBackupAll";
-            this.m_mnuBackupAll.Size = new System.Drawing.Size(192, 22);
-            this.m_mnuBackupAll.Text = "Backup All..";
-            this.m_mnuBackupAll.Click += new System.EventHandler(this.m_btnBackupAll_Click);
             // 
             // BackupListUserControl
             // 

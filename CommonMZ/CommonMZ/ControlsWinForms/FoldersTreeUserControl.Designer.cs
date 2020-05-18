@@ -36,15 +36,18 @@
             // 
             // tvFolders
             // 
+            this.tvFolders.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tvFolders.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tvFolders.HideSelection = false;
             this.tvFolders.ImageIndex = 0;
             this.tvFolders.ImageList = this.m_imageListTreeView;
+            this.tvFolders.ItemHeight = 20;
             this.tvFolders.LabelEdit = true;
             this.tvFolders.Location = new System.Drawing.Point(0, 0);
             this.tvFolders.Name = "tvFolders";
             this.tvFolders.SelectedImageIndex = 0;
             this.tvFolders.Size = new System.Drawing.Size(229, 480);
+            this.tvFolders.StateImageList = this.m_imageListTreeView;
             this.tvFolders.TabIndex = 3;
             this.tvFolders.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.tvFolders_AfterLabelEdit);
             this.tvFolders.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvFolders_AfterSelect);
@@ -53,14 +56,14 @@
             // 
             this.m_imageListTreeView.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_imageListTreeView.ImageStream")));
             this.m_imageListTreeView.TransparentColor = System.Drawing.Color.Transparent;
-            this.m_imageListTreeView.Images.SetKeyName(0, "");
+            this.m_imageListTreeView.Images.SetKeyName(0, "Icon_272_16.png");
             this.m_imageListTreeView.Images.SetKeyName(1, "");
-            this.m_imageListTreeView.Images.SetKeyName(2, "");
-            this.m_imageListTreeView.Images.SetKeyName(3, "");
-            this.m_imageListTreeView.Images.SetKeyName(4, "");
+            this.m_imageListTreeView.Images.SetKeyName(2, "Icon_004_16.png");
+            this.m_imageListTreeView.Images.SetKeyName(3, "Icon_126_16.png");
+            this.m_imageListTreeView.Images.SetKeyName(4, "Icon_000_16.png");
             this.m_imageListTreeView.Images.SetKeyName(5, "");
             this.m_imageListTreeView.Images.SetKeyName(6, "");
-            this.m_imageListTreeView.Images.SetKeyName(7, "");
+            this.m_imageListTreeView.Images.SetKeyName(7, "Icon_188_16.png");
             this.m_imageListTreeView.Images.SetKeyName(8, "");
             this.m_imageListTreeView.Images.SetKeyName(9, "Copy.ico");
             // 

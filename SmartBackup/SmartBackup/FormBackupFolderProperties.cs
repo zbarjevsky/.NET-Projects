@@ -102,6 +102,12 @@ namespace SmartBackup
             _entry.Priority = (BackupPriority)m_cmbPriority.SelectedItem;
         }
 
+        private void m_btnStartBackup_Click(object sender, EventArgs e)
+        {
+            m_btnOk_Click(sender, e);
+            DialogResult = DialogResult.Yes;
+        }
+
         private void ValidateInput(object sender = null, EventArgs e = null)
         {
             BackupEntry entry = new BackupEntry()

@@ -142,7 +142,7 @@ namespace MZ.ControlsWinForms
 			InitListView();
 
 			//check path
-			if (!Directory.Exists(fullPath))
+			if (!string.IsNullOrEmpty(fullPath) && !Directory.Exists(fullPath))
 			{
 				MessageBox.Show("Directory or path " + fullPath.ToString() + " does not exist.");
 			}
@@ -154,7 +154,7 @@ namespace MZ.ControlsWinForms
 					if (Directory.Exists(parentFolder))
 					{
 						FileData parent = new FileData(parentFolder, true);
-						parent.SetName("↑");
+						parent.SetName("..");
 						_list.Add(parent);
 						m_btnUp.Enabled = true;
 					}
@@ -273,6 +273,8 @@ namespace MZ.ControlsWinForms
 			lvData[3] = formatDate(data.ModifiedTime);
 
 			int iconIndex = data.IsDirectory ? 2 : 4;
+			if (lvData[0] == "..") iconIndex = 10;
+
 			ListViewItem lvItem = new ListViewItem(lvData, iconIndex);
 			e.Item = lvItem;
 		}

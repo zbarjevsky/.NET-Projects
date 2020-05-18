@@ -125,7 +125,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAAAk
-        GQAAAk1TRnQBSQFMAgEBCAEAAcgBAAHIAQABEAEAARABAAT/ARkBAAj/AUIBTQE2BwABNgMAASgDAAFA
+        GQAAAk1TRnQBSQFMAgEBCAEAAdABAAHQAQABEAEAARABAAT/ARkBAAj/AUIBTQE2BwABNgMAASgDAAFA
         AwABMAMAAQEBAAEYBgABJP8A/wD/AP8A/wD/AP8A/wD/AP8A/wD/ADYAAYgBpAH0AQoBIwHYAZ0BtQHx
         DAABgQGYAeoSAB5sdQABtQHOAfMBBQEpAf4BCAEnAfABQQFQAdQJAAEvAUkB4AEAARABqAwAAR8BhQG4
         AR8BhQG4AR8BhQG4AR8BhQG4AR8BhQG4AR8BhQG4AR8BhQG4AR8BhQG4AR8BhQG4AR8BhQG4AR8BhQG4
@@ -238,4 +238,21 @@
   <metadata name="m_ContextMenuList.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>127, 17</value>
   </metadata>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="m_btnAdd.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAAj5JREFUOE/tkGtIU2EYx5fExC8R+dkwCsSiqCDtSxIFlUhIQ1NQZxhHm2bNlpgU
+        Y6FQWYIsa3nZUinMSIiMLsygmDETsTUvDXWzzZ2t7exsx7VbtbN/r559CwK/94MH3tvvz/M+ov/8G5Ne
+        sStK9/fEg2bdMmN9ou1tupG8+htgVInfzx/FPA+Hfro1wzyjfuGzXKNX5uvgn65AwHQacEtxYH9mTVIR
+        APf4TMShHmAW1YmArR3sfCt8izfhtajgmb0K15fLcJnO8+w0BXgvgii5gpnEv3BfFXVpEFy6Df9XIpmb
+        8H3yApzj1XB8rIT9QykWRsvBzJ7DgFGC1D1pVFIVsH26Ux736RBavkdC2nnW0gLvzBXeMyUHPVHLO8er
+        QBuqeKNBihMTR3Hq6eEo0TYJNuHdUOMhcAOIuboRdnSCswmdMKQT9+cGsJN1iBgpmN5ToGylKBk8zhFt
+        o2ATtG0VGQj045e7BzG6iw9/UyNgbeN9c0oEZ5r5br0EBfo8vmZKghZfPX+LUyQUViknWyqKEH37Wgji
+        gwD5RoLpRZR+gJC9AxwZZNhyHXcNJahxlkEZkaE5UAk5W4xqphBFrrzVgR5bC+jqkL0ae91qZxZ1YcRH
+        AP4Z8EMLsJ0wj13CWXkupM170RArS+QP54RStoj6UjNS+oiatRaQREwqnVSWWCzO370zs764MEetajz5
+        ZkRLzb0dqQ5IPQU4qMleIW/SVoX1sUGUfeTlPmytTWfJbrNwuH62kdohLFcRif4AhTJYdgqNYksAAAAA
+        SUVORK5CYII=
+</value>
+  </data>
 </root>

@@ -67,10 +67,14 @@ namespace SmartBackup
             {
                 BackupEntry entry = m_listBackup.SelectedItems[0].Tag as BackupEntry;
                 FormBackupFolderProperties frm = new FormBackupFolderProperties(entry);
-                if (frm.ShowDialog(this) != DialogResult.OK)
+                DialogResult res = frm.ShowDialog(this);
+                if (res == DialogResult.Cancel)
                     return;
 
                 ReloadList(entry);
+
+                if(res == DialogResult.Yes)
+                    OpenBackupProgress(entry, BackupPriority.All);
             }
         }
 
@@ -152,6 +156,11 @@ namespace SmartBackup
                 return;
             BackupEntry entry = m_listBackup.SelectedItems[0].Tag as BackupEntry;
 
+            OpenBackupProgress(entry, BackupPriority.All);
+        }
+
+        private void OpenBackupProgress(BackupEntry entry, BackupPriority priority)
+        {
             BackupGroup group = new BackupGroup("Temp");
             group.BackupList.Add(entry);
             OpenBackupProgress(group, BackupPriority.All);

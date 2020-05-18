@@ -40,6 +40,9 @@
             this.m_mnuAddGroup = new System.Windows.Forms.ToolStripMenuItem();
             this.m_mnuRemoveGroup = new System.Windows.Forms.ToolStripMenuItem();
             this.m_mnuRenameGroup = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_btnNewGroup = new System.Windows.Forms.ToolStripButton();
+            this.m_btnRenameGroup = new System.Windows.Forms.ToolStripButton();
+            this.m_btnDeleteGroup = new System.Windows.Forms.ToolStripButton();
             this.m_tabMain.SuspendLayout();
             this.m_pnlMain.SuspendLayout();
             this.m_ToolStripMain.SuspendLayout();
@@ -106,7 +109,10 @@
             // 
             this.m_ToolStripMain.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.m_ToolStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.m_btnAddGroup});
+            this.m_btnAddGroup,
+            this.m_btnNewGroup,
+            this.m_btnRenameGroup,
+            this.m_btnDeleteGroup});
             this.m_ToolStripMain.Location = new System.Drawing.Point(0, 0);
             this.m_ToolStripMain.Name = "m_ToolStripMain";
             this.m_ToolStripMain.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
@@ -153,6 +159,33 @@
             this.m_mnuRenameGroup.Text = "Rename Group";
             this.m_mnuRenameGroup.Click += new System.EventHandler(this.m_btnEdit_Click);
             // 
+            // m_btnNewGroup
+            // 
+            this.m_btnNewGroup.Image = ((System.Drawing.Image)(resources.GetObject("m_btnNewGroup.Image")));
+            this.m_btnNewGroup.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.m_btnNewGroup.Name = "m_btnNewGroup";
+            this.m_btnNewGroup.Size = new System.Drawing.Size(87, 22);
+            this.m_btnNewGroup.Text = "New Group";
+            this.m_btnNewGroup.Click += new System.EventHandler(this.m_btnAdd_Click);
+            // 
+            // m_btnRenameGroup
+            // 
+            this.m_btnRenameGroup.Image = ((System.Drawing.Image)(resources.GetObject("m_btnRenameGroup.Image")));
+            this.m_btnRenameGroup.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.m_btnRenameGroup.Name = "m_btnRenameGroup";
+            this.m_btnRenameGroup.Size = new System.Drawing.Size(106, 22);
+            this.m_btnRenameGroup.Text = "Rename Group";
+            this.m_btnRenameGroup.Click += new System.EventHandler(this.m_btnEdit_Click);
+            // 
+            // m_btnDeleteGroup
+            // 
+            this.m_btnDeleteGroup.Image = ((System.Drawing.Image)(resources.GetObject("m_btnDeleteGroup.Image")));
+            this.m_btnDeleteGroup.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.m_btnDeleteGroup.Name = "m_btnDeleteGroup";
+            this.m_btnDeleteGroup.Size = new System.Drawing.Size(96, 22);
+            this.m_btnDeleteGroup.Text = "Delete Group";
+            this.m_btnDeleteGroup.Click += new System.EventHandler(this.m_btnRemove_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -190,6 +223,9 @@
         private System.Windows.Forms.ToolStripMenuItem m_mnuAddGroup;
         private System.Windows.Forms.ToolStripMenuItem m_mnuRemoveGroup;
         private System.Windows.Forms.ToolStripMenuItem m_mnuRenameGroup;
+        private System.Windows.Forms.ToolStripButton m_btnNewGroup;
+        private System.Windows.Forms.ToolStripButton m_btnRenameGroup;
+        private System.Windows.Forms.ToolStripButton m_btnDeleteGroup;
     }
 }
 

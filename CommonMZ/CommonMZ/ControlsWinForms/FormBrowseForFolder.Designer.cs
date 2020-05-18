@@ -70,11 +70,14 @@
             // m_btnNewFolder
             // 
             this.m_btnNewFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.m_btnNewFolder.Image = ((System.Drawing.Image)(resources.GetObject("m_btnNewFolder.Image")));
+            this.m_btnNewFolder.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.m_btnNewFolder.Location = new System.Drawing.Point(4, 331);
             this.m_btnNewFolder.Name = "m_btnNewFolder";
-            this.m_btnNewFolder.Size = new System.Drawing.Size(75, 23);
+            this.m_btnNewFolder.Size = new System.Drawing.Size(87, 23);
             this.m_btnNewFolder.TabIndex = 4;
             this.m_btnNewFolder.Text = "New &Folder";
+            this.m_btnNewFolder.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.m_btnNewFolder.UseVisualStyleBackColor = true;
             this.m_btnNewFolder.Click += new System.EventHandler(this.m_btnNewFolder_Click);
             // 
@@ -82,6 +85,8 @@
             // 
             this.m_btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.m_btnOk.Image = ((System.Drawing.Image)(resources.GetObject("m_btnOk.Image")));
+            this.m_btnOk.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.m_btnOk.Location = new System.Drawing.Point(121, 331);
             this.m_btnOk.Name = "m_btnOk";
             this.m_btnOk.Size = new System.Drawing.Size(75, 23);
@@ -94,11 +99,14 @@
             // 
             this.m_btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.m_btnCancel.Image = ((System.Drawing.Image)(resources.GetObject("m_btnCancel.Image")));
+            this.m_btnCancel.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.m_btnCancel.Location = new System.Drawing.Point(202, 331);
             this.m_btnCancel.Name = "m_btnCancel";
             this.m_btnCancel.Size = new System.Drawing.Size(75, 23);
             this.m_btnCancel.TabIndex = 0;
             this.m_btnCancel.Text = "&Cancel";
+            this.m_btnCancel.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.m_btnCancel.UseVisualStyleBackColor = true;
             this.m_btnCancel.Click += new System.EventHandler(this.m_btnCancel_Click);
             // 
@@ -156,10 +164,10 @@
             // m_btnRefresh
             // 
             this.m_btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnRefresh.ImageList = this.m_imageListIcons;
-            this.m_btnRefresh.Location = new System.Drawing.Point(243, 5);
+            this.m_btnRefresh.Image = ((System.Drawing.Image)(resources.GetObject("m_btnRefresh.Image")));
+            this.m_btnRefresh.Location = new System.Drawing.Point(243, 4);
             this.m_btnRefresh.Name = "m_btnRefresh";
-            this.m_btnRefresh.Size = new System.Drawing.Size(33, 26);
+            this.m_btnRefresh.Size = new System.Drawing.Size(33, 27);
             this.m_btnRefresh.TabIndex = 6;
             this.toolTip1.SetToolTip(this.m_btnRefresh, "Refresh (F5)");
             this.m_btnRefresh.UseVisualStyleBackColor = true;
@@ -180,7 +188,7 @@
             this.m_mnuRefresh.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuRefresh.Image")));
             this.m_mnuRefresh.Name = "m_mnuRefresh";
             this.m_mnuRefresh.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.m_mnuRefresh.Size = new System.Drawing.Size(136, 22);
+            this.m_mnuRefresh.Size = new System.Drawing.Size(180, 22);
             this.m_mnuRefresh.Text = "&Refresh";
             this.m_mnuRefresh.Click += new System.EventHandler(this.m_mnuRefresh_Click);
             // 
@@ -189,21 +197,21 @@
             this.m_mnuDelete.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuDelete.Image")));
             this.m_mnuDelete.Name = "m_mnuDelete";
             this.m_mnuDelete.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-            this.m_mnuDelete.Size = new System.Drawing.Size(136, 22);
+            this.m_mnuDelete.Size = new System.Drawing.Size(180, 22);
             this.m_mnuDelete.Text = "&Delete";
             this.m_mnuDelete.Click += new System.EventHandler(this.m_mnuDelete_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(133, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(177, 6);
             // 
             // m_mnuRename
             // 
             this.m_mnuRename.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuRename.Image")));
             this.m_mnuRename.Name = "m_mnuRename";
             this.m_mnuRename.ShortcutKeys = System.Windows.Forms.Keys.F2;
-            this.m_mnuRename.Size = new System.Drawing.Size(136, 22);
+            this.m_mnuRename.Size = new System.Drawing.Size(180, 22);
             this.m_mnuRename.Text = "Re&name";
             this.m_mnuRename.Click += new System.EventHandler(this.m_mnuRename_Click);
             // 
