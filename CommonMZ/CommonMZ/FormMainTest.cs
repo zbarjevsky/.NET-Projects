@@ -34,8 +34,9 @@ namespace MZ
         {
             foldersTreeUserControl1.AfterSelectAction = (fullPath) =>
             {
-                fileExplorerUserControl1.ShowFolder(fullPath);
+                fileExplorerUserControl1.PopulateFiles(fullPath);
             };
+
             foldersTreeUserControl1.SelectFolder(@"C:\Dev_Mark\Temp");
 
             listView1.SmallImageList = Shell32_Icons.SmallImageList;

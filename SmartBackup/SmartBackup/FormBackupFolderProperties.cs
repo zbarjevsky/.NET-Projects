@@ -1,6 +1,6 @@
 ﻿using MZ.Tools;
 using SmartBackup.Settings;
-
+using SmartBackup.Tools;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,7 +17,10 @@ namespace SmartBackup
 {
     public partial class FormBackupFolderProperties : Form
     {
+        const double s1MB = 1024 * 1024;
+
         readonly BackupEntry _entry;
+        readonly CalculateSpaceTask _calculateSpaceTask;
         readonly FileUtils.FileProgress _fileProgress = new FileUtils.FileProgress();
 
         public FormBackupFolderProperties(BackupEntry entry)
@@ -54,6 +57,16 @@ namespace SmartBackup
                     m_progressBar.Value = _fileProgress.Percent;
                 }, this);
             };
+
+            _calculateSpaceTask = new CalculateSpaceTask(_fileProgress);
+            _calculateSpaceTask.OnThreadFinished = (size, count) =>
+            {
+                CommonUtils.ExecuteOnUIThread(() =>
+                {
+                    m_txtInfo.Text = string.Format("Selected SRC {0:###,##0} files, Total size: {1:###,##0.0} MB", count, size / s1MB);
+                    m_progressBar.Value = 0;
+                }, this);
+            };
         }
 
         private void FormBackupFolderProperties_Load(object sender, EventArgs e)
@@ -71,9 +84,7 @@ namespace SmartBackup
 
         private void FormBackupFolderProperties_FormClosed(object sender, FormClosedEventArgs e)
         {
-            _fileProgress.Cancel = true;
-            if (_threadUpdateInfo != null && _threadUpdateInfo.IsAlive)
-                _threadUpdateInfo.Abort();
+            _calculateSpaceTask.Abort();
         }
 
         private static string _srcBaseFolder = "";
@@ -81,7 +92,7 @@ namespace SmartBackup
         {
             this.BrowseForFolder(m_txtSrcFolder, _srcBaseFolder, "Select Backup Source Folder");
             _srcBaseFolder = m_txtSrcFolder.Text;
-            m_explorerSrc.ShowFolder(_srcBaseFolder);
+            m_explorerSrc.PopulateFiles(_srcBaseFolder);
         }
 
         private static string _dstBaseFolder = "";
@@ -89,7 +100,7 @@ namespace SmartBackup
         {
             this.BrowseForFolder(m_txtDstFolder, _dstBaseFolder, "Select Backup Destination Folder");
             _dstBaseFolder = m_txtDstFolder.Text;
-            m_explorerDst.ShowFolder(_dstBaseFolder);
+            m_explorerDst.PopulateFiles(_dstBaseFolder);
         }
 
         private void m_btnOk_Click(object sender, EventArgs e)
@@ -124,56 +135,18 @@ namespace SmartBackup
             UpdateInfo(entry);
         }
 
-        private Thread _threadUpdateInfo = null;
         private void UpdateInfo(BackupEntry entry)
         {
-            if(!Directory.Exists(entry.FolderSrc))
+            if (!Directory.Exists(entry.FolderSrc))
             {
                 m_txtInfo.Text = "Cannot Find Source...";
                 return;
             }
 
-            m_explorerSrc.ShowFolder(entry.FolderSrc);
-            if (Directory.Exists(entry.FolderDst))
-                m_explorerDst.ShowFolder(entry.FolderDst);
+            m_explorerSrc.PopulateFiles(entry.FolderSrc);
+            m_explorerDst.PopulateFiles(entry.FolderDst);
 
-            const double s1MB = 1024 * 1024;
-            m_txtInfo.Text = "Calculating Folder Size...";
-
-            _fileProgress.Cancel = true; //cancel previous if running
-            if (_threadUpdateInfo != null && _threadUpdateInfo.IsAlive)
-                _threadUpdateInfo.Abort();
-
-            _threadUpdateInfo = new Thread(() =>
-            {
-                long size = 0;
-                List<BackupFile> fileList = BackupLogic.CollectFiles(entry, _fileProgress);
-
-                int count = fileList.Count;
-
-                _fileProgress.Reset("Calculating Folder Size ", count, 0, FileUtils.FileProgress.ReportOptions.ReportPercentChange);
-                foreach (BackupFile file in fileList)
-                {
-                    if (_fileProgress.Cancel)
-                        break;
-
-                    _fileProgress.Val++;
-                    if (file.SrcIfo.Exists)
-                        size += file.SrcIfo.Length;
-                }
-                _fileProgress.Val = 0;
-                fileList.Clear();
-                GC.Collect();
-
-                CommonUtils.ExecuteOnUIThread(() =>
-                {
-                    m_txtInfo.Text = string.Format("Selected SRC files: {0:###,##0} size: {1:###,##0.0} MB", count, size / s1MB);
-                }, this);
-            });
-
-            _threadUpdateInfo.IsBackground = true;
-            _threadUpdateInfo.Name = "Update Info Thread";
-            _threadUpdateInfo.Start();
+            _calculateSpaceTask.Start(entry);
         }
     }
 }

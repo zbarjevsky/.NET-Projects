@@ -65,16 +65,24 @@ namespace SmartBackup
         {
             if (m_listBackup.SelectedItems.Count > 0)
             {
-                BackupEntry entry = m_listBackup.SelectedItems[0].Tag as BackupEntry;
-                FormBackupFolderProperties frm = new FormBackupFolderProperties(entry);
-                DialogResult res = frm.ShowDialog(this);
-                if (res == DialogResult.Cancel)
-                    return;
+                try
+                {
+                    BackupEntry entry = m_listBackup.SelectedItems[0].Tag as BackupEntry;
+                    FormBackupFolderProperties frm = new FormBackupFolderProperties(entry);
+                    DialogResult res = frm.ShowDialog(this);
+                    if (res == DialogResult.Cancel)
+                        return;
 
-                ReloadList(entry);
+                    ReloadList(entry);
 
-                if(res == DialogResult.Yes)
-                    OpenBackupProgress(entry, BackupPriority.All);
+                    if (res == DialogResult.Yes)
+                        OpenBackupProgress(entry, BackupPriority.All);
+
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show(err.Message);
+                }            
             }
         }
 

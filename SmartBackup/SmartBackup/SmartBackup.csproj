@@ -153,6 +153,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\BackupSettings.cs" />
+    <Compile Include="Tools\CalculateSpaceTask.cs" />
     <EmbeddedResource Include="..\..\CommonMZ\CommonMZ\ControlsWinForms\FileExplorerUserControl.resx">
       <Link>Controls\FileExplorerUserControl.resx</Link>
       <DependentUpon>FileExplorerUserControl.cs</DependentUpon>

@@ -374,9 +374,8 @@ namespace SmartBackup
             {
                 if (progress != null)
                 {
-                    progress.Reset("Collecting Folders and Files: ");
-                    //report per discovered folder
-                    progress.ReportOption = FileUtils.FileProgress.ReportOptions.ReportValueChange;
+                    string prompt = string.Format("Collecting Folders and Files ({0}) ", entry.FolderSrc);
+                    progress.Reset(prompt, 1, 0, FileUtils.FileProgress.ReportOptions.ReportValueChange); //report per discovered folder
                 }
 
                 List<string> files = FileUtils.GetFiles(dir.FullName, entry.FolderIncludeTypes, progress, entry.IncludeSubfolders).ToList();
@@ -385,9 +384,10 @@ namespace SmartBackup
                 {
                     if (progress.Cancel)
                         return fileList;
-                        
+
                     //report percentage only - may be too many files
-                    progress.Reset("Calculating Size: ", files.Count, 0, FileUtils.FileProgress.ReportOptions.ReportPercentChange);
+                    string prompt = string.Format("Preparing Collected Files ({0}) ", entry.FolderSrc);
+                    progress.Reset(prompt, files.Count, 0, FileUtils.FileProgress.ReportOptions.ReportPercentChange);
                 }
 
                 for (int i = 0; i < files.Count; i++)

@@ -16,16 +16,31 @@ namespace MZ.ControlsWinForms
     {
 		private class FileData
 		{
-			public string FullPath { get; }
+			public string FullPath { get; private set; }
 			public string FileName { get; private set; }
-			public bool IsDirectory { get; }
-			public FileInfo FileInfo { get; }
-			public DateTime CreatedTime { get; }
-			public DateTime ModifiedTime { get; }
-			public long FileSize { get; }
+			public bool IsDirectory { get; private set; }
+			public FileInfo FileInfo { get; private set; }
+			public DateTime CreatedTime { get; private set; }
+			public DateTime ModifiedTime { get; private set; }
+			public long FileSize { get; private set; }
+
+			public FileData(string fullPath)
+			{
+				Init(fullPath);
+			}
 
 			public FileData(string fullPath, bool isDirectory)
 			{
+				Init(fullPath, isDirectory);
+			}
+
+			public void Init(string fullPath)
+			{
+				Init(fullPath, Directory.Exists(fullPath));
+			}
+
+			public void Init(string fullPath, bool isDirectory)
+			{ 
 				FullPath = fullPath;
 				IsDirectory = isDirectory;
 				FileName = Path.GetFileName(fullPath);
@@ -66,21 +81,112 @@ namespace MZ.ControlsWinForms
 			}
 		}
 
-		private List<FileData> _list = new List<FileData>();
+		private class FileSystemWatcherHelper : IDisposable
+		{
+			private FileSystemWatcher _fileSystemWatcher;
+			private readonly List<FileData> _list;
+
+			public Action<string> OnChangeAction = (fullPath) => { };
+
+			public FileSystemWatcherHelper(List<FileData> list)
+			{
+				_list = list;
+			}
+
+			public void StartWatching(string fullPath)
+			{
+				Dispose();
+
+				_fileSystemWatcher = new FileSystemWatcher(fullPath);
+
+				_fileSystemWatcher.Created += OnFileCreated;
+				_fileSystemWatcher.Renamed += OnFileRenamed;
+				_fileSystemWatcher.Deleted += OnFileDeleted;
+
+				_fileSystemWatcher.EnableRaisingEvents = true;
+			}
+
+			public void Dispose()
+			{
+				if (_fileSystemWatcher != null)
+				{
+					_fileSystemWatcher.Created -= OnFileCreated;
+					_fileSystemWatcher.Renamed -= OnFileRenamed;
+					_fileSystemWatcher.Deleted -= OnFileDeleted;
+
+					_fileSystemWatcher.EnableRaisingEvents = false;
+					_fileSystemWatcher = null;
+				}
+			}
+
+			private void OnFileDeleted(object sender, FileSystemEventArgs e)
+			{
+				FileData file = _list.FirstOrDefault(f => f.FullPath == e.FullPath);
+				if (file != null)
+				{
+					_list.Remove(file);
+					OnChangeAction(e.FullPath);
+				}
+			}
+
+			private void OnFileRenamed(object sender, RenamedEventArgs e)
+			{
+				FileData file = _list.FirstOrDefault(f => f.FullPath == e.OldFullPath);
+				if (file != null)
+				{
+					file.Init(e.FullPath);
+					SortList();
+					OnChangeAction(e.FullPath);
+				}
+			}
+
+			private void OnFileCreated(object sender, FileSystemEventArgs e)
+			{
+				_list.Add(new FileData(e.FullPath));
+				SortList();
+				OnChangeAction(e.FullPath);
+			}
+
+			private void SortList() //folders first
+			{
+				List<FileData> folders = _list.Where(f => f.IsDirectory).ToList();
+				folders.Sort((f1, f2) => string.Compare(f1.FileName, f2.FileName, true));
+				
+				List<FileData> files = _list.Where(f => !f.IsDirectory).ToList();
+				files.Sort((f1, f2) => string.Compare(f1.FileName, f2.FileName, true));
+
+				_list.Clear();
+				_list.AddRange(folders);
+				_list.AddRange(files);
+			}
+		}
+
+		private readonly List<FileData> _list = new List<FileData>();
+		private readonly FileSystemWatcherHelper _fileSystemWatcherHelper;
 
 		public Action<string> OpenFolderAction = (fullPath) => { };
 
         public FileExplorerUserControl()
         {
             InitializeComponent();
-        }
 
-        private void FileExplorerUserControl_Load(object sender, EventArgs e)
+			_fileSystemWatcherHelper = new FileSystemWatcherHelper(_list);
+			_fileSystemWatcherHelper.OnChangeAction = (path) =>
+			{
+				MZ.Tools.CommonUtils.ExecuteOnUIThread(() => 
+				{
+					m_listFiles.VirtualListSize = _list.Count;
+					m_listFiles.Refresh();
+				}, this);
+			};
+		}
+
+		private void FileExplorerUserControl_Load(object sender, EventArgs e)
         {
             InitListView();
-        }
+		}
 
-        protected void InitListView()
+		protected void InitListView()
         {
             //init ListView control
             m_listFiles.Clear();    //clear control
@@ -93,11 +199,6 @@ namespace MZ.ControlsWinForms
             m_listFiles.Columns.Add("Created", 140, System.Windows.Forms.HorizontalAlignment.Left);
             m_listFiles.Columns.Add("Modified", 140, System.Windows.Forms.HorizontalAlignment.Left);
         }
-
-		public void ShowFolder(string fullPath)
-		{
-			PopulateFiles(fullPath);
-		}
 
 		private void m_btnRoot_Click(object sender, EventArgs e)
 		{
@@ -132,22 +233,15 @@ namespace MZ.ControlsWinForms
 				PopulateFiles(parentFolder);
 		}
 
-		protected void PopulateFiles(string fullPath)
+		public void PopulateFiles(string fullPath)
 		{
-
-			//Populate listview with files
-			string[] lvData = new string[4];
-
 			//clear list
 			InitListView();
 
 			//check path
-			if (!string.IsNullOrEmpty(fullPath) && !Directory.Exists(fullPath))
+			if (!string.IsNullOrEmpty(fullPath) && Directory.Exists(fullPath))
 			{
-				MessageBox.Show("Directory or path " + fullPath.ToString() + " does not exist.");
-			}
-			else
-			{
+
 				try
 				{
 					string parentFolder = Path.GetDirectoryName(fullPath);
@@ -174,15 +268,27 @@ namespace MZ.ControlsWinForms
 					string[] stringFiles = Directory.GetFiles(fullPath);
 					List<string> files = stringFiles.OrderBy(s => s).ToList();
 
+					int pageSize = VisibleItemsCount();
+
 					//loop throught all files
-					foreach (string stringFile in files)
+					for (int i = 0; i < files.Count; i++)
 					{
-						_list.Add(new FileData(stringFile, false));
+						_list.Add(new FileData(files[i], false));
+
+						if (i == pageSize) //after first page
+						{
+							//m_listFiles.SuspendLayout();
+							m_listFiles.VirtualListSize = _list.Count;
+							//m_listFiles.ResumeLayout();
+							Application.DoEvents();
+						}
 
 						//Icon ico = Icon.ExtractAssociatedIcon(stringFile);
 						//int iconIndex = m_imageListTreeView.Images.Count;
 						//m_imageListTreeView.Images.Add(ico);
 					}
+
+					_fileSystemWatcherHelper.StartWatching(fullPath);
 
 					m_listFiles.VirtualListSize = _list.Count;
 					m_txtPath.Text = fullPath;
@@ -201,6 +307,11 @@ namespace MZ.ControlsWinForms
 					MessageBox.Show("Error: " + e);
 				}
 			}
+		}
+
+		private int VisibleItemsCount()
+		{
+			return m_listFiles.Height / 18;
 		}
 
 		protected string formatDate(DateTime dtDate)
