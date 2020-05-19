@@ -79,5 +79,11 @@ namespace MZ
         {
             listView1.View = (View)m_cmbListViewType.SelectedItem;
         }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            colorBarsProgressBar1.Value = trackBar1.Value;
+            colorBarsProgressBar2.Value = trackBar1.Value;
+        }
     }
 }

@@ -62,7 +62,7 @@ namespace MZ.Tools
 
             public TimeSpan Elapsed { get { return _stopper.Elapsed; } }
 
-            public volatile bool IsCancel = false;
+            public volatile bool Cancel = false;
 
             public void Reset(string message = "Progress: ", 
                 long max = 100, long min = 0, 
@@ -73,7 +73,7 @@ namespace MZ.Tools
                 Max = max;
                 ReportOption = options;
                 Message = message;
-                IsCancel = false;
+                Cancel = false;
 
                 _stopper.Restart();
             }
@@ -106,7 +106,7 @@ namespace MZ.Tools
             {
                 if(progress != null)
                 {
-                    if (progress.IsCancel)
+                    if (progress.Cancel)
                         break;
                     progress.Val++;
                 }

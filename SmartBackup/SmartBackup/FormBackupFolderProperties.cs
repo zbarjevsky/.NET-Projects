@@ -71,7 +71,7 @@ namespace SmartBackup
 
         private void FormBackupFolderProperties_FormClosed(object sender, FormClosedEventArgs e)
         {
-            _fileProgress.IsCancel = true;
+            _fileProgress.Cancel = true;
             if (_threadUpdateInfo != null && _threadUpdateInfo.IsAlive)
                 _threadUpdateInfo.Abort();
         }
@@ -140,7 +140,7 @@ namespace SmartBackup
             const double s1MB = 1024 * 1024;
             m_txtInfo.Text = "Calculating Folder Size...";
 
-            _fileProgress.IsCancel = true; //cancel previous if running
+            _fileProgress.Cancel = true; //cancel previous if running
             if (_threadUpdateInfo != null && _threadUpdateInfo.IsAlive)
                 _threadUpdateInfo.Abort();
 
@@ -154,7 +154,7 @@ namespace SmartBackup
                 _fileProgress.Reset("Calculating Folder Size ", count, 0, FileUtils.FileProgress.ReportOptions.ReportPercentChange);
                 foreach (BackupFile file in fileList)
                 {
-                    if (_fileProgress.IsCancel)
+                    if (_fileProgress.Cancel)
                         break;
 
                     _fileProgress.Val++;

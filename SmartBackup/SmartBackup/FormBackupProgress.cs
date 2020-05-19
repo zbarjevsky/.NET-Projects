@@ -41,6 +41,8 @@ namespace SmartBackup
 
             m_cmbViewFilter.SelectedIndex = 0; //all
             m_listFiles.VirtualListSize = 0;
+
+            m_btnAbort.Enabled = false;
         }
 
         private void FormBackupProgress_Load(object sender, EventArgs e)
@@ -67,7 +69,7 @@ namespace SmartBackup
             };
 
             _logic = new BackupLogic(_group, _Priority, _fileProgress);
-            UpdateDisplayList();
+            UpdateDisplayList(calculateNeededSize:true);
         }
 
         private void FormBackupProgress_FormClosing(object sender, FormClosingEventArgs e)
@@ -84,6 +86,9 @@ namespace SmartBackup
                 }
                 m_btnAbort_Click(sender, e);
             }
+
+            _fileProgress.Cancel = true;
+            Thread.Sleep(10);
 
             m_listFiles.VirtualListSize = 0;
             _logic.Clear();
@@ -133,10 +138,10 @@ namespace SmartBackup
             _pause = false;
             _working = true;
 
-            m_progressBar1.State = Windows7ProgressBar.ProgressBarState.Normal;
+            m_progressBarMain.State = Windows7ProgressBar.ProgressBarState.Normal;
 
             m_cmbViewFilter.SelectedIndex = 0; //reset to all - perform backup on whole list
-            UpdateDisplayList();
+            UpdateDisplayList(calculateNeededSize:false);
 
             Stopwatch stopper = new Stopwatch();
             stopper.Start();
@@ -211,21 +216,21 @@ namespace SmartBackup
                 m_btnPause.Enabled = isRunning;
                 m_cmbViewFilter.Enabled = !isRunning;
 
-                m_progressBar1.Value = (int)((long)m_progressBar1.Maximum * (long)(_startIndex+1) / _backupFilesList.Count);
+                m_progressBarMain.Value = (int)((long)m_progressBarMain.Maximum * (long)(_startIndex+1) / _backupFilesList.Count);
                 
                 int visibleIndex = _startIndex + 3;
                 if (visibleIndex >= _backupFilesList.Count)
                     visibleIndex = _backupFilesList.Count - 1;
                 m_listFiles.EnsureVisible(visibleIndex);
                 
-                TimeSpan estimate = TimeSpan.FromMilliseconds(m_progressBar1.Maximum * _elapsed.TotalMilliseconds / (m_progressBar1.Value + 1));
+                TimeSpan estimate = TimeSpan.FromMilliseconds(m_progressBarMain.Maximum * _elapsed.TotalMilliseconds / (m_progressBarMain.Value + 1));
 
-                m_txtStatus.Text = string.Format("Backing up file {0:###,##0} of {1:###,##0}, {2:###,##0.0} MB Copyied, Elapsed {3}, Total {4}",
+                m_txtStatus.Text = string.Format("Backing up file {0:###,##0} of {1:###,##0}, {2:###,##0.0} MB Copyied, Elapsed {3}, Estimated Total {4}",
                     (_startIndex + 1), _backupFilesList.Count, _processedBytes/BackupLogic.i1MB,
                     _elapsed.ToString("mm':'ss"), estimate.ToString("mm':'ss"));
 
                 if (_abort)
-                    m_progressBar1.Value = 0;
+                    m_progressBarMain.Value = 0;
             }, this);
         }
 
@@ -241,7 +246,7 @@ namespace SmartBackup
                 }
 
                 if(errCount>0)
-                    m_progressBar1.State = Windows7ProgressBar.ProgressBarState.Error;
+                    m_progressBarMain.State = Windows7ProgressBar.ProgressBarState.Error;
 
                 m_txtStatus.Text = string.Format(
                     "Backup status done: {0:###,##0} of {1:###,##0} files, {2:###,##0.0} MB Copyied, Errors: {3:###,##0}, Elapsed {4}",
@@ -263,14 +268,14 @@ namespace SmartBackup
         private void m_btnAbort_Click(object sender, EventArgs e)
         {
             _abort = true;
-            _fileProgress.IsCancel = true;
+            _fileProgress.Cancel = true;
         }
 
         bool _pause = false;
         private void m_btnPause_Click(object sender, EventArgs e)
         {
             _pause = true;
-            m_progressBar1.State = Windows7ProgressBar.ProgressBarState.Pause;
+            m_progressBarMain.State = Windows7ProgressBar.ProgressBarState.Pause;
         }
 
         private void m_btnContinue_Click(object sender, EventArgs e)
@@ -280,11 +285,13 @@ namespace SmartBackup
 
         private void m_cmbViewFilter_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            UpdateDisplayList();
+            UpdateDisplayList(calculateNeededSize:true);
         }
 
-        private void UpdateDisplayList()
+        private void UpdateDisplayList(bool calculateNeededSize)
         {
+            AbortCalculateSpaceNeededTask();
+
             string status = "";
             BackupStatus backupStatus = BackupStatus.Any;
             if (m_cmbViewFilter.SelectedIndex == 0) //All
@@ -304,19 +311,45 @@ namespace SmartBackup
                 _backupFilesList = _logic.FilteredFileList(SelectedOption, BackupStatus.None);
             }
 
-            m_txtInfo.Text = "Loading...";
-            Task task = new Task(() =>
-            {
-                string stat = _logic.GetDiskStatistics();
-                _fileProgress.Reset("Calculate Space Needed: ");
-                string sizeInfo = _logic.CalculateSpaceNeeded(backupStatus, _fileProgress);
-                CommonUtils.ExecuteOnUIThread(() => { m_txtInfo.Text = sizeInfo; }, this);
-            });
-            task.Start();
+            if(calculateNeededSize)
+                StartCalculateSpaceNeededTask(backupStatus);
 
             m_listFiles.VirtualListSize = _backupFilesList.Count;
             m_listFiles.Refresh();
             m_txtStatus.Text = "Found " + _backupFilesList.Count.ToString("###,###,##0 ") + status + " files to Backup";
+        }
+
+        private Thread _threadCalculateSpace = null;
+        private void AbortCalculateSpaceNeededTask()
+        {
+            if (_threadCalculateSpace != null && _threadCalculateSpace.IsAlive)
+            {
+                _fileProgress.Cancel = true;
+                Thread.Sleep(64);
+                _threadCalculateSpace.Abort();
+                _threadCalculateSpace = null;
+            }
+        }
+
+        private void StartCalculateSpaceNeededTask(BackupStatus backupStatus)
+        {
+            AbortCalculateSpaceNeededTask();
+
+            m_txtInfo.Text = "Preparing to Calculate Space Needed...";
+            m_btnAbort.Enabled = true;
+
+            _threadCalculateSpace = new Thread(() =>
+            {
+                string stat = _logic.GetDiskStatistics();
+                _fileProgress.Reset("Calculate Space Needed: ", _backupFilesList.Count, 0, FileUtils.FileProgress.ReportOptions.ReportPercentChange);
+                string sizeInfo = _logic.CalculateSpaceNeeded(backupStatus, _fileProgress);
+                CommonUtils.ExecuteOnUIThread(() => { m_txtInfo.Text = sizeInfo; }, this);
+            });
+
+            _threadCalculateSpace.IsBackground = true;
+            _threadCalculateSpace.Name = "Calculate Space Thread";
+            _threadCalculateSpace.Priority = ThreadPriority.Lowest;
+            _threadCalculateSpace.Start();
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using MZ.Tools;
+﻿using MZ.Controls;
+using MZ.Tools;
 using SmartBackup.Settings;
 
 using System;
@@ -325,7 +326,7 @@ namespace SmartBackup
 
                 if (progress != null)
                 {
-                    if (progress.IsCancel)
+                    if (progress.Cancel)
                         break;
 
                     progress.Val++;
@@ -343,7 +344,7 @@ namespace SmartBackup
                 }
             }
 
-            return string.Format("{0} - Source size {1:###,##0.0} MB, Estimated Space Needed: {2:###,##0.0} MB",
+            return string.Format("Filter: {0} - Source size {1:###,##0.0} MB, Estimated Space Needed: {2:###,##0.0} MB",
                 backupStatus, sizeSrc / BackupLogic.i1MB, sizeDst / BackupLogic.i1MB);
         }
 
@@ -382,7 +383,7 @@ namespace SmartBackup
 
                 if (progress != null)
                 {
-                    if (progress.IsCancel)
+                    if (progress.Cancel)
                         return fileList;
                         
                     //report percentage only - may be too many files
@@ -393,7 +394,7 @@ namespace SmartBackup
                 {
                     if (progress != null)
                     {
-                        if (progress.IsCancel)
+                        if (progress.Cancel)
                             break;
                         progress.Val = i;
                     }

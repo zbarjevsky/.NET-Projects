@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace MZ.Controls
 {
-    public class ColorBarsProgressBar : PictureBox
+    public class ColorBarsProgressBar : ProgressBar
     {
         //what color to show when inactive - more than value
         public enum InactiveColorsTheme
@@ -75,6 +75,7 @@ namespace MZ.Controls
         public ColorBarsProgressBar()
         {
             this.DoubleBuffered = true;
+            SetStyle(ControlStyles.UserPaint, true);
         }
 
         const int margin = 2;

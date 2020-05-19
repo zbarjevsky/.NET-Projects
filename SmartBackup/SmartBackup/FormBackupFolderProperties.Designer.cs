@@ -46,11 +46,11 @@
             this.m_txtInfo = new System.Windows.Forms.TextBox();
             this.m_cmbSearchOptions = new System.Windows.Forms.ComboBox();
             this.m_splitFolders = new System.Windows.Forms.SplitContainer();
-            this.m_pnlOptions = new System.Windows.Forms.Panel();
-            this.m_progressBar = new System.Windows.Forms.ProgressBar();
-            this.m_btnStartBackup = new System.Windows.Forms.Button();
             this.m_explorerSrc = new MZ.ControlsWinForms.FileExplorerUserControl();
             this.m_explorerDst = new MZ.ControlsWinForms.FileExplorerUserControl();
+            this.m_pnlOptions = new System.Windows.Forms.Panel();
+            this.m_progressBar = new MZ.Controls.ColorBarsProgressBar();
+            this.m_btnStartBackup = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitFolders)).BeginInit();
             this.m_splitFolders.Panel1.SuspendLayout();
             this.m_splitFolders.Panel2.SuspendLayout();
@@ -253,44 +253,6 @@
             this.m_splitFolders.SplitterDistance = 540;
             this.m_splitFolders.TabIndex = 20;
             // 
-            // m_pnlOptions
-            // 
-            this.m_pnlOptions.Controls.Add(this.m_cmbSearchOptions);
-            this.m_pnlOptions.Controls.Add(this.m_txtFileType);
-            this.m_pnlOptions.Controls.Add(this.m_txtExcludeType);
-            this.m_pnlOptions.Controls.Add(this.label3);
-            this.m_pnlOptions.Controls.Add(this.m_cmbPriority);
-            this.m_pnlOptions.Controls.Add(this.label4);
-            this.m_pnlOptions.Controls.Add(this.label5);
-            this.m_pnlOptions.Dock = System.Windows.Forms.DockStyle.Top;
-            this.m_pnlOptions.Location = new System.Drawing.Point(0, 0);
-            this.m_pnlOptions.Name = "m_pnlOptions";
-            this.m_pnlOptions.Size = new System.Drawing.Size(1084, 47);
-            this.m_pnlOptions.TabIndex = 21;
-            // 
-            // m_progressBar
-            // 
-            this.m_progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.m_progressBar.Location = new System.Drawing.Point(0, 551);
-            this.m_progressBar.Name = "m_progressBar";
-            this.m_progressBar.Size = new System.Drawing.Size(1084, 10);
-            this.m_progressBar.TabIndex = 22;
-            // 
-            // m_btnStartBackup
-            // 
-            this.m_btnStartBackup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnStartBackup.DialogResult = System.Windows.Forms.DialogResult.Yes;
-            this.m_btnStartBackup.Image = ((System.Drawing.Image)(resources.GetObject("m_btnStartBackup.Image")));
-            this.m_btnStartBackup.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnStartBackup.Location = new System.Drawing.Point(798, 522);
-            this.m_btnStartBackup.Name = "m_btnStartBackup";
-            this.m_btnStartBackup.Size = new System.Drawing.Size(105, 23);
-            this.m_btnStartBackup.TabIndex = 23;
-            this.m_btnStartBackup.Text = "Start Backup...";
-            this.m_btnStartBackup.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.m_btnStartBackup.UseVisualStyleBackColor = true;
-            this.m_btnStartBackup.Click += new System.EventHandler(this.m_btnStartBackup_Click);
-            // 
             // m_explorerSrc
             // 
             this.m_explorerSrc.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -310,6 +272,52 @@
             this.m_explorerDst.Name = "m_explorerDst";
             this.m_explorerDst.Size = new System.Drawing.Size(532, 417);
             this.m_explorerDst.TabIndex = 18;
+            // 
+            // m_pnlOptions
+            // 
+            this.m_pnlOptions.Controls.Add(this.m_cmbSearchOptions);
+            this.m_pnlOptions.Controls.Add(this.m_txtFileType);
+            this.m_pnlOptions.Controls.Add(this.m_txtExcludeType);
+            this.m_pnlOptions.Controls.Add(this.label3);
+            this.m_pnlOptions.Controls.Add(this.m_cmbPriority);
+            this.m_pnlOptions.Controls.Add(this.label4);
+            this.m_pnlOptions.Controls.Add(this.label5);
+            this.m_pnlOptions.Dock = System.Windows.Forms.DockStyle.Top;
+            this.m_pnlOptions.Location = new System.Drawing.Point(0, 0);
+            this.m_pnlOptions.Name = "m_pnlOptions";
+            this.m_pnlOptions.Size = new System.Drawing.Size(1084, 47);
+            this.m_pnlOptions.TabIndex = 21;
+            // 
+            // m_progressBar
+            // 
+            this.m_progressBar.ActiveColor = System.Drawing.Color.BlueViolet;
+            this.m_progressBar.ActiveColorTheme = MZ.Controls.ColorBarsProgressBar.ActiveColorsTheme.SingleColor;
+            this.m_progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.m_progressBar.InactiveColorTheme = MZ.Controls.ColorBarsProgressBar.InactiveColorsTheme.Pale;
+            this.m_progressBar.Location = new System.Drawing.Point(0, 549);
+            this.m_progressBar.Maximum = 100;
+            this.m_progressBar.Minimum = 0;
+            this.m_progressBar.Name = "m_progressBar";
+            this.m_progressBar.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.m_progressBar.Size = new System.Drawing.Size(1084, 12);
+            this.m_progressBar.TabIndex = 22;
+            this.m_progressBar.TabStop = false;
+            this.m_progressBar.Value = 0;
+            // 
+            // m_btnStartBackup
+            // 
+            this.m_btnStartBackup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnStartBackup.DialogResult = System.Windows.Forms.DialogResult.Yes;
+            this.m_btnStartBackup.Image = ((System.Drawing.Image)(resources.GetObject("m_btnStartBackup.Image")));
+            this.m_btnStartBackup.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.m_btnStartBackup.Location = new System.Drawing.Point(798, 522);
+            this.m_btnStartBackup.Name = "m_btnStartBackup";
+            this.m_btnStartBackup.Size = new System.Drawing.Size(105, 23);
+            this.m_btnStartBackup.TabIndex = 23;
+            this.m_btnStartBackup.Text = "Start Backup...";
+            this.m_btnStartBackup.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.m_btnStartBackup.UseVisualStyleBackColor = true;
+            this.m_btnStartBackup.Click += new System.EventHandler(this.m_btnStartBackup_Click);
             // 
             // FormBackupFolderProperties
             // 
@@ -367,7 +375,7 @@
         private MZ.ControlsWinForms.FileExplorerUserControl m_explorerSrc;
         private System.Windows.Forms.SplitContainer m_splitFolders;
         private System.Windows.Forms.Panel m_pnlOptions;
-        private System.Windows.Forms.ProgressBar m_progressBar;
+        private MZ.Controls.ColorBarsProgressBar m_progressBar;
         private System.Windows.Forms.Button m_btnStartBackup;
     }
 }

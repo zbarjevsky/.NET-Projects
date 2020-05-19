@@ -76,7 +76,7 @@
             this.m_mnuBackupPriority,
             this.m_mnuBackupAll});
             this.m_ContextMenuList.Name = "m_ContextMenuList";
-            this.m_ContextMenuList.Size = new System.Drawing.Size(193, 104);
+            this.m_ContextMenuList.Size = new System.Drawing.Size(193, 126);
             // 
             // m_mnuEdit
             // 
@@ -94,7 +94,7 @@
             // 
             // m_mnuBackupSelected
             // 
-            this.m_mnuBackupSelected.Image = global::SmartBackup.Properties.Resources.FileCopy;
+            this.m_mnuBackupSelected.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuBackupSelected.Image")));
             this.m_mnuBackupSelected.Name = "m_mnuBackupSelected";
             this.m_mnuBackupSelected.Size = new System.Drawing.Size(192, 22);
             this.m_mnuBackupSelected.Text = "Backup Selected...";
