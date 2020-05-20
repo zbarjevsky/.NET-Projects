@@ -63,6 +63,16 @@ namespace MeditationStopWatch.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
         /// </summary>
+        internal static System.Drawing.Icon FullScreen {
+            get {
+                object obj = ResourceManager.GetObject("FullScreen", resourceCulture);
+                return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Icon similar to (Icon).
+        /// </summary>
         internal static System.Drawing.Icon next_on {
             get {
                 object obj = ResourceManager.GetObject("next_on", resourceCulture);

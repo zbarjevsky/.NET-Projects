@@ -159,16 +159,18 @@ namespace MeditationStopWatch
 		{
 			TaskbarManagerHelper.Init(this.Handle);
 			TaskbarManagerHelper.ShowButtons(
-				new List<string>() {"Previous", "Play/Pause",  "Next"}, 
-				new List<Icon>() { Properties.Resources.previus_on, Properties.Resources.pause_on, Properties.Resources.next_on});
+				new List<string>() {"Full Screen", "Previous", "Play/Pause",  "Next"}, 
+				new List<Icon>() { Properties.Resources.FullScreen, Properties.Resources.previus_on, Properties.Resources.pause_on, Properties.Resources.next_on});
 			
 			TaskbarManagerHelper.ButtonClicked = (index) => 
 			{
 				if (index == 0)
-					m_audioPlayerControl.Prev();
+					m_mnuViewFullScreen_Click(this, null);
 				if (index == 1)
-					m_audioPlayerControl.PauseResume();
+					m_audioPlayerControl.Prev();
 				if (index == 2)
+					m_audioPlayerControl.PauseResume();
+				if (index == 3)
 					m_audioPlayerControl.Next();
 			};
 		}
