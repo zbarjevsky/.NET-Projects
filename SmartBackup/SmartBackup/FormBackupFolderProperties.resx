@@ -117,16 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <metadata name="errorProvider1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="m_btnStartBackup.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        wwAADsMBx2+oZAAAAK5JREFUOE9jGAUMDGvXrv1PLoYbEHsoHgWfeHji/+vXr/FiDAMMNhrB8Y6bO/8/
-        e/YMJx44A0rm7APTWA1AxrjCwLzz9P+S+UfAbBQDcGHT9tP/LSbcAGNzILae+eS/xeQ7/yPbIPJgA/AB
-        k/4b/y1nv8DA+h3n/8tlLEuAKsMNdFpO/zfovQHHptOe/DeccOe/bPba+VAlpAH1ptP/JbPI1AwCQsnL
-        yNeMHTAwAAAYgXI/rOUGbwAAAABJRU5ErkJggg==
-</value>
-  </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAYAEBAAAAAAIABoBAAAZgAAACAgAAAAACAAqBAAAM4EAAAwMAAAAAAgAKglAAB2FQAAQEAAAAAA
@@ -6297,6 +6291,15 @@
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=
+</value>
+  </data>
+  <data name="m_btnStartBackup.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAAK5JREFUOE9jGAUMDGvXrv1PLoYbEHsoHgWfeHji/+vXr/FiDAMMNhrB8Y6bO/8/
+        e/YMJx44A0rm7APTWA1AxrjCwLzz9P+S+UfAbBQDcGHT9tP/LSbcAGNzILae+eS/xeQ7/yPbIPJgA/AB
+        k/4b/y1nv8DA+h3n/8tlLEuAKsMNdFpO/zfovQHHptOe/DeccOe/bPba+VAlpAH1ptP/JbPI1AwCQsnL
+        yNeMHTAwAAAYgXI/rOUGbwAAAABJRU5ErkJggg==
 </value>
   </data>
 </root>

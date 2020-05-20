@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using SmartBackup.Settings;
 using System.Media;
 using System.IO;
+using MZ.ControlsWinForms;
 
 namespace SmartBackup
 {
@@ -32,7 +33,18 @@ namespace SmartBackup
 
         private void m_btnAdd_Click(object sender, EventArgs e)
         {
+            FormBrowseForFolder browse = new FormBrowseForFolder();
+            browse.SelectedFolder = SmartBackup.Properties.Settings.Default.LastSrcFolder;
+            browse.Description = "Select Folder for backup...";
+
+            if (browse.ShowDialog(this) == DialogResult.Cancel)
+                return;
+
             BackupEntry entry = new BackupEntry();
+            entry.FolderSrc = browse.SelectedFolder;
+            SmartBackup.Properties.Settings.Default.LastSrcFolder = browse.SelectedFolder;
+            SmartBackup.Properties.Settings.Default.Save();
+
             FormBackupFolderProperties frm = new FormBackupFolderProperties(entry);
             if (frm.ShowDialog(this) != DialogResult.OK)
                 return;

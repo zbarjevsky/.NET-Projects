@@ -14,6 +14,8 @@ namespace MZ.ControlsWinForms
 {
     public partial class FormBrowseForFolder : Form
     {
+        FileUtils.FileProgress _fileProgress = new FileUtils.FileProgress();
+
         public string SelectedFolder 
         { 
             get { return m_txtSelectedFolder.Text; } 
@@ -35,6 +37,17 @@ namespace MZ.ControlsWinForms
         {
             SelectInTree();
             m_treeFolders.AfterSelectAction = (path) => { m_txtSelectedFolder.Text = path; };
+            m_lblMessage.Visible = false;
+
+            _fileProgress.OnPercentChange = (percent) =>
+            {
+                CommonUtils.ExecuteOnUIThread(() => 
+                {
+                    m_lblMessage.Text = _fileProgress.ToString();
+                    m_progressBar.Value = percent; 
+                }, this);
+                Application.DoEvents();
+            };
         }
 
         private void m_btnNewFolder_Click(object sender, EventArgs e)
@@ -55,7 +68,7 @@ namespace MZ.ControlsWinForms
 
         private void m_btnCancel_Click(object sender, EventArgs e)
         {
-
+            _fileProgress.Cancel = true;
         }
 
         private void SelectInTree()
@@ -83,8 +96,30 @@ namespace MZ.ControlsWinForms
 
             try
             {
-                this.Cursor = Cursors.WaitCursor;
+                this.Cursor = Cursors.AppStarting;
 
+                string prompt = "Delteting folder... \n(" + m_txtSelectedFolder.Text + ") \n";
+                EnableControls(false, prompt);
+
+                _fileProgress.Reset(prompt, 1000, 0, FileUtils.FileProgress.ReportOptions.ReportPercentChange);
+                List<string> files = FileUtils.GetFiles(m_txtSelectedFolder.Text, "*.*", _fileProgress).ToList();
+                if (_fileProgress.Cancel)
+                    return;
+
+                if (files.Count > 0)
+                {
+                    _fileProgress.Reset(prompt, files.Count, 0, FileUtils.FileProgress.ReportOptions.ReportPercentChange);
+                    for (int i = 0; i < files.Count; i++)
+                    {
+                        if (_fileProgress.Cancel)
+                            return;
+
+                        _fileProgress.Val++;
+                        File.Delete(files[i]);
+                    }
+                }
+
+                //delete empty folders
                 Directory.Delete(m_txtSelectedFolder.Text, true);
 
                 string parent = Path.GetDirectoryName(m_txtSelectedFolder.Text);
@@ -99,8 +134,25 @@ namespace MZ.ControlsWinForms
             } 
             finally
             {
+                m_progressBar.Value = 0;
+                EnableControls(true);
                 this.Cursor = Cursors.Default;
             }
+        }
+
+        private void EnableControls(bool bEnable, string message = "Wait...")
+        {
+            m_btnRefresh.Enabled = bEnable;
+            m_btnNewFolder.Enabled = bEnable;
+            m_btnCancel.Enabled = true; //bEnable;
+            m_btnOk.Enabled = bEnable;
+            m_mnuRefresh.Enabled = bEnable;
+            m_mnuRename.Enabled = bEnable;
+            m_mnuDelete.Enabled = bEnable;
+            m_treeFolders.Enabled = bEnable;
+
+            m_lblMessage.Visible = !bEnable;
+            m_lblMessage.Text = message;
         }
     }
 }

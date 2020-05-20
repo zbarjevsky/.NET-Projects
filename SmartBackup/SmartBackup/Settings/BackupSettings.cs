@@ -29,16 +29,26 @@ namespace SmartBackup.Settings
             FolderExcludeTypes = "";
         }
 
-        public bool IsValid()
+        public bool IsValid(out string error)
         {
+            error = "";
             if (!Directory.Exists(FolderSrc))
+            {
+                error = "Error: Source does not exists: " + FolderSrc;
                 return false;
+            }
             if (string.IsNullOrWhiteSpace(FolderDst))
+            {
+                error = "Error: Destination folder not set.";
                 return false;
+            }
             string rootSrc = Path.GetPathRoot(FolderSrc);
             string rootDst = Path.GetPathRoot(FolderDst);
             if (rootDst == rootSrc)
+            {
+                error = "Error: Sorce and Destination are on same drive: " + rootSrc;
                 return false;
+            }
 
             return true;
         }

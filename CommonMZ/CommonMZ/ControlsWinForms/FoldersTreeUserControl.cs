@@ -64,6 +64,12 @@ namespace MZ.ControlsWinForms
 			if (string.IsNullOrWhiteSpace(fullPath))
 				return tvFolders.Nodes[0]; //root
 
+			for (int i = 0; i < tvFolders.Nodes[0].Nodes.Count; i++) //drives
+			{
+				if (tvFolders.Nodes[0].Nodes[i].Text == fullPath)
+					return tvFolders.Nodes[0].Nodes[i];
+			}
+
 			List<string> folders = new List<string>();
 
 			string name = Path.GetFileName(fullPath);

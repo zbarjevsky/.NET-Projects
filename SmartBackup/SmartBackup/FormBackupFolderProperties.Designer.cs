@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormBackupFolderProperties));
             this.m_txtSrcFolder = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -51,11 +52,13 @@
             this.m_pnlOptions = new System.Windows.Forms.Panel();
             this.m_progressBar = new MZ.Controls.ColorBarsProgressBar();
             this.m_btnStartBackup = new System.Windows.Forms.Button();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.m_splitFolders)).BeginInit();
             this.m_splitFolders.Panel1.SuspendLayout();
             this.m_splitFolders.Panel2.SuspendLayout();
             this.m_splitFolders.SuspendLayout();
             this.m_pnlOptions.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // m_txtSrcFolder
@@ -295,19 +298,18 @@
             this.m_progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.m_progressBar.InactiveColorTheme = MZ.Controls.ColorBarsProgressBar.InactiveColorsTheme.Pale;
             this.m_progressBar.Location = new System.Drawing.Point(0, 549);
-            this.m_progressBar.Maximum = 100;
-            this.m_progressBar.Minimum = 0;
             this.m_progressBar.Name = "m_progressBar";
             this.m_progressBar.Orientation = System.Windows.Forms.Orientation.Horizontal;
             this.m_progressBar.Size = new System.Drawing.Size(1084, 12);
             this.m_progressBar.TabIndex = 22;
             this.m_progressBar.TabStop = false;
-            this.m_progressBar.Value = 0;
             // 
             // m_btnStartBackup
             // 
             this.m_btnStartBackup.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnStartBackup.DialogResult = System.Windows.Forms.DialogResult.Yes;
+            this.errorProvider1.SetIconAlignment(this.m_btnStartBackup, System.Windows.Forms.ErrorIconAlignment.MiddleLeft);
+            this.errorProvider1.SetIconPadding(this.m_btnStartBackup, 3);
             this.m_btnStartBackup.Image = ((System.Drawing.Image)(resources.GetObject("m_btnStartBackup.Image")));
             this.m_btnStartBackup.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.m_btnStartBackup.Location = new System.Drawing.Point(798, 522);
@@ -318,6 +320,10 @@
             this.m_btnStartBackup.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.m_btnStartBackup.UseVisualStyleBackColor = true;
             this.m_btnStartBackup.Click += new System.EventHandler(this.m_btnStartBackup_Click);
+            // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
             // 
             // FormBackupFolderProperties
             // 
@@ -348,6 +354,7 @@
             this.m_splitFolders.ResumeLayout(false);
             this.m_pnlOptions.ResumeLayout(false);
             this.m_pnlOptions.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -377,5 +384,6 @@
         private System.Windows.Forms.Panel m_pnlOptions;
         private MZ.Controls.ColorBarsProgressBar m_progressBar;
         private System.Windows.Forms.Button m_btnStartBackup;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
     }
 }

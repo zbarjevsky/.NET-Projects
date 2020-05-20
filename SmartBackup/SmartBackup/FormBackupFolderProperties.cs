@@ -80,6 +80,8 @@ namespace SmartBackup
             m_cmbPriority.SelectedItem = _entry.Priority;
 
             ValidateInput();
+
+            m_txtDstFolder.Focus();
         }
 
         private void FormBackupFolderProperties_FormClosed(object sender, FormClosedEventArgs e)
@@ -131,17 +133,22 @@ namespace SmartBackup
                 Priority = (BackupPriority)m_cmbPriority.SelectedItem
             };
 
-            m_btnOk.Enabled = entry.IsValid();
-            UpdateInfo(entry);
+            string error;
+            m_btnOk.Enabled = entry.IsValid(out error);
+            m_btnStartBackup.Enabled = m_btnOk.Enabled;
+            UpdateInfo(entry, error);
         }
 
-        private void UpdateInfo(BackupEntry entry)
+        private void UpdateInfo(BackupEntry entry, string error)
         {
-            if (!Directory.Exists(entry.FolderSrc))
+            if (!string.IsNullOrWhiteSpace(error))
             {
-                m_txtInfo.Text = "Cannot Find Source...";
+                m_txtInfo.Text = error;
+                errorProvider1.SetError(m_btnStartBackup, error);
                 return;
             }
+
+            errorProvider1.SetError(m_btnStartBackup, error); //clear error
 
             m_explorerSrc.PopulateFiles(entry.FolderSrc);
             m_explorerDst.PopulateFiles(entry.FolderDst);

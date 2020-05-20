@@ -43,6 +43,9 @@ namespace SmartBackup
             m_listFiles.VirtualListSize = 0;
 
             m_btnAbort.Enabled = false;
+            m_btnStart.Enabled = false;
+            m_btnPause.Enabled = false;
+            m_btnContinue.Enabled = false;
         }
 
         private void FormBackupProgress_Load(object sender, EventArgs e)
@@ -69,6 +72,7 @@ namespace SmartBackup
             };
 
             _logic = new BackupLogic(_group, _Priority, _fileProgress);
+            EnableControls(false);
             UpdateDisplayList(calculateNeededSize:true);
         }
 
@@ -210,11 +214,7 @@ namespace SmartBackup
         {
             CommonUtils.ExecuteOnUIThread(() =>
             {
-                m_btnStart.Enabled = !isRunning;
-                m_btnContinue.Enabled = !isRunning;
-                m_btnAbort.Enabled = isRunning;
-                m_btnPause.Enabled = isRunning;
-                m_cmbViewFilter.Enabled = !isRunning;
+                EnableControls(isRunning);
 
                 m_progressBarMain.Value = (int)((long)m_progressBarMain.Maximum * (long)(_startIndex+1) / _backupFilesList.Count);
                 
@@ -232,6 +232,15 @@ namespace SmartBackup
                 if (_abort)
                     m_progressBarMain.Value = 0;
             }, this);
+        }
+
+        private void EnableControls(bool isRunning)
+        {
+            m_btnStart.Enabled = !isRunning;
+            m_btnContinue.Enabled = !isRunning;
+            m_btnAbort.Enabled = isRunning;
+            m_btnPause.Enabled = isRunning;
+            m_cmbViewFilter.Enabled = !isRunning;
         }
 
         private void UpdateBackupStatus()
@@ -343,7 +352,7 @@ namespace SmartBackup
                 string stat = _logic.GetDiskStatistics();
                 _fileProgress.Reset("Calculate Space Needed: ", _backupFilesList.Count, 0, FileUtils.FileProgress.ReportOptions.ReportPercentChange);
                 string sizeInfo = _logic.CalculateSpaceNeeded(backupStatus, _fileProgress);
-                CommonUtils.ExecuteOnUIThread(() => { m_txtInfo.Text = sizeInfo; }, this);
+                CommonUtils.ExecuteOnUIThread(() => { m_txtInfo.Text = sizeInfo; m_progrFile.Value = 0; }, this);
             });
 
             _threadCalculateSpace.IsBackground = true;
