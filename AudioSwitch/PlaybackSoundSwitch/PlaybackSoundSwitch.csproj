@@ -48,6 +48,7 @@
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -64,6 +65,22 @@
       <Link>Tools\ColorBarsProgressBar.cs</Link>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="..\..\CommonMZ\CommonMZ\ControlsWinForms\FoldersTreeUserControl.cs">
+      <Link>Tools\FoldersTreeUserControl.cs</Link>
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="..\..\CommonMZ\CommonMZ\ControlsWinForms\FoldersTreeUserControl.designer.cs">
+      <Link>Tools\FoldersTreeUserControl.designer.cs</Link>
+      <DependentUpon>FoldersTreeUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\CommonMZ\CommonMZ\ControlsWinForms\FormBrowseForFolder.cs">
+      <Link>Tools\FormBrowseForFolder.cs</Link>
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="..\..\CommonMZ\CommonMZ\ControlsWinForms\FormBrowseForFolder.designer.cs">
+      <Link>Tools\FormBrowseForFolder.designer.cs</Link>
+      <DependentUpon>FormBrowseForFolder.cs</DependentUpon>
+    </Compile>
     <Compile Include="..\..\CommonMZ\CommonMZ\ControlsWinForms\ListViewCollapsibleGroups.cs">
       <Link>Tools\ListViewCollapsibleGroups.cs</Link>
       <SubType>Component</SubType>
@@ -76,6 +93,9 @@
     </Compile>
     <Compile Include="..\..\CommonMZ\CommonMZ\Tools\CommonUtils.cs">
       <Link>Tools\CommonUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\..\CommonMZ\CommonMZ\Tools\FileUtils.cs">
+      <Link>Tools\FileUtils.cs</Link>
     </Compile>
     <Compile Include="..\..\CommonMZ\CommonMZ\Tools\SingleInstanceHelper.cs">
       <Link>Tools\SingleInstanceHelper.cs</Link>
@@ -166,6 +186,14 @@
     <Compile Include="VolumeUserControl.Designer.cs">
       <DependentUpon>VolumeUserControl.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="..\..\CommonMZ\CommonMZ\ControlsWinForms\FoldersTreeUserControl.resx">
+      <Link>Tools\FoldersTreeUserControl.resx</Link>
+      <DependentUpon>FoldersTreeUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\CommonMZ\CommonMZ\ControlsWinForms\FormBrowseForFolder.resx">
+      <Link>Tools\FormBrowseForFolder.resx</Link>
+      <DependentUpon>FormBrowseForFolder.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>
     </EmbeddedResource>

@@ -160,8 +160,8 @@ namespace MeditationStopWatch
 			TaskbarManagerHelper.Init(this.Handle);
 			TaskbarManagerHelper.ShowButtons(
 				new List<string>() {"Full Screen", "Previous", "Play/Pause",  "Next"}, 
-				new List<Icon>() { Properties.Resources.FullScreen, Properties.Resources.previus_on, Properties.Resources.pause_on, Properties.Resources.next_on});
-			
+				new List<Icon>() { Properties.Resources.FullScreen16_Light, Properties.Resources.previus_on, Properties.Resources.pause_on, Properties.Resources.next_on});
+			TaskbarManagerHelper.Button(0).DismissOnClick = true;
 			TaskbarManagerHelper.ButtonClicked = (index) => 
 			{
 				if (index == 0)
@@ -172,6 +172,22 @@ namespace MeditationStopWatch
 					m_audioPlayerControl.PauseResume();
 				if (index == 3)
 					m_audioPlayerControl.Next();
+			};
+
+			FullScreenImageHelper.OnVisibleChanged = (isVisible) =>
+			{
+				if (isVisible)
+				{
+					TaskbarManagerHelper.Button(0).Icon = Properties.Resources.FullScreen16_Restore_light;
+					m_btnFullScreen.Image = m_imageListFullScreen.Images[0];
+					m_mnuViewFullScreen.Image = m_imageListFullScreen.Images[0];
+				}
+				else
+				{
+					TaskbarManagerHelper.Button(0).Icon = Properties.Resources.FullScreen16_Light;
+					m_btnFullScreen.Image = m_imageListFullScreen.Images[1];
+					m_mnuViewFullScreen.Image = m_imageListFullScreen.Images[1];
+				}
 			};
 		}
 
@@ -612,10 +628,15 @@ namespace MeditationStopWatch
 
         private void m_mnuViewFullScreen_Click(object sender, EventArgs e)
         {
-            FormFullScreenImage frm = new FormFullScreenImage(this);
-            frm.Picture = m_pictureBox1.PictureBox.Image;
-            frm.ShowDialog(this);
-        }
+			if (FullScreenImageHelper.IsVisible)
+			{
+				FullScreenImageHelper.Hide();
+			}
+			else
+			{
+				FullScreenImageHelper.Show(this, m_pictureBox1.PictureBox.Image);
+			}
+		}
 
         private void m_btnFullScreen_Click(object sender, EventArgs e)
 		{

@@ -143,8 +143,15 @@ namespace PlaybackSoundSwitch
                 return;
             }
 
-            float peak = dev.AudioMeterInformation.MasterPeakValue * 100f;
-            progr.Value = (int)peak;
+            try
+            {
+                float peak = dev.AudioMeterInformation.MasterPeakValue * 100f;
+                progr.Value = (int)peak;
+            }
+            catch (Exception err)
+            {
+                System.Diagnostics.Debug.WriteLine(err);
+            }        
         }
     }
 }

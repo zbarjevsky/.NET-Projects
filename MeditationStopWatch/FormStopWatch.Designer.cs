@@ -649,7 +649,9 @@
             this.m_imageListFullScreen.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_imageListFullScreen.ImageStream")));
             this.m_imageListFullScreen.TransparentColor = System.Drawing.Color.Transparent;
             this.m_imageListFullScreen.Images.SetKeyName(0, "FullScreen.ico");
-            this.m_imageListFullScreen.Images.SetKeyName(1, "RestoreFullScreen.ico");
+            this.m_imageListFullScreen.Images.SetKeyName(1, "FullScreen16_Restore.ico");
+            this.m_imageListFullScreen.Images.SetKeyName(2, "FullScreen16 Light.ico");
+            this.m_imageListFullScreen.Images.SetKeyName(3, "FullScreen16_Restore_light.ico");
             // 
             // FormStopWatch
             // 

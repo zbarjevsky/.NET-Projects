@@ -43,7 +43,6 @@
             this.m_grpVolume.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_trackVolume)).BeginInit();
             this.m_pnlMain.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.m_progrLevel)).BeginInit();
             this.SuspendLayout();
             // 
             // m_grpVolume
@@ -159,7 +158,6 @@
             this.m_grpVolume.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_trackVolume)).EndInit();
             this.m_pnlMain.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.m_progrLevel)).EndInit();
             this.ResumeLayout(false);
 
         }

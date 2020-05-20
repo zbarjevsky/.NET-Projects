@@ -38,6 +38,11 @@ namespace MZ.Tools
             TaskbarManager.Instance.ThumbnailToolbars.AddButtons(hWnd, _buttons);
         }
 
+        public static ThumbnailToolbarButton Button(int i)
+        {
+            return _buttons[i];
+        }
+
         public static void ShowButtons(List<string> tooltips, List<Icon> icons, string disableButtonWithThisTooltip = "")
         {
             for (int i = 0; i < COUNT; i++)

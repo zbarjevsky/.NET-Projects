@@ -79,6 +79,12 @@ namespace MeditationStopWatch
             _zoomScale = (double)pictureBox1.PictureBox.Width / (double)pictureBox1.Width;
         }
 
+        private void m_btnCancel_Click(object sender, EventArgs e)
+        {
+            //Close();
+            this.Visible = false;
+        }
+
         private void EnsureVisibleControls()
         {
             pictureBox1.EnsureVisible(m_lblVolume, AnchorStyles.Top | AnchorStyles.Right, 50, true);
@@ -110,7 +116,8 @@ namespace MeditationStopWatch
             {
                 case Keys.Escape:
                 case Keys.F11:
-                    Close();
+                    //Close();
+                    this.Visible = false;
                     return true;
                 case Keys.Space:
                     _stopWatchForm.PauseResume();

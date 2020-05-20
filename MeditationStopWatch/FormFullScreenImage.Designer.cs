@@ -55,6 +55,7 @@
             this.m_btnCancel.Size = new System.Drawing.Size(33, 32);
             this.m_btnCancel.TabIndex = 2;
             this.m_btnCancel.UseVisualStyleBackColor = false;
+            this.m_btnCancel.Click += new System.EventHandler(this.m_btnCancel_Click);
             // 
             // m_pnlMain
             // 
