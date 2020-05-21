@@ -1,4 +1,4 @@
-﻿namespace MZ.ControlsWinForms
+﻿namespace MZ.WinForms
 {
     partial class FoldersTreeUserControl
     {

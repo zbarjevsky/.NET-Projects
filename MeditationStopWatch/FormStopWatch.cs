@@ -11,9 +11,8 @@ using System.IO;
 using System.Reflection;
 using MeditationStopWatch.Tools;
 using Microsoft.WindowsAPICodePack.Taskbar;
-using MZ.Tools.WinForms;
-using MZ.ControlsWinForms;
 using MZ.Tools;
+using MZ.WinForms;
 
 namespace MeditationStopWatch
 {

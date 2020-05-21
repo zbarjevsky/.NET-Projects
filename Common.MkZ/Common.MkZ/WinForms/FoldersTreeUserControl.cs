@@ -9,9 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Management;
 using System.IO;
-using MZ.Tools.WinForms;
 
-namespace MZ.ControlsWinForms
+namespace MZ.WinForms
 {
     public partial class FoldersTreeUserControl : UserControl
     {

@@ -54,10 +54,10 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\CommonMZ\CommonMZ\Tools\User32.cs">
+    <Compile Include="..\..\Common.MkZ\Common.MkZ\Windows\User32.cs">
       <Link>User32.cs</Link>
     </Compile>
-    <Compile Include="..\..\CommonMZ\CommonMZ\UtilsWPF\WPF_Helper.cs">
+    <Compile Include="..\..\Common.MkZ\Common.MkZ\WPF\WPF_Helper.cs">
       <Link>WPF_Helper.cs</Link>
     </Compile>
     <Compile Include="PopUp.cs" />

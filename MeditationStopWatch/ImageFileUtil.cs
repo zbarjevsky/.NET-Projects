@@ -2,7 +2,7 @@
 using System.IO;
 using System.Collections.Generic;
 using MeditationStopWatch.Tools;
-using MZ.Tools.WinForms;
+using MZ.WinForms;
 
 namespace MeditationStopWatch
 {

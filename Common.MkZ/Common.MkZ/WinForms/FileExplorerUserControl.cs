@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Globalization;
 
-namespace MZ.ControlsWinForms
+namespace MZ.WinForms
 {
     public partial class FileExplorerUserControl : UserControl
     {

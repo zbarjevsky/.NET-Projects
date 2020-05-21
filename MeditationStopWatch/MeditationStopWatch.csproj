@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MeditationStopWatch</RootNamespace>
     <AssemblyName>MeditationStopWatch</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ApplicationIcon>Yin-Yang.ico</ApplicationIcon>
     <FileUpgradeFlags>
@@ -99,32 +99,6 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\CommonMZ\CommonMZ\ControlsWinForms\DraggableExtension.cs">
-      <Link>Tools\DraggableExtension.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonMZ\CommonMZ\ControlsWinForms\FormInPlaceEdit.cs">
-      <Link>FormInPlaceEdit.cs</Link>
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="..\CommonMZ\CommonMZ\ControlsWinForms\FormInPlaceEdit.designer.cs">
-      <Link>FormInPlaceEdit.designer.cs</Link>
-      <DependentUpon>FormInPlaceEdit.cs</DependentUpon>
-    </Compile>
-    <Compile Include="..\CommonMZ\CommonMZ\ControlsWinForms\WinFormsControlExtension.cs">
-      <Link>Tools\WinFormsControlExtension.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonMZ\CommonMZ\Tools\SingleInstanceHelper.cs">
-      <Link>Tools\SingleInstanceHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonMZ\CommonMZ\Tools\TaskbarManagerHelper.cs">
-      <Link>Tools\TaskbarManagerHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonMZ\CommonMZ\Tools\User32.cs">
-      <Link>Tools\User32.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonMZ\CommonMZ\Tools\WindowsMessages.cs">
-      <Link>Tools\WindowsMessages.cs</Link>
-    </Compile>
     <Compile Include="AnalogClock.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -181,6 +155,9 @@
     <Compile Include="FormOptions.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="FormOptions.Designer.cs">
+      <DependentUpon>FormOptions.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormStopWatch.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -214,10 +191,6 @@
     <Compile Include="ZoomablePictureBoxUserControl.Designer.cs">
       <DependentUpon>ZoomablePictureBoxUserControl.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="..\CommonMZ\CommonMZ\ControlsWinForms\FormInPlaceEdit.resx">
-      <Link>FormInPlaceEdit.resx</Link>
-      <DependentUpon>FormInPlaceEdit.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="AnalogClock.resx">
       <DependentUpon>AnalogClock.cs</DependentUpon>
     </EmbeddedResource>
@@ -369,6 +342,12 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common.MkZ\Common.MkZ\Common.MkZ.csproj">
+      <Project>{a03c89dd-ca87-4c9e-9ff9-f4277372e0f7}</Project>
+      <Name>Common.MkZ</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

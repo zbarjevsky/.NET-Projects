@@ -1,6 +1,4 @@
-﻿using MZ.ControlsWinForms;
-using MZ.Tools;
-using MZ.Tools.WinForms;
+﻿using MZ.WinForms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,7 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace MZ.Controls
+namespace MZ.WinForms
 {
     public partial class FormInPlaceEdit : Form
     {

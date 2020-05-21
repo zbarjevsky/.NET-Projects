@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MZ.ControlsWinForms
+namespace MZ.WinForms
 {
     public class InPlaceTextBox : TextBox
     {

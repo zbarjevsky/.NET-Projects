@@ -1,7 +1,6 @@
-﻿using MZ.Controls;
-using MZ.ControlsWinForms;
+﻿using MZ.WinForms;
+
 using MZ.Tools;
-using MZ.Tools.WinForms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -62,11 +61,6 @@ namespace MZ
             //(text) => { ctrl.Text = text; },
             //(text) => { ctrl.Text = text; },
             //(text) => { ctrl.Text = oldText; });
-        }
-
-        private void foldersTreeUserControl1_Load(object sender, EventArgs e)
-        {
-
         }
 
         private void m_btnBrowseForFolder_Click(object sender, EventArgs e)

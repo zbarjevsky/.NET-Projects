@@ -39,11 +39,11 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.m_btnTestWPFMessageBox = new System.Windows.Forms.Button();
-            this.foldersTreeUserControl1 = new MZ.ControlsWinForms.FoldersTreeUserControl();
-            this.fileExplorerUserControl1 = new MZ.ControlsWinForms.FileExplorerUserControl();
-            this.colorBarsProgressBar3 = new MZ.Controls.ColorBarsProgressBar();
-            this.colorBarsProgressBar2 = new MZ.Controls.ColorBarsProgressBar();
-            this.colorBarsProgressBar1 = new MZ.Controls.ColorBarsProgressBar();
+            this.foldersTreeUserControl1 = new MZ.WinForms.FoldersTreeUserControl();
+            this.fileExplorerUserControl1 = new MZ.WinForms.FileExplorerUserControl();
+            this.colorBarsProgressBar3 = new MZ.WinForms.ColorBarsProgressBar();
+            this.colorBarsProgressBar2 = new MZ.WinForms.ColorBarsProgressBar();
+            this.colorBarsProgressBar1 = new MZ.WinForms.ColorBarsProgressBar();
             this.m_btnTestWPFMessageBoxWPF = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -205,8 +205,8 @@
             this.colorBarsProgressBar3.ActiveColor = System.Drawing.Color.LimeGreen;
             this.colorBarsProgressBar3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.colorBarsProgressBar3.ColorThemeType = MZ.Controls.ColorBarsProgressBar.ColorsThemeType.Speaker;
-            this.colorBarsProgressBar3.InactiveBarsColorType = MZ.Controls.ColorBarsProgressBar.InactiveColorType.Mono;
+            this.colorBarsProgressBar3.ColorThemeType = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Speaker;
+            this.colorBarsProgressBar3.InactiveBarsColorType = MZ.WinForms.ColorBarsProgressBar.InactiveColorType.Mono;
             this.colorBarsProgressBar3.InactiveColor = System.Drawing.Color.Honeydew;
             this.colorBarsProgressBar3.Location = new System.Drawing.Point(26, 29);
             this.colorBarsProgressBar3.Name = "colorBarsProgressBar3";
@@ -221,8 +221,8 @@
             this.colorBarsProgressBar2.ActiveColor = System.Drawing.Color.DarkBlue;
             this.colorBarsProgressBar2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.colorBarsProgressBar2.ColorThemeType = MZ.Controls.ColorBarsProgressBar.ColorsThemeType.Regular;
-            this.colorBarsProgressBar2.InactiveBarsColorType = MZ.Controls.ColorBarsProgressBar.InactiveColorType.Mono;
+            this.colorBarsProgressBar2.ColorThemeType = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Regular;
+            this.colorBarsProgressBar2.InactiveBarsColorType = MZ.WinForms.ColorBarsProgressBar.InactiveColorType.Mono;
             this.colorBarsProgressBar2.InactiveColor = System.Drawing.Color.Gainsboro;
             this.colorBarsProgressBar2.Location = new System.Drawing.Point(160, 385);
             this.colorBarsProgressBar2.Name = "colorBarsProgressBar2";
@@ -237,8 +237,8 @@
             this.colorBarsProgressBar1.ActiveColor = System.Drawing.Color.LimeGreen;
             this.colorBarsProgressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.colorBarsProgressBar1.ColorThemeType = MZ.Controls.ColorBarsProgressBar.ColorsThemeType.Microphone;
-            this.colorBarsProgressBar1.InactiveBarsColorType = MZ.Controls.ColorBarsProgressBar.InactiveColorType.Mono;
+            this.colorBarsProgressBar1.ColorThemeType = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Microphone;
+            this.colorBarsProgressBar1.InactiveBarsColorType = MZ.WinForms.ColorBarsProgressBar.InactiveColorType.Mono;
             this.colorBarsProgressBar1.InactiveColor = System.Drawing.Color.PaleGoldenrod;
             this.colorBarsProgressBar1.Location = new System.Drawing.Point(53, 29);
             this.colorBarsProgressBar1.Name = "colorBarsProgressBar1";
@@ -286,16 +286,16 @@
 
         #endregion
 
-        private Controls.ColorBarsProgressBar colorBarsProgressBar1;
+        private WinForms.ColorBarsProgressBar colorBarsProgressBar1;
         private System.Windows.Forms.Button m_btnTestEdit;
-        private ControlsWinForms.FoldersTreeUserControl foldersTreeUserControl1;
-        private ControlsWinForms.FileExplorerUserControl fileExplorerUserControl1;
+        private WinForms.FoldersTreeUserControl foldersTreeUserControl1;
+        private WinForms.FileExplorerUserControl fileExplorerUserControl1;
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.ComboBox m_cmbListViewType;
         private System.Windows.Forms.TrackBar trackBar1;
-        private Controls.ColorBarsProgressBar colorBarsProgressBar2;
-        private Controls.ColorBarsProgressBar colorBarsProgressBar3;
+        private WinForms.ColorBarsProgressBar colorBarsProgressBar2;
+        private WinForms.ColorBarsProgressBar colorBarsProgressBar3;
         private System.Windows.Forms.TabControl tabControl1;
         private System.Windows.Forms.TabPage tabPage2;
         private System.Windows.Forms.TabPage tabPage1;

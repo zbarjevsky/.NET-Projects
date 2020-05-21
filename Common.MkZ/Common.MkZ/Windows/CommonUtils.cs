@@ -1,4 +1,4 @@
-﻿using MZ.ControlsWinForms;
+﻿using MZ.WinForms;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

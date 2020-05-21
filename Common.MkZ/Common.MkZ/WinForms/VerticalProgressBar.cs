@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MZ.Controls
+namespace MZ.WinForms
 {
     public class VerticalProgressBar : ProgressBar
     {

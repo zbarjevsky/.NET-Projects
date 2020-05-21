@@ -1,4 +1,4 @@
-﻿namespace MZ.ControlsWinForms
+﻿namespace MZ.WinForms
 {
     partial class FormBrowseForFolder
     {
@@ -39,9 +39,9 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.m_pnlMain = new System.Windows.Forms.Panel();
             this.m_lblMessage = new System.Windows.Forms.Label();
-            this.m_progressBar = new MZ.Controls.ColorBarsProgressBar();
+            this.m_progressBar = new MZ.WinForms.ColorBarsProgressBar();
             this.m_btnRefresh = new System.Windows.Forms.Button();
-            this.m_treeFolders = new MZ.ControlsWinForms.FoldersTreeUserControl();
+            this.m_treeFolders = new MZ.WinForms.FoldersTreeUserControl();
             this.m_ctxmnuTree = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.m_mnuRefresh = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
@@ -179,9 +179,9 @@
             // m_progressBar
             // 
             this.m_progressBar.ActiveColor = System.Drawing.Color.SteelBlue;
-            this.m_progressBar.ColorThemeType = MZ.Controls.ColorBarsProgressBar.ColorsThemeType.Regular;
+            this.m_progressBar.ColorThemeType = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Regular;
             this.m_progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.m_progressBar.InactiveBarsColorType = MZ.Controls.ColorBarsProgressBar.InactiveColorType.Mono;
+            this.m_progressBar.InactiveBarsColorType = MZ.WinForms.ColorBarsProgressBar.InactiveColorType.Mono;
             this.m_progressBar.InactiveColor = System.Drawing.Color.Gainsboro;
             this.m_progressBar.Location = new System.Drawing.Point(0, 347);
             this.m_progressBar.Name = "m_progressBar";
@@ -301,7 +301,7 @@
         private System.Windows.Forms.ToolStripMenuItem m_mnuRename;
         private System.Windows.Forms.ToolStripMenuItem m_mnuDelete;
         private System.Windows.Forms.ImageList m_imageListIcons;
-        private Controls.ColorBarsProgressBar m_progressBar;
+        private WinForms.ColorBarsProgressBar m_progressBar;
         private System.Windows.Forms.Label m_lblMessage;
     }
 }
