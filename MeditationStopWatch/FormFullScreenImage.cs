@@ -63,6 +63,8 @@ namespace MeditationStopWatch
             pictureBox1.PictureBox.Focus();
             pictureBox1.PictureBox.Refresh();
             m_btnCancel.BringToFront();
+
+            this.Activate();
         }
 
         private void FormFullScreenImage_FormClosed(object sender, FormClosedEventArgs e)

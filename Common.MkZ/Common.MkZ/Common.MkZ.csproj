@@ -61,6 +61,17 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Tests\FormColorSliderDemo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Tests\FormColorSliderDemo.designer.cs">
+      <DependentUpon>FormColorSliderDemo.cs</DependentUpon>
+    </Compile>
     <Compile Include="Tests\FormTestWpfMessageBox.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -73,6 +84,12 @@
     <Compile Include="Windows\ProcessExtensions.cs" />
     <Compile Include="WinForms\ColorBarsProgressBar.cs">
       <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="WinForms\ColorSlider.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="WinForms\ColorSlider.designer.cs">
+      <DependentUpon>ColorSlider.cs</DependentUpon>
     </Compile>
     <Compile Include="WinForms\FileExplorerUserControl.cs">
       <SubType>UserControl</SubType>
@@ -156,8 +173,18 @@
     <Folder Include="Images\Shell32\Png\" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tests\FormColorSliderDemo.resx">
+      <DependentUpon>FormColorSliderDemo.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Tests\FormTestWpfMessageBox.resx">
       <DependentUpon>FormTestWpfMessageBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinForms\ColorSlider.resx">
+      <DependentUpon>ColorSlider.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="WinForms\FileExplorerUserControl.resx">
       <DependentUpon>FileExplorerUserControl.cs</DependentUpon>

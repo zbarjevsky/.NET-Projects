@@ -75,11 +75,11 @@ namespace MZ
             listView1.View = (View)m_cmbListViewType.SelectedItem;
         }
 
-        private void trackBar1_Scroll(object sender, EventArgs e)
+        private void trackBar1_Scroll(object sender, ScrollEventArgs e)
         {
-            colorBarsProgressBar1.Value = trackBar1.Value;
-            colorBarsProgressBar2.Value = trackBar1.Value;
-            colorBarsProgressBar3.Value = trackBar1.Value;
+            colorBarsProgressBar1.Value = (int)trackBar1.Value;
+            colorBarsProgressBar2.Value = (int)trackBar1.Value;
+            colorBarsProgressBar3.Value = (int)trackBar1.Value;
         }
 
         private void m_btnTestWPFMessageBox_Click(object sender, EventArgs e)
@@ -92,6 +92,12 @@ namespace MZ
         {
             WPFMessageBoxTestWPF.WindowTestWpfMesageBox wnd = new WPFMessageBoxTestWPF.WindowTestWpfMesageBox();
             wnd.ShowDialog();
+        }
+
+        private void m_btnColorSlider_Click(object sender, EventArgs e)
+        {
+            TestColorSlider.FormColorSliderDemo frm = new TestColorSlider.FormColorSliderDemo();
+            frm.ShowDialog(this);
         }
     }
 }
