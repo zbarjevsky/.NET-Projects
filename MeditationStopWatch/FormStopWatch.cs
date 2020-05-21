@@ -179,14 +179,14 @@ namespace MeditationStopWatch
 				if (isVisible)
 				{
 					TaskbarManagerHelper.Button(0).Icon = Properties.Resources.FullScreen16_Restore_light;
-					m_btnFullScreen.Image = m_imageListFullScreen.Images[0];
-					m_mnuViewFullScreen.Image = m_imageListFullScreen.Images[0];
+					m_btnFullScreen.Image = m_imageListFullScreen.Images[3];
+					m_mnuViewFullScreen.Image = m_imageListFullScreen.Images[3];
 				}
 				else
 				{
 					TaskbarManagerHelper.Button(0).Icon = Properties.Resources.FullScreen16_Light;
-					m_btnFullScreen.Image = m_imageListFullScreen.Images[1];
-					m_mnuViewFullScreen.Image = m_imageListFullScreen.Images[1];
+					m_btnFullScreen.Image = m_imageListFullScreen.Images[2];
+					m_mnuViewFullScreen.Image = m_imageListFullScreen.Images[2];
 				}
 			};
 		}

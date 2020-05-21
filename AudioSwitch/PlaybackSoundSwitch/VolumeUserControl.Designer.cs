@@ -131,11 +131,10 @@
             // m_progrLevel
             // 
             this.m_progrLevel.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.m_progrLevel.ActiveColorTheme = MZ.Controls.ColorBarsProgressBar.ActiveColorsTheme.Multicolor;
+            this.m_progrLevel.ColorThemeType = MZ.Controls.ColorBarsProgressBar.ColorsThemeType.Microphone;
             this.m_progrLevel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_progrLevel.InactiveColorTheme = MZ.Controls.ColorBarsProgressBar.InactiveColorsTheme.Pale;
             this.m_progrLevel.Location = new System.Drawing.Point(35, 45);
             this.m_progrLevel.MinimumSize = new System.Drawing.Size(20, 0);
             this.m_progrLevel.Name = "m_progrLevel";

@@ -59,6 +59,12 @@ namespace PlaybackSoundSwitch
             };
         }
 
+        public ColorBarsProgressBar.ColorsThemeType ColorTheme
+        {
+            get { return m_progrLevel.ColorThemeType; }
+            set { m_progrLevel.ColorThemeType = value; }
+        }
+
         //desired volume
         public int Volume
         {

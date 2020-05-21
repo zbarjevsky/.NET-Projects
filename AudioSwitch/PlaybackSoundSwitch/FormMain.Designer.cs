@@ -132,6 +132,7 @@
             // 
             this.m_volumeControlSpk.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_volumeControlSpk.ColorTheme = MZ.Controls.ColorBarsProgressBar.ColorsThemeType.Speaker;
             this.m_volumeControlSpk.Level = 0;
             this.m_volumeControlSpk.Location = new System.Drawing.Point(601, 19);
             this.m_volumeControlSpk.MaximumSize = new System.Drawing.Size(62, 600);
@@ -146,6 +147,7 @@
             // 
             this.m_volumeControlMic.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_volumeControlMic.ColorTheme = MZ.Controls.ColorBarsProgressBar.ColorsThemeType.Microphone;
             this.m_volumeControlMic.Level = 0;
             this.m_volumeControlMic.Location = new System.Drawing.Point(669, 19);
             this.m_volumeControlMic.MaximumSize = new System.Drawing.Size(62, 600);

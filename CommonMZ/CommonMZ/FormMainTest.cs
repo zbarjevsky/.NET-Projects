@@ -85,6 +85,7 @@ namespace MZ
         {
             colorBarsProgressBar1.Value = trackBar1.Value;
             colorBarsProgressBar2.Value = trackBar1.Value;
+            colorBarsProgressBar3.Value = trackBar1.Value;
         }
     }
 }

@@ -168,9 +168,8 @@
             // m_progressBar
             // 
             this.m_progressBar.ActiveColor = System.Drawing.Color.SteelBlue;
-            this.m_progressBar.ActiveColorTheme = MZ.Controls.ColorBarsProgressBar.ActiveColorsTheme.SingleColor;
+            this.m_progressBar.ColorThemeType = MZ.Controls.ColorBarsProgressBar.ColorsThemeType.Regular;
             this.m_progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.m_progressBar.InactiveColorTheme = MZ.Controls.ColorBarsProgressBar.InactiveColorsTheme.Pale;
             this.m_progressBar.Location = new System.Drawing.Point(0, 347);
             this.m_progressBar.Name = "m_progressBar";
             this.m_progressBar.Orientation = System.Windows.Forms.Orientation.Horizontal;

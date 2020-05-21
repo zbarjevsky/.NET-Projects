@@ -248,10 +248,9 @@
             // m_progrFile
             // 
             this.m_progrFile.ActiveColor = System.Drawing.Color.DeepSkyBlue;
-            this.m_progrFile.ActiveColorTheme = MZ.Controls.ColorBarsProgressBar.ActiveColorsTheme.SingleColor;
+            this.m_progrFile.ColorThemeType = MZ.Controls.ColorBarsProgressBar.ColorsThemeType.Regular;
             this.m_progrFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_progrFile.InactiveColorTheme = MZ.Controls.ColorBarsProgressBar.InactiveColorsTheme.Pale;
             this.m_progrFile.Location = new System.Drawing.Point(12, 285);
             this.m_progrFile.Name = "m_progrFile";
             this.m_progrFile.Orientation = System.Windows.Forms.Orientation.Horizontal;
