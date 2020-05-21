@@ -39,7 +39,7 @@
             this.m_timer = new System.Windows.Forms.Timer(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.m_btnMute = new System.Windows.Forms.Button();
-            this.m_progrLevel = new MZ.Controls.ColorBarsProgressBar();
+            this.m_progrLevel = new MZ.WinForms.ColorBarsProgressBar();
             this.m_grpVolume.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_trackVolume)).BeginInit();
             this.m_pnlMain.SuspendLayout();
@@ -131,7 +131,7 @@
             // m_progrLevel
             // 
             this.m_progrLevel.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.m_progrLevel.ColorThemeType = MZ.Controls.ColorBarsProgressBar.ColorsThemeType.Microphone;
+            this.m_progrLevel.ColorThemeType = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Microphone;
             this.m_progrLevel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -171,7 +171,7 @@
         private System.Windows.Forms.ImageList m_imgListSpk;
         private System.Windows.Forms.Timer m_timer;
         private System.Windows.Forms.ToolTip toolTip1;
-        private MZ.Controls.ColorBarsProgressBar m_progrLevel;
+        private MZ.WinForms.ColorBarsProgressBar m_progrLevel;
         private System.Windows.Forms.Label m_lbl;
     }
 }

@@ -11,7 +11,7 @@ using PlaybackSoundSwitch.Device;
 using System.Diagnostics;
 using MZ.Tools;
 using PlaybackSoundSwitch.DeviceSwitch;
-using MZ.Tools.WinForms;
+using MZ.WinForms;
 
 namespace PlaybackSoundSwitch
 {

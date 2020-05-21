@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PlaybackSoundSwitch", "PlaybackSoundSwitch\PlaybackSoundSwitch.csproj", "{01EE1EBE-02E6-4DDD-B64E-B8DBECA3A9CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonMZ", "..\CommonMZ\CommonMZ\CommonMZ.csproj", "{A03C89DD-CA87-4C9E-9FF9-F4277372E0F7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.MkZ", "..\Common.MkZ\Common.MkZ\Common.MkZ.csproj", "{A03C89DD-CA87-4C9E-9FF9-F4277372E0F7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
