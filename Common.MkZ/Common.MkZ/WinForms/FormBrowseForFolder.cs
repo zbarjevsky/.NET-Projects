@@ -6,6 +6,7 @@ using System.Data;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -121,6 +122,9 @@ namespace MZ.ControlsWinForms
 
                 //delete empty folders
                 Directory.Delete(m_txtSelectedFolder.Text, true);
+
+                if (_fileProgress.Elapsed.TotalSeconds > 10)
+                    SystemSounds.Beep.Play();
 
                 string parent = Path.GetDirectoryName(m_txtSelectedFolder.Text);
                 m_treeFolders.RefreshFolder(parent);

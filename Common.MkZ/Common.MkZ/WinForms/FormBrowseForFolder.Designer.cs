@@ -38,6 +38,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.m_pnlMain = new System.Windows.Forms.Panel();
+            this.m_lblMessage = new System.Windows.Forms.Label();
             this.m_progressBar = new MZ.Controls.ColorBarsProgressBar();
             this.m_btnRefresh = new System.Windows.Forms.Button();
             this.m_treeFolders = new MZ.ControlsWinForms.FoldersTreeUserControl();
@@ -48,7 +49,6 @@
             this.m_mnuDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.m_imageListIcons = new System.Windows.Forms.ImageList(this.components);
-            this.m_lblMessage = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.m_pnlMain.SuspendLayout();
@@ -165,11 +165,24 @@
             this.m_pnlMain.Size = new System.Drawing.Size(284, 361);
             this.m_pnlMain.TabIndex = 0;
             // 
+            // m_lblMessage
+            // 
+            this.m_lblMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_lblMessage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.m_lblMessage.Location = new System.Drawing.Point(24, 120);
+            this.m_lblMessage.Name = "m_lblMessage";
+            this.m_lblMessage.Size = new System.Drawing.Size(230, 71);
+            this.m_lblMessage.TabIndex = 1;
+            this.m_lblMessage.Text = "Wait...";
+            this.m_lblMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // m_progressBar
             // 
             this.m_progressBar.ActiveColor = System.Drawing.Color.SteelBlue;
             this.m_progressBar.ColorThemeType = MZ.Controls.ColorBarsProgressBar.ColorsThemeType.Regular;
             this.m_progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.m_progressBar.InactiveBarsColorType = MZ.Controls.ColorBarsProgressBar.InactiveColorType.Mono;
+            this.m_progressBar.InactiveColor = System.Drawing.Color.Gainsboro;
             this.m_progressBar.Location = new System.Drawing.Point(0, 347);
             this.m_progressBar.Name = "m_progressBar";
             this.m_progressBar.Orientation = System.Windows.Forms.Orientation.Horizontal;
@@ -247,17 +260,6 @@
             this.m_imageListIcons.ColorDepth = System.Windows.Forms.ColorDepth.Depth32Bit;
             this.m_imageListIcons.ImageSize = new System.Drawing.Size(16, 16);
             this.m_imageListIcons.TransparentColor = System.Drawing.Color.Transparent;
-            // 
-            // m_lblMessage
-            // 
-            this.m_lblMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_lblMessage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.m_lblMessage.Location = new System.Drawing.Point(54, 120);
-            this.m_lblMessage.Name = "m_lblMessage";
-            this.m_lblMessage.Size = new System.Drawing.Size(153, 71);
-            this.m_lblMessage.TabIndex = 1;
-            this.m_lblMessage.Text = "Wait...";
-            this.m_lblMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // FormBrowseForFolder
             // 

@@ -8,7 +8,7 @@
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MZ</RootNamespace>
-    <AssemblyName>CommonMZ</AssemblyName>
+    <AssemblyName>Common.MkZ</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -32,6 +32,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Tools.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.WindowsAPICodePack">
@@ -57,42 +60,42 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ControlsWinForms\ColorBarsProgressBar.cs">
+    <Compile Include="WinForms\ColorBarsProgressBar.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ControlsWinForms\FileExplorerUserControl.cs">
+    <Compile Include="WinForms\FileExplorerUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ControlsWinForms\FileExplorerUserControl.Designer.cs">
+    <Compile Include="WinForms\FileExplorerUserControl.Designer.cs">
       <DependentUpon>FileExplorerUserControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="ControlsWinForms\FoldersTreeUserControl.cs">
+    <Compile Include="WinForms\FoldersTreeUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="ControlsWinForms\FoldersTreeUserControl.Designer.cs">
+    <Compile Include="WinForms\FoldersTreeUserControl.Designer.cs">
       <DependentUpon>FoldersTreeUserControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="ControlsWinForms\FormBrowseForFolder.cs">
+    <Compile Include="WinForms\FormBrowseForFolder.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ControlsWinForms\FormBrowseForFolder.Designer.cs">
+    <Compile Include="WinForms\FormBrowseForFolder.Designer.cs">
       <DependentUpon>FormBrowseForFolder.cs</DependentUpon>
     </Compile>
-    <Compile Include="ControlsWinForms\InPlaceTextBox.cs">
+    <Compile Include="WinForms\InPlaceTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ControlsWinForms\WinFormsControlExtension.cs" />
-    <Compile Include="ControlsWinForms\DraggableExtension.cs" />
-    <Compile Include="ControlsWinForms\FormInPlaceEdit.cs">
+    <Compile Include="WinForms\WinFormsControlExtension.cs" />
+    <Compile Include="WinForms\DraggableExtension.cs" />
+    <Compile Include="WinForms\FormInPlaceEdit.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="ControlsWinForms\FormInPlaceEdit.Designer.cs">
+    <Compile Include="WinForms\FormInPlaceEdit.Designer.cs">
       <DependentUpon>FormInPlaceEdit.cs</DependentUpon>
     </Compile>
-    <Compile Include="ControlsWinForms\ListViewCollapsibleGroups.cs">
+    <Compile Include="WinForms\ListViewCollapsibleGroups.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="ControlsWinForms\VerticalProgressBar.cs">
+    <Compile Include="WinForms\VerticalProgressBar.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="FormMainTest.cs">
@@ -103,47 +106,46 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Tools\AlternateColorTool.cs" />
-    <Compile Include="Tools\DesktopWindowManager.cs" />
-    <Compile Include="Tools\FileUtils.cs" />
-    <Compile Include="Tools\NotifyPropertyChangedImpl.cs" />
-    <Compile Include="Tools\Shell32_Icons.cs" />
-    <Compile Include="Tools\SingleInstanceHelper.cs" />
-    <Compile Include="Tools\TaskbarManagerHelper.cs" />
-    <Compile Include="Tools\User32.cs" />
-    <Compile Include="Tools\Windows7ProgressBar.cs">
+    <Compile Include="Windows\AlternateColorTool.cs" />
+    <Compile Include="Windows\DesktopWindowManager.cs" />
+    <Compile Include="Windows\FileUtils.cs" />
+    <Compile Include="Windows\NotifyPropertyChangedImpl.cs" />
+    <Compile Include="Windows\Shell32_Icons.cs" />
+    <Compile Include="Windows\SingleInstanceHelper.cs" />
+    <Compile Include="Windows\TaskbarManagerHelper.cs" />
+    <Compile Include="Windows\User32.cs" />
+    <Compile Include="Windows\Windows7ProgressBar.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Tools\WindowsMessages.cs" />
-    <Compile Include="Tools\XmlSerializerHelper.cs" />
-    <Compile Include="Tools\CommonUtils.cs" />
-    <Compile Include="UtilsWPF\AutoGreyableImage.cs" />
-    <Compile Include="UtilsWPF\DraggableExtension.cs" />
-    <Compile Include="UtilsWPF\GridLengthAnimation.cs" />
-    <Compile Include="UtilsWPF\ItemsControlExtensions.cs" />
-    <Compile Include="UtilsWPF\RelayCommand.cs" />
-    <Compile Include="UtilsWPF\RelayCommand1.cs" />
-    <Compile Include="UtilsWPF\ScrollDragZoom.cs" />
-    <Compile Include="UtilsWPF\WPFExtensionMethods.cs" />
-    <Compile Include="UtilsWPF\WPFUtils.cs" />
-    <Compile Include="UtilsWPF\WPF_Helper.cs" />
+    <Compile Include="Windows\WindowsMessages.cs" />
+    <Compile Include="Windows\XmlSerializerHelper.cs" />
+    <Compile Include="Windows\CommonUtils.cs" />
+    <Compile Include="WPF\AutoGreyableImage.cs" />
+    <Compile Include="WPF\DraggableExtension.cs" />
+    <Compile Include="WPF\GridLengthAnimation.cs" />
+    <Compile Include="WPF\ItemsControlExtensions.cs" />
+    <Compile Include="WPF\RelayCommand.cs" />
+    <Compile Include="WPF\RelayCommand1.cs" />
+    <Compile Include="WPF\ScrollDragZoom.cs" />
+    <Compile Include="WPF\WPFExtensionMethods.cs" />
+    <Compile Include="WPF\WPFUtils.cs" />
+    <Compile Include="WPF\WPF_Helper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\Shell32\Ico\" />
     <Folder Include="Images\Shell32\Png\" />
-    <Folder Include="UtilsWinForms\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="ControlsWinForms\FileExplorerUserControl.resx">
+    <EmbeddedResource Include="WinForms\FileExplorerUserControl.resx">
       <DependentUpon>FileExplorerUserControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ControlsWinForms\FoldersTreeUserControl.resx">
+    <EmbeddedResource Include="WinForms\FoldersTreeUserControl.resx">
       <DependentUpon>FoldersTreeUserControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ControlsWinForms\FormBrowseForFolder.resx">
+    <EmbeddedResource Include="WinForms\FormBrowseForFolder.resx">
       <DependentUpon>FormBrowseForFolder.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="ControlsWinForms\FormInPlaceEdit.resx">
+    <EmbeddedResource Include="WinForms\FormInPlaceEdit.resx">
       <DependentUpon>FormInPlaceEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormMainTest.resx">
@@ -156,6 +158,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Images\RedX.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Tools.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
