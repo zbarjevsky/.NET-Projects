@@ -142,13 +142,13 @@
     <Content Include="sldd.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Controls\" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\Common.MkZ\Common.MkZ\Common.MkZ.csproj">
       <Project>{a03c89dd-ca87-4c9e-9ff9-f4277372e0f7}</Project>
       <Name>Common.MkZ</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controls\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

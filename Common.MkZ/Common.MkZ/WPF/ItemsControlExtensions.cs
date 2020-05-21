@@ -9,7 +9,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Media;
 using System.Windows.Threading;
 
-namespace MZ.Tools
+namespace MZ.WPF
 {
     public static class ItemsControlExtensions
     {

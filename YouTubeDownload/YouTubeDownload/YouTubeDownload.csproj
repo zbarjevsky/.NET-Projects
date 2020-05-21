@@ -8,9 +8,10 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>YouTubeDownload</RootNamespace>
     <AssemblyName>YouTubeDownload</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -53,13 +54,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\CommonMZ\CommonMZ\Tools\User32.cs">
-      <Link>Utils\User32.cs</Link>
-    </Compile>
-    <Compile Include="..\..\CommonMZ\CommonMZ\Tools\Windows7ProgressBar.cs">
-      <Link>Windows7ProgressBar\Windows7ProgressBar.cs</Link>
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="DownloaderUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -67,7 +61,6 @@
       <DependentUpon>DownloaderUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="EncodingsHelper.cs" />
-    <Compile Include="Extensions\ProcessExtensions.cs" />
     <Compile Include="FormAbout.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -129,6 +122,15 @@
   <ItemGroup>
     <None Include="Dependencies.sfx.exe" />
     <Content Include="youtube.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common.MkZ\Common.MkZ\Common.MkZ.csproj">
+      <Project>{a03c89dd-ca87-4c9e-9ff9-f4277372e0f7}</Project>
+      <Name>Common.MkZ</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Extensions\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

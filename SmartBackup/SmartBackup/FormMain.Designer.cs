@@ -215,7 +215,6 @@
         private System.Windows.Forms.TabControl m_tabMain;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
-        private BackupListUserControl backupListUserControl1;
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.Panel m_pnlMain;
         private System.Windows.Forms.ToolStrip m_ToolStripMain;

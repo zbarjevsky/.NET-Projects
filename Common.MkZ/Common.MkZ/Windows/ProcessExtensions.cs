@@ -1,4 +1,4 @@
-﻿namespace YouTubeDownload.Extensions
+﻿namespace MZ.Extensions
 {
     using System.Diagnostics;
     using System.Threading.Tasks;

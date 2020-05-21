@@ -1,5 +1,5 @@
 ﻿using MZ.Tools;
-using MZ.Tools.WinForms;
+using MZ.WinForms;
 using SmartBackup.Settings;
 
 using System;

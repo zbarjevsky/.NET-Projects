@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
-namespace DashCamGPSView.Tools
+namespace MZ.WPF
 {
     public class ScrollDragZoom
     {
@@ -69,7 +69,7 @@ namespace DashCamGPSView.Tools
             }
         }
 
-        public Action SizeChangedAction { get; internal set; } = () => { };
+        public Action SizeChangedAction { get; set; } = () => { };
 
         public ScrollDragZoom(FrameworkElement content, ScrollViewer scrollViewer)
         {
@@ -131,7 +131,7 @@ namespace DashCamGPSView.Tools
             SizeChangedAction();
         }
 
-        internal void FitWindow(double margin = 18)
+        public void FitWindow(double margin = 18)
         {
             if (_scrollViewer.ActualHeight > margin && _scrollViewer.ActualWidth > margin)
             {

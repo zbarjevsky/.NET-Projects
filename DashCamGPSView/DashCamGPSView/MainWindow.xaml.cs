@@ -29,7 +29,7 @@ using System.Windows.Media.Animation;
 using DashCamGPSView.Controls;
 using System.Runtime.CompilerServices;
 using MZ.Tools;
-using MZ.Tools.WPF;
+using MZ.WPF;
 
 namespace DashCamGPSView
 {

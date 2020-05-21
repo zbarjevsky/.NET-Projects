@@ -9,7 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace MZ.Tools.WPF
+namespace MZ.WPF
 {
     public static class DraggableExtension
     {

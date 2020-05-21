@@ -12,7 +12,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace MZ.WPF.MessageBox
+namespace MZ.WPF
 {
     public static class WPF_Helper
     {

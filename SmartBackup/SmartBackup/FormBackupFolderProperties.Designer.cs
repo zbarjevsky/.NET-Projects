@@ -47,10 +47,10 @@
             this.m_txtInfo = new System.Windows.Forms.TextBox();
             this.m_cmbSearchOptions = new System.Windows.Forms.ComboBox();
             this.m_splitFolders = new System.Windows.Forms.SplitContainer();
-            this.m_explorerSrc = new MZ.ControlsWinForms.FileExplorerUserControl();
-            this.m_explorerDst = new MZ.ControlsWinForms.FileExplorerUserControl();
+            this.m_explorerSrc = new MZ.WinForms.FileExplorerUserControl();
+            this.m_explorerDst = new MZ.WinForms.FileExplorerUserControl();
             this.m_pnlOptions = new System.Windows.Forms.Panel();
-            this.m_progressBar = new MZ.Controls.ColorBarsProgressBar();
+            this.m_progressBar = new MZ.WinForms.ColorBarsProgressBar();
             this.m_btnStartBackup = new System.Windows.Forms.Button();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.m_splitFolders)).BeginInit();
@@ -294,7 +294,7 @@
             // m_progressBar
             // 
             this.m_progressBar.ActiveColor = System.Drawing.Color.BlueViolet;
-            this.m_progressBar.ColorThemeType = MZ.Controls.ColorBarsProgressBar.ColorsThemeType.Regular;
+            this.m_progressBar.ColorThemeType = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Regular;
             this.m_progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.m_progressBar.Location = new System.Drawing.Point(0, 549);
             this.m_progressBar.Name = "m_progressBar";
@@ -377,11 +377,11 @@
         private System.Windows.Forms.ComboBox m_cmbPriority;
         private System.Windows.Forms.TextBox m_txtInfo;
         private System.Windows.Forms.ComboBox m_cmbSearchOptions;
-        private MZ.ControlsWinForms.FileExplorerUserControl m_explorerDst;
-        private MZ.ControlsWinForms.FileExplorerUserControl m_explorerSrc;
+        private MZ.WinForms.FileExplorerUserControl m_explorerDst;
+        private MZ.WinForms.FileExplorerUserControl m_explorerSrc;
         private System.Windows.Forms.SplitContainer m_splitFolders;
         private System.Windows.Forms.Panel m_pnlOptions;
-        private MZ.Controls.ColorBarsProgressBar m_progressBar;
+        private MZ.WinForms.ColorBarsProgressBar m_progressBar;
         private System.Windows.Forms.Button m_btnStartBackup;
         private System.Windows.Forms.ErrorProvider errorProvider1;
     }

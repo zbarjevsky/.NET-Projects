@@ -70,6 +70,7 @@
     <Compile Include="Tests\WindowTestWpfMesageBox.xaml.cs">
       <DependentUpon>WindowTestWpfMesageBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\ProcessExtensions.cs" />
     <Compile Include="WinForms\ColorBarsProgressBar.cs">
       <SubType>Component</SubType>
     </Compile>

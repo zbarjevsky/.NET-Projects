@@ -8,8 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MZ.Controls;
-using MZ.ControlsWinForms;
+using MZ.WinForms;
 
 namespace SmartBackup
 {

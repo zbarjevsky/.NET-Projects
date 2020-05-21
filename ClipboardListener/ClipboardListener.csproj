@@ -18,7 +18,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>3.5</OldToolsVersion>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -95,9 +95,6 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MZ.WPF.MessageBox">
-      <HintPath>..\Binaries\MZ.WPF.MessageBox.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -117,12 +114,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\CommonMZ\CommonMZ\Tools\SingleInstanceHelper.cs">
-      <Link>Utils\SingleInstanceHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\CommonMZ\CommonMZ\Tools\User32.cs">
-      <Link>Utils\User32.cs</Link>
-    </Compile>
     <Compile Include="AnimEffect.cs" />
     <Compile Include="ClipboardList.cs" />
     <Compile Include="ClipboardMessageFilter.cs" />
@@ -338,6 +329,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common.MkZ\Common.MkZ\Common.MkZ.csproj">
+      <Project>{a03c89dd-ca87-4c9e-9ff9-f4277372e0f7}</Project>
+      <Name>Common.MkZ</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using SmartBackup.Settings;
 using System.Media;
 using System.IO;
-using MZ.ControlsWinForms;
+using MZ.WinForms;
 
 namespace SmartBackup
 {

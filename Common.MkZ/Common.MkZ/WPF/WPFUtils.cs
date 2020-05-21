@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace DesktopManagerUX.Utils
+namespace MZ.WPF
 {
     public static class WPFUtils
     {

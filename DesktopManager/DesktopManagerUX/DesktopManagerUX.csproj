@@ -63,24 +63,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="..\..\CommonMZ\CommonMZ\Tools\DesktopWindowManager.cs">
-      <Link>Utils\DesktopWindowManager.cs</Link>
-    </Compile>
-    <Compile Include="..\..\CommonMZ\CommonMZ\Tools\NotifyPropertyChangedImpl.cs">
-      <Link>Utils\NotifyPropertyChangedImpl.cs</Link>
-    </Compile>
-    <Compile Include="..\..\CommonMZ\CommonMZ\Tools\User32.cs">
-      <Link>Utils\User32.cs</Link>
-    </Compile>
-    <Compile Include="..\..\CommonMZ\CommonMZ\Tools\XmlSerializerHelper.cs">
-      <Link>Utils\XmlSerializerHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\CommonMZ\CommonMZ\UtilsWPF\RelayCommand.cs">
-      <Link>Utils\RelayCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\CommonMZ\CommonMZ\UtilsWPF\WPFUtils.cs">
-      <Link>Utils\WPFUtils.cs</Link>
-    </Compile>
     <Compile Include="AppContext.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Controls\SelectTableSizeUserControl.xaml.cs">
@@ -159,6 +141,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\AppIcon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common.MkZ\Common.MkZ\Common.MkZ.csproj">
+      <Project>{a03c89dd-ca87-4c9e-9ff9-f4277372e0f7}</Project>
+      <Name>Common.MkZ</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

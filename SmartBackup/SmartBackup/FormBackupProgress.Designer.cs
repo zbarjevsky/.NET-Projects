@@ -47,7 +47,7 @@
             this.m_txtInfo = new System.Windows.Forms.TextBox();
             this.m_cmbViewFilter = new System.Windows.Forms.ComboBox();
             this.m_progressBarMain = new MZ.Tools.Windows7ProgressBar();
-            this.m_progrFile = new MZ.Controls.ColorBarsProgressBar();
+            this.m_progrFile = new MZ.WinForms.ColorBarsProgressBar();
             this.SuspendLayout();
             // 
             // m_listFiles
@@ -248,7 +248,7 @@
             // m_progrFile
             // 
             this.m_progrFile.ActiveColor = System.Drawing.Color.DeepSkyBlue;
-            this.m_progrFile.ColorThemeType = MZ.Controls.ColorBarsProgressBar.ColorsThemeType.Regular;
+            this.m_progrFile.ColorThemeType = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Regular;
             this.m_progrFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_progrFile.Location = new System.Drawing.Point(12, 285);
@@ -310,6 +310,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox m_txtInfo;
         private System.Windows.Forms.ComboBox m_cmbViewFilter;
-        private MZ.Controls.ColorBarsProgressBar m_progrFile;
+        private MZ.WinForms.ColorBarsProgressBar m_progrFile;
     }
 }

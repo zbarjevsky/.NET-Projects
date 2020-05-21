@@ -6,6 +6,7 @@ using System;
 using System.Diagnostics;
 using DashCamGPSView.Tools;
 using MZ.Tools;
+using MZ.WPF;
 
 namespace DashCamGPSView.Controls
 {

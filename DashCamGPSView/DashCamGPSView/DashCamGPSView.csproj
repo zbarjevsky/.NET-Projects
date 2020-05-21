@@ -65,27 +65,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="..\..\CommonMZ\CommonMZ\Tools\User32.cs">
-      <Link>Tools\User32.cs</Link>
-    </Compile>
-    <Compile Include="..\..\CommonMZ\CommonMZ\UtilsWPF\AutoGreyableImage.cs">
-      <Link>Tools\AutoGreyableImage.cs</Link>
-    </Compile>
-    <Compile Include="..\..\CommonMZ\CommonMZ\UtilsWPF\DraggableExtension.cs">
-      <Link>Tools\DraggableExtension.cs</Link>
-    </Compile>
-    <Compile Include="..\..\CommonMZ\CommonMZ\UtilsWPF\GridLengthAnimation.cs">
-      <Link>Tools\GridLengthAnimation.cs</Link>
-    </Compile>
-    <Compile Include="..\..\CommonMZ\CommonMZ\UtilsWPF\ItemsControlExtensions.cs">
-      <Link>Tools\ItemsControlExtensions.cs</Link>
-    </Compile>
-    <Compile Include="..\..\CommonMZ\CommonMZ\UtilsWPF\ScrollDragZoom.cs">
-      <Link>Tools\ScrollDragZoom.cs</Link>
-    </Compile>
-    <Compile Include="..\..\CommonMZ\CommonMZ\UtilsWPF\WPFExtensionMethods.cs">
-      <Link>Tools\WPFExtensionMethods.cs</Link>
-    </Compile>
     <Compile Include="Controls\IVideoPlayer.cs" />
     <Compile Include="Controls\PlayerTimeLineBarUserControl.xaml.cs">
       <DependentUpon>PlayerTimeLineBarUserControl.xaml</DependentUpon>
@@ -303,6 +282,10 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Common.MkZ\Common.MkZ\Common.MkZ.csproj">
+      <Project>{a03c89dd-ca87-4c9e-9ff9-f4277372e0f7}</Project>
+      <Name>Common.MkZ</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CircularGauge\CircularGauge.csproj">
       <Project>{6efd5895-177b-4bbb-af52-29f4d53b3fbd}</Project>
       <Name>CircularGauge</Name>
