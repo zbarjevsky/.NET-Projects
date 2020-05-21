@@ -240,7 +240,7 @@ namespace MZ.WPF.MessageBox
             return (T)topmost.Invoke(action);
         }
 
-        public static ImageSource GetResourceImage(string imageFileName)
+        public static ImageSource GetResourceImage(string imageResourcePath)
         {
             try
             {
@@ -254,14 +254,14 @@ namespace MZ.WPF.MessageBox
 
                 Uri oUri = new Uri("pack://application:,,,/"
                     + _assemblyName
-                    + ";component/Images/" 
-                    + imageFileName, UriKind.Absolute);
+                    + ";component/" 
+                    + imageResourcePath, UriKind.Absolute);
 
                 return new BitmapImage(oUri);
             }
             catch (Exception err)
             {
-                System.Windows.MessageBox.Show("Cannot load image: " + imageFileName + "\nError: " + err.Message,
+                System.Windows.MessageBox.Show("Cannot load image: " + imageResourcePath + "\nError: " + err.Message,
                     "MessageWindow.GetResourceImage()");
                 return null;
             }

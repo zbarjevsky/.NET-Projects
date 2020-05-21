@@ -87,5 +87,17 @@ namespace MZ
             colorBarsProgressBar2.Value = trackBar1.Value;
             colorBarsProgressBar3.Value = trackBar1.Value;
         }
+
+        private void m_btnTestWPFMessageBox_Click(object sender, EventArgs e)
+        {
+            WPFMessageBoxTestWinForms.FormTestWpfMessageBox frm = new WPFMessageBoxTestWinForms.FormTestWpfMessageBox();
+            frm.ShowDialog(this);
+        }
+
+        private void m_btnTestWPFMessageBoxWPF_Click(object sender, EventArgs e)
+        {
+            WPFMessageBoxTestWPF.WindowTestWpfMesageBox wnd = new WPFMessageBoxTestWPF.WindowTestWpfMesageBox();
+            wnd.ShowDialog();
+        }
     }
 }

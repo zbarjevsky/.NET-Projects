@@ -5,6 +5,12 @@ VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common.MkZ", "Common.MkZ\Common.MkZ.csproj", "{A03C89DD-CA87-4C9E-9FF9-F4277372E0F7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFMessageBox", "..\MessageBox\WPFMessageBox\WPFMessageBox.csproj", "{6F425EFB-7F0D-4530-941C-98533782832F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWPFMessageBox_WinForms", "..\MessageBox\WPFMessageBoxTestWinForms\TestWPFMessageBox_WinForms.csproj", "{70AC0C45-9156-4929-BDD1-E379120110FB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWPFMessageBox_WPF", "..\MessageBox\WPFMessageBoxTestWPF\TestWPFMessageBox_WPF.csproj", "{96D74DB6-63F9-425D-AC18-88BE200B36B2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +21,18 @@ Global
 		{A03C89DD-CA87-4C9E-9FF9-F4277372E0F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A03C89DD-CA87-4C9E-9FF9-F4277372E0F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A03C89DD-CA87-4C9E-9FF9-F4277372E0F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F425EFB-7F0D-4530-941C-98533782832F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F425EFB-7F0D-4530-941C-98533782832F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F425EFB-7F0D-4530-941C-98533782832F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F425EFB-7F0D-4530-941C-98533782832F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70AC0C45-9156-4929-BDD1-E379120110FB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70AC0C45-9156-4929-BDD1-E379120110FB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70AC0C45-9156-4929-BDD1-E379120110FB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70AC0C45-9156-4929-BDD1-E379120110FB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96D74DB6-63F9-425D-AC18-88BE200B36B2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96D74DB6-63F9-425D-AC18-88BE200B36B2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96D74DB6-63F9-425D-AC18-88BE200B36B2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96D74DB6-63F9-425D-AC18-88BE200B36B2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
