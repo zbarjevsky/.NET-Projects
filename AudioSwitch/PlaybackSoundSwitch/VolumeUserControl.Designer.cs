@@ -29,17 +29,18 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet1 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VolumeUserControl));
             this.m_grpVolume = new System.Windows.Forms.GroupBox();
             this.m_lbl = new System.Windows.Forms.Label();
+            this.m_progrLevel = new MZ.WinForms.ColorBarsProgressBar();
             this.m_btnMute = new System.Windows.Forms.Button();
             this.m_imgListMic = new System.Windows.Forms.ImageList(this.components);
+            this.m_trackVolume = new ColorSlider.ColorSlider();
             this.m_pnlMain = new System.Windows.Forms.Panel();
             this.m_imgListSpk = new System.Windows.Forms.ImageList(this.components);
             this.m_timer = new System.Windows.Forms.Timer(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.m_progrLevel = new MZ.WinForms.ColorBarsProgressBar();
-            this.m_trackVolume = new ColorSlider.ColorSlider();
             this.m_grpVolume.SuspendLayout();
             this.m_pnlMain.SuspendLayout();
             this.SuspendLayout();
@@ -67,6 +68,30 @@
             this.m_lbl.TabIndex = 0;
             this.m_lbl.Text = "30%";
             // 
+            // m_progrLevel
+            // 
+            this.m_progrLevel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            themeColorSet1.Part1_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet1.Part1_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet1.Part2_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet1.Part2_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet1.Part3_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet1.Part3_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet1.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Regular;
+            themeColorSet1.Threshold1 = 100;
+            themeColorSet1.Threshold2 = 100;
+            this.m_progrLevel.ColorTheme = themeColorSet1;
+            this.m_progrLevel.Location = new System.Drawing.Point(35, 45);
+            this.m_progrLevel.MinimumSize = new System.Drawing.Size(20, 0);
+            this.m_progrLevel.Name = "m_progrLevel";
+            this.m_progrLevel.Orientation = System.Windows.Forms.Orientation.Vertical;
+            this.m_progrLevel.Size = new System.Drawing.Size(20, 186);
+            this.m_progrLevel.TabIndex = 3;
+            this.m_progrLevel.TabStop = false;
+            this.m_progrLevel.Value = 30;
+            // 
             // m_btnMute
             // 
             this.m_btnMute.Anchor = System.Windows.Forms.AnchorStyles.Bottom;
@@ -88,44 +113,6 @@
             this.m_imgListMic.Images.SetKeyName(1, "MicMute1.png");
             this.m_imgListMic.Images.SetKeyName(2, "sad_32px.png");
             this.m_imgListMic.Images.SetKeyName(3, "gears_32px.png");
-            // 
-            // m_pnlMain
-            // 
-            this.m_pnlMain.Controls.Add(this.m_grpVolume);
-            this.m_pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_pnlMain.Location = new System.Drawing.Point(0, 0);
-            this.m_pnlMain.Name = "m_pnlMain";
-            this.m_pnlMain.Size = new System.Drawing.Size(64, 294);
-            this.m_pnlMain.TabIndex = 8;
-            // 
-            // m_imgListSpk
-            // 
-            this.m_imgListSpk.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_imgListSpk.ImageStream")));
-            this.m_imgListSpk.TransparentColor = System.Drawing.Color.Transparent;
-            this.m_imgListSpk.Images.SetKeyName(0, "Spk1.png");
-            // 
-            // m_timer
-            // 
-            this.m_timer.Enabled = true;
-            this.m_timer.Tick += new System.EventHandler(this.m_timer_Tick);
-            // 
-            // m_progrLevel
-            // 
-            this.m_progrLevel.ActiveColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.m_progrLevel.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_progrLevel.ColorThemeType = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Microphone;
-            this.m_progrLevel.InactiveBarsColorType = MZ.WinForms.ColorBarsProgressBar.InactiveColorType.Mono;
-            this.m_progrLevel.InactiveColor = System.Drawing.Color.PaleGoldenrod;
-            this.m_progrLevel.Location = new System.Drawing.Point(35, 45);
-            this.m_progrLevel.MinimumSize = new System.Drawing.Size(20, 0);
-            this.m_progrLevel.Name = "m_progrLevel";
-            this.m_progrLevel.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.m_progrLevel.Size = new System.Drawing.Size(20, 186);
-            this.m_progrLevel.TabIndex = 3;
-            this.m_progrLevel.TabStop = false;
-            this.m_progrLevel.Value = 30;
             // 
             // m_trackVolume
             // 
@@ -192,6 +179,26 @@
             0});
             this.m_trackVolume.ValueChanged += new System.EventHandler(this.m_trackVolume_ValueChanged);
             this.m_trackVolume.Scroll += new System.Windows.Forms.ScrollEventHandler(this.m_trackVolume_Scroll);
+            // 
+            // m_pnlMain
+            // 
+            this.m_pnlMain.Controls.Add(this.m_grpVolume);
+            this.m_pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_pnlMain.Location = new System.Drawing.Point(0, 0);
+            this.m_pnlMain.Name = "m_pnlMain";
+            this.m_pnlMain.Size = new System.Drawing.Size(64, 294);
+            this.m_pnlMain.TabIndex = 8;
+            // 
+            // m_imgListSpk
+            // 
+            this.m_imgListSpk.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_imgListSpk.ImageStream")));
+            this.m_imgListSpk.TransparentColor = System.Drawing.Color.Transparent;
+            this.m_imgListSpk.Images.SetKeyName(0, "Spk1.png");
+            // 
+            // m_timer
+            // 
+            this.m_timer.Enabled = true;
+            this.m_timer.Tick += new System.EventHandler(this.m_timer_Tick);
             // 
             // VolumeUserControl
             // 

@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet1 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormBackupFolderProperties));
             this.m_txtSrcFolder = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
@@ -293,8 +294,16 @@
             // 
             // m_progressBar
             // 
-            this.m_progressBar.ActiveColor = System.Drawing.Color.BlueViolet;
-            this.m_progressBar.ColorThemeType = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Regular;
+            themeColorSet1.Part1_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet1.Part1_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet1.Part2_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet1.Part2_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet1.Part3_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet1.Part3_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet1.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Regular;
+            themeColorSet1.Threshold1 = 100;
+            themeColorSet1.Threshold2 = 100;
+            this.m_progressBar.ColorTheme = themeColorSet1;
             this.m_progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.m_progressBar.Location = new System.Drawing.Point(0, 549);
             this.m_progressBar.Name = "m_progressBar";

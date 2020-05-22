@@ -30,6 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormBackupProgress));
+            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet1 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
             this.m_listFiles = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -46,8 +47,8 @@
             this.m_btnAbort = new System.Windows.Forms.Button();
             this.m_txtInfo = new System.Windows.Forms.TextBox();
             this.m_cmbViewFilter = new System.Windows.Forms.ComboBox();
-            this.m_progressBarMain = new MZ.Tools.Windows7ProgressBar();
             this.m_progrFile = new MZ.WinForms.ColorBarsProgressBar();
+            this.m_progressBarMain = new MZ.Tools.Windows7ProgressBar();
             this.SuspendLayout();
             // 
             // m_listFiles
@@ -234,6 +235,27 @@
             this.m_cmbViewFilter.TabIndex = 5;
             this.m_cmbViewFilter.SelectionChangeCommitted += new System.EventHandler(this.m_cmbViewFilter_SelectionChangeCommitted);
             // 
+            // m_progrFile
+            // 
+            this.m_progrFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            themeColorSet1.Part1_ActiveColor = System.Drawing.Color.SkyBlue;
+            themeColorSet1.Part1_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet1.Part2_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet1.Part2_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet1.Part3_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet1.Part3_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet1.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
+            themeColorSet1.Threshold1 = 100;
+            themeColorSet1.Threshold2 = 100;
+            this.m_progrFile.ColorTheme = themeColorSet1;
+            this.m_progrFile.Location = new System.Drawing.Point(12, 285);
+            this.m_progrFile.Name = "m_progrFile";
+            this.m_progrFile.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.m_progrFile.Size = new System.Drawing.Size(810, 13);
+            this.m_progrFile.TabIndex = 13;
+            this.m_progrFile.TabStop = false;
+            // 
             // m_progressBarMain
             // 
             this.m_progressBarMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
@@ -244,19 +266,6 @@
             this.m_progressBarMain.ShowInTaskbar = true;
             this.m_progressBarMain.Size = new System.Drawing.Size(729, 23);
             this.m_progressBarMain.TabIndex = 9;
-            // 
-            // m_progrFile
-            // 
-            this.m_progrFile.ActiveColor = System.Drawing.Color.DeepSkyBlue;
-            this.m_progrFile.ColorThemeType = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Regular;
-            this.m_progrFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_progrFile.Location = new System.Drawing.Point(12, 285);
-            this.m_progrFile.Name = "m_progrFile";
-            this.m_progrFile.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            this.m_progrFile.Size = new System.Drawing.Size(810, 13);
-            this.m_progrFile.TabIndex = 13;
-            this.m_progrFile.TabStop = false;
             // 
             // FormBackupProgress
             // 

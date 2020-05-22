@@ -28,6 +28,9 @@
         /// </summary>
         private void InitializeComponent()
         {
+            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet1 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
+            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet2 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
+            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet3 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMainTest));
             this.m_btnTestEdit = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
@@ -254,12 +257,18 @@
             // 
             // colorBarsProgressBar3
             // 
-            this.colorBarsProgressBar3.ActiveColor = System.Drawing.Color.LimeGreen;
             this.colorBarsProgressBar3.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.colorBarsProgressBar3.ColorThemeType = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Speaker;
-            this.colorBarsProgressBar3.InactiveBarsColorType = MZ.WinForms.ColorBarsProgressBar.InactiveColorType.Mono;
-            this.colorBarsProgressBar3.InactiveColor = System.Drawing.Color.Honeydew;
+            themeColorSet1.Part1_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet1.Part1_InactiveColor = System.Drawing.Color.Honeydew;
+            themeColorSet1.Part2_ActiveColor = System.Drawing.Color.Orange;
+            themeColorSet1.Part2_InactiveColor = System.Drawing.Color.LightGoldenrodYellow;
+            themeColorSet1.Part3_ActiveColor = System.Drawing.Color.Red;
+            themeColorSet1.Part3_InactiveColor = System.Drawing.Color.MistyRose;
+            themeColorSet1.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Speaker;
+            themeColorSet1.Threshold1 = 60;
+            themeColorSet1.Threshold2 = 85;
+            this.colorBarsProgressBar3.ColorTheme = themeColorSet1;
             this.colorBarsProgressBar3.Location = new System.Drawing.Point(26, 29);
             this.colorBarsProgressBar3.Name = "colorBarsProgressBar3";
             this.colorBarsProgressBar3.Orientation = System.Windows.Forms.Orientation.Vertical;
@@ -270,12 +279,18 @@
             // 
             // colorBarsProgressBar2
             // 
-            this.colorBarsProgressBar2.ActiveColor = System.Drawing.Color.DarkBlue;
             this.colorBarsProgressBar2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.colorBarsProgressBar2.ColorThemeType = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Regular;
-            this.colorBarsProgressBar2.InactiveBarsColorType = MZ.WinForms.ColorBarsProgressBar.InactiveColorType.Mono;
-            this.colorBarsProgressBar2.InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet2.Part1_ActiveColor = System.Drawing.Color.RoyalBlue;
+            themeColorSet2.Part1_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet2.Part2_ActiveColor = System.Drawing.Color.AliceBlue;
+            themeColorSet2.Part2_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet2.Part3_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet2.Part3_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet2.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
+            themeColorSet2.Threshold1 = 100;
+            themeColorSet2.Threshold2 = 100;
+            this.colorBarsProgressBar2.ColorTheme = themeColorSet2;
             this.colorBarsProgressBar2.Location = new System.Drawing.Point(160, 385);
             this.colorBarsProgressBar2.Name = "colorBarsProgressBar2";
             this.colorBarsProgressBar2.Orientation = System.Windows.Forms.Orientation.Horizontal;
@@ -286,12 +301,18 @@
             // 
             // colorBarsProgressBar1
             // 
-            this.colorBarsProgressBar1.ActiveColor = System.Drawing.Color.LimeGreen;
             this.colorBarsProgressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left)));
-            this.colorBarsProgressBar1.ColorThemeType = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Microphone;
-            this.colorBarsProgressBar1.InactiveBarsColorType = MZ.WinForms.ColorBarsProgressBar.InactiveColorType.Mono;
-            this.colorBarsProgressBar1.InactiveColor = System.Drawing.Color.PaleGoldenrod;
+            themeColorSet3.Part1_ActiveColor = System.Drawing.Color.Orange;
+            themeColorSet3.Part1_InactiveColor = System.Drawing.Color.LightGoldenrodYellow;
+            themeColorSet3.Part2_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet3.Part2_InactiveColor = System.Drawing.Color.Honeydew;
+            themeColorSet3.Part3_ActiveColor = System.Drawing.Color.Red;
+            themeColorSet3.Part3_InactiveColor = System.Drawing.Color.MistyRose;
+            themeColorSet3.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Microphone;
+            themeColorSet3.Threshold1 = 10;
+            themeColorSet3.Threshold2 = 85;
+            this.colorBarsProgressBar1.ColorTheme = themeColorSet3;
             this.colorBarsProgressBar1.Location = new System.Drawing.Point(53, 29);
             this.colorBarsProgressBar1.Name = "colorBarsProgressBar1";
             this.colorBarsProgressBar1.Orientation = System.Windows.Forms.Orientation.Vertical;

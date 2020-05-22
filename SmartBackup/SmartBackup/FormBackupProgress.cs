@@ -71,6 +71,7 @@ namespace SmartBackup
                 Application.DoEvents();
             };
 
+            m_progrFile.ColorTheme.Part1_ActiveColor = Color.Violet;
             _logic = new BackupLogic(_group, _Priority, _fileProgress);
             EnableControls(false);
             UpdateDisplayList(calculateNeededSize:true);
@@ -346,6 +347,7 @@ namespace SmartBackup
 
             m_txtInfo.Text = "Preparing to Calculate Space Needed...";
             m_btnAbort.Enabled = true;
+            m_progrFile.ColorTheme.Part1_ActiveColor = Color.SkyBlue;
 
             _threadCalculateSpace = new Thread(() =>
             {

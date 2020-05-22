@@ -30,6 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormBrowseForFolder));
+            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet1 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
             this.m_txtSelectedFolder = new System.Windows.Forms.RichTextBox();
             this.m_btnNewFolder = new System.Windows.Forms.Button();
             this.m_btnOk = new System.Windows.Forms.Button();
@@ -178,11 +179,17 @@
             // 
             // m_progressBar
             // 
-            this.m_progressBar.ActiveColor = System.Drawing.Color.SteelBlue;
-            this.m_progressBar.ColorThemeType = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Regular;
+            themeColorSet1.Part1_ActiveColor = System.Drawing.SystemColors.HotTrack;
+            themeColorSet1.Part1_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet1.Part2_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet1.Part2_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet1.Part3_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet1.Part3_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet1.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
+            themeColorSet1.Threshold1 = 100;
+            themeColorSet1.Threshold2 = 100;
+            this.m_progressBar.ColorTheme = themeColorSet1;
             this.m_progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.m_progressBar.InactiveBarsColorType = MZ.WinForms.ColorBarsProgressBar.InactiveColorType.Mono;
-            this.m_progressBar.InactiveColor = System.Drawing.Color.Gainsboro;
             this.m_progressBar.Location = new System.Drawing.Point(0, 347);
             this.m_progressBar.Name = "m_progressBar";
             this.m_progressBar.Orientation = System.Windows.Forms.Orientation.Horizontal;

@@ -89,6 +89,11 @@ namespace MZ.WinForms
 
         private void m_mnuDelete_Click(object sender, EventArgs e)
         {
+            //MZ.WPF.MessageBox.PopUp.PopUpResult res = MZ.WPF.MessageBox.PopUp.Question(
+            //    "Confirm folder delete: \n" + m_txtSelectedFolder.Text, "Delete Folder");
+            //if (res != WPF.MessageBox.PopUp.PopUpResult.OK)
+            //    return;
+
             DialogResult res = MessageBox.Show(this,
                 "Are you sure to delete: \n" + m_txtSelectedFolder.Text, "Delete Folder",
                 MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
