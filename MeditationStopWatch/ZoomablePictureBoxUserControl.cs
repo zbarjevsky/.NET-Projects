@@ -78,6 +78,8 @@ namespace MeditationStopWatch
             if (margin == null)
                 margin = new MarginRect(100);
 
+            ctrl.Anchor = ancors;
+
             //visible bounds in picture box coordinates
             int left = -pictureBox1.Left;
             int top = -pictureBox1.Top;

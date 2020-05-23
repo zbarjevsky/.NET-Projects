@@ -13,7 +13,36 @@ namespace MZ.WPF
 {
     public static class DraggableExtension
     {
-        private class DraggableData
+ 
+         private static HashSet<Window> _draggableWindows = new HashSet<Window>();
+        public static void Draggable(this Window wnd, bool enable = true)
+        {
+            if (enable)
+            {
+                if (_draggableWindows.Contains(wnd))
+                    return;
+                _draggableWindows.Add(wnd);
+                wnd.MouseDown += Wnd_MouseDown;
+            }
+            else
+            {
+                if (!_draggableWindows.Contains(wnd))
+                    return;
+                wnd.MouseDown -= Wnd_MouseDown;
+                _draggableWindows.Remove(wnd);
+            }
+        }
+
+        private static void Wnd_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            {
+                if(sender is Window wnd)
+                    wnd.DragMove();
+            }
+        }
+
+       private class DraggableData
         {
             public FrameworkElement Element;
             public bool IsDragging = false;

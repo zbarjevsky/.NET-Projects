@@ -116,7 +116,7 @@ namespace MZ.WinForms
 
             public override string ToString()
             {
-                return "Theme: " + Theme + ", " + Threshold1 + ":" + Threshold2;
+                return "Theme: " + Theme + ", " + Threshold1 + "-|--|-" + Threshold2;
             }
         }
 

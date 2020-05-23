@@ -10,6 +10,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using DesktopManagerUX.Controls;
+using System.Windows.Interop;
 
 namespace MZ
 {
@@ -98,6 +100,15 @@ namespace MZ
         {
             TestColorSlider.FormColorSliderDemo frm = new TestColorSlider.FormColorSliderDemo();
             frm.ShowDialog(this);
+        }
+
+        private void m_btnGradientWpfProgress_Click(object sender, EventArgs e)
+        {
+            PopupInfoWindow wnd = new PopupInfoWindow();
+            WindowInteropHelper helper = new WindowInteropHelper(wnd);
+            helper.Owner = this.Handle;
+            wnd.ShowActivated = true;
+            wnd.Show();
         }
     }
 }

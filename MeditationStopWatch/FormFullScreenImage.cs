@@ -14,7 +14,7 @@ namespace MeditationStopWatch
     public partial class FormFullScreenImage : Form
     {
         FormStopWatch _stopWatchForm;
-        ZoomablePictureBoxUserControl.MarginRect _clockMargin = new ZoomablePictureBoxUserControl.MarginRect(100);
+        ZoomablePictureBoxUserControl.MarginRect _clockMargins = new ZoomablePictureBoxUserControl.MarginRect(100);
         static double _zoomScale = 1;
 
         public Image Picture
@@ -56,7 +56,7 @@ namespace MeditationStopWatch
             this.WindowState = FormWindowState.Maximized;
 
             m_analogClock.Bounds = _stopWatchForm.m_Options.ClockFullScreenBounds;
-            _clockMargin.FromRectangle(_stopWatchForm.m_Options.ClockFullScreenBounds, this.Bounds);
+            _clockMargins.FromRectangle(m_analogClock.Bounds, this.Bounds);
 
             EnsureVisibleControls();
             pictureBox1.Zoom(_zoomScale);
@@ -90,7 +90,7 @@ namespace MeditationStopWatch
         {
             pictureBox1.EnsureVisible(m_lblVolume, AnchorStyles.Top | AnchorStyles.Right, 50, true);
             pictureBox1.EnsureVisible(m_btnCancel, AnchorStyles.Top | AnchorStyles.Right, 4, true);
-            pictureBox1.EnsureVisible(m_analogClock, AnchorStyles.Top | AnchorStyles.Right, _clockMargin, true);
+            pictureBox1.EnsureVisible(m_analogClock, AnchorStyles.Top | AnchorStyles.Right, _clockMargins, true);
         }
 
         protected override void OnMouseWheel(MouseEventArgs e)
@@ -100,6 +100,9 @@ namespace MeditationStopWatch
             else if (!ModifierKeys.HasFlag(Keys.Control))
                 m_lblVolume.Show(_stopWatchForm.AdjustVolume(e.Delta), 4000);
 
+            //update clock margins - if image resized
+            EnsureVisibleControls();
+
             base.OnMouseWheel(e);
         }
 
@@ -107,7 +110,7 @@ namespace MeditationStopWatch
         {
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1.PictureBox)).BeginInit();
             m_analogClock.AdjustClockSize(delta, pictureBox1.Bounds);
-            pictureBox1.EnsureVisible(m_analogClock, AnchorStyles.Top | AnchorStyles.Right, _clockMargin, true);
+            pictureBox1.EnsureVisible(m_analogClock, AnchorStyles.Top | AnchorStyles.Right, _clockMargins, true);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1.PictureBox)).EndInit();
         }
 

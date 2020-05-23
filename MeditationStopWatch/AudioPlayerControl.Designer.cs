@@ -15,7 +15,7 @@
 		{
 			if (disposing && (components != null))
 			{
-				m_Mp3Player.Close();
+				m_Mp3Player.CmdClose();
 				components.Dispose();
 			}
 			base.Dispose(disposing);

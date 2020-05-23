@@ -31,6 +31,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject />
@@ -153,6 +154,12 @@
     <Compile Include="WPF\DraggableExtension.cs" />
     <Compile Include="WPF\GridLengthAnimation.cs" />
     <Compile Include="WPF\ItemsControlExtensions.cs" />
+    <Compile Include="WPF\PopupInfoWindow.xaml.cs">
+      <DependentUpon>PopupInfoWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF\GradientProgressBar.xaml.cs">
+      <DependentUpon>GradientProgressBar.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF\RelayCommand.cs" />
     <Compile Include="WPF\RelayCommand1.cs" />
     <Compile Include="WPF\ScrollDragZoom.cs" />
@@ -210,6 +217,8 @@
     <None Include="Images\RedX.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Images\Ok.ico" />
+    <Resource Include="Images\Cancel.ico" />
     <Content Include="Tools.ico" />
     <Resource Include="WPF\WPFMessageBox\Images\Stop32x32.png" />
     <Resource Include="WPF\WPFMessageBox\Images\ok_plain.ico" />
@@ -225,6 +234,14 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Tests\WindowTestWpfMesageBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\PopupInfoWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\GradientProgressBar.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
