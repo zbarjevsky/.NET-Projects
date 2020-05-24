@@ -104,10 +104,11 @@ namespace MZ
 
         private void m_btnGradientWpfProgress_Click(object sender, EventArgs e)
         {
-            PopupInfoWindow wnd = new PopupInfoWindow();
-            WindowInteropHelper helper = new WindowInteropHelper(wnd);
-            helper.Owner = this.Handle;
-            wnd.ShowActivated = true;
+            PopupInfoWindow wnd = new PopupInfoWindow(
+                System.Windows.WindowStartupLocation.Manual, 
+                new System.Windows.Point(100, 100), 
+                this.Handle);
+            wnd.ShowActivated = false;
             wnd.Show();
         }
     }

@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
@@ -26,14 +27,35 @@ namespace DesktopManagerUX.Controls
 
         public TimeSpan CloseTimeOut { get; set; } = TimeSpan.FromSeconds(4);
 
-        public PopupInfoWindow()
+        public PopupInfoWindow() 
+        {
+            InitializeComponent(WindowStartupLocation.CenterScreen, new Point());
+        }
+
+        public PopupInfoWindow(WindowStartupLocation startupLocation, Point location, Window owner)
+        {
+            this.Owner = owner;
+            InitializeComponent(startupLocation, location);
+        }
+
+        //for WinForms
+        public PopupInfoWindow(WindowStartupLocation startupLocation, Point location, IntPtr ownerHandle)
+        {
+            WindowInteropHelper helper = new WindowInteropHelper(this);
+            helper.Owner = ownerHandle;
+            InitializeComponent(startupLocation, location);
+        }
+
+        private void InitializeComponent(WindowStartupLocation startupLocation, Point location)
         {
             InitializeComponent();
 
+            this.WindowStartupLocation = startupLocation;
+
             this.Draggable(true);
 
-            this.Left = 100;
-            this.Top = 100;
+            this.Left = location.X;
+            this.Top = location.Y;
 
             m_Timer.Interval = TimeSpan.FromMilliseconds(100);
             m_Timer.Tick += Timer_Tick;

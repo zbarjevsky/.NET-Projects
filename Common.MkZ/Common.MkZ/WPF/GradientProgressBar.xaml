@@ -8,7 +8,7 @@
              x:Name="_gradientProgressBar"
              MouseDoubleClick="Progress_MouseDoubleClick"
              SizeChanged="Progress_SizeChanged"
-             Background="Transparent"
+             Background="LightGray"
              FocusManager.FocusedElement="{Binding RelativeSource={x:Static RelativeSource.Self}, Mode=OneTime}"
              d:DesignHeight="80" d:DesignWidth="400">
     <UserControl.Resources>
