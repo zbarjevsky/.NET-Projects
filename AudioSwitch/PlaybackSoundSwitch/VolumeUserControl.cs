@@ -70,7 +70,7 @@ namespace PlaybackSoundSwitch
         public int Volume
         {
             get { return (int)m_trackVolume.Value; }
-            set { m_trackVolume.Value = value; }
+            set { m_trackVolume.Value = value; UpdateDeviceVolume(); }
         }
 
         //actual device level
@@ -80,9 +80,15 @@ namespace PlaybackSoundSwitch
             set { m_progrLevel.Value = value; }
         }
 
+        private void UpdateDeviceVolume()
+        {
+            if(Device != null)
+                Device.AudioEndpointVolume.MasterVolumeLevelScalar = (float)m_trackVolume.Value / 100f;
+        }
+
         private void m_trackVolume_Scroll(object sender, ScrollEventArgs e)
         {
-            Device.AudioEndpointVolume.MasterVolumeLevelScalar = (float)m_trackVolume.Value / 100f;
+            UpdateDeviceVolume();
             OnVolumeChanged((float)m_trackVolume.Value / 100f);
             UpdateUI();
             //SystemSounds.Beep.Play();

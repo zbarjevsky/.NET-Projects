@@ -18,6 +18,7 @@ using PlaybackSoundSwitch.DeviceSwitch;
 using PlaybackSoundSwitch.Interfaces;
 using PlaybackSoundSwitch.Notifications;
 using PlaybackSoundSwitch.Properties;
+using PlaybackSoundSwitch.WPF;
 
 namespace PlaybackSoundSwitch
 {
@@ -26,6 +27,7 @@ namespace PlaybackSoundSwitch
         public const string TITLE = "Select Active Audio End Point";
 
         MMDeviceEnumerator _mmd = new MMDeviceEnumerator();
+        readonly PopupVolumeInfoWindow _popupVolumeInfoWindow;
 
         public FormMain()
         {
@@ -46,10 +48,22 @@ namespace PlaybackSoundSwitch
             m_DeviceListPlayback.AlternateColorPalette = AlternateColorPalette.Cold;
             m_DeviceListRecording.AlternateColorPalette = AlternateColorPalette.Warm;
 
-            m_volumeControlSpk.OnVolumeChanged = (volume) => { UpdateUI(null); };
+            m_volumeControlSpk.OnVolumeChanged = (volume) => { UpdateUI(null); UpdatePopupVolume(); };
             m_volumeControlMic.OnVolumeChanged = (volume) => { UpdateUI(null); };
 
             this.Text = TITLE;
+
+            _popupVolumeInfoWindow = new PopupVolumeInfoWindow(
+                System.Windows.WindowStartupLocation.Manual,
+                new System.Windows.Point(Properties.Settings.Default.PopupLocation.X, Properties.Settings.Default.PopupLocation.Y),
+                this.Handle);
+            _popupVolumeInfoWindow.ShowActivated = false;
+            _popupVolumeInfoWindow.OnVolumeChangedAction = (volume) => { m_volumeControlSpk.Volume = volume; };
+        }
+
+        private void UpdatePopupVolume()
+        {
+            _popupVolumeInfoWindow.ShowIfVolumeChanged(m_volumeControlSpk.Volume);
         }
 
         private void FormMain_Load(object sender, EventArgs e)
@@ -59,6 +73,11 @@ namespace PlaybackSoundSwitch
 
         private void FormMain_FormClosed(object sender, FormClosedEventArgs e)
         {
+            Properties.Settings.Default.PopupLocation = new Point((int)_popupVolumeInfoWindow.Left, (int)_popupVolumeInfoWindow.Top);
+            Properties.Settings.Default.Save();
+
+            _popupVolumeInfoWindow.Close();
+
             _mmd.Dispose();
         }
 

@@ -22,5 +22,17 @@ namespace PlaybackSoundSwitch.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100, 100")]
+        public global::System.Drawing.Point PopupLocation {
+            get {
+                return ((global::System.Drawing.Point)(this["PopupLocation"]));
+            }
+            set {
+                this["PopupLocation"] = value;
+            }
+        }
     }
 }
