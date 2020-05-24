@@ -27,6 +27,15 @@ namespace MZ.WPF
 
         public TimeSpan CloseTimeOut { get; set; } = TimeSpan.FromSeconds(4);
 
+        public string InfoText
+        {
+            get { return (string)GetValue(InfoTextProperty); }
+            set { SetValue(InfoTextProperty, value); }
+        }
+
+        public static readonly DependencyProperty InfoTextProperty =
+            DependencyProperty.Register("InfoText", typeof(string), typeof(PopupInfoWindow), new PropertyMetadata(""));
+
         public PopupInfoWindow() 
         {
             InitializeComponent(WindowStartupLocation.CenterScreen, new Point());

@@ -23,6 +23,10 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
             <wpf:GradientProgressBar  x:Name="_progress"
                 Margin="10" Background="{Binding Background, ElementName=_border}"
                 Value="{Binding Value, ElementName=_slider}">
@@ -35,6 +39,9 @@
                     Minimum="0" Maximum="100" Value="30">
 
             </Slider>
+            <TextBlock Grid.Row="1" Grid.ColumnSpan="2" 
+                       VerticalAlignment="Center" HorizontalAlignment="Center"
+                       Text="{Binding InfoText, FallbackValue=Info}"/>
         </Grid>
     </Border>
 </Window>

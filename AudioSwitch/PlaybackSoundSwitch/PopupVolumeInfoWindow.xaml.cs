@@ -30,6 +30,8 @@ namespace PlaybackSoundSwitch.WPF
 
         public int Volume { get { return (int)_slider.Value; } set { _slider.Value = value; } }
 
+        public string InfoText { get { return _txtInfo.Text; } set { _txtInfo.Text = value; } }
+
         public Action<int> OnVolumeChangedAction = (volume) => { };
 
         public void ShowIfVolumeChanged(int volume)
@@ -41,7 +43,7 @@ namespace PlaybackSoundSwitch.WPF
                 if (this.Visibility != Visibility.Visible)
                 {
                     m_Timer.Start();
-                    this.Opacity = 1;
+                    this.Opacity = 0.9;
                     this.Visibility = Visibility.Visible; //modeless
                 }
             }
@@ -109,13 +111,13 @@ namespace PlaybackSoundSwitch.WPF
             {
                 To = 0,
                 BeginTime = TimeSpan.FromSeconds(0),
-                Duration = TimeSpan.FromSeconds(0.5),
+                Duration = TimeSpan.FromSeconds(0.7),
                 FillBehavior = FillBehavior.Stop
             };
 
             animation.Completed += (s, a) => { this.Opacity = 0; this.Visibility = Visibility.Collapsed; };
 
-           this.BeginAnimation(UIElement.OpacityProperty, animation);
+            this.BeginAnimation(UIElement.OpacityProperty, animation);
         }
 
         private void Window_MouseEnter(object sender, MouseEventArgs e)
