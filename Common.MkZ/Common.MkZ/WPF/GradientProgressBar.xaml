@@ -8,6 +8,7 @@
              x:Name="_gradientProgressBar"
              MouseDoubleClick="Progress_MouseDoubleClick"
              SizeChanged="Progress_SizeChanged"
+             Background="Transparent"
              FocusManager.FocusedElement="{Binding RelativeSource={x:Static RelativeSource.Self}, Mode=OneTime}"
              d:DesignHeight="80" d:DesignWidth="400">
     <UserControl.Resources>
@@ -15,12 +16,12 @@
             <SolidColorBrush x:Key="LineColor0">DarkGoldenrod</SolidColorBrush>
             <SolidColorBrush x:Key="LineColor1">Black</SolidColorBrush>
             
-            <Style x:Name="xxx" x:Key="{x:Type ProgressBar}" TargetType="{x:Type ProgressBar}">
+            <Style x:Name="GradientProgress" x:Key="{x:Type ProgressBar}" TargetType="{x:Type ProgressBar}">
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="{x:Type ProgressBar}">
                             <Grid MinHeight="14" MinWidth="200">
-                                <Rectangle Name="PART_Track" Stroke="#888888" StrokeThickness="1">
+                                <Rectangle Name="PART_Track" Stroke="Transparent" StrokeThickness="1">
                                     <Rectangle.Fill>
                                         <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
                                             <GradientStop Offset="0" Color="#FF00FF00"/>
@@ -32,7 +33,7 @@
                                 <DockPanel Margin="1">
                                     <Rectangle Name="PART_Indicator">
                                     </Rectangle>
-                                    <Rectangle Name="Mask" MinWidth="{TemplateBinding Width}" Fill="#C0C0C0"/>
+                                    <Rectangle Name="Mask" MinWidth="{TemplateBinding Width}" Fill="{TemplateBinding Background}"/>
                                 </DockPanel>
                             </Grid>
                         </ControlTemplate>
@@ -67,7 +68,8 @@
             </ContextMenu>
         </Grid.ContextMenu>-->
 
-        <ProgressBar Value="{Binding Value, Mode=OneWay, ElementName=_gradientProgressBar}" Maximum="{Binding Max, ElementName=_gradientProgressBar}">
+        <ProgressBar  Background="{Binding Background, ElementName=_gradientProgressBar, FallbackValue = Red}" 
+            Value="{Binding Value, Mode=OneWay, ElementName=_gradientProgressBar}" Maximum="{Binding Max, ElementName=_gradientProgressBar}">
             <ProgressBar.BorderThickness >0</ProgressBar.BorderThickness>
         </ProgressBar>
         

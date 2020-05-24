@@ -8,21 +8,32 @@
         WindowStartupLocation="Manual"
         WindowStyle="None"
         ResizeMode="NoResize"
-        Title="PopupInfoWindow" Height="250" Width="120">
-    <Grid Background="Navy">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-        <wpf:GradientProgressBar Margin="10" Value="{Binding Value, ElementName=_slider}">
-            <wpf:GradientProgressBar.LayoutTransform>
-                <RotateTransform CenterX="0.5" CenterY="0.5" Angle="-90"/>
-            </wpf:GradientProgressBar.LayoutTransform>
-        </wpf:GradientProgressBar>
-        <Slider x:Name="_slider" Grid.Column="1" Margin="10"
-                Orientation="Vertical" HorizontalAlignment="Center"
-                Minimum="0" Maximum="180" Value="30">
-            
-        </Slider>
-    </Grid>
+        MouseEnter="Window_MouseEnter"
+        MouseLeave="Window_MouseLeave"
+        Background="Transparent"
+        AllowsTransparency="True"
+        Title="PopupInfoWindow" Height="250" Width="80">
+    <Border x:Name="_border" BorderThickness="2" CornerRadius="4" Padding="1" BorderBrush="Blue">
+        <Border.Background>
+            <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.GradientActiveCaptionColorKey}}"/>
+        </Border.Background>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <wpf:GradientProgressBar  x:Name="_progress"
+                Margin="10" Background="{Binding Background, ElementName=_border}"
+                Value="{Binding Value, ElementName=_slider}">
+                <wpf:GradientProgressBar.LayoutTransform>
+                    <RotateTransform CenterX="0.5" CenterY="0.5" Angle="-90"/>
+                </wpf:GradientProgressBar.LayoutTransform>
+            </wpf:GradientProgressBar>
+            <Slider x:Name="_slider" Grid.Column="1" Margin="0,10"
+                    Orientation="Vertical" HorizontalAlignment="Center"
+                    Minimum="0" Maximum="100" Value="30">
+
+            </Slider>
+        </Grid>
+    </Border>
 </Window>
