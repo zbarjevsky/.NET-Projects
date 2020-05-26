@@ -53,7 +53,7 @@ namespace PlaybackSoundSwitch
             Device.AudioEndpointVolume.OnVolumeNotification = (notificationData) =>
             {
                 MZ.Tools.CommonUtils.ExecuteOnUIThread(() => {
-                    m_trackVolume.Value = (int)Math.Ceiling(100f * notificationData.MasterVolume);
+                    m_trackVolume.Value = (int)Math.Round(100f * notificationData.MasterVolume);
                 }
                 , this);
             };

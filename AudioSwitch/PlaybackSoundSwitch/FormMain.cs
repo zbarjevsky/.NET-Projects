@@ -116,7 +116,7 @@ namespace PlaybackSoundSwitch
                     MMDevice activeSpk = _mmd.GetDefaultAudioEndpoint(EDataFlow.Render, Role.Multimedia);
                     m_DeviceListPlayback.UpdateDeviceList(devsPlayback, activeSpk);
                     m_volumeControlSpk.SetDevice(activeSpk);
-                    _popupVolumeInfoWindow.InfoText = activeSpk.ShortName;
+                    _popupVolumeInfoWindow.InfoText = activeSpk.FriendlyName;
 
                     MMDevice activeMic = _mmd.GetDefaultAudioEndpoint(EDataFlow.Capture, Role.Multimedia);
                     m_DeviceListRecording.UpdateDeviceList(devsRecording, activeMic);

@@ -28,11 +28,38 @@ namespace PlaybackSoundSwitch.WPF
 
         public TimeSpan CloseTimeOut { get; set; } = TimeSpan.FromSeconds(4);
 
-        public int Volume { get { return (int)_slider.Value; } set { _slider.Value = value; } }
-
-        public string InfoText { get { return _txtInfo.Text; } set { _txtInfo.Text = value; } }
-
         public Action<int> OnVolumeChangedAction = (volume) => { };
+
+        private bool _enableVolumeChangeEvent = true;
+        public int Volume 
+        { 
+            get { return (int)_slider.Value; } 
+            set 
+            { 
+                _enableVolumeChangeEvent = false; 
+                _slider.Value = value;
+                _enableVolumeChangeEvent = true;
+            } 
+        }
+
+        public string InfoText 
+        { 
+            get { return _txtInfo.ToolTip.ToString(); } 
+            set { _txtInfo.ToolTip = value; _txtInfo.Text = ShortName(value); } 
+        }
+
+        public static string ShortName(string longDeviceName)
+        {
+            string ellipse = "";
+            int idx = longDeviceName.IndexOf("(");
+            if (idx > 32)
+            {
+                ellipse = "...";
+                idx = 30;
+            }
+            string name = longDeviceName.Substring(0, idx) + ellipse;
+            return name;
+        }
 
         public void ShowIfVolumeChanged(int volume)
         {
@@ -85,9 +112,14 @@ namespace PlaybackSoundSwitch.WPF
             m_Timer.Start();
             _timer_count = 0;
 
-            _progress.ProgressTheme = GradientProgressBar.Theme.GetBase100Theme();
+            _progress.ProgressTheme = GradientProgressBar.TicksTheme.GetBase100Theme();
             _progress.Maximum = 100;
             _progress.TickColor = Brushes.Navy;
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            _slider.Focus();
         }
 
         private void Timer_Tick(object sender, EventArgs e)
@@ -133,8 +165,39 @@ namespace PlaybackSoundSwitch.WPF
 
         private void _slider_DragDelta(object sender, System.Windows.Controls.Primitives.DragDeltaEventArgs e)
         {
+            //NotifyVolumeChanged();
+        }
+
+        private void _slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            NotifyVolumeChanged();
+        }
+
+        private void NotifyVolumeChanged()
+        {
             Debug.WriteLine("Volume: " + (int)_slider.Value);
-            OnVolumeChangedAction((int)_slider.Value);
+            if (_enableVolumeChangeEvent)
+            {
+                _enableVolumeChangeEvent = false;
+                OnVolumeChangedAction((int)_slider.Value);
+                _enableVolumeChangeEvent = true;
+            }
+        }
+
+        //enable arrow keys for slider (does not work on SmallChange)
+        private void Window_PreviewKeyUp(object sender, KeyEventArgs e)
+        {
+            double change = 0;
+            if (e.Key == Key.Up || e.Key == Key.Right)
+                change += _slider.SmallChange;
+            if (e.Key == Key.Down || e.Key == Key.Left)
+                change -= _slider.SmallChange;
+            
+            if (change != 0)
+            {
+                _slider.Value += change;
+                NotifyVolumeChanged();
+            }
         }
     }
 }

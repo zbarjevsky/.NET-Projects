@@ -26,12 +26,13 @@
                    Fill="{Binding Background, ElementName=_gradientProgressBar}">
         </Rectangle>
 
+        <Canvas x:Name="_canvas" />
+
         <Viewbox HorizontalAlignment="Right" VerticalAlignment="Center" MinHeight="16" MinWidth="16">
-            <CheckBox x:Name="chk" ToolTip="ThinkerBell at the end"
-                      Margin="2" Visibility="Collapsed"
+            <CheckBox x:Name="chk" Margin="2" Opacity="0.9"
+                      ToolTip="{Binding CheckBoxToolTip, ElementName=_gradientProgressBar}"
+                      Visibility="{Binding CheckBoxVisibility, ElementName=_gradientProgressBar}"
                       Checked="chk_Clicked" Unchecked="chk_Clicked" />
         </Viewbox>
-
-        <Canvas x:Name="_canvas" />
     </Grid>
 </UserControl>

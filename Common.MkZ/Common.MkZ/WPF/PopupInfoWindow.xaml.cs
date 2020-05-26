@@ -72,7 +72,7 @@ namespace MZ.WPF
             m_Timer.Start();
             _timer_count = 0;
 
-            _progress.ProgressTheme = GradientProgressBar.Theme.GetBase100Theme();
+            _progress.ProgressTheme = GradientProgressBar.TicksTheme.GetBase100Theme();
             _progress.Maximum = 100;
             _progress.TickColor = Brushes.Navy;
         }

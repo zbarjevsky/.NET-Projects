@@ -160,22 +160,6 @@ namespace PlaybackSoundSwitch.Device
             }
         }
 
-        public string ShortName
-        {
-            get
-            {
-                string ellipse = "";
-                int idx = FriendlyName.IndexOf("(");
-                if (idx > 32)
-                {
-                    ellipse = "...";
-                    idx = 30; 
-                }
-                string name = FriendlyName.Substring(0, idx) + ellipse;
-                return name;
-            }
-        }
-
         /// <summary>
         /// Friendly name for the endpoint
         /// </summary>

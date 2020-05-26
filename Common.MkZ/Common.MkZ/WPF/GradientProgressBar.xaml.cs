@@ -42,7 +42,13 @@ namespace MZ.WPF
         }
 
         public static readonly DependencyProperty MaximumProperty =
-            DependencyProperty.Register("Maximum", typeof(double), typeof(GradientProgressBar), new PropertyMetadata(180.0));
+            DependencyProperty.Register("Maximum", typeof(double), typeof(GradientProgressBar), new PropertyMetadata(180.0, OnMaximumChanged));
+
+        private static void OnMaximumChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is GradientProgressBar This)
+                This.DrawTicks();
+        }
 
         public double Minimum
         {
@@ -62,11 +68,32 @@ namespace MZ.WPF
         public static readonly DependencyProperty TickColorProperty =
             DependencyProperty.Register("TickColor", typeof(SolidColorBrush), typeof(GradientProgressBar), new PropertyMetadata(Brushes.Green));
 
+        public Visibility CheckBoxVisibility
+        {
+            get { return (Visibility)GetValue(CheckBoxVisibilityProperty); }
+            set { SetValue(CheckBoxVisibilityProperty, value); DrawTicks(); OnPropertyChanged(); }
+        }
+
+        public static readonly DependencyProperty CheckBoxVisibilityProperty =
+            DependencyProperty.Register("CheckBoxVisibility", typeof(Visibility), typeof(GradientProgressBar), new UIPropertyMetadata(Visibility.Collapsed));
+
+        public string CheckBoxToolTip
+        {
+            get { return (string)GetValue(CheckBoxToolTipProperty); }
+            set { SetValue(CheckBoxToolTipProperty, value); }
+        }
+
+        public static readonly DependencyProperty CheckBoxToolTipProperty =
+            DependencyProperty.Register("CheckBoxToolTip", typeof(string), typeof(GradientProgressBar), new UIPropertyMetadata(""));
+
+        public Action<bool> OnCheckClicked = (isChecked) => { };
+
+        public bool IsChecked { get { return chk.IsChecked.Value; } set { chk.IsChecked = value; OnPropertyChanged(); } }
+
         public GradientProgressBar()
         {
             InitializeComponent();
-
-            DataContext = this;
+            DrawTicks();
         }
 
         #region INotifyPropertyChanged Members
@@ -81,34 +108,34 @@ namespace MZ.WPF
 
         #endregion
 
-        public class Theme
+        public class TicksTheme
         {
             public int iBaseTickCount = 10;
             public int iHalfTickCount = 30;
             public int iFullTickCount = 60;
 
-            public static Theme GetBase60Theme()
+            public static TicksTheme GetBase60Theme()
             {
-                return new Theme()
-                {
-                    iBaseTickCount = 10,
-                    iHalfTickCount = 30,
-                    iFullTickCount = 60,
-                };
+                return GetBaseTheme(60);
             }
 
-            public static Theme GetBase100Theme()
+            public static TicksTheme GetBase100Theme()
             {
-                return new Theme()
+                return GetBaseTheme(100);
+            }
+
+            public static TicksTheme GetBaseTheme(int max = 100, int min = 10)
+            {
+                return new TicksTheme()
                 {
-                    iBaseTickCount = 10,
-                    iHalfTickCount = 50,
-                    iFullTickCount = 100,
+                    iBaseTickCount = min,
+                    iHalfTickCount = max / 2,
+                    iFullTickCount = max,
                 };
             }
         }
 
-        public Theme ProgressTheme { get; set; } = Theme.GetBase100Theme();
+        public TicksTheme ProgressTheme { get; set; } = TicksTheme.GetBase100Theme();
 
         private void DrawValue()
         {
@@ -172,7 +199,6 @@ namespace MZ.WPF
 
         private void Progress_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            DrawValue();
         }
 
         private void Progress_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -182,7 +208,7 @@ namespace MZ.WPF
 
         private void chk_Clicked(object sender, RoutedEventArgs e)
         {
-
+            OnCheckClicked(chk.IsChecked.Value);
         }
     }
 }
