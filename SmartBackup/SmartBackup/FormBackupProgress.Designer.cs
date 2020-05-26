@@ -47,8 +47,10 @@
             this.m_btnAbort = new System.Windows.Forms.Button();
             this.m_txtInfo = new System.Windows.Forms.TextBox();
             this.m_cmbViewFilter = new System.Windows.Forms.ComboBox();
-            this.m_progrFile = new MZ.WinForms.ColorBarsProgressBar();
+            this.m_progressFile = new MZ.WinForms.ColorBarsProgressBar();
             this.m_progressBarMain = new MZ.Tools.Windows7ProgressBar();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // m_listFiles
@@ -212,6 +214,8 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_txtInfo.BackColor = System.Drawing.SystemColors.Control;
             this.m_txtInfo.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.errorProvider1.SetIconAlignment(this.m_txtInfo, System.Windows.Forms.ErrorIconAlignment.MiddleLeft);
+            this.errorProvider1.SetIconPadding(this.m_txtInfo, 1);
             this.m_txtInfo.Location = new System.Drawing.Point(13, 43);
             this.m_txtInfo.Name = "m_txtInfo";
             this.m_txtInfo.ReadOnly = true;
@@ -235,26 +239,26 @@
             this.m_cmbViewFilter.TabIndex = 5;
             this.m_cmbViewFilter.SelectionChangeCommitted += new System.EventHandler(this.m_cmbViewFilter_SelectionChangeCommitted);
             // 
-            // m_progrFile
+            // m_progressFile
             // 
-            this.m_progrFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_progressFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            themeColorSet1.Part1_ActiveColor = System.Drawing.Color.SkyBlue;
+            themeColorSet1.Part1_ActiveColor = System.Drawing.Color.DodgerBlue;
             themeColorSet1.Part1_InactiveColor = System.Drawing.Color.Gainsboro;
             themeColorSet1.Part2_ActiveColor = System.Drawing.Color.LimeGreen;
             themeColorSet1.Part2_InactiveColor = System.Drawing.Color.Gainsboro;
             themeColorSet1.Part3_ActiveColor = System.Drawing.Color.LimeGreen;
             themeColorSet1.Part3_InactiveColor = System.Drawing.Color.Gainsboro;
             themeColorSet1.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
-            themeColorSet1.Threshold1 = 100;
-            themeColorSet1.Threshold2 = 100;
-            this.m_progrFile.ColorTheme = themeColorSet1;
-            this.m_progrFile.Location = new System.Drawing.Point(12, 285);
-            this.m_progrFile.Name = "m_progrFile";
-            this.m_progrFile.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            this.m_progrFile.Size = new System.Drawing.Size(810, 13);
-            this.m_progrFile.TabIndex = 13;
-            this.m_progrFile.TabStop = false;
+            themeColorSet1.Threshold1 = 101;
+            themeColorSet1.Threshold2 = 101;
+            this.m_progressFile.ColorTheme = themeColorSet1;
+            this.m_progressFile.Location = new System.Drawing.Point(12, 285);
+            this.m_progressFile.Name = "m_progressFile";
+            this.m_progressFile.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.m_progressFile.Size = new System.Drawing.Size(810, 13);
+            this.m_progressFile.TabIndex = 13;
+            this.m_progressFile.TabStop = false;
             // 
             // m_progressBarMain
             // 
@@ -267,6 +271,10 @@
             this.m_progressBarMain.Size = new System.Drawing.Size(729, 23);
             this.m_progressBarMain.TabIndex = 9;
             // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
+            // 
             // FormBackupProgress
             // 
             this.AcceptButton = this.m_btnClose;
@@ -274,7 +282,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.m_btnClose;
             this.ClientSize = new System.Drawing.Size(834, 361);
-            this.Controls.Add(this.m_progrFile);
+            this.Controls.Add(this.m_progressFile);
             this.Controls.Add(this.m_cmbViewFilter);
             this.Controls.Add(this.m_txtInfo);
             this.Controls.Add(this.label1);
@@ -295,6 +303,7 @@
             this.Text = "Backup Progress";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormBackupProgress_FormClosing);
             this.Load += new System.EventHandler(this.FormBackupProgress_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -319,6 +328,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox m_txtInfo;
         private System.Windows.Forms.ComboBox m_cmbViewFilter;
-        private MZ.WinForms.ColorBarsProgressBar m_progrFile;
+        private MZ.WinForms.ColorBarsProgressBar m_progressFile;
+        private System.Windows.Forms.ErrorProvider errorProvider1;
     }
 }

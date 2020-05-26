@@ -15,7 +15,7 @@ namespace MZ.WinForms
 {
     public partial class FormBrowseForFolder : Form
     {
-        FileUtils.FileProgress _fileProgress = new FileUtils.FileProgress();
+        FileUtils.FileProgress _fileProgress;
 
         public string SelectedFolder 
         { 
@@ -32,6 +32,8 @@ namespace MZ.WinForms
         public FormBrowseForFolder()
         {
             InitializeComponent();
+
+            _fileProgress = new FileUtils.FileProgress(m_progressBar, this);
         }
 
         private void FormBrowseForFolder_Load(object sender, EventArgs e)
@@ -40,15 +42,7 @@ namespace MZ.WinForms
             m_treeFolders.AfterSelectAction = (path) => { m_txtSelectedFolder.Text = path; };
             m_lblMessage.Visible = false;
 
-            _fileProgress.OnPercentChange = (percent) =>
-            {
-                CommonUtils.ExecuteOnUIThread(() => 
-                {
-                    m_lblMessage.Text = _fileProgress.ToString();
-                    m_progressBar.Value = percent; 
-                }, this);
-                Application.DoEvents();
-            };
+            _fileProgress.OnChange = (status) => { m_lblMessage.Text = status; };
         }
 
         private void m_btnNewFolder_Click(object sender, EventArgs e)
@@ -107,20 +101,21 @@ namespace MZ.WinForms
                 string prompt = "Delteting folder... \n(" + m_txtSelectedFolder.Text + ") \n";
                 EnableControls(false, prompt);
 
-                _fileProgress.Reset(prompt, 1000, 0, FileUtils.FileProgress.ReportOptions.ReportPercentChange);
-                List<string> files = FileUtils.GetFiles(m_txtSelectedFolder.Text, "*.*", _fileProgress).ToList();
+                _fileProgress.ResetToMarquee(prompt);
+
+                List<string> files = FileUtils.GetFiles(m_txtSelectedFolder.Text, "*.*", SearchOption.AllDirectories, _fileProgress).ToList();
                 if (_fileProgress.Cancel)
                     return;
 
                 if (files.Count > 0)
                 {
-                    _fileProgress.Reset(prompt, files.Count, 0, FileUtils.FileProgress.ReportOptions.ReportPercentChange);
+                    _fileProgress.ResetToBlocks(prompt, files.Count, 0);
                     for (int i = 0; i < files.Count; i++)
                     {
                         if (_fileProgress.Cancel)
                             return;
 
-                        _fileProgress.Val++;
+                        _fileProgress.Value++;
                         File.Delete(files[i]);
                     }
                 }

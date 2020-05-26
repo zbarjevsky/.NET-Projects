@@ -78,7 +78,8 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Settings\BackupSettings.cs" />
-    <Compile Include="Tools\CalculateSpaceTask.cs" />
+    <Compile Include="Tools\CalculateSpaceDifferenceTask.cs" />
+    <Compile Include="Tools\CalculateOccupiedSpaceTask.cs" />
     <EmbeddedResource Include="BackupListUserControl.resx">
       <DependentUpon>BackupListUserControl.cs</DependentUpon>
     </EmbeddedResource>

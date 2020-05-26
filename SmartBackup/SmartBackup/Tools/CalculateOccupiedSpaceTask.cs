@@ -8,11 +8,12 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using static MZ.Tools.FileUtils;
 
 namespace SmartBackup.Tools
 {
-    public class CalculateSpaceTask
+    public class CalculateOccupiedSpaceTask
     {
         private FileProgress _fileProgress;
         private Thread _threadUpdateInfo = null;
@@ -20,7 +21,7 @@ namespace SmartBackup.Tools
 
         public Action<long, long> OnThreadFinished = (size, count) => { };
 
-        public CalculateSpaceTask(FileProgress fileProgress)
+        public CalculateOccupiedSpaceTask(FileProgress fileProgress)
         {
             _fileProgress = fileProgress;
         }
@@ -58,21 +59,25 @@ namespace SmartBackup.Tools
 
                 int count = fileList.Count;
                 string prompt = string.Format("Calculating Folder Size ({0}) ", entry.FolderSrc);
-                _fileProgress.Reset(prompt, count, 0, FileUtils.FileProgress.ReportOptions.ReportPercentChange);
+                _fileProgress.ResetToBlocks(prompt, count);
                 foreach (BackupFile file in fileList)
                 {
                     if (_fileProgress.Cancel)
+                    {
+                        OnThreadFinished(0, fileList.Count);
                         break;
+                    }
 
-                    _fileProgress.Val++;
+                    _fileProgress.Value++;
                     if (file.SrcIfo.Exists)
                         size += file.SrcIfo.Length;
                 }
-                _fileProgress.Val = 0;
+                _fileProgress.Value = 0;
                 fileList.Clear();
                 GC.Collect();
 
-                OnThreadFinished(size, count);
+                if (!_fileProgress.Cancel)
+                    OnThreadFinished(size, count);
             });
 
             _threadUpdateInfo.IsBackground = true;

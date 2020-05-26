@@ -48,12 +48,12 @@
             this.m_txtInfo = new System.Windows.Forms.TextBox();
             this.m_cmbSearchOptions = new System.Windows.Forms.ComboBox();
             this.m_splitFolders = new System.Windows.Forms.SplitContainer();
-            this.m_explorerSrc = new MZ.WinForms.FileExplorerUserControl();
-            this.m_explorerDst = new MZ.WinForms.FileExplorerUserControl();
             this.m_pnlOptions = new System.Windows.Forms.Panel();
-            this.m_progressBar = new MZ.WinForms.ColorBarsProgressBar();
             this.m_btnStartBackup = new System.Windows.Forms.Button();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.m_progressBar = new MZ.WinForms.ColorBarsProgressBar();
+            this.m_explorerSrc = new MZ.WinForms.FileExplorerUserControl();
+            this.m_explorerDst = new MZ.WinForms.FileExplorerUserControl();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitFolders)).BeginInit();
             this.m_splitFolders.Panel1.SuspendLayout();
             this.m_splitFolders.Panel2.SuspendLayout();
@@ -257,26 +257,6 @@
             this.m_splitFolders.SplitterDistance = 540;
             this.m_splitFolders.TabIndex = 20;
             // 
-            // m_explorerSrc
-            // 
-            this.m_explorerSrc.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_explorerSrc.Location = new System.Drawing.Point(3, 40);
-            this.m_explorerSrc.Name = "m_explorerSrc";
-            this.m_explorerSrc.Size = new System.Drawing.Size(532, 417);
-            this.m_explorerSrc.TabIndex = 19;
-            // 
-            // m_explorerDst
-            // 
-            this.m_explorerDst.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_explorerDst.Location = new System.Drawing.Point(3, 40);
-            this.m_explorerDst.Name = "m_explorerDst";
-            this.m_explorerDst.Size = new System.Drawing.Size(532, 417);
-            this.m_explorerDst.TabIndex = 18;
-            // 
             // m_pnlOptions
             // 
             this.m_pnlOptions.Controls.Add(this.m_cmbSearchOptions);
@@ -291,26 +271,6 @@
             this.m_pnlOptions.Name = "m_pnlOptions";
             this.m_pnlOptions.Size = new System.Drawing.Size(1084, 47);
             this.m_pnlOptions.TabIndex = 21;
-            // 
-            // m_progressBar
-            // 
-            themeColorSet1.Part1_ActiveColor = System.Drawing.Color.LimeGreen;
-            themeColorSet1.Part1_InactiveColor = System.Drawing.Color.Gainsboro;
-            themeColorSet1.Part2_ActiveColor = System.Drawing.Color.LimeGreen;
-            themeColorSet1.Part2_InactiveColor = System.Drawing.Color.Gainsboro;
-            themeColorSet1.Part3_ActiveColor = System.Drawing.Color.LimeGreen;
-            themeColorSet1.Part3_InactiveColor = System.Drawing.Color.Gainsboro;
-            themeColorSet1.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Regular;
-            themeColorSet1.Threshold1 = 100;
-            themeColorSet1.Threshold2 = 100;
-            this.m_progressBar.ColorTheme = themeColorSet1;
-            this.m_progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.m_progressBar.Location = new System.Drawing.Point(0, 549);
-            this.m_progressBar.Name = "m_progressBar";
-            this.m_progressBar.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            this.m_progressBar.Size = new System.Drawing.Size(1084, 12);
-            this.m_progressBar.TabIndex = 22;
-            this.m_progressBar.TabStop = false;
             // 
             // m_btnStartBackup
             // 
@@ -332,6 +292,46 @@
             // errorProvider1
             // 
             this.errorProvider1.ContainerControl = this;
+            // 
+            // m_progressBar
+            // 
+            themeColorSet1.Part1_ActiveColor = System.Drawing.Color.MediumSlateBlue;
+            themeColorSet1.Part1_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet1.Part2_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet1.Part2_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet1.Part3_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet1.Part3_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet1.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
+            themeColorSet1.Threshold1 = 101;
+            themeColorSet1.Threshold2 = 101;
+            this.m_progressBar.ColorTheme = themeColorSet1;
+            this.m_progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.m_progressBar.Location = new System.Drawing.Point(0, 549);
+            this.m_progressBar.Name = "m_progressBar";
+            this.m_progressBar.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.m_progressBar.Size = new System.Drawing.Size(1084, 12);
+            this.m_progressBar.TabIndex = 22;
+            this.m_progressBar.TabStop = false;
+            // 
+            // m_explorerSrc
+            // 
+            this.m_explorerSrc.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_explorerSrc.Location = new System.Drawing.Point(3, 40);
+            this.m_explorerSrc.Name = "m_explorerSrc";
+            this.m_explorerSrc.Size = new System.Drawing.Size(532, 417);
+            this.m_explorerSrc.TabIndex = 19;
+            // 
+            // m_explorerDst
+            // 
+            this.m_explorerDst.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_explorerDst.Location = new System.Drawing.Point(3, 40);
+            this.m_explorerDst.Name = "m_explorerDst";
+            this.m_explorerDst.Size = new System.Drawing.Size(532, 417);
+            this.m_explorerDst.TabIndex = 18;
             // 
             // FormBackupFolderProperties
             // 

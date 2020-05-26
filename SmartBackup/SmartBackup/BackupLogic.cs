@@ -15,7 +15,7 @@ using System.Windows.Forms;
 namespace SmartBackup
 {
     [Flags]
-    internal enum BackupStatus : int
+    public enum BackupStatus : int
     {
         None = 1,
         InProgress = 2,
@@ -25,7 +25,7 @@ namespace SmartBackup
     }
 
     [Flags]
-    internal enum BackupOptions
+    public enum BackupOptions
     {
         OverwriteAll = 1,
         OverwriteAllOlder = 2,
@@ -42,7 +42,7 @@ namespace SmartBackup
         All = 7
     }
 
-    internal class BackupFile
+    public class BackupFile
     {
         public string Src = "";
         public string Err = "OK";
@@ -256,13 +256,18 @@ namespace SmartBackup
     {
         private readonly BackupGroup _group;
 
-        private List<BackupFile> FileList = new List<BackupFile>();
+        private readonly List<BackupFile> FileList = new List<BackupFile>();
 
-        public BackupLogic(BackupGroup group, BackupPriority priority, FileUtils.FileProgress progress)
+        public BackupLogic(BackupGroup group)
         {
             _group = group;
 
-            foreach (BackupEntry entry in group.BackupList)
+        }
+
+        public void Load(BackupPriority priority, FileUtils.FileProgress progress = null)
+        {
+            Clear();
+            foreach (BackupEntry entry in _group.BackupList)
             {
                 if (priority.HasFlag(entry.Priority))
                 {
@@ -274,6 +279,7 @@ namespace SmartBackup
         public void Clear()
         {
             FileList.Clear();
+            GC.Collect();
         }
 
         public List<BackupFile> FilteredFileList(BackupOptions options, BackupStatus statusFilter = BackupStatus.Any)
@@ -301,54 +307,22 @@ namespace SmartBackup
 
         public const double i1MB = 1024 * 1024;
 
-        public string GetDiskStatistics()
+        public static string GetDiskFreeSpace(string path, out long freeSpace)
         {
-            string root = Path.GetPathRoot(_group.BackupList[0].FolderDst);
+            string root = Path.GetPathRoot(path);
             if(!Directory.Exists(root))
             {
-                MessageBox.Show("Cannot access backup drive: " + root);
+                MessageBox.Show("Cannot access drive for backup: " + root);
+                freeSpace = 0;
                 return "Drive " + root + " is not accessible";
             }
 
             DriveInfo drive = GetDriveInfo(root);
-            return string.Format("Free Space on Destination Drive {0} is {1:###,##0.0} MB", root, drive.TotalFreeSpace/ i1MB);
+            freeSpace = drive.TotalFreeSpace;
+            return string.Format("Free Space on Destination Drive {0} is {1:###,##0.0} MB", root, freeSpace / i1MB);
         }
 
-        public string CalculateSpaceNeeded(BackupStatus backupStatus, FileUtils.FileProgress progress)
-        {
-            if (progress != null)
-                progress.Max = FileList.Count;
-
-            long sizeDst = 0, sizeSrc = 0;
-            for(int i=0; i<FileList.Count; i++)
-            {
-                BackupFile file = FileList[i];
-
-                if (progress != null)
-                {
-                    if (progress.Cancel)
-                        break;
-
-                    progress.Val++;
-                }
-
-                if (backupStatus.HasFlag(file.Status))
-                {
-                    if (!file.SrcIfo.Exists)
-                        continue;
-
-                    sizeSrc += file.SrcIfo.Length;
-                    sizeDst += file.SrcIfo.Length;
-                    if(file.DstIfo.Exists)
-                        sizeDst -= file.DstIfo.Length;
-                }
-            }
-
-            return string.Format("Filter: {0} - Source size {1:###,##0.0} MB, Estimated Space Needed: {2:###,##0.0} MB",
-                backupStatus, sizeSrc / BackupLogic.i1MB, sizeDst / BackupLogic.i1MB);
-        }
-
-        private DriveInfo GetDriveInfo(string driveName)
+        public static DriveInfo GetDriveInfo(string driveName)
         {
             foreach (DriveInfo drive in DriveInfo.GetDrives())
             {
@@ -374,20 +348,25 @@ namespace SmartBackup
             {
                 if (progress != null)
                 {
-                    string prompt = string.Format("Collecting Folders and Files ({0}) ", entry.FolderSrc);
-                    progress.Reset(prompt, 1, 0, FileUtils.FileProgress.ReportOptions.ReportValueChange); //report per discovered folder
+                    string prompt = string.Format("Discovering ({0}) ", entry.FolderSrc);
+                    progress.ResetToMarquee(prompt);
                 }
 
-                List<string> files = FileUtils.GetFiles(dir.FullName, entry.FolderIncludeTypes, progress, entry.IncludeSubfolders).ToList();
+                List<string> files = FileUtils.GetFiles(dir.FullName, 
+                    entry.FolderIncludeTypes, entry.IncludeSubfolders, progress).ToList();
 
                 if (progress != null)
                 {
                     if (progress.Cancel)
+                    {
+                        files.Clear();
+                        GC.Collect();
                         return fileList;
+                    }
 
                     //report percentage only - may be too many files
                     string prompt = string.Format("Preparing Collected Files ({0}) ", entry.FolderSrc);
-                    progress.Reset(prompt, files.Count, 0, FileUtils.FileProgress.ReportOptions.ReportPercentChange);
+                    progress.ResetToBlocks(prompt, files.Count);
                 }
 
                 for (int i = 0; i < files.Count; i++)
@@ -395,19 +374,23 @@ namespace SmartBackup
                     if (progress != null)
                     {
                         if (progress.Cancel)
+                        {
+                            fileList.Clear();
                             break;
-                        progress.Val = i;
+                        }
+                        progress.Value = i;
                     }
 
-                    if(File.Exists(files[i]))
+                    //if (File.Exists(files[i]))
                         fileList.Add(new BackupFile(i, files[i], entry));
                 }
             }
             catch (Exception err)
             {
-                Debug.WriteLine("Error enumerating files in: " + dir.FullName);
+                Debug.WriteLine("Error enumerating files in: " + dir.FullName + ", Error: " + err);
             }
 
+            GC.Collect();
             return fileList;
         }
     }

@@ -20,8 +20,8 @@ namespace SmartBackup
         const double s1MB = 1024 * 1024;
 
         readonly BackupEntry _entry;
-        readonly CalculateSpaceTask _calculateSpaceTask;
-        readonly FileUtils.FileProgress _fileProgress = new FileUtils.FileProgress();
+        readonly CalculateOccupiedSpaceTask _calculateSpaceTask;
+        readonly FileUtils.FileProgress _fileProgress;
 
         public FormBackupFolderProperties(BackupEntry entry)
         {
@@ -40,30 +40,17 @@ namespace SmartBackup
             m_explorerSrc.OpenFolderAction = (fullPath) => { m_txtSrcFolder.Text = fullPath; };
             m_explorerDst.OpenFolderAction = (fullPath) => { m_txtDstFolder.Text = fullPath; };
 
-            _fileProgress.OnPercentChange = (percent) =>
-            {
-                CommonUtils.ExecuteOnUIThread(() => 
-                { 
-                    m_txtInfo.Text = _fileProgress.ToString();
-                    m_progressBar.Value = _fileProgress.Percent;
-                }, this);
-            };
+            _fileProgress = new FileUtils.FileProgress(m_progressBar, this);
+            _fileProgress.OnChange = (status) => { m_txtInfo.Text = status; };
 
-            _fileProgress.OnValueChange = () =>
-            {
-                CommonUtils.ExecuteOnUIThread(() => 
-                { 
-                    m_txtInfo.Text = _fileProgress.ToString();
-                    m_progressBar.Value = _fileProgress.Percent;
-                }, this);
-            };
-
-            _calculateSpaceTask = new CalculateSpaceTask(_fileProgress);
+            _calculateSpaceTask = new CalculateOccupiedSpaceTask(_fileProgress);
             _calculateSpaceTask.OnThreadFinished = (size, count) =>
             {
                 CommonUtils.ExecuteOnUIThread(() =>
                 {
-                    m_txtInfo.Text = string.Format("Selected SRC {0:###,##0} files, Total size: {1:###,##0.0} MB", count, size / s1MB);
+                    string diskInfo = BackupLogic.GetDiskFreeSpace(m_txtDstFolder.Text, out long freeSpace);
+                    m_txtInfo.Text = string.Format("Selected SRC {0:###,##0} files, Total size: {1:###,##0.0} MB, {2}", 
+                        count, size / s1MB, diskInfo);
                     m_progressBar.Value = 0;
                 }, this);
             };
@@ -80,8 +67,6 @@ namespace SmartBackup
             m_cmbPriority.SelectedItem = _entry.Priority;
 
             ValidateInput();
-
-            m_txtDstFolder.Focus();
         }
 
         private void FormBackupFolderProperties_FormClosed(object sender, FormClosedEventArgs e)
@@ -153,6 +138,8 @@ namespace SmartBackup
             m_explorerSrc.PopulateFiles(entry.FolderSrc);
             m_explorerDst.PopulateFiles(entry.FolderDst);
 
+            m_txtInfo.Text = "Calculating Space Needed...";
+            Application.DoEvents();
             _calculateSpaceTask.Start(entry);
         }
     }

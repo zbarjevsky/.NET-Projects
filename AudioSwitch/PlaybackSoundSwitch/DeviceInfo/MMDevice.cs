@@ -166,10 +166,10 @@ namespace PlaybackSoundSwitch.Device
             {
                 string ellipse = "";
                 int idx = FriendlyName.IndexOf("(");
-                if (idx > 12)
+                if (idx > 32)
                 {
                     ellipse = "...";
-                    idx = 10; 
+                    idx = 30; 
                 }
                 string name = FriendlyName.Substring(0, idx) + ellipse;
                 return name;

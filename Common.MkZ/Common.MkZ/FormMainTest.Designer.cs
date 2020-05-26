@@ -40,6 +40,7 @@
             this.m_cmbListViewType = new System.Windows.Forms.ComboBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.m_btnGradientWpfProgress = new System.Windows.Forms.Button();
             this.m_btnColorSlider = new System.Windows.Forms.Button();
             this.m_btnTestWPFMessageBoxWPF = new System.Windows.Forms.Button();
             this.m_btnTestWPFMessageBox = new System.Windows.Forms.Button();
@@ -49,7 +50,6 @@
             this.colorBarsProgressBar1 = new MZ.WinForms.ColorBarsProgressBar();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.m_btnGradientWpfProgress = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -157,6 +157,16 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Common Controls";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // m_btnGradientWpfProgress
+            // 
+            this.m_btnGradientWpfProgress.Location = new System.Drawing.Point(333, 146);
+            this.m_btnGradientWpfProgress.Name = "m_btnGradientWpfProgress";
+            this.m_btnGradientWpfProgress.Size = new System.Drawing.Size(144, 68);
+            this.m_btnGradientWpfProgress.TabIndex = 14;
+            this.m_btnGradientWpfProgress.Text = "WPF Gradient Progress";
+            this.m_btnGradientWpfProgress.UseVisualStyleBackColor = true;
+            this.m_btnGradientWpfProgress.Click += new System.EventHandler(this.m_btnGradientWpfProgress_Click);
             // 
             // m_btnColorSlider
             // 
@@ -269,6 +279,7 @@
             this.colorBarsProgressBar3.Name = "colorBarsProgressBar3";
             this.colorBarsProgressBar3.Orientation = System.Windows.Forms.Orientation.Vertical;
             this.colorBarsProgressBar3.Size = new System.Drawing.Size(21, 369);
+            this.colorBarsProgressBar3.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.colorBarsProgressBar3.TabIndex = 10;
             this.colorBarsProgressBar3.TabStop = false;
             this.colorBarsProgressBar3.Value = 60;
@@ -284,13 +295,14 @@
             themeColorSet2.Part3_ActiveColor = System.Drawing.Color.LimeGreen;
             themeColorSet2.Part3_InactiveColor = System.Drawing.Color.Gainsboro;
             themeColorSet2.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
-            themeColorSet2.Threshold1 = 100;
-            themeColorSet2.Threshold2 = 100;
+            themeColorSet2.Threshold1 = 101;
+            themeColorSet2.Threshold2 = 101;
             this.colorBarsProgressBar2.ColorTheme = themeColorSet2;
             this.colorBarsProgressBar2.Location = new System.Drawing.Point(160, 385);
             this.colorBarsProgressBar2.Name = "colorBarsProgressBar2";
             this.colorBarsProgressBar2.Orientation = System.Windows.Forms.Orientation.Horizontal;
             this.colorBarsProgressBar2.Size = new System.Drawing.Size(567, 27);
+            this.colorBarsProgressBar2.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.colorBarsProgressBar2.TabIndex = 9;
             this.colorBarsProgressBar2.TabStop = false;
             this.colorBarsProgressBar2.Value = 60;
@@ -313,6 +325,7 @@
             this.colorBarsProgressBar1.Name = "colorBarsProgressBar1";
             this.colorBarsProgressBar1.Orientation = System.Windows.Forms.Orientation.Vertical;
             this.colorBarsProgressBar1.Size = new System.Drawing.Size(21, 369);
+            this.colorBarsProgressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.colorBarsProgressBar1.TabIndex = 0;
             this.colorBarsProgressBar1.TabStop = false;
             this.colorBarsProgressBar1.Value = 60;
@@ -339,16 +352,6 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Shell32 icons";
             this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // m_btnGradientWpfProgress
-            // 
-            this.m_btnGradientWpfProgress.Location = new System.Drawing.Point(333, 146);
-            this.m_btnGradientWpfProgress.Name = "m_btnGradientWpfProgress";
-            this.m_btnGradientWpfProgress.Size = new System.Drawing.Size(144, 68);
-            this.m_btnGradientWpfProgress.TabIndex = 14;
-            this.m_btnGradientWpfProgress.Text = "WPF Gradient Progress";
-            this.m_btnGradientWpfProgress.UseVisualStyleBackColor = true;
-            this.m_btnGradientWpfProgress.Click += new System.EventHandler(this.m_btnGradientWpfProgress_Click);
             // 
             // FormMainTest
             // 

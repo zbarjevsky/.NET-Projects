@@ -37,8 +37,8 @@ namespace MZ.WinForms
             public Color Part2_InactiveColor { get { return brushes[4].Color; } set { UpdateColor(4, value); } }
             public Color Part3_InactiveColor { get { return brushes[5].Color; } set { UpdateColor(5, value); } }
 
-            public int Threshold1 { get; set; } = 0;
-            public int Threshold2 { get; set; } = 100;
+            public int Threshold1 { get; set; } = 101;
+            public int Threshold2 { get; set; } = 101;
 
             public ThemeColorSet()
             {
@@ -80,8 +80,8 @@ namespace MZ.WinForms
                         brushes[3] = (SolidBrush)Brushes.Gainsboro; 
                         brushes[4] = (SolidBrush)Brushes.Gainsboro;
                         brushes[5] = (SolidBrush)Brushes.Gainsboro;
-                        Threshold1 = 100; 
-                        Threshold2 = 100;
+                        Threshold1 = 101; 
+                        Threshold2 = 101;
                         break;
                     case ColorsThemeType.Custom:
                     default:
@@ -98,7 +98,7 @@ namespace MZ.WinForms
                 _theme = ColorsThemeType.Custom;
             }
 
-            public Brush GetColor(int percent, bool isActive)
+            internal Brush GetColor(int percent, bool isActive)
             {
                 return brushes[GetColorIndex(percent, isActive)];
             }
@@ -123,7 +123,19 @@ namespace MZ.WinForms
         private const string CAT = "Color Bars";
 
         [Category("Behavior")]
-        public int ValuePercent { get { return (100 * (Value - Minimum)) / (Maximum - Minimum); } }
+        public double ValuePercent { get { return (100.0 * (Value - Minimum)) / (double)(Maximum - Minimum); } }
+
+        /// <summary>
+        /// Move Marquee progress to next position
+        /// </summary>
+        public void MarqueeNext()
+        {
+            double OnePercent = (Maximum - Minimum) / 100.0;
+            if (Value >= Maximum)
+                Value = Minimum;
+            else
+                Value += (int)OnePercent;
+        }
 
         #region Colors
 
@@ -136,14 +148,56 @@ namespace MZ.WinForms
         [Category(CAT)]
         public Orientation Orientation { get { return _orientation; } set { _orientation = value; Refresh(); } }
 
+        private  int _margin = 0;
+        private  int _barSize = 1;
+        private ProgressBarStyle _style = ProgressBarStyle.Blocks; 
+        public new ProgressBarStyle Style 
+        { 
+            get { return _style; } 
+            set 
+            {
+                _style = value;
+                switch (_style)
+                {
+                    case ProgressBarStyle.Blocks:
+                        _margin = 2;
+                        _barSize = 6;
+                        break;
+                    case ProgressBarStyle.Continuous:
+                        _margin = 0;
+                        _barSize = 1;
+                        break;
+                    case ProgressBarStyle.Marquee:
+                        _margin = 2;
+                        _barSize = 6;
+                        break;
+                    default:
+                        break;
+                }
+                Refresh();
+            } 
+        }
+
         public ColorBarsProgressBar()
         {
             this.DoubleBuffered = true;
             SetStyle(ControlStyles.UserPaint, true);
+            Style = Style; //update sizes
         }
 
-        const int margin = 2;
-        const int barSize = 6;
+        public void SetMainColor(Color c)
+        {
+            if (ColorTheme.Theme == ColorsThemeType.Regular)
+            {
+                ColorTheme.Part1_ActiveColor = c;
+                ColorTheme.Part2_ActiveColor = c;
+                ColorTheme.Part3_ActiveColor = c;
+            }
+            else
+            {
+                ColorTheme.Part1_ActiveColor = c;
+            }
+        }
 
         protected override void OnPaint(PaintEventArgs pe)
         {
@@ -158,8 +212,8 @@ namespace MZ.WinForms
         private int CalcBarsCount()
         {
             if (_orientation == Orientation.Vertical)
-                return this.ClientRectangle.Height / barSize;
-            return this.ClientRectangle.Width / barSize;
+                return this.ClientRectangle.Height / _barSize;
+            return this.ClientRectangle.Width / _barSize;
         }
 
         private void DrawBarRectangle(int barIndex, int barsCount, Graphics g)
@@ -171,33 +225,63 @@ namespace MZ.WinForms
 
             if (_orientation == Orientation.Vertical)
             {
-                rBar.X = rClnt.X + margin;
-                rBar.Y = rClnt.Y + margin + barIndex * barSize;
-                rBar.Width = rClnt.Width - 2 * margin;
-                rBar.Height = barSize - margin;
+                rBar.X = rClnt.X + _margin;
+                rBar.Y = rClnt.Y + _margin + barIndex * _barSize;
+                rBar.Width = rClnt.Width - 2 * _margin;
+                rBar.Height = _barSize - _margin;
 
                 //if out of bounds
-                if (rBar.Y + rBar.Height + margin > this.Height)
-                    rBar.Height = rClnt.Height - rBar.Y - margin;
+                if (rBar.Y + rBar.Height + _margin > this.Height)
+                    rBar.Height = rClnt.Height - rBar.Y - _margin;
 
                 barPercent = (int)Math.Ceiling(100.0 * (barsCount - barIndex - 1) / (double)barsCount);
             }
             else
             {
-                rBar.X = rClnt.X + margin + barIndex * barSize;
-                rBar.Y = rClnt.Y + margin;
-                rBar.Width = barSize - margin;
-                rBar.Height = rClnt.Height - 2 * margin;
+                rBar.X = rClnt.X + _margin + barIndex * _barSize;
+                rBar.Y = rClnt.Y + _margin;
+                rBar.Width = _barSize - _margin;
+                rBar.Height = rClnt.Height - 2 * _margin;
 
                 //if out of bounds
-                if (rBar.X + rBar.Width + margin > this.Width)
-                    rBar.Width = rClnt.Width - rBar.X - margin;
-
+                if (rBar.X + rBar.Width + _margin > this.Width)
+                    rBar.Width = rClnt.Width - rBar.X - _margin;
             }
 
-            bool isBarActive = ValuePercent > 0 && (barPercent) <= ValuePercent;
+            bool isBarActive = IsBarActive(barPercent);
             Brush brush = ColorTheme.GetColor(barPercent, isBarActive);
             g.FillRectangle(brush, rBar);
+        }
+
+        private bool IsBarActive(int barPercent)
+        {
+            if (ValuePercent == 0)
+                return false;
+
+            if (Style != ProgressBarStyle.Marquee)
+                return barPercent <= ValuePercent;
+
+            const int MarqueeWidth = 25;
+            double left = ValuePercent - MarqueeWidth;
+            double right = ValuePercent;
+            if (left < 0)
+            {
+                right = 100 + left;
+                left = ValuePercent;
+
+                return barPercent < left || barPercent >= right;
+            }
+            else if(ValuePercent > 100)
+            {
+                left = MarqueeWidth + ValuePercent - 100;
+                right = ValuePercent;
+
+                return barPercent < left || barPercent >= right;
+            }
+            else
+            {
+                return barPercent > left && barPercent <= right;
+            }
         }
     }
 }

@@ -36,10 +36,6 @@
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.m_pnlMain = new System.Windows.Forms.Panel();
             this.m_ToolStripMain = new System.Windows.Forms.ToolStrip();
-            this.m_btnAddGroup = new System.Windows.Forms.ToolStripSplitButton();
-            this.m_mnuAddGroup = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_mnuRemoveGroup = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_mnuRenameGroup = new System.Windows.Forms.ToolStripMenuItem();
             this.m_btnNewGroup = new System.Windows.Forms.ToolStripButton();
             this.m_btnRenameGroup = new System.Windows.Forms.ToolStripButton();
             this.m_btnDeleteGroup = new System.Windows.Forms.ToolStripButton();
@@ -109,7 +105,6 @@
             // 
             this.m_ToolStripMain.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
             this.m_ToolStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.m_btnAddGroup,
             this.m_btnNewGroup,
             this.m_btnRenameGroup,
             this.m_btnDeleteGroup});
@@ -119,45 +114,6 @@
             this.m_ToolStripMain.Size = new System.Drawing.Size(800, 25);
             this.m_ToolStripMain.TabIndex = 6;
             this.m_ToolStripMain.Text = "toolStrip1";
-            // 
-            // m_btnAddGroup
-            // 
-            this.m_btnAddGroup.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.m_btnAddGroup.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.m_mnuAddGroup,
-            this.m_mnuRemoveGroup,
-            this.m_mnuRenameGroup});
-            this.m_btnAddGroup.Image = ((System.Drawing.Image)(resources.GetObject("m_btnAddGroup.Image")));
-            this.m_btnAddGroup.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.m_btnAddGroup.Margin = new System.Windows.Forms.Padding(10, 1, 0, 2);
-            this.m_btnAddGroup.Name = "m_btnAddGroup";
-            this.m_btnAddGroup.Size = new System.Drawing.Size(124, 22);
-            this.m_btnAddGroup.Text = "Add New Group";
-            this.m_btnAddGroup.ButtonClick += new System.EventHandler(this.m_btnAdd_Click);
-            // 
-            // m_mnuAddGroup
-            // 
-            this.m_mnuAddGroup.Image = global::SmartBackup.Properties.Resources.Show_Detail1;
-            this.m_mnuAddGroup.Name = "m_mnuAddGroup";
-            this.m_mnuAddGroup.Size = new System.Drawing.Size(180, 22);
-            this.m_mnuAddGroup.Text = "Add Group";
-            this.m_mnuAddGroup.Click += new System.EventHandler(this.m_btnAdd_Click);
-            // 
-            // m_mnuRemoveGroup
-            // 
-            this.m_mnuRemoveGroup.Image = global::SmartBackup.Properties.Resources.Hide_Detail1;
-            this.m_mnuRemoveGroup.Name = "m_mnuRemoveGroup";
-            this.m_mnuRemoveGroup.Size = new System.Drawing.Size(180, 22);
-            this.m_mnuRemoveGroup.Text = "Remove Group";
-            this.m_mnuRemoveGroup.Click += new System.EventHandler(this.m_btnRemove_Click);
-            // 
-            // m_mnuRenameGroup
-            // 
-            this.m_mnuRenameGroup.Image = global::SmartBackup.Properties.Resources.Properties;
-            this.m_mnuRenameGroup.Name = "m_mnuRenameGroup";
-            this.m_mnuRenameGroup.Size = new System.Drawing.Size(180, 22);
-            this.m_mnuRenameGroup.Text = "Rename Group";
-            this.m_mnuRenameGroup.Click += new System.EventHandler(this.m_btnEdit_Click);
             // 
             // m_btnNewGroup
             // 
@@ -218,10 +174,6 @@
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.Panel m_pnlMain;
         private System.Windows.Forms.ToolStrip m_ToolStripMain;
-        private System.Windows.Forms.ToolStripSplitButton m_btnAddGroup;
-        private System.Windows.Forms.ToolStripMenuItem m_mnuAddGroup;
-        private System.Windows.Forms.ToolStripMenuItem m_mnuRemoveGroup;
-        private System.Windows.Forms.ToolStripMenuItem m_mnuRenameGroup;
         private System.Windows.Forms.ToolStripButton m_btnNewGroup;
         private System.Windows.Forms.ToolStripButton m_btnRenameGroup;
         private System.Windows.Forms.ToolStripButton m_btnDeleteGroup;
