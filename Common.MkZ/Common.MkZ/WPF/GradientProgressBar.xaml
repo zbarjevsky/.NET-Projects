@@ -8,71 +8,24 @@
              x:Name="_gradientProgressBar"
              MouseDoubleClick="Progress_MouseDoubleClick"
              SizeChanged="Progress_SizeChanged"
-             Background="LightGray"
+             Background="AliceBlue"
              FocusManager.FocusedElement="{Binding RelativeSource={x:Static RelativeSource.Self}, Mode=OneTime}"
              d:DesignHeight="80" d:DesignWidth="400">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <SolidColorBrush x:Key="LineColor0">DarkGoldenrod</SolidColorBrush>
-            <SolidColorBrush x:Key="LineColor1">Black</SolidColorBrush>
-            
-            <Style x:Name="GradientProgress" x:Key="{x:Type ProgressBar}" TargetType="{x:Type ProgressBar}">
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type ProgressBar}">
-                            <Grid MinHeight="14" MinWidth="200">
-                                <Rectangle Name="PART_Track" Stroke="Transparent" StrokeThickness="1">
-                                    <Rectangle.Fill>
-                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                            <GradientStop Offset="0" Color="#FF00FF00"/>
-                                            <GradientStop Offset="0.9" Color="#FFFFFF00"/>
-                                            <GradientStop Offset="1" Color="#FFFF0000"/>
-                                        </LinearGradientBrush>
-                                    </Rectangle.Fill>
-                                </Rectangle>
-                                <DockPanel Margin="1">
-                                    <Rectangle Name="PART_Indicator">
-                                    </Rectangle>
-                                    <Rectangle Name="Mask" MinWidth="{TemplateBinding Width}" Fill="{TemplateBinding Background}"/>
-                                </DockPanel>
-                            </Grid>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-        </ResourceDictionary>
-    </UserControl.Resources>
+    <Grid>
+        <Rectangle x:Name="_rcColor">
+            <Rectangle.Fill>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                    <GradientStop Offset="0" Color="#FF00FF00"/>
+                    <GradientStop Offset="0.9" Color="#FFFFFF00"/>
+                    <GradientStop Offset="1" Color="#FFFF0000"/>
+                </LinearGradientBrush>
+            </Rectangle.Fill>
+        </Rectangle>
 
-    <Grid ContextMenuService.ShowOnDisabled="True">
-        <!--<Grid.ContextMenu>
-            <ContextMenu DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type l:GradientProgressBar}}, Path=PlacementTarget.DataContext}">
-                <MenuItem Header="Start" Click="OnStart">
-                    <MenuItem.Icon>
-                        <Image Source="Images\Ok.ico" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="Stop" Click="OnStop">
-                    <MenuItem.Icon>
-                        <Image Source="Images\Cancel.ico" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <Separator />
-                <MenuItem x:Name="mnuBellOnOff" Header="ThinkerBell at the end" Click="OnBellOnOffClicked"/>
-                <Separator />
-                <MenuItem x:Name="chkNoProgress" Header="None" Click="OnBellIntervalClicked"/>
-                <MenuItem x:Name="chkBell1min" Header="1 Min" Click="OnBellIntervalClicked"/>
-                <MenuItem x:Name="chkBell2min" Header="2 Min" Click="OnBellIntervalClicked"/>
-                <MenuItem x:Name="chkBell3min" Header="3 Min" Click="OnBellIntervalClicked"/>
-                <MenuItem x:Name="chkBell4min" Header="4 Min" Click="OnBellIntervalClicked"/>
-                <MenuItem x:Name="chkBell5min" Header="5 Min" Click="OnBellIntervalClicked"/>
-            </ContextMenu>
-        </Grid.ContextMenu>-->
+        <Rectangle x:Name="_rcGray" Margin="190,0,0,0" 
+                   Fill="{Binding Background, ElementName=_gradientProgressBar}">
+        </Rectangle>
 
-        <ProgressBar  Background="{Binding Background, ElementName=_gradientProgressBar, FallbackValue = Red}" 
-            Value="{Binding Value, Mode=OneWay, ElementName=_gradientProgressBar}" Maximum="{Binding Max, ElementName=_gradientProgressBar}">
-            <ProgressBar.BorderThickness >0</ProgressBar.BorderThickness>
-        </ProgressBar>
-        
         <Viewbox HorizontalAlignment="Right" VerticalAlignment="Center" MinHeight="16" MinWidth="16">
             <CheckBox x:Name="chk" ToolTip="ThinkerBell at the end"
                       Margin="2" Visibility="Collapsed"

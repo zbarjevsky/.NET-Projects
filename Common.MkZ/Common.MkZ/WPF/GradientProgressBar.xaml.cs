@@ -16,23 +16,24 @@ using System.Windows.Media;
 namespace MZ.WPF
 {
     /// <summary>
-    /// Interaction logic for ReikiProgressBar.xaml
+    /// Common Control - GradientProgressBar
     /// </summary>
     public partial class GradientProgressBar : UserControl, INotifyPropertyChanged
     {
-        private Timer m_Timer = new Timer(300);
-        private DateTime m_LastTime = DateTime.Now;
-        private TimeSpan m_ElapsedTime = TimeSpan.FromSeconds(0);
-        private bool m_bPaused = false;
-
         public double Value
         {
             get { return (double)GetValue(ValueProperty); }
-            set { SetValue(ValueProperty, value); DrawTicks(); OnPropertyChanged(); }
+            set { SetValue(ValueProperty, value); }
         }
 
         public static readonly DependencyProperty ValueProperty =
-            DependencyProperty.Register("Value", typeof(double), typeof(GradientProgressBar), new PropertyMetadata(0.0));
+            DependencyProperty.Register("Value", typeof(double), typeof(GradientProgressBar), new UIPropertyMetadata(0.0, OnValueChanged));
+
+        private static void OnValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is GradientProgressBar This)
+                This.DrawValue();
+        }
 
         public double Maximum
         {
@@ -42,6 +43,15 @@ namespace MZ.WPF
 
         public static readonly DependencyProperty MaximumProperty =
             DependencyProperty.Register("Maximum", typeof(double), typeof(GradientProgressBar), new PropertyMetadata(180.0));
+
+        public double Minimum
+        {
+            get { return (double)GetValue(MinimumProperty); }
+            set { SetValue(MinimumProperty, value); DrawTicks(); OnPropertyChanged(); }
+        }
+
+        public static readonly DependencyProperty MinimumProperty =
+            DependencyProperty.Register("Minimum", typeof(double), typeof(GradientProgressBar), new PropertyMetadata(0.0));
 
         public SolidColorBrush TickColor
         {
@@ -56,57 +66,7 @@ namespace MZ.WPF
         {
             InitializeComponent();
 
-            m_Timer.Enabled = false;
-            m_Timer.Elapsed += m_Timer_Elapsed;
-
-            DrawTicks();
-
-            //ProgressColor = Brushes.Pink;
-            //TickColor = Brushes.Navy;
-        }
-
-		private void m_Timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            m_Timer.Stop();
-
-            DateTime now = DateTime.Now;
-            if (!m_bPaused)
-                m_ElapsedTime += (now - m_LastTime);
-            m_LastTime = now;
-
-            if (Maximum > 10)
-            {
-                Value = m_ElapsedTime.TotalSeconds % Maximum;
-            }
-            else
-            {
-                Value = 0;
-            }
-
-            UpdateTooltip(Maximum - Value);
-
-            m_Timer.Start();
-        }
-
-        private void UpdateTooltip(double secondsLeft)
-        {
-            this.Dispatcher.BeginInvoke((Action)(() =>
-            {
-                const string FMT = @"m\:ss"; // @"hh\:mm\:ss"
-
-                string interval = "3 min"; // TimeSpan.FromSeconds(Settings.ProgressInterval).ToString(FMT);
-                string value = TimeSpan.FromSeconds(secondsLeft).ToString(FMT);
-
-                if (Maximum > 10)
-                {
-                    this.ToolTip = string.Format("Bell: {0}, Interval: {1:0} Time Left: {2:0}",
-                        chk.IsChecked == true ? "On" : "Off", interval, value);
-                }
-                else
-                {
-                    this.ToolTip = "None";
-                }
-            }));
+            DataContext = this;
         }
 
         #region INotifyPropertyChanged Members
@@ -127,7 +87,7 @@ namespace MZ.WPF
             public int iHalfTickCount = 30;
             public int iFullTickCount = 60;
 
-            public static Theme GetClockTheme()
+            public static Theme GetBase60Theme()
             {
                 return new Theme()
                 {
@@ -148,28 +108,40 @@ namespace MZ.WPF
             }
         }
 
-        public Theme ProgressTheme { get; set; } = Theme.GetClockTheme();
+        public Theme ProgressTheme { get; set; } = Theme.GetBase100Theme();
+
+        private void DrawValue()
+        {
+            if (_canvas.ActualWidth == 0 || _canvas.ActualHeight == 0)
+                return;
+
+            double ratio = (Value - Minimum) / (Maximum - Minimum);
+            double left = ratio * _canvas.ActualWidth;
+            _rcGray.Margin = new Thickness(left, 0, 0, 0);
+        }
 
         private void DrawTicks()
         {
+            DrawValue();
+
             _canvas.Children.Clear();
 
             if (_canvas.ActualWidth == 0 || _canvas.ActualHeight == 0)
                 return;
 
-            double line_count = Maximum;  //(Max / 30.0); //line per 30 sec
-            double line_offset = (_canvas.ActualWidth-3) / line_count;
+            double line_count = Maximum;
+            double line_distance = _canvas.ActualWidth / line_count;
             double smallDelta = _canvas.ActualHeight / 10;
             double bigDelta = _canvas.ActualHeight / 4;
 
-            for (int i = 0; i < line_count + 1; i++)
+            for (int i = 0; i <= line_count; i++)
             {
                 double thickness = -1;
                 double delta = bigDelta;
 
                 if (i % ProgressTheme.iBaseTickCount == 0)
                 {
-                    thickness = 0.5;
+                    thickness = 1;
                     delta = bigDelta;
                 }
                 if (i % ProgressTheme.iHalfTickCount == 0)
@@ -182,13 +154,14 @@ namespace MZ.WPF
                     thickness = 2;
                     delta = smallDelta;
                 }
+
                 if (thickness < 0)
-                    continue;
+                    continue; //skip line
 
                 Line line = new Line();
                 line.Stroke = TickColor;
                 line.StrokeThickness = thickness;
-                line.X1 = 1 + i * line_offset;
+                line.X1 = i * line_distance;
                 line.X2 = line.X1;
                 line.Y1 = delta;
                 line.Y2 = _canvas.ActualHeight - delta;
@@ -199,7 +172,7 @@ namespace MZ.WPF
 
         private void Progress_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-
+            DrawValue();
         }
 
         private void Progress_SizeChanged(object sender, SizeChangedEventArgs e)

@@ -16,6 +16,10 @@
         Topmost="True"
         AllowsTransparency="True"
         Title="PopupInfoWindow" Height="250" Width="80">
+    <Window.Resources>
+        <ResourceDictionary>
+        </ResourceDictionary>
+    </Window.Resources>
     <Border x:Name="_border" BorderThickness="2" CornerRadius="4" Padding="1" BorderBrush="Navy">
         <Border.Background>
             <SolidColorBrush Color="{DynamicResource {x:Static SystemColors.GradientActiveCaptionColorKey}}"/>
@@ -47,15 +51,14 @@
             <Slider x:Name="_slider" Grid.Row="1" Grid.Column="1" Margin="0,10"
                     Orientation="Vertical" HorizontalAlignment="Center"
                     Thumb.DragDelta="_slider_DragDelta"
-                    Minimum="0" Maximum="100" Value="30">
-
+                    Minimum="0" Maximum="100" Value="30" >
             </Slider>
             <Border Grid.Row="2" Grid.ColumnSpan="2" Margin="1"
                     BorderThickness="0,1,0,0" BorderBrush="{Binding ElementName=_border, Path=BorderBrush}">
                 <TextBlock x:Name="_txtVolume" 
                        TextAlignment="Center" FontWeight="Bold" Foreground="{Binding ElementName=_border, Path=BorderBrush}"
                        VerticalAlignment="Center" HorizontalAlignment="Center"
-                       Text="{Binding ElementName=_slider, Path=Value, StringFormat={}{0:# '%}}"/>
+                       Text="{Binding ElementName=_slider, Path=Value, StringFormat={}{0:0 '%}}"/>
             </Border>
         </Grid>
     </Border>
