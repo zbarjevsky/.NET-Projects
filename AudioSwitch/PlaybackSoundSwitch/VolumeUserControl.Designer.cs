@@ -84,10 +84,10 @@
             themeColorSet1.Threshold2 = 100;
             this.m_progrLevel.ColorTheme = themeColorSet1;
             this.m_progrLevel.Location = new System.Drawing.Point(35, 45);
-            this.m_progrLevel.MinimumSize = new System.Drawing.Size(20, 0);
+            this.m_progrLevel.MinimumSize = new System.Drawing.Size(16, 0);
             this.m_progrLevel.Name = "m_progrLevel";
             this.m_progrLevel.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.m_progrLevel.Size = new System.Drawing.Size(20, 186);
+            this.m_progrLevel.Size = new System.Drawing.Size(16, 186);
             this.m_progrLevel.TabIndex = 3;
             this.m_progrLevel.TabStop = false;
             this.m_progrLevel.Value = 30;

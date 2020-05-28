@@ -25,6 +25,7 @@ namespace PlaybackSoundSwitch.Notifications
         /// </summary>
         private void Register(MMDeviceEnumerator enumerator)
         {
+            UnRegister();
             _enumerator = enumerator;
             _enumerator.RegisterEndpointNotificationCallback(this);
         }
@@ -43,30 +44,45 @@ namespace PlaybackSoundSwitch.Notifications
 
         public void OnDeviceStateChanged(string deviceId, DeviceState newState)
         {
+            if (string.IsNullOrWhiteSpace(deviceId))
+                return;
+
             var device = _enumerator.GetDevice(deviceId);
             _dispatcher.Debounce(300, (o) => DevicesChanged(device, newState));
         }
 
         public void OnDeviceAdded(string deviceId)
         {
+            if (string.IsNullOrWhiteSpace(deviceId))
+                return;
+
             var device = _enumerator.GetDevice(deviceId);
             _dispatcher.Debounce(300, (o) => DevicesChanged(device, "Added"));
         }
 
         public void OnDeviceRemoved(string deviceId)
         {
+            if (string.IsNullOrWhiteSpace(deviceId))
+                return;
+
             var device = _enumerator.GetDevice(deviceId);
             _dispatcher.Debounce(300, (o) => DevicesChanged(device, "Removed"));
         }
 
         public void OnDefaultDeviceChanged(DataFlow flow, Role role, string deviceId)
         {
-            var device = _enumerator.GetDevice(deviceId);
+            if (string.IsNullOrWhiteSpace(deviceId))
+                return;
+
+            MMDevice device = _enumerator.GetDevice(deviceId);
             _dispatcher.Debounce(300, (o) => DefaultDeviceChanged(device));
         }
 
         public void OnPropertyValueChanged(string deviceId, PropertyKey key)
         {
+            if (string.IsNullOrWhiteSpace(deviceId))
+                return;
+
             if (PropertyKeys.PKEY_DEVICE_INTERFACE_FRIENDLY_NAME.formatId != key.formatId
                 && PropertyKeys.PKEY_AUDIO_ENDPOINT_GUID.formatId != key.formatId
                 && PropertyKeys.PKEY_DEVICE_ICON.formatId != key.formatId

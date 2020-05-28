@@ -93,7 +93,7 @@ namespace PlaybackSoundSwitch
         public MMDevice GetDefaultAudioEndpoint(EDataFlow dataFlow, Role role)
         {
             IMMDevice device;
-            Marshal.ThrowExceptionForHR(((IMMDeviceEnumerator)_realEnumerator).GetDefaultAudioEndpoint(dataFlow, role, out device));
+            Marshal.ThrowExceptionForHR(_realEnumerator.GetDefaultAudioEndpoint(dataFlow, role, out device));
             return new MMDevice(device);
         }
 
@@ -130,7 +130,7 @@ namespace PlaybackSoundSwitch
         public MMDevice GetDevice(string id)
         {
             IMMDevice device;
-            Marshal.ThrowExceptionForHR(((IMMDeviceEnumerator)_realEnumerator).GetDevice(id, out device));
+            Marshal.ThrowExceptionForHR(_realEnumerator.GetDevice(id, out device));
             return new MMDevice(device);
         }
 

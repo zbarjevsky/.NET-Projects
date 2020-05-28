@@ -50,6 +50,7 @@
             this.colorBarsProgressBar1 = new MZ.WinForms.ColorBarsProgressBar();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.m_chkEnable = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -141,6 +142,7 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.m_chkEnable);
             this.tabPage3.Controls.Add(this.m_btnGradientWpfProgress);
             this.tabPage3.Controls.Add(this.m_btnColorSlider);
             this.tabPage3.Controls.Add(this.m_btnTestWPFMessageBoxWPF);
@@ -353,6 +355,19 @@
             this.tabPage1.Text = "Shell32 icons";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
+            // m_chkEnable
+            // 
+            this.m_chkEnable.AutoSize = true;
+            this.m_chkEnable.Checked = true;
+            this.m_chkEnable.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.m_chkEnable.Location = new System.Drawing.Point(349, 252);
+            this.m_chkEnable.Name = "m_chkEnable";
+            this.m_chkEnable.Size = new System.Drawing.Size(59, 17);
+            this.m_chkEnable.TabIndex = 12;
+            this.m_chkEnable.Text = "Enable";
+            this.m_chkEnable.UseVisualStyleBackColor = true;
+            this.m_chkEnable.CheckedChanged += new System.EventHandler(this.m_chkEnable_CheckedChanged);
+            // 
             // FormMainTest
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -371,6 +386,7 @@
             this.splitContainer1.ResumeLayout(false);
             this.tabControl1.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
+            this.tabPage3.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -397,5 +413,6 @@
         private System.Windows.Forms.Button m_btnTestWPFMessageBoxWPF;
         private System.Windows.Forms.Button m_btnColorSlider;
         private System.Windows.Forms.Button m_btnGradientWpfProgress;
+        private System.Windows.Forms.CheckBox m_chkEnable;
     }
 }

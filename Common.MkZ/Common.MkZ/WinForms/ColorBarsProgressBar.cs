@@ -250,7 +250,10 @@ namespace MZ.WinForms
 
             bool isBarActive = IsBarActive(barPercent);
             Brush brush = ColorTheme.GetColor(barPercent, isBarActive);
-            g.FillRectangle(brush, rBar);
+            if (Enabled)
+                g.FillRectangle(brush, rBar);
+            else
+                g.DrawRectangle(Pens.Silver, rBar);
         }
 
         private bool IsBarActive(int barPercent)

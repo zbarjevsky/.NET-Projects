@@ -71,7 +71,7 @@ namespace PlaybackSoundSwitch
                 lvi.ToolTipText = GetDeviceTooltip(dev);
             }
 
-            SetActiveDeviceToBold(activeDevice.ID);
+            SetActiveDeviceToBold(activeDevice);
             m_listDevices.EndUpdate();
         }
 
@@ -109,16 +109,17 @@ namespace PlaybackSoundSwitch
             }
         }
 
-        private void SetActiveDeviceToBold(string deviceId)
+        private void SetActiveDeviceToBold(MMDevice device)
         {
             AlternateColorTool altenateColor = new AlternateColorTool(AlternateColorPalette);
 
+            string ID = device == null ? "" : device.ID;
             foreach (ListViewGroup group in m_listDevices.Groups)
             {
                 foreach (ListViewItem item in group.Items)
                 {
                     DeviceFullInfo dev = item.Tag as DeviceFullInfo;
-                    bool isActive = dev.ID == deviceId;
+                    bool isActive = dev.ID == ID;
                     item.Font = isActive ? _fontBold : _fontNorm;
                     item.SubItems[1].Text = isActive ? "Active" : "";
                     item.Selected = false; // dev.Id == sel.ID;
@@ -268,7 +269,7 @@ namespace PlaybackSoundSwitch
 
                 SoundDeviceManager.SetActiveDevice(device.ID, device.DeviceType);
 
-                SetActiveDeviceToBold(device.ID);
+                SetActiveDeviceToBold(device.Device);
             }
             catch (Exception err)
             {

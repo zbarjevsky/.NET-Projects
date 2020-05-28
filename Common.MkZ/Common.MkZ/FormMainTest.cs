@@ -110,5 +110,12 @@ namespace MZ
             wnd.ShowActivated = false;
             wnd.Show();
         }
+
+        private void m_chkEnable_CheckedChanged(object sender, EventArgs e)
+        {
+            colorBarsProgressBar1.Enabled = m_chkEnable.Checked;
+            colorBarsProgressBar2.Enabled = m_chkEnable.Checked;
+            colorBarsProgressBar3.Enabled = m_chkEnable.Checked;
+        }
     }
 }

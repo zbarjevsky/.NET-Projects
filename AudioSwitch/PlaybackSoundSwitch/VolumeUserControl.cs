@@ -21,6 +21,14 @@ namespace PlaybackSoundSwitch
 
         public string Title { get { return m_grpVolume.Text; } set { m_grpVolume.Text = value; } }
 
+        public void EnableControls(bool bEnable)
+        {
+            m_btnMute.Enabled = bEnable;
+            m_trackVolume.Enabled = bEnable;
+            m_progrLevel.Enabled = bEnable;
+            m_trackVolume.Value = 0;
+        }
+
         public VolumeUserControl()
         {
             InitializeComponent();
@@ -38,6 +46,10 @@ namespace PlaybackSoundSwitch
                 Device.Dispose();
 
             Device = device;
+            EnableControls(Device != null);
+            if (Device == null) //no device
+                return;
+
             if (Device.DataFlow == EDataFlow.Capture)
             {
                 m_btnMute.ImageList = m_imgListMic;
@@ -116,13 +128,14 @@ namespace PlaybackSoundSwitch
             this.Text = Device.FriendlyName;
             this.m_lbl.Text = m_trackVolume.Value + "%";
 
-            string mute = Device.AudioEndpointVolume.Mute ? "Muted: " : "Mute: ";
+            bool isMuted = Device.AudioEndpointVolume.Mute;
+            string mute = isMuted ? "Muted: " : "Mute: ";
             toolTip1.SetToolTip(m_btnMute, mute + Device.FriendlyName);
 
             //microphone
             if (Device.DataFlow == EDataFlow.Capture)
             {
-                m_btnMute.ImageIndex = Device.AudioEndpointVolume.Mute ? 1 : 0;
+                m_btnMute.ImageIndex = isMuted ? 1 : 0;
             }
 
             //speaker
@@ -138,9 +151,11 @@ namespace PlaybackSoundSwitch
                 else
                     m_btnMute.ImageIndex = 4;
 
-                if (Device.AudioEndpointVolume.Mute)
+                if (isMuted)
                     m_btnMute.ImageIndex = 3;
             }
+
+            m_progrLevel.Enabled = isMuted ? false : true;
         }
 
         private void m_timer_Tick(object sender, EventArgs e)

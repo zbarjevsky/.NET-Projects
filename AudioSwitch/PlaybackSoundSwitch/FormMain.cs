@@ -26,7 +26,7 @@ namespace PlaybackSoundSwitch
     {
         public const string TITLE = "Select Active Audio End Point";
 
-        MMDeviceEnumerator _mmd = new MMDeviceEnumerator();
+        EnumeratorClient _mmd = new EnumeratorClient();
         readonly PopupVolumeInfoWindow _popupVolumeInfoWindow;
 
         public FormMain()
