@@ -67,13 +67,13 @@ namespace PlaybackSoundSwitch.WPF
             {
                 _timer_count = 0;
                 this.Volume = volume;
+                this.Opacity = 0.9;
+
                 if (this.Visibility != Visibility.Visible)
-                {
                     m_Timer.Start();
-                    this.Opacity = 0.9;
-                    this.Visibility = Visibility.Visible; //modeless
-                }
-            }
+
+                this.Show();
+           }
         }
 
         public PopupVolumeInfoWindow() 
@@ -130,7 +130,6 @@ namespace PlaybackSoundSwitch.WPF
             if (_timer_count++ > maxCount)
             {
                 _timer_count = 0;
-                //this.Visibility = Visibility.Collapsed;
                 VisibilityHideAnimation();
                 return; //do not start timer
             }
@@ -155,6 +154,7 @@ namespace PlaybackSoundSwitch.WPF
         private void Window_MouseEnter(object sender, MouseEventArgs e)
         {
             m_Timer.Stop();
+            _timer_count = 0;
         }
 
         private void Window_MouseLeave(object sender, MouseEventArgs e)
