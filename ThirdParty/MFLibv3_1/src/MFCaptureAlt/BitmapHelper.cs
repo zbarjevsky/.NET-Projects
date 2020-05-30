@@ -451,12 +451,15 @@ namespace MFCaptureAlt
                         //int bpp = 3;// fmt == PixelFormat.Format24bppRgb ? 3 : 4;
                         //int stride = _bmp.Width * bpp;
 
-                        byte* src = (byte*)pbScanline0;
-                        byte* dst = (byte*)data.Scan0;
-                        for (int i = 0; i < pcbCurrentLength; i++)
-                        {
-                            dst[i] = src[i/2];
-                        }
+                        //byte* src = (byte*)pbScanline0;
+                        //byte* dst = (byte*)data.Scan0;
+                        //for (int i = 0; i < pcbCurrentLength; i++)
+                        //{
+                        //    dst[i] = src[i/2];
+                        //}
+
+                        MFExtern.MFCopyImage(data.Scan0, data.Stride, pbScanline0, m_lDefaultStride, m_width * 2, m_height);
+
 
                         //m_convertFn(data.Scan0, data.Stride, pbScanline0, m_lDefaultStride, m_width, m_height);
                         //TransformImage_YUY2(data.Scan0, data.Stride, pData, m_lDefaultStride, m_width, m_height);
