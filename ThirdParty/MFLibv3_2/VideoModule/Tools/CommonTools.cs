@@ -19,6 +19,18 @@ namespace VideoModule.Tools
             ExecuteOnUIThread(() => { action(); return 0; });
         }
 
+        public static void ExecuteOnUIThreadBeginInvoke(Action action)
+        {
+            if (!Application.Current.Dispatcher.CheckAccess())
+            {
+                Application.Current.Dispatcher.BeginInvoke(action, System.Windows.Threading.DispatcherPriority.Background);
+            }
+            else
+            {
+                action.Invoke();
+            }
+        }
+
         public static T ExecuteOnUIThread<T>(Func<T> action)
         {
             if (!Application.Current.Dispatcher.CheckAccess())

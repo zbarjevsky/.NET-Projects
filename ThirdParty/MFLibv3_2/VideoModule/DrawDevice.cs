@@ -20,7 +20,7 @@ namespace VideoModule
         #region Definitions
 
         private static readonly Color DefaultBackColor = Colors.Gray;
-        private static readonly Color NullBackColor = Colors.CornflowerBlue;
+        private static readonly Color NullBackColor = Colors.DimGray;
 
         private const int NUM_BACK_BUFFERS = 2;
 
@@ -52,6 +52,14 @@ namespace VideoModule
             public byte G;
             public byte R;
             public byte A;
+
+            public RGBQUAD(Color color) : this()
+            {
+                R = color.R;
+                G = color.G;
+                B = color.B;
+                A = color.A;
+            }
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -96,11 +104,11 @@ namespace VideoModule
         //private SlimDX.Direct3D9.Format offScreenFormat;
         //private PresentParameters[] d3dpp;
 
-        private int offScreenCoeffN = 4;
-        private int offScreenCoeffD = 1;
+        private int _offScreenCoeffN = 4;
+        private int _offScreenCoeffD = 1;
 
-        ImageWrapper _image;
-        DeviceImage pDevice;
+        NewFrameAvailableNotify _notify;
+        DeviceImage _device;
 
         // Format information
         private SlimDX.Direct3D9.Format _format;
@@ -127,14 +135,8 @@ namespace VideoModule
         //-------------------------------------------------------------------
         public DrawDevice()
         {
-            //hwnd = IntPtr.Zero;
-            //pDevice = null;
-            //pSwapChain = null;
-
-            //d3dpp = null;
-
-            _image = null;
-            pDevice = null;
+            _notify = null;
+            _device = null;
 
             _format = SlimDX.Direct3D9.Format.X8R8G8B8;
             _width = 0;
@@ -152,7 +154,7 @@ namespace VideoModule
         ~DrawDevice()
         {
             //Debug.Assert(pSwapChain == null || pDevice == null);
-            Debug.Assert(pDevice == null);
+            Debug.Assert(_device == null);
             DestroyDevice();
         }
 #endif
@@ -168,13 +170,13 @@ namespace VideoModule
 
         private HResult TestCooperativeLevel()
         {
-            if (pDevice == null)
+            if (_device == null)
             {
                 return HResult.E_FAIL;
             }
 
             // Check the current status of Bitmap device.
-            return pDevice.TestCooperativeLevel();
+            return _device.TestCooperativeLevel();
         }
 
         //-------------------------------------------------------------------
@@ -193,19 +195,19 @@ namespace VideoModule
             switch (offScreenFormat)
             {
                 case SlimDX.Direct3D9.Format.R8G8B8:
-                    offScreenCoeffN = 3;
-                    offScreenCoeffD = 1;
+                    _offScreenCoeffN = 3;
+                    _offScreenCoeffD = 1;
                     break;
                 case SlimDX.Direct3D9.Format.Yuy2:
-                    offScreenCoeffN = 2;
-                    offScreenCoeffD = 1;
+                    _offScreenCoeffN = 2;
+                    _offScreenCoeffD = 1;
                     break;
                 case SlimDX.Direct3D9.Format.X8B8G8R8:
                 case SlimDX.Direct3D9.Format.A8B8G8R8:
                 case SlimDX.Direct3D9.Format.X8R8G8B8:
                 case SlimDX.Direct3D9.Format.A8R8G8B8:
-                    offScreenCoeffN = 4;
-                    offScreenCoeffD = 1;
+                    _offScreenCoeffN = 4;
+                    _offScreenCoeffD = 1;
                     break;
             }
             return (m_convertFn == null) ? HResult.MF_E_INVALIDMEDIATYPE : HResult.S_OK;
@@ -282,15 +284,15 @@ namespace VideoModule
         //
         // Create the Direct3D device.
         //-------------------------------------------------------------------
-        public HResult CreateDevice(ImageWrapper image)
+        public HResult CreateDevice(NewFrameAvailableNotify notify)
         {
-            if (pDevice != null)
+            if (_device != null)
             {
                 return S_Ok;
             }
 
-            _image = image;
-            pDevice = new DeviceImage(image);
+            _notify = notify;
+            _device = new DeviceImage(notify);
 
             //var pp = new PresentParameters[1];
 
@@ -327,13 +329,13 @@ namespace VideoModule
         {
             HResult hr = S_Ok;
 
-            if (pDevice != null)
+            if (_device != null)
             {
                 //var d3dppClone = (PresentParameters[])d3dpp.Clone();
 
                 try
                 {
-                    hr = pDevice.Reset();
+                    hr = _device.Reset();
 
                     if (Failed(hr))
                     {
@@ -346,9 +348,9 @@ namespace VideoModule
                 }
             }
 
-            if (pDevice == null)
+            if (_device == null)
             {
-                hr = CreateDevice(_image);
+                hr = CreateDevice(_notify);
 
                 if (Failed(hr))
                 {
@@ -366,19 +368,11 @@ namespace VideoModule
 
         //-------------------------------------------------------------------
         // DestroyDevice
-        //
-        // Release all Direct3D resources.
         //-------------------------------------------------------------------
         public void DestroyDevice()
         {
-            //offScreenSurface?.Dispose();
-            //offScreenSurface = null;
-            //pSwapChain?.Dispose();
-            //pSwapChain = null;
-            //pDevice?.Dispose();
-            //pDevice = null;
-            pDevice?.Dispose();
-            pDevice = null;
+            _device?.Dispose();
+            _device = null;
         }
 
         //-------------------------------------------------------------------
@@ -464,10 +458,10 @@ namespace VideoModule
         public HResult DrawNullFrame()
         {
             // Color fill the back buffer.
-            pDevice.ColorFill(NullBackColor);
+            _device.ColorFill(NullBackColor);
 
             // Present the frame.
-            return pDevice.Present();
+            return _device.Present();
         }
 
         //-------------------------------------------------------------------
@@ -482,7 +476,7 @@ namespace VideoModule
                 return HResult.MF_E_INVALIDREQUEST;
             }            
 
-            if (pDevice == null)
+            if (_device == null)
             {
                 return S_Ok;
             }
@@ -514,7 +508,7 @@ namespace VideoModule
                     return hr;
                 }
 
-                DataBuffer dr = new DataBuffer(pbScanline0, lStride, _width, _height);
+                //DataBuffer dr = new DataBuffer(pbScanline0, lStride, _width, _height);
                 try
                 {
                     //IntPtr scan0 = dr.LockBuffer();
@@ -529,21 +523,21 @@ namespace VideoModule
                     //}
 
                     //pDevice.UpdateBuffer(dr);
-                    pDevice.UpdateBuffer(dr.Scan0, dr.Stride, _width, _height);
+                    DataBuffer dr = _device.UpdateBuffer(pbScanline0, lStride, _width, _height);
 
                     if (snap)
                             ImageHelper.SnapShot(dr.Scan0, dr.Stride, _width, _height, snapFormat);
                 }
                 finally
                 {
-                    dr.UnlockBuffer();
+                    //dr.UnlockBuffer();
                 }
             }
 
             if (true)
             {
                 // Present the frame.
-                hr = pDevice.Present();
+                hr = _device.Present();
             }
 
             return hr;

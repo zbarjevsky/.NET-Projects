@@ -14,19 +14,19 @@ using VideoModule.Tools;
 
 namespace VideoModule
 {
-    public class DataBuffer
+    public class DataBuffer : IDisposable
     {
-        public int Stride { get; }
+        public int Stride { get; private set; }
 
-        private static int _length = 0;
-        private static int _width = 0;
-        private static int _height = 0;
+        private int _length = 0;
+        private int _width = 0;
+        private int _height = 0;
 
-        private static IntPtr _unmanagedPointer = IntPtr.Zero;
+        private IntPtr _unmanagedPointer = IntPtr.Zero;
 
         public IntPtr Scan0 { get { return _unmanagedPointer; } }
 
-        unsafe public DataBuffer(IntPtr src0, int pitch, int width, int height)
+        unsafe public bool UpdateBuffer(IntPtr src0, int pitch, int width, int height)
         {
             Stride = pitch * 2;
             if(_width != width || _height != height)
@@ -40,8 +40,7 @@ namespace VideoModule
                 _unmanagedPointer = Marshal.AllocHGlobal(_length+1);
             }
 
-            YUV2BGRQManaged((byte*)src0, (byte*)_unmanagedPointer, _width, _height);
-            Thread.Sleep(10);
+            YUV2BGRQManagedFast((byte*)src0, (byte*)_unmanagedPointer, _width, _height);
 
             //int lengthSrc = pitch * height / 4;
             //int lengthDst = _length / 4;
@@ -71,18 +70,43 @@ namespace VideoModule
             //          pDestPel[buffIdx + 1] = empty;
             //      }
             //  });
+
+            return true;
         }
 
-        public IntPtr LockBuffer()
+        public BitmapSource CreateBitmap()
         {
-            return _unmanagedPointer;
+            try
+            {
+                BitmapSource bmp = BitmapSource.Create(_width, _height, 72, 72, PixelFormats.Bgr32, null, Scan0, Stride * _height, Stride);
+                return bmp;
+            }
+            catch (Exception err)
+            {
+                Debug.WriteLine(err);
+                return null;
+            }
         }
 
-        public void UnlockBuffer()
+        public unsafe void ColorFill(Color color)
         {
+            if (_unmanagedPointer == IntPtr.Zero)
+                return;
+
+            DrawDevice.RGBQUAD empty = new DrawDevice.RGBQUAD(color);
+
+            var po = new ParallelOptions()
+            {
+                MaxDegreeOfParallelism = 4,
+            };
+
+            int lengthDst = _length / 4;
+            var pDestPel = (DrawDevice.RGBQUAD*)_unmanagedPointer;
+
+            Parallel.For(0, lengthDst, po, idx => pDestPel[idx] = empty);
         }
 
-        private static unsafe void YUV2BGRQManaged(byte* YUVData, byte* BGRQData, int width, int height, bool flipHorizontally = false)
+        private static unsafe void YUV2BGRQManagedFast(byte* YUVData, byte* BGRQData, int width, int height, bool flipHorizontally = false)
         {
 
             //returned pixel format is 2yuv - i.e. luminance, y, is represented for every pixel and the u and v are alternated
@@ -127,11 +151,13 @@ namespace VideoModule
                         int B2 = (298 * C2 + 516 * D + 128) >> 8;
 #if true
                         //check for overflow
-                        ////unsurprisingly this takes the bulk of the time.
+                        //unsurprisingly this takes the bulk of the time.
+                        pBGRQ[3] = 255; //opacity
                         pBGRQ[2] = (byte)(R1 < 0 ? 0 : R1 > 255 ? 255 : R1);
                         pBGRQ[1] = (byte)(G1 < 0 ? 0 : G1 > 255 ? 255 : G1);
                         pBGRQ[0] = (byte)(B1 < 0 ? 0 : B1 > 255 ? 255 : B1);
 
+                        pBGRQ[7] = 255; //opacity
                         pBGRQ[6] = (byte)(R2 < 0 ? 0 : R2 > 255 ? 255 : R2);
                         pBGRQ[5] = (byte)(G2 < 0 ? 0 : G2 > 255 ? 255 : G2);
                         pBGRQ[4] = (byte)(B2 < 0 ? 0 : B2 > 255 ? 255 : B2);
@@ -150,19 +176,28 @@ namespace VideoModule
                 }
             }
         }
+
+        public void Dispose()
+        {
+            _width = _height = _length = 0;
+
+            if (_unmanagedPointer != IntPtr.Zero)
+                Marshal.FreeHGlobal(_unmanagedPointer);
+            _unmanagedPointer = IntPtr.Zero;
+        }
     }
 
-    public class ImageWrapper
+    public class NewFrameAvailableNotify
     {
         private ImageSource _source;
 
         public Action<ImageSource> OnUpdateVideoAction = (source) => { };
 
-        public void UpdateSource(ImageSource source)
+        public void Notify(ImageSource source)
         {
             _source = source;
             _source.Freeze();
-            WPFUtils.ExecuteOnUIThread(() =>
+            WPFUtils.ExecuteOnUIThreadBeginInvoke(() =>
             {
                 OnUpdateVideoAction(_source);
             });
@@ -171,14 +206,17 @@ namespace VideoModule
 
     public class DeviceImage : IDisposable
     {
-        private readonly ImageWrapper _image;
+        private readonly NewFrameAvailableNotify _notify;
         private BitmapSource _bitmapSource;
+        private DataBuffer _dataBuffer = new DataBuffer();
 
-        public bool DoubleBuffering { get; set; } = true;
+        //public bool DoubleBuffering { get; set; } = true;
+        
+        private object LockObj = new object();
 
-        public DeviceImage(ImageWrapper image)
+        public DeviceImage(NewFrameAvailableNotify notify)
         {
-            _image = image;
+            _notify = notify;
         }
 
         public HResult TestCooperativeLevel()
@@ -193,31 +231,46 @@ namespace VideoModule
 
         public void Dispose()
         {
-
+            lock (LockObj)
+            {
+                _bitmapSource = null;
+                _dataBuffer.Dispose();
+                _dataBuffer = null;
+            }
         }
 
         public HResult Present()
         {
-            _image.UpdateSource(_bitmapSource);
+            lock (LockObj)
+            {
+                if (_bitmapSource != null)
+                    _notify.Notify(_bitmapSource);
+            }
             return HResult.S_OK;
         }
 
         public void ColorFill(Color nullBackColor)
         {
-            
+            lock (LockObj)
+            {
+                _dataBuffer.ColorFill(nullBackColor);
+                _bitmapSource = _dataBuffer.CreateBitmap();
+            }
         }
 
-        internal void UpdateBuffer(IntPtr sourcePtr, int pitch, int width, int height)
+        internal DataBuffer UpdateBuffer(IntPtr sourcePtr, int pitch, int width, int height)
         {
-            int stride = pitch;// ((width * 32 + 31) & ~31) / 8;
-            try
+            lock (LockObj)
             {
-                _bitmapSource = BitmapSource.Create(width, height, 72, 72, PixelFormats.Bgr32, null, sourcePtr, stride * height, stride);
+                if (_dataBuffer == null) //disposed
+                    return null;
+
+                if (!_dataBuffer.UpdateBuffer(sourcePtr, pitch, width, height))
+                    return null;
+
+                _bitmapSource = _dataBuffer.CreateBitmap();
+                return _dataBuffer;
             }
-            catch (Exception err)
-            {
-                Debug.WriteLine(err);
-            }        
         }
 
         //Bitmap GetBitmap(BitmapSource source)

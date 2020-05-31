@@ -34,18 +34,18 @@ namespace VideoModule
         #region Member Variables
 
         protected IMFSourceReaderAsync PReader;
-        protected readonly IntPtr HwndEvent;       // Application window to receive events.
-        protected DrawDevice Draw;             // Manages the Direct3D device.
+        protected readonly IntPtr HwndEvent;        // Application window to receive events.
+        protected DrawDevice Draw;                  // Manages the Direct3D device.
         protected string PwszSymbolicLink;
         protected object LockSync = new object();
-        protected ImageWrapper _image;
+        protected NewFrameAvailableNotify _image;
 
         #endregion
 
         // Constructor
-        protected CProcess(ImageWrapper image, IntPtr hEvent)
+        protected CProcess(NewFrameAvailableNotify notify, IntPtr hEvent)
         {
-            this._image = image;
+            this._image = notify;
             PReader = null;
             HwndEvent = hEvent;
             PwszSymbolicLink = null;
@@ -54,7 +54,7 @@ namespace VideoModule
             MFError.ThrowExceptionForHR(hr);
 
             Draw = new DrawDevice();
-            hr = Draw.CreateDevice(image);
+            hr = Draw.CreateDevice(notify);
 
             MFError.ThrowExceptionForHR(hr);
         }
@@ -155,14 +155,16 @@ namespace VideoModule
 
         public HResult SetDevice(MfDevice pDevice, ref string format)
         {
-            HResult hr;
+            // Release the current device, if any.
+            HResult hr = CloseDevice();
+            if (pDevice == null)
+                return HResult.S_OK;
+
             IMFMediaSource pSource = null;
             lock (LockSync)
             {
                 try
                 {
-                    // Release the current device, if any.
-                    hr = CloseDevice();
                     pActivate = pDevice.Activator;
                     object o = null;
                     if (Succeeded(hr))
@@ -259,7 +261,7 @@ namespace VideoModule
                 pActivate?.ShutdownObject();
                 pActivate = null;
                 PwszSymbolicLink = null;
-                //Draw.DrawNullFrame();
+                Draw.DrawNullFrame();
             }
             return HResult.S_OK;
         }
@@ -414,12 +416,6 @@ namespace VideoModule
                     {
                         // Read next sample.
                         hr = AskForNextSample();
-                        //hr = PReader.ReadSample((int) MF_SOURCE_READER.FirstVideoStream, 0, 
-                        //    IntPtr.Zero, // actual
-                        //    IntPtr.Zero, // flags
-                        //    IntPtr.Zero, // time stamp
-                        //    IntPtr.Zero // sample
-                        //    );
                     }
 
                     if (Failed(hr))

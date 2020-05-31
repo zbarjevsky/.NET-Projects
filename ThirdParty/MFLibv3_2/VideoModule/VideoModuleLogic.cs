@@ -28,11 +28,11 @@ namespace VideoModule
         public Action<string, string> OnErrorAction = (msg, title) => { };
         public Action<string> OnFormatAction = (format) => { };
 
-        public ImageWrapper ImageWrapper { get; }
+        public NewFrameAvailableNotify ImageWrapper { get; }
 
         public VideoModuleLogic()
         {
-            ImageWrapper = new ImageWrapper();
+            ImageWrapper = new NewFrameAvailableNotify();
 
             //Need use thread expect UI to dispose COM objects
             Application.Current.MainWindow.Closing += (o, args) =>

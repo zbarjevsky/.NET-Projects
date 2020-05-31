@@ -16,8 +16,8 @@ namespace VideoModule
         protected bool BFirstSample;
         protected long LlBaseTime;
 
-        public CCapture(ImageWrapper image, IntPtr hEvent)
-            : base(image, hEvent)
+        public CCapture(NewFrameAvailableNotify notify, IntPtr hEvent)
+            : base(notify, hEvent)
         {
             PWriter = null;
             BFirstSample = false;

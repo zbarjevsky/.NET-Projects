@@ -18,13 +18,22 @@ namespace ControlModule
     {
         private VideoModuleLogic _videoModuleLogic;
 
+        private class EmptyDevice : IDeviceInfo
+        {
+            public string Name => "Close";
+
+            public string SymbolicName => "";
+        }
+
         public ConsoleViewModel(VideoModuleLogic videoModuleLogic)
         {
             _videoModuleLogic = videoModuleLogic;
 
             IList<IDeviceInfo> deviceTable = MfDevice.GetCategoryDevices(CLSID.MF_DEVSOURCE_ATTRIBUTE_SOURCE_TYPE_VIDCAP_GUID);
+            deviceTable.Insert(0, new EmptyDevice());
 
             DeviceItems = new ObservableCollection<IDeviceInfo>(deviceTable);
+            SelectedDevice = null;
             
             PlayCommand = new RelayCommand(o =>
             {
