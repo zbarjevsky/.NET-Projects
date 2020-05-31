@@ -1,7 +1,9 @@
 ﻿using MediaFoundation;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -15,34 +17,93 @@ namespace VideoModule
     {
         public int Stride { get; }
 
-        private WriteableBitmap _bmp;
+        private static int _length = 0;
+        private static int _width = 0;
+        private static int _height = 0;
 
-        public DataBuffer(int pitch, int width, int height)
+        private static IntPtr _unmanagedPointer = IntPtr.Zero;
+
+        public IntPtr Scan0 { get { return _unmanagedPointer; } }
+
+        unsafe public DataBuffer(IntPtr src0, int pitch, int width, int height)
         {
-            Stride = pitch;
-            _bmp = new WriteableBitmap(width, height, 72, 72, PixelFormats.Bgr32, null);
+            Stride = pitch * 2;
+            if(_width != width || _height != height)
+            {
+                if (_unmanagedPointer != IntPtr.Zero)
+                    Marshal.FreeHGlobal(_unmanagedPointer);
+
+                _width = width;
+                _height = height;
+                _length = Stride * _height; //in bytes
+                _unmanagedPointer = Marshal.AllocHGlobal(_length+1);
+            }
+
+            int lengthSrc = pitch * height / 4;
+            int lengthDst = _length / 4;
+
+            var pSrcPel = (DrawDevice.YUYV*)src0;
+            var pDestPel = (DrawDevice.RGBQUAD*)_unmanagedPointer;
+
+            DrawDevice.RGBQUAD empty = new DrawDevice.RGBQUAD();
+
+            var po = new ParallelOptions()
+            {
+                MaxDegreeOfParallelism = 2,
+            };
+
+            Parallel.For(0, lengthDst/2, po, srcIdx => 
+            {
+                int buffIdx = srcIdx << 1;
+                if (srcIdx < lengthSrc)
+                {
+                    DrawDevice.YUYV pt = pSrcPel[srcIdx];
+                    pDestPel[buffIdx] = DrawDevice.ConvertYCrCbToRGB(pt.Y, pt.V, pt.U);
+                    pDestPel[buffIdx + 1] = DrawDevice.ConvertYCrCbToRGB(pt.Y2, pt.V, pt.U);
+                }
+                else
+                {
+                    pDestPel[buffIdx] = empty;
+                    pDestPel[buffIdx+1] = empty;
+                }
+            });
         }
 
         public IntPtr LockBuffer()
         {
-            _bmp.Lock();
-            return _bmp.BackBuffer;
+            return _unmanagedPointer;
         }
 
         public void UnlockBuffer()
         {
-            _bmp.Unlock();
+        }
+    }
+
+    public class ImageWrapper
+    {
+        private ImageSource _source;
+
+        public Action<ImageSource> OnUpdateVideoAction = (source) => { };
+
+        public void UpdateSource(ImageSource source)
+        {
+            _source = source;
+            _source.Freeze();
+            WPFUtils.ExecuteOnUIThread(() =>
+            {
+                OnUpdateVideoAction(_source);
+            });
         }
     }
 
     public class DeviceImage : IDisposable
     {
-        private readonly Image _image;
+        private readonly ImageWrapper _image;
         private BitmapSource _bitmapSource;
 
-        public bool DoubleBuffering { get; internal set; }
+        public bool DoubleBuffering { get; set; } = true;
 
-        public DeviceImage(Image image)
+        public DeviceImage(ImageWrapper image)
         {
             _image = image;
         }
@@ -64,7 +125,7 @@ namespace VideoModule
 
         public HResult Present()
         {
-            WPFUtils.ExecuteOnUIThread(() => _image.Source = _bitmapSource);
+            _image.UpdateSource(_bitmapSource);
             return HResult.S_OK;
         }
 
@@ -75,7 +136,15 @@ namespace VideoModule
 
         internal void UpdateBuffer(IntPtr sourcePtr, int pitch, int width, int height)
         {
-            _bitmapSource = BitmapSource.Create(width, height, 72, 72, PixelFormats.Bgr32, null, sourcePtr, pitch * height, pitch);
+            int stride = pitch;// ((width * 32 + 31) & ~31) / 8;
+            try
+            {
+                _bitmapSource = BitmapSource.Create(width, height, 72, 72, PixelFormats.Bgr32, null, sourcePtr, stride * height, stride);
+            }
+            catch (Exception err)
+            {
+                Debug.WriteLine(err);
+            }        
         }
 
         //Bitmap GetBitmap(BitmapSource source)

@@ -30,11 +30,13 @@ namespace VideoModule
             InitializeComponent();
             
             _videoModuleLogic = new VideoModuleLogic();
-            _videoModuleLogic.InitDisplay(_image, IntPtr.Zero);
+            _videoModuleLogic.InitDisplay(IntPtr.Zero);
 
             _consoleViewModel = new ConsoleViewModel(_videoModuleLogic);
             _consoleViewModel.PropertyChanged += ConsoleViewModel_PropertyChanged;
             _consoleControl.DataContext = _consoleViewModel;
+
+            this.DataContext = _consoleViewModel;
         }
 
         private void ConsoleViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)

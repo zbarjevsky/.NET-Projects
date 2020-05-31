@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MediaFoundation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -31,6 +32,19 @@ namespace VideoModule.Tools
             {
                 return action.Invoke();
             }
+        }
+
+        public static Task ExecuteInBacgroundThread(Action action)
+        {
+            var task = Task.Factory.StartNew(action);
+            return task;
+        }
+
+        public static T ExecuteInBacgroundThread<T>(Func<T> func)
+        {
+            var task = Task<T>.Factory.StartNew(func);
+            task.Wait();
+            return task.Result;
         }
     }
 }

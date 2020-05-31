@@ -4,11 +4,13 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows.Input;
+using System.Windows.Media;
 using CameraCapture.Interface;
 using MediaFoundation;
 using MZ.Utils;
 using MZ.WPF;
 using VideoModule;
+using VideoModule.Tools;
 
 namespace ControlModule
 {
@@ -43,6 +45,8 @@ namespace ControlModule
 
                 _videoModuleLogic.OnOperation("Snap");
             });
+
+            _videoModuleLogic.ImageWrapper.OnUpdateVideoAction = (source) => { VideoImage = source; };
         }
 
         public ObservableCollection<IDeviceInfo> DeviceItems { get; private set; }
@@ -60,6 +64,13 @@ namespace ControlModule
                 if (_selectedDevice!=null)
                     _videoModuleLogic.OnActivate(_selectedDevice);
             }
+        }
+
+        private ImageSource _videoImage = null;
+        public ImageSource VideoImage
+        {
+            get { return _videoImage; }
+            set { _videoImage = value; OnPropertyChanged(); }
         }
 
         private string _operationString = "Start";

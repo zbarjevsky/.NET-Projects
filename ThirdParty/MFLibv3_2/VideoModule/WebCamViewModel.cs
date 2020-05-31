@@ -73,7 +73,7 @@ namespace VideoModule
             }
         }
 
-        public void InitDisplay(Image image, IntPtr hEvent)
+        public void InitDisplay(ImageWrapper image, IntPtr hEvent)
         {
             if (rdn==null)
                 rdn = new RegisterDeviceNotifications(hEvent, KSCATEGORY_CAPTURE);

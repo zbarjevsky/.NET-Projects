@@ -15,8 +15,11 @@
             <RowDefinition />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
-        <Canvas>
-            <Image x:Name="_image" />
+        <Canvas x:Name="_canvas" Background="AliceBlue" Margin="4">
+            <Image x:Name="_image" Source="{Binding VideoImage}" 
+                   Width="{Binding Path=ActualWidth, ElementName=_canvas}" 
+                   Height="{Binding Path=ActualHeight, ElementName=_canvas}"
+                   Stretch="Uniform" />
         </Canvas>
         <views:ConsoleControl Grid.Row="1" Grid.Column="0" Margin="10"
                               x:Name="_consoleControl" />

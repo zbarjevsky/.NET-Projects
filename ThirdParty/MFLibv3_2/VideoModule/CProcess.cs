@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
+using System.Threading;
 using System.Windows.Controls;
 using MediaFoundation;
 using MediaFoundation.Alt;
@@ -37,12 +38,12 @@ namespace VideoModule
         protected DrawDevice Draw;             // Manages the Direct3D device.
         protected string PwszSymbolicLink;
         protected object LockSync = new object();
-        protected Image _image;
+        protected ImageWrapper _image;
 
         #endregion
 
         // Constructor
-        protected CProcess(Image image, IntPtr hEvent)
+        protected CProcess(ImageWrapper image, IntPtr hEvent)
         {
             this._image = image;
             PReader = null;
@@ -249,7 +250,6 @@ namespace VideoModule
         //
         //  Releases all resources held by this object.
         //-------------------------------------------------------------------
-
         public virtual HResult CloseDevice()
         {
             lock (LockSync)
@@ -259,7 +259,7 @@ namespace VideoModule
                 pActivate?.ShutdownObject();
                 pActivate = null;
                 PwszSymbolicLink = null;
-                Draw.DrawNullFrame();
+                //Draw.DrawNullFrame();
             }
             return HResult.S_OK;
         }
@@ -413,7 +413,7 @@ namespace VideoModule
                     if (Succeeded(hr))
                     {
                         // Read next sample.
-                        hr = hr = AskForNextSample();
+                        hr = AskForNextSample();
                         //hr = PReader.ReadSample((int) MF_SOURCE_READER.FirstVideoStream, 0, 
                         //    IntPtr.Zero, // actual
                         //    IntPtr.Zero, // flags

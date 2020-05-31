@@ -28,7 +28,7 @@ namespace VideoModule
         /// A struct that describes a YUYV pixel
         /// </summary>
         [StructLayout(LayoutKind.Sequential)]
-        private struct YUYV
+        public struct YUYV
         {
             public byte Y;
             public byte U;
@@ -46,7 +46,7 @@ namespace VideoModule
         }
 
         [StructLayout(LayoutKind.Sequential)]
-        private struct RGBQUAD
+        public struct RGBQUAD
         {
             public byte B;
             public byte G;
@@ -99,7 +99,7 @@ namespace VideoModule
         private int offScreenCoeffN = 4;
         private int offScreenCoeffD = 1;
 
-        Image _image;
+        ImageWrapper _image;
         DeviceImage pDevice;
 
         // Format information
@@ -282,7 +282,7 @@ namespace VideoModule
         //
         // Create the Direct3D device.
         //-------------------------------------------------------------------
-        public HResult CreateDevice(Image image)
+        public HResult CreateDevice(ImageWrapper image)
         {
             if (pDevice != null)
             {
@@ -513,26 +513,27 @@ namespace VideoModule
                 {
                     return hr;
                 }
-                
 
-            DataBuffer dr = new DataBuffer(lStride, _width, _height);
-               try
+                int stride = lStride;
+                DataBuffer dr = new DataBuffer(pbScanline0, stride, _width, _height);
+                try
                 {
-                    IntPtr scan0 = dr.LockBuffer();
-                    if (pDevice.DoubleBuffering)
-                    {
-                        // Convert the frame. This also copies it to the Direct3D surface.
-                        m_convertFn(scan0, dr.Stride, pbScanline0, lStride, _width, _height);
-                    }
-                    else
-                    {
-                        MFExtern.MFCopyImage(scan0, dr.Stride, pbScanline0, lStride, _width * offScreenCoeffN / offScreenCoeffD, _height);
-                    }
+                    //IntPtr scan0 = dr.LockBuffer();
+                    //if (pDevice.DoubleBuffering)
+                    //{
+                    //    // Convert the frame. This also copies it to the Direct3D surface.
+                    //    m_convertFn(scan0, dr.Stride, pbScanline0, stride, _width, _height);
+                    //}
+                    //else
+                    //{
+                    //    MFExtern.MFCopyImage(scan0, dr.Stride, pbScanline0, lStride, _width * offScreenCoeffN / offScreenCoeffD, _height);
+                    //}
 
-                    pDevice.UpdateBuffer(scan0, dr.Stride, _width, _height);
+                    //pDevice.UpdateBuffer(dr);
+                    pDevice.UpdateBuffer(dr.Scan0, dr.Stride, _width, _height);
 
                     if (snap)
-                            ImageHelper.SnapShot(scan0, dr.Stride, _width, _height, snapFormat);
+                            ImageHelper.SnapShot(dr.Scan0, dr.Stride, _width, _height, snapFormat);
                 }
                 finally
                 {
@@ -591,7 +592,7 @@ namespace VideoModule
             return (byte)(clr < 0 ? 0 : (clr > 255 ? 255 : clr));
         }
 
-        private static RGBQUAD ConvertYCrCbToRGB(byte y, byte cr, byte cb)
+        public static RGBQUAD ConvertYCrCbToRGB(byte y, byte cr, byte cb)
         {
             var rgbq = new RGBQUAD();
 
@@ -673,7 +674,7 @@ namespace VideoModule
 
             var po = new ParallelOptions()
             {
-                MaxDegreeOfParallelism = 32,
+                MaxDegreeOfParallelism = 1,
             };
 
             Parallel.For(0, dwHeightInPixels, po, y =>

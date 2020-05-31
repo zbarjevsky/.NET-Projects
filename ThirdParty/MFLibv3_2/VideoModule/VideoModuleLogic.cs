@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
+using VideoModule.Tools;
 
 namespace VideoModule
 {
@@ -26,8 +28,12 @@ namespace VideoModule
         public Action<string, string> OnErrorAction = (msg, title) => { };
         public Action<string> OnFormatAction = (format) => { };
 
+        public ImageWrapper ImageWrapper { get; }
+
         public VideoModuleLogic()
         {
+            ImageWrapper = new ImageWrapper();
+
             //Need use thread expect UI to dispose COM objects
             Application.Current.MainWindow.Closing += (o, args) =>
             {
@@ -40,42 +46,52 @@ namespace VideoModule
 
         public void OnActivate(IDeviceInfo moniker)
         {
-            _activeDevice = moniker as MfDevice;
-            var format = string.Empty;
-            var hr = camProcess.SetDevice(_activeDevice, ref format);
-            if (!string.IsNullOrEmpty(format))
-                OnFormatAction(format);
+            HResult hr = WPFUtils.ExecuteInBacgroundThread<HResult>(() => 
+            {
+                _activeDevice = moniker as MfDevice;
+                string format = string.Empty;
+                HResult hr1 = camProcess.SetDevice(_activeDevice, ref format);
+                if (!string.IsNullOrEmpty(format))
+                    OnFormatAction(format);
+                return hr1;
+            });
             
             MFError.ThrowExceptionForHR(hr);
         }
 
         public void OnOperation(string op)
         {
-            var capture = camProcess as ICapture;
-            switch (op)
+            HResult hr = WPFUtils.ExecuteInBacgroundThread<HResult>(() =>
             {
-                case "Start":
-                    var filename = FileHelper.SavePath + "Video " + DateTime.Now.ToString("yyyyMMddTHHmmss") + ".mp4";
-                    capture?.StartCapture(filename, MFMediaType.H264);
-                    break;
-                case "Stop":
-                    capture?.StopCapture();
-                    break;
-                case "Snap":
-                    capture?.SnapShot(ToTitleCase(ConfigurationManager.AppSettings["snapformat"]));
-                    break;
-                default:
-                    throw new InvalidOperationException(op);
-            }
+                var capture = camProcess as ICapture;
+                switch (op)
+                {
+                    case "Start":
+                        var filename = FileHelper.SavePath + "Video " + DateTime.Now.ToString("yyyyMMddTHHmmss") + ".mp4";
+                        capture?.StartCapture(filename, MFMediaType.H264);
+                        break;
+                    case "Stop":
+                        capture?.StopCapture();
+                        break;
+                    case "Snap":
+                        capture?.SnapShot(ToTitleCase(ConfigurationManager.AppSettings["snapformat"]));
+                        break;
+                    default:
+                        return HResult.MF_E_CAPTURE_ENGINE_INVALID_OP;
+                }
+                return HResult.S_OK;
+            });
+
+            MFError.ThrowExceptionForHR(hr);
         }
 
-        public void InitDisplay(Image image, IntPtr hEvent)
+        public void InitDisplay(IntPtr hEvent)
         {
             if (rdn == null)
                 rdn = new RegisterDeviceNotifications(hEvent, KSCATEGORY_CAPTURE);
             if (camProcess == null)
                 //camProcess = new CPreview(image, hEvent);
-                camProcess = new CCapture(image, hEvent);
+                camProcess = new CCapture(ImageWrapper, hEvent);
         }
 
         private void NotifyError(string sErrorMessage, int hrErr)
