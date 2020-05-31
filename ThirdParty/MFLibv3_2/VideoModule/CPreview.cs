@@ -6,7 +6,7 @@ namespace VideoModule
 {
     class CPreview : CProcess
     {
-        public CPreview(NewFrameAvailableNotify image, IntPtr hEvent)
+        public CPreview(ImageDisplayData image, IntPtr hEvent)
             :base(image, hEvent)
         { }
 

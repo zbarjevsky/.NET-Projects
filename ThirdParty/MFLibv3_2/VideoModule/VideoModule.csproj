@@ -38,6 +38,9 @@
     <Prefer32Bit>false</Prefer32Bit>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Icon_117_32.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -132,7 +135,9 @@
       <Name>MediaFoundation</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Icon_117_32.ico" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\camera.png" />
     <Resource Include="Images\red.png" />

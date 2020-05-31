@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using CameraCapture.Interface;
@@ -44,7 +45,7 @@ namespace ControlModule
                 _videoModuleLogic.OnOperation(op);
                     
                 OperationString = op == "Start" ? "Stop" : "Start";
-                ButtonShown = (OperationString == "Stop");
+                ButtonShown = (OperationString == "Stop") ? Visibility.Visible : Visibility.Hidden;
             });
 
             SnapCommand = new RelayCommand(op =>
@@ -82,6 +83,17 @@ namespace ControlModule
             set { _videoImage = value; OnPropertyChanged(); }
         }
 
+        private bool _isFlipHorizontally = true;
+        public bool IsFlipHorizontally
+        {
+            get { return _isFlipHorizontally; }
+            set 
+            { 
+                SetProperty(ref _isFlipHorizontally, value); 
+                _videoModuleLogic.SetFlipHorizontally(_isFlipHorizontally); 
+            }
+        }
+
         private string _operationString = "Start";
         public string OperationString
         {
@@ -96,8 +108,8 @@ namespace ControlModule
             set { SetProperty(ref _formatString, value); }
         }
 
-        private bool _buttonShown;
-        public bool ButtonShown
+        private Visibility _buttonShown = Visibility.Hidden;
+        public Visibility ButtonShown
         {
             get { return _buttonShown; }
             set { SetProperty(ref _buttonShown, value); }

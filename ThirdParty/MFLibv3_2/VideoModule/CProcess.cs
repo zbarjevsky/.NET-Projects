@@ -38,12 +38,12 @@ namespace VideoModule
         protected DrawDevice Draw;                  // Manages the Direct3D device.
         protected string PwszSymbolicLink;
         protected object LockSync = new object();
-        protected NewFrameAvailableNotify _image;
+        protected ImageDisplayData _image;
 
         #endregion
 
         // Constructor
-        protected CProcess(NewFrameAvailableNotify notify, IntPtr hEvent)
+        protected CProcess(ImageDisplayData notify, IntPtr hEvent)
         {
             this._image = notify;
             PReader = null;

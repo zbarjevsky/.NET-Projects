@@ -28,11 +28,11 @@ namespace VideoModule
         public Action<string, string> OnErrorAction = (msg, title) => { };
         public Action<string> OnFormatAction = (format) => { };
 
-        public NewFrameAvailableNotify ImageWrapper { get; }
+        public ImageDisplayData ImageWrapper { get; }
 
         public VideoModuleLogic()
         {
-            ImageWrapper = new NewFrameAvailableNotify();
+            ImageWrapper = new ImageDisplayData();
 
             //Need use thread expect UI to dispose COM objects
             Application.Current.MainWindow.Closing += (o, args) =>
@@ -83,6 +83,11 @@ namespace VideoModule
             });
 
             MFError.ThrowExceptionForHR(hr);
+        }
+
+        public void SetFlipHorizontally(bool isFlipHorizontally)
+        {
+            ImageWrapper.IsFlipHorizontally = isFlipHorizontally;
         }
 
         public void InitDisplay(IntPtr hEvent)

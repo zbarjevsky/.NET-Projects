@@ -34,50 +34,65 @@
         </Style>
     </UserControl.Resources>
     <Grid>
-        <ComboBox x:Name="comboBox" 
-                  ItemsSource="{Binding Path=DeviceItems}" SelectedItem="{Binding Path=SelectedDevice, Mode=TwoWay}"
-                  HorizontalAlignment="Left" Margin="120,32,0,0" VerticalAlignment="Top" Width="196">
-            <ComboBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel>
-                        <TextBlock Text="{Binding Path=Name}"></TextBlock>
-                    </StackPanel>
-                </DataTemplate>
-            </ComboBox.ItemTemplate>
-        </ComboBox>
-        <Button Style="{StaticResource AnimatedButtonStyle}" x:Name="buttonStart" 
-                HorizontalAlignment="Left" Height="28" Margin="120,86,0,0" VerticalAlignment="Top" Width="87"
-                Content="{Binding Path=OperationString}" 
-                Command="{Binding PlayCommand}" 
-                CommandParameter="{Binding Path=OperationString}"/>
-        <Button Style="{StaticResource AnimatedButtonStyle}" x:Name="buttonSnap" 
-                Command="{Binding SnapCommand}" 
-                Margin="225,86,0,0" Height="28" Width="32" HorizontalAlignment="Left" VerticalAlignment="Top"
-                HorizontalContentAlignment="Center" VerticalContentAlignment="Top">
-            <Button.Content>
-                <Image Source="/VideoModule;component/Images/camera.png" Margin="3" />
-            </Button.Content>
-        </Button>
-        <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="26,32,0,0" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Source Device"/></TextBlock>
-        <TextBlock x:Name="textBlock1" HorizontalAlignment="Right" Margin="0,10,10,0" TextWrapping="Wrap" Text="{Binding Path=FormatString}" VerticalAlignment="Top" Width="Auto"/>
-        <Image x:Name="image" HorizontalAlignment="Left" Height="40" Margin="50,80
-               ,0,0" VerticalAlignment="Top" Width="40" 
-               Source="/VideoModule;component/Images/red.png" 
-               Visibility="{Binding ButtonShown, Converter={StaticResource BooleanToVisibilityConverter}}">
-            <Image.Triggers>
-                <EventTrigger RoutedEvent="Image.Loaded">
-                    <EventTrigger.Actions>
-                        <BeginStoryboard>
-                            <Storyboard Duration="00:00:02" RepeatBehavior="Forever">
-                                <DoubleAnimation Storyboard.TargetName="image" Storyboard.TargetProperty="Opacity"
-                                                 Duration="00:00:01" AutoReverse="True" RepeatBehavior="Forever"
-                                                 AccelerationRatio="0.6" DecelerationRatio="0.4"
-                                                 From="0" To="1"/>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </EventTrigger.Actions>
-                </EventTrigger>
-            </Image.Triggers>
-        </Image>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal">
+            <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="10" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Source Device"/></TextBlock>
+            <ComboBox x:Name="comboBox" 
+                      ItemsSource="{Binding Path=DeviceItems}" SelectedItem="{Binding Path=SelectedDevice, Mode=TwoWay}"
+                      HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" Width="196">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Path=Name}"></TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <CheckBox IsChecked="{Binding IsFlipHorizontally}" Margin="10" VerticalAlignment="Center"
+                      Content="Flip Horizontally" />
+        </StackPanel>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <TextBlock x:Name="textBlock1" HorizontalAlignment="Right" Margin="10" MinWidth="60" TextWrapping="Wrap" 
+                       Text="{Binding Path=FormatString, FallbackValue=Status}" VerticalAlignment="Center" Width="Auto"/>
+            <Image x:Name="image" HorizontalAlignment="Left" Width="40" Height="40" Margin="10" MinWidth="40" VerticalAlignment="Center" 
+                   Source="/VideoModule;component/Images/red.png" 
+                   Visibility="{Binding ButtonShown}">
+                <Image.Triggers>
+                    <EventTrigger RoutedEvent="Image.Loaded">
+                        <EventTrigger.Actions>
+                            <BeginStoryboard>
+                                <Storyboard Duration="00:00:02" RepeatBehavior="Forever">
+                                    <DoubleAnimation Storyboard.TargetName="image" Storyboard.TargetProperty="Opacity"
+                                                     Duration="00:00:01" AutoReverse="True" RepeatBehavior="Forever"
+                                                     AccelerationRatio="0.6" DecelerationRatio="0.4"
+                                                     From="0" To="1"/>
+                                </Storyboard>
+                            </BeginStoryboard>
+                        </EventTrigger.Actions>
+                    </EventTrigger>
+                </Image.Triggers>
+            </Image>
+            <Button Style="{StaticResource AnimatedButtonStyle}" x:Name="buttonStart" 
+                    HorizontalAlignment="Left" Height="28" Margin="10" VerticalAlignment="Center" Width="87"
+                    Content="{Binding Path=OperationString}" 
+                    Command="{Binding PlayCommand}" 
+                    CommandParameter="{Binding Path=OperationString}"/>
+            <Button Style="{StaticResource AnimatedButtonStyle}" x:Name="buttonSnap" 
+                    Command="{Binding SnapCommand}" 
+                    Margin="10" Height="28" Width="32" HorizontalAlignment="Left" VerticalAlignment="Center"
+                    HorizontalContentAlignment="Center" VerticalContentAlignment="Top">
+                <Button.Content>
+                    <Image Source="/VideoModule;component/Images/camera.png" Margin="3" />
+                </Button.Content>
+            </Button>
+            
+        </StackPanel>
     </Grid>
 </UserControl>

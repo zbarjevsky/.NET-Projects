@@ -107,7 +107,7 @@ namespace VideoModule
         private int _offScreenCoeffN = 4;
         private int _offScreenCoeffD = 1;
 
-        NewFrameAvailableNotify _notify;
+        ImageDisplayData _notify;
         DeviceImage _device;
 
         // Format information
@@ -284,7 +284,7 @@ namespace VideoModule
         //
         // Create the Direct3D device.
         //-------------------------------------------------------------------
-        public HResult CreateDevice(NewFrameAvailableNotify notify)
+        public HResult CreateDevice(ImageDisplayData notify)
         {
             if (_device != null)
             {

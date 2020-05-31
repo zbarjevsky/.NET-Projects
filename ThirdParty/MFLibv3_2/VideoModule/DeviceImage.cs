@@ -26,7 +26,7 @@ namespace VideoModule
 
         public IntPtr Scan0 { get { return _unmanagedPointer; } }
 
-        unsafe public bool UpdateBuffer(IntPtr src0, int pitch, int width, int height)
+        unsafe public bool UpdateBuffer(IntPtr src0, int pitch, int width, int height, bool isFlipHorizontally)
         {
             Stride = pitch * 2;
             if(_width != width || _height != height)
@@ -40,7 +40,7 @@ namespace VideoModule
                 _unmanagedPointer = Marshal.AllocHGlobal(_length+1);
             }
 
-            YUV2BGRQManagedFast((byte*)src0, (byte*)_unmanagedPointer, _width, _height);
+            YUV2BGRQManagedFast((byte*)src0, (byte*)_unmanagedPointer, _width, _height, isFlipHorizontally);
 
             //int lengthSrc = pitch * height / 4;
             //int lengthDst = _length / 4;
@@ -106,7 +106,7 @@ namespace VideoModule
             Parallel.For(0, lengthDst, po, idx => pDestPel[idx] = empty);
         }
 
-        private static unsafe void YUV2BGRQManagedFast(byte* YUVData, byte* BGRQData, int width, int height, bool flipHorizontally = false)
+        private static unsafe void YUV2BGRQManagedFast(byte* YUVData, byte* BGRQData, int width, int height, bool flipHorizontally = true)
         {
 
             //returned pixel format is 2yuv - i.e. luminance, y, is represented for every pixel and the u and v are alternated
@@ -126,13 +126,26 @@ namespace VideoModule
              * http://stackoverflow.com/questions/3943779/converting-to-yuv-ycbcr-colour-space-many-versions
              */
 
+            int i0 = flipHorizontally ? 4 : 0;
+            int i1 = flipHorizontally ? 5 : 1;
+            int i2 = flipHorizontally ? 6 : 2;
+            int i3 = flipHorizontally ? 7 : 3;
+            int i4 = flipHorizontally ? 0 : 4;
+            int i5 = flipHorizontally ? 1 : 5;
+            int i6 = flipHorizontally ? 2 : 6;
+            int i7 = flipHorizontally ? 3 : 7;
 
-            byte * pBGRQs = BGRQData, pYUVs = YUVData;
+            byte* pBGRQs = BGRQData, pYUVs = YUVData;
             {
                 for (int row = 0; row < height; row++)
                 {
                     byte* pBGRQ = pBGRQs + row * width * 4;
                     byte* pYUV = pYUVs + row * width * 2;
+
+                    if(flipHorizontally)
+                    {
+                        pBGRQ += width * 4 - 4;
+                    }
 
                     //process two pixels at a time
                     for (int col = 0; col < width; col += 2)
@@ -152,15 +165,15 @@ namespace VideoModule
 #if true
                         //check for overflow
                         //unsurprisingly this takes the bulk of the time.
-                        pBGRQ[3] = 255; //opacity
-                        pBGRQ[2] = (byte)(R1 < 0 ? 0 : R1 > 255 ? 255 : R1);
-                        pBGRQ[1] = (byte)(G1 < 0 ? 0 : G1 > 255 ? 255 : G1);
-                        pBGRQ[0] = (byte)(B1 < 0 ? 0 : B1 > 255 ? 255 : B1);
+                        pBGRQ[i3] = 255; //opacity
+                        pBGRQ[i2] = (byte)(R1 < 0 ? 0 : R1 > 255 ? 255 : R1);
+                        pBGRQ[i1] = (byte)(G1 < 0 ? 0 : G1 > 255 ? 255 : G1);
+                        pBGRQ[i0] = (byte)(B1 < 0 ? 0 : B1 > 255 ? 255 : B1);
 
-                        pBGRQ[7] = 255; //opacity
-                        pBGRQ[6] = (byte)(R2 < 0 ? 0 : R2 > 255 ? 255 : R2);
-                        pBGRQ[5] = (byte)(G2 < 0 ? 0 : G2 > 255 ? 255 : G2);
-                        pBGRQ[4] = (byte)(B2 < 0 ? 0 : B2 > 255 ? 255 : B2);
+                        pBGRQ[i7] = 255; //opacity
+                        pBGRQ[i6] = (byte)(R2 < 0 ? 0 : R2 > 255 ? 255 : R2);
+                        pBGRQ[i5] = (byte)(G2 < 0 ? 0 : G2 > 255 ? 255 : G2);
+                        pBGRQ[i4] = (byte)(B2 < 0 ? 0 : B2 > 255 ? 255 : B2);
 #else
                         pBGRQ[2] = (byte)(R1);
                         pBGRQ[1] = (byte)(G1);
@@ -170,8 +183,15 @@ namespace VideoModule
                         pBGRQ[5] = (byte)(G2);
                         pBGRQ[4] = (byte)(B2);
 #endif
-                        pBGRQ += 8;
                         pYUV += 4;
+                        if (flipHorizontally)
+                        {
+                            pBGRQ -= 8;
+                        }
+                        else
+                        {
+                            pBGRQ += 8;
+                        }
                     }
                 }
             }
@@ -187,11 +207,13 @@ namespace VideoModule
         }
     }
 
-    public class NewFrameAvailableNotify
+    public class ImageDisplayData
     {
         private ImageSource _source;
 
         public Action<ImageSource> OnUpdateVideoAction = (source) => { };
+
+        public bool IsFlipHorizontally { get; set; } = true;
 
         public void Notify(ImageSource source)
         {
@@ -206,7 +228,7 @@ namespace VideoModule
 
     public class DeviceImage : IDisposable
     {
-        private readonly NewFrameAvailableNotify _notify;
+        private readonly ImageDisplayData _imageData;
         private BitmapSource _bitmapSource;
         private DataBuffer _dataBuffer = new DataBuffer();
 
@@ -214,9 +236,9 @@ namespace VideoModule
         
         private object LockObj = new object();
 
-        public DeviceImage(NewFrameAvailableNotify notify)
+        public DeviceImage(ImageDisplayData imageData)
         {
-            _notify = notify;
+            _imageData = imageData;
         }
 
         public HResult TestCooperativeLevel()
@@ -244,7 +266,7 @@ namespace VideoModule
             lock (LockObj)
             {
                 if (_bitmapSource != null)
-                    _notify.Notify(_bitmapSource);
+                    _imageData.Notify(_bitmapSource);
             }
             return HResult.S_OK;
         }
@@ -265,7 +287,7 @@ namespace VideoModule
                 if (_dataBuffer == null) //disposed
                     return null;
 
-                if (!_dataBuffer.UpdateBuffer(sourcePtr, pitch, width, height))
+                if (!_dataBuffer.UpdateBuffer(sourcePtr, pitch, width, height, _imageData.IsFlipHorizontally))
                     return null;
 
                 _bitmapSource = _dataBuffer.CreateBitmap();
