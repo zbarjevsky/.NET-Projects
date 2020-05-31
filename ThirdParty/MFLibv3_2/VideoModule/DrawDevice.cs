@@ -514,15 +514,14 @@ namespace VideoModule
                     return hr;
                 }
 
-                int stride = lStride;
-                DataBuffer dr = new DataBuffer(pbScanline0, stride, _width, _height);
+                DataBuffer dr = new DataBuffer(pbScanline0, lStride, _width, _height);
                 try
                 {
                     //IntPtr scan0 = dr.LockBuffer();
                     //if (pDevice.DoubleBuffering)
                     //{
                     //    // Convert the frame. This also copies it to the Direct3D surface.
-                    //    m_convertFn(scan0, dr.Stride, pbScanline0, stride, _width, _height);
+                    //    m_convertFn(scan0, dr.Stride, pbScanline0, lStride, _width, _height);
                     //}
                     //else
                     //{
@@ -683,8 +682,9 @@ namespace VideoModule
                 {
                     var dIndex = y*lDestStride + (x<<1);
                     var sIndex = y*lSrcStride + x;
-                    pDestPel[dIndex] = ConvertYCrCbToRGB(pSrcPel[sIndex].Y, pSrcPel[sIndex].V, pSrcPel[sIndex].U);
-                    pDestPel[dIndex + 1] = ConvertYCrCbToRGB(pSrcPel[sIndex].Y2, pSrcPel[sIndex].V, pSrcPel[sIndex].U);
+                    YUYV src = pSrcPel[sIndex];
+                    pDestPel[dIndex] = ConvertYCrCbToRGB(src.Y, src.V, src.U);
+                    pDestPel[dIndex + 1] = ConvertYCrCbToRGB(src.Y2, src.V, src.U);
                 });
             });
         }
