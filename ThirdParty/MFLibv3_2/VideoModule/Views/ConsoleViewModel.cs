@@ -45,7 +45,7 @@ namespace ControlModule
                 _videoModuleLogic.OnOperation(op);
                     
                 OperationString = op == "Start" ? "Stop" : "Start";
-                ButtonShown = (OperationString == "Stop") ? Visibility.Visible : Visibility.Hidden;
+                RecordIconVisibility = (OperationString == "Stop") ? Visibility.Visible : Visibility.Hidden;
             });
 
             SnapCommand = new RelayCommand(op =>
@@ -108,11 +108,11 @@ namespace ControlModule
             set { SetProperty(ref _formatString, value); }
         }
 
-        private Visibility _buttonShown = Visibility.Hidden;
-        public Visibility ButtonShown
+        private Visibility _recordIconVisibility = Visibility.Hidden;
+        public Visibility RecordIconVisibility
         {
-            get { return _buttonShown; }
-            set { SetProperty(ref _buttonShown, value); }
+            get { return _recordIconVisibility; }
+            set { SetProperty(ref _recordIconVisibility, value); }
         }
 
         private bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)

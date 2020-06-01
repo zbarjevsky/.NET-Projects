@@ -523,10 +523,10 @@ namespace VideoModule
                     //}
 
                     //pDevice.UpdateBuffer(dr);
-                    DataBuffer dr = _device.UpdateBuffer(pbScanline0, lStride, _width, _height);
+                    BitmapSource bmp = _device.UpdateBuffer(pbScanline0, lStride, _width, _height);
 
                     if (snap)
-                            ImageHelper.SnapShot(dr.Scan0, dr.Stride, _width, _height, snapFormat);
+                            ImageHelper.SnapShot(bmp, snapFormat);
                 }
                 finally
                 {

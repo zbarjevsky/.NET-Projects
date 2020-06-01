@@ -23,10 +23,11 @@ namespace VideoModule
         private int _height = 0;
 
         private IntPtr _unmanagedPointer = IntPtr.Zero;
+        WriteableBitmap _bmp;
 
         public IntPtr Scan0 { get { return _unmanagedPointer; } }
 
-        unsafe public bool UpdateBuffer(IntPtr src0, int pitch, int width, int height, bool isFlipHorizontally)
+        unsafe public BitmapSource UpdateBuffer(IntPtr src0, int pitch, int width, int height, bool isFlipHorizontally)
         {
             Stride = pitch * 2;
             if(_width != width || _height != height)
@@ -37,10 +38,15 @@ namespace VideoModule
                 _width = width;
                 _height = height;
                 _length = Stride * _height; //in bytes
-                _unmanagedPointer = Marshal.AllocHGlobal(_length+1);
+                //_unmanagedPointer = Marshal.AllocHGlobal(_length+1);
             }
 
-            YUV2BGRQManagedFast((byte*)src0, (byte*)_unmanagedPointer, _width, _height, isFlipHorizontally);
+            _bmp = new WriteableBitmap(_width, _height+1, 72, 72, PixelFormats.Bgr32, null);
+            _bmp.Lock();
+            YUV2BGRQManagedFast((byte*)src0, (byte*)_bmp.BackBuffer, _width, _height, isFlipHorizontally);
+            _bmp.Unlock();
+
+            //YUV2BGRQManagedFast((byte*)src0, (byte*)_unmanagedPointer, _width, _height, isFlipHorizontally);
 
             //int lengthSrc = pitch * height / 4;
             //int lengthDst = _length / 4;
@@ -71,27 +77,27 @@ namespace VideoModule
             //      }
             //  });
 
-            return true;
+            return _bmp;
         }
 
-        public BitmapSource CreateBitmap()
+        //public BitmapSource CreateBitmap()
+        //{
+        //    try
+        //    {
+        //        BitmapSource bmp = BitmapSource.Create(_width, _height, 72, 72, PixelFormats.Bgr32, null, Scan0, Stride * _height, Stride);
+        //        return bmp;
+        //    }
+        //    catch (Exception err)
+        //    {
+        //        Debug.WriteLine(err);
+        //        return null;
+        //    }
+        //}
+
+        public unsafe BitmapSource ColorFill(Color color)
         {
-            try
-            {
-                BitmapSource bmp = BitmapSource.Create(_width, _height, 72, 72, PixelFormats.Bgr32, null, Scan0, Stride * _height, Stride);
-                return bmp;
-            }
-            catch (Exception err)
-            {
-                Debug.WriteLine(err);
+            if (_bmp == null)
                 return null;
-            }
-        }
-
-        public unsafe void ColorFill(Color color)
-        {
-            if (_unmanagedPointer == IntPtr.Zero)
-                return;
 
             DrawDevice.RGBQUAD empty = new DrawDevice.RGBQUAD(color);
 
@@ -100,10 +106,17 @@ namespace VideoModule
                 MaxDegreeOfParallelism = 4,
             };
 
+            _bmp = new WriteableBitmap(_width, _height, 72, 72, PixelFormats.Bgr32, null);
+            _bmp.Lock();
+
+
             int lengthDst = _length / 4;
-            var pDestPel = (DrawDevice.RGBQUAD*)_unmanagedPointer;
+            var pDestPel = (DrawDevice.RGBQUAD*)_bmp.BackBuffer;
 
             Parallel.For(0, lengthDst, po, idx => pDestPel[idx] = empty);
+            _bmp.Unlock();
+
+            return _bmp;
         }
 
         private static unsafe void YUV2BGRQManagedFast(byte* YUVData, byte* BGRQData, int width, int height, bool flipHorizontally = true)
@@ -275,23 +288,20 @@ namespace VideoModule
         {
             lock (LockObj)
             {
-                _dataBuffer.ColorFill(nullBackColor);
-                _bitmapSource = _dataBuffer.CreateBitmap();
+                _bitmapSource = _dataBuffer.ColorFill(nullBackColor);
             }
         }
 
-        internal DataBuffer UpdateBuffer(IntPtr sourcePtr, int pitch, int width, int height)
+        internal BitmapSource UpdateBuffer(IntPtr sourcePtr, int pitch, int width, int height)
         {
             lock (LockObj)
             {
                 if (_dataBuffer == null) //disposed
                     return null;
 
-                if (!_dataBuffer.UpdateBuffer(sourcePtr, pitch, width, height, _imageData.IsFlipHorizontally))
-                    return null;
+                _bitmapSource = _dataBuffer.UpdateBuffer(sourcePtr, pitch, width, height, _imageData.IsFlipHorizontally);
 
-                _bitmapSource = _dataBuffer.CreateBitmap();
-                return _dataBuffer;
+                return _bitmapSource;
             }
         }
 

@@ -63,7 +63,7 @@
                        Text="{Binding Path=FormatString, FallbackValue=Status}" VerticalAlignment="Center" Width="Auto"/>
             <Image x:Name="image" HorizontalAlignment="Left" Width="40" Height="40" Margin="10" MinWidth="40" VerticalAlignment="Center" 
                    Source="/VideoModule;component/Images/red.png" 
-                   Visibility="{Binding ButtonShown}">
+                   Visibility="{Binding RecordIconVisibility}">
                 <Image.Triggers>
                     <EventTrigger RoutedEvent="Image.Loaded">
                         <EventTrigger.Actions>
