@@ -211,29 +211,16 @@ namespace VideoModule
                     return hr;
                 }
 
-                //DataBuffer dr = new DataBuffer(pbScanline0, lStride, _width, _height);
                 try
                 {
-                    //IntPtr scan0 = dr.LockBuffer();
-                    //if (pDevice.DoubleBuffering)
-                    //{
-                    //    // Convert the frame. This also copies it to the Direct3D surface.
-                    //    m_convertFn(scan0, dr.Stride, pbScanline0, lStride, _width, _height);
-                    //}
-                    //else
-                    //{
-                    //    MFExtern.MFCopyImage(scan0, dr.Stride, pbScanline0, lStride, _width * offScreenCoeffN / offScreenCoeffD, _height);
-                    //}
-
-                    //pDevice.UpdateBuffer(dr);
                     BitmapSource bmp = _device.Convert(pbScanline0, lStride, _formatInformation);
 
                     if (snap)
-                            ImageHelper.SnapShot(bmp, snapFormat);
+                       ImageHelper.SnapShot(bmp, snapFormat);
                 }
                 finally
                 {
-                    //dr.UnlockBuffer();
+                    xbuffer.UnlockBuffer();
                 }
             }
 

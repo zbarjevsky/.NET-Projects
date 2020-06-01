@@ -33,13 +33,14 @@ namespace VideoModule
             IntPtr pSrc,
             int lSrcStride,
             int dwWidthInPixels,
-            int dwHeightInPixels);
+            int dwHeightInPixels,
+            bool flipHorizontally);
 
         public readonly VideoFormatGUID[] VideoFormatDefs =
         {
             new VideoFormatGUID(MFMediaType.RGB32, ImageConversion.TransformImage_RGB32, SlimDX.Direct3D9.Format.X8R8G8B8),
             new VideoFormatGUID(MFMediaType.RGB24, ImageConversion.TransformImage_RGB24, SlimDX.Direct3D9.Format.R8G8B8),
-            new VideoFormatGUID(MFMediaType.YUY2, ImageConversion.TransformImage_YUY2, SlimDX.Direct3D9.Format.Yuy2),
+            new VideoFormatGUID(MFMediaType.YUY2, ImageConversion.YUV2BGRQManagedFast, SlimDX.Direct3D9.Format.Yuy2),
             new VideoFormatGUID(MFMediaType.NV12, ImageConversion.TransformImage_NV12, SlimDX.Direct3D9.Format.Unknown)
         };
 
@@ -49,10 +50,10 @@ namespace VideoModule
         public int _height = 0;
         public int _lDefaultStride = 0;
         
-        private MFRatio pixelAR = new MFRatio() {Denominator = 1, Numerator = 1 };
-        
-        private int _offScreenCoeffN = 4;
-        private int _offScreenCoeffD = 1;
+        private MFRatio _pixelAR = new MFRatio() {Denominator = 1, Numerator = 1 };
+
+        public int _offScreenCoeffN = 4;
+        public int _offScreenCoeffD = 1;
         private SlimDX.Direct3D9.Format _offScreenFormat = SlimDX.Direct3D9.Format.X8R8G8B8;
         
         public SlimDX.Direct3D9.Format _format = SlimDX.Direct3D9.Format.X8R8G8B8;
@@ -105,16 +106,15 @@ namespace VideoModule
 
                 if (COMBase.Succeeded(hr))
                 {
-                    pixelAR = PAR;
+                    _pixelAR = PAR;
                 }
                 else
                 {
-                    pixelAR.Numerator = pixelAR.Denominator = 1;
+                    _pixelAR.Numerator = _pixelAR.Denominator = 1;
                 }
 
                 var f = new FourCC(subtype);
                 _format = (SlimDX.Direct3D9.Format)f.ToInt32();
-
             }
             finally
             {
@@ -322,7 +322,8 @@ namespace VideoModule
         // RGB-24 to RGB-32
         //-------------------------------------------------------------------
         public static unsafe void TransformImage_RGB24(IntPtr pDest, int lDestStride, IntPtr pSrc, int lSrcStride,
-            int dwWidthInPixels, int dwHeightInPixels)
+            int dwWidthInPixels, int dwHeightInPixels,
+            bool flipHorizontally = true)
         {
             var source = (RGB24*)pSrc;
             var dest = (RGBQUAD*)pDest;
@@ -357,7 +358,9 @@ namespace VideoModule
         // Note: This function is needed to copy the image from system
         // memory to the Direct3D surface.
         //-------------------------------------------------------------------
-        public static void TransformImage_RGB32(IntPtr pDest, int lDestStride, IntPtr pSrc, int lSrcStride, int dwWidthInPixels, int dwHeightInPixels)
+        public static void TransformImage_RGB32(IntPtr pDest, int lDestStride, IntPtr pSrc, int lSrcStride, 
+            int dwWidthInPixels, int dwHeightInPixels,
+            bool flipHorizontally = true)
         {
             MFExtern.MFCopyImage(pDest, lDestStride, pSrc, lSrcStride, dwWidthInPixels * 4, dwHeightInPixels);
         }
@@ -373,7 +376,8 @@ namespace VideoModule
             IntPtr pSrc,
             int lSrcStride,
             int dwWidthInPixels,
-            int dwHeightInPixels)
+            int dwHeightInPixels,
+            bool flipHorizontally = true)
         {
             var pSrcPel = (YUYV*)pSrc;
             var pDestPel = (RGBQUAD*)pDest;
@@ -399,12 +403,115 @@ namespace VideoModule
             });
         }
 
+        unsafe public static void YUV2BGRQManagedFast(
+            IntPtr pDest,
+            int lDestStride,
+            IntPtr pSrc,
+            int lSrcStride,
+            int dwWidthInPixels,
+            int dwHeightInPixels,
+            bool flipHorizontally = true)
+        {
+            byte* YUVData = (byte*)pSrc;
+            byte* BGRQData = (byte*)pDest;
+            
+            //returned pixel format is 2yuv - i.e. luminance, y, is represented for every pixel and the u and v are alternated
+            //like this (where Cb = u , Cr = y)
+            //Y0 Cb Y1 Cr Y2 Cb Y3 
+
+            /*http://msdn.microsoft.com/en-us/library/ms893078.aspx
+             * 
+             * C = Y - 16
+             D = U - 128
+             E = V - 128
+             R = clip(( 298 * C           + 409 * E + 128) >> 8)
+             G = clip(( 298 * C - 100 * D - 208 * E + 128) >> 8)
+             B = clip(( 298 * C + 516 * D           + 128) >> 8)
+
+             * here are a whole bunch more formats for doing this...
+             * http://stackoverflow.com/questions/3943779/converting-to-yuv-ycbcr-colour-space-many-versions
+             */
+
+            int i0 = flipHorizontally ? 4 : 0;
+            int i1 = flipHorizontally ? 5 : 1;
+            int i2 = flipHorizontally ? 6 : 2;
+            int i3 = flipHorizontally ? 7 : 3;
+            int i4 = flipHorizontally ? 0 : 4;
+            int i5 = flipHorizontally ? 1 : 5;
+            int i6 = flipHorizontally ? 2 : 6;
+            int i7 = flipHorizontally ? 3 : 7;
+
+            byte* pBGRQs = BGRQData, pYUVs = YUVData;
+            {
+                for (int row = 0; row < dwHeightInPixels; row++)
+                {
+                    byte* pBGRQ = pBGRQs + row * dwWidthInPixels * 4;
+                    byte* pYUV = pYUVs + row * dwWidthInPixels * 2;
+
+                    if (flipHorizontally)
+                    {
+                        pBGRQ += dwWidthInPixels * 4 - 8;
+                    }
+
+                    //process two pixels at a time
+                    for (int col = 0; col < dwWidthInPixels; col += 2)
+                    {
+                        int C1 = pYUV[0] - 16;
+                        int C2 = pYUV[2] - 16;
+                        int D = pYUV[1] - 128;
+                        int E = pYUV[3] - 128;
+
+                        int R1 = (298 * C1 + 409 * E + 128) >> 8;
+                        int G1 = (298 * C1 - 100 * D - 208 * E + 128) >> 8;
+                        int B1 = (298 * C1 + 516 * D + 128) >> 8;
+
+                        int R2 = (298 * C2 + 409 * E + 128) >> 8;
+                        int G2 = (298 * C2 - 100 * D - 208 * E + 128) >> 8;
+                        int B2 = (298 * C2 + 516 * D + 128) >> 8;
+#if true
+                        //check for overflow
+                        //unsurprisingly this takes the bulk of the time.
+                        pBGRQ[i3] = 255; //opacity
+                        pBGRQ[i2] = (byte)(R1 < 0 ? 0 : R1 > 255 ? 255 : R1);
+                        pBGRQ[i1] = (byte)(G1 < 0 ? 0 : G1 > 255 ? 255 : G1);
+                        pBGRQ[i0] = (byte)(B1 < 0 ? 0 : B1 > 255 ? 255 : B1);
+
+                        pBGRQ[i7] = 255; //opacity
+                        pBGRQ[i6] = (byte)(R2 < 0 ? 0 : R2 > 255 ? 255 : R2);
+                        pBGRQ[i5] = (byte)(G2 < 0 ? 0 : G2 > 255 ? 255 : G2);
+                        pBGRQ[i4] = (byte)(B2 < 0 ? 0 : B2 > 255 ? 255 : B2);
+#else
+                        pBGRQ[2] = (byte)(R1);
+                        pBGRQ[1] = (byte)(G1);
+                        pBGRQ[0] = (byte)(B1);
+
+                        pBGRQ[6] = (byte)(R2);
+                        pBGRQ[5] = (byte)(G2);
+                        pBGRQ[4] = (byte)(B2);
+#endif
+                        pYUV += 4;
+                        if (flipHorizontally)
+                        {
+                            pBGRQ -= 8;
+                        }
+                        else
+                        {
+                            pBGRQ += 8;
+                        }
+                    }
+                }
+            }
+        }
+
         //-------------------------------------------------------------------
         // TransformImage_NV12
         //
         // NV12 to RGB-32
         //-------------------------------------------------------------------
-        unsafe public static void TransformImage_NV12(IntPtr pDest, int lDestStride, IntPtr pSrc, int lSrcStride, int dwWidthInPixels, int dwHeightInPixels)
+        unsafe public static void TransformImage_NV12(
+            IntPtr pDest, int lDestStride, IntPtr pSrc, int lSrcStride, 
+            int dwWidthInPixels, int dwHeightInPixels,
+            bool flipHorizontally = true)
         {
             byte* lpBitsY = (byte*)pSrc;
             byte* lpBitsCb = lpBitsY + (dwHeightInPixels * lSrcStride);
