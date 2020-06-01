@@ -32,7 +32,7 @@ namespace VideoModule
         DeviceImage _device;
 
         // Format information
-        private TransformInformation _formatInformation = new TransformInformation();
+        private TransformInformation _format = new TransformInformation();
         private Rect _rcDest;       // Destination Rect
 
         #endregion
@@ -137,7 +137,7 @@ namespace VideoModule
                 }
             }
 
-            if ((_formatInformation._format != SlimDX.Direct3D9.Format.Unknown))
+            if ((_format._format != SlimDX.Direct3D9.Format.Unknown))
             {
                 
             }
@@ -164,7 +164,7 @@ namespace VideoModule
             _device.ColorFill(NullBackColor);
 
             // Present the frame.
-            return _device.Present();
+            return _device.Present(isLive: false);
         }
 
         //-------------------------------------------------------------------
@@ -174,7 +174,7 @@ namespace VideoModule
         //-------------------------------------------------------------------
         public HResult DrawFrame(IMFMediaBuffer pCaptureDeviceBuffer, bool snap, string snapFormat=null)
         {
-            if (_formatInformation.m_convertFn == null)
+            if (_format.m_convertFn == null)
             {
                 return HResult.MF_E_INVALIDREQUEST;
             }            
@@ -202,7 +202,7 @@ namespace VideoModule
                     // Lock the video buffer. This method returns a pointer to the first scan
                     // line in the image, and the stride in bytes.
 
-                    hr = xbuffer.LockBuffer(_formatInformation._lDefaultStride, _formatInformation._height, out pbScanline0, out lStride);
+                    hr = xbuffer.LockBuffer(_format._lDefaultStride, _format._height, out pbScanline0, out lStride);
                     if (Failed(hr))
                         throw new InvalidOperationException();
                 }
@@ -213,7 +213,7 @@ namespace VideoModule
 
                 try
                 {
-                    BitmapSource bmp = _device.Convert(pbScanline0, lStride, _formatInformation);
+                    BitmapSource bmp = _device.DrawFrame(pbScanline0, lStride, _format);
 
                     if (snap)
                        ImageHelper.SnapShot(bmp, snapFormat);
@@ -227,7 +227,7 @@ namespace VideoModule
             if (true)
             {
                 // Present the frame.
-                hr = _device.Present();
+                hr = _device.Present(isLive: true);
             }
 
             return hr;
@@ -239,17 +239,17 @@ namespace VideoModule
 
         public HResult GetFormat(int index, out Guid subtype)
         {
-            return _formatInformation.GetFormat(index, out subtype);
+            return _format.GetFormat(index, out subtype);
         }
 
         public bool IsFormatSupported(Guid subtype)
         {
-            return _formatInformation.IsFormatSupported(subtype);
+            return _format.IsFormatSupported(subtype);
         }
 
         internal HResult SetVideoType(IMFMediaType pType)
         {
-            return _formatInformation.SetVideoType(pType);
+            return _format.SetVideoType(pType);
         }
 
         #endregion

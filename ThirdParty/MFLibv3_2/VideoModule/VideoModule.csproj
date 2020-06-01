@@ -74,6 +74,9 @@
     <Compile Include="TransformInformation.cs" />
     <Compile Include="VideoBufferLock.cs" />
     <Compile Include="VideoModuleLogic.cs" />
+    <Compile Include="Views\CircularProgressBar.xaml.cs">
+      <DependentUpon>CircularProgressBar.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ConsoleControl.xaml.cs">
       <DependentUpon>ConsoleControl.xaml</DependentUpon>
     </Compile>
@@ -98,6 +101,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Views\CircularProgressBar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\ConsoleControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

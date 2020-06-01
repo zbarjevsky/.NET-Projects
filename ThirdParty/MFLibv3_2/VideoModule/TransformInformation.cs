@@ -52,6 +52,8 @@ namespace VideoModule
         
         private MFRatio _pixelAR = new MFRatio() {Denominator = 1, Numerator = 1 };
 
+        public bool OffScreenRender { get; set; } = true;
+
         public int _offScreenCoeffN = 4;
         public int _offScreenCoeffD = 1;
         private SlimDX.Direct3D9.Format _offScreenFormat = SlimDX.Direct3D9.Format.X8R8G8B8;

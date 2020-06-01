@@ -3,7 +3,8 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:VideoModule" xmlns:views="clr-namespace:ControlModule.Views"
+        xmlns:local="clr-namespace:VideoModule" 
+        xmlns:views="clr-namespace:ControlModule.Views"
         mc:Ignorable="d"
         Icon="/VideoModule;component/Images/camera.png"
         WindowStartupLocation="CenterScreen"
@@ -22,6 +23,9 @@
                    Height="{Binding Path=ActualHeight, ElementName=_canvas}"
                    Stretch="Uniform" />
         </Canvas>
+        <views:CircularProgressBar 
+            StartupDelay="0"
+            Visibility="{Binding WaitControlVisibility}"/>
         <views:ConsoleControl Grid.Row="1" Grid.Column="0" Margin="10"
                               x:Name="_consoleControl" />
     </Grid>

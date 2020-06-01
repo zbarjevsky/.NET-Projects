@@ -16,73 +16,23 @@ namespace VideoModule
 {
     public class ImageDisplayData
     {
-        public Action<ImageSource> OnUpdateVideoAction = (source) => { };
+        public Action<ImageSource, bool> OnUpdateVideoAction = (imageSource, isLive) => { };
 
         public bool IsFlipHorizontally { get; set; } = true;
 
-        public void Notify(ImageSource source)
+        public void Notify(ImageSource source, bool isLive)
         {
             source.Freeze();
             WPFUtils.ExecuteOnUIThreadBeginInvoke(() =>
             {
-                OnUpdateVideoAction(source);
+                OnUpdateVideoAction(source, isLive);
             });
-        }
-    }
-
-   public class ImageCreateTransform : IDisposable
-    {
-        public bool OffScreenRender { get; set; } = true;
-
-        unsafe public BitmapSource ConvertToBitmapSourceBgr32(IntPtr pbScanline0, int lStride, TransformInformation tf, bool isFlipHorizontally)
-        {
-            if (tf._width == 0 || tf._height == 0 || tf.m_convertFn == null)
-                return null;
-
-            WriteableBitmap bmp = new WriteableBitmap(tf._width, tf._height, 72, 72, PixelFormats.Bgr32, null);
-            bmp.Lock();
-
-            if(OffScreenRender)
-                tf.m_convertFn(bmp.BackBuffer, bmp.BackBufferStride, pbScanline0, lStride, tf._width, tf._height, isFlipHorizontally);
-            else
-                MFExtern.MFCopyImage(bmp.BackBuffer, bmp.BackBufferStride, pbScanline0, lStride, tf._width * tf._offScreenCoeffN / tf._offScreenCoeffD, tf._height);
-
-            bmp.Unlock();
-            return bmp;
-        }
-
-        public unsafe BitmapSource ColorFill(Color color)
-        {
-            ImageConversion.RGBQUAD empty = new ImageConversion.RGBQUAD(color);
-
-            var po = new ParallelOptions()
-            {
-                MaxDegreeOfParallelism = 4,
-            };
-
-            WriteableBitmap bmp = new WriteableBitmap(640, 480, 72, 72, PixelFormats.Bgr32, null);
-            bmp.Lock();
-
-
-            int lengthDst = 640 * 480;
-            var pDestPel = (ImageConversion.RGBQUAD*)bmp.BackBuffer;
-
-            Parallel.For(0, lengthDst, po, idx => pDestPel[idx] = empty);
-            
-            bmp.Unlock();
-
-            return bmp;
-        }
-
-        public void Dispose()
-        {
         }
     }
 
     public class DeviceImage : IDisposable
     {
         private readonly ImageDisplayData _imageData;
-        private readonly ImageCreateTransform _dataTransform = new ImageCreateTransform();
 
         private BitmapSource _bitmapSource;
 
@@ -110,16 +60,15 @@ namespace VideoModule
             lock (LockObj)
             {
                 _bitmapSource = null;
-                _dataTransform.Dispose();
             }
         }
 
-        public HResult Present()
+        public HResult Present(bool isLive)
         {
             lock (LockObj)
             {
                 if (_bitmapSource != null)
-                    _imageData.Notify(_bitmapSource);
+                    _imageData.Notify(_bitmapSource, isLive);
             }
             return HResult.S_OK;
         }
@@ -128,21 +77,63 @@ namespace VideoModule
         {
             lock (LockObj)
             {
-                _bitmapSource = _dataTransform.ColorFill(nullBackColor);
+                _bitmapSource = CreateEmptyBitmapSource(640, 480, nullBackColor);
             }
         }
 
-        internal BitmapSource Convert(IntPtr sourcePtr, int pitch, TransformInformation formatInformation)
+        internal BitmapSource DrawFrame(IntPtr sourcePtr, int pitch, TransformInformation formatInformation)
         {
             lock (LockObj)
             {
                 if (formatInformation.m_convertFn == null) //not set
                     return null;
 
-                _bitmapSource = _dataTransform.ConvertToBitmapSourceBgr32(sourcePtr, pitch, formatInformation, _imageData.IsFlipHorizontally);
+                _bitmapSource = ConvertToBitmapSourceBgr32(sourcePtr, pitch, formatInformation, _imageData.IsFlipHorizontally);
 
                 return _bitmapSource;
             }
+        }
+
+        unsafe private static BitmapSource ConvertToBitmapSourceBgr32(
+            IntPtr pbScanline0, int lStride, 
+            TransformInformation tf, bool isFlipHorizontally)
+        {
+            if (tf._width == 0 || tf._height == 0 || tf.m_convertFn == null)
+                return null;
+
+            WriteableBitmap bmp = new WriteableBitmap(tf._width, tf._height, 72, 72, PixelFormats.Bgr32, null);
+            bmp.Lock();
+
+            if (tf.OffScreenRender)
+                tf.m_convertFn(bmp.BackBuffer, bmp.BackBufferStride, pbScanline0, lStride, tf._width, tf._height, isFlipHorizontally);
+            else
+                MFExtern.MFCopyImage(bmp.BackBuffer, bmp.BackBufferStride, pbScanline0, lStride, tf._width * tf._offScreenCoeffN / tf._offScreenCoeffD, tf._height);
+
+            bmp.Unlock();
+            return bmp;
+        }
+
+        unsafe private static BitmapSource CreateEmptyBitmapSource(int width, int heigth, Color color)
+        {
+            ImageConversion.RGBQUAD empty = new ImageConversion.RGBQUAD(color);
+
+            var po = new ParallelOptions()
+            {
+                MaxDegreeOfParallelism = 4,
+            };
+
+            WriteableBitmap bmp = new WriteableBitmap(width, heigth, 72, 72, PixelFormats.Bgr32, null);
+            bmp.Lock();
+
+
+            int lengthDst = width * heigth;
+            var pDestPel = (ImageConversion.RGBQUAD*)bmp.BackBuffer;
+
+            Parallel.For(0, lengthDst, po, idx => pDestPel[idx] = empty);
+
+            bmp.Unlock();
+
+            return bmp;
         }
     }
 }

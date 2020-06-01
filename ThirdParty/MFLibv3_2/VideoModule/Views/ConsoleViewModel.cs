@@ -56,7 +56,13 @@ namespace ControlModule
                 _videoModuleLogic.OnOperation("Snap");
             });
 
-            _videoModuleLogic.ImageWrapper.OnUpdateVideoAction = (source) => { VideoImage = source; };
+            _videoModuleLogic.ImageWrapper.OnUpdateVideoAction = (imageSource, isLive) => 
+            {
+                if (WaitControlVisibility == Visibility.Visible && isLive)
+                    WaitControlVisibility = Visibility.Hidden;
+
+                VideoImage = imageSource; 
+            };
         }
 
         public ObservableCollection<IDeviceInfo> DeviceItems { get; private set; }
@@ -71,8 +77,11 @@ namespace ControlModule
             set
             {
                 SetProperty(ref _selectedDevice, value);
-                if (_selectedDevice!=null)
+                if (_selectedDevice != null)
+                {
+                    WaitControlVisibility = Visibility.Visible;
                     _videoModuleLogic.OnActivate(_selectedDevice);
+                }
             }
         }
 
@@ -92,6 +101,13 @@ namespace ControlModule
                 SetProperty(ref _isFlipHorizontally, value); 
                 _videoModuleLogic.SetFlipHorizontally(_isFlipHorizontally); 
             }
+        }
+
+        private Visibility _waitControlVisibility = Visibility.Hidden;
+        public Visibility WaitControlVisibility
+        {
+            get { return _waitControlVisibility; }
+            set { SetProperty(ref _waitControlVisibility, value); }
         }
 
         private string _operationString = "Start";
