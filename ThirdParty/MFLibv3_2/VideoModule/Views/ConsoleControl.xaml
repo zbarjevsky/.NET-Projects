@@ -62,7 +62,7 @@
             <TextBlock x:Name="textBlock1" HorizontalAlignment="Right" Margin="10" MinWidth="60" TextWrapping="Wrap" 
                        Text="{Binding Path=FormatString, FallbackValue=Status}" VerticalAlignment="Center" Width="Auto"/>
             <Image x:Name="image" HorizontalAlignment="Left" Width="40" Height="40" Margin="10" MinWidth="40" VerticalAlignment="Center" 
-                   Source="/VideoModule;component/Images/red.png" 
+                   Source="/VideoModuleMF;component/Images/red.png" 
                    Visibility="{Binding RecordIconVisibility}">
                 <Image.Triggers>
                     <EventTrigger RoutedEvent="Image.Loaded">
@@ -89,7 +89,7 @@
                     Margin="10" Height="28" Width="32" HorizontalAlignment="Left" VerticalAlignment="Center"
                     HorizontalContentAlignment="Center" VerticalContentAlignment="Top">
                 <Button.Content>
-                    <Image Source="/VideoModule;component/Images/camera.png" Margin="3" />
+                    <Image Source="/VideoModuleMF;component/Images/camera.png" Margin="3" />
                 </Button.Content>
             </Button>
             

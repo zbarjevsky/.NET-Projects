@@ -96,7 +96,7 @@
     <Compile Include="DrawDevice.cs" />
     <Compile Include="FileHelper.cs" />
     <Compile Include="ICapture.cs" />
-    <Compile Include="ImageHelper.cs" />
+    <Compile Include="SnapShotImageHelper.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

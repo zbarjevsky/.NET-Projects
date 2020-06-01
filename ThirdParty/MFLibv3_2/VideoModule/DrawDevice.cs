@@ -216,7 +216,7 @@ namespace VideoModule
                     BitmapSource bmp = _device.DrawFrame(pbScanline0, lStride, _format);
 
                     if (snap)
-                       ImageHelper.SnapShot(bmp, snapFormat);
+                       SnapShotImageHelper.SnapShot(bmp, snapFormat);
                 }
                 finally
                 {

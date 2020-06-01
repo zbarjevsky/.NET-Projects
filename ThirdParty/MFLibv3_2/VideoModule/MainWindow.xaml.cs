@@ -27,16 +27,25 @@ namespace VideoModule
 
         public MainWindow()
         {
-            InitializeComponent();
-            
-            _videoModuleLogic = new VideoModuleLogic();
-            _videoModuleLogic.InitDisplay(IntPtr.Zero);
+            try
+            {
+                InitializeComponent();
 
-            _consoleViewModel = new ConsoleViewModel(_videoModuleLogic);
-            _consoleViewModel.PropertyChanged += ConsoleViewModel_PropertyChanged;
-            _consoleControl.DataContext = _consoleViewModel;
+                _videoModuleLogic = new VideoModuleLogic();
+                _videoModuleLogic.InitDisplay(IntPtr.Zero);
 
-            this.DataContext = _consoleViewModel;
+                _consoleViewModel = new ConsoleViewModel(_videoModuleLogic);
+                _consoleViewModel.PropertyChanged += ConsoleViewModel_PropertyChanged;
+                _consoleControl.DataContext = _consoleViewModel;
+
+                this.DataContext = _consoleViewModel;
+
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.ToString(), "VideoModuleMF", MessageBoxButton.OK, MessageBoxImage.Error);
+                throw;
+            }        
         }
 
         private void ConsoleViewModel_PropertyChanged(object sender, PropertyChangedEventArgs e)

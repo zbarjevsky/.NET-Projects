@@ -9,7 +9,7 @@ using System.Windows.Media.Imaging;
 
 namespace VideoModule
 {
-    internal class ImageHelper
+    internal class SnapShotImageHelper
     {
         private static readonly Assembly PresentationCore = Assembly.GetAssembly(typeof(BitmapEncoder));
 
@@ -18,8 +18,6 @@ namespace VideoModule
             var sync = new AutoResetEvent(false);
             Task.Factory.StartNew(() =>
             {
-                //BitmapSource source = BitmapSource.Create(width, height, 72, 72, PixelFormats.Bgr32, null,
-                //    sourcePtr, pitch * height, pitch);
                 sync.Set();
                 BitmapEncoder encoder;
                 var encoderType = PresentationCore.GetType(

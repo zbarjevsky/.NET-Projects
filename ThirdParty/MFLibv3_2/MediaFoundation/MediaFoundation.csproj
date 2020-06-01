@@ -140,7 +140,6 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>
-    </PostBuildEvent>
+    <PostBuildEvent>if "$(ConfigurationName)" == "Release" xcopy /s /f /r /y $(TargetPath) $(SolutionDir)\..\..\Binaries</PostBuildEvent>
   </PropertyGroup>
 </Project>

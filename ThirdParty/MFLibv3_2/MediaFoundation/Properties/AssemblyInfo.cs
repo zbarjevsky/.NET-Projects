@@ -24,8 +24,8 @@ using System.Security.Permissions;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: Guid("106ce403-2382-4c3d-ab55-fcb43e09f245")]
-[assembly: AssemblyVersion("3.0.0.*")]
-[assembly: AssemblyFileVersion("3.0.0.0")]
+[assembly: AssemblyVersion("3.2.0.12")]
+[assembly: AssemblyFileVersion("3.2.0.12")]
 #if DEBUG
 [assembly: AssemblyProduct("Debug Version")]
 #else
