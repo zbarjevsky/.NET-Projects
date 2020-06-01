@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaFoundation", "MediaFoundation\MediaFoundation.csproj", "{B78C0F3B-071A-4FD2-829D-7A67E0F7BD1C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoModule", "VideoModule\VideoModule.csproj", "{2F16527D-390C-4A9E-9A87-32F3B639DFD7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VideoModuleMF", "VideoModule\VideoModuleMF.csproj", "{2F16527D-390C-4A9E-9A87-32F3B639DFD7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
