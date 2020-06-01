@@ -71,6 +71,7 @@
     <Compile Include="Tools\NotifyPropertyChangedImpl.cs" />
     <Compile Include="Tools\RelayCommand.cs" />
     <Compile Include="Tools\User32.cs" />
+    <Compile Include="TransformInformation.cs" />
     <Compile Include="VideoBufferLock.cs" />
     <Compile Include="VideoModuleLogic.cs" />
     <Compile Include="Views\ConsoleControl.xaml.cs">

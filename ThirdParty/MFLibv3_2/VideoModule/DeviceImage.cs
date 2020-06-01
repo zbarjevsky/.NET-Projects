@@ -14,23 +14,39 @@ using VideoModule.Tools;
 
 namespace VideoModule
 {
-    public class DataBuffer : IDisposable
+    public class ImageDisplayData
+    {
+        public Action<ImageSource> OnUpdateVideoAction = (source) => { };
+
+        public bool IsFlipHorizontally { get; set; } = true;
+
+        public void Notify(ImageSource source)
+        {
+            source.Freeze();
+            WPFUtils.ExecuteOnUIThreadBeginInvoke(() =>
+            {
+                OnUpdateVideoAction(source);
+            });
+        }
+    }
+
+   public class ImageCreateTransform : IDisposable
     {
         public int Stride { get; private set; }
 
-        private int _length = 0;
-        private int _width = 0;
-        private int _height = 0;
-
-        unsafe public BitmapSource ConvertToBitmapSourceBgr32(IntPtr src0, int pitch, int width, int height, bool isFlipHorizontally)
+        unsafe public BitmapSource ConvertToBitmapSourceBgr32(IntPtr src0, int pitch, TransformInformation formatInformation, bool isFlipHorizontally)
         {
+            if (formatInformation._width == 0 || formatInformation._height == 0)
+                return null;
+
             Stride = pitch * 2; //for YUV2
 
-            _width = width;
-            _height = height;
-            _length = Stride * _height; //in bytes
+            int _width = formatInformation._width;
+            int _height = formatInformation._height;
+            int _length = Stride * _height; //in bytes
 
-            WriteableBitmap bmp = new WriteableBitmap(_width, _height+1, 72, 72, PixelFormats.Bgr32, null);
+            WriteableBitmap bmp = new WriteableBitmap(_width, _height, 72, 72, PixelFormats.Bgr32, null);
+            Debug.Assert(Stride == bmp.BackBufferStride);
             bmp.Lock();
             YUV2BGRQManagedFast((byte*)src0, (byte*)bmp.BackBuffer, _width, _height, isFlipHorizontally);
             bmp.Unlock();
@@ -40,7 +56,7 @@ namespace VideoModule
 
         public unsafe BitmapSource ColorFill(Color color)
         {
-            DrawDevice.RGBQUAD empty = new DrawDevice.RGBQUAD(color);
+            ImageConversion.RGBQUAD empty = new ImageConversion.RGBQUAD(color);
 
             var po = new ParallelOptions()
             {
@@ -52,7 +68,7 @@ namespace VideoModule
 
 
             int lengthDst = 640 * 480;
-            var pDestPel = (DrawDevice.RGBQUAD*)bmp.BackBuffer;
+            var pDestPel = (ImageConversion.RGBQUAD*)bmp.BackBuffer;
 
             Parallel.For(0, lengthDst, po, idx => pDestPel[idx] = empty);
             
@@ -99,7 +115,7 @@ namespace VideoModule
 
                     if(flipHorizontally)
                     {
-                        pBGRQ += width * 4 - 4;
+                        pBGRQ += width * 4 - 8;
                     }
 
                     //process two pixels at a time
@@ -152,84 +168,63 @@ namespace VideoModule
             }
         }
 
-        unsafe public void UpdateBufferOld(IntPtr src0, int pitch, int width, int height, bool isFlipHorizontally)
-        {
-            IntPtr _unmanagedPointer = IntPtr.Zero;
+        //unsafe public void UpdateBufferOld(IntPtr src0, int pitch, int width, int height, bool isFlipHorizontally)
+        //{
+        //    IntPtr _unmanagedPointer = IntPtr.Zero;
 
-            Stride = pitch * 2;
-            if (_width != width || _height != height)
-            {
-                if (_unmanagedPointer != IntPtr.Zero)
-                    Marshal.FreeHGlobal(_unmanagedPointer);
+        //    Stride = pitch * 2;
+        //    if (_width != width || _height != height)
+        //    {
+        //        if (_unmanagedPointer != IntPtr.Zero)
+        //            Marshal.FreeHGlobal(_unmanagedPointer);
 
-                _width = width;
-                _height = height;
-                _length = Stride * _height; //in bytes
-                _unmanagedPointer = Marshal.AllocHGlobal(_length+1);
-            }
+        //        _width = width;
+        //        _height = height;
+        //        _length = Stride * _height; //in bytes
+        //        _unmanagedPointer = Marshal.AllocHGlobal(_length+1);
+        //    }
 
-            YUV2BGRQManagedFast((byte*)src0, (byte*)_unmanagedPointer, _width, _height, isFlipHorizontally);
+        //    int lengthSrc = pitch * height / 4;
+        //    int lengthDst = _length / 4;
 
-            int lengthSrc = pitch * height / 4;
-            int lengthDst = _length / 4;
+        //    var pSrcPel = (TransformInformation.YUYV*)src0;
+        //    var pDestPel = (TransformInformation.RGBQUAD*)_unmanagedPointer;
 
-            var pSrcPel = (DrawDevice.YUYV*)src0;
-            var pDestPel = (DrawDevice.RGBQUAD*)_unmanagedPointer;
+        //    TransformInformation.RGBQUAD empty = new TransformInformation.RGBQUAD();
 
-            DrawDevice.RGBQUAD empty = new DrawDevice.RGBQUAD();
+        //    var po = new ParallelOptions()
+        //    {
+        //        MaxDegreeOfParallelism = 1,
+        //    };
 
-            var po = new ParallelOptions()
-            {
-                MaxDegreeOfParallelism = 1,
-            };
-
-            Parallel.For(0, lengthDst / 2, po, srcIdx =>
-              {
-                  int buffIdx = srcIdx << 1;
-                  if (srcIdx < lengthSrc)
-                  {
-                      DrawDevice.YUYV pt = pSrcPel[srcIdx];
-                      pDestPel[buffIdx] = DrawDevice.ConvertYCrCbToRGB(pt.Y, pt.V, pt.U);
-                      pDestPel[buffIdx + 1] = DrawDevice.ConvertYCrCbToRGB(pt.Y2, pt.V, pt.U);
-                  }
-                  else
-                  {
-                      pDestPel[buffIdx] = empty;
-                      pDestPel[buffIdx + 1] = empty;
-                  }
-              });
-        }
+        //    Parallel.For(0, lengthDst / 2, po, srcIdx =>
+        //      {
+        //          int buffIdx = srcIdx << 1;
+        //          if (srcIdx < lengthSrc)
+        //          {
+        //              TransformInformation.YUYV pt = pSrcPel[srcIdx];
+        //              pDestPel[buffIdx] = TransformInformation.ConvertYCrCbToRGB(pt.Y, pt.V, pt.U);
+        //              pDestPel[buffIdx + 1] = TransformInformation.ConvertYCrCbToRGB(pt.Y2, pt.V, pt.U);
+        //          }
+        //          else
+        //          {
+        //              pDestPel[buffIdx] = empty;
+        //              pDestPel[buffIdx + 1] = empty;
+        //          }
+        //      });
+        //}
 
         public void Dispose()
         {
-            _width = _height = _length = 0;
-        }
-    }
-
-    public class ImageDisplayData
-    {
-        private ImageSource _source;
-
-        public Action<ImageSource> OnUpdateVideoAction = (source) => { };
-
-        public bool IsFlipHorizontally { get; set; } = true;
-
-        public void Notify(ImageSource source)
-        {
-            _source = source;
-            _source.Freeze();
-            WPFUtils.ExecuteOnUIThreadBeginInvoke(() =>
-            {
-                OnUpdateVideoAction(_source);
-            });
         }
     }
 
     public class DeviceImage : IDisposable
     {
         private readonly ImageDisplayData _imageData;
+        private readonly ImageCreateTransform _dataTransform = new ImageCreateTransform();
+
         private BitmapSource _bitmapSource;
-        private DataBuffer _dataBuffer = new DataBuffer();
 
         //public bool DoubleBuffering { get; set; } = true;
         
@@ -255,8 +250,7 @@ namespace VideoModule
             lock (LockObj)
             {
                 _bitmapSource = null;
-                _dataBuffer.Dispose();
-                _dataBuffer = null;
+                _dataTransform.Dispose();
             }
         }
 
@@ -274,40 +268,21 @@ namespace VideoModule
         {
             lock (LockObj)
             {
-                _bitmapSource = _dataBuffer.ColorFill(nullBackColor);
+                _bitmapSource = _dataTransform.ColorFill(nullBackColor);
             }
         }
 
-        internal BitmapSource UpdateBuffer(IntPtr sourcePtr, int pitch, int width, int height)
+        internal BitmapSource Convert(IntPtr sourcePtr, int pitch, TransformInformation formatInformation)
         {
             lock (LockObj)
             {
-                if (_dataBuffer == null) //disposed
+                if (formatInformation.m_convertFn == null) //not set
                     return null;
 
-                _bitmapSource = _dataBuffer.ConvertToBitmapSourceBgr32(sourcePtr, pitch, width, height, _imageData.IsFlipHorizontally);
+                _bitmapSource = _dataTransform.ConvertToBitmapSourceBgr32(sourcePtr, pitch, formatInformation, _imageData.IsFlipHorizontally);
 
                 return _bitmapSource;
             }
         }
-
-        //Bitmap GetBitmap(BitmapSource source)
-        //{
-        //    Bitmap bmp = new Bitmap(
-        //      source.PixelWidth,
-        //      source.PixelHeight,
-        //      PixelFormat.Format32bppPArgb);
-        //    BitmapData data = bmp.LockBits(
-        //      new Rectangle(Point.Empty, bmp.Size),
-        //      ImageLockMode.WriteOnly,
-        //      PixelFormat.Format32bppPArgb);
-        //    source.CopyPixels(
-        //      Int32Rect.Empty,
-        //      data.Scan0,
-        //      data.Height * data.Stride,
-        //      data.Stride);
-        //    bmp.UnlockBits(data);
-        //    return bmp;
-        //}
     }
 }
