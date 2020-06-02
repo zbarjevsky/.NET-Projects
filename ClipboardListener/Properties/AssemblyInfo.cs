@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Zbarjevsky")]
 [assembly: AssemblyProduct("Clipboard Manager")]
-[assembly: AssemblyCopyright("Copyright © Mark Z. 2006")]
+[assembly: AssemblyCopyright("Copyright © Mark Z. 2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

@@ -12,8 +12,8 @@ namespace MeditationStopWatch
         //Random randomNumber = new Random();
         private StringBuilder m_sbErrorMessage;  // MCI Error message
         private StringBuilder m_sbReturnData;  // MCI return m_Data
-        private bool result;
-        private string _command, _file = string.Empty;  // String that holds the MCI command
+        private string _command;  // String that holds the MCI command
+        private string _fileNameAllias = string.Empty;
         //private IList<FileInfo> playlist;  // ListView as a playlist with the song path
 		//public int NowPlaying { get; set; }
 		public bool Paused { get; set; }
@@ -25,12 +25,12 @@ namespace MeditationStopWatch
         [DllImport("winmm.dll")]
         public static extern int mciGetErrorString(int errCode, StringBuilder errMsg, int buflen);
 
-        public string FileName {  get { return _file; } }
+        public string FileName {  get { return _fileNameAllias; } }
 
 		private bool Command(string cmd, params object [] args)
 		{
-			if (_file == string.Empty)
-				return true;
+            if (string.IsNullOrWhiteSpace(_fileNameAllias))
+                return true;
 
 			_command = string.Format(cmd, args);
 			int error = mciSendString(_command, null, 0, IntPtr.Zero);
@@ -43,7 +43,7 @@ namespace MeditationStopWatch
 
 		private string CommandGetData(string cmd, params object[] args)
 		{
-			if (_file == string.Empty)
+			if (string.IsNullOrWhiteSpace(_fileNameAllias))
 				return string.Empty;
 
 			_command = string.Format(cmd, args);
@@ -72,23 +72,23 @@ namespace MeditationStopWatch
 
         #region Operations
 
-        public void Close()
+        public void CmdClose()
         {
-			Command("close {0}", _file);
-			_file = string.Empty;
+			Command("close {0}", _fileNameAllias);
+			_fileNameAllias = string.Empty;
         }
 
-        public bool Open(string sFileName, string sShortName)
+        public bool Open(string fullPath, string fileNameAlias)
         {
-            Close();
+            CmdClose();
 
             // Try to open as mpegvideo 
-			_file = PrepareShortName(sShortName);
-            result = Command("open \"{0}\" type mpegvideo alias {1}", sFileName, _file);
+			_fileNameAllias = ReplaceSpaces(fileNameAlias);
+            bool result = Command("open \"{0}\" type mpegvideo alias {1}", fullPath, _fileNameAllias);
             if (!result)
             {
                 // Let MCI deside which file type the song is
-                result = Command("open \"{0}\" alias {1}", sFileName, _file);
+                result = Command("open \"{0}\" alias {1}", fullPath, _fileNameAllias);
                 return result;
             }
             else
@@ -96,98 +96,78 @@ namespace MeditationStopWatch
         }
 
 
-		public bool Play(string sFileName, string sShortName)
+        public bool Play(string sFileName, string fileNameAlias)
         {
-			if (Open(sFileName, sShortName))
+            if (!Open(sFileName, fileNameAlias))
+                return false;
+
+            bool result = CmdPlay();
+            if (result)
             {
-				result = Command("play {0}", _file);
-                if (result)
-                {
-                    //NowPlaying = track;
-                    return true;
-                }
-                else
-                {
-                    Close();
-                    return false;
-                }
+                return true;
             }
             else
+            {
+                CmdClose();
                 return false;
-        }
-
-        public void PauseResume()
-        {
-            if (Paused)
-            {
-                Resume();
-                Paused = false;
-            }
-            else if(IsPlaying())
-            {
-				result = Command("pause {0}", _file);
-                Paused = true;
             }
         }
 
-        public void Stop()
+        public bool CmdPlay()
         {
-			result = Command("stop {0}", _file);
-            Paused = false;
-            //Close();
+            return Command("play {0}", _fileNameAllias);
         }
 
-        public void Resume()
+        public bool CmdStop()
         {
-			result = Command("resume {0}", _file);
+            return Command("stop {0}", _fileNameAllias);
         }
 
-        #endregion 
+        public bool CmdPause()
+        {
+            return Command("pause {0}", _fileNameAllias);
+        }
+
+        public bool CmdResume()
+        {
+            return Command("resume {0}", _fileNameAllias);
+        }
+
+        #endregion
 
         #region Status
 
-		public string StatusMode
+        public string GetStatusMode()
 		{
-			get 
-			{
-				return CommandGetData("status {0} mode", _file);
-			}
+    		return CommandGetData("status {0} mode", _fileNameAllias);
 		}
 
-        public bool IsPlaying()
+        public bool IsPlaying(string sMode = "")
         {
-            string sMode = StatusMode;
-			if (sMode.Length == 7 && sMode.Substring(0, 7) == "playing")
-                return true;
-            else
-                return false;
+            if(string.IsNullOrWhiteSpace(sMode))
+                sMode = GetStatusMode();
+            return (sMode.Length == 7 && sMode.Substring(0, 7) == "playing");
         }
 
-        public bool IsOpen()
+        public bool IsOpen(string sMode = "")
         {
-			string sMode = StatusMode;
-			if (sMode.Length == 4 && sMode.Substring(0, 4) == "open")
-                return true;
-            else
-                return false;
+            if (string.IsNullOrWhiteSpace(sMode))
+                sMode = GetStatusMode();
+            return (sMode.Length == 4 && sMode.Substring(0, 4) == "open");
         }
 
-        public bool IsPaused()
+        public bool IsPaused(string sMode = "")
         {
-			string sMode = StatusMode;
-			if (sMode.Length == 6 && sMode.Substring(0, 6) == "paused")
-                return true;
-            else
-                return false;
+            if (string.IsNullOrWhiteSpace(sMode))
+                sMode = GetStatusMode();
+            return (sMode.Length == 6 && sMode.Substring(0, 6) == "paused");
         }
 
-        public bool IsStopped()
+        public bool IsStopped(string sMode = "")
         {
-			string sMode = StatusMode;
-			if (sMode.Length == 7 && sMode.Substring(0, 7) == "stopped")
-                return true;
-            else
-                return false;
+            if (string.IsNullOrWhiteSpace(sMode))
+                sMode = GetStatusMode();
+            return (sMode.Length == 7 && sMode.Substring(0, 7) == "stopped");
         }
         #endregion
 
@@ -195,33 +175,28 @@ namespace MeditationStopWatch
 
         public int GetCurentMilisecond()
         {
-			string sPosition = CommandGetData("status {0} position", _file);
-			if (string.IsNullOrEmpty(sPosition))
+			string sPosition = CommandGetData("status {0} position", _fileNameAllias);
+			if (string.IsNullOrWhiteSpace(sPosition))
 				return 0;
+
 			return int.Parse(sPosition);
         }
 
-        public void SetPosition(int miliseconds)
+        public bool SetPosition(int miliseconds)
         {
             if (IsPlaying())
-            {
-				result = Command("play {0} from {1}", _file, miliseconds);
-            }
+				return Command("play {0} from {1}", _fileNameAllias, miliseconds);
             else
-            {
-				result = Command("seek {0} to {1}", _file, miliseconds);
-            }
+				return Command("seek {0} to {1}", _fileNameAllias, miliseconds);
         }
 
         public int GetSongLenght()
         {
-            if (IsPlaying())
-            {
-				string sLength = CommandGetData("status {0} length", _file);
-				return int.Parse(sLength);
-            }
-            else
+            if (!IsPlaying())
                 return 0;
+
+			string sLength = CommandGetData("status {0} length", _fileNameAllias);
+			return int.Parse(sLength);
         }
 
         #endregion
@@ -230,12 +205,9 @@ namespace MeditationStopWatch
         public bool SetVolume(int volume)
         {
             if (volume >= 0 && volume <= 1000)
-            {
-				result = Command("setaudio {0} volume to {1}", _file, volume);
-                return result;
-            }
-            else
-                return false;
+                return Command("setaudio {0} volume to {1}", _fileNameAllias, volume);
+
+            return false;
         }
 
         public bool SetBalance(int balance, int volume)
@@ -246,9 +218,9 @@ namespace MeditationStopWatch
             if (balance >= 0 && balance <= max)
             {
 				int left = (max - balance) * volume / max;
-				result = Command("setaudio {0} left volume to {1}", _file, left);
+				bool result = Command("setaudio {0} left volume to {1}", _fileNameAllias, left);
 				int right = balance * volume / max;
-				result = Command("setaudio {0} right volume to {1}", _file, right);
+				result = Command("setaudio {0} right volume to {1}", _fileNameAllias, right);
                 return true;
             }
             else
@@ -274,9 +246,9 @@ namespace MeditationStopWatch
 			}
 		}
 
-		private string PrepareShortName(string sShortName)
+		private string ReplaceSpaces(string fileName)
 		{
-			return sShortName.Replace(' ', '_');
+			return fileName.Replace(' ', '_');
 		}
 
 

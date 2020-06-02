@@ -18,7 +18,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>3.5</OldToolsVersion>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -95,9 +95,6 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="MZ.WPF.MessageBox">
-      <HintPath>..\Binaries\MZ.WPF.MessageBox.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -147,7 +144,6 @@
     <Compile Include="Utils\ListViewColumnSorter.cs" />
     <Compile Include="Utils\ServicesManipulator.cs" />
     <Compile Include="Utils\ShutdownHandler.cs" />
-    <Compile Include="Utils\SingleInstanceHelper.cs" />
     <Compile Include="Utils\Log.cs" />
     <Compile Include="Utils\Settings.cs" />
     <Compile Include="Utils\XmlSerializerHelper.cs" />
@@ -252,7 +248,6 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Utils\WindowHighlighter.cs" />
-    <Compile Include="Utils\WindowsMessages.cs" />
     <Compile Include="Utils\XmlUtil.cs" />
     <Compile Include="Zip\IZip.cs" />
   </ItemGroup>
@@ -334,6 +329,12 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common.MkZ\Common.MkZ\Common.MkZ.csproj">
+      <Project>{a03c89dd-ca87-4c9e-9ff9-f4277372e0f7}</Project>
+      <Name>Common.MkZ</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

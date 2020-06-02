@@ -1,0 +1,63 @@
+﻿<UserControl x:Class="DashCamGPSView.Controls.PlayerTimelineBarUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DashCamGPSView.Controls"
+             mc:Ignorable="d" 
+             d:DesignHeight="55" d:DesignWidth="1200">
+    <Grid>
+        <StatusBar>
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+            <StatusBarItem Grid.Column="0" Margin="2,0" >
+                <TextBlock Name="lblProgressStatus" FontSize="16">00:00:00.000/00:00:00</TextBlock>
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="1" Margin="2,0" >
+                <Button FontSize="16" Content="ᗈ" ToolTip="Next Frame" Click="btnNextFrame_Click" />
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="2" HorizontalContentAlignment="Stretch" Margin="2,0" >
+                <StackPanel Orientation="Vertical" Width="200">
+                    <UniformGrid Columns="7">
+                        <TextBlock Text="1/30" HorizontalAlignment="Center"/>
+                        <TextBlock Text="1/4" HorizontalAlignment="Center"/>
+                        <TextBlock Text="1/2" HorizontalAlignment="Center"/>
+                        <TextBlock Text="x1" HorizontalAlignment="Center"/>
+                        <TextBlock Text="x2" HorizontalAlignment="Center"/>
+                        <TextBlock Text="x4" HorizontalAlignment="Center"/>
+                        <TextBlock Text="x8" HorizontalAlignment="Center"/>
+                    </UniformGrid>
+                    <Slider Name="sliSpeed" Foreground="Black" Margin="10,0"
+                            Minimum="0" Maximum="6" IsSnapToTickEnabled="True"
+                            Value="{Binding SpeedRatio, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}, FallbackValue=3}"
+                            SmallChange="1" LargeChange="1" TickPlacement="TopLeft" />
+                </StackPanel>
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="3" HorizontalContentAlignment="Stretch" Margin="2,0" >
+                <Slider Name="sliProgress" Foreground="Black"
+                        SmallChange="1" LargeChange="10" TickPlacement="TopLeft" 
+                        ValueChanged="sliProgress_ValueChanged" />
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="4" Margin="2,0" >
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Volume: " FontSize="16" />
+                    <Slider Name="pbVolume" Width="110" VerticalAlignment="Bottom"
+                            TickPlacement="TopLeft" 
+                            Maximum="1" SmallChange="0.05" LargeChange="0.1"
+                            Value="{Binding ExternalPlayer.Volume, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
+                </StackPanel>
+            </StatusBarItem>
+        </StatusBar>
+    </Grid>
+</UserControl>

@@ -1,0 +1,217 @@
+﻿<Window x:Class="DashCamGPSView.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DashCamGPSView"
+        xmlns:controls="clr-namespace:DashCamGPSView.Controls"
+        xmlns:gauge="clr-namespace:CircularGauge;assembly=CircularGauge"
+        xmlns:speedGauge="clr-namespace:SpeedGauge;assembly=CircularGauge" 
+        xmlns:local1="clr-namespace:MZ.WPF;assembly=Common.MkZ"
+        mc:Ignorable="d"
+        Loaded="Window_Loaded" Closed="Window_Closed" PreviewKeyDown="Window_PreviewKeyDown"
+        WindowStartupLocation="Manual"
+        Left="10" Top="10"
+        Title="DashCam GPS Viewer" Icon="DashMap.ico"
+        Height="750" Width="1600">
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Open" CanExecute="Open_CanExecute" Executed="Open_Executed" />
+        <CommandBinding Command="MediaCommands.Play" CanExecute="Play_CanExecute" Executed="Play_Executed" />
+        <CommandBinding Command="MediaCommands.Pause" CanExecute="Pause_CanExecute" Executed="Pause_Executed" />
+        <CommandBinding Command="MediaCommands.Stop" CanExecute="Stop_CanExecute" Executed="Stop_Executed" />
+        <CommandBinding Command="MediaCommands.NextTrack" CanExecute="Next_CanExecute" Executed="Next_Executed" />
+        <CommandBinding Command="MediaCommands.PreviousTrack" CanExecute="Prev_CanExecute" Executed="Prev_Executed" />
+    </Window.CommandBindings>
+    <!--<Window.InputBindings>
+        <KeyBinding  Gesture="Space" Command="{Binding MediaCommands.Pause}"/>
+        <KeyBinding Key="Escape" Command="{Binding EscapeKeyCommand}"/>
+    </Window.InputBindings>-->
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="500" x:Name="mapColumn"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40" MaxHeight="40" MinHeight="40"/>
+            <RowDefinition Height="3*" />
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="1.3*" x:Name="rowSpeedGraph"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <ToolBar Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" >
+            <Button Command="ApplicationCommands.Open" ToolTip="Open">
+                <local1:AutoGreyableImage Source="/DashCamGPSView;component/Images/map_32px.png" />
+            </Button>
+            <Separator />
+            <Button Command="MediaCommands.PreviousTrack" ToolTip="Previous File" >
+                <local1:AutoGreyableImage Source="/Images/PrevE.png" />
+            </Button>
+            <Separator />
+            <Button Command="MediaCommands.Play" ToolTip="Play" >
+                <local1:AutoGreyableImage  Source="/Images/PlayE.png" />
+            </Button>
+            <Button Command="MediaCommands.Pause" ToolTip="Pause" >
+                <local1:AutoGreyableImage Source="/Images/PauseE.png" />
+            </Button>
+            <Button Command="MediaCommands.Stop" ToolTip="Stop" >
+                <local1:AutoGreyableImage Source="/Images/StopE.png" />
+            </Button>
+            <Separator />
+            <Button Command="MediaCommands.NextTrack" ToolTip="Next File" >
+                <local1:AutoGreyableImage Source="/Images/nextE.png" />
+            </Button>
+            <Button  ToolTip="Screen Shot" Click="Screenshot_Click" >
+                <local1:AutoGreyableImage Source="/Images/Screenshot.png" />
+            </Button>
+            <Button  ToolTip="Test" Content="Test" Click="Test_Click" />
+            <TextBox Name="txtFileName"  Text="..." IsReadOnly="True"
+                     VerticalAlignment="Center" Margin="10,0" FontSize="16"/>
+            <Viewbox Margin="6">
+                <CheckBox x:Name="chkAutoPlay" IsChecked="True" Content="Auto Play Next"/>
+            </Viewbox>
+        </ToolBar>
+
+        <Grid x:Name="_gridPlayers" Grid.Row="1" Grid.RowSpan="4" Grid.Column="0" Grid.ColumnSpan="3" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="3*" x:Name="rowRearView"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="5*" x:Name="rowFrontView"/>
+            </Grid.RowDefinitions>
+            <Border x:Name="borderPlayerR" Grid.Row="0"
+                BorderThickness="2" BorderBrush="Gray" >
+                <controls:VideoPlayerControl x:Name="playerR" Title="Rear View" />
+            </Border>
+            <GridSplitter Grid.Row="1" 
+                      HorizontalAlignment="Stretch"
+                      DragCompleted="GridSplitter1_DragCompleted"/>
+
+            <Border x:Name="borderPlayerF" Grid.Row="2" BorderThickness="2" BorderBrush="Gray">
+                <controls:VideoPlayerControl x:Name="playerF" Title="Front View" />
+            </Border>
+
+            <speedGauge:Gauge180UserControl x:Name="speedGauge" Grid.RowSpan="3" 
+                 Width="180" Height="100" MaxSpeed="140" SpeedColor="Gold"
+                 HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="40,0,40,20"/>
+            
+            <!--<Viewbox Grid.Column="2" Grid.Row="3" 
+                 Width="150" Height="150"
+                 HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="40">
+            <gauge:CircularGaugeControl x:Name="speedGauge" 
+                                            OuterFrameThickness="4"
+                                            Radius="150" 
+                                            ScaleRadius="140" 
+                                            ScaleStartAngle="150" 
+                                            ScaleSweepAngle="240"
+                                            PointerLength="85" 
+                                            PointerCapRadius="45" 
+                                            MinValue="0" 
+                                            MaxValue="140" 
+                                            MajorDivisionsCount="7" 
+                                            MinorDivisionsCount="10" 
+                                            CurrentValue="{Binding Score, FallbackValue=80}"
+                                            ImageSource="/Images/map_32px.png"
+                                            ImageSize="40,50"
+                                            RangeIndicatorThickness="8"
+                                            RangeIndicatorRadius="80"
+                                            RangeIndicatorLightRadius="10"
+                                            RangeIndicatorLightOffset="60"
+                                            OptimalRangeStartValue="25"
+                                            OptimalRangeEndValue="80" 
+                                            ScaleLabelRadius="120"
+                                            ScaleLabelSize="40,30"
+                                            ScaleLabelFontSize="20"
+                                            ScaleLabelForeground="WhiteSmoke"
+                                            MajorTickSize="10,3"
+                                            MinorTickSize="3,1"
+                                            MajorTickColor="LightGray"
+                                            MinorTickColor="LightGray"
+                                            ImageOffset="-50"
+                                            GaugeBackgroundColor="Black"
+                                            PointerThickness ="16"
+                                            DialTextOffset="90" 
+                                            DialText="Speed MPH"
+                                            DialTextColor="Wheat"
+                                            DialTextFontSize="24"
+                                            >
+
+            </gauge:CircularGaugeControl>
+        </Viewbox>-->
+        </Grid>
+
+        <GridSplitter Grid.Column="3" Grid.Row="1" Grid.RowSpan="6" HorizontalAlignment="Stretch"/>
+        
+        <Grid Grid.Row="1" Grid.RowSpan="7" Grid.Column="4">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*" x:Name="rowFilesTree" />
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="5*" x:Name="rowMaps" />
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="2*" x:Name="rowGpsInfo"/>
+            </Grid.RowDefinitions>
+            <Border Grid.Column="0" Grid.Row="0" BorderThickness="2" BorderBrush="Gray" Background="Beige">
+                <controls:FilesTreeUserControl x:Name="treeGroups"/>
+            </Border>
+            <GridSplitter Grid.Column="0" Grid.Row="1" Grid.RowSpan="1" HorizontalAlignment="Stretch"/>
+            <Border Grid.Row="2" BorderThickness="2" BorderBrush="Gray">
+                <controls:GMapUserControl x:Name="MainMap" MaxZoom="24" MinZoom="1" />
+            </Border>
+            <GridSplitter Grid.Row="3" HorizontalAlignment="Stretch"/>
+            <Border Grid.Row="4" BorderThickness="2" BorderBrush="Gray">
+                <controls:GpsInfoUserControl x:Name="gpsInfo"/>
+            </Border>
+        </Grid>
+        
+        <GridSplitter Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Stretch"/>
+        
+        <controls:SpeedChartUserControl x:Name="graphSpeedInfo" Grid.Row="6" Grid.ColumnSpan="3" />
+
+        <controls:PlayerTimelineBarUserControl x:Name="statusBar" Grid.Row="7" Grid.ColumnSpan="3"  Background="Gray" 
+                           ExternalPlayer="{Binding MainPlayer, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
+
+        <!--<StatusBar Grid.Row="7" Grid.ColumnSpan="3"  Background="Gray">
+            <StatusBar.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                    </Grid>
+                </ItemsPanelTemplate>
+            </StatusBar.ItemsPanel>
+            <StatusBarItem Grid.Column="0">
+                <TextBlock Name="lblProgressStatus" FontSize="16">00:00:00/00:00:00</TextBlock>
+            </StatusBarItem>
+            --><!--<StatusBarItem Grid.Column="1">
+                <Button FontSize="16" ToolTip="Next Frame" Click="btnNextFrame_Click" >ᗈ</Button>
+            </StatusBarItem>--><!--
+            <StatusBarItem Grid.Column="2" HorizontalContentAlignment="Stretch">
+                <Slider Name="sliProgress" Foreground="Black" Minimum="0"
+                        SmallChange="1" LargeChange="10" TickPlacement="TopLeft" 
+                        Thumb.DragStarted="sliProgress_DragStarted"  
+                        Thumb.DragCompleted="sliProgress_DragCompleted" 
+                        ValueChanged="sliProgress_ValueChanged" />
+            </StatusBarItem>
+            <StatusBarItem Grid.Column="3">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Volume: " FontSize="16" />
+                    <Slider Name="pbVolume" Width="110" 
+                            Maximum="1" SmallChange="0.05" LargeChange="0.1"
+                            Value="{Binding ElementName=playerF, Path=Volume}" />
+                </StackPanel>
+            </StatusBarItem>
+        </StatusBar>-->
+
+        <controls:MaximizedUserControl x:Name="maxScreen" Grid.RowSpan="8" Grid.ColumnSpan="5" Visibility="Hidden" />
+        <controls:WaitScreenUserControl x:Name="waitScreen" Grid.RowSpan="8" Grid.ColumnSpan="5" Visibility="Hidden" />
+    </Grid>
+</Window>

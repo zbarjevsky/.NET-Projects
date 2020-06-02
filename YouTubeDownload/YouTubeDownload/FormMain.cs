@@ -13,7 +13,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Shell;
 using YouTubeDownload.Utils;
-using YouTubeDownload.Windows7ProgressBar;
 
 namespace YouTubeDownload
 {
@@ -377,10 +376,20 @@ namespace YouTubeDownload
             if (m_listUrls.SelectedItems.Count == 0)
                 return;
 
-            DownloadData data = m_listUrls.SelectedItems[0].Tag as DownloadData;
-            if (data != null && data.State != DownloadState.Failed)
+            try
             {
-                Process.Start(data.Description);
+                DownloadData data = m_listUrls.SelectedItems[0].Tag as DownloadData;
+                if (data != null && data.State != DownloadState.Failed)
+                {
+                    if (File.Exists(data.Description))
+                        Process.Start(data.Description);
+                    else
+                        Process.Start(Path.GetDirectoryName(data.Description));
+                }
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
         }
 
@@ -392,7 +401,10 @@ namespace YouTubeDownload
             DownloadData data = m_listUrls.SelectedItems[0].Tag as DownloadData;
             if (data != null && data.State != DownloadState.Failed)
             {
-                Process.Start(data.OutputFolder);
+                if(File.Exists(data.Description.Trim('"')))
+                    OpenFolderWithSelectedFile(data.Description.Trim('"'));
+                else
+                    Process.Start(data.OutputFolder);
             }
         }
 
@@ -452,6 +464,20 @@ namespace YouTubeDownload
             {
                 Clipboard.SetText(data.Url);
             }
+        }
+
+        private void OpenFolderWithSelectedFile(string filePath)
+        {
+            if (!File.Exists(filePath))
+            {
+                return;
+            }
+
+            // combine the arguments together
+            // it doesn't matter if there is a space after ','
+            string argument = "/select, \"" + filePath + "\"";
+
+            System.Diagnostics.Process.Start("explorer.exe", argument);
         }
     }
 }

@@ -33,8 +33,9 @@ namespace DUMeterMZ
             m_richTextBoxAbout.AppendText("05 Oct 2008: Reimplemented Log mechanism + Generics\n");
             m_richTextBoxAbout.AppendText("14 Jul 2013: Compiled for Windows 7 x64\n");
             m_richTextBoxAbout.AppendText("17 Jun 2015: Fixed 'Sleep Mode' bug\n");
-            m_richTextBoxAbout.AppendText("17 Jun 2016: Fixed 'Long Tooltip' bug\n");
-            m_richTextBoxAbout.AppendText("\n");
+			m_richTextBoxAbout.AppendText("17 Jun 2016: Fixed 'Long Tooltip' bug\n");
+			m_richTextBoxAbout.AppendText("29 Apr 2020: Implemented Single Instance, User Folder, VS2019");
+			m_richTextBoxAbout.AppendText("\n");
 		}//end FormAbout_Load
 
 		private void m_btnOK_Click(object sender, EventArgs e)

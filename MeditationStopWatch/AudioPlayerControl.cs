@@ -116,7 +116,7 @@ namespace MeditationStopWatch
 
 		private void UpdateInfo()
 		{
-			string sStatus = m_Mp3Player.StatusMode;
+			string sStatus = m_Mp3Player.GetStatusMode();
 			m_lblStatus.Text = sStatus + ": " + m_Mp3Player.FileName;
 			UpdateButtonsState(sStatus);
 			DisableScreenSaver();
@@ -254,8 +254,19 @@ namespace MeditationStopWatch
 
         public void PauseResume()
         {
-            m_Mp3Player.PauseResume();
-            if (m_Mp3Player.Paused)
+			string sMode = m_Mp3Player.GetStatusMode();
+
+			if (m_Mp3Player.IsPlaying(sMode))
+				m_Mp3Player.CmdPause();
+			else if (m_Mp3Player.IsPaused(sMode))
+				m_Mp3Player.CmdResume();
+			else if (m_Mp3Player.IsStopped(sMode))
+				m_Mp3Player.CmdPlay();
+			else if (string.IsNullOrWhiteSpace(sMode))
+				Next(); //play next
+
+			sMode = m_Mp3Player.GetStatusMode();
+			if (m_Mp3Player.IsPaused(sMode) || m_Mp3Player.IsStopped(sMode))
                 m_progrReiKi.Pause();
             else
                 m_progrReiKi.Resume();
@@ -264,14 +275,14 @@ namespace MeditationStopWatch
 
         public void Stop()
         {
-            m_Mp3Player.Stop();
+            m_Mp3Player.CmdStop();
             m_Mp3Player.SetPosition(0);
             m_progrReiKi.Stop();
             //m_Mp3Player.Close();
             UpdateInfo();
         }
 
-        private void Next()
+        public void Next()
         {
             if (Count == 0)
                 return;
@@ -279,7 +290,7 @@ namespace MeditationStopWatch
             PlaySelected(m_playLists.PL.NextIdx());
         }
 
-        private void Prev()
+        public void Prev()
         {
             if (Count == 0)
                 return;

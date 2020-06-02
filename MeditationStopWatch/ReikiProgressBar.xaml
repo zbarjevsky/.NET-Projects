@@ -3,45 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:l="clr-namespace:ReiKi"
+             xmlns:l="clr-namespace:ReiKi" xmlns:wpf="clr-namespace:MZ.WPF;assembly=Common.MkZ"
              mc:Ignorable="d" 
              x:Name="ReiKi"
+             Background="Gainsboro"
              MouseDoubleClick="ReiKi_MouseDoubleClick"
-             SizeChanged="ReiKi_SizeChanged"
              FocusManager.FocusedElement="{Binding RelativeSource={x:Static RelativeSource.Self}, Mode=OneTime}"
              d:DesignHeight="80" d:DesignWidth="400">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <SolidColorBrush x:Key="LineColor0">DarkGoldenrod</SolidColorBrush>
-            <SolidColorBrush x:Key="LineColor1">Black</SolidColorBrush>
-            
-            <Style x:Name="xxx" x:Key="{x:Type ProgressBar}" TargetType="{x:Type ProgressBar}">
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="{x:Type ProgressBar}">
-                            <Grid MinHeight="14" MinWidth="200">
-                                <Rectangle Name="PART_Track" Stroke="#888888" StrokeThickness="1">
-                                    <Rectangle.Fill>
-                                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
-                                            <GradientStop Offset="0" Color="#FF00FF00"/>
-                                            <GradientStop Offset="0.9" Color="#FFFFFF00"/>
-                                            <GradientStop Offset="1" Color="#FFFF0000"/>
-                                        </LinearGradientBrush>
-                                    </Rectangle.Fill>
-                                </Rectangle>
-                                <DockPanel Margin="1">
-                                    <Rectangle Name="PART_Indicator">
-                                    </Rectangle>
-                                    <Rectangle Name="Mask" MinWidth="{TemplateBinding Width}" Fill="#C0C0C0"/>
-                                </DockPanel>
-                            </Grid>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-        </ResourceDictionary>
-    </UserControl.Resources>
-
     <Grid ContextMenuService.ShowOnDisabled="True">
         <Grid.ContextMenu>
             <ContextMenu DataContext="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type l:ReikiProgressBar}}, Path=PlacementTarget.DataContext}">
@@ -66,15 +34,11 @@
                 <MenuItem x:Name="chkBell5min" Header="5 Min" Click="OnBellIntervalClicked"/>
             </ContextMenu>
         </Grid.ContextMenu>
-        <ProgressBar Value="{Binding Value, Mode=OneWay, ElementName=ReiKi}" Maximum="{Binding Max, ElementName=ReiKi}">
-            <ProgressBar.BorderThickness >0</ProgressBar.BorderThickness>
-        </ProgressBar>
-        <Viewbox HorizontalAlignment="Right" VerticalAlignment="Center" MinHeight="16" MinWidth="16">
-            <CheckBox x:Name="chkBellAtTheEnd" ToolTip="ThinkerBell at the end"
-                      Margin="2"
-                      Checked="OnBellOnOffClicked" Unchecked="OnBellOnOffClicked" />
-        </Viewbox>
-        <Canvas x:Name="_canvas">
-        </Canvas>
+        
+        <wpf:GradientProgressBar x:Name="progr" Margin="2" Background="{Binding ElementName=ReiKi, Path=Background}"
+                                 CheckBoxVisibility="Visible" CheckBoxToolTip="Ding at the End"
+                                 Value="{Binding Value, Mode=OneWay, ElementName=ReiKi}" 
+                                 Maximum="{Binding Max, ElementName=ReiKi}" />
+
     </Grid>
 </UserControl>

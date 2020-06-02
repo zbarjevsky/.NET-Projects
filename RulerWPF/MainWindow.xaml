@@ -81,6 +81,8 @@
                     </MenuItem>
                     <Separator />
                     <MenuItem Header="About WPF Ruler" Click="AboutMenuItem_Click" />
+                    <MenuItem Header="Reset" Click="Reset_Click" />
+                    <Separator />
                     <MenuItem Header="Exit" Click="ExitMenuItem_Click" />
                 </ContextMenu>
             </Canvas.ContextMenu>

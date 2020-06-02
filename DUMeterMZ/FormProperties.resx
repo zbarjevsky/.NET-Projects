@@ -112,37 +112,12 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="m_statusStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="m_statusStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAQAQAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACmpqb/mZmZ/wAAAAAAAAAApqam/6ampv8AAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACZmZn/0MW+/s7DvP2mpqb/pqam/8u/uPvSxr/+mZmZ/wAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAApqam/9fNyP7h1Mv91MrE/dPJwv3f0sr+2c/H/qam
-        pv8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACmpqb/pqam/5mZmf/Y0Mv94dbP/uLWz//i1s//39XP/tjQ
-        yv6ZmZn/pqam/5mZmf8AAAAAAAAAAAAAAACmpqb/yMTD/tDLy/7Uzsz+29XQ/9vUz//Z0cz92NHM/tzT
-        z/7b08//0c3K/s3JyP7GwcH+pqam/wAAAAAAAAAApqam/8vHxv7X0tD+2tXT/9rT0f2/u7jusrKy/7Ky
-        sv+mpqb/2NHP/tjU0f7Uz879ysXE/pmZmf8AAAAAAAAAAAAAAACmpqb/1NDP/t3X1v/X0tH+srKy/wAA
-        AAAAAAAAsrKy/9TQzv3Z1dP/0s7M/qampv8AAAAAAAAAAAAAAAAAAAAApqam/9bQz/7f2tj+2NXT/rKy
-        sv8AAAAAAAAAALKysv/X0tD+3djW/9LOzf6mpqb/AAAAAAAAAAAAAAAApqam/8fCwvjf2tj+49/d/uHc
-        2v6mpqb/srKy/7Kysv+mpqb/39rY/eDc2v3b1tT+xcLA+pmZmf8AAAAAAAAAAJmZmf/d2tn95OLh/ujl
-        4/7q5uX96eXj/uHe3P3h3dz+5+Ti/ujk5P7l4uH+4t7d/t3Z1/6ZmZn/AAAAAAAAAAAAAAAApqam/6am
-        pv+ysrL/7erp/e/t6//w7ev+8Ozr/+/r6/7r6Oj+pqam/5mZmf+mpqb/AAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAApqam/+/s6v3z8e/+8O/s/u/t6//x7+7/7uvq/pmZmf8AAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAKampv/x7u3+7uvr/pmZmf+ZmZn/6efm/fDu7f6ZmZn/AAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAApqam/6ampv8AAAAAAAAAAJmZmf+ZmZn/AAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
-        AAAAAAAA//8AAPmfAADwDwAA8A8AAMADAACAAQAAgAEAAMGDAADBgwAAgAEAAIABAADAAwAA8A8AAPAP
-        AAD5nwAA//8AAA==
-</value>
-  </data>
 </root>

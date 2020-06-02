@@ -1,0 +1,65 @@
+﻿<UserControl x:Class="SpeedGauge.Gauge180UserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SpeedGauge"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Viewbox>
+        <Grid Width="320" Height="180">
+            <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="10"
+                    BorderBrush="Navy"
+                    BorderThickness="3 3 3 3" CornerRadius="320 320 0 0">
+                <Border.Effect>
+                    <DropShadowEffect Color="Navy" BlurRadius="10" ShadowDepth="0"/>
+                </Border.Effect>
+            </Border>
+            <Border HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Margin="15" 
+                    BorderBrush="Navy"
+                    BorderThickness="2 2 2 2" CornerRadius="300 300 0 0">
+                <Border.Background>
+                    <SolidColorBrush Color="Black" Opacity="0.3"/>
+                </Border.Background>
+                <Border.Effect>
+                    <DropShadowEffect Color="Blue" BlurRadius="10" ShadowDepth="0"/>
+                </Border.Effect>
+            </Border>
+            <Border x:Name="borderArrow" Width="8" Height="70" CornerRadius="120 120 4 4" Background="Red" 
+                    RenderTransformOrigin="0.5 1.9" 
+                    Margin="0 0 0 70" Opacity=".7" 
+                    VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Border.RenderTransform>
+                    <TransformGroup>
+                        <ScaleTransform/>
+                        <SkewTransform/>
+                        <RotateTransform Angle="{Binding Path=Angle, FallbackValue=-30}"/>
+                        <TranslateTransform/>
+                    </TransformGroup>
+                </Border.RenderTransform>
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="30" Color="Red" ShadowDepth="0"/>
+                </Border.Effect>
+            </Border>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Top" Margin="0,80,0,0">
+                <TextBlock x:Name="txtSpeed"  Margin="50,0,0,0"
+                           FontSize="80" FontWeight="SemiBold" FontFamily="Agency FB" 
+                           Foreground="{Binding SpeedBrush, FallbackValue=Cyan}" Text="{Binding Path=SpeedValue, Mode=TwoWay, FallbackValue=147}">
+                    <TextBlock.Effect>
+                        <DropShadowEffect BlurRadius="20" Color="YellowGreen" ShadowDepth="0"/>
+                    </TextBlock.Effect>
+                </TextBlock>
+                <TextBlock x:Name="txtSpeedUnits" VerticalAlignment="Bottom" Margin="10,0,0,10"
+                           FontSize="40" FontWeight="SemiBold" FontFamily="Agency FB" 
+                           Foreground="DarkGray" Text="{Binding SpeedUnits, FallbackValue=mph}">
+                    <TextBlock.Effect>
+                        <DropShadowEffect BlurRadius="20" Color="YellowGreen" ShadowDepth="0"/>
+                    </TextBlock.Effect>
+                </TextBlock>
+            </StackPanel>
+            <Slider x:Name="sliTest" Visibility="Collapsed"
+                    Minimum="0" Maximum="{Binding MaxValue}" Value="{Binding Path=Value, FallbackValue=0}" 
+                    Width="150" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="0,0,0,-10"/>
+        </Grid>
+    </Viewbox>
+</UserControl>

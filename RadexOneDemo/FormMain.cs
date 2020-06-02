@@ -254,7 +254,7 @@ namespace RadexOneDemo
         {
             if (state == AlertManager.AlertState.Good)
             {
-                m_progressMain.SetState(ModifyProgressBarColor.State.Green);
+                //m_progressMain.SetState(ModifyProgressBarColor.State.Green);
 
                 m_lblVal.BackColor = Color.Chartreuse;
                 m_lblCPM.BackColor = Color.LightGray;
@@ -265,7 +265,7 @@ namespace RadexOneDemo
             }
             else if (state == AlertManager.AlertState.Warning || state == AlertManager.AlertState.CoolingDown)
             {
-                m_progressMain.SetState(ModifyProgressBarColor.State.Yellow);
+                //m_progressMain.SetState(ModifyProgressBarColor.State.Yellow);
 
                 m_lblVal.BackColor = Color.Chartreuse;
                 m_lblCPM.BackColor = Color.Yellow;
@@ -278,7 +278,7 @@ namespace RadexOneDemo
             {
                 UpdateMaxRecord(false); //record alert value
 
-                m_progressMain.SetState(ModifyProgressBarColor.State.Red);
+                //m_progressMain.SetState(ModifyProgressBarColor.State.Red);
 
                 m_lblVal.BackColor = Color.OrangeRed;
                 m_lblCPM.BackColor = Color.OrangeRed;

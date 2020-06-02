@@ -33,6 +33,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
@@ -51,6 +54,12 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\Common.MkZ\Common.MkZ\Windows\User32.cs">
+      <Link>User32.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common.MkZ\Common.MkZ\WPF\WPF_Helper.cs">
+      <Link>WPF_Helper.cs</Link>
+    </Compile>
     <Compile Include="PopUp.cs" />
     <Compile Include="MessageWindow.xaml.cs">
       <DependentUpon>MessageWindow.xaml</DependentUpon>
@@ -61,8 +70,6 @@
     <Compile Include="UserControlFootSwitchIcon.xaml.cs">
       <DependentUpon>UserControlFootSwitchIcon.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Win32.cs" />
-    <Compile Include="WPF_Helper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\MSGBOX01.ICO" />
@@ -103,7 +110,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /s /f /r /y $(TargetPath) $(SolutionDir)\..\Binaries</PostBuildEvent>
+    <PostBuildEvent>if "$(ConfigurationName)" == "Release" xcopy /s /f /r /y $(TargetPath) $(SolutionDir)\..\Binaries</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

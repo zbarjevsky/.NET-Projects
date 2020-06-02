@@ -1,0 +1,161 @@
+﻿namespace MZ.WinForms
+{
+    partial class FileExplorerUserControl
+    {
+        /// <summary> 
+        /// Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary> 
+        /// Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Component Designer generated code
+
+        /// <summary> 
+        /// Required method for Designer support - do not modify 
+        /// the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FileExplorerUserControl));
+            this.m_listFiles = new System.Windows.Forms.ListView();
+            this.m_pnlCommands = new System.Windows.Forms.Panel();
+            this.m_btnBrowse = new System.Windows.Forms.Button();
+            this.m_btnRoot = new System.Windows.Forms.Button();
+            this.m_btnUp = new System.Windows.Forms.Button();
+            this.m_txtPath = new System.Windows.Forms.TextBox();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.m_imageList = new System.Windows.Forms.ImageList(this.components);
+            this.m_pnlCommands.SuspendLayout();
+            this.SuspendLayout();
+            // 
+            // m_listFiles
+            // 
+            this.m_listFiles.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_listFiles.FullRowSelect = true;
+            this.m_listFiles.GridLines = true;
+            this.m_listFiles.HideSelection = false;
+            this.m_listFiles.Location = new System.Drawing.Point(0, 28);
+            this.m_listFiles.Name = "m_listFiles";
+            this.m_listFiles.Size = new System.Drawing.Size(383, 467);
+            this.m_listFiles.SmallImageList = this.m_imageList;
+            this.m_listFiles.TabIndex = 0;
+            this.m_listFiles.UseCompatibleStateImageBehavior = false;
+            this.m_listFiles.View = System.Windows.Forms.View.Details;
+            this.m_listFiles.VirtualMode = true;
+            this.m_listFiles.RetrieveVirtualItem += new System.Windows.Forms.RetrieveVirtualItemEventHandler(this.m_listFiles_RetrieveVirtualItem);
+            this.m_listFiles.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.m_listFiles_MouseDoubleClick);
+            // 
+            // m_pnlCommands
+            // 
+            this.m_pnlCommands.Controls.Add(this.m_btnBrowse);
+            this.m_pnlCommands.Controls.Add(this.m_btnRoot);
+            this.m_pnlCommands.Controls.Add(this.m_btnUp);
+            this.m_pnlCommands.Controls.Add(this.m_txtPath);
+            this.m_pnlCommands.Dock = System.Windows.Forms.DockStyle.Top;
+            this.m_pnlCommands.Location = new System.Drawing.Point(0, 0);
+            this.m_pnlCommands.Name = "m_pnlCommands";
+            this.m_pnlCommands.Size = new System.Drawing.Size(383, 28);
+            this.m_pnlCommands.TabIndex = 1;
+            // 
+            // m_btnBrowse
+            // 
+            this.m_btnBrowse.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnBrowse.Image = ((System.Drawing.Image)(resources.GetObject("m_btnBrowse.Image")));
+            this.m_btnBrowse.Location = new System.Drawing.Point(357, -1);
+            this.m_btnBrowse.Name = "m_btnBrowse";
+            this.m_btnBrowse.Size = new System.Drawing.Size(27, 26);
+            this.m_btnBrowse.TabIndex = 5;
+            this.toolTip1.SetToolTip(this.m_btnBrowse, "Browse");
+            this.m_btnBrowse.UseVisualStyleBackColor = true;
+            this.m_btnBrowse.Click += new System.EventHandler(this.m_btnBrowse_Click);
+            // 
+            // m_btnRoot
+            // 
+            this.m_btnRoot.Image = ((System.Drawing.Image)(resources.GetObject("m_btnRoot.Image")));
+            this.m_btnRoot.Location = new System.Drawing.Point(0, -1);
+            this.m_btnRoot.Name = "m_btnRoot";
+            this.m_btnRoot.Size = new System.Drawing.Size(27, 25);
+            this.m_btnRoot.TabIndex = 4;
+            this.toolTip1.SetToolTip(this.m_btnRoot, "Drive Root");
+            this.m_btnRoot.UseVisualStyleBackColor = true;
+            this.m_btnRoot.Click += new System.EventHandler(this.m_btnRoot_Click);
+            // 
+            // m_btnUp
+            // 
+            this.m_btnUp.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.m_btnUp.Image = ((System.Drawing.Image)(resources.GetObject("m_btnUp.Image")));
+            this.m_btnUp.Location = new System.Drawing.Point(28, -1);
+            this.m_btnUp.Name = "m_btnUp";
+            this.m_btnUp.Size = new System.Drawing.Size(27, 25);
+            this.m_btnUp.TabIndex = 3;
+            this.toolTip1.SetToolTip(this.m_btnUp, "Folder UP");
+            this.m_btnUp.UseVisualStyleBackColor = true;
+            this.m_btnUp.Click += new System.EventHandler(this.m_btnUp_Click);
+            // 
+            // m_txtPath
+            // 
+            this.m_txtPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_txtPath.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.m_txtPath.Location = new System.Drawing.Point(58, 8);
+            this.m_txtPath.Name = "m_txtPath";
+            this.m_txtPath.ReadOnly = true;
+            this.m_txtPath.Size = new System.Drawing.Size(294, 13);
+            this.m_txtPath.TabIndex = 2;
+            // 
+            // m_imageList
+            // 
+            this.m_imageList.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_imageList.ImageStream")));
+            this.m_imageList.TransparentColor = System.Drawing.Color.Transparent;
+            this.m_imageList.Images.SetKeyName(0, "Icon_272_16.png");
+            this.m_imageList.Images.SetKeyName(1, "");
+            this.m_imageList.Images.SetKeyName(2, "Icon_003_16.png");
+            this.m_imageList.Images.SetKeyName(3, "Icon_126_16.png");
+            this.m_imageList.Images.SetKeyName(4, "Icon_000_16.png");
+            this.m_imageList.Images.SetKeyName(5, "");
+            this.m_imageList.Images.SetKeyName(6, "");
+            this.m_imageList.Images.SetKeyName(7, "Icon_188_16.png");
+            this.m_imageList.Images.SetKeyName(8, "");
+            this.m_imageList.Images.SetKeyName(9, "Copy.ico");
+            this.m_imageList.Images.SetKeyName(10, "Icon_146_16.png");
+            // 
+            // FileExplorerUserControl
+            // 
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.Controls.Add(this.m_listFiles);
+            this.Controls.Add(this.m_pnlCommands);
+            this.Name = "FileExplorerUserControl";
+            this.Size = new System.Drawing.Size(383, 495);
+            this.Load += new System.EventHandler(this.FileExplorerUserControl_Load);
+            this.m_pnlCommands.ResumeLayout(false);
+            this.m_pnlCommands.PerformLayout();
+            this.ResumeLayout(false);
+
+        }
+
+        #endregion
+
+        private System.Windows.Forms.ListView m_listFiles;
+        private System.Windows.Forms.Panel m_pnlCommands;
+        private System.Windows.Forms.Button m_btnRoot;
+        private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Button m_btnUp;
+        private System.Windows.Forms.TextBox m_txtPath;
+        private System.Windows.Forms.Button m_btnBrowse;
+        private System.Windows.Forms.ImageList m_imageList;
+    }
+}

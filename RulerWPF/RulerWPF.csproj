@@ -40,6 +40,9 @@
   <PropertyGroup>
     <ApplicationIcon>MeasuringTape.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -125,7 +128,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /s /f /r /y $(TargetPath) $(SolutionDir)\..\Binaries</PostBuildEvent>
+    <PostBuildEvent>if "$(ConfigurationName)" == "Release" xcopy /s /f /r /y $(TargetPath) $(SolutionDir)\..\Binaries</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>if exist "$(TargetPath)" (

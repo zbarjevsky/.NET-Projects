@@ -1,0 +1,261 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{A03C89DD-CA87-4C9E-9FF9-F4277372E0F7}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MZ</RootNamespace>
+    <AssemblyName>Common.MkZ</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Tools.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.WindowsAPICodePack">
+      <HintPath>..\..\ThirdParty\WindowsAPICodePack\Microsoft.WindowsAPICodePack.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.Shell">
+      <HintPath>..\..\ThirdParty\WindowsAPICodePack\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Tests\FormColorSliderDemo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Tests\FormColorSliderDemo.designer.cs">
+      <DependentUpon>FormColorSliderDemo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tests\FormTestWpfMessageBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Tests\FormTestWpfMessageBox.Designer.cs">
+      <DependentUpon>FormTestWpfMessageBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Tests\WindowTestWpfMesageBox.xaml.cs">
+      <DependentUpon>WindowTestWpfMesageBox.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Windows\ProcessExtensions.cs" />
+    <Compile Include="WinForms\ColorBarsProgressBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="WinForms\ColorSlider.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="WinForms\ColorSlider.designer.cs">
+      <DependentUpon>ColorSlider.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinForms\FileExplorerUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WinForms\FileExplorerUserControl.Designer.cs">
+      <DependentUpon>FileExplorerUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinForms\FoldersTreeUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WinForms\FoldersTreeUserControl.Designer.cs">
+      <DependentUpon>FoldersTreeUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinForms\FormBrowseForFolder.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinForms\FormBrowseForFolder.Designer.cs">
+      <DependentUpon>FormBrowseForFolder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinForms\InPlaceTextBox.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="WinForms\WinFormsControlExtension.cs" />
+    <Compile Include="WinForms\DraggableExtension.cs" />
+    <Compile Include="WinForms\FormInPlaceEdit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WinForms\FormInPlaceEdit.Designer.cs">
+      <DependentUpon>FormInPlaceEdit.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WinForms\ListViewCollapsibleGroups.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="WinForms\VerticalProgressBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="FormMainTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormMainTest.Designer.cs">
+      <DependentUpon>FormMainTest.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Windows\AlternateColorTool.cs" />
+    <Compile Include="Windows\DesktopWindowManager.cs" />
+    <Compile Include="Windows\FileUtils.cs" />
+    <Compile Include="Windows\NotifyPropertyChangedImpl.cs" />
+    <Compile Include="Windows\Shell32_Icons.cs" />
+    <Compile Include="Windows\SingleInstanceHelper.cs" />
+    <Compile Include="Windows\TaskbarManagerHelper.cs" />
+    <Compile Include="Windows\User32.cs" />
+    <Compile Include="Windows\Windows7ProgressBar.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Windows\WindowsMessages.cs" />
+    <Compile Include="Windows\XmlSerializerHelper.cs" />
+    <Compile Include="Windows\CommonUtils.cs" />
+    <Compile Include="WPF\AutoGreyableImage.cs" />
+    <Compile Include="WPF\DraggableExtension.cs" />
+    <Compile Include="WPF\GridLengthAnimation.cs" />
+    <Compile Include="WPF\ItemsControlExtensions.cs" />
+    <Compile Include="WPF\PopupInfoWindow.xaml.cs">
+      <DependentUpon>PopupInfoWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF\GradientProgressBar.xaml.cs">
+      <DependentUpon>GradientProgressBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF\RelayCommand.cs" />
+    <Compile Include="WPF\RelayCommand1.cs" />
+    <Compile Include="WPF\ScrollDragZoom.cs" />
+    <Compile Include="WPF\WPFExtensionMethods.cs" />
+    <Compile Include="WPF\WPFMessageBox\MessageWindow.xaml.cs">
+      <DependentUpon>MessageWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF\WPFMessageBox\PopUp.cs" />
+    <Compile Include="WPF\WPFMessageBox\PopUpExtension.cs" />
+    <Compile Include="WPF\WPFMessageBox\RelayCommand.cs" />
+    <Compile Include="WPF\WPFMessageBox\UserControlFootSwitchIcon.xaml.cs">
+      <DependentUpon>UserControlFootSwitchIcon.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF\WPFUtils.cs" />
+    <Compile Include="WPF\WPF_Helper.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Images\Shell32\Ico\" />
+    <Folder Include="Images\Shell32\Png\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tests\FormColorSliderDemo.resx">
+      <DependentUpon>FormColorSliderDemo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Tests\FormTestWpfMessageBox.resx">
+      <DependentUpon>FormTestWpfMessageBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinForms\ColorSlider.resx">
+      <DependentUpon>ColorSlider.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinForms\FileExplorerUserControl.resx">
+      <DependentUpon>FileExplorerUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinForms\FoldersTreeUserControl.resx">
+      <DependentUpon>FoldersTreeUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinForms\FormBrowseForFolder.resx">
+      <DependentUpon>FormBrowseForFolder.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WinForms\FormInPlaceEdit.resx">
+      <DependentUpon>FormInPlaceEdit.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormMainTest.resx">
+      <DependentUpon>FormMainTest.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\SmallX.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Images\RedX.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Ok.ico" />
+    <Resource Include="Images\Cancel.ico" />
+    <Content Include="Tools.ico" />
+    <Resource Include="WPF\WPFMessageBox\Images\Stop32x32.png" />
+    <Resource Include="WPF\WPFMessageBox\Images\ok_plain.ico" />
+    <Resource Include="WPF\WPFMessageBox\Images\Ok.ico" />
+    <Resource Include="WPF\WPFMessageBox\Images\MSGBOX04.ICO" />
+    <Resource Include="WPF\WPFMessageBox\Images\MSGBOX03.ICO" />
+    <Resource Include="WPF\WPFMessageBox\Images\MSGBOX02.ICO" />
+    <Resource Include="WPF\WPFMessageBox\Images\MSGBOX01.ICO" />
+    <Resource Include="WPF\WPFMessageBox\Images\Hand32x32.png" />
+    <Resource Include="WPF\WPFMessageBox\Images\COPY.PNG" />
+    <Resource Include="WPF\WPFMessageBox\Images\close.ico" />
+    <Resource Include="WPF\WPFMessageBox\Images\Cancel.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="Tests\WindowTestWpfMesageBox.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\PopupInfoWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\GradientProgressBar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\WPFMessageBox\MessageWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\WPFMessageBox\UserControlFootSwitchIcon.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if "$(ConfigurationName)" == "Release" xcopy /s /f /r /y $(TargetPath) $(SolutionDir)\..\Binaries</PostBuildEvent>
+  </PropertyGroup>
+</Project>

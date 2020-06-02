@@ -1,0 +1,208 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{01EE1EBE-02E6-4DDD-B64E-B8DBECA3A9CD}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>PlaybackSoundSwitch</RootNamespace>
+    <AssemblyName>PlaybackSoundSwitch</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Speaker3.ico</ApplicationIcon>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.WindowsAPICodePack">
+      <HintPath>..\..\ThirdParty\WindowsAPICodePack\Microsoft.WindowsAPICodePack.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.Shell">
+      <HintPath>..\..\ThirdParty\WindowsAPICodePack\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
+    </Reference>
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Runtime.Caching" />
+    <Reference Include="System.Xaml" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AudioVolume\AudioEndpointVolume.cs" />
+    <Compile Include="AudioVolume\AudioEndpointVolumeCallback.cs" />
+    <Compile Include="AudioVolume\AudioEndpointVolumeChannel.cs" />
+    <Compile Include="AudioVolume\AudioEndpointVolumeChannels.cs" />
+    <Compile Include="AudioVolume\AudioEndpointVolumeStepInformation.cs" />
+    <Compile Include="AudioVolume\AudioEndpointVolumeVolumeRange.cs" />
+    <Compile Include="AudioVolume\AudioVolumeNotificationData.cs" />
+    <Compile Include="AudioVolume\AudioVolumeNotificationDataStruct.cs" />
+    <Compile Include="AudioVolume\EEndpointHardwareSupport.cs" />
+    <Compile Include="AudioVolume\IAudioEndpointVolume.cs" />
+    <Compile Include="AudioVolume\IAudioEndpointVolumeCallback.cs" />
+    <Compile Include="ComObjects\ComBase.cs" />
+    <Compile Include="ComObjects\ComIIds.cs" />
+    <Compile Include="ComObjects\ComTaskScheduler.cs" />
+    <Compile Include="ComObjects\ComThread.cs" />
+    <Compile Include="ComObjects\DataFlow.cs" />
+    <Compile Include="ComObjects\DeviceState.cs" />
+    <Compile Include="ComObjects\HRESULT.cs" />
+    <Compile Include="ComObjects\IMMDeviceEnumerator.cs" />
+    <Compile Include="ComObjects\MMDeviceEnumeratorComObject.cs" />
+    <Compile Include="ComObjects\Role.cs" />
+    <Compile Include="DeviceInfo\AudioMeterInformation.cs" />
+    <Compile Include="DeviceInfo\AudioMeterInformationChannels.cs" />
+    <Compile Include="DeviceInfo\IAudioMeterInformation.cs" />
+    <Compile Include="DeviceSwitch\AudioPolicyConfigFactory.cs" />
+    <Compile Include="DeviceSwitch\EnumeratorClient.cs" />
+    <Compile Include="DeviceSwitch\IAudioPolicyConfigFactory.cs" />
+    <Compile Include="DeviceSwitch\IPolicyConfig.cs" />
+    <Compile Include="DeviceSwitch\IPolicyConfigVista.cs" />
+    <Compile Include="DeviceSwitch\IPolicyConfigX.cs" />
+    <Compile Include="DeviceSwitch\PolicyClient.cs" />
+    <Compile Include="DeviceInfo\AudioDeviceIconExtractor.cs" />
+    <Compile Include="DeviceSwitch\AudioSwitcher.cs" />
+    <Compile Include="DeviceInfo\Blob.cs" />
+    <Compile Include="DeviceInfo\ClsCtx.cs" />
+    <Compile Include="DeviceInfo\DeviceFullInfo.cs" />
+    <Compile Include="DeviceInfo\DeviceInfo.cs" />
+    <Compile Include="DeviceInfo\EDataFlow.cs" />
+    <Compile Include="DeviceInfo\EDeviceState.cs" />
+    <Compile Include="DeviceSwitch\ExtendedPolicyClient.cs" />
+    <Compile Include="DeviceInfo\IconExtractor.cs" />
+    <Compile Include="DeviceInfo\IMMDevice.cs" />
+    <Compile Include="DeviceInfo\IMMDeviceCollection.cs" />
+    <Compile Include="DeviceInfo\IMMEndpoint.cs" />
+    <Compile Include="DeviceInfo\IPropertyStore.cs" />
+    <Compile Include="DeviceInfo\MarshalHelpers.cs" />
+    <Compile Include="DeviceInfo\MMDevice.cs" />
+    <Compile Include="DeviceInfo\MMDeviceCollection.cs" />
+    <Compile Include="DeviceInfo\PropertyKey.cs" />
+    <Compile Include="DeviceInfo\PropertyKeys.cs" />
+    <Compile Include="DeviceInfo\PropertyStore.cs" />
+    <Compile Include="DeviceInfo\PropertyStoreProperty.cs" />
+    <Compile Include="DeviceInfo\PropVariant.cs" />
+    <Compile Include="DeviceSwitch\SoundDeviceManager.cs" />
+    <Compile Include="DeviceInfo\StorageAccessMode.cs" />
+    <Compile Include="FormMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormMain.Designer.cs">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DeviceInfo\MMDeviceEnumerator.cs" />
+    <Compile Include="MediaDeviceListUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="MediaDeviceListUserControl.Designer.cs">
+      <DependentUpon>MediaDeviceListUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Notifications\IMMNotificationClient.cs" />
+    <Compile Include="Notifications\MMNotificationClient.cs" />
+    <Compile Include="PopupVolumeInfoWindow.xaml.cs">
+      <DependentUpon>PopupVolumeInfoWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Tools\DebounceDispatcher.cs" />
+    <Compile Include="Tools\Trace.cs" />
+    <Compile Include="VolumeUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="VolumeUserControl.Designer.cs">
+      <DependentUpon>VolumeUserControl.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="FormMain.resx">
+      <DependentUpon>FormMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MediaDeviceListUserControl.resx">
+      <DependentUpon>MediaDeviceListUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <EmbeddedResource Include="VolumeUserControl.resx">
+      <DependentUpon>VolumeUserControl.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\refresh.ico" />
+    <None Include="Images\Refresh1.ico" />
+    <None Include="Images\Refresh2.ico" />
+    <None Include="Images\Mic1.png" />
+    <None Include="Images\Speaker1.png" />
+    <None Include="Images\Speaker3.png" />
+    <Content Include="Speaker3.ico" />
+    <None Include="Images\SpeakerImgList.png" />
+    <Content Include="Speaker1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Common.MkZ\Common.MkZ\Common.MkZ.csproj">
+      <Project>{a03c89dd-ca87-4c9e-9ff9-f4277372e0f7}</Project>
+      <Name>Common.MkZ</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Page Include="PopupVolumeInfoWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if "$(ConfigurationName)" == "Release" xcopy /s /f /r /y $(TargetPath) $(SolutionDir)\..\Binaries</PostBuildEvent>
+  </PropertyGroup>
+</Project>

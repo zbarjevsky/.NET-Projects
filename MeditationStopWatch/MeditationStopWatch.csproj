@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MeditationStopWatch</RootNamespace>
     <AssemblyName>MeditationStopWatch</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ApplicationIcon>Yin-Yang.ico</ApplicationIcon>
     <FileUpgradeFlags>
@@ -56,7 +56,31 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.DirectX, Version=1.0.2902.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Windows\Microsoft.NET\DirectX for Managed Code\1.0.2902.0\Microsoft.DirectX.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.DirectX.DirectPlay, Version=1.0.2902.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Windows\Microsoft.NET\DirectX for Managed Code\1.0.2902.0\Microsoft.DirectX.DirectPlay.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.DirectX.DirectSound, Version=1.0.2902.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Windows\Microsoft.NET\DirectX for Managed Code\1.0.2902.0\Microsoft.DirectX.DirectSound.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualC" />
+    <Reference Include="Microsoft.WindowsAPICodePack, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ThirdParty\WindowsAPICodePack\Microsoft.WindowsAPICodePack.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.WindowsAPICodePack.Shell, Version=1.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\ThirdParty\WindowsAPICodePack\Microsoft.WindowsAPICodePack.Shell.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
@@ -75,9 +99,6 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\ClipboardListener\Utils\SingleInstanceHelper.cs">
-      <Link>Tools\SingleInstanceHelper.cs</Link>
-    </Compile>
     <Compile Include="AnalogClock.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -87,6 +108,25 @@
     <Compile Include="AudioPlayerControl.Designer.cs">
       <DependentUpon>AudioPlayerControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="DirectSoundAPI\Dmo\AudioMediaSubtypes.cs" />
+    <Compile Include="DirectSoundAPI\Utils\MarshalHelpers.cs" />
+    <Compile Include="DirectSoundAPI\WaveFormats\AdpcmWaveFormat.cs" />
+    <Compile Include="DirectSoundAPI\WaveFormats\Gsm610WaveFormat.cs" />
+    <Compile Include="DirectSoundAPI\WaveFormats\ImaAdpcmWaveFormat.cs" />
+    <Compile Include="DirectSoundAPI\WaveFormats\Mp3WaveFormat.cs" />
+    <Compile Include="DirectSoundAPI\WaveFormats\OggWaveFormat.cs" />
+    <Compile Include="DirectSoundAPI\WaveFormats\TrueSpeechWaveFormat.cs" />
+    <Compile Include="DirectSoundAPI\WaveFormats\WaveFormat.cs" />
+    <Compile Include="DirectSoundAPI\WaveFormats\WaveFormatCustomMarshaler.cs" />
+    <Compile Include="DirectSoundAPI\WaveFormats\WaveFormatEncoding.cs" />
+    <Compile Include="DirectSoundAPI\WaveFormats\WaveFormatExtensible.cs" />
+    <Compile Include="DirectSoundAPI\WaveFormats\WaveFormatExtraData.cs" />
+    <Compile Include="DirectSoundAPI\WaveFormats\WmaWaveFormat.cs" />
+    <Compile Include="DirectSoundAPI\WaveOutputs\DirectSoundOut.cs" />
+    <Compile Include="DirectSoundAPI\WaveOutputs\IWavePlayer.cs" />
+    <Compile Include="DirectSoundAPI\WaveOutputs\IWaveProvider.cs" />
+    <Compile Include="DirectSoundAPI\WaveOutputs\PlaybackState.cs" />
+    <Compile Include="DirectSoundAPI\WaveOutputs\StoppedEventArgs.cs" />
     <Compile Include="FileListControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -112,14 +152,11 @@
     <Compile Include="FormFullScreenImage.Designer.cs">
       <DependentUpon>FormFullScreenImage.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormInPlaceEdit.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormInPlaceEdit.Designer.cs">
-      <DependentUpon>FormInPlaceEdit.cs</DependentUpon>
-    </Compile>
     <Compile Include="FormOptions.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormOptions.Designer.cs">
+      <DependentUpon>FormOptions.cs</DependentUpon>
     </Compile>
     <Compile Include="FormStopWatch.cs">
       <SubType>Form</SubType>
@@ -127,6 +164,7 @@
     <Compile Include="FormStopWatch.Designer.cs">
       <DependentUpon>FormStopWatch.cs</DependentUpon>
     </Compile>
+    <Compile Include="FullScreenImageHelper.cs" />
     <Compile Include="ImageFileUtil.cs" />
     <Compile Include="MCIPLayer.cs" />
     <Compile Include="Mp3Player.cs">
@@ -143,6 +181,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\CursorHandler.cs" />
     <Compile Include="Tools\GlobalMessageFilter.cs" />
+    <Compile Include="Tools\SoundUtils.cs" />
+    <Compile Include="Tools\VoiceConnect.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ZoomablePictureBoxUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -167,9 +209,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormFullScreenImage.resx">
       <DependentUpon>FormFullScreenImage.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="FormInPlaceEdit.resx">
-      <DependentUpon>FormInPlaceEdit.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormOptions.resx">
       <DependentUpon>FormOptions.cs</DependentUpon>
@@ -199,6 +238,7 @@
       <DependentUpon>ZoomablePictureBoxUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="app.config" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -218,7 +258,6 @@
     </Compile>
     <Compile Include="ToolStripTrackBar.cs" />
     <Compile Include="ExifTools.cs" />
-    <Compile Include="Tools\ControlExtension.cs" />
     <Compile Include="Tools\LabelWithTimeout.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -237,6 +276,12 @@
     <Content Include="Images\Yin-Yang.ico" />
     <None Include="Images\ZoomIn.ico" />
     <None Include="Images\ZoomOut.ico" />
+    <None Include="Res\next_on.ico" />
+    <None Include="Res\pause_on.ico" />
+    <None Include="Res\play_on.ico" />
+    <None Include="Res\previus_on.ico" />
+    <None Include="Resources\FullScreen16 Light.ico" />
+    <None Include="Resources\FullScreen16_Restore_light.ico" />
     <Content Include="Sounds\ding.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -298,9 +343,15 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common.MkZ\Common.MkZ\Common.MkZ.csproj">
+      <Project>{a03c89dd-ca87-4c9e-9ff9-f4277372e0f7}</Project>
+      <Name>Common.MkZ</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /s /f /r /y $(TargetPath) $(SolutionDir)\..\Binaries</PostBuildEvent>
+    <PostBuildEvent>if "$(ConfigurationName)" == "Release" xcopy /s /f /r /y $(TargetPath) $(SolutionDir)\..\Binaries</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
