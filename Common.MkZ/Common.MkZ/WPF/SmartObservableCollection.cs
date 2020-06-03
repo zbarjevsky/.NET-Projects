@@ -7,21 +7,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DesktopManagerUX.Utils
+namespace MZ.WPF.Utils
 {
-    public class SmartCollection<T> : ObservableCollection<T>
+    public class SmartObservableCollection<T> : ObservableCollection<T>
     {
-        public SmartCollection()
+        public SmartObservableCollection()
             : base()
         {
         }
 
-        public SmartCollection(IEnumerable<T> collection)
+        public SmartObservableCollection(IEnumerable<T> collection)
             : base(collection)
         {
         }
 
-        public SmartCollection(List<T> list)
+        public SmartObservableCollection(List<T> list)
             : base(list)
         {
         }
@@ -34,6 +34,13 @@ namespace DesktopManagerUX.Utils
             this.OnPropertyChanged(new PropertyChangedEventArgs("Count"));
             this.OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
             this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+        }
+
+        //replace whole collection
+        public void Update(IEnumerable<T> range)
+        {
+            Items.Clear();
+            AddRange(range);
         }
 
         //add new, replace existing

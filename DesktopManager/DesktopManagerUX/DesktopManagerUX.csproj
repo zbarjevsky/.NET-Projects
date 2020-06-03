@@ -69,14 +69,14 @@
       <DependentUpon>SelectTableSizeUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="DataModel.cs" />
-    <Compile Include="DisplayConfigurationUserControl.xaml.cs">
-      <DependentUpon>DisplayConfigurationUserControl.xaml</DependentUpon>
+    <Compile Include="LayoutConfigurationUserControl.xaml.cs">
+      <DependentUpon>LayoutConfigurationUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Logic.cs" />
     <Compile Include="Utils\AeroPeek.cs" />
     <Compile Include="Utils\DataGridHelper.cs" />
     <Compile Include="Utils\Gdi32.cs" />
-    <Compile Include="Utils\SmartCollection.cs" />
+    <Compile Include="Utils\SmartObservableCollection.cs" />
     <Compile Include="Utils\WpfScreen.cs" />
     <Compile Include="ViewModel.cs" />
     <Page Include="AppChooserUserControl.xaml">
@@ -87,7 +87,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="DisplayConfigurationUserControl.xaml">
+    <Page Include="LayoutConfigurationUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -20,47 +20,50 @@ using System.Windows.Shapes;
 namespace DesktopManagerUX
 {
     /// <summary>
-    /// Interaction logic for DisplayConfigurationUserControl.xaml
+    /// Interaction logic for LayoutConfigurationUserControl.xaml
     /// </summary>
-    public partial class DisplayConfigurationUserControl : UserControl
+    public partial class LayoutConfigurationUserControl : UserControl
     {
         private bool _isInitialized = false;
 
-        public DisplayConfiguration DisplayConfiguration
+        public LayoutConfiguration LayoutConfiguration
         {
-            get { return (DisplayConfiguration)this.GetValue(DisplayConfigurationProperty); }
-            set { this.SetValue(DisplayConfigurationProperty, value); OnDisplayConfigurationChanged(); }
+            get { return (LayoutConfiguration)this.GetValue(LayoutConfigurationProperty); }
+            set { this.SetValue(LayoutConfigurationProperty, value); OnDisplayConfigurationChanged(); }
         }
 
-        public static readonly DependencyProperty DisplayConfigurationProperty = DependencyProperty.Register(
-          nameof(DisplayConfiguration), typeof(DisplayConfiguration), typeof(DisplayConfigurationUserControl), new PropertyMetadata(DisplayConfigurationPropertyChanged));// new DisplayConfiguration()));
+        public static readonly DependencyProperty LayoutConfigurationProperty = DependencyProperty.Register(
+          nameof(LayoutConfiguration), typeof(LayoutConfiguration), typeof(LayoutConfigurationUserControl), new PropertyMetadata(LayoutConfigurationPropertyChanged));// new DisplayConfiguration()));
 
-        private static void DisplayConfigurationPropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
+        private static void LayoutConfigurationPropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
-            if (obj is DisplayConfigurationUserControl This)
+            if (obj is LayoutConfigurationUserControl This)
                 This.OnDisplayConfigurationChanged();
         }
 
         private void OnDisplayConfigurationChanged()
         {
-            if (DisplayConfiguration == null)
+            if (LayoutConfiguration == null)
                 return;
 
-            string selectedGridSize = DisplayConfiguration.GetSelectedGridSizeText();
-            //cmbGridSize.ItemsSource = GridSizeData.GetAllSizes();
-            //foreach (string txtSize in cmbGridSize.Items)
-            //{
-            //    if (txtSize.EndsWith(selectedGridSize))
-            //        cmbGridSize.SelectedItem = txtSize;
-            //}
-
+            OnDisplaysChange();
 
             _isInitialized = true;
 
-            RebuildAppsGrid(DisplayConfiguration.GridSize);
+            RebuildAppsGrid(LayoutConfiguration.GridSize);
         }
 
-        public DisplayConfigurationUserControl()
+        public void OnDisplaysChange()
+        {
+            if (LayoutConfiguration.SelectedMonitorInfo == null)
+                LayoutConfiguration.SelectedMonitorInfo = AppContext.Configuration.Displays[0];
+
+            int idx = LayoutConfiguration.SelectedMonitorInfo.Index;
+            cmbDisplays.ItemsSource = AppContext.Configuration.Displays;
+            cmbDisplays.SelectedIndex = idx;
+        }
+
+        public LayoutConfigurationUserControl()
         {
             InitializeComponent();
         }
@@ -75,6 +78,11 @@ namespace DesktopManagerUX
         //    string txtSize = (cmbGridSize.SelectedItem as string);
         //    RebuildAppsGrid(GridSizeData.Parse(txtSize));
         //}
+
+        private void cmbDisplays_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            LayoutConfiguration.SelectedMonitorInfo = cmbDisplays.SelectedItem as DisplayInfo;
+        }
 
         private AppChooserUserControl GetAppChooser(int row, int col)
         {
@@ -118,12 +126,12 @@ namespace DesktopManagerUX
             if (chooser.SelectedApp == null || !chooser.SelectedApp.IsActive)
                 return;
 
-            DisplayConfiguration activeDisplay = this.DisplayConfiguration; // AppContext.Configuration.Displays[0];
+            LayoutConfiguration layout = this.LayoutConfiguration; // AppContext.Configuration.Displays[0];
 
-            double width = activeDisplay.CellSize.Width;
-            double height = activeDisplay.CellSize.Height;
-            double left = activeDisplay.MonitorInfo.Bounds.Left + col * width;
-            double top = activeDisplay.MonitorInfo.Bounds.Top + row * height;
+            double width = layout.CellSize.Width;
+            double height = layout.CellSize.Height;
+            double left = layout.SelectedMonitorInfo.Bounds.Left + col * width;
+            double top = layout.SelectedMonitorInfo.Bounds.Top + row * height;
 
             User32.RECT border = DesktopWindowManager.GetWindowBorderSize(chooser.SelectedApp.HWND);
 
@@ -138,8 +146,8 @@ namespace DesktopManagerUX
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
             this.Cursor = Cursors.Wait;
-            AppContext.Configuration.UpdateDisplays();
-            RebuildAppsGrid(this.DisplayConfiguration.GridSize);
+            AppContext.Configuration.SmartDisplaysUpdate();
+            RebuildAppsGrid(this.LayoutConfiguration.GridSize);
             this.Cursor = Cursors.Arrow;
         }
 
@@ -178,19 +186,19 @@ namespace DesktopManagerUX
             {
                 AppContext.ViewModel.ReloadApps();
 
-                this.DisplayConfiguration.UpdateApps(newGridSize);
+                this.LayoutConfiguration.UpdateApps(newGridSize);
 
-                int rows = this.DisplayConfiguration.GridSize.Rows;
-                int cols = this.DisplayConfiguration.GridSize.Cols;
+                int rows = this.LayoutConfiguration.GridSize.Rows;
+                int cols = this.LayoutConfiguration.GridSize.Cols;
 
                 gridSizeSelector.SelectedSize = new GridSizeData(rows, cols);
 
-                RebuildAppsGrid(gridApps, rows, cols, this.DisplayConfiguration, AppContext.ViewModel);
+                RebuildAppsGrid(gridApps, rows, cols, this.LayoutConfiguration, AppContext.ViewModel);
             }
             AppContext.Sync = false;
         }
 
-        private static void RebuildAppsGrid(Grid grid, int rows, int cols, DisplayConfiguration config, ViewModel vm)
+        private static void RebuildAppsGrid(Grid grid, int rows, int cols, LayoutConfiguration config, ViewModel vm)
         {
             grid.ColumnDefinitions.Clear();
             for (int col = 0; col < cols; col++)

@@ -163,6 +163,7 @@
     <Compile Include="WPF\RelayCommand.cs" />
     <Compile Include="WPF\RelayCommand1.cs" />
     <Compile Include="WPF\ScrollDragZoom.cs" />
+    <Compile Include="WPF\SmartObservableCollection.cs" />
     <Compile Include="WPF\WPFExtensionMethods.cs" />
     <Compile Include="WPF\WPFMessageBox\MessageWindow.xaml.cs">
       <DependentUpon>MessageWindow.xaml</DependentUpon>

@@ -34,13 +34,13 @@ namespace DesktopManagerUX
 
         public bool IsSelected { get { return chkSelected.IsChecked.Value; } set { chkSelected.IsChecked = value; } }
 
-        public DisplayConfiguration DisplayConfiguration
+        public LayoutConfiguration DisplayConfiguration
         {
-            get { return (DisplayConfiguration)this.GetValue(DisplayConfigurationProperty); }
+            get { return (LayoutConfiguration)this.GetValue(DisplayConfigurationProperty); }
             set { this.SetValue(DisplayConfigurationProperty, value); }
         }
         public static readonly DependencyProperty DisplayConfigurationProperty = DependencyProperty.Register(
-          nameof(DisplayConfiguration), typeof(DisplayConfiguration), typeof(AppChooserUserControl), new PropertyMetadata(new DisplayConfiguration()));
+          nameof(DisplayConfiguration), typeof(LayoutConfiguration), typeof(AppChooserUserControl), new PropertyMetadata(new LayoutConfiguration()));
 
         public AppChooserUserControl()
         {

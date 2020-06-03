@@ -29,9 +29,9 @@ namespace DesktopManagerUX
 
             this.DataContext = AppContext.ViewModel;
 
-            tabDisplays.Items.Clear();
-            tabDisplays.ItemsSource = AppContext.Configuration.Displays;
-            tabDisplays.SelectedIndex = 0; //AppContext.Configuration.SelectedDisplayInfo.Index;
+            tabLayouts.Items.Clear();
+            tabLayouts.ItemsSource = AppContext.Configuration.Layouts;
+            tabLayouts.SelectedIndex = 0; //AppContext.Configuration.SelectedDisplayInfo.Index;
 
             Microsoft.Win32.SystemEvents.DisplaySettingsChanged += SystemEvents_DisplaySettingsChanged;
         }
@@ -45,7 +45,7 @@ namespace DesktopManagerUX
 
         private void SystemEvents_DisplaySettingsChanged(object sender, EventArgs e)
         {
-            AppContext.Configuration.UpdateDisplays();
+            AppContext.Configuration.SmartDisplaysUpdate();
         }
 
         private void Window_LocationChanged(object sender, EventArgs e)
@@ -67,6 +67,25 @@ namespace DesktopManagerUX
         private void CloseSelected_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void AddLayout_Click(object sender, RoutedEventArgs e)
+        {
+            AppContext.Configuration.Layouts.Add(new LayoutConfiguration(true));
+            tabLayouts.SelectedIndex = tabLayouts.Items.Count - 1; //last
+        }
+
+        private void RemoveLayout_Click(object sender, RoutedEventArgs e)
+        {
+            if(sender is Button btn)
+            {
+                if(btn.DataContext is LayoutConfiguration layout)
+                {
+                    int idx = AppContext.Configuration.Layouts.IndexOf(layout);
+                    if(idx>=0)
+                        AppContext.Configuration.Layouts.RemoveAt(idx);
+                }
+            }
         }
     }
 }

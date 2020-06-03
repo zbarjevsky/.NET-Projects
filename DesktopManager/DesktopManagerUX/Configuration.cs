@@ -17,10 +17,15 @@ namespace DesktopManagerUX
     [Serializable]
     public class Configuration
     {
-        public ObservableCollection<DisplayConfiguration> Displays { get; set; } = new ObservableCollection<DisplayConfiguration>();
+        public ObservableCollection<LayoutConfiguration> Layouts { get; set; } = new ObservableCollection<LayoutConfiguration>();
+
+        //current windows displays
+        [XmlIgnore]
+        public SmartObservableCollection<DisplayInfo> Displays { get; set; }
 
         public Configuration()
         {
+            Displays = new SmartObservableCollection<DisplayInfo>(Logic.GetDisplays());
         }
 
         public static string ConfigurationFileName
@@ -35,23 +40,6 @@ namespace DesktopManagerUX
             }
         }
 
-        public void UpdateDisplays()
-        {
-            List<DisplayInfo> info = Logic.GetDisplays();
-
-            while (Displays.Count > info.Count)
-                Displays.Remove(Displays.Last());
-            while (Displays.Count < info.Count)
-                Displays.Add(new DisplayConfiguration());
-
-            Debug.Assert(info.Count == Displays.Count);
-
-            for (int i = 0; i < info.Count; i++)
-            {
-                Displays[i].UpdateDisplayInfo(info[i]);
-            }
-        }
-
         public void Save()
         {
             SerializerHelper.Save<Configuration>(ConfigurationFileName, this);
@@ -60,18 +48,45 @@ namespace DesktopManagerUX
         public static Configuration Load()
         {
             Configuration cnf = SerializerHelper.Open<Configuration>(ConfigurationFileName);
-            cnf.UpdateDisplays();
+            if (cnf.Layouts.Count == 0) //add one default layout tab
+                cnf.Layouts.Add(new LayoutConfiguration(init: true));
+
+            cnf.SmartDisplaysUpdate();
             return cnf;
+        }
+
+        public void SmartDisplaysUpdate()
+        {
+            List<DisplayInfo> info = Logic.GetDisplays();
+
+            Displays.Update(info);
+
+            Debug.Assert(info.Count == Displays.Count);
+
+            for (int i = 0; i < Layouts.Count; i++)
+                Layouts[i].NotifyDisplaysChanged(Displays);
         }
     }
 
     [Serializable]
-    public class DisplayConfiguration : NotifyPropertyChangedImpl
+    public class LayoutConfiguration : NotifyPropertyChangedImpl
     {
-        [XmlIgnore]
-        public string Name { get { return MonitorInfo.Name; } }
+        private string _name = "";
+        public string Name { get { return _name; } set { _name = value; OnPropertyChanged(); } }
 
-        public DisplayInfo MonitorInfo { get; set; }
+        [XmlIgnore]
+        public string DisplayName 
+        { 
+            get 
+            { 
+                if (SelectedMonitorInfo == null) 
+                    return Name; 
+                return Name + " Display " + SelectedMonitorInfo.Index + (SelectedMonitorInfo.IsPrimary ? " (Primary)" : "");
+            } 
+        }
+
+        private DisplayInfo _displayInfo;
+        public DisplayInfo SelectedMonitorInfo { get { return _displayInfo; } set { _displayInfo = value; OnPropertyChanged(nameof(DisplayName)); } }
 
         private GridSizeData _gridSize = new GridSizeData() { Rows = 2, Cols = 2 };
 
@@ -81,14 +96,33 @@ namespace DesktopManagerUX
         {
             get
             {
-                double width = (MonitorInfo.Bounds.Width / _gridSize.Cols);
-                double height = (MonitorInfo.Bounds.Height / _gridSize.Rows);
+                double width = (SelectedMonitorInfo.Bounds.Width / _gridSize.Cols);
+                double height = (SelectedMonitorInfo.Bounds.Height / _gridSize.Rows);
                 return new Rect(0, 0, width, height);
             }
         }
 
         //should be before SelectedGridSize - to avoid doubling when loading from XML
         public List<AppInfo> SelectedApps { get; set; }
+
+        //empty constructor for serialization
+        public LayoutConfiguration()
+        {
+        }
+
+        public LayoutConfiguration(bool init, string name = "Layout 1")
+        {
+            if (init) Initialize(name);
+        }
+
+        public void Initialize(string name)
+        {
+            _name = name;
+
+            SelectedApps = new List<AppInfo>(GridSize.CellCount);
+            for (int i = 0; i < GridSize.CellCount; i++)
+                SelectedApps.Add(AppInfo.GetEmptyAppInfo());
+        }
 
         public string GetSelectedGridSizeText()
         {
@@ -127,13 +161,18 @@ namespace DesktopManagerUX
             _gridSize = newGridSize;
         }
 
-        public void UpdateDisplayInfo(DisplayInfo displayInfo)
+        public void NotifyDisplaysChanged(SmartObservableCollection<DisplayInfo> displays)
         {
-            MonitorInfo = displayInfo;
+            if (SelectedMonitorInfo == null)
+                SelectedMonitorInfo = displays[0];
 
-            if(SelectedApps.Count == 0) //not loaded from config file
-                for (int i = 0; i < _gridSize.CellCount; i++)
-                    SelectedApps.Add(AppInfo.GetEmptyAppInfo());
+            SelectedMonitorInfo.Update(displays);
+
+            if (string.IsNullOrWhiteSpace(_name))
+                _name = "Conf 1";
+
+            if (SelectedApps.Count == 0)
+                Initialize(_name);
 
             OnPropertyChanged(nameof(Name));
         }
@@ -152,13 +191,6 @@ namespace DesktopManagerUX
                 SelectedApps[pos].Row = row;
                 SelectedApps[pos].Col = col;
             }
-        }
-
-        public DisplayConfiguration()
-        {
-            SelectedApps = new List<AppInfo>(GridSize.CellCount);
-            //for (int i = 0; i < Rows*Columns; i++)
-            //    SelectedApps.Add(AppInfo.GetEmptyAppInfo());
         }
 
         public override string ToString()

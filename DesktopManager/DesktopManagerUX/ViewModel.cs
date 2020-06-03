@@ -17,7 +17,7 @@ namespace DesktopManagerUX
     {
         private MainWindow _wnd;
 
-        public SmartCollection<AppInfo> Apps { get; } = new SmartCollection<AppInfo>();
+        public SmartObservableCollection<AppInfo> Apps { get; } = new SmartObservableCollection<AppInfo>();
 
         public ViewModel(Window wnd)
         {

@@ -75,7 +75,7 @@ namespace DesktopManagerUX
         [XmlIgnore]
         public bool IsActive { get { return Process != null && !Process.HasExited && HWND != IntPtr.Zero; } }
 
-        public static int FindApp(string title, SmartCollection<AppInfo> apps)
+        public static int FindApp(string title, SmartObservableCollection<AppInfo> apps)
         {
             int pos = title.IndexOf("[");
             int end = title.IndexOf("]");
@@ -179,6 +179,7 @@ namespace DesktopManagerUX
 
         [XmlIgnore]
         public string Name { get { return "Display " +Index + " - " + Bounds.Width + "x" + Bounds.Height + (screen.IsPrimary ? " (Primary)" : ""); } }
+
         [XmlIgnore]
         public System.Windows.Rect Bounds { get { return screen.WorkingArea; } set { } }
 
@@ -186,6 +187,8 @@ namespace DesktopManagerUX
 
         [XmlIgnore]
         public SolidColorBrush Brush { get { return new SolidColorBrush(this.Color); } }
+
+        public bool IsPrimary { get { return screen != null ? screen.IsPrimary : false; } }
 
         [XmlIgnore]
         private WpfScreen screen;
@@ -200,6 +203,14 @@ namespace DesktopManagerUX
         {
             Index = index;
             this.screen = screen;
+        }
+
+        public void Update(SmartObservableCollection<DisplayInfo> displays)
+        {
+            if (Index < 0 || Index >= displays.Count)
+                Index = 0;
+
+            this.screen = displays[Index].screen;
         }
 
         public override string ToString()
