@@ -71,8 +71,20 @@ namespace DesktopManagerUX
 
         private void AddLayout_Click(object sender, RoutedEventArgs e)
         {
-            AppContext.Configuration.Layouts.Add(new LayoutConfiguration(true));
+            string name = GenerateNewLayoutName();
+            AppContext.Configuration.Layouts.Add(new LayoutConfiguration(true, name));
             tabLayouts.SelectedIndex = tabLayouts.Items.Count - 1; //last
+        }
+
+        private string GenerateNewLayoutName()
+        {
+            for (int i = 0; i < 200; i++)
+            {
+                LayoutConfiguration found = AppContext.Configuration.Layouts.FirstOrDefault(l => l.Name.StartsWith("Layout " + (i+1)));
+                if (found == null)
+                    return "Layout " + (i + 1);
+            }
+            return "<<>>";
         }
 
         private void RemoveLayout_Click(object sender, RoutedEventArgs e)

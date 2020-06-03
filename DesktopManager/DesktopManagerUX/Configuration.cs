@@ -80,8 +80,8 @@ namespace DesktopManagerUX
             get 
             { 
                 if (SelectedMonitorInfo == null) 
-                    return Name; 
-                return Name + " Display " + SelectedMonitorInfo.Index + (SelectedMonitorInfo.IsPrimary ? " (Primary)" : "");
+                    return ""; 
+                return "Display " + SelectedMonitorInfo.Index + (SelectedMonitorInfo.IsPrimary ? " (Primary)" : "");
             } 
         }
 

@@ -41,6 +41,7 @@
                 <TabControl.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">
+                            <TextBox Text="{Binding Name}" BorderThickness="0" Background="Transparent" />
                             <TextBlock Text="{Binding DisplayName}" />
                             <Button Margin="4,0,0,0" VerticalAlignment="Top" Click="RemoveLayout_Click" >
                                 <Button.Template>
