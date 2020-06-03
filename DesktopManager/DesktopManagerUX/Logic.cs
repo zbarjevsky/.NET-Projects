@@ -18,7 +18,7 @@ namespace DesktopManagerUX
 {
     public class Logic
     {
-        public static ObservableCollection<AppInfo> GetAppsWithUI()
+        public static List<AppInfo> GetAppsWithUI()
         {
             List<AppInfo> apps = new List<AppInfo>();
             apps.AddRange(EnumOpenWindows.GetOpenWindows().Select(w => new AppInfo(w)));
@@ -32,7 +32,7 @@ namespace DesktopManagerUX
             //foreach (Process p in pp)
             //    apps.Add(new AppInfo(p));
 
-            return new ObservableCollection<AppInfo>(apps);
+            return apps; //new ObservableCollection<AppInfo>(apps);
         }
 
         public static List<Process> FindProcess(string processName)

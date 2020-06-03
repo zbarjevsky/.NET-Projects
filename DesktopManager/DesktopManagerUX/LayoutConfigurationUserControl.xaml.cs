@@ -29,7 +29,7 @@ namespace DesktopManagerUX
         public LayoutConfiguration LayoutConfiguration
         {
             get { return (LayoutConfiguration)this.GetValue(LayoutConfigurationProperty); }
-            set { this.SetValue(LayoutConfigurationProperty, value); OnDisplayConfigurationChanged(); }
+            set { this.SetValue(LayoutConfigurationProperty, value); OnSelectedTabChanged(); }
         }
 
         public static readonly DependencyProperty LayoutConfigurationProperty = DependencyProperty.Register(
@@ -38,29 +38,24 @@ namespace DesktopManagerUX
         private static void LayoutConfigurationPropertyChanged(DependencyObject obj, DependencyPropertyChangedEventArgs e)
         {
             if (obj is LayoutConfigurationUserControl This)
-                This.OnDisplayConfigurationChanged();
+                This.OnSelectedTabChanged();
         }
 
-        private void OnDisplayConfigurationChanged()
+        private void OnSelectedTabChanged()
         {
             if (LayoutConfiguration == null)
                 return;
 
-            OnDisplaysChange();
-
-            _isInitialized = true;
-
-            RebuildAppsGrid(LayoutConfiguration.GridSize);
-        }
-
-        public void OnDisplaysChange()
-        {
             if (LayoutConfiguration.SelectedMonitorInfo == null)
                 LayoutConfiguration.SelectedMonitorInfo = AppContext.Configuration.Displays[0];
 
             int idx = LayoutConfiguration.SelectedMonitorInfo.Index;
             cmbDisplays.ItemsSource = AppContext.Configuration.Displays;
             cmbDisplays.SelectedIndex = idx;
+
+            _isInitialized = true;
+
+            RebuildAppsGrid(LayoutConfiguration.GridSize);
         }
 
         public LayoutConfigurationUserControl()
@@ -146,6 +141,7 @@ namespace DesktopManagerUX
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
         {
             this.Cursor = Cursors.Wait;
+            AppContext.ViewModel.ReloadApps();
             AppContext.Configuration.SmartDisplaysUpdate();
             RebuildAppsGrid(this.LayoutConfiguration.GridSize);
             this.Cursor = Cursors.Arrow;
@@ -184,7 +180,7 @@ namespace DesktopManagerUX
 
             AppContext.Sync = true;
             {
-                AppContext.ViewModel.ReloadApps();
+                //AppContext.ViewModel.ReloadApps();
 
                 this.LayoutConfiguration.UpdateApps(newGridSize);
 

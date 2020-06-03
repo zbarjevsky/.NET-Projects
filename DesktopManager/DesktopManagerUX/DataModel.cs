@@ -178,7 +178,7 @@ namespace DesktopManagerUX
         public int Index { get; set; }
 
         [XmlIgnore]
-        public string Name { get { return "Display " +Index + " - " + Bounds.Width + "x" + Bounds.Height + (screen.IsPrimary ? " (Primary)" : ""); } }
+        public string Name { get { return "Display " +(Index+1) + " - " + Bounds.Width + "x" + Bounds.Height + (screen.IsPrimary ? " (Primary)" : ""); } }
 
         [XmlIgnore]
         public System.Windows.Rect Bounds { get { return screen.WorkingArea; } set { } }
@@ -211,6 +211,20 @@ namespace DesktopManagerUX
                 Index = 0;
 
             this.screen = displays[Index].screen;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is DisplayInfo info)
+            {
+                return info.Name == Name && info.Index == Index;
+            }
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            return Name.GetHashCode();
         }
 
         public override string ToString()

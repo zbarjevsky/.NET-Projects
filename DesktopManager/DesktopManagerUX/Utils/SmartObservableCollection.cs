@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace DesktopManagerUX.Utils
 {
@@ -31,16 +32,29 @@ namespace DesktopManagerUX.Utils
             foreach (var item in range)
                 Items.Add(item);
 
-            this.OnPropertyChanged(new PropertyChangedEventArgs("Count"));
-            this.OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
-            this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            this.NotifyCollectionChanged();
         }
 
         //replace whole collection
-        public void Update(IEnumerable<T> range)
+        public void Update(IList<T> newItems)
         {
-            Items.Clear();
-            AddRange(range);
+            //remove missing
+            for (int i = Items.Count -1; i >= 0; i--)
+            {
+                int idx = FindItem(Items[i], newItems);
+                if (idx < 0) //not found
+                    Items.Remove(Items[i]);
+            }
+
+            //add new
+            for (int i = 0; i < newItems.Count; i++)
+            {
+                int idx = FindItem(newItems[i], Items);
+                if (idx < 0)
+                    Items.Add(newItems[i]);
+            }
+
+            this.NotifyCollectionChanged();
         }
 
         //add new, replace existing
@@ -49,23 +63,31 @@ namespace DesktopManagerUX.Utils
         {
             foreach (T item in range)
             {
-                int idx = FindItem(item);
+                int idx = FindItem(item, Items);
                 if (idx < 0)
                     Items.Add(item);
                 else
                     Items[idx] = item;
             }
 
-            this.OnPropertyChanged(new PropertyChangedEventArgs("Count"));
-            this.OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
-            this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            this.NotifyCollectionChanged();
         }
 
-        public int FindItem(T item)
+        private void NotifyCollectionChanged()
         {
-            for (int i = 0; i < Count; i++)
+            //System.Windows.Application.Current.Dispatcher.BeginInvoke(new MethodInvoker(() =>
+            //{
+                this.OnPropertyChanged(new PropertyChangedEventArgs("Count"));
+                this.OnPropertyChanged(new PropertyChangedEventArgs("Item[]"));
+                this.OnCollectionChanged(new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset));
+            //}));
+        }
+
+        public static int FindItem(T item, IList<T> collection)
+        {
+            for (int i = 0; i < collection.Count; i++)
             {
-                if (item.Equals(Items[i]))
+                if (item.Equals(collection[i]))
                     return i;
             }
             return -1;

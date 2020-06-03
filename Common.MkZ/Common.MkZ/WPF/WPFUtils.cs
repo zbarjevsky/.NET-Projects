@@ -14,6 +14,11 @@ namespace MZ.WPF
             ExecuteOnUIThread(() => { action(); return 0; }); 
         }
 
+        public static void ExecuteOnUIThreadBeginInvoke(Action action)
+        {
+            Application.Current.Dispatcher.BeginInvoke(action);
+        }
+
         public static T ExecuteOnUIThread<T>(Func<T> action)
         {
             if (!Application.Current.Dispatcher.CheckAccess())

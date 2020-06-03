@@ -99,5 +99,19 @@ namespace DesktopManagerUX
                 }
             }
         }
+
+        //click inside TextBox does not select tab - do it here
+        private void TextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is TextBox txt)
+            {
+                if (txt.DataContext is LayoutConfiguration layout)
+                {
+                    int idx = AppContext.Configuration.Layouts.IndexOf(layout);
+                    if (idx >= 0)
+                        tabLayouts.SelectedIndex = idx;
+                }
+            }
+        }
     }
 }
