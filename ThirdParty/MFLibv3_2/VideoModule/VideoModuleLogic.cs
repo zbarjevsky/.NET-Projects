@@ -13,10 +13,29 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using TantaCommon;
+using VideoModule.Tanta;
 using VideoModule.Tools;
 
 namespace VideoModule
 {
+    public class VideoResolutionInfo
+    {
+        public string Name { get; }
+        public TantaMFVideoFormatContainer Data { get; }
+
+        public VideoResolutionInfo(TantaMFVideoFormatContainer data)
+        {
+            Name = data.DisplayString() + " " + data.FrameRateAsString + " fps";
+            Data = data;
+        }
+
+        public override string ToString()
+        {
+            return Name;
+        }
+    }
+
     public class VideoModuleLogic : IDisposable
     {
         // Category for capture devices
@@ -46,7 +65,7 @@ namespace VideoModule
 
         public void OnActivate(IDeviceInfo moniker)
         {
-            HResult hr = WPFUtils.ExecuteInBacgroundThread<HResult>(() => 
+            HResult hr = WPFUtils.ExecuteInBacgroundThread<HResult>(() =>
             {
                 _activeDevice = moniker as MfDevice;
                 string format = string.Empty;
@@ -55,7 +74,18 @@ namespace VideoModule
                     OnFormatAction(format);
                 return hr1;
             });
-            
+
+            MFError.ThrowExceptionForHR(hr);
+        }
+
+        public void OnClose(IDeviceInfo moniker)
+        {
+            HResult hr = WPFUtils.ExecuteInBacgroundThread<HResult>(() =>
+            {
+                _activeDevice = moniker as MfDevice;
+                return camProcess.CloseDevice(Colors.AliceBlue);
+            });
+
             MFError.ThrowExceptionForHR(hr);
         }
 
@@ -99,11 +129,21 @@ namespace VideoModule
                 camProcess = new CCapture(ImageWrapper, hEvent);
         }
 
+        public static List<VideoResolutionInfo> GetVideoFormats(IDeviceInfo device)
+        {
+            TantaMFDevice tantaDevice = new TantaMFDevice(device.Name, device.SymbolicName, CLSID.MF_DEVSOURCE_ATTRIBUTE_SOURCE_TYPE_VIDCAP_GUID);
+            List<TantaMFVideoFormatContainer> list = EnumVideoFormats.GetVideoFormatsForCaptureDevice(tantaDevice);
+
+            List<VideoResolutionInfo> res = list.Select(d => new VideoResolutionInfo(d)).ToList();
+
+            return res;
+        }
+
         private void NotifyError(string sErrorMessage, int hrErr)
         {
             var sErrMsg = MFError.GetErrorText(hrErr);
             string sMsg = $"{sErrorMessage} (HRESULT = 0x{hrErr:x}:{sErrMsg})";
-            camProcess.CloseDevice();
+            camProcess.CloseDevice(Colors.DarkRed);
             OnErrorAction(sMsg, "Error");
         }
 

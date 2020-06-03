@@ -81,7 +81,7 @@ namespace VideoModule
             }
         }
 
-        internal BitmapSource DrawFrame(IntPtr sourcePtr, int pitch, TransformInformation formatInformation)
+        internal BitmapSource DrawFrame(IntPtr sourcePtr, int pitch, TransformData formatInformation)
         {
             lock (LockObj)
             {
@@ -96,7 +96,7 @@ namespace VideoModule
 
         unsafe private static BitmapSource ConvertToBitmapSourceBgr32(
             IntPtr pbScanline0, int lStride, 
-            TransformInformation tf, bool isFlipHorizontally)
+            TransformData tf, bool isFlipHorizontally)
         {
             if (tf._width == 0 || tf._height == 0 || tf.m_convertFn == null)
                 return null;

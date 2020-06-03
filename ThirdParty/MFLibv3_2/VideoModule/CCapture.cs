@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Media;
 using MediaFoundation;
 using MediaFoundation.Alt;
 using MediaFoundation.Misc;
@@ -32,6 +33,7 @@ namespace VideoModule
             {
                 if (PReader == null)
                     return hr;
+
                 // Create the sink writer 
                 if (Succeeded(hr))
                 {
@@ -41,7 +43,7 @@ namespace VideoModule
                 // Set up the encoding parameters.
                 if (Succeeded(hr))
                 {
-                    var param = new EncodingParameters {Subtype = subType};
+                    var param = new EncodingParameters {Subtype = subType, Bitrate = 18000};
                     hr = ConfigureCapture(param);
                 }
 
@@ -84,74 +86,78 @@ namespace VideoModule
             return bIsCapturing;
         }
 
-        private static HResult ConfigureEncoder(EncodingParameters eparams, IMFMediaType pType, IMFSinkWriter pWriter,
+        private static HResult ConfigureEncoder(EncodingParameters eparams, IMFMediaType videoInStreamType, IMFSinkWriter pWriter,
             out int pdwStreamIndex)
         {
-            IMFMediaType pType2;
+            IMFMediaType outStreamType;
 
-            var hr = MFExtern.MFCreateMediaType(out pType2);
+            var hr = MFExtern.MFCreateMediaType(out outStreamType);
 
             if (Succeeded(hr))
             {
-                hr = pType2.SetGUID(MFAttributesClsid.MF_MT_MAJOR_TYPE, MFMediaType.Video);
+                hr = outStreamType.SetGUID(MFAttributesClsid.MF_MT_MAJOR_TYPE, MFMediaType.Video);
             }
 
             if (Succeeded(hr))
             {
-                hr = pType2.SetGUID(MFAttributesClsid.MF_MT_SUBTYPE, eparams.Subtype);
+                hr = outStreamType.SetGUID(MFAttributesClsid.MF_MT_SUBTYPE, eparams.Subtype);
             }
 
             if (Succeeded(hr))
             {
-                hr = pType2.SetUINT32(MFAttributesClsid.MF_MT_AVG_BITRATE, eparams.Bitrate);
+                hr = outStreamType.SetUINT32(MFAttributesClsid.MF_MT_AVG_BITRATE, eparams.Bitrate);
             }
 
             if (Succeeded(hr))
             {
-                hr = CopyAttribute(pType, pType2, MFAttributesClsid.MF_MT_FRAME_SIZE);
+                hr = CopyAttribute(videoInStreamType, outStreamType, MFAttributesClsid.MF_MT_FRAME_SIZE);
             }
 
             if (Succeeded(hr))
             {
-                hr = CopyAttribute(pType, pType2, MFAttributesClsid.MF_MT_FRAME_RATE);
+                hr = CopyAttribute(videoInStreamType, outStreamType, MFAttributesClsid.MF_MT_FRAME_RATE);
             }
 
             if (Succeeded(hr))
             {
-                hr = CopyAttribute(pType, pType2, MFAttributesClsid.MF_MT_PIXEL_ASPECT_RATIO);
+                hr = CopyAttribute(videoInStreamType, outStreamType, MFAttributesClsid.MF_MT_PIXEL_ASPECT_RATIO);
             }
 
             if (Succeeded(hr))
             {
-                hr = CopyAttribute(pType, pType2, MFAttributesClsid.MF_MT_INTERLACE_MODE);
+                hr = CopyAttribute(videoInStreamType, outStreamType, MFAttributesClsid.MF_MT_INTERLACE_MODE);
             }
 
             pdwStreamIndex = 0;
             if (Succeeded(hr))
             {
-                hr = pWriter.AddStream(pType2, out pdwStreamIndex);
+                hr = pWriter.AddStream(outStreamType, out pdwStreamIndex);
             }
 
-            SafeRelease(pType2);
+            SafeRelease(outStreamType);
 
             return hr;
         }
 
         private HResult ConfigureCapture(EncodingParameters eparam)
         {
-            IMFMediaType pType = null;
+            IMFMediaType videoStreamType = null;
 
             //var hr = ConfigureSourceReader(PReader);
 
-            var hr = PReader.GetCurrentMediaType((int)MF_SOURCE_READER.FirstVideoStream, out pType);
-            int w, h;
-            MfGetAttributeSize(pType, out w, out h);
-            eparam.Bitrate = w*h*20;
+            var hr = PReader.GetCurrentMediaType((int)MF_SOURCE_READER.FirstVideoStream, out videoStreamType);
+            MfGetAttributeSize(videoStreamType, out int width, out int height);
+
+            double compressionFactor = 50;
+            double fps = 30;
+            int bpp = 4; //bytes per pixel
+
+            eparam.Bitrate = (int)(fps * width * height * bpp / compressionFactor);
 
             var sinkStream = 0;
             if (Succeeded(hr))
             {
-                hr = ConfigureEncoder(eparam, pType, PWriter, out sinkStream);
+                hr = ConfigureEncoder(eparam, videoStreamType, PWriter, out sinkStream);
             }
 
             if (Succeeded(hr))
@@ -175,7 +181,7 @@ namespace VideoModule
 
             if (Succeeded(hr))
             {
-                hr = PWriter.SetInputMediaType(sinkStream, pType, null);
+                hr = PWriter.SetInputMediaType(sinkStream, videoStreamType, null);
             }
 
             if (Succeeded(hr))
@@ -183,7 +189,7 @@ namespace VideoModule
                 hr = PWriter.BeginWriting();
             }
 
-            SafeRelease(pType);
+            SafeRelease(videoStreamType);
 
             return hr;
         }
@@ -198,10 +204,10 @@ namespace VideoModule
             return hr;
         }
 
-        public override HResult CloseDevice()
+        public override HResult CloseDevice(Color backColor)
         {
             StopCapture();
-            return base.CloseDevice();
+            return base.CloseDevice(backColor);
         }
 
         protected override HResult OnFrame(IMFSample pSample, IMFMediaBuffer pBuffer, long llTimestamp, string ssFormat)

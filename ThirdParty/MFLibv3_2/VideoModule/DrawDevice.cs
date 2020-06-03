@@ -32,7 +32,7 @@ namespace VideoModule
         DeviceImage _device;
 
         // Format information
-        private TransformInformation _format = new TransformInformation();
+        private TransformData _format = new TransformData();
         private Rect _rcDest;       // Destination Rect
 
         #endregion
@@ -158,10 +158,10 @@ namespace VideoModule
         //[DllImport("kernel32.dll", EntryPoint = "CopyMemory", SetLastError = false)]
         //private static extern void CopyMemory(IntPtr dest, IntPtr src, uint count);
 
-        public HResult DrawNullFrame()
+        public HResult DrawNullFrame(Color backColor)
         {
             // Color fill the back buffer.
-            _device.ColorFill(NullBackColor);
+            _device.ColorFill(backColor);
 
             // Present the frame.
             return _device.Present(isLive: false);

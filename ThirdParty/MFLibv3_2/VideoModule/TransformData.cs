@@ -10,7 +10,7 @@ using System.Windows.Media;
 
 namespace VideoModule
 {
-    public class TransformInformation
+    public class TransformData
     {
         public struct VideoFormatGUID
         {
@@ -60,7 +60,7 @@ namespace VideoModule
         
         public SlimDX.Direct3D9.Format _format = SlimDX.Direct3D9.Format.X8R8G8B8;
 
-        public TransformInformation()
+        public TransformData()
         {
         }
 
@@ -187,8 +187,7 @@ namespace VideoModule
         //
         // Set the conversion function for the specified video snapFormat.
         //-------------------------------------------------------------------
-
-        public HResult SetConversionFunction(Guid subtype)
+        private HResult SetConversionFunction(Guid subtype)
         {
             var q = (from item in VideoFormatDefs where item.SubType == subtype select item).FirstOrDefault();
 

@@ -21,24 +21,40 @@ namespace ControlModule
 
         private class EmptyDevice : IDeviceInfo
         {
-            public string Name => "Close";
+            public string Name { get; }
 
             public string SymbolicName => "";
+
+            public EmptyDevice(string name)
+            {
+                Name = name;
+            }
         }
+
+        private IDeviceInfo _emptyDevice = new EmptyDevice("Close");
 
         public ConsoleViewModel(VideoModuleLogic videoModuleLogic)
         {
             _videoModuleLogic = videoModuleLogic;
 
-            IList<IDeviceInfo> deviceTable = MfDevice.GetCategoryDevices(CLSID.MF_DEVSOURCE_ATTRIBUTE_SOURCE_TYPE_VIDCAP_GUID);
-            deviceTable.Insert(0, new EmptyDevice());
+            IList<IDeviceInfo> vidCapList = MfDevice.GetCategoryDevices(CLSID.MF_DEVSOURCE_ATTRIBUTE_SOURCE_TYPE_VIDCAP_GUID);
+            vidCapList.Insert(0, _emptyDevice);
 
-            DeviceItems = new ObservableCollection<IDeviceInfo>(deviceTable);
-            SelectedDevice = null;
-            
+            VideoDeviceItems = new ObservableCollection<IDeviceInfo>(vidCapList);
+            SelectedVideoDevice = _emptyDevice;
+
+            VideoResolutionItems = new ObservableCollection<VideoResolutionInfo>();
+
+            IList<IDeviceInfo> audCapList = MfDevice.GetCategoryDevices(CLSID.MF_DEVSOURCE_ATTRIBUTE_SOURCE_TYPE_AUDCAP_GUID);
+            audCapList.Insert(0, new EmptyDevice("Master Volume"));
+            audCapList.Insert(0, _emptyDevice);
+
+            AudioDeviceItems = new ObservableCollection<IDeviceInfo>(audCapList);
+            SelectedAudioDevice = _emptyDevice;
+
             PlayCommand = new RelayCommand(o =>
             {
-                if (SelectedDevice == null)
+                if (SelectedVideoDevice == _emptyDevice)
                     return;
                 string op = o as string;
 
@@ -50,7 +66,7 @@ namespace ControlModule
 
             SnapCommand = new RelayCommand(op =>
             {
-                if (SelectedDevice == null)
+                if (SelectedVideoDevice == _emptyDevice)
                     return;
 
                 _videoModuleLogic.OnOperation("Snap");
@@ -65,23 +81,53 @@ namespace ControlModule
             };
         }
 
-        public ObservableCollection<IDeviceInfo> DeviceItems { get; private set; }
+        public ObservableCollection<IDeviceInfo> VideoDeviceItems { get; private set; }
+
+        public ObservableCollection<VideoResolutionInfo> VideoResolutionItems { get; private set; }
+
+        public ObservableCollection<IDeviceInfo> AudioDeviceItems { get; private set; }
 
         public ICommand PlayCommand { get; private set; }
         public ICommand SnapCommand { get; private set; }
 
-        private IDeviceInfo _selectedDevice;
-        public IDeviceInfo SelectedDevice
+        private IDeviceInfo _selectedVideoDevice;
+        public IDeviceInfo SelectedVideoDevice
         {
-            get { return _selectedDevice; }
+            get { return _selectedVideoDevice; }
             set
             {
-                SetProperty(ref _selectedDevice, value);
-                if (_selectedDevice != null)
+                SetProperty(ref _selectedVideoDevice, value);
+                if (_selectedVideoDevice != _emptyDevice)
                 {
                     WaitControlVisibility = Visibility.Visible;
-                    _videoModuleLogic.OnActivate(_selectedDevice);
+                    _videoModuleLogic.OnActivate(_selectedVideoDevice);
+                    UpdateResolutions(_selectedVideoDevice);
                 }
+                else
+                {
+                    WaitControlVisibility = Visibility.Hidden;
+                    _videoModuleLogic.OnClose(_selectedVideoDevice);
+                }
+            }
+        }
+
+        private IDeviceInfo _selectedAudioDevice;
+        public IDeviceInfo SelectedAudioDevice
+        {
+            get { return _selectedAudioDevice; }
+            set
+            {
+                SetProperty(ref _selectedAudioDevice, value);
+            }
+        }
+
+        private VideoResolutionInfo _selectedVideoResolution;
+        public VideoResolutionInfo SelectedVideoResolution
+        {
+            get { return _selectedVideoResolution; }
+            set
+            {
+                SetProperty(ref _selectedVideoResolution, value);
             }
         }
 
@@ -129,6 +175,18 @@ namespace ControlModule
         {
             get { return _recordIconVisibility; }
             set { SetProperty(ref _recordIconVisibility, value); }
+        }
+
+        private void UpdateResolutions(IDeviceInfo device)
+        {
+            List<VideoResolutionInfo> list = VideoModuleLogic.GetVideoFormats(device);
+            VideoResolutionItems.Clear();
+            foreach (var item in list)
+            {
+                VideoResolutionItems.Add(item);
+            }
+            if(list.Count > 0)
+                SelectedVideoResolution = VideoResolutionItems[0];
         }
 
         private bool SetProperty<T>(ref T storage, T value, [CallerMemberName] string propertyName = null)

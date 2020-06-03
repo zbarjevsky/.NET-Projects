@@ -67,11 +67,16 @@
     <Compile Include="DirectX\FormatDX.cs" />
     <Compile Include="Interface\IDeviceInfo.cs" />
     <Compile Include="RegisterDeviceNotifications.cs" />
+    <Compile Include="Tanta\EnumVideoFormats.cs" />
+    <Compile Include="Tanta\TantaMediaTypeInfo.cs" />
+    <Compile Include="Tanta\TantaMFDevice.cs" />
+    <Compile Include="Tanta\TantaMFVideoFormatContainer.cs" />
+    <Compile Include="Tanta\TantaWMFUtils.cs" />
     <Compile Include="Tools\CommonTools.cs" />
     <Compile Include="Tools\NotifyPropertyChangedImpl.cs" />
     <Compile Include="Tools\RelayCommand.cs" />
     <Compile Include="Tools\User32.cs" />
-    <Compile Include="TransformInformation.cs" />
+    <Compile Include="TransformData.cs" />
     <Compile Include="VideoBufferLock.cs" />
     <Compile Include="VideoModuleLogic.cs" />
     <Compile Include="Views\CircularProgressBar.xaml.cs">

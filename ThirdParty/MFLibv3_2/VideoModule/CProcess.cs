@@ -4,7 +4,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using MediaFoundation;
 using MediaFoundation.Alt;
 using MediaFoundation.Misc;
@@ -156,7 +158,7 @@ namespace VideoModule
         public HResult SetDevice(MfDevice pDevice, ref string format)
         {
             // Release the current device, if any.
-            HResult hr = CloseDevice();
+            HResult hr = CloseDevice(SystemColors.ControlColor);
             if (pDevice == null)
                 return HResult.S_OK;
 
@@ -201,7 +203,7 @@ namespace VideoModule
                         //pActivate.ShutdownObject();
                         // NOTE: The source reader shuts down the media source
                         // by default, but we might not have gotten that far.
-                        CloseDevice();
+                        CloseDevice(Colors.DarkRed);
                     }
                 }
                 finally
@@ -252,7 +254,7 @@ namespace VideoModule
         //
         //  Releases all resources held by this object.
         //-------------------------------------------------------------------
-        public virtual HResult CloseDevice()
+        public virtual HResult CloseDevice(System.Windows.Media.Color backColor)
         {
             lock (LockSync)
             {
@@ -261,7 +263,7 @@ namespace VideoModule
                 pActivate?.ShutdownObject();
                 pActivate = null;
                 PwszSymbolicLink = null;
-                Draw.DrawNullFrame();
+                Draw.DrawNullFrame(backColor);
             }
             return HResult.S_OK;
         }
@@ -294,7 +296,7 @@ namespace VideoModule
 
         public void Dispose()
         {
-            CloseDevice();
+            CloseDevice(Colors.White);
 
             Draw.DestroyDevice();
             Draw = null;

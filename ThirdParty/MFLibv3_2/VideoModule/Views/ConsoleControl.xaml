@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:ControlModule.Views"
              xmlns:controlModule="clr-namespace:ControlModule"
              xmlns:regions="http://www.codeplex.com/CompositeWPF"
-             mc:Ignorable="d" d:DesignWidth="457.667" d:DesignHeight="184.667" >
+             mc:Ignorable="d" 
+             d:DesignWidth="800" d:DesignHeight="200" >
 
     <!--d:DataContext="{d:DesignInstance controlModule:DesignViewModel, IsDesignTimeCreatable=True}">-->
     <!--prism:ViewModelLocator.AutoWireViewModel="True">-->
@@ -40,13 +41,27 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal">
-            <TextBlock x:Name="textBlock" HorizontalAlignment="Left" Margin="10" TextWrapping="Wrap" VerticalAlignment="Top"><Run Text="Source Device"/></TextBlock>
-            <ComboBox x:Name="comboBox" 
-                      ItemsSource="{Binding Path=DeviceItems}" SelectedItem="{Binding Path=SelectedDevice, Mode=TwoWay}"
-                      HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" Width="196">
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <TextBlock x:Name="lblVideoSource" HorizontalAlignment="Left" Margin="10" TextWrapping="Wrap" VerticalAlignment="Center">
+                <Run Text="Video Source"/>
+            </TextBlock>
+            <ComboBox x:Name="cmbVideoSources" IsEditable="False"
+                      ItemsSource="{Binding Path=VideoDeviceItems}" SelectedItem="{Binding Path=SelectedVideoDevice, Mode=TwoWay}"
+                      HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" MinWidth="200">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Path=Name}"></TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <ComboBox x:Name="cmbVideoResolutions" IsEditable="False"
+                      ItemsSource="{Binding Path=VideoResolutionItems}" SelectedItem="{Binding Path=SelectedVideoResolution, Mode=TwoWay}"
+                      HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" MinWidth="100">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel>
@@ -59,7 +74,25 @@
                       Content="Flip Horizontally" />
         </StackPanel>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <TextBlock x:Name="textBlock1" HorizontalAlignment="Right" Margin="10" MinWidth="60" TextWrapping="Wrap" 
+            <TextBlock x:Name="lblAudioSource" HorizontalAlignment="Left" Margin="10" TextWrapping="Wrap" VerticalAlignment="Top">
+                <Run Text="Audio Source"/>
+            </TextBlock>
+            <ComboBox x:Name="cmbAudioSources" IsEditable="False"
+                      ItemsSource="{Binding Path=AudioDeviceItems}" SelectedItem="{Binding Path=SelectedAudioDevice, Mode=TwoWay}"
+                      HorizontalAlignment="Left" Margin="10" VerticalAlignment="Top" MinWidth="200">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding Path=Name}"></TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+            <CheckBox IsChecked="{Binding IsFlipHorizontally}" Margin="10" VerticalAlignment="Center"
+                      Content="Record Audio" />
+        </StackPanel>
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <TextBlock x:Name="txtRecordingStatus" HorizontalAlignment="Right" Margin="10" MinWidth="60" TextWrapping="Wrap" 
                        Text="{Binding Path=FormatString, FallbackValue=Status}" VerticalAlignment="Center" Width="Auto"/>
             <Image x:Name="image" HorizontalAlignment="Left" Width="40" Height="40" Margin="10" MinWidth="40" VerticalAlignment="Center" 
                    Source="/VideoModuleMF;component/Images/red.png" 

@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using CameraCapture.Interface;
 using MediaFoundation;
 using MediaFoundation.Misc;
@@ -106,7 +107,7 @@ namespace VideoModule
         {
             var sErrMsg = MFError.GetErrorText(hrErr);
             string sMsg = $"{sErrorMessage} (HRESULT = 0x{hrErr:x}:{sErrMsg})";
-            camProcess.CloseDevice();
+            camProcess.CloseDevice(Colors.DarkRed);
             //NotificationRequest.Raise(new Notification { Content = sMsg, Title = "Error" });
         }
 
