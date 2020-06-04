@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MZ.WPF.MessageBox;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,28 +28,27 @@ namespace WPFMessageBoxTestWPF
 
         private void btnInfo_OnClick(object sender, RoutedEventArgs e)
         {
-            MZ.WPF.MessageBox.PopUp.Information("Information.");
+            this.MessageInfo("Information.");
         }
 
         private void btnWarn_OnClick(object sender, RoutedEventArgs e)
         {
-            MZ.WPF.MessageBox.PopUp.Exclamation("Exclamation!");
+            this.MessageWarning("Exclamation!");
         }
 
         private void btnError_OnClick(object sender, RoutedEventArgs e)
         {
-            MZ.WPF.MessageBox.PopUp.Error("Error!!!");
+            this.MessageError("Error!!!");
         }
 
         private void btnQuestionr_OnClick(object sender, RoutedEventArgs e)
         {
-            MZ.WPF.MessageBox.PopUp.Question("Question!");
+            this.MessageQuestion("?Question?");
         }
 
         private void CYNQuestion_Click(object sender, RoutedEventArgs e)
         {
-            MZ.WPF.MessageBox.PopUp.Question("Question!", this.Title, MessageBoxImage.Question, TextAlignment.Center,
-                MZ.WPF.MessageBox.PopUp.PopUpButtonsType.CancelNoYes);
+            this.MessageQuestion("Question???", this.Title, PopUp.PopUpButtonsType.CancelNoYes);
         }
     }
 }

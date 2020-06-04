@@ -42,7 +42,7 @@ namespace MZ.WPF.MessageBox
         public static Visibility IconType1Visibility { get; set; } = Visibility.Visible;
         public static Visibility IconType2Visibility { get; set; } = Visibility.Collapsed;
 
-        private PopUp.PopUpResult _DialogResult = PopUp.PopUpResult.None;
+        internal PopUp.PopUpResult _DialogResult = PopUp.PopUpResult.None;
         private PopUp.PopUpButtons _buttons = new PopUp.PopUpButtons(PopUp.PopUpButtonsType.CancelOK);
         //private PopUp.PopUpResult _defaultButton = PopUp.PopUpResult.None;
 
@@ -51,51 +51,6 @@ namespace MZ.WPF.MessageBox
         /// </summary>
         public static TextAlignment sTextAlignment = TextAlignment.Center;
         public static WindowStartupLocation sWindowStartupLocation = WindowStartupLocation.CenterOwner;
-
-        public static PopUp.PopUpResult MessageBox(UIElement owner, 
-            ref string message, string title,
-            MessageBoxImage icon, 
-            TextAlignment textAlignment,
-            PopUp.PopUpButtons buttons, 
-            int autoCloseTimeoutMs = Timeout.Infinite, //infinite
-            bool bReadonly = true)
-        {
-            MessageWindow wnd = new MessageWindow(buttons);
-            wnd.WindowStartupLocation = WindowStartupLocation.Manual; // sWindowStartupLocation;
-            wnd.Owner = GetWindowImpl(owner);
-            wnd.ConfigureAppearance(icon);
-            wnd.Title = title; //for task bar visible tetx
-            wnd.txtMessage.TextAlignment = textAlignment;
-            wnd.txtMessage.Text = message;
-            wnd.txtMessage.IsReadOnly = bReadonly;
-            //wnd.txtMessage.ToolTip = message;
-            wnd.txtTitle.Text = title;
-            //wnd.txtTitle.ToolTip = title;
-
-            wnd.btn1.Content = buttons.btn1.Text;
-            wnd.btn2.Content = buttons.btn2.Text;
-            wnd.btn3.Content = buttons.btn3.Text;
-
-            wnd.AdjustSize(message, true);
-            if (owner != null)
-                wnd.CenterToUIElement(owner);
-            else
-                wnd.CenterToMainWindow();
-
-            //if timeout is set and window is not closed after timeout - close it
-            Thread t = wnd.CloseWindowOnTimeout(autoCloseTimeoutMs);
-
-            wnd.ShowDialog();
-
-            //if closed before timeout - abort thread
-            if(t != null)
-                t.Abort();
-
-            //get text from input box - return value
-            message = wnd.txtMessage.Text;
-
-            return wnd._DialogResult;
-        }
 
         public MessageWindow(PopUp.PopUpButtons buttons)
         {
@@ -281,7 +236,7 @@ namespace MZ.WPF.MessageBox
         }
 
         //if timeout is set and window is not closed after timeout - click default button
-        private Thread CloseWindowOnTimeout(int timeout)
+        internal Thread CloseWindowOnTimeout(int timeout)
         {
             if (timeout < 100)
                 return null;
@@ -331,18 +286,10 @@ namespace MZ.WPF.MessageBox
             }
         }
 
-        private static Window GetWindowImpl(UIElement owner)
-        {
-            if (owner == null)
-                return WPF_Helper.GetMainWindow();
-
-            return GetWindow(owner);
-        }
-
         /// <summary>
         /// Calculate size of message and adjust window size correspondently
         /// </summary>
-        private Point AdjustSize(string newText, bool growAndShrink)
+        internal Point AdjustSize(string newText, bool growAndShrink)
         {
             WPF_Helper.UpdateScaleWPF(txtMessage);
 
@@ -400,25 +347,6 @@ namespace MZ.WPF.MessageBox
             return new Point(deltaX, deltaY);
         }
 
-        private void CenterToUIElement(UIElement owner)
-        {
-            Rect r = new Rect(owner.PointToScreen(new Point()), owner.RenderSize);
-            CenterToRectangle(r);
-        }
-
-        private void CenterToMainWindow()
-        {
-            Rect r = WPF_Helper.GetMainWindowRect();
-            CenterToRectangle(r);
-        }
-
-        private void CenterToRectangle(Rect rOwner)
-        {
-            Point location = WPF_Helper.CenterToRectangle(new Size(this.Width, this.Height), rOwner);
-            this.Left = location.X;
-            this.Top = location.Y;
-        }
-
         private Size MeasureString(TextBlock t)
         {
             var formattedText = new FormattedText(
@@ -427,7 +355,8 @@ namespace MZ.WPF.MessageBox
                 FlowDirection.LeftToRight,
                 new Typeface(t.FontFamily, t.FontStyle, t.FontWeight, t.FontStretch),
                 t.FontSize,
-                Brushes.Black);
+                Brushes.Black,
+                VisualTreeHelper.GetDpi(this).PixelsPerDip);
 
             return new Size(formattedText.Width, formattedText.Height);
         }
@@ -445,7 +374,8 @@ namespace MZ.WPF.MessageBox
                 FlowDirection.LeftToRight,
                 new Typeface(t.FontFamily, t.FontStyle, t.FontWeight, t.FontStretch),
                 t.FontSize,
-                Brushes.Black);
+                Brushes.Black,
+                VisualTreeHelper.GetDpi(this).PixelsPerDip);
 
             return new Size(formattedText.Width, formattedText.Height);
         }
@@ -475,7 +405,7 @@ namespace MZ.WPF.MessageBox
         public static ImageSource _imgExcl = System.Drawing.SystemIcons.Exclamation.ToImageSource();
         public static ImageSource _imgInfo = System.Drawing.SystemIcons.Information.ToImageSource();
 
-        private void ConfigureAppearance(MessageBoxImage iconType)
+        internal void ConfigureAppearance(MessageBoxImage iconType)
         {
             Color messageColor = Colors.DodgerBlue;
             switch (iconType)

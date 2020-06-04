@@ -2,7 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Interop;
 
 namespace MZ.WPF.MessageBox
 {
@@ -12,6 +15,7 @@ namespace MZ.WPF.MessageBox
         // Summary:
         //     Specifies the buttons that are displayed on a message box. Used as an argument
         //     of the Overload:System.Windows.MessageBox.Show method.
+        [Flags]
         public enum PopUpButtonsType : int
         {
             //
@@ -171,6 +175,170 @@ namespace MZ.WPF.MessageBox
                     ButtonsType = (PopUpButtonsType)((int)ButtonsType | 1);
                 }
             }
+        }
+    }
+
+    public partial class PopUp
+    {
+        #region Common Message Boxes
+
+        public static void Error(string message, string title = "Error",
+            TextAlignment textAlignment = TextAlignment.Center)
+        {
+            MessageBox(null, message, title, MessageBoxImage.Error, textAlignment);
+        }
+
+        public static void Information(string message, string title = "Information",
+            TextAlignment textAlignment = TextAlignment.Center)
+        {
+            MessageBox(null, message, title, MessageBoxImage.Information, textAlignment);
+        }
+
+        public static void Exclamation(string message, string title = "Exclamation",
+            TextAlignment textAlignment = TextAlignment.Center)
+        {
+            MessageBox(null, message, title, MessageBoxImage.Exclamation, textAlignment);
+        }
+
+        /// <summary>
+        /// return True on Ok(F6), False on Cancel(F5)
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="title"></param>
+        /// <param name="icon"></param>
+        /// <param name="textAlignment"></param>
+        /// <param name="buttons"></param>
+        /// <returns></returns>
+        public static PopUp.PopUpResult Question(string message, string title = "Question",
+            MessageBoxImage icon = MessageBoxImage.Question,
+            TextAlignment textAlignment = TextAlignment.Center,
+            PopUp.PopUpButtonsType buttonsType = PopUp.PopUpButtonsType.CancelOK)
+        {
+            PopUp.PopUpButtons buttons = new PopUp.PopUpButtons(buttonsType);
+
+            return MessageBox(null, message, title, icon, textAlignment, buttons);
+        }
+
+        /// <summary>
+        /// Show Message Box, using main app window(WinForms or WPF) as owner,
+        /// If btn*text is null will assign text by 'buttons'
+        /// </summary>
+        /// <param name="message"></param>
+        /// <param name="title"></param>
+        /// <param name="icon"></param>
+        /// <param name="textAlignment"></param>
+        /// <param name="buttons"></param>
+        /// <param name="timeout"></param>
+        /// <returns></returns>
+        public static PopUp.PopUpResult MessageBox(string message, string title,
+            MessageBoxImage icon = MessageBoxImage.Information, 
+            TextAlignment textAlignment = TextAlignment.Center,
+            PopUp.PopUpButtons buttons = null, int timeout = Timeout.Infinite)
+        {
+            if (buttons == null)
+                buttons = new PopUp.PopUpButtons(PopUp.PopUpButtonsType.OK);
+
+            return WPF_Helper.ExecuteOnUIThread(() =>
+            {
+                return MessageWindowExtension.MessageBox(null, ref message, title, icon, textAlignment, buttons, timeout);
+            });
+        }
+
+        #endregion
+    }
+
+    public static class PopUpWpfExtension
+    {
+
+        #region WPF Extension Message Boxes
+
+        public static void MessageInfo(this UIElement owner,
+            string message, string title = "Information")
+        {
+            owner.MessageBox(message, title, MessageBoxImage.Information);
+        }
+
+        public static void MessageError(this UIElement owner,
+            string message, string title = "Error")
+        {
+            owner.MessageBox(message, title, MessageBoxImage.Error);
+        }
+
+        public static void MessageWarning(this UIElement owner,
+            string message, string title = "Warning")
+        {
+            owner.MessageBox(message, title, MessageBoxImage.Exclamation);
+        }
+
+        public static PopUp.PopUpResult MessageQuestion(this UIElement owner,
+            string message, string title = "Question",
+            PopUp.PopUpButtonsType buttons = PopUp.PopUpButtonsType.CancelOK)
+        {
+            return owner.MessageBox(message, title, MessageBoxImage.Question, TextAlignment.Center, buttons);
+        }
+
+        #endregion
+
+        public static PopUp.PopUpResult MessageBox(this UIElement owner, string message, string title,
+            MessageBoxImage icon = MessageBoxImage.Information, TextAlignment textAlignment = TextAlignment.Center,
+            PopUp.PopUpButtonsType buttonsType = PopUp.PopUpButtonsType.OK, int timeout = Timeout.Infinite)
+        {
+            PopUp.PopUpButtons buttons = new PopUp.PopUpButtons(buttonsType);
+
+            return WPF_Helper.ExecuteOnUIThreadWPF(() =>
+            {
+                return MessageWindowExtension.MessageBox(owner, ref message, title, icon, textAlignment, buttons, timeout);
+            });
+        }
+    }
+
+    public static class PopUpWinExtension
+    {
+        public static void MessageInfo(this System.Windows.Forms.Control owner, 
+            string message, string title = "Information", TextAlignment textAlignment = TextAlignment.Center)
+        {
+            owner.MessageBox(message, title, MessageBoxImage.Information, textAlignment);
+        }
+
+        public static void MessageError(this System.Windows.Forms.Control owner, 
+            string message, string title = "Error", TextAlignment textAlignment = TextAlignment.Center)
+        {
+            owner.MessageBox(message, title, MessageBoxImage.Error, textAlignment);
+        }
+
+        public static void MessageWarning(this System.Windows.Forms.Control owner, 
+            string message, string title = "Warning", TextAlignment textAlignment = TextAlignment.Center)
+        {
+            owner.MessageBox(message, title, MessageBoxImage.Exclamation, textAlignment);
+        }
+
+        public static PopUp.PopUpResult MessageQuestion(this System.Windows.Forms.Control owner, 
+            string message, string title = "Question",
+            PopUp.PopUpButtonsType buttons = PopUp.PopUpButtonsType.CancelOK)
+        {
+            return owner.MessageBox(message, title, MessageBoxImage.Question, TextAlignment.Center, buttons);
+        }
+
+        public static PopUp.PopUpResult MessageBox(this System.Windows.Forms.Control owner, string message, string title,
+            MessageBoxImage icon = MessageBoxImage.Information, TextAlignment textAlignment = TextAlignment.Center,
+            PopUp.PopUpButtonsType buttonsType = PopUp.PopUpButtonsType.OK, int timeout = Timeout.Infinite)
+        {
+            PopUp.PopUpButtons buttons = new PopUp.PopUpButtons(PopUp.PopUpButtonsType.OK);
+
+            return owner.MessageBoxEx(message, title, icon, textAlignment, buttons, timeout);
+        }
+
+        public static PopUp.PopUpResult MessageBoxEx(this System.Windows.Forms.Control owner, string message, string title,
+            MessageBoxImage icon = MessageBoxImage.Information, TextAlignment textAlignment = TextAlignment.Center,
+            PopUp.PopUpButtons buttons = null, int timeout = Timeout.Infinite)
+        {
+            if(buttons == null)
+                buttons = new PopUp.PopUpButtons(PopUp.PopUpButtonsType.OK);
+
+            return WPF_Helper.ExecuteOnUIThreadForm(() =>
+            {
+                return MessageWindowExtension.MessageBox(owner.Handle, ref message, title, icon, textAlignment, buttons, timeout);
+            });
         }
     }
 }

@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using System.Globalization;
 using ClipboardManager.Properties;
 using MZ.Tools;
+using Utils;
 
 namespace ClipboardManager
 {
@@ -28,9 +29,6 @@ namespace ClipboardManager
 		[STAThread]
 		static void Main()
 		{
-			if ( !SingleInstance() )
-				return; //already running
-
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 
@@ -39,7 +37,16 @@ namespace ClipboardManager
 RunAgain:
 			try
 			{
-				Application.Run(new FormClipboard());
+                //single instance
+                using (var mutex = new System.Threading.Mutex(true, FormClipboard.TITLE, out bool result))
+                {
+                    if (!result)
+                    {
+                        CenteredMessageBox.MsgBoxErr("Another instance of "+ FormClipboard.TITLE + " is already running.", FormClipboard.TITLE);
+                        return;
+                    }
+                    Application.Run(new FormClipboard());
+                }
 			}//end try
 			catch ( Exception err )
 			{
@@ -61,11 +68,6 @@ RunAgain:
             if (!File.Exists(fileName))
                 File.WriteAllBytes(fileName, Properties.Resources.MZ_WPF_MessageBox);
         }
-
-        private static bool SingleInstance()
-        {
-            return !(SingleInstanceHelper.GlobalShowWindow(FormClipboard.TITLE));
-        }//end SingleInstance
 
         public static string GetUserPath()
         {

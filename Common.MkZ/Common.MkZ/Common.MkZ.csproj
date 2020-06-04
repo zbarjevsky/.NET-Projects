@@ -161,13 +161,13 @@
       <DependentUpon>GradientProgressBar.xaml</DependentUpon>
     </Compile>
     <Compile Include="WPF\RelayCommand.cs" />
-    <Compile Include="WPF\RelayCommand1.cs" />
     <Compile Include="WPF\ScrollDragZoom.cs" />
     <Compile Include="WPF\SmartObservableCollection.cs" />
     <Compile Include="WPF\WPFExtensionMethods.cs" />
     <Compile Include="WPF\WPFMessageBox\MessageWindow.xaml.cs">
       <DependentUpon>MessageWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WPF\WPFMessageBox\MessageWindowExtension.cs" />
     <Compile Include="WPF\WPFMessageBox\PopUp.cs" />
     <Compile Include="WPF\WPFMessageBox\PopUpExtension.cs" />
     <Compile Include="WPF\WPFMessageBox\RelayCommand.cs" />

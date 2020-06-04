@@ -270,11 +270,11 @@ namespace MZ.WinForms
 			}
 			catch (IOException e)
 			{
-				MessageBox.Show("Error: Drive not ready or directory does not exist.");
+				MessageBox.Show("Error: Drive not ready or directory does not exist.\n" + e);
 			}
 			catch (UnauthorizedAccessException e)
 			{
-				MessageBox.Show("Error: Drive or directory access denided.");
+				MessageBox.Show("Error: Drive or directory access denided.\n" + e);
 			}
 			catch (Exception e)
 			{

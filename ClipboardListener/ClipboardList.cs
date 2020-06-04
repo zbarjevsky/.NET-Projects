@@ -86,11 +86,14 @@ namespace ClipboardManager
 				else if (ClipboardDataObject.GetDataPresent(DataFormats.Bitmap.ToString())) //  Clipboard.ContainsImage() )
                 {
 					_dataType = DataFormats.Bitmap;
-					_data = ClipboardDataObject.GetData(DataFormats.Bitmap.ToString());// Clipboard.GetImage();
+					_data = ClipboardDataObject.GetData(_dataType);// Clipboard.GetImage();
                     _icoItemType = 3;
 
 					Image bmp = (Image)_data;
-					_desc = "Bitmap: " + bmp.Width + "x" + bmp.Height;
+					if (bmp != null)
+						_desc = "Bitmap: " + bmp.Width + "x" + bmp.Height;
+					else
+						_desc = "Bitmap: Unknown";
 				}//end else if
 				else if (ClipboardDataObject.GetDataPresent(DataFormats.FileDrop.ToString())) //  Clipboard.ContainsFileDropList() )
                 {
@@ -284,21 +287,29 @@ namespace ClipboardManager
 
 				try
 				{
-                    if (ClipboardDataObject != null && !IsTextType)
-                    {
-                        Clipboard.SetDataObject(ClipboardDataObject, true);
-                    }
+					if(_dataType == DataFormats.Bitmap)
+					{
+						Clipboard.SetImage((Image)_data);
+					}
                     else if (_dataType == DataFormats.Rtf)
                     {
                         m_RtfBox.Rtf = (string)_data;
                         m_RtfBox.SelectAll();
                         m_RtfBox.Copy();
                         //Clipboard.SetText(m_RtfBox.Rtf, TextDataFormat.Rtf);
-                    }//end if
-                    else
+                    }
+					else if (IsTextType)
                     {
                         Clipboard.SetData(_dataType, _data);
                     }
+                    else if (ClipboardDataObject != null)
+                    {
+                        Clipboard.SetDataObject(ClipboardDataObject, true);
+                    }
+					else
+					{
+						Clipboard.SetData(_dataType, _data);
+					}
 				}//end try
 				catch ( Exception err)
 				{
@@ -324,18 +335,26 @@ namespace ClipboardManager
 				bool bReadOnly = box.ReadOnly;
 				box.ReadOnly = false;
 
-				lblApp.Image = _icoAppFrom;
-				lblType.ImageIndex = _icoItemType;
+				try
+				{
+					lblApp.Image = _icoAppFrom;
+					lblType.ImageIndex = _icoItemType;
 
-				box.Clear();
-				if (_dataType == DataFormats.Rtf)
-					box.Rtf = (string)_data;
-				else if (_dataType == DataFormats.Bitmap || _dataType == DataFormats.Dib)
-					box.Paste();
-				else //text, picture, file etc.
-					box.Text = _desc;
-				//box.SelectAll();
-
+					box.Clear();
+					if (_dataType == DataFormats.Rtf)
+						box.Rtf = (string)_data;
+					else if (_dataType == DataFormats.Bitmap || _dataType == DataFormats.Dib)
+						box.Paste();
+					else //text, picture, file etc.
+						box.Text = _desc;
+					//box.SelectAll();
+				}
+				catch (Exception err)
+				{
+					System.Diagnostics.Trace.WriteLine("ClipboardList: " + err.Message);
+					FormClipboard.TraceLn(true, "ClipboardList", "SetRichText",
+						"_dataType = '{0}' Error: {1}", _dataType, err.Message);
+				}
 				box.ReadOnly = bReadOnly;
 				box.ResumeLayout();
 			}//end SetRichText

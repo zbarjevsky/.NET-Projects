@@ -17,6 +17,7 @@ using ClipboardManager.DesktopUtil;
 using Microsoft.Win32;
 using Utils;
 using ClipboardManager.Utils;
+using MZ.WPF.MessageBox;
 
 namespace ClipboardManager
 {
@@ -28,13 +29,13 @@ namespace ClipboardManager
         private ClipboardList m_ClipboardListMain		= null;
 		private ClipboardList m_ClipboardListFavorites	= null;
 		private IntPtr m_hWndToRestore					= IntPtr.Zero;
-		private volatile bool m_bPasteFromThis			= false; //to prevent loop
-		private volatile bool m_bCopyFromSnapShot		= false;
+		private bool m_bPasteFromThis { get; set; }		= false; //to prevent loop
+		private bool m_bCopyFromSnapShot { get; set; }	= false;
 		public  static FormClipboard m_This				= null;
 		public  Settings m_Settings			            = new Settings();
         private bool m_bModified						= false;
-		private int m_iAboutId							= 32164;
-		private int m_iExitId							= 32165;
+		private const int m_iAboutId					= 32164;
+		private const int m_iExitId						= 32165;
 
 		//timer data for automatic reconnect
 		private System.Windows.Forms.Timer m_TimerReconnect = new System.Windows.Forms.Timer();
@@ -1294,7 +1295,7 @@ namespace ClipboardManager
 			string s = m_richTextBoxClipboard.SelectedText;
 			if ( s == null || s.Length == 0 )
 			{
-                CenteredMessageBox.MsgBoxIfo("No text selected");
+				this.MessageInfo("No text selected");
 				return;
 			}//end if
 			StringBuilder sb = new StringBuilder(s.Length);
@@ -1310,7 +1311,7 @@ namespace ClipboardManager
             string s = m_richTextBoxClipboard.SelectedText;
             if (s == null || s.Length == 0)
             {
-                CenteredMessageBox.MsgBoxIfo("No text selected");
+				this.MessageInfo("No text selected");
                 return;
             }//end if
             m_richTextBoxClipboard.SelectedText = Uri.UnescapeDataString(s);
@@ -1410,7 +1411,7 @@ namespace ClipboardManager
                 {
                     if ((bUserClick || !m_Settings.I.IsAutoUAC)) //show question if user clicked or not Automatic UAC
                     {
-                        reset = (MZ.WPF.MessageBox.PopUp.PopUpResult.OK == CenteredMessageBox.MsgBoxQst(
+                        reset = (PopUp.PopUpResult.OK == this.MessageQuestion(
                             "User Account Control Enabled\n  Disable?", "Enable LUA"));
                     }
 
@@ -1421,7 +1422,7 @@ namespace ClipboardManager
                 }
                 else if (bUserClick) //comes from user
                 {
-                    CenteredMessageBox.MsgBoxIfo("User Account Control Disabled");
+					this.MessageInfo("User Account Control Disabled");
                 }
             }
             catch (Exception err)

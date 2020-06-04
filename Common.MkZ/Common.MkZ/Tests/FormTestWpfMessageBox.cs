@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MZ.WPF.MessageBox;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -61,60 +62,64 @@ namespace WPFMessageBoxTestWinForms
 
         private void m_btnInfo_Click(object sender, EventArgs e)
         {
-            MZ.WPF.MessageBox.PopUp.Information(richTextBox1.Text);
+            //MZ.WPF.MessageBox.PopUp.Information(richTextBox1.Text);
+            this.MessageInfo(richTextBox1.Text);
         }
 
         private void m_btnWarn_Click(object sender, EventArgs e)
         {
-            MZ.WPF.MessageBox.PopUp.Exclamation(richTextBox1.Text);
+            //MZ.WPF.MessageBox.PopUp.Exclamation(richTextBox1.Text);
+            this.MessageWarning(richTextBox1.Text);
         }
 
         private void m_btnError_Click(object sender, EventArgs e)
         {
-            MZ.WPF.MessageBox.PopUp.Error(richTextBox1.Text);
+            //MZ.WPF.MessageBox.PopUp.Error(richTextBox1.Text);
+            this.MessageError(richTextBox1.Text);
         }
 
         private void m_btnQuestion_Click(object sender, EventArgs e)
         {
-            MZ.WPF.MessageBox.PopUp.PopUpResult res = MZ.WPF.MessageBox.PopUp.Question(richTextBox1.Text);
+            PopUp.PopUpResult res = this.MessageQuestion(richTextBox1.Text);
+            //MZ.WPF.MessageBox.PopUp.Question(richTextBox1.Text);
 
-            MZ.WPF.MessageBox.PopUp.Information("Result = " + res);
+            this.MessageInfo("Result = " + res);
         }
 
         private void m_btnQuestionYNC_Click(object sender, EventArgs e)
         {
-            MZ.WPF.MessageBox.PopUp.PopUpResult res = MZ.WPF.MessageBox.PopUp.Question(richTextBox1.Text, "Title", MessageBoxImage.Question, TextAlignment.Center, MZ.WPF.MessageBox.PopUp.PopUpButtonsType.CancelNoYes);
+            PopUp.PopUpResult res = this.MessageQuestion(richTextBox1.Text, "Question", PopUp.PopUpButtonsType.CancelNoYes);
+            //PopUpResult res = MZ.WPF.MessageBox.PopUp.Question(richTextBox1.Text, "Title", MessageBoxImage.Question, TextAlignment.Center, MZ.WPF.MessageBox.PopUp.PopUpButtonsType.CancelNoYes);
 
-            MZ.WPF.MessageBox.PopUp.Information("Result = " + res);
+            this.MessageInfo("Result = " + res);
         }
 
         private void m_btnSpecial_Click(object sender, EventArgs e)
         {
-            MZ.WPF.MessageBox.PopUp.PopUpResult res = MZ.WPF.MessageBox.PopUp.MessageBox(richTextBox1.Text, "Title", 
+            PopUp.PopUpResult res = this.MessageBoxEx(richTextBox1.Text, "Title", 
                 MessageBoxImage.Question, TextAlignment.Center, 
                 new MZ.WPF.MessageBox.PopUp.PopUpButtons(
                     "Cancel - Da Da Da Da Long Text", "No - Long Long Long Text", "Yes - Long Text", 
-                    MZ.WPF.MessageBox.PopUp.PopUpResult.Btn2));
+                    PopUp.PopUpResult.Btn2));
 
-            MZ.WPF.MessageBox.PopUp.Information("Result = "+res);
+            this.MessageInfo("Result = "+res);
         }
 
         private void m_btnInput_Click(object sender, EventArgs e)
         {
             string inputText = "Type Here...";
             if(MZ.WPF.MessageBox.PopUp.InputBox(ref inputText, "Title") == MZ.WPF.MessageBox.PopUp.PopUpResult.OK)
-                MZ.WPF.MessageBox.PopUp.Information(inputText, Text, 
-                    MessageBoxImage.Information, TextAlignment.Justify);
+                this.MessageInfo(inputText, Text, TextAlignment.Justify);
         }
 
         private void m_btnTimeout_Click(object sender, EventArgs e)
         {
-            MZ.WPF.MessageBox.PopUp.PopUpResult res = MZ.WPF.MessageBox.PopUp.MessageBox(richTextBox1.Text, "Title", 
+            MZ.WPF.MessageBox.PopUp.PopUpResult res = this.MessageBoxEx(richTextBox1.Text, "Title", 
                 MessageBoxImage.Question, TextAlignment.Center,
                 new MZ.WPF.MessageBox.PopUp.PopUpButtons("Cancel ", "No", "Yes", MZ.WPF.MessageBox.PopUp.PopUpResult.Btn2),
                 timeout: (int)m_numTimeout.Value);
 
-            MZ.WPF.MessageBox.PopUp.Information("Result = " + res);
+            this.MessageInfo("Result = " + res);
         }
 
         private void m_numTimeout_ValueChanged(object sender, EventArgs e)

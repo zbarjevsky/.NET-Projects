@@ -52,92 +52,6 @@ namespace MZ.WPF.MessageBox
             }
         }
 
-        public static void Error(string message, string title = "Error",
-          MessageBoxImage icon = MessageBoxImage.Error,
-          TextAlignment textAlignment = TextAlignment.Center)
-        {
-            MessageBox(message, title, icon, textAlignment);
-        }
-
-        public static void Information(string message, string title = "Information",
-            MessageBoxImage icon = MessageBoxImage.Information,
-            TextAlignment textAlignment = TextAlignment.Center)
-        {
-            MessageBox(message, title, icon, textAlignment);
-        }
-
-        public static void Exclamation(string message, string title = "Exclamation",
-            MessageBoxImage icon = MessageBoxImage.Exclamation, 
-            TextAlignment textAlignment = TextAlignment.Center)
-        {
-            MessageBox(message, title, icon, textAlignment);
-        }
-
-        /// <summary>
-        /// return True on Ok(F6), False on Cancel(F5)
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="title"></param>
-        /// <param name="icon"></param>
-        /// <param name="textAlignment"></param>
-        /// <param name="buttons"></param>
-        /// <returns></returns>
-        public static PopUpResult Question(string message, string title = "Question",
-            MessageBoxImage icon = MessageBoxImage.Question, 
-            TextAlignment textAlignment = TextAlignment.Center,
-            PopUpButtonsType buttonsType = PopUpButtonsType.CancelOK)
-        {
-            PopUpButtons buttons = new PopUpButtons(buttonsType);
-
-            return MessageBox(message, title, icon, textAlignment, buttons);
-        }
-
-        /// <summary>
-        /// Show Message Box, using main app window(WinForms or WPF) as owner,
-        /// If btn*text is null will assign text by 'buttons'
-        /// </summary>
-        /// <param name="message"></param>
-        /// <param name="title"></param>
-        /// <param name="icon"></param>
-        /// <param name="textAlignment"></param>
-        /// <param name="buttons"></param>
-        /// <param name="timeout"></param>
-        /// <returns></returns>
-        public static PopUpResult MessageBox(string message, string title,
-            MessageBoxImage icon = MessageBoxImage.Information, TextAlignment textAlignment = TextAlignment.Center,
-            PopUpButtons buttons = null, int timeout = Timeout.Infinite)
-        {
-            if (buttons == null)
-                buttons = new PopUpButtons(PopUpButtonsType.OK);
-
-            return WPF_Helper.ExecuteOnUIThread(() =>
-            {
-                return MessageWindow.MessageBox(null, ref message, title, icon, textAlignment, buttons, timeout);
-            });
-        }
-
-        /// <summary>
-        /// Show Message Box, using main app window(WinForms or WPF) as owner,
-        /// If btn*text is null will assign text by 'buttons'
-        /// </summary>
-        /// <param name="owner">WPF UIElement to center on, can be null</param>
-        /// <param name="message"></param>
-        /// <param name="title"></param>
-        /// <param name="icon"></param>
-        /// <param name="textAlignment"></param>
-        /// <param name="buttons"></param>
-        /// <param name="timeout">execute default action after timeout if more than 100 milliseconds</param>
-        /// <returns></returns>
-        public static PopUpResult MessageBox(UIElement owner, string message, string title,
-            MessageBoxImage icon, TextAlignment textAlignment = TextAlignment.Center,
-            PopUpButtons buttons = null, int timeout = Timeout.Infinite)
-        {
-            if (buttons == null)
-                buttons = new PopUpButtons(PopUpButtonsType.OK);
-
-            return MessageBox(() => owner, message, title, icon, textAlignment, buttons, timeout);
-        }
-
         /// <summary>
         /// Show Message Box, using main app window(WinForms or WPF) as owner,
         /// If btn*text is null will assign text by 'buttons'
@@ -163,10 +77,11 @@ namespace MZ.WPF.MessageBox
                 if(GetOwnerOnUIThread != null)
                     owner = GetOwnerOnUIThread();
 
-                return MessageWindow.MessageBox(owner,
+                return MessageWindowExtension.MessageBox(owner,
                     ref message, title,
                     icon, textAlignment,
-                    buttons, timeout);
+                    buttons, timeout, 
+                    true);
             });
         }
 
@@ -179,7 +94,9 @@ namespace MZ.WPF.MessageBox
             string message = userInput;
             PopUpResult res = WPF_Helper.ExecuteOnUIThread(() =>
             {
-                return MessageWindow.MessageBox(null, ref message, title, icon, textAlignment, 
+                return MessageWindowExtension.MessageBox(null,
+                    ref message, title, 
+                    icon, textAlignment, 
                     buttons, timeout,
                     false);
             });
