@@ -115,6 +115,9 @@
     <Compile Include="WinForms\InPlaceTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="WinForms\ListViewVirtualWithCheckBoxes.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="WinForms\WinFormsControlExtension.cs" />
     <Compile Include="WinForms\DraggableExtension.cs" />
     <Compile Include="WinForms\FormInPlaceEdit.cs">

@@ -64,6 +64,11 @@ namespace SmartBackup
             }
         }
 
+        /// <summary>
+        /// If source drive on network - decrease big file size
+        /// </summary>
+        public double BigFileSizeThreshold = 12 * BackupLogic.i1MB;
+
         private string _dstFolder = null;
         public string DstFolder 
         {
@@ -106,7 +111,7 @@ namespace SmartBackup
 
         public bool IsBigFile()
         {
-            return (SrcIfo.Length > 12 * 1024 * 1024); //less than 13MB
+            return (SrcIfo.Length > BigFileSizeThreshold); 
         }
 
         private readonly BackupEntry _entry;
@@ -211,7 +216,7 @@ namespace SmartBackup
         //http://www.pinvoke.net/default.aspx/kernel32.CopyFileEx
         private void CopyWithProgress(ProgressBar progress, Form owner)
         {
-            int bufferSize = 1024 * 64;
+            int bufferSize = 4 * 1024; //4k
             byte[] bytes = new byte[bufferSize];
 
             using (FileStream srcFile = new FileStream(Src, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, FileOptions.SequentialScan))
@@ -264,6 +269,7 @@ namespace SmartBackup
 
         }
 
+        long _bigFileThreshold = 64 * 1024;
         public void Load(BackupPriority priority, FileUtils.FileProgress progress = null)
         {
             Clear();
@@ -310,27 +316,24 @@ namespace SmartBackup
         public static string GetDiskFreeSpace(string path, out long freeSpace)
         {
             string root = Path.GetPathRoot(path);
-            if(!Directory.Exists(root))
+            DriveInfo drive = GetDriveInfo(root);
+            if(drive == null)
             {
                 MessageBox.Show("Cannot access drive for backup: " + root);
                 freeSpace = 0;
                 return "Drive " + root + " is not accessible";
             }
 
-            DriveInfo drive = GetDriveInfo(root);
             freeSpace = drive.TotalFreeSpace;
             return string.Format("Free Space on Destination Drive {0} is {1:###,##0.0} MB", root, freeSpace / i1MB);
         }
 
-        public static DriveInfo GetDriveInfo(string driveName)
+        public static DriveInfo GetDriveInfo(string path)
         {
-            foreach (DriveInfo drive in DriveInfo.GetDrives())
-            {
-                if (drive.IsReady && drive.Name == driveName)
-                {
-                    return drive;
-                }
-            }
+            string root = Path.GetPathRoot(path);
+            DriveInfo drive = new DriveInfo(root);
+            if(drive != null && drive.IsReady)
+                return drive;
             return null;
         }
 

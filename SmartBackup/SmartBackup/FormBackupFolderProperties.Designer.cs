@@ -48,12 +48,12 @@
             this.m_txtInfo = new System.Windows.Forms.TextBox();
             this.m_cmbSearchOptions = new System.Windows.Forms.ComboBox();
             this.m_splitFolders = new System.Windows.Forms.SplitContainer();
+            this.m_explorerSrc = new MZ.WinForms.FileExplorerUserControl();
+            this.m_explorerDst = new MZ.WinForms.FileExplorerUserControl();
             this.m_pnlOptions = new System.Windows.Forms.Panel();
             this.m_btnStartBackup = new System.Windows.Forms.Button();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.m_progressBar = new MZ.WinForms.ColorBarsProgressBar();
-            this.m_explorerSrc = new MZ.WinForms.FileExplorerUserControl();
-            this.m_explorerDst = new MZ.WinForms.FileExplorerUserControl();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitFolders)).BeginInit();
             this.m_splitFolders.Panel1.SuspendLayout();
             this.m_splitFolders.Panel2.SuspendLayout();
@@ -257,6 +257,28 @@
             this.m_splitFolders.SplitterDistance = 540;
             this.m_splitFolders.TabIndex = 20;
             // 
+            // m_explorerSrc
+            // 
+            this.m_explorerSrc.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_explorerSrc.CheckBoxes = true;
+            this.m_explorerSrc.Location = new System.Drawing.Point(3, 40);
+            this.m_explorerSrc.Name = "m_explorerSrc";
+            this.m_explorerSrc.Size = new System.Drawing.Size(532, 417);
+            this.m_explorerSrc.TabIndex = 19;
+            // 
+            // m_explorerDst
+            // 
+            this.m_explorerDst.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_explorerDst.CheckBoxes = false;
+            this.m_explorerDst.Location = new System.Drawing.Point(3, 40);
+            this.m_explorerDst.Name = "m_explorerDst";
+            this.m_explorerDst.Size = new System.Drawing.Size(532, 417);
+            this.m_explorerDst.TabIndex = 18;
+            // 
             // m_pnlOptions
             // 
             this.m_pnlOptions.Controls.Add(this.m_cmbSearchOptions);
@@ -312,26 +334,6 @@
             this.m_progressBar.Size = new System.Drawing.Size(1084, 12);
             this.m_progressBar.TabIndex = 22;
             this.m_progressBar.TabStop = false;
-            // 
-            // m_explorerSrc
-            // 
-            this.m_explorerSrc.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_explorerSrc.Location = new System.Drawing.Point(3, 40);
-            this.m_explorerSrc.Name = "m_explorerSrc";
-            this.m_explorerSrc.Size = new System.Drawing.Size(532, 417);
-            this.m_explorerSrc.TabIndex = 19;
-            // 
-            // m_explorerDst
-            // 
-            this.m_explorerDst.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_explorerDst.Location = new System.Drawing.Point(3, 40);
-            this.m_explorerDst.Name = "m_explorerDst";
-            this.m_explorerDst.Size = new System.Drawing.Size(532, 417);
-            this.m_explorerDst.TabIndex = 18;
             // 
             // FormBackupFolderProperties
             // 

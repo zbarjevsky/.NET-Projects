@@ -105,7 +105,7 @@
             this.imageList1.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("imageList1.ImageStream")));
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             this.imageList1.Images.SetKeyName(0, "SmileGray.ico");
-            this.imageList1.Images.SetKeyName(1, "SmileYellow.ico");
+            this.imageList1.Images.SetKeyName(1, "arrow-forward_16.ico");
             this.imageList1.Images.SetKeyName(2, "SmileGreen.ico");
             this.imageList1.Images.SetKeyName(3, "SmileRed.ico");
             this.imageList1.Images.SetKeyName(4, "ok.ico");
@@ -132,7 +132,7 @@
             this.m_btnClose.Name = "m_btnClose";
             this.m_btnClose.Size = new System.Drawing.Size(75, 23);
             this.m_btnClose.TabIndex = 0;
-            this.m_btnClose.Text = "Close";
+            this.m_btnClose.Text = "Done";
             this.m_btnClose.UseVisualStyleBackColor = true;
             // 
             // m_btnContinue

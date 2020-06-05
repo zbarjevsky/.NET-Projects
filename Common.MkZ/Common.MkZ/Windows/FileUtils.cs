@@ -37,11 +37,12 @@ namespace MZ.Tools
             
             private long _min = 100;
             public long Minimum { get { return _min; } set { Validate(value, _max, _val); _min = value; } }
-            
+
             //circular progress
-            //set maximum to configure frequency and percentage
-            private long _marqueeCount = 0;
-            public long MarqueeCount { get { return _marqueeCount; } set { Validate(_min, _max, value); _marqueeCount = value; } }
+            //set it to 
+            private long _marqueeElapsed = 0;
+            private long _marqueeTimeoutMs = 0;
+            public long MarqueeTimeoutMs { get { return _marqueeTimeoutMs; } set { _marqueeTimeoutMs = value; } }
 
             private long _val = 0;
             public long Value 
@@ -49,26 +50,33 @@ namespace MZ.Tools
                 get { return _val; } 
                 set 
                 {
-                    int prevPercent = Percent;
                     if(Style == ProgressBarStyle.Marquee)
                     {
-                        _marqueeCount++;
-                        _val = _marqueeCount % _max;
+                        if (ReportOption.HasFlag(NotifyOptions.NotifyValueChange))
+                        {
+                            long delta = (long)Elapsed.TotalMilliseconds - _marqueeElapsed;
+                            if (delta > _marqueeTimeoutMs)
+                            {
+                                _marqueeElapsed = 0;
+                                OnValueChange();
+                            }
+                        }
                     }
                     else
                     {
+                        int prevPercent = Percent;
                         if (_val == value)
                             return;
                         _val = value;
+
+                        //report percent only if changed
+                        if (ReportOption.HasFlag(NotifyOptions.NotifyPercentChange))
+                            if (prevPercent != Percent)
+                                OnPercentChange();
+
+                        if (ReportOption.HasFlag(NotifyOptions.NotifyValueChange))
+                            OnValueChange();
                     }
-
-                    //report percent only if changed
-                    if (ReportOption.HasFlag(NotifyOptions.NotifyPercentChange))
-                        if (prevPercent != Percent)
-                            OnPercentChange();
-
-                    if(ReportOption.HasFlag(NotifyOptions.NotifyValueChange))
-                        OnValueChange();
                 } 
             }
 
@@ -86,7 +94,7 @@ namespace MZ.Tools
                 {
                     _cancel = value;
                     _val = 0;
-                    _marqueeCount = 0;
+                    _marqueeTimeoutMs = 0;
                 }
             }
 
@@ -114,7 +122,10 @@ namespace MZ.Tools
                     CommonUtils.ExecuteOnUIThread(() =>
                     {
                         _ctrlProgress.Style = Style;
-                        _ctrlProgress.Value = Percent;
+                        if (Style == ProgressBarStyle.Marquee)
+                            _ctrlProgress.MarqueeNext();
+                        else
+                            _ctrlProgress.Value = Percent;
                         OnChange(this.ToString());
                     }, _formOwner);
                     Application.DoEvents();
@@ -128,9 +139,10 @@ namespace MZ.Tools
                 Reset(message, max, 0, ProgressBarStyle.Blocks, options);
             }
 
-            public void ResetToMarquee(string message = "Progress: ")
+            public void ResetToMarquee(string message = "Progress: ", long marqueeTimeoutMs = 256)
             {
-                Reset(message, 10000, 0, ProgressBarStyle.Marquee, NotifyOptions.NotifyPercentChange);
+                MarqueeTimeoutMs = marqueeTimeoutMs;
+                Reset(message, 100, 0, ProgressBarStyle.Marquee, NotifyOptions.NotifyValueChange);
             }
 
             private void Reset(string message, long max, long min, ProgressBarStyle style, NotifyOptions options)
@@ -138,7 +150,7 @@ namespace MZ.Tools
                 Validate(min, max, 0);
 
                 _val = 0;
-                _marqueeCount = 0;
+                _marqueeTimeoutMs = 0;
                 _min = min;
                 _max = max;
 
@@ -204,7 +216,7 @@ namespace MZ.Tools
                         listFiles.Clear();
                         break;
                     }
-                    fileProgress.SubStatus = string.Format("Folders: {0:###,##0}, Files: {1:###,##0}", totalFoldersCount, listFiles.Count);
+                    fileProgress.SubStatus = string.Format("Folders: ? {0:###,##0}, Files: ? {1:###,##0}", totalFoldersCount, listFiles.Count);
                 }
 
                 string[] fileList = null;

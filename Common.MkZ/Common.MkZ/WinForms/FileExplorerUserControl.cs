@@ -14,7 +14,9 @@ namespace MZ.WinForms
 {
     public partial class FileExplorerUserControl : UserControl
     {
-		private class FileData
+		public const string ParentFolderText = "[..]";
+
+		public class FileData : ListViewItem
 		{
 			public string FullPath { get; private set; }
 			public string FileName { get; private set; }
@@ -39,7 +41,7 @@ namespace MZ.WinForms
 				Init(fullPath, Directory.Exists(fullPath));
 			}
 
-			public void Init(string fullPath, bool isDirectory)
+			private void Init(string fullPath, bool isDirectory)
 			{ 
 				FullPath = fullPath;
 				IsDirectory = isDirectory;
@@ -72,12 +74,74 @@ namespace MZ.WinForms
 					//not in day light saving time adjust time
 					ModifiedTime = FileInfo.LastWriteTime;
 				}
+
+				//init listViewItem
+				this.SubItems.AddRange(new string[] { "", "", "", ""});
 			}
 
 			//for special folder name 'up'
 			internal void SetName(string name)
 			{
 				FileName = name;
+			}
+
+			public void PrepareListViewItem()
+			{
+				this.SubItems[0].Text = this.FileName;
+				if (!this.IsDirectory)
+					this.SubItems[1].Text = formatSize(this.FileSize);
+				this.SubItems[2].Text = formatDate(this.CreatedTime);
+				this.SubItems[3].Text = formatDate(this.ModifiedTime);
+
+				int iconIndex = this.IsDirectory ? 2 : 4;
+				if (this.SubItems[0].Text == ParentFolderText) 
+					iconIndex = 10;
+				this.ImageIndex = iconIndex;
+			}
+
+			protected string formatDate(DateTime dtDate)
+			{
+				//Get date and time in short format
+				string stringDate = "";
+
+				stringDate = dtDate.ToShortDateString().ToString() + " " + dtDate.ToShortTimeString().ToString();
+
+				return stringDate;
+			}
+
+			protected string formatSize(Int64 lSize)
+			{
+				//Format number to KB
+				string stringSize = "";
+				NumberFormatInfo myNfi = new NumberFormatInfo();
+
+				Int64 lKBSize = 0;
+
+				if (lSize < 1024)
+				{
+					if (lSize == 0)
+					{
+						//zero byte
+						stringSize = "0";
+					}
+					else
+					{
+						//less than 1K but not zero byte
+						stringSize = "1";
+					}
+				}
+				else
+				{
+					//convert to KB
+					lKBSize = lSize / 1024;
+					//format number with default format
+					stringSize = lKBSize.ToString("n", myNfi);
+					//remove decimal
+					stringSize = stringSize.Replace(".00", "");
+				}
+
+				return stringSize + " KB";
+
 			}
 		}
 
@@ -166,6 +230,18 @@ namespace MZ.WinForms
 
 		public Action<string> OpenFolderAction = (fullPath) => { };
 
+		public bool CheckBoxes { get { return m_listFiles.CheckBoxes; } set { m_listFiles.CheckBoxes = value; } }
+
+		public List<FileData> GetCheckedFiles() 
+		{
+			List<FileData> list = new List<FileData>();
+			foreach (ListViewItem item in m_listFiles.CheckedItems)
+			{
+				list.Add(_list[item.Index].Tag as FileData);
+			}
+			return list;
+		}
+
         public FileExplorerUserControl()
         {
             InitializeComponent();
@@ -199,6 +275,27 @@ namespace MZ.WinForms
             m_listFiles.Columns.Add("Created", 140, System.Windows.Forms.HorizontalAlignment.Left);
             m_listFiles.Columns.Add("Modified", 140, System.Windows.Forms.HorizontalAlignment.Left);
         }
+
+		private void m_listFiles_ItemCheck(object sender, ItemCheckEventArgs e)
+		{
+
+		}
+
+		private void m_listFiles_ItemChecked(object sender, ItemCheckedEventArgs e)
+		{
+			if(_list[e.Item.Index].Text == ParentFolderText)
+			{
+				this.Cursor = Cursors.WaitCursor;
+				_list.ForEach((item) => item.Checked = e.Item.Checked);
+				m_listFiles.Refresh();
+				this.Cursor = Cursors.Default;
+			}
+			else
+			{
+				_list[0].Checked = false;
+				m_listFiles.Invalidate(_list[0].Bounds);
+			}
+		}
 
 		private void m_btnRoot_Click(object sender, EventArgs e)
 		{
@@ -248,7 +345,7 @@ namespace MZ.WinForms
 					if (Directory.Exists(parentFolder))
 					{
 						FileData parent = new FileData(parentFolder, true);
-						parent.SetName("..");
+						parent.SetName(ParentFolderText);
 						_list.Add(parent);
 						m_btnUp.Enabled = true;
 					}
@@ -314,51 +411,6 @@ namespace MZ.WinForms
 			return m_listFiles.Height / 18;
 		}
 
-		protected string formatDate(DateTime dtDate)
-		{
-			//Get date and time in short format
-			string stringDate = "";
-
-			stringDate = dtDate.ToShortDateString().ToString() + " " + dtDate.ToShortTimeString().ToString();
-
-			return stringDate;
-		}
-
-		protected string formatSize(Int64 lSize)
-		{
-			//Format number to KB
-			string stringSize = "";
-			NumberFormatInfo myNfi = new NumberFormatInfo();
-
-			Int64 lKBSize = 0;
-
-			if (lSize < 1024)
-			{
-				if (lSize == 0)
-				{
-					//zero byte
-					stringSize = "0";
-				}
-				else
-				{
-					//less than 1K but not zero byte
-					stringSize = "1";
-				}
-			}
-			else
-			{
-				//convert to KB
-				lKBSize = lSize / 1024;
-				//format number with default format
-				stringSize = lKBSize.ToString("n", myNfi);
-				//remove decimal
-				stringSize = stringSize.Replace(".00", "");
-			}
-
-			return stringSize + " KB";
-
-		}
-
 		private void m_listFiles_MouseDoubleClick(object sender, MouseEventArgs e)
 		{
 			if (m_listFiles.SelectedIndices.Count == 0)
@@ -374,20 +426,8 @@ namespace MZ.WinForms
 
 		private void m_listFiles_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
 		{
-			string[] lvData = new string[4];
-			FileData data = _list[e.ItemIndex];
-
-			lvData[0] = data.FileName;
-			if(!data.IsDirectory)
-				lvData[1] = formatSize(data.FileSize);
-			lvData[2] = formatDate(data.CreatedTime);
-			lvData[3] = formatDate(data.ModifiedTime);
-
-			int iconIndex = data.IsDirectory ? 2 : 4;
-			if (lvData[0] == "..") iconIndex = 10;
-
-			ListViewItem lvItem = new ListViewItem(lvData, iconIndex);
-			e.Item = lvItem;
+			_list[e.ItemIndex].PrepareListViewItem();
+			e.Item = _list[e.ItemIndex];
 		}
 	}
 }

@@ -140,6 +140,16 @@ namespace SmartBackup
         bool _working = false;
         private void PerformBackup(int startIndex, BackupOptions options)
         {
+            DriveInfo drive = BackupLogic.GetDriveInfo(_backupFilesList[0].Src);
+            if(drive == null)
+            {
+                MessageBox.Show(this, "Source Drive is not accessible: " + _backupFilesList[0].Src);
+                return;
+            }
+
+            const double ONE_MB = 1024 * 1024;
+            double bigFileSizeThreshold = (drive.DriveType == DriveType.Network) ? 0.6 * ONE_MB : 12 * ONE_MB;
+
             _abort = false;
             _pause = false;
             _working = true;
@@ -164,10 +174,12 @@ namespace SmartBackup
 
                     _startIndex = i;
                     BackupFile file = _backupFilesList[i];
+                    file.BigFileSizeThreshold = bigFileSizeThreshold;
+
                     int updateProgressCount = 128;
                     if (file.ValidateBackupNeeded(options))
                     {
-                        updateProgressCount = 33;
+                        updateProgressCount = 3;
                         if (file.IsBigFile())
                         {
                             updateProgressCount = 1;
@@ -175,6 +187,7 @@ namespace SmartBackup
                             {
                                 file.Status = BackupStatus.InProgress;
                                 m_listFiles.EnsureVisible(_startIndex);
+                                m_listFiles.Refresh();
                             }, this);
                         }
 
@@ -224,10 +237,11 @@ namespace SmartBackup
                 if (visibleIndex >= _backupFilesList.Count)
                     visibleIndex = _backupFilesList.Count - 1;
                 m_listFiles.EnsureVisible(visibleIndex);
-                
+                m_listFiles.Refresh();
+
                 TimeSpan estimate = TimeSpan.FromMilliseconds(m_progressBarMain.Maximum * _elapsed.TotalMilliseconds / (m_progressBarMain.Value + 1));
 
-                m_txtStatus.Text = string.Format("Backing up file {0:###,##0} of {1:###,##0}, {2:###,##0.0} MB Done, Elapsed {3}, Estimated Total {4}",
+                m_txtStatus.Text = string.Format("Copying file {0:###,##0} of {1:###,##0}, {2:###,##0.0} MB Done, Elapsed {3}, Estimated Total {4}",
                     (_startIndex + 1), _backupFilesList.Count, _processedBytes/BackupLogic.i1MB,
                     _elapsed.ToString("mm':'ss"), estimate.ToString("mm':'ss"));
 

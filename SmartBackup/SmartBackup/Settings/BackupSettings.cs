@@ -20,6 +20,15 @@ namespace SmartBackup.Settings
         public string FolderIncludeTypes { get; set; }
         public string FolderExcludeTypes { get; set; }
         public BackupPriority Priority { get; set; }
+        public bool IsSrcOnNetworkDrive 
+        { 
+            get 
+            {
+                string rootSrc = Path.GetPathRoot(FolderSrc);
+                DriveInfo drive = new DriveInfo(rootSrc);
+                return drive.DriveType == DriveType.Network;
+            }
+        }
 
         public BackupEntry()
         {
