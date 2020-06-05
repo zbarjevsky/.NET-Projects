@@ -250,6 +250,17 @@ namespace MZ.Tools
                 Microsoft.VisualBasic.FileIO.UIOption.AllDialogs);
         }
 
+        public static void MoveDirectoryWithSystemProgressDialog(string sourceDirectoryName, string destinationDirectoryName)
+        {
+            Microsoft.VisualBasic.FileIO.FileSystem.MoveDirectory(sourceDirectoryName, destinationDirectoryName,
+                Microsoft.VisualBasic.FileIO.UIOption.AllDialogs);
+        }
+
+        public static void RenameDirectoryWithSystemProgressDialog(string sourceDirectoryName, string destinationDirectoryName)
+        {
+            Microsoft.VisualBasic.FileIO.FileSystem.RenameDirectory(sourceDirectoryName, destinationDirectoryName);
+        }
+
         public static void DeleteDirectoryWithSystemProgressDialog(string directoryName)
         {
             Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(directoryName, 

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Management;
 using System.IO;
+using MZ.Tools;
 
 namespace MZ.WinForms
 {
@@ -209,13 +210,15 @@ namespace MZ.WinForms
 			//get current selected drive or folder
 			try
 			{
-				if (!string.IsNullOrWhiteSpace(e.Label))
+				if (!string.IsNullOrWhiteSpace(e.Node.Name) && !string.IsNullOrWhiteSpace(e.Label))
 				{
 					string path = getFullPath(e.Node);
-					string parent = Path.GetDirectoryName(path);
-					string newPath = Path.Combine(parent, e.Label);
-					Directory.Move(path, newPath);
-					AfterSelectAction(newPath);
+					//string parent = Path.GetDirectoryName(path);
+					//string newPath = Path.Combine(parent, e.Label);
+					//Directory.Move(path, newPath);
+					FileUtils.RenameDirectoryWithSystemProgressDialog(path, e.Label);
+					e.Node.Name = e.Label;
+					AfterSelectAction(getFullPath(e.Node));
 				}
 			}
 			catch (Exception err)
@@ -326,12 +329,15 @@ namespace MZ.WinForms
 
 		protected string getFullPath(TreeNode node)
 		{
-			string stringPath = "";
+			string stringPath = node.Name;
 			while (node.Parent != null)
 			{
+				node = node.Parent;
+				if (string.IsNullOrWhiteSpace(node.Name))
+					break;
+
 				string name = node.Name.Replace("\\", "");
 				stringPath = name + "\\" + stringPath;
-				node = node.Parent;
 			}
 
 			return stringPath;
