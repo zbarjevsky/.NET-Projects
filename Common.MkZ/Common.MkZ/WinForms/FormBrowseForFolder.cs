@@ -71,6 +71,13 @@ namespace MZ.WinForms
             m_treeFolders.SelectFolder(m_txtSelectedFolder.Text);
         }
 
+        private void m_mnuSelect_Click(object sender, EventArgs e)
+        {
+            m_btnOk_Click(sender, e);
+            DialogResult = DialogResult.OK;
+            this.Close();
+        }
+
         private void m_mnuRefresh_Click(object sender, EventArgs e)
         {
             m_treeFolders.RefreshFolder(m_txtSelectedFolder.Text);

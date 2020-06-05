@@ -51,6 +51,8 @@
             this.tvFolders.TabIndex = 3;
             this.tvFolders.AfterLabelEdit += new System.Windows.Forms.NodeLabelEditEventHandler(this.tvFolders_AfterLabelEdit);
             this.tvFolders.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.tvFolders_AfterSelect);
+            this.tvFolders.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.tvFolders_MouseDoubleClick);
+            this.tvFolders.MouseDown += new System.Windows.Forms.MouseEventHandler(this.tvFolders_MouseDown);
             // 
             // m_imageListTreeView
             // 

@@ -237,5 +237,23 @@ namespace MZ.Tools
 
             return listFiles;
         }
+
+        public static void CopyFileWithSystemProgressDialog(string sourceFileName, string destinationFileName)
+        {
+            Microsoft.VisualBasic.FileIO.FileSystem.CopyFile(sourceFileName, destinationFileName,
+                Microsoft.VisualBasic.FileIO.UIOption.AllDialogs);
+        }
+
+        public static void CopyDirectoryWithSystemProgressDialog(string sourceDirectoryName, string destinationDirectoryName)
+        {
+            Microsoft.VisualBasic.FileIO.FileSystem.CopyDirectory(sourceDirectoryName, destinationDirectoryName,
+                Microsoft.VisualBasic.FileIO.UIOption.AllDialogs);
+        }
+
+        public static void DeleteDirectoryWithSystemProgressDialog(string directoryName)
+        {
+            Microsoft.VisualBasic.FileIO.FileSystem.DeleteDirectory(directoryName, 
+                Microsoft.VisualBasic.FileIO.UIOption.AllDialogs, Microsoft.VisualBasic.FileIO.RecycleOption.SendToRecycleBin);
+        }
     }
 }

@@ -40,6 +40,7 @@
     <ApplicationIcon>Tools.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="Microsoft.WindowsAPICodePack">
       <HintPath>..\..\ThirdParty\WindowsAPICodePack\Microsoft.WindowsAPICodePack.dll</HintPath>
     </Reference>

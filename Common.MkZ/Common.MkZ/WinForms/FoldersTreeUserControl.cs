@@ -65,7 +65,7 @@ namespace MZ.WinForms
 
 			for (int i = 0; i < tvFolders.Nodes[0].Nodes.Count; i++) //drives
 			{
-				if (tvFolders.Nodes[0].Nodes[i].Text == fullPath)
+				if (tvFolders.Nodes[0].Nodes[i].Name == fullPath)
 					return tvFolders.Nodes[0].Nodes[i];
 			}
 
@@ -102,7 +102,7 @@ namespace MZ.WinForms
 
 			foreach (TreeNode n in node.Nodes)
 			{
-				if(n.Text == folders[index])
+				if(n.Name == folders[index])
 				{
 					if (index == folders.Count - 1)
 						return n;
@@ -121,38 +121,34 @@ namespace MZ.WinForms
 			int imageIndex = 0;
 			int selectIndex = 0;
 
-			const int Removable = 2;
-			const int LocalDisk = 3;
-			const int Network = 4;
-			const int CD = 5;
-			//const int RAMDrive = 6;
-
 			this.Cursor = Cursors.WaitCursor;
+			
 			//clear TreeView
 			tvFolders.Nodes.Clear();
 			TreeNode root = new TreeNode("My Computer", 0, 0);
 			tvFolders.Nodes.Add(root);
 
 			//Get Drive list
-			ManagementObjectCollection queryCollection = getDrives();
-			foreach (ManagementObject drive in queryCollection)
+			DriveInfo[] drives = System.IO.DriveInfo.GetDrives();
+
+			foreach (DriveInfo drive in drives)
 			{
 
-				switch (int.Parse(drive["DriveType"].ToString()))
+				switch (drive.DriveType)
 				{
-					case Removable:         //removable drives
+					case DriveType.Removable:         //removable drives
 						imageIndex = 5;
 						selectIndex = 5;
 						break;
-					case LocalDisk:         //Local drives
+					case DriveType.Fixed:         //Local drives
 						imageIndex = 6;
 						selectIndex = 6;
 						break;
-					case CD:                //CD rom drives
+					case DriveType.CDRom:                //CD rom drives
 						imageIndex = 7;
 						selectIndex = 7;
 						break;
-					case Network:           //Network drives
+					case DriveType.Network:           //Network drives
 						imageIndex = 8;
 						selectIndex = 8;
 						break;
@@ -161,8 +157,12 @@ namespace MZ.WinForms
 						selectIndex = 3;
 						break;
 				}
+
 				//create new drive node
-				TreeNode nodeTreeNode = new TreeNode(drive["Name"].ToString() + "\\", imageIndex, selectIndex);
+				string desc = GetDriveDescription(drive);
+				TreeNode nodeTreeNode = new TreeNode(desc, imageIndex, selectIndex);
+				nodeTreeNode.Name = drive.Name;
+				nodeTreeNode.Tag = drive;
 
 				//add new node
 				root.Nodes.Add(nodeTreeNode);
@@ -174,14 +174,35 @@ namespace MZ.WinForms
 			return root;
 		}
 
-		protected ManagementObjectCollection getDrives()
+		public string GetDriveDescription(DriveInfo drive)
 		{
-			//get drive collection
-			ManagementObjectSearcher query = new ManagementObjectSearcher("SELECT * From Win32_LogicalDisk ");
-			ManagementObjectCollection queryCollection = query.Get();
-
-			return queryCollection;
+			try
+			{
+				if (drive.DriveType != DriveType.Network)
+				{
+					return drive.Name + " [" + drive.VolumeLabel + "] - " + drive.TotalSize.ToString("###,###,##0");
+				}
+				else
+				{
+					return drive.Name + " [Network Drive]";
+				}
+			}
+			catch (Exception err)
+			{
+				return (drive.Name + "<" + err.Message + ">");
+				System.Diagnostics.Debug.WriteLine("GetDriveList error: (" + drive.Name + ") - " + err.Message);
+			}
 		}
+
+		//protected ManagementObjectCollection getDrives()
+		//{
+		//	//get drive collection
+		//	ManagementObjectSearcher query = new ManagementObjectSearcher("SELECT * From Win32_LogicalDisk ");
+		//	ManagementObjectCollection queryCollection = query.Get();
+		//	query.Dispose();
+
+		//	return queryCollection;
+		//}
 
 		private void tvFolders_AfterLabelEdit(object sender, NodeLabelEditEventArgs e)
 		{
@@ -190,7 +211,7 @@ namespace MZ.WinForms
 			{
 				if (!string.IsNullOrWhiteSpace(e.Label))
 				{
-					string path = getFullPath(e.Node.FullPath);
+					string path = getFullPath(e.Node);
 					string parent = Path.GetDirectoryName(path);
 					string newPath = Path.Combine(parent, e.Label);
 					Directory.Move(path, newPath);
@@ -221,12 +242,24 @@ namespace MZ.WinForms
 			}
 
 			//notify
-			AfterSelectAction(getFullPath(e.Node.FullPath));
+			AfterSelectAction(getFullPath(e.Node));
+		}
+
+		private void tvFolders_MouseDown(object sender, MouseEventArgs e)
+		{
+			TreeNode node = tvFolders.GetNodeAt(e.X, e.Y);
+			if (node != tvFolders.SelectedNode && e.Button == MouseButtons.Right)
+				tvFolders.SelectedNode = node;
+		}
+
+		private void tvFolders_MouseDoubleClick(object sender, MouseEventArgs e)
+		{
+
 		}
 
 		private bool IsRootNoode(TreeNode node)
 		{
-			string path = getFullPath(node.FullPath);
+			string path = getFullPath(node);
 			return string.IsNullOrWhiteSpace(path);
 		}
 
@@ -249,13 +282,13 @@ namespace MZ.WinForms
 				else
 				{
 					//check path
-					if (!Directory.Exists(getFullPath(node.FullPath)))
+					if (!Directory.Exists(getFullPath(node)))
 					{
 						MessageBox.Show("Directory or path " + node.ToString() + " does not exist.");
 						return;
 					}
 
-					string[] stringDirectories = Directory.GetDirectories(getFullPath(node.FullPath));
+					string[] stringDirectories = Directory.GetDirectories(getFullPath(node));
 
 					//loop throught all directories
 					foreach (string stringDir in stringDirectories)
@@ -264,6 +297,7 @@ namespace MZ.WinForms
 
 						//create node for directories
 						nodeDir = new TreeNode(stringPathName, imageIndex, selectIndex);
+						nodeDir.Name = stringPathName;
 						node.Nodes.Add(nodeDir);
 					}
 				}
@@ -290,11 +324,17 @@ namespace MZ.WinForms
 			return stringSplit[_maxIndex - 1];
 		}
 
-		protected string getFullPath(string stringPath)
+		protected string getFullPath(TreeNode node)
 		{
-			//Get Full path
-			//remove My Computer from path.
-			return stringPath.Replace("My Computer\\", "").Replace("\\\\", "\\");
+			string stringPath = "";
+			while (node.Parent != null)
+			{
+				string name = node.Name.Replace("\\", "");
+				stringPath = name + "\\" + stringPath;
+				node = node.Parent;
+			}
+
+			return stringPath;
 		}
 	}
 }
