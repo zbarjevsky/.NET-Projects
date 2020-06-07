@@ -148,12 +148,10 @@ namespace MeditationStopWatch
 
             double scale = delta > 0 ? scaleUp : scaleDown;
             int width = (int)(scale * this.Width);
-            if (width > max.Width)
-                width = max.Width;
+            if (width > max.Width || width > max.Height)
+                width = Math.Min(max.Width, max.Height);
 
             int height = width;
-            if (height > max.Height)
-                height = max.Height;
 
             int deltaX = (this.Width - width) / 2;
             int deltaY = deltaX;

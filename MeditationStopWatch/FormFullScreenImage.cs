@@ -32,7 +32,7 @@ namespace MeditationStopWatch
             m_analogClock.Settings = parent.m_Options.AnalogClockSettings.Clone();
             m_analogClock.Settings.ClockBackground = Color.Transparent;
             m_analogClock.Settings.SuspendScreenSaver = true;
-            m_analogClock.BackColor = Color.Transparent; 
+            m_analogClock.BackColor = Color.Transparent;
 
             m_analogClock.Draggable(true);
             m_analogClock.Parent = pictureBox1.PictureBox; //to show picture as background
@@ -55,28 +55,25 @@ namespace MeditationStopWatch
 
             this.WindowState = FormWindowState.Maximized;
 
-            m_analogClock.Bounds = _stopWatchForm.m_Options.ClockFullScreenBounds;
-            _clockMargins.FromRectangle(m_analogClock.Bounds, this.Bounds);
-
             EnsureVisibleControls();
             pictureBox1.Zoom(_zoomScale);
             pictureBox1.PictureBox.Focus();
             pictureBox1.PictureBox.Refresh();
             m_btnCancel.BringToFront();
+            
+            m_analogClock.Bounds = _stopWatchForm.m_Options.ClockFullScreenBounds;
+            m_analogClock.LocationChanged += (s, o) => { UpdateClockMargins(); SaveClockRectangle(); };
 
             this.Activate();
         }
 
+        private void FormFullScreenImage_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            SaveClockRectangle();
+        }
+
         private void FormFullScreenImage_FormClosed(object sender, FormClosedEventArgs e)
         {
-            _stopWatchForm.m_Options.ClockFullScreenBounds = new Rectangle()
-            {
-                X = pictureBox1.PictureBox.Left + m_analogClock.Left,
-                Y = pictureBox1.PictureBox.Top + m_analogClock.Top,
-                Width = m_analogClock.Width,
-                Height = m_analogClock.Height
-            };
-
             _zoomScale = (double)pictureBox1.PictureBox.Width / (double)pictureBox1.Width;
         }
 
@@ -112,6 +109,39 @@ namespace MeditationStopWatch
             m_analogClock.AdjustClockSize(delta, pictureBox1.Bounds);
             pictureBox1.EnsureVisible(m_analogClock, AnchorStyles.Top | AnchorStyles.Right, _clockMargins, true);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1.PictureBox)).EndInit();
+            SaveClockRectangle();
+        }
+
+        private void UpdateClockMargins()
+        {
+            if (m_analogClock.Anchor.HasFlag(AnchorStyles.Left))
+            {
+                _clockMargins.Left = pictureBox1.PictureBox.Left + m_analogClock.Left;
+            }
+            if (m_analogClock.Anchor.HasFlag(AnchorStyles.Top))
+            {
+                _clockMargins.Top = pictureBox1.PictureBox.Top + m_analogClock.Top;
+            }
+            if (m_analogClock.Anchor.HasFlag(AnchorStyles.Right))
+            {
+                _clockMargins.Right = pictureBox1.Width - (pictureBox1.PictureBox.Left + m_analogClock.Right);
+            }
+            if (m_analogClock.Anchor.HasFlag(AnchorStyles.Bottom))
+            {
+                _clockMargins.Bottom = pictureBox1.Height - (pictureBox1.PictureBox.Top + m_analogClock.Bottom);
+            }
+        }
+
+        private void SaveClockRectangle()
+        {
+            //save bounds
+            _stopWatchForm.m_Options.ClockFullScreenBounds = new Rectangle()
+            {
+                X = pictureBox1.PictureBox.Left + m_analogClock.Left,
+                Y = pictureBox1.PictureBox.Top + m_analogClock.Top,
+                Width = m_analogClock.Width,
+                Height = m_analogClock.Height
+            };
         }
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)

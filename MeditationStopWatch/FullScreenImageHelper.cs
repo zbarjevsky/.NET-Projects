@@ -20,6 +20,7 @@ namespace MeditationStopWatch
             if (_formFullScreenImage == null)
             {
                 _formFullScreenImage = new FormFullScreenImage(parent);
+                _formFullScreenImage.Location = parent.Location; //show on same screen
                 _formFullScreenImage.VisibleChanged += (s, e) => { OnVisibleChanged(IsVisible); };
             }
 

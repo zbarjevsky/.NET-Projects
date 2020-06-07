@@ -19,6 +19,9 @@ namespace MeditationStopWatch
         {
             public int Left, Top, Right, Bottom;
 
+            public int Width { get { return Right - Left; } }
+            public int Height { get { return Bottom - Top; } }
+
             public MarginRect(int margin, int max = 10000, int min = 0)
             {
                 Left = Top = Right = Bottom = EnsureValidMargin(margin, max, min);
@@ -44,6 +47,11 @@ namespace MeditationStopWatch
                 if (margin < min) margin = min;
                 if (margin > max) margin = max;
                 return margin;
+            }
+
+            public override string ToString()
+            {
+                return string.Format("L:{0}, T:{1}, R:{2}, B:{3}", Left, Top, Right, Bottom);
             }
         }
 

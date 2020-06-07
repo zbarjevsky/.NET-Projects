@@ -25,11 +25,11 @@ namespace MZ.Tools
         {
             private Stopwatch _stopper = new Stopwatch();
 
-            private Action OnValueChange = () => { };
-            private Action OnPercentChange = () => { };
+            private Action OnValueChange = null; // () => { };
+            private Action OnPercentChange = null; // () => { };
             public Action<string> OnChange = (status) => { };
 
-            public NotifyOptions ReportOption = NotifyOptions.NotifyPercentChange;
+            public NotifyOptions ReportOption { get; private set; } = NotifyOptions.NotifyPercentChange;
 
             public string Message { get; set; } = "";
             public string SubStatus { get; set; } = "";
@@ -110,33 +110,28 @@ namespace MZ.Tools
             {
                 _formOwner = owner;
                 _ctrlProgress = ctrlProgress;
+
                 Reset("Progress: ", ctrlProgress.Maximum, ctrlProgress.Minimum, ctrlProgress.Style, options);
 
-                if (options.HasFlag(NotifyOptions.NotifyPercentChange))
+                this.OnPercentChange = () =>
                 {
-                    this.OnPercentChange = () =>
+                    CommonUtils.ExecuteOnUIThread(() =>
                     {
-                        CommonUtils.ExecuteOnUIThread(() =>
-                        {
-                            _ctrlProgress.Value = (int)Value;
-                            OnChange(this.ToString());
-                        }, _formOwner);
-                        Application.DoEvents();
-                    };
-                }
+                        _ctrlProgress.Value = (int)Value;
+                        OnChange(this.ToString());
+                    }, _formOwner);
+                    Application.DoEvents();
+                };
 
-                if (options.HasFlag(NotifyOptions.NotifyValueChange))
+                this.OnValueChange = () =>
                 {
-                    this.OnValueChange = () =>
+                    CommonUtils.ExecuteOnUIThread(() =>
                     {
-                        CommonUtils.ExecuteOnUIThread(() =>
-                        {
-                            _ctrlProgress.Value = (int)Value;
-                            OnChange(this.ToString());
-                        }, _formOwner);
-                        Application.DoEvents();
-                    };
-                }
+                        _ctrlProgress.Value = (int)Value;
+                        OnChange(this.ToString());
+                    }, _formOwner);
+                    Application.DoEvents();
+                };
             }
 
             public void ResetToBlocks(string message = "Progress: ",

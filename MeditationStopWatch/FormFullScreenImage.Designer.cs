@@ -131,6 +131,7 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "FullScreenImage";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormFullScreenImage_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormFullScreenImage_FormClosed);
             this.Load += new System.EventHandler(this.FormFullScreenImage_Load);
             this.m_pnlMain.ResumeLayout(false);
