@@ -78,8 +78,10 @@ namespace MZ
 
         private void trackBar1_Scroll(object sender, ScrollEventArgs e)
         {
-            colorBarsProgressBar1.Value = (int)trackBar1.Value;
-            colorBarsProgressBar2.Value = (int)trackBar1.Value;
+            if(trackBar1.Value <= colorBarsProgressBar1.Maximum)
+                colorBarsProgressBar1.Value = (int)trackBar1.Value;
+            if (trackBar1.Value <= colorBarsProgressBar2.Maximum)
+                colorBarsProgressBar2.Value = (int)trackBar1.Value;
             colorBarsProgressBar3.Value = (int)trackBar1.Value;
         }
 

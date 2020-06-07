@@ -1,6 +1,6 @@
 ﻿using MZ.WinForms;
 using MZ.Tools;
-using SmartBackup.Settings;
+using SimpleBackup.Settings;
 
 using System;
 using System.Collections.Generic;
@@ -11,8 +11,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static MZ.Tools.FileUtils;
 
-namespace SmartBackup
+namespace SimpleBackup
 {
     [Flags]
     public enum BackupStatus : int
@@ -70,11 +71,12 @@ namespace SmartBackup
         public double BigFileSizeThreshold = 12 * BackupLogic.i1MB;
 
         private string _dstFolder = null;
+        //private string _dstFolder = null;
         public string DstFolder 
         {
             get
             {
-                if(_dstFolder == null)
+                if (_dstFolder == null)
                 {
                     string subFolders = FindSubFolders(_entry.FolderSrc, Src);
                     _dstFolder = Path.Combine(_entry.FolderDst, subFolders);
@@ -150,13 +152,13 @@ namespace SmartBackup
             return true;
         }
 
-        public BackupStatus PerformBackup(ProgressBar progress, Form owner, BackupOptions option = BackupOptions.OverwriteAllOlder)
+        public BackupStatus PerformBackup(FileProgress progress, BackupOptions option = BackupOptions.OverwriteAllOlder)
         {
             try
             {
                 Err = "OK";
                 Status = BackupStatus.None;
-                CommonUtils.ExecuteOnUIThread(() => { progress.Value = progress.Minimum; }, owner);
+                progress.Value = progress.Minimum; //reset
 
                 if(!ValidateBackupNeeded(option, true))
                     return Status;
@@ -167,7 +169,7 @@ namespace SmartBackup
                     DstIfo.IsReadOnly = false;
 
                 if (IsBigFile()) //more than 12M
-                    CopyWithProgress(progress, owner);
+                    CopyWithProgress(Src, Dst, SrcIfo.Length, progress);
                 else
                     File.Copy(Src, Dst, true);
 
@@ -214,32 +216,47 @@ namespace SmartBackup
         }
 
         //http://www.pinvoke.net/default.aspx/kernel32.CopyFileEx
-        private void CopyWithProgress(ProgressBar progress, Form owner)
+        private static void CopyWithProgress(string src, string dst, long length, FileProgress progress)
         {
-            int bufferSize = 4 * 1024; //4k
+            const int bufferSize = 4 * 1024; //4k - best size
             byte[] bytes = new byte[bufferSize];
 
-            using (FileStream srcFile = new FileStream(Src, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, FileOptions.SequentialScan))
+            progress.ResetToBlocks("Progress: ", length, 0, NotifyOptions.NotifyValueChange);
+
+            try
             {
-                using (FileStream fileStream = new FileStream(Dst, FileMode.OpenOrCreate, FileAccess.Write))
+                using (FileStream srcFile = new FileStream(src, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, FileOptions.SequentialScan))
                 {
-                    int bytesRead = -1;
-                    long totalWrite = 0;
-                    while ((bytesRead = srcFile.Read(bytes, 0, bufferSize)) > 0)
+                    using (FileStream fileStream = new FileStream(dst, FileMode.OpenOrCreate, FileAccess.Write))
                     {
-                        fileStream.Write(bytes, 0, bytesRead);
-
-                        totalWrite += bytesRead;
-
-                        CommonUtils.ExecuteOnUIThread(() =>
+                        int bytesRead = -1;
+                        long totalWrite = 0;
+                        while ((bytesRead = srcFile.Read(bytes, 0, bufferSize)) > 0)
                         {
-                            progress.Value = (int)(totalWrite * 100 / SrcIfo.Length);
-                        }, owner);
+                            fileStream.Write(bytes, 0, bytesRead);
+
+                            totalWrite += bytesRead;
+
+                            if (progress.Cancel)
+                                throw new Exception("Abort copy file: " + src);
+
+                            progress.Value = totalWrite;
+                        }
                     }
                 }
+                progress.Value = 0;
             }
+            catch (Exception)
+            {
+                progress.Value = 0;
+                if (File.Exists(dst)) //delete partially copied file
+                    File.Delete(dst);
+                throw;
+            }        
         }
 
+        //go up from 'file' folder until found 'folderSrc'
+        //return all 'missing' folders on the way
         private string FindSubFolders(string folderSrc, string file)
         {
             List<string> newFolders = new List<string>();
@@ -250,7 +267,7 @@ namespace SmartBackup
                 newFolders.Add(Path.GetFileName(folder));
                 folder = Path.GetDirectoryName(folder);
             }
-            newFolders.Add(Path.GetFileName(folder));
+            //newFolders.Add(Path.GetFileName(folder));
 
             newFolders.Reverse();
             return Path.Combine(newFolders.ToArray());
@@ -269,17 +286,22 @@ namespace SmartBackup
 
         }
 
-        long _bigFileThreshold = 64 * 1024;
-        public void Load(BackupPriority priority, FileUtils.FileProgress progress = null)
+        public void Load(BackupPriority priority, FileUtils.FileProgress progress = null, Action onFinished = null)
         {
             Clear();
-            foreach (BackupEntry entry in _group.BackupList)
+            Task.Factory.StartNew(() => 
             {
-                if (priority.HasFlag(entry.Priority))
+                foreach (BackupEntry entry in _group.BackupList)
                 {
-                    FileList.AddRange(CollectFiles(entry, progress));
+                    if (priority.HasFlag(entry.Priority))
+                    {
+                        FileList.AddRange(CollectFiles(entry, progress));
+                    }
                 }
-            }
+
+                if (onFinished != null)
+                    CommonUtils.ExecuteOnUIThread(onFinished, progress.ProgressBar);
+            });
         }
 
         public void Clear()
@@ -339,61 +361,7 @@ namespace SmartBackup
 
         public static List<BackupFile> CollectFiles(BackupEntry entry, FileUtils.FileProgress progress = null)
         {
-            List<BackupFile> fileList = new List<BackupFile>();
-            if (string.IsNullOrWhiteSpace(entry.FolderSrc))
-                return fileList;
-
-            DirectoryInfo dir = new DirectoryInfo(entry.FolderSrc);
-            if (!dir.Exists)
-                return fileList;
-
-            try
-            {
-                if (progress != null)
-                {
-                    string prompt = string.Format("Discovering ({0}) ", entry.FolderSrc);
-                    progress.ResetToMarquee(prompt);
-                }
-
-                List<string> files = FileUtils.GetFiles(dir.FullName, 
-                    entry.FolderIncludeTypes, entry.IncludeSubfolders, progress).ToList();
-
-                if (progress != null)
-                {
-                    if (progress.Cancel)
-                    {
-                        files.Clear();
-                        GC.Collect();
-                        return fileList;
-                    }
-
-                    //report percentage only - may be too many files
-                    string prompt = string.Format("Preparing Collected Files ({0}) ", entry.FolderSrc);
-                    progress.ResetToBlocks(prompt, files.Count);
-                }
-
-                for (int i = 0; i < files.Count; i++)
-                {
-                    if (progress != null)
-                    {
-                        if (progress.Cancel)
-                        {
-                            fileList.Clear();
-                            break;
-                        }
-                        progress.Value = i;
-                    }
-
-                    //if (File.Exists(files[i]))
-                        fileList.Add(new BackupFile(i, files[i], entry));
-                }
-            }
-            catch (Exception err)
-            {
-                Debug.WriteLine("Error enumerating files in: " + dir.FullName + ", Error: " + err);
-            }
-
-            GC.Collect();
+            List<BackupFile> fileList = entry.CollectFiles(progress);
             return fileList;
         }
     }

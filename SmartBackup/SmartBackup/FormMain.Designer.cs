@@ -1,4 +1,4 @@
-﻿namespace SmartBackup
+﻿namespace SimpleBackup
 {
     partial class FormMain
     {

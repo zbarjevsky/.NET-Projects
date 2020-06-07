@@ -1,4 +1,4 @@
-﻿using SmartBackup.Settings;
+﻿using SimpleBackup.Settings;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MZ.WinForms;
 
-namespace SmartBackup
+namespace SimpleBackup
 {
     public partial class FormMain : Form
     {

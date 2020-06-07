@@ -1,4 +1,4 @@
-﻿namespace SmartBackup
+﻿namespace SimpleBackup
 {
     partial class FormBackupProgress
     {
@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormBackupProgress));
-            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet1 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
+            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet2 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
             this.m_listFiles = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -50,6 +50,7 @@
             this.m_progressFile = new MZ.WinForms.ColorBarsProgressBar();
             this.m_progressBarMain = new MZ.Tools.Windows7ProgressBar();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.m_lblStatusProgress = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -170,7 +171,7 @@
             // 
             // m_btnPause
             // 
-            this.m_btnPause.Image = global::SmartBackup.Properties.Resources.pause_on;
+            this.m_btnPause.Image = global::SimpleBackup.Properties.Resources.pause_on;
             this.m_btnPause.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.m_btnPause.Location = new System.Drawing.Point(94, 9);
             this.m_btnPause.Name = "m_btnPause";
@@ -183,7 +184,7 @@
             // 
             // m_btnStart
             // 
-            this.m_btnStart.Image = global::SmartBackup.Properties.Resources.play_on;
+            this.m_btnStart.Image = global::SimpleBackup.Properties.Resources.play_on;
             this.m_btnStart.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.m_btnStart.Location = new System.Drawing.Point(13, 9);
             this.m_btnStart.Name = "m_btnStart";
@@ -243,16 +244,16 @@
             // 
             this.m_progressFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            themeColorSet1.Part1_ActiveColor = System.Drawing.Color.DodgerBlue;
-            themeColorSet1.Part1_InactiveColor = System.Drawing.Color.Gainsboro;
-            themeColorSet1.Part2_ActiveColor = System.Drawing.Color.LimeGreen;
-            themeColorSet1.Part2_InactiveColor = System.Drawing.Color.Gainsboro;
-            themeColorSet1.Part3_ActiveColor = System.Drawing.Color.LimeGreen;
-            themeColorSet1.Part3_InactiveColor = System.Drawing.Color.Gainsboro;
-            themeColorSet1.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
-            themeColorSet1.Threshold1 = 101;
-            themeColorSet1.Threshold2 = 101;
-            this.m_progressFile.ColorTheme = themeColorSet1;
+            themeColorSet2.Part1_ActiveColor = System.Drawing.Color.DodgerBlue;
+            themeColorSet2.Part1_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet2.Part2_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet2.Part2_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet2.Part3_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet2.Part3_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet2.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
+            themeColorSet2.Threshold1 = 101;
+            themeColorSet2.Threshold2 = 101;
+            this.m_progressFile.ColorTheme = themeColorSet2;
             this.m_progressFile.Location = new System.Drawing.Point(12, 285);
             this.m_progressFile.Name = "m_progressFile";
             this.m_progressFile.Orientation = System.Windows.Forms.Orientation.Horizontal;
@@ -275,6 +276,19 @@
             // 
             this.errorProvider1.ContainerControl = this;
             // 
+            // m_lblStatusProgress
+            // 
+            this.m_lblStatusProgress.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_lblStatusProgress.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.m_lblStatusProgress.Location = new System.Drawing.Point(39, 117);
+            this.m_lblStatusProgress.Name = "m_lblStatusProgress";
+            this.m_lblStatusProgress.Size = new System.Drawing.Size(738, 85);
+            this.m_lblStatusProgress.TabIndex = 14;
+            this.m_lblStatusProgress.Text = "Ready...";
+            this.m_lblStatusProgress.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // FormBackupProgress
             // 
             this.AcceptButton = this.m_btnClose;
@@ -282,6 +296,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.m_btnClose;
             this.ClientSize = new System.Drawing.Size(834, 361);
+            this.Controls.Add(this.m_lblStatusProgress);
             this.Controls.Add(this.m_progressFile);
             this.Controls.Add(this.m_cmbViewFilter);
             this.Controls.Add(this.m_txtInfo);
@@ -330,5 +345,6 @@
         private System.Windows.Forms.ComboBox m_cmbViewFilter;
         private MZ.WinForms.ColorBarsProgressBar m_progressFile;
         private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.Label m_lblStatusProgress;
     }
 }

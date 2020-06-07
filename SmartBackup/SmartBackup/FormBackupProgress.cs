@@ -1,7 +1,7 @@
 ﻿using MZ.Tools;
 using MZ.WinForms;
-using SmartBackup.Settings;
-using SmartBackup.Tools;
+using SimpleBackup.Settings;
+using SimpleBackup.Tools;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -15,8 +15,9 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static MZ.Tools.FileUtils;
 
-namespace SmartBackup
+namespace SimpleBackup
 {
     public partial class FormBackupProgress : Form
     {
@@ -43,6 +44,7 @@ namespace SmartBackup
 
             m_cmbViewFilter.SelectedIndex = 0; //all
             m_listFiles.VirtualListSize = 0;
+            m_listFiles.SetDoubleBuffered(true);
 
             m_btnAbort.Enabled = false;
             m_btnStart.Enabled = false;
@@ -50,6 +52,7 @@ namespace SmartBackup
             m_btnContinue.Enabled = false;
 
             _fileProgress = new FileUtils.FileProgress(m_progressFile, this);
+            _fileProgress.OnChange = (status) => { m_txtInfo.Text = status; };
             _logic = new BackupLogic(_group);
 
             _calculateSpaceDifferenceTask = new CalculateSpaceDifferenceTask(_fileProgress);
@@ -57,9 +60,11 @@ namespace SmartBackup
             {
                 CommonUtils.ExecuteOnUIThread(() => 
                 {
-                    m_txtInfo.Text = status; 
+                    m_txtInfo.Text = status;
                     m_progressFile.Value = 0;
+                    EnableControls(true, false);
                     errorProvider1.SetError(m_txtInfo, error);
+                    m_lblStatusProgress.Visible = false;
                 }, this);
             };
         }
@@ -68,12 +73,24 @@ namespace SmartBackup
         {
             this.Visible = true;
 
-            _fileProgress.OnChange = (status) => { m_txtInfo.Text = status; };
-
             m_progressFile.ColorTheme.Part1_ActiveColor = Color.Violet;
-            _logic.Load(_Priority, _fileProgress);
-            EnableControls(false);
-            UpdateDisplayList(calculateNeededSize:true);
+            m_btnAbort.Enabled = true;
+
+            EnableControls(false, false);
+
+            m_txtInfo.Text = "Collecting file Information...";
+            m_txtStatus.Text = "Please Wait...";
+            m_btnClose.Text = "Close";
+
+            m_btnAbort.Enabled = true;
+            m_lblStatusProgress.Visible = true;
+            _fileProgress.OnChange = (status) => { m_lblStatusProgress.Text = status; };
+            _logic.Load(_Priority, _fileProgress, () => 
+            {
+                m_lblStatusProgress.Visible = false;
+                EnableControls(true, false);
+                UpdateDisplayList(calculateNeededSize: true);
+            });
         }
 
         private void FormBackupProgress_FormClosing(object sender, FormClosingEventArgs e)
@@ -149,12 +166,19 @@ namespace SmartBackup
 
             const double ONE_MB = 1024 * 1024;
             double bigFileSizeThreshold = (drive.DriveType == DriveType.Network) ? 0.6 * ONE_MB : 12 * ONE_MB;
+            int refreshUICount = (drive.DriveType == DriveType.Network) ? 3 : 33;
 
             _abort = false;
             _pause = false;
             _working = true;
 
             m_progressBarMain.State = Windows7ProgressBar.ProgressBarState.Normal;
+            m_progressBarMain.Maximum = _backupFilesList.Count;
+            m_progressBarMain.Minimum = 0;
+            m_progressBarMain.Value = startIndex;
+
+            m_progressFile.Style = ProgressBarStyle.Blocks;
+            FileProgress progressCopyBigFile = new FileProgress(m_progressFile, this, NotifyOptions.NotifyValueChange);
 
             m_cmbViewFilter.SelectedIndex = 0; //reset to all - perform backup on whole list
             UpdateDisplayList(calculateNeededSize:false);
@@ -179,7 +203,7 @@ namespace SmartBackup
                     int updateProgressCount = 128;
                     if (file.ValidateBackupNeeded(options))
                     {
-                        updateProgressCount = 3;
+                        updateProgressCount = refreshUICount;
                         if (file.IsBigFile())
                         {
                             updateProgressCount = 1;
@@ -191,10 +215,10 @@ namespace SmartBackup
                             }, this);
                         }
 
-                        if (file.PerformBackup(m_progressFile, this, options) == BackupStatus.Error)
+                        if (file.PerformBackup(progressCopyBigFile, options) == BackupStatus.Error)
                         {
                             Thread.Sleep(10);
-                            file.PerformBackup(m_progressFile, this, options); //retry
+                            file.PerformBackup(progressCopyBigFile, options); //retry
                         }
                     }
 
@@ -214,7 +238,7 @@ namespace SmartBackup
                 _elapsed += stopper.Elapsed;
                 SystemSounds.Beep.Play();
                 UpdateUI(false);
-                UpdateBackupStatus();
+                OnBackupDone();
                 _working = false;
             });
             threadBackup.IsBackground = true;
@@ -229,37 +253,43 @@ namespace SmartBackup
         {
             CommonUtils.ExecuteOnUIThread(() =>
             {
-                EnableControls(isRunning);
+                EnableControls(true, isRunning);
 
-                m_progressBarMain.Value = (int)((long)m_progressBarMain.Maximum * (long)(_startIndex+1) / _backupFilesList.Count);
-                
-                int visibleIndex = _startIndex + 3;
-                if (visibleIndex >= _backupFilesList.Count)
-                    visibleIndex = _backupFilesList.Count - 1;
-                m_listFiles.EnsureVisible(visibleIndex);
-                m_listFiles.Refresh();
+                m_progressBarMain.Value = _startIndex;
 
                 TimeSpan estimate = TimeSpan.FromMilliseconds(m_progressBarMain.Maximum * _elapsed.TotalMilliseconds / (m_progressBarMain.Value + 1));
 
-                m_txtStatus.Text = string.Format("Copying file {0:###,##0} of {1:###,##0}, {2:###,##0.0} MB Done, Elapsed {3}, Estimated Total {4}",
+                m_txtStatus.Text = string.Format("Copying file {0:###,##0} of {1:###,##0}, {2:###,##0.0} MB Done, Elapsed {3}, Total Estimated: {4}",
                     (_startIndex + 1), _backupFilesList.Count, _processedBytes/BackupLogic.i1MB,
-                    _elapsed.ToString("mm':'ss"), estimate.ToString("mm':'ss"));
+                    _elapsed.ToString("mm':'ss"), estimate.ToString("hh':'mm':'ss"));
+
+                int visibleIndex = _startIndex + 3;
+                if (visibleIndex >= _backupFilesList.Count)
+                    visibleIndex = _backupFilesList.Count - 1;
+                
+                if (visibleIndex >= 0 && visibleIndex < _backupFilesList.Count)
+                {
+                    m_listFiles.EnsureVisible(visibleIndex);
+                    m_listFiles.Refresh();
+                }
 
                 if (_abort)
                     m_progressBarMain.Value = 0;
+
+                Application.DoEvents();
             }, this);
         }
 
-        private void EnableControls(bool isRunning)
+        private void EnableControls(bool bEnable, bool isRunning)
         {
-            m_btnStart.Enabled = !isRunning;
-            m_btnContinue.Enabled = !isRunning;
-            m_btnAbort.Enabled = isRunning;
-            m_btnPause.Enabled = isRunning;
-            m_cmbViewFilter.Enabled = !isRunning;
+            m_btnStart.Enabled = bEnable && !isRunning;
+            m_btnContinue.Enabled = bEnable && !isRunning;
+            m_btnAbort.Enabled = bEnable && isRunning;
+            m_btnPause.Enabled = bEnable && isRunning;
+            m_cmbViewFilter.Enabled = bEnable && !isRunning;
         }
 
-        private void UpdateBackupStatus()
+        private void OnBackupDone()
         {
             CommonUtils.ExecuteOnUIThread(() =>
             {
@@ -270,7 +300,9 @@ namespace SmartBackup
                         errCount++;
                 }
 
-                if(errCount>0)
+                m_btnClose.Text = "Done";
+
+                if (errCount>0)
                     m_progressBarMain.State = Windows7ProgressBar.ProgressBarState.Error;
 
                 m_txtStatus.Text = string.Format(
@@ -357,6 +389,8 @@ namespace SmartBackup
             m_btnAbort.Enabled = true;
             m_progressFile.ColorTheme.Part1_ActiveColor = Color.SkyBlue;
 
+            m_btnAbort.Enabled = true;
+            _fileProgress.OnChange = (status) => { m_txtInfo.Text = status; };
             _calculateSpaceDifferenceTask.Start(_backupFilesList, backupStatus, SelectedOverwriteOption);
         }
     }

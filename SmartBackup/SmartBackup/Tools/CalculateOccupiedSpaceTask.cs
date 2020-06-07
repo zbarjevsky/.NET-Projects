@@ -1,6 +1,6 @@
 ﻿using MZ.Tools;
-using SmartBackup;
-using SmartBackup.Settings;
+using SimpleBackup;
+using SimpleBackup.Settings;
 
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using static MZ.Tools.FileUtils;
 
-namespace SmartBackup.Tools
+namespace SimpleBackup.Tools
 {
     public class CalculateOccupiedSpaceTask
     {
@@ -50,7 +50,9 @@ namespace SmartBackup.Tools
             _threadUpdateInfo = new Thread(() =>
             {
                 long size = 0;
-                List<BackupFile> fileList = BackupLogic.CollectFiles(entry, _fileProgress);
+                string prompt = string.Format("Collecting files for ({0}) ", entry.FolderSrc);
+                _fileProgress.ResetToMarquee(prompt);
+                List<BackupFile> fileList = entry.CollectFiles(_fileProgress);
                 if (_fileProgress.Cancel || fileList.Count == 0)
                 {
                     OnThreadFinished(0, fileList.Count);
@@ -58,7 +60,7 @@ namespace SmartBackup.Tools
                 }
 
                 int count = fileList.Count;
-                string prompt = string.Format("Calculating Folder Size ({0}) ", entry.FolderSrc);
+                prompt = string.Format("Calculating Folder Size ({0}) ", entry.FolderSrc);
                 _fileProgress.ResetToBlocks(prompt, count);
                 foreach (BackupFile file in fileList)
                 {

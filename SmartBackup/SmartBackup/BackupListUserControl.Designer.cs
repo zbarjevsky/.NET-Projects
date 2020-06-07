@@ -1,4 +1,4 @@
-﻿namespace SmartBackup
+﻿namespace SimpleBackup
 {
     partial class BackupListUserControl
     {
@@ -76,49 +76,49 @@
             this.m_mnuBackupPriority,
             this.m_mnuBackupAll});
             this.m_ContextMenuList.Name = "m_ContextMenuList";
-            this.m_ContextMenuList.Size = new System.Drawing.Size(193, 126);
+            this.m_ContextMenuList.Size = new System.Drawing.Size(182, 126);
             // 
             // m_mnuEdit
             // 
             this.m_mnuEdit.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.m_mnuEdit.Image = global::SmartBackup.Properties.Resources.Properties;
+            this.m_mnuEdit.Image = global::SimpleBackup.Properties.Resources.Properties;
             this.m_mnuEdit.Name = "m_mnuEdit";
-            this.m_mnuEdit.Size = new System.Drawing.Size(192, 22);
+            this.m_mnuEdit.Size = new System.Drawing.Size(181, 22);
             this.m_mnuEdit.Text = "Edit...";
             this.m_mnuEdit.Click += new System.EventHandler(this.m_btnEdit_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(189, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(178, 6);
             // 
             // m_mnuBackupSelected
             // 
             this.m_mnuBackupSelected.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuBackupSelected.Image")));
             this.m_mnuBackupSelected.Name = "m_mnuBackupSelected";
-            this.m_mnuBackupSelected.Size = new System.Drawing.Size(192, 22);
-            this.m_mnuBackupSelected.Text = "Backup Selected...";
+            this.m_mnuBackupSelected.Size = new System.Drawing.Size(181, 22);
+            this.m_mnuBackupSelected.Text = "Copy Selected...";
             this.m_mnuBackupSelected.Click += new System.EventHandler(this.m_mnuBackupSelected_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(189, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(178, 6);
             // 
             // m_mnuBackupPriority
             // 
-            this.m_mnuBackupPriority.Image = global::SmartBackup.Properties.Resources.Favorites;
+            this.m_mnuBackupPriority.Image = global::SimpleBackup.Properties.Resources.Favorites;
             this.m_mnuBackupPriority.Name = "m_mnuBackupPriority";
-            this.m_mnuBackupPriority.Size = new System.Drawing.Size(192, 22);
-            this.m_mnuBackupPriority.Text = "Backup High Priority...";
+            this.m_mnuBackupPriority.Size = new System.Drawing.Size(181, 22);
+            this.m_mnuBackupPriority.Text = "Copy High Priority...";
             this.m_mnuBackupPriority.Click += new System.EventHandler(this.m_btnBackupImportant_Click);
             // 
             // m_mnuBackupAll
             // 
-            this.m_mnuBackupAll.Image = global::SmartBackup.Properties.Resources.FilesCopy;
+            this.m_mnuBackupAll.Image = global::SimpleBackup.Properties.Resources.FilesCopy;
             this.m_mnuBackupAll.Name = "m_mnuBackupAll";
-            this.m_mnuBackupAll.Size = new System.Drawing.Size(192, 22);
-            this.m_mnuBackupAll.Text = "Backup All..";
+            this.m_mnuBackupAll.Size = new System.Drawing.Size(181, 22);
+            this.m_mnuBackupAll.Text = "Copy All..";
             this.m_mnuBackupAll.Click += new System.EventHandler(this.m_btnBackupAll_Click);
             // 
             // m_listBackup

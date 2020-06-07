@@ -14,9 +14,9 @@ namespace MZ.Tools
 {
     public static class CommonUtils
     {
-        public static void BrowseForFolder(this Form owner, TextBox txt, string selectedPath = "", string prompt = "Select Folder")
+        public static void BrowseForFolder(this Form owner, ref string txt, string selectedPath = "", string prompt = "Select Folder")
         {
-            selectedPath = string.IsNullOrWhiteSpace(selectedPath) ? txt.Text : selectedPath;
+            selectedPath = string.IsNullOrWhiteSpace(selectedPath) ? txt : selectedPath;
 
             FormBrowseForFolder frm = new FormBrowseForFolder();
             frm.SelectedFolder = selectedPath;
@@ -24,7 +24,7 @@ namespace MZ.Tools
 
             if (frm.ShowDialog(owner) == DialogResult.OK)
             {
-                txt.Text = frm.SelectedFolder;
+                txt = frm.SelectedFolder;
             }
         }
 

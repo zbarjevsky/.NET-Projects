@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Globalization;
+using System.Windows.Documents;
 
 namespace MZ.WinForms
 {
@@ -26,22 +27,22 @@ namespace MZ.WinForms
 			public DateTime ModifiedTime { get; private set; }
 			public long FileSize { get; private set; }
 
-			public FileData(string fullPath)
+			public FileData(string fullPath, bool isCheck)
 			{
-				Init(fullPath);
+				Init(fullPath, isCheck);
 			}
 
-			public FileData(string fullPath, bool isDirectory)
+			public FileData(string fullPath, bool isDirectory, bool isCheck)
 			{
-				Init(fullPath, isDirectory);
+				Init(fullPath, isDirectory, isCheck);
 			}
 
-			public void Init(string fullPath)
+			public void Init(string fullPath, bool isCheck)
 			{
-				Init(fullPath, Directory.Exists(fullPath));
+				Init(fullPath, Directory.Exists(fullPath), isCheck);
 			}
 
-			private void Init(string fullPath, bool isDirectory)
+			private void Init(string fullPath, bool isDirectory, bool isCheck)
 			{ 
 				FullPath = fullPath;
 				IsDirectory = isDirectory;
@@ -87,16 +88,23 @@ namespace MZ.WinForms
 
 			public void PrepareListViewItem()
 			{
-				this.SubItems[0].Text = this.FileName;
-				if (!this.IsDirectory)
-					this.SubItems[1].Text = formatSize(this.FileSize);
-				this.SubItems[2].Text = formatDate(this.CreatedTime);
-				this.SubItems[3].Text = formatDate(this.ModifiedTime);
+				try
+				{
+					this.SubItems[0].Text = this.FileName;
+					if (!this.IsDirectory)
+						this.SubItems[1].Text = formatSize(this.FileSize);
+					this.SubItems[2].Text = formatDate(this.CreatedTime);
+					this.SubItems[3].Text = formatDate(this.ModifiedTime);
 
-				int iconIndex = this.IsDirectory ? 2 : 4;
-				if (this.SubItems[0].Text == ParentFolderText) 
-					iconIndex = 10;
-				this.ImageIndex = iconIndex;
+					int iconIndex = this.IsDirectory ? 2 : 4;
+					if (this.SubItems[0].Text == ParentFolderText)
+						iconIndex = 10;
+					this.ImageIndex = iconIndex;
+				}
+				catch (Exception err)
+				{
+					Text = err.Message;
+				}			
 			}
 
 			protected string formatDate(DateTime dtDate)
@@ -198,7 +206,7 @@ namespace MZ.WinForms
 				FileData file = _list.FirstOrDefault(f => f.FullPath == e.OldFullPath);
 				if (file != null)
 				{
-					file.Init(e.FullPath);
+					file.Init(e.FullPath, file.Checked);
 					SortList();
 					OnChangeAction(e.FullPath);
 				}
@@ -206,7 +214,7 @@ namespace MZ.WinForms
 
 			private void OnFileCreated(object sender, FileSystemEventArgs e)
 			{
-				_list.Add(new FileData(e.FullPath));
+				_list.Add(new FileData(e.FullPath, true));
 				SortList();
 				OnChangeAction(e.FullPath);
 			}
@@ -232,14 +240,65 @@ namespace MZ.WinForms
 
 		public bool CheckBoxes { get { return m_listFiles.CheckBoxes; } set { m_listFiles.CheckBoxes = value; } }
 
-		public List<FileData> GetCheckedFiles() 
+		public bool IsAllChecked() 
 		{
-			List<FileData> list = new List<FileData>();
-			foreach (ListViewItem item in m_listFiles.CheckedItems)
+			if (!m_listFiles.CheckBoxes)
+				return false;
+
+			for (int i = 1; i < _list.Count; i++)
 			{
-				list.Add(_list[item.Index].Tag as FileData);
+				if (!_list[i].Checked)
+					return false;
+			}
+			return true;	
+		}
+
+		public List<string> GetCheckedFiles() 
+		{
+			List<string> list = new List<string>();
+			if (!CheckBoxes)
+				return list;
+
+			foreach (FileData data in _list)
+			{
+				if(data.SubItems[0].Text != ParentFolderText && data.Checked)
+					list.Add(data.FileName);
 			}
 			return list;
+		}
+
+		public void SetCheckedFiles(List<string> list, bool bCheckAll, bool isChecked = true)
+		{
+			if (!CheckBoxes)
+				return;
+
+			if(bCheckAll)
+			{
+				if(_list.Count > 512)
+					this.Cursor = Cursors.WaitCursor;
+
+				_list.ForEach((item) => item.Checked = isChecked);
+				
+				this.Cursor = Cursors.Default;
+			}
+			else
+			{
+				foreach (string file in list)
+				{
+					SetCheckedFile(file, isChecked);
+				}
+			}
+			m_listFiles.Refresh();
+		}
+
+		public void SetCheckedFile(string file, bool isChecked = true)
+		{
+			if (!CheckBoxes)
+				return;
+
+			FileData data = _list.FirstOrDefault(d => d.FileName == file);
+			if (data != null)
+				data.Checked = isChecked;
 		}
 
         public FileExplorerUserControl()
@@ -252,7 +311,7 @@ namespace MZ.WinForms
 				MZ.Tools.CommonUtils.ExecuteOnUIThread(() => 
 				{
 					m_listFiles.VirtualListSize = _list.Count;
-					m_listFiles.Refresh();
+					m_listFiles.Invalidate();
 				}, this);
 			};
 		}
@@ -264,16 +323,12 @@ namespace MZ.WinForms
 
 		protected void InitListView()
         {
-            //init ListView control
-            m_listFiles.Clear();    //clear control
-			_list.Clear();
-			m_listFiles.VirtualListSize = 0;
+			m_txtPath.Text = "";
 
-									//create column header for ListView
-			m_listFiles.Columns.Add("Name", 150, System.Windows.Forms.HorizontalAlignment.Left);
-            m_listFiles.Columns.Add("Size", 75, System.Windows.Forms.HorizontalAlignment.Right);
-            m_listFiles.Columns.Add("Created", 140, System.Windows.Forms.HorizontalAlignment.Left);
-            m_listFiles.Columns.Add("Modified", 140, System.Windows.Forms.HorizontalAlignment.Left);
+			m_listFiles.VirtualListSize = 0;
+			_list.Clear();
+
+			errorProvider1.SetError(m_txtPath, "");
         }
 
 		private void m_listFiles_ItemCheck(object sender, ItemCheckEventArgs e)
@@ -283,16 +338,14 @@ namespace MZ.WinForms
 
 		private void m_listFiles_ItemChecked(object sender, ItemCheckedEventArgs e)
 		{
-			if(_list[e.Item.Index].Text == ParentFolderText)
+			//check/uncheck all - if first was checked/unchecked
+			if (_list[e.Item.Index].Text == ParentFolderText)
 			{
-				this.Cursor = Cursors.WaitCursor;
-				_list.ForEach((item) => item.Checked = e.Item.Checked);
-				m_listFiles.Refresh();
-				this.Cursor = Cursors.Default;
+				SetCheckedFiles(null, true, e.Item.Checked);
 			}
 			else
 			{
-				_list[0].Checked = false;
+				_list[0].Checked = IsAllChecked();
 				m_listFiles.Invalidate(_list[0].Bounds);
 			}
 		}
@@ -315,8 +368,7 @@ namespace MZ.WinForms
 
 			if (frm.ShowDialog(this) == DialogResult.OK)
 			{
-				m_txtPath.Text = frm.SelectedFolder;
-				PopulateFiles(m_txtPath.Text);
+				PopulateFiles(frm.SelectedFolder);
 			}
 		}
 
@@ -330,15 +382,24 @@ namespace MZ.WinForms
 				PopulateFiles(parentFolder);
 		}
 
-		public void PopulateFiles(string fullPath)
+        private void m_btnNewFolder_Click(object sender, EventArgs e)
+        {
+
+        }
+
+		public void PopulateFiles(string fullPath, bool isCheck = false)
 		{
+			if (m_txtPath.Text == fullPath)
+				return; //no change
+
 			//clear list
 			InitListView();
+
+			m_txtPath.Text = fullPath;
 
 			//check path
 			if (!string.IsNullOrEmpty(fullPath) && Directory.Exists(fullPath))
 			{
-
 				try
 				{
 					string parentFolder = Path.GetDirectoryName(fullPath);
@@ -359,7 +420,7 @@ namespace MZ.WinForms
 					
 					foreach (string folder in dirs)
 					{
-						_list.Add(new FileData(folder, true));
+						_list.Add(new FileData(folder, isCheck));
 					}
 
 					string[] stringFiles = Directory.GetFiles(fullPath);
@@ -370,7 +431,7 @@ namespace MZ.WinForms
 					//loop throught all files
 					for (int i = 0; i < files.Count; i++)
 					{
-						_list.Add(new FileData(files[i], false));
+						_list.Add(new FileData(files[i], isCheck));
 
 						if (i == pageSize) //after first page
 						{
@@ -394,15 +455,23 @@ namespace MZ.WinForms
 				catch (IOException e)
 				{
 					MessageBox.Show("Error: Drive not ready or directory does not exist."+e.Message);
+					errorProvider1.SetError(m_txtPath, e.Message);
 				}
 				catch (UnauthorizedAccessException e)
 				{
 					MessageBox.Show("Error: Drive or directory access denided." + e.Message);
+					errorProvider1.SetError(m_txtPath, e.Message);
 				}
 				catch (Exception e)
 				{
 					MessageBox.Show("Error: " + e);
+					errorProvider1.SetError(m_txtPath, e.Message);
 				}
+			}
+            else
+            {
+				MessageBox.Show("Folder does not exists: \n" + fullPath);
+				errorProvider1.SetError(m_txtPath, "Folder does not exists");
 			}
 		}
 
@@ -429,5 +498,5 @@ namespace MZ.WinForms
 			_list[e.ItemIndex].PrepareListViewItem();
 			e.Item = _list[e.ItemIndex];
 		}
-	}
+    }
 }

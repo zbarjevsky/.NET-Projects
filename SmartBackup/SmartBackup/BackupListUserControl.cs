@@ -7,12 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using SmartBackup.Settings;
+using SimpleBackup.Settings;
 using System.Media;
 using System.IO;
 using MZ.WinForms;
 
-namespace SmartBackup
+namespace SimpleBackup
 {
     public partial class BackupListUserControl : UserControl
     {
@@ -34,7 +34,7 @@ namespace SmartBackup
         private void m_btnAdd_Click(object sender, EventArgs e)
         {
             FormBrowseForFolder browse = new FormBrowseForFolder();
-            browse.SelectedFolder = SmartBackup.Properties.Settings.Default.LastSrcFolder;
+            browse.SelectedFolder = SimpleBackup.Properties.Settings.Default.LastSrcFolder;
             browse.Description = "Select Folder for backup...";
 
             if (browse.ShowDialog(this) == DialogResult.Cancel)
@@ -42,8 +42,8 @@ namespace SmartBackup
 
             BackupEntry entry = new BackupEntry();
             entry.FolderSrc = browse.SelectedFolder;
-            SmartBackup.Properties.Settings.Default.LastSrcFolder = browse.SelectedFolder;
-            SmartBackup.Properties.Settings.Default.Save();
+            SimpleBackup.Properties.Settings.Default.LastSrcFolder = browse.SelectedFolder;
+            SimpleBackup.Properties.Settings.Default.Save();
 
             FormBackupFolderProperties frm = new FormBackupFolderProperties(entry);
             if (frm.ShowDialog(this) != DialogResult.OK)
@@ -80,6 +80,9 @@ namespace SmartBackup
                 try
                 {
                     BackupEntry entry = m_listBackup.SelectedItems[0].Tag as BackupEntry;
+                    if (!Directory.Exists(entry.FolderSrc))
+                        throw new Exception("Source Folder Does Not Exists: "+entry.FolderSrc);
+
                     FormBackupFolderProperties frm = new FormBackupFolderProperties(entry);
                     DialogResult res = frm.ShowDialog(this);
                     if (res == DialogResult.Cancel)
@@ -93,7 +96,7 @@ namespace SmartBackup
                 }
                 catch (Exception err)
                 {
-                    MessageBox.Show(err.Message);
+                    MessageBox.Show(err.Message, "Open Backup Entry Properties");
                 }            
             }
         }

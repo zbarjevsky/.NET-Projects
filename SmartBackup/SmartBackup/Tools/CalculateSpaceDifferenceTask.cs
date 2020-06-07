@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace SmartBackup.Tools
+namespace SimpleBackup.Tools
 {
     public class CalculateSpaceDifferenceTask
     {

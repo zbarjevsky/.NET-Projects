@@ -1,4 +1,4 @@
-﻿namespace SmartBackup
+﻿namespace SimpleBackup
 {
     partial class FormBackupFolderProperties
     {
@@ -29,14 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet1 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormBackupFolderProperties));
-            this.m_txtSrcFolder = new System.Windows.Forms.TextBox();
+            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet1 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
             this.label1 = new System.Windows.Forms.Label();
-            this.m_btnBrowseSrc = new System.Windows.Forms.Button();
-            this.m_btnBrowseDst = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
-            this.m_txtDstFolder = new System.Windows.Forms.TextBox();
             this.m_btnOk = new System.Windows.Forms.Button();
             this.m_btnCancel = new System.Windows.Forms.Button();
             this.m_txtFileType = new System.Windows.Forms.TextBox();
@@ -62,18 +58,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
-            // m_txtSrcFolder
-            // 
-            this.m_txtSrcFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_txtSrcFolder.BackColor = System.Drawing.SystemColors.Window;
-            this.m_txtSrcFolder.Location = new System.Drawing.Point(62, 9);
-            this.m_txtSrcFolder.Name = "m_txtSrcFolder";
-            this.m_txtSrcFolder.ReadOnly = true;
-            this.m_txtSrcFolder.Size = new System.Drawing.Size(428, 20);
-            this.m_txtSrcFolder.TabIndex = 1;
-            this.m_txtSrcFolder.TextChanged += new System.EventHandler(this.ValidateInput);
-            // 
             // label1
             // 
             this.label1.AutoSize = true;
@@ -82,28 +66,6 @@
             this.label1.Size = new System.Drawing.Size(44, 13);
             this.label1.TabIndex = 0;
             this.label1.Text = "Source:";
-            // 
-            // m_btnBrowseSrc
-            // 
-            this.m_btnBrowseSrc.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnBrowseSrc.Location = new System.Drawing.Point(496, 7);
-            this.m_btnBrowseSrc.Name = "m_btnBrowseSrc";
-            this.m_btnBrowseSrc.Size = new System.Drawing.Size(34, 23);
-            this.m_btnBrowseSrc.TabIndex = 2;
-            this.m_btnBrowseSrc.Text = "...";
-            this.m_btnBrowseSrc.UseVisualStyleBackColor = true;
-            this.m_btnBrowseSrc.Click += new System.EventHandler(this.m_btnBrowseSrc_Click);
-            // 
-            // m_btnBrowseDst
-            // 
-            this.m_btnBrowseDst.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnBrowseDst.Location = new System.Drawing.Point(499, 7);
-            this.m_btnBrowseDst.Name = "m_btnBrowseDst";
-            this.m_btnBrowseDst.Size = new System.Drawing.Size(34, 23);
-            this.m_btnBrowseDst.TabIndex = 5;
-            this.m_btnBrowseDst.Text = "...";
-            this.m_btnBrowseDst.UseVisualStyleBackColor = true;
-            this.m_btnBrowseDst.Click += new System.EventHandler(this.m_btnBrowseDst_Click);
             // 
             // label2
             // 
@@ -114,25 +76,13 @@
             this.label2.TabIndex = 3;
             this.label2.Text = "Backup to:";
             // 
-            // m_txtDstFolder
-            // 
-            this.m_txtDstFolder.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_txtDstFolder.BackColor = System.Drawing.SystemColors.Window;
-            this.m_txtDstFolder.Location = new System.Drawing.Point(69, 9);
-            this.m_txtDstFolder.Name = "m_txtDstFolder";
-            this.m_txtDstFolder.ReadOnly = true;
-            this.m_txtDstFolder.Size = new System.Drawing.Size(424, 20);
-            this.m_txtDstFolder.TabIndex = 4;
-            this.m_txtDstFolder.TextChanged += new System.EventHandler(this.ValidateInput);
-            // 
             // m_btnOk
             // 
             this.m_btnOk.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnOk.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.m_btnOk.Location = new System.Drawing.Point(921, 522);
+            this.m_btnOk.Location = new System.Drawing.Point(921, 519);
             this.m_btnOk.Name = "m_btnOk";
-            this.m_btnOk.Size = new System.Drawing.Size(75, 23);
+            this.m_btnOk.Size = new System.Drawing.Size(75, 26);
             this.m_btnOk.TabIndex = 13;
             this.m_btnOk.Text = "OK";
             this.m_btnOk.UseVisualStyleBackColor = true;
@@ -142,9 +92,9 @@
             // 
             this.m_btnCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnCancel.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.m_btnCancel.Location = new System.Drawing.Point(1002, 522);
+            this.m_btnCancel.Location = new System.Drawing.Point(1002, 519);
             this.m_btnCancel.Name = "m_btnCancel";
-            this.m_btnCancel.Size = new System.Drawing.Size(75, 23);
+            this.m_btnCancel.Size = new System.Drawing.Size(75, 26);
             this.m_btnCancel.TabIndex = 14;
             this.m_btnCancel.Text = "Cancel";
             this.m_btnCancel.UseVisualStyleBackColor = true;
@@ -213,10 +163,12 @@
             this.m_txtInfo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_txtInfo.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.m_txtInfo.Location = new System.Drawing.Point(12, 527);
+            this.errorProvider1.SetIconAlignment(this.m_txtInfo, System.Windows.Forms.ErrorIconAlignment.MiddleLeft);
+            this.errorProvider1.SetIconPadding(this.m_txtInfo, 2);
+            this.m_txtInfo.Location = new System.Drawing.Point(16, 527);
             this.m_txtInfo.Name = "m_txtInfo";
             this.m_txtInfo.ReadOnly = true;
-            this.m_txtInfo.Size = new System.Drawing.Size(794, 13);
+            this.m_txtInfo.Size = new System.Drawing.Size(763, 13);
             this.m_txtInfo.TabIndex = 12;
             this.m_txtInfo.Text = "Calculating Folder Size...";
             // 
@@ -243,16 +195,12 @@
             // m_splitFolders.Panel1
             // 
             this.m_splitFolders.Panel1.Controls.Add(this.m_explorerSrc);
-            this.m_splitFolders.Panel1.Controls.Add(this.m_txtSrcFolder);
             this.m_splitFolders.Panel1.Controls.Add(this.label1);
-            this.m_splitFolders.Panel1.Controls.Add(this.m_btnBrowseSrc);
             // 
             // m_splitFolders.Panel2
             // 
             this.m_splitFolders.Panel2.Controls.Add(this.m_explorerDst);
-            this.m_splitFolders.Panel2.Controls.Add(this.m_txtDstFolder);
             this.m_splitFolders.Panel2.Controls.Add(this.label2);
-            this.m_splitFolders.Panel2.Controls.Add(this.m_btnBrowseDst);
             this.m_splitFolders.Size = new System.Drawing.Size(1084, 462);
             this.m_splitFolders.SplitterDistance = 540;
             this.m_splitFolders.TabIndex = 20;
@@ -302,9 +250,9 @@
             this.errorProvider1.SetIconPadding(this.m_btnStartBackup, 3);
             this.m_btnStartBackup.Image = ((System.Drawing.Image)(resources.GetObject("m_btnStartBackup.Image")));
             this.m_btnStartBackup.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnStartBackup.Location = new System.Drawing.Point(798, 522);
+            this.m_btnStartBackup.Location = new System.Drawing.Point(798, 519);
             this.m_btnStartBackup.Name = "m_btnStartBackup";
-            this.m_btnStartBackup.Size = new System.Drawing.Size(105, 23);
+            this.m_btnStartBackup.Size = new System.Drawing.Size(105, 26);
             this.m_btnStartBackup.TabIndex = 23;
             this.m_btnStartBackup.Text = "Start Backup...";
             this.m_btnStartBackup.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -371,13 +319,8 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.TextBox m_txtSrcFolder;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button m_btnBrowseSrc;
-        private System.Windows.Forms.Button m_btnBrowseDst;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox m_txtDstFolder;
         private System.Windows.Forms.Button m_btnOk;
         private System.Windows.Forms.Button m_btnCancel;
         private System.Windows.Forms.TextBox m_txtFileType;

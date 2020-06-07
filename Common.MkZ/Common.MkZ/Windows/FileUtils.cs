@@ -13,8 +13,10 @@ namespace MZ.Tools
     [Flags]
     public enum NotifyOptions
     {
+        None = 0,
         NotifyValueChange = 1,
-        NotifyPercentChange = 2
+        NotifyPercentChange = 2,
+        All = NotifyValueChange | NotifyPercentChange
     }
 
     public static class FileUtils
@@ -57,6 +59,7 @@ namespace MZ.Tools
                             long delta = (long)Elapsed.TotalMilliseconds - _marqueeElapsed;
                             if (delta > _marqueeTimeoutMs)
                             {
+                                _val = _ctrlProgress.MarqueeNext(_formOwner);
                                 _marqueeElapsed = 0;
                                 OnValueChange();
                             }
@@ -82,7 +85,7 @@ namespace MZ.Tools
 
             public int Percent { get { return (int)(100 * (_val - Minimum) / (Maximum - Minimum + 1)); } }
 
-            public ProgressBarStyle Style { get; set; } = ProgressBarStyle.Blocks;
+            public ProgressBarStyle Style { get { return _ctrlProgress.Style; } }
 
             public TimeSpan Elapsed { get { return _stopper.Elapsed; } }
 
@@ -98,38 +101,42 @@ namespace MZ.Tools
                 }
             }
 
-            private readonly ColorBarsProgressBar _ctrlProgress;
+            public ProgressBar ProgressBar { get { return _ctrlProgress; } }
+
+            private readonly ProgressBar _ctrlProgress;
             private readonly Form _formOwner;
 
-            public FileProgress(ColorBarsProgressBar ctrlProgress, Form owner)
+            public FileProgress(ProgressBar ctrlProgress, Form owner, NotifyOptions options = NotifyOptions.All)
             {
                 _formOwner = owner;
                 _ctrlProgress = ctrlProgress;
+                Reset("Progress: ", ctrlProgress.Maximum, ctrlProgress.Minimum, ctrlProgress.Style, options);
 
-                this.OnPercentChange = () =>
+                if (options.HasFlag(NotifyOptions.NotifyPercentChange))
                 {
-                    CommonUtils.ExecuteOnUIThread(() =>
+                    this.OnPercentChange = () =>
                     {
-                        _ctrlProgress.Style = Style;
-                        _ctrlProgress.Value = Percent;
-                        OnChange(this.ToString());
-                    }, _formOwner);
-                    Application.DoEvents();
-                };
+                        CommonUtils.ExecuteOnUIThread(() =>
+                        {
+                            _ctrlProgress.Value = (int)Value;
+                            OnChange(this.ToString());
+                        }, _formOwner);
+                        Application.DoEvents();
+                    };
+                }
 
-                this.OnValueChange = () =>
+                if (options.HasFlag(NotifyOptions.NotifyValueChange))
                 {
-                    CommonUtils.ExecuteOnUIThread(() =>
+                    this.OnValueChange = () =>
                     {
-                        _ctrlProgress.Style = Style;
-                        if (Style == ProgressBarStyle.Marquee)
-                            _ctrlProgress.MarqueeNext();
-                        else
-                            _ctrlProgress.Value = Percent;
-                        OnChange(this.ToString());
-                    }, _formOwner);
-                    Application.DoEvents();
-                };
+                        CommonUtils.ExecuteOnUIThread(() =>
+                        {
+                            _ctrlProgress.Value = (int)Value;
+                            OnChange(this.ToString());
+                        }, _formOwner);
+                        Application.DoEvents();
+                    };
+                }
             }
 
             public void ResetToBlocks(string message = "Progress: ",
@@ -157,16 +164,16 @@ namespace MZ.Tools
                 ReportOption = options;
                 Message = message;
                 Cancel = false;
-                Style = style;
 
                 CommonUtils.ExecuteOnUIThread(() =>
                 {
-                    _ctrlProgress.Maximum = 100;
-                    _ctrlProgress.Minimum = 0;
+                    _ctrlProgress.Maximum = (int)max;
+                    _ctrlProgress.Minimum = (int)min;
                     _ctrlProgress.Value = 0;
                     _ctrlProgress.Style = style;
                 }, _formOwner);
 
+                Application.DoEvents();
                 _stopper.Restart();
             }
 

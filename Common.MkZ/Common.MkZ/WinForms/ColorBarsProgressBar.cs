@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MZ.Tools;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -10,6 +11,33 @@ using System.Windows.Forms;
 
 namespace MZ.WinForms
 {
+    public static class ProgressBarExtension
+    {
+        /// <summary>
+        /// Move Marquee progress to next position
+        /// </summary>
+        public static int MarqueeNext(this ProgressBar progress, Form owner)
+        {
+            return CommonUtils.ExecuteOnUIThread(() =>
+            {
+                return progress.Value = MarqueeNext(progress.Value, progress.Maximum, progress.Minimum);
+            }, owner);
+        }
+
+        /// <summary>
+        /// Move Marquee progress to next position
+        /// </summary>
+        public static int MarqueeNext(int val, int max, int min)
+        {
+            double OnePercent = (max - min) / 100.0;
+            if (val >= max)
+                val = min;
+            else
+                val += (int)OnePercent;
+            return val;
+        }
+    }
+
     public class ColorBarsProgressBar : ProgressBar
     {
         public enum ColorsThemeType
@@ -125,18 +153,6 @@ namespace MZ.WinForms
         [Category("Behavior")]
         public double ValuePercent { get { return (100.0 * (Value - Minimum)) / (double)(Maximum - Minimum); } }
 
-        /// <summary>
-        /// Move Marquee progress to next position
-        /// </summary>
-        public void MarqueeNext()
-        {
-            double OnePercent = (Maximum - Minimum) / 100.0;
-            if (Value >= Maximum)
-                Value = Minimum;
-            else
-                Value += (int)OnePercent;
-        }
-
         #region Colors
 
         [Category(CAT)]
@@ -150,39 +166,33 @@ namespace MZ.WinForms
 
         private  int _margin = 0;
         private  int _barSize = 1;
-        private ProgressBarStyle _style = ProgressBarStyle.Blocks; 
-        public new ProgressBarStyle Style 
-        { 
-            get { return _style; } 
-            set 
-            {
-                _style = value;
-                switch (_style)
-                {
-                    case ProgressBarStyle.Blocks:
-                        _margin = 2;
-                        _barSize = 6;
-                        break;
-                    case ProgressBarStyle.Continuous:
-                        _margin = 0;
-                        _barSize = 1;
-                        break;
-                    case ProgressBarStyle.Marquee:
-                        _margin = 2;
-                        _barSize = 6;
-                        break;
-                    default:
-                        break;
-                }
-                Refresh();
-            } 
-        }
 
         public ColorBarsProgressBar()
         {
             this.DoubleBuffered = true;
             SetStyle(ControlStyles.UserPaint, true);
-            Style = Style; //update sizes
+            UpdateProgressBarStyle(Style); //update sizes
+        }
+
+        private void UpdateProgressBarStyle(ProgressBarStyle style)
+        {
+            switch (style)
+            {
+                case ProgressBarStyle.Blocks:
+                    _margin = 2;
+                    _barSize = 6;
+                    break;
+                case ProgressBarStyle.Continuous:
+                    _margin = 0;
+                    _barSize = 1;
+                    break;
+                case ProgressBarStyle.Marquee:
+                    _margin = 2;
+                    _barSize = 6;
+                    break;
+                default:
+                    break;
+            }
         }
 
         public void SetMainColor(Color c)
@@ -201,6 +211,8 @@ namespace MZ.WinForms
 
         protected override void OnPaint(PaintEventArgs pe)
         {
+            UpdateProgressBarStyle(Style); //update bar sizes
+                                           
             //clear graphics
             pe.Graphics.Clear(this.BackColor);
 
@@ -258,32 +270,22 @@ namespace MZ.WinForms
 
         private bool IsBarActive(int barPercent)
         {
-            if (ValuePercent == 0)
+            double val = ValuePercent;
+            if (val == 0)
                 return false;
 
             if (Style != ProgressBarStyle.Marquee)
-                return barPercent <= ValuePercent;
+                return barPercent <= val;
 
             const int MarqueeWidth = 25;
-            double left = ValuePercent - MarqueeWidth;
-            double right = ValuePercent;
-            if (left < 0)
-            {
-                right = 100 + left;
-                left = ValuePercent;
 
-                return barPercent < left || barPercent >= right;
-            }
-            else if(ValuePercent > 100)
+            if (val < MarqueeWidth)
             {
-                left = MarqueeWidth + ValuePercent - 100;
-                right = ValuePercent;
-
-                return barPercent < left || barPercent >= right;
+                return barPercent < val || barPercent >= (100 + val - MarqueeWidth);
             }
             else
             {
-                return barPercent > left && barPercent <= right;
+                return barPercent > (val - MarqueeWidth) && barPercent <= val;
             }
         }
     }

@@ -7,6 +7,10 @@ using System.Windows.Forms;
 
 namespace ListViewVirtualMode
 {
+	/// <summary>
+	/// https://www.codeproject.com/Articles/18115/ListView-in-VirtualMode-and-checkboxes
+	/// Must have List<ListViewItem> as virtual collection, or deriverd from ListViewItem
+	/// </summary>
 	public class ListViewVirtualWithCheckBoxes : ListView
 	{
 		public ListViewVirtualWithCheckBoxes()
@@ -16,13 +20,21 @@ namespace ListViewVirtualMode
 			// This is what you need, for drawing unchecked checkboxes
 			this.OwnerDraw = true;
 			this.DrawItem += new DrawListViewItemEventHandler(listView_DrawItem);
+            this.DrawColumnHeader += ListViewVirtualWithCheckBoxes_DrawColumnHeader;
 
 			// Redraw when checked or doubleclicked
 			this.MouseClick += new MouseEventHandler(listView_MouseClick);
 			this.MouseDoubleClick += new MouseEventHandler(listView_MouseDoubleClick);
+
+			this.DoubleBuffered = true;
 		}
 
-		private void listView_DrawItem(object sender, DrawListViewItemEventArgs e)
+        private void ListViewVirtualWithCheckBoxes_DrawColumnHeader(object sender, DrawListViewColumnHeaderEventArgs e)
+        {
+            e.DrawDefault = true;
+        }
+
+        private void listView_DrawItem(object sender, DrawListViewItemEventArgs e)
 		{
 			e.DrawDefault = true;
 			if (!CheckBoxes)
