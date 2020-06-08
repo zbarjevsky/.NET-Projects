@@ -84,6 +84,7 @@
     <Compile Include="Tests\WindowTestWpfMesageBox.xaml.cs">
       <DependentUpon>WindowTestWpfMesageBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\MouseHook.cs" />
     <Compile Include="Windows\ProcessExtensions.cs" />
     <Compile Include="WinForms\ColorBarsProgressBar.cs">
       <SubType>Component</SubType>
@@ -158,6 +159,7 @@
     <Compile Include="WPF\DraggableExtension.cs" />
     <Compile Include="WPF\GridLengthAnimation.cs" />
     <Compile Include="WPF\ItemsControlExtensions.cs" />
+    <Compile Include="WPF\NonStickMouse.cs" />
     <Compile Include="WPF\PopupInfoWindow.xaml.cs">
       <DependentUpon>PopupInfoWindow.xaml</DependentUpon>
     </Compile>
@@ -178,6 +180,7 @@
     <Compile Include="WPF\WPFMessageBox\UserControlFootSwitchIcon.xaml.cs">
       <DependentUpon>UserControlFootSwitchIcon.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WPF\WpfScreen.cs" />
     <Compile Include="WPF\WPFUtils.cs" />
     <Compile Include="WPF\WPF_Helper.cs" />
   </ItemGroup>

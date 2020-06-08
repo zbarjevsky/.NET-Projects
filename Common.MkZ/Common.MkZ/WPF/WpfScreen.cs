@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 
-namespace DesktopManagerUX.Utils
+namespace MZ.WPF.Utils
 {
     public class WpfScreen
     {
@@ -83,6 +83,11 @@ namespace DesktopManagerUX.Utils
         public string DeviceName
         {
             get { return this.screen.DeviceName; }
+        }
+
+        public override string ToString()
+        {
+            return DeviceBounds + (IsPrimary ? " (Primary)" : "");
         }
     }
 }

@@ -76,8 +76,6 @@
     <Compile Include="Utils\AeroPeek.cs" />
     <Compile Include="Utils\DataGridHelper.cs" />
     <Compile Include="Utils\Gdi32.cs" />
-    <Compile Include="Utils\SmartObservableCollection.cs" />
-    <Compile Include="Utils\WpfScreen.cs" />
     <Compile Include="ViewModel.cs" />
     <Page Include="AppChooserUserControl.xaml">
       <SubType>Designer</SubType>

@@ -46,6 +46,8 @@ namespace MZ
             {
                 listView1.Items.Add("i" + i, i);
             }
+
+            NonStickMouse.StartCorrectingMouseMoveBetweenScreens();
         }
 
         private void m_btnTestEdit_Click(object sender, EventArgs e)
