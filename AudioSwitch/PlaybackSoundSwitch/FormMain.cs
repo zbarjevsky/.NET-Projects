@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using MZ.Tools;
+using MZ.WPF;
 using PlaybackSoundSwitch.ComObjects;
 using PlaybackSoundSwitch.Device;
 using PlaybackSoundSwitch.DeviceSwitch;
@@ -69,6 +70,9 @@ namespace PlaybackSoundSwitch
         private void FormMain_Load(object sender, EventArgs e)
         {
             EnumDevices("Loaded");
+
+            //correct mouse movement if stuck between monitors
+            NonStickMouse.StartCorrectingMouseMoveBetweenScreens();
         }
 
         private void FormMain_FormClosed(object sender, FormClosedEventArgs e)
