@@ -13,6 +13,10 @@ namespace WindowsFormsApp1
 {
     public partial class ChartProgressUserControl : UserControl
     {
+        private List<double> _history = new List<double>();
+        RectangleAnnotation _annotationText = new RectangleAnnotation();
+        HorizontalLineAnnotation _annotationLine = new HorizontalLineAnnotation();
+
         public ChartProgressUserControl()
         {
             InitializeComponent();
@@ -51,29 +55,28 @@ namespace WindowsFormsApp1
             //chart1.ChartAreas[0].AxisY.StripLines.Add(stripline);
 
             //foreground line
-            HorizontalLineAnnotation ann = new HorizontalLineAnnotation();
-            ann.AxisX = chart1.ChartAreas[0].AxisX;
-            ann.AxisY = chart1.ChartAreas[0].AxisY;
-            ann.IsSizeAlwaysRelative = false;
-            ann.AnchorY = 44;
-            ann.IsInfinitive = true;
-            ann.ClipToChartArea = chart1.ChartAreas[0].Name; 
-            ann.LineColor = Color.Navy; 
-            ann.LineWidth = 2;
-            chart1.Annotations.Add(ann);
+            _annotationLine.AxisX = chart1.ChartAreas[0].AxisX;
+            _annotationLine.AxisY = chart1.ChartAreas[0].AxisY;
+            _annotationLine.IsSizeAlwaysRelative = false;
+            _annotationLine.AnchorY = 44;
+            _annotationLine.IsInfinitive = true;
+            _annotationLine.ClipToChartArea = chart1.ChartAreas[0].Name; 
+            _annotationLine.LineColor = Color.Navy; 
+            _annotationLine.LineWidth = 2;
+            chart1.Annotations.Add(_annotationLine);
 
             //annotation text
-            RectangleAnnotation annotation = new RectangleAnnotation();
+            
             //annotation.AnchorDataPoint = chart1.Series[1].Points[3];
-            annotation.Y = 40; // percent from top
-            annotation.X = 70; // percent from left
-            annotation.ShadowColor = Color.Pink;
-            annotation.Text = "Speed: 946 Kb/s";
-            annotation.ForeColor = Color.Black;
-            annotation.BackColor = Color.Transparent;
-            annotation.Font = new Font("Arial", 10, FontStyle.Bold);
-            annotation.LineWidth = 0;
-            chart1.Annotations.Add(annotation);
+            _annotationText.Y = 40; // percent from top
+            _annotationText.X = 60; // percent from left
+            _annotationText.ShadowColor = Color.Pink;
+            _annotationText.Text = "Speed: 946 Kb/s";
+            _annotationText.ForeColor = Color.Black;
+            _annotationText.BackColor = Color.Transparent;
+            _annotationText.Font = new Font("Arial", 10, FontStyle.Bold);
+            _annotationText.LineWidth = 0;
+            chart1.Annotations.Add(_annotationText);
 
             foreach (var ser in chart1.Series)
             {
@@ -89,6 +92,41 @@ namespace WindowsFormsApp1
                 {
                     chart1.Series[0].Points.AddXY(i, 100);
                     chart1.Series[1].Points.AddXY(i, 43);
+                }
+                else
+                {
+                    chart1.Series[0].Points.AddXY(i, 0);
+                    chart1.Series[1].Points.AddXY(i, 0);
+                }
+            }
+        }
+
+        public void SetHistory(List<double> values, double current, int maxX)
+        {
+            foreach (var ser in chart1.Series)
+            {
+                ser.Points.Clear();
+            }
+
+            _annotationText.Text = string.Format("Speed: {0} Kb/s", current);
+            _annotationText.Y = 40;
+
+            _annotationLine.AnchorY = current;
+
+            if (values.Count == 0)
+                return;
+
+            double maxY = 1.2 * values.Max();
+
+            chart1.ChartAreas[0].AxisX.Maximum = maxX;
+            chart1.ChartAreas[0].AxisY.Maximum = maxY;
+
+            for (int i = 0; i < maxX; i++)
+            {
+                if (i < values.Count)
+                {
+                    chart1.Series[0].Points.AddXY(i, 100);
+                    chart1.Series[1].Points.AddXY(i, values[i]);
                 }
                 else
                 {

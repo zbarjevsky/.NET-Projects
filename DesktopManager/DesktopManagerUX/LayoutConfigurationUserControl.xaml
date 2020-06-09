@@ -68,7 +68,7 @@
             </Button>
         </StackPanel>
 
-        <Grid x:Name="gridApps" Grid.Row="1">
+        <Grid x:Name="gridApps" Grid.Row="1" ShowGridLines="False">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>

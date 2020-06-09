@@ -18,7 +18,12 @@ namespace MZ
     {
         public const string TITLE = "Common MZ Testing";
 
-        public FormMainTest()
+        Random _r = new Random();
+
+        List<double> _values = new List<double>();
+
+
+    public FormMainTest()
         {
             InitializeComponent();
 
@@ -28,6 +33,11 @@ namespace MZ
             //string folder = @"C:\Dev_Mark\GitHub\zbarjevsky\.NET-Projects\CommonMZ\CommonMZ\Images\Shell32";
             //Shell32_Icons.SaveImages(folder, Shell32_Icons.SmallIconsList);
             //Shell32_Icons.SaveImages(folder, Shell32_Icons.LargeIconsList);
+
+            for (int i = 0; i < trackBar1.Maximum; i++)
+            {
+                _values.Add(_r.Next(22, 67));
+            }
         }
 
         private void FormMainTest_Load(object sender, EventArgs e)
@@ -85,6 +95,15 @@ namespace MZ
             if (trackBar1.Value <= colorBarsProgressBar2.Maximum)
                 colorBarsProgressBar2.Value = (int)trackBar1.Value;
             colorBarsProgressBar3.Value = (int)trackBar1.Value;
+
+            Random r = new Random();
+
+            List<double> values = new List<double>();
+            for (int i = 0; i < trackBar1.Value; i++)
+            {
+                values.Add(_values[i]);
+            }
+            chartProgressUserControl1.SetHistory(values, r.Next(22, 67), 100);
         }
 
         private void m_btnTestWPFMessageBox_Click(object sender, EventArgs e)

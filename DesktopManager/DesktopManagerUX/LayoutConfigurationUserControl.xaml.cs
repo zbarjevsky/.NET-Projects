@@ -79,9 +79,9 @@ namespace DesktopManagerUX
             LayoutConfiguration.SelectedMonitorInfo = cmbDisplays.SelectedItem as DisplayInfo;
         }
 
-        private AppChooserUserControl GetAppChooser(int row, int col)
+        private UIElement GetGridItem(int row, int col)
         {
-            foreach (AppChooserUserControl item in gridApps.Children)
+            foreach (UIElement item in gridApps.Children)
             {
                 if (Grid.GetRow(item) == row && Grid.GetColumn(item) == col)
                     return item;
@@ -97,15 +97,17 @@ namespace DesktopManagerUX
             {
                 for (int col = 0; col < cols; col++)
                 {
-                    AppChooserUserControl chooser = GetAppChooser(row, col);
-                    if (!chooser.IsSelected)
-                        continue;
+                    if (GetGridItem(row, col) is AppChooserUserControl chooser)
+                    {
+                        if (!chooser.IsSelected)
+                            continue;
 
-                    //AppInfo app = chooser.SelectedApp;
-                    //if (chooser.SelectedApp == null)
-                    //    continue;
+                        //AppInfo app = chooser.SelectedApp;
+                        //if (chooser.SelectedApp == null)
+                        //    continue;
 
-                    action(chooser, row, col);
+                        action(chooser, row / 2, col / 2);
+                    }
                 }
             }
             AppContext.ViewModel.ActivateMainWindow();
@@ -196,16 +198,29 @@ namespace DesktopManagerUX
 
         private static void RebuildAppsGrid(Grid grid, int rows, int cols, LayoutConfiguration config, ViewModel vm)
         {
+            //for splitters
+            int newRows = rows * 2 - 1; 
+            int newCols = cols * 2 - 1;
+
+            GridLength oneStar = new GridLength(1, GridUnitType.Star);
+            GridLength splitterSize = new GridLength(5, GridUnitType.Pixel);
+
             grid.ColumnDefinitions.Clear();
-            for (int col = 0; col < cols; col++)
+            for (int col = 0; col < newCols; col++)
             {
-                grid.ColumnDefinitions.Add(new ColumnDefinition());
+                //every odd column for splitter
+                GridLength width = (col % 2) == 0 ? oneStar : splitterSize;
+                
+                grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = width });
             }
 
             grid.RowDefinitions.Clear(); //all but first
-            for (int row = 0; row < rows; row++)
+            for (int row = 0; row < newRows; row++)
             {
-                grid.RowDefinitions.Add(new RowDefinition());
+                //every odd row for splitter
+                GridLength height = (row % 2) == 0 ? oneStar : splitterSize;
+
+                grid.RowDefinitions.Add(new RowDefinition() { Height = height });
             }
 
             foreach (UIElement ul in grid.Children)
@@ -215,19 +230,72 @@ namespace DesktopManagerUX
             }
 
             grid.Children.Clear();
-            for (int row = 0; row < rows; row++)
+            for (int row = 0; row < newRows; row++)
             {
-                for (int col = 0; col < cols; col++)
+                if ((row % 2) != 0) //create row splitter
                 {
-                    AppChooserUserControl ctrl = new AppChooserUserControl();
-                    ctrl.DisplayConfiguration = config;
-                    ctrl.Init(row, col);
+                    CreateGridSplitterH(grid, newRows, newCols, row, 0);
+                }
+                else
+                {
+                    for (int col = 0; col < newCols; col++)
+                    {
+                        if (row == 0 && (col % 2) != 0)
+                        {
+                            CreateGridSplitterV(grid, newRows, newCols, row, col);
+                        }
+                        else if((col % 2) == 0)
+                        {
+                            AppChooserUserControl ctrl = new AppChooserUserControl();
+                            ctrl.DisplayConfiguration = config;
+                            ctrl.Init(row / 2, col / 2);
 
-                    Grid.SetRow(ctrl, row);
-                    Grid.SetColumn(ctrl, col);
-                    grid.Children.Add(ctrl);
+                            Grid.SetColumn(ctrl, col);
+                            Grid.SetRow(ctrl, row);
+                            grid.Children.Add(ctrl);
+                        }
+                    }
                 }
             }
+
+        }
+
+        private static void CreateGridSplitterH(Grid grid, int rows, int cols, int row, int col)
+        {
+            GridSplitter splitter = new GridSplitter()
+            {
+                Height = 5,
+                Background = Brushes.DarkGray,
+                ResizeDirection = GridResizeDirection.Rows,
+                ResizeBehavior = GridResizeBehavior.PreviousAndNext,
+                HorizontalAlignment = HorizontalAlignment.Stretch,
+                VerticalAlignment = VerticalAlignment.Top
+            };
+
+            Grid.SetRow(splitter, row);
+            Grid.SetColumn(splitter, 0);
+            Grid.SetColumnSpan(splitter, cols);
+
+            grid.Children.Add(splitter);
+        }
+
+        private static void CreateGridSplitterV(Grid grid, int rows, int cols, int row, int col)
+        {
+            GridSplitter splitter = new GridSplitter()
+            {
+                Width = 5,
+                Background = Brushes.DarkGray,
+                ResizeDirection = GridResizeDirection.Columns,
+                ResizeBehavior = GridResizeBehavior.PreviousAndNext,
+                HorizontalAlignment = HorizontalAlignment.Left,
+                VerticalAlignment = VerticalAlignment.Stretch
+            };
+
+            Grid.SetRow(splitter, 0);
+            Grid.SetColumn(splitter, col);
+            Grid.SetRowSpan(splitter, rows);
+
+            grid.Children.Add(splitter);
         }
     }
 }
