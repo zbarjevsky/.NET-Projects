@@ -101,11 +101,11 @@ namespace DesktopManagerUX
             double width = (totalWidth * _gridSize.RelativeColumnsWidths[col]);
             double height = (totalHeight * _gridSize.RelativeRowsHeghts[row]);
 
-            double left = 0;
+            double left = SelectedMonitorInfo.Bounds.Left;
             for (int i = 0; i < col; i++) //width of all previous columns
                 left += totalWidth * _gridSize.RelativeColumnsWidths[i];
 
-            double top = 0;
+            double top = SelectedMonitorInfo.Bounds.Top;
             for (int i = 0; i < row; i++) //width of all previous rows
                 top += totalHeight * _gridSize.RelativeRowsHeghts[i];
 
@@ -159,7 +159,7 @@ namespace DesktopManagerUX
 
         public void UpdateApps(GridSizeData newGridSize)
         {
-            if (SelectedApps.Count > 0)
+            if (SelectedApps.Count == _gridSize.CellCount)
             {
                 if (newGridSize.Rows != _gridSize.Rows || newGridSize.Cols != _gridSize.Cols)
                 {
@@ -174,11 +174,35 @@ namespace DesktopManagerUX
                         for (int col = 0; col < _gridSize.Cols; col++)
                         {
                             if (row < newGridSize.Rows && col < newGridSize.Cols)
-                                list[newGridSize.Pos(row, col)] = this[row, col];
+                            {
+                                int index = newGridSize.Pos(row, col);
+                                list[index] = this[row, col];
+                            }
                         }
                     }
                     SelectedApps = list;
                 }
+            }
+            else if(SelectedApps.Count > 0)
+            {
+                List<AppInfo> list = new List<AppInfo>();
+                for (int i = 0; i < newGridSize.CellCount; i++)
+                    list.Add(AppInfo.GetEmptyAppInfo());
+
+                //smart copy
+                for (int row = 0; row < _gridSize.Rows; row++) //copy maximum possible settings
+                {
+                    for (int col = 0; col < _gridSize.Cols; col++)
+                    {
+                        if (row < newGridSize.Rows && col < newGridSize.Cols)
+                        {
+                            int index = newGridSize.Pos(row, col);
+                            if(index < SelectedApps.Count)
+                                list[index] = SelectedApps[index];
+                        }
+                    }
+                }
+                SelectedApps = list;
             }
 
             _gridSize = newGridSize;
@@ -196,6 +220,8 @@ namespace DesktopManagerUX
 
             if (SelectedApps.Count == 0)
                 Initialize(_name);
+            else if (SelectedApps.Count != GridSize.CellCount)
+                UpdateApps(GridSize);
 
             OnPropertyChanged(nameof(Name));
         }
