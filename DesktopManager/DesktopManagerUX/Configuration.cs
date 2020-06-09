@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Serialization;
+using System.Windows.Desktop;
 
 namespace DesktopManagerUX
 {
@@ -90,17 +91,38 @@ namespace DesktopManagerUX
         public DisplayInfo SelectedMonitorInfo { get { return _displayInfo; } set { _displayInfo = value; OnPropertyChanged(nameof(DisplayName)); } }
 
         private GridSizeData _gridSize = new GridSizeData() { Rows = 2, Cols = 2 };
-
         public GridSizeData GridSize { get { return _gridSize; } set { _gridSize = value; } }
 
-        public Rect CellSize
+        public Rect GetCellBounds(int row, int col)
         {
-            get
-            {
-                double width = (SelectedMonitorInfo.Bounds.Width / _gridSize.Cols);
-                double height = (SelectedMonitorInfo.Bounds.Height / _gridSize.Rows);
-                return new Rect(0, 0, width, height);
-            }
+            double totalWidth = SelectedMonitorInfo.Bounds.Width;
+            double totalHeight = SelectedMonitorInfo.Bounds.Height;
+
+            double width = (totalWidth * _gridSize.RelativeColumnsWidths[col]);
+            double height = (totalHeight * _gridSize.RelativeRowsHeghts[row]);
+
+            double left = 0;
+            for (int i = 0; i < col; i++) //width of all previous columns
+                left += totalWidth * _gridSize.RelativeColumnsWidths[i];
+
+            double top = 0;
+            for (int i = 0; i < row; i++) //width of all previous rows
+                top += totalHeight * _gridSize.RelativeRowsHeghts[i];
+
+            return new Rect(left, top, width, height);
+        }
+
+        public Rect GetCorrectedCellBounds(int row, int col, IntPtr hWnd)
+        {
+            User32.RECT border = DesktopWindowManager.GetWindowBorderSize(hWnd);
+
+            Rect bounds = GetCellBounds(row, col);
+
+            bounds.Offset(-border.left, -border.top);
+            bounds.Width += border.left + border.right;
+            bounds.Height += border.top + border.bottom;
+
+            return bounds;
         }
 
         //should be before SelectedGridSize - to avoid doubling when loading from XML

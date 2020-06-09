@@ -68,7 +68,7 @@
             </Button>
         </StackPanel>
 
-        <Grid x:Name="gridApps" Grid.Row="1" ShowGridLines="False">
+        <Grid x:Name="gridApps" Grid.Row="1" ShowGridLines="False" PreviewMouseLeftButtonUp="gridApps_MouseLeftButtonUp">
             <Grid.RowDefinitions>
                 <RowDefinition/>
                 <RowDefinition/>
@@ -82,5 +82,7 @@
             <local:AppChooserUserControl x:Name="app1x0" Grid.Row="1" Grid.Column="0"/>
             <local:AppChooserUserControl x:Name="app1x1" Grid.Row="1" Grid.Column="1"/>
         </Grid>
+
+        <Canvas x:Name="_canvas"  Grid.Row="1" SizeChanged="_canvas_SizeChanged"/>
     </Grid>
 </UserControl>

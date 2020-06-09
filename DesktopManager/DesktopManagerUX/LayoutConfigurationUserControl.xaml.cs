@@ -115,29 +115,20 @@ namespace DesktopManagerUX
 
         private void Apply_Click(object sender, RoutedEventArgs e)
         {
-            Apply_ActionOnAll((chooser, row, col) => Apply(chooser, row, col));
+            Apply_ActionOnAll((chooser, row, col) => ApplyLayout(chooser, row, col));
         }
 
-        private void Apply(AppChooserUserControl chooser, int row, int col)
+        private void ApplyLayout(AppChooserUserControl chooser, int row, int col)
         {
             if (chooser.SelectedApp == null || !chooser.SelectedApp.IsActive)
                 return;
 
             LayoutConfiguration layout = this.LayoutConfiguration; // AppContext.Configuration.Displays[0];
+            layout.GridSize.UpdateCellSizes(gridApps);
 
-            double width = layout.CellSize.Width;
-            double height = layout.CellSize.Height;
-            double left = layout.SelectedMonitorInfo.Bounds.Left + col * width;
-            double top = layout.SelectedMonitorInfo.Bounds.Top + row * height;
+            Rect bounds = layout.GetCorrectedCellBounds(row, col, chooser.SelectedApp.HWND);
 
-            User32.RECT border = DesktopWindowManager.GetWindowBorderSize(chooser.SelectedApp.HWND);
-
-            left -= border.left;
-            top -= border.top;
-            width += border.left + border.right;
-            height += border.top + border.bottom;
-
-            Logic.MoveWindow(chooser.SelectedApp.HWND, left, top, width, height);
+            Logic.MoveWindow(chooser.SelectedApp.HWND, bounds.Left, bounds.Top, bounds.Width, bounds.Height);
         }
 
         private void btnRefresh_Click(object sender, RoutedEventArgs e)
@@ -205,11 +196,14 @@ namespace DesktopManagerUX
             GridLength oneStar = new GridLength(1, GridUnitType.Star);
             GridLength splitterSize = new GridLength(5, GridUnitType.Pixel);
 
+            double[] widths = config.GridSize.RelativeColumnsWidths;
+
             grid.ColumnDefinitions.Clear();
             for (int col = 0; col < newCols; col++)
             {
                 //every odd column for splitter
-                GridLength width = (col % 2) == 0 ? oneStar : splitterSize;
+                GridLength width = (col % 2) != 0 ? splitterSize :
+                    new GridLength(config.GridSize.RelativeColumnsWidths[col/2], GridUnitType.Star);
                 
                 grid.ColumnDefinitions.Add(new ColumnDefinition() { Width = width });
             }
@@ -218,7 +212,8 @@ namespace DesktopManagerUX
             for (int row = 0; row < newRows; row++)
             {
                 //every odd row for splitter
-                GridLength height = (row % 2) == 0 ? oneStar : splitterSize;
+                GridLength height = (row % 2) != 0 ? splitterSize :
+                    new GridLength(config.GridSize.RelativeRowsHeghts[row/2], GridUnitType.Star);
 
                 grid.RowDefinitions.Add(new RowDefinition() { Height = height });
             }
@@ -265,7 +260,7 @@ namespace DesktopManagerUX
             GridSplitter splitter = new GridSplitter()
             {
                 Height = 5,
-                Background = Brushes.DarkGray,
+                Background = Brushes.Gainsboro,
                 ResizeDirection = GridResizeDirection.Rows,
                 ResizeBehavior = GridResizeBehavior.PreviousAndNext,
                 HorizontalAlignment = HorizontalAlignment.Stretch,
@@ -284,7 +279,7 @@ namespace DesktopManagerUX
             GridSplitter splitter = new GridSplitter()
             {
                 Width = 5,
-                Background = Brushes.DarkGray,
+                Background = Brushes.Gainsboro,
                 ResizeDirection = GridResizeDirection.Columns,
                 ResizeBehavior = GridResizeBehavior.PreviousAndNext,
                 HorizontalAlignment = HorizontalAlignment.Left,
@@ -296,6 +291,54 @@ namespace DesktopManagerUX
             Grid.SetRowSpan(splitter, rows);
 
             grid.Children.Add(splitter);
+        }
+
+        private void gridApps_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        {
+            LayoutConfiguration.GridSize.UpdateCellSizes(gridApps);
+        }
+
+        private void _canvas_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            _canvas.Children.Clear();
+
+            int rows = LayoutConfiguration.GridSize.Rows * 2;
+            int cols = LayoutConfiguration.GridSize.Cols * 2;
+
+            Thickness thickness = new Thickness(3);
+            double line_distanceX = _canvas.ActualWidth / cols;
+            double line_distanceY = _canvas.ActualHeight / rows;
+
+            //vertical lines
+            for (int i = 1; i < cols; i++)
+            {
+                Line lineV = new Line();
+                lineV.Opacity = 0.6;
+                lineV.Stroke = Brushes.Gray;
+                lineV.StrokeThickness = 2;
+                lineV.StrokeDashArray = new DoubleCollection(new double[] { 1.0 });
+                lineV.X1 = i * line_distanceX;
+                lineV.X2 = lineV.X1;
+                lineV.Y1 = 0;
+                lineV.Y2 = _canvas.ActualHeight;
+
+                _canvas.Children.Add(lineV);
+            }
+
+            for (int i = 1; i < rows; i++)
+            {
+                Line lineH = new Line();
+                lineH.Opacity = 0.6;
+                lineH.Stroke = Brushes.Gray;
+                lineH.StrokeThickness = 2;
+                lineH.StrokeDashArray = new DoubleCollection(new double [] {1.0});
+                lineH.X1 = 0;
+                lineH.X2 = _canvas.ActualWidth;
+                lineH.Y1 = i * line_distanceY;
+                lineH.Y2 = lineH.Y1;
+
+                _canvas.Children.Add(lineH);
+            }
         }
     }
 }

@@ -130,21 +130,28 @@ namespace DesktopManagerUX.Controls
             int max_col = 0;
             int min_row = 3;
             int min_col = 3;
-            for (int i = 0; i < list.Count; i++)
+            if (list.Count > 1)
             {
-                GridSelection sel = list[i].Item as GridSelection;
-                int col = sel.GetRowCol(list[i].Column.SortMemberPath);
-                int row = sel.Row;
+                for (int i = 0; i < list.Count; i++)
+                {
+                    GridSelection sel = list[i].Item as GridSelection;
+                    int col = sel.GetRowCol(list[i].Column.SortMemberPath);
+                    int row = sel.Row;
 
-                if (row > max_row) max_row = row;
-                if (row < min_row) min_row = row;
-                if (col > max_col) max_col = col;
-                if (col < min_col) min_col = col;
+                    if (row > max_row) max_row = row;
+                    if (row < min_row) min_row = row;
+                    if (col > max_col) max_col = col;
+                    if (col < min_col) min_col = col;
 
-                Debug.WriteLine(list[i].Column.SortMemberPath + " === " + list[i].Item);
+                    Debug.WriteLine(list[i].Column.SortMemberPath + " === " + list[i].Item);
+                }
+
+                SelectedSize = new GridSizeData((max_row - min_row + 1), (max_col - min_col + 1));
             }
-
-            SelectedSize = new GridSizeData((max_row - min_row + 1), (max_col - min_col + 1));
+            else
+            {
+                SelectedSize = new GridSizeData(1, 1);
+            }
 
             Debug.WriteLine("c" + min_col + ", r" + min_row + ", == c" + max_col + ", r" + max_row);
             Debug.WriteLine(SelectedSizeText);

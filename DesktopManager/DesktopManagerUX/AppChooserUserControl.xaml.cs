@@ -67,7 +67,7 @@ namespace DesktopManagerUX
 
             RestoreSelected(savedInfo);
 
-            borderMain.BorderThickness = ThicknessFromRowCol(row, col);
+            borderMain.BorderThickness = new Thickness(2); //ThicknessFromRowCol(row, col);
 
             //save
             DisplayConfiguration[row, col] = cmbApps.SelectedItem as AppInfo;
@@ -90,9 +90,11 @@ namespace DesktopManagerUX
             txtInfo.Content = "<<DISPOSED>>";
         }
 
-        public void UpdateInfo()
+        public void UpdateInfo(int row, int col)
         {
-            txtInfo.Content = "Expected: "+ DisplayConfiguration.CellSize.Width + "x" + DisplayConfiguration.CellSize.Height + ", ";
+            Rect bounds = DisplayConfiguration.GetCorrectedCellBounds(row, col, SelectedApp.HWND);
+
+            txtInfo.Content = "Expected: "+ bounds.Width.ToString("0") + "x" + bounds.Height.ToString("0") + ", ";
             if (imagePreview.Source != null)
                 txtInfo.Content += "Snapshot Size: " + imagePreview.Source.Width + "x" + imagePreview.Source.Height;
             else
@@ -155,7 +157,7 @@ namespace DesktopManagerUX
                     if (bRestoreBeforeSnapshot || !User32.IsMinimized(SelectedApp.HWND))
                     {
                         imagePreview.Source = Logic.CaptureApplication(SelectedApp.HWND, bRestoreBeforeSnapshot);
-                        UpdateInfo();
+                        UpdateInfo(Row, Col);
                     }
                     else if (imagePreview == null) //no snapshot
                     {

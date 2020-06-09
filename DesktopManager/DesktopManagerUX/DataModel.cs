@@ -5,12 +5,15 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Data;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
@@ -21,7 +24,7 @@ namespace DesktopManagerUX
     {
     }
 
-    public enum GridSizes : int
+    public enum eGridSizes : int
     {
         Grid_1x1 = 1,
         Grid_1x2 = 2,
@@ -135,7 +138,7 @@ namespace DesktopManagerUX
             }
         }
 
-        private Process GetProcessForWindow(IntPtr hWnd)
+        private static Process GetProcessForWindow(IntPtr hWnd)
         {
             uint pid;
             User32.GetWindowThreadProcessId(hWnd, out pid);
@@ -237,14 +240,21 @@ namespace DesktopManagerUX
     public class GridSizeData
     {
         [XmlAttribute]
-        public int Rows { get; set; }
-        [XmlAttribute]
-        public int Cols { get; set; }
+        private int _rows = 2;
+        public int Rows { get { return _rows; } set { _rows = value; ResetRowsHeight(); } }
 
-        public GridSizeData()
+        [XmlAttribute]
+        private int _cols = 2;
+        public int Cols { get { return _cols; } set { _cols = value; ResetColsWidth(); } }
+
+        public double[] RelativeColumnsWidths { get; set; }
+        public double[] RelativeRowsHeghts { get; set; }
+
+        [XmlIgnore]
+        public int CellCount { get { return Rows * Cols; } }
+
+        public GridSizeData() : this(2, 2)
         {
-            Rows = 2;
-            Cols = 2;
         }
 
         public GridSizeData(int rows, int cols)
@@ -253,12 +263,23 @@ namespace DesktopManagerUX
             Cols = cols;
         }
 
-        [XmlIgnore]
-        public int CellCount { get { return Rows * Cols; } }
-
         public int Pos(int row, int col)
         {
             return row * this.Cols + col;
+        }
+
+        private void ResetRowsHeight()
+        {
+            RelativeRowsHeghts = new double[Rows];
+            for (int row = 0; row < Rows; row++)
+                RelativeRowsHeghts[row] = 1.0 / Rows;
+        }
+
+        private void ResetColsWidth()
+        {
+            RelativeColumnsWidths = new double[Cols];
+            for (int col = 0; col < Cols; col++)
+                RelativeColumnsWidths[col] = 1.0 / Cols;
         }
 
         public static GridSizeData Parse(string txtGridSize)
@@ -273,9 +294,38 @@ namespace DesktopManagerUX
             return Rows + "x" + Cols;
         }
 
-        public static ObservableCollection<string> GetAllSizes()
+        public static ObservableCollection<string> GetAllSizesEnumNames()
         {
-            return new ObservableCollection<string>(Enum.GetNames(typeof(GridSizes)));
+            return new ObservableCollection<string>(Enum.GetNames(typeof(eGridSizes)));
+        }
+
+        public void UpdateCellSizes(Grid gridApps)
+        {
+            double totalWidth = 0;
+            for (int col = 0; col < gridApps.ColumnDefinitions.Count; col++)
+            {
+                double width = gridApps.ColumnDefinitions[col].ActualWidth;
+                if ((col % 2) == 0) //apps col
+                {
+                    totalWidth += width;
+                    RelativeColumnsWidths[col / 2] = width;
+                }
+            }
+            for (int i = 0; i < Cols; i++)
+                RelativeColumnsWidths[i] /= totalWidth;
+
+            double totalHeight = 0;
+            for (int row = 0; row < gridApps.RowDefinitions.Count; row++)
+            {
+                double height = gridApps.RowDefinitions[row].ActualHeight;
+                if ((row % 2) == 0) //apps row
+                {
+                    totalHeight += height;
+                    RelativeRowsHeghts[row / 2] = height;
+                }
+            }
+            for (int i = 0; i < Rows; i++)
+                RelativeRowsHeghts[i] /= totalHeight;
         }
     }
 
