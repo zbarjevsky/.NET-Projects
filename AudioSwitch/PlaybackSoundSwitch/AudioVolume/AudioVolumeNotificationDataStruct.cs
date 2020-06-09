@@ -21,11 +21,13 @@
 */
 
 using System;
+using System.Runtime.InteropServices;
 // ReSharper disable InconsistentNaming
 
 namespace PlaybackSoundSwitch.Audio
 {
-    internal struct AudioVolumeNotificationDataStruct
+    [StructLayout(LayoutKind.Sequential)]
+    public struct AudioVolumeNotificationDataStruct
     {
         public Guid guidEventContext;
         public bool bMuted;

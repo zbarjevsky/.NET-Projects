@@ -63,7 +63,7 @@ namespace PlaybackSoundSwitch
                 {
                     string id;
                     device.GetId(out id);
-                    MZ.Tools.Trace.Debug("Can't get name of device {0}", id);
+                    MZ.Tools.Trace.Debug("Can't get name of device {0}, Error: {1}", id, e);
                     //throw;
                 }
             }

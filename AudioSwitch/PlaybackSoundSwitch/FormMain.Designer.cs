@@ -29,26 +29,28 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet1 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
             MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet2 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.m_status1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.m_status2 = new System.Windows.Forms.ToolStripStatusLabel();
             this.m_pnlMain = new System.Windows.Forms.Panel();
             this.m_splitMain = new System.Windows.Forms.SplitContainer();
             this.m_chkTopMost = new System.Windows.Forms.CheckBox();
-            this.m_volumeControlSpk = new PlaybackSoundSwitch.VolumeUserControl();
-            this.m_volumeControlMic = new PlaybackSoundSwitch.VolumeUserControl();
             this.m_tabDevices = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.m_DeviceListPlayback = new PlaybackSoundSwitch.MediaDeviceListUserControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.m_DeviceListRecording = new PlaybackSoundSwitch.MediaDeviceListUserControl();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
             this.m_imageListTabs = new System.Windows.Forms.ImageList(this.components);
             this.m_txtLog = new System.Windows.Forms.RichTextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.m_chkCorrectMouseMove = new System.Windows.Forms.CheckBox();
+            this.m_volumeControlSpk = new PlaybackSoundSwitch.VolumeUserControl();
+            this.m_volumeControlMic = new PlaybackSoundSwitch.VolumeUserControl();
+            this.m_DeviceListPlayback = new PlaybackSoundSwitch.MediaDeviceListUserControl();
+            this.m_DeviceListRecording = new PlaybackSoundSwitch.MediaDeviceListUserControl();
             this.statusStrip1.SuspendLayout();
             this.m_pnlMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitMain)).BeginInit();
@@ -58,6 +60,7 @@
             this.m_tabDevices.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip1
@@ -105,6 +108,7 @@
             // 
             // m_splitMain.Panel1
             // 
+            this.m_splitMain.Panel1.Controls.Add(this.panel1);
             this.m_splitMain.Panel1.Controls.Add(this.m_chkTopMost);
             this.m_splitMain.Panel1.Controls.Add(this.m_volumeControlSpk);
             this.m_splitMain.Panel1.Controls.Add(this.m_volumeControlMic);
@@ -131,6 +135,92 @@
             this.m_chkTopMost.UseVisualStyleBackColor = true;
             this.m_chkTopMost.CheckedChanged += new System.EventHandler(this.m_chkTopMost_CheckedChanged);
             // 
+            // m_tabDevices
+            // 
+            this.m_tabDevices.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_tabDevices.Controls.Add(this.tabPage1);
+            this.m_tabDevices.Controls.Add(this.tabPage2);
+            this.m_tabDevices.Controls.Add(this.tabPage3);
+            this.m_tabDevices.ImageList = this.m_imageListTabs;
+            this.m_tabDevices.Location = new System.Drawing.Point(2, 3);
+            this.m_tabDevices.Name = "m_tabDevices";
+            this.m_tabDevices.SelectedIndex = 0;
+            this.m_tabDevices.Size = new System.Drawing.Size(592, 335);
+            this.m_tabDevices.TabIndex = 8;
+            // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.m_DeviceListPlayback);
+            this.tabPage1.ImageIndex = 1;
+            this.tabPage1.Location = new System.Drawing.Point(4, 23);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(584, 308);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Sound Playback Devices";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // tabPage2
+            // 
+            this.tabPage2.Controls.Add(this.m_DeviceListRecording);
+            this.tabPage2.ImageIndex = 0;
+            this.tabPage2.Location = new System.Drawing.Point(4, 23);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(584, 308);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Sound Recording Devices";
+            this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Location = new System.Drawing.Point(4, 23);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Size = new System.Drawing.Size(584, 308);
+            this.tabPage3.TabIndex = 2;
+            this.tabPage3.Text = "Video Capturing";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // m_imageListTabs
+            // 
+            this.m_imageListTabs.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_imageListTabs.ImageStream")));
+            this.m_imageListTabs.TransparentColor = System.Drawing.Color.Transparent;
+            this.m_imageListTabs.Images.SetKeyName(0, "Mic1.png");
+            this.m_imageListTabs.Images.SetKeyName(1, "Spk1.png");
+            // 
+            // m_txtLog
+            // 
+            this.m_txtLog.BackColor = System.Drawing.SystemColors.Info;
+            this.m_txtLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.m_txtLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_txtLog.Location = new System.Drawing.Point(0, 0);
+            this.m_txtLog.Name = "m_txtLog";
+            this.m_txtLog.Size = new System.Drawing.Size(741, 32);
+            this.m_txtLog.TabIndex = 0;
+            this.m_txtLog.Text = "";
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.m_chkCorrectMouseMove);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Location = new System.Drawing.Point(0, 344);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(741, 27);
+            this.panel1.TabIndex = 12;
+            // 
+            // m_chkCorrectMouseMove
+            // 
+            this.m_chkCorrectMouseMove.AutoSize = true;
+            this.m_chkCorrectMouseMove.Location = new System.Drawing.Point(12, 4);
+            this.m_chkCorrectMouseMove.Name = "m_chkCorrectMouseMove";
+            this.m_chkCorrectMouseMove.Size = new System.Drawing.Size(218, 17);
+            this.m_chkCorrectMouseMove.TabIndex = 0;
+            this.m_chkCorrectMouseMove.Text = "Correct Mouse if stuck between Displays";
+            this.m_chkCorrectMouseMove.UseVisualStyleBackColor = true;
+            this.m_chkCorrectMouseMove.CheckedChanged += new System.EventHandler(this.m_chkCorrectMouseMove_CheckedChanged);
+            // 
             // m_volumeControlSpk
             // 
             this.m_volumeControlSpk.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -150,7 +240,7 @@
             this.m_volumeControlSpk.MaximumSize = new System.Drawing.Size(62, 600);
             this.m_volumeControlSpk.MinimumSize = new System.Drawing.Size(58, 200);
             this.m_volumeControlSpk.Name = "m_volumeControlSpk";
-            this.m_volumeControlSpk.Size = new System.Drawing.Size(62, 350);
+            this.m_volumeControlSpk.Size = new System.Drawing.Size(62, 319);
             this.m_volumeControlSpk.TabIndex = 10;
             this.m_volumeControlSpk.Title = "Spk";
             this.m_volumeControlSpk.Volume = 0;
@@ -174,37 +264,10 @@
             this.m_volumeControlMic.MaximumSize = new System.Drawing.Size(62, 600);
             this.m_volumeControlMic.MinimumSize = new System.Drawing.Size(58, 200);
             this.m_volumeControlMic.Name = "m_volumeControlMic";
-            this.m_volumeControlMic.Size = new System.Drawing.Size(62, 350);
+            this.m_volumeControlMic.Size = new System.Drawing.Size(62, 319);
             this.m_volumeControlMic.TabIndex = 9;
             this.m_volumeControlMic.Title = "Mic";
             this.m_volumeControlMic.Volume = 0;
-            // 
-            // m_tabDevices
-            // 
-            this.m_tabDevices.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_tabDevices.Controls.Add(this.tabPage1);
-            this.m_tabDevices.Controls.Add(this.tabPage2);
-            this.m_tabDevices.Controls.Add(this.tabPage3);
-            this.m_tabDevices.ImageList = this.m_imageListTabs;
-            this.m_tabDevices.Location = new System.Drawing.Point(2, 3);
-            this.m_tabDevices.Name = "m_tabDevices";
-            this.m_tabDevices.SelectedIndex = 0;
-            this.m_tabDevices.Size = new System.Drawing.Size(592, 365);
-            this.m_tabDevices.TabIndex = 8;
-            // 
-            // tabPage1
-            // 
-            this.tabPage1.Controls.Add(this.m_DeviceListPlayback);
-            this.tabPage1.ImageIndex = 1;
-            this.tabPage1.Location = new System.Drawing.Point(4, 23);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(584, 338);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Sound Playback Devices";
-            this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // m_DeviceListPlayback
             // 
@@ -212,20 +275,8 @@
             this.m_DeviceListPlayback.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_DeviceListPlayback.Location = new System.Drawing.Point(3, 3);
             this.m_DeviceListPlayback.Name = "m_DeviceListPlayback";
-            this.m_DeviceListPlayback.Size = new System.Drawing.Size(578, 332);
+            this.m_DeviceListPlayback.Size = new System.Drawing.Size(578, 302);
             this.m_DeviceListPlayback.TabIndex = 0;
-            // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.m_DeviceListRecording);
-            this.tabPage2.ImageIndex = 0;
-            this.tabPage2.Location = new System.Drawing.Point(4, 23);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(584, 338);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Sound Recording Devices";
-            this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // m_DeviceListRecording
             // 
@@ -233,35 +284,8 @@
             this.m_DeviceListRecording.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_DeviceListRecording.Location = new System.Drawing.Point(3, 3);
             this.m_DeviceListRecording.Name = "m_DeviceListRecording";
-            this.m_DeviceListRecording.Size = new System.Drawing.Size(578, 332);
+            this.m_DeviceListRecording.Size = new System.Drawing.Size(578, 302);
             this.m_DeviceListRecording.TabIndex = 0;
-            // 
-            // m_imageListTabs
-            // 
-            this.m_imageListTabs.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_imageListTabs.ImageStream")));
-            this.m_imageListTabs.TransparentColor = System.Drawing.Color.Transparent;
-            this.m_imageListTabs.Images.SetKeyName(0, "Mic1.png");
-            this.m_imageListTabs.Images.SetKeyName(1, "Spk1.png");
-            // 
-            // m_txtLog
-            // 
-            this.m_txtLog.BackColor = System.Drawing.SystemColors.Info;
-            this.m_txtLog.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.m_txtLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_txtLog.Location = new System.Drawing.Point(0, 0);
-            this.m_txtLog.Name = "m_txtLog";
-            this.m_txtLog.Size = new System.Drawing.Size(741, 32);
-            this.m_txtLog.TabIndex = 0;
-            this.m_txtLog.Text = "";
-            // 
-            // tabPage3
-            // 
-            this.tabPage3.Location = new System.Drawing.Point(4, 23);
-            this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(584, 338);
-            this.tabPage3.TabIndex = 2;
-            this.tabPage3.Text = "Video Capturing";
-            this.tabPage3.UseVisualStyleBackColor = true;
             // 
             // FormMain
             // 
@@ -289,6 +313,8 @@
             this.m_tabDevices.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage2.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -312,6 +338,8 @@
         private VolumeUserControl m_volumeControlMic;
         private System.Windows.Forms.CheckBox m_chkTopMost;
         private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.CheckBox m_chkCorrectMouseMove;
     }
 }
 

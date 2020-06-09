@@ -94,6 +94,7 @@ namespace PlaybackSoundSwitch.Device
             catch (Exception e)
             {
                 //Log.Error(e, "Can't extract icon from {path}", path);
+                MZ.Tools.Trace.Debug("Can't extract icon from {0}, Error: {1}", path, e);
                 switch (dataFlow)
                 {
                     case EDataFlow.Capture:

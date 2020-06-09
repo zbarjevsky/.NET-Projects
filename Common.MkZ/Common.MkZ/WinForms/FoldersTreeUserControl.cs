@@ -190,8 +190,8 @@ namespace MZ.WinForms
 			}
 			catch (Exception err)
 			{
-				return (drive.Name + "<" + err.Message + ">");
 				System.Diagnostics.Debug.WriteLine("GetDriveList error: (" + drive.Name + ") - " + err.Message);
+				return (drive.Name + "<" + err.Message + ">");
 			}
 		}
 

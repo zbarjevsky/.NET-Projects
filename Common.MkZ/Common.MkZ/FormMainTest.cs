@@ -47,7 +47,7 @@ namespace MZ
                 listView1.Items.Add("i" + i, i);
             }
 
-            NonStickMouse.StartCorrectingMouseMoveBetweenScreens();
+            NonStickMouse.EnableMouseCorrection(true);
         }
 
         private void m_btnTestEdit_Click(object sender, EventArgs e)

@@ -24,6 +24,7 @@ namespace MZ.WPF
         static bool _lBtnDown, _rBtnDown;
         static BorderBetweenDisplays[] _borders = null;
         static int _prevX = -1;
+        static bool _enableCorrection = true;
 
         static bool IsButtonDown {  get { return _lBtnDown || _rBtnDown; } }
 
@@ -94,9 +95,8 @@ namespace MZ.WPF
             int delta = pt.X - _prevX;
             _prevX = pt.X;
 
-            if (IsButtonDown || _screens.Count == 1)
-                return; //ignore dragging or if one sceen only
-
+            if (IsButtonDown || _screens.Count == 1 || !_enableCorrection)
+                return; //ignore dragging or if one sceen only or if not enabled
 
             int currentScreenIndex = ScreenFromPoint(pt);
             if (currentScreenIndex < 0) //point out of screen
@@ -144,9 +144,13 @@ namespace MZ.WPF
             return -1;
         }
 
-        public static void StartCorrectingMouseMoveBetweenScreens()
+        /// <summary>
+        /// correct mouse movement if stuck between monitors
+        /// </summary>
+        /// <param name="enable"></param>
+        public static void EnableMouseCorrection(bool enable)
         {
-
+            _enableCorrection = enable;
         }
     }
 }
