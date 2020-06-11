@@ -83,7 +83,7 @@ namespace DesktopManagerUX
             { 
                 if (SelectedMonitorInfo == null) 
                     return ""; 
-                return "Monitor " + (SelectedMonitorInfo.Index+1) + (SelectedMonitorInfo.IsPrimary ? " (Primary)" : "");
+                return "Monitor [" + (SelectedMonitorInfo.Index+1) + (SelectedMonitorInfo.IsPrimary ? "] (Primary)" : "]");
             } 
         }
 

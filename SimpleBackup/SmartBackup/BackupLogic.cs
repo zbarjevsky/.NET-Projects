@@ -286,21 +286,32 @@ namespace SimpleBackup
 
         }
 
-        public void Load(BackupPriority priority, FileUtils.FileProgress progress = null, Action onFinished = null)
+        public void Load(BackupPriority priority, FileUtils.FileProgress progress, Action<string> onFinished = null)
         {
             Clear();
             Task.Factory.StartNew(() => 
             {
-                foreach (BackupEntry entry in _group.BackupList)
+                string error = "";
+                try
                 {
-                    if (priority.HasFlag(entry.Priority))
+                    foreach (BackupEntry entry in _group.BackupList)
                     {
-                        FileList.AddRange(CollectFiles(entry, progress));
+                        if (priority.HasFlag(entry.Priority))
+                        {
+                            FileList.AddRange(CollectFiles(entry, progress));
+                        }
+                        
+                        if (progress != null && progress.Cancel)
+                            throw new Exception("Operation Aborted");
                     }
+                }
+                catch (Exception err)
+                {
+                    error = err.Message;
                 }
 
                 if (onFinished != null)
-                    CommonUtils.ExecuteOnUIThread(onFinished, progress.ProgressBar);
+                    onFinished(error);
             });
         }
 

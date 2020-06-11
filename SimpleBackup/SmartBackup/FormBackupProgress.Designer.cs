@@ -30,14 +30,14 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormBackupProgress));
-            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet2 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
+            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet1 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
             this.m_listFiles = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
-            this.m_txtStatus = new System.Windows.Forms.TextBox();
+            this.m_txtInfoBottom = new System.Windows.Forms.TextBox();
             this.m_btnClose = new System.Windows.Forms.Button();
             this.m_btnContinue = new System.Windows.Forms.Button();
             this.m_cmbOption = new System.Windows.Forms.ComboBox();
@@ -45,13 +45,22 @@
             this.m_btnPause = new System.Windows.Forms.Button();
             this.m_btnStart = new System.Windows.Forms.Button();
             this.m_btnAbort = new System.Windows.Forms.Button();
-            this.m_txtInfo = new System.Windows.Forms.TextBox();
+            this.m_txtInfoTop = new System.Windows.Forms.TextBox();
             this.m_cmbViewFilter = new System.Windows.Forms.ComboBox();
-            this.m_progressFile = new MZ.WinForms.ColorBarsProgressBar();
-            this.m_progressBarMain = new MZ.Tools.Windows7ProgressBar();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.m_lblStatusProgress = new System.Windows.Forms.Label();
+            this.m_btnPrepare = new System.Windows.Forms.Button();
+            this.m_spliMain = new System.Windows.Forms.SplitContainer();
+            this.m_pnlStatus = new System.Windows.Forms.Panel();
+            this.m_progressFile = new MZ.WinForms.ColorBarsProgressBar();
+            this.m_progressBarMain = new MZ.Tools.Windows7ProgressBar();
+            this.chartProgressUserControl1 = new WindowsFormsApp1.ChartProgressUserControl();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.m_spliMain)).BeginInit();
+            this.m_spliMain.Panel1.SuspendLayout();
+            this.m_spliMain.Panel2.SuspendLayout();
+            this.m_spliMain.SuspendLayout();
+            this.m_pnlStatus.SuspendLayout();
             this.SuspendLayout();
             // 
             // m_listFiles
@@ -68,12 +77,12 @@
             this.m_listFiles.GridLines = true;
             this.m_listFiles.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.m_listFiles.HideSelection = false;
-            this.m_listFiles.Location = new System.Drawing.Point(12, 62);
+            this.m_listFiles.Location = new System.Drawing.Point(12, 63);
             this.m_listFiles.MultiSelect = false;
             this.m_listFiles.Name = "m_listFiles";
-            this.m_listFiles.Size = new System.Drawing.Size(810, 219);
+            this.m_listFiles.Size = new System.Drawing.Size(805, 199);
             this.m_listFiles.SmallImageList = this.imageList1;
-            this.m_listFiles.TabIndex = 7;
+            this.m_listFiles.TabIndex = 8;
             this.m_listFiles.UseCompatibleStateImageBehavior = false;
             this.m_listFiles.View = System.Windows.Forms.View.Details;
             this.m_listFiles.VirtualListSize = 1000;
@@ -112,36 +121,36 @@
             this.imageList1.Images.SetKeyName(4, "ok.ico");
             this.imageList1.Images.SetKeyName(5, "close.ico");
             // 
-            // m_txtStatus
+            // m_txtInfoBottom
             // 
-            this.m_txtStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_txtInfoBottom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_txtStatus.BackColor = System.Drawing.SystemColors.Control;
-            this.m_txtStatus.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.m_txtStatus.Location = new System.Drawing.Point(13, 335);
-            this.m_txtStatus.Name = "m_txtStatus";
-            this.m_txtStatus.ReadOnly = true;
-            this.m_txtStatus.Size = new System.Drawing.Size(717, 13);
-            this.m_txtStatus.TabIndex = 10;
-            this.m_txtStatus.Text = "Press Start To Begin";
+            this.m_txtInfoBottom.BackColor = System.Drawing.SystemColors.Control;
+            this.m_txtInfoBottom.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.m_txtInfoBottom.Location = new System.Drawing.Point(12, 13);
+            this.m_txtInfoBottom.Name = "m_txtInfoBottom";
+            this.m_txtInfoBottom.ReadOnly = true;
+            this.m_txtInfoBottom.Size = new System.Drawing.Size(714, 13);
+            this.m_txtInfoBottom.TabIndex = 0;
+            this.m_txtInfoBottom.Text = "Press Start To Begin";
             // 
             // m_btnClose
             // 
             this.m_btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.m_btnClose.Location = new System.Drawing.Point(747, 330);
+            this.m_btnClose.Location = new System.Drawing.Point(744, 8);
             this.m_btnClose.Name = "m_btnClose";
             this.m_btnClose.Size = new System.Drawing.Size(75, 23);
-            this.m_btnClose.TabIndex = 0;
+            this.m_btnClose.TabIndex = 1;
             this.m_btnClose.Text = "Done";
             this.m_btnClose.UseVisualStyleBackColor = true;
             // 
             // m_btnContinue
             // 
-            this.m_btnContinue.Location = new System.Drawing.Point(175, 9);
+            this.m_btnContinue.Location = new System.Drawing.Point(254, 11);
             this.m_btnContinue.Name = "m_btnContinue";
             this.m_btnContinue.Size = new System.Drawing.Size(75, 23);
-            this.m_btnContinue.TabIndex = 2;
+            this.m_btnContinue.TabIndex = 3;
             this.m_btnContinue.Text = "Resume";
             this.m_btnContinue.UseVisualStyleBackColor = true;
             this.m_btnContinue.Click += new System.EventHandler(this.m_btnContinue_Click);
@@ -155,28 +164,28 @@
             "Overwrite All Older",
             "Overwrite All",
             "Skip All Existing"});
-            this.m_cmbOption.Location = new System.Drawing.Point(368, 11);
+            this.m_cmbOption.Location = new System.Drawing.Point(447, 13);
             this.m_cmbOption.Name = "m_cmbOption";
             this.m_cmbOption.Size = new System.Drawing.Size(138, 21);
-            this.m_cmbOption.TabIndex = 4;
+            this.m_cmbOption.TabIndex = 5;
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(268, 15);
+            this.label1.Location = new System.Drawing.Point(347, 17);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(94, 13);
-            this.label1.TabIndex = 3;
+            this.label1.TabIndex = 4;
             this.label1.Text = "Overwrite Options:";
             // 
             // m_btnPause
             // 
             this.m_btnPause.Image = global::SimpleBackup.Properties.Resources.pause_on;
             this.m_btnPause.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnPause.Location = new System.Drawing.Point(94, 9);
+            this.m_btnPause.Location = new System.Drawing.Point(173, 11);
             this.m_btnPause.Name = "m_btnPause";
             this.m_btnPause.Size = new System.Drawing.Size(75, 23);
-            this.m_btnPause.TabIndex = 1;
+            this.m_btnPause.TabIndex = 2;
             this.m_btnPause.Text = "Pause";
             this.m_btnPause.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.m_btnPause.UseVisualStyleBackColor = true;
@@ -186,10 +195,10 @@
             // 
             this.m_btnStart.Image = global::SimpleBackup.Properties.Resources.play_on;
             this.m_btnStart.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnStart.Location = new System.Drawing.Point(13, 9);
+            this.m_btnStart.Location = new System.Drawing.Point(92, 11);
             this.m_btnStart.Name = "m_btnStart";
             this.m_btnStart.Size = new System.Drawing.Size(75, 23);
-            this.m_btnStart.TabIndex = 0;
+            this.m_btnStart.TabIndex = 1;
             this.m_btnStart.Text = "Start";
             this.m_btnStart.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.m_btnStart.UseVisualStyleBackColor = true;
@@ -201,28 +210,28 @@
             this.m_btnAbort.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.m_btnAbort.ImageIndex = 5;
             this.m_btnAbort.ImageList = this.imageList1;
-            this.m_btnAbort.Location = new System.Drawing.Point(747, 302);
+            this.m_btnAbort.Location = new System.Drawing.Point(742, 285);
             this.m_btnAbort.Name = "m_btnAbort";
             this.m_btnAbort.Size = new System.Drawing.Size(75, 23);
-            this.m_btnAbort.TabIndex = 11;
+            this.m_btnAbort.TabIndex = 12;
             this.m_btnAbort.Text = "Abort";
             this.m_btnAbort.UseVisualStyleBackColor = true;
             this.m_btnAbort.Click += new System.EventHandler(this.m_btnAbort_Click);
             // 
-            // m_txtInfo
+            // m_txtInfoTop
             // 
-            this.m_txtInfo.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_txtInfoTop.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_txtInfo.BackColor = System.Drawing.SystemColors.Control;
-            this.m_txtInfo.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.errorProvider1.SetIconAlignment(this.m_txtInfo, System.Windows.Forms.ErrorIconAlignment.MiddleLeft);
-            this.errorProvider1.SetIconPadding(this.m_txtInfo, 1);
-            this.m_txtInfo.Location = new System.Drawing.Point(13, 43);
-            this.m_txtInfo.Name = "m_txtInfo";
-            this.m_txtInfo.ReadOnly = true;
-            this.m_txtInfo.Size = new System.Drawing.Size(809, 13);
-            this.m_txtInfo.TabIndex = 6;
-            this.m_txtInfo.Text = "Disk Free Space: 0k";
+            this.m_txtInfoTop.BackColor = System.Drawing.SystemColors.Control;
+            this.m_txtInfoTop.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.errorProvider1.SetIconAlignment(this.m_txtInfoTop, System.Windows.Forms.ErrorIconAlignment.MiddleLeft);
+            this.errorProvider1.SetIconPadding(this.m_txtInfoTop, 1);
+            this.m_txtInfoTop.Location = new System.Drawing.Point(13, 44);
+            this.m_txtInfoTop.Name = "m_txtInfoTop";
+            this.m_txtInfoTop.ReadOnly = true;
+            this.m_txtInfoTop.Size = new System.Drawing.Size(804, 13);
+            this.m_txtInfoTop.TabIndex = 7;
+            this.m_txtInfoTop.Text = "Disk Free Space: 0k";
             // 
             // m_cmbViewFilter
             // 
@@ -234,43 +243,11 @@
             "Show All",
             "Show Errors",
             "Show Unrocessed"});
-            this.m_cmbViewFilter.Location = new System.Drawing.Point(722, 12);
+            this.m_cmbViewFilter.Location = new System.Drawing.Point(717, 14);
             this.m_cmbViewFilter.Name = "m_cmbViewFilter";
             this.m_cmbViewFilter.Size = new System.Drawing.Size(100, 21);
-            this.m_cmbViewFilter.TabIndex = 5;
+            this.m_cmbViewFilter.TabIndex = 6;
             this.m_cmbViewFilter.SelectionChangeCommitted += new System.EventHandler(this.m_cmbViewFilter_SelectionChangeCommitted);
-            // 
-            // m_progressFile
-            // 
-            this.m_progressFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            themeColorSet2.Part1_ActiveColor = System.Drawing.Color.DodgerBlue;
-            themeColorSet2.Part1_InactiveColor = System.Drawing.Color.Gainsboro;
-            themeColorSet2.Part2_ActiveColor = System.Drawing.Color.LimeGreen;
-            themeColorSet2.Part2_InactiveColor = System.Drawing.Color.Gainsboro;
-            themeColorSet2.Part3_ActiveColor = System.Drawing.Color.LimeGreen;
-            themeColorSet2.Part3_InactiveColor = System.Drawing.Color.Gainsboro;
-            themeColorSet2.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
-            themeColorSet2.Threshold1 = 101;
-            themeColorSet2.Threshold2 = 101;
-            this.m_progressFile.ColorTheme = themeColorSet2;
-            this.m_progressFile.Location = new System.Drawing.Point(12, 285);
-            this.m_progressFile.Name = "m_progressFile";
-            this.m_progressFile.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            this.m_progressFile.Size = new System.Drawing.Size(810, 13);
-            this.m_progressFile.TabIndex = 13;
-            this.m_progressFile.TabStop = false;
-            // 
-            // m_progressBarMain
-            // 
-            this.m_progressBarMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_progressBarMain.Location = new System.Drawing.Point(12, 302);
-            this.m_progressBarMain.Maximum = 10000;
-            this.m_progressBarMain.Name = "m_progressBarMain";
-            this.m_progressBarMain.ShowInTaskbar = true;
-            this.m_progressBarMain.Size = new System.Drawing.Size(729, 23);
-            this.m_progressBarMain.TabIndex = 9;
             // 
             // errorProvider1
             // 
@@ -282,12 +259,104 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_lblStatusProgress.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.m_lblStatusProgress.Location = new System.Drawing.Point(39, 117);
+            this.m_lblStatusProgress.Location = new System.Drawing.Point(39, 118);
             this.m_lblStatusProgress.Name = "m_lblStatusProgress";
-            this.m_lblStatusProgress.Size = new System.Drawing.Size(738, 85);
-            this.m_lblStatusProgress.TabIndex = 14;
+            this.m_lblStatusProgress.Size = new System.Drawing.Size(748, 77);
+            this.m_lblStatusProgress.TabIndex = 9;
             this.m_lblStatusProgress.Text = "Ready...";
             this.m_lblStatusProgress.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // m_btnPrepare
+            // 
+            this.m_btnPrepare.Location = new System.Drawing.Point(13, 11);
+            this.m_btnPrepare.Name = "m_btnPrepare";
+            this.m_btnPrepare.Size = new System.Drawing.Size(75, 23);
+            this.m_btnPrepare.TabIndex = 0;
+            this.m_btnPrepare.Text = "Prepare...";
+            this.m_btnPrepare.UseVisualStyleBackColor = true;
+            this.m_btnPrepare.Click += new System.EventHandler(this.m_btnPrepare_Click);
+            // 
+            // m_spliMain
+            // 
+            this.m_spliMain.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.m_spliMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_spliMain.Location = new System.Drawing.Point(0, 0);
+            this.m_spliMain.Name = "m_spliMain";
+            this.m_spliMain.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // m_spliMain.Panel1
+            // 
+            this.m_spliMain.Panel1.Controls.Add(this.m_btnPrepare);
+            this.m_spliMain.Panel1.Controls.Add(this.m_lblStatusProgress);
+            this.m_spliMain.Panel1.Controls.Add(this.m_listFiles);
+            this.m_spliMain.Panel1.Controls.Add(this.m_progressFile);
+            this.m_spliMain.Panel1.Controls.Add(this.m_btnAbort);
+            this.m_spliMain.Panel1.Controls.Add(this.m_cmbViewFilter);
+            this.m_spliMain.Panel1.Controls.Add(this.m_btnStart);
+            this.m_spliMain.Panel1.Controls.Add(this.m_txtInfoTop);
+            this.m_spliMain.Panel1.Controls.Add(this.m_progressBarMain);
+            this.m_spliMain.Panel1.Controls.Add(this.label1);
+            this.m_spliMain.Panel1.Controls.Add(this.m_btnPause);
+            this.m_spliMain.Panel1.Controls.Add(this.m_cmbOption);
+            this.m_spliMain.Panel1.Controls.Add(this.m_btnContinue);
+            // 
+            // m_spliMain.Panel2
+            // 
+            this.m_spliMain.Panel2.Controls.Add(this.chartProgressUserControl1);
+            this.m_spliMain.Size = new System.Drawing.Size(831, 476);
+            this.m_spliMain.SplitterDistance = 319;
+            this.m_spliMain.TabIndex = 0;
+            // 
+            // m_pnlStatus
+            // 
+            this.m_pnlStatus.Controls.Add(this.m_btnClose);
+            this.m_pnlStatus.Controls.Add(this.m_txtInfoBottom);
+            this.m_pnlStatus.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.m_pnlStatus.Location = new System.Drawing.Point(0, 476);
+            this.m_pnlStatus.Name = "m_pnlStatus";
+            this.m_pnlStatus.Size = new System.Drawing.Size(831, 38);
+            this.m_pnlStatus.TabIndex = 1;
+            // 
+            // m_progressFile
+            // 
+            this.m_progressFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            themeColorSet1.Part1_ActiveColor = System.Drawing.Color.DodgerBlue;
+            themeColorSet1.Part1_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet1.Part2_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet1.Part2_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet1.Part3_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet1.Part3_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet1.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
+            themeColorSet1.Threshold1 = 101;
+            themeColorSet1.Threshold2 = 101;
+            this.m_progressFile.ColorTheme = themeColorSet1;
+            this.m_progressFile.Location = new System.Drawing.Point(12, 268);
+            this.m_progressFile.Name = "m_progressFile";
+            this.m_progressFile.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.m_progressFile.Size = new System.Drawing.Size(805, 13);
+            this.m_progressFile.TabIndex = 10;
+            this.m_progressFile.TabStop = false;
+            // 
+            // m_progressBarMain
+            // 
+            this.m_progressBarMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_progressBarMain.Location = new System.Drawing.Point(12, 285);
+            this.m_progressBarMain.Maximum = 10000;
+            this.m_progressBarMain.Name = "m_progressBarMain";
+            this.m_progressBarMain.ShowInTaskbar = true;
+            this.m_progressBarMain.Size = new System.Drawing.Size(724, 23);
+            this.m_progressBarMain.TabIndex = 11;
+            // 
+            // chartProgressUserControl1
+            // 
+            this.chartProgressUserControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.chartProgressUserControl1.Location = new System.Drawing.Point(0, 0);
+            this.chartProgressUserControl1.Name = "chartProgressUserControl1";
+            this.chartProgressUserControl1.Padding = new System.Windows.Forms.Padding(6, 4, 6, 4);
+            this.chartProgressUserControl1.Size = new System.Drawing.Size(829, 151);
+            this.chartProgressUserControl1.TabIndex = 16;
             // 
             // FormBackupProgress
             // 
@@ -295,32 +364,26 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.m_btnClose;
-            this.ClientSize = new System.Drawing.Size(834, 361);
-            this.Controls.Add(this.m_lblStatusProgress);
-            this.Controls.Add(this.m_progressFile);
-            this.Controls.Add(this.m_cmbViewFilter);
-            this.Controls.Add(this.m_txtInfo);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.m_cmbOption);
-            this.Controls.Add(this.m_btnContinue);
-            this.Controls.Add(this.m_btnPause);
-            this.Controls.Add(this.m_progressBarMain);
-            this.Controls.Add(this.m_btnClose);
-            this.Controls.Add(this.m_txtStatus);
-            this.Controls.Add(this.m_btnStart);
-            this.Controls.Add(this.m_btnAbort);
-            this.Controls.Add(this.m_listFiles);
+            this.ClientSize = new System.Drawing.Size(831, 514);
+            this.Controls.Add(this.m_spliMain);
+            this.Controls.Add(this.m_pnlStatus);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(650, 400);
             this.Name = "FormBackupProgress";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Backup Progress";
+            this.Text = "Copy Progress";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormBackupProgress_FormClosing);
             this.Load += new System.EventHandler(this.FormBackupProgress_Load);
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            this.m_spliMain.Panel1.ResumeLayout(false);
+            this.m_spliMain.Panel1.PerformLayout();
+            this.m_spliMain.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.m_spliMain)).EndInit();
+            this.m_spliMain.ResumeLayout(false);
+            this.m_pnlStatus.ResumeLayout(false);
+            this.m_pnlStatus.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -333,7 +396,7 @@
         private System.Windows.Forms.ImageList imageList1;
         private System.Windows.Forms.Button m_btnAbort;
         private System.Windows.Forms.Button m_btnStart;
-        private System.Windows.Forms.TextBox m_txtStatus;
+        private System.Windows.Forms.TextBox m_txtInfoBottom;
         private System.Windows.Forms.Button m_btnClose;
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private MZ.Tools.Windows7ProgressBar m_progressBarMain;
@@ -341,10 +404,14 @@
         private System.Windows.Forms.Button m_btnContinue;
         private System.Windows.Forms.ComboBox m_cmbOption;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TextBox m_txtInfo;
+        private System.Windows.Forms.TextBox m_txtInfoTop;
         private System.Windows.Forms.ComboBox m_cmbViewFilter;
         private MZ.WinForms.ColorBarsProgressBar m_progressFile;
         private System.Windows.Forms.ErrorProvider errorProvider1;
         private System.Windows.Forms.Label m_lblStatusProgress;
+        private System.Windows.Forms.Button m_btnPrepare;
+        private System.Windows.Forms.SplitContainer m_spliMain;
+        private System.Windows.Forms.Panel m_pnlStatus;
+        private WindowsFormsApp1.ChartProgressUserControl chartProgressUserControl1;
     }
 }

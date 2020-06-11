@@ -80,6 +80,7 @@
     <Compile Include="Settings\BackupSettings.cs" />
     <Compile Include="Tools\CalculateSpaceDifferenceTask.cs" />
     <Compile Include="Tools\CalculateOccupiedSpaceTask.cs" />
+    <Compile Include="Tools\TransferSpeedCounter.cs" />
     <EmbeddedResource Include="BackupListUserControl.resx">
       <DependentUpon>BackupListUserControl.cs</DependentUpon>
     </EmbeddedResource>

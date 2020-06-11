@@ -29,6 +29,11 @@ namespace SimpleBackup
 
         private List<BackupFile> _backupFilesList;
 
+        private BackupOptions SelectedOverwriteOption
+        {
+            get { return (BackupOptions)m_cmbOption.SelectedItem; }
+        }
+
         public FormBackupProgress(BackupGroup group, BackupPriority priority)
         {
             _group = group;
@@ -39,7 +44,7 @@ namespace SimpleBackup
             m_listFiles.SetDoubleBuffered(true);
 
             m_cmbOption.Items.Clear();
-            m_cmbOption.Items.AddRange(Enum.GetNames(typeof(BackupOptions)).ToArray());
+            m_cmbOption.Items.AddRange(Enum.GetValues(typeof(BackupOptions)).Cast<object>().ToArray());
             m_cmbOption.SelectedIndex = 1;
 
             m_cmbViewFilter.SelectedIndex = 0; //all
@@ -52,7 +57,7 @@ namespace SimpleBackup
             m_btnContinue.Enabled = false;
 
             _fileProgress = new FileUtils.FileProgress(m_progressFile, this);
-            _fileProgress.OnChange = (status) => { m_txtInfo.Text = status; };
+            _fileProgress.OnChange = (status) => { m_txtInfoTop.Text = status; };
             _logic = new BackupLogic(_group);
 
             _calculateSpaceDifferenceTask = new CalculateSpaceDifferenceTask(_fileProgress);
@@ -60,11 +65,11 @@ namespace SimpleBackup
             {
                 CommonUtils.ExecuteOnUIThread(() => 
                 {
-                    m_txtInfo.Text = status;
+                    m_txtInfoTop.Text = status;
                     m_progressFile.Value = 0;
-                    EnableControls(true, false);
-                    errorProvider1.SetError(m_txtInfo, error);
+                    errorProvider1.SetError(m_txtInfoTop, error);
                     m_lblStatusProgress.Visible = false;
+                    EnableControls(true, false);
                 }, this);
             };
         }
@@ -73,24 +78,9 @@ namespace SimpleBackup
         {
             this.Visible = true;
 
-            m_progressFile.ColorTheme.Part1_ActiveColor = Color.Violet;
-            m_btnAbort.Enabled = true;
-
-            EnableControls(false, false);
-
-            m_txtInfo.Text = "Collecting file Information...";
-            m_txtStatus.Text = "Please Wait...";
-            m_btnClose.Text = "Close";
-
-            m_btnAbort.Enabled = true;
-            m_lblStatusProgress.Visible = true;
             _fileProgress.OnChange = (status) => { m_lblStatusProgress.Text = status; };
-            _logic.Load(_Priority, _fileProgress, () => 
-            {
-                m_lblStatusProgress.Visible = false;
-                EnableControls(true, false);
-                UpdateDisplayList(calculateNeededSize: true);
-            });
+
+            m_btnPrepare_Click(sender, e);
         }
 
         private void FormBackupProgress_FormClosing(object sender, FormClosingEventArgs e)
@@ -108,20 +98,56 @@ namespace SimpleBackup
                 m_btnAbort_Click(sender, e);
             }
 
+            Clear();
+        }
+
+        private void Clear()
+        {
             _fileProgress.Cancel = true;
             Thread.Sleep(10);
 
+            AbortCalculateSpaceNeededTask();
+
             m_listFiles.VirtualListSize = 0;
-            if(_logic != null)
+            if (_logic != null)
                 _logic.Clear();
-            if(_backupFilesList != null)
+            if (_backupFilesList != null)
                 _backupFilesList.Clear();
             GC.Collect();
         }
 
-        private BackupOptions SelectedOverwriteOption
+        private void m_btnPrepare_Click(object sender, EventArgs e)
         {
-            get { return (BackupOptions)Enum.Parse(typeof(BackupOptions), m_cmbOption.SelectedItem.ToString()); }
+            Clear();
+
+            m_progressFile.ColorTheme.Part1_ActiveColor = Color.BlueViolet;
+
+            EnableControls(false, false, false);
+            m_btnAbort.Enabled = true;
+
+            m_txtInfoTop.Text = "Collecting file Information...";
+            m_txtInfoBottom.Text = "Please Wait...";
+            m_btnClose.Text = "Close";
+
+            m_lblStatusProgress.Visible = true;
+
+            _logic.Load(_Priority, _fileProgress, (error) =>
+            {
+                CommonUtils.ExecuteOnUIThread(() => 
+                {
+                    if (string.IsNullOrWhiteSpace(error))
+                    {
+                        m_lblStatusProgress.Visible = false;
+                        EnableControls(true, false, true);
+                        UpdateDisplayList(calculateNeededSize: true);
+                    }
+                    else
+                    {
+                        m_lblStatusProgress.Text = error;
+                        EnableControls(false, false, true);
+                    }
+                }, this);
+            });
         }
 
         private void m_listFiles_RetrieveVirtualItem(object sender, RetrieveVirtualItemEventArgs e)
@@ -183,11 +209,7 @@ namespace SimpleBackup
             m_cmbViewFilter.SelectedIndex = 0; //reset to all - perform backup on whole list
             UpdateDisplayList(calculateNeededSize:false);
 
-            Stopwatch stopper = new Stopwatch();
-            stopper.Start();
-
-            if (startIndex == 0)
-                _processedBytes = 0;
+            _speedCounter.StartCounting(startIndex);
 
             Thread threadBackup = new Thread(() =>
             {
@@ -222,20 +244,17 @@ namespace SimpleBackup
                         }
                     }
 
-                    _processedBytes += file.SrcIfo.Length;
+                    _speedCounter.AddCount(file.SrcIfo.Length);
 
                     if (i % updateProgressCount == 0)
                     {
-                        _elapsed += stopper.Elapsed;
-                        stopper.Restart();
                         UpdateUI(true);
                         Application.DoEvents();
                         System.Threading.Thread.Sleep(3);
                     }
                 }
 
-                stopper.Stop();
-                _elapsed += stopper.Elapsed;
+                _speedCounter.StopCounting();
                 SystemSounds.Beep.Play();
                 UpdateUI(false);
                 OnBackupDone();
@@ -247,7 +266,7 @@ namespace SimpleBackup
             threadBackup.Start();
         }
 
-        TimeSpan _elapsed = TimeSpan.FromSeconds(0);
+        TransferSpeedCounter _speedCounter = new TransferSpeedCounter();
 
         private void UpdateUI(bool isRunning)
         {
@@ -257,31 +276,34 @@ namespace SimpleBackup
 
                 m_progressBarMain.Value = _startIndex;
 
-                TimeSpan estimate = TimeSpan.FromMilliseconds(m_progressBarMain.Maximum * _elapsed.TotalMilliseconds / (m_progressBarMain.Value + 1));
+                TimeSpan estimatedTotal = _speedCounter.EstimatedTotal(m_progressBarMain);
 
-                m_txtStatus.Text = string.Format("Copying file {0:###,##0} of {1:###,##0}, {2:###,##0.0} MB Done, Elapsed {3}, Total Estimated: {4}",
-                    (_startIndex + 1), _backupFilesList.Count, _processedBytes/BackupLogic.i1MB,
-                    _elapsed.ToString("mm':'ss"), estimate.ToString("hh':'mm':'ss"));
+                m_txtInfoBottom.Text = string.Format(
+                    "Copying file {0:###,##0} of {1:###,##0}, {2:###,##0.0} MB Done, Elapsed {3}, Total Estimated: {4}, Speed {5:###,##0.0} KB/s Average Speed {6:###,##0.0} KB/s",
+                    (_startIndex + 1), _backupFilesList.Count, _speedCounter.iBytesCount/ BackupLogic.i1MB,
+                    _speedCounter.ElapsedTime.ToString("h':'mm':'ss"),  estimatedTotal.ToString("h':'mm':'ss"),
+                    _speedCounter.SpeedInervalKB(TimeSpan.FromSeconds(10)), _speedCounter.SpeedAvgKB());
 
-                int visibleIndex = _startIndex + 3;
+                int visibleIndex = _startIndex + 1;
                 if (visibleIndex >= _backupFilesList.Count)
                     visibleIndex = _backupFilesList.Count - 1;
                 
                 if (visibleIndex >= 0 && visibleIndex < _backupFilesList.Count)
                 {
                     m_listFiles.EnsureVisible(visibleIndex);
-                    m_listFiles.Refresh();
+                    m_listFiles.Invalidate();
                 }
 
                 if (_abort)
                     m_progressBarMain.Value = 0;
 
-                Application.DoEvents();
+                //Application.DoEvents();
             }, this);
         }
 
-        private void EnableControls(bool bEnable, bool isRunning)
+        private void EnableControls(bool bEnable, bool isRunning, bool prepare = true)
         {
+            m_btnPrepare.Enabled = prepare && !isRunning;
             m_btnStart.Enabled = bEnable && !isRunning;
             m_btnContinue.Enabled = bEnable && !isRunning;
             m_btnAbort.Enabled = bEnable && isRunning;
@@ -305,17 +327,17 @@ namespace SimpleBackup
                 if (errCount>0)
                     m_progressBarMain.State = Windows7ProgressBar.ProgressBarState.Error;
 
-                m_txtStatus.Text = string.Format(
-                    "Backup status done: {0:###,##0} of {1:###,##0} files, {2:###,##0.0} MB Copyied, Errors: {3:###,##0}, Elapsed {4}",
-                    (_startIndex + 1), _backupFilesList.Count, _processedBytes / BackupLogic.i1MB, errCount, _elapsed.ToString("mm':'ss"));
+                m_txtInfoBottom.Text = string.Format(
+                    "Backup status done: {0:###,##0} of {1:###,##0} files, {2:###,##0.0} MB Copyied, Errors: {3:###,##0}, Elapsed {4}, Average Speed {5:0.0} KB/s",
+                    (_startIndex + 1), _backupFilesList.Count, 
+                    _speedCounter.iBytesCount / BackupLogic.i1MB, errCount, 
+                    _speedCounter.ElapsedTime.ToString("mm':'ss"), _speedCounter.SpeedAvgKB());
             }, this);
         }
 
         private int _startIndex = 0;
-        private long _processedBytes = 0;
         private void m_btnStart_Click(object sender, EventArgs e)
         {
-            _elapsed = TimeSpan.FromSeconds(0);
             _logic.ResetStatus();
 
             PerformBackup(0, SelectedOverwriteOption);
@@ -373,7 +395,7 @@ namespace SimpleBackup
 
             m_listFiles.VirtualListSize = _backupFilesList.Count;
             m_listFiles.Refresh();
-            m_txtStatus.Text = "Found " + _backupFilesList.Count.ToString("###,###,##0 ") + status + " files to Backup";
+            m_txtInfoBottom.Text = "Found " + _backupFilesList.Count.ToString("###,###,##0 ") + status + " files to Backup";
         }
 
         private void AbortCalculateSpaceNeededTask()
@@ -385,12 +407,12 @@ namespace SimpleBackup
         {
             AbortCalculateSpaceNeededTask();
 
-            m_txtInfo.Text = "Preparing to Calculate Space Needed...";
+            m_txtInfoTop.Text = "Preparing to Calculate Space Needed...";
             m_btnAbort.Enabled = true;
             m_progressFile.ColorTheme.Part1_ActiveColor = Color.SkyBlue;
 
             m_btnAbort.Enabled = true;
-            _fileProgress.OnChange = (status) => { m_txtInfo.Text = status; };
+            _fileProgress.OnChange = (status) => { m_txtInfoTop.Text = status; };
             _calculateSpaceDifferenceTask.Start(_backupFilesList, backupStatus, SelectedOverwriteOption);
         }
     }

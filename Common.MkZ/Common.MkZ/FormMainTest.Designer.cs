@@ -35,23 +35,23 @@
             this.m_btnTestEdit = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.foldersTreeUserControl1 = new MZ.WinForms.FoldersTreeUserControl();
+            this.fileExplorerUserControl1 = new MZ.WinForms.FileExplorerUserControl();
             this.m_cmbListViewType = new System.Windows.Forms.ComboBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.chartProgressUserControl1 = new WindowsFormsApp1.ChartProgressUserControl();
             this.m_chkEnable = new System.Windows.Forms.CheckBox();
             this.m_btnGradientWpfProgress = new System.Windows.Forms.Button();
             this.m_btnColorSlider = new System.Windows.Forms.Button();
             this.m_btnTestWPFMessageBoxWPF = new System.Windows.Forms.Button();
             this.m_btnTestWPFMessageBox = new System.Windows.Forms.Button();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.chartProgressUserControl1 = new WindowsFormsApp1.ChartProgressUserControl();
             this.trackBar1 = new ColorSlider.ColorSlider();
             this.colorBarsProgressBar3 = new MZ.WinForms.ColorBarsProgressBar();
             this.colorBarsProgressBar2 = new MZ.WinForms.ColorBarsProgressBar();
             this.colorBarsProgressBar1 = new MZ.WinForms.ColorBarsProgressBar();
-            this.foldersTreeUserControl1 = new MZ.WinForms.FoldersTreeUserControl();
-            this.fileExplorerUserControl1 = new MZ.WinForms.FileExplorerUserControl();
+            this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -102,6 +102,24 @@
             this.splitContainer1.SplitterDistance = 191;
             this.splitContainer1.TabIndex = 6;
             // 
+            // foldersTreeUserControl1
+            // 
+            this.foldersTreeUserControl1.Cursor = System.Windows.Forms.Cursors.Default;
+            this.foldersTreeUserControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.foldersTreeUserControl1.Location = new System.Drawing.Point(0, 0);
+            this.foldersTreeUserControl1.Name = "foldersTreeUserControl1";
+            this.foldersTreeUserControl1.Size = new System.Drawing.Size(191, 422);
+            this.foldersTreeUserControl1.TabIndex = 2;
+            // 
+            // fileExplorerUserControl1
+            // 
+            this.fileExplorerUserControl1.CheckBoxes = false;
+            this.fileExplorerUserControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fileExplorerUserControl1.Location = new System.Drawing.Point(0, 0);
+            this.fileExplorerUserControl1.Name = "fileExplorerUserControl1";
+            this.fileExplorerUserControl1.Size = new System.Drawing.Size(541, 422);
+            this.fileExplorerUserControl1.TabIndex = 3;
+            // 
             // m_cmbListViewType
             // 
             this.m_cmbListViewType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -144,6 +162,17 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Common Controls";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // chartProgressUserControl1
+            // 
+            this.chartProgressUserControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.chartProgressUserControl1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.chartProgressUserControl1.Location = new System.Drawing.Point(232, 173);
+            this.chartProgressUserControl1.Name = "chartProgressUserControl1";
+            this.chartProgressUserControl1.Size = new System.Drawing.Size(488, 216);
+            this.chartProgressUserControl1.TabIndex = 15;
             // 
             // m_chkEnable
             // 
@@ -197,40 +226,6 @@
             this.m_btnTestWPFMessageBox.Text = "Test WPFMessageBox (WinForms)";
             this.m_btnTestWPFMessageBox.UseVisualStyleBackColor = true;
             this.m_btnTestWPFMessageBox.Click += new System.EventHandler(this.m_btnTestWPFMessageBox_Click);
-            // 
-            // tabPage2
-            // 
-            this.tabPage2.Controls.Add(this.splitContainer1);
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(742, 428);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Explorer Controls";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // tabPage1
-            // 
-            this.tabPage1.Controls.Add(this.listView1);
-            this.tabPage1.Controls.Add(this.m_cmbListViewType);
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(742, 428);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "Shell32 icons";
-            this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // chartProgressUserControl1
-            // 
-            this.chartProgressUserControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.chartProgressUserControl1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.chartProgressUserControl1.Location = new System.Drawing.Point(232, 173);
-            this.chartProgressUserControl1.Name = "chartProgressUserControl1";
-            this.chartProgressUserControl1.Size = new System.Drawing.Size(488, 216);
-            this.chartProgressUserControl1.TabIndex = 15;
             // 
             // trackBar1
             // 
@@ -363,23 +358,28 @@
             this.colorBarsProgressBar1.TabStop = false;
             this.colorBarsProgressBar1.Value = 60;
             // 
-            // foldersTreeUserControl1
+            // tabPage2
             // 
-            this.foldersTreeUserControl1.Cursor = System.Windows.Forms.Cursors.Default;
-            this.foldersTreeUserControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.foldersTreeUserControl1.Location = new System.Drawing.Point(0, 0);
-            this.foldersTreeUserControl1.Name = "foldersTreeUserControl1";
-            this.foldersTreeUserControl1.Size = new System.Drawing.Size(191, 422);
-            this.foldersTreeUserControl1.TabIndex = 2;
+            this.tabPage2.Controls.Add(this.splitContainer1);
+            this.tabPage2.Location = new System.Drawing.Point(4, 22);
+            this.tabPage2.Name = "tabPage2";
+            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage2.Size = new System.Drawing.Size(742, 428);
+            this.tabPage2.TabIndex = 1;
+            this.tabPage2.Text = "Explorer Controls";
+            this.tabPage2.UseVisualStyleBackColor = true;
             // 
-            // fileExplorerUserControl1
+            // tabPage1
             // 
-            this.fileExplorerUserControl1.CheckBoxes = false;
-            this.fileExplorerUserControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.fileExplorerUserControl1.Location = new System.Drawing.Point(0, 0);
-            this.fileExplorerUserControl1.Name = "fileExplorerUserControl1";
-            this.fileExplorerUserControl1.Size = new System.Drawing.Size(541, 422);
-            this.fileExplorerUserControl1.TabIndex = 3;
+            this.tabPage1.Controls.Add(this.listView1);
+            this.tabPage1.Controls.Add(this.m_cmbListViewType);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(742, 428);
+            this.tabPage1.TabIndex = 0;
+            this.tabPage1.Text = "Shell32 icons";
+            this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // FormMainTest
             // 

@@ -1,8 +1,10 @@
 ﻿using MZ.Tools;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
+using System.Media;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -47,9 +49,14 @@ namespace SimpleBackup.Tools
                     OnThreadFinished("Calculate Needed Size Calculation - Aborted...", "Aborted");
                     return;
                 }
+                Stopwatch stopper = new Stopwatch();
+                stopper.Start();
 
                 _fileProgress.ResetToBlocks("Calculate Space Needed: ", backupFilesList.Count);
                 string sizeInfo = CalculateSpaceNeeded(backupFilesList, backupStatus, backupOptions, _fileProgress, out string error);
+                if (stopper.ElapsedMilliseconds > 10000)
+                    SystemSounds.Beep.Play();
+
                 OnThreadFinished(sizeInfo, error);
             });
 
