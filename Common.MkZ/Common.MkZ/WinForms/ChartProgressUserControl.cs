@@ -34,7 +34,7 @@ namespace WindowsFormsApp1
             chart1.ChartAreas[0].Position.Height = 100;
             chart1.ChartAreas[0].Position.Y = 0;
 
-            chart1.ChartAreas[0].AxisX.MajorGrid.Interval = Max / 10;
+            chart1.ChartAreas[0].AxisX.MajorGrid.Interval = 10;
             //remove labels
             chart1.ChartAreas[0].AxisX.LabelStyle.Enabled = false;
             chart1.ChartAreas[0].AxisX.MajorTickMark.Enabled = false;
@@ -108,18 +108,21 @@ namespace WindowsFormsApp1
                 ser.Points.Clear();
             }
 
+            chart1.ChartAreas[0].AxisX.Maximum = maxX;
+            chart1.ChartAreas[0].AxisX.MajorGrid.Interval = maxX / 10;
+
+
+            double maxY = 1.2 * values.Max();
+            chart1.ChartAreas[0].AxisY.Maximum = maxY;
+
             _annotationText.Text = string.Format("Speed: {0} Kb/s", current);
-            _annotationText.Y = 40;
+            _annotationText.Y = -20 + 100 * (maxY - current)/maxY;
 
             _annotationLine.AnchorY = current;
 
             if (values.Count == 0)
                 return;
 
-            double maxY = 1.2 * values.Max();
-
-            chart1.ChartAreas[0].AxisX.Maximum = maxX;
-            chart1.ChartAreas[0].AxisY.Maximum = maxY;
 
             for (int i = 0; i < maxX; i++)
             {
