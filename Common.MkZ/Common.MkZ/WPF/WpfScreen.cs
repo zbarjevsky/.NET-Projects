@@ -13,9 +13,10 @@ namespace MZ.WPF.Utils
         public static List<WpfScreen> AllScreens()
         {
             List<WpfScreen> screens = new List<WpfScreen>();
-            foreach (System.Windows.Forms.Screen screen in System.Windows.Forms.Screen.AllScreens)
+            for (int i = 0; i < System.Windows.Forms.Screen.AllScreens.Length; i++)
             {
-                screens.Add(new WpfScreen(screen));
+                System.Windows.Forms.Screen screen = System.Windows.Forms.Screen.AllScreens[i];
+                screens.Add(new WpfScreen(i, screen));
             }
             return screens;
         }
@@ -24,7 +25,7 @@ namespace MZ.WPF.Utils
         {
             WindowInteropHelper windowInteropHelper = new WindowInteropHelper(window);
             System.Windows.Forms.Screen screen = System.Windows.Forms.Screen.FromHandle(windowInteropHelper.Handle);
-            WpfScreen wpfScreen = new WpfScreen(screen);
+            WpfScreen wpfScreen = new WpfScreen(-1, screen);
             return wpfScreen;
         }
 
@@ -36,20 +37,22 @@ namespace MZ.WPF.Utils
             // are x,y device-independent-pixels ??
             System.Drawing.Point drawingPoint = new System.Drawing.Point(x, y);
             System.Windows.Forms.Screen screen = System.Windows.Forms.Screen.FromPoint(drawingPoint);
-            WpfScreen wpfScreen = new WpfScreen(screen);
+            WpfScreen wpfScreen = new WpfScreen(-1, screen);
 
             return wpfScreen;
         }
 
         public static WpfScreen Primary
         {
-            get { return new WpfScreen(System.Windows.Forms.Screen.PrimaryScreen); }
+            get { return new WpfScreen(-1, System.Windows.Forms.Screen.PrimaryScreen); }
         }
 
         private readonly System.Windows.Forms.Screen screen;
+        public int Index { get; }
 
-        internal WpfScreen(System.Windows.Forms.Screen screen)
+        public WpfScreen(int idx, System.Windows.Forms.Screen screen)
         {
+            Index = idx;
             this.screen = screen;
         }
 
