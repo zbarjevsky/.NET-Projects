@@ -15,7 +15,7 @@ namespace SimpleBackup.Settings
 {
     public class SelectedFoldersAndFilesList
     {
-        public bool AllInSrcFolder { get; set; } = true;
+        public bool AllInSrcFolder { get; set; } = false;
         public string FolderSrc { get; set; }
         public List<string> Names { get; set; } = new List<string>();
     }

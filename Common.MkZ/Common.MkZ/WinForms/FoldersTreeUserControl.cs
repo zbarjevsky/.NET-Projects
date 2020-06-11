@@ -15,6 +15,8 @@ namespace MZ.WinForms
 {
     public partial class FoldersTreeUserControl : UserControl
     {
+		private const string NODE_PLACEHOLDER = "!!should not see this!!";
+
 		public Action<string> AfterSelectAction = (fullPath) => { };
 
         public FoldersTreeUserControl()
@@ -230,22 +232,21 @@ namespace MZ.WinForms
 
 		private void tvFolders_AfterSelect(object sender, System.Windows.Forms.TreeViewEventArgs e)
 		{
-			if (e.Node.Nodes.Count == 0)
-			{
-
-				//Populate folders and files when a folder is selected
-				this.Cursor = Cursors.WaitCursor;
-
-				System.Diagnostics.Debug.WriteLine("tvFolders_AfterSelect: " + e.Node.Text);
-
-				//populate sub-folders and folder files
-				PopulateDirectory(e.Node);
-
-				this.Cursor = Cursors.Default;
-			}
-
 			//notify
 			AfterSelectAction(getFullPath(e.Node));
+		}
+
+        private void tvFolders_BeforeExpand(object sender, TreeViewCancelEventArgs e)
+        {
+			if(e.Node.Nodes.Count == 0 || e.Node.Nodes[0].Name == NODE_PLACEHOLDER)
+            {
+                //Populate folders and files when a folder is expanded
+                this.Cursor = Cursors.WaitCursor;
+                
+				PopulateDirectory(e.Node);
+
+                this.Cursor = Cursors.Default;
+            }
 		}
 
 		private void tvFolders_MouseDown(object sender, MouseEventArgs e)
@@ -268,7 +269,6 @@ namespace MZ.WinForms
 
 		protected void PopulateDirectory(TreeNode node)
 		{
-			TreeNode nodeDir;
 			int imageIndex = 2;     //unselected image index
 			int selectIndex = 3;    //selected image index
 
@@ -299,9 +299,10 @@ namespace MZ.WinForms
 						string stringPathName = Path.GetFileName(stringDir);
 
 						//create node for directories
-						nodeDir = new TreeNode(stringPathName, imageIndex, selectIndex);
-						nodeDir.Name = stringPathName;
-						node.Nodes.Add(nodeDir);
+						TreeNode subDirNode = new TreeNode(stringPathName, imageIndex, selectIndex);
+						subDirNode.Name = stringPathName;
+						subDirNode.Nodes.Add(NODE_PLACEHOLDER, ""); //to add + sign to expand the node
+						node.Nodes.Add(subDirNode);
 					}
 				}
 			}
@@ -342,5 +343,5 @@ namespace MZ.WinForms
 
 			return stringPath;
 		}
-	}
+    }
 }

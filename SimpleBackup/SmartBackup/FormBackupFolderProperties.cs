@@ -126,30 +126,31 @@ namespace SimpleBackup
                 Priority = (BackupPriority)m_cmbPriority.SelectedItem
             };
 
-            m_btnOk.Enabled = entry.IsValid(out string error);
-            m_btnStartBackup.Enabled = m_btnOk.Enabled;
-            UpdateInfo(entry, error);
+            UpdateInfo(entry);
         }
 
-        private void UpdateInfo(BackupEntry entry, string error)
+        private void UpdateInfo(BackupEntry entry)
         {
-            if (!string.IsNullOrWhiteSpace(error))
-            {
-                m_txtInfo.Text = error;
-                errorProvider1.SetError(m_btnStartBackup, error);
-                return;
-            }
+            m_btnOk.Enabled = entry.IsValid(out string error);
+            m_btnStartBackup.Enabled = m_btnOk.Enabled;
 
-            errorProvider1.SetError(m_btnStartBackup, error); //clear error
+            errorProvider1.SetError(m_btnStartBackup, error); //clear or set error
 
             m_explorerSrc.PopulateFiles(entry.FolderSrc);
             m_explorerDst.PopulateFiles(entry.FolderDst);
 
             UpdateCheckedFiles(entry.FolderSrc);
 
-            m_txtInfo.Text = "Calculating Space Needed...";
-            Application.DoEvents();
-            _calculateSpaceTask.Start(entry);
+            if (Directory.Exists(entry.FolderSrc))
+            {
+                m_txtInfo.Text = "Calculating Space Needed...";
+                _calculateSpaceTask.Start(entry);
+                Application.DoEvents();
+            }
+            else
+            {
+                m_txtInfo.Text = error;
+            }
         }
 
         private void UpdateCheckedFiles(string fullPath)

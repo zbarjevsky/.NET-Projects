@@ -352,7 +352,11 @@ namespace SimpleBackup
             DriveInfo drive = GetDriveInfo(root);
             if(drive == null)
             {
-                MessageBox.Show("Cannot access drive for backup: " + root);
+                string message = "Cannot access drive for backup: " + root;
+                if (string.IsNullOrWhiteSpace(path))
+                    message = "Destination Drive is not Defined";
+
+                MessageBox.Show(message);
                 freeSpace = 0;
                 return "Drive " + root + " is not accessible";
             }
@@ -364,6 +368,9 @@ namespace SimpleBackup
         public static DriveInfo GetDriveInfo(string path)
         {
             string root = Path.GetPathRoot(path);
+            if (string.IsNullOrWhiteSpace(root))
+                return null;
+
             DriveInfo drive = new DriveInfo(root);
             if(drive != null && drive.IsReady)
                 return drive;

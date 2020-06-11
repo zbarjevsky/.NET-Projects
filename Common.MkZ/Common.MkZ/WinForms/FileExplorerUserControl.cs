@@ -23,11 +23,16 @@ namespace MZ.WinForms
 			public string FileName { get; private set; }
 			public bool IsDirectory { get; private set; }
 			public FileInfo FileInfo { get; private set; }
-			public DateTime CreatedTime { get; private set; }
-			public DateTime ModifiedTime { get; private set; }
-			public long FileSize { get; private set; }
+			private DateTime _createTime = DateTime.MinValue;
+			public DateTime CreatedTime { get { return GetCreateTime(); } }
 
-			public FileData(string fullPath, bool isCheck)
+            private DateTime _modifiedTime = DateTime.MinValue;
+			public DateTime ModifiedTime { get { return GetModifiedTime(); } }
+
+			private long _fileLength = -1;
+            public long FileSize { get { return GetFileLength(); } }
+
+            public FileData(string fullPath, bool isCheck)
 			{
 				Init(fullPath, isCheck);
 			}
@@ -49,41 +54,60 @@ namespace MZ.WinForms
 				FileName = Path.GetFileName(fullPath);
 
 				FileInfo = new FileInfo(fullPath);
-				if(!IsDirectory)
-					FileSize = FileInfo.Length;
-
-				//check if file is in local current day light saving time
-				if (TimeZone.CurrentTimeZone.IsDaylightSavingTime(FileInfo.CreationTime) == false)
-				{
-					//not in day light saving time adjust time
-					CreatedTime = FileInfo.CreationTime.AddHours(1);
-				}
-				else
-				{
-					//is in day light saving time adjust time
-					CreatedTime = FileInfo.CreationTime;
-				}
-
-				//check if file is in local current day light saving time
-				if (TimeZone.CurrentTimeZone.IsDaylightSavingTime(FileInfo.LastWriteTime) == false)
-				{
-					//not in day light saving time adjust time
-					ModifiedTime = FileInfo.LastWriteTime.AddHours(1);
-				}
-				else
-				{
-					//not in day light saving time adjust time
-					ModifiedTime = FileInfo.LastWriteTime;
-				}
 
 				//init listViewItem
 				this.SubItems.AddRange(new string[] { "", "", "", ""});
 			}
 
 			//for special folder name 'up'
-			internal void SetName(string name)
+			public void SetName(string name)
 			{
 				FileName = name;
+			}
+
+			private long GetFileLength()
+			{
+				if (!IsDirectory && _fileLength < 0)
+					_fileLength = FileInfo.Length;
+				return _fileLength;
+			}
+
+			private DateTime GetCreateTime()
+			{
+				if (_createTime == DateTime.MinValue)
+				{
+					//check if file is in local current day light saving time
+					if (TimeZone.CurrentTimeZone.IsDaylightSavingTime(FileInfo.CreationTime) == false)
+					{
+						//not in day light saving time adjust time
+						_createTime = FileInfo.CreationTime.AddHours(1);
+					}
+					else
+					{
+						//is in day light saving time adjust time
+						_createTime = FileInfo.CreationTime;
+					}
+				}
+				return _createTime;
+			}
+
+			private DateTime GetModifiedTime()
+			{
+				if (_modifiedTime == DateTime.MinValue)
+				{
+					//check if file is in local current day light saving time
+					if (TimeZone.CurrentTimeZone.IsDaylightSavingTime(FileInfo.LastWriteTime) == false)
+					{
+						//not in day light saving time adjust time
+						_modifiedTime = FileInfo.LastWriteTime.AddHours(1);
+					}
+					else
+					{
+						//not in day light saving time adjust time
+						_modifiedTime = FileInfo.LastWriteTime;
+					}
+				}
+				return _modifiedTime;
 			}
 
 			public void PrepareListViewItem()
@@ -420,7 +444,7 @@ namespace MZ.WinForms
 					
 					foreach (string folder in dirs)
 					{
-						_list.Add(new FileData(folder, isCheck));
+						_list.Add(new FileData(folder, true, isCheck));
 					}
 
 					string[] stringFiles = Directory.GetFiles(fullPath);
@@ -431,7 +455,7 @@ namespace MZ.WinForms
 					//loop throught all files
 					for (int i = 0; i < files.Count; i++)
 					{
-						_list.Add(new FileData(files[i], isCheck));
+						_list.Add(new FileData(files[i], false, isCheck));
 
 						if (i == pageSize) //after first page
 						{
