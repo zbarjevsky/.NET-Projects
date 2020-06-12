@@ -5,12 +5,15 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace MZ.Tools
 {
+    using HWND = IntPtr;
+
     public class WindowInfo
     {
-        public IntPtr hWnd { get; set; }
+        public HWND hWnd { get; set; }
         public string Title { get; set; }
 
         public WindowInfo(IntPtr hWnd, string title)
@@ -28,6 +31,152 @@ namespace MZ.Tools
             return "---";
         }
     }
+
+    public static class User32HotKey
+    {
+
+        [Flags()]
+        public enum KeyModifiers
+        {
+            None = 0,
+            Alt = 1,
+            Control = 2,
+            Shift = 4,
+            Windows = 8
+        }
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool RegisterHotKey(
+                        HWND hWnd,                  // handle to window    
+                        int id,                     // hot key identifier    
+                        KeyModifiers fsModifiers,   // key-modifier options    
+                        Keys vk                     // virtual-key code    
+        );
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern bool UnregisterHotKey(
+                                HWND hWnd,  // handle to window    
+                                int id      // hot key identifier    
+        );
+
+    }
+
+    public static class User32Clipboard
+    {
+        [DllImport("user32.dll")]
+        public static extern int SetClipboardViewer(int hWndNewViewer);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern bool ChangeClipboardChain(HWND hWndRemove, HWND hWndNewNext);
+    }
+
+    public static class User32SystemMenu
+    {
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetSystemMenu(IntPtr hWnd, int bRevert);
+
+        public const int MF_SEPARATOR = 0xA00; //for uFlags
+        public const int MF_BYCOMMAND = 0x00000000; //for uFlags
+        public const int MF_BYPOSITION = 0x00000400; //for uFlags
+        public const int MF_LAST = -1; //for uFlags
+
+        [DllImport("user32.dll")]
+        public static extern int AppendMenu(IntPtr hMenu, int uFlags, int uIDNewItem, string lpNewItem);
+
+        [DllImport("user32.dll")]
+        public static extern bool InsertMenu(IntPtr hMenu, int uPosition, int uFlags, int uIDNewItem, string lpNewItem);
+
+        [DllImport("user32.dll")]
+        public static extern bool SetMenuItemBitmaps(IntPtr hMenu, int uPosition, int uFlags, IntPtr hBitmapUnchecked, IntPtr hBitmapChecked);
+    }
+
+    public class User32SystemTray
+    {
+
+        public static IntPtr GetTrayHandle()
+        {
+            IntPtr taskBarHandle = User32.FindWindow("Shell_TrayWnd", null);
+            if (!taskBarHandle.Equals(IntPtr.Zero))
+            {
+                return User32.FindWindowEx(taskBarHandle, IntPtr.Zero, "TrayNotifyWnd", IntPtr.Zero);
+            }
+            return IntPtr.Zero;
+        }
+
+        public static User32.RECT GetTrayRectangle()
+        {
+            User32.GetWindowRect(GetTrayHandle(), out User32.RECT rect);
+            return rect;
+        }
+    }
+
+    public static class User32EnumChildWindows
+    {
+        //The EnumChildWindows function enumerates the child windows that belong 
+        //to the specified parent window by passing the handle of each child 
+        //window, in turn, to an application-defined callback function. 
+        //EnumChildWindows continues until the last child window is enumerated or 
+        //the callback function returns FALSE. 
+        //Parameters
+        //* hWndParent
+        //  Identifies the parent window whose child windows are to be 
+        //  enumerated. 
+        //* lpEnumFunc
+        //  Points to an application-defined callback function. For more 
+        //  information about the callback function, see the EnumChildProc 
+        //  callback function. 
+        //* lParam
+        //  Specifies a 32-bit, application-defined value to be passed to the 
+        //  callback function. 
+        //------------------------------------------------------------------------
+
+        [DllImport("user32.dll")]
+        public static extern int EnumChildWindows(
+            HWND hWndParent,                // handle to parent window
+            WindowEnumDelegate lpEnumFunc,  // pointer to callback function
+            int lParam                      // application-defined value
+        );
+
+        public static void EnumChildWindows(HWND hWndParent, string title)
+        {
+            System.Diagnostics.Trace.WriteLine("======================" + title + "=====================");
+            WindowEnumDelegate del = new WindowEnumDelegate(WindowEnumProc);
+            EnumChildWindows(hWndParent, del, 0);
+        }//end EnumChildWindows
+
+        public delegate bool WindowEnumDelegate(HWND hwnd, int lParam);
+        public static bool WindowEnumProc(HWND hwnd, int lParam)
+        {
+            // get the text from the window
+            string text = User32.GetText(hwnd);
+
+            if (text.Length > 0)
+            {
+                System.Diagnostics.Trace.WriteLine(text);
+            }//end if
+            return true;
+        }//end WindowEnumProc
+
+    }
+
+    public class ForegroundWindow : IWin32Window
+    {
+        private static ForegroundWindow _window = new ForegroundWindow();
+        private ForegroundWindow() { }
+
+        public static IWin32Window Instance
+        {
+            get { return _window; }
+        }
+
+        IntPtr IWin32Window.Handle
+        {
+            get
+            {
+                return User32.GetForegroundWindow();
+            }
+        }
+    }//end class ForegroundWindow
 
     public class User32
     {
@@ -50,13 +199,13 @@ namespace MZ.Tools
         [StructLayout(LayoutKind.Sequential)]
         public struct RECT
         {
-            public int left;
-            public int top;
-            public int right;
-            public int bottom;
+            public int Left;
+            public int Top;
+            public int Right;
+            public int Bottom;
 
-            public int width { get { return right - left; } }
-            public int height { get { return bottom - top; } }
+            public int Width { get { return Right - Left; } }
+            public int Height { get { return Bottom - Top; } }
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -86,29 +235,100 @@ namespace MZ.Tools
             {
                 cbSize = (UInt32)(Marshal.SizeOf(typeof(WINDOWINFO)));
             }
+        }
 
+        public enum RDW
+        {
+            RDW_INVALIDATE = 0x0001,
+            RDW_INTERNALPAINT = 0x0002,
+            RDW_ERASE = 0x0004,
+
+            RDW_VALIDATE = 0x0008,
+            RDW_NOINTERNALPAINT = 0x0010,
+            RDW_NOERASE = 0x0020,
+
+            RDW_NOCHILDREN = 0x0040,
+            RDW_ALLCHILDREN = 0x0080,
+
+            RDW_UPDATENOW = 0x0100,
+            RDW_ERASENOW = 0x0200,
+
+            RDW_FRAME = 0x0400,
+            RDW_NOFRAME = 0x0800
         }
 
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
-        public static extern IntPtr SendMessage(IntPtr hWnd, uint msg, uint wParam, uint lParam);
+        public static extern IntPtr SendMessage(IntPtr hWnd, uint msg, IntPtr wParam, IntPtr lParam);
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        public static extern int SendMessage(HWND hwnd, int wMsg, int wParam, StringBuilder lParam);
+
+        [DllImport("User32.dll")]
+        public static extern int GetClassName(HWND hWnd, StringBuilder lpClassName, int nMaxCount);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetClassLong(HWND hwnd, int wMsg);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr SetCapture(HWND hWnd);
+
         [DllImportAttribute("user32.dll")]
         public static extern bool ReleaseCapture();
+        
         [DllImport("user32.dll")]
         public static extern IntPtr GetWindowRect(IntPtr hWnd, out RECT rect);
+        
         [DllImport("user32.dll")]
         public static extern bool GetClientRect(IntPtr hWnd, out RECT rect);
+        
         [DllImport("user32.dll")]
         public static extern IntPtr FindWindow(string className, string windowTitle);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern IntPtr FindWindowEx(IntPtr parentHandle, IntPtr childAfter, string className, IntPtr windowTitle);
+
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool ShowWindow(IntPtr hWnd, uint nCmdShow);
+
         [DllImport("User32.dll")]
         public static extern bool SetForegroundWindow(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr SetActiveWindow(HWND hWnd);
+
         [DllImport("user32.dll", SetLastError = true)]
         public static extern bool MoveWindow(IntPtr hWnd, int X, int Y, int nWidth, int nHeight, bool bRepaint);
+        
         [DllImport("User32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool PrintWindow(IntPtr hwnd, IntPtr hDC, uint nFlags);
+
+        [DllImport("user32.dll")]
+        public static extern int InvalidateRect(IntPtr hWnd, IntPtr lpRect, int bErase);
+
+        [DllImport("user32.dll")]
+        public static extern int UpdateWindow(IntPtr hWnd);
+
+        [DllImport("user32.dll")]
+        public static extern int RedrawWindow(IntPtr hWnd, IntPtr lprcUpdate, IntPtr hrgnUpdate, RDW flags);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr GetWindowDC(IntPtr hwnd);
+
+        [DllImport("user32.dll")]
+        public static extern Int32 ReleaseDC(IntPtr hwnd, IntPtr hdc);
+
+        [DllImport("user32.dll")]
+        public static extern IntPtr WindowFromPoint(System.Drawing.Point pt);
+
+        //	child windows belonging to a parent window contains the specified point. 
+        [DllImport("user32.dll")]
+        public static extern HWND ChildWindowFromPoint(
+            HWND hWndParent,        // handle to parent window
+            System.Drawing.Point pt // structure with point coordinates
+        );
+
         //[DllImport("user32.dll")]
         //public static extern IntPtr GetWindowThreadProcessId([In] IntPtr hWnd, [Out] out uint ProcessId);
 
@@ -126,7 +346,7 @@ namespace MZ.Tools
 
         public static void CloseWindow(IntPtr hwnd)
         {
-            SendMessage(hwnd, WM_CLOSE, 0, 0);
+            SendMessage(hwnd, WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
         }
 
         public static void MinimizeWindow(IntPtr hWnd)
@@ -277,6 +497,14 @@ namespace MZ.Tools
 
         [DllImport("user32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
         private static extern int GetWindowTextLength(IntPtr hWnd);
+
+        public static string GetText(HWND hWnd)
+        {
+            int length = (int)SendMessage(hWnd, (int)WM_Message.WM_GETTEXTLENGTH, IntPtr.Zero, IntPtr.Zero);
+            StringBuilder sb = new StringBuilder(length + 1);
+            SendMessage(hWnd, (int)WM_Message.WM_GETTEXT, length + 1, sb);
+            return sb.ToString();
+        }//end GetText
 
         public static string GetWindowText(IntPtr hWnd)
         {

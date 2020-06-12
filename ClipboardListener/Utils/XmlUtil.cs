@@ -2,6 +2,7 @@ using System;
 using System.Xml;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
 
 namespace ClipboardManager
 {
@@ -91,5 +92,30 @@ namespace ClipboardManager
 			}//end try
 			catch { return iDefault; }
 		}//end GetInt
+
+		public static string FormatXMLDoc(XmlDocument doc)
+		{
+			StringBuilder sb = new StringBuilder();
+			StringWriter sw = new StringWriter(sb);
+			XmlTextWriter xtw = null;
+			try
+			{
+				xtw = new XmlTextWriter(sw);
+				xtw.Formatting = Formatting.Indented;
+				doc.WriteTo(xtw);
+			}
+			finally
+			{
+				if (xtw != null)
+					xtw.Close();
+			}
+			return sb.ToString();
+		}
+
+		public static void SaveXmlDocFormatted(XmlDocument doc, string fileName)
+        {
+			string formattedXml = FormatXMLDoc(doc);
+			File.WriteAllText(fileName, formattedXml);
+		}
 	}//end class XmlUtil
 }//end namespace ClipboardListener

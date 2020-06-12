@@ -125,6 +125,7 @@
     <Compile Include="WinForms\InPlaceTextBox.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="WinForms\ListViewColumnSorter.cs" />
     <Compile Include="WinForms\ListViewVirtualWithCheckBoxes.cs">
       <SubType>Component</SubType>
     </Compile>

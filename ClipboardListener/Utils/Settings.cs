@@ -156,11 +156,11 @@ namespace ClipboardManager.Utils
                 XmlNode root = doc.CreateNode(XmlNodeType.Element, "Settings", "");
                 root = doc.AppendChild(root);
 
-                listMain.Save(root, zip, Path.GetDirectoryName(sHistoryFileName));
-                listFavorites.Save(root, zip, Path.GetDirectoryName(sHistoryFileName));
+                listMain.Save(root, zip);
+                listFavorites.Save(root, zip);
 
                 doc.PreserveWhitespace = true;
-                doc.Save(sHistoryFileName);
+                XmlUtil.SaveXmlDocFormatted(doc, sHistoryFileName);
 
                 zip.Add(sHistoryFileName);
                 zip.Close();
@@ -198,8 +198,8 @@ namespace ClipboardManager.Utils
                 doc.Load(sHistoryFileName);
                 XmlNode root = doc.SelectSingleNode("Settings");
 
-                listMain.Load(doc, icoDefault);
-                listFavorites.Load(doc, icoDefault);
+                listMain.Load(doc, icoDefault, Path.GetDirectoryName(sHistoryFileName));
+                listFavorites.Load(doc, icoDefault, Path.GetDirectoryName(sHistoryFileName));
 
                 listMain.MAX_HISTORY = I.BufferMaxLen;
                 listFavorites.MAX_HISTORY = I.BufferMaxLen;

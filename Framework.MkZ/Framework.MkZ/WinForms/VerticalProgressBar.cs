@@ -57,7 +57,7 @@ namespace MZ.WinForms
                 return;
             _state = state;
 
-            User32.SendMessage(this.Handle, WM_USER + PBM_SETSTATE, (uint)state, 0);
+            User32.SendMessage(this.Handle, WM_USER + PBM_SETSTATE, (IntPtr)state, IntPtr.Zero);
         }
     }
 }

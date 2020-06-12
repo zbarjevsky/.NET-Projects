@@ -194,7 +194,7 @@ namespace MZ.WinForms
                 const int HT_CAPTION = 0x2;
 
                 User32.ReleaseCapture();
-                User32.SendMessage((sender as Form).Handle, (uint)WM_Message.WM_NCLBUTTONDOWN, HT_CAPTION, 0);
+                User32.SendMessage((sender as Form).Handle, (uint)WM_Message.WM_NCLBUTTONDOWN, (IntPtr)HT_CAPTION, IntPtr.Zero);
             }
         }
     }

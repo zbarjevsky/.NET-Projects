@@ -67,10 +67,10 @@ namespace System.Windows.Desktop
             //frame should be `7, 0, 1273, 1017`
 
             User32.RECT border;
-            border.left = frame.left - rect.left;
-            border.top = frame.top - rect.top;
-            border.right = rect.right - frame.right;
-            border.bottom = rect.bottom - frame.bottom;
+            border.Left = frame.Left - rect.Left;
+            border.Top = frame.Top - rect.Top;
+            border.Right = rect.Right - frame.Right;
+            border.Bottom = rect.Bottom - frame.Bottom;
 
             //border should be `7, 0, 7, 7`
             return border;
