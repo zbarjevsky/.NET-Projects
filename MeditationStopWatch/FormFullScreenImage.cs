@@ -1,5 +1,5 @@
 ﻿using MeditationStopWatch.Tools;
-using MZ.WinForms;
+
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,6 +8,8 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+
+using MZ.WinForms;
 
 namespace MeditationStopWatch
 {
@@ -34,7 +36,7 @@ namespace MeditationStopWatch
             m_analogClock.Settings.SuspendScreenSaver = true;
             m_analogClock.BackColor = Color.Transparent;
 
-            m_analogClock.Draggable(true);
+            m_analogClock.Draggable(true, () => { UpdateClockMargins(); SaveClockRectangle(); });
             m_analogClock.Parent = pictureBox1.PictureBox; //to show picture as background
 
             m_btnCancel.BackColor = Color.Transparent;
@@ -62,7 +64,8 @@ namespace MeditationStopWatch
             m_btnCancel.BringToFront();
             
             m_analogClock.Bounds = _stopWatchForm.m_Options.ClockFullScreenBounds;
-            m_analogClock.LocationChanged += (s, o) => { UpdateClockMargins(); SaveClockRectangle(); };
+            UpdateClockMargins();
+            //m_analogClock.LocationChanged += (s, o) => { UpdateClockMargins(); SaveClockRectangle(); };
 
             this.Activate();
         }
@@ -97,7 +100,7 @@ namespace MeditationStopWatch
             else if (!ModifierKeys.HasFlag(Keys.Control))
                 m_lblVolume.Show(_stopWatchForm.AdjustVolume(e.Delta), 4000);
 
-            //update clock margins - if image resized
+            //enforce clock margins - if image resized
             EnsureVisibleControls();
 
             base.OnMouseWheel(e);

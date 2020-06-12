@@ -10,17 +10,35 @@ using System.Windows.Forms;
 
 namespace MZ.WinForms
 {
+    internal class DragData
+    {
+        public bool IsDragging = false;
+        private Action AfterDragAction = null;
+
+        public DragData(bool isDragging, Action afterDragAction)
+        {
+            IsDragging = isDragging;
+            AfterDragAction = afterDragAction;
+        }
+
+        public void InvokeAfterDragAction()
+        {
+            if (AfterDragAction != null)
+                AfterDragAction();
+        }
+    }
+
     public static class DraggableExtension
     {
         private static Size _dragOffset = new Size();
         // TKey is control to drag, TValue is a flag used while dragging
-        private static Dictionary<Control, bool> _draggables = new Dictionary<Control, bool>();
+        private static Dictionary<Control, DragData> _draggables = new Dictionary<Control, DragData>();
         private static System.Drawing.Size _dragStartLocation;
 
         /// <summary>
         /// Enabling/disabling dragging for control
         /// </summary>
-        public static void Draggable(this Control control, bool enable)
+        public static void Draggable(this Control control, bool enable, Action afterDragAction = null)
         {
             if (control is Form)
             {
@@ -38,7 +56,7 @@ namespace MZ.WinForms
                     return;
                 }
                 // 'false' - initial state is 'not dragging'
-                _draggables.Add(control, false);
+                _draggables.Add(control, new DragData(false, afterDragAction));
 
                 // assign required event handlersnnn
                 control.MouseDown += new MouseEventHandler(control_MouseDown);
@@ -68,14 +86,19 @@ namespace MZ.WinForms
                 _dragStartLocation = new Size(e.Location);
 
                 // turning on dragging
-                _draggables[(Control)sender] = true;
+                _draggables[(Control)sender].IsDragging = true;
             }
         }
 
         static void control_MouseUp(object sender, MouseEventArgs e)
         {
+            if(_draggables[(Control)sender].IsDragging)
+            {
+                _draggables[(Control)sender].InvokeAfterDragAction();
+            }
+
             // turning off dragging
-            _draggables[(Control)sender] = false;
+            _draggables[(Control)sender].IsDragging = false;
         }
 
         private static void control_MouseMove(object sender, MouseEventArgs e)
@@ -83,7 +106,7 @@ namespace MZ.WinForms
             Control ctrl = (Control)sender;
 
             // only if dragging is turned on
-            if (!_draggables[ctrl])
+            if (!_draggables[ctrl].IsDragging)
                 return;
 
             //accumulated move
@@ -125,25 +148,38 @@ namespace MZ.WinForms
 
     public static class DraggableForm
     {
-        private static Dictionary<Form, bool> _draggables = new Dictionary<Form, bool>();
+        private static Dictionary<Form, DragData> _draggables = new Dictionary<Form, DragData>();
 
-        public static void Draggable(this Form form, bool enable)
+        public static void Draggable(this Form form, bool enable, Action afterDragAction = null)
         {
             if (enable)
             {
                 if (_draggables.ContainsKey(form))
                     return;
-                _draggables.Add(form, false);
+                _draggables.Add(form, new DragData(false, afterDragAction));
 
                 form.MouseDown += Form_MouseDown;
+                form.MouseUp += Form_MouseUp;
             }
             else 
             {
                 if (_draggables.ContainsKey(form))
                 {
                     form.MouseDown -= Form_MouseDown;
+                    form.MouseUp -= Form_MouseUp;
                     _draggables.Remove(form);
                 }
+            }
+        }
+
+        private static void Form_MouseUp(object sender, MouseEventArgs e)
+        {
+            Debug.Assert(sender is Form);
+
+            if (e.Button == MouseButtons.Left)
+            {
+                _draggables[(Form)sender].IsDragging = false;
+                _draggables[(Form)sender].InvokeAfterDragAction();
             }
         }
 
@@ -153,6 +189,8 @@ namespace MZ.WinForms
 
             if (e.Button == MouseButtons.Left)
             {
+                _draggables[(Form)sender].IsDragging = true;
+
                 const int HT_CAPTION = 0x2;
 
                 User32.ReleaseCapture();

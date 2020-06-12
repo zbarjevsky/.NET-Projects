@@ -19,7 +19,7 @@ namespace MZ.WinForms
         public string EditText { get { return m_txtInput.Text; } set { m_txtInput.Text = value; } }
         public Font EditFont { get { return m_txtInput.Font; } set { m_txtInput.Font = value; } }
 
-        public static void ShowInPlaceEdit(string text, Font font, Point location, Form owner, 
+        public static void ShowInPlaceEdit(string text, Font font, Point location, IWin32Window owner, 
             Action<string> OkAction, 
             Action<string> TextEditAction = null, 
             Action<string> CancelAction = null)

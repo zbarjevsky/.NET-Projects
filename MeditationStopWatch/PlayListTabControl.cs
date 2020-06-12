@@ -124,21 +124,15 @@ namespace MeditationStopWatch
         {
             if (m_tabPlayLists.SelectedIndex >= 0)
             {
-                FormInPlaceEdit frm = new FormInPlaceEdit()
-                {
-                    Font = m_tabPlayLists.Font,
-                    EditText = m_tabPlayLists.SelectedTab.Text
-                };
-
                 Point location = m_tabPlayLists.PointToScreen(m_tabPlayLists.GetTabRect(m_tabPlayLists.SelectedIndex).Location);
                 location.Offset(4, 16);
-                frm.Location = location;
-                frm.OkAction = (text) =>
-                {
-                    m_tabPlayLists.SelectedTab.Text = frm.EditText;
-                    m_Options.PlayListCollection[m_tabPlayLists.SelectedIndex].Name = frm.EditText;
-                };
-                frm.Show(this);
+
+                FormInPlaceEdit.ShowInPlaceEdit(m_tabPlayLists.SelectedTab.Text, m_tabPlayLists.Font, location, this, 
+                    (newText) => 
+                    {
+                        m_tabPlayLists.SelectedTab.Text = newText;
+                        m_Options.PlayListCollection[m_tabPlayLists.SelectedIndex].Name = newText;
+                    });
             }
         }
     }
