@@ -78,7 +78,10 @@ namespace SimpleBackup
         {
             this.Visible = true;
 
-            _fileProgress.OnChange = (status) => { m_lblStatusProgress.Text = status; };
+            _fileProgress.OnChange = (status) => 
+            { 
+                m_lblStatusProgress.Text = status; 
+            };
 
             m_btnPrepare_Click(sender, e);
         }
@@ -218,7 +221,6 @@ namespace SimpleBackup
                     if (_abort || _pause)
                         break;
 
-                    _startIndex = i;
                     BackupFile file = _backupFilesList[i];
                     file.BigFileSizeThreshold = bigFileSizeThreshold;
 
@@ -244,6 +246,7 @@ namespace SimpleBackup
                         }
                     }
 
+                    _startIndex = i;
                     _speedCounter.AddCount(file.SrcIfo.Length);
 
                     if (i % updateProgressCount == 0)
@@ -293,6 +296,10 @@ namespace SimpleBackup
                     m_listFiles.EnsureVisible(visibleIndex);
                     m_listFiles.Invalidate();
                 }
+
+                int max = 100;
+                List<double> speeds = _speedCounter.SpeedHistory(_backupFilesList.Count, ref max);
+                m_chartProgress.SetHistory(speeds, max);
 
                 if (_abort)
                     m_progressBarMain.Value = 0;

@@ -38,8 +38,8 @@
             this.m_btnRefresh = new System.Windows.Forms.Button();
             this.m_mnuDevices = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.m_mnuActivate = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_mnuMute = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.m_mnuMute = new System.Windows.Forms.ToolStripMenuItem();
             this.m_imageListMute = new System.Windows.Forms.ImageList(this.components);
             this.m_listDevices = new ListViewExtensions.ListViewCollapsibleGroups();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -53,9 +53,9 @@
             this.m_btnActivate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnActivate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnActivate.Location = new System.Drawing.Point(0, 265);
+            this.m_btnActivate.Location = new System.Drawing.Point(0, 272);
             this.m_btnActivate.Name = "m_btnActivate";
-            this.m_btnActivate.Size = new System.Drawing.Size(502, 37);
+            this.m_btnActivate.Size = new System.Drawing.Size(502, 27);
             this.m_btnActivate.TabIndex = 1;
             this.m_btnActivate.Text = "Set Active: ";
             this.m_btnActivate.UseVisualStyleBackColor = true;
@@ -64,11 +64,11 @@
             // m_btnRefresh
             // 
             this.m_btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnRefresh.Image = global::PlaybackSoundSwitch.Properties.Resources.Refresh21;
+            this.m_btnRefresh.Image = ((System.Drawing.Image)(resources.GetObject("m_btnRefresh.Image")));
             this.m_btnRefresh.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnRefresh.Location = new System.Drawing.Point(508, 265);
+            this.m_btnRefresh.Location = new System.Drawing.Point(508, 272);
             this.m_btnRefresh.Name = "m_btnRefresh";
-            this.m_btnRefresh.Size = new System.Drawing.Size(68, 37);
+            this.m_btnRefresh.Size = new System.Drawing.Size(68, 27);
             this.m_btnRefresh.TabIndex = 2;
             this.m_btnRefresh.Text = "Refresh";
             this.m_btnRefresh.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -91,17 +91,17 @@
             this.m_mnuActivate.Text = "&Activate";
             this.m_mnuActivate.Click += new System.EventHandler(this.m_mnuActivate_Click);
             // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(114, 6);
+            // 
             // m_mnuMute
             // 
             this.m_mnuMute.Name = "m_mnuMute";
             this.m_mnuMute.Size = new System.Drawing.Size(117, 22);
             this.m_mnuMute.Text = "&Mute";
             this.m_mnuMute.Click += new System.EventHandler(this.m_mnuMute_Click);
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(114, 6);
             // 
             // m_imageListMute
             // 
@@ -142,7 +142,7 @@
             this.m_listDevices.MultiSelect = false;
             this.m_listDevices.Name = "m_listDevices";
             this.m_listDevices.ShowItemToolTips = true;
-            this.m_listDevices.Size = new System.Drawing.Size(576, 259);
+            this.m_listDevices.Size = new System.Drawing.Size(576, 268);
             this.m_listDevices.TabIndex = 0;
             this.m_listDevices.UseCompatibleStateImageBehavior = false;
             this.m_listDevices.View = System.Windows.Forms.View.Details;

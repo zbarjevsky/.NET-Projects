@@ -7,7 +7,7 @@
         xmlns:controls="clr-namespace:DashCamGPSView.Controls"
         xmlns:gauge="clr-namespace:CircularGauge;assembly=CircularGauge"
         xmlns:speedGauge="clr-namespace:SpeedGauge;assembly=CircularGauge" 
-        xmlns:local1="clr-namespace:MZ.WPF;assembly=Common.MkZ"
+        xmlns:local1="clr-namespace:MZ.WPF;assembly=Framework.MkZ"
         mc:Ignorable="d"
         Loaded="Window_Loaded" Closed="Window_Closed" PreviewKeyDown="Window_PreviewKeyDown"
         WindowStartupLocation="Manual"

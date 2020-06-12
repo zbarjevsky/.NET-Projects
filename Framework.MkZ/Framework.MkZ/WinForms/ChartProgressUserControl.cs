@@ -24,6 +24,7 @@ namespace WindowsFormsApp1
 
         private void ChartProgressUserControl_Load(object sender, EventArgs e)
         {
+            chart1.Titles.Clear();
             chart1.Titles.Add("Progress Bar");
 
             const int Max = 1000;
@@ -34,7 +35,7 @@ namespace WindowsFormsApp1
             chart1.ChartAreas[0].Position.Height = 100;
             chart1.ChartAreas[0].Position.Y = 0;
 
-            chart1.ChartAreas[0].AxisX.MajorGrid.Interval = 10;
+            chart1.ChartAreas[0].AxisX.MajorGrid.Interval = Max/10;
             //remove labels
             chart1.ChartAreas[0].AxisX.LabelStyle.Enabled = false;
             chart1.ChartAreas[0].AxisX.MajorTickMark.Enabled = false;
@@ -45,6 +46,7 @@ namespace WindowsFormsApp1
             chart1.ChartAreas[0].AxisY.MajorGrid.Interval = 20;
             chart1.ChartAreas[0].AxisY.Maximum = 100;
             chart1.ChartAreas[0].AxisY.Minimum = 0;
+            chart1.ChartAreas[0].AxisY.LineColor = chart1.BackColor; //hide Y axis line
 
             ////background line
             //StripLine stripline = new StripLine();
@@ -62,7 +64,7 @@ namespace WindowsFormsApp1
             _annotationLine.IsInfinitive = true;
             _annotationLine.ClipToChartArea = chart1.ChartAreas[0].Name; 
             _annotationLine.LineColor = Color.Navy; 
-            _annotationLine.LineWidth = 2;
+            _annotationLine.LineWidth = 1;
             chart1.Annotations.Add(_annotationLine);
 
             //annotation text
@@ -74,7 +76,7 @@ namespace WindowsFormsApp1
             _annotationText.Text = "Speed: 946 Kb/s";
             _annotationText.ForeColor = Color.Black;
             _annotationText.BackColor = Color.Transparent;
-            _annotationText.Font = new Font("Arial", 10, FontStyle.Bold);
+            _annotationText.Font = new Font("Arial", 10, FontStyle.Regular);
             _annotationText.LineWidth = 0;
             chart1.Annotations.Add(_annotationText);
 
@@ -95,34 +97,35 @@ namespace WindowsFormsApp1
                 }
                 else
                 {
-                    chart1.Series[0].Points.AddXY(i, 0);
-                    chart1.Series[1].Points.AddXY(i, 0);
+                    //chart1.Series[0].Points.AddXY(i, 0);
+                    //chart1.Series[1].Points.AddXY(i, 0);
                 }
             }
         }
 
-        public void SetHistory(List<double> values, double current, int maxX)
+        public void SetHistory(List<double> values, int maxX)
         {
             foreach (var ser in chart1.Series)
             {
                 ser.Points.Clear();
             }
 
-            chart1.ChartAreas[0].AxisX.Maximum = maxX;
-            chart1.ChartAreas[0].AxisX.MajorGrid.Interval = maxX / 10;
-
-
-            double maxY = 1.2 * values.Max();
-            chart1.ChartAreas[0].AxisY.Maximum = maxY;
-
-            _annotationText.Text = string.Format("Speed: {0} Kb/s", current);
-            _annotationText.Y = -20 + 100 * (maxY - current)/maxY;
-
-            _annotationLine.AnchorY = current;
-
             if (values.Count == 0)
                 return;
 
+            chart1.ChartAreas[0].AxisX.Minimum = 0;
+            chart1.ChartAreas[0].AxisX.Maximum = maxX;
+            chart1.ChartAreas[0].AxisX.MajorGrid.Interval = maxX / 10;
+
+            double maxY = 1.2 * values.Max();
+            chart1.ChartAreas[0].AxisY.Maximum = maxY;
+            chart1.ChartAreas[0].AxisY.MajorGrid.Interval = maxY / 5;
+
+            double current = values.Last();
+
+            _annotationText.Text = string.Format("Speed: {0:###,##0.0} Kb/s", current);
+            _annotationText.Y = -20 + 100 * (maxY - current)/maxY;
+            _annotationLine.AnchorY = current;
 
             for (int i = 0; i < maxX; i++)
             {
@@ -133,8 +136,8 @@ namespace WindowsFormsApp1
                 }
                 else
                 {
-                    chart1.Series[0].Points.AddXY(i, 0);
-                    chart1.Series[1].Points.AddXY(i, 0);
+                    //chart1.Series[0].Points.AddXY(i, 0);
+                    //chart1.Series[1].Points.AddXY(i, 0);
                 }
             }
         }

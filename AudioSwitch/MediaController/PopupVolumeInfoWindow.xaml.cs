@@ -83,15 +83,17 @@ namespace PlaybackSoundSwitch.WPF
 
         public PopupVolumeInfoWindow(WindowStartupLocation startupLocation, Point location, Window owner)
         {
-            this.Owner = owner;
+            //set owner will minimize with parent window
+            //this.Owner = owner;
             InitializeComponent(startupLocation, location);
         }
 
         //for WinForms
         public PopupVolumeInfoWindow(WindowStartupLocation startupLocation, Point location, IntPtr ownerHandle)
         {
-            WindowInteropHelper helper = new WindowInteropHelper(this);
-            helper.Owner = ownerHandle;
+            //set owner will minimize with parent window
+            //WindowInteropHelper helper = new WindowInteropHelper(this);
+            //helper.Owner = ownerHandle;
             InitializeComponent(startupLocation, location);
         }
 

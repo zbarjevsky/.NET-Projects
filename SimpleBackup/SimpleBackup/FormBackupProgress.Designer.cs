@@ -51,10 +51,10 @@
             this.m_lblStatusProgress = new System.Windows.Forms.Label();
             this.m_btnPrepare = new System.Windows.Forms.Button();
             this.m_spliMain = new System.Windows.Forms.SplitContainer();
-            this.m_pnlStatus = new System.Windows.Forms.Panel();
             this.m_progressFile = new MZ.WinForms.ColorBarsProgressBar();
             this.m_progressBarMain = new MZ.Tools.Windows7ProgressBar();
-            this.chartProgressUserControl1 = new WindowsFormsApp1.ChartProgressUserControl();
+            this.m_chartProgress = new WindowsFormsApp1.ChartProgressUserControl();
+            this.m_pnlStatus = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_spliMain)).BeginInit();
             this.m_spliMain.Panel1.SuspendLayout();
@@ -302,20 +302,10 @@
             // 
             // m_spliMain.Panel2
             // 
-            this.m_spliMain.Panel2.Controls.Add(this.chartProgressUserControl1);
+            this.m_spliMain.Panel2.Controls.Add(this.m_chartProgress);
             this.m_spliMain.Size = new System.Drawing.Size(831, 476);
             this.m_spliMain.SplitterDistance = 319;
             this.m_spliMain.TabIndex = 0;
-            // 
-            // m_pnlStatus
-            // 
-            this.m_pnlStatus.Controls.Add(this.m_btnClose);
-            this.m_pnlStatus.Controls.Add(this.m_txtInfoBottom);
-            this.m_pnlStatus.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.m_pnlStatus.Location = new System.Drawing.Point(0, 476);
-            this.m_pnlStatus.Name = "m_pnlStatus";
-            this.m_pnlStatus.Size = new System.Drawing.Size(831, 38);
-            this.m_pnlStatus.TabIndex = 1;
             // 
             // m_progressFile
             // 
@@ -349,14 +339,24 @@
             this.m_progressBarMain.Size = new System.Drawing.Size(724, 23);
             this.m_progressBarMain.TabIndex = 11;
             // 
-            // chartProgressUserControl1
+            // m_chartProgress
             // 
-            this.chartProgressUserControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.chartProgressUserControl1.Location = new System.Drawing.Point(0, 0);
-            this.chartProgressUserControl1.Name = "chartProgressUserControl1";
-            this.chartProgressUserControl1.Padding = new System.Windows.Forms.Padding(6, 4, 6, 4);
-            this.chartProgressUserControl1.Size = new System.Drawing.Size(829, 151);
-            this.chartProgressUserControl1.TabIndex = 16;
+            this.m_chartProgress.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_chartProgress.Location = new System.Drawing.Point(0, 0);
+            this.m_chartProgress.Name = "m_chartProgress";
+            this.m_chartProgress.Padding = new System.Windows.Forms.Padding(6, 4, 6, 4);
+            this.m_chartProgress.Size = new System.Drawing.Size(829, 151);
+            this.m_chartProgress.TabIndex = 16;
+            // 
+            // m_pnlStatus
+            // 
+            this.m_pnlStatus.Controls.Add(this.m_btnClose);
+            this.m_pnlStatus.Controls.Add(this.m_txtInfoBottom);
+            this.m_pnlStatus.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.m_pnlStatus.Location = new System.Drawing.Point(0, 476);
+            this.m_pnlStatus.Name = "m_pnlStatus";
+            this.m_pnlStatus.Size = new System.Drawing.Size(831, 38);
+            this.m_pnlStatus.TabIndex = 1;
             // 
             // FormBackupProgress
             // 
@@ -412,6 +412,6 @@
         private System.Windows.Forms.Button m_btnPrepare;
         private System.Windows.Forms.SplitContainer m_spliMain;
         private System.Windows.Forms.Panel m_pnlStatus;
-        private WindowsFormsApp1.ChartProgressUserControl chartProgressUserControl1;
+        private WindowsFormsApp1.ChartProgressUserControl m_chartProgress;
     }
 }

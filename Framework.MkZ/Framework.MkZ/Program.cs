@@ -25,7 +25,7 @@ namespace MZ.Tools
 			}
 			catch (Exception err)
 			{
-				MessageBox.Show(err.Message, "Meditation");
+				MessageBox.Show(err.Message, "Framework");
 			}
 		}
 

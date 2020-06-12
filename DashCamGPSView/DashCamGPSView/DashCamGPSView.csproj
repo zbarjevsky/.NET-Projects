@@ -282,9 +282,9 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Common.MkZ\Common.MkZ\Common.MkZ.csproj">
+    <ProjectReference Include="..\..\Common.MkZ\Common.MkZ\Framework.MkZ.csproj">
       <Project>{a03c89dd-ca87-4c9e-9ff9-f4277372e0f7}</Project>
-      <Name>Common.MkZ</Name>
+      <Name>Framework.MkZ</Name>
     </ProjectReference>
     <ProjectReference Include="..\CircularGauge\CircularGauge.csproj">
       <Project>{6efd5895-177b-4bbb-af52-29f4d53b3fbd}</Project>

@@ -117,6 +117,21 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="m_btnRefresh.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
+        wwAADsMBx2+oZAAAAdRJREFUOE/FU8tOwlAQ7R9IYlQkGgkBw8MHiq0iiP+iokQF6iuKD0SNaNxUxUd8
+        pbu70e7cSawJiy5csGVBUhYs3PEJ49xStCjGxI0nOUkz0zn3ztwzzF/RNEFE/bMe7iixuhYk0b3xrHp2
+        FHCnFHAkntXOOUlsnyZW+k9LRBItS0+gFRjRGyO8N5UD9qIM3NVbHYcw5tjMgTnyIPcLRbBtKfUC/XHC
+        s0d58F9jwVkJepIvFdd6VnYmkJsvFRZjNFejPWkQGOCJld3LQeAWT0IR5zwRuueISU8zHTPE1Dl7r9J8
+        jY5tg4BvRRJD12UIXpbAEyWCHv6ANSqJI5kihO7ePthtFOA2HtWx0wL4ktmKJ/Z5MkVXhIiD6VcYPi5o
+        5JCsUADbmvx9iP+HkV0ZxjIFCGIblAEke/gKttl6s7SGicm+mq1w2IIl/qjqYYbxHygwjoOpMXBWBCcv
+        fXNaW5gIoxclCOLAqZn0MN4grUAQn6ZGV/xe/fqMlmki9B3ktbwdDWWaqLpSA4cC/hs0iM7h8xL0NjIS
+        5nrSeWieJLxeWgW7rwB7UoS+xQfZu9PYyjRGrdwy9aWYwrf1BN7lak/aMmH/jZbJHDZc2wjfwg+r+SsY
+        5h3eCD5szxaggwAAAABJRU5ErkJggg==
+</value>
+  </data>
   <metadata name="m_mnuDevices.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
@@ -128,7 +143,7 @@
         AAEAAAD/////AQAAAAAAAAAMAgAAAFdTeXN0ZW0uV2luZG93cy5Gb3JtcywgVmVyc2lvbj00LjAuMC4w
         LCBDdWx0dXJlPW5ldXRyYWwsIFB1YmxpY0tleVRva2VuPWI3N2E1YzU2MTkzNGUwODkFAQAAACZTeXN0
         ZW0uV2luZG93cy5Gb3Jtcy5JbWFnZUxpc3RTdHJlYW1lcgEAAAAERGF0YQcCAgAAAAkDAAAADwMAAACk
-        EgAAAk1TRnQBSQFMAgEBAgEAAbgBAAG4AQABIAEAASABAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAGA
+        EgAAAk1TRnQBSQFMAgEBAgEAAcABAAHAAQABIAEAASABAAT/ASEBAAj/AUIBTQE2BwABNgMAASgDAAGA
         AwABIAMAAQEBAAEgBgABQDoAAyEBMANMAY8DXAHPAYQBgQGAAf8BhAGBAYAB/wGEAYEBgAH/AYQBgQGA
         Af8BhAGBAYAB/wGEAYEBgAH/A1wBzwNMAY8DIQEwUAADIQEwA0wBjwNcAc8BhAGBAYAB/wGEAYEBgAH/
         AYQBgQGAAf8BhAGBAYAB/wGEAYEBgAH/AYQBgQGAAf8DXAHPA0wBjwMhATD/AEkAAzoBYANcAd8BhAGB

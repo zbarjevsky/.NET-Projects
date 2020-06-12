@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{E4E25D2A-72DA-4701-A222-FAA272533E7B}</ProjectGuid>
+    <ProjectGuid>{5B2DDCA8-4EB0-4ED5-A2C0-19DA1137F869}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <RootNamespace>SimpleBackup</RootNamespace>
     <AssemblyName>SimpleBackup</AssemblyName>
@@ -147,9 +147,9 @@
     <Folder Include="Controls\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Common.MkZ\Common.MkZ\Common.MkZ.csproj">
-      <Project>{a03c89dd-ca87-4c9e-9ff9-f4277372e0f7}</Project>
-      <Name>Common.MkZ</Name>
+    <ProjectReference Include="..\..\Framework.MkZ\Framework.MkZ\Framework.MkZ.csproj">
+      <Project>{768af4b8-5edd-4196-97ae-dbc1589dd426}</Project>
+      <Name>Framework.MkZ</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -141,9 +141,9 @@
     <Resource Include="Images\AppIcon.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Common.MkZ\Common.MkZ\Common.MkZ.csproj">
-      <Project>{A03C89DD-CA87-4C9E-9FF9-F4277372E0F7}</Project>
-      <Name>Common.MkZ</Name>
+    <ProjectReference Include="..\..\Framework.MkZ\Framework.MkZ\Framework.MkZ.csproj">
+      <Project>{768af4b8-5edd-4196-97ae-dbc1589dd426}</Project>
+      <Name>Framework.MkZ</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

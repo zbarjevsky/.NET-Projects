@@ -57,7 +57,7 @@ namespace MZ
                 listView1.Items.Add("i" + i, i);
             }
 
-            NonStickMouse.EnableMouseCorrection(true);
+            //NonStickMouse.EnableMouseCorrection(true);
         }
 
         private void m_btnTestEdit_Click(object sender, EventArgs e)
@@ -96,14 +96,12 @@ namespace MZ
                 colorBarsProgressBar2.Value = (int)trackBar1.Value;
             colorBarsProgressBar3.Value = (int)trackBar1.Value;
 
-            Random r = new Random();
-
             List<double> values = new List<double>();
             for (int i = 0; i < trackBar1.Value; i++)
             {
                 values.Add(_values[i]);
             }
-            chartProgressUserControl1.SetHistory(values, r.Next(22, 67), 100);
+            chartProgressUserControl1.SetHistory(values, 100);
         }
 
         private void m_btnTestWPFMessageBox_Click(object sender, EventArgs e)

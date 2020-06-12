@@ -228,12 +228,16 @@ namespace MZ.WinForms
 			private void OnFileRenamed(object sender, RenamedEventArgs e)
 			{
 				FileData file = _list.FirstOrDefault(f => f.FullPath == e.OldFullPath);
-				if (file != null)
+				if (file == null)
+					return;
+
+				Control parent = file.ListView;
+				MZ.Tools.CommonUtils.ExecuteOnUIThread(() =>
 				{
 					file.Init(e.FullPath, file.Checked);
 					SortList();
 					OnChangeAction(e.FullPath);
-				}
+				}, parent);
 			}
 
 			private void OnFileCreated(object sender, FileSystemEventArgs e)

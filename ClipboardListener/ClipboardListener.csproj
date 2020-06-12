@@ -331,9 +331,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Common.MkZ\Common.MkZ\Common.MkZ.csproj">
+    <ProjectReference Include="..\Common.MkZ\Common.MkZ\Framework.MkZ.csproj">
       <Project>{a03c89dd-ca87-4c9e-9ff9-f4277372e0f7}</Project>
-      <Name>Common.MkZ</Name>
+      <Name>Framework.MkZ</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

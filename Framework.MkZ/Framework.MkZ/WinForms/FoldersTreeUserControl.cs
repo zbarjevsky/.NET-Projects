@@ -100,7 +100,7 @@ namespace MZ.WinForms
 
 		private TreeNode FindSubNode(TreeNode node, List<string> folders, int index = 0)
 		{
-			if(node.Nodes.Count == 0)
+			if(node.Nodes.Count == 0 || node.Nodes[0].Name == NODE_PLACEHOLDER)
 				PopulateDirectory(node);
 
 			foreach (TreeNode n in node.Nodes)
