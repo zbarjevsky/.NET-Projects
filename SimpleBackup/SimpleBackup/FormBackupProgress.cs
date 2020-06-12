@@ -247,7 +247,7 @@ namespace SimpleBackup
                     }
 
                     _startIndex = i;
-                    _speedCounter.AddCount(file.SrcIfo.Length);
+                    _speedCounter.AddCount(file.SrcIfo.Length, i, _backupFilesList.Count);
 
                     if (i % updateProgressCount == 0)
                     {

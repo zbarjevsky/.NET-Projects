@@ -147,7 +147,7 @@
             // 
             // m_btnContinue
             // 
-            this.m_btnContinue.Location = new System.Drawing.Point(254, 11);
+            this.m_btnContinue.Location = new System.Drawing.Point(173, 11);
             this.m_btnContinue.Name = "m_btnContinue";
             this.m_btnContinue.Size = new System.Drawing.Size(75, 23);
             this.m_btnContinue.TabIndex = 3;
@@ -182,7 +182,7 @@
             // 
             this.m_btnPause.Image = global::SimpleBackup.Properties.Resources.pause_on;
             this.m_btnPause.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnPause.Location = new System.Drawing.Point(173, 11);
+            this.m_btnPause.Location = new System.Drawing.Point(254, 11);
             this.m_btnPause.Name = "m_btnPause";
             this.m_btnPause.Size = new System.Drawing.Size(75, 23);
             this.m_btnPause.TabIndex = 2;

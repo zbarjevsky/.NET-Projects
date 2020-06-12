@@ -12,43 +12,25 @@ using System.Windows.Forms;
 
 namespace MZ.Tools
 {
-    public static class Shell32_Icons
+    public class IconsExtractor
     {
-        public static ImageList SmallImageList = new ImageList();
-        public static ImageList LargeImageList = new ImageList();
+        public ImageList SmallImageList = new ImageList();
+        public ImageList LargeImageList = new ImageList();
 
         public static List<Icon> SmallIconsList = new List<Icon>();
         public static List<Icon> LargeIconsList = new List<Icon>();
 
-        static Shell32_Icons()
+        public IconsExtractor(params string [] fileNames)
         {
             SmallImageList.ColorDepth = ColorDepth.Depth32Bit;
             SmallImageList.ImageSize = new Size(16, 16);
-            
+
             LargeImageList.ColorDepth = ColorDepth.Depth32Bit;
             LargeImageList.ImageSize = new Size(32, 32);
 
-            IntPtr large;
-            IntPtr small;
-            int count = ExtractIconEx("shell32.dll", -1, out large, out small, 1);
-
-            for (int i = 0; i < count; i++)
+            foreach (var file in fileNames)
             {
-                try
-                {
-                    int res = ExtractIconEx("shell32.dll", i, out large, out small, 1);
-
-                    SmallIconsList.Add(Icon.FromHandle(small));
-                    LargeIconsList.Add(Icon.FromHandle(large));
-
-                    SmallImageList.Images.Add(SmallIconsList[i]);
-                    LargeImageList.Images.Add(LargeIconsList[i]);
-                }
-                catch (Exception err)
-                {
-                    Debug.WriteLine("Load Icons Error: " + err.Message);
-                    break;
-                }
+                ExtractIcons(file);
             }
         }
 
@@ -76,11 +58,51 @@ namespace MZ.Tools
             }
         }
 
-        public static Icon Extract(string file, int number, bool largeIcon)
+        private void ExtractIcons(string fileName)
+        {
+            try
+            {
+                string ext = Path.GetExtension(fileName).ToLowerInvariant();
+                if (ext == ".exe" || ext == ".dll")
+                {
+                    IntPtr large;
+                    IntPtr small;
+                    int count = ExtractIconEx(fileName, -1, out large, out small, 1);
+
+                    for (int i = 0; i < count; i++)
+                    {
+                        int res = ExtractIconEx(fileName, i, out large, out small, 1);
+
+                        SmallIconsList.Add(Icon.FromHandle(small));
+                        LargeIconsList.Add(Icon.FromHandle(large));
+
+                        SmallImageList.Images.Add(SmallIconsList[i]);
+                        LargeImageList.Images.Add(LargeIconsList[i]);
+                    }
+                }
+                else
+                {
+                    Bitmap bmp = new Bitmap(fileName);
+                    Icon ico = Icon.FromHandle(bmp.GetHicon());
+                    SmallIconsList.Add(ico);
+                    LargeIconsList.Add(ico);
+
+                    SmallImageList.Images.Add(ico);
+                    LargeImageList.Images.Add(ico);
+                }
+            }
+            catch (Exception err)
+            {
+                Debug.WriteLine("Load Icons Error: " + err.Message);
+                throw;
+            }
+        }
+
+        public static Icon ExtractByIndex(string file, int index, bool largeIcon)
         {
             IntPtr large;
             IntPtr small;
-            ExtractIconEx(file, number, out large, out small, 1);
+            ExtractIconEx(file, index, out large, out small, 1);
             try
             {
                 return Icon.FromHandle(largeIcon ? large : small);

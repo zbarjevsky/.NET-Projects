@@ -11,6 +11,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using MZ.WPF;
+using MZ.WPF.MessageBox;
+using System.IO;
 
 namespace MZ
 {
@@ -49,13 +51,13 @@ namespace MZ
 
             foldersTreeUserControl1.SelectFolder(@"D:\Temp");
 
-            listView1.SmallImageList = Shell32_Icons.SmallImageList;
-            listView1.LargeImageList = Shell32_Icons.LargeImageList;
+            //listView1.SmallImageList = Shell32_Icons.SmallImageList;
+            //listView1.LargeImageList = Shell32_Icons.LargeImageList;
 
-            for (int i = 0; i < Shell32_Icons.SmallImageList.Images.Count; i++)
-            {
-                listView1.Items.Add("i" + i, i);
-            }
+            //for (int i = 0; i < Shell32_Icons.SmallImageList.Images.Count; i++)
+            //{
+            //    listView1.Items.Add("i" + i, i);
+            //}
 
             //NonStickMouse.EnableMouseCorrection(true);
         }
@@ -137,6 +139,45 @@ namespace MZ
             colorBarsProgressBar1.Enabled = m_chkEnable.Checked;
             colorBarsProgressBar2.Enabled = m_chkEnable.Checked;
             colorBarsProgressBar3.Enabled = m_chkEnable.Checked;
+        }
+
+        private void m_btnOpenIconsFile_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.Multiselect = true;
+            dlg.Filter = "Icon Containers *.exe, *.dll|*.exe;*.dll|Images *.png, *.jpg | *.png; *.jpg| All Files (*.*)|*.*";
+            dlg.FileName = @"C:\Windows\System32\Shell32.dll";
+            dlg.CheckFileExists = false;
+            if (dlg.ShowDialog(this) != DialogResult.OK)
+                return;
+
+            try
+            {
+                IconsExtractor extractor = new IconsExtractor(dlg.FileNames);
+
+                listView1.SmallImageList = extractor.SmallImageList;
+                listView1.LargeImageList = extractor.LargeImageList;
+
+                if (extractor.SmallImageList.Images.Count == 0)
+                    throw new Exception("No Images found in: " + Path.GetFileName(dlg.FileName));
+
+                listView1.Items.Clear();
+                for (int i = 0; i < extractor.SmallImageList.Images.Count; i++)
+                {
+                    listView1.Items.Add("i" + i, i);
+                }
+            }
+            catch (Exception err)
+            {
+                this.MessageError(err.Message);
+            }        
+        }
+
+        private void m_btnSaveIcons_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog dlg = new SaveFileDialog();
+            if (dlg.ShowDialog(this) != DialogResult.OK)
+                return;
         }
     }
 }

@@ -38,18 +38,23 @@ namespace SimpleBackup.Tools
 
         public long iBytesCount { get; set; } = 0;
         public TimeSpan ElapsedTime { get; set; } = TimeSpan.FromSeconds(0);
-        public int Count { get { return _fileDataList.Count; } }
+        public int Count { get { return _fileDataListMax.Count; } }
 
-        private List<FileData> _fileDataList = new List<FileData>(1024); 
+        private List<FileData> _fileDataListMax = new List<FileData>(1024);
+        private List<FileData> _fileDataList100 = new List<FileData>(1024);
 
-        public void AddCount(long addBytes)
+        public void AddCount(long addBytes, int currentIndex, int total)
         {
-            lock (_fileDataList)
+            lock (_fileDataListMax)
             {
                 ElapsedTime += _stopper.Elapsed;
                 iBytesCount += addBytes;
 
-                _fileDataList.Add(new FileData(addBytes, _stopper.Elapsed.TotalMilliseconds));
+                FileData data = new FileData(addBytes, _stopper.Elapsed.TotalMilliseconds);
+                _fileDataListMax.Add(data);
+
+                int i = 100 * currentIndex / total;
+                _fileDataList100[i] += data;
             }
 
             _stopper.Restart();
@@ -59,11 +64,18 @@ namespace SimpleBackup.Tools
         {
             _stopper.Restart();
 
-            if (startIndex == 0 || (startIndex+1) != _fileDataList.Count)
+            if (startIndex == 0 || (startIndex+1) != _fileDataListMax.Count)
             {
                 iBytesCount = 0;
                 ElapsedTime = TimeSpan.FromSeconds(0);
-                _fileDataList.Clear();
+
+                _fileDataListMax.Clear();
+                _fileDataList100.Clear();
+                
+                for (int i = 0; i < 100; i++)
+                {
+                    _fileDataList100.Add(new FileData(0, 0));
+                }
             }
         }
 
@@ -102,12 +114,12 @@ namespace SimpleBackup.Tools
         {
             long bytes = 0;
             double milliseconds = 0;
-            lock (_fileDataList)
+            lock (_fileDataListMax)
             {
-                for (int i = _fileDataList.Count - 1; i >= 0; i--)
+                for (int i = _fileDataListMax.Count - 1; i >= 0; i--)
                 {
-                    bytes += _fileDataList[i].Length;
-                    milliseconds += _fileDataList[i].ElapsedMilliseconds;
+                    bytes += _fileDataListMax[i].Length;
+                    milliseconds += _fileDataListMax[i].ElapsedMilliseconds;
                     if (milliseconds > interval.TotalMilliseconds)
                         break;
                 }
@@ -118,21 +130,21 @@ namespace SimpleBackup.Tools
         public List<double> SpeedHistory(int total, ref int max)
         {
             List<double> progress = new List<double>();
-            lock (_fileDataList)
+            lock (_fileDataListMax)
             {
                 if (total <= max)
                 {
                     max = total;
-                    for (int i = 0; i < _fileDataList.Count; i++)
+                    for (int i = 0; i < _fileDataListMax.Count; i++)
                     {
-                        progress.Add(_fileDataList[i].SpeedKBs); //KB/s
+                        progress.Add(_fileDataListMax[i].SpeedKBs); //KB/s
                     }
                     return progress;
                 }
                 else
                 {
                     double countMax = total;
-                    double countVal = _fileDataList.Count;
+                    double countVal = _fileDataListMax.Count;
 
                     double filesPerBucket = countMax / max;
 
@@ -140,16 +152,16 @@ namespace SimpleBackup.Tools
                     List<FileData> data = new List<FileData>();
 
                     FileData currentBucket = new FileData(0, 0);
-                    for (int i = 0; i < _fileDataList.Count; i++)
+                    for (int i = 0; i < _fileDataListMax.Count; i++)
                     {
                         if (i < currentFile)
                         {
-                            currentBucket += _fileDataList[i];
+                            currentBucket += _fileDataListMax[i];
                         }
                         else
                         {
                             progress.Add(currentBucket.SpeedKBs);
-                            currentBucket = _fileDataList[i];
+                            currentBucket = _fileDataListMax[i];
                             currentFile += filesPerBucket;
                         }
                     }

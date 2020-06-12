@@ -154,7 +154,7 @@
     <Compile Include="Windows\DesktopWindowManager.cs" />
     <Compile Include="Windows\FileUtils.cs" />
     <Compile Include="Windows\NotifyPropertyChangedImpl.cs" />
-    <Compile Include="Windows\Shell32_Icons.cs" />
+    <Compile Include="Windows\IconsExtractor.cs" />
     <Compile Include="Windows\SingleInstanceHelper.cs" />
     <Compile Include="Windows\TaskbarManagerHelper.cs" />
     <Compile Include="Windows\User32.cs" />
