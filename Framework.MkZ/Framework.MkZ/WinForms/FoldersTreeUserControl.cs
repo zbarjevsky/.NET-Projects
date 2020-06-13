@@ -163,12 +163,13 @@ namespace MZ.WinForms
 
 				//create new drive node
 				string desc = GetDriveDescription(drive);
-				TreeNode nodeTreeNode = new TreeNode(desc, imageIndex, selectIndex);
-				nodeTreeNode.Name = drive.Name;
-				nodeTreeNode.Tag = drive;
+				TreeNode driveNode = new TreeNode(desc, imageIndex, selectIndex);
+				driveNode.Name = drive.Name;
+				driveNode.Tag = drive;
+				driveNode.Nodes.Add(NODE_PLACEHOLDER, ""); //to add + sign to expand the node
 
 				//add new node
-				root.Nodes.Add(nodeTreeNode);
+				root.Nodes.Add(driveNode);
 			}
 
 			root.Expand();
