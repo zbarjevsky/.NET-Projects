@@ -299,7 +299,7 @@ namespace SimpleBackup
 
                 int max = 100;
                 List<double> speeds = _speedCounter.SpeedHistory(_backupFilesList.Count, ref max);
-                m_chartProgress.SetHistory(speeds, max);
+                m_chartProgress.SetHistory(speeds, max, _backupFilesList[_startIndex].Src);
 
                 if (_abort)
                     m_progressBarMain.Value = 0;

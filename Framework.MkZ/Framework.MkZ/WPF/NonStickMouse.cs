@@ -12,7 +12,7 @@ namespace MZ.WPF
 {
     public class NonStickMouse
     {
-        public class BorderBetweenDisplays
+        private class BorderBetweenDisplays
         {
             public double fromDisplaytoDisplay_Top = -1;
             public double fromDisplaytoDisplay_Bottom = -1;

@@ -218,7 +218,7 @@ namespace MZ.Tools
                         listFiles.Clear();
                         break;
                     }
-                    fileProgress.SubStatus = string.Format("Folders: ? {0:###,##0}, Files: ? {1:###,##0}", totalFoldersCount, listFiles.Count);
+                    fileProgress.SubStatus = string.Format("? {0:###,##0} Folders, ? {1:###,##0} Files", totalFoldersCount, listFiles.Count);
                 }
 
                 string[] fileList = null;

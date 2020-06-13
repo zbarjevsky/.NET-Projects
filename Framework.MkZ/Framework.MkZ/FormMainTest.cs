@@ -36,9 +36,10 @@ namespace MZ
             //Shell32_Icons.SaveImages(folder, Shell32_Icons.SmallIconsList);
             //Shell32_Icons.SaveImages(folder, Shell32_Icons.LargeIconsList);
 
+            //chart values
             for (int i = 0; i < trackBar1.Maximum; i++)
             {
-                _values.Add(_r.Next(22, 67));
+                _values.Add(256 + 256 * Math.Sin(6 * Math.PI * i / 180.0));
             }
         }
 
@@ -98,12 +99,13 @@ namespace MZ
                 colorBarsProgressBar2.Value = (int)trackBar1.Value;
             colorBarsProgressBar3.Value = (int)trackBar1.Value;
 
+            //chart values
             List<double> values = new List<double>();
             for (int i = 0; i < trackBar1.Value; i++)
             {
                 values.Add(_values[i]);
             }
-            chartProgressUserControl1.SetHistory(values, 100);
+            chartProgressUserControl1.SetHistory(values, 100, "Trackbar Value "+ trackBar1.Value);
         }
 
         private void m_btnTestWPFMessageBox_Click(object sender, EventArgs e)

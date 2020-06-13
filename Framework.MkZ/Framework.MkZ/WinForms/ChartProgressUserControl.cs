@@ -60,7 +60,7 @@ namespace WindowsFormsApp1
             _annotationLine.AxisX = chart1.ChartAreas[0].AxisX;
             _annotationLine.AxisY = chart1.ChartAreas[0].AxisY;
             _annotationLine.IsSizeAlwaysRelative = false;
-            _annotationLine.AnchorY = 44;
+            _annotationLine.AnchorY = 2;
             _annotationLine.IsInfinitive = true;
             _annotationLine.ClipToChartArea = chart1.ChartAreas[0].Name; 
             _annotationLine.LineColor = Color.Navy; 
@@ -70,10 +70,12 @@ namespace WindowsFormsApp1
             //annotation text
             
             //annotation.AnchorDataPoint = chart1.Series[1].Points[3];
-            _annotationText.Y = 40; // percent from top
-            _annotationText.X = 60; // percent from left
+            _annotationText.Y = 0; // Y coordinate
+            _annotationText.X = 0.7 * chart1.ChartAreas[0].AxisX.Maximum; // X coordinate
+            //_annotationText.Width = 0.3 * chart1.ChartAreas[0].AxisX.Maximum;
+            //_annotationText.Height = Auto;
             _annotationText.ShadowColor = Color.Pink;
-            _annotationText.Text = "Speed: 946 Kb/s";
+            _annotationText.Text = "Speed: ? Kb/s";
             _annotationText.ForeColor = Color.Black;
             _annotationText.BackColor = Color.Transparent;
             _annotationText.Font = new Font("Arial", 10, FontStyle.Regular);
@@ -85,59 +87,47 @@ namespace WindowsFormsApp1
                 ser.IsVisibleInLegend = false;
                 ser.Color = Color.FromArgb(192, ser.Color); //semitransparent
             }
-
-            Random r = new Random();
-
-            for (int i = 0; i < Max; i++)
-            {
-                if (i < 630)
-                {
-                    chart1.Series[0].Points.AddXY(i, 100);
-                    chart1.Series[1].Points.AddXY(i, 43);
-                }
-                else
-                {
-                    //chart1.Series[0].Points.AddXY(i, 0);
-                    //chart1.Series[1].Points.AddXY(i, 0);
-                }
-            }
         }
 
-        public void SetHistory(List<double> values, int maxX)
+        public void SetHistory(List<double> values, int maxX, string title)
         {
             foreach (var ser in chart1.Series)
             {
                 ser.Points.Clear();
             }
 
+            _annotationLine.AnchorY = 0;
+            _annotationText.Y = 0; //Top
+            _annotationText.Text = "";
+            chart1.Titles[0].Text = title;
             if (values.Count == 0)
                 return;
 
-            chart1.ChartAreas[0].AxisX.Minimum = 0;
+            chart1.ChartAreas[0].AxisX.Minimum = -1;
             chart1.ChartAreas[0].AxisX.Maximum = maxX;
             chart1.ChartAreas[0].AxisX.MajorGrid.Interval = maxX / 10;
 
             double maxY = 1.2 * values.Max();
+            chart1.ChartAreas[0].AxisY.Minimum = 0;
             chart1.ChartAreas[0].AxisY.Maximum = maxY;
             chart1.ChartAreas[0].AxisY.MajorGrid.Interval = maxY / 5;
 
             double current = values.Last();
 
             _annotationText.Text = string.Format("Speed: {0:###,##0.0} Kb/s", current);
-            _annotationText.Y = -20 + 100 * (maxY - current)/maxY;
+            _annotationText.X = 0.8 * maxX;
+            double textY = 100 * ((maxY - current)/maxY); //percent from top
+            textY -= 4.0 * maxY /chart1.Height; 
+            _annotationText.Y = textY;
+            
             _annotationLine.AnchorY = current;
 
             for (int i = 0; i < maxX; i++)
             {
                 if (i < values.Count)
                 {
-                    chart1.Series[0].Points.AddXY(i, 100);
+                    chart1.Series[0].Points.AddXY(i, maxY);
                     chart1.Series[1].Points.AddXY(i, values[i]);
-                }
-                else
-                {
-                    //chart1.Series[0].Points.AddXY(i, 0);
-                    //chart1.Series[1].Points.AddXY(i, 0);
                 }
             }
         }
