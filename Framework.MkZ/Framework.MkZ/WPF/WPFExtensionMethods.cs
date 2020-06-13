@@ -25,7 +25,7 @@ namespace MZ.WPF
             {
                 User32.RECT rc = new User32.RECT();
                 User32.SystemParametersInfo(48, 0, ref rc, 0);
-                r = new Int32Rect(rc.left, rc.top, rc.width, rc.height);
+                r = new Int32Rect(rc.Left, rc.Top, rc.Width, rc.Height);
             }
             else
             {
@@ -33,7 +33,7 @@ namespace MZ.WPF
                 IntPtr hmonitor = User32.MonitorFromWindow(new HandleRef((object)null, helper.EnsureHandle()), 2);
                 User32.MONITORINFOEX info = new User32.MONITORINFOEX();
                 User32.GetMonitorInfo(new HandleRef((object)null, hmonitor), info);
-                r = new Int32Rect(info.rcWork.left, info.rcWork.top, info.rcWork.width, info.rcWork.height);
+                r = new Int32Rect(info.rcWork.Left, info.rcWork.Top, info.rcWork.Width, info.rcWork.Height);
             }
             return new System.Windows.Point(r.X, r.Y);
         }

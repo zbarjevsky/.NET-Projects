@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace ClipboardManager
+namespace ListViewExtensions
 {
     public static class ListViewColumnSorterExtension
     {

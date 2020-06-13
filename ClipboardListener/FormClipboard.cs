@@ -18,6 +18,8 @@ using Microsoft.Win32;
 using Utils;
 using ClipboardManager.Utils;
 using MZ.WPF.MessageBox;
+using MZ.Tools;
+using System.Runtime.CompilerServices;
 
 namespace ClipboardManager
 {
@@ -115,14 +117,14 @@ namespace ClipboardManager
 
 				case WM_DRAWCLIPBOARD:
 					if (ProcessClipboardData())
-						NativeWIN32.SendMessage(m_NextClipboardViewer, m.Msg, m.WParam, m.LParam);
+						User32.SendMessage(m_NextClipboardViewer, (uint)m.Msg, m.WParam, m.LParam);
 					return true;
 
 				case WM_CHANGECBCHAIN:
 					if (m.WParam == m_NextClipboardViewer)
 						m_NextClipboardViewer = m.LParam;
 					else if ( m_NextClipboardViewer != IntPtr.Zero )
-						NativeWIN32.SendMessage(m_NextClipboardViewer, m.Msg, m.WParam, m.LParam);
+						User32.SendMessage(m_NextClipboardViewer, (uint)m.Msg, m.WParam, m.LParam);
 					return true;
 
 				case WM_SYSCOMMAND: //respond to About & Exit
@@ -144,7 +146,7 @@ namespace ClipboardManager
 		private void FormClipboard_Load(object sender, EventArgs e)
 		{
             m_Settings.Load(m_sHistoryFileName, m_sSettingsFileName, this, m_ClipboardListMain, m_ClipboardListFavorites, this.Icon.ToBitmap());
-            m_NextClipboardViewer = (IntPtr)NativeWIN32.SetClipboardViewer((int)this.Handle);
+            m_NextClipboardViewer = (IntPtr)User32Clipboard.SetClipboardViewer((int)this.Handle);
 			bool success = m_Settings.I.HotKeyInfo.RegisterHotKey(this);
 			
 			m_richTextBoxClipboard_SelectionChanged(null, null); //to enable copy/paste
@@ -189,7 +191,7 @@ namespace ClipboardManager
             ShutdownHandler.CancelMonitoringShutdown();
             Utils.ServicesManipulator.Stop();
 
-            NativeWIN32.ChangeClipboardChain(this.Handle, m_NextClipboardViewer);
+            User32Clipboard.ChangeClipboardChain(this.Handle, m_NextClipboardViewer);
 
 			Save();
 		}//end FormClipboard_FormClosing
@@ -202,18 +204,18 @@ namespace ClipboardManager
 			m_bmpAbout = new Bitmap(m_ImageListSysMenu.Images[4]);
 
 			// get handle to system menu
-			IntPtr menu = NativeWIN32.GetSystemMenu(this.Handle, 0);
+			IntPtr menu = User32SystemMenu.GetSystemMenu(this.Handle, 0);
 			// add exit item with a unique ID
-			NativeWIN32.InsertMenu(menu, NativeWIN32.MF_LAST, NativeWIN32.MF_BYPOSITION, m_iExitId, "Exit\tAlt+X");
+			User32SystemMenu.InsertMenu(menu, User32SystemMenu.MF_LAST, User32SystemMenu.MF_BYPOSITION, m_iExitId, "Exit\tAlt+X");
 			// add a separator
-			NativeWIN32.AppendMenu(menu, NativeWIN32.MF_SEPARATOR, 0, null);
+			User32SystemMenu.AppendMenu(menu, User32SystemMenu.MF_SEPARATOR, 0, null);
 			// add About item with a unique ID
-			NativeWIN32.AppendMenu(menu, 0, m_iAboutId, "About " + this.Text);
+			User32SystemMenu.AppendMenu(menu, 0, m_iAboutId, "About " + this.Text);
 
 			// change icons
-			NativeWIN32.SetMenuItemBitmaps(menu, 6, NativeWIN32.MF_BYPOSITION, m_bmpClose.GetHbitmap(), IntPtr.Zero);
-			NativeWIN32.SetMenuItemBitmaps(menu, 7, NativeWIN32.MF_BYPOSITION, m_bmpExit.GetHbitmap(), IntPtr.Zero);
-			NativeWIN32.SetMenuItemBitmaps(menu, 9, NativeWIN32.MF_BYPOSITION, m_bmpAbout.GetHbitmap(), IntPtr.Zero);
+			User32SystemMenu.SetMenuItemBitmaps(menu, 6, User32SystemMenu.MF_BYPOSITION, m_bmpClose.GetHbitmap(), IntPtr.Zero);
+			User32SystemMenu.SetMenuItemBitmaps(menu, 7, User32SystemMenu.MF_BYPOSITION, m_bmpExit.GetHbitmap(), IntPtr.Zero);
+			User32SystemMenu.SetMenuItemBitmaps(menu, 9, User32SystemMenu.MF_BYPOSITION, m_bmpAbout.GetHbitmap(), IntPtr.Zero);
 		}//end SetupSystemMenu
 
 		private void CopyMenuStripItem(ToolStripMenuItem src, ToolStripMenuItem dst, EventHandler onClick)
@@ -295,7 +297,7 @@ namespace ClipboardManager
 				if ( !m_bPasteFromThis )
 				{
 					IntPtr hWndCurr = ForegroundWindow.Instance.Handle;
-					sAppTitle = NativeWIN32.GetWindowText(hWndCurr);
+					sAppTitle = User32.GetWindowText(hWndCurr);
 					if ( sAppTitle.Trim().Length == 0 )
 						sAppTitle = "--Unknown--";
                     
@@ -373,22 +375,22 @@ namespace ClipboardManager
 			const int ICON_SMALL		= 0;
 			const int ICON_BIG			= 1;
 			
-			string sTitle = NativeWIN32.GetWindowText(hWnd);
+			string sTitle = User32.GetWindowText(hWnd);
 			LogMethod("GetIconFromHWnd", "Caption(ico): {0}", sTitle);
 			if (hWnd == this.Handle || sTitle.Trim().Length == 0 )
 				return this.Icon.ToBitmap();
 
-			IntPtr hIcon = NativeWIN32.GetClassLong(hWnd, GCL_HICONSM);
+			IntPtr hIcon = User32.GetClassLong(hWnd, GCL_HICONSM);
 			if (hIcon == IntPtr.Zero)
-				hIcon = NativeWIN32.SendMessage(hWnd, WM_GETICON, ICON_SMALL, IntPtr.Zero);
+				hIcon = User32.SendMessage(hWnd, WM_GETICON, (IntPtr)ICON_SMALL, IntPtr.Zero);
 			if (hIcon == IntPtr.Zero)
-				hIcon = NativeWIN32.SendMessage(hWnd, WM_GETICON, ICON_SMALL2, IntPtr.Zero);
+				hIcon = User32.SendMessage(hWnd, WM_GETICON, (IntPtr)ICON_SMALL2, IntPtr.Zero);
 			if (hIcon == IntPtr.Zero)
-				hIcon = NativeWIN32.GetClassLong(hWnd, GCL_HICON);
+				hIcon = User32.GetClassLong(hWnd, GCL_HICON);
 			if (hIcon == IntPtr.Zero)
-				hIcon = NativeWIN32.SendMessage(hWnd, WM_GETICON, ICON_BIG, IntPtr.Zero);
+				hIcon = User32.SendMessage(hWnd, WM_GETICON, (IntPtr)ICON_BIG, IntPtr.Zero);
 			if (hIcon == IntPtr.Zero)
-				hIcon = NativeWIN32.SendMessage(hWnd, WM_QUERYDRAGICON, 0, IntPtr.Zero);
+				hIcon = User32.SendMessage(hWnd, WM_QUERYDRAGICON, IntPtr.Zero, IntPtr.Zero);
 			
 			if (hIcon == IntPtr.Zero)
 			{
@@ -400,7 +402,7 @@ namespace ClipboardManager
 
 		private class Pos
 		{
-			private NativeWIN32.RECT r;
+			private User32.RECT r;
 			public Pos(Control ctrl) 
 			{
 				r.Left		= ctrl.Left;
@@ -417,7 +419,7 @@ namespace ClipboardManager
 				r.Bottom	= sz.Height;
 			}//end constructor
 
-			public Pos(NativeWIN32.RECT r)
+			public Pos(User32.RECT r)
 			{
 				this.r = r;
 			}//end constructor
@@ -431,9 +433,9 @@ namespace ClipboardManager
 		private void ProcessHotkey(Pos rectangle)
 		{
 			m_hWndToRestore = ForegroundWindow.Instance.Handle;
-			NativeWIN32.RECT rc = NativeWIN32.GetWindowRect(m_hWndToRestore);
+			User32.GetWindowRect(m_hWndToRestore, out User32.RECT rc);
 			LogMethod("ProcessHotkey", "Parent rc: {0}",  rc);
-			LogMethod("ProcessHotkey", "Caption(HotKey): {0}", NativeWIN32.GetWindowText(m_hWndToRestore));
+			LogMethod("ProcessHotkey", "Caption(HotKey): {0}", User32.GetWindowText(m_hWndToRestore));
 
 			//redbuild menu without flickering
 			m_contextMenuStripClipboard.Visible = false;
@@ -477,7 +479,7 @@ namespace ClipboardManager
 			//set this active - to receive menu events
 			if ( m_hWndToRestore != this.Handle )
 				this.Visible = false;
-			NativeWIN32.SetForegroundWindow(this.Handle);
+			User32.SetForegroundWindow(this.Handle);
 
 			//fix - show system tray icon
 			m_notifyIconCoodClip.Visible = true;
@@ -533,7 +535,7 @@ namespace ClipboardManager
 			return list;
 		}//end BuildFavoritesList
 
-		private static Point CalculateCenter(NativeWIN32.RECT r, Size szMenu)
+		private static Point CalculateCenter(User32.RECT r, Size szMenu)
 		{
 			int deltaX = ((r.Right - r.Left) - szMenu.Width) / 2;
 			int deltaY = ((r.Bottom - r.Top) - szMenu.Height) / 2;
@@ -611,7 +613,7 @@ namespace ClipboardManager
 
 			IntPtr hWndCurr = ForegroundWindow.Instance.Handle;
 			LogMethod("ClipboardEntry_Closed", "Caption3: {0} Text: {1}", 
-				hWndCurr, NativeWIN32.GetWindowText(hWndCurr));
+				hWndCurr, User32.GetWindowText(hWndCurr));
 
 			//restore color of selected item
 			ToolStripMenuItem itm = (ToolStripMenuItem)m_contextMenuStrip_ClipboardEntry.Tag;
@@ -751,8 +753,8 @@ namespace ClipboardManager
 			//restore previous active window - if still foreground
 			IntPtr hWndCurr = ForegroundWindow.Instance.Handle;
 
-			LogMethod("m_contextMenuStripClipboard_Closed", "Caption1: {0}", NativeWIN32.GetWindowText(hWndCurr));
-			LogMethod("m_contextMenuStripClipboard_Closed", "Caption2: {0}", NativeWIN32.GetWindowText(m_hWndToRestore));
+			LogMethod("m_contextMenuStripClipboard_Closed", "Caption1: {0}", User32.GetWindowText(hWndCurr));
+			LogMethod("m_contextMenuStripClipboard_Closed", "Caption2: {0}", User32.GetWindowText(m_hWndToRestore));
 
 			//close menu - clear screen
 			m_contextMenuStripClipboard.Close(ToolStripDropDownCloseReason.AppFocusChange);
@@ -766,8 +768,8 @@ namespace ClipboardManager
 					m_contextMenuStripTrayIcon_Show_Click(sender, null);
 				else //restore last foreground window
 				{
-					NativeWIN32.SetActiveWindow(m_hWndToRestore);
-					NativeWIN32.SetForegroundWindow(m_hWndToRestore);
+					User32.SetActiveWindow(m_hWndToRestore);
+					User32.SetForegroundWindow(m_hWndToRestore);
 				}//end else
 			}//end if
 
@@ -938,6 +940,7 @@ namespace ClipboardManager
 
 			this.Show();
 			this.WindowState = FormWindowState.Normal;
+			this.CenterToScreen();
 
 			//if out of desktop window more than a half
 			if (this.Location.X < 0 || this.Location.X > SystemInformation.VirtualScreen.Width - this.Width/2)
@@ -946,7 +949,7 @@ namespace ClipboardManager
 			if (this.Location.Y < 0 || this.Location.Y > SystemInformation.VirtualScreen.Height - this.Height/2)
 				this.Top = 150;
 
-			NativeWIN32.SetForegroundWindow(this.Handle);
+			User32.SetForegroundWindow(this.Handle);
 		}//end m_contextMenuStripTrayIcon_Show_Click
 
 		private void m_notifyIconCoodClip_MouseClick(object sender, MouseEventArgs e)
@@ -955,13 +958,7 @@ namespace ClipboardManager
             if (e.Button == MouseButtons.Left)
             {
                 //calculate rigth - lower quater of main screen
-                //Rectangle r = Screen.PrimaryScreen.Bounds;
-                //NativeWIN32.RECT rc = new NativeWIN32.RECT();
-                //rc.Left = r.X + (int)(0.8 * r.Width);
-                //rc.Top = r.Y + (int)(0.8 * r.Height);
-                //rc.Right = r.X + r.Width;
-                //rc.Bottom = r.Y + r.Height;
-                NativeWIN32.RECT rc = SystemTray.GetTrayRectangle();
+                User32.RECT rc = User32SystemTray.GetTrayRectangle();
 
                 ProcessHotkey(new Pos(rc));
             }
@@ -1192,6 +1189,7 @@ namespace ClipboardManager
 		{
 			SetFontSize(4);
 		}//end m_toolStripButton_FontSize_4_Click
+
 		public static void TraceLn(bool bAlways, string sModule, string sMethod, string sFormat, params object[] args)
 		{
 			if ( m_This == null )
@@ -1351,10 +1349,10 @@ namespace ClipboardManager
             bool bOldModified = m_bModified;
             try
             {
-                //unregister
-                NativeWIN32.ChangeClipboardChain(this.Handle, m_NextClipboardViewer);
+				//unregister
+				User32Clipboard.ChangeClipboardChain(this.Handle, m_NextClipboardViewer);
                 //register
-                m_NextClipboardViewer = (IntPtr)NativeWIN32.SetClipboardViewer((int)this.Handle);
+                m_NextClipboardViewer = (IntPtr)User32Clipboard.SetClipboardViewer((int)this.Handle);
 
                 //save Desktop snapshot
                 m_contextMenuStripTrayIcon_DesktopSave_Click(sender, e);

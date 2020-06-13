@@ -26,21 +26,22 @@ namespace ClipboardManager
 			public Image _icoAppFrom { get; private set; } = null;
 			public string _dataType		= DataFormats.Text;
 			public object _data			= null;
+			public DateTime date		= DateTime.Now;
 			public string _ownerType	= "";
 			private string _desc		= "--empty--";
 
             public IDataObject ClipboardDataObject { get; private set; } = null; //not valid for loaded from xml
             public string[] _svFormats { get; private set; } = null;
 
-
-            public class DropEffect
+			[Flags]
+            public enum DropEffect
 			{
-				public static int DROPEFFECT_NONE { get { return 0; } }
-				public static int DROPEFFECT_COPY { get { return 1; } }
-				public static int DROPEFFECT_MOVE { get { return 2; } }
-				public static int DROPEFFECT_LINK { get { return 4; } }
-				public static int DROPEFFECT_SCROLL { get { return -2147483648; } }
-			}; //end enum DrpEffect
+				DROPEFFECT_NONE = 0,
+				DROPEFFECT_COPY = 1,
+				DROPEFFECT_MOVE = 2,
+				DROPEFFECT_LINK = 4,
+				DROPEFFECT_SCROLL = -2147483648
+			}; 
 
 			public ClipboardEntry(Image ico)
 			{
@@ -97,14 +98,14 @@ namespace ClipboardManager
 				}//end else if
 				else if (ClipboardDataObject.GetDataPresent(DataFormats.FileDrop.ToString())) //  Clipboard.ContainsFileDropList() )
                 {
-					int flag = 0;
+					DropEffect flag = DropEffect.DROPEFFECT_NONE;
                     //MemoryStream streamType = (MemoryStream)Clipboard.GetData("Preferred DropEffect");
                     MemoryStream streamType = (MemoryStream)ClipboardDataObject.GetData("Preferred DropEffect"); 
                     if ( streamType != null )
-						flag = streamType.ReadByte();
+						flag = (DropEffect)streamType.ReadByte();
 
-					bool move = (flag & DropEffect.DROPEFFECT_MOVE) > 0 ;
-					bool copy = (flag & DropEffect.DROPEFFECT_COPY) > 0 ;
+					bool move = flag.HasFlag(DropEffect.DROPEFFECT_MOVE);
+					bool copy = flag.HasFlag(DropEffect.DROPEFFECT_COPY);
 
 					_dataType = DataFormats.FileDrop;
 					_data = ClipboardDataObject.GetData(DataFormats.FileDrop.ToString());// Clipboard.GetData(DataFormats.FileDrop);
@@ -132,62 +133,6 @@ namespace ClipboardManager
 						"ClipboardEntry::constructor - Unsupported clipboard format",
 						"ClipboardEntry");
 				}//end else
-			}//end constructor
-
-			//for load from Xml
-			public ClipboardEntry(XmlNode nd, string sOwnerType, Image icoDefault)
-			{
-				_dataType = XmlUtil.GetStrAtt(nd, "Type", DataFormats.Text);
-                _svFormats = new string[] { _dataType };
-
-				_ownerType = XmlUtil.GetStrAtt(nd, "OwnerType", "");
-				if (_ownerType != sOwnerType)
-					throw new Exception(OWNER_TYPE_MISMATCH);
-
-				string Value = nd.InnerText;
-				string sImageFileName = XmlUtil.GetStrAtt(nd, "Ico", "Image001");
-				Image ico = LoadImage(sImageFileName, icoDefault);
-
-				_icoAppFrom = ico;
-				if ( ico == null )
-					_icoAppFrom = new Bitmap(16, 16);
-
-				if (_dataType == DataFormats.Rtf)
-				{
-					_icoItemType = 2;
-					_data = Value;
-					m_RtfBox.Rtf = Value;
-					_desc = m_RtfBox.Text;
-					if (_desc.Trim().Length == 0)
-						_desc = "--Rtf Binary--";
-				}//end if
-				else if (_dataType == DataFormats.UnicodeText)
-				{
-					_icoItemType = 1;
-					_data = Value;
-					_desc = Value;
-				}//end else if
-				else if (_dataType == DataFormats.Text)
-				{
-					_icoItemType = 0;
-					_data = Value;
-					_desc = Value;
-				}//end else if
-				else if (_dataType == DataFormats.FileDrop)
-				{
-					_icoItemType = 4;
-					String [] sv = Value.Split('|');
-					_data = sv;
-					_desc = FileDropListDesc(sv);
-				}//end else if
-				else
-				{
-					throw new Exception("Unknown clipboard format");
-				}//end else
-
-				System.Diagnostics.Trace.WriteLine(
-					"File: " + Path.GetFileName(sImageFileName) +
-					" Entry: " + ShortDesc());
 			}//end constructor
 
 			private ClipboardEntry(string sOwnerType)
@@ -279,6 +224,66 @@ namespace ClipboardManager
 				XmlUtil.UpdStrAtt(ndEntry, "Type", Type);
 				XmlUtil.UpdStrAtt(ndEntry, "Ico", sImageFileName);
 			}//end Save
+
+			//for load from Xml
+			public static ClipboardEntry Load(XmlNode nd, string sOwnerType, Image icoDefault, string baseFolder)
+			{
+				ClipboardEntry entry = new ClipboardEntry(sOwnerType);
+
+				entry._dataType = XmlUtil.GetStrAtt(nd, "Type", DataFormats.Text);
+				entry._svFormats = new string[] { entry._dataType };
+
+				entry._ownerType = XmlUtil.GetStrAtt(nd, "OwnerType", "");
+				if (entry._ownerType != sOwnerType)
+					throw new Exception(OWNER_TYPE_MISMATCH);
+
+				string Value = nd.InnerText;
+				string sImageFileName = XmlUtil.GetStrAtt(nd, "Ico", "Image001");
+				Image ico = LoadImage(Path.Combine(baseFolder, sImageFileName), icoDefault);
+
+				entry._icoAppFrom = ico;
+				if (ico == null)
+					entry._icoAppFrom = new Bitmap(16, 16);
+
+				if (entry._dataType == DataFormats.Rtf)
+				{
+					entry._icoItemType = 2;
+					entry._data = Value;
+					m_RtfBox.Rtf = Value;
+					entry._desc = m_RtfBox.Text;
+					if (entry._desc.Trim().Length == 0)
+						entry._desc = "--Rtf Binary--";
+				}//end if
+				else if (entry._dataType == DataFormats.UnicodeText)
+				{
+					entry._icoItemType = 1;
+					entry._data = Value;
+					entry._desc = Value;
+				}//end else if
+				else if (entry._dataType == DataFormats.Text)
+				{
+					entry._icoItemType = 0;
+					entry._data = Value;
+					entry._desc = Value;
+				}//end else if
+				else if (entry._dataType == DataFormats.FileDrop)
+				{
+					entry._icoItemType = 4;
+					String[] sv = Value.Split('|');
+					entry._data = sv;
+					entry._desc = entry.FileDropListDesc(sv);
+				}//end else if
+				else
+				{
+					throw new Exception("Unknown clipboard format");
+				}//end else
+
+				System.Diagnostics.Trace.WriteLine(
+					"File: " + Path.GetFileName(sImageFileName) +
+					" Entry: " + entry.ShortDesc());
+
+				return entry;
+			}//end Load
 
 			public void Put()
 			{
@@ -499,7 +504,7 @@ namespace ClipboardManager
 			get { return m_vData.Count; }
 		}//end count
 
-		public int Load(XmlNode nd, Image icoDefault)
+		public int Load(XmlNode nd, Image icoDefault, string baseFolder)
 		{
 			m_vData = new List<ClipboardEntry>();
 			try
@@ -511,7 +516,7 @@ namespace ClipboardManager
 					{
                         string ownerType = XmlUtil.GetStrAtt(list[i], "OwnerType", "");
                         if(ownerType == m_sListType)
-                            m_vData.Add(new ClipboardEntry(list[i], m_sListType, icoDefault)); 
+                            m_vData.Add(ClipboardEntry.Load(list[i], m_sListType, icoDefault, baseFolder)); 
 					}//end try
 					catch (Exception err) 
 					{
@@ -533,19 +538,19 @@ namespace ClipboardManager
 			return Count;
 		}//end Load
 
-		public void Save(XmlNode nd, IZip zip, string sFolderName)
+		public void Save(XmlNode nd, IZip zip)
 		{
 			nd = XmlUtil.UpdSubNode(nd, "ClipBoardList", "");
 			for (int i = 0; i < Count; i++)
 			{
-				string sImageFileName = GetImageFileName(sFolderName, i);
+				string sImageFileName = GetImageFileName(i);
 				GetEntry(i).Save(nd, zip, sImageFileName);
 			}//end for
 		}//end Save
 
-		private string GetImageFileName(string sFolderName, int idx)
+		private string GetImageFileName(int idx)
 		{
-			return sFolderName + "\\" + string.Format("{0}_Image{1:D3}.png", m_sListType, idx);
+			return string.Format("{0}_Image{1:D3}.png", m_sListType, idx);
 		}//end GetImageFileName
 
 		protected static Image LoadImage(string sImageFileName, Image icoDefault)

@@ -126,8 +126,8 @@ namespace MZ.WPF.MessageBox
         private static void CenterToWindow(this Window window, IntPtr hWnd)
         {
             User32.GetWindowRect(hWnd, out User32.RECT r);
-            Rect rect = new System.Windows.Rect(r.left, r.top, r.right - r.left, r.bottom - r.top);
-            if (r.left < 0 || r.top < 0)
+            Rect rect = new System.Windows.Rect(r.Left, r.Top, r.Right - r.Left, r.Bottom - r.Top);
+            if (r.Left < 0 || r.Top < 0)
             {
                 //center screen
                 rect = new Rect(

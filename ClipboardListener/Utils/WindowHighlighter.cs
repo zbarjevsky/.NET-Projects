@@ -1,3 +1,4 @@
+using MZ.Tools;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -17,9 +18,9 @@ namespace ClipboardManager
 		public static void Highlight(IntPtr hWnd)
 		{
 			const float penWidth = 3;
-			NativeWIN32.RECT rc = NativeWIN32.GetWindowRect(hWnd);
+			User32.GetWindowRect(hWnd, out User32.RECT rc);
 
-			IntPtr hDC = NativeWIN32.GetWindowDC(hWnd);
+			IntPtr hDC = User32.GetWindowDC(hWnd);
 			if (hDC != IntPtr.Zero)
 			{
 				using (Pen pen = new Pen(Color.Lime, penWidth))
@@ -30,7 +31,7 @@ namespace ClipboardManager
 					}
 				}
 			}
-			NativeWIN32.ReleaseDC(hWnd, hDC);
+			User32.ReleaseDC(hWnd, hDC);
 		}
 
 		/// <summary>
@@ -39,9 +40,10 @@ namespace ClipboardManager
 		/// <param name="hWnd"></param>
 		public static void Refresh(IntPtr hWnd)
 		{
-			NativeWIN32.InvalidateRect(hWnd, IntPtr.Zero, 1 /* TRUE */);
-			NativeWIN32.UpdateWindow(hWnd);
-			NativeWIN32.RedrawWindow(hWnd, IntPtr.Zero, IntPtr.Zero, NativeWIN32.RDW_FRAME | NativeWIN32.RDW_INVALIDATE | NativeWIN32.RDW_UPDATENOW | NativeWIN32.RDW_ALLCHILDREN);		
+			User32.InvalidateRect(hWnd, IntPtr.Zero, 1 /* TRUE */);
+			User32.UpdateWindow(hWnd);
+			User32.RedrawWindow(hWnd, IntPtr.Zero, IntPtr.Zero, 
+				User32.RDW.RDW_FRAME | User32.RDW.RDW_INVALIDATE | User32.RDW.RDW_UPDATENOW | User32.RDW.RDW_ALLCHILDREN);		
 		}
 	}
 }

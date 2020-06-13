@@ -159,7 +159,7 @@ namespace MZ.WPF
             {
                 User32.RECT r;
                 User32.GetWindowRect(p.MainWindowHandle, out r);
-                return new System.Windows.Rect(r.left, r.top, r.right - r.left, r.bottom - r.top);
+                return new System.Windows.Rect(r.Left, r.Top, r.Right - r.Left, r.Bottom - r.Top);
             }
             else
             {

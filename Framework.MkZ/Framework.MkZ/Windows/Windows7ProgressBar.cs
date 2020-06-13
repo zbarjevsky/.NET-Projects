@@ -129,7 +129,7 @@ namespace MZ.Tools
                     Style = ProgressBarStyle.Blocks;
 
                 // set the progress bar state (Normal, Error, Paused)
-                User32.SendMessage(this.Handle, 0x410, (uint)value, 0);
+                User32.SendMessage(this.Handle, 0x410, (IntPtr)value, IntPtr.Zero);
 
                 if (isMarquee)
                     // the Taskbar PB value needs to be reset
