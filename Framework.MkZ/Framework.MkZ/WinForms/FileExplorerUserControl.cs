@@ -496,11 +496,6 @@ namespace MZ.WinForms
 					errorProvider1.SetError(m_txtPath, e.Message);
 				}
 			}
-            else
-            {
-				MessageBox.Show("Folder does not exists: \n" + fullPath);
-				errorProvider1.SetError(m_txtPath, "Folder does not exists");
-			}
 		}
 
 		private int VisibleItemsCount()

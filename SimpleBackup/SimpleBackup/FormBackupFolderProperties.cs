@@ -51,9 +51,12 @@ namespace SimpleBackup
             {
                 CommonUtils.ExecuteOnUIThread(() =>
                 {
-                    string diskInfo = BackupLogic.GetDiskFreeSpace(_dstBaseFolder, out long freeSpace);
-                    m_txtInfo.Text = string.Format("Selected SRC {0:###,##0} files, Total size: {1:###,##0.0} MB, {2}", 
-                        count, size / s1MB, diskInfo);
+                    if (!string.IsNullOrWhiteSpace(_dstBaseFolder))
+                    {
+                        string diskInfo = BackupLogic.GetDiskFreeSpace(_dstBaseFolder, out long freeSpace);
+                        m_txtInfo.Text = string.Format("Selected SRC {0:###,##0} files, Total size: {1:###,##0.0} MB, {2}",
+                            count, size / s1MB, diskInfo);
+                    }
                     m_progressBar.Value = 0;
                 }, this);
             };
@@ -61,6 +64,10 @@ namespace SimpleBackup
 
         private void FormBackupFolderProperties_Load(object sender, EventArgs e)
         {
+            this.Visible = true;
+            this.Cursor = Cursors.WaitCursor;
+            Application.DoEvents();
+
             _srcBaseFolder = _entry.FolderSrc;
             _dstBaseFolder = _entry.FolderDst;
 
@@ -69,9 +76,9 @@ namespace SimpleBackup
             m_txtExcludeType.Text = _entry.FolderExcludeTypes;
             m_cmbPriority.SelectedItem = _entry.Priority;
 
-            this.Visible = true;
 
             ValidateInput();
+            this.Cursor = Cursors.Default;
         }
 
         private void FormBackupFolderProperties_FormClosed(object sender, FormClosedEventArgs e)
@@ -93,6 +100,8 @@ namespace SimpleBackup
 
         private void m_btnOk_Click(object sender, EventArgs e)
         {
+            _calculateSpaceTask.Abort();
+
             _entry.FolderSrc = _srcBaseFolder;
             _entry.FolderDst = _dstBaseFolder;
             _entry.IncludeSubfolders = (SearchOption)m_cmbSearchOptions.SelectedItem;
@@ -136,8 +145,10 @@ namespace SimpleBackup
 
             errorProvider1.SetError(m_btnStartBackup, error); //clear or set error
 
-            m_explorerSrc.PopulateFiles(entry.FolderSrc);
-            m_explorerDst.PopulateFiles(entry.FolderDst);
+            if(!string.IsNullOrWhiteSpace(entry.FolderSrc))
+                m_explorerSrc.PopulateFiles(entry.FolderSrc);
+            if (!string.IsNullOrWhiteSpace(entry.FolderDst))
+                m_explorerDst.PopulateFiles(entry.FolderDst);
 
             UpdateCheckedFiles(entry.FolderSrc);
 

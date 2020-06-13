@@ -70,8 +70,8 @@ namespace WindowsFormsApp1
             //annotation text
             
             //annotation.AnchorDataPoint = chart1.Series[1].Points[3];
-            _annotationText.Y = 0; // Y coordinate
-            _annotationText.X = 0.7 * chart1.ChartAreas[0].AxisX.Maximum; // X coordinate
+            _annotationText.Y = 0; // percent from top
+            _annotationText.X = 0; // percent from left
             //_annotationText.Width = 0.3 * chart1.ChartAreas[0].AxisX.Maximum;
             //_annotationText.Height = Auto;
             _annotationText.ShadowColor = Color.Pink;
@@ -79,8 +79,9 @@ namespace WindowsFormsApp1
             _annotationText.ForeColor = Color.Black;
             _annotationText.BackColor = Color.Transparent;
             _annotationText.Font = new Font("Arial", 10, FontStyle.Regular);
-            _annotationText.LineWidth = 0;
+            _annotationText.LineWidth = 0; //rectangle border
             chart1.Annotations.Add(_annotationText);
+            UpdateTextLabelWidthAndPositionXY(0);
 
             foreach (var ser in chart1.Series)
             {
@@ -103,7 +104,7 @@ namespace WindowsFormsApp1
             if (values.Count == 0)
                 return;
 
-            chart1.ChartAreas[0].AxisX.Minimum = -1;
+            chart1.ChartAreas[0].AxisX.Minimum = -0.1;
             chart1.ChartAreas[0].AxisX.Maximum = maxX;
             chart1.ChartAreas[0].AxisX.MajorGrid.Interval = maxX / 10;
 
@@ -115,21 +116,40 @@ namespace WindowsFormsApp1
             double current = values.Last();
 
             _annotationText.Text = string.Format("Speed: {0:###,##0.0} Kb/s", current);
-            _annotationText.X = 0.8 * maxX;
+
             double textY = 100 * ((maxY - current)/maxY); //percent from top
-            textY -= 4.0 * maxY /chart1.Height; 
+            double annotationHeightInPixels = 21;
+            textY -= annotationHeightInPixels * 100.0 / chart1.Height; //
             _annotationText.Y = textY;
             
             _annotationLine.AnchorY = current;
+
+            chart1.Series[0].Points.AddXY(0, maxY);
+            chart1.Series[1].Points.AddXY(0, values[0]);
 
             for (int i = 0; i < maxX; i++)
             {
                 if (i < values.Count)
                 {
-                    chart1.Series[0].Points.AddXY(i, maxY);
-                    chart1.Series[1].Points.AddXY(i, values[i]);
+                    chart1.Series[0].Points.AddXY(i+1, maxY);
+                    chart1.Series[1].Points.AddXY(i+1, values[i]);
                 }
             }
+        }
+
+        private void chart1_SizeChanged(object sender, EventArgs e)
+        {
+            UpdateTextLabelWidthAndPositionXY(_annotationText.Y);
+        }
+
+        private void UpdateTextLabelWidthAndPositionXY(double yPercentsFromTop)
+        {
+            double textWidthInPixels = 150;
+            double pixelsPerPercent = chart1.Width / 100.0;
+            double widthInPercents = textWidthInPixels / pixelsPerPercent;
+            _annotationText.Width = widthInPercents; // percent from chart Width;
+            _annotationText.X = 100.0 - widthInPercents; // percent from left
+            _annotationText.Y = yPercentsFromTop; //update
         }
     }
 }

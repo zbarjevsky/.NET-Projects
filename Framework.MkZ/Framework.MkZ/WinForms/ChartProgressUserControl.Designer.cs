@@ -69,6 +69,7 @@
             this.chart1.Size = new System.Drawing.Size(626, 377);
             this.chart1.TabIndex = 0;
             this.chart1.Text = "chart1";
+            this.chart1.SizeChanged += new System.EventHandler(this.chart1_SizeChanged);
             // 
             // ChartProgressUserControl
             // 

@@ -46,11 +46,17 @@ namespace SimpleBackup
             SimpleBackup.Properties.Settings.Default.Save();
 
             FormBackupFolderProperties frm = new FormBackupFolderProperties(entry);
-            if (frm.ShowDialog(this) != DialogResult.OK)
+            DialogResult res = frm.ShowDialog(this);
+            if (res == DialogResult.Cancel)
                 return;
 
             _settings.Add(entry);
             ReloadList(entry);
+
+            if(res == DialogResult.Yes) //start backup
+            {
+                OpenBackupProgress(entry, BackupPriority.All);
+            }
         }
 
         private void m_btnRemove_Click(object sender, EventArgs e)

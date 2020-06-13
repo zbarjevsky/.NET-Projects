@@ -38,10 +38,17 @@ namespace MZ.WinForms
 
         private void FormBrowseForFolder_Load(object sender, EventArgs e)
         {
+            this.Visible = true;
+            this.Cursor = Cursors.WaitCursor;
+            EnableControls(false, "Loading, Please wait...");
+            m_btnCancel.Enabled = false;
+            Application.DoEvents();
+
             SelectInTree();
             m_treeFolders.AfterSelectAction = (path) => { m_txtSelectedFolder.Text = path; };
-            m_lblMessage.Visible = false;
 
+            EnableControls(true, "");
+            this.Cursor = Cursors.Default;
             _fileProgress.OnChange = (status) => { m_lblMessage.Text = status; };
         }
 

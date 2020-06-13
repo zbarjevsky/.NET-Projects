@@ -93,7 +93,7 @@ namespace SimpleBackup.Settings
             {
                 if (progress != null)
                 {
-                    string prompt = string.Format("Discovering ({0}) ", FolderSrc);
+                    string prompt = string.Format("Collecting Files in: ({0}) ", FolderSrc);
                     progress.ResetToMarquee(prompt);
                 }
 
@@ -191,7 +191,7 @@ namespace SimpleBackup.Settings
             if (found == null)
                 BackupList.Add(entry);
             else
-                MessageBox.Show("Already exists:\n" + entry.SelectedFoldersAndFilesList.FolderSrc);
+                MessageBox.Show("Cannot add - already exists:\n" + entry.SelectedFoldersAndFilesList.FolderSrc, "Adding to Backup List");
         }
 
         internal void Remove(BackupEntry entry)
@@ -201,7 +201,7 @@ namespace SimpleBackup.Settings
 
         internal BackupEntry FindEntry(BackupEntry entry)
         {
-            return BackupList.SingleOrDefault(e => e.SelectedFoldersAndFilesList.FolderSrc == entry.SelectedFoldersAndFilesList.FolderSrc);
+            return BackupList.SingleOrDefault(e => e.FolderSrc == entry.FolderSrc && e.FolderDst == entry.FolderDst);
         }
     }
 

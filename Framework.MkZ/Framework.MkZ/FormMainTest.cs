@@ -101,11 +101,11 @@ namespace MZ
 
             //chart values
             List<double> values = new List<double>();
-            for (int i = 0; i < trackBar1.Value; i++)
+            for (int i = 0; i < trackBar1.Value; i+=10)
             {
                 values.Add(_values[i]);
             }
-            chartProgressUserControl1.SetHistory(values, 100, "Trackbar Value "+ trackBar1.Value);
+            chartProgressUserControl1.SetHistory(values, 10, "Trackbar Value "+ trackBar1.Value);
         }
 
         private void m_btnTestWPFMessageBox_Click(object sender, EventArgs e)
