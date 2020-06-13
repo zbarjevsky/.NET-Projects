@@ -131,7 +131,7 @@ namespace WindowsFormsApp1
             {
                 if (i < values.Count)
                 {
-                    chart1.Series[0].Points.AddXY(i, 100);
+                    chart1.Series[0].Points.AddXY(i, maxY);
                     chart1.Series[1].Points.AddXY(i, values[i]);
                 }
                 else

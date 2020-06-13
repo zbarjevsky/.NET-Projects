@@ -40,8 +40,8 @@ namespace SimpleBackup
             m_cmbSearchOptions.Items.AddRange(Enum.GetValues(typeof(SearchOption)).Cast<Object>().ToArray());
             m_cmbSearchOptions.SelectedIndex = 1;
 
-            m_explorerSrc.OpenFolderAction = (fullPath) => { _srcBaseFolder = fullPath; };
-            m_explorerDst.OpenFolderAction = (fullPath) => { _dstBaseFolder = fullPath; };
+            m_explorerSrc.OpenFolderAction = (fullPath) => { _srcBaseFolder = fullPath; ValidateInput(); };
+            m_explorerDst.OpenFolderAction = (fullPath) => { _dstBaseFolder = fullPath; ValidateInput(); };
 
             _fileProgress = new FileUtils.FileProgress(m_progressBar, this);
             _fileProgress.OnChange = (status) => { m_txtInfo.Text = status; };
