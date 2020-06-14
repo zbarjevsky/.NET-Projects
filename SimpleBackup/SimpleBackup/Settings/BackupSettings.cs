@@ -15,9 +15,42 @@ namespace SimpleBackup.Settings
 {
     public class SelectedFoldersAndFilesList
     {
-        public bool AllInSrcFolder { get; set; } = false;
+        public bool AllInSrcFolder { get { return Names.Count == 0; }  }
         public string FolderSrc { get; set; }
         public List<string> Names { get; set; } = new List<string>();
+
+        public override bool Equals(object obj)
+        {
+            return obj is SelectedFoldersAndFilesList list &&
+                   FolderSrc == list.FolderSrc &&
+                   Names.SequenceEqual(list.Names);
+        }
+
+        public override int GetHashCode()
+        {
+            int hashCode = FolderSrc.GetHashCode();
+            hashCode = hashCode * Names.GetHashCode();
+            return hashCode;
+        }
+
+        public static bool operator ==(SelectedFoldersAndFilesList o1, SelectedFoldersAndFilesList o2)
+        {
+            return o1.Equals(o2);
+        }
+
+        public static bool operator !=(SelectedFoldersAndFilesList o1, SelectedFoldersAndFilesList o2)
+        {
+            return !o1.Equals(o2);
+        }
+
+        public SelectedFoldersAndFilesList Clone()
+        {
+            return new SelectedFoldersAndFilesList() 
+            { 
+                FolderSrc = this.FolderSrc,
+                Names = new List<string>(this.Names)
+            };
+        }
     }
 
     public class BackupEntry
@@ -55,6 +88,21 @@ namespace SimpleBackup.Settings
             FolderExcludeTypes = "";
         }
 
+        public  BackupEntry Clone()
+        {
+            BackupEntry entry = new BackupEntry()
+            {
+                FolderDst = this.FolderDst,
+                IncludeSubfolders = this.IncludeSubfolders,
+                FolderIncludeTypes = this.FolderIncludeTypes,
+                FolderExcludeTypes = this.FolderExcludeTypes,
+                Priority = this.Priority,
+                SelectedFoldersAndFilesList = this.SelectedFoldersAndFilesList.Clone()
+            };
+
+            return entry;
+        }
+
         public bool IsValid(out string error)
         {
             error = "";
@@ -79,13 +127,13 @@ namespace SimpleBackup.Settings
             return true;
         }
 
-        public List<BackupFile> CollectFiles(FileUtils.FileProgress progress = null)
+        public static List<BackupFile> CollectFiles(BackupEntry e, FileUtils.FileProgress progress = null)
         {
             List<BackupFile> fileList = new List<BackupFile>();
-            if (string.IsNullOrWhiteSpace(FolderSrc))
+            if (string.IsNullOrWhiteSpace(e.FolderSrc))
                 return fileList;
 
-            DirectoryInfo dir = new DirectoryInfo(FolderSrc);
+            DirectoryInfo dir = new DirectoryInfo(e.FolderSrc);
             if (!dir.Exists)
                 return fileList;
 
@@ -93,22 +141,22 @@ namespace SimpleBackup.Settings
             {
                 if (progress != null)
                 {
-                    string prompt = string.Format("Collecting Files in: ({0}) ", FolderSrc);
+                    string prompt = string.Format("Collecting Files in: ({0}) ", e.FolderSrc);
                     progress.ResetToMarquee(prompt);
                 }
 
                 List<string> fileNames = new List<string>();
-                if (SelectedFoldersAndFilesList.AllInSrcFolder)
+                if (e.SelectedFoldersAndFilesList.AllInSrcFolder)
                 {
-                    fileNames = FileUtils.GetFiles(dir.FullName, FolderIncludeTypes, IncludeSubfolders, progress).ToList();
+                    fileNames = FileUtils.GetFiles(dir.FullName, e.FolderIncludeTypes, e.IncludeSubfolders, progress).ToList();
                 }
                 else
                 {
-                    foreach (string file in SelectedFoldersAndFilesList.Names)
+                    foreach (string file in e.SelectedFoldersAndFilesList.Names)
                     {
-                        string fullPath = Path.Combine(FolderSrc, file);
+                        string fullPath = Path.Combine(e.FolderSrc, file);
                         if (Directory.Exists(fullPath))
-                            fileNames.AddRange(FileUtils.GetFiles(fullPath, FolderIncludeTypes, IncludeSubfolders, progress));
+                            fileNames.AddRange(FileUtils.GetFiles(fullPath, e.FolderIncludeTypes, e.IncludeSubfolders, progress));
                         else if (File.Exists(fullPath))
                             fileNames.Add(fullPath);
                     }
@@ -124,7 +172,7 @@ namespace SimpleBackup.Settings
                     }
 
                     //report percentage only - may be too many files
-                    string prompt = string.Format("Preparing Collected Files ({0}) ", SelectedFoldersAndFilesList.FolderSrc);
+                    string prompt = string.Format("Preparing Collected Files ({0}) ", e.FolderSrc);
                     progress.ResetToBlocks(prompt, fileNames.Count);
                 }
 
@@ -141,7 +189,7 @@ namespace SimpleBackup.Settings
                     }
 
                     //if (File.Exists(files[i]))
-                    fileList.Add(new BackupFile(i, fileNames[i], this));
+                    fileList.Add(new BackupFile(i, fileNames[i], e));
                 }
             }
             catch (Exception err)

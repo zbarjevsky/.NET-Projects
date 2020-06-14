@@ -32,20 +32,28 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FileExplorerUserControl));
             this.m_imageList = new System.Windows.Forms.ImageList(this.components);
             this.m_pnlCommands = new System.Windows.Forms.Panel();
+            this.m_btnNewFolder = new System.Windows.Forms.Button();
             this.m_btnBrowse = new System.Windows.Forms.Button();
             this.m_btnRoot = new System.Windows.Forms.Button();
             this.m_btnUp = new System.Windows.Forms.Button();
             this.m_txtPath = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.m_btnNewFolder = new System.Windows.Forms.Button();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.m_listFiles = new ListViewVirtualMode.ListViewVirtualWithCheckBoxes();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.m_ctxmnuList = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.m_mnuSelect = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
+            this.m_mnuRefresh = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.m_mnuRename = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.m_pnlCommands.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            this.m_ctxmnuList.SuspendLayout();
             this.SuspendLayout();
             // 
             // m_imageList
@@ -76,6 +84,18 @@
             this.m_pnlCommands.Name = "m_pnlCommands";
             this.m_pnlCommands.Size = new System.Drawing.Size(538, 28);
             this.m_pnlCommands.TabIndex = 1;
+            // 
+            // m_btnNewFolder
+            // 
+            this.m_btnNewFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.m_btnNewFolder.Image = ((System.Drawing.Image)(resources.GetObject("m_btnNewFolder.Image")));
+            this.m_btnNewFolder.Location = new System.Drawing.Point(59, -1);
+            this.m_btnNewFolder.Name = "m_btnNewFolder";
+            this.m_btnNewFolder.Size = new System.Drawing.Size(27, 25);
+            this.m_btnNewFolder.TabIndex = 6;
+            this.toolTip1.SetToolTip(this.m_btnNewFolder, "New Folder");
+            this.m_btnNewFolder.UseVisualStyleBackColor = true;
+            this.m_btnNewFolder.Click += new System.EventHandler(this.m_btnNewFolder_Click);
             // 
             // m_btnBrowse
             // 
@@ -125,18 +145,6 @@
             this.m_txtPath.Size = new System.Drawing.Size(397, 13);
             this.m_txtPath.TabIndex = 2;
             // 
-            // m_btnNewFolder
-            // 
-            this.m_btnNewFolder.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.m_btnNewFolder.Image = ((System.Drawing.Image)(resources.GetObject("m_btnNewFolder.Image")));
-            this.m_btnNewFolder.Location = new System.Drawing.Point(59, -1);
-            this.m_btnNewFolder.Name = "m_btnNewFolder";
-            this.m_btnNewFolder.Size = new System.Drawing.Size(27, 25);
-            this.m_btnNewFolder.TabIndex = 6;
-            this.toolTip1.SetToolTip(this.m_btnNewFolder, "New Folder");
-            this.m_btnNewFolder.UseVisualStyleBackColor = true;
-            this.m_btnNewFolder.Click += new System.EventHandler(this.m_btnNewFolder_Click);
-            // 
             // errorProvider1
             // 
             this.errorProvider1.ContainerControl = this;
@@ -148,6 +156,7 @@
             this.columnHeader2,
             this.columnHeader3,
             this.columnHeader4});
+            this.m_listFiles.ContextMenuStrip = this.m_ctxmnuList;
             this.m_listFiles.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_listFiles.FullRowSelect = true;
             this.m_listFiles.GridLines = true;
@@ -189,6 +198,63 @@
             this.columnHeader4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.columnHeader4.Width = 120;
             // 
+            // m_ctxmnuList
+            // 
+            this.m_ctxmnuList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.m_mnuSelect,
+            this.toolStripMenuItem2,
+            this.m_mnuRefresh,
+            this.toolStripMenuItem1,
+            this.m_mnuRename,
+            this.m_mnuDelete});
+            this.m_ctxmnuList.Name = "m_ctxmnuTree";
+            this.m_ctxmnuList.Size = new System.Drawing.Size(181, 126);
+            // 
+            // m_mnuSelect
+            // 
+            this.m_mnuSelect.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuSelect.Image")));
+            this.m_mnuSelect.Name = "m_mnuSelect";
+            this.m_mnuSelect.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuSelect.Text = "Select";
+            this.m_mnuSelect.Click += new System.EventHandler(this.m_mnuSelect_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(133, 6);
+            // 
+            // m_mnuRefresh
+            // 
+            this.m_mnuRefresh.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuRefresh.Image")));
+            this.m_mnuRefresh.Name = "m_mnuRefresh";
+            this.m_mnuRefresh.ShortcutKeys = System.Windows.Forms.Keys.F5;
+            this.m_mnuRefresh.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuRefresh.Text = "&Refresh";
+            this.m_mnuRefresh.Click += new System.EventHandler(this.m_mnuRefresh_Click);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(133, 6);
+            // 
+            // m_mnuRename
+            // 
+            this.m_mnuRename.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuRename.Image")));
+            this.m_mnuRename.Name = "m_mnuRename";
+            this.m_mnuRename.ShortcutKeys = System.Windows.Forms.Keys.F2;
+            this.m_mnuRename.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuRename.Text = "Re&name";
+            this.m_mnuRename.Click += new System.EventHandler(this.m_mnuRename_Click);
+            // 
+            // m_mnuDelete
+            // 
+            this.m_mnuDelete.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuDelete.Image")));
+            this.m_mnuDelete.Name = "m_mnuDelete";
+            this.m_mnuDelete.ShortcutKeys = System.Windows.Forms.Keys.Delete;
+            this.m_mnuDelete.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuDelete.Text = "&Delete";
+            this.m_mnuDelete.Click += new System.EventHandler(this.m_mnuDelete_Click);
+            // 
             // FileExplorerUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -201,6 +267,7 @@
             this.m_pnlCommands.ResumeLayout(false);
             this.m_pnlCommands.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            this.m_ctxmnuList.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -221,5 +288,12 @@
         private System.Windows.Forms.ColumnHeader columnHeader4;
         private System.Windows.Forms.Button m_btnNewFolder;
         private System.Windows.Forms.ErrorProvider errorProvider1;
+        private System.Windows.Forms.ContextMenuStrip m_ctxmnuList;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuSelect;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuRefresh;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuRename;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuDelete;
     }
 }

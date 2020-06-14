@@ -79,7 +79,7 @@ namespace SimpleBackup.Tools
             string diskInfo = BackupLogic.GetDiskFreeSpace(backupFilesList[0].DstFolder, out long freeSpace);
 
             if (progress != null)
-                progress.Maximum = backupFilesList.Count;
+                progress.ResetToBlocks(progress.Message, backupFilesList.Count);
 
             long sizeDst = 0, sizeSrc = 0;
             for (int i = 0; i < backupFilesList.Count; i++)

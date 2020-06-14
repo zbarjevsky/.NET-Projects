@@ -197,6 +197,15 @@
         5h3eCD5szxaggwAAAABJRU5ErkJggg==
 </value>
   </data>
+  <data name="m_mnuNewFolder.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+    <value>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
+        YQUAAAAJcEhZcwAADsQAAA7EAZUrDhsAAADBSURBVDhPYwCBb9++GQDxeiD+j4RBfAOwAnwApAiI37+8
+        sR+s8VCtFJiG8t+D5KFKsQOggvUgxSCNj08uQaGhhqyHKsUOQLaBMEwTDIP4MDkoBrlGAKoNAUCSyBqx
+        8e9sq/r/5t4JELsBqg0BQApAGNkFR1s1UFzw7NzK//f3dcH5SPg8wTB4fGwm2AXYMMgQkAGgWIAFGFgj
+        jA9yNjaNMAw2AOYNkE0gGobx2QzDKAZgU0AIjxpAZQPOgzik42/nAeBrxHxJlKd/AAAAAElFTkSuQmCC
+</value>
+  </data>
   <data name="m_mnuRename.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO

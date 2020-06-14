@@ -40,18 +40,19 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.m_pnlMain = new System.Windows.Forms.Panel();
             this.m_lblMessage = new System.Windows.Forms.Label();
+            this.m_progressBar = new MZ.WinForms.ColorBarsProgressBar();
             this.m_btnRefresh = new System.Windows.Forms.Button();
+            this.m_treeFolders = new MZ.WinForms.FoldersTreeUserControl();
             this.m_ctxmnuTree = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.m_mnuSelect = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.m_mnuRefresh = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.m_mnuRename = new System.Windows.Forms.ToolStripMenuItem();
             this.m_mnuDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.m_imageListIcons = new System.Windows.Forms.ImageList(this.components);
-            this.m_mnuSelect = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
-            this.m_progressBar = new MZ.WinForms.ColorBarsProgressBar();
-            this.m_treeFolders = new MZ.WinForms.FoldersTreeUserControl();
+            this.m_mnuNewFolder = new System.Windows.Forms.ToolStripMenuItem();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.m_pnlMain.SuspendLayout();
@@ -179,6 +180,25 @@
             this.m_lblMessage.Text = "Wait...";
             this.m_lblMessage.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // m_progressBar
+            // 
+            themeColorSet1.Part1_ActiveColor = System.Drawing.SystemColors.HotTrack;
+            themeColorSet1.Part1_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet1.Part2_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet1.Part2_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet1.Part3_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet1.Part3_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet1.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
+            themeColorSet1.Threshold1 = 100;
+            themeColorSet1.Threshold2 = 100;
+            this.m_progressBar.ColorTheme = themeColorSet1;
+            this.m_progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.m_progressBar.Location = new System.Drawing.Point(0, 347);
+            this.m_progressBar.Name = "m_progressBar";
+            this.m_progressBar.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.m_progressBar.Size = new System.Drawing.Size(282, 12);
+            this.m_progressBar.TabIndex = 7;
+            // 
             // m_btnRefresh
             // 
             this.m_btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
@@ -191,6 +211,18 @@
             this.m_btnRefresh.UseVisualStyleBackColor = true;
             this.m_btnRefresh.Click += new System.EventHandler(this.m_mnuRefresh_Click);
             // 
+            // m_treeFolders
+            // 
+            this.m_treeFolders.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_treeFolders.ContextMenuStrip = this.m_ctxmnuTree;
+            this.m_treeFolders.Cursor = System.Windows.Forms.Cursors.Default;
+            this.m_treeFolders.Location = new System.Drawing.Point(5, 36);
+            this.m_treeFolders.Name = "m_treeFolders";
+            this.m_treeFolders.Size = new System.Drawing.Size(272, 246);
+            this.m_treeFolders.TabIndex = 0;
+            // 
             // m_ctxmnuTree
             // 
             this.m_ctxmnuTree.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -198,10 +230,24 @@
             this.toolStripMenuItem2,
             this.m_mnuRefresh,
             this.toolStripMenuItem1,
+            this.m_mnuNewFolder,
             this.m_mnuRename,
             this.m_mnuDelete});
             this.m_ctxmnuTree.Name = "m_ctxmnuTree";
-            this.m_ctxmnuTree.Size = new System.Drawing.Size(181, 126);
+            this.m_ctxmnuTree.Size = new System.Drawing.Size(181, 148);
+            // 
+            // m_mnuSelect
+            // 
+            this.m_mnuSelect.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuSelect.Image")));
+            this.m_mnuSelect.Name = "m_mnuSelect";
+            this.m_mnuSelect.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuSelect.Text = "Select";
+            this.m_mnuSelect.Click += new System.EventHandler(this.m_mnuSelect_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(177, 6);
             // 
             // m_mnuRefresh
             // 
@@ -241,49 +287,13 @@
             this.m_imageListIcons.ImageSize = new System.Drawing.Size(16, 16);
             this.m_imageListIcons.TransparentColor = System.Drawing.Color.Transparent;
             // 
-            // m_mnuSelect
+            // m_mnuNewFolder
             // 
-            this.m_mnuSelect.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuSelect.Image")));
-            this.m_mnuSelect.Name = "m_mnuSelect";
-            this.m_mnuSelect.Size = new System.Drawing.Size(180, 22);
-            this.m_mnuSelect.Text = "Select";
-            this.m_mnuSelect.Click += new System.EventHandler(this.m_mnuSelect_Click);
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(177, 6);
-            // 
-            // m_progressBar
-            // 
-            themeColorSet1.Part1_ActiveColor = System.Drawing.SystemColors.HotTrack;
-            themeColorSet1.Part1_InactiveColor = System.Drawing.Color.Gainsboro;
-            themeColorSet1.Part2_ActiveColor = System.Drawing.Color.LimeGreen;
-            themeColorSet1.Part2_InactiveColor = System.Drawing.Color.Gainsboro;
-            themeColorSet1.Part3_ActiveColor = System.Drawing.Color.LimeGreen;
-            themeColorSet1.Part3_InactiveColor = System.Drawing.Color.Gainsboro;
-            themeColorSet1.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
-            themeColorSet1.Threshold1 = 100;
-            themeColorSet1.Threshold2 = 100;
-            this.m_progressBar.ColorTheme = themeColorSet1;
-            this.m_progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.m_progressBar.Location = new System.Drawing.Point(0, 347);
-            this.m_progressBar.Name = "m_progressBar";
-            this.m_progressBar.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            this.m_progressBar.Size = new System.Drawing.Size(282, 12);
-            this.m_progressBar.TabIndex = 7;
-            // 
-            // m_treeFolders
-            // 
-            this.m_treeFolders.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_treeFolders.ContextMenuStrip = this.m_ctxmnuTree;
-            this.m_treeFolders.Cursor = System.Windows.Forms.Cursors.Default;
-            this.m_treeFolders.Location = new System.Drawing.Point(5, 36);
-            this.m_treeFolders.Name = "m_treeFolders";
-            this.m_treeFolders.Size = new System.Drawing.Size(272, 246);
-            this.m_treeFolders.TabIndex = 0;
+            this.m_mnuNewFolder.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuNewFolder.Image")));
+            this.m_mnuNewFolder.Name = "m_mnuNewFolder";
+            this.m_mnuNewFolder.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuNewFolder.Text = "New Folder";
+            this.m_mnuNewFolder.Click += new System.EventHandler(this.m_mnuNewFolder_Click);
             // 
             // FormBrowseForFolder
             // 
@@ -329,5 +339,6 @@
         private System.Windows.Forms.Label m_lblMessage;
         private System.Windows.Forms.ToolStripMenuItem m_mnuSelect;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuNewFolder;
     }
 }

@@ -90,6 +90,11 @@ namespace MZ.WinForms
             m_treeFolders.RefreshFolder(m_txtSelectedFolder.Text);
         }
 
+        private void m_mnuNewFolder_Click(object sender, EventArgs e)
+        {
+            m_btnNewFolder_Click(sender, e);
+        }
+
         private void m_mnuRename_Click(object sender, EventArgs e)
         {
             m_treeFolders.EditFolder(m_txtSelectedFolder.Text);

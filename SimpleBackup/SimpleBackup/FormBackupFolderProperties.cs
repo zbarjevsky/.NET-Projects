@@ -76,6 +76,12 @@ namespace SimpleBackup
             m_txtExcludeType.Text = _entry.FolderExcludeTypes;
             m_cmbPriority.SelectedItem = _entry.Priority;
 
+            m_explorerSrc.CheckedChangedAction = (checkAllState) =>
+            {
+                BackupEntry entry = new BackupEntry();
+                UpdateBackupEntryFromUI(entry);
+                _calculateSpaceTask.Start(entry);
+            };
 
             ValidateInput();
             this.Cursor = Cursors.Default;
@@ -100,20 +106,24 @@ namespace SimpleBackup
 
         private void m_btnOk_Click(object sender, EventArgs e)
         {
+            UpdateBackupEntryFromUI(_entry);
+        }
+
+        private void UpdateBackupEntryFromUI(BackupEntry entry)
+        {
             _calculateSpaceTask.Abort();
 
-            _entry.FolderSrc = _srcBaseFolder;
-            _entry.FolderDst = _dstBaseFolder;
-            _entry.IncludeSubfolders = (SearchOption)m_cmbSearchOptions.SelectedItem;
-            _entry.FolderIncludeTypes = m_txtFileType.Text;
-            _entry.FolderExcludeTypes = m_txtExcludeType.Text;
-            _entry.Priority = (BackupPriority)m_cmbPriority.SelectedItem;
+            entry.FolderSrc = _srcBaseFolder;
+            entry.FolderDst = _dstBaseFolder;
+            entry.IncludeSubfolders = (SearchOption)m_cmbSearchOptions.SelectedItem;
+            entry.FolderIncludeTypes = m_txtFileType.Text;
+            entry.FolderExcludeTypes = m_txtExcludeType.Text;
+            entry.Priority = (BackupPriority)m_cmbPriority.SelectedItem;
 
-            _entry.SelectedFoldersAndFilesList.AllInSrcFolder = m_explorerSrc.IsAllChecked();
-            _entry.SelectedFoldersAndFilesList.Names.Clear();
-            if (!_entry.SelectedFoldersAndFilesList.AllInSrcFolder)
+            entry.SelectedFoldersAndFilesList.Names.Clear();
+            if (!m_explorerSrc.IsAllChecked())
             {
-                _entry.SelectedFoldersAndFilesList.Names.AddRange(m_explorerSrc.GetCheckedFiles());
+                entry.SelectedFoldersAndFilesList.Names.AddRange(m_explorerSrc.GetCheckedFiles());
             }
         }
 
@@ -123,8 +133,13 @@ namespace SimpleBackup
             DialogResult = DialogResult.Yes;
         }
 
+        private bool _isValidatingInput = false;
         private void ValidateInput(object sender = null, EventArgs e = null)
         {
+            if (_isValidatingInput)
+                return;
+            _isValidatingInput = true;
+
             BackupEntry entry = new BackupEntry()
             {
                 FolderSrc = _srcBaseFolder,
@@ -136,6 +151,7 @@ namespace SimpleBackup
             };
 
             UpdateInfo(entry);
+            _isValidatingInput = false;
         }
 
         private void UpdateInfo(BackupEntry entry)

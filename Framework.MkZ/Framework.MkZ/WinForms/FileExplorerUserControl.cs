@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using System.IO;
 using System.Globalization;
 using System.Windows.Documents;
+using MZ.WPF.MessageBox;
+using MZ.Tools;
 
 namespace MZ.WinForms
 {
@@ -265,6 +267,7 @@ namespace MZ.WinForms
 		private readonly FileSystemWatcherHelper _fileSystemWatcherHelper;
 
 		public Action<string> OpenFolderAction = (fullPath) => { };
+		public Action<CheckState> CheckedChangedAction = (checkAllState) => { };
 
 		public bool CheckBoxes { get { return m_listFiles.CheckBoxes; } set { m_listFiles.CheckBoxes = value; } }
 
@@ -370,11 +373,13 @@ namespace MZ.WinForms
 			if (_list[e.Item.Index].Text == ParentFolderText)
 			{
 				SetCheckedFiles(null, true, e.Item.Checked);
+				CheckedChangedAction(e.Item.Checked?CheckState.Checked : CheckState.Unchecked);
 			}
 			else
 			{
 				_list[0].Checked = IsAllChecked();
 				m_listFiles.Invalidate(_list[0].Bounds);
+				CheckedChangedAction(CheckState.Indeterminate);
 			}
 		}
 
@@ -412,8 +417,8 @@ namespace MZ.WinForms
 
         private void m_btnNewFolder_Click(object sender, EventArgs e)
         {
-
-        }
+			this.MessageInfo("Not Implemented");
+		}
 
 		public void PopulateFiles(string fullPath, bool isCheck = false)
 		{
@@ -482,17 +487,17 @@ namespace MZ.WinForms
 				}
 				catch (IOException e)
 				{
-					MessageBox.Show("Error: Drive not ready or directory does not exist."+e.Message);
+					this.MessageError("Error: Drive not ready or directory does not exist."+e.Message, "FileExplorerUserControl");
 					errorProvider1.SetError(m_txtPath, e.Message);
 				}
 				catch (UnauthorizedAccessException e)
 				{
-					MessageBox.Show("Error: Drive or directory access denided." + e.Message);
+					this.MessageError("Error: Drive or directory access denided." + e.Message, "FileExplorerUserControl");
 					errorProvider1.SetError(m_txtPath, e.Message);
 				}
 				catch (Exception e)
 				{
-					MessageBox.Show("Error: " + e);
+					this.MessageError("Error: " + e, "FileExplorerUserControl");
 					errorProvider1.SetError(m_txtPath, e.Message);
 				}
 			}
@@ -521,5 +526,46 @@ namespace MZ.WinForms
 			_list[e.ItemIndex].PrepareListViewItem();
 			e.Item = _list[e.ItemIndex];
 		}
-    }
+
+        private void m_mnuSelect_Click(object sender, EventArgs e)
+        {
+			if (m_listFiles.SelectedIndices.Count == 0)
+				return;
+
+			FileData data = _list[m_listFiles.SelectedIndices[0]];
+			data.Checked = true;
+		}
+
+		private void m_mnuRefresh_Click(object sender, EventArgs e)
+        {
+			PopulateFiles(m_txtPath.Text);
+		}
+
+        private void m_mnuRename_Click(object sender, EventArgs e)
+        {
+			this.MessageInfo("Not Implemented");
+        }
+
+        private void m_mnuDelete_Click(object sender, EventArgs e)
+        {
+			if (m_listFiles.SelectedIndices.Count == 0)
+				return;
+
+			FileData data = _list[m_listFiles.SelectedIndices[0]];
+			data.Checked = false;
+			if(data.IsDirectory)
+            {
+				string dir = data.FileInfo.FullName;
+				Task.Factory.StartNew(() => { FileUtils.DeleteDirectoryWithSystemProgressDialog(dir); });
+            }
+            else
+            {
+				var res = this.MessageQuestion("Delete: " + data.FileName + "?", "Delete");
+				if (res == PopUp.PopUpResult.OK)
+				{
+					data.FileInfo.Delete();
+				}
+			}
+		}
+	}
 }

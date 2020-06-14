@@ -23,6 +23,8 @@ namespace MZ.Tools
     {
         public class FileProgress
         {
+            private const int DEFAULT_MARQUEE_TIMEOUT = 256;
+
             private Stopwatch _stopper = new Stopwatch();
 
             private Action OnValueChange = null; // () => { };
@@ -35,16 +37,16 @@ namespace MZ.Tools
             public string SubStatus { get; set; } = "";
 
             private long _max = 100;
-            public long Maximum { get { return _max; } set { Validate(_min, value, _val); _max = value; } }
+            public long Maximum { get { return _max; } /*set { Validate(_min, value, _val); _max = value; }*/ }
             
             private long _min = 100;
-            public long Minimum { get { return _min; } set { Validate(value, _max, _val); _min = value; } }
+            public long Minimum { get { return _min; } /*set { Validate(value, _max, _val); _min = value; }*/ }
 
             //circular progress
             //set it to 
             private long _marqueeElapsed = 0;
-            private long _marqueeTimeoutMs = 0;
-            public long MarqueeTimeoutMs { get { return _marqueeTimeoutMs; } set { _marqueeTimeoutMs = value; } }
+            private long _marqueeTimeoutMs = 300;
+            public long MarqueeTimeoutMs { get { return _marqueeTimeoutMs; } /*set { _marqueeTimeoutMs = value; }*/ }
 
             private long _val = 0;
             public long Value 
@@ -61,6 +63,7 @@ namespace MZ.Tools
                             {
                                 _val = _ctrlProgress.MarqueeNext(_formOwner);
                                 _marqueeElapsed = 0;
+                                Debug.Assert(_val < Maximum);
                                 OnValueChange();
                             }
                         }
@@ -97,7 +100,7 @@ namespace MZ.Tools
                 {
                     _cancel = value;
                     _val = 0;
-                    _marqueeTimeoutMs = 0;
+                    _marqueeTimeoutMs = DEFAULT_MARQUEE_TIMEOUT;
                 }
             }
 
@@ -111,7 +114,7 @@ namespace MZ.Tools
                 _formOwner = owner;
                 _ctrlProgress = ctrlProgress;
 
-                Reset("Progress: ", ctrlProgress.Maximum, ctrlProgress.Minimum, ctrlProgress.Style, options);
+                Reset("Progress: ", ctrlProgress.Maximum, ctrlProgress.Minimum, ctrlProgress.Style, DEFAULT_MARQUEE_TIMEOUT, options);
 
                 this.OnPercentChange = () =>
                 {
@@ -138,23 +141,22 @@ namespace MZ.Tools
                 long max = 100, long min = 0,
                 NotifyOptions options = NotifyOptions.NotifyPercentChange)
             {
-                Reset(message, max, 0, ProgressBarStyle.Blocks, options);
+                Reset(message, max, 0, ProgressBarStyle.Blocks, DEFAULT_MARQUEE_TIMEOUT, options);
             }
 
-            public void ResetToMarquee(string message = "Progress: ", long marqueeTimeoutMs = 256)
+            public void ResetToMarquee(string message = "Progress: ", long marqueeTimeoutMs = DEFAULT_MARQUEE_TIMEOUT)
             {
-                MarqueeTimeoutMs = marqueeTimeoutMs;
-                Reset(message, 100, 0, ProgressBarStyle.Marquee, NotifyOptions.NotifyValueChange);
+                Reset(message, 100, 0, ProgressBarStyle.Marquee, marqueeTimeoutMs, NotifyOptions.NotifyValueChange);
             }
 
-            private void Reset(string message, long max, long min, ProgressBarStyle style, NotifyOptions options)
+            private void Reset(string message, long max, long min, ProgressBarStyle style, long marqueeTimeoutMs, NotifyOptions options)
             {
                 Validate(min, max, 0);
 
                 _val = 0;
-                _marqueeTimeoutMs = 0;
                 _min = min;
                 _max = max;
+                _marqueeTimeoutMs = marqueeTimeoutMs;
 
                 ReportOption = options;
                 Message = message;
@@ -162,8 +164,8 @@ namespace MZ.Tools
 
                 CommonUtils.ExecuteOnUIThread(() =>
                 {
-                    _ctrlProgress.Maximum = (int)max;
-                    _ctrlProgress.Minimum = (int)min;
+                    _ctrlProgress.Maximum = (int)_max;
+                    _ctrlProgress.Minimum = (int)_min;
                     _ctrlProgress.Value = 0;
                     _ctrlProgress.Style = style;
                 }, _formOwner);

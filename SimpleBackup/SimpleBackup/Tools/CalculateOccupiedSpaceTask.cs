@@ -17,7 +17,7 @@ namespace SimpleBackup.Tools
     {
         private FileProgress _fileProgress;
         private Thread _threadUpdateInfo = null;
-        private string _currentFolder = "";
+        private BackupEntry _entry = null;
 
         public Action<long, long> OnThreadFinished = (size, count) => { };
 
@@ -41,18 +41,18 @@ namespace SimpleBackup.Tools
 
         public void Start(BackupEntry entry)
         {
-            if (_currentFolder == entry.FolderSrc)
+            if (_entry != null && entry.SelectedFoldersAndFilesList.Equals(_entry.SelectedFoldersAndFilesList))
                 return; //avoid run on the same folder
-            _currentFolder = entry.FolderSrc;
+            _entry = entry.Clone();
 
             Abort(); //cancel previous if running
 
             _threadUpdateInfo = new Thread(() =>
             {
                 long size = 0;
-                string prompt = string.Format("Collecting files for ({0}) ", entry.FolderSrc);
+                string prompt = string.Format("Collecting files for ({0}) ", _entry.FolderSrc);
                 _fileProgress.ResetToMarquee(prompt);
-                List<BackupFile> fileList = entry.CollectFiles(_fileProgress);
+                List<BackupFile> fileList = BackupEntry.CollectFiles(_entry, _fileProgress);
                 if (_fileProgress.Cancel || fileList.Count == 0)
                 {
                     OnThreadFinished(0, fileList.Count);
@@ -60,7 +60,7 @@ namespace SimpleBackup.Tools
                 }
 
                 int count = fileList.Count;
-                prompt = string.Format("Calculating Folder Size ({0}) ", entry.FolderSrc);
+                prompt = string.Format("Calculating Folder Size ({0}) ", _entry.FolderSrc);
                 _fileProgress.ResetToBlocks(prompt, count);
                 foreach (BackupFile file in fileList)
                 {

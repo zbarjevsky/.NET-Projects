@@ -11,6 +11,7 @@ using SimpleBackup.Settings;
 using System.Media;
 using System.IO;
 using MZ.WinForms;
+using System.Diagnostics;
 
 namespace SimpleBackup
 {
@@ -222,6 +223,24 @@ namespace SimpleBackup
                 MessageBox.Show(this, "Backup error: " + err.Message, "Start Backup",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private void m_mnuOpenSrc_Click(object sender, EventArgs e)
+        {
+            if (m_listBackup.SelectedItems.Count == 0)
+                return;
+            BackupEntry entry = m_listBackup.SelectedItems[0].Tag as BackupEntry;
+
+            Process.Start(entry.FolderSrc);
+        }
+
+        private void m_mnuOpenDst_Click(object sender, EventArgs e)
+        {
+            if (m_listBackup.SelectedItems.Count == 0)
+                return;
+            BackupEntry entry = m_listBackup.SelectedItems[0].Tag as BackupEntry;
+
+            Process.Start(entry.FolderDst);
         }
     }
 }

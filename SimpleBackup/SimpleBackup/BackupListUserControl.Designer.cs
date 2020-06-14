@@ -50,6 +50,9 @@
             this.m_btnEdit = new System.Windows.Forms.Button();
             this.m_btnRemove = new System.Windows.Forms.Button();
             this.m_btnAdd = new System.Windows.Forms.Button();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+            this.m_mnuOpenSrc = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuOpenDst = new System.Windows.Forms.ToolStripMenuItem();
             this.m_ContextMenuList.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -74,42 +77,45 @@
             this.m_mnuBackupSelected,
             this.toolStripMenuItem1,
             this.m_mnuBackupPriority,
-            this.m_mnuBackupAll});
+            this.m_mnuBackupAll,
+            this.toolStripMenuItem3,
+            this.m_mnuOpenSrc,
+            this.m_mnuOpenDst});
             this.m_ContextMenuList.Name = "m_ContextMenuList";
-            this.m_ContextMenuList.Size = new System.Drawing.Size(182, 126);
+            this.m_ContextMenuList.Size = new System.Drawing.Size(227, 176);
             // 
             // m_mnuEdit
             // 
             this.m_mnuEdit.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.m_mnuEdit.Image = global::SimpleBackup.Properties.Resources.Properties;
             this.m_mnuEdit.Name = "m_mnuEdit";
-            this.m_mnuEdit.Size = new System.Drawing.Size(181, 22);
+            this.m_mnuEdit.Size = new System.Drawing.Size(226, 22);
             this.m_mnuEdit.Text = "Edit...";
             this.m_mnuEdit.Click += new System.EventHandler(this.m_btnEdit_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(178, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(223, 6);
             // 
             // m_mnuBackupSelected
             // 
             this.m_mnuBackupSelected.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuBackupSelected.Image")));
             this.m_mnuBackupSelected.Name = "m_mnuBackupSelected";
-            this.m_mnuBackupSelected.Size = new System.Drawing.Size(181, 22);
+            this.m_mnuBackupSelected.Size = new System.Drawing.Size(226, 22);
             this.m_mnuBackupSelected.Text = "Copy Selected...";
             this.m_mnuBackupSelected.Click += new System.EventHandler(this.m_mnuBackupSelected_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(178, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(223, 6);
             // 
             // m_mnuBackupPriority
             // 
             this.m_mnuBackupPriority.Image = global::SimpleBackup.Properties.Resources.Favorites;
             this.m_mnuBackupPriority.Name = "m_mnuBackupPriority";
-            this.m_mnuBackupPriority.Size = new System.Drawing.Size(181, 22);
+            this.m_mnuBackupPriority.Size = new System.Drawing.Size(226, 22);
             this.m_mnuBackupPriority.Text = "Copy High Priority...";
             this.m_mnuBackupPriority.Click += new System.EventHandler(this.m_btnBackupImportant_Click);
             // 
@@ -117,7 +123,7 @@
             // 
             this.m_mnuBackupAll.Image = global::SimpleBackup.Properties.Resources.FilesCopy;
             this.m_mnuBackupAll.Name = "m_mnuBackupAll";
-            this.m_mnuBackupAll.Size = new System.Drawing.Size(181, 22);
+            this.m_mnuBackupAll.Size = new System.Drawing.Size(226, 22);
             this.m_mnuBackupAll.Text = "Copy All..";
             this.m_mnuBackupAll.Click += new System.EventHandler(this.m_btnBackupAll_Click);
             // 
@@ -235,6 +241,25 @@
             this.m_btnAdd.UseVisualStyleBackColor = true;
             this.m_btnAdd.Click += new System.EventHandler(this.m_btnAdd_Click);
             // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(223, 6);
+            // 
+            // m_mnuOpenSrc
+            // 
+            this.m_mnuOpenSrc.Name = "m_mnuOpenSrc";
+            this.m_mnuOpenSrc.Size = new System.Drawing.Size(226, 22);
+            this.m_mnuOpenSrc.Text = "Open Source Directory";
+            this.m_mnuOpenSrc.Click += new System.EventHandler(this.m_mnuOpenSrc_Click);
+            // 
+            // m_mnuOpenDst
+            // 
+            this.m_mnuOpenDst.Name = "m_mnuOpenDst";
+            this.m_mnuOpenDst.Size = new System.Drawing.Size(226, 22);
+            this.m_mnuOpenDst.Text = "Open Destination Directory...";
+            this.m_mnuOpenDst.Click += new System.EventHandler(this.m_mnuOpenDst_Click);
+            // 
             // BackupListUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -274,5 +299,8 @@
         private System.Windows.Forms.ToolStripMenuItem m_mnuBackupAll;
         private System.Windows.Forms.ToolStripMenuItem m_mnuEdit;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuOpenSrc;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuOpenDst;
     }
 }

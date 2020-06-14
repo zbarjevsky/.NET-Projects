@@ -379,8 +379,7 @@ namespace SimpleBackup
 
         public static List<BackupFile> CollectFiles(BackupEntry entry, FileUtils.FileProgress progress = null)
         {
-            List<BackupFile> fileList = entry.CollectFiles(progress);
-            return fileList;
+            return BackupEntry.CollectFiles(entry, progress);
         }
     }
 }
