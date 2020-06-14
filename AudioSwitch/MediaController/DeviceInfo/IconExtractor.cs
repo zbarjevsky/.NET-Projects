@@ -17,7 +17,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 
-namespace PlaybackSoundSwitch.Device
+namespace MZ.Media.Device
 {
     public class IconExtractionException : Exception
     {

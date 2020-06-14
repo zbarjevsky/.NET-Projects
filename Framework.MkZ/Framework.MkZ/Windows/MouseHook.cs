@@ -1,4 +1,5 @@
-﻿using MZ.WPF;
+﻿using MZ.Windows;
+using MZ.WPF;
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -29,55 +30,50 @@ namespace MZ.Tools
     /// </summary>
     public class MouseHook : IDisposable
     {
-        private Win32.HookProcDelegate _proc;
-        private IntPtr _hookID = IntPtr.Zero;
+        //single instance
+        private static MouseHook _instance = new MouseHook();
 
-        public class MouseEventArgs32 : EventArgs
-        {
-            public Win32.MouseMessages Message { get; }
-            public Win32.MSLLHOOKSTRUCT MessageData { get; }
-            public MouseEventArgs32(Win32.MouseMessages msg, ref Win32.MSLLHOOKSTRUCT hookStruct)
-            {
-                Message = msg;
-                MessageData = hookStruct;
-            }
-        }
+        private User32_MouseHook.HookProcDelegate _proc;
+        private IntPtr _hookID = IntPtr.Zero;
 
         public event EventHandler<MouseEventArgs32> OnMouseMessage = delegate { };
 
-        public MouseHook()
+        /// <summary>
+        /// Use this to hook/unhook mose messages
+        /// </summary>
+        public bool Enabled
         {
-            MessageUtil.Init();
+            get { return _hookID != IntPtr.Zero; }
+            set
+            {
+                if(value)
+                {
+                    if(_hookID == IntPtr.Zero)
+                        _hookID = SetHook(_proc);
+                }
+                else //Dispose
+                {
+                    UnHook(ref _hookID);
+                }
+            }
+        }
 
+        public static MouseHook Hook { get { return _instance; } }
+
+        private MouseHook()
+        {
             _proc = LowLevelMouseProc;
-            _hookID = SetHook();
+            MessageUtil.Init();
         }
 
         ~MouseHook()
         {
-            Dispose();
-        }
-
-        public static void SetMousePos(int x, int y)
-        {
-            Win32.SetCursorPos(x, y);
+            UnHook(ref _hookID);
         }
 
         public void Dispose()
         {
-            if (_hookID != IntPtr.Zero)
-                Win32.UnhookWindowsHookEx(_hookID);
-            _hookID = IntPtr.Zero;
-        }
-
-        private IntPtr SetHook()
-        {
-            IntPtr hook = Win32.SetWindowsHookEx(Win32.HookType.WH_MOUSE_LL, _proc, Win32.GetModuleHandle("user32"), 0);
-            if (hook == IntPtr.Zero)
-            {
-                throw new System.ComponentModel.Win32Exception();
-            }
-            return hook;
+            UnHook(ref _hookID);
         }
 
         //https://docs.microsoft.com/en-us/previous-versions/windows/desktop/legacy/ms644986(v=vs.85)
@@ -85,14 +81,42 @@ namespace MZ.Tools
         {
             if (nCode >= 0)
             {
-                Win32.MouseMessages msg = (Win32.MouseMessages)wParam;
-                Win32.MSLLHOOKSTRUCT hookStruct = (Win32.MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(Win32.MSLLHOOKSTRUCT));
+                User32_MouseHook.MouseMessages msg = (User32_MouseHook.MouseMessages)wParam;
+                User32_MouseHook.MSLLHOOKSTRUCT hookStruct = (User32_MouseHook.MSLLHOOKSTRUCT)Marshal.PtrToStructure(lParam, typeof(User32_MouseHook.MSLLHOOKSTRUCT));
                 MouseEventArgs32 e = new MouseEventArgs32(msg, ref hookStruct);
 
                 MessageUtil.BeginInvoke(() => OnMouseMessage(null, e));
             }
 
-            return Win32.CallNextHookEx(_hookID, nCode, wParam, lParam);
+            return User32_MouseHook.CallNextHookEx(_hookID, nCode, wParam, lParam);
+        }
+
+        private static IntPtr SetHook(User32_MouseHook.HookProcDelegate proc)
+        {
+            IntPtr hook = User32_MouseHook.SetWindowsHookEx(User32_MouseHook.HookType.WH_MOUSE_LL, proc, User32.GetModuleHandle("user32"), 0);
+            if (hook == IntPtr.Zero)
+            {
+                throw new System.ComponentModel.Win32Exception();
+            }
+            return hook;
+        }
+
+        private static void UnHook(ref IntPtr hookID)
+        {
+            if (hookID != IntPtr.Zero)
+                User32_MouseHook.UnhookWindowsHookEx(hookID);
+            hookID = IntPtr.Zero;
+        }
+
+        public class MouseEventArgs32 : EventArgs
+        {
+            public User32_MouseHook.MouseMessages Message { get; }
+            public User32_MouseHook.MSLLHOOKSTRUCT MessageData { get; }
+            public MouseEventArgs32(User32_MouseHook.MouseMessages msg, ref User32_MouseHook.MSLLHOOKSTRUCT hookStruct)
+            {
+                Message = msg;
+                MessageData = hookStruct;
+            }
         }
 
         public class MessageUtil
@@ -131,73 +155,6 @@ namespace MZ.Tools
             {
                 MainForm.BeginInvoke(action);
             }
-        }
-
-        public class Win32
-        {
-            public delegate IntPtr LowLevelMouseProcDelegate(int nCode, MouseMessages message, MSLLHOOKSTRUCT lParam);
-            public delegate IntPtr HookProcDelegate(int code, IntPtr wParam, IntPtr lParam);
-
-            //The WH_MOUSE_LL hook enables you to monitor mouse input events about to be posted in a thread input queue.
-            //https://docs.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-setwindowshookexa?redirectedfrom=MSDN
-            public enum HookType
-            {
-                WH_MSGFILTER = -1,
-                WH_KEYBOARD = 2,
-                WH_MOUSE = 7,
-                WH_KEYBOARD_LL = 13,
-                WH_MOUSE_LL = 14,
-            }
-
-            public enum MouseMessages
-            {
-                WM_LBUTTONDOWN = 0x0201,
-                WM_LBUTTONUP = 0x0202,
-                WM_MOUSEMOVE = 0x0200,
-                WM_MOUSEWHEEL = 0x020A,
-                WM_RBUTTONDOWN = 0x0204,
-                WM_RBUTTONUP = 0x0205
-            }
-
-            [StructLayout(LayoutKind.Sequential)]
-            public struct Win32Point
-            {
-                public Int32 X;
-                public Int32 Y;
-
-                public override string ToString()
-                {
-                    return string.Format("X = {0}, Y = {1}", X, Y);
-                }
-            }
-
-            //https://docs.microsoft.com/en-us/windows/win32/api/winuser/ns-winuser-msllhookstruct?redirectedfrom=MSDN
-            [StructLayout(LayoutKind.Sequential)]
-            public struct MSLLHOOKSTRUCT
-            {
-                public Win32Point pt;
-                public uint mouseData;
-                public uint flags;
-                public uint time;
-                public IntPtr dwExtraInfo;
-            }
-
-            [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-            public static extern IntPtr SetWindowsHookEx(HookType hookType, HookProcDelegate lpfn, IntPtr hModule, uint dwThreadId);
-
-            [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-            [return: MarshalAs(UnmanagedType.Bool)]
-            public static extern bool UnhookWindowsHookEx(IntPtr hhk);
-
-            [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-            public static extern IntPtr CallNextHookEx(IntPtr hhk, int nCode, IntPtr wParam, IntPtr lParam);
-
-            [DllImport("User32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-            [return: MarshalAs(UnmanagedType.Bool)]
-            public static extern bool SetCursorPos(int x, int y);
-
-            [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
-            public static extern IntPtr GetModuleHandle(string lpModuleName);
         }
     }
 }

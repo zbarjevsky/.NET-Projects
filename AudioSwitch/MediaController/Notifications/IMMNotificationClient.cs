@@ -1,9 +1,9 @@
-﻿using PlaybackSoundSwitch.ComObjects;
-using PlaybackSoundSwitch.Device;
+﻿using MZ.Media.ComObjects;
+using MZ.Media.Device;
 using System;
 using System.Runtime.InteropServices;
 
-namespace PlaybackSoundSwitch.Interfaces
+namespace MZ.Media.Interfaces
 {
     /// <summary>
     /// IMMNotificationClient

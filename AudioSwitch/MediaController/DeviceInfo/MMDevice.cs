@@ -1,5 +1,5 @@
-﻿using PlaybackSoundSwitch.Audio;
-using PlaybackSoundSwitch.ComObjects;
+﻿using MZ.Media.Audio;
+using MZ.Media.ComObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PlaybackSoundSwitch.Device
+namespace MZ.Media.Device
 {
     /// <summary>
     /// MM Device

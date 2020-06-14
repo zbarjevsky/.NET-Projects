@@ -24,7 +24,7 @@
 
 using System;
 
-namespace PlaybackSoundSwitch.ComObjects
+namespace MZ.Media.ComObjects
 {
     /// <summary>
     ///     Device State

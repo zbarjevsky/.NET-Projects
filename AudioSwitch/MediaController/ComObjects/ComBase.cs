@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace PlaybackSoundSwitch.ComObjects
+namespace MZ.Media.ComObjects
 {
     internal sealed class ComBase
     {

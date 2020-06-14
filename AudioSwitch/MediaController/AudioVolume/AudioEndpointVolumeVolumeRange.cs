@@ -22,7 +22,7 @@
 // modified for NAudio
 using System.Runtime.InteropServices;
 
-namespace PlaybackSoundSwitch.Audio
+namespace MZ.Media.Audio
 {
     /// <summary>
     /// Audio Endpoint Volume Volume Range

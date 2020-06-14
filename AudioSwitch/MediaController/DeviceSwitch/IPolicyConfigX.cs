@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using PlaybackSoundSwitch.ComObjects;
+using MZ.Media.ComObjects;
 
 namespace SoundSwitch.Audio.Manager.Interop.Interface.Policy
 {

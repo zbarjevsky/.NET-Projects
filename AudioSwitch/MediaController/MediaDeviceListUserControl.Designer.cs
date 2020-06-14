@@ -1,4 +1,4 @@
-﻿namespace PlaybackSoundSwitch
+﻿namespace MZ.Media
 {
     partial class MediaDeviceListUserControl
     {

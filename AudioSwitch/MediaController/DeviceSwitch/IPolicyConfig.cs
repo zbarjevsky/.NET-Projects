@@ -2,10 +2,10 @@
 using System.Runtime.InteropServices;
 //using AudioSwitcher.AudioApi.CoreAudio.Interfaces;
 //using AudioSwitcher.AudioApi.Hooking.ComObjects;
-using PlaybackSoundSwitch.ComObjects;
+using MZ.Media.ComObjects;
 //using SoundSwitch.Audio.Manager.Interop.Enum;
 
-namespace PlaybackSoundSwitch.DeviceSwitch
+namespace MZ.Media.DeviceSwitch
 {
     [Guid(ComIIds.POLICY_CONFIG_IID)]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]

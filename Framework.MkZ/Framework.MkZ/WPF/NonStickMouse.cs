@@ -1,4 +1,5 @@
 ﻿using MZ.Tools;
+using MZ.Windows;
 using MZ.WPF.Utils;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,6 @@ namespace MZ.WPF
             public double DisplaytoDisplay_X = -1;
         }
 
-        static MouseHook _mouseHook = new MouseHook();
         static List<WpfScreen> _screens = WpfScreen.AllScreens();
         static bool _lBtnDown, _rBtnDown;
         static BorderBetweenDisplays[] _borders = null;
@@ -30,7 +30,7 @@ namespace MZ.WPF
 
         static NonStickMouse()
         {
-            _mouseHook.OnMouseMessage += mouseHook_OnMouseMessage;
+            MouseHook.Hook.OnMouseMessage += mouseHook_OnMouseMessage;
             Microsoft.Win32.SystemEvents.DisplaySettingsChanged += SystemEvents_DisplaySettingsChanged;
             Init();
         }
@@ -67,21 +67,21 @@ namespace MZ.WPF
         {
             switch (e.Message)
             {
-                case MouseHook.Win32.MouseMessages.WM_LBUTTONDOWN:
+                case User32_MouseHook.MouseMessages.WM_LBUTTONDOWN:
                     _lBtnDown = true;
                     break;
-                case MouseHook.Win32.MouseMessages.WM_LBUTTONUP:
+                case User32_MouseHook.MouseMessages.WM_LBUTTONUP:
                     _lBtnDown = false;
                     break;
-                case MouseHook.Win32.MouseMessages.WM_MOUSEMOVE:
+                case User32_MouseHook.MouseMessages.WM_MOUSEMOVE:
                     OnMouseMove(e);
                     break;
-                case MouseHook.Win32.MouseMessages.WM_MOUSEWHEEL:
+                case User32_MouseHook.MouseMessages.WM_MOUSEWHEEL:
                     break;
-                case MouseHook.Win32.MouseMessages.WM_RBUTTONDOWN:
+                case User32_MouseHook.MouseMessages.WM_RBUTTONDOWN:
                     _rBtnDown = true;
                     break;
-                case MouseHook.Win32.MouseMessages.WM_RBUTTONUP:
+                case User32_MouseHook.MouseMessages.WM_RBUTTONUP:
                     _rBtnDown = false;
                     break;
                 default:
@@ -126,15 +126,16 @@ namespace MZ.WPF
             if (pt.Y > rTo.Top && pt.Y < rTo.Bottom)
                 return; //no correction needed
 
-            int y = (int)rTo.Top;
+            const int offsetY = 80;
+            int y = (int)rTo.Top + offsetY;
             if (pt.Y >= rTo.Bottom)
-                y = (int)(rTo.Bottom - 1);
+                y = (int)(rTo.Bottom - offsetY);
 
             Debug.WriteLine("Corrected Mouse Position: X:{0} Y:{1}", pt.X - delta, y);
-            MouseHook.SetMousePos(pt.X - delta, y);
+            User32.SetCursorPos(pt.X - delta, y);
         }
 
-        private static int ScreenFromPoint(MouseHook.Win32.Win32Point pt)
+        private static int ScreenFromPoint(User32.POINT pt)
         {
             for (int i = 0; i < _screens.Count; i++)
             {
@@ -150,7 +151,7 @@ namespace MZ.WPF
         /// <param name="enable"></param>
         public static void EnableMouseCorrection(bool enable)
         {
-            _enableCorrection = enable;
+            MouseHook.Hook.Enabled = _enableCorrection = enable;
         }
     }
 }

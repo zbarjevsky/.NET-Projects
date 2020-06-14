@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using PlaybackSoundSwitch.ComObjects;
+using MZ.Media.ComObjects;
 
-namespace PlaybackSoundSwitch.DeviceSwitch
+namespace MZ.Media.DeviceSwitch
 {
     [Guid(ComIIds.POLICY_CONFIG_VISTA_IID)]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]

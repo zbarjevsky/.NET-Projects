@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using PlaybackSoundSwitch.ComObjects;
+using MZ.Media.ComObjects;
 using SoundSwitch.Audio.Manager.Interop.Interface;
 using SoundSwitch.Audio.Manager.Interop.Interface.Policy;
 
-namespace PlaybackSoundSwitch.DeviceSwitch
+namespace MZ.Media.DeviceSwitch
 {
     internal class PolicyClient
     {

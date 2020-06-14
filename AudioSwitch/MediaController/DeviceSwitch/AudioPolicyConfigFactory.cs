@@ -1,6 +1,6 @@
-﻿using PlaybackSoundSwitch.ComObjects;
+﻿using MZ.Media.ComObjects;
 
-namespace PlaybackSoundSwitch.DeviceSwitch
+namespace MZ.Media.DeviceSwitch
 {
     internal sealed class AudioPolicyConfigFactory
     {

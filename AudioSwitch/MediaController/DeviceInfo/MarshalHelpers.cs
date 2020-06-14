@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PlaybackSoundSwitch.Device
+namespace MZ.Media.Device
 {
     /// <summary>
     /// Support for Marshal Methods in both UWP and .NET 3.5

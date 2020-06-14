@@ -26,7 +26,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-namespace PlaybackSoundSwitch.Device
+namespace MZ.Media.Device
 {
     /// <summary>
     ///     Multimedia Device Collection

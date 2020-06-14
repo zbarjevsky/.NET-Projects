@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace PlaybackSoundSwitch.Device
+namespace MZ.Media.Device
 {
     /// <summary>
     /// from Propidl.h.

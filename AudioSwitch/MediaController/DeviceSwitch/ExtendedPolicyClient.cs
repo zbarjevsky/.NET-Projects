@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using PlaybackSoundSwitch.ComObjects;
-using PlaybackSoundSwitch.Device;
+using MZ.Media.ComObjects;
+using MZ.Media.Device;
 
-namespace PlaybackSoundSwitch.DeviceSwitch
+namespace MZ.Media.DeviceSwitch
 {
     internal class ExtendedPolicyClient
     {

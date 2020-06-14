@@ -7,13 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using PlaybackSoundSwitch.Device;
+using MZ.Media.Device;
 using System.Diagnostics;
 using MZ.Tools;
-using PlaybackSoundSwitch.DeviceSwitch;
+using MZ.Media.DeviceSwitch;
 using MZ.WinForms;
 
-namespace PlaybackSoundSwitch
+namespace MZ.Media
 {
     public partial class MediaDeviceListUserControl : UserControl
     {

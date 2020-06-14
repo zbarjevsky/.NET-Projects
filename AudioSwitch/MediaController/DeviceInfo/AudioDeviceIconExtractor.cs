@@ -17,14 +17,14 @@ using System.Drawing;
 using System.Runtime.Caching;
 //using System.Runtime.Caching;
 //using NAudio.CoreAudioApi;
-using PlaybackSoundSwitch.Device;
-using PlaybackSoundSwitch.Properties;
+using MZ.Media.Device;
+using MZ.Media.Properties;
 //using SoundSwitch.Common.Framework.Icon;
 //using Serilog;
 //using SoundSwitch.Common.Framework.Icon;
 //using SoundSwitch.Common.Properties;
 
-namespace PlaybackSoundSwitch.Device
+namespace MZ.Media.Device
 {
     public class AudioDeviceIconExtractor
     {

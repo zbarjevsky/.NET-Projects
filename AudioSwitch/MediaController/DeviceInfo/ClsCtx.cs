@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PlaybackSoundSwitch.Device
+namespace MZ.Media.Device
 {
     /// <summary>
     ///     is defined in WTypes.h

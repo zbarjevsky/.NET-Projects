@@ -24,7 +24,7 @@
 
 using System;
 
-namespace PlaybackSoundSwitch.Device
+namespace MZ.Media.Device
 {
     /// <summary>
     ///     Device State

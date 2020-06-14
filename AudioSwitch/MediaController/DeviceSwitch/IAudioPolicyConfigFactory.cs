@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using PlaybackSoundSwitch.ComObjects;
+using MZ.Media.ComObjects;
 //using AudioSwitcher.AudioApi.Hooking.ComObjects;
-using PlaybackSoundSwitch.Device;
+using MZ.Media.Device;
 //using SoundSwitch.Audio.Manager.Interop.Enum;
 
-namespace PlaybackSoundSwitch.DeviceSwitch
+namespace MZ.Media.DeviceSwitch
 {
     [Guid("2a59116d-6c4f-45e0-a74f-707e3fef9258")]
     [InterfaceType(ComInterfaceType.InterfaceIsIInspectable)]

@@ -1,7 +1,7 @@
 ﻿using System;
-using PlaybackSoundSwitch.Device;
+using MZ.Media.Device;
 
-namespace PlaybackSoundSwitch.Device
+namespace MZ.Media.Device
 {
     public class DeviceInfo : IEquatable<DeviceInfo>, IComparable<DeviceInfo>
     {

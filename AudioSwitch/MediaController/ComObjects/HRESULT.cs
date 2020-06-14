@@ -1,4 +1,4 @@
-﻿namespace PlaybackSoundSwitch.ComObjects
+﻿namespace MZ.Media.ComObjects
 {
     public enum HRESULT : uint
     {

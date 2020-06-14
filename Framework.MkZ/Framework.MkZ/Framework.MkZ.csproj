@@ -89,6 +89,7 @@
     </Compile>
     <Compile Include="Windows\MouseHook.cs" />
     <Compile Include="Windows\ProcessExtensions.cs" />
+    <Compile Include="Windows\User32_MouseHook.cs" />
     <Compile Include="WinForms\ChartProgressUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -162,7 +163,7 @@
     <Compile Include="Windows\Windows7ProgressBar.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Windows\WindowsMessages.cs" />
+    <Compile Include="Windows\User32_WindowsMessages.cs" />
     <Compile Include="Windows\XmlSerializerHelper.cs" />
     <Compile Include="Windows\CommonUtils.cs" />
     <Compile Include="WPF\AutoGreyableImage.cs" />

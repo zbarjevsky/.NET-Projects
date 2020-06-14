@@ -211,8 +211,13 @@ namespace MZ.Tools
         [StructLayout(LayoutKind.Sequential)]
         public struct POINT
         {
-            public Int32 x;
-            public Int32 y;
+            public Int32 X;
+            public Int32 Y;
+
+            public override string ToString()
+            {
+                return string.Format("X = {0}, Y = {1}", X, Y);
+            }
         }
 
         //http://kenneththorman.blogspot.com/2010/08/c-net-active-windows-size-helper.html
@@ -487,6 +492,9 @@ namespace MZ.Tools
         [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
         public static extern int GetWindowThreadProcessId(IntPtr handle, out uint processId);
 
+        [DllImport("kernel32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        public static extern IntPtr GetModuleHandle(string lpModuleName);
+
         public delegate bool EnumWindowsProc(IntPtr IntPtr, int lParam);
 
         [DllImport("user32.dll")]
@@ -559,7 +567,8 @@ namespace MZ.Tools
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern bool GetMonitorInfo(HandleRef hmonitor, [In, Out] MONITORINFOEX info);
 
-        [DllImport("User32.dll")]
+        [DllImport("User32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+        [return: MarshalAs(UnmanagedType.Bool)]
         public static extern bool SetCursorPos(int X, int Y);
 
         [DllImport("user32.dll")]

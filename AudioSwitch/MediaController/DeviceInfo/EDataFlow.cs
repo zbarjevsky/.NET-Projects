@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace PlaybackSoundSwitch.Device
+namespace MZ.Media.Device
 {
     /// <summary>
     ///     The EDataFlow enumeration defines constants that indicate the direction

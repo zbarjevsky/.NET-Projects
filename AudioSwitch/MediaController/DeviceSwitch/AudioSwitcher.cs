@@ -3,10 +3,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using MZ.Tools;
-using PlaybackSoundSwitch.ComObjects;
-using PlaybackSoundSwitch.Device;
+using MZ.Media.ComObjects;
+using MZ.Media.Device;
 
-namespace PlaybackSoundSwitch.DeviceSwitch
+namespace MZ.Media.DeviceSwitch
 {
     public class AudioSwitcher
     {

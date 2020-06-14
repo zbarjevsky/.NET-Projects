@@ -13,15 +13,15 @@ using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using MZ.Tools;
 using MZ.WPF;
-using PlaybackSoundSwitch.ComObjects;
-using PlaybackSoundSwitch.Device;
-using PlaybackSoundSwitch.DeviceSwitch;
-using PlaybackSoundSwitch.Interfaces;
-using PlaybackSoundSwitch.Notifications;
-using PlaybackSoundSwitch.Properties;
-using PlaybackSoundSwitch.WPF;
+using MZ.Media.ComObjects;
+using MZ.Media.Device;
+using MZ.Media.DeviceSwitch;
+using MZ.Media.Interfaces;
+using MZ.Media.Notifications;
+using MZ.Media.Properties;
+using MZ.Media.WPF;
 
-namespace PlaybackSoundSwitch
+namespace MZ.Media
 {
     public partial class FormMain : Form
     {

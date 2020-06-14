@@ -21,7 +21,7 @@
 */
 using System;
 
-namespace PlaybackSoundSwitch.Audio
+namespace MZ.Media.Audio
 {
     /// <summary>
     /// Endpoint Hardware Support

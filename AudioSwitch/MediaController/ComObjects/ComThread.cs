@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace PlaybackSoundSwitch.ComObjects
+namespace MZ.Media.ComObjects
 {
     internal static class ComThread
     {

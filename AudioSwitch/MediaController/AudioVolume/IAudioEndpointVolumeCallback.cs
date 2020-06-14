@@ -22,11 +22,11 @@
   (Modified for NAudio by Mark Heath)
   
 */
-using PlaybackSoundSwitch.ComObjects;
+using MZ.Media.ComObjects;
 using System;
 using System.Runtime.InteropServices;
 
-namespace PlaybackSoundSwitch.Audio
+namespace MZ.Media.Audio
 {
     [Guid(ComIIds.AUDIO_ENDPOINT_VOLUME_CALLBACK_IID),
      InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]

@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using MarkZ.Timer;
-using PlaybackSoundSwitch.ComObjects;
-using PlaybackSoundSwitch.Device;
-using PlaybackSoundSwitch.Interfaces;
-using PlaybackSoundSwitch.Notifications;
+using MZ.Media.ComObjects;
+using MZ.Media.Device;
+using MZ.Media.Interfaces;
+using MZ.Media.Notifications;
 
-namespace PlaybackSoundSwitch
+namespace MZ.Media
 {
 	public class MMDeviceEnumerator : IDisposable
 	{

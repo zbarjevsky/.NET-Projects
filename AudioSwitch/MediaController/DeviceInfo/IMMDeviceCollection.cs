@@ -1,7 +1,7 @@
-﻿using PlaybackSoundSwitch.ComObjects;
+﻿using MZ.Media.ComObjects;
 using System.Runtime.InteropServices;
 
-namespace PlaybackSoundSwitch.Device
+namespace MZ.Media.Device
 {
     [Guid(ComIIds.IMM_DEVICE_COLLECTION_IID)]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]

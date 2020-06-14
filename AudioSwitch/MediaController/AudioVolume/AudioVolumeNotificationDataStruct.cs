@@ -24,7 +24,7 @@ using System;
 using System.Runtime.InteropServices;
 // ReSharper disable InconsistentNaming
 
-namespace PlaybackSoundSwitch.Audio
+namespace MZ.Media.Audio
 {
     [StructLayout(LayoutKind.Sequential)]
     public struct AudioVolumeNotificationDataStruct

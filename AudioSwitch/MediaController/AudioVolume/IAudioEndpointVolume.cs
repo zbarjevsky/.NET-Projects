@@ -19,11 +19,11 @@
      misrepresented as being the original source code.
   3. This notice may not be removed or altered from any source distribution.
 */
-using PlaybackSoundSwitch.ComObjects;
+using MZ.Media.ComObjects;
 using System;
 using System.Runtime.InteropServices;
 
-namespace PlaybackSoundSwitch.Audio
+namespace MZ.Media.Audio
 {
     [Guid(ComIIds.AUDIO_ENDPOINT_VOLUME_IID),
      InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]

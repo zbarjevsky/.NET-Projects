@@ -16,7 +16,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
-namespace PlaybackSoundSwitch.WPF
+namespace MZ.Media.WPF
 {
     /// <summary>
     /// Interaction logic for PopupInfoWindow.xaml
@@ -65,6 +65,8 @@ namespace PlaybackSoundSwitch.WPF
         {
             if (this.Volume != volume) 
             {
+                this.DataContext = this;
+
                 _timer_count = 0;
                 this.Volume = volume;
                 this.Opacity = 0.9;

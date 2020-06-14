@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace PlaybackSoundSwitch.ComObjects
+namespace MZ.Media.ComObjects
 {
     /// <summary>
     ///     implements IMMDeviceEnumerator

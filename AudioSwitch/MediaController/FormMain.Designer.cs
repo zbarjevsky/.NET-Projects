@@ -1,4 +1,4 @@
-﻿namespace PlaybackSoundSwitch
+﻿namespace MZ.Media
 {
     partial class FormMain
     {
@@ -47,10 +47,10 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.panel1 = new System.Windows.Forms.Panel();
             this.m_chkCorrectMouseMove = new System.Windows.Forms.CheckBox();
-            this.m_volumeControlSpk = new PlaybackSoundSwitch.VolumeUserControl();
-            this.m_volumeControlMic = new PlaybackSoundSwitch.VolumeUserControl();
-            this.m_DeviceListPlayback = new PlaybackSoundSwitch.MediaDeviceListUserControl();
-            this.m_DeviceListRecording = new PlaybackSoundSwitch.MediaDeviceListUserControl();
+            this.m_volumeControlSpk = new MZ.Media.VolumeUserControl();
+            this.m_volumeControlMic = new MZ.Media.VolumeUserControl();
+            this.m_DeviceListPlayback = new MZ.Media.MediaDeviceListUserControl();
+            this.m_DeviceListRecording = new MZ.Media.MediaDeviceListUserControl();
             this.statusStrip1.SuspendLayout();
             this.m_pnlMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitMain)).BeginInit();

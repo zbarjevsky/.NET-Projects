@@ -23,10 +23,10 @@
 
  */
 
-using PlaybackSoundSwitch.Device;
+using MZ.Media.Device;
 using System;
 
-namespace PlaybackSoundSwitch.Audio
+namespace MZ.Media.Audio
 {
     // This class implements the IAudioEndpointVolumeCallback interface,
     // it is implemented in this class because implementing it on AudioEndpointVolume 

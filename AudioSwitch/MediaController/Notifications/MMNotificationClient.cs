@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MarkZ.Timer;
-using PlaybackSoundSwitch.ComObjects;
-using PlaybackSoundSwitch.Device;
-using PlaybackSoundSwitch.Interfaces;
+using MZ.Media.ComObjects;
+using MZ.Media.Device;
+using MZ.Media.Interfaces;
 
-namespace PlaybackSoundSwitch.Notifications
+namespace MZ.Media.Notifications
 {
     public class MMNotificationClient : IMMNotificationClient, IDisposable
     {

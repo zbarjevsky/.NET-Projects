@@ -7,11 +7,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using PlaybackSoundSwitch.Properties;
-using PlaybackSoundSwitch.Device;
+using MZ.Media.Properties;
+using MZ.Media.Device;
 using MZ.WinForms;
 
-namespace PlaybackSoundSwitch
+namespace MZ.Media
 {
     public partial class VolumeUserControl : UserControl
     {
