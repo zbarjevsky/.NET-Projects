@@ -154,7 +154,7 @@
             this.MinimumSize = new System.Drawing.Size(640, 480);
             this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Smart Backup";
+            this.Text = "Simple Backup";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormMain_FormClosed);
             this.Load += new System.EventHandler(this.FormMain_Load);
             this.m_tabMain.ResumeLayout(false);

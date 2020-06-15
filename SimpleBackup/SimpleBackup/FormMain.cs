@@ -15,7 +15,7 @@ namespace SimpleBackup
     public partial class FormMain : Form
     {
         private readonly BackupSettings _settings;
-        public const string TITLE = "Smart Backup MZ";
+        public const string TITLE = "Simple Backup MZ";
 
         public FormMain()
         {

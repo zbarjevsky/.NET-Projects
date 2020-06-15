@@ -292,10 +292,11 @@ namespace MZ.WinForms
 						return;
 					}
 
-					string[] stringDirectories = Directory.GetDirectories(getFullPath(node));
+					List<string> directories = new List<string>(Directory.GetDirectories(getFullPath(node)));
+					directories.Sort();
 
 					//loop throught all directories
-					foreach (string stringDir in stringDirectories)
+					foreach (string stringDir in directories)
 					{
 						string stringPathName = Path.GetFileName(stringDir);
 

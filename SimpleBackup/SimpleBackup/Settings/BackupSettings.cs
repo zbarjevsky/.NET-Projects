@@ -127,6 +127,12 @@ namespace SimpleBackup.Settings
             return true;
         }
 
+        public override string ToString()
+        {
+            string selItems = SelectedFoldersAndFilesList.AllInSrcFolder ? "All Items" : SelectedFoldersAndFilesList.Names.Count + " Item(s)";
+            return string.Format("From: {0} [{1}], To: {2}", FolderSrc, selItems, FolderDst);
+        }
+
         public static List<BackupFile> CollectFiles(BackupEntry e, FileUtils.FileProgress progress = null)
         {
             List<BackupFile> fileList = new List<BackupFile>();
@@ -141,7 +147,7 @@ namespace SimpleBackup.Settings
             {
                 if (progress != null)
                 {
-                    string prompt = string.Format("Collecting Files in: ({0}) ", e.FolderSrc);
+                    string prompt = string.Format("Collecting Files in: {0} \n", e);
                     progress.ResetToMarquee(prompt);
                 }
 

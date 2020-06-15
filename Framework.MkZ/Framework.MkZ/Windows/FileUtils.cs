@@ -63,7 +63,7 @@ namespace MZ.Tools
                             {
                                 _val = _ctrlProgress.MarqueeNext(_formOwner);
                                 _marqueeElapsed = 0;
-                                Debug.Assert(_val < Maximum);
+                                Debug.Assert(_val <= Maximum);
                                 OnValueChange();
                             }
                         }
