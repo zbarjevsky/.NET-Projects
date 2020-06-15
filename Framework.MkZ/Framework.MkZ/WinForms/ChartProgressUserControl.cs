@@ -26,6 +26,7 @@ namespace WindowsFormsApp1
         {
             chart1.Titles.Clear();
             chart1.Titles.Add("Progress Bar");
+            chart1.Titles[0].ForeColor = Color.Gray;
 
             const int Max = 1000;
 

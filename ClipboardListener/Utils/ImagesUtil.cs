@@ -19,7 +19,7 @@ namespace ClipboardManager
 
 		public static Image Combine(Image ico1, Image ico2)
 		{
-			Bitmap bmp = new Bitmap(33, 16);
+			Bitmap bmp = new Bitmap(33, 16); //16 + 1 + 16
 			using (Graphics oGraphics = Graphics.FromImage(bmp))
 			{
 				oGraphics.DrawImage(ico1, 0, 0, 16, 16);

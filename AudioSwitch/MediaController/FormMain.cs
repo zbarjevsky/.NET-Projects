@@ -70,10 +70,6 @@ namespace MZ.Media
         private void FormMain_Load(object sender, EventArgs e)
         {
             EnumDevices("Loaded");
-
-            //correct mouse movement if stuck between monitors
-            m_chkCorrectMouseMove.Checked = true;
-            m_chkCorrectMouseMove_CheckedChanged(sender, e);
         }
 
         private void FormMain_FormClosed(object sender, FormClosedEventArgs e)
@@ -171,11 +167,6 @@ namespace MZ.Media
         private void m_chkTopMost_CheckedChanged(object sender, EventArgs e)
         {
             this.TopMost = m_chkTopMost.Checked;
-        }
-
-        private void m_chkCorrectMouseMove_CheckedChanged(object sender, EventArgs e)
-        {
-            NonStickMouse.EnableMouseCorrection(m_chkCorrectMouseMove.Checked);
         }
     }
 }
