@@ -11,7 +11,7 @@ namespace MeditationStopWatch
     {
         private static FormFullScreenImage _formFullScreenImage = null;
 
-        public static Action<bool> OnVisibleChanged = (isVisible) => { };
+        public static EventHandler<bool> OnVisibleChanged = (sender, isVisible) => { };
 
         public static bool IsVisible { get { return _formFullScreenImage != null ? _formFullScreenImage.Visible : false; } }
  
@@ -20,14 +20,15 @@ namespace MeditationStopWatch
             if (_formFullScreenImage == null)
             {
                 _formFullScreenImage = new FormFullScreenImage(parent);
-                _formFullScreenImage.Location = parent.Location; //show on same screen
-                _formFullScreenImage.VisibleChanged += (s, e) => { OnVisibleChanged(IsVisible); };
+                _formFullScreenImage.VisibleChanged += (s, e) => { OnVisibleChanged(_formFullScreenImage, IsVisible); };
             }
+
+            Point pt = parent.Location;
+            pt.Offset(100, 100); //show on same screen
+            _formFullScreenImage.Location = pt;
 
             _formFullScreenImage.Picture = image;
             _formFullScreenImage.Show(parent);
-
-
         }
 
         public static void Hide()

@@ -23,7 +23,7 @@ namespace MeditationStopWatch
 		//private bool _bScreenSaverActive = false;
 	
 		public event EventHandler OnTimerTick;
-		public event EventHandler<NETSoundPlayer.PlayingState> OnStatusModeChanged;
+		public event EventHandler<NETSoundPlayer.PlayingState> OnPlayerStateChanged;
 
 		public AudioPlayerControl()
 		{
@@ -136,7 +136,7 @@ namespace MeditationStopWatch
 
 		private void _player_StateChanged(object sender, NETSoundPlayer.PlayingState e)
 		{
-			OnStatusModeChanged?.Invoke(sender, e);
+			OnPlayerStateChanged?.Invoke(sender, e);
 		}
 
 

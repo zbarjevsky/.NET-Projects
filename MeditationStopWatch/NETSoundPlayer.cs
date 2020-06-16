@@ -44,9 +44,9 @@ namespace MeditationStopWatch
 
         internal void CmdClose()
         {
+            State = PlayingState.none;
             FileName = string.Empty;
             _player.Close();
-            State = PlayingState.none;
         }
 
         private void _player_MediaEnded(object sender, EventArgs e)

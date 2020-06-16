@@ -47,7 +47,7 @@ namespace MeditationStopWatch
 
             m_Options.AnalogClockSettings = m_analogClock.Settings;
 
-            m_audioPlayerControl.OnStatusModeChanged += AudioPlayerControl_OnStatusModeChanged;
+            m_audioPlayerControl.OnPlayerStateChanged += AudioPlayerControl_OnPlayStateChanged;
 		}
 
         private bool _isInitialized = false;
@@ -156,8 +156,11 @@ namespace MeditationStopWatch
 			return DialogResult.Ignore;
 		}
 
-        private void AudioPlayerControl_OnStatusModeChanged(object sender, NETSoundPlayer.PlayingState state)
+        private void AudioPlayerControl_OnPlayStateChanged(object sender, NETSoundPlayer.PlayingState state)
         {
+			if (Disposing)
+				return;
+
 			if (state == NETSoundPlayer.PlayingState.playing)
 				TaskbarManagerHelper.Button(2).Icon = Properties.Resources.pause_on;
 			else
@@ -183,7 +186,7 @@ namespace MeditationStopWatch
 					m_audioPlayerControl.Next();
 			};
 
-			FullScreenImageHelper.OnVisibleChanged = (isVisible) =>
+			FullScreenImageHelper.OnVisibleChanged = (form, isVisible) =>
 			{
 				if (isVisible)
 				{
