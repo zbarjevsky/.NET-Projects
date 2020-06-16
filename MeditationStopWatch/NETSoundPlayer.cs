@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.DirectX.DirectSound;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -73,9 +74,10 @@ namespace MeditationStopWatch
             set { _player.Position = TimeSpan.FromMilliseconds(value); }
         }
 
-        internal void Play(string fullName, string shortName)
+        internal void Play(string fullName, string shortName, int volume)
         {
             Open(fullName, shortName);
+            SetVolume(volume);
             CmdPlay();
         }
 

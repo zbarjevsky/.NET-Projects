@@ -270,10 +270,14 @@ namespace MeditationStopWatch
 
 		private void m_tbbtnPlay_Click(object sender, EventArgs e)
 		{
-            PlaySelected(GetSelectedFile());
+			if (m_Mp3Player.State == NETSoundPlayer.PlayingState.none)
+				PlaySelected(GetSelectedFile());
+			else
+				m_Mp3Player.CmdResume();
+			UpdateInfo();
 		}
 
-        private void PlaySelected(int selectedIndex = -1)
+		private void PlaySelected(int selectedIndex = -1)
         {
             if (selectedIndex < 0)
             {
@@ -288,17 +292,11 @@ namespace MeditationStopWatch
 
         private void Play(int idx)
 		{
-            FileInfo fiMP3 = m_playLists.PL.SelectPlayFile(idx);
+			m_Mp3Player.CmdClose();
 
-			if(m_Mp3Player.State == NETSoundPlayer.PlayingState.paused)
-            {
-				m_Mp3Player.CmdResume();
-            }
-            else
-            {
-				m_Mp3Player.SetVolume(Volume);
-				m_Mp3Player.Play(fiMP3.FullName, fiMP3.Name);
-			}
+			FileInfo fiMP3 = m_playLists.PL.SelectPlayFile(idx);
+
+			m_Mp3Player.Play(fiMP3.FullName, fiMP3.Name, Volume);
 		}
 
         public void PauseResume()
