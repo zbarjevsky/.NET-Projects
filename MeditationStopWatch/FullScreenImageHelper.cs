@@ -23,9 +23,13 @@ namespace MeditationStopWatch
                 _formFullScreenImage.VisibleChanged += (s, e) => { OnVisibleChanged(_formFullScreenImage, IsVisible); };
             }
 
+            _formFullScreenImage.WindowState = System.Windows.Forms.FormWindowState.Normal;
+
             Point pt = parent.Location;
             pt.Offset(100, 100); //show on same screen
             _formFullScreenImage.Location = pt;
+
+            _formFullScreenImage.WindowState = System.Windows.Forms.FormWindowState.Maximized;
 
             _formFullScreenImage.Picture = image;
             _formFullScreenImage.Show(parent);

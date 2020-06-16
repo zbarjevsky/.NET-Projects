@@ -269,6 +269,7 @@ namespace MeditationStopWatch
         {
             _playingIdx = idx;
             UpdatePlayingFile();
+            m_listFiles.EnsureVisible(idx);
             return m_listFiles.Items[idx].Tag as FileInfo;
         }
 

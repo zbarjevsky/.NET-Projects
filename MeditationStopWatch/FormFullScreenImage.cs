@@ -55,8 +55,6 @@ namespace MeditationStopWatch
             pictureBox1.ShowControlsAction = (show) => { m_btnCancel.Visible = show; m_lblUsage.Visible = show; };
             pictureBox1.OnClickAction = () => { _stopWatchForm.PauseResume(); };
 
-            this.WindowState = FormWindowState.Maximized;
-
             EnsureVisibleControls();
             pictureBox1.Zoom(_zoomScale);
             pictureBox1.PictureBox.Focus();
