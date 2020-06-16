@@ -46,9 +46,11 @@ namespace MeditationStopWatch
 			m_ThumbnailCache.ProgressChanged += m_ThumbnailCache_ProgressChanged;
 
             m_Options.AnalogClockSettings = m_analogClock.Settings;
+
+            m_audioPlayerControl.OnStatusModeChanged += AudioPlayerControl_OnStatusModeChanged;
 		}
 
-		private bool _isInitialized = false;
+        private bool _isInitialized = false;
 		private void FormStopWatch_Load(object sender, EventArgs e)
 		{
 			if (File.Exists(m_sSettingsFile))
@@ -152,6 +154,14 @@ namespace MeditationStopWatch
 				}
 			}
 			return DialogResult.Ignore;
+		}
+
+        private void AudioPlayerControl_OnStatusModeChanged(object sender, NETSoundPlayer.PlayingState state)
+        {
+			if (state == NETSoundPlayer.PlayingState.playing)
+				TaskbarManagerHelper.Button(2).Icon = Properties.Resources.pause_on;
+			else
+				TaskbarManagerHelper.Button(2).Icon = Properties.Resources.play_on;
 		}
 
 		private void InitThumbnailToolBarButtons()

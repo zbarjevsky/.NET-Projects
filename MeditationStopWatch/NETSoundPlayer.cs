@@ -63,7 +63,7 @@ namespace MeditationStopWatch
 
         private void _player_MediaOpened(object sender, EventArgs e)
         {
-            State = PlayingState.open;
+            State = PlayingState.playing;
             OnMediaOpened?.Invoke(sender, e);
         }
 
