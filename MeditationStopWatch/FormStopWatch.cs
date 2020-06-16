@@ -113,7 +113,7 @@ namespace MeditationStopWatch
 			this.Visible = true;
 			OpenImageDirectory(m_Options.LastImageFile);
 
-			m_audioPlayerControl.ValueChanged += m_audioPlayerControl_ValueChanged;
+			m_audioPlayerControl.OnTimerTick += m_audioPlayerControl_ValueChanged;
 
             AutoCloseThumbnailsPanel();
 			InitThumbnailToolBarButtons();
@@ -127,7 +127,7 @@ namespace MeditationStopWatch
 				return;
 
 			m_ThumbnailCache.ProgressChanged -= m_ThumbnailCache_ProgressChanged;
-			m_audioPlayerControl.ValueChanged -= m_audioPlayerControl_ValueChanged;
+			m_audioPlayerControl.OnTimerTick -= m_audioPlayerControl_ValueChanged;
 			m_ThumbnailCache.CancelLoadingThumbnails = true;
 			
 			SaveOptions();

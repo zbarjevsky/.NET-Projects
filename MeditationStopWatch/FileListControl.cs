@@ -13,6 +13,7 @@ namespace MeditationStopWatch
     public partial class FileListControl : UserControl
     {
         private int _playingIdx = -1;
+        public int FileIndex { get { return _playingIdx; } }
 
         public PlayListActions OP = new PlayListActions();
 
@@ -123,7 +124,7 @@ namespace MeditationStopWatch
             if (list.ListEquals(GetFilelist()))
                 return;
 
-            OP.StopAction();
+            OP.CloseAction();
             m_listFiles.Items.Clear();
             AddToFileList(list.List, bPlayFirst);
             OnListChanged();
@@ -208,7 +209,7 @@ namespace MeditationStopWatch
                 int idx = m_listFiles.SelectedIndices[i];
                 if (idx == _playingIdx)
                 {
-                    OP.StopAction();
+                    OP.CloseAction();
                     _playingIdx = -1;
                 }
                 m_listFiles.SelectedItems[i].Remove();
@@ -218,7 +219,7 @@ namespace MeditationStopWatch
 
         public void RemoveAll()
         {
-            OP.StopAction();
+            OP.CloseAction();
             m_listFiles.Items.Clear();
             OnListChanged();
         }
@@ -365,6 +366,7 @@ namespace MeditationStopWatch
     public class PlayListActions
     {
         public Action<int> PlayAction = (selectedIndex) => { };
+        public Action CloseAction = () => { };
         public Action StopAction = () => { };
         public Action PauseAction = () => { };
         public Action NextAction = () => { };

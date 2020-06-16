@@ -11,6 +11,7 @@ using System.IO;
 using MeditationStopWatch;
 using System.Runtime.CompilerServices;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace ReiKi
 {
@@ -19,13 +20,13 @@ namespace ReiKi
     /// </summary>
     public partial class ReikiProgressBar : UserControl, INotifyPropertyChanged
     {
-        private Timer m_Timer = new Timer(300);
+        private DispatcherTimer m_Timer;
         private DateTime m_LastTime = DateTime.Now;
         private TimeSpan m_ElapsedTime = TimeSpan.FromSeconds(0);
         private bool m_bPaused = false;
         private bool m_bSoundPlayed;
         //private SoundPlayer m_SoundPlayer;
-        private MCIPLayer m_SoundPlayer = new MCIPLayer();
+        private NETSoundPlayer m_SoundPlayer = new NETSoundPlayer();
         private string m_sExePath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         private Options _options;
 
@@ -68,39 +69,15 @@ namespace ReiKi
                 OnBellOnOffClicked(false);
             };
 
-            m_Timer.Enabled = false;
-            m_Timer.Elapsed += m_Timer_Elapsed;
+            m_Timer = new DispatcherTimer();
+            m_Timer.Interval = TimeSpan.FromSeconds(0.3);
+            m_Timer.Tick += Timer_Tick;
+
+            string sDingFileName = System.IO.Path.Combine(m_sExePath, "Sounds", "ding.mp3");
+            m_SoundPlayer.Open(sDingFileName, "ding");
         }
 
-        public void PlayDing()
-        {
-            string sName = System.IO.Path.Combine(m_sExePath, "Sounds", "ding.mp3");
-            m_SoundPlayer.Play(sName, "ding");
-            m_SoundPlayer.SetVolume(_options.Volume);
-        }
-
-        private void UpdateTooltip(double secondsLeft)
-        {
-            this.Dispatcher.BeginInvoke((Action)(() =>
-            {
-                const string FMT = @"m\:ss"; // @"hh\:mm\:ss"
-
-                string interval = TimeSpan.FromSeconds(Settings.ProgressInterval).ToString(FMT);
-                string value = TimeSpan.FromSeconds(secondsLeft).ToString(FMT);
-
-                if (Max > 10)
-                {
-                    this.ToolTip = string.Format("Bell: {0}, Interval: {1:0} Time Left: {2:0}",
-                        Settings.BellAtTheEnd ? "On" : "Off", interval, value);
-                }
-                else
-                {
-                    this.ToolTip = "None";
-                }
-            }));
-        }
-
-        private void m_Timer_Elapsed(object sender, ElapsedEventArgs e)
+        private void Timer_Tick(object sender, EventArgs e)
         {
             m_Timer.Stop();
 
@@ -130,6 +107,34 @@ namespace ReiKi
             UpdateTooltip(Max - Value);
 
             m_Timer.Start();
+        }
+
+        public void PlayDing()
+        {
+            m_SoundPlayer.SetVolume(_options.Volume);
+            m_SoundPlayer.CmdStop();
+            m_SoundPlayer.CmdPlay();
+        }
+
+        private void UpdateTooltip(double secondsLeft)
+        {
+            this.Dispatcher.BeginInvoke((Action)(() =>
+            {
+                const string FMT = @"m\:ss"; // @"hh\:mm\:ss"
+
+                string interval = TimeSpan.FromSeconds(Settings.ProgressInterval).ToString(FMT);
+                string value = TimeSpan.FromSeconds(secondsLeft).ToString(FMT);
+
+                if (Max > 10)
+                {
+                    this.ToolTip = string.Format("Bell: {0}, Interval: {1:0} Time Left: {2:0}",
+                        Settings.BellAtTheEnd ? "On" : "Off", interval, value);
+                }
+                else
+                {
+                    this.ToolTip = "None";
+                }
+            }));
         }
 
         private double _value;
@@ -174,7 +179,7 @@ namespace ReiKi
             m_bPaused = false;
 
             Value = 0;
-            m_Timer.Enabled = true;
+            m_Timer.Start();
         }
 
         public void Pause()
@@ -190,7 +195,7 @@ namespace ReiKi
 
         public void Stop()
         {
-            m_Timer.Enabled = false;
+            m_Timer.Stop();
             m_bPaused = false;
             Value = 0;
         }

@@ -169,6 +169,7 @@
     <Compile Include="MCIPLayer.cs" />
     <Compile Include="Mp3Player.cs">
     </Compile>
+    <Compile Include="NETSoundPlayer.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="OptionsSerializer.cs" />
     <Compile Include="PlayListTabControl.cs">
