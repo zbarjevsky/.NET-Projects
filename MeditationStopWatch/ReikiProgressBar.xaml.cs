@@ -24,7 +24,6 @@ namespace ReiKi
         private DateTime m_LastTime = DateTime.Now;
         private TimeSpan m_ElapsedTime = TimeSpan.FromSeconds(0);
         private bool m_bPaused = false;
-        private bool m_bSoundPlayed;
         //private SoundPlayer m_SoundPlayer;
         private NETSoundPlayer m_SoundPlayer = new NETSoundPlayer();
         private string m_sExePath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
@@ -72,11 +71,9 @@ namespace ReiKi
             m_Timer = new DispatcherTimer();
             m_Timer.Interval = TimeSpan.FromSeconds(0.3);
             m_Timer.Tick += Timer_Tick;
-
-            string sDingFileName = System.IO.Path.Combine(m_sExePath, "Sounds", "ding.mp3");
-            m_SoundPlayer.Open(sDingFileName, "ding");
         }
 
+        private bool _wasSoundPlayed = false;
         private void Timer_Tick(object sender, EventArgs e)
         {
             m_Timer.Stop();
@@ -90,14 +87,14 @@ namespace ReiKi
             {
                 Value = m_ElapsedTime.TotalSeconds % Max;
 
-                if (Settings.BellAtTheEnd && Max - Value < 2 && !m_bSoundPlayed)
+                if (Settings.BellAtTheEnd && Max - Value < 2 && !_wasSoundPlayed)
                 {
-                    m_bSoundPlayed = true;
+                    _wasSoundPlayed = true;
                     PlayDing();
                 }
 
                 if (Max - Value > 5)
-                    m_bSoundPlayed = false;
+                    _wasSoundPlayed = false;
             }
             else
             {
@@ -111,9 +108,8 @@ namespace ReiKi
 
         public void PlayDing()
         {
-            m_SoundPlayer.SetVolume(_options.Volume);
-            m_SoundPlayer.CmdStop();
-            m_SoundPlayer.CmdPlay();
+            string sDingFileName = System.IO.Path.Combine(m_sExePath, "Sounds", "ding.mp3");
+            m_SoundPlayer.Play(sDingFileName, "ding", _options.Volume);
         }
 
         private void UpdateTooltip(double secondsLeft)
