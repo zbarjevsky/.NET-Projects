@@ -40,7 +40,7 @@ namespace SimpleBackup
             m_cmbSearchOptions.Items.AddRange(Enum.GetValues(typeof(SearchOption)).Cast<Object>().ToArray());
             m_cmbSearchOptions.SelectedIndex = 1;
 
-            m_explorerSrc.OpenFolderAction = (fullPath) => { _srcBaseFolder = fullPath; ValidateInput(); };
+            m_explorerSrc.OpenFolderAction = (fullPath) => { _srcBaseFolder = fullPath; ValidateInput(); StartCalculateSpaceTask(); };
             m_explorerDst.OpenFolderAction = (fullPath) => { _dstBaseFolder = fullPath; ValidateInput(); };
 
             _fileProgress = new FileUtils.FileProgress(m_progressBar, this);
@@ -51,12 +51,14 @@ namespace SimpleBackup
             {
                 CommonUtils.ExecuteOnUIThread(() =>
                 {
+                    string diskInfo = "";
                     if (!string.IsNullOrWhiteSpace(_dstBaseFolder))
                     {
-                        string diskInfo = BackupLogic.GetDiskFreeSpace(_dstBaseFolder, out long freeSpace);
-                        m_txtInfo.Text = string.Format("Selected SRC {0:###,##0} files, Total size: {1:###,##0.0} MB, {2}",
-                            count, size / s1MB, diskInfo);
+                        diskInfo = BackupLogic.GetDiskFreeSpace(_dstBaseFolder, out long freeSpace);
                     }
+
+                    m_txtInfo.Text = string.Format("Selected SRC {0:###,##0} files, Total size: {1:###,##0.0} MB, {2}",
+                        count, size / s1MB, diskInfo);
                     m_progressBar.Value = 0;
                 }, this);
             };
@@ -68,19 +70,11 @@ namespace SimpleBackup
             this.Cursor = Cursors.WaitCursor;
             Application.DoEvents();
 
-            _srcBaseFolder = _entry.FolderSrc;
-            _dstBaseFolder = _entry.FolderDst;
-
-            m_cmbSearchOptions.SelectedItem = _entry.IncludeSubfolders;
-            m_txtFileType.Text = _entry.FolderIncludeTypes;
-            m_txtExcludeType.Text = _entry.FolderExcludeTypes;
-            m_cmbPriority.SelectedItem = _entry.Priority;
+            UpdateUIFromBackupEntry(_entry);
 
             m_explorerSrc.CheckedChangedAction = (checkAllState) =>
             {
-                BackupEntry entry = new BackupEntry();
-                UpdateBackupEntryFromUI(entry);
-                _calculateSpaceTask.Start(entry);
+                StartCalculateSpaceTask();
             };
 
             ValidateInput();
@@ -109,64 +103,16 @@ namespace SimpleBackup
             UpdateBackupEntryFromUI(_entry);
         }
 
-        private void UpdateBackupEntryFromUI(BackupEntry entry)
-        {
-            _calculateSpaceTask.Abort();
-
-            entry.FolderSrc = _srcBaseFolder;
-            entry.FolderDst = _dstBaseFolder;
-            entry.IncludeSubfolders = (SearchOption)m_cmbSearchOptions.SelectedItem;
-            entry.FolderIncludeTypes = m_txtFileType.Text;
-            entry.FolderExcludeTypes = m_txtExcludeType.Text;
-            entry.Priority = (BackupPriority)m_cmbPriority.SelectedItem;
-
-            entry.SelectedFoldersAndFilesList.Names.Clear();
-            if (!m_explorerSrc.IsAllChecked())
-            {
-                entry.SelectedFoldersAndFilesList.Names.AddRange(m_explorerSrc.GetCheckedFiles());
-            }
-        }
-
         private void m_btnStartBackup_Click(object sender, EventArgs e)
         {
             m_btnOk_Click(sender, e);
             DialogResult = DialogResult.Yes;
         }
 
-        private bool _isValidatingInput = false;
-        private void ValidateInput(object sender = null, EventArgs e = null)
+        private void StartCalculateSpaceTask()
         {
-            if (_isValidatingInput)
-                return;
-            _isValidatingInput = true;
-
-            BackupEntry entry = new BackupEntry()
-            {
-                FolderSrc = _srcBaseFolder,
-                FolderDst = _dstBaseFolder,
-                IncludeSubfolders = (SearchOption)m_cmbSearchOptions.SelectedItem,
-                FolderIncludeTypes = m_txtFileType.Text,
-                FolderExcludeTypes = m_txtExcludeType.Text,
-                Priority = (BackupPriority)m_cmbPriority.SelectedItem
-            };
-
-            UpdateInfo(entry);
-            _isValidatingInput = false;
-        }
-
-        private void UpdateInfo(BackupEntry entry)
-        {
-            m_btnOk.Enabled = entry.IsValid(out string error);
-            m_btnStartBackup.Enabled = m_btnOk.Enabled;
-
-            errorProvider1.SetError(m_btnStartBackup, error); //clear or set error
-
-            if(!string.IsNullOrWhiteSpace(entry.FolderSrc))
-                m_explorerSrc.PopulateFiles(entry.FolderSrc);
-            if (!string.IsNullOrWhiteSpace(entry.FolderDst))
-                m_explorerDst.PopulateFiles(entry.FolderDst);
-
-            UpdateCheckedFiles(entry.FolderSrc);
+            BackupEntry entry = new BackupEntry();
+            UpdateBackupEntryFromUI(entry);
 
             if (Directory.Exists(entry.FolderSrc))
             {
@@ -176,15 +122,64 @@ namespace SimpleBackup
             }
             else
             {
-                m_txtInfo.Text = error;
+                m_txtInfo.Text = "Folder does not exists: " + entry.FolderSrc;
             }
         }
 
-        private void UpdateCheckedFiles(string fullPath)
+        private bool _isValidatingInput = false;
+        private void ValidateInput(object sender = null, EventArgs e = null)
         {
-            if (fullPath == _entry.FolderSrc) //original path
+            if (_isValidatingInput)
+                return;
+            _isValidatingInput = true;
+
+            BackupEntry entry = new BackupEntry();
+            UpdateBackupEntryFromUI(entry);
+
+            m_btnOk.Enabled = entry.IsValid(out string error);
+            m_btnStartBackup.Enabled = m_btnOk.Enabled;
+
+            errorProvider1.SetError(m_btnStartBackup, error); //clear or set error
+
+            _isValidatingInput = false;
+        }
+
+        private void UpdateUIFromBackupEntry(BackupEntry entry)
+        {
+            _srcBaseFolder = entry.FolderSrc;
+            _dstBaseFolder = entry.FolderDst;
+
+            m_cmbSearchOptions.SelectedItem = entry.IncludeSubfolders;
+            m_txtFileType.Text = entry.FolderIncludeTypes;
+            m_txtExcludeType.Text = entry.FolderExcludeTypes;
+            m_cmbPriority.SelectedItem = entry.Priority;
+
+            if(!string.IsNullOrWhiteSpace(entry.FolderSrc))
+                m_explorerSrc.PopulateFiles(entry.FolderSrc);
+            if (!string.IsNullOrWhiteSpace(entry.FolderDst))
+                m_explorerDst.PopulateFiles(entry.FolderDst);
+
+            UpdateCheckedFiles(entry);
+        }
+
+        private void UpdateBackupEntryFromUI(BackupEntry entry)
+        {
+            entry.FolderSrc = _srcBaseFolder;
+            entry.FolderDst = _dstBaseFolder;
+
+            entry.IncludeSubfolders = (SearchOption)m_cmbSearchOptions.SelectedItem;
+            entry.FolderIncludeTypes = m_txtFileType.Text;
+            entry.FolderExcludeTypes = m_txtExcludeType.Text;
+            entry.Priority = (BackupPriority)m_cmbPriority.SelectedItem;
+
+            entry.Selection = m_explorerSrc.GetCheckedFiles();
+        }
+
+        private void UpdateCheckedFiles(BackupEntry entry)
+        {
+            if (entry.FolderSrc == _entry.FolderSrc) //original path
             {
-                m_explorerSrc.SetCheckedFiles(_entry.SelectedFoldersAndFilesList.Names, _entry.SelectedFoldersAndFilesList.AllInSrcFolder);
+                m_explorerSrc.SetCheckedFiles(_entry.Selection, true);
             }
         }
     }

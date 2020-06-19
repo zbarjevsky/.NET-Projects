@@ -10,49 +10,10 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Serialization;
 using MZ.Tools;
+using MZ.WinForms;
 
 namespace SimpleBackup.Settings
 {
-    public class SelectedFoldersAndFilesList
-    {
-        public bool AllInSrcFolder { get { return Names.Count == 0; }  }
-        public string FolderSrc { get; set; }
-        public List<string> Names { get; set; } = new List<string>();
-
-        public override bool Equals(object obj)
-        {
-            return obj is SelectedFoldersAndFilesList list &&
-                   FolderSrc == list.FolderSrc &&
-                   Names.SequenceEqual(list.Names);
-        }
-
-        public override int GetHashCode()
-        {
-            int hashCode = FolderSrc.GetHashCode();
-            hashCode = hashCode * Names.GetHashCode();
-            return hashCode;
-        }
-
-        public static bool operator ==(SelectedFoldersAndFilesList o1, SelectedFoldersAndFilesList o2)
-        {
-            return o1.Equals(o2);
-        }
-
-        public static bool operator !=(SelectedFoldersAndFilesList o1, SelectedFoldersAndFilesList o2)
-        {
-            return !o1.Equals(o2);
-        }
-
-        public SelectedFoldersAndFilesList Clone()
-        {
-            return new SelectedFoldersAndFilesList() 
-            { 
-                FolderSrc = this.FolderSrc,
-                Names = new List<string>(this.Names)
-            };
-        }
-    }
-
     public class BackupEntry
     {
         public string FolderDst { get; set; }
@@ -61,12 +22,12 @@ namespace SimpleBackup.Settings
         public string FolderExcludeTypes { get; set; }
         public BackupPriority Priority { get; set; }
 
-        public SelectedFoldersAndFilesList SelectedFoldersAndFilesList { get; set; } = new SelectedFoldersAndFilesList();
+        public FileExplorerUserControl.SelectedFoldersAndFilesList Selection { get; set; } = new FileExplorerUserControl.SelectedFoldersAndFilesList("");
 
         public string FolderSrc
         {
-            set { SelectedFoldersAndFilesList.FolderSrc = value; }
-            get { return SelectedFoldersAndFilesList.FolderSrc; }
+            set { Selection.FolderSrc = value; }
+            get { return Selection.FolderSrc; }
         }
 
         [XmlIgnore]
@@ -74,7 +35,7 @@ namespace SimpleBackup.Settings
         { 
             get 
             {
-                string rootSrc = Path.GetPathRoot(SelectedFoldersAndFilesList.FolderSrc);
+                string rootSrc = Path.GetPathRoot(Selection.FolderSrc);
                 DriveInfo drive = new DriveInfo(rootSrc);
                 return drive.DriveType == DriveType.Network;
             }
@@ -97,7 +58,7 @@ namespace SimpleBackup.Settings
                 FolderIncludeTypes = this.FolderIncludeTypes,
                 FolderExcludeTypes = this.FolderExcludeTypes,
                 Priority = this.Priority,
-                SelectedFoldersAndFilesList = this.SelectedFoldersAndFilesList.Clone()
+                Selection = this.Selection.Clone()
             };
 
             return entry;
@@ -106,9 +67,9 @@ namespace SimpleBackup.Settings
         public bool IsValid(out string error)
         {
             error = "";
-            if (!Directory.Exists(SelectedFoldersAndFilesList.FolderSrc))
+            if (!Directory.Exists(Selection.FolderSrc))
             {
-                error = "Error: Source does not exists: " + SelectedFoldersAndFilesList.FolderSrc;
+                error = "Error: Source does not exists: " + Selection.FolderSrc;
                 return false;
             }
             if (string.IsNullOrWhiteSpace(FolderDst))
@@ -116,7 +77,7 @@ namespace SimpleBackup.Settings
                 error = "Error: Destination folder not set.";
                 return false;
             }
-            string rootSrc = Path.GetPathRoot(SelectedFoldersAndFilesList.FolderSrc);
+            string rootSrc = Path.GetPathRoot(Selection.FolderSrc);
             string rootDst = Path.GetPathRoot(FolderDst);
             if (rootDst == rootSrc)
             {
@@ -129,7 +90,7 @@ namespace SimpleBackup.Settings
 
         public override string ToString()
         {
-            string selItems = SelectedFoldersAndFilesList.AllInSrcFolder ? "All Items" : SelectedFoldersAndFilesList.Names.Count + " Item(s)";
+            string selItems = Selection.ToString();
             return string.Format("From: {0} [{1}], To: {2}", FolderSrc, selItems, FolderDst);
         }
 
@@ -152,13 +113,13 @@ namespace SimpleBackup.Settings
                 }
 
                 List<string> fileNames = new List<string>();
-                if (e.SelectedFoldersAndFilesList.AllInSrcFolder)
+                if (e.Selection.AllInSrcFolder != CheckState.Indeterminate)
                 {
                     fileNames = FileUtils.GetFiles(dir.FullName, e.FolderIncludeTypes, e.IncludeSubfolders, progress).ToList();
                 }
                 else
                 {
-                    foreach (string file in e.SelectedFoldersAndFilesList.Names)
+                    foreach (string file in e.Selection.Names)
                     {
                         string fullPath = Path.Combine(e.FolderSrc, file);
                         if (Directory.Exists(fullPath))
@@ -245,7 +206,7 @@ namespace SimpleBackup.Settings
             if (found == null)
                 BackupList.Add(entry);
             else
-                MessageBox.Show("Cannot add - already exists:\n" + entry.SelectedFoldersAndFilesList.FolderSrc, "Adding to Backup List");
+                MessageBox.Show("Cannot add - already exists:\n" + entry.Selection.FolderSrc, "Adding to Backup List");
         }
 
         internal void Remove(BackupEntry entry)

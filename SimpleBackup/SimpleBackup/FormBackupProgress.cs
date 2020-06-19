@@ -206,13 +206,16 @@ namespace SimpleBackup
             m_progressBarMain.Minimum = 0;
             m_progressBarMain.Value = startIndex;
 
+            m_chartProgress.GraphBackColor = Color.LightBlue;
+            m_chartProgress.GraphMainColor = Color.Blue;
+
             m_progressFile.Style = ProgressBarStyle.Blocks;
             FileProgress progressCopyBigFile = new FileProgress(m_progressFile, this, NotifyOptions.NotifyValueChange);
 
             m_cmbViewFilter.SelectedIndex = 0; //reset to all - perform backup on whole list
             UpdateDisplayList(calculateNeededSize:false);
 
-            _speedCounter.StartCounting(startIndex);
+            _progressData.InitCounting(startIndex, _backupFilesList.Count);
 
             Thread threadBackup = new Thread(() =>
             {
@@ -247,7 +250,7 @@ namespace SimpleBackup
                     }
 
                     _startIndex = i;
-                    _speedCounter.AddCount(file.SrcIfo.Length, i, _backupFilesList.Count);
+                    _progressData.AddCount(file.SrcIfo.Length, i, _backupFilesList.Count);
 
                     if (i % updateProgressCount == 0)
                     {
@@ -257,7 +260,7 @@ namespace SimpleBackup
                     }
                 }
 
-                _speedCounter.StopCounting();
+                _progressData.StopCounting();
                 SystemSounds.Beep.Play();
                 UpdateUI(false);
                 OnBackupDone();
@@ -269,7 +272,7 @@ namespace SimpleBackup
             threadBackup.Start();
         }
 
-        TransferSpeedCounter _speedCounter = new TransferSpeedCounter();
+        TransferSpeedCounter _progressData = new TransferSpeedCounter();
 
         private void UpdateUI(bool isRunning)
         {
@@ -279,13 +282,13 @@ namespace SimpleBackup
 
                 m_progressBarMain.Value = _startIndex;
 
-                TimeSpan estimatedTotal = _speedCounter.EstimatedTotal(m_progressBarMain);
+                TimeSpan estimatedTotal = _progressData.EstimatedTotal(m_progressBarMain);
 
                 m_txtInfoBottom.Text = string.Format(
                     "Copying file {0:###,##0} of {1:###,##0}, {2:###,##0.0} MB Done, Elapsed {3}, Total Estimated: {4}, Speed {5:###,##0.0} KB/s Average Speed {6:###,##0.0} KB/s",
-                    (_startIndex + 1), _backupFilesList.Count, _speedCounter.iBytesCount/ BackupLogic.i1MB,
-                    _speedCounter.ElapsedTime.ToString("h':'mm':'ss"),  estimatedTotal.ToString("h':'mm':'ss"),
-                    _speedCounter.SpeedInervalKB(TimeSpan.FromSeconds(10)), _speedCounter.SpeedAvgKB());
+                    (_startIndex + 1), _backupFilesList.Count, _progressData.iBytesCount/ BackupLogic.i1MB,
+                    _progressData.ElapsedTime.ToString("h':'mm':'ss"),  estimatedTotal.ToString("h':'mm':'ss"),
+                    _progressData.SpeedInervalKB(TimeSpan.FromSeconds(10)), _progressData.SpeedAvgKB());
 
                 int visibleIndex = _startIndex + 1;
                 if (visibleIndex >= _backupFilesList.Count)
@@ -298,7 +301,7 @@ namespace SimpleBackup
                 }
 
                 int max = 100;
-                List<double> speeds = _speedCounter.SpeedHistory(_backupFilesList.Count, ref max);
+                List<double> speeds = _progressData.SpeedHistory(_backupFilesList.Count, ref max);
                 m_chartProgress.SetHistory(speeds, max, _backupFilesList[_startIndex].Src);
 
                 if (_abort)
@@ -320,6 +323,12 @@ namespace SimpleBackup
 
         private void OnBackupDone()
         {
+            Windows7ProgressBar.ProgressBarState state = Windows7ProgressBar.ProgressBarState.Normal;
+            if (_abort)
+                state = Windows7ProgressBar.ProgressBarState.Error;
+            if (_pause)
+                state = Windows7ProgressBar.ProgressBarState.Pause;
+
             CommonUtils.ExecuteOnUIThread(() =>
             {
                 int errCount = 0;
@@ -329,6 +338,8 @@ namespace SimpleBackup
                         errCount++;
                 }
 
+                SetProgressState(state);
+
                 m_btnClose.Text = "Done";
 
                 if (errCount>0)
@@ -337,9 +348,31 @@ namespace SimpleBackup
                 m_txtInfoBottom.Text = string.Format(
                     "Backup status done: {0:###,##0} of {1:###,##0} files, {2:###,##0.0} MB Copyied, Errors: {3:###,##0}, Elapsed {4}, Average Speed {5:0.0} KB/s",
                     (_startIndex + 1), _backupFilesList.Count, 
-                    _speedCounter.iBytesCount / BackupLogic.i1MB, errCount, 
-                    _speedCounter.ElapsedTime.ToString("mm':'ss"), _speedCounter.SpeedAvgKB());
+                    _progressData.iBytesCount / BackupLogic.i1MB, errCount, 
+                    _progressData.ElapsedTime.ToString("mm':'ss"), _progressData.SpeedAvgKB());
             }, this);
+        }
+
+        private void SetProgressState(Windows7ProgressBar.ProgressBarState state)
+        {
+            if (state == Windows7ProgressBar.ProgressBarState.Pause)
+            {
+                m_progressBarMain.State = state;
+                m_chartProgress.GraphBackColor = Color.LightYellow;
+                m_chartProgress.GraphMainColor = Color.Goldenrod;
+            }
+            else if (state == Windows7ProgressBar.ProgressBarState.Normal)
+            {
+                m_progressBarMain.State = state;
+                m_chartProgress.GraphBackColor = Color.PaleGreen;
+                m_chartProgress.GraphMainColor = Color.Green;
+            }
+            else
+            {
+                m_progressBarMain.State = state;
+                m_chartProgress.GraphBackColor = Color.Pink;
+                m_chartProgress.GraphMainColor = Color.Red;
+            }
         }
 
         private int _startIndex = 0;
@@ -361,7 +394,6 @@ namespace SimpleBackup
         private void m_btnPause_Click(object sender, EventArgs e)
         {
             _pause = true;
-            m_progressBarMain.State = Windows7ProgressBar.ProgressBarState.Pause;
         }
 
         private void m_btnContinue_Click(object sender, EventArgs e)

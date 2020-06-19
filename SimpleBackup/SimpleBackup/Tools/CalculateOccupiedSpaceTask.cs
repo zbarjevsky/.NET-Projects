@@ -41,7 +41,7 @@ namespace SimpleBackup.Tools
 
         public void Start(BackupEntry entry)
         {
-            if (_entry != null && entry.SelectedFoldersAndFilesList.Equals(_entry.SelectedFoldersAndFilesList))
+            if (_entry != null && entry.Selection.Equals(_entry.Selection))
                 return; //avoid run on the same folder
             _entry = entry.Clone();
 

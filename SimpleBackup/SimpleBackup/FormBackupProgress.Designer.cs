@@ -342,6 +342,8 @@
             // m_chartProgress
             // 
             this.m_chartProgress.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_chartProgress.GraphBackColor = System.Drawing.Color.PaleGreen;
+            this.m_chartProgress.GraphMainColor = System.Drawing.Color.Green;
             this.m_chartProgress.Location = new System.Drawing.Point(0, 0);
             this.m_chartProgress.Name = "m_chartProgress";
             this.m_chartProgress.Padding = new System.Windows.Forms.Padding(6, 4, 6, 4);

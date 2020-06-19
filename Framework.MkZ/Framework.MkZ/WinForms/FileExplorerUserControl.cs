@@ -15,9 +15,9 @@ using MZ.Tools;
 
 namespace MZ.WinForms
 {
-    public partial class FileExplorerUserControl : UserControl
+	public partial class FileExplorerUserControl : UserControl
     {
-		public const string ParentFolderText = "[..]";
+		public const string PARENT_FOLDER_TEXT = "[..]";
 
 		public class FileData : ListViewItem
 		{
@@ -123,7 +123,7 @@ namespace MZ.WinForms
 					this.SubItems[3].Text = formatDate(this.ModifiedTime);
 
 					int iconIndex = this.IsDirectory ? 2 : 4;
-					if (this.SubItems[0].Text == ParentFolderText)
+					if (this.SubItems[0].Text == PARENT_FOLDER_TEXT)
 						iconIndex = 10;
 					this.ImageIndex = iconIndex;
 				}
@@ -263,7 +263,58 @@ namespace MZ.WinForms
 			}
 		}
 
+		public class SelectedFoldersAndFilesList
+		{
+			public CheckState AllInSrcFolder { get { return Names.Count == 0 ? CheckState.Checked : CheckState.Indeterminate; } }
+			public string FolderSrc { get; set; }
+			public List<string> Names { get; set; } = new List<string>();
+
+			public SelectedFoldersAndFilesList(string folderSrc)
+			{
+				FolderSrc = folderSrc;
+			}
+
+			public override string ToString()
+			{
+				string selItems = AllInSrcFolder == CheckState.Indeterminate ? Names.Count + " Item(s)" : "All Items";
+				return selItems;
+			}
+
+			public override bool Equals(object obj)
+			{
+				return obj is SelectedFoldersAndFilesList list &&
+					   FolderSrc == list.FolderSrc &&
+					   Names.SequenceEqual(list.Names);
+			}
+
+			public override int GetHashCode()
+			{
+				int hashCode = FolderSrc.GetHashCode();
+				hashCode = hashCode * Names.GetHashCode();
+				return hashCode;
+			}
+
+			public static bool operator ==(SelectedFoldersAndFilesList o1, SelectedFoldersAndFilesList o2)
+			{
+				return o1.Equals(o2);
+			}
+
+			public static bool operator !=(SelectedFoldersAndFilesList o1, SelectedFoldersAndFilesList o2)
+			{
+				return !o1.Equals(o2);
+			}
+
+			public SelectedFoldersAndFilesList Clone()
+			{
+				return new SelectedFoldersAndFilesList(FolderSrc)
+				{
+					Names = new List<string>(this.Names)
+				};
+			}
+		}
+
 		private readonly List<FileData> _list = new List<FileData>();
+		private readonly SelectedFoldersAndFilesList _checkedItems = new SelectedFoldersAndFilesList("");
 		private readonly FileSystemWatcherHelper _fileSystemWatcherHelper;
 
 		public Action<string> OpenFolderAction = (fullPath) => { };
@@ -271,7 +322,7 @@ namespace MZ.WinForms
 
 		public bool CheckBoxes { get { return m_listFiles.CheckBoxes; } set { m_listFiles.CheckBoxes = value; } }
 
-		public bool IsAllChecked() 
+		public bool AreAllChecked() 
 		{
 			if (!m_listFiles.CheckBoxes)
 				return false;
@@ -284,42 +335,48 @@ namespace MZ.WinForms
 			return true;	
 		}
 
-		public List<string> GetCheckedFiles() 
+		public SelectedFoldersAndFilesList GetCheckedFiles() 
 		{
-			List<string> list = new List<string>();
+			SelectedFoldersAndFilesList selection = new SelectedFoldersAndFilesList(m_txtPath.Text);
 			if (!CheckBoxes)
-				return list;
+				return selection;
 
 			foreach (FileData data in _list)
 			{
-				if(data.SubItems[0].Text != ParentFolderText && data.Checked)
-					list.Add(data.FileName);
+				if(data.SubItems[0].Text != PARENT_FOLDER_TEXT && data.Checked)
+					selection.Names.Add(data.FileName);
 			}
-			return list;
+			return selection;
 		}
 
-		public void SetCheckedFiles(List<string> list, bool bCheckAll, bool isChecked = true)
+		public void SetCheckedFiles(SelectedFoldersAndFilesList selection, bool isChecked = true)
 		{
 			if (!CheckBoxes)
 				return;
 
-			if(bCheckAll)
+			if(selection.AllInSrcFolder == CheckState.Checked)
 			{
-				if(_list.Count > 512)
-					this.Cursor = Cursors.WaitCursor;
-
-				_list.ForEach((item) => item.Checked = isChecked);
-				
-				this.Cursor = Cursors.Default;
+				SetCheckedForAll(isChecked);
 			}
-			else
+			else //set checks individually
 			{
-				foreach (string file in list)
+				foreach (string file in selection.Names)
 				{
 					SetCheckedFile(file, isChecked);
 				}
 			}
 			m_listFiles.Refresh();
+		}
+
+		public void SetCheckedForAll(bool isChecked)
+        {
+			if (_list.Count > 512)
+				this.Cursor = Cursors.WaitCursor;
+
+			_list.ForEach((item) => item.Checked = isChecked);
+			_checkedItems.Names.Clear();
+
+			this.Cursor = Cursors.Default;
 		}
 
 		public void SetCheckedFile(string file, bool isChecked = true)
@@ -355,6 +412,7 @@ namespace MZ.WinForms
 		protected void InitListView()
         {
 			m_txtPath.Text = "";
+			_checkedItems.FolderSrc = m_txtPath.Text;
 
 			m_listFiles.VirtualListSize = 0;
 			_list.Clear();
@@ -370,14 +428,15 @@ namespace MZ.WinForms
 		private void m_listFiles_ItemChecked(object sender, ItemCheckedEventArgs e)
 		{
 			//check/uncheck all - if first was checked/unchecked
-			if (_list[e.Item.Index].Text == ParentFolderText)
+			if (_list[e.Item.Index].Text == PARENT_FOLDER_TEXT)
 			{
-				SetCheckedFiles(null, true, e.Item.Checked);
+				SetCheckedForAll(e.Item.Checked);
+				m_listFiles.Invalidate();
 				CheckedChangedAction(e.Item.Checked?CheckState.Checked : CheckState.Unchecked);
 			}
 			else
 			{
-				_list[0].Checked = IsAllChecked();
+				_list[0].Checked = AreAllChecked();
 				m_listFiles.Invalidate(_list[0].Bounds);
 				CheckedChangedAction(CheckState.Indeterminate);
 			}
@@ -429,6 +488,7 @@ namespace MZ.WinForms
 			InitListView();
 
 			m_txtPath.Text = fullPath;
+			_checkedItems.FolderSrc = m_txtPath.Text;
 
 			//check path
 			if (!string.IsNullOrEmpty(fullPath) && Directory.Exists(fullPath))
@@ -439,7 +499,7 @@ namespace MZ.WinForms
 					if (Directory.Exists(parentFolder))
 					{
 						FileData parent = new FileData(parentFolder, true);
-						parent.SetName(ParentFolderText);
+						parent.SetName(PARENT_FOLDER_TEXT);
 						_list.Add(parent);
 						m_btnUp.Enabled = true;
 					}
@@ -483,6 +543,7 @@ namespace MZ.WinForms
 
 					m_listFiles.VirtualListSize = _list.Count;
 					m_txtPath.Text = fullPath;
+					_checkedItems.FolderSrc = m_txtPath.Text;
 					OpenFolderAction(fullPath);
 				}
 				catch (IOException e)

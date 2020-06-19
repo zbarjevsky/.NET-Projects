@@ -17,6 +17,11 @@ namespace WindowsFormsApp1
         RectangleAnnotation _annotationText = new RectangleAnnotation();
         HorizontalLineAnnotation _annotationLine = new HorizontalLineAnnotation();
 
+        [Description("Graph Back Color"), Category("Colors")]
+        public Color GraphBackColor { get { return chart1.Series[0].Color; } set { chart1.Series[0].Color = value; } }
+        [Description("Graph Main Color"), Category("Colors")]
+        public Color GraphMainColor { get { return chart1.Series[1].Color; } set { chart1.Series[1].Color = value; } }
+
         public ChartProgressUserControl()
         {
             InitializeComponent();
@@ -56,6 +61,8 @@ namespace WindowsFormsApp1
             //stripline.StripWidth = 1;
             //stripline.BackColor = Color.Navy;
             //chart1.ChartAreas[0].AxisY.StripLines.Add(stripline);
+
+            chart1.Annotations.Clear();
 
             //foreground line
             _annotationLine.AxisX = chart1.ChartAreas[0].AxisX;
