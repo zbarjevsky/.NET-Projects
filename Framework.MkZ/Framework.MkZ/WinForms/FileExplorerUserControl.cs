@@ -12,6 +12,7 @@ using System.Globalization;
 using System.Windows.Documents;
 using MZ.WPF.MessageBox;
 using MZ.Tools;
+using System.Xml.Serialization;
 
 namespace MZ.WinForms
 {
@@ -265,18 +266,32 @@ namespace MZ.WinForms
 
 		public class SelectedFoldersAndFilesList
 		{
-			public CheckState AllInSrcFolder { get { return Names.Count == 0 ? CheckState.Checked : CheckState.Indeterminate; } }
+			public CheckState State { get; set; } = CheckState.Indeterminate;
 			public string FolderSrc { get; set; }
 			public List<string> Names { get; set; } = new List<string>();
 
-			public SelectedFoldersAndFilesList(string folderSrc)
-			{
-				FolderSrc = folderSrc;
+			//for serialization
+			public SelectedFoldersAndFilesList() { }
+
+			public SelectedFoldersAndFilesList(string folderSrc) { FolderSrc = folderSrc; }
+			public SelectedFoldersAndFilesList(SelectedFoldersAndFilesList selection) 
+			{ 
+				FolderSrc = selection.FolderSrc;
+				State = selection.State;
+				Names = new List<string>(selection.Names);
 			}
+
+			public bool IsSelected(string name)
+            {
+				if (State != CheckState.Indeterminate)
+					return State.IsChecked();
+
+				return Names.FirstOrDefault((s) => s == name) != null;
+            }
 
 			public override string ToString()
 			{
-				string selItems = AllInSrcFolder == CheckState.Indeterminate ? Names.Count + " Item(s)" : "All Items";
+				string selItems = State == CheckState.Indeterminate ? Names.Count + " Item(s)" : "All Items " + State;
 				return selItems;
 			}
 
@@ -296,11 +311,21 @@ namespace MZ.WinForms
 
 			public static bool operator ==(SelectedFoldersAndFilesList o1, SelectedFoldersAndFilesList o2)
 			{
+				if (object.ReferenceEquals(o1, null))
+				{
+					return object.ReferenceEquals(o2, null);
+				}
+
 				return o1.Equals(o2);
 			}
 
 			public static bool operator !=(SelectedFoldersAndFilesList o1, SelectedFoldersAndFilesList o2)
 			{
+				if (object.ReferenceEquals(o1, null))
+				{
+					return !object.ReferenceEquals(o2, null);
+				}
+
 				return !o1.Equals(o2);
 			}
 
@@ -322,17 +347,26 @@ namespace MZ.WinForms
 
 		public bool CheckBoxes { get { return m_listFiles.CheckBoxes; } set { m_listFiles.CheckBoxes = value; } }
 
-		public bool AreAllChecked() 
+		public CheckState GetCheckState() 
 		{
 			if (!m_listFiles.CheckBoxes)
-				return false;
+				return CheckState.Indeterminate;
 
+			bool areAllChecked = true;
+			bool areAllUnchecked = true;
 			for (int i = 1; i < _list.Count; i++)
 			{
-				if (!_list[i].Checked)
-					return false;
+				areAllChecked &= _list[i].Checked;
+				areAllUnchecked &= !_list[i].Checked;
 			}
-			return true;	
+
+			if (areAllChecked)
+				return CheckState.Checked;
+			
+			if (areAllUnchecked)
+				return CheckState.Unchecked;
+
+			return CheckState.Indeterminate;	
 		}
 
 		public SelectedFoldersAndFilesList GetCheckedFiles() 
@@ -341,28 +375,33 @@ namespace MZ.WinForms
 			if (!CheckBoxes)
 				return selection;
 
+			selection.State = GetCheckState();
+			if (selection.State != CheckState.Indeterminate)
+				return selection;
+
 			foreach (FileData data in _list)
 			{
 				if(data.SubItems[0].Text != PARENT_FOLDER_TEXT && data.Checked)
 					selection.Names.Add(data.FileName);
 			}
+
 			return selection;
 		}
 
-		public void SetCheckedFiles(SelectedFoldersAndFilesList selection, bool isChecked = true)
+		public void SetCheckedFiles(SelectedFoldersAndFilesList selection)
 		{
 			if (!CheckBoxes)
 				return;
 
-			if(selection.AllInSrcFolder == CheckState.Checked)
+			if(selection.State != CheckState.Indeterminate)
 			{
-				SetCheckedForAll(isChecked);
+				SetCheckedForAll(selection.State.IsChecked());
 			}
 			else //set checks individually
 			{
 				foreach (string file in selection.Names)
 				{
-					SetCheckedFile(file, isChecked);
+					SetCheckedFile(file, true);
 				}
 			}
 			m_listFiles.Refresh();
@@ -418,7 +457,9 @@ namespace MZ.WinForms
 			_list.Clear();
 
 			errorProvider1.SetError(m_txtPath, "");
-        }
+
+			EnableMenu(false);
+		}
 
 		private void m_listFiles_ItemCheck(object sender, ItemCheckEventArgs e)
 		{
@@ -428,15 +469,15 @@ namespace MZ.WinForms
 		private void m_listFiles_ItemChecked(object sender, ItemCheckedEventArgs e)
 		{
 			//check/uncheck all - if first was checked/unchecked
-			if (_list[e.Item.Index].Text == PARENT_FOLDER_TEXT)
+			if (e.Item.Text == PARENT_FOLDER_TEXT)
 			{
 				SetCheckedForAll(e.Item.Checked);
 				m_listFiles.Invalidate();
-				CheckedChangedAction(e.Item.Checked?CheckState.Checked : CheckState.Unchecked);
+				CheckedChangedAction(e.Item.Checked.CheckState());
 			}
 			else
 			{
-				_list[0].Checked = AreAllChecked();
+				_list[0].Checked = GetCheckState().IsChecked();
 				m_listFiles.Invalidate(_list[0].Bounds);
 				CheckedChangedAction(CheckState.Indeterminate);
 			}
@@ -479,13 +520,16 @@ namespace MZ.WinForms
 			this.MessageInfo("Not Implemented");
 		}
 
-		public void PopulateFiles(string fullPath, bool isCheck = false)
+		public void PopulateFiles(string fullPath, SelectedFoldersAndFilesList selection = null)
 		{
 			if (m_txtPath.Text == fullPath)
 				return; //no change
 
 			//clear list
 			InitListView();
+
+			if (selection == null)
+				selection = new SelectedFoldersAndFilesList(fullPath) { State = CheckState.Unchecked };
 
 			m_txtPath.Text = fullPath;
 			_checkedItems.FolderSrc = m_txtPath.Text;
@@ -498,7 +542,7 @@ namespace MZ.WinForms
 					string parentFolder = Path.GetDirectoryName(fullPath);
 					if (Directory.Exists(parentFolder))
 					{
-						FileData parent = new FileData(parentFolder, true);
+						FileData parent = new FileData(parentFolder, selection.State.IsChecked());
 						parent.SetName(PARENT_FOLDER_TEXT);
 						_list.Add(parent);
 						m_btnUp.Enabled = true;
@@ -513,7 +557,7 @@ namespace MZ.WinForms
 					
 					foreach (string folder in dirs)
 					{
-						_list.Add(new FileData(folder, true, isCheck));
+						_list.Add(new FileData(folder, true, selection.IsSelected(folder)));
 					}
 
 					string[] stringFiles = Directory.GetFiles(fullPath);
@@ -524,7 +568,7 @@ namespace MZ.WinForms
 					//loop throught all files
 					for (int i = 0; i < files.Count; i++)
 					{
-						_list.Add(new FileData(files[i], false, isCheck));
+						_list.Add(new FileData(files[i], false, selection.IsSelected(files[i])));
 
 						if (i == pageSize) //after first page
 						{
@@ -595,11 +639,14 @@ namespace MZ.WinForms
 
 			FileData data = _list[m_listFiles.SelectedIndices[0]];
 			data.Checked = true;
+			m_listFiles.Invalidate(data.Bounds);
 		}
 
 		private void m_mnuRefresh_Click(object sender, EventArgs e)
         {
-			PopulateFiles(m_txtPath.Text);
+			string path = m_txtPath.Text;
+			m_txtPath.Text = "";
+			PopulateFiles(path);
 		}
 
         private void m_mnuRename_Click(object sender, EventArgs e)
@@ -628,5 +675,34 @@ namespace MZ.WinForms
 				}
 			}
 		}
+
+        private void m_listFiles_SelectedIndexChanged(object sender, EventArgs e)
+        {
+			EnableMenu(m_listFiles.SelectedIndices.Count > 0);
+		}
+
+		private void EnableMenu(bool bEnable)
+        {
+			m_mnuSelect.Visible = CheckBoxes;
+			m_mnuSeparator1.Visible = CheckBoxes;
+
+			m_mnuSelect.Enabled = bEnable;
+			m_mnuRename.Enabled = bEnable;
+			m_mnuDelete.Enabled = bEnable;
+			m_mnuRefresh.Enabled = true;
+		}
 	}
+
+	public static class CheckStateExtension
+    {
+		public static bool IsChecked(this CheckState state)
+        {
+			return state == System.Windows.Forms.CheckState.Checked;
+        }
+
+		public static CheckState CheckState(this bool check)
+        {
+			return check ? System.Windows.Forms.CheckState.Checked : System.Windows.Forms.CheckState.Unchecked;
+        }
+    }
 }

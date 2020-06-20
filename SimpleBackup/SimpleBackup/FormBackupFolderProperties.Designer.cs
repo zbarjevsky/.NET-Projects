@@ -301,7 +301,7 @@
             this.MinimumSize = new System.Drawing.Size(600, 400);
             this.Name = "FormBackupFolderProperties";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Backup Properties";
+            this.Text = "Copy Configuration";
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormBackupFolderProperties_FormClosed);
             this.Load += new System.EventHandler(this.FormBackupFolderProperties_Load);
             this.m_splitFolders.Panel1.ResumeLayout(false);

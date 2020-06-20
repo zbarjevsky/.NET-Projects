@@ -190,7 +190,7 @@ namespace MZ.Tools
 
             private void Validate(long min, long max, long val)
             {
-                if (min >= max)
+                if (min > max)
                     throw new ArgumentOutOfRangeException("invalid min/max parameter");
                 if (val < min || val > max)
                     throw new ArgumentOutOfRangeException("invalid value");

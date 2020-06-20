@@ -17,23 +17,26 @@ namespace WindowsFormsApp1
         RectangleAnnotation _annotationText = new RectangleAnnotation();
         HorizontalLineAnnotation _annotationLine = new HorizontalLineAnnotation();
 
-        [Description("Graph Back Color"), Category("Colors")]
+        [Description("Graph Back Color"), Category("Graph")]
         public Color GraphBackColor { get { return chart1.Series[0].Color; } set { chart1.Series[0].Color = value; } }
-        [Description("Graph Main Color"), Category("Colors")]
+        [Description("Graph Main Color"), Category("Graph")]
         public Color GraphMainColor { get { return chart1.Series[1].Color; } set { chart1.Series[1].Color = value; } }
+        [Description("Graph Title"), Category("Graph")]
+        public string GraphTitle 
+        { 
+            get { return chart1.Titles[0].Text; } 
+            set { chart1.Titles[0].Text = value; } 
+        }
 
         public ChartProgressUserControl()
         {
-            InitializeComponent();
-        }
+            const int MAX = 1000;
 
-        private void ChartProgressUserControl_Load(object sender, EventArgs e)
-        {
+            InitializeComponent();
+
             chart1.Titles.Clear();
             chart1.Titles.Add("Progress Bar");
             chart1.Titles[0].ForeColor = Color.Gray;
-
-            const int Max = 1000;
 
             //remove all margins
             chart1.ChartAreas[0].Position.X = 0;
@@ -41,11 +44,11 @@ namespace WindowsFormsApp1
             chart1.ChartAreas[0].Position.Height = 100;
             chart1.ChartAreas[0].Position.Y = 0;
 
-            chart1.ChartAreas[0].AxisX.MajorGrid.Interval = Max/10;
+            chart1.ChartAreas[0].AxisX.MajorGrid.Interval = MAX / 10;
             //remove labels
             chart1.ChartAreas[0].AxisX.LabelStyle.Enabled = false;
             chart1.ChartAreas[0].AxisX.MajorTickMark.Enabled = false;
-            chart1.ChartAreas[0].AxisX.Maximum = Max;
+            chart1.ChartAreas[0].AxisX.Maximum = MAX;
 
             chart1.ChartAreas[0].AxisY.LabelStyle.Enabled = false;
             chart1.ChartAreas[0].AxisY.MajorTickMark.Enabled = false;
@@ -70,13 +73,13 @@ namespace WindowsFormsApp1
             _annotationLine.IsSizeAlwaysRelative = false;
             _annotationLine.AnchorY = 2;
             _annotationLine.IsInfinitive = true;
-            _annotationLine.ClipToChartArea = chart1.ChartAreas[0].Name; 
-            _annotationLine.LineColor = Color.Navy; 
+            _annotationLine.ClipToChartArea = chart1.ChartAreas[0].Name;
+            _annotationLine.LineColor = Color.Navy;
             _annotationLine.LineWidth = 1;
             chart1.Annotations.Add(_annotationLine);
 
             //annotation text
-            
+
             //annotation.AnchorDataPoint = chart1.Series[1].Points[3];
             _annotationText.Y = 0; // percent from top
             _annotationText.X = 0; // percent from left
@@ -90,6 +93,10 @@ namespace WindowsFormsApp1
             _annotationText.LineWidth = 0; //rectangle border
             chart1.Annotations.Add(_annotationText);
             UpdateTextLabelWidthAndPositionXY(0);
+        }
+
+        private void ChartProgressUserControl_Load(object sender, EventArgs e)
+        {
 
             foreach (var ser in chart1.Series)
             {

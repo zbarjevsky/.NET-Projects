@@ -94,13 +94,13 @@ namespace SimpleBackup.Settings
             return string.Format("From: {0} [{1}], To: {2}", FolderSrc, selItems, FolderDst);
         }
 
-        public static List<BackupFile> CollectFiles(BackupEntry e, FileUtils.FileProgress progress = null)
+        public static List<BackupFile> CollectFiles(BackupEntry entry, FileUtils.FileProgress progress = null)
         {
             List<BackupFile> fileList = new List<BackupFile>();
-            if (string.IsNullOrWhiteSpace(e.FolderSrc))
+            if (string.IsNullOrWhiteSpace(entry.FolderSrc))
                 return fileList;
 
-            DirectoryInfo dir = new DirectoryInfo(e.FolderSrc);
+            DirectoryInfo dir = new DirectoryInfo(entry.FolderSrc);
             if (!dir.Exists)
                 return fileList;
 
@@ -108,22 +108,22 @@ namespace SimpleBackup.Settings
             {
                 if (progress != null)
                 {
-                    string prompt = string.Format("Collecting Files in: {0} \n", e);
+                    string prompt = string.Format("Collecting Files in: {0} \n", entry);
                     progress.ResetToMarquee(prompt);
                 }
 
                 List<string> fileNames = new List<string>();
-                if (e.Selection.AllInSrcFolder != CheckState.Indeterminate)
+                if (entry.Selection.State == CheckState.Checked)
                 {
-                    fileNames = FileUtils.GetFiles(dir.FullName, e.FolderIncludeTypes, e.IncludeSubfolders, progress).ToList();
+                    fileNames = FileUtils.GetFiles(dir.FullName, entry.FolderIncludeTypes, entry.IncludeSubfolders, progress).ToList();
                 }
-                else
+                else if (entry.Selection.State == CheckState.Indeterminate)
                 {
-                    foreach (string file in e.Selection.Names)
+                    foreach (string file in entry.Selection.Names)
                     {
-                        string fullPath = Path.Combine(e.FolderSrc, file);
+                        string fullPath = Path.Combine(entry.FolderSrc, file);
                         if (Directory.Exists(fullPath))
-                            fileNames.AddRange(FileUtils.GetFiles(fullPath, e.FolderIncludeTypes, e.IncludeSubfolders, progress));
+                            fileNames.AddRange(FileUtils.GetFiles(fullPath, entry.FolderIncludeTypes, entry.IncludeSubfolders, progress));
                         else if (File.Exists(fullPath))
                             fileNames.Add(fullPath);
                     }
@@ -139,7 +139,7 @@ namespace SimpleBackup.Settings
                     }
 
                     //report percentage only - may be too many files
-                    string prompt = string.Format("Preparing Collected Files ({0}) ", e.FolderSrc);
+                    string prompt = string.Format("Preparing Collected Files ({0}) ", entry.FolderSrc);
                     progress.ResetToBlocks(prompt, fileNames.Count);
                 }
 
@@ -156,7 +156,7 @@ namespace SimpleBackup.Settings
                     }
 
                     //if (File.Exists(files[i]))
-                    fileList.Add(new BackupFile(i, fileNames[i], e));
+                    fileList.Add(new BackupFile(i, fileNames[i], entry));
                 }
             }
             catch (Exception err)

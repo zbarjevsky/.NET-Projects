@@ -40,9 +40,6 @@ namespace SimpleBackup
             m_cmbSearchOptions.Items.AddRange(Enum.GetValues(typeof(SearchOption)).Cast<Object>().ToArray());
             m_cmbSearchOptions.SelectedIndex = 1;
 
-            m_explorerSrc.OpenFolderAction = (fullPath) => { _srcBaseFolder = fullPath; ValidateInput(); StartCalculateSpaceTask(); };
-            m_explorerDst.OpenFolderAction = (fullPath) => { _dstBaseFolder = fullPath; ValidateInput(); };
-
             _fileProgress = new FileUtils.FileProgress(m_progressBar, this);
             _fileProgress.OnChange = (status) => { m_txtInfo.Text = status; };
 
@@ -71,11 +68,12 @@ namespace SimpleBackup
             Application.DoEvents();
 
             UpdateUIFromBackupEntry(_entry);
+            StartCalculateSpaceTask(_entry);
 
-            m_explorerSrc.CheckedChangedAction = (checkAllState) =>
-            {
-                StartCalculateSpaceTask();
-            };
+            m_explorerSrc.OpenFolderAction = (fullPath) => { _srcBaseFolder = fullPath; ValidateInput(); StartCalculateSpaceTask(); };
+            m_explorerDst.OpenFolderAction = (fullPath) => { _dstBaseFolder = fullPath; ValidateInput(); };
+
+            m_explorerSrc.CheckedChangedAction = (checkAllState) => { StartCalculateSpaceTask(); };
 
             ValidateInput();
             this.Cursor = Cursors.Default;
@@ -109,10 +107,13 @@ namespace SimpleBackup
             DialogResult = DialogResult.Yes;
         }
 
-        private void StartCalculateSpaceTask()
+        private void StartCalculateSpaceTask(BackupEntry entry = null)
         {
-            BackupEntry entry = new BackupEntry();
-            UpdateBackupEntryFromUI(entry);
+            if (entry == null)
+            {
+                entry = new BackupEntry();
+                UpdateBackupEntryFromUI(entry);
+            }
 
             if (Directory.Exists(entry.FolderSrc))
             {
@@ -179,7 +180,7 @@ namespace SimpleBackup
         {
             if (entry.FolderSrc == _entry.FolderSrc) //original path
             {
-                m_explorerSrc.SetCheckedFiles(_entry.Selection, true);
+                m_explorerSrc.SetCheckedFiles(_entry.Selection);
             }
         }
     }

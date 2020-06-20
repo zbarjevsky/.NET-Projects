@@ -39,18 +39,18 @@
             this.m_txtPath = new System.Windows.Forms.TextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.m_ctxmnuList = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.m_mnuSelect = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.m_mnuRefresh = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.m_mnuRename = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.m_listFiles = new ListViewVirtualMode.ListViewVirtualWithCheckBoxes();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.m_ctxmnuList = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.m_mnuSelect = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
-            this.m_mnuRefresh = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
-            this.m_mnuRename = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_mnuDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.m_pnlCommands.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.m_ctxmnuList.SuspendLayout();
@@ -149,6 +149,63 @@
             // 
             this.errorProvider1.ContainerControl = this;
             // 
+            // m_ctxmnuList
+            // 
+            this.m_ctxmnuList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.m_mnuSelect,
+            this.m_mnuSeparator1,
+            this.m_mnuRefresh,
+            this.m_mnuSeparator2,
+            this.m_mnuRename,
+            this.m_mnuDelete});
+            this.m_ctxmnuList.Name = "m_ctxmnuTree";
+            this.m_ctxmnuList.Size = new System.Drawing.Size(181, 126);
+            // 
+            // m_mnuSelect
+            // 
+            this.m_mnuSelect.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuSelect.Image")));
+            this.m_mnuSelect.Name = "m_mnuSelect";
+            this.m_mnuSelect.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuSelect.Text = "Toggle &Check";
+            this.m_mnuSelect.Click += new System.EventHandler(this.m_mnuSelect_Click);
+            // 
+            // m_mnuSeparator1
+            // 
+            this.m_mnuSeparator1.Name = "m_mnuSeparator1";
+            this.m_mnuSeparator1.Size = new System.Drawing.Size(177, 6);
+            // 
+            // m_mnuRefresh
+            // 
+            this.m_mnuRefresh.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuRefresh.Image")));
+            this.m_mnuRefresh.Name = "m_mnuRefresh";
+            this.m_mnuRefresh.ShortcutKeys = System.Windows.Forms.Keys.F5;
+            this.m_mnuRefresh.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuRefresh.Text = "&Refresh";
+            this.m_mnuRefresh.Click += new System.EventHandler(this.m_mnuRefresh_Click);
+            // 
+            // m_mnuSeparator2
+            // 
+            this.m_mnuSeparator2.Name = "m_mnuSeparator2";
+            this.m_mnuSeparator2.Size = new System.Drawing.Size(177, 6);
+            // 
+            // m_mnuRename
+            // 
+            this.m_mnuRename.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuRename.Image")));
+            this.m_mnuRename.Name = "m_mnuRename";
+            this.m_mnuRename.ShortcutKeys = System.Windows.Forms.Keys.F2;
+            this.m_mnuRename.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuRename.Text = "Re&name";
+            this.m_mnuRename.Click += new System.EventHandler(this.m_mnuRename_Click);
+            // 
+            // m_mnuDelete
+            // 
+            this.m_mnuDelete.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuDelete.Image")));
+            this.m_mnuDelete.Name = "m_mnuDelete";
+            this.m_mnuDelete.ShortcutKeys = System.Windows.Forms.Keys.Delete;
+            this.m_mnuDelete.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuDelete.Text = "&Delete";
+            this.m_mnuDelete.Click += new System.EventHandler(this.m_mnuDelete_Click);
+            // 
             // m_listFiles
             // 
             this.m_listFiles.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
@@ -173,6 +230,7 @@
             this.m_listFiles.ItemCheck += new System.Windows.Forms.ItemCheckEventHandler(this.m_listFiles_ItemCheck);
             this.m_listFiles.ItemChecked += new System.Windows.Forms.ItemCheckedEventHandler(this.m_listFiles_ItemChecked);
             this.m_listFiles.RetrieveVirtualItem += new System.Windows.Forms.RetrieveVirtualItemEventHandler(this.m_listFiles_RetrieveVirtualItem);
+            this.m_listFiles.SelectedIndexChanged += new System.EventHandler(this.m_listFiles_SelectedIndexChanged);
             this.m_listFiles.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.m_listFiles_MouseDoubleClick);
             // 
             // columnHeader1
@@ -197,63 +255,6 @@
             this.columnHeader4.Text = "Modified";
             this.columnHeader4.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.columnHeader4.Width = 120;
-            // 
-            // m_ctxmnuList
-            // 
-            this.m_ctxmnuList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.m_mnuSelect,
-            this.toolStripMenuItem2,
-            this.m_mnuRefresh,
-            this.toolStripMenuItem1,
-            this.m_mnuRename,
-            this.m_mnuDelete});
-            this.m_ctxmnuList.Name = "m_ctxmnuTree";
-            this.m_ctxmnuList.Size = new System.Drawing.Size(181, 126);
-            // 
-            // m_mnuSelect
-            // 
-            this.m_mnuSelect.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuSelect.Image")));
-            this.m_mnuSelect.Name = "m_mnuSelect";
-            this.m_mnuSelect.Size = new System.Drawing.Size(180, 22);
-            this.m_mnuSelect.Text = "Select";
-            this.m_mnuSelect.Click += new System.EventHandler(this.m_mnuSelect_Click);
-            // 
-            // toolStripMenuItem2
-            // 
-            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(133, 6);
-            // 
-            // m_mnuRefresh
-            // 
-            this.m_mnuRefresh.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuRefresh.Image")));
-            this.m_mnuRefresh.Name = "m_mnuRefresh";
-            this.m_mnuRefresh.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.m_mnuRefresh.Size = new System.Drawing.Size(180, 22);
-            this.m_mnuRefresh.Text = "&Refresh";
-            this.m_mnuRefresh.Click += new System.EventHandler(this.m_mnuRefresh_Click);
-            // 
-            // toolStripMenuItem1
-            // 
-            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(133, 6);
-            // 
-            // m_mnuRename
-            // 
-            this.m_mnuRename.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuRename.Image")));
-            this.m_mnuRename.Name = "m_mnuRename";
-            this.m_mnuRename.ShortcutKeys = System.Windows.Forms.Keys.F2;
-            this.m_mnuRename.Size = new System.Drawing.Size(180, 22);
-            this.m_mnuRename.Text = "Re&name";
-            this.m_mnuRename.Click += new System.EventHandler(this.m_mnuRename_Click);
-            // 
-            // m_mnuDelete
-            // 
-            this.m_mnuDelete.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuDelete.Image")));
-            this.m_mnuDelete.Name = "m_mnuDelete";
-            this.m_mnuDelete.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-            this.m_mnuDelete.Size = new System.Drawing.Size(180, 22);
-            this.m_mnuDelete.Text = "&Delete";
-            this.m_mnuDelete.Click += new System.EventHandler(this.m_mnuDelete_Click);
             // 
             // FileExplorerUserControl
             // 
@@ -290,9 +291,9 @@
         private System.Windows.Forms.ErrorProvider errorProvider1;
         private System.Windows.Forms.ContextMenuStrip m_ctxmnuList;
         private System.Windows.Forms.ToolStripMenuItem m_mnuSelect;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripSeparator m_mnuSeparator1;
         private System.Windows.Forms.ToolStripMenuItem m_mnuRefresh;
-        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripSeparator m_mnuSeparator2;
         private System.Windows.Forms.ToolStripMenuItem m_mnuRename;
         private System.Windows.Forms.ToolStripMenuItem m_mnuDelete;
     }
