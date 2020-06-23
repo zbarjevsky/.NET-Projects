@@ -43,13 +43,6 @@ namespace MeditationStopWatch
             _player.MediaEnded += _player_MediaEnded;
         }
 
-        internal void CmdClose()
-        {
-            State = PlayingState.none;
-            FileName = string.Empty;
-            _player.Close();
-        }
-
         private void _player_MediaEnded(object sender, EventArgs e)
         {
             State = PlayingState.stopped;
@@ -68,7 +61,7 @@ namespace MeditationStopWatch
             OnMediaOpened?.Invoke(sender, e);
         }
 
-        public int PositionMs
+        internal int PositionMs
         {
             get { return (int)_player.Position.TotalMilliseconds; }
             set { _player.Position = TimeSpan.FromMilliseconds(value); }
@@ -94,13 +87,10 @@ namespace MeditationStopWatch
 
         internal void Open(string fullName, string shortName)
         {
-            if (FileName != shortName)
-            {
-                FileName = shortName;
+            FileName = shortName;
 
-                _player.Close();
-                _player.Open(new Uri(fullName));
-            }
+            _player.Close();
+            _player.Open(new Uri(fullName));
         }
 
         internal void CmdPause()
@@ -126,6 +116,13 @@ namespace MeditationStopWatch
         {
             _player.Stop();
             State = PlayingState.stopped;
+        }
+
+        internal void CmdClose()
+        {
+            State = PlayingState.none;
+            FileName = string.Empty;
+            _player.Close();
         }
     }
 }

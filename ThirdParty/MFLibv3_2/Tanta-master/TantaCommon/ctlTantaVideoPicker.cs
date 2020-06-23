@@ -142,10 +142,13 @@ namespace TantaCommon
             // reset this
             // display this
             DisplayVideoFormatsForCurrentCaptureDevice();
+
             // just send an event
-            if (VideoDevicePickedEvent != null) VideoDevicePickedEvent(this, CurrentDevice);
+            if (VideoDevicePickedEvent != null) 
+                VideoDevicePickedEvent(this, CurrentDevice);
             // just send a clearing event
-            if (VideoFormatPickedEvent != null) VideoFormatPickedEvent(this, null);
+            if (VideoFormatPickedEvent != null) 
+                VideoFormatPickedEvent(this, null);
         }
 
         /// +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -204,6 +207,7 @@ namespace TantaCommon
                 {
                     throw new Exception("DisplayVideoFormatsForCurrentCaptureDevice call to mediaSource.CreatePresentationDescriptor failed. Err=" + hr.ToString());
                 }
+
                 if (sourcePresentationDescriptor == null)
                 {
                     throw new Exception("DisplayVideoFormatsForCurrentCaptureDevice call to mediaSource.CreatePresentationDescriptor failed. sourcePresentationDescriptor == null");
@@ -314,6 +318,8 @@ namespace TantaCommon
                 listViewSupportedFormats.Columns.Add("FrameRate f/s", 100);
                 listViewSupportedFormats.Columns.Add("FrameRateMax f/s", 100);
                 listViewSupportedFormats.Columns.Add("All Attributes", 2500);
+
+                UpdateComboBoxFormats();
             }
             finally
             {
@@ -341,6 +347,57 @@ namespace TantaCommon
             }
         }
 
+        private void UpdateComboBoxFormats()
+        {
+            List<string> formats = new List<string>();
+            foreach (ListViewItem item in listViewSupportedFormats.Items)
+            {
+                TantaMFVideoFormatContainer videoFormat = item.Tag as TantaMFVideoFormatContainer;
+                string name = videoFormat.SubTypeAsString;
+                if (formats.FirstOrDefault(n => n == name) == null)
+                    formats.Add(name);
+            }
+            comboBoxFormat.DataSource = formats;
+
+            UpdateComboBoxResolutions(formats[0]);
+        }
+
+        private void UpdateComboBoxResolutions(string formatName)
+        {
+            List<string> resolutions = new List<string>();
+            foreach (ListViewItem item in listViewSupportedFormats.Items)
+            {
+                TantaMFVideoFormatContainer videoFormat = item.Tag as TantaMFVideoFormatContainer;
+                string name = videoFormat.SubTypeAsString;
+                if (name == formatName)
+                {
+                    if (resolutions.FirstOrDefault(r => r == videoFormat.FrameSizeAsString) == null)
+                        resolutions.Add(videoFormat.FrameSizeAsString);
+                }
+            }
+            comboBoxResolution.DataSource = resolutions;
+
+            UpdateComboBoxFps(formatName, resolutions[0]);
+        }
+
+        private void UpdateComboBoxFps(string formatName, string resolution)
+        {
+            List<string> fps = new List<string>();
+            foreach (ListViewItem item in listViewSupportedFormats.Items)
+            {
+                TantaMFVideoFormatContainer videoFormat = item.Tag as TantaMFVideoFormatContainer;
+                string name = videoFormat.SubTypeAsString;
+                if (name == formatName && videoFormat.FrameSizeAsString == resolution)
+                {
+                    if (fps.FirstOrDefault(f => f == videoFormat.FrameRateAsString) == null)
+                        fps.Add(videoFormat.FrameRateAsString);
+                }
+            }
+            comboBoxFps.DataSource = fps;
+            comboBoxFps.SelectedIndex = 0;
+            comboBoxFps_SelectionChangeCommitted(this, null);
+        }
+
         /// +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
         /// <summary>
         /// Handles a selected index changed on a video format in the list view
@@ -351,14 +408,23 @@ namespace TantaCommon
         private void listViewSupportedFormats_SelectedIndexChanged(object sender, EventArgs e)
         {
             // just send a clearing event
-            if (VideoFormatPickedEvent != null) VideoFormatPickedEvent(this, null);
+            if (VideoFormatPickedEvent != null) 
+                VideoFormatPickedEvent(this, null);
 
-            if (CurrentDevice == null) return;
+            if (CurrentDevice == null) 
+                return;
+
             TantaMFVideoFormatContainer selectedVideoFormat = GetSelectedVideoFormatContainer();
-            if (selectedVideoFormat == null) return;
+            if (selectedVideoFormat == null) 
+                return;
+
+            comboBoxFormat.SelectedItem = selectedVideoFormat.SubTypeAsString;
+            comboBoxResolution.SelectedItem = selectedVideoFormat.FrameSizeAsString;
+            comboBoxFps.SelectedItem = selectedVideoFormat.FrameRateAsString;
 
             // just send the event
-            if (VideoFormatPickedEvent != null) VideoFormatPickedEvent(this, GetSelectedVideoFormatContainer());
+            if (VideoFormatPickedEvent != null) 
+                VideoFormatPickedEvent(this, GetSelectedVideoFormatContainer());
         }
 
         /// +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -409,6 +475,36 @@ namespace TantaCommon
             listViewSupportedFormats.ListViewItemSorter = new ListViewItemCompareAsText(e.Column);
             // Call the sort method to manually sort.
             listViewSupportedFormats.Sort();
+        }
+
+        private void comboBoxFormat_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            UpdateComboBoxResolutions(comboBoxFormat.SelectedItem as string);
+        }
+
+        private void comboBoxResolution_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            string format = comboBoxFormat.SelectedItem as string;
+            string resolution = comboBoxResolution.SelectedItem as string;
+            UpdateComboBoxFps(format, resolution);
+        }
+
+        private void comboBoxFps_SelectionChangeCommitted(object sender, EventArgs e)
+        {
+            string format = comboBoxFormat.SelectedItem as string;
+            string resolution = comboBoxResolution.SelectedItem as string;
+            string fps = comboBoxFps.SelectedItem as string;
+
+            foreach (ListViewItem item in listViewSupportedFormats.Items)
+            {
+                TantaMFVideoFormatContainer videoFormat = item.Tag as TantaMFVideoFormatContainer;
+                string name = videoFormat.SubTypeAsString;
+                if (format == videoFormat.SubTypeAsString && resolution == videoFormat.FrameSizeAsString && fps == videoFormat.FrameRateAsString)
+                {
+                    item.Selected = true;
+                    listViewSupportedFormats.EnsureVisible(item.Index);
+                }
+            }
         }
     }
 }
