@@ -57,6 +57,9 @@
             this.m_toolStripButton_Down = new System.Windows.Forms.ToolStripButton();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.m_openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
+            this.m_mnuShowInFolder = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuCopyFileName = new System.Windows.Forms.ToolStripMenuItem();
             this.m_contextMenuStrip1.SuspendLayout();
             this.m_toolbarPlayer.SuspendLayout();
             this.SuspendLayout();
@@ -72,6 +75,7 @@
             this.m_listFiles.FullRowSelect = true;
             this.m_listFiles.GridLines = true;
             this.m_listFiles.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
+            this.m_listFiles.HideSelection = false;
             this.m_listFiles.Location = new System.Drawing.Point(0, 27);
             this.m_listFiles.Margin = new System.Windows.Forms.Padding(4);
             this.m_listFiles.Name = "m_listFiles";
@@ -115,16 +119,19 @@
             this.m_mnuRemoveAll,
             this.m_toolStripMenuSep3,
             this.m_mnuUp,
-            this.m_mnuDown});
+            this.m_mnuDown,
+            this.toolStripMenuItem1,
+            this.m_mnuCopyFileName,
+            this.m_mnuShowInFolder});
             this.m_contextMenuStrip1.Name = "m_contextMenuStrip1";
-            this.m_contextMenuStrip1.Size = new System.Drawing.Size(260, 310);
+            this.m_contextMenuStrip1.Size = new System.Drawing.Size(222, 362);
             // 
             // m_mnuPlay
             // 
             this.m_mnuPlay.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuPlay.Image")));
             this.m_mnuPlay.Name = "m_mnuPlay";
             this.m_mnuPlay.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
-            this.m_mnuPlay.Size = new System.Drawing.Size(259, 26);
+            this.m_mnuPlay.Size = new System.Drawing.Size(221, 26);
             this.m_mnuPlay.Text = "Play";
             this.m_mnuPlay.Click += new System.EventHandler(this.m_mnuPlay_Click);
             // 
@@ -133,7 +140,7 @@
             this.m_mnuPause.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuPause.Image")));
             this.m_mnuPause.Name = "m_mnuPause";
             this.m_mnuPause.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Space)));
-            this.m_mnuPause.Size = new System.Drawing.Size(259, 26);
+            this.m_mnuPause.Size = new System.Drawing.Size(221, 26);
             this.m_mnuPause.Text = "Pause/Resume";
             this.m_mnuPause.Click += new System.EventHandler(this.m_mnuPause_Click);
             // 
@@ -141,20 +148,20 @@
             // 
             this.m_mnuStop.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuStop.Image")));
             this.m_mnuStop.Name = "m_mnuStop";
-            this.m_mnuStop.Size = new System.Drawing.Size(201, 26);
+            this.m_mnuStop.Size = new System.Drawing.Size(221, 26);
             this.m_mnuStop.Text = "Stop";
             this.m_mnuStop.Click += new System.EventHandler(this.m_mnuStop_Click);
             // 
             // m_toolStripMenuSep1
             // 
             this.m_toolStripMenuSep1.Name = "m_toolStripMenuSep1";
-            this.m_toolStripMenuSep1.Size = new System.Drawing.Size(198, 6);
+            this.m_toolStripMenuSep1.Size = new System.Drawing.Size(218, 6);
             // 
             // m_mnuPrev
             // 
             this.m_mnuPrev.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuPrev.Image")));
             this.m_mnuPrev.Name = "m_mnuPrev";
-            this.m_mnuPrev.Size = new System.Drawing.Size(201, 26);
+            this.m_mnuPrev.Size = new System.Drawing.Size(221, 26);
             this.m_mnuPrev.Text = "Previous";
             this.m_mnuPrev.Click += new System.EventHandler(this.m_mnuPrev_Click);
             // 
@@ -162,52 +169,52 @@
             // 
             this.m_mnuNext.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuNext.Image")));
             this.m_mnuNext.Name = "m_mnuNext";
-            this.m_mnuNext.Size = new System.Drawing.Size(201, 26);
+            this.m_mnuNext.Size = new System.Drawing.Size(221, 26);
             this.m_mnuNext.Text = "Next";
             this.m_mnuNext.Click += new System.EventHandler(this.m_mnuNext_Click);
             // 
             // m_toolStripMenuSep2
             // 
             this.m_toolStripMenuSep2.Name = "m_toolStripMenuSep2";
-            this.m_toolStripMenuSep2.Size = new System.Drawing.Size(198, 6);
+            this.m_toolStripMenuSep2.Size = new System.Drawing.Size(218, 6);
             // 
             // m_mnuAdd
             // 
             this.m_mnuAdd.Name = "m_mnuAdd";
-            this.m_mnuAdd.Size = new System.Drawing.Size(201, 26);
+            this.m_mnuAdd.Size = new System.Drawing.Size(221, 26);
             this.m_mnuAdd.Text = "Add Files";
             this.m_mnuAdd.Click += new System.EventHandler(this.m_toolStripButton_AddFiles_Click);
             // 
             // m_mnuRemove
             // 
             this.m_mnuRemove.Name = "m_mnuRemove";
-            this.m_mnuRemove.Size = new System.Drawing.Size(201, 26);
+            this.m_mnuRemove.Size = new System.Drawing.Size(221, 26);
             this.m_mnuRemove.Text = "Remove";
             this.m_mnuRemove.Click += new System.EventHandler(this.m_toolStripButton_Remove_Click);
             // 
             // m_mnuRemoveAll
             // 
             this.m_mnuRemoveAll.Name = "m_mnuRemoveAll";
-            this.m_mnuRemoveAll.Size = new System.Drawing.Size(201, 26);
+            this.m_mnuRemoveAll.Size = new System.Drawing.Size(221, 26);
             this.m_mnuRemoveAll.Text = "Remove All";
             this.m_mnuRemoveAll.Click += new System.EventHandler(this.m_toolStripButton_RemoveAll_Click);
             // 
             // m_toolStripMenuSep3
             // 
             this.m_toolStripMenuSep3.Name = "m_toolStripMenuSep3";
-            this.m_toolStripMenuSep3.Size = new System.Drawing.Size(198, 6);
+            this.m_toolStripMenuSep3.Size = new System.Drawing.Size(218, 6);
             // 
             // m_mnuUp
             // 
             this.m_mnuUp.Name = "m_mnuUp";
-            this.m_mnuUp.Size = new System.Drawing.Size(201, 26);
+            this.m_mnuUp.Size = new System.Drawing.Size(221, 26);
             this.m_mnuUp.Text = "Up";
             this.m_mnuUp.Click += new System.EventHandler(this.m_toolStripButton_Up_Click);
             // 
             // m_mnuDown
             // 
             this.m_mnuDown.Name = "m_mnuDown";
-            this.m_mnuDown.Size = new System.Drawing.Size(201, 26);
+            this.m_mnuDown.Size = new System.Drawing.Size(221, 26);
             this.m_mnuDown.Text = "Down";
             this.m_mnuDown.Click += new System.EventHandler(this.m_toolStripButton_Down_Click);
             // 
@@ -233,7 +240,7 @@
             this.m_toolStripButton_AddFiles.Image = ((System.Drawing.Image)(resources.GetObject("m_toolStripButton_AddFiles.Image")));
             this.m_toolStripButton_AddFiles.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.m_toolStripButton_AddFiles.Name = "m_toolStripButton_AddFiles";
-            this.m_toolStripButton_AddFiles.Size = new System.Drawing.Size(94, 24);
+            this.m_toolStripButton_AddFiles.Size = new System.Drawing.Size(79, 24);
             this.m_toolStripButton_AddFiles.Text = "Add Files";
             this.m_toolStripButton_AddFiles.ToolTipText = "Add Files (Ins)";
             this.m_toolStripButton_AddFiles.Click += new System.EventHandler(this.m_toolStripButton_AddFiles_Click);
@@ -243,7 +250,7 @@
             this.m_toolStripButton_Remove.Image = ((System.Drawing.Image)(resources.GetObject("m_toolStripButton_Remove.Image")));
             this.m_toolStripButton_Remove.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.m_toolStripButton_Remove.Name = "m_toolStripButton_Remove";
-            this.m_toolStripButton_Remove.Size = new System.Drawing.Size(87, 24);
+            this.m_toolStripButton_Remove.Size = new System.Drawing.Size(74, 24);
             this.m_toolStripButton_Remove.Text = "Remove";
             this.m_toolStripButton_Remove.ToolTipText = "Remove (Del)";
             this.m_toolStripButton_Remove.Click += new System.EventHandler(this.m_toolStripButton_Remove_Click);
@@ -253,7 +260,7 @@
             this.m_toolStripButton_RemoveAll.Image = ((System.Drawing.Image)(resources.GetObject("m_toolStripButton_RemoveAll.Image")));
             this.m_toolStripButton_RemoveAll.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.m_toolStripButton_RemoveAll.Name = "m_toolStripButton_RemoveAll";
-            this.m_toolStripButton_RemoveAll.Size = new System.Drawing.Size(109, 24);
+            this.m_toolStripButton_RemoveAll.Size = new System.Drawing.Size(91, 24);
             this.m_toolStripButton_RemoveAll.Text = "Remove All";
             this.m_toolStripButton_RemoveAll.Click += new System.EventHandler(this.m_toolStripButton_RemoveAll_Click);
             // 
@@ -290,6 +297,25 @@
             this.m_openFileDialog.Filter = "Music Files(*.mp3)|*.mp3|All files|*.*";
             this.m_openFileDialog.Multiselect = true;
             this.m_openFileDialog.ValidateNames = false;
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(218, 6);
+            // 
+            // m_mnuShowInFolder
+            // 
+            this.m_mnuShowInFolder.Name = "m_mnuShowInFolder";
+            this.m_mnuShowInFolder.Size = new System.Drawing.Size(221, 26);
+            this.m_mnuShowInFolder.Text = "Show in Folder";
+            this.m_mnuShowInFolder.Click += new System.EventHandler(this.m_mnuShowInFolder_Click);
+            // 
+            // m_mnuCopyFileName
+            // 
+            this.m_mnuCopyFileName.Name = "m_mnuCopyFileName";
+            this.m_mnuCopyFileName.Size = new System.Drawing.Size(221, 26);
+            this.m_mnuCopyFileName.Text = "Copy File Name";
+            this.m_mnuCopyFileName.Click += new System.EventHandler(this.m_mnuCopyFileName_Click);
             // 
             // FileListControl
             // 
@@ -337,5 +363,8 @@
         private System.Windows.Forms.ToolStripSeparator m_toolStripMenuSep3;
         private System.Windows.Forms.ToolStripMenuItem m_mnuUp;
         private System.Windows.Forms.ToolStripMenuItem m_mnuDown;
+        private System.Windows.Forms.ToolStripSeparator toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuCopyFileName;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuShowInFolder;
     }
 }

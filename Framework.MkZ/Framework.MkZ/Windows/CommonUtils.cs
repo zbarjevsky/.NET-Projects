@@ -1,4 +1,5 @@
 ﻿using MZ.WinForms;
+using MZ.WPF.MessageBox;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,18 +15,25 @@ namespace MZ.Tools
 {
     public static class CommonUtils
     {
-        public static void BrowseForFolder(this Form owner, ref string txt, string selectedPath = "", string prompt = "Select Folder")
+        public static void BrowseForFolder(this Form owner, ref string folderName, string selectedPath = "", string prompt = "Select Folder")
         {
-            selectedPath = string.IsNullOrWhiteSpace(selectedPath) ? txt : selectedPath;
+            selectedPath = string.IsNullOrWhiteSpace(selectedPath) ? folderName : selectedPath;
 
-            FormBrowseForFolder frm = new FormBrowseForFolder();
-            frm.SelectedFolder = selectedPath;
-            frm.Description = prompt;
-
-            if (frm.ShowDialog(owner) == DialogResult.OK)
+            try
             {
-                txt = frm.SelectedFolder;
+                FormBrowseForFolder frm = new FormBrowseForFolder();
+                frm.SelectedFolder = selectedPath;
+                frm.Description = prompt;
+
+                if (frm.ShowDialog(owner) == DialogResult.OK)
+                {
+                    folderName = frm.SelectedFolder;
+                }
             }
+            catch (Exception err)
+            {
+                PopUp.Error(err.Message, prompt);
+            }        
         }
 
         public static void ExecuteOnUIThread(Action action, Control owner)

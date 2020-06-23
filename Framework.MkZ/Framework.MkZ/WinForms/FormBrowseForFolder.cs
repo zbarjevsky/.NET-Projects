@@ -1,4 +1,5 @@
 ﻿using MZ.Tools;
+using MZ.WPF.MessageBox;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -45,11 +46,11 @@ namespace MZ.WinForms
             Application.DoEvents();
 
             SelectInTree();
-            m_treeFolders.AfterSelectAction = (path) => { m_txtSelectedFolder.Text = path; };
 
             EnableControls(true, "");
             this.Cursor = Cursors.Default;
             _fileProgress.OnChange = (status) => { m_lblMessage.Text = status; };
+            m_treeFolders.AfterSelectAction = (path) => { m_txtSelectedFolder.Text = path; };
         }
 
         private void m_btnNewFolder_Click(object sender, EventArgs e)
@@ -75,7 +76,16 @@ namespace MZ.WinForms
 
         private void SelectInTree()
         {
-            m_treeFolders.SelectFolder(m_txtSelectedFolder.Text);
+            try
+            {
+                m_treeFolders.SelectFolder(m_txtSelectedFolder.Text);
+            }
+            catch (Exception err)
+            {
+                m_txtSelectedFolder.Text = "";
+                this.MessageError(err.Message, m_txtSelectedFolder.Text);
+            }
+
         }
 
         private void m_mnuSelect_Click(object sender, EventArgs e)

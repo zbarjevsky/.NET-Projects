@@ -248,6 +248,7 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.ImageIndex = 2;
             this.tabPage3.Location = new System.Drawing.Point(4, 23);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Size = new System.Drawing.Size(584, 308);
@@ -259,8 +260,9 @@
             // 
             this.m_imageListTabs.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_imageListTabs.ImageStream")));
             this.m_imageListTabs.TransparentColor = System.Drawing.Color.Transparent;
-            this.m_imageListTabs.Images.SetKeyName(0, "Mic1.png");
-            this.m_imageListTabs.Images.SetKeyName(1, "Spk1.png");
+            this.m_imageListTabs.Images.SetKeyName(0, "Mic16x16.png");
+            this.m_imageListTabs.Images.SetKeyName(1, "Icon_168_16.png");
+            this.m_imageListTabs.Images.SetKeyName(2, "Media_16x.png");
             // 
             // m_txtLog
             // 

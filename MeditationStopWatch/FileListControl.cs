@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using MZ.Tools;
 
 namespace MeditationStopWatch
 {
@@ -361,6 +362,22 @@ namespace MeditationStopWatch
         private void m_mnuNext_Click(object sender, EventArgs e)
         {
             OP.NextAction();
+        }
+
+        private void m_mnuCopyFileName_Click(object sender, EventArgs e)
+        {
+            if (m_listFiles.SelectedIndices.Count == 0)
+                return;
+
+            Clipboard.SetText(m_listFiles.SelectedItems[0].Text);
+        }
+
+        private void m_mnuShowInFolder_Click(object sender, EventArgs e)
+        {
+            if (m_listFiles.SelectedIndices.Count == 0)
+                return;
+            FileInfo file = m_listFiles.SelectedItems[0].Tag as FileInfo;
+            FileUtils.ShowInFolder(file.FullName);
         }
     }
 

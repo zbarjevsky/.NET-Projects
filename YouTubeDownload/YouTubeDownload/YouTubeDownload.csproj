@@ -32,6 +32,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>youtube.ico</ApplicationIcon>
@@ -124,13 +125,13 @@
     <Content Include="youtube.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Common.MkZ\Common.MkZ\Framework.MkZ.csproj">
-      <Project>{a03c89dd-ca87-4c9e-9ff9-f4277372e0f7}</Project>
-      <Name>Framework.MkZ</Name>
-    </ProjectReference>
+    <Folder Include="Extensions\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Extensions\" />
+    <ProjectReference Include="..\..\Framework.MkZ\Framework.MkZ\Framework.MkZ.csproj">
+      <Project>{768af4b8-5edd-4196-97ae-dbc1589dd426}</Project>
+      <Name>Framework.MkZ</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
