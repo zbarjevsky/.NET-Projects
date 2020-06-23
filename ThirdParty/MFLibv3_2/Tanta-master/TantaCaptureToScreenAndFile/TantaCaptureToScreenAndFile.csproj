@@ -32,6 +32,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Tanta.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="MediaFoundation">
       <HintPath>..\MediaFoundation.dll</HintPath>
@@ -85,6 +88,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="aaReadMe.txt" />
+    <Content Include="Tanta.ico" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\OISCommon\OISCommon.csproj">
