@@ -118,9 +118,9 @@ namespace DesktopManagerUX
 
             Rect bounds = GetCellBounds(row, col);
 
-            bounds.Offset(-border.left, -border.top);
-            bounds.Width += border.left + border.right;
-            bounds.Height += border.top + border.bottom;
+            bounds.Offset(-border.Left, -border.Top);
+            bounds.Width += border.Left + border.Right;
+            bounds.Height += border.Top + border.Bottom;
 
             return bounds;
         }
