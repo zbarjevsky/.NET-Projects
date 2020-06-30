@@ -1,4 +1,5 @@
 ﻿using ClipboardManager.Zip;
+using MZ.WPF;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -28,6 +29,11 @@ namespace ClipboardManager.Utils
         [DisplayName("Automatically reset UAC")]
         public bool IsAutoUAC { get; set; } = false;
         public bool IsAbortShutdown { get; set; } = false;
+
+        private bool _isCorrectMouse = false;
+        [Description("Correct Mouse Pointer if Stuck Between Multiple Monitors")]
+        public bool IsCorrectMouse { get { return _isCorrectMouse; } set { _isCorrectMouse = value; UpdateMouseCorrection(_isCorrectMouse); } }
+
         [TypeConverter(typeof(ExpandableObjectConverter))]
         public ServicesManipulatorSettings ServicesManipulatorSettings { get; set; } = new ServicesManipulatorSettings();
         [TypeConverter(typeof(ExpandableObjectConverter))]
@@ -112,6 +118,7 @@ namespace ClipboardManager.Utils
             IsAutoReconnect = s.IsAutoReconnect;
             IsAutoUAC = s.IsAutoUAC;
             IsAbortShutdown = s.IsAbortShutdown;
+            IsCorrectMouse = s.IsCorrectMouse;
             ServicesManipulatorSettings = s.ServicesManipulatorSettings;
             EncodingsList = s.EncodingsList;
         }
@@ -131,16 +138,21 @@ namespace ClipboardManager.Utils
                 return null;
             }
         }
+
+        private void UpdateMouseCorrection(bool isCorrectMouse)
+        {
+            NonStickMouse.EnableMouseCorrection(isCorrectMouse);
+        }
     }
 
     public class Settings
     {
-        public SettingsData I = new SettingsData();
+        public SettingsData globalSettings = new SettingsData();
 
         public void Save(string sHistoryFileName, string sSettingsFileName, 
             ClipboardList listMain, ClipboardList listFavorites)
         {
-            I.Save(sSettingsFileName);
+            globalSettings.Save(sSettingsFileName);
 
             try
             {
@@ -156,11 +168,11 @@ namespace ClipboardManager.Utils
                 XmlNode root = doc.CreateNode(XmlNodeType.Element, "Settings", "");
                 root = doc.AppendChild(root);
 
-                listMain.Save(root, zip, Path.GetDirectoryName(sHistoryFileName));
-                listFavorites.Save(root, zip, Path.GetDirectoryName(sHistoryFileName));
+                listMain.Save(root, zip);
+                listFavorites.Save(root, zip);
 
                 doc.PreserveWhitespace = true;
-                doc.Save(sHistoryFileName);
+                XmlUtil.SaveXmlDocFormatted(doc, sHistoryFileName);
 
                 zip.Add(sHistoryFileName);
                 zip.Close();
@@ -176,7 +188,7 @@ namespace ClipboardManager.Utils
             Form parent, 
             ClipboardList listMain, ClipboardList listFavorites, Image icoDefault)
         {
-            I.Load(sSettingsFileName);
+            globalSettings.Load(sSettingsFileName);
             return Import(sHistoryFileName, listMain, listFavorites, icoDefault);
         }//end Load
 
@@ -198,11 +210,11 @@ namespace ClipboardManager.Utils
                 doc.Load(sHistoryFileName);
                 XmlNode root = doc.SelectSingleNode("Settings");
 
-                listMain.Load(doc, icoDefault);
-                listFavorites.Load(doc, icoDefault);
+                listMain.Load(doc, icoDefault, Path.GetDirectoryName(sHistoryFileName));
+                listFavorites.Load(doc, icoDefault, Path.GetDirectoryName(sHistoryFileName));
 
-                listMain.MAX_HISTORY = I.BufferMaxLen;
-                listFavorites.MAX_HISTORY = I.BufferMaxLen;
+                listMain.MAX_HISTORY = globalSettings.BufferMaxLen;
+                listFavorites.MAX_HISTORY = globalSettings.BufferMaxLen;
 
                 //File.Delete(sHistoryFileName);
                 return true;

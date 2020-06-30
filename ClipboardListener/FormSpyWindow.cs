@@ -12,11 +12,12 @@ namespace ClipboardManager
 	using HWND = IntPtr;
     using ClipboardManager.Properties;
     using System.IO;
+    using MZ.Tools;
 
-	/// <summary>
-	/// Summary description for SpyWindow.
-	/// </summary>
-	public partial class FormSpyWindow : System.Windows.Forms.Form
+    /// <summary>
+    /// Summary description for SpyWindow.
+    /// </summary>
+    public partial class FormSpyWindow : System.Windows.Forms.Form
 	{
 		public delegate void DisplayImageEventHandler(Image image, bool autoDecideOnSizing, PictureBoxSizeMode manualSizeMode);
 
@@ -56,13 +57,13 @@ namespace ClipboardManager
 				/*
 				 * stop capturing events as soon as the user releases the left mouse button
 				 * */
-				case (int)NativeWIN32.WindowMessages.WM_LBUTTONUP:
+				case (int)WM_Message.WM_LBUTTONUP:
 					this.CaptureMouse(false);
 					break;
 				/*
 				 * handle all the mouse movements
 				 * */
-				case (int)NativeWIN32.WindowMessages.WM_MOUSEMOVE:
+				case (int)WM_Message.WM_MOUSEMOVE:
 					this.HandleMouseMovements();
 					break;			
 			};
@@ -90,7 +91,7 @@ namespace ClipboardManager
 		private string GetClassName(IntPtr hWnd)
 		{			
 			StringBuilder sb = new StringBuilder(256);
-			NativeWIN32.GetClassName(hWnd, sb, 256);								
+			User32.GetClassName(hWnd, sb, 256);								
 			return sb.ToString();
 		}//end GetClassName
 
@@ -104,7 +105,7 @@ namespace ClipboardManager
 			if (captured)
 			{
 				// capture the mouse movements and send them to ourself
-				NativeWIN32.SetCapture(this.Handle);
+				User32.SetCapture(this.Handle);
 
 				// set the mouse cursor to our finder cursor
 				Cursor.Current = _cursorFinder;
@@ -116,7 +117,7 @@ namespace ClipboardManager
 			else
 			{
 				// so release it
-				NativeWIN32.ReleaseCapture();
+				User32.ReleaseCapture();
 
 				// put the default cursor back
 				Cursor.Current = _cursorDefault;
@@ -148,7 +149,7 @@ namespace ClipboardManager
 			try
 			{
                 // capture the window under the cursor's position
-                _hCurrentWindow = NativeWIN32.WindowFromPoint(Cursor.Position);
+                _hCurrentWindow = User32.WindowFromPoint(Cursor.Position);
 
 				// if the window we're over, is not the same as the one before, and we had one before, refresh it
 				if (_hPreviousWindow != IntPtr.Zero && _hPreviousWindow != _hCurrentWindow)
@@ -174,15 +175,15 @@ namespace ClipboardManager
 
 					m_txtClass.Text = this.GetClassName(_hCurrentWindow);
 
-					m_txtCaption.Text = NativeWIN32.GetWindowText(_hCurrentWindow);
+					m_txtCaption.Text = User32.GetWindowText(_hCurrentWindow);
 
 					if ( m_txtClass.Text == "Edit" || m_txtCaption.Text == "" )
 					{
-						m_txtCaption.Text = NativeWIN32.GetText(_hCurrentWindow);
+						m_txtCaption.Text = User32.GetText(_hCurrentWindow);
 					}//end if
 
-					NativeWIN32.RECT rc = NativeWIN32.GetWindowRect(_hCurrentWindow);
-					NativeWIN32.EnumChildWindows(_hCurrentWindow, m_txtCaption.Text);
+					User32.GetWindowRect(_hCurrentWindow, out User32.RECT rc);
+					User32EnumChildWindows.EnumChildWindows(_hCurrentWindow, m_txtCaption.Text);
 						
 					// rect
 					m_txtRect.Text = string.Format(
@@ -263,7 +264,7 @@ namespace ClipboardManager
         private Process GetWindowProcess(IntPtr hWnd)
         {
             uint processId;
-            NativeWIN32.GetWindowThreadProcessId(hWnd, out processId);
+			User32.GetWindowThreadProcessId(hWnd, out processId);
             return Process.GetProcessById((int)processId);
         }
     }//end class FormSpyWindow

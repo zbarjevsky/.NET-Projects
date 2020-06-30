@@ -46,6 +46,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -113,7 +114,6 @@
     <Compile Include="CustomMarkers\CustomMarkerRoute.xaml.cs">
       <DependentUpon>CustomMarkerRoute.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Tools\AutoGreyableImage.cs" />
     <Compile Include="Controls\CompassUserControl.xaml.cs">
       <DependentUpon>CompassUserControl.xaml</DependentUpon>
     </Compile>
@@ -141,17 +141,12 @@
     </Compile>
     <Compile Include="Tools\DemoStuff.cs" />
     <Compile Include="Controls\PercentageConverter.cs" />
-    <Compile Include="Tools\ScrollDragZoom.cs" />
     <Compile Include="Tools\DashCamFileInfo.cs" />
     <Compile Include="Tools\DashCamFileTree.cs" />
     <Compile Include="Controls\VideoPlayerControl.xaml.cs">
       <DependentUpon>VideoPlayerControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Tools\DraggableExtension.cs" />
     <Compile Include="Tools\ExportUtils.cs" />
-    <Compile Include="Tools\GridLengthAnimation.cs" />
-    <Compile Include="Tools\ItemsControlExtensions.cs" />
-    <Compile Include="Tools\RelayCommand.cs" />
     <Compile Include="Tools\Tools.cs" />
     <Page Include="Controls\PlayerTimeLineBarUserControl.xaml">
       <SubType>Designer</SubType>
@@ -287,6 +282,10 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Common.MkZ\Common.MkZ\Framework.MkZ.csproj">
+      <Project>{a03c89dd-ca87-4c9e-9ff9-f4277372e0f7}</Project>
+      <Name>Framework.MkZ</Name>
+    </ProjectReference>
     <ProjectReference Include="..\CircularGauge\CircularGauge.csproj">
       <Project>{6efd5895-177b-4bbb-af52-29f4d53b3fbd}</Project>
       <Name>CircularGauge</Name>
@@ -349,7 +348,7 @@
   <PropertyGroup>
     <PostBuildEvent>if "$(ConfigurationName)" == "Release" (
 xcopy /s /f /r /y $(TargetDir)\*.* $(SolutionDir)\..\Binaries\$(ProjectName)\
-$(SolutionDir)CommandLineProcessor\bin\$(ConfigurationName)\CmdProc.exe ZipBinaries $(SolutionDir)\..\Binaries\DashCamGPSView $(SolutionDir)\..\Binaries\DashCamGPSView.zip
+$(SolutionDir)..\DashCamGPSView\CommandLineProcessor\bin\$(ConfigurationName)\CmdProc.exe ZipBinaries $(SolutionDir)\..\Binaries\DashCamGPSView $(SolutionDir)\..\Binaries\DashCamGPSView.zip
 )
 </PostBuildEvent>
   </PropertyGroup>

@@ -11,6 +11,7 @@ using System.IO;
 using MeditationStopWatch;
 using System.Runtime.CompilerServices;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace ReiKi
 {
@@ -19,13 +20,12 @@ namespace ReiKi
     /// </summary>
     public partial class ReikiProgressBar : UserControl, INotifyPropertyChanged
     {
-        private Timer m_Timer = new Timer(300);
+        private DispatcherTimer m_Timer;
         private DateTime m_LastTime = DateTime.Now;
         private TimeSpan m_ElapsedTime = TimeSpan.FromSeconds(0);
         private bool m_bPaused = false;
-        private bool m_bSoundPlayed;
         //private SoundPlayer m_SoundPlayer;
-        private MCIPLayer m_SoundPlayer = new MCIPLayer();
+        private NETSoundPlayer m_SoundPlayer = new NETSoundPlayer();
         private string m_sExePath = System.IO.Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
         private Options _options;
 
@@ -48,7 +48,7 @@ namespace ReiKi
         {
             get
             {
-                if(_options.PlayListCollection.SelectedPlayList != null)
+                if (_options.PlayListCollection.SelectedPlayList != null)
                     return _options.PlayListCollection.SelectedPlayList.ReiKiSettings;
                 return new ReiKiSettings();
             }
@@ -57,20 +57,59 @@ namespace ReiKi
         public ReikiProgressBar()
         {
             InitializeComponent();
-			
-			chkBell3min.IsChecked = true;
-			mnuBellOnOff.IsChecked = true;
-            chkBellAtTheEnd.IsChecked = true;
 
-            m_Timer.Enabled = false;
-            m_Timer.Elapsed += m_Timer_Elapsed;
+            progr.ProgressTheme = MZ.WPF.GradientProgressBar.TicksTheme.GetBase60Theme();
+
+            chkBell3min.IsChecked = true;
+            mnuBellOnOff.IsChecked = true;
+            progr.IsChecked = true;
+            progr.OnCheckClicked = (isChecked) =>
+            {
+                OnBellOnOffClicked(false);
+            };
+
+            m_Timer = new DispatcherTimer();
+            m_Timer.Interval = TimeSpan.FromSeconds(0.3);
+            m_Timer.Tick += Timer_Tick;
+        }
+
+        private bool _wasSoundPlayed = false;
+        private void Timer_Tick(object sender, EventArgs e)
+        {
+            m_Timer.Stop();
+
+            DateTime now = DateTime.Now;
+            if (!m_bPaused)
+                m_ElapsedTime += (now - m_LastTime);
+            m_LastTime = now;
+
+            if (Max > 10)
+            {
+                Value = m_ElapsedTime.TotalSeconds % Max;
+
+                if (Settings.BellAtTheEnd && Max - Value < 2 && !_wasSoundPlayed)
+                {
+                    _wasSoundPlayed = true;
+                    PlayDing();
+                }
+
+                if (Max - Value > 5)
+                    _wasSoundPlayed = false;
+            }
+            else
+            {
+                Value = 0;
+            }
+
+            UpdateTooltip(Max - Value);
+
+            m_Timer.Start();
         }
 
         public void PlayDing()
         {
-            string sName = System.IO.Path.Combine(m_sExePath, "Sounds", "ding.mp3");
-            m_SoundPlayer.Play(sName, "ding");
-            m_SoundPlayer.SetVolume(_options.Volume);
+            string sDingFileName = System.IO.Path.Combine(m_sExePath, "Sounds", "ding.mp3");
+            m_SoundPlayer.Play(sDingFileName, "ding", _options.Volume);
         }
 
         private void UpdateTooltip(double secondsLeft)
@@ -94,61 +133,27 @@ namespace ReiKi
             }));
         }
 
-		private void m_Timer_Elapsed(object sender, ElapsedEventArgs e)
-        {
-            m_Timer.Stop();
-
-            DateTime now = DateTime.Now;
-            if (!m_bPaused)
-                m_ElapsedTime += (now - m_LastTime);
-            m_LastTime = now;
-
-            if (Max > 10)
-            {
-                Value = m_ElapsedTime.TotalSeconds % Max;
-
-                if (Settings.BellAtTheEnd && Max - Value < 2 && !m_bSoundPlayed)
-                {
-                    m_bSoundPlayed = true;
-                    PlayDing();
-                }
-
-                if (Max - Value > 5)
-                    m_bSoundPlayed = false;
-            }
-            else
-            {
-                Value = 0;
-            }
-
-            UpdateTooltip(Max - Value);
-
-            m_Timer.Start();
-        }
-
         private double _value;
         public double Value
         {
             get { return _value; }
-            set { _value = value;  OnPropertyChanged(); }
+            set { _value = value; OnPropertyChanged(); }
         }
 
-		public double Max
-		{
-			get 
-			{ 
-				if (_options == null) 
-					return 180; 
-				return Settings.ProgressInterval; 
-			}
-			set 
-			{
+        public double Max
+        {
+            get
+            {
+                if (_options == null)
+                    return 180;
+                return Settings.ProgressInterval;
+            }
+            set
+            {
                 Settings.ProgressInterval = value;
-                DrawTicks();
-
-                OnPropertyChanged(); 
-			}
-		}
+                OnPropertyChanged();
+            }
+        }
 
         public void Initialize(Options options)
         {
@@ -158,11 +163,11 @@ namespace ReiKi
             _options = options;
 
             mnuBellOnOff.IsChecked = Settings.BellAtTheEnd;
-            chkBellAtTheEnd.IsChecked = Settings.BellAtTheEnd;
+            progr.IsChecked = Settings.BellAtTheEnd;
             InitInterval();
             OnPropertyChanged("Max");
         }
-        
+
         public void Start()
         {
             m_LastTime = DateTime.Now;
@@ -170,7 +175,7 @@ namespace ReiKi
             m_bPaused = false;
 
             Value = 0;
-            m_Timer.Enabled = true;
+            m_Timer.Start();
         }
 
         public void Pause()
@@ -183,10 +188,10 @@ namespace ReiKi
         {
             m_bPaused = false;
         }
-        
+
         public void Stop()
         {
-            m_Timer.Enabled = false;
+            m_Timer.Stop();
             m_bPaused = false;
             Value = 0;
         }
@@ -213,22 +218,28 @@ namespace ReiKi
             Stop();
         }
 
-		private void OnBellOnOffClicked(object sender, RoutedEventArgs e)
+        private void OnBellOnOffClicked(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem)
+                OnBellOnOffClicked(true);
+        }
+
+        private void OnBellOnOffClicked(bool fromMenu)
 		{
-            if (e.Source is MenuItem)
+            if (fromMenu)
             {
                 mnuBellOnOff.IsChecked = !mnuBellOnOff.IsChecked;
                 if (_options != null)
                     Settings.BellAtTheEnd = mnuBellOnOff.IsChecked;
 
-                chkBellAtTheEnd.IsChecked = mnuBellOnOff.IsChecked;
+                progr.IsChecked = mnuBellOnOff.IsChecked;
             }
-            if(e.Source is CheckBox)
+            else //from checkBox
             {
                 if (_options != null)
-                    Settings.BellAtTheEnd = chkBellAtTheEnd.IsChecked.Value;
+                    Settings.BellAtTheEnd = progr.IsChecked;
 
-                mnuBellOnOff.IsChecked = chkBellAtTheEnd.IsChecked.Value;
+                mnuBellOnOff.IsChecked = progr.IsChecked;
             }
         }
 
@@ -278,57 +289,9 @@ namespace ReiKi
 				SetInterval(chkBell3min);
 		}
 
-        private void DrawTicks()
-        {
-            _canvas.Children.Clear();
-            double line_count = Max;  //(Max / 30.0); //line per 30 sec
-            double line_offset = (_canvas.ActualWidth-3) / line_count;
-            double smallDelta = _canvas.ActualHeight / 10;
-            double bigDelta = _canvas.ActualHeight / 4;
-
-            for (int i = 0; i < line_count + 1; i++)
-            {
-                double thickness = -1;
-                double delta = bigDelta;
-
-                if (i % 10 == 0)
-                {
-                    thickness = 0.5;
-                    delta = bigDelta;
-                }
-                if (i % 30 == 0)
-                {
-                    thickness = 2;
-                    delta = bigDelta;
-                }
-                if (i % 60 == 0)
-                {
-                    thickness = 2;
-                    delta = smallDelta;
-                }
-                if (thickness < 0)
-                    continue;
-
-                Line line = new Line();
-                line.Stroke = System.Windows.Media.Brushes.Green;
-                line.StrokeThickness = thickness;
-                line.X1 = 1 + i * line_offset;
-                line.X2 = line.X1;
-                line.Y1 = delta;
-                line.Y2 = _canvas.ActualHeight - delta;
-
-                _canvas.Children.Add(line);
-            }
-        }
-
         private void ReiKi_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             Start();
-        }
-
-        private void ReiKi_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            DrawTicks();
         }
     }
 }

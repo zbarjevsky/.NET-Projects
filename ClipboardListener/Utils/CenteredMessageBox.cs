@@ -3,31 +3,36 @@ using System.Windows.Forms;
 using System.Text; 
 using System.Drawing; 
 using System.Runtime.InteropServices;
-
+using MZ.WPF.MessageBox;
 
 namespace Utils
 {
     //Centered MessageBox - relatively to owner window
-	public class CenteredMessageBox
+	public static class CenteredMessageBox
 	{
         static CenteredMessageBox()
         {
-            MZ.WPF.MessageBox.PopUp.IconType = MZ.WPF.MessageBox.PopUp.IconStyle.RegularImages;
+            PopUp.IconType = PopUp.IconStyle.RegularImages;
         }
 
-        public static void MsgBoxErr(string msg, string title= "Clipboard Manager")
+        public static void MsgBoxErr(this Form owner, string msg, string title = "Clipboard Manager")
         {
-            MZ.WPF.MessageBox.PopUp.Error(msg, title);
+            owner.MessageError(msg, title);
         }//end MsgBoxErr
 
-        public static void MsgBoxIfo(string msg, string title = "Clipboard Manager")
+        public static void MsgBoxErr(string msg, string title = "Clipboard Manager")
         {
-            MZ.WPF.MessageBox.PopUp.Information(msg, title);
+            PopUp.Error(msg, title);
+        }//end MsgBoxErr
+
+        public static void MsgBoxIfo(this Form owner, string msg, string title = "Clipboard Manager")
+        {
+            owner.MessageInfo(msg, title);
         }//end MsgBoxIfo
 
-        public static MZ.WPF.MessageBox.PopUp.PopUpResult MsgBoxQst(string msg, string title = "Clipboard Manager")
+        public static PopUp.PopUpResult MsgBoxQst(this Form owner, string msg, string title = "Clipboard Manager")
         {
-            return MZ.WPF.MessageBox.PopUp.Question(msg, title);
+            return owner.MessageQuestion(msg, title);
         }//end MsgBoxErr
     }
 }

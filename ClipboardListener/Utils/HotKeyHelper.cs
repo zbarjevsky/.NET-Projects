@@ -1,4 +1,5 @@
 using ClipboardManager.Utils;
+using MZ.Tools;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -87,27 +88,27 @@ namespace ClipboardManager
 				return true;
 
 			// update HotKey
-			NativeWIN32.KeyModifiers modifiers = NativeWIN32.KeyModifiers.None;
+			User32HotKey.KeyModifiers modifiers = User32HotKey.KeyModifiers.None;
 
 			if (keyData.KeyData.HasFlag(Keys.Control))
-				modifiers |= NativeWIN32.KeyModifiers.Control;
+				modifiers |= User32HotKey.KeyModifiers.Control;
 			if (keyData.KeyData.HasFlag(Keys.Shift))
-				modifiers |= NativeWIN32.KeyModifiers.Shift;
+				modifiers |= User32HotKey.KeyModifiers.Shift;
 			if (keyData.KeyData.HasFlag(Keys.Alt))
-				modifiers |= NativeWIN32.KeyModifiers.Alt;
+				modifiers |= User32HotKey.KeyModifiers.Alt;
 			if (keyData.KeyData.HasFlag(Keys.LWin) || keyData.KeyData.HasFlag(Keys.RWin))
-				modifiers |= NativeWIN32.KeyModifiers.Windows;
+				modifiers |= User32HotKey.KeyModifiers.Windows;
 
             Keys key = (Keys)((int)keyData.KeyData & 0x0000FFFF); //filter out modifiers
 
             Log.WriteLine("RegisterHotKey: " + keyData);
-            return NativeWIN32.RegisterHotKey(parent.Handle, keyData.AppId, modifiers, key);
+            return User32HotKey.RegisterHotKey(parent.Handle, keyData.AppId, modifiers, key);
 		}//end RegisterHotKey
 
 		public static void UnregisterHotKey(this HotKeyData keyData, Form parent)
 		{
             Log.WriteLine("UnregisterHotKey: " + keyData);
-            NativeWIN32.UnregisterHotKey(parent.Handle, keyData.AppId);
+            User32HotKey.UnregisterHotKey(parent.Handle, keyData.AppId);
 		}//end UnregisterHotKey
 	}//end class HotKeyTranslator
 }//end namespace ClipboardListener

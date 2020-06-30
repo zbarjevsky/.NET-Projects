@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
+using DUMeterMZ.Common;
+
 namespace DUMeterMZ
 {
     public class Program
@@ -16,11 +18,21 @@ namespace DUMeterMZ
         {
             try
             {
-                Application.Run(new FormLoadGraph());
+                bool result;
+                using (var mutex = new System.Threading.Mutex(true, Utils.AppName, out result))
+                {
+                    if (!result)
+                    {
+                        Utils.MessageBox("Another instance is already running.");
+                        return;
+                    }
+
+                    Application.Run(new FormLoadGraph());
+                }
             }//end try
             catch (Exception err)
             {
-                FormLoadGraph.MessageBox("Main error: " + err.Message);
+                Utils.MessageBox("Main error: " + err.Message);
                 Environment.Exit(-1);
             }//end catch
         }//end Main

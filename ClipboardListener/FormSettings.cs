@@ -17,8 +17,8 @@ namespace ClipboardManager
 
         public FormSettings(Settings settings)
 		{
-			this.m_SettingsData = settings.I;
-            HotKey = settings.I.HotKeyInfo.Clone();
+			this.m_SettingsData = settings.globalSettings;
+            HotKey = settings.globalSettings.HotKeyInfo.Clone();
 
             InitializeComponent();
 		}//end constructor

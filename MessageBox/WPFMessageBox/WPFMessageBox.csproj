@@ -54,6 +54,12 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\Common.MkZ\Common.MkZ\Windows\User32.cs">
+      <Link>User32.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Common.MkZ\Common.MkZ\WPF\WPF_Helper.cs">
+      <Link>WPF_Helper.cs</Link>
+    </Compile>
     <Compile Include="PopUp.cs" />
     <Compile Include="MessageWindow.xaml.cs">
       <DependentUpon>MessageWindow.xaml</DependentUpon>
@@ -64,8 +70,6 @@
     <Compile Include="UserControlFootSwitchIcon.xaml.cs">
       <DependentUpon>UserControlFootSwitchIcon.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Win32.cs" />
-    <Compile Include="WPF_Helper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\MSGBOX01.ICO" />

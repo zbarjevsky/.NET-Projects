@@ -1,0 +1,78 @@
+﻿<Window x:Class="DesktopManagerUX.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:DesktopManagerUX"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterScreen"
+        MinWidth="800" MinHeight="600" Width="1800" Height="1000"
+        d:DesignHeight="601" d:DesignWidth="801"
+        LocationChanged="Window_LocationChanged"
+        Closed="Window_Closed"
+        Icon="Images\AppIcon.ico" FontSize="16" Background="LightGray"
+        Title="Desktop Manager" >
+    <Grid x:Name="gridMain">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid>
+            <TabControl x:Name="tabLayouts" Margin="0,20,0,0" Background="LightBlue">
+                <TabControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox Text="{Binding Name}" BorderThickness="0" Background="Transparent" GotFocus="TextBox_GotFocus" />
+                            <TextBlock Text="{Binding DisplayName}" />
+                            <Button Margin="4,0,0,0" VerticalAlignment="Top" Click="RemoveLayout_Click" >
+                                <Button.Template>
+                                    <ControlTemplate TargetType="Button">
+                                        <Path Data="M0,0 L8,8 M8,0 L0,8" StrokeThickness="3" VerticalAlignment="Center" Margin="5,4,0,2">
+                                            <Path.Style>
+                                                <Style TargetType="{x:Type Path}">
+                                                    <Style.Triggers>
+                                                        <Trigger Property="IsMouseOver" Value="False">
+                                                            <Setter Property="Stroke" Value="LightGray" />
+                                                        </Trigger>
+                                                        <Trigger Property="IsMouseOver" Value="True">
+                                                            <Setter Property="Stroke" Value="BlueViolet" />
+                                                        </Trigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Path.Style>
+                                        </Path>
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                        </StackPanel>
+                    </DataTemplate>
+                </TabControl.ItemTemplate>
+                <TabControl.ContentTemplate>
+                    <DataTemplate>
+                        <local:LayoutConfigurationUserControl LayoutConfiguration="{Binding}"/>
+                    </DataTemplate>
+                </TabControl.ContentTemplate>
+            </TabControl>
+        </Grid>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <Button Margin="5,5,150,5" Padding="4" Click="AddLayout_Click">
+                <StackPanel Orientation="Horizontal" Height="22">
+                    <TextBlock Text="⊞" Foreground="DarkGreen" VerticalAlignment="Center" 
+                               FontWeight="Bold" FontSize="20" Margin="3,0,6,3"/>
+                    <TextBlock Text="Add Layout" VerticalAlignment="Center" Margin="2"/>
+                </StackPanel>
+            </Button>
+            <Button Margin="5" Padding="4" Click="Minimize_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="_ " Width="18" Background="Navy" Foreground="Wheat" VerticalAlignment="Bottom" TextAlignment="Center"/>
+                    <TextBlock Text="Minimize All" VerticalAlignment="Center" Margin="2"/>
+                </StackPanel>
+            </Button>
+            <Button Margin="10,5" Padding="4" Click="CloseSelected_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="☒" Width="18" Background="Red" Foreground="Wheat" VerticalAlignment="Center" TextAlignment="Center"/>
+                    <TextBlock Text="Close All" VerticalAlignment="Center" Margin="2"/>
+                </StackPanel>
+            </Button>
+        </StackPanel>
+    </Grid>
+</Window>

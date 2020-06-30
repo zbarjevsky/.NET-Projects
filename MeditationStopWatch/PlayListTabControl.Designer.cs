@@ -46,10 +46,10 @@
             // 
             this.m_btnEditTab.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnEditTab.Image = ((System.Drawing.Image)(resources.GetObject("m_btnEditTab.Image")));
-            this.m_btnEditTab.Location = new System.Drawing.Point(400, 0);
+            this.m_btnEditTab.Location = new System.Drawing.Point(431, 0);
             this.m_btnEditTab.Margin = new System.Windows.Forms.Padding(4);
             this.m_btnEditTab.Name = "m_btnEditTab";
-            this.m_btnEditTab.Size = new System.Drawing.Size(37, 28);
+            this.m_btnEditTab.Size = new System.Drawing.Size(27, 23);
             this.m_btnEditTab.TabIndex = 0;
             this.toolTip1.SetToolTip(this.m_btnEditTab, "Rename Selected");
             this.m_btnEditTab.UseVisualStyleBackColor = true;
@@ -59,10 +59,10 @@
             // 
             this.m_btnDelTab.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnDelTab.Image = ((System.Drawing.Image)(resources.GetObject("m_btnDelTab.Image")));
-            this.m_btnDelTab.Location = new System.Drawing.Point(491, 0);
+            this.m_btnDelTab.Location = new System.Drawing.Point(501, 0);
             this.m_btnDelTab.Margin = new System.Windows.Forms.Padding(4);
             this.m_btnDelTab.Name = "m_btnDelTab";
-            this.m_btnDelTab.Size = new System.Drawing.Size(37, 28);
+            this.m_btnDelTab.Size = new System.Drawing.Size(27, 23);
             this.m_btnDelTab.TabIndex = 2;
             this.toolTip1.SetToolTip(this.m_btnDelTab, "Delete Selected");
             this.m_btnDelTab.UseVisualStyleBackColor = true;
@@ -72,10 +72,10 @@
             // 
             this.m_btnAddTab.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnAddTab.Image = ((System.Drawing.Image)(resources.GetObject("m_btnAddTab.Image")));
-            this.m_btnAddTab.Location = new System.Drawing.Point(445, 0);
+            this.m_btnAddTab.Location = new System.Drawing.Point(466, 0);
             this.m_btnAddTab.Margin = new System.Windows.Forms.Padding(4);
             this.m_btnAddTab.Name = "m_btnAddTab";
-            this.m_btnAddTab.Size = new System.Drawing.Size(37, 28);
+            this.m_btnAddTab.Size = new System.Drawing.Size(27, 23);
             this.m_btnAddTab.TabIndex = 1;
             this.toolTip1.SetToolTip(this.m_btnAddTab, "Add New List");
             this.m_btnAddTab.UseVisualStyleBackColor = true;
@@ -97,11 +97,11 @@
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.tabPage1.Location = new System.Drawing.Point(4, 34);
+            this.tabPage1.Location = new System.Drawing.Point(4, 29);
             this.tabPage1.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPage1.Size = new System.Drawing.Size(384, 8);
+            this.tabPage1.Size = new System.Drawing.Size(384, 13);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "<<Test>>";
             // 

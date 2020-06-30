@@ -26,7 +26,7 @@ namespace ClipboardManager
 			m_listFavorites_SizeChanged(sender, e);
 			for (int i = 0; i < m_ClipboardFavorites.Count; i++)
 			{
-				ClipboardList.ClipboardEntry entry = m_ClipboardFavorites.GetEntry(i);
+				ClipboardEntryLogic entry = m_ClipboardFavorites.GetEntry(i);
 				string sText = entry.ShortDesc();
 				int ico = entry._icoItemType;
 
@@ -49,7 +49,7 @@ namespace ClipboardManager
 			for (int i = m_listFavorites.SelectedItems.Count - 1; i >= 0; i--)
 			{
 				ListViewItem itm = m_listFavorites.SelectedItems[i];
-				ClipboardList.ClipboardEntry entry = (ClipboardList.ClipboardEntry)itm.Tag;
+				ClipboardEntryLogic entry = (ClipboardEntryLogic)itm.Tag;
 				int idx = m_ClipboardFavorites.FindEntry(entry);
 				m_ClipboardFavorites.RemoveAt(idx);
 				itm.Remove();
@@ -73,7 +73,7 @@ namespace ClipboardManager
 
 			m_listFavorites.BeginUpdate();
 			ListViewItem itm = m_listFavorites.SelectedItems[0];
-			ClipboardList.ClipboardEntry entry = (ClipboardList.ClipboardEntry)itm.Tag;
+			ClipboardEntryLogic entry = (ClipboardEntryLogic)itm.Tag;
 			int idx = m_ClipboardFavorites.FindEntry(entry);
 			m_ClipboardFavorites.RemoveAt(idx);
 			itm.Remove();
@@ -115,7 +115,7 @@ namespace ClipboardManager
 
 			try
 			{
-				ClipboardList.ClipboardEntry entry = (ClipboardList.ClipboardEntry)m_listFavorites.SelectedItems[0].Tag;
+				ClipboardEntryLogic entry = (ClipboardEntryLogic)m_listFavorites.SelectedItems[0].Tag;
 				entry.Put();
 			}//end try
 			catch ( Exception err )

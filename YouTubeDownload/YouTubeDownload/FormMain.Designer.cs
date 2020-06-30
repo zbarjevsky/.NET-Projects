@@ -53,15 +53,19 @@
             this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.m_ContextMenuList = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.m_ctxmnuAddUrl = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_ctxmnuRemoveSelected = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+            this.m_ctxmnuDownloadAgain = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
             this.m_ctxmnuOpenSelectedFile = new System.Windows.Forms.ToolStripMenuItem();
             this.m_ctxmnuOpenOutputFolder = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_ctxmnuRemoveSelected = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_ctxmnuDownloadAgain = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_ctxmnuCopyFileName = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_ctxmnuCopyURL = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
             this.m_ctxmnuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.m_btnAddUrl = new System.Windows.Forms.Button();
             this.m_spliMain = new System.Windows.Forms.SplitContainer();
+            this.m_DownloaderUserControl = new YouTubeDownload.DownloaderUserControl();
             this.m_btnClearList = new System.Windows.Forms.Button();
             this.m_lnkOutputFolder = new System.Windows.Forms.LinkLabel();
             this.m_btnPause = new System.Windows.Forms.Button();
@@ -69,10 +73,6 @@
             this.m_btnRemove = new System.Windows.Forms.Button();
             this.m_btnBrowseForFolder = new System.Windows.Forms.Button();
             this.m_errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
-            this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
-            this.m_ctxmnuCoypyFileName = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_ctxmnuCoypyURL = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_DownloaderUserControl = new YouTubeDownload.DownloaderUserControl();
             this.m_statusStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.m_ContextMenuList.SuspendLayout();
@@ -271,65 +271,84 @@
             this.toolStripMenuItem5,
             this.m_ctxmnuOpenSelectedFile,
             this.m_ctxmnuOpenOutputFolder,
-            this.m_ctxmnuCoypyFileName,
-            this.m_ctxmnuCoypyURL,
+            this.m_ctxmnuCopyFileName,
+            this.m_ctxmnuCopyURL,
             this.toolStripMenuItem4,
             this.m_ctxmnuExit});
             this.m_ContextMenuList.Name = "contextMenuStrip1";
-            this.m_ContextMenuList.Size = new System.Drawing.Size(167, 252);
+            this.m_ContextMenuList.Size = new System.Drawing.Size(185, 252);
             // 
             // m_ctxmnuAddUrl
             // 
             this.m_ctxmnuAddUrl.Name = "m_ctxmnuAddUrl";
-            this.m_ctxmnuAddUrl.Size = new System.Drawing.Size(166, 26);
-            this.m_ctxmnuAddUrl.Text = "Add";
+            this.m_ctxmnuAddUrl.Size = new System.Drawing.Size(184, 26);
+            this.m_ctxmnuAddUrl.Text = "New Download...";
             this.m_ctxmnuAddUrl.Click += new System.EventHandler(this.m_mnuFileAdd_Click);
+            // 
+            // m_ctxmnuRemoveSelected
+            // 
+            this.m_ctxmnuRemoveSelected.Image = ((System.Drawing.Image)(resources.GetObject("m_ctxmnuRemoveSelected.Image")));
+            this.m_ctxmnuRemoveSelected.Name = "m_ctxmnuRemoveSelected";
+            this.m_ctxmnuRemoveSelected.Size = new System.Drawing.Size(184, 26);
+            this.m_ctxmnuRemoveSelected.Text = "Remove";
+            this.m_ctxmnuRemoveSelected.Click += new System.EventHandler(this.m_btnRemove_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(163, 6);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(181, 6);
+            // 
+            // m_ctxmnuDownloadAgain
+            // 
+            this.m_ctxmnuDownloadAgain.Image = ((System.Drawing.Image)(resources.GetObject("m_ctxmnuDownloadAgain.Image")));
+            this.m_ctxmnuDownloadAgain.Name = "m_ctxmnuDownloadAgain";
+            this.m_ctxmnuDownloadAgain.Size = new System.Drawing.Size(184, 26);
+            this.m_ctxmnuDownloadAgain.Text = "Download Again";
+            this.m_ctxmnuDownloadAgain.Click += new System.EventHandler(this.m_ctxmnuDownloadAgain_Click);
+            // 
+            // toolStripMenuItem5
+            // 
+            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(181, 6);
             // 
             // m_ctxmnuOpenSelectedFile
             // 
             this.m_ctxmnuOpenSelectedFile.Name = "m_ctxmnuOpenSelectedFile";
-            this.m_ctxmnuOpenSelectedFile.Size = new System.Drawing.Size(166, 26);
+            this.m_ctxmnuOpenSelectedFile.Size = new System.Drawing.Size(184, 26);
             this.m_ctxmnuOpenSelectedFile.Text = "Open File";
             this.m_ctxmnuOpenSelectedFile.Click += new System.EventHandler(this.m_mnuOpenSelectedFile_Click);
             // 
             // m_ctxmnuOpenOutputFolder
             // 
             this.m_ctxmnuOpenOutputFolder.Name = "m_ctxmnuOpenOutputFolder";
-            this.m_ctxmnuOpenOutputFolder.Size = new System.Drawing.Size(166, 26);
+            this.m_ctxmnuOpenOutputFolder.Size = new System.Drawing.Size(184, 26);
             this.m_ctxmnuOpenOutputFolder.Text = "Open Folder";
             this.m_ctxmnuOpenOutputFolder.Click += new System.EventHandler(this.m_mnuOpenOutputFolder_Click);
             // 
-            // m_ctxmnuRemoveSelected
+            // m_ctxmnuCoypyFileName
             // 
-            this.m_ctxmnuRemoveSelected.Image = ((System.Drawing.Image)(resources.GetObject("m_ctxmnuRemoveSelected.Image")));
-            this.m_ctxmnuRemoveSelected.Name = "m_ctxmnuRemoveSelected";
-            this.m_ctxmnuRemoveSelected.Size = new System.Drawing.Size(166, 26);
-            this.m_ctxmnuRemoveSelected.Text = "Remove";
-            this.m_ctxmnuRemoveSelected.Click += new System.EventHandler(this.m_btnRemove_Click);
+            this.m_ctxmnuCopyFileName.Name = "m_ctxmnuCoypyFileName";
+            this.m_ctxmnuCopyFileName.Size = new System.Drawing.Size(184, 26);
+            this.m_ctxmnuCopyFileName.Text = "Copy File Name";
+            this.m_ctxmnuCopyFileName.Click += new System.EventHandler(this.m_ctxmnuCoypyFileName_Click);
             // 
-            // m_ctxmnuDownloadAgain
+            // m_ctxmnuCoypyURL
             // 
-            this.m_ctxmnuDownloadAgain.Image = ((System.Drawing.Image)(resources.GetObject("m_ctxmnuDownloadAgain.Image")));
-            this.m_ctxmnuDownloadAgain.Name = "m_ctxmnuDownloadAgain";
-            this.m_ctxmnuDownloadAgain.Size = new System.Drawing.Size(166, 26);
-            this.m_ctxmnuDownloadAgain.Text = "Download Again";
-            this.m_ctxmnuDownloadAgain.Click += new System.EventHandler(this.m_ctxmnuDownloadAgain_Click);
+            this.m_ctxmnuCopyURL.Name = "m_ctxmnuCoypyURL";
+            this.m_ctxmnuCopyURL.Size = new System.Drawing.Size(184, 26);
+            this.m_ctxmnuCopyURL.Text = "Copy URL";
+            this.m_ctxmnuCopyURL.Click += new System.EventHandler(this.m_ctxmnuCoypyURL_Click);
             // 
             // toolStripMenuItem4
             // 
             this.toolStripMenuItem4.Name = "toolStripMenuItem4";
-            this.toolStripMenuItem4.Size = new System.Drawing.Size(163, 6);
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(181, 6);
             // 
             // m_ctxmnuExit
             // 
             this.m_ctxmnuExit.Image = ((System.Drawing.Image)(resources.GetObject("m_ctxmnuExit.Image")));
             this.m_ctxmnuExit.Name = "m_ctxmnuExit";
-            this.m_ctxmnuExit.Size = new System.Drawing.Size(166, 26);
+            this.m_ctxmnuExit.Size = new System.Drawing.Size(184, 26);
             this.m_ctxmnuExit.Text = "E&xit";
             this.m_ctxmnuExit.Click += new System.EventHandler(this.m_mnuFileExit_Click);
             // 
@@ -342,7 +361,7 @@
             this.m_btnAddUrl.Name = "m_btnAddUrl";
             this.m_btnAddUrl.Size = new System.Drawing.Size(289, 33);
             this.m_btnAddUrl.TabIndex = 1;
-            this.m_btnAddUrl.Text = "Add && Start";
+            this.m_btnAddUrl.Text = "New Download...";
             this.m_btnAddUrl.UseVisualStyleBackColor = true;
             this.m_btnAddUrl.Click += new System.EventHandler(this.m_btnAddUrl_Click);
             // 
@@ -368,6 +387,15 @@
             this.m_spliMain.SplitterDistance = 159;
             this.m_spliMain.TabIndex = 7;
             // 
+            // m_DownloaderUserControl
+            // 
+            this.m_DownloaderUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_DownloaderUserControl.Location = new System.Drawing.Point(0, 0);
+            this.m_DownloaderUserControl.Margin = new System.Windows.Forms.Padding(4);
+            this.m_DownloaderUserControl.Name = "m_DownloaderUserControl";
+            this.m_DownloaderUserControl.Size = new System.Drawing.Size(959, 254);
+            this.m_DownloaderUserControl.TabIndex = 0;
+            // 
             // m_btnClearList
             // 
             this.m_btnClearList.Image = ((System.Drawing.Image)(resources.GetObject("m_btnClearList.Image")));
@@ -389,7 +417,7 @@
             this.m_lnkOutputFolder.BackColor = System.Drawing.SystemColors.Window;
             this.m_lnkOutputFolder.Location = new System.Drawing.Point(465, 65);
             this.m_lnkOutputFolder.Name = "m_lnkOutputFolder";
-            this.m_lnkOutputFolder.Size = new System.Drawing.Size(387, 32);
+            this.m_lnkOutputFolder.Size = new System.Drawing.Size(396, 32);
             this.m_lnkOutputFolder.TabIndex = 6;
             this.m_lnkOutputFolder.TabStop = true;
             this.m_lnkOutputFolder.Text = "Output Folder";
@@ -398,9 +426,8 @@
             // 
             // m_btnPause
             // 
+            this.m_btnPause.Image = ((System.Drawing.Image)(resources.GetObject("m_btnPause.Image")));
             this.m_btnPause.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnPause.ImageIndex = 0;
-            this.m_btnPause.ImageList = this.m_imageListStartStop;
             this.m_btnPause.Location = new System.Drawing.Point(10, 64);
             this.m_btnPause.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnPause.Name = "m_btnPause";
@@ -435,45 +462,20 @@
             // m_btnBrowseForFolder
             // 
             this.m_btnBrowseForFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnBrowseForFolder.Location = new System.Drawing.Point(858, 65);
+            this.m_btnBrowseForFolder.Image = ((System.Drawing.Image)(resources.GetObject("m_btnBrowseForFolder.Image")));
+            this.m_btnBrowseForFolder.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.m_btnBrowseForFolder.Location = new System.Drawing.Point(867, 65);
             this.m_btnBrowseForFolder.Name = "m_btnBrowseForFolder";
-            this.m_btnBrowseForFolder.Size = new System.Drawing.Size(111, 33);
+            this.m_btnBrowseForFolder.Size = new System.Drawing.Size(102, 33);
             this.m_btnBrowseForFolder.TabIndex = 5;
             this.m_btnBrowseForFolder.Text = "Change...";
+            this.m_btnBrowseForFolder.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.m_btnBrowseForFolder.UseVisualStyleBackColor = true;
             this.m_btnBrowseForFolder.Click += new System.EventHandler(this.m_btnBrowseForFolder_Click);
             // 
             // m_errorProvider
             // 
             this.m_errorProvider.ContainerControl = this;
-            // 
-            // toolStripMenuItem5
-            // 
-            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
-            this.toolStripMenuItem5.Size = new System.Drawing.Size(163, 6);
-            // 
-            // m_ctxmnuCoypyFileName
-            // 
-            this.m_ctxmnuCoypyFileName.Name = "m_ctxmnuCoypyFileName";
-            this.m_ctxmnuCoypyFileName.Size = new System.Drawing.Size(166, 26);
-            this.m_ctxmnuCoypyFileName.Text = "Copy File Name";
-            this.m_ctxmnuCoypyFileName.Click += new System.EventHandler(this.m_ctxmnuCoypyFileName_Click);
-            // 
-            // m_ctxmnuCoypyURL
-            // 
-            this.m_ctxmnuCoypyURL.Name = "m_ctxmnuCoypyURL";
-            this.m_ctxmnuCoypyURL.Size = new System.Drawing.Size(166, 26);
-            this.m_ctxmnuCoypyURL.Text = "Copy URL";
-            this.m_ctxmnuCoypyURL.Click += new System.EventHandler(this.m_ctxmnuCoypyURL_Click);
-            // 
-            // m_DownloaderUserControl
-            // 
-            this.m_DownloaderUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_DownloaderUserControl.Location = new System.Drawing.Point(0, 0);
-            this.m_DownloaderUserControl.Margin = new System.Windows.Forms.Padding(4);
-            this.m_DownloaderUserControl.Name = "m_DownloaderUserControl";
-            this.m_DownloaderUserControl.Size = new System.Drawing.Size(959, 254);
-            this.m_DownloaderUserControl.TabIndex = 0;
             // 
             // FormMain
             // 
@@ -557,8 +559,8 @@
         private System.Windows.Forms.ToolStripMenuItem m_ctxmnuExit;
         private System.Windows.Forms.ToolStripMenuItem m_ctxmnuDownloadAgain;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem5;
-        private System.Windows.Forms.ToolStripMenuItem m_ctxmnuCoypyFileName;
-        private System.Windows.Forms.ToolStripMenuItem m_ctxmnuCoypyURL;
+        private System.Windows.Forms.ToolStripMenuItem m_ctxmnuCopyFileName;
+        private System.Windows.Forms.ToolStripMenuItem m_ctxmnuCopyURL;
     }
 }
 

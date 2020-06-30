@@ -155,12 +155,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Common\ScreenSaver.cs" />
+    <Compile Include="Common\Utils.cs" />
     <Content Include="app.ico" />
     <Content Include="Log.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>Log.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
+    <None Include="Resources\SmallX.ico" />
+    <None Include="Resources\RedX.ico" />
     <Content Include="res\bmp\bbabort.bmp" />
     <Content Include="res\bmp\bball.bmp" />
     <Content Include="res\bmp\bbcancel.bmp" />
@@ -243,6 +247,12 @@
     </Compile>
     <Compile Include="EventLogWrap.cs" />
     <Compile Include="ForegroundWindow.cs" />
+    <Compile Include="FormLoadGraph.Designer.cs">
+      <DependentUpon>FormLoadGraph.cs</DependentUpon>
+    </Compile>
+    <Compile Include="FormProperties.Designer.cs">
+      <DependentUpon>FormProperties.cs</DependentUpon>
+    </Compile>
     <Compile Include="Options.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -280,6 +290,9 @@
     </Compile>
     <Compile Include="ReportForm.cs">
       <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ReportForm.Designer.cs">
+      <DependentUpon>ReportForm.cs</DependentUpon>
     </Compile>
     <Compile Include="SendEmail.cs" />
     <Compile Include="TrayIconList.cs">

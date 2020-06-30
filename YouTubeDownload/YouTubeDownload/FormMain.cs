@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MZ.Tools;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -13,7 +14,6 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Shell;
 using YouTubeDownload.Utils;
-using YouTubeDownload.Windows7ProgressBar;
 
 namespace YouTubeDownload
 {
@@ -185,6 +185,8 @@ namespace YouTubeDownload
             m_ctxmnuOpenSelectedFile.Enabled = bHasSelection;
             m_ctxmnuRemoveSelected.Enabled = bHasSelection;
             m_ctxmnuDownloadAgain.Enabled = bHasSelection;
+            m_ctxmnuCopyFileName.Enabled = bHasSelection;
+            m_ctxmnuCopyURL.Enabled = bHasSelection;
 
             int queueIdx = FindStateInList(DownloadState.InQueue);
             int workIdx = FindStateInList(DownloadState.Working);
@@ -301,24 +303,8 @@ namespace YouTubeDownload
 
         private void m_mnuToolsOutputFolder_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog dlg = new FolderBrowserDialog()
-            {
-                RootFolder = Environment.SpecialFolder.MyComputer,
-                SelectedPath = _folderName,
-                Description = "Select Folder to Download to:"
-            };
-
-            //select current folder
-            Task.Factory.StartNew(() =>
-            {
-                Thread.Sleep(100);
-                this.Invoke(new MethodInvoker(() => SendKeys.Send("{TAB}{TAB}{DOWN}{DOWN}{UP}{UP}")));
-            });
-
-            if (dlg.ShowDialog(this) == DialogResult.OK)
-            {
-                UpdateOutputFolder(dlg.SelectedPath);
-            }
+            this.BrowseForFolder(ref _folderName, _folderName, "Select Folder to Download to:");
+            UpdateOutputFolder(_folderName);
         }
 
         private void UpdateOutputFolder(string newFolder)
@@ -377,10 +363,20 @@ namespace YouTubeDownload
             if (m_listUrls.SelectedItems.Count == 0)
                 return;
 
-            DownloadData data = m_listUrls.SelectedItems[0].Tag as DownloadData;
-            if (data != null && data.State != DownloadState.Failed)
+            try
             {
-                Process.Start(data.Description);
+                DownloadData data = m_listUrls.SelectedItems[0].Tag as DownloadData;
+                if (data != null && data.State != DownloadState.Failed)
+                {
+                    if (File.Exists(data.Description))
+                        Process.Start(data.Description);
+                    else
+                        Process.Start(Path.GetDirectoryName(data.Description));
+                }
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
             }
         }
 
@@ -392,7 +388,10 @@ namespace YouTubeDownload
             DownloadData data = m_listUrls.SelectedItems[0].Tag as DownloadData;
             if (data != null && data.State != DownloadState.Failed)
             {
-                Process.Start(data.OutputFolder);
+                if(File.Exists(data.Description.Trim('"')))
+                    FileUtils.ShowInFolder(data.Description.Trim('"'));
+                else
+                    Process.Start(data.OutputFolder);
             }
         }
 

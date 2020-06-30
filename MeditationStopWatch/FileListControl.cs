@@ -7,12 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using MZ.Tools;
 
 namespace MeditationStopWatch
 {
     public partial class FileListControl : UserControl
     {
         private int _playingIdx = -1;
+        public int FileIndex { get { return _playingIdx; } }
 
         public PlayListActions OP = new PlayListActions();
 
@@ -123,7 +125,7 @@ namespace MeditationStopWatch
             if (list.ListEquals(GetFilelist()))
                 return;
 
-            OP.StopAction();
+            OP.CloseAction();
             m_listFiles.Items.Clear();
             AddToFileList(list.List, bPlayFirst);
             OnListChanged();
@@ -208,7 +210,7 @@ namespace MeditationStopWatch
                 int idx = m_listFiles.SelectedIndices[i];
                 if (idx == _playingIdx)
                 {
-                    OP.StopAction();
+                    OP.CloseAction();
                     _playingIdx = -1;
                 }
                 m_listFiles.SelectedItems[i].Remove();
@@ -218,7 +220,7 @@ namespace MeditationStopWatch
 
         public void RemoveAll()
         {
-            OP.StopAction();
+            OP.CloseAction();
             m_listFiles.Items.Clear();
             OnListChanged();
         }
@@ -268,6 +270,7 @@ namespace MeditationStopWatch
         {
             _playingIdx = idx;
             UpdatePlayingFile();
+            m_listFiles.EnsureVisible(idx);
             return m_listFiles.Items[idx].Tag as FileInfo;
         }
 
@@ -360,11 +363,28 @@ namespace MeditationStopWatch
         {
             OP.NextAction();
         }
+
+        private void m_mnuCopyFileName_Click(object sender, EventArgs e)
+        {
+            if (m_listFiles.SelectedIndices.Count == 0)
+                return;
+
+            Clipboard.SetText(m_listFiles.SelectedItems[0].Text);
+        }
+
+        private void m_mnuShowInFolder_Click(object sender, EventArgs e)
+        {
+            if (m_listFiles.SelectedIndices.Count == 0)
+                return;
+            FileInfo file = m_listFiles.SelectedItems[0].Tag as FileInfo;
+            FileUtils.ShowInFolder(file.FullName);
+        }
     }
 
     public class PlayListActions
     {
         public Action<int> PlayAction = (selectedIndex) => { };
+        public Action CloseAction = () => { };
         public Action StopAction = () => { };
         public Action PauseAction = () => { };
         public Action NextAction = () => { };

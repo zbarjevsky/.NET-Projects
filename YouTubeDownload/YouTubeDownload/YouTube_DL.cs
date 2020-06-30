@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using YouTubeDownload.Extensions;
+using MZ.Extensions;
 
 namespace YouTubeDownload
 {

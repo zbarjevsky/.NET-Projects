@@ -59,5 +59,15 @@ MessageBox/Binaries/MZ.WPF.MessageBox.dll
 /DUMeterMZ/.vs/DUMeterMZ/v16/Server/sqlite3/storage.ide
 /Binaries/DashCamGPSView
 /YouTubeDownload/.vs/YouTubeDownload/v16/Server/sqlite3
-/.vs/ProjectSettings.json
-/.vs
+/MeditationStopWatch/.vs/MeditationStopWatch/v16/Server/sqlite3
+/DesktopManager/.vs/DesktopManager/v16/Server/sqlite3
+/RulerWPF/.vs/RulerWPF/v16/Server/sqlite3
+/CashFlowGame101/.vs/CashFlowGame101/v16/Server/sqlite3
+/MeditationStopWatch/packages/WindowsAPICodePack-Core.1.1.1
+/MeditationStopWatch/packages/WindowsAPICodePack-Shell.1.1.1
+/WinIRRemote/.vs/WinIRRemote/v16/Server/sqlite3
+/RadexOneDemo/.vs/RadexOneDemo/v16/Server/sqlite3
+/DUMeterMZ/packages
+/Binaries/SmartBackup.Config.xml
+/Binaries/SimpleBackup.Config.xml
+/Binaries/PlaybackSoundSwitch.exe

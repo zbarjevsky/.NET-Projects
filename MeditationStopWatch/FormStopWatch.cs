@@ -10,6 +10,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using MeditationStopWatch.Tools;
+using Microsoft.WindowsAPICodePack.Taskbar;
+using MZ.Tools;
+using MZ.WinForms;
 
 namespace MeditationStopWatch
 {
@@ -43,12 +46,30 @@ namespace MeditationStopWatch
 			m_ThumbnailCache.ProgressChanged += m_ThumbnailCache_ProgressChanged;
 
             m_Options.AnalogClockSettings = m_analogClock.Settings;
+
+            m_audioPlayerControl.OnPlayerStateChanged += AudioPlayerControl_OnPlayStateChanged;
 		}
 
+        private bool _isInitialized = false;
 		private void FormStopWatch_Load(object sender, EventArgs e)
 		{
-			if ( File.Exists(m_sSettingsFile) )
+			if (File.Exists(m_sSettingsFile))
+			{
 				OptionsSerializer.Load(m_sSettingsFile, m_Options);
+
+				//check files exists - may be network disk is unmounted
+			CheckFiles:
+				DialogResult res = CheckFilesExist();
+				if (res == DialogResult.Abort)
+				{
+					this.Close();
+					return;
+				}
+				else if (res == DialogResult.Retry)
+				{
+					goto CheckFiles;
+				}
+			}
 
             m_analogClock.Settings = m_Options.AnalogClockSettings;
 
@@ -58,7 +79,7 @@ namespace MeditationStopWatch
                 m_lblVolume.Visible = false;
             m_pictureBox1.OnSizeChangedAction = (bounds) =>
             {
-                m_pictureBox1.EnsureVisible(m_lblVolume, AnchorStyles.Top | AnchorStyles.Right, 50);
+				m_pictureBox1.EnsureVisible(m_lblVolume, AnchorStyles.Top | AnchorStyles.Right, 50);
             };
             m_pictureBox1.OnClickAction = () =>
             {
@@ -88,18 +109,27 @@ namespace MeditationStopWatch
 			
 			ApplyOptions();
 
+			m_cmbAudioOutDevices.Items.AddRange(SoundUtils.GetOutDevices().ToArray<object>());
+			m_cmbAudioOutDevices.SelectedIndex = 0;
+
 			this.Visible = true;
 			OpenImageDirectory(m_Options.LastImageFile);
 
-			m_audioPlayerControl.ValueChanged += m_audioPlayerControl_ValueChanged;
+			m_audioPlayerControl.OnTimerTick += m_audioPlayerControl_ValueChanged;
 
             AutoCloseThumbnailsPanel();
+			InitThumbnailToolBarButtons();
+
+			_isInitialized = true;
 		}
 
 		private void FormStopWatch_FormClosing(object sender, FormClosingEventArgs e)
 		{
+			if (!_isInitialized)
+				return;
+
 			m_ThumbnailCache.ProgressChanged -= m_ThumbnailCache_ProgressChanged;
-			m_audioPlayerControl.ValueChanged -= m_audioPlayerControl_ValueChanged;
+			m_audioPlayerControl.OnTimerTick -= m_audioPlayerControl_ValueChanged;
 			m_ThumbnailCache.CancelLoadingThumbnails = true;
 			
 			SaveOptions();
@@ -107,6 +137,70 @@ namespace MeditationStopWatch
 
 		private void FormStopWatch_FormClosed(object sender, FormClosedEventArgs e)
 		{
+		}
+
+		private DialogResult CheckFilesExist()
+		{
+			foreach (PlayList list in m_Options.PlayListCollection.Collection)
+			{
+				foreach (string file in list.List)
+				{
+					if (!File.Exists(file))
+					{
+						DialogResult res = MessageBox.Show(this, "Cannot find file:\n" + file, "Load",
+							MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Asterisk);
+						return res;
+					}
+				}
+			}
+			return DialogResult.Ignore;
+		}
+
+        private void AudioPlayerControl_OnPlayStateChanged(object sender, NETSoundPlayer.PlayingState state)
+        {
+			if (Disposing)
+				return;
+
+			if (state == NETSoundPlayer.PlayingState.playing)
+				TaskbarManagerHelper.Button(2).Icon = Properties.Resources.pause_on;
+			else
+				TaskbarManagerHelper.Button(2).Icon = Properties.Resources.play_on;
+		}
+
+		private void InitThumbnailToolBarButtons()
+		{
+			TaskbarManagerHelper.Init(this.Handle);
+			TaskbarManagerHelper.ShowButtons(
+				new List<string>() {"Full Screen", "Previous", "Play/Pause",  "Next"}, 
+				new List<Icon>() { Properties.Resources.FullScreen16_Light, Properties.Resources.previus_on, Properties.Resources.pause_on, Properties.Resources.next_on});
+			TaskbarManagerHelper.Button(0).DismissOnClick = true;
+			TaskbarManagerHelper.ButtonClicked = (index) => 
+			{
+				if (index == 0)
+					m_mnuViewFullScreen_Click(this, null);
+				if (index == 1)
+					m_audioPlayerControl.Prev();
+				if (index == 2)
+					m_audioPlayerControl.PauseResume();
+				if (index == 3)
+					m_audioPlayerControl.Next();
+			};
+
+			FullScreenImageHelper.OnVisibleChanged = (form, isVisible) =>
+			{
+				if (isVisible)
+				{
+					TaskbarManagerHelper.Button(0).Icon = Properties.Resources.FullScreen16_Restore_light;
+					m_btnFullScreen.Image = m_imageListFullScreen.Images[3];
+					m_mnuViewFullScreen.Image = m_imageListFullScreen.Images[3];
+				}
+				else
+				{
+					TaskbarManagerHelper.Button(0).Icon = Properties.Resources.FullScreen16_Light;
+					m_btnFullScreen.Image = m_imageListFullScreen.Images[2];
+					m_mnuViewFullScreen.Image = m_imageListFullScreen.Images[2];
+				}
+			};
 		}
 
 		private void m_ThumbnailCache_ProgressChanged(object sender, CacheEventArgs e)
@@ -216,7 +310,10 @@ namespace MeditationStopWatch
 			if (string.IsNullOrEmpty(sFileName) || !File.Exists(sFileName))
 				return;
 
-			ImageInfo.OpenImageDirectory(sFileName);
+			string[] extentions = m_openFileDialog.Filter.Split('|');
+			extentions = extentions[1].Replace("*", "").Split(';');
+
+			ImageInfo.OpenImageDirectory(sFileName, extentions);
 			m_listThumbnails.VirtualListSize = ImageInfo.AllImages.Count;
 			OpenImage(ImageInfo.ImageInfo);
 
@@ -448,7 +545,7 @@ namespace MeditationStopWatch
 
             string fmt = (vol < 10) ? "0.0" : "0";
 
-            m_pictureBox1.EnsureVisible(m_lblVolume, AnchorStyles.Top | AnchorStyles.Right, 50);
+			m_pictureBox1.EnsureVisible(m_lblVolume, AnchorStyles.Top | AnchorStyles.Right, 50);
             m_lblVolume.Show(string.Format("Volume: {0} %", (vol /10.0).ToString(fmt)), 4000);
 
             return m_lblVolume.Text;
@@ -496,6 +593,8 @@ namespace MeditationStopWatch
 		private void EnsureVisible()
 		{
 			int idx = ImageInfo.IndexOf(ImageInfo.ImageInfo);
+			if (idx < 0)
+				return;
 			m_listThumbnails.Items[idx].Selected = true;
 			m_listThumbnails.EnsureVisible(idx);
 		}
@@ -541,10 +640,15 @@ namespace MeditationStopWatch
 
         private void m_mnuViewFullScreen_Click(object sender, EventArgs e)
         {
-            FormFullScreenImage frm = new FormFullScreenImage(this);
-            frm.Picture = m_pictureBox1.PictureBox.Image;
-            frm.ShowDialog(this);
-        }
+			if (FullScreenImageHelper.IsVisible)
+			{
+				FullScreenImageHelper.Hide();
+			}
+			else
+			{
+				FullScreenImageHelper.Show(this, m_pictureBox1.PictureBox.Image);
+			}
+		}
 
         private void m_btnFullScreen_Click(object sender, EventArgs e)
 		{

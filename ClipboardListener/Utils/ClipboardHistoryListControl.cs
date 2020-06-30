@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MZ.WinForms;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,11 +10,11 @@ namespace ClipboardManager.Utils
 {
     public partial class ClipboardHistoryListControl : UserControl
     {
-        private List<ClipboardList.ClipboardEntry> _history = new List<ClipboardList.ClipboardEntry>();
+        private List<ClipboardEntryLogic> _history = new List<ClipboardEntryLogic>();
 
-        public Action<ClipboardList.ClipboardEntry> AddToFavorites = (clp) => { };
-        public Action<ClipboardList.ClipboardEntry> RemoveFromMain = (clp) => { };
-        public Action<ClipboardList.ClipboardEntry> SelectMainEntry = (clp) => { };
+        public Action<ClipboardEntryLogic> AddToFavorites = (clp) => { };
+        public Action<ClipboardEntryLogic> RemoveFromMain = (clp) => { };
+        public Action<ClipboardEntryLogic> SelectMainEntry = (clp) => { };
 
         public ClipboardHistoryListControl()
         {
@@ -42,7 +43,7 @@ namespace ClipboardManager.Utils
         {
             if (update)
             {
-                _history = new List<ClipboardList.ClipboardEntry>(log.Count);
+                _history = new List<ClipboardEntryLogic>(log.Count);
                 for (int i = 0; i < log.Count; i++)
                 {
                     _history.Add(log.GetEntry(i));

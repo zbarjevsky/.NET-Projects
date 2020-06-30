@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WPFMessageBox", "WPFMessageBox\WPFMessageBox.csproj", "{6F425EFB-7F0D-4530-941C-98533782832F}"
 EndProject
@@ -31,19 +31,7 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 4
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://tuherz-ap-sdtfs:8080/tfs/defaultcollection
-		SccProjectUniqueName0 = WPFMessageBox\\WPFMessageBox.csproj
-		SccProjectName0 = WPFMessageBox
-		SccLocalPath0 = WPFMessageBox
-		SccLocalPath1 = .
-		SccProjectUniqueName2 = WPFMessageBoxTestWPF\\TestWPFMessageBox_WPF.csproj
-		SccProjectName2 = WPFMessageBoxTestWPF
-		SccLocalPath2 = WPFMessageBoxTestWPF
-		SccProjectUniqueName3 = WPFMessageBoxTestWinForms\\TestWPFMessageBox_WinForms.csproj
-		SccProjectName3 = WPFMessageBoxTestWinForms
-		SccLocalPath3 = WPFMessageBoxTestWinForms
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {E26743BD-5D30-42AD-B080-C09845C78F87}
 	EndGlobalSection
 EndGlobal

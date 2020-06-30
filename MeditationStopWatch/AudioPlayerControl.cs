@@ -7,23 +7,46 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using System.Windows.Media;
+using System.Diagnostics;
+using MZ.WPF.MessageBox;
 
 namespace MeditationStopWatch
 {
 	public partial class AudioPlayerControl : UserControl
 	{
 		//private List<FileInfo> m_vSongsList = new List<FileInfo>();
-		private MCIPLayer m_Mp3Player = new MCIPLayer();
+		//private MCIPLayer m_Mp3Player = new MCIPLayer();
+		private NETSoundPlayer m_Mp3Player = new NETSoundPlayer();
 		private TimeSpan _tsLength;
 		private Options m_Options;
 		//private bool _bScreenSaverActive = false;
 	
+		public event EventHandler OnTimerTick;
+		public event EventHandler<NETSoundPlayer.PlayingState> OnPlayerStateChanged;
+
 		public AudioPlayerControl()
 		{
 			InitializeComponent();
+
+			m_Mp3Player.OnMediaOpened += _player_MediaOpened;
+			m_Mp3Player.OnMediaEnded += _player_MediaEnded;
+			m_Mp3Player.OnMediaFailed += _player_MediaFailed;
+			m_Mp3Player.OnStateChanged += _player_StateChanged;
 		}
 
-		public event EventHandler ValueChanged;
+        private void AudioPlayerControl_Load(object sender, EventArgs e)
+		{
+			UpdateInfo();
+            m_playLists.PL.OP.OnListChanged += () => { UpdateInfo(); };
+            m_playLists.PL.OP.PlayAction += (selectedIdx) => { PlaySelected(selectedIdx); };
+            m_playLists.PL.OP.PauseAction += () => { PauseResume(); };
+			m_playLists.PL.OP.CloseAction += () => { Close(); };
+			m_playLists.PL.OP.StopAction += () => { Stop(); };
+			m_playLists.PL.OP.NextAction += () => { Next(); };
+            m_playLists.PL.OP.PrevAction += () => { Prev(); };
+        }
+
 		public int Count { get { return m_playLists.PL.Count; } }
 		public FileInfo PlayingFile 
 		{ 
@@ -83,68 +106,95 @@ namespace MeditationStopWatch
             m_lblStatus.Font = m_Options.PlayListFont;
 		}
 
-		private void AudioPlayerControl_Load(object sender, EventArgs e)
-		{
-			UpdateInfo();
-            m_playLists.PL.OP.OnListChanged += () => { UpdateInfo(); };
-            m_playLists.PL.OP.PlayAction += (selectedIdx) => { PlaySelected(selectedIdx); };
-            m_playLists.PL.OP.PauseAction += () => { PauseResume(); };
-            m_playLists.PL.OP.StopAction += () => { Stop(); };
-            m_playLists.PL.OP.NextAction += () => { Next(); };
-            m_playLists.PL.OP.PrevAction += () => { Prev(); };
-        }
-
 		private void m_trackBarPosition_Scroll(object sender, EventArgs e)
 		{
-			m_Mp3Player.SetPosition(m_trackBarPosition.Value * 1000);
+			m_Mp3Player.PositionMs = (m_trackBarPosition.Value * 1000);
 			UpdateInfo();
 		}
 
+		private void _player_MediaOpened(object sender, EventArgs e)
+		{
+			_tsLength = m_Mp3Player.GetSongLenght();
+			m_trackBarPosition.Maximum = (int)_tsLength.TotalSeconds;
+			_tsLength = TimeSpan.FromSeconds(m_trackBarPosition.Maximum);
+			m_playLists.PL.UpdateFileTime(m_playLists.PL.FileIndex, TimeString(_tsLength));
+
+			UpdateInfo();
+		}
+
+		private void _player_MediaEnded(object sender, EventArgs e)
+		{
+			if (Loop) // && m_Mp3Player.GetStatusMode() == NETSoundPlayer.PlayingState.stopped && m_trackBarPosition.Value == m_trackBarPosition.Maximum)
+				Play(m_playLists.PL.NextIdx());
+		}
+
+
+		private void _player_MediaFailed(object sender, ExceptionEventArgs e)
+		{
+			this.MessageError("Cannot open file: " + e.ErrorException.Message);
+		}
+
+		private void _player_StateChanged(object sender, NETSoundPlayer.PlayingState e)
+		{
+			OnPlayerStateChanged?.Invoke(sender, e);
+		}
+
+
 		private void m_timer1_Tick(object sender, EventArgs e)
 		{
+			//Debug.WriteLine("Timer: " + DateTime.Now.ToString("s"));
 			if (m_Options == null)
 				return;
 
-			if (Loop && m_Mp3Player.IsStopped() && m_trackBarPosition.Value == m_trackBarPosition.Maximum)
-				Play(m_playLists.PL.NextIdx());
+			m_timer1.Stop();
+            //if (Loop && m_Mp3Player.GetStatusMode() == NETSoundPlayer.PlayingState.stopped && m_trackBarPosition.Value == m_trackBarPosition.Maximum)
+            //	Play(m_playLists.PL.NextIdx());
 
-			if (ValueChanged != null) 
-				ValueChanged(sender, e);
+            OnTimerTick?.Invoke(sender, e);
 
-			UpdateInfo();
+            UpdateInfo();
+			m_timer1.Start();
 		}
 
 		private void UpdateInfo()
 		{
-			string sStatus = m_Mp3Player.StatusMode;
-			m_lblStatus.Text = sStatus + ": " + m_Mp3Player.FileName;
-			UpdateButtonsState(sStatus);
-			DisableScreenSaver();
-			UpdatePlayingFile();
-            m_progrReiKi.Initialize(m_Options);
+            try
+            {
+                var playMode = m_Mp3Player.State;
+                m_lblStatus.Text = playMode + ": " + m_Mp3Player.FileName;
+                UpdateButtonsState(playMode);
+                DisableScreenSaver();
+                UpdatePlayingFile();
+                m_progrReiKi.Initialize(m_Options);
 
-            int sec = m_Mp3Player.GetCurentMilisecond() / 1000;
-			m_trackBarPosition.Value = sec;
-			//m_prgr3Minute.Value = (int)(sec % 180);
+                int sec = m_Mp3Player.PositionMs / 1000;
+                m_trackBarPosition.Value = sec;
+                //m_prgr3Minute.Value = (int)(sec % 180);
 
-			TimeSpan tsPos = TimeSpan.FromSeconds(sec);
-			m_lblTime.Text = string.Format("{0} / {1}",
-				TimeString(tsPos), TimeString(_tsLength));
+                TimeSpan tsPos = TimeSpan.FromSeconds(sec);
+                m_lblTime.Text = string.Format("{0} / {1}",
+                    TimeString(tsPos), TimeString(_tsLength));
 
-			m_toolStripTrackBarVolume.ToolTipText = "";
-				//string.Format("V({0})", Volume);
+                m_toolStripTrackBarVolume.ToolTipText = "";
+                //string.Format("V({0})", Volume);
 
-			this.m_toolTip1.SetToolTip(this.m_toolStripTrackBarVolume.TrackBar,
-				string.Format("V({0})\nMouseScroll", Volume));
+                this.m_toolTip1.SetToolTip(this.m_toolStripTrackBarVolume.TrackBar,
+                    string.Format("V({0})\nMouseScroll", Volume));
 
-			this.m_toolTip1.SetToolTip(this.m_trackBarPosition,
-				string.Format("P({0})", TimeString(tsPos)));
+                this.m_toolTip1.SetToolTip(this.m_trackBarPosition,
+                    string.Format("P({0})", TimeString(tsPos)));
+
+            }
+            catch (Exception err)
+            {
+				Debug.WriteLine(err);
+            }		
 		}
 
         private int _screenSaverTimerCount = 0;
 		private void DisableScreenSaver()
 		{
-            if (m_Mp3Player.IsPlaying())
+            if (m_Mp3Player.State == NETSoundPlayer.PlayingState.playing)
             {
                 if (_screenSaverTimerCount++ % 100 == 0)
                    ScreenSaver.ResetIdleTimer();
@@ -161,24 +211,23 @@ namespace MeditationStopWatch
             m_playLists.PL.UpdatePlayingFile();
 		}
 
-		private void UpdateButtonsState(string status)
+		private void UpdateButtonsState(NETSoundPlayer.PlayingState status)
 		{
-			status = status.ToLower();
 			switch (status)
 			{
-				case "playing":
+				case NETSoundPlayer.PlayingState.playing:
 					UpdatePlayerButtonsState(false, true, true, true, true, true);
 					UpdatePlayerButtonsState(true, true, false, false, false, false);
 					break;
-				case "paused":
+				case NETSoundPlayer.PlayingState.paused:
 					UpdatePlayerButtonsState(false, true, true, true, true, true);
 					UpdatePlayerButtonsState(true, false, true, false, false, false);
 					break;
-				case "open":
+				case NETSoundPlayer.PlayingState.open:
 					UpdatePlayerButtonsState(false, true, true, true, true, true);
 					UpdatePlayerButtonsState(true, false, false, false, false, false);
 					break;
-				case "stopped":
+				case NETSoundPlayer.PlayingState.stopped:
 					UpdatePlayerButtonsState(false, true, true, true, true, true);
 					UpdatePlayerButtonsState(true, false, false, true, false, false);
 					break;
@@ -221,10 +270,14 @@ namespace MeditationStopWatch
 
 		private void m_tbbtnPlay_Click(object sender, EventArgs e)
 		{
-            PlaySelected(GetSelectedFile());
+			if (m_Mp3Player.State == NETSoundPlayer.PlayingState.none)
+				PlaySelected(GetSelectedFile());
+			else
+				m_Mp3Player.CmdResume();
+			UpdateInfo();
 		}
 
-        private void PlaySelected(int selectedIndex = -1)
+		private void PlaySelected(int selectedIndex = -1)
         {
             if (selectedIndex < 0)
             {
@@ -239,39 +292,51 @@ namespace MeditationStopWatch
 
         private void Play(int idx)
 		{
-            FileInfo fiMP3 = m_playLists.PL.SelectPlayFile(idx);
+			m_Mp3Player.CmdClose();
 
-			//m_Mp3Player.Open(fiMP3.FullName, fiMP3.Name);
-			m_Mp3Player.Play(fiMP3.FullName, fiMP3.Name);
-			m_Mp3Player.SetVolume(Volume);
+			FileInfo fiMP3 = m_playLists.PL.SelectPlayFile(idx);
 
-			m_trackBarPosition.Maximum = m_Mp3Player.GetSongLenght() / 1000;
-			_tsLength = TimeSpan.FromSeconds(m_trackBarPosition.Maximum);
-			m_playLists.PL.UpdateFileTime(idx, TimeString(_tsLength));
-
-			UpdateInfo();
+			m_Mp3Player.Play(fiMP3.FullName, fiMP3.Name, Volume);
 		}
 
         public void PauseResume()
         {
-            m_Mp3Player.PauseResume();
-            if (m_Mp3Player.Paused)
+			var mode = m_Mp3Player.State;
+
+			if (mode == NETSoundPlayer.PlayingState.playing)
+				m_Mp3Player.CmdPause();
+			else if (mode == NETSoundPlayer.PlayingState.paused)
+				m_Mp3Player.CmdResume();
+			else if (mode == NETSoundPlayer.PlayingState.stopped)
+				m_Mp3Player.CmdPlay();
+			else if (mode == NETSoundPlayer.PlayingState.none)
+				Next(); //play next
+
+			mode = m_Mp3Player.State;
+			if (mode == NETSoundPlayer.PlayingState.paused || mode == NETSoundPlayer.PlayingState.stopped)
                 m_progrReiKi.Pause();
             else
                 m_progrReiKi.Resume();
             UpdateInfo();
         }
 
-        public void Stop()
-        {
-            m_Mp3Player.Stop();
-            m_Mp3Player.SetPosition(0);
-            m_progrReiKi.Stop();
-            //m_Mp3Player.Close();
-            UpdateInfo();
-        }
+		public void Close()
+		{
+			m_Mp3Player.CmdClose();
+			m_progrReiKi.Stop();
+			
+			UpdateInfo();
+		}
 
-        private void Next()
+		public void Stop()
+		{
+			m_Mp3Player.CmdStop();
+			m_progrReiKi.Stop();
+
+			UpdateInfo();
+		}
+
+		public void Next()
         {
             if (Count == 0)
                 return;
@@ -279,7 +344,7 @@ namespace MeditationStopWatch
             PlaySelected(m_playLists.PL.NextIdx());
         }
 
-        private void Prev()
+        public void Prev()
         {
             if (Count == 0)
                 return;
@@ -289,7 +354,8 @@ namespace MeditationStopWatch
 
         private void m_tbbtnPause_Click(object sender, EventArgs e)
 		{
-			PauseResume();
+			m_Mp3Player.CmdPause();
+			UpdateInfo();
 		}
 
 		private void m_tbbtnStop_Click(object sender, EventArgs e)
