@@ -28,7 +28,7 @@ namespace MZ.Media
         public const string TITLE = "Select Active Audio End Point";
 
         EnumeratorClient _mmd = new EnumeratorClient();
-        readonly PopupVolumeInfoWindow _popupVolumeInfoWindow;
+        readonly PopupVolumeInfoHelper _popupVolumeInfoWindow;
 
         public FormMain()
         {
@@ -36,6 +36,13 @@ namespace MZ.Media
 
             _mmd.DevicesChanged = OnDevicesChanged;
             _mmd.DefaultDeviceChanged = OnDefaultDeviceChanged;
+
+            Rectangle rThis = new Rectangle(Properties.Settings.Default.MainLocation, this.Size);
+            if(SystemInformation.VirtualScreen.IntersectsWith(rThis))
+            {
+                this.StartPosition = FormStartPosition.Manual;
+                this.Location = Properties.Settings.Default.MainLocation;
+            }
 
             TaskbarManagerHelper.Init(this.Handle);
             TaskbarManagerHelper.ButtonClicked = (index) => { m_DeviceListPlayback.SetActiveDevice(index); };
@@ -52,19 +59,16 @@ namespace MZ.Media
             m_volumeControlSpk.OnVolumeChanged = (volume) => { UpdateUI(null); UpdatePopupVolume(); };
             m_volumeControlMic.OnVolumeChanged = (volume) => { UpdateUI(null); };
 
-            this.Text = TITLE;
+            _popupVolumeInfoWindow = new PopupVolumeInfoHelper(
+                Properties.Settings.Default.PopupLocation, 
+                (volume) => { m_volumeControlSpk.Volume = volume; });
 
-            _popupVolumeInfoWindow = new PopupVolumeInfoWindow(
-                System.Windows.WindowStartupLocation.Manual,
-                new System.Windows.Point(Properties.Settings.Default.PopupLocation.X, Properties.Settings.Default.PopupLocation.Y),
-                this.Handle);
-            _popupVolumeInfoWindow.ShowActivated = false;
-            _popupVolumeInfoWindow.OnVolumeChangedAction = (volume) => { m_volumeControlSpk.Volume = volume; };
+            this.Text = TITLE;
         }
 
         private void UpdatePopupVolume()
         {
-            _popupVolumeInfoWindow.ShowIfVolumeChanged(m_volumeControlSpk.Volume);
+            _popupVolumeInfoWindow.ShowPopupVolume(m_volumeControlSpk.Volume);
         }
 
         private void FormMain_Load(object sender, EventArgs e)
@@ -74,7 +78,8 @@ namespace MZ.Media
 
         private void FormMain_FormClosed(object sender, FormClosedEventArgs e)
         {
-            Properties.Settings.Default.PopupLocation = new Point((int)_popupVolumeInfoWindow.Left, (int)_popupVolumeInfoWindow.Top);
+            Properties.Settings.Default.MainLocation = this.Location;
+            Properties.Settings.Default.PopupLocation = _popupVolumeInfoWindow.Location;
             Properties.Settings.Default.Save();
 
             _popupVolumeInfoWindow.Close();
@@ -115,9 +120,10 @@ namespace MZ.Media
                     Application.DoEvents();
 
                     MMDevice activeSpk = _mmd.GetDefaultAudioEndpoint(EDataFlow.Render, Role.Multimedia);
+                    _popupVolumeInfoWindow.InfoText = activeSpk.FriendlyName;
+
                     m_DeviceListPlayback.UpdateDeviceList(devsPlayback, activeSpk);
                     m_volumeControlSpk.SetDevice(activeSpk);
-                    _popupVolumeInfoWindow.InfoText = activeSpk.FriendlyName;
 
                     MMDevice activeMic = _mmd.GetDefaultAudioEndpoint(EDataFlow.Capture, Role.Multimedia);
                     m_DeviceListRecording.UpdateDeviceList(devsRecording, activeMic);
@@ -144,6 +150,12 @@ namespace MZ.Media
         {
             ListViewGroup activeGroup = m_DeviceListPlayback.GetItemGroup(EDeviceState.Active);
             TaskbarManagerHelper.ShowButtons(activeGroup.Items, m_DeviceListPlayback.ActiveDevice.FriendlyName);
+
+            //hide preview on click
+            for (int i = 0; i < activeGroup.Items.Count; i++)
+            {
+                TaskbarManagerHelper.Button(i).DismissOnClick = true;
+            }
         }
 
         private void UpdateUI(string status)

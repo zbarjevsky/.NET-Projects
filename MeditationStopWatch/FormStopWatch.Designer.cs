@@ -631,6 +631,7 @@
             // 
             // m_cmbAudioOutDevices
             // 
+            this.m_cmbAudioOutDevices.BackColor = System.Drawing.SystemColors.Info;
             this.m_cmbAudioOutDevices.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.m_cmbAudioOutDevices.Name = "m_cmbAudioOutDevices";
             this.m_cmbAudioOutDevices.Size = new System.Drawing.Size(300, 29);
@@ -668,7 +669,7 @@
             this.MainMenuStrip = this.m_menuMain;
             this.MinimumSize = new System.Drawing.Size(532, 294);
             this.Name = "FormStopWatch";
-            this.Text = "Meditation";
+            this.Text = "Play Media - Time...";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormStopWatch_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormStopWatch_FormClosed);
             this.Load += new System.EventHandler(this.FormStopWatch_Load);

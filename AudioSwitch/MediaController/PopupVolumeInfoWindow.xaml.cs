@@ -18,6 +18,55 @@ using System.Windows.Threading;
 
 namespace MZ.Media.WPF
 {
+    public class PopupVolumeInfoHelper
+    {
+        private PopupVolumeInfoWindow _popupVolumeInfoWindow;
+        private System.Windows.Point _location = new System.Windows.Point(100, 100);
+
+        public Action<int> OnVolumeChangedAction = (volume) => { };
+
+        public System.Drawing.Point Location
+        {
+            get { return new System.Drawing.Point((int)_location.X, (int)_location.Y); }
+            set { _location = new System.Windows.Point(value.X, value.Y); }
+        }
+
+        public string InfoText { get; set; } = "No Device (None)";
+
+        public PopupVolumeInfoHelper(System.Drawing.Point location, Action<int> onVolumeChangedAction)
+        {
+            Location = location;
+            OnVolumeChangedAction = onVolumeChangedAction;
+        }
+
+        public void ShowPopupVolume(int volume)
+        {
+            bool bForceShow = false;
+            if (_popupVolumeInfoWindow == null)
+            {
+                bForceShow = true;
+
+                _popupVolumeInfoWindow = new PopupVolumeInfoWindow(_location);
+                _popupVolumeInfoWindow.ShowActivated = false;
+                _popupVolumeInfoWindow.OnVolumeChangedAction = OnVolumeChangedAction;
+                _popupVolumeInfoWindow.OnBeforeCloseAnimation = (window) => 
+                {
+                    _location = new System.Windows.Point(window.Left, window.Top);
+                    _popupVolumeInfoWindow = null; 
+                    return true; 
+                };
+            }
+
+            _popupVolumeInfoWindow.UpdateAndShow(volume, InfoText, bForceShow);
+        }
+
+        public void Close()
+        {
+            if (_popupVolumeInfoWindow != null)
+                _popupVolumeInfoWindow.Close();
+        }
+    }
+
     /// <summary>
     /// Interaction logic for PopupInfoWindow.xaml
     /// </summary>
@@ -29,6 +78,8 @@ namespace MZ.Media.WPF
         public TimeSpan CloseTimeOut { get; set; } = TimeSpan.FromSeconds(4);
 
         public Action<int> OnVolumeChangedAction = (volume) => { };
+        public Func<Window, bool> OnBeforeCloseAnimation = (wnd) => true;
+        public Action OnAfterCloseAnimation = () => { };
 
         private bool _enableVolumeChangeEvent = true;
         public int Volume 
@@ -48,7 +99,7 @@ namespace MZ.Media.WPF
             set { _txtInfo.ToolTip = value; _txtInfo.Text = ShortName(value); } 
         }
 
-        public static string ShortName(string longDeviceName)
+        private static string ShortName(string longDeviceName)
         {
             string ellipse = "";
             int idx = longDeviceName.IndexOf("(");
@@ -61,29 +112,33 @@ namespace MZ.Media.WPF
             return name;
         }
 
-        public void ShowIfVolumeChanged(int volume)
+        public void UpdateAndShow(int volume, string deviceName, bool bForceShow)
         {
-            if (this.Volume != volume) 
+            InfoText = deviceName;
+            if (this.Volume != volume || bForceShow) 
             {
-                this.DataContext = this;
-
                 _timer_count = 0;
                 this.Volume = volume;
                 this.Opacity = 0.9;
 
-                if (this.Visibility != Visibility.Visible)
-                    m_Timer.Start();
+                m_Timer.Stop();
+                m_Timer.Start();
 
                 this.Show();
            }
         }
 
-        public PopupVolumeInfoWindow() 
+        private PopupVolumeInfoWindow() 
         {
             InitializeComponent(WindowStartupLocation.CenterScreen, new Point());
         }
 
-        public PopupVolumeInfoWindow(WindowStartupLocation startupLocation, Point location, Window owner)
+        internal PopupVolumeInfoWindow(Point location)
+        {
+            InitializeComponent(WindowStartupLocation.Manual, location);
+        }
+
+        private PopupVolumeInfoWindow(WindowStartupLocation startupLocation, Point location, Window owner)
         {
             //set owner will minimize with parent window
             //this.Owner = owner;
@@ -91,7 +146,7 @@ namespace MZ.Media.WPF
         }
 
         //for WinForms
-        public PopupVolumeInfoWindow(WindowStartupLocation startupLocation, Point location, IntPtr ownerHandle)
+        private PopupVolumeInfoWindow(WindowStartupLocation startupLocation, Point location, IntPtr ownerHandle)
         {
             //set owner will minimize with parent window
             //WindowInteropHelper helper = new WindowInteropHelper(this);
@@ -101,6 +156,8 @@ namespace MZ.Media.WPF
 
         private void InitializeComponent(WindowStartupLocation startupLocation, Point location)
         {
+            this.DataContext = this;
+
             InitializeComponent();
 
             this.WindowStartupLocation = startupLocation;
@@ -142,6 +199,9 @@ namespace MZ.Media.WPF
 
         private void VisibilityHideAnimation()
         {
+            if (!OnBeforeCloseAnimation(this))
+                return;
+
             var animation = new DoubleAnimation
             {
                 To = 0,
@@ -150,7 +210,13 @@ namespace MZ.Media.WPF
                 FillBehavior = FillBehavior.Stop
             };
 
-            animation.Completed += (s, a) => { this.Opacity = 0; this.Visibility = Visibility.Collapsed; };
+            animation.Completed += (s, a) => 
+            { 
+                this.Opacity = 0; 
+                this.Visibility = Visibility.Collapsed;
+                this.Close();
+                OnAfterCloseAnimation();
+            };
 
             this.BeginAnimation(UIElement.OpacityProperty, animation);
         }

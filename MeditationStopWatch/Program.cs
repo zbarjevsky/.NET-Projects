@@ -25,7 +25,7 @@ namespace MeditationStopWatch
 			}
 			catch (Exception err)
 			{
-				MessageBox.Show(err.Message, "Meditation");
+				MessageBox.Show(err.Message, "Media Player - Time", MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 
