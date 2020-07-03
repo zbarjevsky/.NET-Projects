@@ -35,7 +35,7 @@ namespace DesktopManagerUX
             get
             {
                 string path = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-                path = Path.Combine(path, "DesktopManager");
+                path = Path.Combine(path, "DesktopManagerUX");
                 Directory.CreateDirectory(path);
                 string fileName = Path.Combine(path, "Config.xml");
                 return fileName;
@@ -51,7 +51,7 @@ namespace DesktopManagerUX
         {
             Configuration cnf = SerializerHelper.Open<Configuration>(ConfigurationFileName);
             if (cnf.Layouts.Count == 0) //add one default layout tab
-                cnf.Layouts.Add(new LayoutConfiguration(init: true));
+                cnf.Layouts.Add(new LayoutConfiguration(LayoutConfiguration.LayoutType.Layout));
 
             cnf.SmartDisplaysUpdate();
             return cnf;
@@ -73,11 +73,21 @@ namespace DesktopManagerUX
     [Serializable]
     public class LayoutConfiguration : NotifyPropertyChangedImpl
     {
-        private string _name = "";
-        public string Name { get { return _name; } set { _name = value; OnPropertyChanged(); } }
+        public enum LayoutType
+        {
+            Serializable,   //for serialization
+            CreateNewTab,   //for adding new tab  
+            Layout          //configured layout
+        }
 
         [XmlIgnore]
-        public string DisplayName 
+        public LayoutType TabType { get; private set; } = LayoutType.Layout;
+
+        [XmlIgnore]
+        public bool IsNameReadonly { get; }
+
+        [XmlIgnore]
+        public string MonitorName 
         { 
             get 
             { 
@@ -87,8 +97,17 @@ namespace DesktopManagerUX
             } 
         }
 
+        [XmlIgnore]
+        public Visibility NewTabBtnVisibility { get; set; }
+
+        [XmlIgnore]
+        public Visibility RemoveTabBtnVisibility { get; set; }
+
+        private string _name = "";
+        public string Name { get { return _name; } set { _name = value; OnPropertyChanged(); } }
+
         private DisplayInfo _displayInfo;
-        public DisplayInfo SelectedMonitorInfo { get { return _displayInfo; } set { _displayInfo = value; OnPropertyChanged(nameof(DisplayName)); } }
+        public DisplayInfo SelectedMonitorInfo { get { return _displayInfo; } set { _displayInfo = value; OnPropertyChanged(nameof(MonitorName)); } }
 
         private GridSizeData _gridSize = new GridSizeData() { Rows = 2, Cols = 2 };
         public GridSizeData GridSize { get { return _gridSize; } set { _gridSize = value; } }
@@ -129,22 +148,44 @@ namespace DesktopManagerUX
         public List<AppInfo> SelectedApps { get; set; }
 
         //empty constructor for serialization
-        public LayoutConfiguration()
+        public LayoutConfiguration() : this(LayoutType.Serializable)
         {
         }
 
-        public LayoutConfiguration(bool init, string name = "Layout 1")
+        public LayoutConfiguration(LayoutType tabType, string name = "Layout 1")
         {
-            if (init) Initialize(name);
+            IsNameReadonly = (tabType == LayoutType.CreateNewTab);
+            
+            Initialize(tabType, name);
         }
 
-        public void Initialize(string name)
+        public void Initialize(LayoutType tabType, string name)
         {
             _name = name;
+            TabType = tabType;
 
-            SelectedApps = new List<AppInfo>(GridSize.CellCount);
-            for (int i = 0; i < GridSize.CellCount; i++)
-                SelectedApps.Add(AppInfo.GetEmptyAppInfo());
+            if (TabType == LayoutType.Layout)
+            {
+                NewTabBtnVisibility = Visibility.Collapsed;
+                RemoveTabBtnVisibility = Visibility.Visible;
+
+                SelectedApps = new List<AppInfo>(GridSize.CellCount);
+                for (int i = 0; i < GridSize.CellCount; i++)
+                    SelectedApps.Add(AppInfo.GetEmptyAppInfo());
+            }
+            else if (tabType == LayoutType.CreateNewTab) //new tab button - should not be serialized
+            {
+                NewTabBtnVisibility = Visibility.Visible;
+                RemoveTabBtnVisibility = Visibility.Collapsed;
+            }
+            else if (TabType == LayoutType.Serializable)
+            {
+                //tabs config from serialization
+                NewTabBtnVisibility = Visibility.Collapsed;
+                RemoveTabBtnVisibility = Visibility.Visible;
+
+                TabType = LayoutType.Layout; //loaded from serialization
+            }
         }
 
         public string GetSelectedGridSizeText()
@@ -219,7 +260,7 @@ namespace DesktopManagerUX
                 _name = "Conf 1";
 
             if (SelectedApps.Count == 0)
-                Initialize(_name);
+                Initialize(LayoutType.Layout, _name);
             else if (SelectedApps.Count != GridSize.CellCount)
                 UpdateApps(GridSize);
 

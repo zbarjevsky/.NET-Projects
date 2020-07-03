@@ -2,6 +2,7 @@
 using MZ.WPF.Utils;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -31,8 +32,7 @@ namespace DesktopManagerUX
             this.DataContext = AppContext.ViewModel;
 
             tabLayouts.Items.Clear();
-            tabLayouts.ItemsSource = AppContext.Configuration.Layouts;
-            tabLayouts.SelectedIndex = 0; //AppContext.Configuration.SelectedDisplayInfo.Index;
+            ReloadLayouts();
 
             Microsoft.Win32.SystemEvents.DisplaySettingsChanged += SystemEvents_DisplaySettingsChanged;
         }
@@ -42,6 +42,16 @@ namespace DesktopManagerUX
             //AppContext.Configuration.SelectedDisplayInfo = cmbDisplays.SelectedItem as DisplayInfo;
             AppContext.Configuration.Save();
             Properties.Settings.Default.Save();
+        }
+
+        private void ReloadLayouts(int selectTab = 0)
+        {
+            //copy
+            ObservableCollection<LayoutConfiguration> layouts = new ObservableCollection<LayoutConfiguration>(AppContext.Configuration.Layouts);
+            layouts.Add(new LayoutConfiguration(LayoutConfiguration.LayoutType.CreateNewTab, "*"));
+
+            tabLayouts.ItemsSource = layouts;
+            tabLayouts.SelectedIndex = selectTab;
         }
 
         private void SystemEvents_DisplaySettingsChanged(object sender, EventArgs e)
@@ -70,33 +80,38 @@ namespace DesktopManagerUX
 
         }
 
-        private void AddLayout_Click(object sender, RoutedEventArgs e)
-        {
-            string name = GenerateNewLayoutName();
-            AppContext.Configuration.Layouts.Add(new LayoutConfiguration(true, name));
-            tabLayouts.SelectedIndex = tabLayouts.Items.Count - 1; //last
-        }
-
-        private string GenerateNewLayoutName()
-        {
-            for (int i = 0; i < 200; i++)
-            {
-                LayoutConfiguration found = AppContext.Configuration.Layouts.FirstOrDefault(l => l.Name.StartsWith("Layout " + (i+1)));
-                if (found == null)
-                    return "Layout " + (i + 1);
-            }
-            return "<<>>";
-        }
-
         private void RemoveLayout_Click(object sender, RoutedEventArgs e)
         {
-            if(sender is Button btn)
+            if (AppContext.Configuration.Layouts.Count <= 1)
+                return; //must have at least one
+
+            if (sender is Button btn)
             {
-                if(btn.DataContext is LayoutConfiguration layout)
+                if (btn.DataContext is LayoutConfiguration layout)
                 {
                     int idx = AppContext.Configuration.Layouts.IndexOf(layout);
-                    if(idx>=0)
+                    if (idx >= 0)
+                    {
+                        int selected = tabLayouts.SelectedIndex;
                         AppContext.Configuration.Layouts.RemoveAt(idx);
+
+                        //select tab that is in place of deleted - if was selected
+                        if(idx == selected) //delete active
+                        {
+                            if (selected >= AppContext.Configuration.Layouts.Count) //was last
+                                selected--;
+                        }
+                        else //if was not selected - retain selection
+                        {
+                            if (selected > idx)
+                                selected--;
+                        }
+
+                        if(selected < 0)
+                            selected = 0;
+
+                        ReloadLayouts(selected); //tab before
+                    }
                 }
             }
         }
@@ -108,11 +123,47 @@ namespace DesktopManagerUX
             {
                 if (txt.DataContext is LayoutConfiguration layout)
                 {
-                    int idx = AppContext.Configuration.Layouts.IndexOf(layout);
-                    if (idx >= 0)
-                        tabLayouts.SelectedIndex = idx;
+                    if (layout.TabType == LayoutConfiguration.LayoutType.Layout)
+                    {
+                        int idx = AppContext.Configuration.Layouts.IndexOf(layout);
+                        if (idx >= 0)
+                            tabLayouts.SelectedIndex = idx;
+                    }
+                    else if (layout.TabType == LayoutConfiguration.LayoutType.CreateNewTab)
+                    {
+                        AddLayout_Click(sender, e);
+                    }
                 }
             }
+        }
+
+        private void TabLayouts_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (tabLayouts.SelectedItem is LayoutConfiguration layout)
+            {
+                if (layout.TabType == LayoutConfiguration.LayoutType.CreateNewTab)
+                {
+                    AddLayout_Click(sender, e);
+                }
+            }
+        }
+
+        private void AddLayout_Click(object sender, RoutedEventArgs e)
+        {
+            string name = GenerateNewLayoutName();
+            AppContext.Configuration.Layouts.Add(new LayoutConfiguration(LayoutConfiguration.LayoutType.Layout, name));
+            ReloadLayouts(AppContext.Configuration.Layouts.Count - 1); //last
+        }
+
+        private string GenerateNewLayoutName()
+        {
+            for (int i = 0; i < 200; i++)
+            {
+                LayoutConfiguration found = AppContext.Configuration.Layouts.FirstOrDefault(l => l.Name.StartsWith("Layout " + (i + 1)));
+                if (found == null)
+                    return "Layout " + (i + 1);
+            }
+            return "<<>>";
         }
     }
 }
