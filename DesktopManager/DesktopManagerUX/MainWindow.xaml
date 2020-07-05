@@ -9,6 +9,7 @@
         MinWidth="800" MinHeight="600" Width="1800" Height="1000"
         d:DesignHeight="601" d:DesignWidth="801"
         LocationChanged="Window_LocationChanged"
+        Loaded="Window_Loaded"
         Closed="Window_Closed"
         Icon="Images\AppIcon.ico" FontSize="16" Background="LightGray"
         Title="Desktop Manager" >

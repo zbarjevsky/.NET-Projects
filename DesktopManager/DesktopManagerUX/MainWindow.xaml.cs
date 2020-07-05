@@ -37,9 +37,14 @@ namespace DesktopManagerUX
             Microsoft.Win32.SystemEvents.DisplaySettingsChanged += SystemEvents_DisplaySettingsChanged;
         }
 
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            ResizeThisProportionallyToDesktopSize();
+        }
+
         private void Window_Closed(object sender, EventArgs e)
         {
-            //AppContext.Configuration.SelectedDisplayInfo = cmbDisplays.SelectedItem as DisplayInfo;
+            tabLayouts.ItemsSource = null;
             AppContext.Configuration.Save();
             Properties.Settings.Default.Save();
         }
@@ -61,13 +66,6 @@ namespace DesktopManagerUX
 
         private void Window_LocationChanged(object sender, EventArgs e)
         {
-            WpfScreen screen = WpfScreen.GetScreenFrom(this);
-            Rect bounds = screen.WorkingArea;
-            if (this.ActualWidth > bounds.Width || this.ActualHeight > bounds.Height)
-            {
-                //this.Width = bounds.Width / 2;
-                //this.Height = bounds.Height / 2;
-            }
         }
 
         private void Minimize_Click(object sender, RoutedEventArgs e)
@@ -164,6 +162,29 @@ namespace DesktopManagerUX
                     return "Layout " + (i + 1);
             }
             return "<<>>";
+        }
+
+        private void ResizeThisProportionallyToDesktopSize()
+        {
+            WpfScreen screen = WpfScreen.GetScreenFrom(this);
+            Rect bounds = screen.WorkingArea;
+
+            double ratio = bounds.Width / bounds.Height;
+            double height = tabLayouts.ActualHeight;
+            double width = height * ratio;
+
+            //add borders
+            height += 130;
+            width += 12;
+
+            if (width > bounds.Width || width > bounds.Height)
+            {
+                width = bounds.Width - 12;
+                width = bounds.Height - 12;
+            }
+
+            this.Width = width;
+            this.Height = height;
         }
     }
 }

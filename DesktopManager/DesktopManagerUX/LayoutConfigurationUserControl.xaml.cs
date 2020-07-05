@@ -188,6 +188,8 @@ namespace DesktopManagerUX
                 gridSizeSelector.SelectedSize = new GridSizeData(rows, cols);
 
                 RebuildAppsGrid(gridApps, rows, cols, this.LayoutConfiguration, AppContext.ViewModel);
+
+                DrawGridLines();
             }
             AppContext.Sync = false;
         }
@@ -304,6 +306,11 @@ namespace DesktopManagerUX
         }
 
         private void _canvas_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            DrawGridLines();
+        }
+
+        private void DrawGridLines()
         {
             _canvas.Children.Clear();
 
