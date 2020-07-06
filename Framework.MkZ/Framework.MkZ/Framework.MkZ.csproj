@@ -173,7 +173,7 @@
     <Compile Include="WPF\DraggableExtension.cs" />
     <Compile Include="WPF\GridLengthAnimation.cs" />
     <Compile Include="WPF\ItemsControlExtensions.cs" />
-    <Compile Include="WPF\NonStickMouse.cs" />
+    <Compile Include="Windows\NonStickMouse.cs" />
     <Compile Include="WPF\PopupInfoWindow.xaml.cs">
       <DependentUpon>PopupInfoWindow.xaml</DependentUpon>
     </Compile>

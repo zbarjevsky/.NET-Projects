@@ -63,6 +63,11 @@ namespace MZ
             //NonStickMouse.EnableMouseCorrection(true);
         }
 
+        private void FormMainTest_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            NonStickMouse.Instance.Dispose();
+        }
+
         private void m_btnTestEdit_Click(object sender, EventArgs e)
         {
             Control ctrl = m_btnTestEdit;
@@ -180,6 +185,11 @@ namespace MZ
             SaveFileDialog dlg = new SaveFileDialog();
             if (dlg.ShowDialog(this) != DialogResult.OK)
                 return;
+        }
+
+        private void m_chkNonStickMouse_CheckedChanged(object sender, EventArgs e)
+        {
+            NonStickMouse.Instance.EnableMouseCorrection(m_chkNonStickMouse.Checked);
         }
     }
 }

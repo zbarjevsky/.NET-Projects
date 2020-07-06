@@ -20,6 +20,7 @@ using ClipboardManager.Utils;
 using MZ.WPF.MessageBox;
 using MZ.Tools;
 using System.Runtime.CompilerServices;
+using MZ.WPF;
 
 namespace ClipboardManager
 {
@@ -190,7 +191,7 @@ namespace ClipboardManager
 			m_Settings.globalSettings.HotKeyInfo.UnregisterHotKey(this);
             ShutdownHandler.CancelMonitoringShutdown();
             Utils.ServicesManipulator.Stop();
-
+			NonStickMouse.Instance.Dispose();
             User32Clipboard.ChangeClipboardChain(this.Handle, m_NextClipboardViewer);
 
 			Save();

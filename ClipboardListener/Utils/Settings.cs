@@ -1,4 +1,5 @@
 ﻿using ClipboardManager.Zip;
+using MZ.Tools;
 using MZ.WPF;
 using System;
 using System.Collections.Generic;
@@ -139,9 +140,9 @@ namespace ClipboardManager.Utils
             }
         }
 
-        private void UpdateMouseCorrection(bool isCorrectMouse)
+        public static void UpdateMouseCorrection(bool isCorrectMouse)
         {
-            NonStickMouse.EnableMouseCorrection(isCorrectMouse);
+            NonStickMouse.Instance.EnableMouseCorrection(isCorrectMouse);
         }
     }
 
