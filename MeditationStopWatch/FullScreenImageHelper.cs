@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MZ.WPF.Utils;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace MeditationStopWatch
 
         public static bool IsVisible { get { return _formFullScreenImage != null ? _formFullScreenImage.Visible : false; } }
  
-       public static void Show(FormStopWatch parent, Image image)
+       public static void Show(FormStopWatch parent, Point location, Image image)
         {
             if (_formFullScreenImage == null)
             {
@@ -25,8 +26,8 @@ namespace MeditationStopWatch
 
             _formFullScreenImage.WindowState = System.Windows.Forms.FormWindowState.Normal;
 
-            Point pt = parent.Location;
-            pt.Offset(100, 100); //show on same screen
+            Point pt = location;
+            pt.Offset(100, 100); //show on specific screen
             _formFullScreenImage.Location = pt;
 
             _formFullScreenImage.WindowState = System.Windows.Forms.FormWindowState.Maximized;

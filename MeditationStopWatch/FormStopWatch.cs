@@ -13,6 +13,7 @@ using MeditationStopWatch.Tools;
 using Microsoft.WindowsAPICodePack.Taskbar;
 using MZ.Tools;
 using MZ.WinForms;
+using MZ.WPF.Utils;
 
 namespace MeditationStopWatch
 {
@@ -109,8 +110,7 @@ namespace MeditationStopWatch
 			
 			ApplyOptions();
 
-			m_cmbAudioOutDevices.Items.AddRange(SoundUtils.GetOutDevices().ToArray<object>());
-			m_cmbAudioOutDevices.SelectedIndex = 0;
+			UpdateDisplaysMenu();
 
 			this.Visible = true;
 			OpenImageDirectory(m_Options.LastImageFile);
@@ -123,7 +123,7 @@ namespace MeditationStopWatch
 			_isInitialized = true;
 		}
 
-		private void FormStopWatch_FormClosing(object sender, FormClosingEventArgs e)
+        private void FormStopWatch_FormClosing(object sender, FormClosingEventArgs e)
 		{
 			if (!_isInitialized)
 				return;
@@ -201,6 +201,54 @@ namespace MeditationStopWatch
 					m_mnuViewFullScreen.Image = m_imageListFullScreen.Images[2];
 				}
 			};
+		}
+
+		private void UpdateDisplaysMenu()
+		{
+			ToolStripMenuItem[] disp = new ToolStripMenuItem[]
+			{
+				m_mnuFullScreenDisp1,
+				m_mnuFullScreenDisp2,
+				m_mnuFullScreenDisp3,
+				m_mnuFullScreenDisp4
+			};
+
+            foreach (var item in disp)
+            {
+				item.Visible = false;
+            }
+
+			List<WpfScreen> screens = WpfScreen.AllScreens();
+            if (screens.Count > 1) //
+            {
+                for (int i = 0; i < disp.Count() && i<screens.Count; i++)
+                {
+					disp[i].Visible = true;
+					disp[i].Text = screens[i].ToString();
+					disp[i].Tag = screens[i];
+				}
+			}
+        }
+
+		private void m_mnuViewFullScreen_Click(object sender, EventArgs e)
+		{
+			if (FullScreenImageHelper.IsVisible)
+			{
+				FullScreenImageHelper.Hide();
+			}
+			else
+			{
+				Point location = this.Location;
+				if (sender is ToolStripMenuItem mnu)
+                {
+					if(mnu.Tag is WpfScreen scr)
+                    {
+						location = new Point((int)scr.DeviceBounds.Left, (int)scr.DeviceBounds.Top);
+					}
+				}
+
+				FullScreenImageHelper.Show(this, location, m_pictureBox1.PictureBox.Image);
+			}
 		}
 
 		private void m_ThumbnailCache_ProgressChanged(object sender, CacheEventArgs e)
@@ -637,23 +685,6 @@ namespace MeditationStopWatch
 			OpenImage(ImageInfo.ImageInfo);
 			UpdateStatusText();
 		}
-
-        private void m_mnuViewFullScreen_Click(object sender, EventArgs e)
-        {
-			if (FullScreenImageHelper.IsVisible)
-			{
-				FullScreenImageHelper.Hide();
-			}
-			else
-			{
-				FullScreenImageHelper.Show(this, m_pictureBox1.PictureBox.Image);
-			}
-		}
-
-        private void m_btnFullScreen_Click(object sender, EventArgs e)
-		{
-            m_mnuViewFullScreen_Click(sender, e);
-        }
 
 		private void m_txtImageIndex_TextChanged(object sender, EventArgs e)
 		{

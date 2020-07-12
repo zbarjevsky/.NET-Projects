@@ -173,51 +173,34 @@ namespace MZ.Tools
                 return new User32.POINT();
             }
 
-            //if (pt.Y > rTo.Top && pt.Y < rTo.Bottom)
-            //    return new User32.POINT(); //no correction needed
+            int dstY = CalcProportionalY(ptCurr, rFrom, rTo, delta);
+            //int dstY = CorrectYIfNeeded(ptCurr, rFrom, rTo, delta);
 
-            double srcRatioFromTop = (ptCurr.Y - rFrom.Top) / rFrom.Height;
-            double dstY = rTo.Top + srcRatioFromTop * rTo.Height;
-            Debug.WriteLine("SrcRatio: {0:0.00} DstHeight:{1:0.0} DstY: {2:0.0}", srcRatioFromTop, rTo.Height, dstY);
-
-            User32.POINT corrected = new User32.POINT(ptCurr.X + delta.X, (int)dstY);
+            User32.POINT corrected = new User32.POINT(ptCurr.X + delta.X, dstY);
             Debug.WriteLine("Corrected Mouse Position: {0} Delta:{1}", corrected, delta);
             return corrected;
         }
 
-        private User32.POINT CorrectIntoOtherScreen(User32.POINT delta, User32.POINT pt, int currentScreenIndex)
+        private int CalcProportionalY(User32.POINT ptCurr, Rect rFrom, Rect rTo, User32.POINT delta)
         {
-            Rect rFrom = _screens[currentScreenIndex].DeviceBounds;
-            Rect rTo;
+            double srcRatioFromTop = (ptCurr.Y - rFrom.Top) / rFrom.Height;
+            double dstY = rTo.Top + srcRatioFromTop * rTo.Height;
+            Debug.WriteLine("SrcRatio: {0:0.00} DstHeight:{1:0.0} DstY: {2:0.0}", srcRatioFromTop, rTo.Height, dstY);
 
-            if (Math.Abs(pt.X - _screens[currentScreenIndex].DeviceBounds.Left) < 2) //close to left side
-            {
-                if (currentScreenIndex == 0 || delta.X >= 0) //left most or move away
-                    return new User32.POINT();
-                rTo = _screens[currentScreenIndex - 1].DeviceBounds;
-            }
-            else if (Math.Abs(pt.X - _screens[currentScreenIndex].DeviceBounds.Right) < 2) //close to right side
-            {
-                if (currentScreenIndex == _screens.Count - 1 || delta.X <= 0) //right most or move away
-                    return new User32.POINT();
-                rTo = _screens[currentScreenIndex + 1].DeviceBounds;
-            }
-            else
-            {
-                return new User32.POINT();
-            }
+            return (int)dstY;
+        }
 
-            if (pt.Y > rTo.Top && pt.Y < rTo.Bottom)
-                return new User32.POINT(); //no correction needed
+        private int CorrectYIfNeeded(User32.POINT ptCurr, Rect rFrom, Rect rTo, User32.POINT delta)
+        {
+            if (ptCurr.Y > rTo.Top && ptCurr.Y < rTo.Bottom)
+                return ptCurr.Y + delta.Y; //no correction needed
 
             const int offsetY = 80;
             int y = (int)rTo.Top + offsetY;
-            if (pt.Y >= rTo.Bottom)
+            if (ptCurr.Y >= rTo.Bottom)
                 y = (int)(rTo.Bottom - offsetY);
 
-            User32.POINT ptCorrected = new User32.POINT(pt.X - delta.X, y);
-            Debug.WriteLine("Corrected Mouse Position: {0} Delta:{1}", ptCorrected, delta);
-            return ptCorrected;
+            return y;
         }
 
         private int ScreenFromPoint(User32.POINT pt)
