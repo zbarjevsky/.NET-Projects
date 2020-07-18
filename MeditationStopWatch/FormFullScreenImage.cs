@@ -63,6 +63,7 @@ namespace MeditationStopWatch
             
             m_analogClock.Bounds = _stopWatchForm.m_Options.ClockFullScreenBounds;
             UpdateClockMargins();
+            EnsureVisibleControls();
             //m_analogClock.LocationChanged += (s, o) => { UpdateClockMargins(); SaveClockRectangle(); };
 
             this.Activate();
@@ -115,21 +116,28 @@ namespace MeditationStopWatch
 
         private void UpdateClockMargins()
         {
-            if (m_analogClock.Anchor.HasFlag(AnchorStyles.Left))
+            if (m_analogClock.Left < this.Width && m_analogClock.Top < this.Height)
             {
-                _clockMargins.Left = pictureBox1.PictureBox.Left + m_analogClock.Left;
+                if (m_analogClock.Anchor.HasFlag(AnchorStyles.Left))
+                {
+                    _clockMargins.Left = pictureBox1.PictureBox.Left + m_analogClock.Left;
+                }
+                if (m_analogClock.Anchor.HasFlag(AnchorStyles.Top))
+                {
+                    _clockMargins.Top = pictureBox1.PictureBox.Top + m_analogClock.Top;
+                }
+                if (m_analogClock.Anchor.HasFlag(AnchorStyles.Right))
+                {
+                    _clockMargins.Right = pictureBox1.Width - (pictureBox1.PictureBox.Left + m_analogClock.Right);
+                }
+                if (m_analogClock.Anchor.HasFlag(AnchorStyles.Bottom))
+                {
+                    _clockMargins.Bottom = pictureBox1.Height - (pictureBox1.PictureBox.Top + m_analogClock.Bottom);
+                }
             }
-            if (m_analogClock.Anchor.HasFlag(AnchorStyles.Top))
+            else
             {
-                _clockMargins.Top = pictureBox1.PictureBox.Top + m_analogClock.Top;
-            }
-            if (m_analogClock.Anchor.HasFlag(AnchorStyles.Right))
-            {
-                _clockMargins.Right = pictureBox1.Width - (pictureBox1.PictureBox.Left + m_analogClock.Right);
-            }
-            if (m_analogClock.Anchor.HasFlag(AnchorStyles.Bottom))
-            {
-                _clockMargins.Bottom = pictureBox1.Height - (pictureBox1.PictureBox.Top + m_analogClock.Bottom);
+                _clockMargins = new ZoomablePictureBoxUserControl.MarginRect(m_analogClock.Bounds, this.Bounds);
             }
         }
 
