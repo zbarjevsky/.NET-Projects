@@ -8,9 +8,9 @@ using System.Windows.Forms;
 using System.IO;
 using System.Threading.Tasks;
 using System.Threading;
-using MZ.WPF.MessageBox;
 using System.Diagnostics;
 using System.Linq;
+using MZ.WPF.MessageBox;
 
 namespace VhdApiExample
 {

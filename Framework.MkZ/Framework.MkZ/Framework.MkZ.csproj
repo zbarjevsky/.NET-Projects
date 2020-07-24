@@ -89,6 +89,7 @@
     </Compile>
     <Compile Include="Windows\MouseHook.cs" />
     <Compile Include="Windows\ProcessExtensions.cs" />
+    <Compile Include="Windows\UsbEject.cs" />
     <Compile Include="Windows\User32_MouseHook.cs" />
     <Compile Include="WinForms\ChartProgressUserControl.cs">
       <SubType>UserControl</SubType>
