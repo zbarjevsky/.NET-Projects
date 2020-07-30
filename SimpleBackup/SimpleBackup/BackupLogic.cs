@@ -12,6 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using static MZ.Tools.FileUtils;
+using SimpleBackup.Tools;
 
 namespace SimpleBackup
 {
@@ -129,7 +130,10 @@ namespace SimpleBackup
         public bool ValidateBackupNeeded(BackupOptions option, bool createDstFolderIfNotExists = false)
         {
             if(!SrcIfo.Exists)
-            { Status = BackupStatus.Error; return false; }
+            { 
+                Status = BackupStatus.Error; 
+                return false; 
+            }
 
             if (!DstIfo.Exists)
             {
@@ -139,8 +143,17 @@ namespace SimpleBackup
             }
             else if (!option.HasFlag(BackupOptions.OverwriteAll)) //check overwrite options
             {
-                if (option.HasFlag(BackupOptions.OverwriteAllOlder) && SrcIfo.CreationTimeUtc <= DstIfo.CreationTimeUtc)
-                { Status = BackupStatus.Done; return false; }
+                if (option.HasFlag(BackupOptions.OverwriteAllOlder))
+                {
+                    long ticks1 = SrcIfo.CreationTimeUtc.Ticks / 1000000; //1/10 second
+                    long ticks2 = DstIfo.CreationTimeUtc.Ticks / 1000000;
+
+                    if (ticks1 <= ticks2)
+                    {
+                        Status = BackupStatus.Done;
+                        return false;
+                    }
+                }
 
                 if (option.HasFlag(BackupOptions.SkipExisting) && DstIfo.Exists)
                 { Status = BackupStatus.Done; return false; }
@@ -173,14 +186,21 @@ namespace SimpleBackup
                 else
                     File.Copy(Src, Dst, true);
 
-                RestoreTimestamp();
+                RestoreFileTimestamp();
 
                 return Status = BackupStatus.Done;
             }
             catch (Exception err)
             {
-                Err = "Copy Err: " + err.Message;
-                return Status = BackupStatus.Error;
+                if (progress.Cancel)
+                {
+                    return Status = BackupStatus.None; //undo
+                }
+                else 
+                {
+                    Err = "Copy Err: " + err.Message;
+                    return Status = BackupStatus.Error;
+                }
             }        
         }
 
@@ -191,7 +211,7 @@ namespace SimpleBackup
             Status = BackupStatus.None;
         }
 
-        private BackupStatus RestoreTimestamp()
+        private BackupStatus RestoreFileTimestamp()
         {
             try
             {
@@ -218,17 +238,26 @@ namespace SimpleBackup
         //http://www.pinvoke.net/default.aspx/kernel32.CopyFileEx
         private static void CopyWithProgress(string src, string dst, long length, FileProgress progress)
         {
-            const int bufferSize = 4 * 1024; //4k - best size
+            const int bufferSize = 256 * 1024; //4k - best size
             byte[] bytes = new byte[bufferSize];
-
-            progress.ResetToBlocks("Progress: ", length, 0, NotifyOptions.NotifyValueChange);
 
             try
             {
+                TimeSpan refreshInterval = TimeSpan.FromSeconds(0.3);
+                TimeSpan timestamp = TimeSpan.FromSeconds(0);
+
                 using (FileStream srcFile = new FileStream(src, FileMode.Open, FileAccess.Read, FileShare.Read, bufferSize, FileOptions.SequentialScan))
                 {
                     using (FileStream fileStream = new FileStream(dst, FileMode.OpenOrCreate, FileAccess.Write))
                     {
+                        int bufferIndex = 0;
+                        int bufferCount = 1 + (int)(length / bufferSize);
+
+                        progress.ResetToBlocks("Progress: ", bufferCount, 0, NotifyOptions.NotifyValueChange);
+
+                        TransferSpeedCounter speedData = new TransferSpeedCounter();
+                        speedData.InitCounting();
+
                         int bytesRead = -1;
                         long totalWrite = 0;
                         while ((bytesRead = srcFile.Read(bytes, 0, bufferSize)) > 0)
@@ -240,13 +269,20 @@ namespace SimpleBackup
                             if (progress.Cancel)
                                 throw new Exception("Abort copy file: " + src);
 
-                            progress.Value = totalWrite;
+                            speedData.AddCount(bytesRead, bufferIndex, bufferCount);
+                            progress.Value = ++bufferIndex;
+
+                            if ((speedData.ElapsedTime - timestamp) > refreshInterval)
+                            {
+                                timestamp = speedData.ElapsedTime;
+                                progress.SubStatus = string.Format("{0:0.000} MB/s", speedData.SpeedNowKB() / 1000.0);
+                            }
                         }
                     }
                 }
                 progress.Value = 0;
             }
-            catch (Exception)
+            catch (Exception) //in case of any problem including cancel
             {
                 progress.Value = 0;
                 if (File.Exists(dst)) //delete partially copied file

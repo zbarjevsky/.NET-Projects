@@ -18,9 +18,9 @@ namespace WindowsFormsApp1
         HorizontalLineAnnotation _annotationLine = new HorizontalLineAnnotation();
 
         [Description("Graph Back Color"), Category("Graph")]
-        public Color GraphBackColor { get { return chart1.Series[0].Color; } set { chart1.Series[0].Color = value; } }
+        public Color GraphBackColor { get { return chart1.Series[0].Color; } set { chart1.Series[0].Color = Semitransparent(value); } }
         [Description("Graph Main Color"), Category("Graph")]
-        public Color GraphMainColor { get { return chart1.Series[1].Color; } set { chart1.Series[1].Color = value; } }
+        public Color GraphMainColor { get { return chart1.Series[1].Color; } set { chart1.Series[1].Color = Semitransparent(value); } }
         [Description("Graph Title"), Category("Graph")]
         public string GraphTitle 
         { 
@@ -101,8 +101,13 @@ namespace WindowsFormsApp1
             foreach (var ser in chart1.Series)
             {
                 ser.IsVisibleInLegend = false;
-                ser.Color = Color.FromArgb(192, ser.Color); //semitransparent
+                ser.Color = Semitransparent(ser.Color); //semitransparent
             }
+        }
+
+        private Color Semitransparent(Color c, byte alpha = 168)
+        {
+            return Color.FromArgb(alpha, c); //semitransparent
         }
 
         public void SetHistory(List<double> values, int maxX, string title)
