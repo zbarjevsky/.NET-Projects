@@ -70,6 +70,7 @@ namespace SimpleBackup
         /// If source drive on network - decrease big file size
         /// </summary>
         public double BigFileSizeThreshold = 12 * BackupLogic.i1MB;
+        public int BigFileBufferSize = 256 * 1024;
 
         private string _dstFolder = null;
         //private string _dstFolder = null;
@@ -182,7 +183,7 @@ namespace SimpleBackup
                     DstIfo.IsReadOnly = false;
 
                 if (IsBigFile()) //more than 12M
-                    CopyWithProgress(Src, Dst, SrcIfo.Length, progress);
+                    CopyWithProgress(Src, Dst, SrcIfo.Length, BigFileBufferSize, progress);
                 else
                     File.Copy(Src, Dst, true);
 
@@ -236,9 +237,9 @@ namespace SimpleBackup
         }
 
         //http://www.pinvoke.net/default.aspx/kernel32.CopyFileEx
-        private static void CopyWithProgress(string src, string dst, long length, FileProgress progress)
+        private static void CopyWithProgress(string src, string dst, long length, int bufferSize, FileProgress progress)
         {
-            const int bufferSize = 256 * 1024; //4k - best size
+            //const int bufferSize = 256 * 1024; //4k - best size
             byte[] bytes = new byte[bufferSize];
 
             try

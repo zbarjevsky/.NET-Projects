@@ -186,16 +186,22 @@ namespace SimpleBackup
         bool _working = false;
         private void PerformBackup(int startIndex, BackupOptions options)
         {
-            DriveInfo drive = BackupLogic.GetDriveInfo(_backupFilesList[0].Src);
-            if(drive == null)
+            DriveInfo driveSrc = BackupLogic.GetDriveInfo(_backupFilesList[0].Src);
+            DriveInfo driveDst = BackupLogic.GetDriveInfo(_backupFilesList[0].Dst);
+            if (driveSrc == null || driveDst == null)
             {
-                MessageBox.Show(this, "Source Drive is not accessible: " + _backupFilesList[0].Src);
+                MessageBox.Show(this, "Drive is not accessible: " + _backupFilesList[0].Src);
                 return;
             }
 
-            const double ONE_MB = 1024 * 1024;
-            double bigFileSizeThreshold = (drive.DriveType == DriveType.Network) ? 0.6 * ONE_MB : 12 * ONE_MB;
-            int refreshUICount = (drive.DriveType == DriveType.Network) ? 3 : 33;
+            bool isNetworkDive = (driveSrc.DriveType == DriveType.Network) || (driveDst.DriveType == DriveType.Network);
+
+            const int ONE_KB = 1024;
+            const int ONE_MB = 1024 * ONE_KB;
+
+            double bigFileSizeThreshold = isNetworkDive ? 0.6 * ONE_MB : 12 * ONE_MB;
+            int bigFileBufferSize = isNetworkDive ? 16 * ONE_KB : 256 * ONE_KB;
+            int refreshUICount = isNetworkDive ? 3 : 33;
 
             _abort = false;
             _pause = false;
@@ -233,7 +239,9 @@ namespace SimpleBackup
 
                     BackupFile file = _backupFilesList[i];
                     file.BigFileSizeThreshold = bigFileSizeThreshold;
+                    file.BigFileBufferSize = bigFileBufferSize;
 
+                    long fileSizeBytes = 1024; //if no copy required - 'symbolic size' 1k is used - to improve average speed calc
                     int updateProgressCount = 128;
                     if (file.ValidateBackupNeeded(options))
                     {
@@ -254,10 +262,12 @@ namespace SimpleBackup
                             Thread.Sleep(10);
                             file.PerformBackup(progressCopyBigFile, options); //retry
                         }
+
+                        fileSizeBytes = file.SrcIfo.Length;
                     }
 
                     _startIndex = i;
-                    _progressSpeedData.AddCount(file.SrcIfo.Length, i, _backupFilesList.Count);
+                    _progressSpeedData.AddCount(fileSizeBytes, i, _backupFilesList.Count);
 
                     if (i % updateProgressCount == 0)
                     {

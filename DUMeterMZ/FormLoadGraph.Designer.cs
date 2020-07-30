@@ -125,7 +125,7 @@ namespace DUMeterMZ
             this.menuItemSep3,
             this.menu_Exit});
             this.m_ContextMenuMain.Name = "m_ContextMenuMain";
-            this.m_ContextMenuMain.Size = new System.Drawing.Size(186, 278);
+            this.m_ContextMenuMain.Size = new System.Drawing.Size(186, 256);
             // 
             // menuShowHide
             // 
@@ -340,10 +340,10 @@ namespace DUMeterMZ
             this.m_btnHide.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))), ((int)(((byte)(224)))));
             this.m_btnHide.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.m_btnHide.Font = new System.Drawing.Font("Webdings", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(2)));
-            this.m_btnHide.Image = global::DUMeterMZ.Properties.Resources.SmallX;
-            this.m_btnHide.Location = new System.Drawing.Point(161, 3);
+            this.m_btnHide.Image = ((System.Drawing.Image)(resources.GetObject("m_btnHide.Image")));
+            this.m_btnHide.Location = new System.Drawing.Point(157, 3);
             this.m_btnHide.Name = "m_btnHide";
-            this.m_btnHide.Size = new System.Drawing.Size(18, 18);
+            this.m_btnHide.Size = new System.Drawing.Size(21, 20);
             this.m_btnHide.TabIndex = 3;
             this.m_btnHide.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.toolTip1.SetToolTip(this.m_btnHide, "Hide");

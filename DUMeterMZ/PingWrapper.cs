@@ -75,7 +75,7 @@ namespace PingImplementation
 					case IPStatus.Success:
 						System.Diagnostics.Trace.WriteLine(
 							string.Format("Reply from {0}: bytes={1} time={2}ms TTL={3}",
-							reply.Address, reply.Buffer.Length, reply.RoundtripTime, reply.Options.Ttl));
+							reply.Address, reply.Buffer.Length, reply.RoundtripTime, reply.Options?.Ttl));
 						return reply.RoundtripTime;
 					case IPStatus.TimedOut:
 						throw new Exception(string.Format("Request timed out ({0} ms).", timeout));
