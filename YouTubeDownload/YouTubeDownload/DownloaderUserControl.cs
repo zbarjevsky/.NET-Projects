@@ -85,10 +85,10 @@ namespace YouTubeDownload
             }
         }
 
-        public void Start(DownloadData data)
+        public void Start(DownloadData data, bool noWindow)
         {
             timer1.Start();
-           _youTube_DL.Start(data);
+           _youTube_DL.Start(data, noWindow);
         }
 
         public void Stop()

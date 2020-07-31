@@ -70,26 +70,36 @@ namespace YouTubeDownload
 
         private Process _DL_Process = null;
 
-        public void Start(DownloadData data)
+        public void Start(DownloadData data, bool noWindow)
         {
             Data = data;
             Data.State = DownloadState.Working;
 
-            string parameters = "--encoding UTF8 ";
-            parameters += Data.NoPlayList ? "--no-playlist " : " ";
-            parameters += Data.AudioOnly ? " --extract-audio --audio-format mp3 " : " ";
-            parameters += data.AdditionalParameters;
+            string parameters = PrepareCommanLine(data, out string exePath);
 
-            string exePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), DL);
-            _DL_Process = ProcessHelper.Create(exePath,
-                string.Format(" \"{0}\" {1} -o \"{2}\\{3}\"",
-                Data.Url, parameters, Data.OutputFolder, Data.FileNameTemplate), Data.Encoding);
+            _DL_Process = ProcessHelper.Create(exePath, parameters, data.Encoding, noWindow);
 
             _DL_Process.OutputDataReceived += DL_Process_OutputDataReceived;
+            _DL_Process.ErrorDataReceived += DL_Process_OutputDataReceived;
             _DL_Process.Exited += DL_Process_Exited;
             _DL_Process.Start();
 
             _DL_Process.BeginOutputReadLine();
+        }
+
+        public static string PrepareCommanLine(DownloadData data, out string exePath)
+        {
+            exePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), DL);
+
+            string parameters = "--encoding UTF8 ";
+            parameters += data.NoPlayList ? "--no-playlist " : " ";
+            parameters += data.AudioOnly ? " --extract-audio --audio-format mp3 " : " ";
+            parameters += data.AdditionalParameters;
+
+            string outParams = string.Format(" \"{0}\" {1} -o \"{2}\\{3}\"",
+                data.Url, parameters, data.OutputFolder, data.FileNameTemplate);
+
+            return outParams;
         }
 
         public void Stop()
@@ -127,12 +137,14 @@ namespace YouTubeDownload
             int exitCode = -1;
             if (_DL_Process != null)
             {
+                _DL_Process.ErrorDataReceived -= DL_Process_OutputDataReceived;
                 _DL_Process.OutputDataReceived -= DL_Process_OutputDataReceived;
                 _DL_Process.Exited -= DL_Process_Exited;
                 try { exitCode = _DL_Process.ExitCode; }
                 catch (Exception err) { Debug.WriteLine("DL_Process_Exited: " + err); }            
             }
 
+            _line = "";
             Data.Progress = 0;
             if (Data.State == DownloadState.Working)
             {
@@ -229,7 +241,7 @@ namespace YouTubeDownload
 
         public static List<string> Update()
         {
-            return ProcessHelper.GetStdOut(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, DL), "-U");
+            return ProcessHelper.GetStdOut(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, DL), "-U", false);
         }
 
         public static string GetVersion()
@@ -251,7 +263,7 @@ namespace YouTubeDownload
             try
             {
                 string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, FF);
-                List<string> ver = ProcessHelper.GetStdOut(path, " -version");
+                List<string> ver = ProcessHelper.GetStdOut(path, " -version", true);
 
                 return ver.Aggregate("\n", (current, s) => current + (" " + s + Environment.NewLine));
             }

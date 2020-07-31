@@ -11,16 +11,16 @@ namespace YouTubeDownload
     {
         private List<string> _lines = new List<string>(1024);
 
-        public static List<string> GetStdOut(string fileName, string arguments)
+        public static List<string> GetStdOut(string fileName, string arguments, bool noWindow)
         {
-            return new ProcessHelper().GetStdOutImpl(fileName, arguments, -1);
+            return new ProcessHelper().GetStdOutImpl(fileName, arguments, -1, noWindow);
         }
 
         //https://stackoverflow.com/questions/1259084/what-encoding-code-page-is-cmd-exe-using/17177904#17177904
         //https://stackoverflow.com/questions/38533903/set-c-sharp-console-application-to-unicode-output
-        private List<string> GetStdOutImpl(string fileName, string arguments, int timeoutMs)
+        private List<string> GetStdOutImpl(string fileName, string arguments, int timeoutMs, bool noWindow)
         {
-            Process p = Create(fileName, arguments, Encoding.UTF8);
+            Process p = Create(fileName, arguments, Encoding.UTF8, noWindow);
 
             p.OutputDataReceived += DL_Process_OutputDataReceived;
             p.Exited += DL_Process_Exited;
@@ -46,19 +46,19 @@ namespace YouTubeDownload
             p.Exited -= DL_Process_Exited;
         }
 
-        public static Process Create(string fileName, string arguments, Encoding enc)
+        public static Process Create(string fileName, string arguments, Encoding enc, bool noWindow)
         {
             return new Process
             {
                 EnableRaisingEvents = true,
                 StartInfo = new ProcessStartInfo(fileName, arguments)
                 {
-                    CreateNoWindow = true,
+                    CreateNoWindow = noWindow,
                     UseShellExecute = false,
-                    RedirectStandardInput = true,
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
-                    StandardOutputEncoding = enc
+                    RedirectStandardInput = noWindow,
+                    RedirectStandardOutput = noWindow,
+                    RedirectStandardError = noWindow,
+                    StandardOutputEncoding = noWindow ? enc : null
                 }
             };
         }
