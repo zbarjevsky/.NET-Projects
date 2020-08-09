@@ -173,7 +173,7 @@ namespace TantaCommon
                 // clear what we have now
                 listViewAvailableTransforms.Clear();
                 // reset this
-                listViewAvailableTransforms.ListViewItemSorter = null;
+                listViewAvailableTransforms.ListViewItemSorter = new ListViewItemCompareAsText();
 
                 // get the currently selected major category
                 TantaGuidNamePair currentCategory = (TantaGuidNamePair)comboBoxTransformCategories.SelectedItem;
@@ -527,9 +527,8 @@ namespace TantaCommon
         /// </history>
         private void listViewAvailableTransforms_ColumnClick(object sender, ColumnClickEventArgs e)
         {
-            // Set the ListViewItemSorter property to a new ListViewItemComparer
-            // object.
-            listViewAvailableTransforms.ListViewItemSorter = new ListViewItemCompareAsText(e.Column);
+            // Set the ListViewItemSorter property to a new ListViewItemComparer object.
+            (listViewAvailableTransforms.ListViewItemSorter as ListViewItemCompareAsText).SetSortingColumn(e.Column, 0);
             // Call the sort method to manually sort.
             listViewAvailableTransforms.Sort();
         }

@@ -25,7 +25,9 @@ namespace YouTubeDownload
             p.OutputDataReceived += DL_Process_OutputDataReceived;
             p.Exited += DL_Process_Exited;
             p.Start();
-            p.BeginOutputReadLine();
+
+            if(noWindow)
+                p.BeginOutputReadLine();
 
             p.WaitForExit(timeoutMs);
 

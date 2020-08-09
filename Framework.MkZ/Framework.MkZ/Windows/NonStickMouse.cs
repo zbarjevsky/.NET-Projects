@@ -133,7 +133,7 @@ namespace MZ.Tools
                 return; //ignore dragging or if one sceen only or if not enabled
 
             int screenSrcIndex = ScreenFromPoint(ptPrev);
-            if (screenSrcIndex < 0) //point out of screen
+            if (screenSrcIndex < 0) //point out of screens
                 return;
 
             User32.POINT ptCorrected = CorrectIntoOtherScreenProportionally(ptPrev, ptCurr, screenSrcIndex);
@@ -184,6 +184,9 @@ namespace MZ.Tools
         private int CalcProportionalY(User32.POINT ptCurr, Rect rFrom, Rect rTo, User32.POINT delta)
         {
             double srcRatioFromTop = (ptCurr.Y - rFrom.Top) / rFrom.Height;
+            if (srcRatioFromTop < 0 || srcRatioFromTop >= 1)
+                srcRatioFromTop = 0.5;
+
             double dstY = rTo.Top + srcRatioFromTop * rTo.Height;
             Debug.WriteLine("SrcRatio: {0:0.00} DstHeight:{1:0.0} DstY: {2:0.0}", srcRatioFromTop, rTo.Height, dstY);
 

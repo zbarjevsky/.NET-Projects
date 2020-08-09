@@ -342,7 +342,8 @@ namespace TantaCaptureToScreenAndFile
         {
             get
             {
-                if (textBoxPickedVideoDeviceURL.Text == null) textBoxPickedVideoDeviceURL.Text = "";
+                if (textBoxPickedVideoDeviceURL.Text == null) 
+                    textBoxPickedVideoDeviceURL.Text = "";
                 return textBoxPickedVideoDeviceURL.Text;
             }
         }
