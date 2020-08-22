@@ -102,7 +102,7 @@ namespace YouTubeDownload
             //}
 
             UpdateButtonsState();
-            StartDownloadNext();
+            StartDownloadNext(true);
         }
 
         public void ListViewShowProgress(ListViewItem item = null)
@@ -128,7 +128,7 @@ namespace YouTubeDownload
             _progressBarInPlace.Visible = true;
         }
 
-        private bool StartDownloadNext()
+        private bool StartDownloadNext(bool noWindow)
         {
             if (m_DownloaderUserControl.State == DownloadState.Working)
                 return false;
@@ -141,7 +141,7 @@ namespace YouTubeDownload
                 if (data.State == DownloadState.InQueue)
                 {
                     this.Cursor = Cursors.AppStarting;
-                    m_DownloaderUserControl.Start(data);
+                    m_DownloaderUserControl.Start(data, noWindow);
                     UpdateUrlList();
                     return true;
                 }
@@ -185,6 +185,7 @@ namespace YouTubeDownload
             m_ctxmnuOpenSelectedFile.Enabled = bHasSelection;
             m_ctxmnuRemoveSelected.Enabled = bHasSelection;
             m_ctxmnuDownloadAgain.Enabled = bHasSelection;
+            m_ctxmnuCMD.Enabled = bHasSelection;
             m_ctxmnuCopyFileName.Enabled = bHasSelection;
             m_ctxmnuCopyURL.Enabled = bHasSelection;
 
@@ -236,7 +237,7 @@ namespace YouTubeDownload
             //if(m_DownloaderUserControl.State == DownloadState.Failed)
 
             UpdateUrlList();
-            if (!StartDownloadNext())
+            if (!StartDownloadNext(true))
             {
                 this.Cursor = Cursors.Arrow;
                 //MessageBox.Show(this, "Operation Finished!", Text, MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -336,7 +337,7 @@ namespace YouTubeDownload
             }
 
             UpdateButtonsState();
-            StartDownloadNext();
+            StartDownloadNext(true);
         }
 
         private void m_btnRemove_Click(object sender, EventArgs e)
@@ -411,21 +412,40 @@ namespace YouTubeDownload
             }
         }
 
-        private void m_ctxmnuDownloadAgain_Click(object sender, EventArgs e)
+        private void m_ctxmnuCMD_Click(object sender, EventArgs e)
         {
             if (m_listUrls.SelectedItems.Count == 0)
                 return;
 
             DownloadData data = m_listUrls.SelectedItems[0].Tag as DownloadData;
-            if(data != null)
+            string parameters = YouTube_DL.PrepareCommanLine(data, out string exePath);
+
+            string fileNameBat = "C:\\Temp\\RunIt.bat";
+            File.WriteAllText(fileNameBat, "\"" + exePath + "\" " + parameters + "\npause\n");
+
+            Process p = Process.Start(fileNameBat);
+        }
+
+        private void m_ctxmnuDownloadAgain_Click(object sender, EventArgs e)
+        {
+            DownloadAgain(true);
+        }
+
+        private void DownloadAgain(bool noWindow)
+        {
+            if (m_listUrls.SelectedItems.Count == 0)
+                return;
+
+            DownloadData data = m_listUrls.SelectedItems[0].Tag as DownloadData;
+            if (data != null)
             {
-                if(data.State == DownloadState.Working )
+                if (data.State == DownloadState.Working)
                 {
                     m_DownloaderUserControl.Stop();
                 }
                 data.State = DownloadState.InQueue;
                 UpdateButtonsState();
-                StartDownloadNext();
+                StartDownloadNext(noWindow);
             }
         }
 
@@ -441,7 +461,7 @@ namespace YouTubeDownload
             }
         }
 
-        private void m_ctxmnuCoypyURL_Click(object sender, EventArgs e)
+        private void m_ctxmnuCopyURL_Click(object sender, EventArgs e)
         {
             if (m_listUrls.SelectedItems.Count == 0)
                 return;

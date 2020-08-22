@@ -214,9 +214,27 @@ namespace MZ.Tools
             public Int32 X;
             public Int32 Y;
 
+            public POINT(int x, int y) : this()
+            {
+                X = x;
+                Y = y;
+            }
+
+            public static POINT operator-(POINT pt1, POINT pt2)
+            {
+                return new POINT(pt1.X - pt2.X, pt1.Y - pt2.Y);
+            }
+
+            public override bool Equals(object obj)
+            {
+                if(obj is POINT pt)
+                    return pt.X == X && pt.Y == Y;
+                return false;
+            }
+
             public override string ToString()
             {
-                return string.Format("X = {0}, Y = {1}", X, Y);
+                return string.Format("X:{0}, Y:{1}", X, Y);
             }
         }
 

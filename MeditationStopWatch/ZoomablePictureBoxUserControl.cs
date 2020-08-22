@@ -22,22 +22,24 @@ namespace MeditationStopWatch
             public int Width { get { return Right - Left; } }
             public int Height { get { return Bottom - Top; } }
 
+            public Rectangle Bounds { get { return new Rectangle(Left, Top, Width, Height); } }
+
             public MarginRect(int margin, int max = 10000, int min = 0)
             {
                 Left = Top = Right = Bottom = EnsureValidMargin(margin, max, min);
             }
 
-            public MarginRect(Rectangle r, Rectangle bounds)
+            public MarginRect(Rectangle rClock, Rectangle rThis)
             {
-                FromRectangle(r, bounds);
+                FromRectangle(rClock, rThis);
             }
 
-            public MarginRect FromRectangle(Rectangle r, Rectangle bounds)
+            public MarginRect FromRectangle(Rectangle rClock, Rectangle rThis)
             {
-                Left = EnsureValidMargin(r.Left, bounds.Width - r.Width);
-                Top = EnsureValidMargin(r.Top, bounds.Height - r.Height);
-                Right = EnsureValidMargin(bounds.Width - r.Right, bounds.Width);
-                Bottom = EnsureValidMargin(bounds.Height - r.Bottom, bounds.Height);
+                Left = EnsureValidMargin(rClock.Left, rThis.Width - rClock.Width);
+                Top = EnsureValidMargin(rClock.Top, rThis.Height - rClock.Height);
+                Right = EnsureValidMargin(rThis.Width - rClock.Right, rThis.Width);
+                Bottom = EnsureValidMargin(rThis.Height - rClock.Bottom, rThis.Height);
 
                 return this;
             }

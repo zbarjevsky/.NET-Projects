@@ -6,7 +6,6 @@ using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
-using MZ.WPF.MessageBox;
 
 namespace VhdApiExample {
     public partial class VHD_MainForm : Form
@@ -54,7 +53,7 @@ namespace VhdApiExample {
                 }
                 catch (Exception err)
                 {
-                    PopUp.Error(err.ToString(), "Open - ERROR");
+                    MZ.WPF.MessageBox.PopUp.Error(err.ToString(), "Open - ERROR");
                 }
                 UpdateData();
             }
@@ -116,7 +115,7 @@ namespace VhdApiExample {
                 }
                 catch (Exception err)
                 {
-                    PopUp.Error(err.ToString(), "Close - ERROR");
+                    MZ.WPF.MessageBox.PopUp.Error(err.ToString(), "Close - ERROR");
                 }
                 UpdateData();
             }
@@ -132,7 +131,7 @@ namespace VhdApiExample {
             }
             catch (Exception err)
             {
-                PopUp.Error(err.ToString(), "Attach - ERROR");
+                MZ.WPF.MessageBox.PopUp.Error(err.ToString(), "Attach - ERROR");
             }
             UpdateData();
         }
@@ -146,7 +145,7 @@ namespace VhdApiExample {
             }
             catch (Exception err)
             {
-                PopUp.Error(err.ToString(), "Detach - ERROR");
+                MZ.WPF.MessageBox.PopUp.Error(err.ToString(), "Detach - ERROR");
             }
             UpdateData();
         }

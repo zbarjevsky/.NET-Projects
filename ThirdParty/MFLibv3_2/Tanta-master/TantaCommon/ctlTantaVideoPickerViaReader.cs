@@ -168,7 +168,7 @@ namespace TantaCommon
                 // clear what we have now
                 listViewSupportedFormats.Clear();
                 // reset this
-                listViewSupportedFormats.ListViewItemSorter = null;
+                listViewSupportedFormats.ListViewItemSorter = new ListViewItemCompareAsText();
 
                 // get the currently selected device
                 TantaMFDevice currentDevice = (TantaMFDevice)comboBoxCaptureDevices.SelectedItem;
@@ -280,9 +280,8 @@ namespace TantaCommon
         /// </history>
         private void listViewSupportedFormats_ColumnClick(object sender, ColumnClickEventArgs e)
         {
-            // Set the ListViewItemSorter property to a new ListViewItemComparer
-            // object.
-            listViewSupportedFormats.ListViewItemSorter = new ListViewItemCompareAsText(e.Column);
+            // Set the ListViewItemSorter property to a new ListViewItemComparer object.
+            (listViewSupportedFormats.ListViewItemSorter as ListViewItemCompareAsText).SetSortingColumn(e.Column, 0);
             // Call the sort method to manually sort.
             listViewSupportedFormats.Sort();
         }

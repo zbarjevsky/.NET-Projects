@@ -242,7 +242,7 @@ namespace DUMeterMZ
 				}
 				m_iCheckIpCount++;
 
-				if (!_hover && m_iHideControlsCounter++ > 5)
+				if (!_hover && m_iHideControlsCounter++ > 2)
 					m_btnHide.Visible = false;
 
                 //LogData();

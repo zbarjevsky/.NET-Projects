@@ -38,7 +38,8 @@ namespace TantaCommon
     /// </history>
     public class ListViewItemCompareAsText : IComparer
     {
-        private int col;
+        private int _col1 = 0, _col2 = 0;
+        private bool _bAscending = true;
 
         /// +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
         /// <summary>
@@ -49,7 +50,6 @@ namespace TantaCommon
         /// </history>
         public ListViewItemCompareAsText()
         {
-            col = 0;
         }
 
         /// +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -60,9 +60,15 @@ namespace TantaCommon
         /// <history>
         ///    01 Nov 18  Cynic - Started
         /// </history>
-        public ListViewItemCompareAsText(int column)
+        public void SetSortingColumn(int column, int secondaryColumn = -1)
         {
-            col = column;
+            if (_col1 == column)
+                _bAscending = !_bAscending;
+            else
+                _bAscending = true;
+
+            _col1 = column;
+            _col2 = secondaryColumn;
         }
 
         /// +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -75,9 +81,28 @@ namespace TantaCommon
         /// </history>
         public int Compare(object x, object y)
         {
+            if (_bAscending)
+                return CompareImpl(x, y);
+            return CompareImpl(y, x);
+        }
+
+        private int CompareImpl(object x, object y)
+        {
             int returnVal = -1;
-            returnVal = String.Compare(((ListViewItem)x).SubItems[col].Text,
-            ((ListViewItem)y).SubItems[col].Text);
+            ListViewItem itmX = x as ListViewItem;
+            ListViewItem itmY = y as ListViewItem;
+
+            string strX = itmX.SubItems[_col1].Text;
+            string strY = itmY.SubItems[_col1].Text;
+            returnVal = String.Compare(strX, strY);
+
+            if (returnVal == 0 && _col2 >= 0 && _col2 != _col1) //equals
+            {
+                strX = itmX.SubItems[_col2].Text;
+                strY = itmY.SubItems[_col2].Text;
+                returnVal = String.Compare(strX, strY);
+            }
+
             return returnVal;
         }
     }

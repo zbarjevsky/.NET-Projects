@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MZ.Tools;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -66,24 +67,9 @@ namespace YouTubeDownload
 
         private void m_btnBrowseForFolder_Click(object sender, EventArgs e)
         {
-            FolderBrowserDialog dlg = new FolderBrowserDialog()
-            {
-                RootFolder = Environment.SpecialFolder.MyComputer,
-                SelectedPath = Data.OutputFolder,
-                Description = "Select Folder to Download to:"
-            };
-
-            //select current folder
-            Task.Factory.StartNew(() =>
-            {
-                Thread.Sleep(100);
-                this.Invoke(new MethodInvoker(() => SendKeys.Send("{TAB}{TAB}{DOWN}{DOWN}{UP}{UP}")));
-            });
-
-            if (dlg.ShowDialog(this) == DialogResult.OK)
-            {
-                UpdateOutputFolder(dlg.SelectedPath);
-            }
+            string selectedPath = Data.OutputFolder;
+            this.BrowseForFolder(ref selectedPath, Data.OutputFolder);
+            UpdateOutputFolder(selectedPath);
         }
 
         private void m_lnkOutputFolder_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

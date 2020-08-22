@@ -43,8 +43,13 @@ namespace DesktopManagerUX
 
         private void OnSelectedTabChanged()
         {
-            if (LayoutConfiguration == null)
+            if (LayoutConfiguration == null ) 
                 return;
+
+            if (LayoutConfiguration.TabType == LayoutConfiguration.LayoutType.CreateNewTab)
+            {
+                return;
+            }
 
             if (LayoutConfiguration.SelectedMonitorInfo == null)
                 LayoutConfiguration.SelectedMonitorInfo = AppContext.Configuration.Displays[0];
@@ -183,6 +188,8 @@ namespace DesktopManagerUX
                 gridSizeSelector.SelectedSize = new GridSizeData(rows, cols);
 
                 RebuildAppsGrid(gridApps, rows, cols, this.LayoutConfiguration, AppContext.ViewModel);
+
+                DrawGridLines();
             }
             AppContext.Sync = false;
         }
@@ -300,10 +307,15 @@ namespace DesktopManagerUX
 
         private void _canvas_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+            DrawGridLines();
+        }
+
+        private void DrawGridLines()
+        {
             _canvas.Children.Clear();
 
-            int rows = LayoutConfiguration.GridSize.Rows * 2;
-            int cols = LayoutConfiguration.GridSize.Cols * 2;
+            int rows = LayoutConfiguration.GridSize.Rows * 3;
+            int cols = LayoutConfiguration.GridSize.Cols * 3;
 
             Thickness thickness = new Thickness(3);
             double line_distanceX = _canvas.ActualWidth / cols;

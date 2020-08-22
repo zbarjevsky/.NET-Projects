@@ -14,12 +14,19 @@ namespace SimpleBackup
         [STAThread]
         static void Main()
         {
-            if (MZ.Tools.SingleInstanceHelper.GlobalShowWindow(FormMain.TITLE))
-                return; //already running
+            try
+            {
+                if (MZ.Tools.SingleInstanceHelper.GlobalShowWindow(FormMain.TITLE))
+                    return; //already running
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormMain());
+                Application.EnableVisualStyles();
+                Application.SetCompatibleTextRenderingDefault(false);
+                Application.Run(new FormMain());
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message, FormMain.TITLE, MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

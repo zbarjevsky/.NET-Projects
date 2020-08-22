@@ -186,16 +186,22 @@ namespace SimpleBackup
         bool _working = false;
         private void PerformBackup(int startIndex, BackupOptions options)
         {
-            DriveInfo drive = BackupLogic.GetDriveInfo(_backupFilesList[0].Src);
-            if(drive == null)
+            DriveInfo driveSrc = BackupLogic.GetDriveInfo(_backupFilesList[0].Src);
+            DriveInfo driveDst = BackupLogic.GetDriveInfo(_backupFilesList[0].Dst);
+            if (driveSrc == null || driveDst == null)
             {
-                MessageBox.Show(this, "Source Drive is not accessible: " + _backupFilesList[0].Src);
+                MessageBox.Show(this, "Drive is not accessible: " + _backupFilesList[0].Src);
                 return;
             }
 
-            const double ONE_MB = 1024 * 1024;
-            double bigFileSizeThreshold = (drive.DriveType == DriveType.Network) ? 0.6 * ONE_MB : 12 * ONE_MB;
-            int refreshUICount = (drive.DriveType == DriveType.Network) ? 3 : 33;
+            bool isNetworkDive = (driveSrc.DriveType == DriveType.Network) || (driveDst.DriveType == DriveType.Network);
+
+            const int ONE_KB = 1024;
+            const int ONE_MB = 1024 * ONE_KB;
+
+            double bigFileSizeThreshold = isNetworkDive ? 0.6 * ONE_MB : 12 * ONE_MB;
+            int bigFileBufferSize = isNetworkDive ? 16 * ONE_KB : 256 * ONE_KB;
+            int refreshUICount = isNetworkDive ? 3 : 33;
 
             _abort = false;
             _pause = false;
@@ -210,12 +216,19 @@ namespace SimpleBackup
             m_chartProgress.GraphMainColor = Color.Blue;
 
             m_progressFile.Style = ProgressBarStyle.Blocks;
-            FileProgress progressCopyBigFile = new FileProgress(m_progressFile, this, NotifyOptions.NotifyValueChange);
+            FileProgress progressCopyBigFile = new FileProgress(m_progressFile, this, NotifyOptions.NotifyPercentChange);
+            progressCopyBigFile.OnChange = (status) =>
+            {
+                m_lblProgressFile.Text = string.Format("{0}%", progressCopyBigFile.Percent);
+                m_lblSpeedFile.Text = progressCopyBigFile.SubStatus;
+                if (_abort || _pause)
+                    progressCopyBigFile.Cancel = true;
+            };
 
             m_cmbViewFilter.SelectedIndex = 0; //reset to all - perform backup on whole list
             UpdateDisplayList(calculateNeededSize:false);
 
-            _progressData.InitCounting(startIndex, _backupFilesList.Count);
+            _progressSpeedData.InitCounting(startIndex == 0);
 
             Thread threadBackup = new Thread(() =>
             {
@@ -226,7 +239,9 @@ namespace SimpleBackup
 
                     BackupFile file = _backupFilesList[i];
                     file.BigFileSizeThreshold = bigFileSizeThreshold;
+                    file.BigFileBufferSize = bigFileBufferSize;
 
+                    long fileSizeBytes = 1024; //if no copy required - 'symbolic size' 1k is used - to improve average speed calc
                     int updateProgressCount = 128;
                     if (file.ValidateBackupNeeded(options))
                     {
@@ -237,7 +252,7 @@ namespace SimpleBackup
                             CommonUtils.ExecuteOnUIThread(() =>
                             {
                                 file.Status = BackupStatus.InProgress;
-                                m_listFiles.EnsureVisible(_startIndex);
+                                m_listFiles.EnsureVisible(i);
                                 m_listFiles.Refresh();
                             }, this);
                         }
@@ -247,10 +262,12 @@ namespace SimpleBackup
                             Thread.Sleep(10);
                             file.PerformBackup(progressCopyBigFile, options); //retry
                         }
+
+                        fileSizeBytes = file.SrcIfo.Length;
                     }
 
                     _startIndex = i;
-                    _progressData.AddCount(file.SrcIfo.Length, i, _backupFilesList.Count);
+                    _progressSpeedData.AddCount(fileSizeBytes, i, _backupFilesList.Count);
 
                     if (i % updateProgressCount == 0)
                     {
@@ -260,7 +277,7 @@ namespace SimpleBackup
                     }
                 }
 
-                _progressData.StopCounting();
+                _progressSpeedData.StopCounting();
                 SystemSounds.Beep.Play();
                 UpdateUI(false);
                 OnBackupDone();
@@ -272,7 +289,7 @@ namespace SimpleBackup
             threadBackup.Start();
         }
 
-        TransferSpeedCounter _progressData = new TransferSpeedCounter();
+        TransferSpeedCounter _progressSpeedData = new TransferSpeedCounter();
 
         private void UpdateUI(bool isRunning)
         {
@@ -282,13 +299,13 @@ namespace SimpleBackup
 
                 m_progressBarMain.Value = _startIndex;
 
-                TimeSpan estimatedTotal = _progressData.EstimatedTotal(m_progressBarMain);
+                TimeSpan estimatedTotal = _progressSpeedData.EstimatedTotal(m_progressBarMain);
 
                 m_txtInfoBottom.Text = string.Format(
                     "Copying file {0:###,##0} of {1:###,##0}, {2:###,##0.0} MB Done, Elapsed {3}, Total Estimated: {4}, Speed {5:###,##0.0} KB/s Average Speed {6:###,##0.0} KB/s",
-                    (_startIndex + 1), _backupFilesList.Count, _progressData.iBytesCount/ BackupLogic.i1MB,
-                    _progressData.ElapsedTime.ToString("h':'mm':'ss"),  estimatedTotal.ToString("h':'mm':'ss"),
-                    _progressData.SpeedInervalKB(TimeSpan.FromSeconds(10)), _progressData.SpeedAvgKB());
+                    (_startIndex + 1), _backupFilesList.Count, _progressSpeedData.iBytesCount/ BackupLogic.i1MB,
+                    _progressSpeedData.ElapsedTime.ToString("h':'mm':'ss"),  estimatedTotal.ToString("h':'mm':'ss"),
+                    _progressSpeedData.SpeedInervalKB(TimeSpan.FromSeconds(10)), _progressSpeedData.SpeedAvgKB());
 
                 int visibleIndex = _startIndex + 1;
                 if (visibleIndex >= _backupFilesList.Count)
@@ -301,7 +318,7 @@ namespace SimpleBackup
                 }
 
                 int max = 100;
-                List<double> speeds = _progressData.SpeedHistory(_backupFilesList.Count, ref max);
+                List<double> speeds = _progressSpeedData.SpeedHistory(_backupFilesList.Count, ref max);
                 m_chartProgress.SetHistory(speeds, max, _backupFilesList[_startIndex].Src);
 
                 if (_abort)
@@ -348,8 +365,8 @@ namespace SimpleBackup
                 m_txtInfoBottom.Text = string.Format(
                     "Backup status done: {0:###,##0} of {1:###,##0} files, {2:###,##0.0} MB Copyied, Errors: {3:###,##0}, Elapsed {4}, Average Speed {5:0.0} KB/s",
                     (_startIndex + 1), _backupFilesList.Count, 
-                    _progressData.iBytesCount / BackupLogic.i1MB, errCount, 
-                    _progressData.ElapsedTime.ToString("mm':'ss"), _progressData.SpeedAvgKB());
+                    _progressSpeedData.iBytesCount / BackupLogic.i1MB, errCount, 
+                    _progressSpeedData.ElapsedTime.ToString("mm':'ss"), _progressSpeedData.SpeedAvgKB());
             }, this);
         }
 

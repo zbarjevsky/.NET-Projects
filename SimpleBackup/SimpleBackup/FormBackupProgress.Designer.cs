@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormBackupProgress));
-            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet2 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
+            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet1 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
             this.m_listFiles = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -55,6 +55,8 @@
             this.m_progressFile = new MZ.WinForms.ColorBarsProgressBar();
             this.m_progressBarMain = new MZ.Tools.Windows7ProgressBar();
             this.m_chartProgress = new WindowsFormsApp1.ChartProgressUserControl();
+            this.m_lblProgressFile = new System.Windows.Forms.Label();
+            this.m_lblSpeedFile = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_spliMain)).BeginInit();
             this.m_spliMain.Panel1.SuspendLayout();
@@ -286,6 +288,8 @@
             // 
             // m_spliMain.Panel1
             // 
+            this.m_spliMain.Panel1.Controls.Add(this.m_lblSpeedFile);
+            this.m_spliMain.Panel1.Controls.Add(this.m_lblProgressFile);
             this.m_spliMain.Panel1.Controls.Add(this.m_btnPrepare);
             this.m_spliMain.Panel1.Controls.Add(this.m_lblStatusProgress);
             this.m_spliMain.Panel1.Controls.Add(this.m_listFiles);
@@ -321,20 +325,20 @@
             // 
             this.m_progressFile.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            themeColorSet2.Part1_ActiveColor = System.Drawing.Color.DodgerBlue;
-            themeColorSet2.Part1_InactiveColor = System.Drawing.Color.Gainsboro;
-            themeColorSet2.Part2_ActiveColor = System.Drawing.Color.LimeGreen;
-            themeColorSet2.Part2_InactiveColor = System.Drawing.Color.Gainsboro;
-            themeColorSet2.Part3_ActiveColor = System.Drawing.Color.LimeGreen;
-            themeColorSet2.Part3_InactiveColor = System.Drawing.Color.Gainsboro;
-            themeColorSet2.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
-            themeColorSet2.Threshold1 = 101;
-            themeColorSet2.Threshold2 = 101;
-            this.m_progressFile.ColorTheme = themeColorSet2;
-            this.m_progressFile.Location = new System.Drawing.Point(12, 268);
+            themeColorSet1.Part1_ActiveColor = System.Drawing.Color.DodgerBlue;
+            themeColorSet1.Part1_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet1.Part2_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet1.Part2_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet1.Part3_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet1.Part3_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet1.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
+            themeColorSet1.Threshold1 = 101;
+            themeColorSet1.Threshold2 = 101;
+            this.m_progressFile.ColorTheme = themeColorSet1;
+            this.m_progressFile.Location = new System.Drawing.Point(47, 268);
             this.m_progressFile.Name = "m_progressFile";
             this.m_progressFile.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            this.m_progressFile.Size = new System.Drawing.Size(805, 13);
+            this.m_progressFile.Size = new System.Drawing.Size(689, 13);
             this.m_progressFile.TabIndex = 10;
             this.m_progressFile.TabStop = false;
             // 
@@ -352,14 +356,34 @@
             // m_chartProgress
             // 
             this.m_chartProgress.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_chartProgress.GraphBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(152)))), ((int)(((byte)(251)))), ((int)(((byte)(152)))));
-            this.m_chartProgress.GraphMainColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
+            this.m_chartProgress.GraphBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(168)))), ((int)(((byte)(152)))), ((int)(((byte)(251)))), ((int)(((byte)(152)))));
+            this.m_chartProgress.GraphMainColor = System.Drawing.Color.FromArgb(((int)(((byte)(168)))), ((int)(((byte)(0)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.m_chartProgress.GraphTitle = "File Name";
             this.m_chartProgress.Location = new System.Drawing.Point(0, 0);
             this.m_chartProgress.Name = "m_chartProgress";
             this.m_chartProgress.Padding = new System.Windows.Forms.Padding(6, 4, 6, 4);
             this.m_chartProgress.Size = new System.Drawing.Size(829, 151);
             this.m_chartProgress.TabIndex = 16;
+            // 
+            // m_lblProgressFile
+            // 
+            this.m_lblProgressFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.m_lblProgressFile.AutoSize = true;
+            this.m_lblProgressFile.Location = new System.Drawing.Point(11, 267);
+            this.m_lblProgressFile.Name = "m_lblProgressFile";
+            this.m_lblProgressFile.Size = new System.Drawing.Size(30, 13);
+            this.m_lblProgressFile.TabIndex = 13;
+            this.m_lblProgressFile.Text = "0.0%";
+            // 
+            // m_lblSpeedFile
+            // 
+            this.m_lblSpeedFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_lblSpeedFile.AutoSize = true;
+            this.m_lblSpeedFile.Location = new System.Drawing.Point(742, 267);
+            this.m_lblSpeedFile.Name = "m_lblSpeedFile";
+            this.m_lblSpeedFile.Size = new System.Drawing.Size(51, 13);
+            this.m_lblSpeedFile.TabIndex = 14;
+            this.m_lblSpeedFile.Text = "0.0 MB/s";
             // 
             // FormBackupProgress
             // 
@@ -416,5 +440,7 @@
         private System.Windows.Forms.SplitContainer m_spliMain;
         private System.Windows.Forms.Panel m_pnlStatus;
         private WindowsFormsApp1.ChartProgressUserControl m_chartProgress;
+        private System.Windows.Forms.Label m_lblSpeedFile;
+        private System.Windows.Forms.Label m_lblProgressFile;
     }
 }

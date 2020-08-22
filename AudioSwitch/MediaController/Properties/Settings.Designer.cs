@@ -34,5 +34,17 @@ namespace MZ.Media.Properties {
                 this["PopupLocation"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100, 200")]
+        public global::System.Drawing.Point MainLocation {
+            get {
+                return ((global::System.Drawing.Point)(this["MainLocation"]));
+            }
+            set {
+                this["MainLocation"] = value;
+            }
+        }
     }
 }

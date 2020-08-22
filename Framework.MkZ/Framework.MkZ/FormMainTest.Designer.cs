@@ -40,6 +40,7 @@
             this.m_cmbListViewType = new System.Windows.Forms.ComboBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.m_btnEjectDrive = new System.Windows.Forms.Button();
             this.chartProgressUserControl1 = new WindowsFormsApp1.ChartProgressUserControl();
             this.m_chkEnable = new System.Windows.Forms.CheckBox();
             this.m_btnGradientWpfProgress = new System.Windows.Forms.Button();
@@ -57,6 +58,9 @@
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
             this.displayTopologyUserControl1 = new WpfApplication6.DisplayTopologyUserControl();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.m_chkNonStickMouse = new System.Windows.Forms.CheckBox();
+            this.m_cmbDriveLetter = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -66,6 +70,7 @@
             this.tabPage2.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage4.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // m_btnTestEdit
@@ -152,6 +157,8 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.m_cmbDriveLetter);
+            this.tabPage3.Controls.Add(this.m_btnEjectDrive);
             this.tabPage3.Controls.Add(this.chartProgressUserControl1);
             this.tabPage3.Controls.Add(this.m_chkEnable);
             this.tabPage3.Controls.Add(this.m_btnGradientWpfProgress);
@@ -171,14 +178,25 @@
             this.tabPage3.Text = "Common Controls";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // m_btnEjectDrive
+            // 
+            this.m_btnEjectDrive.Location = new System.Drawing.Point(208, 161);
+            this.m_btnEjectDrive.Name = "m_btnEjectDrive";
+            this.m_btnEjectDrive.Size = new System.Drawing.Size(75, 23);
+            this.m_btnEjectDrive.TabIndex = 17;
+            this.m_btnEjectDrive.Text = "Eject...";
+            this.m_btnEjectDrive.UseVisualStyleBackColor = true;
+            this.m_btnEjectDrive.Click += new System.EventHandler(this.m_btnEjectDrive_Click);
+            // 
             // chartProgressUserControl1
             // 
             this.chartProgressUserControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chartProgressUserControl1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.chartProgressUserControl1.GraphBackColor = System.Drawing.Color.LightSkyBlue;
-            this.chartProgressUserControl1.GraphMainColor = System.Drawing.Color.Blue;
+            this.chartProgressUserControl1.GraphBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(135)))), ((int)(((byte)(206)))), ((int)(((byte)(250)))));
+            this.chartProgressUserControl1.GraphMainColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.chartProgressUserControl1.GraphTitle = "Progress Bar";
             this.chartProgressUserControl1.Location = new System.Drawing.Point(160, 274);
             this.chartProgressUserControl1.Name = "chartProgressUserControl1";
             this.chartProgressUserControl1.Size = new System.Drawing.Size(567, 115);
@@ -416,6 +434,7 @@
             // tabPage4
             // 
             this.tabPage4.Controls.Add(this.elementHost1);
+            this.tabPage4.Controls.Add(this.panel1);
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Size = new System.Drawing.Size(742, 428);
@@ -428,10 +447,38 @@
             this.elementHost1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.elementHost1.Location = new System.Drawing.Point(0, 0);
             this.elementHost1.Name = "elementHost1";
-            this.elementHost1.Size = new System.Drawing.Size(742, 428);
+            this.elementHost1.Size = new System.Drawing.Size(742, 393);
             this.elementHost1.TabIndex = 0;
             this.elementHost1.Text = "elementHost1";
             this.elementHost1.Child = this.displayTopologyUserControl1;
+            // 
+            // panel1
+            // 
+            this.panel1.Controls.Add(this.m_chkNonStickMouse);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Location = new System.Drawing.Point(0, 393);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(742, 35);
+            this.panel1.TabIndex = 1;
+            // 
+            // m_chkNonStickMouse
+            // 
+            this.m_chkNonStickMouse.AutoSize = true;
+            this.m_chkNonStickMouse.Location = new System.Drawing.Point(13, 9);
+            this.m_chkNonStickMouse.Name = "m_chkNonStickMouse";
+            this.m_chkNonStickMouse.Size = new System.Drawing.Size(102, 17);
+            this.m_chkNonStickMouse.TabIndex = 0;
+            this.m_chkNonStickMouse.Text = "NonStickMouse";
+            this.m_chkNonStickMouse.UseVisualStyleBackColor = true;
+            this.m_chkNonStickMouse.CheckedChanged += new System.EventHandler(this.m_chkNonStickMouse_CheckedChanged);
+            // 
+            // m_cmbDriveLetter
+            // 
+            this.m_cmbDriveLetter.FormattingEnabled = true;
+            this.m_cmbDriveLetter.Location = new System.Drawing.Point(161, 162);
+            this.m_cmbDriveLetter.Name = "m_cmbDriveLetter";
+            this.m_cmbDriveLetter.Size = new System.Drawing.Size(41, 21);
+            this.m_cmbDriveLetter.TabIndex = 18;
             // 
             // FormMainTest
             // 
@@ -444,6 +491,7 @@
             this.Name = "FormMainTest";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form Main Test";
+            this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormMainTest_FormClosed);
             this.Load += new System.EventHandler(this.FormMainTest_Load);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
@@ -455,6 +503,8 @@
             this.tabPage2.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -486,5 +536,9 @@
         private WpfApplication6.DisplayTopologyUserControl displayTopologyUserControl1;
         private System.Windows.Forms.Button m_btnSaveIcons;
         private System.Windows.Forms.Button m_btnOpenIconsFile;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.CheckBox m_chkNonStickMouse;
+        private System.Windows.Forms.Button m_btnEjectDrive;
+        private System.Windows.Forms.ComboBox m_cmbDriveLetter;
     }
 }

@@ -1,9 +1,12 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="PlaybackSoundSwitch.Properties" GeneratedClassName="Settings">
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="MZ.Media.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
     <Setting Name="PopupLocation" Type="System.Drawing.Point" Scope="User">
       <Value Profile="(Default)">100, 100</Value>
+    </Setting>
+    <Setting Name="MainLocation" Type="System.Drawing.Point" Scope="User">
+      <Value Profile="(Default)">100, 200</Value>
     </Setting>
   </Settings>
 </SettingsFile>

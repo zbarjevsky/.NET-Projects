@@ -89,6 +89,7 @@
     </Compile>
     <Compile Include="Windows\MouseHook.cs" />
     <Compile Include="Windows\ProcessExtensions.cs" />
+    <Compile Include="Windows\UsbEject.cs" />
     <Compile Include="Windows\User32_MouseHook.cs" />
     <Compile Include="WinForms\ChartProgressUserControl.cs">
       <SubType>UserControl</SubType>
@@ -173,7 +174,7 @@
     <Compile Include="WPF\DraggableExtension.cs" />
     <Compile Include="WPF\GridLengthAnimation.cs" />
     <Compile Include="WPF\ItemsControlExtensions.cs" />
-    <Compile Include="WPF\NonStickMouse.cs" />
+    <Compile Include="Windows\NonStickMouse.cs" />
     <Compile Include="WPF\PopupInfoWindow.xaml.cs">
       <DependentUpon>PopupInfoWindow.xaml</DependentUpon>
     </Compile>

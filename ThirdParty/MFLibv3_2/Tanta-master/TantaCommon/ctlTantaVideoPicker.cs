@@ -100,7 +100,8 @@ namespace TantaCommon
             // Query MF for the devices, can also use MF_DEVSOURCE_ATTRIBUTE_SOURCE_TYPE_AUDCAP_GUID 
             // here to see the audio capture devices
             List<TantaMFDevice> vcDevices = TantaWMFUtils.GetDevicesByCategory(MFAttributesClsid.MF_DEVSOURCE_ATTRIBUTE_SOURCE_TYPE, CLSID.MF_DEVSOURCE_ATTRIBUTE_SOURCE_TYPE_VIDCAP_GUID);
-            if (vcDevices == null) return;
+            if (vcDevices == null) 
+                return;
 
             foreach (TantaMFDevice mfDevice in vcDevices)
             {
@@ -110,8 +111,14 @@ namespace TantaCommon
                 sb.Append("\r\n");
                 sb.Append("\r\n");
             }
+
             // add all known devices
             comboBoxCaptureDevices.DataSource = vcDevices;
+
+            //select first
+            listViewSupportedFormats.SelectedIndices.Clear();
+            if (comboBoxCaptureDevices.Items.Count > 0 && listViewSupportedFormats.Items.Count > 0)
+                listViewSupportedFormats.SelectedIndices.Add(0);
         }
 
         /// +=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=+=
@@ -181,7 +188,10 @@ namespace TantaCommon
                 // clear what we have now
                 listViewSupportedFormats.Clear();
                 // reset this
-                listViewSupportedFormats.ListViewItemSorter = null;
+                listViewSupportedFormats.ListViewItemSorter = new ListViewItemCompareAsText();
+
+                if (comboBoxCaptureDevices.SelectedItem == null)
+                    return;
 
                 // get the currently selected device
                 TantaMFDevice currentDevice = (TantaMFDevice)comboBoxCaptureDevices.SelectedItem;
@@ -437,12 +447,16 @@ namespace TantaCommon
         /// </history>
         private TantaMFVideoFormatContainer GetSelectedVideoFormatContainer()
         { 
-            if (listViewSupportedFormats.SelectedItems.Count == 0) return null;
+            if (listViewSupportedFormats.SelectedItems.Count == 0) 
+                return null;
 
             ListViewItem lvi = listViewSupportedFormats.SelectedItems[0];
-            if (lvi == null) return null;
-            if (lvi.Tag == null) return null;
-            if ((lvi.Tag is TantaMFVideoFormatContainer) == false) return null;
+            if (lvi == null) 
+                return null;
+            if (lvi.Tag == null) 
+                return null;
+            if ((lvi.Tag is TantaMFVideoFormatContainer) == false) 
+                return null;
 
             return (lvi.Tag as TantaMFVideoFormatContainer);
          }
@@ -470,9 +484,8 @@ namespace TantaCommon
         /// </history>
         private void listViewSupportedFormats_ColumnClick(object sender, ColumnClickEventArgs e)
         {
-            // Set the ListViewItemSorter property to a new ListViewItemComparer
-            // object.
-            listViewSupportedFormats.ListViewItemSorter = new ListViewItemCompareAsText(e.Column);
+            // Update the ListViewItemSorter property to a new ListViewItemComparer object.
+            (listViewSupportedFormats.ListViewItemSorter as ListViewItemCompareAsText).SetSortingColumn(e.Column, 0);
             // Call the sort method to manually sort.
             listViewSupportedFormats.Sort();
         }

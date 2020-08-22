@@ -46,7 +46,7 @@
             // 
             this.m_btnEditTab.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnEditTab.Image = ((System.Drawing.Image)(resources.GetObject("m_btnEditTab.Image")));
-            this.m_btnEditTab.Location = new System.Drawing.Point(431, 0);
+            this.m_btnEditTab.Location = new System.Drawing.Point(443, 1);
             this.m_btnEditTab.Margin = new System.Windows.Forms.Padding(4);
             this.m_btnEditTab.Name = "m_btnEditTab";
             this.m_btnEditTab.Size = new System.Drawing.Size(27, 23);
@@ -59,7 +59,7 @@
             // 
             this.m_btnDelTab.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnDelTab.Image = ((System.Drawing.Image)(resources.GetObject("m_btnDelTab.Image")));
-            this.m_btnDelTab.Location = new System.Drawing.Point(501, 0);
+            this.m_btnDelTab.Location = new System.Drawing.Point(501, 1);
             this.m_btnDelTab.Margin = new System.Windows.Forms.Padding(4);
             this.m_btnDelTab.Name = "m_btnDelTab";
             this.m_btnDelTab.Size = new System.Drawing.Size(27, 23);
@@ -72,7 +72,7 @@
             // 
             this.m_btnAddTab.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnAddTab.Image = ((System.Drawing.Image)(resources.GetObject("m_btnAddTab.Image")));
-            this.m_btnAddTab.Location = new System.Drawing.Point(466, 0);
+            this.m_btnAddTab.Location = new System.Drawing.Point(472, 1);
             this.m_btnAddTab.Margin = new System.Windows.Forms.Padding(4);
             this.m_btnAddTab.Name = "m_btnAddTab";
             this.m_btnAddTab.Size = new System.Drawing.Size(27, 23);
@@ -86,11 +86,11 @@
             this.m_tabPlayLists.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_tabPlayLists.Controls.Add(this.tabPage1);
-            this.m_tabPlayLists.Location = new System.Drawing.Point(0, 10);
+            this.m_tabPlayLists.Location = new System.Drawing.Point(0, 0);
             this.m_tabPlayLists.Margin = new System.Windows.Forms.Padding(4);
             this.m_tabPlayLists.Name = "m_tabPlayLists";
             this.m_tabPlayLists.SelectedIndex = 0;
-            this.m_tabPlayLists.Size = new System.Drawing.Size(392, 46);
+            this.m_tabPlayLists.Size = new System.Drawing.Size(441, 46);
             this.m_tabPlayLists.TabIndex = 3;
             this.m_tabPlayLists.SelectedIndexChanged += new System.EventHandler(this.m_tabPlayLists_SelectedIndexChanged);
             // 
@@ -101,12 +101,13 @@
             this.tabPage1.Margin = new System.Windows.Forms.Padding(4);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(4);
-            this.tabPage1.Size = new System.Drawing.Size(384, 13);
+            this.tabPage1.Size = new System.Drawing.Size(433, 13);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "<<Test>>";
             // 
             // m_pnlTabs
             // 
+            this.m_pnlTabs.BackColor = System.Drawing.SystemColors.Control;
             this.m_pnlTabs.Controls.Add(this.m_tabPlayLists);
             this.m_pnlTabs.Controls.Add(this.m_btnEditTab);
             this.m_pnlTabs.Controls.Add(this.m_btnAddTab);
@@ -115,16 +116,16 @@
             this.m_pnlTabs.Location = new System.Drawing.Point(0, 0);
             this.m_pnlTabs.Margin = new System.Windows.Forms.Padding(4);
             this.m_pnlTabs.Name = "m_pnlTabs";
-            this.m_pnlTabs.Size = new System.Drawing.Size(532, 36);
+            this.m_pnlTabs.Size = new System.Drawing.Size(532, 28);
             this.m_pnlTabs.TabIndex = 0;
             // 
             // m_mp3List
             // 
             this.m_mp3List.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_mp3List.Location = new System.Drawing.Point(0, 36);
+            this.m_mp3List.Location = new System.Drawing.Point(0, 28);
             this.m_mp3List.Margin = new System.Windows.Forms.Padding(5);
             this.m_mp3List.Name = "m_mp3List";
-            this.m_mp3List.Size = new System.Drawing.Size(532, 195);
+            this.m_mp3List.Size = new System.Drawing.Size(532, 203);
             this.m_mp3List.TabIndex = 1;
             // 
             // PlayListTabControl

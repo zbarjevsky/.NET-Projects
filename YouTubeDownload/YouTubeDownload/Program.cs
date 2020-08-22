@@ -17,11 +17,18 @@ namespace YouTubeDownload
         [STAThread]
         static void Main()
         {
-            UpdateDependencies();
-
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new FormMain());
+            
+            try
+            {
+                UpdateDependencies();
+                Application.Run(new FormMain());
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message, "YouTube Downloader UI", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }        
         }
 
         private static void UpdateDependencies()

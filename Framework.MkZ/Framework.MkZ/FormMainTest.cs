@@ -13,6 +13,7 @@ using System.Windows.Forms;
 using MZ.WPF;
 using MZ.WPF.MessageBox;
 using System.IO;
+using MZ.Windows;
 
 namespace MZ
 {
@@ -61,6 +62,14 @@ namespace MZ
             //}
 
             //NonStickMouse.EnableMouseCorrection(true);
+
+            DriveInfo [] ifo = DriveInfo.GetDrives();
+            m_cmbDriveLetter.Items.AddRange(ifo.Where(d => d.DriveType == DriveType.Removable).ToArray());
+        }
+
+        private void FormMainTest_FormClosed(object sender, FormClosedEventArgs e)
+        {
+            NonStickMouse.Instance.Dispose();
         }
 
         private void m_btnTestEdit_Click(object sender, EventArgs e)
@@ -180,6 +189,16 @@ namespace MZ
             SaveFileDialog dlg = new SaveFileDialog();
             if (dlg.ShowDialog(this) != DialogResult.OK)
                 return;
+        }
+
+        private void m_chkNonStickMouse_CheckedChanged(object sender, EventArgs e)
+        {
+            NonStickMouse.Instance.EnableMouseCorrection(m_chkNonStickMouse.Checked);
+        }
+
+        private void m_btnEjectDrive_Click(object sender, EventArgs e)
+        {
+            //RemoveDriveTools.RemoveDrive(m_cmbDriveLetter.Text);
         }
     }
 }

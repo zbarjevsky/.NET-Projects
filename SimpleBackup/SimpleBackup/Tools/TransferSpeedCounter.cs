@@ -60,11 +60,11 @@ namespace SimpleBackup.Tools
             _stopper.Restart();
         }
 
-        public void InitCounting(int startIndex, int total)
+        public void InitCounting(bool resetCount = true)
         {
             _stopper.Restart();
 
-            if (startIndex == 0)
+            if (resetCount)
             {
                 iBytesCount = 0;
                 ElapsedTime = TimeSpan.FromSeconds(0);

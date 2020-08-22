@@ -69,7 +69,6 @@
             this.m_openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.m_toolStripMain = new System.Windows.Forms.ToolStrip();
             this.m_btnOpenImage = new System.Windows.Forms.ToolStripButton();
-            this.m_btnFullScreen = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.m_btnPrevImage = new System.Windows.Forms.ToolStripButton();
             this.m_btnNextImage = new System.Windows.Forms.ToolStripButton();
@@ -79,7 +78,11 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.m_btnSlideShow = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
-            this.m_cmbAudioOutDevices = new System.Windows.Forms.ToolStripComboBox();
+            this.m_btnFullScreen = new System.Windows.Forms.ToolStripSplitButton();
+            this.m_mnuFullScreenDisp1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuFullScreenDisp2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuFullScreenDisp3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuFullScreenDisp4 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.m_imageListFullScreen = new System.Windows.Forms.ImageList(this.components);
             this.m_pnlMain.SuspendLayout();
@@ -538,8 +541,7 @@
             this.m_lblImageDesc,
             this.toolStripSeparator3,
             this.m_btnSlideShow,
-            this.toolStripSeparator4,
-            this.m_cmbAudioOutDevices});
+            this.toolStripSeparator4});
             this.m_toolStripMain.Location = new System.Drawing.Point(0, 28);
             this.m_toolStripMain.Name = "m_toolStripMain";
             this.m_toolStripMain.Size = new System.Drawing.Size(946, 29);
@@ -554,16 +556,6 @@
             this.m_btnOpenImage.Size = new System.Drawing.Size(98, 26);
             this.m_btnOpenImage.Text = "Open Image";
             this.m_btnOpenImage.Click += new System.EventHandler(this.m_btnOpenImage_Click);
-            // 
-            // m_btnFullScreen
-            // 
-            this.m_btnFullScreen.Image = ((System.Drawing.Image)(resources.GetObject("m_btnFullScreen.Image")));
-            this.m_btnFullScreen.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnFullScreen.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.m_btnFullScreen.Name = "m_btnFullScreen";
-            this.m_btnFullScreen.Size = new System.Drawing.Size(155, 26);
-            this.m_btnFullScreen.Text = "Full Screen Image (F11)";
-            this.m_btnFullScreen.Click += new System.EventHandler(this.m_btnFullScreen_Click);
             // 
             // toolStripSeparator1
             // 
@@ -629,11 +621,48 @@
             this.toolStripSeparator4.Name = "toolStripSeparator4";
             this.toolStripSeparator4.Size = new System.Drawing.Size(6, 29);
             // 
-            // m_cmbAudioOutDevices
+            // m_btnFullScreen
             // 
-            this.m_cmbAudioOutDevices.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.m_cmbAudioOutDevices.Name = "m_cmbAudioOutDevices";
-            this.m_cmbAudioOutDevices.Size = new System.Drawing.Size(300, 29);
+            this.m_btnFullScreen.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.m_mnuFullScreenDisp1,
+            this.m_mnuFullScreenDisp2,
+            this.m_mnuFullScreenDisp3,
+            this.m_mnuFullScreenDisp4});
+            this.m_btnFullScreen.Image = ((System.Drawing.Image)(resources.GetObject("m_btnFullScreen.Image")));
+            this.m_btnFullScreen.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.m_btnFullScreen.Name = "m_btnFullScreen";
+            this.m_btnFullScreen.Size = new System.Drawing.Size(167, 26);
+            this.m_btnFullScreen.Text = "Full Screen Image (F11)";
+            this.m_btnFullScreen.ToolTipText = "Show Full Screen Image (F11)";
+            this.m_btnFullScreen.ButtonClick += new System.EventHandler(this.m_mnuViewFullScreen_Click);
+            // 
+            // m_mnuFullScreenDisp1
+            // 
+            this.m_mnuFullScreenDisp1.Name = "m_mnuFullScreenDisp1";
+            this.m_mnuFullScreenDisp1.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuFullScreenDisp1.Text = "Disp1";
+            this.m_mnuFullScreenDisp1.Click += new System.EventHandler(this.m_mnuViewFullScreen_Click);
+            // 
+            // m_mnuFullScreenDisp2
+            // 
+            this.m_mnuFullScreenDisp2.Name = "m_mnuFullScreenDisp2";
+            this.m_mnuFullScreenDisp2.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuFullScreenDisp2.Text = "Disp2";
+            this.m_mnuFullScreenDisp2.Click += new System.EventHandler(this.m_mnuViewFullScreen_Click);
+            // 
+            // m_mnuFullScreenDisp3
+            // 
+            this.m_mnuFullScreenDisp3.Name = "m_mnuFullScreenDisp3";
+            this.m_mnuFullScreenDisp3.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuFullScreenDisp3.Text = "Disp3";
+            this.m_mnuFullScreenDisp3.Click += new System.EventHandler(this.m_mnuViewFullScreen_Click);
+            // 
+            // m_mnuFullScreenDisp4
+            // 
+            this.m_mnuFullScreenDisp4.Name = "m_mnuFullScreenDisp4";
+            this.m_mnuFullScreenDisp4.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuFullScreenDisp4.Text = "Disp4";
+            this.m_mnuFullScreenDisp4.Click += new System.EventHandler(this.m_mnuViewFullScreen_Click);
             // 
             // toolStripButton1
             // 
@@ -668,7 +697,7 @@
             this.MainMenuStrip = this.m_menuMain;
             this.MinimumSize = new System.Drawing.Size(532, 294);
             this.Name = "FormStopWatch";
-            this.Text = "Meditation";
+            this.Text = "Play Media - Time...";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.FormStopWatch_FormClosing);
             this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.FormStopWatch_FormClosed);
             this.Load += new System.EventHandler(this.FormStopWatch_Load);
@@ -750,7 +779,6 @@
 		private System.Windows.Forms.ToolStripStatusLabel m_toolStripStatusLabel1;
 		private System.Windows.Forms.ToolStripStatusLabel m_toolStripStatusLabel2;
 		private System.Windows.Forms.ToolStripProgressBar m_toolStripProgressBar1;
-		private System.Windows.Forms.ToolStripButton m_btnFullScreen;
 		private System.Windows.Forms.ToolStripTextBox m_txtImageIndex;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
 		private System.Windows.Forms.ToolStripButton toolStripButton1;
@@ -765,7 +793,11 @@
         private System.Windows.Forms.ToolStripMenuItem m_mnuViewFullScreen;
         private System.Windows.Forms.ImageList m_imageListFullScreen;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-        private System.Windows.Forms.ToolStripComboBox m_cmbAudioOutDevices;
+        private System.Windows.Forms.ToolStripSplitButton m_btnFullScreen;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuFullScreenDisp1;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuFullScreenDisp2;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuFullScreenDisp3;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuFullScreenDisp4;
     }
 }
 
