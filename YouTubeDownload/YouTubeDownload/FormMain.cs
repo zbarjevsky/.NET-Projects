@@ -184,6 +184,7 @@ namespace YouTubeDownload
             m_ctxmnuOpenOutputFolder.Enabled = bHasSelection;
             m_ctxmnuOpenSelectedFile.Enabled = bHasSelection;
             m_ctxmnuRemoveSelected.Enabled = bHasSelection;
+            m_ctxmnuEdit.Enabled = bHasSelection;
             m_ctxmnuDownloadAgain.Enabled = bHasSelection;
             m_ctxmnuCMD.Enabled = bHasSelection;
             m_ctxmnuCopyFileName.Enabled = bHasSelection;
