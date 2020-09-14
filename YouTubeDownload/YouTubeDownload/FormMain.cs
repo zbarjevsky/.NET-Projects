@@ -472,5 +472,44 @@ namespace YouTubeDownload
                 Clipboard.SetText(data.Url);
             }
         }
+
+        private void m_ctxmnuCopyCommandLine_Click(object sender, EventArgs e)
+        {
+            if (m_listUrls.SelectedItems.Count == 0)
+                return;
+
+            DownloadData data = m_listUrls.SelectedItems[0].Tag as DownloadData;
+            if (data != null)
+            {
+                string cmd = YouTube_DL.PrepareCommanLine(data, out string exePath);
+                Clipboard.SetText(exePath + " " + cmd);
+            }
+        }
+
+        private void m_ctxmnuEdit_Click(object sender, EventArgs e)
+        {
+            if (m_listUrls.SelectedItems.Count == 0)
+                return;
+
+            ListViewItem selected = m_listUrls.SelectedItems[0];
+            DownloadData data = selected.Tag as DownloadData;
+            if (data != null)
+            {
+                FormAddUrl frm = new FormAddUrl(data);
+                if (frm.ShowDialog(this) != DialogResult.OK)
+                    return;
+
+                data = frm.Data.Clone();
+                data.State = DownloadState.InQueue;
+
+                selected.Text = data.State.ToString();
+                selected.SubItems[1].Text = (data.Description);
+                selected.SubItems[2].Text = (data.Url);
+                selected.Tag = data;
+
+                UpdateButtonsState();
+                StartDownloadNext(true);
+            }
+        }
     }
 }

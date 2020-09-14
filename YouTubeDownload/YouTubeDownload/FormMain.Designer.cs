@@ -56,11 +56,13 @@
             this.m_ctxmnuRemoveSelected = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
             this.m_ctxmnuDownloadAgain = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_ctxmnuCMD = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
             this.m_ctxmnuOpenSelectedFile = new System.Windows.Forms.ToolStripMenuItem();
             this.m_ctxmnuOpenOutputFolder = new System.Windows.Forms.ToolStripMenuItem();
             this.m_ctxmnuCopyFileName = new System.Windows.Forms.ToolStripMenuItem();
             this.m_ctxmnuCopyURL = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_ctxmnuCopyCommandLine = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripSeparator();
             this.m_ctxmnuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.m_btnAddUrl = new System.Windows.Forms.Button();
@@ -74,7 +76,7 @@
             this.m_btnBrowseForFolder = new System.Windows.Forms.Button();
             this.m_errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.m_ctxmnuCMD = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_ctxmnuEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.m_statusStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.m_ContextMenuList.SuspendLayout();
@@ -269,6 +271,7 @@
             this.m_ctxmnuAddUrl,
             this.m_ctxmnuRemoveSelected,
             this.toolStripMenuItem3,
+            this.m_ctxmnuEdit,
             this.m_ctxmnuDownloadAgain,
             this.m_ctxmnuCMD,
             this.toolStripMenuItem5,
@@ -276,10 +279,11 @@
             this.m_ctxmnuOpenOutputFolder,
             this.m_ctxmnuCopyFileName,
             this.m_ctxmnuCopyURL,
+            this.m_ctxmnuCopyCommandLine,
             this.toolStripMenuItem4,
             this.m_ctxmnuExit});
             this.m_ContextMenuList.Name = "contextMenuStrip1";
-            this.m_ContextMenuList.Size = new System.Drawing.Size(220, 278);
+            this.m_ContextMenuList.Size = new System.Drawing.Size(220, 330);
             // 
             // m_ctxmnuAddUrl
             // 
@@ -308,6 +312,13 @@
             this.m_ctxmnuDownloadAgain.Size = new System.Drawing.Size(219, 26);
             this.m_ctxmnuDownloadAgain.Text = "Download Again";
             this.m_ctxmnuDownloadAgain.Click += new System.EventHandler(this.m_ctxmnuDownloadAgain_Click);
+            // 
+            // m_ctxmnuCMD
+            // 
+            this.m_ctxmnuCMD.Name = "m_ctxmnuCMD";
+            this.m_ctxmnuCMD.Size = new System.Drawing.Size(219, 26);
+            this.m_ctxmnuCMD.Text = "Download Running CMD...";
+            this.m_ctxmnuCMD.Click += new System.EventHandler(this.m_ctxmnuCMD_Click);
             // 
             // toolStripMenuItem5
             // 
@@ -341,6 +352,13 @@
             this.m_ctxmnuCopyURL.Size = new System.Drawing.Size(219, 26);
             this.m_ctxmnuCopyURL.Text = "Copy URL";
             this.m_ctxmnuCopyURL.Click += new System.EventHandler(this.m_ctxmnuCopyURL_Click);
+            // 
+            // m_ctxmnuCopyCommandLine
+            // 
+            this.m_ctxmnuCopyCommandLine.Name = "m_ctxmnuCopyCommandLine";
+            this.m_ctxmnuCopyCommandLine.Size = new System.Drawing.Size(219, 26);
+            this.m_ctxmnuCopyCommandLine.Text = "Copy Command Line";
+            this.m_ctxmnuCopyCommandLine.Click += new System.EventHandler(this.m_ctxmnuCopyCommandLine_Click);
             // 
             // toolStripMenuItem4
             // 
@@ -482,12 +500,12 @@
             // 
             this.m_errorProvider.ContainerControl = this;
             // 
-            // m_ctxmnuCMD
+            // m_ctxmnuEdit
             // 
-            this.m_ctxmnuCMD.Name = "m_ctxmnuCMD";
-            this.m_ctxmnuCMD.Size = new System.Drawing.Size(219, 26);
-            this.m_ctxmnuCMD.Text = "Download Running CMD...";
-            this.m_ctxmnuCMD.Click += new System.EventHandler(this.m_ctxmnuCMD_Click);
+            this.m_ctxmnuEdit.Name = "m_ctxmnuEdit";
+            this.m_ctxmnuEdit.Size = new System.Drawing.Size(219, 26);
+            this.m_ctxmnuEdit.Text = "Edit Entry Settings";
+            this.m_ctxmnuEdit.Click += new System.EventHandler(this.m_ctxmnuEdit_Click);
             // 
             // FormMain
             // 
@@ -575,6 +593,8 @@
         private System.Windows.Forms.ToolStripMenuItem m_ctxmnuCopyURL;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.ToolStripMenuItem m_ctxmnuCMD;
+        private System.Windows.Forms.ToolStripMenuItem m_ctxmnuCopyCommandLine;
+        private System.Windows.Forms.ToolStripMenuItem m_ctxmnuEdit;
     }
 }
 

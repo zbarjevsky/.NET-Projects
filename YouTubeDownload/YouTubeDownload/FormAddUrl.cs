@@ -23,7 +23,44 @@ namespace YouTubeDownload
             InitializeComponent();
 
             Data.OutputFolder = outputFolder;
-            m_chkNoPlayList.Checked = true; // Properties.Settings.Default.NoPlayList;
+            Data.NoPlayList = true; // Properties.Settings.Default.NoPlayList;
+            UpdateData(true);
+        }
+
+        public FormAddUrl(DownloadData data)
+        {
+            InitializeComponent();
+
+            m_btnAddUrl.Text = "Update && &Start";
+            Data = data.Clone();
+            UpdateData(true);
+        }
+
+        private void UpdateData(bool fromData)
+        {
+            if(fromData)
+            {
+                m_txtUrl.Text = Data.Url;
+                m_chkNoPlayList.Checked = Data.NoPlayList;
+                m_chkAudioOnly.Checked = Data.AudioOnly;
+                m_cmbAdditionalParameters.Text = Data.AdditionalParameters;
+                m_cmbFileName.Text = Data.FileNameTemplate;
+            }
+            else
+            {
+                Uri url = new Uri(m_txtUrl.Text);
+
+                Data.Description = url.PathAndQuery;
+                Data.Url = m_txtUrl.Text;
+                Data.NoPlayList = m_chkNoPlayList.Checked;
+                Data.AudioOnly = m_chkAudioOnly.Checked;
+                Data.AdditionalParameters = m_cmbAdditionalParameters.Text;
+
+                if (!string.IsNullOrWhiteSpace(m_cmbFileName.Text))
+                    Data.FileNameTemplate = m_cmbFileName.Text;
+                else
+                    Data.FileNameTemplate = m_cmbFileName.Items[0].ToString();
+            }
         }
 
         private void FormAddUrl_Load(object sender, EventArgs e)
@@ -33,7 +70,7 @@ namespace YouTubeDownload
             try { text = (string)Clipboard.GetData(DataFormats.UnicodeText.ToString()); }
             catch {}
 
-            if (IsValidYouTubeUrl(text))
+            if (IsValidUrl(text))
                 m_txtUrl.Text = text;
 
             UpdateOutputFolder(Data.OutputFolder);
@@ -46,18 +83,7 @@ namespace YouTubeDownload
             Properties.Settings.Default.NoPlayList = m_chkNoPlayList.Checked;
             Properties.Settings.Default.Save();
 
-            Uri url = new Uri(m_txtUrl.Text);
-
-            Data.Description = url.PathAndQuery;
-            Data.Url = m_txtUrl.Text;
-            Data.NoPlayList = m_chkNoPlayList.Checked;
-            Data.AudioOnly = m_chkAudioOnly.Checked;
-            Data.AdditionalParameters = m_cmbAdditionalParameters.Text;
-
-            if (!string.IsNullOrWhiteSpace(m_cmbFileName.Text))
-                Data.FileNameTemplate = m_cmbFileName.Text;
-            else
-                Data.FileNameTemplate = m_cmbFileName.Items[0].ToString();
+            UpdateData(false);
         }
 
         private void m_txtUrl_TextChanged(object sender, EventArgs e)
@@ -94,10 +120,10 @@ namespace YouTubeDownload
 
         private void UpdateButtonsState()
         {
-            m_btnAddUrl.Enabled = IsValidYouTubeUrl(m_txtUrl.Text);
+            m_btnAddUrl.Enabled = IsValidUrl(m_txtUrl.Text);
         }
 
-        private bool IsValidYouTubeUrl(string text)
+        private bool IsValidUrl(string text)
         {
             Uri url = null;
             try { url = new Uri(text); } catch { }

@@ -137,7 +137,7 @@
             this.m_btnAddUrl.Name = "m_btnAddUrl";
             this.m_btnAddUrl.Size = new System.Drawing.Size(136, 31);
             this.m_btnAddUrl.TabIndex = 6;
-            this.m_btnAddUrl.Text = "Add && Start";
+            this.m_btnAddUrl.Text = "Add && &Start";
             this.m_btnAddUrl.UseVisualStyleBackColor = true;
             this.m_btnAddUrl.Click += new System.EventHandler(this.m_btnAddUrl_Click);
             // 

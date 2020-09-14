@@ -96,8 +96,7 @@ namespace YouTubeDownload
             parameters += data.AudioOnly ? " --extract-audio --audio-format mp3 " : " ";
             parameters += data.AdditionalParameters;
 
-            string outParams = string.Format(" \"{0}\" {1} -o \"{2}\\{3}\"",
-                data.Url, parameters, data.OutputFolder, data.FileNameTemplate);
+            string outParams = $" {parameters} -o \"{data.OutputFolder}\\{data.FileNameTemplate}\" \"{data.Url}\"";
 
             return outParams;
         }
