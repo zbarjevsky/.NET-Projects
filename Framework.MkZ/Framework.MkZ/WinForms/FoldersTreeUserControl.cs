@@ -18,6 +18,7 @@ namespace MZ.WinForms
 		private const string NODE_PLACEHOLDER = "!!should not see this!!";
 
 		public Action<string> AfterSelectAction = (fullPath) => { };
+		public string SelectedFolder { get; private set; }
 
         public FoldersTreeUserControl()
         {
@@ -30,13 +31,16 @@ namespace MZ.WinForms
 		}
 
 		//This procedure populate the TreeView with the Drive list
-		public void SelectFolder(string fullPath)
+		public void SelectFolder(string fullPath, bool expand)
 		{
 			TreeNode node = FindTreeNode(fullPath);
 			if (node != null)
 			{
+				SelectedFolder = fullPath;
 				tvFolders.SelectedNode = node;
 				node.EnsureVisible();
+				if (expand)
+					node.Expand();
 			}
 		}
 
@@ -105,7 +109,7 @@ namespace MZ.WinForms
 
 			foreach (TreeNode n in node.Nodes)
 			{
-				if(n.Name == folders[index])
+				if(StringComparer.OrdinalIgnoreCase.Equals(n.Name, folders[index]))
 				{
 					if (index == folders.Count - 1)
 						return n;
@@ -221,7 +225,8 @@ namespace MZ.WinForms
 					//Directory.Move(path, newPath);
 					FileUtils.RenameDirectoryWithSystemProgressDialog(path, e.Label);
 					e.Node.Name = e.Label;
-					AfterSelectAction(getFullPath(e.Node));
+					SelectedFolder = getFullPath(e.Node);
+					AfterSelectAction(SelectedFolder);
 				}
 			}
 			catch (Exception err)
@@ -234,10 +239,11 @@ namespace MZ.WinForms
 		private void tvFolders_AfterSelect(object sender, System.Windows.Forms.TreeViewEventArgs e)
 		{
 			//notify
-			AfterSelectAction(getFullPath(e.Node));
+			SelectedFolder = getFullPath(e.Node);
+			AfterSelectAction(SelectedFolder);
 		}
 
-        private void tvFolders_BeforeExpand(object sender, TreeViewCancelEventArgs e)
+		private void tvFolders_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
 			if(e.Node.Nodes.Count == 0 || e.Node.Nodes[0].Name == NODE_PLACEHOLDER)
             {

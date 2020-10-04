@@ -122,6 +122,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Dependencies.sfx.exe" />
+    <SplashScreen Include="SplashScreen.png" />
     <Content Include="youtube.ico" />
   </ItemGroup>
   <ItemGroup>

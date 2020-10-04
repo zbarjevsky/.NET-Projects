@@ -21,7 +21,7 @@ namespace MZ.WinForms
         public string SelectedFolder 
         { 
             get { return m_txtSelectedFolder.Text; } 
-            set { m_txtSelectedFolder.Text = value; SelectInTree(); }
+            set { m_txtSelectedFolder.Text = value; SelectInTree(true); }
         }
 
         public string Description 
@@ -45,7 +45,7 @@ namespace MZ.WinForms
             m_btnCancel.Enabled = false;
             Application.DoEvents();
 
-            SelectInTree();
+            SelectInTree(true);
 
             EnableControls(true, "");
             this.Cursor = Cursors.Default;
@@ -59,14 +59,18 @@ namespace MZ.WinForms
             string newFolder = Path.Combine(oldFolder, "NewFolder");
             Directory.CreateDirectory(newFolder);
             m_treeFolders.RefreshFolder(oldFolder); //load new folder
-            m_treeFolders.SelectFolder(newFolder);
+            m_treeFolders.SelectFolder(newFolder, false);
             m_treeFolders.EditFolder(newFolder);
             m_txtSelectedFolder.Text = newFolder;
         }
 
         private void m_btnOk_Click(object sender, EventArgs e)
         {
-
+            if(!StringComparer.OrdinalIgnoreCase.Equals(m_txtSelectedFolder.Text, m_treeFolders.SelectedFolder))
+            {
+                SelectInTree(true);
+                DialogResult = DialogResult.None;
+            }
         }
 
         private void m_btnCancel_Click(object sender, EventArgs e)
@@ -74,11 +78,11 @@ namespace MZ.WinForms
             _fileProgress.Cancel = true;
         }
 
-        private void SelectInTree()
+        private void SelectInTree(bool expand)
         {
             try
             {
-                m_treeFolders.SelectFolder(m_txtSelectedFolder.Text);
+                m_treeFolders.SelectFolder(m_txtSelectedFolder.Text, expand);
             }
             catch (Exception err)
             {
@@ -98,6 +102,21 @@ namespace MZ.WinForms
         private void m_mnuRefresh_Click(object sender, EventArgs e)
         {
             m_treeFolders.RefreshFolder(m_txtSelectedFolder.Text);
+        }
+
+        private void m_btnGoToFolder_Click(object sender, EventArgs e)
+        {
+            if (!Directory.Exists(m_txtSelectedFolder.Text))
+            {
+                PopUp.Exclamation("Cannot Access Foder: \n" + m_txtSelectedFolder.Text, "Go To Folder");
+                return;
+            }
+            SelectInTree(true);
+        }
+
+        private void m_txtSelectedFolder_TextChanged(object sender, EventArgs e)
+        {
+            m_btnGoToFolder.Enabled = Directory.Exists(m_txtSelectedFolder.Text);
         }
 
         private void m_mnuNewFolder_Click(object sender, EventArgs e)

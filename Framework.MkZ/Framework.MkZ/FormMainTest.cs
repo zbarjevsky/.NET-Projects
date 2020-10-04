@@ -51,7 +51,7 @@ namespace MZ
                 fileExplorerUserControl1.PopulateFiles(fullPath);
             };
 
-            foldersTreeUserControl1.SelectFolder(@"D:\Temp");
+            foldersTreeUserControl1.SelectFolder(@"D:\Temp", true);
 
             //listView1.SmallImageList = Shell32_Icons.SmallImageList;
             //listView1.LargeImageList = Shell32_Icons.LargeImageList;

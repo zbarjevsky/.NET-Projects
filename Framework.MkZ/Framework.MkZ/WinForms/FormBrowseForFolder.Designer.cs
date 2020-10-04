@@ -30,8 +30,8 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormBrowseForFolder));
-            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet1 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
-            this.m_txtSelectedFolder = new System.Windows.Forms.RichTextBox();
+            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet2 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
+            this.m_txtSelectedFolder = new System.Windows.Forms.TextBox();
             this.m_btnNewFolder = new System.Windows.Forms.Button();
             this.m_btnOk = new System.Windows.Forms.Button();
             this.m_btnCancel = new System.Windows.Forms.Button();
@@ -39,6 +39,7 @@
             this.panel1 = new System.Windows.Forms.Panel();
             this.panel2 = new System.Windows.Forms.Panel();
             this.m_pnlMain = new System.Windows.Forms.Panel();
+            this.m_btnGoToFolder = new System.Windows.Forms.Button();
             this.m_lblMessage = new System.Windows.Forms.Label();
             this.m_progressBar = new MZ.WinForms.ColorBarsProgressBar();
             this.m_btnRefresh = new System.Windows.Forms.Button();
@@ -61,17 +62,16 @@
             // 
             // m_txtSelectedFolder
             // 
+            this.m_txtSelectedFolder.AcceptsReturn = true;
             this.m_txtSelectedFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_txtSelectedFolder.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.m_txtSelectedFolder.Location = new System.Drawing.Point(5, 5);
-            this.m_txtSelectedFolder.Multiline = false;
             this.m_txtSelectedFolder.Name = "m_txtSelectedFolder";
-            this.m_txtSelectedFolder.ReadOnly = true;
-            this.m_txtSelectedFolder.Size = new System.Drawing.Size(346, 14);
+            this.m_txtSelectedFolder.Size = new System.Drawing.Size(310, 13);
             this.m_txtSelectedFolder.TabIndex = 0;
-            this.m_txtSelectedFolder.Text = "";
+            this.m_txtSelectedFolder.TextChanged += new System.EventHandler(this.m_txtSelectedFolder_TextChanged);
             // 
             // m_btnNewFolder
             // 
@@ -142,18 +142,20 @@
             // 
             // panel2
             // 
-            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            this.panel2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel2.BackColor = System.Drawing.SystemColors.Window;
             this.panel2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.panel2.Controls.Add(this.m_txtSelectedFolder);
-            this.panel2.Location = new System.Drawing.Point(5, 287);
+            this.panel2.Location = new System.Drawing.Point(5, 37);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(358, 26);
+            this.panel2.Size = new System.Drawing.Size(322, 26);
             this.panel2.TabIndex = 3;
             // 
             // m_pnlMain
             // 
             this.m_pnlMain.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.m_pnlMain.Controls.Add(this.m_btnGoToFolder);
             this.m_pnlMain.Controls.Add(this.m_lblMessage);
             this.m_pnlMain.Controls.Add(this.m_progressBar);
             this.m_pnlMain.Controls.Add(this.m_btnRefresh);
@@ -169,11 +171,23 @@
             this.m_pnlMain.Size = new System.Drawing.Size(409, 361);
             this.m_pnlMain.TabIndex = 0;
             // 
+            // m_btnGoToFolder
+            // 
+            this.m_btnGoToFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnGoToFolder.Image = ((System.Drawing.Image)(resources.GetObject("m_btnGoToFolder.Image")));
+            this.m_btnGoToFolder.Location = new System.Drawing.Point(333, 36);
+            this.m_btnGoToFolder.Name = "m_btnGoToFolder";
+            this.m_btnGoToFolder.Size = new System.Drawing.Size(33, 27);
+            this.m_btnGoToFolder.TabIndex = 8;
+            this.toolTip1.SetToolTip(this.m_btnGoToFolder, "Refresh (F5)");
+            this.m_btnGoToFolder.UseVisualStyleBackColor = true;
+            this.m_btnGoToFolder.Click += new System.EventHandler(this.m_btnGoToFolder_Click);
+            // 
             // m_lblMessage
             // 
             this.m_lblMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.m_lblMessage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.m_lblMessage.Location = new System.Drawing.Point(24, 120);
+            this.m_lblMessage.Location = new System.Drawing.Point(25, 153);
             this.m_lblMessage.Name = "m_lblMessage";
             this.m_lblMessage.Size = new System.Drawing.Size(355, 71);
             this.m_lblMessage.TabIndex = 1;
@@ -182,16 +196,16 @@
             // 
             // m_progressBar
             // 
-            themeColorSet1.Part1_ActiveColor = System.Drawing.SystemColors.HotTrack;
-            themeColorSet1.Part1_InactiveColor = System.Drawing.Color.Gainsboro;
-            themeColorSet1.Part2_ActiveColor = System.Drawing.Color.LimeGreen;
-            themeColorSet1.Part2_InactiveColor = System.Drawing.Color.Gainsboro;
-            themeColorSet1.Part3_ActiveColor = System.Drawing.Color.LimeGreen;
-            themeColorSet1.Part3_InactiveColor = System.Drawing.Color.Gainsboro;
-            themeColorSet1.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
-            themeColorSet1.Threshold1 = 100;
-            themeColorSet1.Threshold2 = 100;
-            this.m_progressBar.ColorTheme = themeColorSet1;
+            themeColorSet2.Part1_ActiveColor = System.Drawing.SystemColors.HotTrack;
+            themeColorSet2.Part1_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet2.Part2_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet2.Part2_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet2.Part3_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet2.Part3_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet2.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
+            themeColorSet2.Threshold1 = 100;
+            themeColorSet2.Threshold2 = 100;
+            this.m_progressBar.ColorTheme = themeColorSet2;
             this.m_progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.m_progressBar.Location = new System.Drawing.Point(0, 347);
             this.m_progressBar.Name = "m_progressBar";
@@ -201,9 +215,9 @@
             // 
             // m_btnRefresh
             // 
-            this.m_btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_btnRefresh.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnRefresh.Image = ((System.Drawing.Image)(resources.GetObject("m_btnRefresh.Image")));
-            this.m_btnRefresh.Location = new System.Drawing.Point(369, 287);
+            this.m_btnRefresh.Location = new System.Drawing.Point(369, 36);
             this.m_btnRefresh.Name = "m_btnRefresh";
             this.m_btnRefresh.Size = new System.Drawing.Size(33, 27);
             this.m_btnRefresh.TabIndex = 6;
@@ -218,7 +232,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_treeFolders.ContextMenuStrip = this.m_ctxmnuTree;
             this.m_treeFolders.Cursor = System.Windows.Forms.Cursors.Default;
-            this.m_treeFolders.Location = new System.Drawing.Point(5, 36);
+            this.m_treeFolders.Location = new System.Drawing.Point(4, 69);
             this.m_treeFolders.Name = "m_treeFolders";
             this.m_treeFolders.Size = new System.Drawing.Size(397, 246);
             this.m_treeFolders.TabIndex = 0;
@@ -312,6 +326,7 @@
             this.Load += new System.EventHandler(this.FormBrowseForFolder_Load);
             this.panel1.ResumeLayout(false);
             this.panel2.ResumeLayout(false);
+            this.panel2.PerformLayout();
             this.m_pnlMain.ResumeLayout(false);
             this.m_ctxmnuTree.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -321,7 +336,7 @@
         #endregion
 
         private FoldersTreeUserControl m_treeFolders;
-        private System.Windows.Forms.RichTextBox m_txtSelectedFolder;
+        private System.Windows.Forms.TextBox m_txtSelectedFolder;
         private System.Windows.Forms.Button m_btnNewFolder;
         private System.Windows.Forms.Button m_btnOk;
         private System.Windows.Forms.Button m_btnCancel;
@@ -342,5 +357,6 @@
         private System.Windows.Forms.ToolStripMenuItem m_mnuSelect;
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem m_mnuNewFolder;
+        private System.Windows.Forms.Button m_btnGoToFolder;
     }
 }
