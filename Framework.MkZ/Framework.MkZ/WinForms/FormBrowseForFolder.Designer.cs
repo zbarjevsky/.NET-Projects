@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormBrowseForFolder));
-            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet2 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
+            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet6 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
             this.m_txtSelectedFolder = new System.Windows.Forms.TextBox();
             this.m_btnNewFolder = new System.Windows.Forms.Button();
             this.m_btnOk = new System.Windows.Forms.Button();
@@ -66,6 +66,8 @@
             this.m_txtSelectedFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_txtSelectedFolder.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.m_txtSelectedFolder.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystemDirectories;
             this.m_txtSelectedFolder.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.m_txtSelectedFolder.Location = new System.Drawing.Point(5, 5);
             this.m_txtSelectedFolder.Name = "m_txtSelectedFolder";
@@ -196,16 +198,16 @@
             // 
             // m_progressBar
             // 
-            themeColorSet2.Part1_ActiveColor = System.Drawing.SystemColors.HotTrack;
-            themeColorSet2.Part1_InactiveColor = System.Drawing.Color.Gainsboro;
-            themeColorSet2.Part2_ActiveColor = System.Drawing.Color.LimeGreen;
-            themeColorSet2.Part2_InactiveColor = System.Drawing.Color.Gainsboro;
-            themeColorSet2.Part3_ActiveColor = System.Drawing.Color.LimeGreen;
-            themeColorSet2.Part3_InactiveColor = System.Drawing.Color.Gainsboro;
-            themeColorSet2.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
-            themeColorSet2.Threshold1 = 100;
-            themeColorSet2.Threshold2 = 100;
-            this.m_progressBar.ColorTheme = themeColorSet2;
+            themeColorSet6.Part1_ActiveColor = System.Drawing.SystemColors.HotTrack;
+            themeColorSet6.Part1_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet6.Part2_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet6.Part2_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet6.Part3_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet6.Part3_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet6.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
+            themeColorSet6.Threshold1 = 100;
+            themeColorSet6.Threshold2 = 100;
+            this.m_progressBar.ColorTheme = themeColorSet6;
             this.m_progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.m_progressBar.Location = new System.Drawing.Point(0, 347);
             this.m_progressBar.Name = "m_progressBar";
@@ -321,6 +323,7 @@
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(300, 400);
             this.Name = "FormBrowseForFolder";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Browse For Folder";
             this.Load += new System.EventHandler(this.FormBrowseForFolder_Load);

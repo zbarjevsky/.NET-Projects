@@ -161,11 +161,8 @@
   <data name="m_btnGoToFolder.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        wwAADsMBx2+oZAAAAOZJREFUOE+1kE1qwzAQRn2E0hLSmrh2FNuq/FMrTkJb2nv0dDnAzC4HmH0WOtBA
-        FlM7dJM/nAjy4IHA/h5Iwd2Z4/fv/9EPu/7ZNfjlH6lpJRV8coUffpGSWimdlQJWXODycsRsFmJofqQV
-        s23EuPe9GhassT0fyamR3FWDpmA5RXsaSan76MxVTqHmKdaHEUWFKKevMoaSYywPAzG9SeyyQSdgeILm
-        9ArRRktE3Q9HRtuZRE7tDUFziPn5R7zEC3VDl8gzZDzG9LZxz5gSGcGMR6huH/c8rtXuCRO/cc8DvvqP
-        hwmCP9jXsfTZg/gNAAAAAElFTkSuQmCC
+        wwAADsMBx2+oZAAAAFRJREFUOE9jGAUQ4L/53jQg/k8CngbVCgEgwS9fvhCNQeqhWiEAZCKxhoDUgdRD
+        tSIAMYbg1AwD+AwhqBkGsBlCtGYYQDaEZM0wADOELM0jCjAwAABs5PIpI6djBwAAAABJRU5ErkJggg==
 </value>
   </data>
   <data name="m_btnRefresh.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

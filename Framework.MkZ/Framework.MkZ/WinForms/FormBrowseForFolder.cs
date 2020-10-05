@@ -116,7 +116,7 @@ namespace MZ.WinForms
 
         private void m_txtSelectedFolder_TextChanged(object sender, EventArgs e)
         {
-            m_btnGoToFolder.Enabled = Directory.Exists(m_txtSelectedFolder.Text);
+            m_btnGoToFolder.Enabled = !m_treeFolders.IsFolderSelected(m_txtSelectedFolder.Text);
         }
 
         private void m_mnuNewFolder_Click(object sender, EventArgs e)

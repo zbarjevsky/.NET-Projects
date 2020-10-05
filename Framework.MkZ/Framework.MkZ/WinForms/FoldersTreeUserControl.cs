@@ -44,6 +44,16 @@ namespace MZ.WinForms
 			}
 		}
 
+		public bool IsFolderSelected(string fullPath)
+        {
+			if (string.IsNullOrWhiteSpace(fullPath) || !Directory.Exists(fullPath))
+				return false;
+
+			string f1 = SelectedFolder.ToLower().TrimEnd(Path.DirectorySeparatorChar);
+			string f2 = fullPath.ToLower().TrimEnd(Path.DirectorySeparatorChar);
+			return StringComparer.OrdinalIgnoreCase.Equals(f1, f2);
+		}
+
 		public void RefreshFolder(string fullPath)
 		{
 			TreeNode node = FindTreeNode(fullPath);

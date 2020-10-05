@@ -74,6 +74,7 @@
             // 
             // m_pnlCommands
             // 
+            this.m_pnlCommands.BackColor = System.Drawing.SystemColors.ControlLight;
             this.m_pnlCommands.Controls.Add(this.m_btnNewFolder);
             this.m_pnlCommands.Controls.Add(this.m_btnBrowse);
             this.m_pnlCommands.Controls.Add(this.m_btnRoot);
@@ -136,6 +137,9 @@
             // 
             this.m_txtPath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_txtPath.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.m_txtPath.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.FileSystemDirectories;
+            this.m_txtPath.BackColor = System.Drawing.SystemColors.ControlLight;
             this.m_txtPath.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.errorProvider1.SetIconAlignment(this.m_txtPath, System.Windows.Forms.ErrorIconAlignment.MiddleLeft);
             this.errorProvider1.SetIconPadding(this.m_txtPath, 2);
@@ -159,41 +163,41 @@
             this.m_mnuRename,
             this.m_mnuDelete});
             this.m_ctxmnuList.Name = "m_ctxmnuTree";
-            this.m_ctxmnuList.Size = new System.Drawing.Size(181, 126);
+            this.m_ctxmnuList.Size = new System.Drawing.Size(147, 104);
             // 
             // m_mnuSelect
             // 
             this.m_mnuSelect.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuSelect.Image")));
             this.m_mnuSelect.Name = "m_mnuSelect";
-            this.m_mnuSelect.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuSelect.Size = new System.Drawing.Size(146, 22);
             this.m_mnuSelect.Text = "Toggle &Check";
             this.m_mnuSelect.Click += new System.EventHandler(this.m_mnuSelect_Click);
             // 
             // m_mnuSeparator1
             // 
             this.m_mnuSeparator1.Name = "m_mnuSeparator1";
-            this.m_mnuSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.m_mnuSeparator1.Size = new System.Drawing.Size(143, 6);
             // 
             // m_mnuRefresh
             // 
             this.m_mnuRefresh.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuRefresh.Image")));
             this.m_mnuRefresh.Name = "m_mnuRefresh";
             this.m_mnuRefresh.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.m_mnuRefresh.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuRefresh.Size = new System.Drawing.Size(146, 22);
             this.m_mnuRefresh.Text = "&Refresh";
             this.m_mnuRefresh.Click += new System.EventHandler(this.m_mnuRefresh_Click);
             // 
             // m_mnuSeparator2
             // 
             this.m_mnuSeparator2.Name = "m_mnuSeparator2";
-            this.m_mnuSeparator2.Size = new System.Drawing.Size(177, 6);
+            this.m_mnuSeparator2.Size = new System.Drawing.Size(143, 6);
             // 
             // m_mnuRename
             // 
             this.m_mnuRename.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuRename.Image")));
             this.m_mnuRename.Name = "m_mnuRename";
             this.m_mnuRename.ShortcutKeys = System.Windows.Forms.Keys.F2;
-            this.m_mnuRename.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuRename.Size = new System.Drawing.Size(146, 22);
             this.m_mnuRename.Text = "Re&name";
             this.m_mnuRename.Click += new System.EventHandler(this.m_mnuRename_Click);
             // 
@@ -202,7 +206,7 @@
             this.m_mnuDelete.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuDelete.Image")));
             this.m_mnuDelete.Name = "m_mnuDelete";
             this.m_mnuDelete.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-            this.m_mnuDelete.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuDelete.Size = new System.Drawing.Size(146, 22);
             this.m_mnuDelete.Text = "&Delete";
             this.m_mnuDelete.Click += new System.EventHandler(this.m_mnuDelete_Click);
             // 
