@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MZ.Framework.Tools;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -12,18 +13,34 @@ namespace YouTubeDownload
 {
     static class Program
     {
+        static Program()
+        {
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler((x, y) =>
+            {
+                var exception = y.ExceptionObject as Exception;
+
+                if (exception is System.IO.FileNotFoundException)
+                    Console.WriteLine("Please make sure the DLL is in the same folder.");
+                Console.WriteLine(exception);
+            });
+        }
+
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
+            if (YouTubeDownload.Utils.Utils.UpdateAssemblyInfoVersion(args))
+                return;
+
+            UpdateDependencies();
+
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             
             try
             {
-                UpdateDependencies();
                 Application.Run(new FormMain());
             }
             catch (Exception err)
@@ -34,22 +51,8 @@ namespace YouTubeDownload
 
         private static void UpdateDependencies()
         {
-            string dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string youtube_dl = Path.Combine(dir, "Dependencies", "youtube-dl.exe");
-            if (File.Exists(youtube_dl))
-                return; //already extracted
-
-            string fileName = Path.Combine(dir, "Dependencies.sfx.exe");
-            if (!File.Exists(fileName))
-            {
-                File.WriteAllBytes(fileName, Properties.Resources.Dependencies_sfx);
-                if (File.Exists(fileName))
-                {
-                    Process  p = Process.Start(fileName);
-                    p.WaitForExit();
-                    File.Delete(fileName);
-                }
-            }
+            //DependenciesTool.LoadFrameworkMkZ_Dependency(Properties.Resources.Framework_MkZ);
+            DependenciesTool.UpdateDependenciesSfx("", "youtube-dl.exe", Properties.Resources.Dependencies_sfx);
         }
     }
 }

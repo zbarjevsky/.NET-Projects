@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MZ.Framework.Tools;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,6 +10,12 @@ namespace YouTubeDownload.Utils
 {
     public static class Utils
     {
+        //delay indirect load Framework
+        public static bool UpdateAssemblyInfoVersion(string[] args)
+        {
+            return (AssemblyTools.UpdateAssemblyInfoVersion(args));
+        }
+
         public static void SetDoubleBuffered(this Control c, bool value)
         {
             //Taxes: Remote Desktop Connection and painting

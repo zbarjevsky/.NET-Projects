@@ -41,6 +41,7 @@
     <RunPostBuildEvent>OnOutputUpdated</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -55,6 +56,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\Framework.MkZ\AssemblyTools\DependenciesTool.cs">
+      <Link>Utils\DependenciesTool.cs</Link>
+    </Compile>
     <Compile Include="DownloaderUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -123,6 +127,9 @@
   <ItemGroup>
     <None Include="Dependencies.sfx.exe" />
     <SplashScreen Include="SplashScreen.png" />
+    <None Include="..\..\Framework.MkZ\Framework.MkZ\bin\Debug\Framework.MkZ.exe">
+      <Link>Resources\Framework.MkZ.exe</Link>
+    </None>
     <Content Include="youtube.ico" />
   </ItemGroup>
   <ItemGroup>
@@ -132,10 +139,19 @@
     <ProjectReference Include="..\..\Framework.MkZ\Framework.MkZ\Framework.MkZ.csproj">
       <Project>{768af4b8-5edd-4196-97ae-dbc1589dd426}</Project>
       <Name>Framework.MkZ</Name>
+      <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if "$(ConfigurationName)" == "Release" xcopy /s /f /r /y $(TargetPath) $(SolutionDir)\..\Binaries</PostBuildEvent>
+  </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>if $(ConfigurationName) == Debug (
+   if exist "$(TargetPath)" (
+      "$(TargetPath)" -FILE"$(ProjectDir)Properties\AssemblyInfo.cs"
+   )
+)
+</PreBuildEvent>
   </PropertyGroup>
 </Project>

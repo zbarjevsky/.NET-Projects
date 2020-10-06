@@ -33,6 +33,8 @@ namespace MZ.WinForms
 		//This procedure populate the TreeView with the Drive list
 		public void SelectFolder(string fullPath, bool expand)
 		{
+			fullPath = fullPath.Trim().Trim('"'); //clean path
+
 			TreeNode node = FindTreeNode(fullPath);
 			if (node != null)
 			{
@@ -47,6 +49,9 @@ namespace MZ.WinForms
 		public bool IsFolderSelected(string fullPath)
         {
 			if (string.IsNullOrWhiteSpace(fullPath) || !Directory.Exists(fullPath))
+				return false;
+
+			if (string.IsNullOrWhiteSpace(SelectedFolder))
 				return false;
 
 			string f1 = SelectedFolder.ToLower().TrimEnd(Path.DirectorySeparatorChar);

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
+using MZ.Framework.Tools;
+
 namespace MZ.Tools
 {
 	static class Program
@@ -11,13 +13,17 @@ namespace MZ.Tools
 		/// The main entry point for the application.
 		/// </summary>
 		[STAThread]
-		static void Main()
+		static void Main(string[] args)
 		{
+			if (AssemblyTools.UpdateAssemblyInfoVersion(args))
+				return; //version updated
+
             if (!SingleInstance())
                 return; //already running
 
-            Application.EnableVisualStyles();
+			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
+
 			try
 			{
 				Form frm = new FormMainTest();

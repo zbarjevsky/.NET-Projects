@@ -83,6 +83,7 @@ namespace MZ.WinForms
             try
             {
                 m_treeFolders.SelectFolder(m_txtSelectedFolder.Text, expand);
+                m_txtSelectedFolder_TextChanged(this, null);
             }
             catch (Exception err)
             {

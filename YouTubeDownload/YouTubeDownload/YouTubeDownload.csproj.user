@@ -5,5 +5,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
+    <StartArguments>FILEC:\Dev_Mark\GitHub\zbarjevsky\.NET-Projects\YouTubeDownload\YouTubeDownload\Properties\AssemblyInfo.cs</StartArguments>
   </PropertyGroup>
 </Project>
