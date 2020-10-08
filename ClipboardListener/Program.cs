@@ -6,9 +6,10 @@ using System.Reflection;
 using System.Diagnostics;
 using System.Windows.Forms;
 using System.Globalization;
-using ClipboardManager.Properties;
+
 using MZ.Tools;
 using Utils;
+using MZ.Framework.Tools;
 
 namespace ClipboardManager
 {
@@ -17,22 +18,30 @@ namespace ClipboardManager
 		//static Mutex m_SingleInstance = null;
 		static int m_iFailCount = 0;
 
-//#if (DEBUG)
-//		static string AppName = "ClipboardManager(Debug)";
-//#else
-//		static string AppName = "ClipboardManager";
-//#endif
+        static Program()
+        {
+            AppDomain.CurrentDomain.UnhandledException += new UnhandledExceptionEventHandler((x, y) =>
+            {
+                var exception = y.ExceptionObject as Exception;
 
-		/// <summary>
-		/// The main entry point for the application.
-		/// </summary>
-		[STAThread]
-		static void Main()
+                if (exception is System.IO.FileNotFoundException)
+                    Console.WriteLine("Please make sure the DLL is in the same folder.");
+                MessageBox.Show(exception.ToString(), "ClipboardManager - UnhandledException", 
+                    MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.ServiceNotification);
+            });
+        }
+
+        /// <summary>
+        /// The main entry point for the application.
+        /// </summary>
+        [STAThread]
+		static void Main(string [] args)
 		{
-			Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);
+            if (AssemblyTools.UpdateAssemblyInfoVersion(args))
+                return;
 
-            UpdateDependencies();
+            Application.EnableVisualStyles();
+			Application.SetCompatibleTextRenderingDefault(false);
 
 RunAgain:
 			try
@@ -60,14 +69,6 @@ RunAgain:
 
             Utils.Log.CloseLog();
 		}//end Main
-
-        private static void UpdateDependencies()
-        {
-            string dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string fileName = Path.Combine(dir, "MZ.WPF.MessageBox.dll");
-            if (!File.Exists(fileName))
-                File.WriteAllBytes(fileName, Properties.Resources.MZ_WPF_MessageBox);
-        }
 
         public static string GetUserPath()
         {

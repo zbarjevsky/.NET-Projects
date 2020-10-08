@@ -21,7 +21,9 @@ namespace ClipboardManager
 			m_lblAbout.Text = "Clipboard Manager v"+Application.ProductVersion;
 
 			m_richTextBoxAbout.Text = "";
-            m_richTextBoxAbout.AppendText("21 Jun 2016: Added save/restore Desktop icons positions\n");
+			m_richTextBoxAbout.AppendText("08 Oct 2020: Auto version update - todays date\n");
+			m_richTextBoxAbout.AppendText("11 Apr 2020: Services Monitoring and stopping\n");
+			m_richTextBoxAbout.AppendText("21 Jun 2016: Added save/restore Desktop icons positions\n");
 			m_richTextBoxAbout.AppendText("25 Mar 2011: Using Zip of .Net 3.5 instead of JavaZip\n");
 			m_richTextBoxAbout.AppendText("27 Apr 2007: Added tooltips for long strings\n");
 			m_richTextBoxAbout.AppendText("27 Apr 2007: Added log file\n");
