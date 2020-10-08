@@ -68,7 +68,7 @@ namespace MZ.Framework.Tools
                 if (File.Exists(dependencyPath))
                     return true; //already extracted
 
-                string sfx = Path.Combine(dir, dependencyFolder, "Dependencies.sfx.exe");
+                string sfx = Path.Combine(dir, "", "Dependencies.sfx.exe");
                 if (File.Exists(sfx))
                     File.Delete(sfx);
 

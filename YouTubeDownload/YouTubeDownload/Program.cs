@@ -52,7 +52,7 @@ namespace YouTubeDownload
         private static void UpdateDependencies()
         {
             //DependenciesTool.LoadFrameworkMkZ_Dependency(Properties.Resources.Framework_MkZ);
-            DependenciesTool.UpdateDependenciesSfx("", "youtube-dl.exe", Properties.Resources.Dependencies_sfx);
+            DependenciesTool.UpdateDependenciesSfx("Dependencies", "youtube-dl.exe", Properties.Resources.Dependencies_sfx);
         }
     }
 }

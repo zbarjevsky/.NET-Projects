@@ -240,7 +240,7 @@ namespace YouTubeDownload
 
         public static List<string> Update()
         {
-            return ProcessHelper.GetStdOut(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, DL), "-U", false);
+            return ProcessHelper.GetStdOut(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, DL), "-U", true);
         }
 
         public static string GetVersion()

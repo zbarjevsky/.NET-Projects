@@ -274,9 +274,13 @@ namespace YouTubeDownload
             List<string> result = YouTube_DL.Update();
             string ver2 = YouTube_DL.GetVersion();
 
-            string message = "Update DL finished.\nWas: " + ver1 + "\nNew: " + ver2 + "\n\nUpdater Output:";
-            foreach (string line in result)
-                message += "\n " + line;
+            string message = "Update DL finished.\nWas: " + ver1 + "\nNew: " + ver2;
+            if (result != null && result.Count > 0)
+            {
+                message += "\n\nUpdater Output:";
+                foreach (string line in result)
+                    message += "\n " + line;
+            }
 
             Cursor = Cursors.Arrow;
             MessageBox.Show(message, "Update DL", MessageBoxButtons.OK, MessageBoxIcon.Information);
@@ -370,10 +374,10 @@ namespace YouTubeDownload
                 DownloadData data = m_listUrls.SelectedItems[0].Tag as DownloadData;
                 if (data != null && data.State != DownloadState.Failed)
                 {
-                    if (File.Exists(data.Description))
-                        Process.Start(data.Description);
+                    if (File.Exists(data.Description.Trim('"')))
+                        Process.Start(data.Description.Trim('"'));
                     else
-                        Process.Start(Path.GetDirectoryName(data.Description));
+                        Process.Start(Path.GetDirectoryName(data.Description.Trim('"')));
                 }
             }
             catch (Exception err)
