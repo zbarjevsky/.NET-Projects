@@ -50,6 +50,21 @@ namespace MZ.Media
             m_listDevices.ExpandGroup(0);
         }
 
+        public List<DeviceFullInfo> GetEnabledDevices()
+        {
+            List<DeviceFullInfo> list = new List<DeviceFullInfo>();
+
+            foreach (ListViewItem item in m_listDevices.Items)
+            {
+                if(item.Tag is DeviceFullInfo dev)
+                {
+                    if (dev.State == EDeviceState.Active)
+                        list.Add(dev);
+                }
+            }
+            return list;
+        }
+
         public void UpdateDeviceList(IReadOnlyCollection<DeviceFullInfo> devs, MMDevice activeDevice)
         {
             _activeDevice = activeDevice;

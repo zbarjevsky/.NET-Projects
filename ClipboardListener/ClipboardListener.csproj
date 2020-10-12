@@ -184,7 +184,6 @@
     <Compile Include="Utils\HotKeyHelper.cs" />
     <Compile Include="Zip\JavaZip.cs" />
     <Compile Include="Utils\CenteredMessageBox.cs" />
-    <Compile Include="Utils\NativeWIN32.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="FormAbout.resx">

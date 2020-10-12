@@ -68,7 +68,9 @@ namespace MZ.Media
 
         private void UpdatePopupVolume()
         {
-            _popupVolumeInfoWindow.ShowPopupVolume(m_volumeControlSpk.Volume);
+            List<DeviceFullInfo> enabledDevices = GetEnabledDevices();
+
+            _popupVolumeInfoWindow.ShowPopupVolume(m_volumeControlSpk.Volume, enabledDevices);
         }
 
         private void FormMain_Load(object sender, EventArgs e)
@@ -144,6 +146,11 @@ namespace MZ.Media
                 //m_btnRefresh.Enabled = true;
                 _isEnumerating = false;
             }, this);
+        }
+
+        private List<DeviceFullInfo> GetEnabledDevices()
+        {
+            return m_DeviceListPlayback.GetEnabledDevices();
         }
 
         private void UpdateTaskbarButtons()

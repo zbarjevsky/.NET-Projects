@@ -1,11 +1,11 @@
-﻿using MZ.WPF;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -15,6 +15,11 @@ using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+
+
+using MZ.Media.Device;
+using MZ.Media.DeviceSwitch;
+using MZ.WPF;
 
 namespace MZ.Media.WPF
 {
@@ -39,7 +44,7 @@ namespace MZ.Media.WPF
             OnVolumeChangedAction = onVolumeChangedAction;
         }
 
-        public void ShowPopupVolume(int volume)
+        public void ShowPopupVolume(int volume, List<DeviceFullInfo> enabledDevices)
         {
             bool bForceShow = false;
             if (_popupVolumeInfoWindow == null)
@@ -57,7 +62,7 @@ namespace MZ.Media.WPF
                 };
             }
 
-            _popupVolumeInfoWindow.UpdateAndShow(volume, InfoText, bForceShow);
+            _popupVolumeInfoWindow.UpdateAndShow(volume, InfoText, enabledDevices, bForceShow);
         }
 
         public void Close()
@@ -74,6 +79,8 @@ namespace MZ.Media.WPF
     {
         private DispatcherTimer m_Timer = new DispatcherTimer(DispatcherPriority.Background);
         private long _timer_count = 0;
+
+        private ContextMenu _ctxMenuDevices = null;
 
         public TimeSpan CloseTimeOut { get; set; } = TimeSpan.FromSeconds(4);
 
@@ -112,11 +119,13 @@ namespace MZ.Media.WPF
             return name;
         }
 
-        public void UpdateAndShow(int volume, string deviceName, bool bForceShow)
+        public void UpdateAndShow(int volume, string deviceName, List<DeviceFullInfo> enabledDevices, bool bForceShow)
         {
             InfoText = deviceName;
             if (this.Volume != volume || bForceShow) 
             {
+                CreateDevicesContextMenu(enabledDevices);
+
                 _timer_count = 0;
                 this.Volume = volume;
                 this.Opacity = 0.9;
@@ -268,6 +277,65 @@ namespace MZ.Media.WPF
                 _slider.Value += change;
                 NotifyVolumeChanged();
             }
+        }
+
+        private void CreateDevicesContextMenu(List<DeviceFullInfo> enabledDevices)
+        {
+            _ctxMenuDevices = new ContextMenu();
+
+            foreach (DeviceFullInfo dev in enabledDevices)
+            {
+                MenuItem mnu = new MenuItem();
+                mnu.DataContext = dev;
+                mnu.Header = dev.FriendlyName;
+                mnu.Click += DeviceMnu_Click;
+                _ctxMenuDevices.Items.Add(mnu);
+            }
+        }
+
+        private void SwithchButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (_ctxMenuDevices != null && _ctxMenuDevices.Items.Count > 0)
+            {
+                this.IsEnabled = false;
+
+                // If there is a drop-down assigned to this button, then position and display it 
+                _ctxMenuDevices.PlacementTarget = this;
+                _ctxMenuDevices.Placement = PlacementMode.Right;
+                _ctxMenuDevices.IsOpen = true;  //!Menu.IsOpen;
+                _ctxMenuDevices.Closed += _ctxMenuDevices_Closed;
+
+                _ctxMenuDevices.Background = new SolidColorBrush(SystemColors.GradientActiveCaptionColor);
+
+                System.Diagnostics.Debug.WriteLine("Options clicked: " + _ctxMenuDevices.IsOpen);
+
+                this.IsEnabled = false;
+
+                m_Timer.Stop();
+                _timer_count = 0;
+            }
+        }
+
+        private void DeviceMnu_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem mnu)
+            {
+                if (mnu.DataContext is DeviceFullInfo device)
+                {
+                    if (device == null || device.State != EDeviceState.Active)
+                        return;
+
+                    SoundDeviceManager.SetActiveDevice(device.ID, device.DeviceType);
+                }
+            }
+        }
+
+        private void _ctxMenuDevices_Closed(object sender, RoutedEventArgs e)
+        {
+            m_Timer.Stop();
+            m_Timer.Start();
+            _timer_count = 0;
+            this.IsEnabled = true;
         }
     }
 }

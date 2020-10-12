@@ -38,10 +38,20 @@
             </Grid.RowDefinitions>
             <Border Grid.Row="0" Grid.ColumnSpan="2" Margin="1"
                     BorderThickness="0,0,0,1" BorderBrush="{Binding ElementName=_border, Path=BorderBrush}">
-                <TextBlock x:Name="_txtInfo" Foreground="{Binding ElementName=_border, Path=BorderBrush}"
-                       TextWrapping="Wrap" TextAlignment="Center"
-                       VerticalAlignment="Center" HorizontalAlignment="Center"
-                       Text="Info Info Info Kaka Kaka"/>
+                <Button HorizontalContentAlignment="Stretch" BorderThickness="0" Background="Transparent"
+                        Click="SwithchButton_Click">
+                    <Grid>
+                        <TextBlock x:Name="_txtInfo" Foreground="{Binding ElementName=_border, Path=BorderBrush}"
+                               TextWrapping="Wrap" TextAlignment="Center"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"
+                               Text="Info Info Info Kaka Kaka"/>
+                        <TextBlock VerticalAlignment="Center" HorizontalAlignment="Right" Text="▶" >
+                            <TextBlock.Foreground>
+                                <SolidColorBrush Opacity="0.5" Color="Navy"/>
+                            </TextBlock.Foreground>
+                        </TextBlock>
+                    </Grid>
+                </Button>
             </Border>
             
             <wpf:GradientProgressBar  x:Name="_progress" Grid.Row="1" Margin="5,10" 
