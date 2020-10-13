@@ -21,7 +21,7 @@ using MZ.Media.Notifications;
 using MZ.Media.Properties;
 using MZ.Media.WPF;
 
-namespace MZ.Media
+namespace MZ.Media 
 {
     public partial class FormMain : Form
     {
