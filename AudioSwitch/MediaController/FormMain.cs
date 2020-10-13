@@ -37,6 +37,13 @@ namespace MZ.Media
             _mmd.DevicesChanged = OnDevicesChanged;
             _mmd.DefaultDeviceChanged = OnDefaultDeviceChanged;
 
+            if (Properties.Settings.Default.UpdateNeeded)
+            {
+                Properties.Settings.Default.Upgrade();
+                Properties.Settings.Default.UpdateNeeded = false;
+                Properties.Settings.Default.Save();
+            }
+
             Rectangle rThis = new Rectangle(Properties.Settings.Default.MainLocation, this.Size);
             if(SystemInformation.VirtualScreen.IntersectsWith(rThis))
             {

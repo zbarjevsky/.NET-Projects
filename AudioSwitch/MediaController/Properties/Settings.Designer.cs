@@ -46,5 +46,17 @@ namespace MZ.Media.Properties {
                 this["MainLocation"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool UpdateNeeded {
+            get {
+                return ((bool)(this["UpdateNeeded"]));
+            }
+            set {
+                this["UpdateNeeded"] = value;
+            }
+        }
     }
 }

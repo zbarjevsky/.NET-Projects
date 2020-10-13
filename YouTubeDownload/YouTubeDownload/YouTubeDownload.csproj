@@ -127,13 +127,11 @@
   <ItemGroup>
     <None Include="Dependencies.sfx.exe" />
     <SplashScreen Include="SplashScreen.png" />
-    <None Include="..\..\Framework.MkZ\Framework.MkZ\bin\Debug\Framework.MkZ.exe">
-      <Link>Resources\Framework.MkZ.exe</Link>
-    </None>
     <Content Include="youtube.ico" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Extensions\" />
+    <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Framework.MkZ\Framework.MkZ\Framework.MkZ.csproj">

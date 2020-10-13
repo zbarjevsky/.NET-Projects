@@ -69,15 +69,5 @@ namespace YouTubeDownload.Properties {
                 return ((byte[])(obj));
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] Framework_MkZ {
-            get {
-                object obj = ResourceManager.GetObject("Framework_MkZ", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
     }
 }

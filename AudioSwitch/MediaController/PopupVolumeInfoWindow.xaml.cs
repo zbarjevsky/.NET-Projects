@@ -19,6 +19,7 @@ using System.Windows.Threading;
 
 using MZ.Media.Device;
 using MZ.Media.DeviceSwitch;
+using MZ.Windows;
 using MZ.WPF;
 
 namespace MZ.Media.WPF
@@ -288,6 +289,7 @@ namespace MZ.Media.WPF
                 MenuItem mnu = new MenuItem();
                 mnu.DataContext = dev;
                 mnu.Header = dev.FriendlyName;
+                mnu.Icon = dev.SmallIcon.ConvertToImage();
                 mnu.Click += DeviceMnu_Click;
                 _ctxMenuDevices.Items.Add(mnu);
             }
