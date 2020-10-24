@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -21,7 +22,7 @@ namespace MZ.WinForms
         public string SelectedFolder 
         { 
             get { return m_txtSelectedFolder.Text; } 
-            set { m_txtSelectedFolder.Text = value; SelectInTree(true); }
+            set { m_txtSelectedFolder.Text = value.Trim().Trim('"'); SelectInTree(true); }
         }
 
         public string Description 
@@ -102,7 +103,7 @@ namespace MZ.WinForms
 
         private void m_mnuRefresh_Click(object sender, EventArgs e)
         {
-            m_treeFolders.RefreshFolder(m_txtSelectedFolder.Text);
+            m_treeFolders.RefreshFolder(m_txtSelectedFolder.Text.Trim().Trim('"'));
         }
 
         private void m_btnGoToFolder_Click(object sender, EventArgs e)
@@ -206,6 +207,18 @@ namespace MZ.WinForms
 
             m_lblMessage.Visible = !bEnable;
             m_lblMessage.Text = message;
+        }
+
+        private void m_mnuExplore_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                Process.Start(m_txtSelectedFolder.Text);
+            }
+            catch (Exception err)
+            {
+                PopUp.Error(err.Message);
+            }
         }
     }
 }

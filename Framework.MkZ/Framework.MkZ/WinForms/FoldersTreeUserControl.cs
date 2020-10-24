@@ -61,7 +61,7 @@ namespace MZ.WinForms
 
 		public void RefreshFolder(string fullPath)
 		{
-			TreeNode node = FindTreeNode(fullPath);
+			TreeNode node = FindTreeNode(fullPath.Trim().Trim('"'));
 			if (node != null)
 			{
 				PopulateDirectory(node);
@@ -70,7 +70,7 @@ namespace MZ.WinForms
 
 		public void EditFolder(string fullPath)
 		{
-			TreeNode node = FindTreeNode(fullPath);
+			TreeNode node = FindTreeNode(fullPath.Trim().Trim('"'));
 			if (node != null)
 			{
 				node.BeginEdit();

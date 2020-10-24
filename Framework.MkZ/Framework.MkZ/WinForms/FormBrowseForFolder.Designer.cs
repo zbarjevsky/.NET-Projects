@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormBrowseForFolder));
-            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet6 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
+            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet1 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
             this.m_txtSelectedFolder = new System.Windows.Forms.TextBox();
             this.m_btnNewFolder = new System.Windows.Forms.Button();
             this.m_btnOk = new System.Windows.Forms.Button();
@@ -52,6 +52,7 @@
             this.m_mnuNewFolder = new System.Windows.Forms.ToolStripMenuItem();
             this.m_mnuRename = new System.Windows.Forms.ToolStripMenuItem();
             this.m_mnuDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuExplore = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.m_imageListIcons = new System.Windows.Forms.ImageList(this.components);
             this.panel1.SuspendLayout();
@@ -198,16 +199,16 @@
             // 
             // m_progressBar
             // 
-            themeColorSet6.Part1_ActiveColor = System.Drawing.SystemColors.HotTrack;
-            themeColorSet6.Part1_InactiveColor = System.Drawing.Color.Gainsboro;
-            themeColorSet6.Part2_ActiveColor = System.Drawing.Color.LimeGreen;
-            themeColorSet6.Part2_InactiveColor = System.Drawing.Color.Gainsboro;
-            themeColorSet6.Part3_ActiveColor = System.Drawing.Color.LimeGreen;
-            themeColorSet6.Part3_InactiveColor = System.Drawing.Color.Gainsboro;
-            themeColorSet6.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
-            themeColorSet6.Threshold1 = 100;
-            themeColorSet6.Threshold2 = 100;
-            this.m_progressBar.ColorTheme = themeColorSet6;
+            themeColorSet1.Part1_ActiveColor = System.Drawing.SystemColors.HotTrack;
+            themeColorSet1.Part1_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet1.Part2_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet1.Part2_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet1.Part3_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet1.Part3_InactiveColor = System.Drawing.Color.Gainsboro;
+            themeColorSet1.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
+            themeColorSet1.Threshold1 = 100;
+            themeColorSet1.Threshold2 = 100;
+            this.m_progressBar.ColorTheme = themeColorSet1;
             this.m_progressBar.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.m_progressBar.Location = new System.Drawing.Point(0, 347);
             this.m_progressBar.Name = "m_progressBar";
@@ -248,42 +249,43 @@
             this.toolStripMenuItem1,
             this.m_mnuNewFolder,
             this.m_mnuRename,
-            this.m_mnuDelete});
+            this.m_mnuDelete,
+            this.m_mnuExplore});
             this.m_ctxmnuTree.Name = "m_ctxmnuTree";
-            this.m_ctxmnuTree.Size = new System.Drawing.Size(137, 126);
+            this.m_ctxmnuTree.Size = new System.Drawing.Size(181, 170);
             // 
             // m_mnuSelect
             // 
             this.m_mnuSelect.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuSelect.Image")));
             this.m_mnuSelect.Name = "m_mnuSelect";
-            this.m_mnuSelect.Size = new System.Drawing.Size(136, 22);
+            this.m_mnuSelect.Size = new System.Drawing.Size(180, 22);
             this.m_mnuSelect.Text = "Select";
             this.m_mnuSelect.Click += new System.EventHandler(this.m_mnuSelect_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(133, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(177, 6);
             // 
             // m_mnuRefresh
             // 
             this.m_mnuRefresh.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuRefresh.Image")));
             this.m_mnuRefresh.Name = "m_mnuRefresh";
             this.m_mnuRefresh.ShortcutKeys = System.Windows.Forms.Keys.F5;
-            this.m_mnuRefresh.Size = new System.Drawing.Size(136, 22);
+            this.m_mnuRefresh.Size = new System.Drawing.Size(180, 22);
             this.m_mnuRefresh.Text = "&Refresh";
             this.m_mnuRefresh.Click += new System.EventHandler(this.m_mnuRefresh_Click);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(133, 6);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(177, 6);
             // 
             // m_mnuNewFolder
             // 
             this.m_mnuNewFolder.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuNewFolder.Image")));
             this.m_mnuNewFolder.Name = "m_mnuNewFolder";
-            this.m_mnuNewFolder.Size = new System.Drawing.Size(136, 22);
+            this.m_mnuNewFolder.Size = new System.Drawing.Size(180, 22);
             this.m_mnuNewFolder.Text = "New Folder";
             this.m_mnuNewFolder.Click += new System.EventHandler(this.m_mnuNewFolder_Click);
             // 
@@ -292,7 +294,7 @@
             this.m_mnuRename.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuRename.Image")));
             this.m_mnuRename.Name = "m_mnuRename";
             this.m_mnuRename.ShortcutKeys = System.Windows.Forms.Keys.F2;
-            this.m_mnuRename.Size = new System.Drawing.Size(136, 22);
+            this.m_mnuRename.Size = new System.Drawing.Size(180, 22);
             this.m_mnuRename.Text = "Re&name";
             this.m_mnuRename.Click += new System.EventHandler(this.m_mnuRename_Click);
             // 
@@ -301,9 +303,17 @@
             this.m_mnuDelete.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuDelete.Image")));
             this.m_mnuDelete.Name = "m_mnuDelete";
             this.m_mnuDelete.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-            this.m_mnuDelete.Size = new System.Drawing.Size(136, 22);
+            this.m_mnuDelete.Size = new System.Drawing.Size(180, 22);
             this.m_mnuDelete.Text = "&Delete";
             this.m_mnuDelete.Click += new System.EventHandler(this.m_mnuDelete_Click);
+            // 
+            // m_mnuExplore
+            // 
+            this.m_mnuExplore.Image = ((System.Drawing.Image)(resources.GetObject("m_mnuExplore.Image")));
+            this.m_mnuExplore.Name = "m_mnuExplore";
+            this.m_mnuExplore.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuExplore.Text = "Open in Explorer";
+            this.m_mnuExplore.Click += new System.EventHandler(this.m_mnuExplore_Click);
             // 
             // m_imageListIcons
             // 
@@ -361,5 +371,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem m_mnuNewFolder;
         private System.Windows.Forms.Button m_btnGoToFolder;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuExplore;
     }
 }
