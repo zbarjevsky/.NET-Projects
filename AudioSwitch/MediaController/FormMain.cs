@@ -37,10 +37,10 @@ namespace MZ.Media
             _mmd.DevicesChanged = OnDevicesChanged;
             _mmd.DefaultDeviceChanged = OnDefaultDeviceChanged;
 
-            if (Properties.Settings.Default.UpdateNeeded)
+            if (Properties.Settings.Default.IsUpgradeNeeded)
             {
                 Properties.Settings.Default.Upgrade();
-                Properties.Settings.Default.UpdateNeeded = false;
+                Properties.Settings.Default.IsUpgradeNeeded = false;
                 Properties.Settings.Default.Save();
             }
 

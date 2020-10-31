@@ -20,6 +20,13 @@ namespace MZ.Media
                 if (AssemblyTools.UpdateAssemblyInfoVersion(args))
                     return;
 
+                if(Properties.Settings.Default.IsUpgradeNeeded)
+                {
+                    Properties.Settings.Default.Upgrade();
+                    Properties.Settings.Default.IsUpgradeNeeded = false;
+                    Properties.Settings.Default.Save();
+                }
+
                 if (MZ.Tools.SingleInstanceHelper.GlobalShowWindow(FormMain.TITLE))
                     return; //already running
 

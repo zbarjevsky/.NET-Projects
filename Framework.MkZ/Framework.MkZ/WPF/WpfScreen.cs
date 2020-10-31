@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 
+
+using MZ.Tools;
+
 namespace MZ.WPF.Utils
 {
     public class WpfScreen
@@ -29,10 +32,10 @@ namespace MZ.WPF.Utils
             return wpfScreen;
         }
 
-        public static WpfScreen GetScreenFrom(Point point)
+        public static WpfScreen GetScreenFrom(int x, int y)
         {
-            int x = (int)Math.Round(point.X);
-            int y = (int)Math.Round(point.Y);
+            //int x = (int)Math.Round(X);
+            //int y = (int)Math.Round(Y);
 
             // are x,y device-independent-pixels ??
             System.Drawing.Point drawingPoint = new System.Drawing.Point(x, y);
@@ -40,6 +43,22 @@ namespace MZ.WPF.Utils
             WpfScreen wpfScreen = new WpfScreen(-1, screen);
 
             return wpfScreen;
+        }
+
+        public static int ScreenIndexFromPoint(double x, double y)
+        {
+            return ScreenIndexFromPoint((int)Math.Round(x), (int)Math.Round(y));
+        }
+
+        public static int ScreenIndexFromPoint(int x, int y)
+        {
+            List<WpfScreen> screens = AllScreens();
+            for (int i = 0; i < screens.Count; i++)
+            {
+                if (screens[i].DeviceBounds.Contains(x, y))
+                    return i;
+            };
+            return -1;
         }
 
         public static WpfScreen Primary

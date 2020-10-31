@@ -203,7 +203,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if "$(ConfigurationName)" == "Release" xcopy /s /f /r /y $(TargetPath) $(SolutionDir)\..\Binaries</PostBuildEvent>
+    <PostBuildEvent>if "$(ConfigurationName)" == "Release" (
+ xcopy /E /f /r /y $(TargetDir)*.exe $(SolutionDir)..\Binaries\$(TargetName)\
+ xcopy /E /f /r /y $(TargetDir)*.dll $(SolutionDir)..\Binaries\$(TargetName)\
+)</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>if $(ConfigurationName) == Debug (

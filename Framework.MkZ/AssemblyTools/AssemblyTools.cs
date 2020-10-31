@@ -41,7 +41,7 @@ namespace MZ.Framework.Tools
                 return true; //processing requested but not needed
             }
 
-            if (!IsUpdateNeeded(fileName))
+            if (!IsVersionUpdateNeeded(fileName))
             {
                 Console.WriteLine("AssemblyVersion is good :) " + fileName);
                 return true; //processing requested but not needed
@@ -90,7 +90,7 @@ namespace MZ.Framework.Tools
         }
 
         //Avoid unnessesary version updates
-        private static bool IsUpdateNeeded(string fileName)
+        private static bool IsVersionUpdateNeeded(string fileName)
         {
             string[] lines = File.ReadAllLines(fileName);
             foreach (string line in lines)

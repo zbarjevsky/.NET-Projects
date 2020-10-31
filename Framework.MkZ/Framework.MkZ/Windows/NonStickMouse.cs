@@ -132,8 +132,12 @@ namespace MZ.Tools
             if (IsButtonDown || _screens.Count == 1 || !MouseHook.Hook.Enabled)
                 return; //ignore dragging or if one sceen only or if not enabled
 
-            int screenSrcIndex = ScreenFromPoint(ptPrev);
+            int screenSrcIndex = WpfScreen.ScreenIndexFromPoint(ptPrev.X, ptPrev.Y);
             if (screenSrcIndex < 0) //point out of screens
+                return;
+
+            int screenDstIndex = WpfScreen.ScreenIndexFromPoint(ptCurr.X, ptCurr.Y);
+            if (screenSrcIndex == screenDstIndex)
                 return;
 
             User32.POINT ptCorrected = CorrectIntoOtherScreenProportionally(ptPrev, ptCurr, screenSrcIndex);
@@ -183,6 +187,7 @@ namespace MZ.Tools
 
         private int CalcProportionalY(User32.POINT ptCurr, Rect rFrom, Rect rTo, User32.POINT delta)
         {
+            Debug.WriteLine("Current Point: {0}", ptCurr);
             double srcRatioFromTop = (ptCurr.Y - rFrom.Top) / rFrom.Height;
             if (srcRatioFromTop < 0 || srcRatioFromTop >= 1)
                 srcRatioFromTop = 0.5;
@@ -204,16 +209,6 @@ namespace MZ.Tools
                 y = (int)(rTo.Bottom - offsetY);
 
             return y;
-        }
-
-        private int ScreenFromPoint(User32.POINT pt)
-        {
-            for (int i = 0; i < _screens.Count; i++)
-            {
-                if (_screens[i].DeviceBounds.Contains(pt.X, pt.Y))
-                    return i;
-            };
-            return -1;
         }
 
         /// <summary>

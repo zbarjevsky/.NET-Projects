@@ -8,7 +8,7 @@
     <Setting Name="MainLocation" Type="System.Drawing.Point" Scope="User">
       <Value Profile="(Default)">100, 200</Value>
     </Setting>
-    <Setting Name="UpdateNeeded" Type="System.Boolean" Scope="User">
+    <Setting Name="IsUpgradeNeeded" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>

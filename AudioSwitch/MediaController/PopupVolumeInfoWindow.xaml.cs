@@ -21,6 +21,7 @@ using MZ.Media.Device;
 using MZ.Media.DeviceSwitch;
 using MZ.Windows;
 using MZ.WPF;
+using MZ.WPF.Utils;
 
 namespace MZ.Media.WPF
 {
@@ -174,8 +175,21 @@ namespace MZ.Media.WPF
 
             this.Draggable(true);
 
-            this.Left = location.X;
-            this.Top = location.Y;
+            if (startupLocation == WindowStartupLocation.Manual)
+            {
+                int screenIdx = WpfScreen.ScreenIndexFromPoint(location.X, location.Y);
+                if (screenIdx >= 0)
+                {
+                    this.Left = location.X;
+                    this.Top = location.Y;
+                }
+                else //show on first visible screen
+                {
+                    WpfScreen screen = WpfScreen.AllScreens()[0];
+                    this.Left = screen.DeviceBounds.Left + 100;
+                    this.Top = screen.DeviceBounds.Top + 100;
+                }
+            }
 
             m_Timer.Interval = TimeSpan.FromMilliseconds(100);
             m_Timer.Tick += Timer_Tick;

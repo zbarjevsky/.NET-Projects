@@ -50,12 +50,12 @@ namespace MZ.Media.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool UpdateNeeded {
+        public bool IsUpgradeNeeded {
             get {
-                return ((bool)(this["UpdateNeeded"]));
+                return ((bool)(this["IsUpgradeNeeded"]));
             }
             set {
-                this["UpdateNeeded"] = value;
+                this["IsUpgradeNeeded"] = value;
             }
         }
     }
