@@ -55,6 +55,7 @@
             this.m_ctxmnuAddUrl = new System.Windows.Forms.ToolStripMenuItem();
             this.m_ctxmnuRemoveSelected = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripSeparator();
+            this.m_ctxmnuEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.m_ctxmnuDownloadAgain = new System.Windows.Forms.ToolStripMenuItem();
             this.m_ctxmnuCMD = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
@@ -76,7 +77,6 @@
             this.m_btnBrowseForFolder = new System.Windows.Forms.Button();
             this.m_errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.m_ctxmnuEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.m_statusStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.m_ContextMenuList.SuspendLayout();
@@ -305,6 +305,13 @@
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
             this.toolStripMenuItem3.Size = new System.Drawing.Size(216, 6);
             // 
+            // m_ctxmnuEdit
+            // 
+            this.m_ctxmnuEdit.Name = "m_ctxmnuEdit";
+            this.m_ctxmnuEdit.Size = new System.Drawing.Size(219, 26);
+            this.m_ctxmnuEdit.Text = "Edit Entry Settings";
+            this.m_ctxmnuEdit.Click += new System.EventHandler(this.m_ctxmnuEdit_Click);
+            // 
             // m_ctxmnuDownloadAgain
             // 
             this.m_ctxmnuDownloadAgain.Image = ((System.Drawing.Image)(resources.GetObject("m_ctxmnuDownloadAgain.Image")));
@@ -327,6 +334,7 @@
             // 
             // m_ctxmnuOpenSelectedFile
             // 
+            this.m_ctxmnuOpenSelectedFile.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.m_ctxmnuOpenSelectedFile.Name = "m_ctxmnuOpenSelectedFile";
             this.m_ctxmnuOpenSelectedFile.Size = new System.Drawing.Size(219, 26);
             this.m_ctxmnuOpenSelectedFile.Text = "Open File";
@@ -334,6 +342,7 @@
             // 
             // m_ctxmnuOpenOutputFolder
             // 
+            this.m_ctxmnuOpenOutputFolder.Image = ((System.Drawing.Image)(resources.GetObject("m_ctxmnuOpenOutputFolder.Image")));
             this.m_ctxmnuOpenOutputFolder.Name = "m_ctxmnuOpenOutputFolder";
             this.m_ctxmnuOpenOutputFolder.Size = new System.Drawing.Size(219, 26);
             this.m_ctxmnuOpenOutputFolder.Text = "Open Folder";
@@ -499,13 +508,6 @@
             // m_errorProvider
             // 
             this.m_errorProvider.ContainerControl = this;
-            // 
-            // m_ctxmnuEdit
-            // 
-            this.m_ctxmnuEdit.Name = "m_ctxmnuEdit";
-            this.m_ctxmnuEdit.Size = new System.Drawing.Size(219, 26);
-            this.m_ctxmnuEdit.Text = "Edit Entry Settings";
-            this.m_ctxmnuEdit.Click += new System.EventHandler(this.m_ctxmnuEdit_Click);
             // 
             // FormMain
             // 

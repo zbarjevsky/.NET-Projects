@@ -24,6 +24,10 @@ namespace YouTubeDownload
 
             Data.OutputFolder = outputFolder;
             Data.NoPlayList = true; // Properties.Settings.Default.NoPlayList;
+
+            try { Data.Url = (string)Clipboard.GetData(DataFormats.UnicodeText.ToString()); }
+            catch { }
+            
             UpdateData(true);
         }
 
@@ -36,39 +40,9 @@ namespace YouTubeDownload
             UpdateData(true);
         }
 
-        private void UpdateData(bool fromData)
-        {
-            if(fromData)
-            {
-                m_txtUrl.Text = Data.Url;
-                m_chkNoPlayList.Checked = Data.NoPlayList;
-                m_chkAudioOnly.Checked = Data.AudioOnly;
-                m_cmbAdditionalParameters.Text = Data.AdditionalParameters;
-                m_cmbFileName.Text = Data.FileNameTemplate;
-            }
-            else
-            {
-                Uri url = new Uri(m_txtUrl.Text);
-
-                Data.Description = url.PathAndQuery;
-                Data.Url = m_txtUrl.Text;
-                Data.NoPlayList = m_chkNoPlayList.Checked;
-                Data.AudioOnly = m_chkAudioOnly.Checked;
-                Data.AdditionalParameters = m_cmbAdditionalParameters.Text;
-
-                if (!string.IsNullOrWhiteSpace(m_cmbFileName.Text))
-                    Data.FileNameTemplate = m_cmbFileName.Text;
-                else
-                    Data.FileNameTemplate = m_cmbFileName.Items[0].ToString();
-            }
-        }
-
         private void FormAddUrl_Load(object sender, EventArgs e)
         {
             string text = m_txtUrl.Text;
-
-            try { text = (string)Clipboard.GetData(DataFormats.UnicodeText.ToString()); }
-            catch {}
 
             if (IsValidUrl(text))
                 m_txtUrl.Text = text;
@@ -106,6 +80,33 @@ namespace YouTubeDownload
         private void m_lnkOutputFileName_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start("https://github.com/ytdl-org/youtube-dl/blob/master/README.md#output-template-examples");
+        }
+
+        private void UpdateData(bool fromData)
+        {
+            if(fromData)
+            {
+                m_txtUrl.Text = Data.Url;
+                m_chkNoPlayList.Checked = Data.NoPlayList;
+                m_chkAudioOnly.Checked = Data.AudioOnly;
+                m_cmbAdditionalParameters.Text = Data.AdditionalParameters;
+                m_cmbFileName.Text = Data.FileNameTemplate;
+            }
+            else
+            {
+                Uri url = new Uri(m_txtUrl.Text);
+
+                Data.Description = url.PathAndQuery;
+                Data.Url = m_txtUrl.Text;
+                Data.NoPlayList = m_chkNoPlayList.Checked;
+                Data.AudioOnly = m_chkAudioOnly.Checked;
+                Data.AdditionalParameters = m_cmbAdditionalParameters.Text;
+
+                if (!string.IsNullOrWhiteSpace(m_cmbFileName.Text))
+                    Data.FileNameTemplate = m_cmbFileName.Text;
+                else
+                    Data.FileNameTemplate = m_cmbFileName.Items[0].ToString();
+            }
         }
 
         private void UpdateOutputFolder(string newFolder)
