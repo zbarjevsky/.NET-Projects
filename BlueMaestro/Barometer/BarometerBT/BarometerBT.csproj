@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Butterfly.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -66,10 +69,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="BlueMaestro\BlueMaestroDevice.cs" />
     <Compile Include="Bluetooth\BluetoothUtils.cs" />
-    <Compile Include="Bluetooth\ScanRecordParser.cs" />
-    <Compile Include="Bluetooth\UartService.cs" />
-    <Compile Include="Bluetooth\Utility.cs" />
+    <Compile Include="BlueMaestro\ScanRecordParser.cs" />
+    <Compile Include="BlueMaestro\UartService.cs" />
+    <Compile Include="BlueMaestro\Utility.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -102,6 +106,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Images\cloud_32px.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Butterfly.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

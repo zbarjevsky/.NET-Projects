@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:BarometerBT"
         mc:Ignorable="d" Background="Navy"
         WindowStartupLocation="CenterScreen"
-        Title="MainWindow" Height="450" Width="800">
+        Icon="/Butterfly.ico"
+        Title="Barometer - Weather Station" Height="450" Width="800">
     <Grid>
     </Grid>
 </Window>
