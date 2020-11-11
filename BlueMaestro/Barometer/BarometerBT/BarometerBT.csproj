@@ -70,7 +70,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BlueMaestro\BlueMaestroDevice.cs" />
-    <Compile Include="Bluetooth\BluetoothUtils.cs" />
+    <Compile Include="Bluetooth\BluetoothConnection.cs" />
     <Compile Include="BlueMaestro\ScanRecordParser.cs" />
     <Compile Include="BlueMaestro\UartService.cs" />
     <Compile Include="BlueMaestro\Utility.cs" />

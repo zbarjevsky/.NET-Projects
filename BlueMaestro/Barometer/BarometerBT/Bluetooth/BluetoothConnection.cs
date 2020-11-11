@@ -11,7 +11,7 @@ using Windows.Storage.Streams;
 
 namespace BarometerBT.Bluetooth
 {
-    public class BluetoothUtils
+    public class BluetoothConnection
     {
         // Create Bluetooth Listener
         private BluetoothLEAdvertisementWatcher _watcher = new BluetoothLEAdvertisementWatcher();
@@ -51,6 +51,7 @@ namespace BarometerBT.Bluetooth
                     var manufacturerSections = eventArgs.Advertisement.ManufacturerData;
                     if (manufacturerSections.Count > 0)
                     {
+                        Debug.WriteLine("  SECTIONS: " + manufacturerSections.Count);
                         foreach (BluetoothLEManufacturerData section in manufacturerSections)
                         {
                             // Only print the first one of the list

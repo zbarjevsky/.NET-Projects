@@ -17,7 +17,7 @@ namespace BarometerBT
     /// </summary>
     public partial class App : Application
     {
-        BluetoothUtils _bt = new BluetoothUtils();
+        BluetoothConnection _bt = new BluetoothConnection();
 
         public App()
         {
