@@ -33,7 +33,8 @@ namespace YouTubeDownload
 
         private void m_lnkYouTubeDL_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Process.Start("https://github.com/ytdl-org/youtube-dl/blob/master/README.md#readme");
+            //Process.Start("https://github.com/ytdl-org/youtube-dl/blob/master/README.md#readme");
+            Process.Start("https://yt-dl.org/");
         }
 
         private void m_lnkFFMpeg_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

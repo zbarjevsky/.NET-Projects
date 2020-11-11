@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30320.27
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BarometerBT", "BarometerBT\BarometerBT.csproj", "{20544025-5E15-45D2-8453-38563D988C9F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{20544025-5E15-45D2-8453-38563D988C9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{20544025-5E15-45D2-8453-38563D988C9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{20544025-5E15-45D2-8453-38563D988C9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{20544025-5E15-45D2-8453-38563D988C9F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {5BC47478-0E66-4AF8-BADA-980BEFD6AEDE}
+	EndGlobalSection
+EndGlobal

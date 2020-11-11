@@ -247,7 +247,7 @@ namespace MZ.WinForms
 			catch (Exception err)
 			{
 				e.CancelEdit = true;
-				MessageBox.Show(err.Message, "Rename Folder");
+				MessageBox.Show(this, err.Message, "Rename Folder");
 			}			
 		}
 
