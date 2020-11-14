@@ -188,7 +188,7 @@ namespace BarometerBT.Bluetooth
             return name;
         }
 
-        private static bool isManufacturerID(int i, byte[] scanRecord)
+        public static bool isManufacturerID(int i, byte[] scanRecord)
         {
             if (i + 2 > scanRecord.Length) { return false; }
             if ((((int)scanRecord[i] & 0xFF) == 0xFF) && (((int)scanRecord[i + 1] & 0xFF) == 0x33) && (((int)scanRecord[i + 2] & 0xFF) == 0x01))

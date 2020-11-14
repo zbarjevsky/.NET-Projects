@@ -5,7 +5,7 @@ VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RadexOneDemo", "RadexOneDemo.csproj", "{B4827A14-7582-44F9-9BEE-F081210BD7FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommonMZ", "..\CommonMZ\CommonMZ\CommonMZ.csproj", "{A03C89DD-CA87-4C9E-9FF9-F4277372E0F7}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework.MkZ", "..\Framework.MkZ\Framework.MkZ\Framework.MkZ.csproj", "{768AF4B8-5EDD-4196-97AE-DBC1589DD426}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -17,10 +17,10 @@ Global
 		{B4827A14-7582-44F9-9BEE-F081210BD7FC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4827A14-7582-44F9-9BEE-F081210BD7FC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4827A14-7582-44F9-9BEE-F081210BD7FC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{A03C89DD-CA87-4C9E-9FF9-F4277372E0F7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{A03C89DD-CA87-4C9E-9FF9-F4277372E0F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{A03C89DD-CA87-4C9E-9FF9-F4277372E0F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{A03C89DD-CA87-4C9E-9FF9-F4277372E0F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{768AF4B8-5EDD-4196-97AE-DBC1589DD426}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{768AF4B8-5EDD-4196-97AE-DBC1589DD426}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{768AF4B8-5EDD-4196-97AE-DBC1589DD426}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{768AF4B8-5EDD-4196-97AE-DBC1589DD426}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

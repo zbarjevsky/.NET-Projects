@@ -1,9 +1,11 @@
-﻿using sD;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+
+
+using MZ.Tools;
 
 namespace RadexOneDemo
 {
@@ -25,7 +27,7 @@ namespace RadexOneDemo
 
         private static bool SingleInstance()
         {
-            return !(MZ.Tools.SingleInstanceHelper.GlobalShowWindow(FormMain.TITLE));
+            return !(SingleInstanceHelper.GlobalShowWindow(FormMain.TITLE));
         }//end SingleInstance
     }
 }

@@ -19,7 +19,7 @@ namespace RadexOneDemo.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -83,10 +83,10 @@ namespace RadexOneDemo.Properties {
         /// <summary>
         ///   Looks up a localized string similar to {\rtf1\ansi\ansicpg1252\deff0\deflang1033{\fonttbl{\f0\fnil\fcharset0 MS Reference Sans Serif;}}
         ///{\colortbl ;\red0\green255\blue0;\red255\green255\blue0;\red255\green255\blue255;\red255\green0\blue0;\red128\green0\blue0;}
-        ///{\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\sl240\slmult1\qc\lang9\b\f0\fs24 How much is dangerous?\par
-        ///\par
-        ///\pard\ri1260\sl240\slmult1\tx7380\tx8640\b0\fs20    Not all radiation is the same, so scientists use the \lquote sievert\rquote  to\par
-        ///\pard\sl240\slmult1 measure [rest of string was truncated]&quot;;.
+        ///{\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\sl240\slmult1\lang9\b\f0\fs24\tab\tab\par
+        ///              How much is dangerous?\par
+        ///\pard\sl240\slmult1\qc\par
+        ///\pard\ri1260\sl240\slmult1\tx7380\tx8640\b0\fs20     Not all radiation is the same, so scientists use the \lquote Siev [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string How_much_is_dangerous {
             get {

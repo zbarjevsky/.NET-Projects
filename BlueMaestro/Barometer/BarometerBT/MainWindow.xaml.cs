@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using BarometerBT.BlueMaestro;
+using BarometerBT.Utils;
 
 namespace BarometerBT
 {
@@ -23,6 +25,43 @@ namespace BarometerBT
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        public static void UpdateList(Dictionary<ushort, DeviceRecordVM> devices)
+        {
+            CommonTools.ExecuteOnUiThreadBeginInvoke(() =>
+            {
+                MainWindow wnd = (Application.Current.MainWindow as MainWindow);
+                if(wnd != null)
+                    wnd._listDevices.ItemsSource = devices.Values.ToList();
+            });
+        }
+
+        public static void SetInfo(string info)
+        {
+            CommonTools.ExecuteOnUiThreadBeginInvoke(() =>
+            {
+                MainWindow wnd = (Application.Current.MainWindow as MainWindow);
+                if (wnd != null)
+                    wnd._txtInfo.Text = info;
+            });
+        }
+
+        internal static void SetChartData(List<BlueMaestroRecord> weatherRecords)
+        {
+            CommonTools.ExecuteOnUiThreadBeginInvoke(() =>
+            {
+                MainWindow wnd = (Application.Current.MainWindow as MainWindow);
+                if (wnd != null)
+                    wnd.UpdateChart(weatherRecords);
+            });
+        }
+
+        private void UpdateChart(List<BlueMaestroRecord> weatherRecords)
+        {
+            _chart1.UpdateChart1(weatherRecords);
+            _chart2.UpdateChart2(weatherRecords);
+            _chart3.UpdateChart3(weatherRecords);
         }
     }
 }

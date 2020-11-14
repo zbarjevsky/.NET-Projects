@@ -1,11 +1,12 @@
 ﻿using BarometerBT.BlueMaestro;
+using BarometerBT.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using System.Windows;
 using Windows.Devices.Bluetooth.Advertisement;
 using Windows.Storage.Streams;
 
@@ -15,6 +16,9 @@ namespace BarometerBT.Bluetooth
     {
         // Create Bluetooth Listener
         private BluetoothLEAdvertisementWatcher _watcher = new BluetoothLEAdvertisementWatcher();
+        private Dictionary<ushort, DeviceRecordVM> _records = new Dictionary<ushort, DeviceRecordVM>();
+        private BMPebble27 _bmp;
+        private List<BlueMaestroRecord> _weatherRecords = new List<BlueMaestroRecord>(1024);
 
         public void StartBluetoothSearch(int OutOfRangeTimeout = 50000, int SamplingInterval = 2000)
         {
@@ -43,9 +47,35 @@ namespace BarometerBT.Bluetooth
             Debug.WriteLine(String.Format("Advertisement:"));
             Debug.WriteLine(String.Format("  BT_ADDR: {0}", eventArgs.BluetoothAddress));
             Debug.WriteLine(String.Format("  FR_NAME: {0}", eventArgs.Advertisement.LocalName));
+            Debug.WriteLine(String.Format("  FR_TYPE: {0}", eventArgs.AdvertisementType));
+            Debug.WriteLine("DATA COUNT: "+eventArgs.Advertisement.DataSections.Count);
 
             try
             {
+                if(eventArgs.Advertisement.DataSections != null && eventArgs.Advertisement.DataSections.Count > 0)
+                {
+                    var dataSections = eventArgs.Advertisement.DataSections;
+                    foreach (BluetoothLEAdvertisementDataSection section in dataSections)
+                    {
+                        var data = new byte[section.Data.Length];
+                        using (var reader = DataReader.FromBuffer(section.Data))
+                        {
+                            reader.ReadBytes(data);
+                        }
+
+                        string manufacturerDataString = string.Format("0x{0}: {1}",
+                           section.DataType.ToString("X"),
+                           BitConverter.ToString(data));
+                        Debug.WriteLine(string.Format("  DATA({0}): {1}", data.Length, manufacturerDataString));
+
+                        if(section.DataType == (byte)BleDataType.CompleteLocalName)
+                        {
+                            string name = Encoding.UTF8.GetString(data);
+                            Debug.WriteLine("  NAME: " + name);
+                        }
+                    }
+                }
+
                 if (eventArgs.Advertisement.ManufacturerData != null)
                 {
                     var manufacturerSections = eventArgs.Advertisement.ManufacturerData;
@@ -65,12 +95,38 @@ namespace BarometerBT.Bluetooth
                             string manufacturerDataString = string.Format("0x{0}: {1}",
                                 section.CompanyId.ToString("X"),
                                 BitConverter.ToString(data));
-                            Debug.WriteLine("  COMPANY: " + manufacturerDataString);
+                            Debug.WriteLine(string.Format("  COMPANY({0}): {1}", data.Length, manufacturerDataString));
 
-                            if(BlueMaestroDevice.IsManufacturerID(section.CompanyId))
+                            _records[section.CompanyId] = new DeviceRecordVM(eventArgs.Advertisement.LocalName, section.CompanyId, data);
+
+                            if (BlueMaestroRecord.IsManufacturerID(section.CompanyId))
                             {
-                                BlueMaestroDevice dev = new BlueMaestroDevice(data);
+                                if(_bmp == null)
+                                    _bmp = new BMPebble27(new BluetoothDevice(eventArgs.Advertisement.LocalName, ""+eventArgs.BluetoothAddress, eventArgs.AdvertisementType.ToString()), 0);
+
+                                if (!string.IsNullOrWhiteSpace(eventArgs.Advertisement.LocalName))
+                                    _bmp.setName(eventArgs.Advertisement.LocalName);
+
+                                if (data.Length == 14)
+                                {
+                                    _bmp.Set_mData(data);
+                                    BlueMaestroRecord rec = new BlueMaestroRecord(eventArgs.Advertisement.LocalName, eventArgs.Timestamp.DateTime, data);
+                                    _weatherRecords.Add(rec);
+                                    MainWindow.SetChartData(_weatherRecords);
+                                }
+                                else if (data.Length == 25)
+                                {
+                                    _bmp.Set_sData(data);
+                                }
+                                else
+                                {
+                                    Debug.WriteLine(" --- Unknown Length: " + data.Length);
+                                }
+
+                                MainWindow.SetInfo(_bmp.Description());
                             }
+
+                            MainWindow.UpdateList(_records);
                         }
                     }
                 }

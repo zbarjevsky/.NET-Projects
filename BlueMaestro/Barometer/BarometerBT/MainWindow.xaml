@@ -3,11 +3,50 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:BarometerBT"
+        xmlns:local="clr-namespace:BarometerBT" 
+        xmlns:controls="clr-namespace:BarometerBT.Controls"
         mc:Ignorable="d" Background="Navy"
         WindowStartupLocation="CenterScreen"
         Icon="/Butterfly.ico"
         Title="Barometer - Weather Station" Height="450" Width="800">
     <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition Width="5*"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <ListBox x:Name="_listDevices">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid Margin="0,2">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="12" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock >
+                            <TextBlock Text="{Binding Name}" /> - <TextBlock Text="{Binding Title}" />                            
+                        </TextBlock>
+                        <GridSplitter Grid.Column="1" Background="AliceBlue" HorizontalAlignment="Stretch"/>
+                        <TextBlock Grid.Column="2"  Text="{Binding Data}"  />
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <TextBox x:Name="_txtInfo" Grid.Row="1" Background="LightYellow" />
+        <WindowsFormsHost Grid.Row="0" Grid.Column="1">
+            <controls:WeatherChartUserControl x:Name="_chart1" />
+        </WindowsFormsHost>
+        <WindowsFormsHost Grid.Row="1" Grid.Column="1" >
+            <controls:WeatherChartUserControl x:Name="_chart2" />
+        </WindowsFormsHost>
+        <WindowsFormsHost Grid.Row="2" Grid.Column="1">
+            <controls:WeatherChartUserControl x:Name="_chart3" />
+        </WindowsFormsHost>
     </Grid>
 </Window>

@@ -40,6 +40,9 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -55,12 +58,31 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BlueMaestro\BMDevice.cs" />
+    <Compile Include="BlueMaestro\BMPebble27.cs" />
+    <Compile Include="Bluetooth\BleDataType.cs" />
+    <Compile Include="Bluetooth\BluetoothDevice.cs" />
+    <Compile Include="Controls\WeatherChartUserControl.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Controls\WeatherChartUserControl.Designer.cs">
+      <DependentUpon>WeatherChartUserControl.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Utils\BMLineChart.cs" />
+    <Compile Include="Utils\Chart.cs" />
+    <Compile Include="Utils\CommonTools.cs" />
+    <Compile Include="Utils\Entry.cs" />
+    <Compile Include="Utils\Log.cs" />
+    <Compile Include="Utils\NotifyPropertyChangedImpl.cs" />
+    <Compile Include="Utils\TextView.cs" />
+    <Compile Include="Utils\ViewGroup.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -69,11 +91,12 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BlueMaestro\BlueMaestroDevice.cs" />
+    <Compile Include="BlueMaestro\BlueMaestroRecord.cs" />
     <Compile Include="Bluetooth\BluetoothConnection.cs" />
     <Compile Include="BlueMaestro\ScanRecordParser.cs" />
     <Compile Include="BlueMaestro\UartService.cs" />
     <Compile Include="BlueMaestro\Utility.cs" />
+    <Compile Include="Bluetooth\DeviceRecordVM.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -93,6 +116,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <EmbeddedResource Include="Controls\WeatherChartUserControl.resx">
+      <DependentUpon>WeatherChartUserControl.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

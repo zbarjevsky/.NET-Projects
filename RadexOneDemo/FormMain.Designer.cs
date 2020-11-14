@@ -1,6 +1,4 @@
-﻿using MZ.Controls;
-
-namespace RadexOneDemo
+﻿namespace RadexOneDemo
 {
     partial class FormMain
     {
@@ -31,6 +29,7 @@ namespace RadexOneDemo
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet1 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.m_btnRequestData = new System.Windows.Forms.Button();
             this.m_lblConnectStatus = new System.Windows.Forms.Label();
@@ -46,6 +45,7 @@ namespace RadexOneDemo
             this.m_numMaxCPM = new System.Windows.Forms.NumericUpDown();
             this.m_splitContainerTools = new System.Windows.Forms.SplitContainer();
             this.m_pnlRadiationStatus = new System.Windows.Forms.Panel();
+            this.m_progressMain = new MZ.WinForms.ColorBarsProgressBar();
             this.m_picRadiationStatus = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.m_txtRecords = new System.Windows.Forms.RichTextBox();
@@ -57,7 +57,9 @@ namespace RadexOneDemo
             this.m_numInterval = new System.Windows.Forms.NumericUpDown();
             this.m_lblMaxCPM = new System.Windows.Forms.Label();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.m_chart1 = new RadexOneDemo.RadiationGraphControl();
             this.m_chkAutoUpdateLog = new System.Windows.Forms.CheckBox();
+            this.m_listLog = new RadexOneDemo.RadiationLogListView();
             this.m_btnDisconnect = new System.Windows.Forms.Button();
             this.m_btnConnect = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
@@ -82,6 +84,7 @@ namespace RadexOneDemo
             this.m_tabPage1_Device = new System.Windows.Forms.TabPage();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.m_tabPage3_About = new System.Windows.Forms.TabPage();
+            this.radiationConverterControl1 = new RadexOneDemo.RadiationConverterControl();
             this.m_chkUseConverter = new System.Windows.Forms.CheckBox();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.m_tabPage2_Settings = new System.Windows.Forms.TabPage();
@@ -96,10 +99,6 @@ namespace RadexOneDemo
             this.m_mnuShow = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
             this.m_mnuExit = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_progressMain = new MZ.Controls.ColorBarsProgressBar();
-            this.m_chart1 = new RadexOneDemo.RadiationGraphControl();
-            this.m_listLog = new RadexOneDemo.RadiationLogListView();
-            this.radiationConverterControl1 = new RadexOneDemo.RadiationConverterControl();
             ((System.ComponentModel.ISupportInitialize)(this.m_numMaxCPM)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitContainerTools)).BeginInit();
             this.m_splitContainerTools.Panel1.SuspendLayout();
@@ -129,13 +128,12 @@ namespace RadexOneDemo
             this.m_splitMain.SuspendLayout();
             this.m_pnlTools.SuspendLayout();
             this.m_ctxMenuSysTray.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.m_progressMain)).BeginInit();
             this.SuspendLayout();
             // 
             // m_btnRequestData
             // 
             this.m_btnRequestData.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnRequestData.Location = new System.Drawing.Point(734, 641);
+            this.m_btnRequestData.Location = new System.Drawing.Point(734, 640);
             this.m_btnRequestData.Margin = new System.Windows.Forms.Padding(4);
             this.m_btnRequestData.Name = "m_btnRequestData";
             this.m_btnRequestData.Size = new System.Drawing.Size(200, 28);
@@ -196,7 +194,7 @@ namespace RadexOneDemo
             // m_btnClear
             // 
             this.m_btnClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_btnClear.Location = new System.Drawing.Point(938, 641);
+            this.m_btnClear.Location = new System.Drawing.Point(938, 640);
             this.m_btnClear.Margin = new System.Windows.Forms.Padding(4);
             this.m_btnClear.Name = "m_btnClear";
             this.m_btnClear.Size = new System.Drawing.Size(200, 28);
@@ -332,6 +330,30 @@ namespace RadexOneDemo
             this.m_pnlRadiationStatus.Size = new System.Drawing.Size(404, 289);
             this.m_pnlRadiationStatus.TabIndex = 1;
             // 
+            // m_progressMain
+            // 
+            this.m_progressMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_progressMain.BackColor = System.Drawing.SystemColors.Control;
+            themeColorSet1.Part1_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet1.Part1_InactiveColor = System.Drawing.Color.Honeydew;
+            themeColorSet1.Part2_ActiveColor = System.Drawing.Color.Orange;
+            themeColorSet1.Part2_InactiveColor = System.Drawing.Color.LightGoldenrodYellow;
+            themeColorSet1.Part3_ActiveColor = System.Drawing.Color.Red;
+            themeColorSet1.Part3_InactiveColor = System.Drawing.Color.MistyRose;
+            themeColorSet1.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Speaker;
+            themeColorSet1.Threshold1 = 60;
+            themeColorSet1.Threshold2 = 85;
+            this.m_progressMain.ColorTheme = themeColorSet1;
+            this.m_progressMain.Location = new System.Drawing.Point(354, 16);
+            this.m_progressMain.Margin = new System.Windows.Forms.Padding(4);
+            this.m_progressMain.Name = "m_progressMain";
+            this.m_progressMain.Orientation = System.Windows.Forms.Orientation.Vertical;
+            this.m_progressMain.Size = new System.Drawing.Size(31, 256);
+            this.m_progressMain.TabIndex = 0;
+            this.m_progressMain.TabStop = false;
+            this.m_progressMain.Value = 33;
+            // 
             // m_picRadiationStatus
             // 
             this.m_picRadiationStatus.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -366,7 +388,7 @@ namespace RadexOneDemo
             this.m_txtRecords.Location = new System.Drawing.Point(4, 145);
             this.m_txtRecords.Margin = new System.Windows.Forms.Padding(4);
             this.m_txtRecords.Name = "m_txtRecords";
-            this.m_txtRecords.Size = new System.Drawing.Size(395, 385);
+            this.m_txtRecords.Size = new System.Drawing.Size(395, 384);
             this.m_txtRecords.TabIndex = 1;
             this.m_txtRecords.Text = "";
             this.m_txtRecords.WordWrap = false;
@@ -500,9 +522,25 @@ namespace RadexOneDemo
             // 
             this.splitContainer2.Panel2.Controls.Add(this.m_listLog);
             this.splitContainer2.Size = new System.Drawing.Size(1152, 804);
-            this.splitContainer2.SplitterDistance = 678;
+            this.splitContainer2.SplitterDistance = 677;
             this.splitContainer2.SplitterWidth = 5;
             this.splitContainer2.TabIndex = 0;
+            // 
+            // m_chart1
+            // 
+            this.m_chart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_chart1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.m_chart1.Location = new System.Drawing.Point(12, 161);
+            this.m_chart1.Margin = new System.Windows.Forms.Padding(5);
+            this.m_chart1.MinimumSize = new System.Drawing.Size(640, 280);
+            this.m_chart1.Name = "m_chart1";
+            this.m_chart1.ScrollPosition = 10;
+            this.m_chart1.Series3Color = System.Drawing.Color.DarkOrange;
+            this.m_chart1.Series3LegendText = "CPM Threshold";
+            this.m_chart1.Size = new System.Drawing.Size(1126, 471);
+            this.m_chart1.TabIndex = 7;
             // 
             // m_chkAutoUpdateLog
             // 
@@ -510,13 +548,31 @@ namespace RadexOneDemo
             this.m_chkAutoUpdateLog.AutoSize = true;
             this.m_chkAutoUpdateLog.Checked = true;
             this.m_chkAutoUpdateLog.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.m_chkAutoUpdateLog.Location = new System.Drawing.Point(12, 653);
+            this.m_chkAutoUpdateLog.Location = new System.Drawing.Point(12, 652);
             this.m_chkAutoUpdateLog.Margin = new System.Windows.Forms.Padding(4);
             this.m_chkAutoUpdateLog.Name = "m_chkAutoUpdateLog";
             this.m_chkAutoUpdateLog.Size = new System.Drawing.Size(86, 17);
             this.m_chkAutoUpdateLog.TabIndex = 8;
             this.m_chkAutoUpdateLog.Text = "Update LOG";
             this.m_chkAutoUpdateLog.UseVisualStyleBackColor = true;
+            // 
+            // m_listLog
+            // 
+            this.m_listLog.BackColor = System.Drawing.SystemColors.Info;
+            this.m_listLog.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_listLog.FullRowSelect = true;
+            this.m_listLog.GridLines = true;
+            this.m_listLog.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
+            this.m_listLog.HideSelection = false;
+            this.m_listLog.LabelEdit = true;
+            this.m_listLog.Location = new System.Drawing.Point(0, 0);
+            this.m_listLog.Margin = new System.Windows.Forms.Padding(4);
+            this.m_listLog.Name = "m_listLog";
+            this.m_listLog.Size = new System.Drawing.Size(1150, 120);
+            this.m_listLog.TabIndex = 0;
+            this.m_listLog.UseCompatibleStateImageBehavior = false;
+            this.m_listLog.View = System.Windows.Forms.View.Details;
+            this.m_listLog.VirtualMode = true;
             // 
             // m_btnDisconnect
             // 
@@ -765,6 +821,18 @@ namespace RadexOneDemo
             this.m_tabPage3_About.TabIndex = 3;
             this.m_tabPage3_About.Text = "About Radiation";
             // 
+            // radiationConverterControl1
+            // 
+            this.radiationConverterControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.radiationConverterControl1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.radiationConverterControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
+            this.radiationConverterControl1.Location = new System.Drawing.Point(540, 661);
+            this.radiationConverterControl1.Margin = new System.Windows.Forms.Padding(9);
+            this.radiationConverterControl1.Name = "radiationConverterControl1";
+            this.radiationConverterControl1.Size = new System.Drawing.Size(600, 77);
+            this.radiationConverterControl1.TabIndex = 1;
+            this.radiationConverterControl1.ValueFrom = 0D;
+            // 
             // m_chkUseConverter
             // 
             this.m_chkUseConverter.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
@@ -931,72 +999,6 @@ namespace RadexOneDemo
             this.m_mnuExit.Text = "E&xit";
             this.m_mnuExit.Click += new System.EventHandler(this.m_mnuExit_Click);
             // 
-            // m_progressMain
-            // 
-            this.m_progressMain.ActiveColor = System.Drawing.Color.LimeGreen;
-            this.m_progressMain.ActiveColorTheme = MZ.Controls.ColorBarsProgressBar.ActiveColorsTheme.Multicolor;
-            this.m_progressMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_progressMain.BackColor = System.Drawing.SystemColors.Control;
-            this.m_progressMain.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.m_progressMain.InactiveColorTheme = MZ.Controls.ColorBarsProgressBar.InactiveColorsTheme.Pale;
-            this.m_progressMain.Location = new System.Drawing.Point(354, 16);
-            this.m_progressMain.Margin = new System.Windows.Forms.Padding(4);
-            this.m_progressMain.Maximum = 100;
-            this.m_progressMain.Minimum = 0;
-            this.m_progressMain.Name = "m_progressMain";
-            this.m_progressMain.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.m_progressMain.Size = new System.Drawing.Size(31, 256);
-            this.m_progressMain.TabIndex = 0;
-            this.m_progressMain.TabStop = false;
-            this.m_progressMain.Value = 33;
-            // 
-            // m_chart1
-            // 
-            this.m_chart1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_chart1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.m_chart1.Location = new System.Drawing.Point(12, 161);
-            this.m_chart1.Margin = new System.Windows.Forms.Padding(5);
-            this.m_chart1.MinimumSize = new System.Drawing.Size(640, 280);
-            this.m_chart1.Name = "m_chart1";
-            this.m_chart1.ScrollPosition = 10;
-            this.m_chart1.Series3Color = System.Drawing.Color.DarkOrange;
-            this.m_chart1.Series3LegendText = "CPM Threshold";
-            this.m_chart1.Size = new System.Drawing.Size(1126, 472);
-            this.m_chart1.TabIndex = 7;
-            // 
-            // m_listLog
-            // 
-            this.m_listLog.BackColor = System.Drawing.SystemColors.Info;
-            this.m_listLog.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_listLog.FullRowSelect = true;
-            this.m_listLog.GridLines = true;
-            this.m_listLog.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
-            this.m_listLog.HideSelection = false;
-            this.m_listLog.LabelEdit = true;
-            this.m_listLog.Location = new System.Drawing.Point(0, 0);
-            this.m_listLog.Margin = new System.Windows.Forms.Padding(4);
-            this.m_listLog.Name = "m_listLog";
-            this.m_listLog.Size = new System.Drawing.Size(1150, 119);
-            this.m_listLog.TabIndex = 0;
-            this.m_listLog.UseCompatibleStateImageBehavior = false;
-            this.m_listLog.View = System.Windows.Forms.View.Details;
-            this.m_listLog.VirtualMode = true;
-            // 
-            // radiationConverterControl1
-            // 
-            this.radiationConverterControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.radiationConverterControl1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.radiationConverterControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F);
-            this.radiationConverterControl1.Location = new System.Drawing.Point(540, 661);
-            this.radiationConverterControl1.Margin = new System.Windows.Forms.Padding(9);
-            this.radiationConverterControl1.Name = "radiationConverterControl1";
-            this.radiationConverterControl1.Size = new System.Drawing.Size(600, 77);
-            this.radiationConverterControl1.TabIndex = 1;
-            this.radiationConverterControl1.ValueFrom = 0D;
-            // 
             // FormMain
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -1049,7 +1051,6 @@ namespace RadexOneDemo
             this.m_pnlTools.ResumeLayout(false);
             this.m_pnlTools.PerformLayout();
             this.m_ctxMenuSysTray.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.m_progressMain)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1063,7 +1064,7 @@ namespace RadexOneDemo
         private System.Windows.Forms.CheckBox m_chkAutoRequestData;
         private System.Windows.Forms.TextBox m_txtStatus;
         private System.Windows.Forms.Label m_lblVal;
-        private ColorBarsProgressBar m_progressMain;
+        private MZ.WinForms.ColorBarsProgressBar m_progressMain;
         private System.Windows.Forms.Button m_btnClear;
         private System.Windows.Forms.Button m_btnVer;
         private System.Windows.Forms.Button m_btnWriteConfig;
