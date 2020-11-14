@@ -65,8 +65,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="BlueMaestro\BMDatabase.cs" />
+    <Compile Include="BlueMaestro\BMDatabaseMap.cs" />
     <Compile Include="BlueMaestro\BMDevice.cs" />
-    <Compile Include="BlueMaestro\BMPebble27.cs" />
+    <Compile Include="BlueMaestro\Original\BMPebble27.cs" />
+    <Compile Include="BlueMaestro\BMRecordAverages.cs" />
+    <Compile Include="BlueMaestro\BMRecordBase.cs" />
     <Compile Include="Bluetooth\BleDataType.cs" />
     <Compile Include="Bluetooth\BluetoothDevice.cs" />
     <Compile Include="Controls\WeatherChartUserControl.cs">
@@ -91,11 +95,11 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BlueMaestro\BlueMaestroRecord.cs" />
+    <Compile Include="BlueMaestro\BMRecordCurrent.cs" />
     <Compile Include="Bluetooth\BluetoothConnection.cs" />
-    <Compile Include="BlueMaestro\ScanRecordParser.cs" />
-    <Compile Include="BlueMaestro\UartService.cs" />
-    <Compile Include="BlueMaestro\Utility.cs" />
+    <Compile Include="BlueMaestro\Original\ScanRecordParser.cs" />
+    <Compile Include="BlueMaestro\Original\UartService.cs" />
+    <Compile Include="BlueMaestro\Original\BMUtility.cs" />
     <Compile Include="Bluetooth\DeviceRecordVM.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>

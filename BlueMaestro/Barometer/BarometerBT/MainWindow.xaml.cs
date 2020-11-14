@@ -47,21 +47,21 @@ namespace BarometerBT
             });
         }
 
-        internal static void SetChartData(List<BlueMaestroRecord> weatherRecords)
+        internal static void SetChartData(BMDatabase db)
         {
             CommonTools.ExecuteOnUiThreadBeginInvoke(() =>
             {
                 MainWindow wnd = (Application.Current.MainWindow as MainWindow);
                 if (wnd != null)
-                    wnd.UpdateChart(weatherRecords);
+                    wnd.UpdateChart(db);
             });
         }
 
-        private void UpdateChart(List<BlueMaestroRecord> weatherRecords)
+        private void UpdateChart(BMDatabase db)
         {
-            _chart1.UpdateChart1(weatherRecords);
-            _chart2.UpdateChart2(weatherRecords);
-            _chart3.UpdateChart3(weatherRecords);
+            _chart1.UpdateChart1(db);
+            _chart2.UpdateChart2(db);
+            _chart3.UpdateChart3(db);
         }
     }
 }

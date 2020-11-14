@@ -36,5 +36,41 @@ namespace BarometerBT.Utils
             return MessageBox.Show(errorMessage, title,
                 MessageBoxButton.OKCancel, MessageBoxImage.Error, MessageBoxResult.Yes, MessageBoxOptions.ServiceNotification);
         }
+
+        /**
+         * Convert two bytes to signed int 16
+         * @param first
+         * @param second
+         * @return
+         */
+        public static int convertToInt16(byte first, byte second)
+        {
+            int value = (int)first & 0xFF;
+            value *= 256;
+            value += (int)second & 0xFF;
+            value -= (value > 32768) ? 65536 : 0;
+            return value;
+        }
+
+        /**
+         * Convert a byte to signed int 8
+         * @param b
+         * @return
+         */
+        public static int convertToUInt8(byte b)
+        {
+            return (b >= 0) ? b : b + 256;
+        }
+
+        /**
+         * Ensure an unsigned int 8 is treated correct
+         * @param b
+         * @return
+         */
+        public static int convertToInt8(byte b)
+        {
+            int c = (int)(b & 0xff);
+            return c;
+        }
     }
 }

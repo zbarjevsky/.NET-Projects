@@ -20,44 +20,47 @@ namespace BarometerBT.Controls
 
         private void WeatherChartUserControl_Load(object sender, EventArgs e)
         {
-
+            chart1.Series[0].Points.Clear();
+            chart1.Series[0].Color = Color.Black;
+            chart1.Series[0].Name = "Please Wait...";
         }
 
-        public void UpdateChart1(List<BlueMaestroRecord> weatherRecords)
+        public void UpdateChart1(BMDatabase weatherDB)
         {
-            UpdateChart(weatherRecords, "Temperature", Color.Red, " º",
+            UpdateChart(weatherDB, "Temperature", Color.Red, " º",
                 (record) => { return record.currTemperature; },
-                -100, 100);
+                weatherDB._max.currTemperature, weatherDB._min.currTemperature);
         }
 
-        public void UpdateChart2(List<BlueMaestroRecord> weatherRecords)
+        public void UpdateChart2(BMDatabase weatherDB)
         {
-            UpdateChart(weatherRecords, "Humidity", Color.Green, " %",
+            UpdateChart(weatherDB, "Humidity", Color.Green, " %",
                 (record) => { return record.currHumidity; },
-                0, 100);
+                weatherDB._max.currHumidity, weatherDB._min.currHumidity);
         }
 
-        public void UpdateChart3(List<BlueMaestroRecord> weatherRecords)
+        public void UpdateChart3(BMDatabase weatherDB)
         {
-            UpdateChart(weatherRecords, "Air Pressure", Color.Blue, " mBar",
+            UpdateChart(weatherDB, "Air Pressure", Color.Blue, " mBar",
                 (record) => { return record.currPressure; },
-                0, 1200);
+                weatherDB._max.currPressure, weatherDB._min.currPressure);
         }
 
-        public void UpdateChart(List<BlueMaestroRecord> weatherRecords, 
+        public void UpdateChart(BMDatabase weatherDB, 
             string title, Color color, string suffix, 
-            Func<BlueMaestroRecord, double> GetValue,
+            Func<BMRecordCurrent, double> GetValue,
             double max, double min)
         {
             chart1.Series[0].Points.Clear();
             chart1.Series[0].Color = color;
             chart1.Series[0].Name = title;
 
-            foreach (BlueMaestroRecord record in weatherRecords)
+            if (weatherDB == null || weatherDB.Records.Count == 0)
+                return;
+
+            foreach (BMRecordCurrent record in weatherDB.Records)
             {
                 double val = GetValue(record);
-                max = Math.Max(max, val);
-                min = Math.Min(min, val);
 
                 chart1.Series[0].Points.AddXY(record.Date, val);
                 m_txtValue.Text = val.ToString("0.0") + suffix;

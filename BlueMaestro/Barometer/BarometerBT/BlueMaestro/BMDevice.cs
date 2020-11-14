@@ -16,7 +16,7 @@ namespace BarometerBT.BlueMaestro
         /**
          * MAC address of the device
          */
-        protected readonly String address;
+        protected readonly ulong address;
 
     /**
      * Name of the device
@@ -67,7 +67,7 @@ namespace BarometerBT.BlueMaestro
             this._mode = 0;
         }
 
-        public String getAddress() { return address; }
+        public ulong getAddress() { return address; }
         public String getName() { return name; }
         public byte getVersion() { return version; }
         public byte getRSSI() { return rssi; }

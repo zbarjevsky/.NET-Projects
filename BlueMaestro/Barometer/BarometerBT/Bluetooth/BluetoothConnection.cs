@@ -17,8 +17,8 @@ namespace BarometerBT.Bluetooth
         // Create Bluetooth Listener
         private BluetoothLEAdvertisementWatcher _watcher = new BluetoothLEAdvertisementWatcher();
         private Dictionary<ushort, DeviceRecordVM> _records = new Dictionary<ushort, DeviceRecordVM>();
-        private BMPebble27 _bmp;
-        private List<BlueMaestroRecord> _weatherRecords = new List<BlueMaestroRecord>(1024);
+        private BMRecordAverages _averages;
+        private BMRecordCurrent _current;
 
         public void StartBluetoothSearch(int OutOfRangeTimeout = 50000, int SamplingInterval = 2000)
         {
@@ -41,20 +41,20 @@ namespace BarometerBT.Bluetooth
             _watcher.Start();
         }
 
-        private void OnAdvertisementReceived(BluetoothLEAdvertisementWatcher watcher, BluetoothLEAdvertisementReceivedEventArgs eventArgs)
+        private void OnAdvertisementReceived(BluetoothLEAdvertisementWatcher watcher, BluetoothLEAdvertisementReceivedEventArgs e)
         {
             // Tell the user we see an advertisement and print some properties
             Debug.WriteLine(String.Format("Advertisement:"));
-            Debug.WriteLine(String.Format("  BT_ADDR: {0}", eventArgs.BluetoothAddress));
-            Debug.WriteLine(String.Format("  FR_NAME: {0}", eventArgs.Advertisement.LocalName));
-            Debug.WriteLine(String.Format("  FR_TYPE: {0}", eventArgs.AdvertisementType));
-            Debug.WriteLine("DATA COUNT: "+eventArgs.Advertisement.DataSections.Count);
+            Debug.WriteLine(String.Format("  BT_ADDR: {0}", e.BluetoothAddress));
+            Debug.WriteLine(String.Format("  FR_NAME: {0}", e.Advertisement.LocalName));
+            Debug.WriteLine(String.Format("  FR_TYPE: {0}", e.AdvertisementType));
+            Debug.WriteLine("DATA COUNT: "+e.Advertisement.DataSections.Count);
 
             try
             {
-                if(eventArgs.Advertisement.DataSections != null && eventArgs.Advertisement.DataSections.Count > 0)
+                if(e.Advertisement.DataSections != null && e.Advertisement.DataSections.Count > 0)
                 {
-                    var dataSections = eventArgs.Advertisement.DataSections;
+                    var dataSections = e.Advertisement.DataSections;
                     foreach (BluetoothLEAdvertisementDataSection section in dataSections)
                     {
                         var data = new byte[section.Data.Length];
@@ -76,9 +76,9 @@ namespace BarometerBT.Bluetooth
                     }
                 }
 
-                if (eventArgs.Advertisement.ManufacturerData != null)
+                if (e.Advertisement.ManufacturerData != null)
                 {
-                    var manufacturerSections = eventArgs.Advertisement.ManufacturerData;
+                    var manufacturerSections = e.Advertisement.ManufacturerData;
                     if (manufacturerSections.Count > 0)
                     {
                         Debug.WriteLine("  SECTIONS: " + manufacturerSections.Count);
@@ -97,33 +97,38 @@ namespace BarometerBT.Bluetooth
                                 BitConverter.ToString(data));
                             Debug.WriteLine(string.Format("  COMPANY({0}): {1}", data.Length, manufacturerDataString));
 
-                            _records[section.CompanyId] = new DeviceRecordVM(eventArgs.Advertisement.LocalName, section.CompanyId, data);
+                            _records[section.CompanyId] = new DeviceRecordVM(e.Advertisement.LocalName, section.CompanyId, data);
 
-                            if (BlueMaestroRecord.IsManufacturerID(section.CompanyId))
+                            if (BMRecordCurrent.IsManufacturerID(section.CompanyId))
                             {
-                                if(_bmp == null)
-                                    _bmp = new BMPebble27(new BluetoothDevice(eventArgs.Advertisement.LocalName, ""+eventArgs.BluetoothAddress, eventArgs.AdvertisementType.ToString()), 0);
+                                DateTime date = DateTime.Now; // eventArgs.Timestamp.DateTime;
+                                BluetoothDevice dev = new BluetoothDevice(
+                                    e.Advertisement.LocalName,
+                                    e.BluetoothAddress, 
+                                    e.AdvertisementType.ToString());
 
-                                if (!string.IsNullOrWhiteSpace(eventArgs.Advertisement.LocalName))
-                                    _bmp.setName(eventArgs.Advertisement.LocalName);
+                                if(_averages == null)
+                                    _averages = new BMRecordAverages(dev, e.RawSignalStrengthInDBm, date, null);
+
+                                if(_current == null)
+                                    _current = new BMRecordCurrent(dev, e.RawSignalStrengthInDBm, date, null);
 
                                 if (data.Length == 14)
                                 {
-                                    _bmp.Set_mData(data);
-                                    BlueMaestroRecord rec = new BlueMaestroRecord(eventArgs.Advertisement.LocalName, eventArgs.Timestamp.DateTime, data);
-                                    _weatherRecords.Add(rec);
-                                    MainWindow.SetChartData(_weatherRecords);
+                                    _current = BMDatabaseMap.INSTANCE.AddRecord(dev, e.RawSignalStrengthInDBm, date, data);
+                                    
+                                    MainWindow.SetChartData(BMDatabaseMap.INSTANCE.Map[dev.getAddress()]);
                                 }
                                 else if (data.Length == 25)
                                 {
-                                    _bmp.Set_sData(data);
+                                    _averages.Set_sData(data);
                                 }
                                 else
                                 {
                                     Debug.WriteLine(" --- Unknown Length: " + data.Length);
                                 }
 
-                                MainWindow.SetInfo(_bmp.Description());
+                                MainWindow.SetInfo(_current.ToString() + _averages.ToString());
                             }
 
                             MainWindow.UpdateList(_records);
