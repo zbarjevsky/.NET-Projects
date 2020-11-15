@@ -11,6 +11,8 @@ namespace BarometerBT.BlueMaestro
     [Serializable]
     public class BMRecordBase
     {
+        public const ushort MANUFACTURER_ID = 0x0133;
+
         [XmlIgnore]
         public byte[] Data { get; set; }
 
@@ -27,7 +29,7 @@ namespace BarometerBT.BlueMaestro
 
         public static bool IsManufacturerID(ushort manufacturerID)
         {
-            return manufacturerID == 0x0133;
+            return manufacturerID == MANUFACTURER_ID;
         }
 
         //for serialization

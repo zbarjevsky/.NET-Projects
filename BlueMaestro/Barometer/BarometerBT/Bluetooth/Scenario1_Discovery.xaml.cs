@@ -317,5 +317,28 @@ namespace BarometerBT.Bluetooth
         }
 
         #endregion
+
+        private void GoToButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (ResultsListView.SelectedItem is BluetoothLEDeviceDisplay bt)
+            {
+                Scenario2_Client client = new Scenario2_Client();
+
+                try
+                {
+                    client.rootPage.SelectedBleDeviceId = bt.Id;
+                    client.rootPage.SelectedBleDeviceName = bt.Name;
+
+                    client.ShowActivated = true;
+                    client.Owner = this;
+                    client.ShowDialog();
+                }
+                catch (Exception err)
+                {
+                    CommonTools.ErrorMessage(err.ToString());
+                }
+
+            }
+        }
     }
 }

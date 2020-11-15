@@ -1,5 +1,6 @@
 ﻿using BarometerBT.BlueMaestro;
 using BarometerBT.Utils;
+using SDKTemplate;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.Advertisement;
 using Windows.Storage.Streams;
 
@@ -21,10 +23,48 @@ namespace BarometerBT.Bluetooth
         // Create Bluetooth Listener
         private BluetoothLEAdvertisementWatcher _watcher = new BluetoothLEAdvertisementWatcher();
         private Dictionary<ushort, DeviceRecordVM> _records = new Dictionary<ushort, DeviceRecordVM>();
+        private Dictionary<ulong, BluetoothLEDevice> _blueMaestroDevice = new Dictionary<ulong, BluetoothLEDevice>();
+
+        private Stopwatch _stopper = new Stopwatch();
+
         private BMRecordAverages _averages;
         private BMRecordCurrent _current;
 
-        public void StartBluetoothSearch(int OutOfRangeTimeout = 5000, int SamplingInterval = 1000)
+        public class MData
+        {
+            public class Section
+            {
+                public ushort CompanyId { get; }
+                public byte[] Buffer;
+
+                public Section(BluetoothLEManufacturerData section)
+                {
+                    CompanyId = section.CompanyId;
+                    Buffer = new byte[section.Data.Length];
+                    using (var reader = DataReader.FromBuffer(section.Data))
+                    {
+                        reader.ReadBytes(Buffer);
+                    }
+                }
+            }
+
+            public List<Section> ManufacturerData = new List<Section>();
+
+            public MData(IList<BluetoothLEManufacturerData> manufacturerSections)
+            {
+                foreach (BluetoothLEManufacturerData section in manufacturerSections)
+                {
+                    ManufacturerData.Add(new Section(section));
+                }
+            }
+
+            public int FindManufacturerId(ushort id)
+            {
+                return ManufacturerData.FindIndex((s) => s.CompanyId == id);
+            }
+        }
+
+        public void StartBluetoothSearch(int OutOfRangeTimeout = 5000, int SamplingInterval = 2000)
         {
             _watcher.ScanningMode = BluetoothLEScanningMode.Active;
 
@@ -45,114 +85,152 @@ namespace BarometerBT.Bluetooth
             _watcher.Start();
         }
 
+        public void StopBluetoothSearch()
+        {
+            _watcher.Stop();
+        }
+
         private void OnAdvertisementReceived(BluetoothLEAdvertisementWatcher watcher, BluetoothLEAdvertisementReceivedEventArgs e)
         {
-            // Tell the user we see an advertisement and print some properties
-            Debug.WriteLine(String.Format("Advertisement:"));
-            Debug.WriteLine(String.Format("  BT_ADDR: {0}", e.BluetoothAddress));
-            Debug.WriteLine(String.Format("  FR_NAME: {0}", e.Advertisement.LocalName));
-            Debug.WriteLine(String.Format("  FR_TYPE: {0}", e.AdvertisementType));
-            Debug.WriteLine("DATA COUNT: "+e.Advertisement.DataSections.Count);
-
             try
             {
-                if(e.Advertisement.DataSections != null && e.Advertisement.DataSections.Count > 0)
-                {
-                    var dataSections = e.Advertisement.DataSections;
-                    foreach (BluetoothLEAdvertisementDataSection section in dataSections)
-                    {
-                        var data = new byte[section.Data.Length];
-                        using (var reader = DataReader.FromBuffer(section.Data))
-                        {
-                            reader.ReadBytes(data);
-                        }
+                //PrintDataSections(e);
 
-                        string manufacturerDataString = string.Format("0x{0}: {1}",
-                           section.DataType.ToString("X"),
-                           BitConverter.ToString(data));
-                        Debug.WriteLine(string.Format("  DATA({0}): {1}", data.Length, manufacturerDataString));
-
-                        if(section.DataType == (byte)BleDataType.CompleteLocalName)
-                        {
-                            string name = Encoding.UTF8.GetString(data);
-                            Debug.WriteLine("  NAME: " + name);
-                        }
-                    }
-                }
-
-                if (e.Advertisement.ManufacturerData != null)
-                {
-                    var manufacturerSections = e.Advertisement.ManufacturerData;
-                    if (manufacturerSections.Count > 0)
-                    {
-                        Debug.WriteLine("  SECTIONS: " + manufacturerSections.Count);
-                        foreach (BluetoothLEManufacturerData section in manufacturerSections)
-                        {
-                            // Only print the first one of the list
-                            var data = new byte[section.Data.Length];
-                            using (var reader = DataReader.FromBuffer(section.Data))
-                            {
-                                reader.ReadBytes(data);
-                            }
-
-                            //// Print the company ID + the raw data in hex format
-                            string manufacturerDataString = string.Format("0x{0}: {1}",
-                                section.CompanyId.ToString("X"),
-                                BitConverter.ToString(data));
-                            Debug.WriteLine(string.Format("  COMPANY({0}): {1}", data.Length, manufacturerDataString));
-
-                            //////////////////////////////////////////////////////
-                            ///
-                            if(!_records.ContainsKey(section.CompanyId))
-                                _records[section.CompanyId] = new DeviceRecordVM(e.Advertisement.LocalName, section.CompanyId, data);
-                            
-                            _records[section.CompanyId].Buffer = data;
-                            if (!string.IsNullOrWhiteSpace(e.Advertisement.LocalName))
-                                _records[section.CompanyId].Name = e.Advertisement.LocalName;
-
-                            if (BMRecordCurrent.IsManufacturerID(section.CompanyId))
-                            {
-                                DateTime date = DateTime.Now; // eventArgs.Timestamp.DateTime;
-                                BluetoothDevice dev = new BluetoothDevice(
-                                    e.Advertisement.LocalName,
-                                    e.BluetoothAddress, 
-                                    e.AdvertisementType.ToString());
-
-                                if(_averages == null)
-                                    _averages = new BMRecordAverages(dev, e.RawSignalStrengthInDBm, date, null);
-
-                                if(_current == null)
-                                    _current = new BMRecordCurrent(dev, e.RawSignalStrengthInDBm, date, null);
-
-                                if (data.Length == 14)
-                                {
-                                    _current = BMDatabaseMap.INSTANCE.AddRecord(dev, e.RawSignalStrengthInDBm, date, data);
-                                    
-                                    MainWindow.SetChartData(BMDatabaseMap.INSTANCE.Map[dev.Address]);
-                                }
-                                else if (data.Length == 25)
-                                {
-                                    _averages.Set_sData(data);
-                                }
-                                else
-                                {
-                                    Debug.WriteLine(" --- Unknown Length: " + data.Length);
-                                }
-
-                                string recCount = "Records: " + BMDatabaseMap.INSTANCE.Map.First().Value.Records.Count + "\n ";
-                                MainWindow.SetInfo(recCount + _current.ToString() + _averages.ToString());
-                            }
-
-                            MainWindow.UpdateList(_records);
-                        }
-                    }
-                }
+                MData sections = new MData(e.Advertisement.ManufacturerData);
+                //PrintManufacturerData(e, sections);
+                ProcessManufacturerData(e, sections);
             }
             catch (Exception err)
             {
                 Debug.WriteLine("ERROR: "+err);
             }
-            Debug.WriteLine("");
+        }
+
+        private async void ProcessManufacturerData(BluetoothLEAdvertisementReceivedEventArgs e, MData m)
+        {
+            int idx = m.FindManufacturerId(BMRecordBase.MANUFACTURER_ID);
+            if (idx < 0)
+                return;
+
+            if(!_blueMaestroDevice.ContainsKey(e.BluetoothAddress))
+            {
+                BluetoothLEDevice device = await BluetoothLEDevice.FromBluetoothAddressAsync(e.BluetoothAddress);
+                if (device != null)
+                {
+                    _blueMaestroDevice[e.BluetoothAddress] = device;
+                    _stopper.Restart();
+                }
+            }
+
+            if (_blueMaestroDevice.ContainsKey(e.BluetoothAddress))
+            {
+                BluetoothLEDeviceDisplay display = new BluetoothLEDeviceDisplay(_blueMaestroDevice[e.BluetoothAddress].DeviceInformation);
+                Debug.WriteLine("*BT* " + display.ToString());
+            }
+
+            if (m.ManufacturerData.Count > 0)
+            {
+                foreach (MData.Section section in m.ManufacturerData)
+                {
+                    if (BMRecordCurrent.IsManufacturerID(section.CompanyId))
+                    {
+                        DateTime date = DateTime.Now; // eventArgs.Timestamp.DateTime;
+                        BluetoothDevice dev = new BluetoothDevice(
+                            e.Advertisement.LocalName,
+                            e.BluetoothAddress,
+                            e.AdvertisementType.ToString());
+
+                        if (_averages == null)
+                            _averages = new BMRecordAverages(dev, e.RawSignalStrengthInDBm, date, null);
+
+                        if (_current == null)
+                            _current = new BMRecordCurrent(dev, e.RawSignalStrengthInDBm, date, null);
+
+                        if (section.Buffer.Length == 14)
+                        {
+                            _current = BMDatabaseMap.INSTANCE.AddRecord(dev, e.RawSignalStrengthInDBm, date, section.Buffer);
+
+                            MainWindow.SetChartData(BMDatabaseMap.INSTANCE.Map[dev.Address]);
+                        }
+                        else if (section.Buffer.Length == 25)
+                        {
+                            _averages.Set_sData(section.Buffer);
+                        }
+                        else
+                        {
+                            Debug.WriteLine(" --- Unknown Length: " + section.Buffer.Length);
+                        }
+
+                        string message = "Records: " + BMDatabaseMap.INSTANCE.Map.First().Value.Records.Count + " \n";
+                        message += "Elapsed: " + _stopper.Elapsed.ToString(@"d\.hh\:mm\:ss") + " \n";
+                        MainWindow.SetInfo(message + _current.ToString() + _averages.ToString());
+                    }
+
+                    MainWindow.UpdateList(_records);
+                }
+            }
+        }
+
+        private void PrintDataSections(BluetoothLEAdvertisementReceivedEventArgs e)
+        {
+            // Tell the user we see an advertisement and print some properties
+            Debug.WriteLine("--------------------------------------------------------------------");
+            Debug.WriteLine(String.Format("Advertisement:"));
+            Debug.WriteLine(String.Format("  BT_ADDR: {0} -- {1}", e.BluetoothAddress, BitConverter.ToString(BitConverter.GetBytes(e.BluetoothAddress).Reverse().ToArray())));
+            Debug.WriteLine(String.Format("  FR_NAME: {0}", e.Advertisement.LocalName));
+            Debug.WriteLine(String.Format("  FR_TYPE: {0}", e.AdvertisementType));
+
+            IList<BluetoothLEAdvertisementDataSection> dataSections = e.Advertisement.DataSections;
+            if (dataSections != null && dataSections.Count > 0)
+            {
+                Debug.WriteLine("DATA COUNT: " + dataSections.Count);
+                foreach (BluetoothLEAdvertisementDataSection section in dataSections)
+                {
+                    var data = new byte[section.Data.Length];
+                    using (var reader = DataReader.FromBuffer(section.Data))
+                    {
+                        reader.ReadBytes(data);
+                    }
+
+                    string manufacturerDataString = string.Format("0x{0}: {1}",
+                       section.DataType.ToString("X"),
+                       BitConverter.ToString(data));
+                    Debug.WriteLine(string.Format("  DATA({0}): {1}", data.Length, manufacturerDataString));
+
+                    if (section.DataType == (byte)BleDataType.CompleteLocalName)
+                    {
+                        string name = Encoding.UTF8.GetString(data);
+                        Debug.WriteLine("  NAME: " + name);
+                    }
+                }
+            }
+        }
+
+        private void PrintManufacturerData(BluetoothLEAdvertisementReceivedEventArgs e, MData m)
+        {
+            {
+                if (m.ManufacturerData.Count > 0)
+                {
+                    Debug.WriteLine("  SECTIONS: " + m.ManufacturerData.Count);
+                    foreach (MData.Section section in m.ManufacturerData)
+                    {
+                        //// Print the company ID + the raw data in hex format
+                        string manufacturerDataString = string.Format("0x{0}: {1}",
+                            section.CompanyId.ToString("X"),
+                            BitConverter.ToString(section.Buffer));
+                        Debug.WriteLine(string.Format("  COMPANY({0}): {1}", section.Buffer.Length, manufacturerDataString));
+
+                        if (!_records.ContainsKey(section.CompanyId))
+                            _records[section.CompanyId] = new DeviceRecordVM(e.Advertisement.LocalName, section.CompanyId, section.Buffer);
+
+                        _records[section.CompanyId].Buffer = section.Buffer;
+                        if (!string.IsNullOrWhiteSpace(e.Advertisement.LocalName))
+                            _records[section.CompanyId].Name = e.Advertisement.LocalName;
+
+                        MainWindow.UpdateList(_records);
+                    }
+                }
+            }
         }
     }
 }

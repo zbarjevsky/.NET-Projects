@@ -23,5 +23,11 @@ namespace BarometerBT
         {
             _bt.StartBluetoothSearch();
         }
+
+        protected override void OnExit(ExitEventArgs e)
+        {
+            base.OnExit(e);
+            _bt.StopBluetoothSearch();
+        }
     }
 }
