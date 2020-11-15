@@ -11,36 +11,43 @@ using BarometerBT.Utils;
 
 namespace BarometerBT.BlueMaestro
 {
+    [Serializable]
     public class BMRecordCurrent : BMRecordBase
     {
         private static readonly Regex burst_pattern =
                new Regex("T(-?[0-9]+\\.[0-9])H(-?[0-9]+\\.[0-9])D(-?[0-9]+\\.[0-9])");
 
-        public byte _mode { get; private set; } = 0;
+        [XmlIgnore]
+        public byte _mode { get; set; } = 0;
 
         // Battery level
-        public int battery { get; private set; } = 0;
+        public int BatteryLevel { get; set; } = 0;
 
         // Reference Date
-        public int referenceDateRawNumber { get; private set; }
+        public int ReferenceDateRawNumber { get; set; }
 
         // Logging interval
-        public int _loggingInterval { get; private set; }
+        public int LoggingInterval { get; set; }
 
         // Current temperature, humidity, and dew point
-        public double currTemperature;
-        public double currHumidity;
-        public double currPressure { get; private set; }
+        public double currTemperature { get; set; }
+        public double currHumidity { get; set; }
+        public double currPressure { get; set; }
 
         [XmlIgnore]
         public double currDewPoint { get { return (this.currTemperature - ((100 - this.currHumidity) / 5)); } }
 
         // Number of threshold breaches
-        public int numBreach { get; private set; }
+        public int numBreach { get; set; }
 
         // User input used to determine altitute or sea adjusted pressure
-        public double userInput { get; private set; }
+        public double userInput { get; set; }
 
+        //for serialization
+        public BMRecordCurrent()
+        {
+
+        }
 
         public BMRecordCurrent(BluetoothDevice device, short rssi, DateTime recordDate,  byte[] mData)
             : base(device, rssi, recordDate, mData)
@@ -49,14 +56,17 @@ namespace BarometerBT.BlueMaestro
         }
 
         //empty record for average, min, max
-        public BMRecordCurrent(BMRecordCurrent r) : base(r)
+        public BMRecordCurrent(BMRecordCurrent r = null) : base(r)
         {
+            if (r == null)
+                return;
+
             currTemperature = r.currTemperature;
             currHumidity = r.currHumidity;
             currPressure = r.currPressure;
 
-            battery = r.battery;
-            _loggingInterval = r._loggingInterval;
+            BatteryLevel = r.BatteryLevel;
+            LoggingInterval = r.LoggingInterval;
             numBreach = r.numBreach;
             _mode = r._mode;
         }
@@ -70,9 +80,9 @@ namespace BarometerBT.BlueMaestro
 
             const int offset = 3;
 
-            this.battery = mData[4 - offset];
+            this.BatteryLevel = mData[4 - offset];
 
-            this._loggingInterval = CommonTools.convertToInt16(mData[5 - offset], mData[6 - offset]);
+            this.LoggingInterval = CommonTools.convertToInt16(mData[5 - offset], mData[6 - offset]);
             //BMDatabase database = BMDeviceMap.INSTANCE.getBMDatabase(getAddress());
             //database.setLoggingInterval(loggingInterval);
 
@@ -125,10 +135,10 @@ namespace BarometerBT.BlueMaestro
         {
             string desc = "";
             desc += base.ToString();
-            desc += ("Temperature: " + currTemperature + "\n");
-            desc += ("Humidity: " + currHumidity + "\n");
-            desc += ("AirPressure: " + currPressure + "\n");
-            desc += ("Battery: " + battery + " %\n");
+            desc += ("Temperature: " + currTemperature + " ºC \n");
+            desc += ("Humidity: " + currHumidity + " %RH \n");
+            desc += ("AirPressure: " + currPressure + " hPa \n");
+            desc += ("Battery: " + BatteryLevel + " % \n");
             return desc;
         }
     }

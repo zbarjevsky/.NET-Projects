@@ -12,8 +12,12 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+
+
 using BarometerBT.BlueMaestro;
+using BarometerBT.Bluetooth;
 using BarometerBT.Utils;
+using Microsoft.Win32;
 
 namespace BarometerBT
 {
@@ -59,9 +63,79 @@ namespace BarometerBT
 
         private void UpdateChart(BMDatabase db)
         {
-            _chart1.UpdateChart1(db);
-            _chart2.UpdateChart2(db);
-            _chart3.UpdateChart3(db);
+            _chart1.UpdateChartTemperature(db);
+            _chart2.UpdateChartHumidity(db);
+            _chart3.UpdateChartAirPressure(db);
+        }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            var db = BMDatabaseMap.INSTANCE.Map.FirstOrDefault();
+            if(db.Value != null)
+                db.Value.Save();
+        }
+
+        private void OpenButton_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog _openFileDialog = new OpenFileDialog()
+            {
+                Multiselect = false,
+                RestoreDirectory = true,
+                Filter = "All supported files|*.xml|All files (*.*)|*.*",
+                //InitialDirectory = _openDirectory
+            };
+
+            if (_openFileDialog.ShowDialog(this).Value)
+            {
+                //_openDirectory = Path.GetDirectoryName(_openFileDialog.FileName);
+
+                List<string> fileNamesList = new List<string>(_openFileDialog.FileNames);
+                fileNamesList.Sort();
+
+                BMDatabase db = BMDatabase.Open(_openFileDialog.FileName);
+
+                //var db = BMDatabaseMap.INSTANCE.Map.FirstOrDefault();
+                //if (db.Value != null)
+                //    db.Value.Save();
+            }
+
+        }
+
+        private void Scenario2Button_Click(object sender, RoutedEventArgs e)
+        {
+            Scenario2_Client client = new Scenario2_Client();
+            
+            BMDatabase db = BMDatabaseMap.INSTANCE.Map.FirstOrDefault().Value;
+
+            if (db != null)
+            {
+                client.rootPage.SelectedBleDeviceId = "BluetoothLE#BluetoothLEc0:b6:f9:73:92:8a-d0:7e:ef:ef:61:4f"; //db.Device.Address;
+                client.rootPage.SelectedBleDeviceName = db.Device.Name;
+
+                client.ShowActivated = true;
+                client.Owner = this;
+                client.ShowDialog();
+            }
+            else
+            {
+                CommonTools.ErrorMessage("Not Found");
+            }
+        }
+
+        private void Scenario1Button_Click(object sender, RoutedEventArgs e)
+        {
+            Scenario1_Discovery client = new Scenario1_Discovery();
+
+            try
+            {
+                client.ShowActivated = true;
+                client.Owner = this;
+                client.ShowDialog();
+            }
+            catch (Exception err)
+            {
+                CommonTools.ErrorMessage(err.ToString());
+            }
         }
     }
 }

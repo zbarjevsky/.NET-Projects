@@ -12,6 +12,10 @@ using Windows.Storage.Streams;
 
 namespace BarometerBT.Bluetooth
 {
+    //https://stackoverflow.com/questions/37333179/is-there-any-way-to-use-bluetooth-le-from-a-c-sharp-desktop-app-in-windows-10
+    //https://github.com/CarterAppleton/Win10Win32Bluetooth
+    //C:\Program Files (x86)\Windows Kits\10\UnionMetadata\Windows.winmd
+    //C:\Program Files(x86)\Reference Assemblies\Microsoft\Framework\.NETCore\v4.5\System.Runtime.WindowsRuntime.dll
     public class BluetoothConnection
     {
         // Create Bluetooth Listener
@@ -20,7 +24,7 @@ namespace BarometerBT.Bluetooth
         private BMRecordAverages _averages;
         private BMRecordCurrent _current;
 
-        public void StartBluetoothSearch(int OutOfRangeTimeout = 50000, int SamplingInterval = 2000)
+        public void StartBluetoothSearch(int OutOfRangeTimeout = 5000, int SamplingInterval = 1000)
         {
             _watcher.ScanningMode = BluetoothLEScanningMode.Active;
 
@@ -97,7 +101,14 @@ namespace BarometerBT.Bluetooth
                                 BitConverter.ToString(data));
                             Debug.WriteLine(string.Format("  COMPANY({0}): {1}", data.Length, manufacturerDataString));
 
-                            _records[section.CompanyId] = new DeviceRecordVM(e.Advertisement.LocalName, section.CompanyId, data);
+                            //////////////////////////////////////////////////////
+                            ///
+                            if(!_records.ContainsKey(section.CompanyId))
+                                _records[section.CompanyId] = new DeviceRecordVM(e.Advertisement.LocalName, section.CompanyId, data);
+                            
+                            _records[section.CompanyId].Buffer = data;
+                            if (!string.IsNullOrWhiteSpace(e.Advertisement.LocalName))
+                                _records[section.CompanyId].Name = e.Advertisement.LocalName;
 
                             if (BMRecordCurrent.IsManufacturerID(section.CompanyId))
                             {
@@ -117,7 +128,7 @@ namespace BarometerBT.Bluetooth
                                 {
                                     _current = BMDatabaseMap.INSTANCE.AddRecord(dev, e.RawSignalStrengthInDBm, date, data);
                                     
-                                    MainWindow.SetChartData(BMDatabaseMap.INSTANCE.Map[dev.getAddress()]);
+                                    MainWindow.SetChartData(BMDatabaseMap.INSTANCE.Map[dev.Address]);
                                 }
                                 else if (data.Length == 25)
                                 {
@@ -128,7 +139,8 @@ namespace BarometerBT.Bluetooth
                                     Debug.WriteLine(" --- Unknown Length: " + data.Length);
                                 }
 
-                                MainWindow.SetInfo(_current.ToString() + _averages.ToString());
+                                string recCount = "Records: " + BMDatabaseMap.INSTANCE.Map.First().Value.Records.Count + "\n ";
+                                MainWindow.SetInfo(recCount + _current.ToString() + _averages.ToString());
                             }
 
                             MainWindow.UpdateList(_records);

@@ -20,10 +20,10 @@ namespace BarometerBT.BlueMaestro
 
         public BMRecordCurrent AddRecord(BluetoothDevice device, short rssi, DateTime recordDate, byte[] data)
         {
-            if (!Map.ContainsKey(device.getAddress()))
-                Map[device.getAddress()] = new BMDatabase(device);
+            if (!Map.ContainsKey(device.Address))
+                Map[device.Address] = new BMDatabase(device);
 
-            return Map[device.getAddress()].AddRecord(device, rssi, recordDate, data);
+            return Map[device.Address].AddRecord(device, rssi, recordDate, data);
         }
     }
 }

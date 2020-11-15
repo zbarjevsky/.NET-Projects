@@ -8,30 +8,21 @@ namespace BarometerBT.Bluetooth
 {
     public class BluetoothDevice
     {
-        string _name;
-        ulong _address;
-        string _state;
+        public string Name { get; set; }
+        public ulong Address { get; set; }
+        public string State { get; set; }
+
+        //for serialization
+        public BluetoothDevice()
+        {
+
+        }
 
         public BluetoothDevice(string name, ulong address, string state)
         {
-            _name = name;
-            _address = address;
-            _state = state;
-        }
-
-        internal ulong getAddress()
-        {
-            return _address;
-        }
-
-        internal string getName()
-        {
-            return _name;
-        }
-
-        internal int getBondState()
-        {
-            return 0;
+            Name = name;
+            Address = address;
+            State = state;
         }
     }
 }

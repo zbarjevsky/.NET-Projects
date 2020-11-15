@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 
-namespace BarometerBT.BlueMaestro
+namespace BarometerBT.BlueMaestro.Original
 {
     public class BMPebble27 : BMDevice
     {

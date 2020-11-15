@@ -12,9 +12,17 @@ namespace BarometerBT.Utils
 {
     public class CommonTools
     {
-        public static void ExecuteOnUiThreadBeginInvoke(Action action, DispatcherPriority priority = DispatcherPriority.Normal)
+        public static DispatcherOperation ExecuteOnUiThreadBeginInvoke(Action action, DispatcherPriority priority = DispatcherPriority.Normal)
         {
-            Application.Current.Dispatcher.BeginInvoke(action, priority);
+            if (Application.Current != null)
+                return Application.Current.Dispatcher.BeginInvoke(action, priority);
+            return null;
+        }
+
+        public static void ExecuteOnUiThreadInvoke(Action action, DispatcherPriority priority = DispatcherPriority.Normal)
+        {
+            if (Application.Current != null)
+                Application.Current.Dispatcher.Invoke(action, priority);
         }
 
         public static void WriteInfoLine([CallerMemberName] string caller = "", [CallerFilePath] string file = "")
@@ -35,6 +43,13 @@ namespace BarometerBT.Utils
         {
             return MessageBox.Show(errorMessage, title,
                 MessageBoxButton.OKCancel, MessageBoxImage.Error, MessageBoxResult.Yes, MessageBoxOptions.ServiceNotification);
+        }
+
+
+        public static MessageBoxResult InfoMessage(string infoMessage, string title = "Information")
+        {
+            return MessageBox.Show(infoMessage, title,
+                MessageBoxButton.OK, MessageBoxImage.Information, MessageBoxResult.Yes, MessageBoxOptions.ServiceNotification);
         }
 
         /**

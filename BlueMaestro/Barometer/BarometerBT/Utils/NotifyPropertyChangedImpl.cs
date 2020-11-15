@@ -21,7 +21,7 @@ namespace BarometerBT.Utils
         {
             if (PropertyChanged != null)
             {
-                CommonTools.ExecuteOnUiThreadBeginInvoke(() => PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName)));
+                CommonTools.ExecuteOnUiThreadInvoke(() => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)));
             }
         }
 

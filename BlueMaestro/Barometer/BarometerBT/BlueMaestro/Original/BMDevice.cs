@@ -1,6 +1,4 @@
-﻿using BarometerBT.Bluetooth;
-using BarometerBT.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,7 +6,11 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace BarometerBT.BlueMaestro
+
+using BarometerBT.Bluetooth;
+using BarometerBT.Utils;
+
+namespace BarometerBT.BlueMaestro.Original
 {
     public abstract class BMDevice
     {
@@ -60,10 +62,10 @@ namespace BarometerBT.BlueMaestro
          */
         public BMDevice(BluetoothDevice device, byte version)
         {
-            this.address = device.getAddress();
-            this.name = device.getName();
+            this.address = device.Address;
+            this.name = device.Name;
             this.version = version;
-            this.bondState = device.getBondState();
+            this.bondState = 11; // device.State;
             this._mode = 0;
         }
 
@@ -97,10 +99,10 @@ namespace BarometerBT.BlueMaestro
          * Updates this Blue Maestro device with new info
          * @param device
          */
-        public void updateWithInfo(BluetoothDevice device)
+        public void updateWithInfo(BarometerBT.Bluetooth.BluetoothDevice device)
         {
-            this.name = device.getName();
-            this.bondState = device.getBondState();
+            this.name = device.Name;
+            this.bondState = 11; // device.getBondState();
         }
 
         /**

@@ -3,44 +3,54 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-
+using System.Xml.Serialization;
 using BarometerBT.Bluetooth;
 
 namespace BarometerBT.BlueMaestro
 {
+    [Serializable]
     public class BMRecordBase
     {
-        public byte[] Data { get; protected set; }
+        [XmlIgnore]
+        public byte[] Data { get; set; }
 
         public const String UNITSF = "º F";
         public const String UNITSC = "º C";
 
-        public string Name { get; protected set; }
+        public string Name { get; set; }
 
-        public ulong Address { get; protected set; }
+        public ulong Address { get; set; }
 
-        public short RSSI { get; protected set; }
+        public short RSSI { get; set; }
 
-        public DateTime Date { get; protected set; }
+        public DateTime Date { get; set; }
 
         public static bool IsManufacturerID(ushort manufacturerID)
         {
             return manufacturerID == 0x0133;
         }
 
+        //for serialization
+        public BMRecordBase()
+        {
+
+        }
+
         public BMRecordBase(BluetoothDevice device, short rssi, DateTime recordDate, byte[] data)
         {
-            Name = device.getName();
-            Address = device.getAddress();
+            Name = device.Name;
+            Address = device.Address;
             RSSI = rssi;
 
             Date = recordDate;
             Data = data;
         }
 
-        public BMRecordBase(BMRecordBase r)
+        public BMRecordBase(BMRecordBase r = null)
         {
+            if (r == null)
+                return;
+
             Name = r.Name;
             Address = r.Address;
             RSSI = r.RSSI;
@@ -52,8 +62,8 @@ namespace BarometerBT.BlueMaestro
         public override string ToString()
         {
             string desc = "";
-            desc += ("Name: " + Name + "\n");
-            desc += ("Signal: " + RSSI + " dB\n");
+            desc += ("Name: " + Name + " \n");
+            desc += ("Signal: " + RSSI + " dBm \n");
             return desc;
         }
     }

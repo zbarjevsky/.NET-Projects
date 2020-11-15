@@ -20,7 +20,7 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <ListBox x:Name="_listDevices">
+        <ListBox x:Name="_listDevices" Margin="6">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <Grid Margin="0,2">
@@ -38,14 +38,21 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <TextBox x:Name="_txtInfo" Grid.Row="1" Background="LightYellow" />
-        <WindowsFormsHost Grid.Row="0" Grid.Column="1">
+        <StackPanel Grid.Row="2" Margin="6" Orientation="Horizontal"
+                    HorizontalAlignment="Left" VerticalAlignment="Center" >
+            <Button Margin="6" Content="Save" Click="SaveButton_Click"/>
+            <Button Margin="6" Content="Open..." Click="OpenButton_Click"/>
+            <Button Margin="6" Content="Scenario1..." Click="Scenario1Button_Click"/>
+            <Button Margin="6" Content="Scenario2..." Click="Scenario2Button_Click"/>
+        </StackPanel>
+        <TextBox x:Name="_txtInfo" Grid.Row="1" Margin="6" Background="LightYellow" />
+        <WindowsFormsHost Grid.Row="0" Grid.Column="1" Margin="6">
             <controls:WeatherChartUserControl x:Name="_chart1" />
         </WindowsFormsHost>
-        <WindowsFormsHost Grid.Row="1" Grid.Column="1" >
+        <WindowsFormsHost Grid.Row="1" Grid.Column="1" Margin="6" >
             <controls:WeatherChartUserControl x:Name="_chart2" />
         </WindowsFormsHost>
-        <WindowsFormsHost Grid.Row="2" Grid.Column="1">
+        <WindowsFormsHost Grid.Row="2" Grid.Column="1" Margin="6" >
             <controls:WeatherChartUserControl x:Name="_chart3" />
         </WindowsFormsHost>
     </Grid>

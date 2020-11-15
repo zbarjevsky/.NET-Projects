@@ -22,24 +22,24 @@ namespace BarometerBT.Controls
         {
             chart1.Series[0].Points.Clear();
             chart1.Series[0].Color = Color.Black;
-            chart1.Series[0].Name = "Please Wait...";
+            chart1.Series[0].Name = "Loading...";
         }
 
-        public void UpdateChart1(BMDatabase weatherDB)
+        public void UpdateChartTemperature(BMDatabase weatherDB)
         {
             UpdateChart(weatherDB, "Temperature", Color.Red, " º",
                 (record) => { return record.currTemperature; },
                 weatherDB._max.currTemperature, weatherDB._min.currTemperature);
         }
 
-        public void UpdateChart2(BMDatabase weatherDB)
+        public void UpdateChartHumidity(BMDatabase weatherDB)
         {
             UpdateChart(weatherDB, "Humidity", Color.Green, " %",
                 (record) => { return record.currHumidity; },
                 weatherDB._max.currHumidity, weatherDB._min.currHumidity);
         }
 
-        public void UpdateChart3(BMDatabase weatherDB)
+        public void UpdateChartAirPressure(BMDatabase weatherDB)
         {
             UpdateChart(weatherDB, "Air Pressure", Color.Blue, " mBar",
                 (record) => { return record.currPressure; },
@@ -58,8 +58,9 @@ namespace BarometerBT.Controls
             if (weatherDB == null || weatherDB.Records.Count == 0)
                 return;
 
-            foreach (BMRecordCurrent record in weatherDB.Records)
+            for (int i = 0; i < weatherDB.Records.Count; i++)
             {
+                BMRecordCurrent record = weatherDB.Records[i];
                 double val = GetValue(record);
 
                 chart1.Series[0].Points.AddXY(record.Date, val);

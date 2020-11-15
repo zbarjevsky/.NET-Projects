@@ -41,6 +41,10 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.WindowsRuntime, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\..\Program Files (x86)\Reference Assemblies\Microsoft\Framework\.NETCore\v4.5\System.Runtime.WindowsRuntime.dll</HintPath>
+    </Reference>
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
     <Reference Include="System.Xml" />
@@ -67,12 +71,21 @@
     </ApplicationDefinition>
     <Compile Include="BlueMaestro\BMDatabase.cs" />
     <Compile Include="BlueMaestro\BMDatabaseMap.cs" />
-    <Compile Include="BlueMaestro\BMDevice.cs" />
+    <Compile Include="BlueMaestro\Original\BMDevice.cs" />
     <Compile Include="BlueMaestro\Original\BMPebble27.cs" />
     <Compile Include="BlueMaestro\BMRecordAverages.cs" />
     <Compile Include="BlueMaestro\BMRecordBase.cs" />
     <Compile Include="Bluetooth\BleDataType.cs" />
     <Compile Include="Bluetooth\BluetoothDevice.cs" />
+    <Compile Include="Bluetooth\BTConnectionDirect.cs" />
+    <Compile Include="Bluetooth\Constants.cs" />
+    <Compile Include="Bluetooth\DisplayHelpers.cs" />
+    <Compile Include="Bluetooth\Scenario1_Discovery.xaml.cs">
+      <DependentUpon>Scenario1_Discovery.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Bluetooth\Scenario2_Client.xaml.cs">
+      <DependentUpon>Scenario2_Client.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\WeatherChartUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -84,9 +97,19 @@
     <Compile Include="Utils\CommonTools.cs" />
     <Compile Include="Utils\Entry.cs" />
     <Compile Include="Utils\Log.cs" />
+    <Compile Include="Utils\MainPage.cs" />
     <Compile Include="Utils\NotifyPropertyChangedImpl.cs" />
     <Compile Include="Utils\TextView.cs" />
     <Compile Include="Utils\ViewGroup.cs" />
+    <Compile Include="Utils\XmlHelper.cs" />
+    <Page Include="Bluetooth\Scenario1_Discovery.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Bluetooth\Scenario2_Client.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -141,6 +164,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Butterfly.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Styles\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

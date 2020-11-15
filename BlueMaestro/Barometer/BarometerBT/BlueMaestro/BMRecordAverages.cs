@@ -84,10 +84,10 @@ namespace BarometerBT.BlueMaestro
         {
             string desc = "";
             desc += base.ToString();
-            desc += ("AVG24 Temperature: " + avg24Temperature + "\n");
-            desc += ("AVG24 Humidity: " + avg24Humidity + "\n");
-            desc += ("AVG24 Dew Point: " + avg24DewPoint + "\n");
-            desc += ("AVG24 AirPressure: " + avg24Pressure + "\n");
+            desc += ("AVG24 Temperature: " + avg24Temperature + " \n");
+            desc += ("AVG24 Humidity: " + avg24Humidity + " \n");
+            desc += ("AVG24 Dew Point: " + avg24DewPoint + " \n");
+            desc += ("AVG24 AirPressure: " + avg24Pressure + " \n");
             return desc;
         }
     }
