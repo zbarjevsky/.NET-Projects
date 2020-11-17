@@ -63,6 +63,9 @@ namespace BarometerBT
 
         private void UpdateChart(BMDatabase db)
         {
+            if (!_chkAutoUpdate.IsChecked.Value)
+                return;
+
             _chart1.UpdateChartTemperature(db);
             _chart2.UpdateChartHumidity(db);
             _chart3.UpdateChartAirPressure(db);
@@ -94,9 +97,10 @@ namespace BarometerBT
 
                 BMDatabase db = BMDatabase.Open(_openFileDialog.FileName);
 
-                //var db = BMDatabaseMap.INSTANCE.Map.FirstOrDefault();
-                //if (db.Value != null)
-                //    db.Value.Save();
+
+                var dbCurrent = BMDatabaseMap.INSTANCE.Merge(db);
+
+                UpdateChart(dbCurrent);
             }
 
         }

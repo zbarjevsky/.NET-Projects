@@ -44,6 +44,11 @@
             <Button Margin="6" Content="Open..." Click="OpenButton_Click"/>
             <Button Margin="6" Content="Scenario1..." Click="Scenario1Button_Click"/>
             <Button Margin="6" Content="Scenario2..." Click="Scenario2Button_Click"/>
+            <Viewbox Height="35">
+                <CheckBox x:Name="_chkAutoUpdate" IsChecked="True" Background="LightGray" >
+                    <TextBlock Text="Auto Update" Background="LightGray"  />
+                </CheckBox>
+            </Viewbox>
         </StackPanel>
         <TextBox x:Name="_txtInfo" Grid.Row="1" Margin="6" Background="LightYellow" />
         <WindowsFormsHost Grid.Row="0" Grid.Column="1" Margin="6">

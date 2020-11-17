@@ -12,9 +12,6 @@ namespace BarometerBT.BlueMaestro
 {
     public class BMDatabase
     {
-        [XmlIgnore]
-        public BMRecordCurrent _max, _min, _avg;
-
         public BluetoothDevice Device { get; set; }
 
         public List<BMRecordCurrent> Records { get; } = new List<BMRecordCurrent>();
@@ -34,28 +31,41 @@ namespace BarometerBT.BlueMaestro
         {
             BMRecordCurrent record = new BMRecordCurrent(device, rssi, recordDate, data);
 
-            BMRecordCurrent last = Records.LastOrDefault();
-            if (last != null && last == record) //not changed - update 
+            lock (Records)
             {
-                Records[Records.Count-1] = record;
-            }
-            else //new record
-            {
-                if(last == null)
+                BMRecordCurrent last = Records.LastOrDefault();
+                if (last != null && last == record) //not changed - update 
                 {
-                    last = record;
-                    _max = new BMRecordCurrent(record);
-                    _min = new BMRecordCurrent(record);
-                    _avg = new BMRecordCurrent(record);
+                    Records[Records.Count - 1] = record;
                 }
+                else //new record
+                {
+                    if (last == null)
+                    {
+                        last = record;
+                    }
 
-                Records.Add(record);
-
-                _max.Max(record);
-                _min.Min(record);
+                    Records.Add(record);
+                }
             }
 
             return record;
+        }
+
+        public void Merge(BMDatabase db)
+        {
+            lock (Records)
+            {
+                Records.AddRange(db.Records);
+                Records.Sort((r1, r2) => r1.Date.CompareTo(r2.Date));
+
+                //remove duplicates
+                for (int i = Records.Count - 1; i > 0; i--)
+                {
+                    if (Records[i].Date == Records[i - 1].Date)
+                        Records.RemoveAt(i);
+                }
+            }
         }
 
         public void Save()
@@ -79,7 +89,6 @@ namespace BarometerBT.BlueMaestro
         public static BMDatabase Open(string fileName)
         {
             BMDatabase db = XmlHelper.Open<BMDatabase>(fileName);
-            db.UpdateLimits();
             return db;
         }
 
@@ -109,18 +118,9 @@ namespace BarometerBT.BlueMaestro
             return db;
         }
 
-        private void UpdateLimits()
+        public override string ToString()
         {
-            foreach (BMRecordCurrent r in Records)
-            {
-                if (_max == null)
-                    _max = new BMRecordCurrent(r);
-                _max.Max(r);
-
-                if (_min == null)
-                    _min = new BMRecordCurrent(r);
-                _min.Min(r);
-            }
+            return string.Format("Count({0}) -- {1}", Records.Count, Device);
         }
     }
 }

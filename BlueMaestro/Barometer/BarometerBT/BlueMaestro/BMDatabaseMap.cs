@@ -25,5 +25,19 @@ namespace BarometerBT.BlueMaestro
 
             return Map[device.Address].AddRecord(device, rssi, recordDate, data);
         }
+
+        public BMDatabase Merge(BMDatabase db)
+        {
+            if (!Map.ContainsKey(db.Device.Address))
+            {
+                Map[db.Device.Address] = db;
+            }
+            else
+            {
+                Map[db.Device.Address].Merge(db);
+            }
+
+            return Map[db.Device.Address];
+        }
     }
 }
