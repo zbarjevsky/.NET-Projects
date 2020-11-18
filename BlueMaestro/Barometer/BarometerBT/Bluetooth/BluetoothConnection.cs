@@ -130,43 +130,46 @@ namespace BarometerBT.Bluetooth
 
             if (m.ManufacturerData.Count > 0)
             {
-                foreach (MData.Section section in m.ManufacturerData)
+                lock (_blueMaestroDevice)
                 {
-                    if (BMRecordCurrent.IsManufacturerID(section.CompanyId))
+                    foreach (MData.Section section in m.ManufacturerData)
                     {
-                        DateTime date = DateTime.Now; // eventArgs.Timestamp.DateTime;
-                        BluetoothDevice dev = new BluetoothDevice(
-                            e.Advertisement.LocalName,
-                            e.BluetoothAddress,
-                            e.AdvertisementType.ToString());
-
-                        if (_averages == null)
-                            _averages = new BMRecordAverages(dev, e.RawSignalStrengthInDBm, date, null);
-
-                        if (_current == null)
-                            _current = new BMRecordCurrent(dev, e.RawSignalStrengthInDBm, date, null);
-
-                        if (section.Buffer.Length == 14)
+                        if (BMRecordCurrent.IsManufacturerID(section.CompanyId))
                         {
-                            _current = BMDatabaseMap.INSTANCE.AddRecord(dev, e.RawSignalStrengthInDBm, date, section.Buffer);
+                            DateTime date = DateTime.Now; // eventArgs.Timestamp.DateTime;
+                            BluetoothDevice dev = new BluetoothDevice(
+                                e.Advertisement.LocalName,
+                                e.BluetoothAddress,
+                                e.AdvertisementType.ToString());
 
-                            MainWindow.SetChartData(BMDatabaseMap.INSTANCE.Map[dev.Address]);
-                        }
-                        else if (section.Buffer.Length == 25)
-                        {
-                            _averages.Set_sData(section.Buffer);
-                        }
-                        else
-                        {
-                            Debug.WriteLine(" --- Unknown Length: " + section.Buffer.Length);
+                            if (_averages == null)
+                                _averages = new BMRecordAverages(dev, e.RawSignalStrengthInDBm, date, null);
+
+                            if (_current == null)
+                                _current = new BMRecordCurrent(dev, e.RawSignalStrengthInDBm, date, null);
+
+                            if (section.Buffer.Length == 14)
+                            {
+                                _current = BMDatabaseMap.INSTANCE.AddRecord(dev, e.RawSignalStrengthInDBm, date, section.Buffer);
+
+                                MainWindow.SetChartData(BMDatabaseMap.INSTANCE.Map[dev.Address]);
+                            }
+                            else if (section.Buffer.Length == 25)
+                            {
+                                _averages.Set_sData(section.Buffer);
+                            }
+                            else
+                            {
+                                Debug.WriteLine(" --- Unknown Length: " + section.Buffer.Length);
+                            }
+
+                            string message = "Records: " + BMDatabaseMap.INSTANCE.Map.First().Value.Records.Count + " \n";
+                            message += "Elapsed: " + _stopper.Elapsed.ToString(@"d\.hh\:mm\:ss") + " \n";
+                            MainWindow.SetInfo(message + _current.ToString() + _averages.ToString());
                         }
 
-                        string message = "Records: " + BMDatabaseMap.INSTANCE.Map.First().Value.Records.Count + " \n";
-                        message += "Elapsed: " + _stopper.Elapsed.ToString(@"d\.hh\:mm\:ss") + " \n";
-                        MainWindow.SetInfo(message + _current.ToString() + _averages.ToString());
+                        MainWindow.UpdateList(_records);
                     }
-
-                    MainWindow.UpdateList(_records);
                 }
             }
         }

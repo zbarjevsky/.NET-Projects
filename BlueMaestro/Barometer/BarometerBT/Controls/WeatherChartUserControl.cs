@@ -84,9 +84,14 @@ namespace BarometerBT.Controls
             // let's zoom to [0,blockSize] (e.g. [0,100])
             chartArea.AxisX.ScaleView.Zoomable = true;
             chartArea.AxisX.ScaleView.SizeType = DateTimeIntervalType.Number;
+
+            double oneMinute = (DateTime.Now.AddMinutes(100).ToOADate() - DateTime.Now.ToOADate()) / 100.0;
+            // set scrollbar small change to blockSize (e.g. 100)
+            chartArea.AxisX.ScaleView.SmallScrollSize = oneMinute;
+            chartArea.AxisX.ScaleView.SmallScrollMinSize = 0;
         }
 
-        private void UpdateChartScroll()
+        private void SetZoom()
         {
             var chartArea1 = chart1.ChartAreas[0];
             var points = chart1.Series[0].Points;
@@ -223,7 +228,7 @@ namespace BarometerBT.Controls
             chart1.ChartAreas[0].AxisY.Maximum = max + margin;
             chart1.ChartAreas[0].RecalculateAxesScale();
 
-            UpdateChartScroll();
+            //SetZoom();
             UpdateTimeLabelsFormat(points);
 
             EnableRedraw(true);
