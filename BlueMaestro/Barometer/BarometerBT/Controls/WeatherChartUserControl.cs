@@ -279,12 +279,6 @@ namespace BarometerBT.Controls
         }
 
         Point? _prevPosition = null;
-        //ToolTip _tooltip = new ToolTip()
-        //{
-        //    IsBalloon = true,
-        //    UseFading = true,
-        //    UseAnimation = true
-        //};
 
         private void ShowToolTipWithValue(Point pos)
         {

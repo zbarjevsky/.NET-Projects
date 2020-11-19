@@ -112,11 +112,16 @@ namespace MZ.Media.WPF
         {
             string ellipse = "";
             int idx = longDeviceName.IndexOf("(");
+            if(idx<0)
+            {
+                idx = longDeviceName.Length;
+            }
             if (idx > 32)
             {
                 ellipse = "...";
                 idx = 30;
             }
+
             string name = longDeviceName.Substring(0, idx) + ellipse;
             return name;
         }
