@@ -279,7 +279,12 @@ namespace BarometerBT.Controls
         }
 
         Point? _prevPosition = null;
-        ToolTip _tooltip = new ToolTip();
+        //ToolTip _tooltip = new ToolTip()
+        //{
+        //    IsBalloon = true,
+        //    UseFading = true,
+        //    UseAnimation = true
+        //};
 
         private void ShowToolTipWithValue(Point pos)
         {
@@ -288,24 +293,37 @@ namespace BarometerBT.Controls
 
             _tooltip.RemoveAll();
             _prevPosition = pos;
+
+            double valueY = double.NaN;
+            double valueX = double.NaN;
+            string desc = "";
+
             HitTestResult[] results = chart1.HitTest(pos.X, pos.Y, false, ChartElementType.DataPoint);
             HitTestResult prop = ChartHelper.FindClosestResult(results, pos);
             if (prop != null)
             {
                 DataPoint point = prop.Object as DataPoint;
-                DateTime dt = DateTime.FromOADate(point.XValue);
-                string txt = string.Format("({0:0.0}{1}) - {2} - {3}",
-                    point.YValues[0],
-                    _theme.units,
-                    prop.Series.Name,
-                    dt.ToString("MMM, dd HH:mm:ss")
-                    );
-                _tooltip.Show(txt, this.chart1, pos.X, pos.Y + 20, 5000);
+                valueX = point.XValue;
+                valueY = point.YValues[0];
+                _tooltip.ToolTipIcon = ToolTipIcon.Info;
             }
             else
             {
-                _tooltip.Show("No Value Here :(", this.chart1, pos.X, pos.Y + 20, 2000);
+                desc = "(approximate)";
+                valueX = chart1.ChartAreas[0].CursorX.Position;
+                valueY = ChartHelper.FindInterpolateValueY(chart1.ChartAreas[0].CursorX.Position, chart1.Series[0]);
+                _tooltip.ToolTipIcon = ToolTipIcon.Warning;
             }
+
+            DateTime dt = DateTime.FromOADate(valueX);
+
+            string txt = string.Format("[{0:0.0}{1}]\n{2}",
+            valueY, _theme.units,
+            dt.ToString("MMM dd, HH:mm:ss"));
+
+            _tooltip.ToolTipTitle = string.Format("{0}{1}", _theme.title, desc);
+            _tooltip.Show("", this.chart1, pos.X, pos.Y + 20, 5000); //bug fix
+            _tooltip.Show(txt, this.chart1, pos.X + 16, pos.Y + 20, 5000);
         }
     }
 
@@ -371,6 +389,30 @@ namespace BarometerBT.Controls
             if (min <= maxDistance)
                 return data;
             return null;
+        }
+
+        public static double FindInterpolateValueY(double positionX, Series series)
+        {
+            if (series.Points.Count < 3)
+                return double.NaN;
+
+            DataPoint pt0 = series.Points[0];
+            DataPoint pt1 = series.Points.Last();
+
+            for (int i = 0; i < series.Points.Count; i++)
+            {
+                if(series.Points[i].XValue >= positionX)
+                {
+                    pt0 = series.Points[i - 1];
+                    pt1 = series.Points[i];
+                    break;
+                }
+            }
+
+            double coefficient = (positionX - pt0.XValue) / (pt1.XValue - pt0.XValue);
+            double approximateValue = pt0.YValues[0] + coefficient * (pt1.YValues[0] - pt0.YValues[0]);
+
+            return approximateValue;
         }
 
         private static double Length(double X, double Y)
