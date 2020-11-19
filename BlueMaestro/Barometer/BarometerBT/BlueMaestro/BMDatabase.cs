@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -68,6 +69,38 @@ namespace BarometerBT.BlueMaestro
             }
         }
 
+        public List<BMRecordCurrent> Dillute(int zoom)
+        {
+            int bucketSize = (int)(zoom);
+            if (bucketSize < 2 || bucketSize > (Records.Count / 3)) //all records
+                return new List<BMRecordCurrent>(Records);
+
+            List<BMRecordCurrent> records = new List<BMRecordCurrent>();
+            for (int i = 0; i < Records.Count; i+=bucketSize)
+            {
+                records.Add(GetAverageValue(i, bucketSize));
+            }
+
+            return records;
+        }
+
+        private BMRecordCurrent GetAverageValue(int start, int bucketSize)
+        {
+            if (start >= Records.Count)
+                return new BMRecordCurrent();
+
+            BMRecordCurrent rec = new BMRecordCurrent(Records[start]);
+
+            int count = 1;
+            for (int i = start + 1; i < Records.Count && i < (start + bucketSize); i++, count++)
+            {
+                rec += Records[i];
+            }
+            rec /= count;
+
+            return rec;
+        }
+
         public void Save()
         {
             string date = DateTime.Now.ToString("yyyy_MM_dd-HH_mm_ss");
@@ -88,8 +121,19 @@ namespace BarometerBT.BlueMaestro
 
         public static BMDatabase Open(string fileName)
         {
-            BMDatabase db = XmlHelper.Open<BMDatabase>(fileName);
-            return db;
+            try
+            {
+                BMDatabase db = XmlHelper.Open<BMDatabase>(fileName);
+                if (db.Device == null)
+                    throw new Exception("Old file format");
+                    
+                return db;
+            }
+            catch (Exception err)
+            {
+                Debug.WriteLine("File: {0} Error: {1}", fileName, err);
+                return null;
+            }
         }
 
         public static BMDatabase Merge(BMDatabase db1, BMDatabase db2)

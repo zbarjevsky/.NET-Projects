@@ -120,63 +120,49 @@ namespace BarometerBT.Controls
             }
         }
 
-        public void UpdateChartTemperature(BMDatabase weatherDB)
+        public void UpdateChartTemperature(List<BMRecordCurrent> records)
         {
-            UpdateChart(weatherDB, "Temperature", Color.Red, " ºC",
+            UpdateChart(records, "Temperature", Color.Red, " ºC",
                 (record) => { return record.currTemperature; });
         }
 
-        public void UpdateChartHumidity(BMDatabase weatherDB)
+        public void UpdateChartHumidity(List<BMRecordCurrent> records)
         {
-            UpdateChart(weatherDB, "Humidity", Color.Green, " % RH",
+            UpdateChart(records, "Humidity", Color.Green, " % RH",
                 (record) => { return record.currHumidity; });
         }
 
-        public void UpdateChartAirPressure(BMDatabase weatherDB)
+        public void UpdateChartAirPressure(List<BMRecordCurrent> records)
         {
-            UpdateChart(weatherDB, "Air Pressure", Color.Blue, " mBar",
+            UpdateChart(records, "Air Pressure", Color.Blue, " mBar",
                 (record) => { return record.currPressure; });
         }
 
-        public void UpdateChart(BMDatabase weatherDB, 
+        public void UpdateChart(List<BMRecordCurrent> records, 
             string title, Color color, string suffix, 
             Func<BMRecordCurrent, double> GetValue)
         {
-            _theme.color = color;
+            _theme.color = Color.FromArgb(128, color);
             _theme.title = title;
             _theme.units = suffix;
 
             _bufferFull.Clear();
 
             chart1.Series[0].Points.Clear();
-            chart1.Series[0].Color = color;
-            chart1.Series[0].Name = title;
+            chart1.Series[0].Color = _theme.color;
+            chart1.Series[0].Name = _theme.title;
 
-            if (weatherDB == null || weatherDB.Records.Count == 0)
+            if (records == null || records.Count == 0)
                 return;
 
-            for (int i = 0; i < weatherDB.Records.Count; i++)
+            for (int i = 0; i < records.Count; i++)
             {
-                BMRecordCurrent record = weatherDB.Records[i];
+                BMRecordCurrent record = records[i];
                 double val = GetValue(record);
                 _bufferFull.Add(new ChartPoint(record.Date, val));
             }
 
             UpdateChart();
-        }
-
-        private void m_trackBarZoom_ValueChanged(object sender, EventArgs e)
-        {
-            if (_inUpdate)
-                return;
-            //UpdateChart();
-        }
-
-        private void m_hScrollBarTimeLine_Scroll(object sender, ScrollEventArgs e)
-        {
-            if (_inUpdate)
-                return;
-            //UpdateChart();
         }
 
         private bool _inUpdate = false;
@@ -185,15 +171,6 @@ namespace BarometerBT.Controls
             if (_inUpdate)
                 return;
             _inUpdate = true;
-
-            //int zoom = (int)Math.Pow(2, m_trackBarZoom.Value);
-            //m_lblZoom.Text = string.Format("Zoom Out({0})", zoom);
-
-            //List<ChartPoint> buffer = ChartHelper.CompactHistoryByPoints(_bufferFull, zoom);
-            //UpdateScrollBar(buffer, m_chkAutoScroll.Checked);
-
-            ////get buffer that corresponds to specific scroll
-            //buffer = ChartHelper.GetSubBuffer(buffer, m_hScrollBarTimeLine.Value, m_hScrollBarTimeLine.Width);
             
             InternalSet(_bufferFull, _theme);
 
@@ -228,83 +205,64 @@ namespace BarometerBT.Controls
             chart1.ChartAreas[0].AxisY.Maximum = max + margin;
             chart1.ChartAreas[0].RecalculateAxesScale();
 
-            //SetZoom();
-            UpdateTimeLabelsFormat(points);
+            UpdateTimeLabelsFormat();
 
             EnableRedraw(true);
         }
 
-        private void UpdateTimeLabelsFormat(List<ChartPoint> points)
+        private void UpdateTimeLabelsFormat()
         {
-            if (points.Count == 0)
+            if (chart1.Series[0].Points.Count == 0)
                 return;
 
-            DateTime first = points[0].Date;
-            DateTime last = points.Last().Date;
-            TimeSpan ts = (last - first);
-            if (ts.TotalMinutes < 3)
+            TimeSpan ts = GetVisibleDateRange(out bool bSameDay);
+            if (ts.TotalHours < 3)
             {
                 chart1.ChartAreas[0].AxisX.LabelStyle.Format = "HH:mm:ss";
             }
-            else if (first.DayOfYear == last.DayOfYear)//same day
+            else if (bSameDay)//same day
             {
                 chart1.ChartAreas[0].AxisX.LabelStyle.Format = "MMM dd\n HH:mm:ss";
             }
             else if (ts.TotalDays < 3)//different day
             {
-                chart1.ChartAreas[0].AxisX.LabelStyle.Format = "MMM dd\n HH:mm:ss";
+                chart1.ChartAreas[0].AxisX.LabelStyle.Format = "MMM dd\n HH:mm";
             }
             else
             {
-                chart1.ChartAreas[0].AxisX.LabelStyle.Format = "MMM dd\n HH:mm:ss";
+                chart1.ChartAreas[0].AxisX.LabelStyle.Format = "MMM dd";
             }
         }
 
-        //private bool _inUpdate = false;
-        //private void Update(bool scrollToLastBuffer, bool resetAutoValues)
-        //{
-        //    if (_inUpdate)
-        //        return;
-        //    _inUpdate = true;
+        private void chart1_AxisViewChanged(object sender, ViewEventArgs e)
+        {
+            UpdateTimeLabelsFormat();
+        }
 
-        //    UpdateScrollBar(scrollToLastBuffer);
-        //    UpdateChart();
+        private TimeSpan GetVisibleDateRange(out bool bSameDay)
+        {
+            ChartArea CA = chart1.ChartAreas[0];
+            Series S = chart1.Series[0];
 
-        //    if (resetAutoValues)
-        //        chart1.ResetAutoValues();
+            // these are the X-Values of the zoomed portion:
+            double min = CA.AxisX.ScaleView.ViewMinimum;
+            double max = CA.AxisX.ScaleView.ViewMaximum;
 
-        //    _inUpdate = false;
-        //}
+            // these are the respective DataPoints:
+            DataPoint pt0 = S.Points.Select(x => x)
+                             .Where(x => x.XValue >= min)
+                             .DefaultIfEmpty(S.Points.First()).First();
+            DataPoint pt1 = S.Points.Select(x => x)
+                             .Where(x => x.XValue <= max)
+                             .DefaultIfEmpty(S.Points.Last()).Last();
 
-        //private void UpdateScrollBar(List<ChartPoint> buffer, bool scrollToLastBuffer)
-        //{
-        //    int width = m_hScrollBarTimeLine.Width;
-        //    if (buffer.Count < width)
-        //    {
-        //        m_hScrollBarTimeLine.Enabled = false;
-        //    }
-        //    else
-        //    {
-        //        int oldMax = m_hScrollBarTimeLine.Maximum;
-        //        int oldPos = m_hScrollBarTimeLine.Value;
+            DateTime dt0 = DateTime.FromOADate(pt0.XValue);
+            DateTime dt1 = DateTime.FromOADate(pt1.XValue);
 
-        //        //scroll bar calculations
-        //        m_hScrollBarTimeLine.Maximum = buffer.Count;
-        //        m_hScrollBarTimeLine.LargeChange = width;
-        //        m_hScrollBarTimeLine.Enabled = true;
-
-        //        if (scrollToLastBuffer)
-        //        {
-        //            int start = buffer.Count > width ? buffer.Count - width : 0;
-        //            m_hScrollBarTimeLine.Value = start;
-        //        }
-        //        else
-        //        {
-        //            int newPos = (int)(m_hScrollBarTimeLine.Maximum * (oldPos / (double)oldMax));
-        //            m_hScrollBarTimeLine.Value = newPos; //restore pos
-        //        }
-        //    }
-        //}
+            bSameDay = dt0.DayOfYear == dt1.DayOfYear;
+            
+            return dt1 - dt0;
+        }
 
         private void EnableRedraw(bool bEnable)
         {
@@ -336,7 +294,7 @@ namespace BarometerBT.Controls
             {
                 DataPoint point = prop.Object as DataPoint;
                 DateTime dt = DateTime.FromOADate(point.XValue);
-                string txt = string.Format("({0}{1}) - {2} - {3}",
+                string txt = string.Format("({0:0.0}{1}) - {2} - {3}",
                     point.YValues[0],
                     _theme.units,
                     prop.Series.Name,

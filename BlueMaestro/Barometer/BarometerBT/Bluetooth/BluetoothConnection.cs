@@ -112,13 +112,16 @@ namespace BarometerBT.Bluetooth
             if (idx < 0)
                 return;
 
-            if(!_blueMaestroDevice.ContainsKey(e.BluetoothAddress))
+            if (!_blueMaestroDevice.ContainsKey(e.BluetoothAddress))
             {
                 BluetoothLEDevice device = await BluetoothLEDevice.FromBluetoothAddressAsync(e.BluetoothAddress);
-                if (device != null)
+                lock (_blueMaestroDevice)
                 {
-                    _blueMaestroDevice[e.BluetoothAddress] = device;
-                    _stopper.Restart();
+                    if (device != null)
+                    {
+                        _blueMaestroDevice[e.BluetoothAddress] = device;
+                        _stopper.Restart();
+                    }
                 }
             }
 
@@ -151,6 +154,7 @@ namespace BarometerBT.Bluetooth
                             if (section.Buffer.Length == 14)
                             {
                                 _current = BMDatabaseMap.INSTANCE.AddRecord(dev, e.RawSignalStrengthInDBm, date, section.Buffer);
+                                //Debug.WriteLine(_current);
 
                                 MainWindow.SetChartData(BMDatabaseMap.INSTANCE.Map[dev.Address]);
                             }

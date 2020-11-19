@@ -4,11 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BarometerBT" 
-        xmlns:controls="clr-namespace:BarometerBT.Controls"
+        xmlns:controls="clr-namespace:BarometerBT.Controls" xmlns:utils="clr-namespace:BarometerBT.Utils"
         mc:Ignorable="d" Background="Navy"
         WindowStartupLocation="CenterScreen"
         Icon="/Butterfly.ico"
         Title="Barometer - Weather Station" Height="850" Width="1600">
+    <Window.Resources>
+        <utils:InvertBoolConverter x:Key="InvertBoolConverter"/>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="4*"/>
@@ -39,16 +42,26 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <StackPanel Grid.Row="2" Margin="6" Orientation="Horizontal"
-                    HorizontalAlignment="Left" VerticalAlignment="Center" >
+                    HorizontalAlignment="Left" VerticalAlignment="Top" >
             <Button Margin="6" Content="Save" Click="SaveButton_Click"/>
             <Button Margin="6" Content="Open..." Click="OpenButton_Click"/>
             <Button Margin="6" Content="Scenario1..." Click="Scenario1Button_Click"/>
             <Button Margin="6" Content="Scenario2..." Click="Scenario2Button_Click"/>
-            <Viewbox Height="35">
-                <CheckBox x:Name="_chkAutoUpdate" IsChecked="True" Background="LightGray" >
-                    <TextBlock Text="Auto Update" Background="LightGray"  />
-                </CheckBox>
+            <Viewbox Height="20">
+                <CheckBox x:Name="_chkAutoUpdate" IsChecked="True" Background="LightGray" />
             </Viewbox>
+            <TextBlock Margin="0,6" Text="Auto Update" Background="LightGray" VerticalAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Grid.Row="2" Margin="6,50" Orientation="Horizontal" VerticalAlignment="Top" Background="AliceBlue" >
+            <TextBlock x:Name="_txtDilluteValue" Width="100" Margin="6" Text="Dillute x1"/>
+            <!--IsEnabled="{Binding IsChecked, ElementName=_chkAutoZoom, Converter={StaticResource InvertBoolConverter}}"-->
+            <Slider x:Name="_sliderDillute" Margin="6" Width="200" Background="White" 
+                    Maximum="10" Minimum="0" Value="0" SmallChange="1" LargeChange="1"
+                    ValueChanged="_sliderDillute_ValueChanged"
+                    IsSnapToTickEnabled="True" TickFrequency="1"/>
+            <CheckBox x:Name="_chkAutoZoom" Content="Auto" Margin="6" VerticalAlignment="Center"
+                      Checked="_chkAutoZoom_Checked"/>
+            <TextBlock x:Name="_txtDilluteResult" MinWidth="100" Margin="6" Text="0 => 0"/>
         </StackPanel>
         <TextBox x:Name="_txtInfo" Grid.Row="1" Margin="6" Background="LightYellow" />
         <WindowsFormsHost Grid.Row="0" Grid.Column="1" Margin="6">

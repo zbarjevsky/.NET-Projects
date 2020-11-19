@@ -123,12 +123,31 @@ namespace BarometerBT.BlueMaestro
 
             return r1.currTemperature == r2.currTemperature &&
                    r1.currHumidity == r2.currHumidity &&
-                   r1.currPressure == r2.currPressure;
+                   r1.currPressure == r2.currPressure &&
+                   r1.BatteryLevel == r2.BatteryLevel;
         }
 
         public static bool operator !=(BMRecordCurrent r1, BMRecordCurrent r2)
         {
             return !(r1 == r2);
+        }
+
+        public static BMRecordCurrent operator +(BMRecordCurrent r1, BMRecordCurrent r2)
+        {
+            BMRecordCurrent rec = new BMRecordCurrent(r2); //later one for time, battery level etc.
+            rec.currTemperature += r1.currTemperature;
+            rec.currHumidity += r1.currHumidity;
+            rec.currPressure += r1.currPressure;
+            return rec;
+        }
+
+        public static BMRecordCurrent operator /(BMRecordCurrent r1, double factor)
+        {
+            BMRecordCurrent rec = new BMRecordCurrent(r1);
+            rec.currTemperature /= factor;
+            rec.currHumidity /= factor;
+            rec.currPressure /= factor;
+            return rec;
         }
 
         public override string ToString()

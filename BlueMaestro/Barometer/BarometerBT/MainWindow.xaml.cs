@@ -57,18 +57,37 @@ namespace BarometerBT
             {
                 MainWindow wnd = (Application.Current.MainWindow as MainWindow);
                 if (wnd != null)
+                {
+                    if (!wnd._chkAutoUpdate.IsChecked.Value)
+                        return;
+
                     wnd.UpdateChart(db);
+                }
             });
         }
 
         private void UpdateChart(BMDatabase db)
         {
-            if (!_chkAutoUpdate.IsChecked.Value)
-                return;
+            this.Cursor = Cursors.AppStarting;
 
-            _chart1.UpdateChartTemperature(db);
-            _chart2.UpdateChartHumidity(db);
-            _chart3.UpdateChartAirPressure(db);
+            if (_chkAutoZoom.IsChecked.Value)
+            {
+                int bucketSize = db.Records.Count / 1000; //1000 records after zoom
+                _sliderDillute.Value = Math.Ceiling(Math.Pow(bucketSize, 0.5));
+            }
+
+            int zoom = (int)Math.Pow(2, _sliderDillute.Value);
+            _txtDilluteValue.Text = string.Format("Dillute x{0:0.0}", zoom);
+
+            List<BMRecordCurrent> records = db.Dillute(zoom);
+
+            _txtDilluteResult.Text = string.Format("Count: {0} -> {1}", db.Records.Count, records.Count);
+
+            _chart1.UpdateChartTemperature(records);
+            _chart2.UpdateChartHumidity(records);
+            _chart3.UpdateChartAirPressure(records);
+
+            this.Cursor = Cursors.Arrow;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
@@ -82,7 +101,7 @@ namespace BarometerBT
         {
             OpenFileDialog _openFileDialog = new OpenFileDialog()
             {
-                Multiselect = false,
+                Multiselect = true,
                 RestoreDirectory = true,
                 Filter = "All supported files|*.xml|All files (*.*)|*.*",
                 //InitialDirectory = _openDirectory
@@ -95,14 +114,16 @@ namespace BarometerBT
                 List<string> fileNamesList = new List<string>(_openFileDialog.FileNames);
                 fileNamesList.Sort();
 
-                BMDatabase db = BMDatabase.Open(_openFileDialog.FileName);
+                BMDatabase dbAll = null; 
+                for (int i = 0; i < fileNamesList.Count; i++)
+                {
+                    BMDatabase db = BMDatabase.Open(fileNamesList[i]);
+                    if(db != null)
+                        dbAll = BMDatabaseMap.INSTANCE.Merge(db);
+                }
 
-
-                var dbCurrent = BMDatabaseMap.INSTANCE.Merge(db);
-
-                UpdateChart(dbCurrent);
+                UpdateChart(dbAll);
             }
-
         }
 
         private void Scenario2Button_Click(object sender, RoutedEventArgs e)
@@ -140,6 +161,28 @@ namespace BarometerBT
             {
                 CommonTools.ErrorMessage(err.ToString());
             }
+        }
+
+        private void _sliderDillute_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if(IsUserDragged(_sliderDillute))
+                _chkAutoZoom.IsChecked = false;
+
+            var db = BMDatabaseMap.INSTANCE.Map.FirstOrDefault();
+            if (db.Value != null)
+                UpdateChart(db.Value);
+        }
+
+        private static bool IsUserDragged(UIElement e)
+        {
+            return e.IsFocused || e.IsMouseDirectlyOver || e.IsMouseOver || e.IsKeyboardFocused || e.IsKeyboardFocusWithin;
+        }
+
+        private void _chkAutoZoom_Checked(object sender, RoutedEventArgs e)
+        {
+            var db = BMDatabaseMap.INSTANCE.Map.FirstOrDefault();
+            if (db.Value != null)
+                UpdateChart(db.Value);
         }
     }
 }

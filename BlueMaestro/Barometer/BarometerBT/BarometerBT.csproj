@@ -24,6 +24,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -96,6 +97,7 @@
     <Compile Include="Utils\Chart.cs" />
     <Compile Include="Utils\CommonTools.cs" />
     <Compile Include="Utils\Entry.cs" />
+    <Compile Include="Utils\InvertBoolConverter.cs" />
     <Compile Include="Utils\Log.cs" />
     <Compile Include="Utils\MainPage.cs" />
     <Compile Include="Utils\NotifyPropertyChangedImpl.cs" />
