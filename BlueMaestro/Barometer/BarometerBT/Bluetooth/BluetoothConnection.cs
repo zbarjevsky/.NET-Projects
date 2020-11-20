@@ -169,6 +169,7 @@ namespace BarometerBT.Bluetooth
 
                             string message = "Records: " + BMDatabaseMap.INSTANCE.Map.First().Value.Records.Count + " \n";
                             message += "Elapsed: " + _stopper.Elapsed.ToString(@"d\.hh\:mm\:ss") + " \n";
+                            message += "Timestamp: " + date.ToString("MMM dd, HH:mm:ss") + " \n";
                             MainWindow.SetInfo(message + _current.ToString() + _averages.ToString());
                         }
 

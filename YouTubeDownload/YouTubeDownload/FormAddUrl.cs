@@ -48,7 +48,6 @@ namespace YouTubeDownload
                 m_txtUrl.Text = text;
 
             UpdateOutputFolder(Data.OutputFolder);
-            m_cmbFileName.SelectedIndex = 0;
             UpdateButtonsState();
         }
 
@@ -90,7 +89,7 @@ namespace YouTubeDownload
                 m_chkNoPlayList.Checked = Data.NoPlayList;
                 m_chkAudioOnly.Checked = Data.AudioOnly;
                 m_cmbAdditionalParameters.Text = Data.AdditionalParameters;
-                m_cmbFileName.Text = Data.FileNameTemplate;
+                UpdateFileName(Data.FileNameTemplate);
             }
             else
             {
@@ -107,6 +106,15 @@ namespace YouTubeDownload
                 else
                     Data.FileNameTemplate = m_cmbFileName.Items[0].ToString();
             }
+        }
+
+        private void UpdateFileName(string format)
+        {
+            List<string> items = new List<string>(m_cmbFileName.Items.OfType<string>());
+            int idx = items.IndexOf(format);
+            if (idx < 0)
+                idx = m_cmbFileName.Items.Add(format);
+            m_cmbFileName.SelectedIndex = idx;
         }
 
         private void UpdateOutputFolder(string newFolder)

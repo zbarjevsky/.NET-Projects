@@ -193,11 +193,12 @@ namespace BarometerBT.Controls
             for (int i = 0; i < points.Count; i++)
             {
                 chart1.Series[0].Points.AddXY(points[i].Date, points[i].Value);
-                m_txtValue.Text = points[i].Value.ToString("0.0") + theme.units;
 
                 max = Math.Max(max, points[i].Value);
                 min = Math.Min(min, points[i].Value);
             }
+
+            m_txtValue.Text = points.Last().Value.ToString("0.0") + theme.units;
 
             double margin = 1 + (max - min) / 5.0;
 
@@ -241,20 +242,20 @@ namespace BarometerBT.Controls
 
         private TimeSpan GetVisibleDateRange(out bool bSameDay)
         {
-            ChartArea CA = chart1.ChartAreas[0];
-            Series S = chart1.Series[0];
+            ChartArea chartArea = chart1.ChartAreas[0];
+            Series series = chart1.Series[0];
 
             // these are the X-Values of the zoomed portion:
-            double min = CA.AxisX.ScaleView.ViewMinimum;
-            double max = CA.AxisX.ScaleView.ViewMaximum;
+            double min = chartArea.AxisX.ScaleView.ViewMinimum;
+            double max = chartArea.AxisX.ScaleView.ViewMaximum;
 
             // these are the respective DataPoints:
-            DataPoint pt0 = S.Points.Select(x => x)
+            DataPoint pt0 = series.Points.Select(x => x)
                              .Where(x => x.XValue >= min)
-                             .DefaultIfEmpty(S.Points.First()).First();
-            DataPoint pt1 = S.Points.Select(x => x)
+                             .DefaultIfEmpty(series.Points.First()).First();
+            DataPoint pt1 = series.Points.Select(x => x)
                              .Where(x => x.XValue <= max)
-                             .DefaultIfEmpty(S.Points.Last()).Last();
+                             .DefaultIfEmpty(series.Points.Last()).Last();
 
             DateTime dt0 = DateTime.FromOADate(pt0.XValue);
             DateTime dt1 = DateTime.FromOADate(pt1.XValue);
@@ -274,8 +275,11 @@ namespace BarometerBT.Controls
 
         private void chart1_Click(object sender, EventArgs e)
         {
-            Point pos = chart1.PointToClient(MousePosition);
-            ShowToolTipWithValue(pos);
+            if(e is MouseEventArgs m && m.Button == MouseButtons.Left)
+            {
+                //Point pos = chart1.PointToClient(MousePosition);
+                ShowToolTipWithValue(m.Location);
+            }
         }
 
         Point? _prevPosition = null;
@@ -286,38 +290,45 @@ namespace BarometerBT.Controls
                 return;
 
             _tooltip.RemoveAll();
+            _tooltip.Hide(chart1);
             _prevPosition = pos;
+
+            if (!ChartHelper.PointInsideChart(chart1, pos))
+                return;
 
             double valueY = double.NaN;
             double valueX = double.NaN;
             string desc = "";
+            string txt = "Unknown...";
 
-            HitTestResult[] results = chart1.HitTest(pos.X, pos.Y, false, ChartElementType.DataPoint);
-            HitTestResult prop = ChartHelper.FindClosestResult(results, pos);
-            if (prop != null)
+            try
             {
-                DataPoint point = prop.Object as DataPoint;
-                valueX = point.XValue;
-                valueY = point.YValues[0];
-                _tooltip.ToolTipIcon = ToolTipIcon.Info;
-            }
-            else
-            {
-                desc = "(approximate)";
+                //double valX = chart1.ChartAreas[0].AxisX.PixelPositionToValue(pos.X);
                 valueX = chart1.ChartAreas[0].CursorX.Position;
-                valueY = ChartHelper.FindInterpolateValueY(chart1.ChartAreas[0].CursorX.Position, chart1.Series[0]);
-                _tooltip.ToolTipIcon = ToolTipIcon.Warning;
+                valueY = ChartHelper.FindInterpolateValueY(chart1, out desc, out ToolTipIcon icon);
+                _tooltip.ToolTipIcon = icon;
+
+                if (!double.IsNaN(valueY))
+                {
+                    DateTime dt = DateTime.FromOADate(valueX);
+
+                    txt = string.Format("[{0:0.0}{1}]\n{2}",
+                    valueY, _theme.units,
+                    dt.ToString("MMM dd, HH:mm:ss"));
+                }
+                else
+                {
+                    return; //no tooltip
+                }
             }
-
-            DateTime dt = DateTime.FromOADate(valueX);
-
-            string txt = string.Format("[{0:0.0}{1}]\n{2}",
-            valueY, _theme.units,
-            dt.ToString("MMM dd, HH:mm:ss"));
+            catch (Exception err)
+            {
+                txt = err.Message;
+            }
 
             _tooltip.ToolTipTitle = string.Format("{0}{1}", _theme.title, desc);
             _tooltip.Show("", this.chart1, pos.X, pos.Y + 20, 5000); //bug fix
-            _tooltip.Show(txt, this.chart1, pos.X + 16, pos.Y + 20, 5000);
+            _tooltip.Show(txt, this.chart1, pos.X + 10, pos.Y + 20, 5000);
         }
     }
 
@@ -354,6 +365,23 @@ namespace BarometerBT.Controls
             c.ResetAutoValues();
         }
 
+        public static bool PointInsideChart(Chart chart, Point point)
+        {
+            double valX = chart.ChartAreas[0].AxisX.PixelPositionToValue(point.X);
+            double minX = chart.ChartAreas[0].AxisX.ScaleView.ViewMinimum;
+            double maxX = chart.ChartAreas[0].AxisX.ScaleView.ViewMaximum;
+
+            double valY = chart.ChartAreas[0].AxisY.PixelPositionToValue(point.Y);
+            double minY = chart.ChartAreas[0].AxisY.ScaleView.ViewMinimum;
+            double maxY = chart.ChartAreas[0].AxisY.ScaleView.ViewMaximum;
+           
+            if (valX < minX || valX > maxX || valY < minY || valY > maxY)
+                return false;
+            
+            return true;
+        }
+
+        //HitTestResult[] results = chart1.HitTest(pos.X, pos.Y, false, ChartElementType.DataPoint);
         public static HitTestResult FindClosestResult(HitTestResult[] results, Point pos, double maxDistance = 10.0)
         {
             double min = 10000;
@@ -385,27 +413,55 @@ namespace BarometerBT.Controls
             return null;
         }
 
-        public static double FindInterpolateValueY(double positionX, Series series)
+        public static double FindInterpolateValueY(Chart chart, out string desc, out ToolTipIcon icon)
         {
-            if (series.Points.Count < 3)
+            double xval = chart.ChartAreas[0].CursorX.Position;
+            DataPointCollection points = chart.Series[0].Points;
+
+            desc = "";
+            icon = ToolTipIcon.Info;
+            if (points.Count == 0)
                 return double.NaN;
+            if (points.Count == 1)
+                return points[0].YValues[0];
 
-            DataPoint pt0 = series.Points[0];
-            DataPoint pt1 = series.Points.Last();
+            DataPoint pt0 = points[0];
+            DataPoint pt1 = points.Last();
 
-            for (int i = 0; i < series.Points.Count; i++)
+            desc = "(out of range)";
+            icon = ToolTipIcon.Warning;
+            if (xval < pt0.XValue || xval > pt1.XValue)
+                return double.NaN; //out of range
+
+            double timePerPoint = (pt1.XValue - pt0.XValue)/chart.Width;
+            if(chart.ChartAreas[0].AxisX.ScaleView.IsZoomed)
             {
-                if(series.Points[i].XValue >= positionX)
-                {
-                    pt0 = series.Points[i - 1];
-                    pt1 = series.Points[i];
-                    break;
-                }
+                double min = chart.ChartAreas[0].AxisX.ScaleView.ViewMinimum;
+                double max = chart.ChartAreas[0].AxisX.ScaleView.ViewMaximum;
+                timePerPoint = (max - min) / chart.Width;
             }
+            double proximityInterval = 10 * timePerPoint;
 
-            double coefficient = (positionX - pt0.XValue) / (pt1.XValue - pt0.XValue);
+            pt0 = points.Last(x => x.XValue <= xval);
+            pt1 = points.First(x => x.XValue >= xval);
+
+            double deltaX = pt1.XValue - pt0.XValue;
+            double deltaX0 = xval - pt0.XValue;
+            double deltaX1 = pt1.XValue - xval;
+
+            desc = "";
+            icon = ToolTipIcon.Info;
+            if (deltaX1 < proximityInterval)
+                return pt1.YValues[0];
+            if (deltaX0 < proximityInterval)
+                return pt0.YValues[0];
+
+            //interpolate
+            double coefficient = (xval - pt0.XValue) / (pt1.XValue - pt0.XValue);
+
+            desc = "(approximate)";
+            icon = ToolTipIcon.Warning;
             double approximateValue = pt0.YValues[0] + coefficient * (pt1.YValues[0] - pt0.YValues[0]);
-
             return approximateValue;
         }
 

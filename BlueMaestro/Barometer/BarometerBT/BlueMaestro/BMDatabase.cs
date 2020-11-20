@@ -76,10 +76,13 @@ namespace BarometerBT.BlueMaestro
                 return new List<BMRecordCurrent>(Records);
 
             List<BMRecordCurrent> records = new List<BMRecordCurrent>();
-            for (int i = 0; i < Records.Count; i+=bucketSize)
+            for (int i = 0; i < Records.Count-1; i+=bucketSize)
             {
                 records.Add(GetAverageValue(i, bucketSize));
             }
+
+            //anyway add last record as is
+            records.Add(new BMRecordCurrent(Records.Last()));
 
             return records;
         }
@@ -97,6 +100,10 @@ namespace BarometerBT.BlueMaestro
                 rec += Records[i];
             }
             rec /= count;
+
+            TimeSpan interval = Records[start + count - 1].Date - Records[start].Date;
+            TimeSpan halfInterval = TimeSpan.FromMilliseconds(interval.TotalMilliseconds / 2);
+            rec.Date = Records[start].Date + halfInterval;
 
             return rec;
         }

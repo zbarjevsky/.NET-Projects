@@ -156,7 +156,7 @@ namespace BarometerBT.BlueMaestro
             desc += base.ToString();
             desc += ("Temperature: " + currTemperature + " ºC \n");
             desc += ("Humidity: " + currHumidity + " %RH \n");
-            desc += ("AirPressure: " + currPressure + " hPa \n");
+            desc += ("AirPressure: " + currPressure + " mBar \n");
             desc += ("Battery: " + BatteryLevel + " % \n");
             return desc;
         }
