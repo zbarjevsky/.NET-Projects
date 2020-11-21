@@ -17,13 +17,6 @@ namespace BarometerBT.BlueMaestro
         [XmlIgnore]
         public byte[] Data { get; set; }
 
-        public const String UNITSF = "º F";
-        public const String UNITSC = "º C";
-
-        public const String UNITS_HG = "InHg";
-        public const String UNITS_MB = "mBar";
-        public const String UNITS_PA = "kPa";
-
         public string Name { get; set; }
 
         public ulong Address { get; set; }

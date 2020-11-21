@@ -1,0 +1,37 @@
+﻿<UserControl x:Class="BarometerBT.BlueMaestro.UX.BMDeviceRecordUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:BarometerBT.BlueMaestro.UX"
+             mc:Ignorable="d" Height="120" Width="400"
+             d:DesignHeight="180" d:DesignWidth="400">
+    <Border Padding="3" BorderBrush="Gainsboro" BorderThickness="2" CornerRadius="3">
+        <Grid ShowGridLines="False">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="5*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="2*"/>
+                <RowDefinition Height="3*"/>
+            </Grid.RowDefinitions>
+            <Image Grid.Row="0" Grid.RowSpan="2" Height="60" Source="/Images/TempoDisk4in1.png" />
+            <TextBlock Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding Name, FallbackValue=EEEG23}" VerticalAlignment="Center" FontSize="22" FontWeight="Bold"/>
+            <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal">
+                <TextBlock Margin="2" VerticalAlignment="Center" Text="{Binding Interval, FallbackValue=Interval 1 h}"/>
+                <TextBlock Margin="2" VerticalAlignment="Center" Text="{Binding Battery, FallbackValue=Battery 100%}" />
+                <TextBlock Margin="2" VerticalAlignment="Center" Text="{Binding LogsCount, FallbackValue=190 logs}" />
+                <TextBlock Margin="2" VerticalAlignment="Center" Text="{Binding Signal, FallbackValue=Signal -70 db}" />
+            </StackPanel>
+            <local:MeasurementUserControl Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" DataContext="{Binding Temperature}"/>
+            <local:MeasurementUserControl Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" DataContext="{Binding AirHumidity}"/>
+            <local:MeasurementUserControl Grid.Row="2" Grid.Column="2" VerticalAlignment="Center" DataContext="{Binding AirPressure}"/>
+            <local:MeasurementUserControl Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" DataContext="{Binding AirDewPoint}"/>
+        </Grid>
+    </Border>
+</UserControl>

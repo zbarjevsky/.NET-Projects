@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ using System.Windows.Shapes;
 
 
 using BarometerBT.BlueMaestro;
+using BarometerBT.BlueMaestro.UX;
 using BarometerBT.Bluetooth;
 using BarometerBT.Utils;
 using Microsoft.Win32;
@@ -26,13 +28,19 @@ namespace BarometerBT
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly ObservableCollection<BMDeviceRecordVM> _devices;
+
         public MainWindow()
         {
             InitializeComponent();
 
+            _devices = new ObservableCollection<BMDeviceRecordVM>();
+            _listDevices.ItemsSource = _devices;
+
             _cmbTemperatureUnits.ItemsSource = UnitsDescriptor.GetEnumTemperatureUnits();
-            _cmbTemperatureUnits.SelectedIndex = 0;
             _cmbAirPressureUnits.ItemsSource = UnitsDescriptor.GetEnumAirPressureUnits();
+            
+            _cmbTemperatureUnits.SelectedIndex = 0;
             _cmbAirPressureUnits.SelectedIndex = 0;
         }
 
@@ -42,8 +50,27 @@ namespace BarometerBT
             {
                 MainWindow wnd = (Application.Current.MainWindow as MainWindow);
                 if(wnd != null)
-                    wnd._listDevices.ItemsSource = devices.Values.ToList();
+                    wnd.UpdateDeviceList();
             });
+        }
+
+        private void UpdateDeviceList()
+        {
+            foreach (BMDatabase db in BMDatabaseMap.INSTANCE.Map.Values)
+            {
+                UpdateBMDeviceRecordVM(db);
+            }
+        }
+
+        private void UpdateBMDeviceRecordVM(BMDatabase db)
+        {
+            BMDeviceRecordVM dev = _devices.FirstOrDefault(d => d.Name == db.Device.Name);
+            if(dev == null)
+            {
+                dev = new BMDeviceRecordVM(db);
+                _devices.Add(dev);
+            }
+            dev.Update(db);
         }
 
         public static void SetInfo(string info)
@@ -75,7 +102,10 @@ namespace BarometerBT
         {
             var db = BMDatabaseMap.INSTANCE.Map.FirstOrDefault();
             if (db.Value != null)
+            {
                 UpdateChart(db.Value);
+                UpdateDeviceList();
+            }
         }
 
         private bool _isInUpdate = false;
@@ -174,6 +204,19 @@ namespace BarometerBT
                 }
 
                 UpdateChart(dbAll);
+            }
+        }
+
+        private void ResetButton_Click(object sender, RoutedEventArgs e)
+        {
+            _devices.Clear();
+
+            BMDatabase db = BMDatabaseMap.INSTANCE.Map.FirstOrDefault().Value;
+            if (db != null)
+            {
+                db.Records.Clear();
+                UpdateChart(db);
+                UpdateDeviceList();
             }
         }
 

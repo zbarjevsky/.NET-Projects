@@ -4,7 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BarometerBT" 
-        xmlns:controls="clr-namespace:BarometerBT.Controls" xmlns:utils="clr-namespace:BarometerBT.Utils"
+        xmlns:controls="clr-namespace:BarometerBT.Controls" xmlns:utils="clr-namespace:BarometerBT.Utils" xmlns:ux="clr-namespace:BarometerBT.BlueMaestro.UX"
         mc:Ignorable="d" Background="Navy"
         WindowStartupLocation="CenterScreen"
         Icon="/Butterfly.ico"
@@ -23,28 +23,20 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <ListBox x:Name="_listDevices" Margin="6">
-            <ListBox.ItemTemplate>
+        <ListView x:Name="_listDevices" Margin="6" SelectionMode="Single" Background="LightYellow" >
+            <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid Margin="0,2">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="12" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock >
-                            <TextBlock Text="{Binding Name}" /> - <TextBlock Text="{Binding Title}" />                            
-                        </TextBlock>
-                        <GridSplitter Grid.Column="1" Background="AliceBlue" HorizontalAlignment="Stretch"/>
-                        <TextBlock Grid.Column="2"  Text="{Binding Data}"  />
+                        <ux:BMDeviceRecordUserControl Background="AntiqueWhite" />
                     </Grid>
                 </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+            </ListView.ItemTemplate>
+        </ListView>
         <StackPanel Grid.Row="2" Margin="6" Orientation="Horizontal"
                     HorizontalAlignment="Left" VerticalAlignment="Top" >
-            <Button Margin="6" Content="Save" Click="SaveButton_Click"/>
             <Button Margin="6" Content="Open..." Click="OpenButton_Click"/>
+            <Button Margin="6" Content="Save" Click="SaveButton_Click"/>
+            <Button Margin="6" Content="Reset" Click="ResetButton_Click"/>
             <Button Margin="6" Content="Scenario1..." Click="Scenario1Button_Click"/>
             <Button Margin="6" Content="Scenario2..." Click="Scenario2Button_Click"/>
             <Viewbox Height="20">

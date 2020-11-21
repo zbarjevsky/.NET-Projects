@@ -25,5 +25,10 @@ namespace BarometerBT.Utils
             }
         }
 
+        public void SetProperty<T>(ref T prop, T val, [CallerMemberName] string propertyName = null)
+        {
+            prop = val;
+            NotifyPropertyChanged(propertyName);
+        }
     }
 }

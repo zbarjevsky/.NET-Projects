@@ -21,6 +21,14 @@ namespace BarometerBT.Utils
 
     public class UnitsDescriptor
     {
+        public const String UNITSF = "ºF";
+        public const String UNITSC = "ºC";
+
+        public const String UNITS_HG = "InHg";
+        public const String UNITS_MB = "mBar";
+        public const String UNITS_PA = "kPa";
+        public const String UNITS_HUM = "%RH";
+
         public TemperatureUnits TemperatureUnits { get; set; } = TemperatureUnits.Celcius;
 
         public AirPressureUnits AirPressureUnits { get; set; } = AirPressureUnits.MilliBars;
