@@ -88,31 +88,31 @@ namespace BarometerBT.Controls
             }
         }
 
-        public void UpdateChartTemperature(List<BMRecordCurrent> records)
+        public void UpdateChartTemperature(List<BMRecordCurrent> records, string units)
         {
-            UpdateChart(records, "Temperature", Color.Red, " ºC",
-                (record) => { return record.currTemperature; });
+            UpdateChart(records, "Temperature", Color.Red, units,
+                (record) => { return record.Temperature; });
         }
 
-        public void UpdateChartHumidity(List<BMRecordCurrent> records)
+        public void UpdateChartHumidity(List<BMRecordCurrent> records, string units = " % RH")
         {
-            UpdateChart(records, "Humidity", Color.Green, " % RH",
-                (record) => { return record.currHumidity; });
+            UpdateChart(records, "Humidity", Color.Green, units,
+                (record) => { return record.AirHumidity; });
         }
 
-        public void UpdateChartAirPressure(List<BMRecordCurrent> records)
+        public void UpdateChartAirPressure(List<BMRecordCurrent> records, string units)
         {
-            UpdateChart(records, "Air Pressure", Color.Blue, " mBar",
-                (record) => { return record.currPressure; });
+            UpdateChart(records, "Air Pressure", Color.Blue, units,
+                (record) => { return record.AirPressure; });
         }
 
         public void UpdateChart(List<BMRecordCurrent> records, 
-            string title, Color color, string suffix, 
+            string title, Color color, string units, 
             Func<BMRecordCurrent, double> GetValue)
         {
             _theme.color = Color.FromArgb(128, color);
             _theme.title = title;
-            _theme.units = suffix;
+            _theme.units = units;
 
             _bufferFull.Clear();
 

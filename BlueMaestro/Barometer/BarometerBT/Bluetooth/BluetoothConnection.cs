@@ -155,8 +155,8 @@ namespace BarometerBT.Bluetooth
                             {
                                 _current = BMDatabaseMap.INSTANCE.AddRecord(dev, e.RawSignalStrengthInDBm, date, section.Buffer);
                                 //Debug.WriteLine(_current);
-
-                                MainWindow.SetChartData(BMDatabaseMap.INSTANCE.Map[dev.Address]);
+                                
+                                MainWindow.UpdateChartData(); //BMDatabaseMap.INSTANCE.Map[dev.Address]);
                             }
                             else if (section.Buffer.Length == 25)
                             {
@@ -167,7 +167,11 @@ namespace BarometerBT.Bluetooth
                                 Debug.WriteLine(" --- Unknown Length: " + section.Buffer.Length);
                             }
 
-                            string message = "Records: " + BMDatabaseMap.INSTANCE.Map.First().Value.Records.Count + " \n";
+                            string recordsCount = "";
+                            if(BMDatabaseMap.INSTANCE.Map.Count > 0)
+                                recordsCount = "Records: " + BMDatabaseMap.INSTANCE.Map.First().Value.Records.Count + " \n";
+
+                            string message = recordsCount;
                             message += "Elapsed: " + _stopper.Elapsed.ToString(@"d\.hh\:mm\:ss") + " \n";
                             message += "Timestamp: " + date.ToString("MMM dd, HH:mm:ss") + " \n";
                             MainWindow.SetInfo(message + _current.ToString() + _averages.ToString());

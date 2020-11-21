@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,7 @@ using System.Windows.Shapes;
 
 
 using BarometerBT.BlueMaestro;
+using BarometerBT.BlueMaestro.UX;
 using BarometerBT.Bluetooth;
 using BarometerBT.Utils;
 using Microsoft.Win32;
@@ -26,9 +28,20 @@ namespace BarometerBT
     /// </summary>
     public partial class MainWindow : Window
     {
+        private readonly ObservableCollection<BMDeviceRecordVM> _devices;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            _devices = new ObservableCollection<BMDeviceRecordVM>();
+            _listDevices.ItemsSource = _devices;
+
+            _cmbTemperatureUnits.ItemsSource = UnitsDescriptor.GetEnumTemperatureUnits();
+            _cmbAirPressureUnits.ItemsSource = UnitsDescriptor.GetEnumAirPressureUnits();
+            
+            _cmbTemperatureUnits.SelectedIndex = 0;
+            _cmbAirPressureUnits.SelectedIndex = 0;
         }
 
         public static void UpdateList(Dictionary<ushort, DeviceRecordVM> devices)
@@ -37,8 +50,27 @@ namespace BarometerBT
             {
                 MainWindow wnd = (Application.Current.MainWindow as MainWindow);
                 if(wnd != null)
-                    wnd._listDevices.ItemsSource = devices.Values.ToList();
+                    wnd.UpdateDeviceList();
             });
+        }
+
+        private void UpdateDeviceList()
+        {
+            foreach (BMDatabase db in BMDatabaseMap.INSTANCE.Map.Values)
+            {
+                UpdateBMDeviceRecordVM(db);
+            }
+        }
+
+        private void UpdateBMDeviceRecordVM(BMDatabase db)
+        {
+            BMDeviceRecordVM dev = _devices.FirstOrDefault(d => d.Name == db.Device.Name);
+            if(dev == null)
+            {
+                dev = new BMDeviceRecordVM(db);
+                _devices.Add(dev);
+            }
+            dev.Update(db);
         }
 
         public static void SetInfo(string info)
@@ -51,7 +83,7 @@ namespace BarometerBT
             });
         }
 
-        internal static void SetChartData(BMDatabase db)
+        public static void UpdateChartData()
         {
             CommonTools.ExecuteOnUiThreadBeginInvoke(() =>
             {
@@ -61,9 +93,19 @@ namespace BarometerBT
                     if (!wnd._chkAutoUpdate.IsChecked.Value)
                         return;
 
-                    wnd.UpdateChart(db);
+                    wnd.UpdateChart();
                 }
             });
+        }
+
+        private void UpdateChart()
+        {
+            var db = BMDatabaseMap.INSTANCE.Map.FirstOrDefault();
+            if (db.Value != null)
+            {
+                UpdateChart(db.Value);
+                UpdateDeviceList();
+            }
         }
 
         private bool _isInUpdate = false;
@@ -74,6 +116,9 @@ namespace BarometerBT
             _isInUpdate = true;
 
             this.Cursor = Cursors.AppStarting;
+
+            db.Units.TemperatureUnits = (TemperatureUnits)_cmbTemperatureUnits.SelectedItem;
+            db.Units.AirPressureUnits = (AirPressureUnits)_cmbAirPressureUnits.SelectedItem;
 
             bool isIntervalZoom = false;
             List<BMRecordCurrent> records;
@@ -88,7 +133,7 @@ namespace BarometerBT
                 int zoom = (int)Math.Pow(2, _sliderDillute.Value);
                 _txtDilluteValue.Text = string.Format("Dillute x{0:0.0}", zoom);
 
-                records = db.Dillute(zoom);
+                records = db.DilluteByPointAndConvertUnits(zoom);
             }
             else //dillute by time
             {
@@ -112,14 +157,14 @@ namespace BarometerBT
                 TimeSpan ts = TimeSpan.FromSeconds(combineIntervalInSec);
                 _txtDilluteValue.Text = string.Format("Interval: {0}", ts.ToString(@"d\d\ hh\h\ mm\m\ ss\s"));
 
-                records = db.DilluteByTime(combineIntervalInSec);
+                records = db.DilluteByTimeAndConvertUnits(combineIntervalInSec);
             }
 
             _txtDilluteResult.Text = string.Format("Count: {0} -> {1}", db.Records.Count, records.Count);
 
-            _chart1.UpdateChartTemperature(records);
+            _chart1.UpdateChartTemperature(records, db.Units.GetTemperatureUnitsDesc());
             _chart2.UpdateChartHumidity(records);
-            _chart3.UpdateChartAirPressure(records);
+            _chart3.UpdateChartAirPressure(records, db.Units.GetAirpressureUnitsDesc());
 
             this.Cursor = Cursors.Arrow;
 
@@ -159,6 +204,19 @@ namespace BarometerBT
                 }
 
                 UpdateChart(dbAll);
+            }
+        }
+
+        private void ResetButton_Click(object sender, RoutedEventArgs e)
+        {
+            _devices.Clear();
+
+            BMDatabase db = BMDatabaseMap.INSTANCE.Map.FirstOrDefault().Value;
+            if (db != null)
+            {
+                db.Records.Clear();
+                UpdateChart(db);
+                UpdateDeviceList();
             }
         }
 
@@ -204,9 +262,7 @@ namespace BarometerBT
             if(IsUserDragged(_sliderDillute))
                 _chkAutoZoom.IsChecked = false;
 
-            var db = BMDatabaseMap.INSTANCE.Map.FirstOrDefault();
-            if (db.Value != null)
-                UpdateChart(db.Value);
+            UpdateChart();
         }
 
         private static bool IsUserDragged(UIElement e)
@@ -216,9 +272,17 @@ namespace BarometerBT
 
         private void _chkAutoZoom_Checked(object sender, RoutedEventArgs e)
         {
-            var db = BMDatabaseMap.INSTANCE.Map.FirstOrDefault();
-            if (db.Value != null)
-                UpdateChart(db.Value);
+            UpdateChart();
+        }
+
+        private void _cmbTemperatureUnits_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateChart();
+        }
+
+        private void _cmbAirPressureUnits_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateChart();
         }
     }
 }

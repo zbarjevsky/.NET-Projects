@@ -72,10 +72,18 @@
     </ApplicationDefinition>
     <Compile Include="BlueMaestro\BMDatabase.cs" />
     <Compile Include="BlueMaestro\BMDatabaseMap.cs" />
+    <Compile Include="BlueMaestro\UX\BMDeviceRecordUserControl.xaml.cs">
+      <DependentUpon>BMDeviceRecordUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BlueMaestro\UX\BMDeviceRecordVM.cs" />
     <Compile Include="BlueMaestro\Original\BMDevice.cs" />
     <Compile Include="BlueMaestro\Original\BMPebble27.cs" />
     <Compile Include="BlueMaestro\BMRecordAverages.cs" />
     <Compile Include="BlueMaestro\BMRecordBase.cs" />
+    <Compile Include="BlueMaestro\UX\MeasurementUserControl.xaml.cs">
+      <DependentUpon>MeasurementUserControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="BlueMaestro\UX\MeasurementVM.cs" />
     <Compile Include="Bluetooth\BleDataType.cs" />
     <Compile Include="Bluetooth\BluetoothDevice.cs" />
     <Compile Include="Bluetooth\BTConnectionDirect.cs" />
@@ -102,8 +110,17 @@
     <Compile Include="Utils\MainPage.cs" />
     <Compile Include="Utils\NotifyPropertyChangedImpl.cs" />
     <Compile Include="Utils\TextView.cs" />
+    <Compile Include="Utils\UnitsDescriptor.cs" />
     <Compile Include="Utils\ViewGroup.cs" />
     <Compile Include="Utils\XmlHelper.cs" />
+    <Page Include="BlueMaestro\UX\BMDeviceRecordUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="BlueMaestro\UX\MeasurementUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Bluetooth\Scenario1_Discovery.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -169,6 +186,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Styles\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\TempoDisk4in1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
