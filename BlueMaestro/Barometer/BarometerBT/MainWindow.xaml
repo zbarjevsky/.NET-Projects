@@ -52,10 +52,13 @@
             </Viewbox>
             <TextBlock Margin="0,6" Text="Auto Update" Background="LightGray" VerticalAlignment="Center"/>
         </StackPanel>
-        <StackPanel Grid.Row="2" Margin="6,50" Orientation="Horizontal" VerticalAlignment="Top" Background="AliceBlue" >
-            <TextBlock x:Name="_txtDilluteValue" Width="100" Margin="6" Text="Dillute x1"/>
+        <StackPanel Grid.Row="2" Margin="6,50" Orientation="Vertical" VerticalAlignment="Top" Background="AliceBlue" >
+            <TextBlock x:Name="_txtDilluteValue" MinWidth="100" Margin="6" 
+                       HorizontalAlignment="Left"
+                       Text="Dillute x1"/>
             <!--IsEnabled="{Binding IsChecked, ElementName=_chkAutoZoom, Converter={StaticResource InvertBoolConverter}}"-->
             <Slider x:Name="_sliderDillute" Margin="6" Width="200" Background="White" 
+                    HorizontalAlignment="Left"
                     Maximum="10" Minimum="0" Value="0" SmallChange="1" LargeChange="1"
                     ValueChanged="_sliderDillute_ValueChanged"
                     IsSnapToTickEnabled="True" TickFrequency="1"/>

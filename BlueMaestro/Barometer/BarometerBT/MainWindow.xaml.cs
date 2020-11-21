@@ -66,20 +66,54 @@ namespace BarometerBT
             });
         }
 
+        private bool _isInUpdate = false;
         private void UpdateChart(BMDatabase db)
         {
+            if (_isInUpdate)
+                return;
+            _isInUpdate = true;
+
             this.Cursor = Cursors.AppStarting;
 
-            if (_chkAutoZoom.IsChecked.Value)
+            bool isIntervalZoom = false;
+            List<BMRecordCurrent> records;
+            if (isIntervalZoom)
             {
-                int bucketSize = db.Records.Count / 1000; //1000 records after zoom
-                _sliderDillute.Value = Math.Ceiling(Math.Pow(bucketSize, 0.5));
+                if (_chkAutoZoom.IsChecked.Value)
+                {
+                    int bucketSize = db.Records.Count / 1000; //1000 records after zoom
+                    _sliderDillute.Value = Math.Ceiling(Math.Pow(bucketSize, 0.5));
+                }
+
+                int zoom = (int)Math.Pow(2, _sliderDillute.Value);
+                _txtDilluteValue.Text = string.Format("Dillute x{0:0.0}", zoom);
+
+                records = db.Dillute(zoom);
             }
+            else //dillute by time
+            {
+                const double HOUR = 3600, MINUTE = 60;
+                double[] intervals = new double[] { 15, 0.5*MINUTE, MINUTE, 10*MINUTE, 15*MINUTE, 0.5*HOUR, HOUR, 2*HOUR, 3*HOUR, 6*HOUR, 12*HOUR };
 
-            int zoom = (int)Math.Pow(2, _sliderDillute.Value);
-            _txtDilluteValue.Text = string.Format("Dillute x{0:0.0}", zoom);
+                double combineIntervalInSec = intervals[(int)_sliderDillute.Value]; //min 10 seconds
+                if (_chkAutoZoom.IsChecked.Value)
+                {
+                    combineIntervalInSec = 15; 
+                    _sliderDillute.Value = 0;
+                    if(db.Records.Count > 1000)
+                    {
+                        TimeSpan range = db.Records.Last().Date - db.Records.First().Date;
+                        combineIntervalInSec = range.TotalSeconds / 1000;
+                        combineIntervalInSec = intervals.First(x => x >= combineIntervalInSec);
+                        _sliderDillute.Value = intervals.ToList().IndexOf(combineIntervalInSec);
+                    }
+                }
 
-            List<BMRecordCurrent> records = db.Dillute(zoom);
+                TimeSpan ts = TimeSpan.FromSeconds(combineIntervalInSec);
+                _txtDilluteValue.Text = string.Format("Interval: {0}", ts.ToString(@"d\d\ hh\h\ mm\m\ ss\s"));
+
+                records = db.DilluteByTime(combineIntervalInSec);
+            }
 
             _txtDilluteResult.Text = string.Format("Count: {0} -> {1}", db.Records.Count, records.Count);
 
@@ -88,6 +122,8 @@ namespace BarometerBT
             _chart3.UpdateChartAirPressure(records);
 
             this.Cursor = Cursors.Arrow;
+
+            _isInUpdate = false;
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)

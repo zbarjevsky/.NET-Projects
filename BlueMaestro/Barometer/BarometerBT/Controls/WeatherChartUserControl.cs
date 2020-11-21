@@ -14,38 +14,6 @@ namespace BarometerBT.Controls
 {
     public partial class WeatherChartUserControl : UserControl
     {
-        public class ChartPoint
-        {
-            public DateTime Date;
-            public double Value;
-
-            public ChartPoint(DateTime date, double val)
-            {
-                Date = date;
-                Value = val;
-            }
-
-            public ChartPoint(ChartPoint pt)
-            {
-                Date = pt.Date;
-                Value = pt.Value;
-            }
-
-            public static ChartPoint operator+(ChartPoint point1, ChartPoint point2)
-            {
-                //date in the middle
-                TimeSpan ts = point1.Date - point2.Date;
-                TimeSpan ts1 = TimeSpan.FromMilliseconds(ts.TotalMilliseconds / 2);
-
-                return new ChartPoint(point1.Date - ts1, point1.Value + point2.Value);
-            }
-
-            public override string ToString()
-            {
-                return string.Format("{0:0.0} -- {1}", Value, Date.ToString("g"));
-            }
-        }
-
         private List<ChartPoint> _bufferFull = new List<ChartPoint>();
         private List<ChartPoint> _bufferFilter = new List<ChartPoint>();
 
@@ -296,25 +264,19 @@ namespace BarometerBT.Controls
             if (!ChartHelper.PointInsideChart(chart1, pos))
                 return;
 
-            double valueY = double.NaN;
-            double valueX = double.NaN;
             string desc = "";
             string txt = "Unknown...";
 
             try
             {
-                //double valX = chart1.ChartAreas[0].AxisX.PixelPositionToValue(pos.X);
-                valueX = chart1.ChartAreas[0].CursorX.Position;
-                valueY = ChartHelper.FindInterpolateValueY(chart1, out desc, out ToolTipIcon icon);
+                ChartPoint pt = ChartHelper.FindInterpolateValueY(chart1, out desc, out ToolTipIcon icon);
                 _tooltip.ToolTipIcon = icon;
 
-                if (!double.IsNaN(valueY))
+                if (!double.IsNaN(pt.Value))
                 {
-                    DateTime dt = DateTime.FromOADate(valueX);
-
                     txt = string.Format("[{0:0.0}{1}]\n{2}",
-                    valueY, _theme.units,
-                    dt.ToString("MMM dd, HH:mm:ss"));
+                    pt.Value, _theme.units,
+                    pt.Date.ToString("MMM dd, HH:mm:ss"));
                 }
                 else
                 {
@@ -329,6 +291,49 @@ namespace BarometerBT.Controls
             _tooltip.ToolTipTitle = string.Format("{0}{1}", _theme.title, desc);
             _tooltip.Show("", this.chart1, pos.X, pos.Y + 20, 5000); //bug fix
             _tooltip.Show(txt, this.chart1, pos.X + 10, pos.Y + 20, 5000);
+        }
+    }
+
+    public class ChartPoint
+    {
+        public DateTime Date;
+        public double Value;
+
+        public ChartPoint(DateTime date, double val)
+        {
+            Date = date;
+            Value = val;
+        }
+
+        public ChartPoint(double date, double val)
+        {
+            Date = DateTime.FromOADate(date);
+            Value = val;
+        }
+
+        public ChartPoint(DataPoint pt) 
+            : this(pt.XValue, pt.YValues[0])
+        {
+        }
+
+        public ChartPoint(ChartPoint pt)
+        {
+            Date = pt.Date;
+            Value = pt.Value;
+        }
+
+        public static ChartPoint operator +(ChartPoint point1, ChartPoint point2)
+        {
+            //date in the middle
+            TimeSpan ts = point1.Date - point2.Date;
+            TimeSpan ts1 = TimeSpan.FromMilliseconds(ts.TotalMilliseconds / 2);
+
+            return new ChartPoint(point1.Date - ts1, point1.Value + point2.Value);
+        }
+
+        public override string ToString()
+        {
+            return string.Format("{0:0.0} -- {1}", Value, Date.ToString("g"));
         }
     }
 
@@ -413,7 +418,7 @@ namespace BarometerBT.Controls
             return null;
         }
 
-        public static double FindInterpolateValueY(Chart chart, out string desc, out ToolTipIcon icon)
+        public static ChartPoint FindInterpolateValueY(Chart chart, out string desc, out ToolTipIcon icon)
         {
             double xval = chart.ChartAreas[0].CursorX.Position;
             DataPointCollection points = chart.Series[0].Points;
@@ -421,9 +426,10 @@ namespace BarometerBT.Controls
             desc = "";
             icon = ToolTipIcon.Info;
             if (points.Count == 0)
-                return double.NaN;
+                return new ChartPoint(double.NaN, double.NaN);
+
             if (points.Count == 1)
-                return points[0].YValues[0];
+                return new ChartPoint(points[0]);
 
             DataPoint pt0 = points[0];
             DataPoint pt1 = points.Last();
@@ -431,7 +437,7 @@ namespace BarometerBT.Controls
             desc = "(out of range)";
             icon = ToolTipIcon.Warning;
             if (xval < pt0.XValue || xval > pt1.XValue)
-                return double.NaN; //out of range
+                return new ChartPoint(double.NaN, double.NaN); //out of range
 
             double timePerPoint = (pt1.XValue - pt0.XValue)/chart.Width;
             if(chart.ChartAreas[0].AxisX.ScaleView.IsZoomed)
@@ -452,9 +458,10 @@ namespace BarometerBT.Controls
             desc = "";
             icon = ToolTipIcon.Info;
             if (deltaX1 < proximityInterval)
-                return pt1.YValues[0];
+                return new ChartPoint(pt1);
+
             if (deltaX0 < proximityInterval)
-                return pt0.YValues[0];
+                return new ChartPoint(pt0);
 
             //interpolate
             double coefficient = (xval - pt0.XValue) / (pt1.XValue - pt0.XValue);
@@ -462,7 +469,7 @@ namespace BarometerBT.Controls
             desc = "(approximate)";
             icon = ToolTipIcon.Warning;
             double approximateValue = pt0.YValues[0] + coefficient * (pt1.YValues[0] - pt0.YValues[0]);
-            return approximateValue;
+            return new ChartPoint(xval, approximateValue);
         }
 
         private static double Length(double X, double Y)
@@ -470,7 +477,7 @@ namespace BarometerBT.Controls
             return Math.Sqrt(X * X + Y * Y);
         }
 
-        public static List<WeatherChartUserControl.ChartPoint> GetSubBuffer(List<WeatherChartUserControl.ChartPoint> history, int startIdx, int count)
+        public static List<ChartPoint> GetSubBuffer(List<ChartPoint> history, int startIdx, int count)
         {
             if (count > history.Count)
             {
@@ -482,7 +489,7 @@ namespace BarometerBT.Controls
                 startIdx = history.Count - count;
             }
 
-            List<WeatherChartUserControl.ChartPoint> buffer = new List<WeatherChartUserControl.ChartPoint>(count);
+            List<ChartPoint> buffer = new List<ChartPoint>(count);
 
             for (int i = startIdx; i < (startIdx + count); i++)
             {
@@ -493,15 +500,15 @@ namespace BarometerBT.Controls
         }
 
         //Dillute - create one point per minute
-        public static List<WeatherChartUserControl.ChartPoint> CompactHistoryByPoints(List<WeatherChartUserControl.ChartPoint> input, int divider)
+        public static List<ChartPoint> CompactHistoryByPoints(List<ChartPoint> input, int divider)
         {
             int maxPoints = (int)(input.Count / (double)divider);
             if (input.Count <= maxPoints)
                 return input;
 
-            List<WeatherChartUserControl.ChartPoint> history = new List<WeatherChartUserControl.ChartPoint>(maxPoints);
+            List<ChartPoint> history = new List<ChartPoint>(maxPoints);
 
-            List<WeatherChartUserControl.ChartPoint> bucket = new List<WeatherChartUserControl.ChartPoint>();
+            List<ChartPoint> bucket = new List<ChartPoint>();
 
             for (int i = 0; i < input.Count; i++)
             {
@@ -523,12 +530,12 @@ namespace BarometerBT.Controls
             return history;
         }
 
-        private static WeatherChartUserControl.ChartPoint Average_Point(List<WeatherChartUserControl.ChartPoint> bucket)
+        private static ChartPoint Average_Point(List<ChartPoint> bucket)
         {
             if (bucket == null || bucket.Count == 0)
                 return null;
 
-            WeatherChartUserControl.ChartPoint pt = new WeatherChartUserControl.ChartPoint(bucket.First());
+            ChartPoint pt = new ChartPoint(bucket.First());
             for (int i = 1; i < bucket.Count; i++)
             {
                 pt += bucket[i];

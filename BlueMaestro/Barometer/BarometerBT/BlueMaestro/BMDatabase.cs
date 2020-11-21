@@ -76,12 +76,48 @@ namespace BarometerBT.BlueMaestro
                 return new List<BMRecordCurrent>(Records);
 
             List<BMRecordCurrent> records = new List<BMRecordCurrent>();
-            for (int i = 0; i < Records.Count-1; i+=bucketSize)
+            for (int i = 0; i < Records.Count - 1; i += bucketSize)
             {
                 records.Add(GetAverageValue(i, bucketSize));
             }
 
             //anyway add last record as is
+            records.Add(new BMRecordCurrent(Records.Last()));
+
+            return records;
+        }
+
+        public List<BMRecordCurrent> DilluteByTime(double combineIntervalInSec = 900) //default 15 min
+        {
+            if (Records.Count < 1000) //return all records
+                return new List<BMRecordCurrent>(Records);
+
+            DateTime first = Records.First().Date;
+            DateTime last = Records.Last().Date;
+            TimeSpan interval = last - first;
+            
+            int bucketStart = 0;
+            int bucketIndex = 0;
+
+            List<BMRecordCurrent> records = new List<BMRecordCurrent>();
+
+            int i = 0;
+            for (; i < Records.Count - 1; i++)
+            {
+                double secondsFromFirst = (Records[i].Date - first).TotalSeconds;
+                int idx = (int)(secondsFromFirst / combineIntervalInSec);
+                if(idx > bucketIndex)
+                {
+                    records.Add(GetAverageValue(bucketStart, i - bucketStart));
+                    bucketStart = i;
+                    bucketIndex = idx;
+                }
+            }
+
+            //last bucket
+            records.Add(GetAverageValue(bucketStart, i - bucketStart));
+
+            //always add last record as is
             records.Add(new BMRecordCurrent(Records.Last()));
 
             return records;
