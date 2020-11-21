@@ -156,7 +156,7 @@ namespace BarometerBT.Bluetooth
                                 _current = BMDatabaseMap.INSTANCE.AddRecord(dev, e.RawSignalStrengthInDBm, date, section.Buffer);
                                 //Debug.WriteLine(_current);
 
-                                MainWindow.SetChartData(BMDatabaseMap.INSTANCE.Map[dev.Address]);
+                                MainWindow.UpdateChartData(); //BMDatabaseMap.INSTANCE.Map[dev.Address]);
                             }
                             else if (section.Buffer.Length == 25)
                             {

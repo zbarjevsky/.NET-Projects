@@ -63,8 +63,10 @@
                     ValueChanged="_sliderDillute_ValueChanged"
                     IsSnapToTickEnabled="True" TickFrequency="1"/>
             <CheckBox x:Name="_chkAutoZoom" Content="Auto" Margin="6" VerticalAlignment="Center"
-                      Checked="_chkAutoZoom_Checked"/>
+                      IsChecked="True" Checked="_chkAutoZoom_Checked"/>
             <TextBlock x:Name="_txtDilluteResult" MinWidth="100" Margin="6" Text="0 => 0"/>
+            <ComboBox x:Name="_cmbTemperatureUnits" SelectionChanged="_cmbTemperatureUnits_SelectionChanged" />
+            <ComboBox x:Name="_cmbAirPressureUnits" SelectionChanged="_cmbAirPressureUnits_SelectionChanged" />
         </StackPanel>
         <TextBox x:Name="_txtInfo" Grid.Row="1" Margin="6" Background="LightYellow" />
         <WindowsFormsHost Grid.Row="0" Grid.Column="1" Margin="6">

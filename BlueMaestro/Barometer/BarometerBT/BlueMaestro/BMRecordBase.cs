@@ -8,6 +8,7 @@ using BarometerBT.Bluetooth;
 
 namespace BarometerBT.BlueMaestro
 {
+
     [Serializable]
     public class BMRecordBase
     {
@@ -18,6 +19,10 @@ namespace BarometerBT.BlueMaestro
 
         public const String UNITSF = "º F";
         public const String UNITSC = "º C";
+
+        public const String UNITS_HG = "InHg";
+        public const String UNITS_MB = "mBar";
+        public const String UNITS_PA = "kPa";
 
         public string Name { get; set; }
 
@@ -31,6 +36,14 @@ namespace BarometerBT.BlueMaestro
         {
             return manufacturerID == MANUFACTURER_ID;
         }
+
+        // Current temperature, humidity, and dew point
+        public double Temperature { get; set; }
+        public double AirHumidity { get; set; }
+        public double AirPressure { get; set; }
+
+        [XmlIgnore]
+        public double AirDewPoint { get { return (this.Temperature - ((100 - this.AirHumidity) / 5)); } }
 
         //for serialization
         public BMRecordBase()
@@ -59,6 +72,10 @@ namespace BarometerBT.BlueMaestro
 
             Date = r.Date;
             Data = r.Data;
+
+            Temperature = r.Temperature;
+            AirHumidity = r.AirHumidity;
+            AirPressure = r.AirPressure;
         }
 
         public override string ToString()

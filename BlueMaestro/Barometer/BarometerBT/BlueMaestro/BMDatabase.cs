@@ -17,6 +17,9 @@ namespace BarometerBT.BlueMaestro
 
         public List<BMRecordCurrent> Records { get; } = new List<BMRecordCurrent>();
 
+        [XmlIgnore]
+        public UnitsDescriptor Units { get; set; } = new UnitsDescriptor();
+
         //for serialization
         public BMDatabase()
         {
@@ -69,7 +72,7 @@ namespace BarometerBT.BlueMaestro
             }
         }
 
-        public List<BMRecordCurrent> Dillute(int zoom)
+        public List<BMRecordCurrent> DilluteByPointAndConvertUnits(int zoom)
         {
             int bucketSize = (int)(zoom);
             if (bucketSize < 2 || bucketSize > (Records.Count / 3)) //all records
@@ -87,10 +90,10 @@ namespace BarometerBT.BlueMaestro
             return records;
         }
 
-        public List<BMRecordCurrent> DilluteByTime(double combineIntervalInSec = 900) //default 15 min
+        public List<BMRecordCurrent> DilluteByTimeAndConvertUnits(double combineIntervalInSec = 900) //default 15 min
         {
-            if (Records.Count < 1000) //return all records
-                return new List<BMRecordCurrent>(Records);
+            if (Records.Count < 1000) //return all records, convert units
+                return new List<BMRecordCurrent>(Records.Select(r => ConvertUnitsCurr(new BMRecordCurrent(r))));
 
             DateTime first = Records.First().Date;
             DateTime last = Records.Last().Date;
@@ -108,17 +111,17 @@ namespace BarometerBT.BlueMaestro
                 int idx = (int)(secondsFromFirst / combineIntervalInSec);
                 if(idx > bucketIndex)
                 {
-                    records.Add(GetAverageValue(bucketStart, i - bucketStart));
+                    records.Add(ConvertUnitsCurr(GetAverageValue(bucketStart, i - bucketStart)));
                     bucketStart = i;
                     bucketIndex = idx;
                 }
             }
 
             //last bucket
-            records.Add(GetAverageValue(bucketStart, i - bucketStart));
+            records.Add(ConvertUnitsCurr(GetAverageValue(bucketStart, i - bucketStart)));
 
             //always add last record as is
-            records.Add(new BMRecordCurrent(Records.Last()));
+            records.Add(ConvertUnitsCurr(new BMRecordCurrent(Records.Last())));
 
             return records;
         }
@@ -179,30 +182,16 @@ namespace BarometerBT.BlueMaestro
             }
         }
 
-        public static BMDatabase Merge(BMDatabase db1, BMDatabase db2)
+        public BMRecordBase ConvertUnits(BMRecordBase r)
         {
-            if (db1.Device.Name != db2.Device.Name)
-                return null;
+            r.Temperature = this.Units.ConvertTemperature(r.Temperature);
+            r.AirPressure = this.Units.ConvertPressure(r.AirPressure);
+            return r;
+        }
 
-            BMDatabase db = new BMDatabase(db1.Device);
-            if (db1.Records.Count == 0 && db2.Records.Count == 0)
-                return db;
-            if (db1.Records.Count == 0)
-                return db2;
-            if (db2.Records.Count == 0)
-                return db1;
-
-            if(db1.Records.Last().Date < db2.Records.First().Date)
-            {
-                db.Records.AddRange(db1.Records);
-                db.Records.AddRange(db2.Records);
-            }
-            else
-            {
-                db.Records.AddRange(db2.Records);
-                db.Records.AddRange(db1.Records);
-            }
-            return db;
+        public BMRecordCurrent ConvertUnitsCurr(BMRecordCurrent r)
+        {
+            return ConvertUnits(r) as BMRecordCurrent;
         }
 
         public override string ToString()

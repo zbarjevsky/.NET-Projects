@@ -102,6 +102,7 @@
     <Compile Include="Utils\MainPage.cs" />
     <Compile Include="Utils\NotifyPropertyChangedImpl.cs" />
     <Compile Include="Utils\TextView.cs" />
+    <Compile Include="Utils\UnitsDescriptor.cs" />
     <Compile Include="Utils\ViewGroup.cs" />
     <Compile Include="Utils\XmlHelper.cs" />
     <Page Include="Bluetooth\Scenario1_Discovery.xaml">
