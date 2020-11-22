@@ -23,7 +23,7 @@ namespace BarometerBT.Bluetooth
         // Create Bluetooth Listener
         private BluetoothLEAdvertisementWatcher _watcher = new BluetoothLEAdvertisementWatcher();
         private Dictionary<ushort, DeviceRecordVM> _records = new Dictionary<ushort, DeviceRecordVM>();
-        private Dictionary<ulong, BluetoothLEDevice> _blueMaestroDevice = new Dictionary<ulong, BluetoothLEDevice>();
+        private Dictionary<ulong, BluetoothLEDevice> _blueMaestroDevices = new Dictionary<ulong, BluetoothLEDevice>();
 
         private Stopwatch _stopper = new Stopwatch();
 
@@ -112,28 +112,28 @@ namespace BarometerBT.Bluetooth
             if (idx < 0)
                 return;
 
-            if (!_blueMaestroDevice.ContainsKey(e.BluetoothAddress))
+            if (!_blueMaestroDevices.ContainsKey(e.BluetoothAddress))
             {
                 BluetoothLEDevice device = await BluetoothLEDevice.FromBluetoothAddressAsync(e.BluetoothAddress);
-                lock (_blueMaestroDevice)
+                lock (_blueMaestroDevices)
                 {
                     if (device != null)
                     {
-                        _blueMaestroDevice[e.BluetoothAddress] = device;
+                        _blueMaestroDevices[e.BluetoothAddress] = device;
                         _stopper.Restart();
                     }
                 }
             }
 
-            if (_blueMaestroDevice.ContainsKey(e.BluetoothAddress))
+            if (_blueMaestroDevices.ContainsKey(e.BluetoothAddress))
             {
-                BluetoothLEDeviceDisplay display = new BluetoothLEDeviceDisplay(_blueMaestroDevice[e.BluetoothAddress].DeviceInformation);
+                BluetoothLEDeviceDisplay display = new BluetoothLEDeviceDisplay(_blueMaestroDevices[e.BluetoothAddress].DeviceInformation);
                 Debug.WriteLine("*BT* " + display.ToString());
             }
 
             if (m.ManufacturerData.Count > 0)
             {
-                lock (_blueMaestroDevice)
+                lock (_blueMaestroDevices)
                 {
                     foreach (MData.Section section in m.ManufacturerData)
                     {
@@ -154,9 +154,6 @@ namespace BarometerBT.Bluetooth
                             if (section.Buffer.Length == 14)
                             {
                                 _current = BMDatabaseMap.INSTANCE.AddRecord(dev, e.RawSignalStrengthInDBm, date, section.Buffer);
-                                //Debug.WriteLine(_current);
-                                
-                                MainWindow.UpdateChartData(); //BMDatabaseMap.INSTANCE.Map[dev.Address]);
                             }
                             else if (section.Buffer.Length == 25)
                             {
@@ -176,8 +173,6 @@ namespace BarometerBT.Bluetooth
                             message += "Timestamp: " + date.ToString("MMM dd, HH:mm:ss") + " \n";
                             MainWindow.SetInfo(message + _current.ToString() + _averages.ToString());
                         }
-
-                        MainWindow.UpdateList(_records);
                     }
                 }
             }
@@ -238,8 +233,6 @@ namespace BarometerBT.Bluetooth
                         _records[section.CompanyId].Buffer = section.Buffer;
                         if (!string.IsNullOrWhiteSpace(e.Advertisement.LocalName))
                             _records[section.CompanyId].Name = e.Advertisement.LocalName;
-
-                        MainWindow.UpdateList(_records);
                     }
                 }
             }

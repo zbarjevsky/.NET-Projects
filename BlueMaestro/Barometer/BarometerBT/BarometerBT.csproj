@@ -72,6 +72,7 @@
     </ApplicationDefinition>
     <Compile Include="BlueMaestro\BMDatabase.cs" />
     <Compile Include="BlueMaestro\BMDatabaseMap.cs" />
+    <Compile Include="BlueMaestro\UX\AutoGrayableImage.cs" />
     <Compile Include="BlueMaestro\UX\BMDeviceRecordUserControl.xaml.cs">
       <DependentUpon>BMDeviceRecordUserControl.xaml</DependentUpon>
     </Compile>

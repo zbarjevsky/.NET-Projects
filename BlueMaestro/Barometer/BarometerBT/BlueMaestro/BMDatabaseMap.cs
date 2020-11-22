@@ -9,6 +9,8 @@ namespace BarometerBT.BlueMaestro
 {
     public class BMDatabaseMap
     {
+        public Action<BMRecordCurrent> OnRecordAddedAction = (r) => { MainWindow.UpdateAllAsync(r); };
+
         public Dictionary<ulong, BMDatabase> Map { get; } = new Dictionary<ulong, BMDatabase>();
 
         public List<BMRecordCurrent> Records(ulong address) { return Map[address].Records; } 
@@ -23,7 +25,11 @@ namespace BarometerBT.BlueMaestro
             if (!Map.ContainsKey(device.Address))
                 Map[device.Address] = new BMDatabase(device);
 
-            return Map[device.Address].AddRecord(device, rssi, recordDate, data);
+            var record = Map[device.Address].AddRecord(device, rssi, recordDate, data);
+
+            OnRecordAddedAction(record);
+
+            return record;
         }
 
         public BMDatabase Merge(BMDatabase db)

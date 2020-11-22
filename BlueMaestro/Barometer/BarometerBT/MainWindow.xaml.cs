@@ -44,33 +44,23 @@ namespace BarometerBT
             _cmbAirPressureUnits.SelectedIndex = 0;
         }
 
-        public static void UpdateList(Dictionary<ushort, DeviceRecordVM> devices)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            CommonTools.ExecuteOnUiThreadBeginInvoke(() =>
-            {
-                MainWindow wnd = (Application.Current.MainWindow as MainWindow);
-                if(wnd != null)
-                    wnd.UpdateDeviceList();
-            });
+
         }
 
-        private void UpdateDeviceList()
+        private void Window_Closed(object sender, EventArgs e)
         {
-            foreach (BMDatabase db in BMDatabaseMap.INSTANCE.Map.Values)
-            {
-                UpdateBMDeviceRecordVM(db);
-            }
+            SaveButton_Click(sender, null);
         }
 
-        private void UpdateBMDeviceRecordVM(BMDatabase db)
+        private void _listDevices_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            BMDeviceRecordVM dev = _devices.FirstOrDefault(d => d.Name == db.Device.Name);
-            if(dev == null)
-            {
-                dev = new BMDeviceRecordVM(db);
-                _devices.Add(dev);
-            }
-            dev.Update(db);
+            BMDatabase db = GetSelectedDB();
+            if (db != null)
+                UpdateChartFromSelectedDB(db);
+            else
+                ClearChart();
         }
 
         public static void SetInfo(string info)
@@ -83,6 +73,51 @@ namespace BarometerBT
             });
         }
 
+        public static void UpdateAllAsync(BMRecordCurrent r)
+        {
+            CommonTools.ExecuteOnUiThreadBeginInvoke(() =>
+            {
+                MainWindow wnd = (Application.Current.MainWindow as MainWindow);
+                if (wnd != null)
+                {
+                    wnd.UpdateDeviceList();
+                    wnd.UpdateChart(r);
+                }
+            });
+        }
+
+        private BMDatabase GetSelectedDB()
+        {
+            BMDeviceRecordVM selected = _listDevices.SelectedItem as BMDeviceRecordVM;
+            if (selected != null && selected.Database != null)
+                return selected.Database;
+            return null;
+        }
+
+        private void UpdateDeviceList()
+        {
+            foreach (BMDatabase db in BMDatabaseMap.INSTANCE.Map.Values)
+            {
+                UpdateOrAddBMDeviceRecordVM(db);
+            }
+
+            if(_devices.Count > 0 && _listDevices.SelectedItem == null)
+            {
+                _listDevices.SelectedIndex = 0; //select first by default
+            }
+        }
+
+        private void UpdateOrAddBMDeviceRecordVM(BMDatabase db)
+        {
+            BMDeviceRecordVM dev = _devices.FirstOrDefault(d => d.DeviceAddress == db.Device.Address);
+            if(dev == null)
+            {
+                dev = new BMDeviceRecordVM(db, 0);
+                _devices.Add(dev);
+            }
+            dev.Update(db, _devices.IndexOf(dev));
+        }
+
         public static void UpdateChartData()
         {
             CommonTools.ExecuteOnUiThreadBeginInvoke(() =>
@@ -93,27 +128,29 @@ namespace BarometerBT
                     if (!wnd._chkAutoUpdate.IsChecked.Value)
                         return;
 
-                    wnd.UpdateChart();
+                    wnd.UpdateChart(null);
                 }
             });
         }
 
-        private void UpdateChart()
+        private void UpdateChart(BMRecordCurrent r = null)
         {
-            var db = BMDatabaseMap.INSTANCE.Map.FirstOrDefault();
-            if (db.Value != null)
+            BMDatabase selected = GetSelectedDB();
+            if (selected != null)
             {
-                UpdateChart(db.Value);
-                UpdateDeviceList();
+                if(r == null || selected.Device.Address == r.Address)
+                    UpdateChartFromSelectedDB(selected);
             }
         }
 
         private bool _isInUpdate = false;
-        private void UpdateChart(BMDatabase db)
+        private void UpdateChartFromSelectedDB(BMDatabase db)
         {
             if (_isInUpdate)
                 return;
             _isInUpdate = true;
+
+            this.Title = "Barometer - " + db.Device;
 
             this.Cursor = Cursors.AppStarting;
 
@@ -171,11 +208,27 @@ namespace BarometerBT
             _isInUpdate = false;
         }
 
+        private void ClearChart()
+        {
+            if (_isInUpdate)
+                return;
+            _isInUpdate = true;
+
+            _chart1.UpdateChartTemperature(null, "");
+            _chart2.UpdateChartHumidity(null, "");
+            _chart3.UpdateChartAirPressure(null, "");
+
+            _isInUpdate = false;
+        }
+
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            var db = BMDatabaseMap.INSTANCE.Map.FirstOrDefault();
-            if(db.Value != null)
-                db.Value.Save();
+            this.Cursor = Cursors.Wait;
+            foreach (BMDatabase db in BMDatabaseMap.INSTANCE.Map.Values)
+            {
+                db.Save();
+            }
+            this.Cursor = Cursors.Arrow;
         }
 
         private void OpenButton_Click(object sender, RoutedEventArgs e)
@@ -203,20 +256,19 @@ namespace BarometerBT
                         dbAll = BMDatabaseMap.INSTANCE.Merge(db);
                 }
 
-                UpdateChart(dbAll);
+                UpdateDeviceList();
+                UpdateChart();
             }
         }
 
         private void ResetButton_Click(object sender, RoutedEventArgs e)
         {
-            _devices.Clear();
-
-            BMDatabase db = BMDatabaseMap.INSTANCE.Map.FirstOrDefault().Value;
+            BMDatabase db = GetSelectedDB();
             if (db != null)
             {
                 db.Records.Clear();
-                UpdateChart(db);
                 UpdateDeviceList();
+                UpdateChart();
             }
         }
 

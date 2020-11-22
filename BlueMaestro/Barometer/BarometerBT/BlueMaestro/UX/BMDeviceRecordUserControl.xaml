@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:BarometerBT.BlueMaestro.UX"
              mc:Ignorable="d" Height="120" Width="400"
              d:DesignHeight="180" d:DesignWidth="400">
-    <Border Padding="3" BorderBrush="Gainsboro" BorderThickness="2" CornerRadius="3">
+    <Border Padding="3" BorderBrush="Gainsboro" BorderThickness="2" CornerRadius="3" Background="{Binding Background}">
         <Grid ShowGridLines="False">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"/>
@@ -20,8 +20,13 @@
                 <RowDefinition Height="2*"/>
                 <RowDefinition Height="3*"/>
             </Grid.RowDefinitions>
-            <Image Grid.Row="0" Grid.RowSpan="2" Height="60" Source="/Images/TempoDisk4in1.png" />
-            <TextBlock Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding Name, FallbackValue=EEEG23}" VerticalAlignment="Center" FontSize="22" FontWeight="Bold"/>
+            <local:AutoGrayableImage Grid.Row="0" Grid.RowSpan="2" Height="60" 
+                                     IsEnabled="{Binding IsActive}"
+                                     Source="/Images/TempoDisk4in1.png" />
+            <StackPanel Grid.Column="1" Grid.ColumnSpan="3" VerticalAlignment="Center" Orientation="Horizontal">
+                <TextBlock Text="{Binding Name, FallbackValue=EEEG23}" FontSize="22" FontWeight="Bold" />
+                <TextBlock Text="{Binding Address, FallbackValue=(12-34-56-78-90)}" Margin="10,5,0,0" VerticalAlignment="Center" />
+            </StackPanel>
             <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal">
                 <TextBlock Margin="2" VerticalAlignment="Center" Text="{Binding Interval, FallbackValue=Interval 1 h}"/>
                 <TextBlock Margin="2" VerticalAlignment="Center" Text="{Binding Battery, FallbackValue=Battery 100%}" />

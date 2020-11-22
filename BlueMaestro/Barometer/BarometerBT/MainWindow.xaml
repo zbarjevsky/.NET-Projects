@@ -7,6 +7,8 @@
         xmlns:controls="clr-namespace:BarometerBT.Controls" xmlns:utils="clr-namespace:BarometerBT.Utils" xmlns:ux="clr-namespace:BarometerBT.BlueMaestro.UX"
         mc:Ignorable="d" Background="Navy"
         WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded"
+        Closed="Window_Closed"
         Icon="/Butterfly.ico"
         Title="Barometer - Weather Station" Height="850" Width="1600">
     <Window.Resources>
@@ -23,11 +25,13 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <ListView x:Name="_listDevices" Margin="6" SelectionMode="Single" Background="LightYellow" >
+        <ListView x:Name="_listDevices" Margin="6" SelectionMode="Single" Background="LightYellow"
+                  ScrollViewer.CanContentScroll="False"
+                  SelectionChanged="_listDevices_SelectionChanged">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid Margin="0,2">
-                        <ux:BMDeviceRecordUserControl Background="AntiqueWhite" />
+                        <ux:BMDeviceRecordUserControl />
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>

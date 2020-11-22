@@ -25,6 +25,16 @@ namespace BarometerBT.Bluetooth
             State = state;
         }
 
+        public string GetAddressString()
+        {
+            return ConvertAddress(Address);
+        }
+
+        public static string ConvertAddress(ulong address)
+        {
+            return BitConverter.ToString(BitConverter.GetBytes(address).Reverse().ToArray());
+        }
+
         public override string ToString()
         {
             return string.Format("{0} <=> {1}", Name, BitConverter.ToString(BitConverter.GetBytes(Address).Reverse().ToArray()));
