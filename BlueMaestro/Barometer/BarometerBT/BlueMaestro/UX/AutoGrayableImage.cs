@@ -15,6 +15,7 @@ namespace BarometerBT.BlueMaestro.UX
 {
     /// <summary>
     /// Image that switches to monochrome when disabled.
+    /// https://www.engineeringsolutions.de/creating-an-automatic-adjusting-image-for-buttons-in-wpf/#:~:text=The%20following%20class%20is%20a,control%20is%20set%20to%20false.
     /// </summary>
     public class AutoGrayableImage : Image
     {

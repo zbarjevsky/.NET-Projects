@@ -19,11 +19,32 @@ namespace BarometerBT.BlueMaestro.UX
             set { SetProperty(ref _background, value); }
         }
 
+        private Brush _borderBrush = Brushes.White;
+        public Brush BorderBrush
+        {
+            get { return _borderBrush; }
+            set { SetProperty(ref _borderBrush, value); }
+        }
+
+        private int _index = -1;
+        public int Index //alternate background
+        {
+            get { return _index; }
+            set { SetProperty(ref _index, value); Background = (_index % 2 == 0) ? Brushes.AliceBlue : Brushes.AntiqueWhite; }
+        }
+
         private bool _isActive = false;
         public bool IsActive
         {
             get { return _isActive; }
             set { SetProperty(ref _isActive, value); }
+        }
+
+        private bool _isSelected = false;
+        public bool IsSelected //border color
+        {
+            get { return _isSelected; }
+            set { SetProperty(ref _isSelected, value); BorderBrush = _isSelected ? Brushes.Navy : Brushes.Gainsboro; }
         }
 
         private string _name = "";
@@ -77,17 +98,18 @@ namespace BarometerBT.BlueMaestro.UX
 
         public BMDatabase Database { get; private set; }
 
-        public BMDeviceRecordVM(BMDatabase db, int index)
+        public BMDeviceRecordVM(BMDatabase db)
         {
-            Update(db, index);
+            Update(db);
         }
 
-        public void Update(BMDatabase db, int index)
+        public void Update(BMDatabase db)
         {
             Database = db;
 
             //alternate background
-            Background = (index%2==0)? Brushes.AliceBlue : Brushes.AntiqueWhite;
+            //Background = (index%2==0)? Brushes.AliceBlue : Brushes.AntiqueWhite;
+            //IsSelected = isSelected;
 
             BMRecordCurrent r = new BMRecordCurrent();
             if(db.Records.Count>0)

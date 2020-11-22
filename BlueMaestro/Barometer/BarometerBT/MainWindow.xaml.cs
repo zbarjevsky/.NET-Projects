@@ -88,10 +88,23 @@ namespace BarometerBT
 
         private BMDatabase GetSelectedDB()
         {
+            UpdateListSelectionUI();
+
             BMDeviceRecordVM selected = _listDevices.SelectedItem as BMDeviceRecordVM;
             if (selected != null && selected.Database != null)
                 return selected.Database;
             return null;
+        }
+
+        private void UpdateListSelectionUI()
+        {
+            BMDeviceRecordVM sel = _listDevices.SelectedItem as BMDeviceRecordVM;
+            for (int i = 0; i < _listDevices.Items.Count; i++)
+            {
+                BMDeviceRecordVM vm = (BMDeviceRecordVM)_listDevices.Items[i];
+                vm.IsSelected = (vm.DeviceAddress == sel.DeviceAddress);
+                vm.Index = i;
+            }
         }
 
         private void UpdateDeviceList()
@@ -101,9 +114,10 @@ namespace BarometerBT
                 UpdateOrAddBMDeviceRecordVM(db);
             }
 
-            if(_devices.Count > 0 && _listDevices.SelectedItem == null)
+            if(_devices.Count > 0)
             {
-                _listDevices.SelectedIndex = 0; //select first by default
+                if (_listDevices.SelectedItem == null)
+                    _listDevices.SelectedIndex = 0; //select first by default
             }
         }
 
@@ -112,10 +126,11 @@ namespace BarometerBT
             BMDeviceRecordVM dev = _devices.FirstOrDefault(d => d.DeviceAddress == db.Device.Address);
             if(dev == null)
             {
-                dev = new BMDeviceRecordVM(db, 0);
+                dev = new BMDeviceRecordVM(db);
                 _devices.Add(dev);
             }
-            dev.Update(db, _devices.IndexOf(dev));
+            dev.Index = _devices.IndexOf(dev);
+            dev.Update(db);
         }
 
         public static void UpdateChartData()

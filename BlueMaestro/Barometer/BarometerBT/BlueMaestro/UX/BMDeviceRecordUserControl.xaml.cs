@@ -24,5 +24,24 @@ namespace BarometerBT.BlueMaestro.UX
         {
             InitializeComponent();
         }
+
+        //IsSelected="{Binding Path=IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListViewItem}}, 
+        //Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+
+        //public static readonly DependencyProperty IsSelectedProperty =
+        //    DependencyProperty.Register(nameof(IsSelected), typeof(bool), typeof(BMDeviceRecordUserControl), null);
+
+        //public bool IsSelected
+        //{
+        //    get
+        //    {
+        //        return (bool)GetValue(IsSelectedProperty);
+        //    }
+
+        //    set
+        //    {
+        //        SetValue(IsSelectedProperty, value);
+        //    }
+        //}
     }
 }
