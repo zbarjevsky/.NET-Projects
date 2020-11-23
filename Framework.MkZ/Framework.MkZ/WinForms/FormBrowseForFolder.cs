@@ -17,6 +17,8 @@ namespace MZ.WinForms
 {
     public partial class FormBrowseForFolder : Form
     {
+        private static Size _formSize = new Size();
+
         FileUtils.FileProgress _fileProgress;
 
         public string SelectedFolder 
@@ -36,6 +38,11 @@ namespace MZ.WinForms
             InitializeComponent();
 
             _fileProgress = new FileUtils.FileProgress(m_progressBar, this);
+
+            if (_formSize.Width == 0 || _formSize.Height == 0)
+                _formSize = this.Size;
+            else
+                this.Size = _formSize;
         }
 
         private void FormBrowseForFolder_Load(object sender, EventArgs e)
@@ -67,7 +74,8 @@ namespace MZ.WinForms
 
         private void m_btnOk_Click(object sender, EventArgs e)
         {
-            if(!StringComparer.OrdinalIgnoreCase.Equals(m_txtSelectedFolder.Text, m_treeFolders.SelectedFolder))
+            _formSize = this.Size;
+            if (!StringComparer.OrdinalIgnoreCase.Equals(m_txtSelectedFolder.Text, m_treeFolders.SelectedFolder))
             {
                 SelectInTree(true);
                 DialogResult = DialogResult.None;
@@ -76,6 +84,7 @@ namespace MZ.WinForms
 
         private void m_btnCancel_Click(object sender, EventArgs e)
         {
+            _formSize = this.Size;
             _fileProgress.Cancel = true;
         }
 
