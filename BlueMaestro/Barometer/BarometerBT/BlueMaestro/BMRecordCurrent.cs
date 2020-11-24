@@ -109,9 +109,13 @@ namespace BarometerBT.BlueMaestro
             if (object.ReferenceEquals(r1, null) || object.ReferenceEquals(r2, null))
                 return false;
 
-            return r1.Temperature == r2.Temperature &&
-                   r1.AirHumidity == r2.AirHumidity &&
-                   r1.AirPressure == r2.AirPressure &&
+            const double EPSILON = 0.15;
+            const double ONE_SECOND = 1.0;
+
+            return Math.Abs((r1.Date - r2.Date).TotalSeconds) < ONE_SECOND &&
+                   Math.Abs(r1.Temperature - r2.Temperature) < EPSILON &&
+                   Math.Abs(r1.AirHumidity - r2.AirHumidity) < EPSILON &&
+                   Math.Abs(r1.AirPressure - r2.AirPressure) < EPSILON &&
                    r1.BatteryLevel == r2.BatteryLevel;
         }
 

@@ -36,34 +36,48 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <StackPanel Grid.Row="2" Margin="6" Orientation="Horizontal"
-                    HorizontalAlignment="Left" VerticalAlignment="Top" >
-            <Button Margin="6" Content="Open..." Click="OpenButton_Click"/>
-            <Button Margin="6" Content="Save" Click="SaveButton_Click"/>
-            <Button Margin="6" Content="Reset" Click="ResetButton_Click"/>
-            <Button Margin="6" Content="Scenario1..." Click="Scenario1Button_Click"/>
-            <Button Margin="6" Content="Scenario2..." Click="Scenario2Button_Click"/>
-            <Viewbox Height="20">
-                <CheckBox x:Name="_chkAutoUpdate" IsChecked="True" Background="LightGray" />
-            </Viewbox>
-            <TextBlock Margin="0,6" Text="Auto Update" Background="LightGray" VerticalAlignment="Center"/>
-        </StackPanel>
-        <StackPanel Grid.Row="2" Margin="6,50" Orientation="Vertical" VerticalAlignment="Top" Background="AliceBlue" >
-            <TextBlock x:Name="_txtDilluteValue" MinWidth="100" Margin="6" 
-                       HorizontalAlignment="Left"
-                       Text="Dillute x1"/>
-            <!--IsEnabled="{Binding IsChecked, ElementName=_chkAutoZoom, Converter={StaticResource InvertBoolConverter}}"-->
-            <Slider x:Name="_sliderDillute" Margin="6" Width="200" Background="White" 
-                    HorizontalAlignment="Left"
-                    Maximum="10" Minimum="0" Value="0" SmallChange="1" LargeChange="1"
-                    ValueChanged="_sliderDillute_ValueChanged"
-                    IsSnapToTickEnabled="True" TickFrequency="1"/>
-            <CheckBox x:Name="_chkAutoZoom" Content="Auto" Margin="6" VerticalAlignment="Center"
-                      IsChecked="True" Checked="_chkAutoZoom_Checked"/>
-            <TextBlock x:Name="_txtDilluteResult" MinWidth="100" Margin="6" Text="0 => 0"/>
-            <ComboBox x:Name="_cmbTemperatureUnits" SelectionChanged="_cmbTemperatureUnits_SelectionChanged" />
-            <ComboBox x:Name="_cmbAirPressureUnits" SelectionChanged="_cmbAirPressureUnits_SelectionChanged" />
-        </StackPanel>
+        <ScrollViewer Grid.Row="2">
+            <StackPanel Orientation="Vertical">
+                <StackPanel Margin="6" Orientation="Horizontal"
+                            HorizontalAlignment="Left" VerticalAlignment="Top" >
+                    <Button Margin="6" Content="Open..." Click="OpenButton_Click"/>
+                    <Button Margin="6" Content="Save" Click="SaveButton_Click"/>
+                    <Button Margin="6" Content="Reset" Click="ResetButton_Click"/>
+                    <Button Margin="6" Content="Scenario1..." Click="Scenario1Button_Click"/>
+                    <Button Margin="6" Content="Scenario2..." Click="Scenario2Button_Click"/>
+                    <Viewbox Height="20">
+                        <CheckBox x:Name="_chkAutoUpdate" IsChecked="True" Background="LightGray" />
+                    </Viewbox>
+                    <TextBlock Margin="0,6" Text="Auto Update" Background="LightGray" VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Margin="6" Orientation="Vertical" VerticalAlignment="Top" Background="AliceBlue" >
+                    <TextBlock x:Name="_txtDilluteValue" MinWidth="100" Margin="6" 
+                               HorizontalAlignment="Left"
+                               Text="Dillute x1"/>
+                    <!--IsEnabled="{Binding IsChecked, ElementName=_chkAutoZoom, Converter={StaticResource InvertBoolConverter}}"-->
+                    <Slider x:Name="_sliderDillute" Margin="6" Width="200" Background="White" 
+                            HorizontalAlignment="Left"
+                            Maximum="10" Minimum="0" Value="0" SmallChange="1" LargeChange="1"
+                            ValueChanged="_sliderDillute_ValueChanged"
+                            IsSnapToTickEnabled="True" TickFrequency="1"/>
+                    <CheckBox x:Name="_chkAutoZoom" Content="Auto" Margin="6" VerticalAlignment="Center"
+                              IsChecked="True" Checked="_chkAutoZoom_Checked"/>
+                    <TextBlock x:Name="_txtDilluteResult" MinWidth="100" Margin="6" Text="0 => 0"/>
+                    <ComboBox x:Name="_cmbTemperatureUnits" SelectionChanged="_cmbTemperatureUnits_SelectionChanged" />
+                    <ComboBox x:Name="_cmbAirPressureUnits" SelectionChanged="_cmbAirPressureUnits_SelectionChanged" />
+                    <TextBlock x:Name="_txtLastNDays" MinWidth="100" Margin="6" 
+                               HorizontalAlignment="Left"
+                               Text="Show last ??? days"/>
+                    <Slider x:Name="_sliderLastNDays" Margin="6" Width="200" Background="White" 
+                            HorizontalAlignment="Left"
+                            Maximum="10" Minimum="0" Value="10" SmallChange="1" LargeChange="1" 
+                            TickFrequency="1" TickPlacement="Both" IsSnapToTickEnabled="True"
+                            ValueChanged="_sliderDays_ValueChanged" />
+                </StackPanel>
+                
+            </StackPanel>
+            
+        </ScrollViewer>
         <TextBox x:Name="_txtInfo" Grid.Row="1" Margin="6" Background="LightYellow" />
         <WindowsFormsHost Grid.Row="0" Grid.Column="1" Margin="6">
             <controls:WeatherChartUserControl x:Name="_chart1" />

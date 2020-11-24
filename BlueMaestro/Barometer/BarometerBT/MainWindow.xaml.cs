@@ -28,13 +28,14 @@ namespace BarometerBT
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly ObservableCollection<BMDeviceRecordVM> _devices;
+        private readonly BluetoothConnection _btWatcher = new BluetoothConnection();
+
+        private readonly ObservableCollection<BMDeviceRecordVM> _devices = new ObservableCollection<BMDeviceRecordVM>();
 
         public MainWindow()
         {
             InitializeComponent();
 
-            _devices = new ObservableCollection<BMDeviceRecordVM>();
             _listDevices.ItemsSource = _devices;
 
             _cmbTemperatureUnits.ItemsSource = UnitsDescriptor.GetEnumTemperatureUnits();
@@ -46,11 +47,16 @@ namespace BarometerBT
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            _btWatcher.OnBMDeviceMsgReceivedAction = (info) => { SetInfo(info); };
+            _btWatcher.OnBMDeviceCheckAction = (elapsed) => { UpdateDeviceList(); };
+            _btWatcher.StartBluetoothSearch();
 
+            BMDatabaseMap.INSTANCE.OnRecordAddedAction = (r) => { MainWindow.UpdateAllAsync(r); };
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
+            _btWatcher.StopBluetoothSearch();
             SaveButton_Click(sender, null);
         }
 
@@ -59,7 +65,7 @@ namespace BarometerBT
             BMDatabase db = GetSelectedDB();
             if (db != null)
                 UpdateChartFromSelectedDB(db);
-            else
+            else //no selection
                 ClearChart();
         }
 
@@ -109,16 +115,19 @@ namespace BarometerBT
 
         private void UpdateDeviceList()
         {
-            foreach (BMDatabase db in BMDatabaseMap.INSTANCE.Map.Values)
-            {
-                UpdateOrAddBMDeviceRecordVM(db);
-            }
+            CommonTools.ExecuteOnUiThreadInvoke(() => 
+            { 
+                foreach (BMDatabase db in BMDatabaseMap.INSTANCE.Map.Values)
+                {
+                    UpdateOrAddBMDeviceRecordVM(db);
+                }
 
-            if(_devices.Count > 0)
-            {
-                if (_listDevices.SelectedItem == null)
-                    _listDevices.SelectedIndex = 0; //select first by default
-            }
+                if(_devices.Count > 0)
+                {
+                    if (_listDevices.SelectedItem == null)
+                        _listDevices.SelectedIndex = 0; //select first by default
+                }
+            });
         }
 
         private void UpdateOrAddBMDeviceRecordVM(BMDatabase db)
@@ -172,8 +181,17 @@ namespace BarometerBT
             db.Units.TemperatureUnits = (TemperatureUnits)_cmbTemperatureUnits.SelectedItem;
             db.Units.AirPressureUnits = (AirPressureUnits)_cmbAirPressureUnits.SelectedItem;
 
+            double[] daysValues = new double[] { 0.25, 0.5, 1, 3, 7, 14, 30, 90, 180, 365, 3000 };
+            TimeSpan daysBack = TimeSpan.FromDays(daysValues[(int)_sliderLastNDays.Value]);
+            if(daysBack.TotalHours < 24)
+                _txtLastNDays.Text = $"Show Last {daysBack.Hours} hours";
+            else
+                _txtLastNDays.Text = $"Show Last {daysBack.Days} days";
+
+            List<BMRecordCurrent> recordsIn = db.GetLastRecords(daysBack);
+
             bool isIntervalZoom = false;
-            List<BMRecordCurrent> records;
+            List<BMRecordCurrent> recordsOut;
             if (isIntervalZoom)
             {
                 if (_chkAutoZoom.IsChecked.Value)
@@ -185,38 +203,38 @@ namespace BarometerBT
                 int zoom = (int)Math.Pow(2, _sliderDillute.Value);
                 _txtDilluteValue.Text = string.Format("Dillute x{0:0.0}", zoom);
 
-                records = db.DilluteByPointAndConvertUnits(zoom);
+                recordsOut = db.DilluteByPointAndConvertUnits(recordsIn, zoom);
             }
             else //dillute by time
             {
                 const double HOUR = 3600, MINUTE = 60;
-                double[] intervals = new double[] { 15, 0.5*MINUTE, MINUTE, 10*MINUTE, 15*MINUTE, 0.5*HOUR, HOUR, 2*HOUR, 3*HOUR, 6*HOUR, 12*HOUR };
+                double[] intervals = new double[] { 1.0, 0.5*MINUTE, MINUTE, 10*MINUTE, 15*MINUTE, 0.5*HOUR, HOUR, 2*HOUR, 3*HOUR, 6*HOUR, 12*HOUR };
 
-                double combineIntervalInSec = intervals[(int)_sliderDillute.Value]; //min 10 seconds
+                double bucketIntervalInSec = intervals[(int)_sliderDillute.Value]; //min 10 seconds
                 if (_chkAutoZoom.IsChecked.Value)
                 {
-                    combineIntervalInSec = 15; 
+                    bucketIntervalInSec = 15; 
                     _sliderDillute.Value = 0;
-                    if(db.Records.Count > 1000)
+                    if(recordsIn.Count > 1000)
                     {
-                        TimeSpan range = db.Records.Last().Date - db.Records.First().Date;
-                        combineIntervalInSec = range.TotalSeconds / 1000;
-                        combineIntervalInSec = intervals.First(x => x >= combineIntervalInSec);
-                        _sliderDillute.Value = intervals.ToList().IndexOf(combineIntervalInSec);
+                        TimeSpan range = recordsIn.Last().Date - recordsIn.First().Date;
+                        bucketIntervalInSec = range.TotalSeconds / 1000;
+                        bucketIntervalInSec = intervals.First(x => x >= bucketIntervalInSec);
+                        _sliderDillute.Value = intervals.ToList().IndexOf(bucketIntervalInSec);
                     }
                 }
 
-                TimeSpan ts = TimeSpan.FromSeconds(combineIntervalInSec);
+                TimeSpan ts = TimeSpan.FromSeconds(bucketIntervalInSec);
                 _txtDilluteValue.Text = string.Format("Interval: {0}", ts.ToString(@"d\d\ hh\h\ mm\m\ ss\s"));
 
-                records = db.DilluteByTimeAndConvertUnits(combineIntervalInSec);
+                recordsOut = db.DilluteByTimeAndConvertUnits(recordsIn, bucketIntervalInSec);
             }
 
-            _txtDilluteResult.Text = string.Format("Count: {0} -> {1}", db.Records.Count, records.Count);
+            _txtDilluteResult.Text = string.Format("Count: {0} -> {1} -> {2}", db.Records.Count, recordsIn.Count, recordsOut.Count);
 
-            _chart1.UpdateChartTemperature(records, db.Units.GetTemperatureUnitsDesc());
-            _chart2.UpdateChartHumidity(records);
-            _chart3.UpdateChartAirPressure(records, db.Units.GetAirpressureUnitsDesc());
+            _chart1.UpdateChartTemperature(recordsOut, db.Units.GetTemperatureUnitsDesc());
+            _chart2.UpdateChartHumidity(recordsOut);
+            _chart3.UpdateChartAirPressure(recordsOut, db.Units.GetAirpressureUnitsDesc());
 
             this.Cursor = Cursors.Arrow;
 
@@ -348,6 +366,11 @@ namespace BarometerBT
         }
 
         private void _cmbAirPressureUnits_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateChart();
+        }
+
+        private void _sliderDays_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             UpdateChart();
         }

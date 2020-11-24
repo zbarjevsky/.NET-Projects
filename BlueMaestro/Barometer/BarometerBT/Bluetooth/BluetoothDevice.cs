@@ -37,7 +37,7 @@ namespace BarometerBT.Bluetooth
 
         public override string ToString()
         {
-            return string.Format("{0} <=> {1}", Name, BitConverter.ToString(BitConverter.GetBytes(Address).Reverse().ToArray()));
+            return string.Format("{0} ({1})", Name, ConvertAddress(Address));
         }
     }
 }

@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using Windows.Devices.Bluetooth;
@@ -20,15 +21,22 @@ namespace BarometerBT.Bluetooth
     //C:\Program Files(x86)\Reference Assemblies\Microsoft\Framework\.NETCore\v4.5\System.Runtime.WindowsRuntime.dll
     public class BluetoothConnection
     {
+        public Action<string> OnBMDeviceMsgReceivedAction = (info) => { };
+        public Action<TimeSpan> OnBMDeviceCheckAction = (elapsed) => { };
+        public Action<TimeSpan> OnBLEDeviceCheckAction = (elapsed) => { };
+
         // Create Bluetooth Listener
-        private BluetoothLEAdvertisementWatcher _watcher = new BluetoothLEAdvertisementWatcher();
+        private BluetoothLEAdvertisementWatcher _watcherBLE = new BluetoothLEAdvertisementWatcher();
         private Dictionary<ushort, DeviceRecordVM> _records = new Dictionary<ushort, DeviceRecordVM>();
         private Dictionary<ulong, BluetoothLEDevice> _blueMaestroDevices = new Dictionary<ulong, BluetoothLEDevice>();
 
-        private Stopwatch _stopper = new Stopwatch();
+        private Stopwatch _stopperBM = new Stopwatch();
+        private Stopwatch _watchDog = new Stopwatch();
 
         private BMRecordAverages _averages;
         private BMRecordCurrent _current;
+
+        private System.Threading.Timer _timer;
 
         public class MData
         {
@@ -64,34 +72,68 @@ namespace BarometerBT.Bluetooth
             }
         }
 
+        public BluetoothConnection()
+        {
+            //I need watch dog - to check bluetooth connection status once a 1 minute
+            _timer = new Timer((o) => 
+            {
+                TimeSpan tsBM = _stopperBM.Elapsed;
+                TimeSpan tsWD = _watchDog.Elapsed;
+
+                OnBMDeviceCheckAction(tsBM);
+                OnBLEDeviceCheckAction(tsWD);
+
+                //if no message more than one minute - restart BluetoothLEAdvertisementWatcher
+                if (tsWD.TotalMinutes > 1.0)
+                {
+                    try
+                    {
+                        Debug.WriteLine("Watch Dog Elapsed: " + tsWD);
+                        CommonTools.ErrorMessage("Restarting, Stuck: " + tsWD);
+                        StopBluetoothSearch();
+                        StartBluetoothSearch();
+                    }
+                    catch (Exception err)
+                    {
+                        Debug.WriteLine("Watch Dog Exception: " + err);
+                        CommonTools.ErrorMessage("Exception on Stuck: " + err);
+                    }
+                }
+            }, null, 10000, 60000);
+        }
+
         public void StartBluetoothSearch(int OutOfRangeTimeout = 5000, int SamplingInterval = 2000)
         {
-            _watcher.ScanningMode = BluetoothLEScanningMode.Active;
+            _watcherBLE.ScanningMode = BluetoothLEScanningMode.Active;
 
             // Only activate the watcher when we're recieving values >= -80
-            _watcher.SignalStrengthFilter.InRangeThresholdInDBm = -80;
+            _watcherBLE.SignalStrengthFilter.InRangeThresholdInDBm = -80;
 
             // Stop watching if the value drops below -90 (user walked away)
-            _watcher.SignalStrengthFilter.OutOfRangeThresholdInDBm = -90;
+            _watcherBLE.SignalStrengthFilter.OutOfRangeThresholdInDBm = -90;
 
             // Register callback for when we see an advertisements
-            _watcher.Received += OnAdvertisementReceived;
+            _watcherBLE.Received += OnAdvertisementReceived;
+
+            _watcherBLE.Stopped += OnWatcherStopped;
 
             // Wait 5 seconds to make sure the device is really out of range
-            _watcher.SignalStrengthFilter.OutOfRangeTimeout = TimeSpan.FromMilliseconds(OutOfRangeTimeout);
-            _watcher.SignalStrengthFilter.SamplingInterval = TimeSpan.FromMilliseconds(SamplingInterval);
+            _watcherBLE.SignalStrengthFilter.OutOfRangeTimeout = TimeSpan.FromMilliseconds(OutOfRangeTimeout);
+            _watcherBLE.SignalStrengthFilter.SamplingInterval = TimeSpan.FromMilliseconds(SamplingInterval);
 
             // Starting watching for advertisements
-            _watcher.Start();
+            _watcherBLE.Start();
         }
 
         public void StopBluetoothSearch()
         {
-            _watcher.Stop();
+            _watcherBLE.Stop();
         }
 
         private void OnAdvertisementReceived(BluetoothLEAdvertisementWatcher watcher, BluetoothLEAdvertisementReceivedEventArgs e)
         {
+            _watchDog.Restart(); //message received
+
             try
             {
                 //PrintDataSections(e);
@@ -103,6 +145,7 @@ namespace BarometerBT.Bluetooth
             catch (Exception err)
             {
                 Debug.WriteLine("ERROR: "+err);
+                CommonTools.ErrorMessage(err.ToString(), "OnAdvertisementReceived");
             }
         }
 
@@ -120,7 +163,7 @@ namespace BarometerBT.Bluetooth
                     if (device != null)
                     {
                         _blueMaestroDevices[e.BluetoothAddress] = device;
-                        _stopper.Restart();
+                        _stopperBM.Restart();
                     }
                 }
             }
@@ -169,13 +212,23 @@ namespace BarometerBT.Bluetooth
                                 recordsCount = "Records: " + BMDatabaseMap.INSTANCE.Map.First().Value.Records.Count + " \n";
 
                             string message = recordsCount;
-                            message += "Elapsed: " + _stopper.Elapsed.ToString(@"d\.hh\:mm\:ss") + " \n";
+                            message += "Elapsed: " + _stopperBM.Elapsed.ToString(@"d\.hh\:mm\:ss") + " \n";
                             message += "Timestamp: " + date.ToString("MMM dd, HH:mm:ss") + " \n";
-                            MainWindow.SetInfo(message + _current.ToString() + _averages.ToString());
+                            message += _current.ToString() + _averages.ToString();
+                            
+                            OnBMDeviceMsgReceivedAction(message);
                         }
                     }
                 }
             }
+        }
+
+        private void OnWatcherStopped(BluetoothLEAdvertisementWatcher sender, BluetoothLEAdvertisementWatcherStoppedEventArgs args)
+        {
+            _watcherBLE.Received -= OnAdvertisementReceived;
+            _watcherBLE.Stopped -= OnWatcherStopped;
+
+            CommonTools.InfoMessage("BluetoothLEAdvertisementWatcher stopped");
         }
 
         private void PrintDataSections(BluetoothLEAdvertisementReceivedEventArgs e)

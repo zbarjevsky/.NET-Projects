@@ -72,83 +72,109 @@ namespace BarometerBT.BlueMaestro
             }
         }
 
-        public List<BMRecordCurrent> DilluteByPointAndConvertUnits(int zoom)
+        public List<BMRecordCurrent> GetLastRecords(TimeSpan interval)
         {
-            lock (Records)
+            DateTime last = Records.Last().Date;
+            DateTime first = last - interval;
+
+            List<BMRecordCurrent> records = new List<BMRecordCurrent>();
+            for (int i = 0; i < Records.Count; i++)
+            {
+                if (Records[i].Date > first)
+                    records.Add(Records[i]);
+            }
+
+            return records;
+        }
+
+        public List<BMRecordCurrent> DilluteByPointAndConvertUnits(List<BMRecordCurrent> recordsIn, int zoom)
+        {
+            lock (recordsIn)
             {
                 int bucketSize = (int)(zoom);
-                if (bucketSize < 2 || bucketSize > (Records.Count / 3)) //all records
-                    return new List<BMRecordCurrent>(Records);
+                if (bucketSize < 2 || bucketSize > (recordsIn.Count / 3)) //all records
+                    return new List<BMRecordCurrent>(recordsIn);
 
-                List<BMRecordCurrent> records = new List<BMRecordCurrent>();
-                for (int i = 0; i < Records.Count - 1; i += bucketSize)
+                DateTime first = recordsIn.First().Date;
+                DateTime last = recordsIn.Last().Date;
+                TimeSpan interval = last - first;
+
+                List<BMRecordCurrent> recordsOut = new List<BMRecordCurrent>();
+                for (int i = 0; i < recordsIn.Count - 1; i += bucketSize)
                 {
-                    records.Add(GetAverageValue(i, bucketSize));
+                    recordsOut.Add(GetAverageValue(recordsIn, i, bucketSize));
                 }
 
                 //anyway add last record as is
-                records.Add(new BMRecordCurrent(Records.Last()));
+                recordsOut.Add(new BMRecordCurrent(recordsIn.Last()));
 
-                return records;
+                return recordsOut;
             }
         }
 
-        public List<BMRecordCurrent> DilluteByTimeAndConvertUnits(double combineIntervalInSec = 900) //default 15 min
+        public List<BMRecordCurrent> DilluteByTimeAndConvertUnits(List<BMRecordCurrent> recordsIn, double bucketIntervalInSec) //default 15 min
         {
-            lock (Records)
+            lock (recordsIn)
             {
-                if (Records.Count < 1000) //return all records, convert units
-                    return new List<BMRecordCurrent>(Records.Select(r => ConvertUnitsCurr(new BMRecordCurrent(r))));
+                if (recordsIn.Count < 1000 || bucketIntervalInSec <= 1.0) //return all records, convert units
+                    return new List<BMRecordCurrent>(recordsIn.Select(r => ConvertUnitsCurr(new BMRecordCurrent(r))));
 
-                DateTime first = Records.First().Date;
-                DateTime last = Records.Last().Date;
+                DateTime first = recordsIn.First().Date;
+                DateTime last = recordsIn.Last().Date;
                 TimeSpan interval = last - first;
 
-                int bucketStart = 0;
+                int i = 0;
+                int bucketStart = i;
                 int bucketIndex = 0;
 
-                List<BMRecordCurrent> records = new List<BMRecordCurrent>();
+                List<BMRecordCurrent> recordsOut = new List<BMRecordCurrent>();
 
-                int i = 0;
-                for (; i < Records.Count - 1; i++)
+                for (; i < recordsIn.Count - 1; i++)
                 {
-                    double secondsFromFirst = (Records[i].Date - first).TotalSeconds;
-                    int idx = (int)(secondsFromFirst / combineIntervalInSec);
-                    if (idx > bucketIndex)
+                    double secondsFromFirst = (recordsIn[i].Date - first).TotalSeconds;
+                    int idx = (int)(secondsFromFirst / bucketIntervalInSec);
+                    if (idx > bucketIndex) //next bucket
                     {
-                        records.Add(ConvertUnitsCurr(GetAverageValue(bucketStart, i - bucketStart)));
+                        recordsOut.Add(ConvertUnitsCurr(GetAverageValue(recordsIn, bucketStart, i - bucketStart)));
                         bucketStart = i;
                         bucketIndex = idx;
                     }
                 }
 
                 //last bucket
-                records.Add(ConvertUnitsCurr(GetAverageValue(bucketStart, i - bucketStart)));
+                recordsOut.Add(ConvertUnitsCurr(GetAverageValue(recordsIn, bucketStart, i - bucketStart)));
 
                 //always add last record as is
-                records.Add(ConvertUnitsCurr(new BMRecordCurrent(Records.Last())));
+                recordsOut.Add(ConvertUnitsCurr(new BMRecordCurrent(recordsIn.Last())));
 
-                return records;
+                return recordsOut;
             }
         }
 
-        private BMRecordCurrent GetAverageValue(int start, int bucketSize)
+        private static BMRecordCurrent GetAverageValue(List<BMRecordCurrent> records, int start, int bucketSize)
         {
-            if (start >= Records.Count)
+            if (start >= records.Count || bucketSize <= 0)
                 return new BMRecordCurrent();
 
-            BMRecordCurrent rec = new BMRecordCurrent(Records[start]);
+            BMRecordCurrent rec = new BMRecordCurrent(records[start]);
+            if (bucketSize == 1)
+                return rec;
 
             int count = 1;
-            for (int i = start + 1; i < Records.Count && i < (start + bucketSize); i++, count++)
+            for (int i = start + 1; i < records.Count && i < (start + bucketSize); i++, count++)
             {
-                rec += Records[i];
+                rec += records[i];
             }
             rec /= count;
 
-            TimeSpan interval = Records[start + count - 1].Date - Records[start].Date;
+            TimeSpan interval = records[start + count - 1].Date - records[start].Date;
             TimeSpan halfInterval = TimeSpan.FromMilliseconds(interval.TotalMilliseconds / 2);
-            rec.Date = Records[start].Date + halfInterval;
+            rec.Date = records[start].Date + halfInterval;
+
+            if(interval.TotalSeconds < 1.0)
+            {
+                Debug.WriteLine("Interval is too small: idx: {0} count: {1} time: {2}", start, bucketSize, interval);
+            }
 
             return rec;
         }

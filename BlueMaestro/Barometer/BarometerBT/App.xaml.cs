@@ -17,17 +17,13 @@ namespace BarometerBT
     /// </summary>
     public partial class App : Application
     {
-        BluetoothConnection _bt = new BluetoothConnection();
-
         public App()
         {
-            _bt.StartBluetoothSearch();
         }
 
         protected override void OnExit(ExitEventArgs e)
         {
             base.OnExit(e);
-            _bt.StopBluetoothSearch();
         }
     }
 }
