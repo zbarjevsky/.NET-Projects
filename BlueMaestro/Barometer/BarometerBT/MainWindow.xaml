@@ -50,33 +50,44 @@
                     </Viewbox>
                     <TextBlock Margin="0,6" Text="Auto Update" Background="LightGray" VerticalAlignment="Center"/>
                 </StackPanel>
-                <StackPanel Margin="6" Orientation="Vertical" VerticalAlignment="Top" Background="AliceBlue" >
-                    <TextBlock x:Name="_txtDilluteValue" MinWidth="100" Margin="6" 
-                               HorizontalAlignment="Left"
-                               Text="Dillute x1"/>
-                    <!--IsEnabled="{Binding IsChecked, ElementName=_chkAutoZoom, Converter={StaticResource InvertBoolConverter}}"-->
-                    <Slider x:Name="_sliderDillute" Margin="6" Width="200" Background="White" 
-                            HorizontalAlignment="Left"
-                            Maximum="10" Minimum="0" Value="0" SmallChange="1" LargeChange="1"
-                            ValueChanged="_sliderDillute_ValueChanged"
-                            IsSnapToTickEnabled="True" TickFrequency="1"/>
-                    <CheckBox x:Name="_chkAutoZoom" Content="Auto" Margin="6" VerticalAlignment="Center"
-                              IsChecked="True" Checked="_chkAutoZoom_Checked"/>
-                    <TextBlock x:Name="_txtDilluteResult" MinWidth="100" Margin="6" Text="0 => 0"/>
-                    <ComboBox x:Name="_cmbTemperatureUnits" SelectionChanged="_cmbTemperatureUnits_SelectionChanged" />
-                    <ComboBox x:Name="_cmbAirPressureUnits" SelectionChanged="_cmbAirPressureUnits_SelectionChanged" />
-                    <TextBlock x:Name="_txtLastNDays" MinWidth="100" Margin="6" 
-                               HorizontalAlignment="Left"
-                               Text="Show last ??? days"/>
-                    <Slider x:Name="_sliderLastNDays" Margin="6" Width="200" Background="White" 
-                            HorizontalAlignment="Left"
-                            Maximum="10" Minimum="0" Value="10" SmallChange="1" LargeChange="1" 
-                            TickFrequency="1" TickPlacement="Both" IsSnapToTickEnabled="True"
-                            ValueChanged="_sliderDays_ValueChanged" />
+                <StackPanel Margin="6" Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Left"
+                            Width="400" Background="AliceBlue" >
+                    <ComboBox x:Name="_cmbDays" Margin="6" SelectionChanged="OnUpdateChart">
+                        <ComboBoxItem Content="Show Last 6 hours" Tag="0.25"/>    
+                        <ComboBoxItem Content="Show Last 12 hours" Tag="0.5"/>    
+                        <ComboBoxItem Content="Show Last 24 hours" Tag="1"/>    
+                        <ComboBoxItem Content="Show Last 3 days" Tag="3"/>    
+                        <ComboBoxItem Content="Show Last 7 days" Tag="7"/>    
+                        <ComboBoxItem Content="Show Last 14 days" Tag="14"/>    
+                        <ComboBoxItem Content="Show Last 30 days" Tag="30"/>
+                        <ComboBoxItem Content="Show Last 90 days" Tag="90"/>
+                        <ComboBoxItem Content="Show Last 180 days" Tag="180"/>
+                        <ComboBoxItem Content="Show Last 365 days" Tag="365"/>
+                        <ComboBoxItem Content="Show All Available Range" Tag="3000" IsSelected="True"/>    
+                    </ComboBox>
+                   <StackPanel Orientation="Horizontal">
+                        <CheckBox x:Name="_chkAutoZoom" Content="Auto" Margin="6" VerticalAlignment="Center"
+                                  IsChecked="True" Checked="OnUpdateChart"/>
+                        <ComboBox x:Name="_cmbInterval" Margin="6" SelectionChanged="_cmbInterval_SelectionChanged">
+                            <ComboBoxItem Content="Sample Interval: All Values" Tag="0.01" IsSelected="True"/>
+                            <ComboBoxItem Content="Sample Interval: 30 seconds" Tag="0.5"/>
+                            <ComboBoxItem Content="Sample Interval: 1 minute" Tag="1"/>
+                            <ComboBoxItem Content="Sample Interval: 10 minutes" Tag="10"/>
+                            <ComboBoxItem Content="Sample Interval: 15 minutes" Tag="15"/>
+                            <ComboBoxItem Content="Sample Interval: 30 minutes" Tag="30"/>
+                            <ComboBoxItem Content="Sample Interval: 1 hour" Tag="60"/>
+                            <ComboBoxItem Content="Sample Interval: 2 hours" Tag="120"/>
+                            <ComboBoxItem Content="Sample Interval: 3 hours" Tag="180"/>
+                            <ComboBoxItem Content="Sample Interval: 6 hours" Tag="360"/>
+                            <ComboBoxItem Content="Sample Interval: 12 hours" Tag="720"/>
+                        </ComboBox>
+                    </StackPanel>
+                    <TextBlock x:Name="_txtDilluteResult" MinWidth="100" Margin="6" Text="All: 0 -> Days: 0 -> Interval: 0"/>
+                    <ComboBox x:Name="_cmbTemperatureUnits" Margin="6" SelectionChanged="OnUpdateChart" />
+                    <ComboBox x:Name="_cmbAirPressureUnits" Margin="6" SelectionChanged="OnUpdateChart" />
                 </StackPanel>
                 
             </StackPanel>
-            
         </ScrollViewer>
         <TextBox x:Name="_txtInfo" Grid.Row="1" Margin="6" Background="LightYellow" />
         <WindowsFormsHost Grid.Row="0" Grid.Column="1" Margin="6">

@@ -1,6 +1,7 @@
 ﻿using BarometerBT.Bluetooth;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -44,6 +45,27 @@ namespace BarometerBT.BlueMaestro
             }
 
             return Map[db.Device.Address];
+        }
+
+        public void Load()
+        {
+            const string PATTERN = "BMDatabase_*_Main.xml";
+            List<string> files = new List<string>(Directory.GetFiles(BMDatabase.DataFolder, PATTERN));
+            files.Sort();
+
+            foreach (string file in files)
+            {
+                BMDatabase db = BMDatabase.Open(file);
+                Merge(db);
+            }
+        }
+
+        public void Save()
+        {
+            foreach (BMDatabase db in Map.Values)
+            {
+                db.SaveMain();
+            }
         }
     }
 }

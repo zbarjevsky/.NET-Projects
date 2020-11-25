@@ -13,12 +13,25 @@ namespace BarometerBT.BlueMaestro
 {
     public class BMDatabase
     {
+        public const int MIN_RECORDS_TO_FILTER = 1000;
+
         public BluetoothDevice Device { get; set; }
 
         public List<BMRecordCurrent> Records { get; } = new List<BMRecordCurrent>();
 
         [XmlIgnore]
         public UnitsDescriptor Units { get; set; } = new UnitsDescriptor();
+
+        public static string DataFolder
+        {
+            get
+            {
+                string commonPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
+                string dataFolder = Path.Combine(commonPath, "MarkZ", "BarometerBT");
+                Directory.CreateDirectory(dataFolder);
+                return dataFolder;
+            }
+        }
 
         //for serialization
         public BMDatabase()
@@ -116,7 +129,7 @@ namespace BarometerBT.BlueMaestro
         {
             lock (recordsIn)
             {
-                if (recordsIn.Count < 1000 || bucketIntervalInSec <= 1.0) //return all records, convert units
+                if (recordsIn.Count < MIN_RECORDS_TO_FILTER || bucketIntervalInSec <= 1.0) //return all records, convert units
                     return new List<BMRecordCurrent>(recordsIn.Select(r => ConvertUnitsCurr(new BMRecordCurrent(r))));
 
                 DateTime first = recordsIn.First().Date;
@@ -179,16 +192,20 @@ namespace BarometerBT.BlueMaestro
             return rec;
         }
 
-        public void Save()
+        public void SaveBackupWithDate()
         {
             string date = DateTime.Now.ToString("yyyy_MM_dd-HH_mm_ss");
             string fileName = string.Format("BMDatabase_{0}_{1}_{2}.xml", Device.Name, Device.Address, date);
-            string commonPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            string dataFolder = Path.Combine(commonPath, "MarkZ", "BarometerBT");
-            Directory.CreateDirectory(dataFolder);
-            
-            fileName = Path.Combine(dataFolder, fileName);
-            
+            fileName = Path.Combine(DataFolder, fileName);
+
+            Save(fileName);
+        }
+
+        public void SaveMain()
+        {
+            string fileName = string.Format("BMDatabase_{0}_{1}_Main.xml", Device.Name, Device.Address);
+            fileName = Path.Combine(DataFolder, fileName);
+
             Save(fileName);
         }
 

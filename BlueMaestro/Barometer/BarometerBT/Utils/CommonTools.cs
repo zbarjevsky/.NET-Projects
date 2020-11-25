@@ -25,6 +25,11 @@ namespace BarometerBT.Utils
                 Application.Current.Dispatcher.Invoke(action, priority);
         }
 
+        public static string TimeSpanToString(TimeSpan ts)
+        {
+            return ts.ToString(@"d\d\ hh\h\ mm\m\ ss\s");
+        }
+
         public static void WriteInfoLine([CallerMemberName] string caller = "", [CallerFilePath] string file = "")
         {
             file = Path.GetFileName(file);

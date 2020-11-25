@@ -47,6 +47,10 @@ namespace BarometerBT
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            BMDatabaseMap.INSTANCE.Load();
+            UpdateDeviceList();
+            UpdateChart();
+
             _btWatcher.OnBMDeviceMsgReceivedAction = (info) => { SetInfo(info); };
             _btWatcher.OnBMDeviceCheckAction = (elapsed) => { UpdateDeviceList(); };
             _btWatcher.StartBluetoothSearch();
@@ -57,7 +61,7 @@ namespace BarometerBT
         private void Window_Closed(object sender, EventArgs e)
         {
             _btWatcher.StopBluetoothSearch();
-            SaveButton_Click(sender, null);
+            BMDatabaseMap.INSTANCE.Save();
         }
 
         private void _listDevices_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -86,8 +90,11 @@ namespace BarometerBT
                 MainWindow wnd = (Application.Current.MainWindow as MainWindow);
                 if (wnd != null)
                 {
-                    wnd.UpdateDeviceList();
-                    wnd.UpdateChart(r);
+                    if(wnd._chkAutoUpdate.IsChecked.Value)
+                    {
+                        wnd.UpdateDeviceList();
+                        wnd.UpdateChart(r);
+                    }
                 }
             });
         }
@@ -181,56 +188,46 @@ namespace BarometerBT
             db.Units.TemperatureUnits = (TemperatureUnits)_cmbTemperatureUnits.SelectedItem;
             db.Units.AirPressureUnits = (AirPressureUnits)_cmbAirPressureUnits.SelectedItem;
 
-            double[] daysValues = new double[] { 0.25, 0.5, 1, 3, 7, 14, 30, 90, 180, 365, 3000 };
-            TimeSpan daysBack = TimeSpan.FromDays(daysValues[(int)_sliderLastNDays.Value]);
-            if(daysBack.TotalHours < 24)
-                _txtLastNDays.Text = $"Show Last {daysBack.Hours} hours";
-            else
-                _txtLastNDays.Text = $"Show Last {daysBack.Days} days";
+            double days = double.Parse(((ComboBoxItem)_cmbDays.SelectedItem).Tag.ToString());
+            TimeSpan daysBack = TimeSpan.FromDays(days);
 
             List<BMRecordCurrent> recordsIn = db.GetLastRecords(daysBack);
 
-            bool isIntervalZoom = false;
             List<BMRecordCurrent> recordsOut;
-            if (isIntervalZoom)
+            //bool isIntervalZoom = false;
+            //if (isIntervalZoom)
+            //{
+            //    if (_chkAutoZoom.IsChecked.Value)
+            //    {
+            //        int bucketSize = db.Records.Count / 1000; //1000 records after zoom
+            //        _sliderDillute.Value = Math.Ceiling(Math.Pow(bucketSize, 0.5));
+            //    }
+
+            //    int zoom = (int)Math.Pow(2, _sliderDillute.Value);
+            //    _txtDilluteValue.Text = string.Format("Dillute x{0:0.0}", zoom);
+
+            //    recordsOut = db.DilluteByPointAndConvertUnits(recordsIn, zoom);
+            //}
+            //else //dillute by time
             {
+                double bucketIntervalInSec = 60 * double.Parse(((ComboBoxItem)_cmbInterval.SelectedItem).Tag.ToString());
                 if (_chkAutoZoom.IsChecked.Value)
                 {
-                    int bucketSize = db.Records.Count / 1000; //1000 records after zoom
-                    _sliderDillute.Value = Math.Ceiling(Math.Pow(bucketSize, 0.5));
-                }
-
-                int zoom = (int)Math.Pow(2, _sliderDillute.Value);
-                _txtDilluteValue.Text = string.Format("Dillute x{0:0.0}", zoom);
-
-                recordsOut = db.DilluteByPointAndConvertUnits(recordsIn, zoom);
-            }
-            else //dillute by time
-            {
-                const double HOUR = 3600, MINUTE = 60;
-                double[] intervals = new double[] { 1.0, 0.5*MINUTE, MINUTE, 10*MINUTE, 15*MINUTE, 0.5*HOUR, HOUR, 2*HOUR, 3*HOUR, 6*HOUR, 12*HOUR };
-
-                double bucketIntervalInSec = intervals[(int)_sliderDillute.Value]; //min 10 seconds
-                if (_chkAutoZoom.IsChecked.Value)
-                {
-                    bucketIntervalInSec = 15; 
-                    _sliderDillute.Value = 0;
-                    if(recordsIn.Count > 1000)
+                    bucketIntervalInSec = 15;
+                    _cmbInterval.SelectedIndex = 0; //all
+                    if(recordsIn.Count >= BMDatabase.MIN_RECORDS_TO_FILTER)
                     {
                         TimeSpan range = recordsIn.Last().Date - recordsIn.First().Date;
-                        bucketIntervalInSec = range.TotalSeconds / 1000;
-                        bucketIntervalInSec = intervals.First(x => x >= bucketIntervalInSec);
-                        _sliderDillute.Value = intervals.ToList().IndexOf(bucketIntervalInSec);
+                        bucketIntervalInSec = range.TotalSeconds / 1000; //interval in seconds to get 1000 points
+                        bucketIntervalInSec = GetClosestIntervalAndSetSelectInComboBox(bucketIntervalInSec);
                     }
                 }
-
-                TimeSpan ts = TimeSpan.FromSeconds(bucketIntervalInSec);
-                _txtDilluteValue.Text = string.Format("Interval: {0}", ts.ToString(@"d\d\ hh\h\ mm\m\ ss\s"));
 
                 recordsOut = db.DilluteByTimeAndConvertUnits(recordsIn, bucketIntervalInSec);
             }
 
-            _txtDilluteResult.Text = string.Format("Count: {0} -> {1} -> {2}", db.Records.Count, recordsIn.Count, recordsOut.Count);
+            _txtDilluteResult.Text = string.Format("Count: All: {0} -> Days: {1} -> Interval: {2}", 
+                db.Records.Count, recordsIn.Count, recordsOut.Count);
 
             _chart1.UpdateChartTemperature(recordsOut, db.Units.GetTemperatureUnitsDesc());
             _chart2.UpdateChartHumidity(recordsOut);
@@ -239,6 +236,17 @@ namespace BarometerBT
             this.Cursor = Cursors.Arrow;
 
             _isInUpdate = false;
+        }
+
+        private double GetClosestIntervalAndSetSelectInComboBox(double interval)
+        {
+            List<double> intervals = _cmbInterval.Items.Cast<ComboBoxItem>().Select(item => 60.0 * double.Parse(item.Tag.ToString())).ToList();
+            
+            int index = intervals.FindIndex(x => x > interval);
+
+            _cmbInterval.SelectedIndex = index;
+
+            return intervals[index];
         }
 
         private void ClearChart()
@@ -259,7 +267,7 @@ namespace BarometerBT
             this.Cursor = Cursors.Wait;
             foreach (BMDatabase db in BMDatabaseMap.INSTANCE.Map.Values)
             {
-                db.Save();
+                db.SaveBackupWithDate();
             }
             this.Cursor = Cursors.Arrow;
         }
@@ -342,36 +350,20 @@ namespace BarometerBT
             }
         }
 
-        private void _sliderDillute_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if(IsUserDragged(_sliderDillute))
-                _chkAutoZoom.IsChecked = false;
-
-            UpdateChart();
-        }
-
         private static bool IsUserDragged(UIElement e)
         {
             return e.IsFocused || e.IsMouseDirectlyOver || e.IsMouseOver || e.IsKeyboardFocused || e.IsKeyboardFocusWithin;
         }
 
-        private void _chkAutoZoom_Checked(object sender, RoutedEventArgs e)
+        private void OnUpdateChart(object sender, RoutedEventArgs e)
         {
             UpdateChart();
         }
 
-        private void _cmbTemperatureUnits_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void _cmbInterval_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            UpdateChart();
-        }
-
-        private void _cmbAirPressureUnits_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            UpdateChart();
-        }
-
-        private void _sliderDays_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
+            if (IsUserDragged(_cmbInterval))
+                _chkAutoZoom.IsChecked = false;
             UpdateChart();
         }
     }
