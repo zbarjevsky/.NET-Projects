@@ -1,4 +1,5 @@
-﻿using SDKTemplate;
+﻿using BarometerBT.Utils;
+using SDKTemplate;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -32,12 +33,12 @@ namespace BarometerBT.Bluetooth
 
                 if (bluetoothLeDevice == null)
                 {
-                    Debug.WriteLine("Failed to connect to device.", NotifyType.ErrorMessage);
+                    Log.d("Failed to connect to device.", NotifyType.ErrorMessage);
                 }
             }
             catch (Exception ex) when (ex.HResult == E_DEVICE_NOT_AVAILABLE)
             {
-                Debug.WriteLine("Bluetooth radio is not on.", NotifyType.ErrorMessage);
+                Log.d("Bluetooth radio is not on.", NotifyType.ErrorMessage);
             }
 
             if (bluetoothLeDevice != null)
@@ -52,15 +53,15 @@ namespace BarometerBT.Bluetooth
                     _services.Clear();
                     _services.AddRange(result.Services);
 
-                    Debug.WriteLine(String.Format("Found {0} services", _services.Count), NotifyType.StatusMessage);
+                    Log.d(String.Format("Found {0} services", _services.Count), NotifyType.StatusMessage);
                     foreach (var service in _services)
                     {
-                        Debug.WriteLine("SERVICE: " + DisplayHelpers.GetServiceName(service));
+                        Log.d("SERVICE: " + DisplayHelpers.GetServiceName(service));
                     }
                 }
                 else
                 {
-                    Debug.WriteLine("Device unreachable", NotifyType.ErrorMessage);
+                    Log.d("Device unreachable", NotifyType.ErrorMessage);
                 }
             }
         }

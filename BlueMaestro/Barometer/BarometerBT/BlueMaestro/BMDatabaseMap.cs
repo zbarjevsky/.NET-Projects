@@ -12,21 +12,45 @@ namespace BarometerBT.BlueMaestro
     {
         public Action<BMRecordCurrent> OnRecordAddedAction = (r) => { MainWindow.UpdateAllAsync(r); };
 
-        public Dictionary<ulong, BMDatabase> Map { get; } = new Dictionary<ulong, BMDatabase>();
+        private Dictionary<ulong, BMDatabase> _map { get; } = new Dictionary<ulong, BMDatabase>();
 
-        public List<BMRecordCurrent> Records(ulong address) { return Map[address].Records; } 
 
         public static readonly BMDatabaseMap INSTANCE = new BMDatabaseMap();
 
         //private constructor - to restrict instance
         private BMDatabaseMap() { }
 
+        public bool Contains(ulong address) { return _map.ContainsKey(address); }
+        public List<BMDatabase> Databases { get { return _map.Values.ToList(); } }
+        public List<BMRecordCurrent> Records(ulong address) { return _map[address].Records; } 
+
+        public BMDatabase this[ulong address]
+        {
+            get
+            {
+                if (_map.ContainsKey(address))
+                    return _map[address];
+                return null;
+            }
+        }
+
+        public BMDatabase this[BluetoothDevice device]
+        {
+            get
+            {
+                if (_map.ContainsKey(device.Address))
+                    return _map[device.Address];
+                return null;
+            }
+        }
+
+
         public BMRecordCurrent AddRecord(BluetoothDevice device, short rssi, DateTime recordDate, byte[] data)
         {
-            if (!Map.ContainsKey(device.Address))
-                Map[device.Address] = new BMDatabase(device);
+            if (!_map.ContainsKey(device.Address))
+                _map[device.Address] = new BMDatabase(device);
 
-            var record = Map[device.Address].AddRecord(device, rssi, recordDate, data);
+            var record = _map[device.Address].AddRecord(device, rssi, recordDate, data);
 
             OnRecordAddedAction(record);
 
@@ -35,16 +59,16 @@ namespace BarometerBT.BlueMaestro
 
         public BMDatabase Merge(BMDatabase db)
         {
-            if (!Map.ContainsKey(db.Device.Address))
+            if (!_map.ContainsKey(db.Device.Address))
             {
-                Map[db.Device.Address] = db;
+                _map[db.Device.Address] = db;
             }
             else
             {
-                Map[db.Device.Address].Merge(db);
+                _map[db.Device.Address].Merge(db);
             }
 
-            return Map[db.Device.Address];
+            return _map[db.Device.Address];
         }
 
         public void Load()
@@ -62,7 +86,7 @@ namespace BarometerBT.BlueMaestro
 
         public void Save()
         {
-            foreach (BMDatabase db in Map.Values)
+            foreach (BMDatabase db in _map.Values)
             {
                 db.SaveMain();
             }

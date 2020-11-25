@@ -124,7 +124,7 @@ namespace BarometerBT
         {
             CommonTools.ExecuteOnUiThreadInvoke(() => 
             { 
-                foreach (BMDatabase db in BMDatabaseMap.INSTANCE.Map.Values)
+                foreach (BMDatabase db in BMDatabaseMap.INSTANCE.Databases)
                 {
                     UpdateOrAddBMDeviceRecordVM(db);
                 }
@@ -226,8 +226,8 @@ namespace BarometerBT
                 recordsOut = db.DilluteByTimeAndConvertUnits(recordsIn, bucketIntervalInSec);
             }
 
-            _txtDilluteResult.Text = string.Format("Count: All: {0} -> Days: {1} -> Interval: {2}", 
-                db.Records.Count, recordsIn.Count, recordsOut.Count);
+            _txtDilluteResult.Text = string.Format("Count Total: {0} -> {1}: {2} -> Interval: {3}", 
+                db.Records.Count, _cmbDays.Text, recordsIn.Count, recordsOut.Count);
 
             _chart1.UpdateChartTemperature(recordsOut, db.Units.GetTemperatureUnitsDesc());
             _chart2.UpdateChartHumidity(recordsOut);
@@ -265,7 +265,7 @@ namespace BarometerBT
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             this.Cursor = Cursors.Wait;
-            foreach (BMDatabase db in BMDatabaseMap.INSTANCE.Map.Values)
+            foreach (BMDatabase db in BMDatabaseMap.INSTANCE.Databases)
             {
                 db.SaveBackupWithDate();
             }
@@ -317,7 +317,7 @@ namespace BarometerBT
         {
             Scenario2_Client client = new Scenario2_Client();
             
-            BMDatabase db = BMDatabaseMap.INSTANCE.Map.FirstOrDefault().Value;
+            BMDatabase db = GetSelectedDB();
 
             if (db != null)
             {

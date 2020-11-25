@@ -64,8 +64,8 @@ namespace BarometerBT.BlueMaestro
             this.referenceDateRawNumber = ((0xFF & sData[24 - offset]) << 24) | ((0xFF & sData[25 - offset]) << 16) | ((0xFF & sData[26 - offset]) << 8) | (0xFF & sData[27 - offset]);
             Log.d("BMTempHumi", "referenceDateNumber" + this.referenceDateRawNumber);
 
-            Debug.WriteLine("AVG24 Temperature: " + Avg24.Temperature);
-            Debug.WriteLine("AVG24 AirPressure: " + Avg24.AirPressure);
+            Log.d("AVG24 Temperature: " + Avg24.Temperature);
+            Log.d("AVG24 AirPressure: " + Avg24.AirPressure);
         }
 
         public override string ToString()

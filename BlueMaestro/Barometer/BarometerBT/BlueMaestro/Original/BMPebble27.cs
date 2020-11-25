@@ -99,8 +99,8 @@ namespace BarometerBT.BlueMaestro.Original
 
             this.numBreach = convertToInt8(mData[16 - offset]);
 
-            Debug.WriteLine("Temperature: " + currTemperature);
-            Debug.WriteLine("AirPressure: " + currPressure);
+            Log.d("Temperature: " + currTemperature);
+            Log.d("AirPressure: " + currPressure);
         }
 
         public void Set_sData(byte [] sData)
@@ -133,8 +133,8 @@ namespace BarometerBT.BlueMaestro.Original
             this.referenceDateRawNumber = ((0xFF & sData[24 - offset]) << 24) | ((0xFF & sData[25 - offset]) << 16) | ((0xFF & sData[26 - offset]) << 8) | (0xFF & sData[27 - offset]);
             Log.d("BMTempHumi", "referenceDateNumber" + this.referenceDateRawNumber);
 
-            Debug.WriteLine("AVG24 Temperature: " + avg24Temperature);
-            Debug.WriteLine("AVG24 AirPressure: " + avg24Pressure);
+            Log.d("AVG24 Temperature: " + avg24Temperature);
+            Log.d("AVG24 AirPressure: " + avg24Pressure);
         }
 
         public override void updateWithData(int rssi, String name, byte[] mData, byte[] sData)

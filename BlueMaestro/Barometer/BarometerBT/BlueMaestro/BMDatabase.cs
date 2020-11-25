@@ -26,10 +26,7 @@ namespace BarometerBT.BlueMaestro
         {
             get
             {
-                string commonPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-                string dataFolder = Path.Combine(commonPath, "MarkZ", "BarometerBT");
-                Directory.CreateDirectory(dataFolder);
-                return dataFolder;
+                return Log.DataFolder;
             }
         }
 
@@ -186,7 +183,7 @@ namespace BarometerBT.BlueMaestro
 
             if(interval.TotalSeconds < 1.0)
             {
-                Debug.WriteLine("Interval is too small: idx: {0} count: {1} time: {2}", start, bucketSize, interval);
+                Log.d("Interval is too small: idx: {0} count: {1} time: {2}", start, bucketSize, interval);
             }
 
             return rec;
@@ -226,7 +223,7 @@ namespace BarometerBT.BlueMaestro
             }
             catch (Exception err)
             {
-                Debug.WriteLine("File: {0} Error: {1}", fileName, err);
+                Log.e("File: {0} Error: {1}", fileName, err);
                 return null;
             }
         }

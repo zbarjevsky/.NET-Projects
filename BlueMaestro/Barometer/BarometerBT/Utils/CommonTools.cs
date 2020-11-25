@@ -27,13 +27,20 @@ namespace BarometerBT.Utils
 
         public static string TimeSpanToString(TimeSpan ts)
         {
-            return ts.ToString(@"d\d\ hh\h\ mm\m\ ss\s");
+            if (ts.TotalMinutes < 1.0)
+                return ts.ToString(@"ss\.fff\s");
+            if (ts.TotalHours < 1.0)
+                return ts.ToString(@"mm\m\ ss\.fff\s");
+            if (ts.TotalDays < 1.0)
+                return ts.ToString(@"hh\h\ mm\m\ ss\.fff\s");
+
+            return ts.ToString(@"d\d\ hh\h\ mm\m\ ss\.fff\s");
         }
 
         public static void WriteInfoLine([CallerMemberName] string caller = "", [CallerFilePath] string file = "")
         {
             file = Path.GetFileName(file);
-            System.Diagnostics.Debug.WriteLine("=> Caller: " + caller + ", file: " + file);
+            Log.i("=> Caller: " + caller + ", file: " + file);
         }
 
         public static bool AskForSucceded(string title)

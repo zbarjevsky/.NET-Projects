@@ -5,6 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
+using BarometerBT.Utils;
+
 namespace BarometerBT.Bluetooth
 {
     /**
@@ -97,7 +100,7 @@ namespace BarometerBT.Bluetooth
             {
                 //Log.d("Utility", "Date parsing failed");
                 // TODO Auto-generated catch block
-                Debug.WriteLine(e.ToString());
+                Log.e(e.ToString());
             }
             return referenceDateString;
         }

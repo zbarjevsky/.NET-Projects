@@ -164,7 +164,7 @@ namespace BarometerBT.Bluetooth
             {
                 lock (this)
                 {
-                    Debug.WriteLine(String.Format("Added {0}{1}", deviceInfo.Id, deviceInfo.Name));
+                    Log.d(String.Format("Added {0}{1}", deviceInfo.Id, deviceInfo.Name));
 
                     // Protect against race condition if the task runs after the app stopped the deviceWatcher.
                     if (sender == deviceWatcher)
@@ -196,7 +196,7 @@ namespace BarometerBT.Bluetooth
             {
                 lock (this)
                 {
-                    Debug.WriteLine(String.Format("Updated {0}{1}", deviceInfoUpdate.Id, ""));
+                    Log.d(String.Format("Updated {0}{1}", deviceInfoUpdate.Id, ""));
 
                     // Protect against race condition if the task runs after the app stopped the deviceWatcher.
                     if (sender == deviceWatcher)
@@ -232,7 +232,7 @@ namespace BarometerBT.Bluetooth
             {
                 lock (this)
                 {
-                    Debug.WriteLine(String.Format("Removed {0}{1}", deviceInfoUpdate.Id, ""));
+                    Log.d(String.Format("Removed {0}{1}", deviceInfoUpdate.Id, ""));
 
                     // Protect against race condition if the task runs after the app stopped the deviceWatcher.
                     if (sender == deviceWatcher)

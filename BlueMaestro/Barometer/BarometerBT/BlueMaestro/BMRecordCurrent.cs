@@ -83,8 +83,8 @@ namespace BarometerBT.BlueMaestro
 
             this.numBreach = CommonTools.convertToInt8(mData[16 - offset]);
 
-            Debug.WriteLine("Temperature: " + Temperature);
-            Debug.WriteLine("AirPressure: " + AirPressure);
+            Log.d("Temperature: " + Temperature);
+            Log.d("AirPressure: " + AirPressure);
         }
 
         public void Max(BMRecordCurrent r)
