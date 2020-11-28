@@ -181,6 +181,8 @@ namespace BarometerBT
                 return;
             _isInUpdate = true;
 
+            DateTime startUpdateTime = DateTime.Now;
+
             this.Title = "Barometer - " + db.Device;
 
             this.Cursor = Cursors.AppStarting;
@@ -214,7 +216,7 @@ namespace BarometerBT
                 if (_chkAutoZoom.IsChecked.Value)
                 {
                     bucketIntervalInSec = 15;
-                    _cmbInterval.SelectedIndex = 0; //all
+                    //_cmbInterval.SelectedIndex = 0; //all
                     if(recordsIn.Count >= BMDatabase.MIN_RECORDS_TO_FILTER)
                     {
                         TimeSpan range = recordsIn.Last().Date - recordsIn.First().Date;
@@ -223,15 +225,19 @@ namespace BarometerBT
                     }
                 }
 
+                ////////
+                //
                 recordsOut = db.DilluteByTimeAndConvertUnits(recordsIn, bucketIntervalInSec);
             }
 
-            _txtDilluteResult.Text = string.Format("Count Total: {0} -> {1}: {2} -> Interval: {3}", 
-                db.Records.Count, _cmbDays.Text, recordsIn.Count, recordsOut.Count);
+            BMDeviceRecordVM dev = _listDevices.SelectedItem as BMDeviceRecordVM;
+            _chart1.UpdateChartTemperature(recordsOut, db.Units.GetTemperatureUnitsDesc(), dev.IsActive);
+            _chart2.UpdateChartHumidity(recordsOut, db.Units.GetHumidityUinitsDesc(), dev.IsActive);
+            _chart3.UpdateChartAirPressure(recordsOut, db.Units.GetAirpressureUnitsDesc(), dev.IsActive);
 
-            _chart1.UpdateChartTemperature(recordsOut, db.Units.GetTemperatureUnitsDesc());
-            _chart2.UpdateChartHumidity(recordsOut);
-            _chart3.UpdateChartAirPressure(recordsOut, db.Units.GetAirpressureUnitsDesc());
+            TimeSpan tsElapsed = DateTime.Now - startUpdateTime;
+            _txtDilluteResult.Text = string.Format("Total: {0:###,###} -> {1:###,###} -> {2} ({3:0.0} ms)", 
+                db.Records.Count, recordsIn.Count, recordsOut.Count, tsElapsed.TotalMilliseconds);
 
             this.Cursor = Cursors.Arrow;
 
@@ -255,9 +261,9 @@ namespace BarometerBT
                 return;
             _isInUpdate = true;
 
-            _chart1.UpdateChartTemperature(null, "");
-            _chart2.UpdateChartHumidity(null, "");
-            _chart3.UpdateChartAirPressure(null, "");
+            _chart1.UpdateChartTemperature(null, "", false);
+            _chart2.UpdateChartHumidity(null, "", false);
+            _chart3.UpdateChartAirPressure(null, "", false);
 
             _isInUpdate = false;
         }

@@ -103,7 +103,7 @@
       <DependentUpon>WeatherChartUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Utils\BMLineChart.cs" />
-    <Compile Include="Utils\Chart.cs" />
+    <Compile Include="Utils\BMChart.cs" />
     <Compile Include="Utils\CommonTools.cs" />
     <Compile Include="Utils\Entry.cs" />
     <Compile Include="Utils\InvertBoolConverter.cs" />

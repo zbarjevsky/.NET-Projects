@@ -134,14 +134,14 @@ namespace BarometerBT.BlueMaestro.Original
          * @param chart The chart to setup
          * @param command The command sent to the device
          */
-        public abstract void setupChart(Chart chart, String command);
+        public abstract void setupChart(BMChart chart, String command);
 
         /**
          * Updates the chart with data
          * @param chart The chart to update
          * @param text The data to update the chart with
          */
-        public abstract void updateChart(Chart chart, String text);
+        public abstract void updateChart(BMChart chart, String text);
 
         /**
          * Updates the device's view group to update its display in the device element list

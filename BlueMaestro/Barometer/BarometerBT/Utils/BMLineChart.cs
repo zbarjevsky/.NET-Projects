@@ -7,7 +7,7 @@ using System.Windows.Media;
 
 namespace BarometerBT.Utils
 {
-    public class BMLineChart : Chart
+    public class BMLineChart : BMChart
     {
         internal int getEntryCount()
         {

@@ -129,7 +129,7 @@ namespace BarometerBT.BlueMaestro.UX
             Temperature.Units = db.Units.GetTemperatureUnitsDesc();
 
             AirHumidity.Value = (r.AirHumidity).ToString("0.0");
-            AirHumidity.Units = UnitsDescriptor.UNITS_HUM;
+            AirHumidity.Units = UnitsDescriptor.UNITS_RH;
 
             AirPressure.Value = db.Units.ConvertPressure(r.AirPressure).ToString("0.0");
             AirPressure.Units = db.Units.GetAirpressureUnitsDesc();

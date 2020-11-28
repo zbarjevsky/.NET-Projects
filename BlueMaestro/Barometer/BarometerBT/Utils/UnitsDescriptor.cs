@@ -21,13 +21,13 @@ namespace BarometerBT.Utils
 
     public class UnitsDescriptor
     {
-        public const String UNITSF = "ºF";
-        public const String UNITSC = "ºC";
+        public const String UNITS_F = "ºF";
+        public const String UNITS_C = "ºC";
 
         public const String UNITS_HG = "InHg";
         public const String UNITS_MB = "mBar";
         public const String UNITS_PA = "kPa";
-        public const String UNITS_HUM = "%RH";
+        public const String UNITS_RH = "%RH";
 
         public TemperatureUnits TemperatureUnits { get; set; } = TemperatureUnits.Celcius;
 
@@ -43,15 +43,20 @@ namespace BarometerBT.Utils
             return Enum.GetValues(typeof(AirPressureUnits)).Cast<AirPressureUnits>();
         }
 
+        public string GetHumidityUinitsDesc()
+        {
+            return " " + UNITS_RH;
+        }
+
         public string GetTemperatureUnitsDesc()
         {
             switch (TemperatureUnits)
             {
                 case TemperatureUnits.Farenheit:
-                    return " ºF";
+                    return " " + UNITS_F;
                 case TemperatureUnits.Celcius:
                 default:
-                    return " ºC";
+                    return " " + UNITS_C;
             }
         }
 
@@ -60,12 +65,12 @@ namespace BarometerBT.Utils
             switch (AirPressureUnits)
             {
                 case AirPressureUnits.InchesOfMercury:
-                    return " inHg";
+                    return " " + UNITS_HG;
                 case AirPressureUnits.KiloPascals:
-                    return " kPa";
+                    return " " + UNITS_PA;
                 case AirPressureUnits.MilliBars:
                 default:
-                    return " mBar";
+                    return " " + UNITS_MB;
             }
         }
 

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using BarometerBT.BlueMaestro;
 using System.Windows.Forms.DataVisualization.Charting;
+using BarometerBT.Utils;
 
 namespace BarometerBT.Controls
 {
@@ -21,7 +22,7 @@ namespace BarometerBT.Controls
         {
             public Color color = Color.Black;
             public string title = "Loading...";
-            public string units = " ºC";
+            public string units = " " + UnitsDescriptor.UNITS_C;
         }
 
         private Theme _theme = new Theme();
@@ -59,6 +60,13 @@ namespace BarometerBT.Controls
             chartArea.AxisX.ScaleView.SmallScrollMinSize = 0;
         }
 
+        public void ResetZoom()
+        {
+            var chartArea1 = chart1.ChartAreas[0];
+            chartArea1.AxisX.ScaleView.ZoomReset();
+            chartArea1.CursorX.SetCursorPosition(chartArea1.AxisX.Maximum);
+        }
+
         private void SetZoom()
         {
             var chartArea1 = chart1.ChartAreas[0];
@@ -88,21 +96,24 @@ namespace BarometerBT.Controls
             }
         }
 
-        public void UpdateChartTemperature(List<BMRecordCurrent> records, string units)
+        public void UpdateChartTemperature(List<BMRecordCurrent> records, string units, bool isActive)
         {
-            UpdateChart(records, "Temperature", Color.Red, units,
+            Color c = isActive ? Color.Red : Color.DarkGray;
+            UpdateChart(records, "Temperature", c, units,
                 (record) => { return record.Temperature; });
         }
 
-        public void UpdateChartHumidity(List<BMRecordCurrent> records, string units = " % RH")
+        public void UpdateChartHumidity(List<BMRecordCurrent> records, string units, bool isActive)
         {
-            UpdateChart(records, "Humidity", Color.Green, units,
+            Color c = isActive ? Color.Green : Color.DarkGray;
+            UpdateChart(records, "Humidity", c, units,
                 (record) => { return record.AirHumidity; });
         }
 
-        public void UpdateChartAirPressure(List<BMRecordCurrent> records, string units)
+        public void UpdateChartAirPressure(List<BMRecordCurrent> records, string units, bool isActive)
         {
-            UpdateChart(records, "Air Pressure", Color.Blue, units,
+            Color c = isActive ? Color.Blue : Color.DarkGray;
+            UpdateChart(records, "Air Pressure", c, units,
                 (record) => { return record.AirPressure; });
         }
 
@@ -291,6 +302,11 @@ namespace BarometerBT.Controls
             _tooltip.ToolTipTitle = string.Format("{0}{1}", _theme.title, desc);
             _tooltip.Show("", this.chart1, pos.X, pos.Y + 20, 5000); //bug fix
             _tooltip.Show(txt, this.chart1, pos.X + 10, pos.Y + 20, 5000);
+        }
+
+        private void m_btnReset_Click(object sender, EventArgs e)
+        {
+            ResetZoom();
         }
     }
 

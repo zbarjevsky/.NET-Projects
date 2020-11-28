@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace BarometerBT.Utils
 {
-    public class Chart
+    public class BMChart
     {
     }
 }

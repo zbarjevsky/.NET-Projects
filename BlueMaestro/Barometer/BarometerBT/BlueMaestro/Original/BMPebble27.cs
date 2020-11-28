@@ -549,7 +549,7 @@ namespace BarometerBT.BlueMaestro.Original
         }
 
 
-        public override void setupChart(Chart chart, String command)
+        public override void setupChart(BMChart chart, String command)
         {
             if (!(chart is BMLineChart)) return;
             BMLineChart lineChart = (BMLineChart)chart;
@@ -642,7 +642,7 @@ namespace BarometerBT.BlueMaestro.Original
             }
         }
 
-        public override void updateChart(Chart chart, String text)
+        public override void updateChart(BMChart chart, String text)
         {
             if (!(chart is BMLineChart)) return;
             BMLineChart lineChart = (BMLineChart)chart;

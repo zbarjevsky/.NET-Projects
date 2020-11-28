@@ -246,7 +246,8 @@ namespace BarometerBT.Bluetooth
             _watcherBLE.Received -= OnAdvertisementReceived;
             _watcherBLE.Stopped -= OnWatcherStopped;
 
-            CommonTools.InfoMessage("BluetoothLEAdvertisementWatcher stopped");
+            Log.d("BluetoothLEAdvertisementWatcher stopped");
+            //CommonTools.InfoMessage("BluetoothLEAdvertisementWatcher stopped");
         }
 
         private void PrintDataSections(BluetoothLEAdvertisementReceivedEventArgs e)

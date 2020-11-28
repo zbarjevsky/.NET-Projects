@@ -16,9 +16,11 @@
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="4*"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="5"/>
             <ColumnDefinition Width="5*"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="20"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -36,10 +38,10 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <ScrollViewer Grid.Row="2">
+        <ScrollViewer Grid.Row="1" Margin="6" Background="LightYellow">
             <StackPanel Orientation="Vertical">
-                <StackPanel Margin="6" Orientation="Horizontal"
-                            HorizontalAlignment="Left" VerticalAlignment="Top" >
+                <StackPanel Margin="6" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top"
+                            Background="{Binding SelectedItem.Background, ElementName=_listDevices}" >
                     <Button Margin="6" Content="Open..." Click="OpenButton_Click"/>
                     <Button Margin="6" Content="Save" Click="SaveButton_Click"/>
                     <Button Margin="6" Content="Reset" Click="ResetButton_Click"/>
@@ -48,11 +50,11 @@
                     <Viewbox Height="20">
                         <CheckBox x:Name="_chkAutoUpdate" IsChecked="True" Background="LightGray" />
                     </Viewbox>
-                    <TextBlock Margin="0,6" Text="Auto Update" Background="LightGray" VerticalAlignment="Center"/>
+                    <TextBlock Margin="0,6,10,6" Text="Auto Update" Background="LightGray" VerticalAlignment="Center"/>
                 </StackPanel>
                 <StackPanel Margin="6" Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Left"
-                            Width="400" Background="AliceBlue" >
-                    <ComboBox x:Name="_cmbDays" Margin="6" SelectionChanged="OnUpdateChart">
+                            Width="400" Background="{Binding SelectedItem.Background, ElementName=_listDevices}" >
+                   <ComboBox x:Name="_cmbDays" Margin="6" SelectionChanged="OnUpdateChart">
                         <ComboBoxItem Content="Show Last 6 hours" Tag="0.25"/>    
                         <ComboBoxItem Content="Show Last 12 hours" Tag="0.5"/>    
                         <ComboBoxItem Content="Show Last 24 hours" Tag="1"/>    
@@ -89,15 +91,17 @@
                 
             </StackPanel>
         </ScrollViewer>
-        <TextBox x:Name="_txtInfo" Grid.Row="1" Margin="6" Background="LightYellow" />
-        <WindowsFormsHost Grid.Row="0" Grid.Column="1" Margin="6">
+        <GridSplitter Grid.Column="1" Grid.RowSpan="3" HorizontalAlignment="Stretch" Background="Blue" />
+        <TextBox x:Name="_txtInfo" Grid.Row="2" Margin="6" Background="LightYellow" />
+        <WindowsFormsHost Grid.Row="0" Grid.Column="2" Margin="6">
             <controls:WeatherChartUserControl x:Name="_chart1" />
         </WindowsFormsHost>
-        <WindowsFormsHost Grid.Row="1" Grid.Column="1" Margin="6" >
+        <WindowsFormsHost Grid.Row="1" Grid.Column="2" Margin="6" >
             <controls:WeatherChartUserControl x:Name="_chart2" />
         </WindowsFormsHost>
-        <WindowsFormsHost Grid.Row="2" Grid.Column="1" Margin="6" >
+        <WindowsFormsHost Grid.Row="2" Grid.Column="2" Margin="6" >
             <controls:WeatherChartUserControl x:Name="_chart3" />
         </WindowsFormsHost>
+        <GridSplitter Grid.Column="3" Grid.RowSpan="3" HorizontalAlignment="Stretch" Background="Blue" />
     </Grid>
 </Window>

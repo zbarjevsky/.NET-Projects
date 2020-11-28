@@ -151,11 +151,18 @@ namespace BarometerBT.BlueMaestro
                     }
                 }
 
-                //last bucket
-                recordsOut.Add(ConvertUnitsCurr(GetAverageValue(recordsIn, bucketStart, i - bucketStart)));
-
-                //always add last record as is
-                recordsOut.Add(ConvertUnitsCurr(new BMRecordCurrent(recordsIn.Last())));
+                //last bucket - always add last record as is
+                if (bucketStart < recordsIn.Count - 2)
+                {
+                    for (int j = bucketStart; j < recordsIn.Count; j++)
+                    {
+                        recordsOut.Add(ConvertUnitsCurr(new BMRecordCurrent(recordsIn[j])));
+                    }
+                }
+                else
+                {
+                    recordsOut.Add(ConvertUnitsCurr(new BMRecordCurrent(recordsIn.Last())));
+                }
 
                 return recordsOut;
             }

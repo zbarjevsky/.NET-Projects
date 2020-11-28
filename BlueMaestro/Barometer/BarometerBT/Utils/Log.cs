@@ -47,10 +47,13 @@ namespace BarometerBT.Utils
 
         public static void w(string type, string format, params object[] args)
         {
-            string text = string.Format(format, args);
-            string message = string.Format("{0} - {1} - {2}\n", DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffK"), type, text);
-            File.AppendAllText(_fileName, message);
-            Debug.Write(message);
+            lock (_fileName)
+            {
+                string text = string.Format(format, args);
+                string message = string.Format("{0} - {1} - {2}\n", DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffK"), type, text);
+                File.AppendAllText(_fileName, message);
+                Debug.Write(message);
+            }
         }
     }
 }

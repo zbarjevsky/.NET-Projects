@@ -80,7 +80,8 @@ namespace BarometerBT.BlueMaestro
             foreach (string file in files)
             {
                 BMDatabase db = BMDatabase.Open(file);
-                Merge(db);
+                if(db != null)
+                    Merge(db);
             }
         }
 
