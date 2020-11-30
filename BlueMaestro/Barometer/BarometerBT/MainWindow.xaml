@@ -12,7 +12,8 @@
         Loaded="Window_Loaded"
         Closed="Window_Closed"
         Icon="/Butterfly.ico"
-        Title="Barometer - Weather Station" Height="850" Width="1600">
+        Title="Barometer - Weather Station" 
+        Height="850" MinHeight="350" Width="1600" MinWidth="600">
     <Window.Resources>
         <utils:InvertBoolConverter x:Key="InvertBoolConverter"/>
     </Window.Resources>
@@ -40,7 +41,8 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <ScrollViewer Grid.Row="1" Margin="6" Background="LightYellow">
+        <ScrollViewer Grid.Row="1" Margin="6" Background="LightYellow" 
+                      HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
             <StackPanel Orientation="Vertical">
                 <StackPanel Margin="6" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top"
                             Background="{Binding SelectedItem.Background, ElementName=_listDevices}" >
