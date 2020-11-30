@@ -58,13 +58,17 @@ namespace BarometerBT.Controls
             // set scrollbar small change to blockSize (e.g. 100)
             chartArea.AxisX.ScaleView.SmallScrollSize = oneMinute;
             chartArea.AxisX.ScaleView.SmallScrollMinSize = 0;
+
+            UpdateZoomResetButton();
+            CheckZoomChanged();
         }
 
         public void ResetZoom()
         {
             var chartArea1 = chart1.ChartAreas[0];
             chartArea1.AxisX.ScaleView.ZoomReset();
-            chartArea1.CursorX.SetCursorPosition(chartArea1.AxisX.Maximum);
+            chartArea1.CursorX.SetCursorPosition(double.NaN);
+            UpdateZoomResetButton();
         }
 
         private void SetZoom()
@@ -96,25 +100,25 @@ namespace BarometerBT.Controls
             }
         }
 
-        public void UpdateChartTemperature(List<BMRecordCurrent> records, string units, bool isActive)
+        public void UpdateChartTemperature(List<BMRecordCurrent> records, UnitsDescriptor units, bool isActive)
         {
             Color c = isActive ? Color.Red : Color.DarkGray;
-            UpdateChart(records, "Temperature", c, units,
-                (record) => { return record.Temperature; });
+            UpdateChart(records, "Temperature", c, units.GetTemperatureUnitsDesc(),
+                (record) => { return record.GetTemperature(units); });
         }
 
-        public void UpdateChartHumidity(List<BMRecordCurrent> records, string units, bool isActive)
+        public void UpdateChartHumidity(List<BMRecordCurrent> records, UnitsDescriptor units, bool isActive)
         {
             Color c = isActive ? Color.Green : Color.DarkGray;
-            UpdateChart(records, "Humidity", c, units,
-                (record) => { return record.AirHumidity; });
+            UpdateChart(records, "Humidity", c, units.GetHumidityUinitsDesc(),
+                (record) => { return record.GetAirHumidity(); });
         }
 
-        public void UpdateChartAirPressure(List<BMRecordCurrent> records, string units, bool isActive)
+        public void UpdateChartAirPressure(List<BMRecordCurrent> records, UnitsDescriptor units, bool isActive)
         {
             Color c = isActive ? Color.Blue : Color.DarkGray;
-            UpdateChart(records, "Air Pressure", c, units,
-                (record) => { return record.AirPressure; });
+            UpdateChart(records, "Air Pressure", c, units.GetAirPressureUnitsDesc(),
+                (record) => { return record.GetAirPressure(units); });
         }
 
         public void UpdateChart(List<BMRecordCurrent> records, 
@@ -130,6 +134,8 @@ namespace BarometerBT.Controls
             chart1.Series[0].Points.Clear();
             chart1.Series[0].Color = _theme.color;
             chart1.Series[0].Name = _theme.title;
+
+            UpdateZoomResetButton();
 
             if (records == null || records.Count == 0)
                 return;
@@ -179,7 +185,7 @@ namespace BarometerBT.Controls
 
             m_txtValue.Text = points.Last().Value.ToString("0.0") + theme.units;
 
-            double margin = 1 + (max - min) / 5.0;
+            double margin = 0.1 + (max - min) / 5.0;
 
             chart1.ChartAreas[0].AxisY.Minimum = min - margin;
             chart1.ChartAreas[0].AxisY.Maximum = max + margin;
@@ -188,6 +194,9 @@ namespace BarometerBT.Controls
             UpdateTimeLabelsFormat();
 
             EnableRedraw(true);
+        
+            UpdateZoomResetButton();
+            CheckZoomChanged();
         }
 
         private void UpdateTimeLabelsFormat()
@@ -217,6 +226,8 @@ namespace BarometerBT.Controls
         private void chart1_AxisViewChanged(object sender, ViewEventArgs e)
         {
             UpdateTimeLabelsFormat();
+            UpdateZoomResetButton();
+            CheckZoomChanged();
         }
 
         private TimeSpan GetVisibleDateRange(out bool bSameDay)
@@ -307,6 +318,40 @@ namespace BarometerBT.Controls
         private void m_btnReset_Click(object sender, EventArgs e)
         {
             ResetZoom();
+        }
+
+        private bool UpdateZoomResetButton()
+        {
+            var chartArea1 = chart1.ChartAreas[0];
+
+            bool isZoomed = chartArea1.AxisX.ScaleView.IsZoomed;
+            m_btnReset.Enabled = isZoomed;
+            m_btnReset.BackColor = isZoomed ? _theme.color : Color.LightGray;
+
+            return isZoomed;
+        }
+
+        double oldSelStart = -1;
+        double oldSelEnd = -1;
+        private bool CheckZoomChanged()
+        {
+            var chartArea1 = chart1.ChartAreas[0];
+
+            double newSelStart = chartArea1.CursorX.SelectionStart;
+            double newSelEnd = chartArea1.CursorX.SelectionEnd;
+
+            const double TOLERANCE = 0.01;
+
+            if (Math.Abs(oldSelEnd - newSelEnd) > TOLERANCE || Math.Abs(newSelStart - oldSelStart) > TOLERANCE)
+            {
+                oldSelStart = newSelStart;
+                oldSelEnd = newSelEnd;
+
+                //Zoom has actually changed do your stuff
+                return true;
+            }
+
+            return false;
         }
     }
 

@@ -87,19 +87,19 @@ namespace BarometerBT.BlueMaestro
             Log.d("AirPressure: " + AirPressure);
         }
 
-        public void Max(BMRecordCurrent r)
-        {
-            Temperature = Math.Max(Temperature, r.Temperature);
-            AirHumidity = Math.Max(AirHumidity, r.AirHumidity);
-            AirPressure = Math.Max(AirPressure, r.AirPressure);
-        }
+        //public void Max(BMRecordCurrent r)
+        //{
+        //    Temperature = Math.Max(Temperature, r.Temperature);
+        //    AirHumidity = Math.Max(AirHumidity, r.AirHumidity);
+        //    AirPressure = Math.Max(AirPressure, r.AirPressure);
+        //}
 
-        public void Min(BMRecordCurrent r)
-        {
-            Temperature = Math.Min(Temperature, r.Temperature);
-            AirHumidity = Math.Min(AirHumidity, r.AirHumidity);
-            AirPressure = Math.Min(AirPressure, r.AirPressure);
-        }
+        //public void Min(BMRecordCurrent r)
+        //{
+        //    Temperature = Math.Min(Temperature, r.Temperature);
+        //    AirHumidity = Math.Min(AirHumidity, r.AirHumidity);
+        //    AirPressure = Math.Min(AirPressure, r.AirPressure);
+        //}
 
         public static bool operator ==(BMRecordCurrent r1, BMRecordCurrent r2)
         {

@@ -19,7 +19,7 @@ namespace BarometerBT.Bluetooth
     //https://github.com/CarterAppleton/Win10Win32Bluetooth
     //C:\Program Files (x86)\Windows Kits\10\UnionMetadata\Windows.winmd
     //C:\Program Files(x86)\Reference Assemblies\Microsoft\Framework\.NETCore\v4.5\System.Runtime.WindowsRuntime.dll
-    public class BluetoothConnection
+    public class BluetoothWatcher
     {
         public Action<string> OnBMDeviceMsgReceivedAction = (info) => { };
         public Action<TimeSpan> OnBMDeviceCheckAction = (elapsed) => { };
@@ -72,7 +72,7 @@ namespace BarometerBT.Bluetooth
             }
         }
 
-        public BluetoothConnection()
+        public BluetoothWatcher()
         {
             //I need watch dog - to check bluetooth connection status once a 1 minute
             _timer = new Timer((o) => 
@@ -149,6 +149,7 @@ namespace BarometerBT.Bluetooth
             }
         }
 
+        private string _lastAverage = "", _lastCurrent = "";
         private async void ProcessManufacturerData(BluetoothLEAdvertisementReceivedEventArgs e, MData m)
         {
             int idx = m.FindManufacturerId(BMRecordBase.MANUFACTURER_ID);
@@ -194,27 +195,27 @@ namespace BarometerBT.Bluetooth
                             if (_current == null)
                                 _current = new BMRecordCurrent(dev, e.RawSignalStrengthInDBm, date, null);
 
-                            string elapsedSinceLast = "";
-                            if (BMDatabaseMap.INSTANCE.Contains(dev.Address))
-                            {
-                                int count = BMDatabaseMap.INSTANCE[dev.Address].Records.Count;
-                                if (count > 0)
-                                {
-                                    TimeSpan tsElapsed = DateTime.Now - BMDatabaseMap.INSTANCE[dev.Address].Records.Last().Date;
-                                    elapsedSinceLast = CommonTools.TimeSpanToString(tsElapsed);
-                                }
-                            }
-
                             if (section.Buffer.Length == 14)
                             {
-                                //time between readings
-                                elapsedSinceLast = ", Interval: " + elapsedSinceLast;
+                                if (BMDatabaseMap.INSTANCE.Contains(dev.Address))
+                                {
+                                    int count = BMDatabaseMap.INSTANCE[dev.Address].Records.Count;
+                                    if (count > 0)
+                                    {
+                                        //time between readings
+                                        TimeSpan tsElapsed = DateTime.Now - BMDatabaseMap.INSTANCE[dev.Address].Records.Last().Date;
+                                        _lastCurrent = ", Curr Updated: " + tsElapsed.TotalSeconds.ToString("0s");
+                                    }
+                                }
+                                    
                                 _current = BMDatabaseMap.INSTANCE.AddRecord(dev, e.RawSignalStrengthInDBm, date, section.Buffer);
                             }
                             else if (section.Buffer.Length == 25)
                             {
                                 //just update time
-                                elapsedSinceLast = ", Elapsed: " + elapsedSinceLast;
+                                TimeSpan tsElapsed = DateTime.Now - _averages.Date;
+                                _lastAverage = ", Avg Updated: " + tsElapsed.TotalSeconds.ToString("0s");
+
                                 _averages.Set_sData(section.Buffer);
                             }
                             else
@@ -230,7 +231,7 @@ namespace BarometerBT.Bluetooth
                             }
 
                             string message = recordsCount;
-                            message += "Elapsed: " + _stopperBM.Elapsed.ToString(@"d\.hh\:mm\:ss") + elapsedSinceLast + " \n";
+                            message += "Total: " + CommonTools.TimeSpanToString(_stopperBM.Elapsed) + _lastAverage + _lastCurrent + " \n";
                             message += "Timestamp: " + date.ToString("MMM dd, HH:mm:ss") + " \n";
                             message += _current.ToString() + _averages.ToString();
                             

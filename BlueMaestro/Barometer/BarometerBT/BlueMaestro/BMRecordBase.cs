@@ -4,7 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
+
+
 using BarometerBT.Bluetooth;
+using BarometerBT.Utils;
 
 namespace BarometerBT.BlueMaestro
 {
@@ -35,8 +38,10 @@ namespace BarometerBT.BlueMaestro
         public double AirHumidity { get; set; }
         public double AirPressure { get; set; }
 
-        [XmlIgnore]
-        public double AirDewPoint { get { return (this.Temperature - ((100 - this.AirHumidity) / 5)); } }
+        public double GetTemperature(UnitsDescriptor units) { return units.ConvertTemperature(Temperature); }
+        public double GetAirHumidity() { return AirHumidity; }
+        public double GetAirPressure(UnitsDescriptor units) { return units.ConvertPressure(AirPressure); }
+        public double GetAirDewPoint(UnitsDescriptor units) { return (this.GetTemperature(units) - ((100 - this.AirHumidity) / 5)); }
 
         //for serialization
         public BMRecordBase()

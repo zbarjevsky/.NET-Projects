@@ -28,7 +28,7 @@ namespace BarometerBT
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly BluetoothConnection _btWatcher = new BluetoothConnection();
+        private readonly BluetoothWatcher _btWatcher = new BluetoothWatcher();
 
         private readonly ObservableCollection<BMDeviceRecordVM> _devices = new ObservableCollection<BMDeviceRecordVM>();
 
@@ -43,6 +43,8 @@ namespace BarometerBT
             
             _cmbTemperatureUnits.SelectedIndex = 0;
             _cmbAirPressureUnits.SelectedIndex = 0;
+
+            ClearChart();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -227,13 +229,13 @@ namespace BarometerBT
 
                 ////////
                 //
-                recordsOut = db.DilluteByTimeAndConvertUnits(recordsIn, bucketIntervalInSec);
+                recordsOut = BMDatabase.DilluteByTime(recordsIn, bucketIntervalInSec);
             }
 
             BMDeviceRecordVM dev = _listDevices.SelectedItem as BMDeviceRecordVM;
-            _chart1.UpdateChartTemperature(recordsOut, db.Units.GetTemperatureUnitsDesc(), dev.IsActive);
-            _chart2.UpdateChartHumidity(recordsOut, db.Units.GetHumidityUinitsDesc(), dev.IsActive);
-            _chart3.UpdateChartAirPressure(recordsOut, db.Units.GetAirpressureUnitsDesc(), dev.IsActive);
+            _chart1.UpdateChartTemperature(recordsOut, db.Units, dev.IsActive);
+            _chart2.UpdateChartHumidity(recordsOut, db.Units, dev.IsActive);
+            _chart3.UpdateChartAirPressure(recordsOut, db.Units, dev.IsActive);
 
             TimeSpan tsElapsed = DateTime.Now - startUpdateTime;
             _txtDilluteResult.Text = string.Format("Total: {0:###,###} -> {1:###,###} -> {2} ({3:0.0} ms)", 
@@ -261,9 +263,10 @@ namespace BarometerBT
                 return;
             _isInUpdate = true;
 
-            _chart1.UpdateChartTemperature(null, "", false);
-            _chart2.UpdateChartHumidity(null, "", false);
-            _chart3.UpdateChartAirPressure(null, "", false);
+            UnitsDescriptor units = new UnitsDescriptor();
+            _chart1.UpdateChartTemperature(null, units, false);
+            _chart2.UpdateChartHumidity(null, units, false);
+            _chart3.UpdateChartAirPressure(null, units, false);
 
             _isInUpdate = false;
         }
@@ -273,9 +276,37 @@ namespace BarometerBT
             this.Cursor = Cursors.Wait;
             foreach (BMDatabase db in BMDatabaseMap.INSTANCE.Databases)
             {
-                db.SaveBackupWithDate();
+                db.SaveAs(db.GenerateFileName(), 1);
             }
             this.Cursor = Cursors.Arrow;
+        }
+
+        private void SaveDillutedButton_Click(object sender, RoutedEventArgs e)
+        {
+            BMDatabase db = GetSelectedDB();
+            if (db == null)
+                return;
+
+            double bucketIntervalInSec = 60 * double.Parse(((ComboBoxItem)_cmbInterval.SelectedItem).Tag.ToString());
+            SaveDatabaseAs(db, bucketIntervalInSec);
+        }
+
+        private void SaveDatabaseAs(BMDatabase db, double bucketIntervalInSec)
+        {
+            SaveFileDialog _saveFileDialog = new SaveFileDialog()
+            {
+                RestoreDirectory = true,
+                Filter = "All supported files|*.xml|All files (*.*)|*.*",
+                FileName = db.GenerateFileName()
+                //InitialDirectory = _openDirectory
+            };
+
+            if (_saveFileDialog.ShowDialog(this).Value)
+            {
+                this.Cursor = Cursors.Wait;
+                db.SaveAs(_saveFileDialog.FileName, bucketIntervalInSec);
+                this.Cursor = Cursors.Arrow;
+            }
         }
 
         private void OpenButton_Click(object sender, RoutedEventArgs e)
@@ -319,24 +350,13 @@ namespace BarometerBT
             }
         }
 
-        private void Scenario2Button_Click(object sender, RoutedEventArgs e)
+        private void DownloadButton_Click(object sender, RoutedEventArgs e)
         {
-            Scenario2_Client client = new Scenario2_Client();
+            string SelectedBleDeviceId = "BluetoothLE#BluetoothLEc0:b6:f9:73:92:8a-d0:7e:ef:ef:61:4f";
             
-            BMDatabase db = GetSelectedDB();
-
-            if (db != null)
+            using (BTConnectionDirect client = new BTConnectionDirect())
             {
-                client.rootPage.SelectedBleDeviceId = "BluetoothLE#BluetoothLEc0:b6:f9:73:92:8a-d0:7e:ef:ef:61:4f"; //db.Device.Address;
-                client.rootPage.SelectedBleDeviceName = db.Device.Name;
-
-                client.ShowActivated = true;
-                client.Owner = this;
-                client.ShowDialog();
-            }
-            else
-            {
-                CommonTools.ErrorMessage("Not Found");
+                client.Connect(SelectedBleDeviceId);
             }
         }
 

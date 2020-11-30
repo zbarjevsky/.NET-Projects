@@ -139,7 +139,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BlueMaestro\BMRecordCurrent.cs" />
-    <Compile Include="Bluetooth\BluetoothConnection.cs" />
+    <Compile Include="Bluetooth\BluetoothWatcher.cs" />
     <Compile Include="BlueMaestro\Original\ScanRecordParser.cs" />
     <Compile Include="BlueMaestro\Original\UartService.cs" />
     <Compile Include="BlueMaestro\Original\BMUtility.cs" />
@@ -190,6 +190,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\TempoDisk4in1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <SplashScreen Include="Images\SplashScreen.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

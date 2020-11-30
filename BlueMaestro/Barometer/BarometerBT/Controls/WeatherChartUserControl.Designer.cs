@@ -80,8 +80,9 @@
             this.m_txtValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.m_txtValue.Location = new System.Drawing.Point(5, 17);
             this.m_txtValue.Name = "m_txtValue";
-            this.m_txtValue.Size = new System.Drawing.Size(73, 20);
+            this.m_txtValue.Size = new System.Drawing.Size(75, 20);
             this.m_txtValue.TabIndex = 1;
+            this.m_txtValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // m_chkAutoScroll
             // 
@@ -112,12 +113,13 @@
             // 
             // m_btnReset
             // 
-            this.m_btnReset.Location = new System.Drawing.Point(5, 47);
+            this.m_btnReset.BackColor = System.Drawing.Color.Gainsboro;
+            this.m_btnReset.Location = new System.Drawing.Point(4, 47);
             this.m_btnReset.Name = "m_btnReset";
-            this.m_btnReset.Size = new System.Drawing.Size(75, 23);
+            this.m_btnReset.Size = new System.Drawing.Size(78, 23);
             this.m_btnReset.TabIndex = 31;
-            this.m_btnReset.Text = "Reset Z";
-            this.m_btnReset.UseVisualStyleBackColor = true;
+            this.m_btnReset.Text = "Reset Zoom";
+            this.m_btnReset.UseVisualStyleBackColor = false;
             this.m_btnReset.Click += new System.EventHandler(this.m_btnReset_Click);
             // 
             // _tooltip

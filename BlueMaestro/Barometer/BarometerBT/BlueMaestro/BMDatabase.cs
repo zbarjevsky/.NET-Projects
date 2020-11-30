@@ -30,15 +30,30 @@ namespace BarometerBT.BlueMaestro
             }
         }
 
+        public string GenerateFileName()
+        {
+            string date = DateTime.Now.ToString("yyyy_MM_dd-HH_mm_ss");
+            string fileName = string.Format("BMDatabase_{0}_{1}_{2}.xml", Device.Name, Device.Address, date);
+            fileName = Path.Combine(DataFolder, fileName);
+            return fileName;
+        }
+
         //for serialization
         public BMDatabase()
         {
 
         }
-       
+
         public BMDatabase(BluetoothDevice device)
         {
             Device = device;
+        }
+
+        public BMDatabase(BMDatabase db)
+        {
+            Device = db.Device;
+            Records.AddRange(db.Records);
+            Units = new UnitsDescriptor(db.Units);
         }
 
         public BMRecordCurrent AddRecord(BluetoothDevice device, short rssi, DateTime recordDate, byte[] data)
@@ -84,10 +99,13 @@ namespace BarometerBT.BlueMaestro
 
         public List<BMRecordCurrent> GetLastRecords(TimeSpan interval)
         {
+            List<BMRecordCurrent> records = new List<BMRecordCurrent>();
+            if (Records.Count < 2)
+                return Records;
+
             DateTime last = Records.Last().Date;
             DateTime first = last - interval;
 
-            List<BMRecordCurrent> records = new List<BMRecordCurrent>();
             for (int i = 0; i < Records.Count; i++)
             {
                 if (Records[i].Date > first)
@@ -97,7 +115,7 @@ namespace BarometerBT.BlueMaestro
             return records;
         }
 
-        public List<BMRecordCurrent> DilluteByPointAndConvertUnits(List<BMRecordCurrent> recordsIn, int zoom)
+        public List<BMRecordCurrent> DilluteByPoint(List<BMRecordCurrent> recordsIn, int zoom)
         {
             lock (recordsIn)
             {
@@ -122,12 +140,12 @@ namespace BarometerBT.BlueMaestro
             }
         }
 
-        public List<BMRecordCurrent> DilluteByTimeAndConvertUnits(List<BMRecordCurrent> recordsIn, double bucketIntervalInSec) //default 15 min
+        public static List<BMRecordCurrent> DilluteByTime(List<BMRecordCurrent> recordsIn, double bucketIntervalInSec) //default 15 min
         {
             lock (recordsIn)
             {
                 if (recordsIn.Count < MIN_RECORDS_TO_FILTER || bucketIntervalInSec <= 1.0) //return all records, convert units
-                    return new List<BMRecordCurrent>(recordsIn.Select(r => ConvertUnitsCurr(new BMRecordCurrent(r))));
+                    return new List<BMRecordCurrent>(recordsIn);
 
                 DateTime first = recordsIn.First().Date;
                 DateTime last = recordsIn.Last().Date;
@@ -145,7 +163,7 @@ namespace BarometerBT.BlueMaestro
                     int idx = (int)(secondsFromFirst / bucketIntervalInSec);
                     if (idx > bucketIndex) //next bucket
                     {
-                        recordsOut.Add(ConvertUnitsCurr(GetAverageValue(recordsIn, bucketStart, i - bucketStart)));
+                        recordsOut.Add(GetAverageValue(recordsIn, bucketStart, i - bucketStart));
                         bucketStart = i;
                         bucketIndex = idx;
                     }
@@ -156,12 +174,12 @@ namespace BarometerBT.BlueMaestro
                 {
                     for (int j = bucketStart; j < recordsIn.Count; j++)
                     {
-                        recordsOut.Add(ConvertUnitsCurr(new BMRecordCurrent(recordsIn[j])));
+                        recordsOut.Add(new BMRecordCurrent(recordsIn[j]));
                     }
                 }
                 else
                 {
-                    recordsOut.Add(ConvertUnitsCurr(new BMRecordCurrent(recordsIn.Last())));
+                    recordsOut.Add(new BMRecordCurrent(recordsIn.Last()));
                 }
 
                 return recordsOut;
@@ -196,13 +214,18 @@ namespace BarometerBT.BlueMaestro
             return rec;
         }
 
-        public void SaveBackupWithDate()
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="bucketIntervalInSec">if == 1 - do not dillute</param>
+        public void SaveAs(string fileName, double bucketIntervalInSec)
         {
-            string date = DateTime.Now.ToString("yyyy_MM_dd-HH_mm_ss");
-            string fileName = string.Format("BMDatabase_{0}_{1}_{2}.xml", Device.Name, Device.Address, date);
-            fileName = Path.Combine(DataFolder, fileName);
+            BMDatabase db = new BMDatabase(this);
+            List<BMRecordCurrent> records = new List<BMRecordCurrent>(db.Records);
+            db.Records.Clear();
+            db.Records.AddRange(BMDatabase.DilluteByTime(records, bucketIntervalInSec));
 
-            Save(fileName);
+            Save(fileName, db);
         }
 
         public void SaveMain()
@@ -210,12 +233,12 @@ namespace BarometerBT.BlueMaestro
             string fileName = string.Format("BMDatabase_{0}_{1}_Main.xml", Device.Name, Device.Address);
             fileName = Path.Combine(DataFolder, fileName);
 
-            Save(fileName);
+            Save(fileName, this);
         }
 
-        public void Save(string fileName)
+        public static void Save(string fileName, BMDatabase db)
         {
-            XmlHelper.Save(fileName, this);
+            XmlHelper.Save(fileName, db);
         }
 
         public static BMDatabase Open(string fileName)
@@ -233,18 +256,6 @@ namespace BarometerBT.BlueMaestro
                 Log.e("File: {0} Error: {1}", fileName, err);
                 return null;
             }
-        }
-
-        public BMRecordBase ConvertUnits(BMRecordBase r)
-        {
-            r.Temperature = this.Units.ConvertTemperature(r.Temperature);
-            r.AirPressure = this.Units.ConvertPressure(r.AirPressure);
-            return r;
-        }
-
-        public BMRecordCurrent ConvertUnitsCurr(BMRecordCurrent r)
-        {
-            return ConvertUnits(r) as BMRecordCurrent;
         }
 
         public override string ToString()

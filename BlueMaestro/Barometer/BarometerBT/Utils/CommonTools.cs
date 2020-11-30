@@ -19,10 +19,19 @@ namespace BarometerBT.Utils
             return null;
         }
 
-        public static void ExecuteOnUiThreadInvoke(Action action, DispatcherPriority priority = DispatcherPriority.Normal)
+        public static void ExecuteOnUiThreadInvoke(Action action, 
+            DispatcherPriority priority = DispatcherPriority.Normal, 
+            [CallerMemberName] string propertyName = null)
         {
-            if (Application.Current != null)
-                Application.Current.Dispatcher.Invoke(action, priority);
+            try
+            {
+                if (Application.Current != null)
+                    Application.Current.Dispatcher.Invoke(action, priority);
+            }
+            catch (Exception ex)
+            {
+                Log.e("ExecuteOnUiThreadInvoke({0}), exeption: {1}\n", propertyName, ex);
+            }        
         }
 
         public static string TimeSpanToString(TimeSpan ts)

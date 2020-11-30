@@ -29,9 +29,28 @@ namespace BarometerBT.Utils
         public const String UNITS_PA = "kPa";
         public const String UNITS_RH = "%RH";
 
-        public TemperatureUnits TemperatureUnits { get; set; } = TemperatureUnits.Celcius;
+        public TemperatureUnits TemperatureUnits { get; set; }
 
-        public AirPressureUnits AirPressureUnits { get; set; } = AirPressureUnits.MilliBars;
+        public AirPressureUnits AirPressureUnits { get; set; }
+
+        public static UnitsDescriptor DefaultUnits { get; } = new UnitsDescriptor();
+
+        public UnitsDescriptor()
+        {
+            Reset();
+        }
+
+        public UnitsDescriptor(UnitsDescriptor units)
+        {
+            this.TemperatureUnits = units.TemperatureUnits;
+            this.AirPressureUnits = units.AirPressureUnits;
+        }
+
+        public void Reset()
+        {
+            this.TemperatureUnits = TemperatureUnits.Celcius;
+            this.AirPressureUnits = AirPressureUnits.MilliBars;
+        }
 
         public static IEnumerable<TemperatureUnits> GetEnumTemperatureUnits()
         {
@@ -60,7 +79,7 @@ namespace BarometerBT.Utils
             }
         }
 
-        public string GetAirpressureUnitsDesc()
+        public string GetAirPressureUnitsDesc()
         {
             switch (AirPressureUnits)
             {

@@ -4,8 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:BarometerBT" 
-        xmlns:controls="clr-namespace:BarometerBT.Controls" xmlns:utils="clr-namespace:BarometerBT.Utils" xmlns:ux="clr-namespace:BarometerBT.BlueMaestro.UX"
-        mc:Ignorable="d" Background="Navy"
+        xmlns:controls="clr-namespace:BarometerBT.Controls" 
+        xmlns:utils="clr-namespace:BarometerBT.Utils" 
+        xmlns:ux="clr-namespace:BarometerBT.BlueMaestro.UX"
+        mc:Ignorable="d" Background="Wheat"
         WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded"
         Closed="Window_Closed"
@@ -43,10 +45,10 @@
                 <StackPanel Margin="6" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top"
                             Background="{Binding SelectedItem.Background, ElementName=_listDevices}" >
                     <Button Margin="6" Content="Open..." Click="OpenButton_Click"/>
-                    <Button Margin="6" Content="Save" Click="SaveButton_Click"/>
+                    <Button Margin="6" Content="Save As" Click="SaveButton_Click"/>
                     <Button Margin="6" Content="Reset" Click="ResetButton_Click"/>
+                    <Button Margin="6" Content="Download" Click="DownloadButton_Click"/>
                     <Button Margin="6" Content="Scenario1..." Click="Scenario1Button_Click"/>
-                    <Button Margin="6" Content="Scenario2..." Click="Scenario2Button_Click"/>
                     <Viewbox Height="20">
                         <CheckBox x:Name="_chkAutoUpdate" IsChecked="True" Background="LightGray" />
                     </Viewbox>
@@ -72,8 +74,8 @@
                                   IsChecked="True" Checked="OnUpdateChart"/>
                         <ComboBox x:Name="_cmbInterval" Margin="6" SelectionChanged="_cmbInterval_SelectionChanged">
                             <ComboBoxItem Content="Sample Interval: All Values" Tag="0.01" IsSelected="True"/>
-                            <ComboBoxItem Content="Sample Interval: 30 seconds" Tag="0.5"/>
                             <ComboBoxItem Content="Sample Interval: 1 minute" Tag="1"/>
+                            <ComboBoxItem Content="Sample Interval: 5 minutes" Tag="5"/>
                             <ComboBoxItem Content="Sample Interval: 10 minutes" Tag="10"/>
                             <ComboBoxItem Content="Sample Interval: 15 minutes" Tag="15"/>
                             <ComboBoxItem Content="Sample Interval: 30 minutes" Tag="30"/>
@@ -83,6 +85,7 @@
                             <ComboBoxItem Content="Sample Interval: 6 hours" Tag="360"/>
                             <ComboBoxItem Content="Sample Interval: 12 hours" Tag="720"/>
                         </ComboBox>
+                        <Button Margin="6" Content=" Save Dilluted... " Click="SaveDillutedButton_Click" />
                     </StackPanel>
                     <TextBlock x:Name="_txtDilluteResult" MinWidth="100" Margin="6" Text="All: 0 -> Days: 0 -> Interval: 0"/>
                     <ComboBox x:Name="_cmbTemperatureUnits" Margin="6" SelectionChanged="OnUpdateChart" />
@@ -91,17 +94,17 @@
                 
             </StackPanel>
         </ScrollViewer>
-        <GridSplitter Grid.Column="1" Grid.RowSpan="3" HorizontalAlignment="Stretch" Background="Blue" />
+        <GridSplitter Grid.Column="1" Grid.RowSpan="3" HorizontalAlignment="Stretch" Background="DarkGoldenrod" />
         <TextBox x:Name="_txtInfo" Grid.Row="2" Margin="6" Background="LightYellow" />
-        <WindowsFormsHost Grid.Row="0" Grid.Column="2" Margin="6">
+        <WindowsFormsHost Grid.Row="0" Grid.Column="2" Margin="6" Background="White" >
             <controls:WeatherChartUserControl x:Name="_chart1" />
         </WindowsFormsHost>
-        <WindowsFormsHost Grid.Row="1" Grid.Column="2" Margin="6" >
+        <WindowsFormsHost Grid.Row="1" Grid.Column="2" Margin="6" Background="White" >
             <controls:WeatherChartUserControl x:Name="_chart2" />
         </WindowsFormsHost>
-        <WindowsFormsHost Grid.Row="2" Grid.Column="2" Margin="6" >
+        <WindowsFormsHost Grid.Row="2" Grid.Column="2" Margin="6" Background="White" >
             <controls:WeatherChartUserControl x:Name="_chart3" />
         </WindowsFormsHost>
-        <GridSplitter Grid.Column="3" Grid.RowSpan="3" HorizontalAlignment="Stretch" Background="Blue" />
+        <GridSplitter Grid.Column="3" Grid.RowSpan="3" HorizontalAlignment="Stretch" Background="DarkGoldenrod" />
     </Grid>
 </Window>
