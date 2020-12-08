@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Threading.Tasks;
 
 namespace AnimEffectApp
 {
@@ -216,9 +217,11 @@ namespace AnimEffectApp
 
 	public class AnimEffect
 	{
-		public AnimEffect()
+		public Action<double> ReportProgressAction = (p) => { };
+
+		public AnimEffect(int delay = 30, int steps = 50, int afterImages = 6)
 		{
-			Defaults();
+			Defaults(delay, steps, afterImages);
 		}//end constructor
 
 		public enum EffectType
@@ -239,14 +242,14 @@ namespace AnimEffectApp
 		EffectType m_EffectType;
 		//Rectangle m_rcScreen;
 
-		public void Defaults()
+		public void Defaults(int delay = 30, int steps = 50, int afterImages = 6)
 		{
 			//Size szMax = System.Windows.Forms.SystemInformation.MaxWindowTrackSize;
 			//m_rcScreen = new Rectangle(0, 0, szMax.Width, szMax.Height);
 			
-			m_iAfterimages	= 6;
-			m_iTotalSteps	= 50;
-			m_iDelay		= 30;
+			m_iAfterimages	= afterImages;
+			m_iTotalSteps	= steps;
+			m_iDelay		= delay;
 			
 			SetEffect(EffectType.Random);
 		}//end Defaults
@@ -378,6 +381,8 @@ namespace AnimEffectApp
 						animData.iStep = frame - animData.iAfterimages;
 						animData.effect.Show(animData);
 					}//end if
+
+					ReportProgressAction(frame/(double)nTotalFrames);
 				}//end for
 			}//end if
 			else //Close
@@ -401,6 +406,8 @@ namespace AnimEffectApp
 						animData.iStep = frame;
 						animData.effect.Show(animData);
 					}//end if
+
+					ReportProgressAction(frame / (double)nTotalFrames);
 				}//end for
 			}//end else 
 
@@ -826,13 +833,16 @@ namespace AnimEffectApp
 
 		internal static void DrawPolygon(Point[] pPts, Color color)
 		{
-			Point pt = pPts[0];
-			for (int i = 1; i < pPts.Length; i++)
-			{
-				ControlPaint.DrawReversibleLine(pt, pPts[i], color);
-				pt = pPts[i];
-			}//end for
-			ControlPaint.DrawReversibleLine(pt, pPts[0], color);
+			//Task t = Task.Factory.StartNew(() =>
+			//{
+				Point pt = pPts[0];
+				for (int i = 1; i < pPts.Length; i++)
+				{
+					ControlPaint.DrawReversibleLine(pt, pPts[i], color);
+					pt = pPts[i];
+				}//end for
+				ControlPaint.DrawReversibleLine(pt, pPts[0], color);
+			//});
 		}//end DrawPolygon
 	}//end class AnimUtil
 }//end namespace AnimEffectApp

@@ -13,11 +13,19 @@ namespace AnimEffectApp
 		public FormMain()
 		{
 			InitializeComponent();
+
+			this.SetStyle(ControlStyles.OptimizedDoubleBuffer | ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint, true);
 		}
 
 		private void button1_Click(object sender, EventArgs e)
 		{
-			AnimEffect eff = new AnimEffect();
+			AnimEffect eff = new AnimEffect(10, 10);
+			eff.ReportProgressAction = (progr) =>
+			{
+				m_statusProgress.Value = (int)(100.0 * progr);
+				Application.DoEvents();
+			};
+
 			eff.SetEffect((AnimEffect.EffectType)comboBox1.SelectedItem);
 			eff.Play(this.Bounds, m_Color, true);
 			eff.Play(this.Bounds, m_Color, false);
