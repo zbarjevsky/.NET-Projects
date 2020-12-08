@@ -33,6 +33,12 @@
         <ListView x:Name="_listDevices" Margin="6" SelectionMode="Single" Background="LightYellow"
                   ScrollViewer.CanContentScroll="False"
                   SelectionChanged="_listDevices_SelectionChanged">
+            <ListView.Resources>
+                <!-- Bind ListViewItem IsSelected to DataContext IsSelected-->
+                <Style TargetType="{x:Type ListViewItem}">
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}"/>
+                </Style>
+            </ListView.Resources>
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid Margin="0,2">

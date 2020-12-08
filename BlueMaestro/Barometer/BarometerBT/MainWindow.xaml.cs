@@ -103,23 +103,10 @@ namespace BarometerBT
 
         private BMDatabase GetSelectedDB()
         {
-            UpdateListSelectionUI();
-
             BMDeviceRecordVM selected = _listDevices.SelectedItem as BMDeviceRecordVM;
             if (selected != null && selected.Database != null)
                 return selected.Database;
             return null;
-        }
-
-        private void UpdateListSelectionUI()
-        {
-            BMDeviceRecordVM sel = _listDevices.SelectedItem as BMDeviceRecordVM;
-            for (int i = 0; i < _listDevices.Items.Count; i++)
-            {
-                BMDeviceRecordVM vm = (BMDeviceRecordVM)_listDevices.Items[i];
-                vm.IsSelected = (vm.DeviceAddress == sel.DeviceAddress);
-                vm.Index = i;
-            }
         }
 
         private void UpdateDeviceList()
