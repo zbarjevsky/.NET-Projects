@@ -10,7 +10,7 @@ namespace BarometerBT.BlueMaestro
 {
     public class BMDatabaseMap
     {
-        public Action<BMRecordCurrent> OnRecordAddedAction = (r) => { MainWindow.UpdateAllAsync(r); };
+        public Action<BluetoothDevice> OnRecordAddedAction = (dev) => { MainWindow.UpdateAllAsync(dev); };
 
         private Dictionary<ulong, BMDatabase> _map { get; } = new Dictionary<ulong, BMDatabase>();
 
@@ -52,7 +52,7 @@ namespace BarometerBT.BlueMaestro
 
             var record = _map[device.Address].AddRecord(device, rssi, recordDate, data);
 
-            OnRecordAddedAction(record);
+            OnRecordAddedAction(device);
 
             return record;
         }

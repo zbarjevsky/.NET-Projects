@@ -51,7 +51,11 @@ namespace BarometerBT.BlueMaestro.UX
         public string Name
         {
             get { return _name; }
-            set { SetProperty(ref _name, value); }
+            set 
+            { 
+                if (SetProperty(ref _name, value))
+                    Database.Device.DisplayName = value;  
+            }
         }
 
         private string _address = "";
@@ -118,7 +122,8 @@ namespace BarometerBT.BlueMaestro.UX
             TimeSpan age = DateTime.Now - r.Date;
             IsActive = age.TotalSeconds < 60;
 
-            Name = db.Device.Name;
+            Name = string.IsNullOrWhiteSpace(db.Device.DisplayName)?db.Device.Name : db.Device.DisplayName;
+            System.Diagnostics.Debug.WriteLine("Display Name: " + Name);
             Address = "(" + db.Device.GetAddressString() + ")";
             Interval = "Int: " + r.LoggingInterval.ToString();
             Signal = "Sig: " + r.RSSI;
@@ -126,16 +131,16 @@ namespace BarometerBT.BlueMaestro.UX
             Battery = "Bat: " + r.BatteryLevel + "%";
 
             Temperature.Value = (r.GetTemperature(db.Units)).ToString("0.0");
-            Temperature.Units = db.Units.GetTemperatureUnitsDesc();
+            Temperature.Units = db.Units.TemperatureUnits.Desc;
 
             AirHumidity.Value = (r.GetAirHumidity()).ToString("0.0");
-            AirHumidity.Units = db.Units.GetHumidityUinitsDesc();
+            AirHumidity.Units = db.Units.RelativeHumidityUnits.Desc;
 
             AirPressure.Value = (r.GetAirPressure(db.Units)).ToString("0.0");
-            AirPressure.Units = db.Units.GetAirPressureUnitsDesc();
+            AirPressure.Units = db.Units.AirPressureUnits.Desc;
 
             AirDewPoint.Value = (r.GetAirDewPoint(db.Units)).ToString("0.0");
-            AirDewPoint.Units = db.Units.GetTemperatureUnitsDesc();
+            AirDewPoint.Units = db.Units.TemperatureUnits.Desc;
         }
     }
 }

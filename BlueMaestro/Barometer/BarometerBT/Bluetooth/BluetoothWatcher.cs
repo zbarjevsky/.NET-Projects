@@ -89,7 +89,7 @@ namespace BarometerBT.Bluetooth
                     try
                     {
                         Log.d("Watch Dog Elapsed: " + tsWD);
-                        CommonTools.ErrorMessage("Restarting, Stuck: " + tsWD);
+                        CommonTools.ErrorMessage("Watcher is Stuck!\nRestarting...\n" + tsWD);
                         StopBluetoothSearch();
                         StartBluetoothSearch();
                     }

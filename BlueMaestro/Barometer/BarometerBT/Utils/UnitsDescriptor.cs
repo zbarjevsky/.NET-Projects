@@ -6,32 +6,198 @@ using System.Threading.Tasks;
 
 namespace BarometerBT.Utils
 {
-    public enum TemperatureUnits
+    public enum eTemperatureUnits
     {
         Celcius,
         Farenheit
     }
 
-    public enum AirPressureUnits
+    public enum eAirPressureUnits
     {
         MilliBars,
         InchesOfMercury,
         KiloPascals
     }
 
-    public class UnitsDescriptor
+    public enum eRelativeHumidity
+    {
+        Percent
+    }
+
+    public struct Scale
+    {
+        public double Min;
+        public double Max;
+
+        public Scale(double min, double max)
+        {
+            Min = min;
+            Max = max;
+        }
+
+        public void Update(double val)
+        {
+            Max = Math.Max(Max, val);
+            Min = Math.Min(Min, val);
+        }
+    }
+
+    public interface IUnitBase<T> where T : struct, IConvertible
+    {
+        T Units { get; set; }
+        string Desc { get; }
+        void Reset();
+        double Convert(double rawUnit);
+        Scale Scale { get; }
+        IEnumerable<T> GetEnum();
+    }
+
+    public class TemperatureUnits : IUnitBase<eTemperatureUnits>
     {
         public const String UNITS_F = "ºF";
         public const String UNITS_C = "ºC";
 
+        public eTemperatureUnits Units { get; set; }
+        public string Desc
+        {
+            get
+            {
+                switch (Units)
+                {
+                    case eTemperatureUnits.Farenheit:
+                        return " " + UNITS_F;
+                    case eTemperatureUnits.Celcius:
+                    default:
+                        return " " + UNITS_C;
+                }
+            }
+        }
+
+        public Scale Scale
+        {
+            get { return new Scale(Convert(10), Convert(40)); }
+        }
+
+        public void Reset()
+        {
+            Units = eTemperatureUnits.Celcius;
+        }
+
+        public double Convert(double temperatureInC)
+        {
+            switch (Units)
+            {
+                case eTemperatureUnits.Farenheit:
+                    return 32 + temperatureInC * 1.8;
+                case eTemperatureUnits.Celcius:
+                default:
+                    return temperatureInC;
+            }
+        }
+
+        public IEnumerable<eTemperatureUnits> GetEnum()
+        {
+            return Enum.GetValues(typeof(eTemperatureUnits)).Cast<eTemperatureUnits>();
+        }
+    }
+
+    public class AirPressureUnits : IUnitBase<eAirPressureUnits>
+    {
         public const String UNITS_HG = "InHg";
         public const String UNITS_MB = "mBar";
         public const String UNITS_PA = "kPa";
+
+        public eAirPressureUnits Units { get; set; }
+        public string Desc
+        {
+            get
+            {
+                switch (Units)
+                {
+                    case eAirPressureUnits.InchesOfMercury:
+                        return " " + UNITS_HG;
+                    case eAirPressureUnits.KiloPascals:
+                        return " " + UNITS_PA;
+                    case eAirPressureUnits.MilliBars:
+                    default:
+                        return " " + UNITS_MB;
+                }
+            }
+        }
+
+        public Scale Scale
+        {
+            get { return new Scale(Convert(940), Convert(1100)); }
+        }
+
+        public void Reset()
+        {
+            Units = eAirPressureUnits.MilliBars;
+        }
+
+        public double Convert(double pressure_mBar)
+        {
+            switch (Units)
+            {
+                case eAirPressureUnits.InchesOfMercury:
+                    return pressure_mBar / 33.8639;
+                case eAirPressureUnits.KiloPascals:
+                    return pressure_mBar / 10.0;
+                case eAirPressureUnits.MilliBars:
+                default:
+                    return pressure_mBar;
+            }
+        }
+
+        public IEnumerable<eAirPressureUnits> GetEnum()
+        {
+            return Enum.GetValues(typeof(eAirPressureUnits)).Cast<eAirPressureUnits>();
+        }
+    }
+
+    public class RelativeHumidityUnits : IUnitBase<eRelativeHumidity>
+    {
         public const String UNITS_RH = "%RH";
 
-        public TemperatureUnits TemperatureUnits { get; set; }
+        public eRelativeHumidity Units { get; set; } = eRelativeHumidity.Percent;
+        public string Desc
+        {
+            get { return UNITS_RH; }
+        }
 
-        public AirPressureUnits AirPressureUnits { get; set; }
+        public Scale Scale
+        {
+            get { return new Scale(Convert(5), Convert(95)); }
+        }
+
+        public void Reset()
+        {
+            Units = eRelativeHumidity.Percent;
+        }
+
+        public double Convert(double hum)
+        {
+            switch (Units)
+            {
+                case eRelativeHumidity.Percent:
+                default:
+                    return hum;
+            }
+        }
+
+        public IEnumerable<eRelativeHumidity> GetEnum()
+        {
+            return Enum.GetValues(typeof(eRelativeHumidity)).Cast<eRelativeHumidity>();
+        }
+    }
+
+    public class UnitsDescriptor
+    {
+        public TemperatureUnits TemperatureUnits { get; set; } = new TemperatureUnits();
+
+        public AirPressureUnits AirPressureUnits { get; set; } = new AirPressureUnits();
+
+        public RelativeHumidityUnits RelativeHumidityUnits { get; set; } = new RelativeHumidityUnits();
 
         public static UnitsDescriptor DefaultUnits { get; } = new UnitsDescriptor();
 
@@ -42,81 +208,16 @@ namespace BarometerBT.Utils
 
         public UnitsDescriptor(UnitsDescriptor units)
         {
-            this.TemperatureUnits = units.TemperatureUnits;
-            this.AirPressureUnits = units.AirPressureUnits;
+            this.TemperatureUnits.Units = units.TemperatureUnits.Units;
+            this.AirPressureUnits.Units = units.AirPressureUnits.Units;
+            this.RelativeHumidityUnits.Units = units.RelativeHumidityUnits.Units;
         }
 
         public void Reset()
         {
-            this.TemperatureUnits = TemperatureUnits.Celcius;
-            this.AirPressureUnits = AirPressureUnits.MilliBars;
-        }
-
-        public static IEnumerable<TemperatureUnits> GetEnumTemperatureUnits()
-        {
-            return Enum.GetValues(typeof(TemperatureUnits)).Cast<TemperatureUnits>();
-        }
-
-        public static IEnumerable<AirPressureUnits> GetEnumAirPressureUnits()
-        {
-            return Enum.GetValues(typeof(AirPressureUnits)).Cast<AirPressureUnits>();
-        }
-
-        public string GetHumidityUinitsDesc()
-        {
-            return " " + UNITS_RH;
-        }
-
-        public string GetTemperatureUnitsDesc()
-        {
-            switch (TemperatureUnits)
-            {
-                case TemperatureUnits.Farenheit:
-                    return " " + UNITS_F;
-                case TemperatureUnits.Celcius:
-                default:
-                    return " " + UNITS_C;
-            }
-        }
-
-        public string GetAirPressureUnitsDesc()
-        {
-            switch (AirPressureUnits)
-            {
-                case AirPressureUnits.InchesOfMercury:
-                    return " " + UNITS_HG;
-                case AirPressureUnits.KiloPascals:
-                    return " " + UNITS_PA;
-                case AirPressureUnits.MilliBars:
-                default:
-                    return " " + UNITS_MB;
-            }
-        }
-
-        public double ConvertTemperature(double temperatureInC)
-        {
-            switch (TemperatureUnits)
-            {
-                case TemperatureUnits.Farenheit:
-                    return 32 + temperatureInC * 1.8;
-                case TemperatureUnits.Celcius:
-                default:
-                    return temperatureInC;
-            }
-        }
-
-        public double ConvertPressure(double pressure_mBar)
-        {
-            switch (AirPressureUnits)
-            {
-                case AirPressureUnits.InchesOfMercury:
-                    return pressure_mBar / 33.8639;
-                case AirPressureUnits.KiloPascals:
-                    return pressure_mBar / 10.0;
-                case AirPressureUnits.MilliBars:
-                default:
-                    return pressure_mBar;
-            }
+            this.TemperatureUnits.Reset();
+            this.AirPressureUnits.Reset();
+            this.RelativeHumidityUnits.Reset();
         }
     }
 }

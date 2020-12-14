@@ -20,9 +20,9 @@ namespace BarometerBT.BlueMaestro
         [XmlIgnore]
         public byte[] Data { get; set; }
 
-        public string Name { get; set; }
+        //public string Name { get; set; }
 
-        public ulong Address { get; set; }
+        //public ulong Address { get; set; }
 
         public short RSSI { get; set; }
 
@@ -38,9 +38,9 @@ namespace BarometerBT.BlueMaestro
         public double AirHumidity { get; set; }
         public double AirPressure { get; set; }
 
-        public double GetTemperature(UnitsDescriptor units) { return units.ConvertTemperature(Temperature); }
+        public double GetTemperature(UnitsDescriptor units) { return units.TemperatureUnits.Convert(Temperature); }
         public double GetAirHumidity() { return AirHumidity; }
-        public double GetAirPressure(UnitsDescriptor units) { return units.ConvertPressure(AirPressure); }
+        public double GetAirPressure(UnitsDescriptor units) { return units.AirPressureUnits.Convert(AirPressure); }
         public double GetAirDewPoint(UnitsDescriptor units) { return (this.GetTemperature(units) - ((100 - this.AirHumidity) / 5)); }
 
         //for serialization
@@ -51,8 +51,8 @@ namespace BarometerBT.BlueMaestro
 
         public BMRecordBase(BluetoothDevice device, short rssi, DateTime recordDate, byte[] data)
         {
-            Name = device.Name;
-            Address = device.Address;
+            //Name = device.Name;
+            //Address = device.Address;
             RSSI = rssi;
 
             Date = recordDate;
@@ -64,8 +64,8 @@ namespace BarometerBT.BlueMaestro
             if (r == null)
                 return;
 
-            Name = r.Name;
-            Address = r.Address;
+            //Name = r.Name;
+            //Address = r.Address;
             RSSI = r.RSSI;
 
             Date = r.Date;
@@ -79,7 +79,7 @@ namespace BarometerBT.BlueMaestro
         public override string ToString()
         {
             string desc = "";
-            desc += ("Name: " + Name + " \n");
+            //desc += ("Name: " + Name + " \n");
             desc += ("Signal: " + RSSI + " dBm \n");
             return desc;
         }

@@ -38,8 +38,8 @@ namespace BarometerBT
 
             _listDevices.ItemsSource = _devices;
 
-            _cmbTemperatureUnits.ItemsSource = UnitsDescriptor.GetEnumTemperatureUnits();
-            _cmbAirPressureUnits.ItemsSource = UnitsDescriptor.GetEnumAirPressureUnits();
+            _cmbTemperatureUnits.ItemsSource = UnitsDescriptor.DefaultUnits.TemperatureUnits.GetEnum();
+            _cmbAirPressureUnits.ItemsSource = UnitsDescriptor.DefaultUnits.AirPressureUnits.GetEnum();
             
             _cmbTemperatureUnits.SelectedIndex = 0;
             _cmbAirPressureUnits.SelectedIndex = 0;
@@ -54,10 +54,10 @@ namespace BarometerBT
             UpdateChart();
 
             _btWatcher.OnBMDeviceMsgReceivedAction = (info) => { SetInfo(info); };
-            _btWatcher.OnBMDeviceCheckAction = (elapsed) => { UpdateDeviceList(); };
+            _btWatcher.OnBMDeviceCheckAction = (elapsed) => { /*UpdateDeviceList();*/ };
             _btWatcher.StartBluetoothSearch();
 
-            BMDatabaseMap.INSTANCE.OnRecordAddedAction = (r) => { MainWindow.UpdateAllAsync(r); };
+            BMDatabaseMap.INSTANCE.OnRecordAddedAction = (device) => { MainWindow.UpdateAllAsync(device); };
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -85,7 +85,7 @@ namespace BarometerBT
             });
         }
 
-        public static void UpdateAllAsync(BMRecordCurrent r)
+        public static void UpdateAllAsync(BluetoothDevice device)
         {
             CommonTools.ExecuteOnUiThreadBeginInvoke(() =>
             {
@@ -95,7 +95,7 @@ namespace BarometerBT
                     if(wnd._chkAutoUpdate.IsChecked.Value)
                     {
                         wnd.UpdateDeviceList();
-                        wnd.UpdateChart(r);
+                        wnd.UpdateChart(device);
                     }
                 }
             });
@@ -153,12 +153,12 @@ namespace BarometerBT
             });
         }
 
-        private void UpdateChart(BMRecordCurrent r = null)
+        private void UpdateChart(BluetoothDevice device = null)
         {
             BMDatabase selected = GetSelectedDB();
             if (selected != null)
             {
-                if(r == null || selected.Device.Address == r.Address)
+                if(device == null || selected.Device.Address == device.Address)
                     UpdateChartFromSelectedDB(selected);
             }
         }
@@ -176,8 +176,8 @@ namespace BarometerBT
 
             this.Cursor = Cursors.AppStarting;
 
-            db.Units.TemperatureUnits = (TemperatureUnits)_cmbTemperatureUnits.SelectedItem;
-            db.Units.AirPressureUnits = (AirPressureUnits)_cmbAirPressureUnits.SelectedItem;
+            db.Units.TemperatureUnits.Units = (eTemperatureUnits)_cmbTemperatureUnits.SelectedItem;
+            db.Units.AirPressureUnits.Units = (eAirPressureUnits)_cmbAirPressureUnits.SelectedItem;
 
             double days = double.Parse(((ComboBoxItem)_cmbDays.SelectedItem).Tag.ToString());
             TimeSpan daysBack = TimeSpan.FromDays(days);

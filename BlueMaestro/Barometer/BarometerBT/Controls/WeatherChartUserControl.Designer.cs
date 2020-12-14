@@ -34,7 +34,7 @@
             System.Windows.Forms.DataVisualization.Charting.Series series1 = new System.Windows.Forms.DataVisualization.Charting.Series();
             this.chart1 = new System.Windows.Forms.DataVisualization.Charting.Chart();
             this.m_txtValue = new System.Windows.Forms.TextBox();
-            this.m_chkAutoScroll = new System.Windows.Forms.CheckBox();
+            this.m_chkAutoScale = new System.Windows.Forms.CheckBox();
             this.m_grpControls = new System.Windows.Forms.GroupBox();
             this.m_btnReset = new System.Windows.Forms.Button();
             this._tooltip = new System.Windows.Forms.ToolTip(this.components);
@@ -84,26 +84,27 @@
             this.m_txtValue.TabIndex = 1;
             this.m_txtValue.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // m_chkAutoScroll
+            // m_chkAutoScale
             // 
-            this.m_chkAutoScroll.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.m_chkAutoScroll.AutoSize = true;
-            this.m_chkAutoScroll.BackColor = System.Drawing.Color.White;
-            this.m_chkAutoScroll.Checked = true;
-            this.m_chkAutoScroll.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.m_chkAutoScroll.Location = new System.Drawing.Point(4, 82);
-            this.m_chkAutoScroll.Name = "m_chkAutoScroll";
-            this.m_chkAutoScroll.Size = new System.Drawing.Size(77, 17);
-            this.m_chkAutoScroll.TabIndex = 30;
-            this.m_chkAutoScroll.Text = "Auto Scroll";
-            this.m_chkAutoScroll.UseVisualStyleBackColor = false;
+            this.m_chkAutoScale.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.m_chkAutoScale.AutoSize = true;
+            this.m_chkAutoScale.BackColor = System.Drawing.Color.White;
+            this.m_chkAutoScale.Checked = true;
+            this.m_chkAutoScale.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.m_chkAutoScale.Location = new System.Drawing.Point(4, 82);
+            this.m_chkAutoScale.Name = "m_chkAutoScale";
+            this.m_chkAutoScale.Size = new System.Drawing.Size(78, 17);
+            this.m_chkAutoScale.TabIndex = 30;
+            this.m_chkAutoScale.Text = "Auto Scale";
+            this.m_chkAutoScale.UseVisualStyleBackColor = false;
+            this.m_chkAutoScale.CheckedChanged += new System.EventHandler(this.m_chkAutoScale_CheckedChanged);
             // 
             // m_grpControls
             // 
             this.m_grpControls.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_grpControls.BackColor = System.Drawing.Color.White;
             this.m_grpControls.Controls.Add(this.m_btnReset);
-            this.m_grpControls.Controls.Add(this.m_chkAutoScroll);
+            this.m_grpControls.Controls.Add(this.m_chkAutoScale);
             this.m_grpControls.Controls.Add(this.m_txtValue);
             this.m_grpControls.Location = new System.Drawing.Point(363, 43);
             this.m_grpControls.Name = "m_grpControls";
@@ -145,7 +146,7 @@
 
         private System.Windows.Forms.DataVisualization.Charting.Chart chart1;
         private System.Windows.Forms.TextBox m_txtValue;
-        private System.Windows.Forms.CheckBox m_chkAutoScroll;
+        private System.Windows.Forms.CheckBox m_chkAutoScale;
         private System.Windows.Forms.GroupBox m_grpControls;
         private System.Windows.Forms.ToolTip _tooltip;
         private System.Windows.Forms.Button m_btnReset;

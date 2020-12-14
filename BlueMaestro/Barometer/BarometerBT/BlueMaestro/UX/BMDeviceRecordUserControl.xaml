@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:BarometerBT.BlueMaestro.UX"
              mc:Ignorable="d" Height="120" Width="400"
              d:DesignHeight="180" d:DesignWidth="400">
-    <Border Padding="3" BorderBrush="{Binding BorderBrush}" BorderThickness="2" CornerRadius="5" Background="{Binding Background}">
+    <Border Padding="3" BorderBrush="{Binding BorderBrush}" Background="{Binding Background, FallbackValue=AliceBlue}" 
+            BorderThickness="2" CornerRadius="5">
         <Grid ShowGridLines="False">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="3*"/>
@@ -24,7 +25,8 @@
                                      IsEnabled="{Binding IsActive}"
                                      Source="/Images/TempoDisk4in1.png" />
             <StackPanel Grid.Column="1" Grid.ColumnSpan="3" VerticalAlignment="Center" Orientation="Horizontal">
-                <TextBlock Text="{Binding Name, FallbackValue=EEEG23}" FontSize="22" FontWeight="Bold" />
+                <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, FallbackValue=EEEG23}" FontSize="22" FontWeight="Bold" 
+                         Background="Transparent" BorderThickness="0" />
                 <TextBlock Text="{Binding Address, FallbackValue=(12-34-56-78-90)}" Margin="10,5,0,0" VerticalAlignment="Center" />
             </StackPanel>
             <StackPanel Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Orientation="Horizontal">

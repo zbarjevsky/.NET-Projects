@@ -18,11 +18,13 @@ namespace BarometerBT.Controls
         private List<ChartPoint> _bufferFull = new List<ChartPoint>();
         private List<ChartPoint> _bufferFilter = new List<ChartPoint>();
 
+        private Scale _scaleAbsolute, _scaleFromPoints;
+
         public class Theme
         {
             public Color color = Color.Black;
             public string title = "Loading...";
-            public string units = " " + UnitsDescriptor.UNITS_C;
+            public string units = " " + TemperatureUnits.UNITS_C;
         }
 
         private Theme _theme = new Theme();
@@ -102,22 +104,28 @@ namespace BarometerBT.Controls
 
         public void UpdateChartTemperature(List<BMRecordCurrent> records, UnitsDescriptor units, bool isActive)
         {
+            _scaleAbsolute = units.TemperatureUnits.Scale;
+
             Color c = isActive ? Color.Red : Color.DarkGray;
-            UpdateChart(records, "Temperature", c, units.GetTemperatureUnitsDesc(),
+            UpdateChart(records, "Temperature", c, units.TemperatureUnits.Desc,
                 (record) => { return record.GetTemperature(units); });
         }
 
         public void UpdateChartHumidity(List<BMRecordCurrent> records, UnitsDescriptor units, bool isActive)
         {
+            _scaleAbsolute = units.RelativeHumidityUnits.Scale;
+
             Color c = isActive ? Color.Green : Color.DarkGray;
-            UpdateChart(records, "Humidity", c, units.GetHumidityUinitsDesc(),
+            UpdateChart(records, "Humidity", c, units.RelativeHumidityUnits.Desc,
                 (record) => { return record.GetAirHumidity(); });
         }
 
         public void UpdateChartAirPressure(List<BMRecordCurrent> records, UnitsDescriptor units, bool isActive)
         {
+            _scaleAbsolute = units.AirPressureUnits.Scale;
+
             Color c = isActive ? Color.Blue : Color.DarkGray;
-            UpdateChart(records, "Air Pressure", c, units.GetAirPressureUnitsDesc(),
+            UpdateChart(records, "Air Pressure", c, units.AirPressureUnits.Desc,
                 (record) => { return record.GetAirPressure(units); });
         }
 
@@ -173,30 +181,40 @@ namespace BarometerBT.Controls
 
             EnableRedraw(false);
 
-            double max = points[0].Value, min = points[0].Value;
+            _scaleFromPoints = new Scale(points[0].Value, points[0].Value);
 
             for (int i = 0; i < points.Count; i++)
             {
                 chart1.Series[0].Points.AddXY(points[i].Date, points[i].Value);
 
-                max = Math.Max(max, points[i].Value);
-                min = Math.Min(min, points[i].Value);
+                _scaleFromPoints.Update(points[i].Value);
             }
 
             m_txtValue.Text = points.Last().Value.ToString("0.0") + theme.units;
 
-            double margin = 0.1 + (max - min) / 5.0;
-
-            chart1.ChartAreas[0].AxisY.Minimum = min - margin;
-            chart1.ChartAreas[0].AxisY.Maximum = max + margin;
-            chart1.ChartAreas[0].RecalculateAxesScale();
-
+            UpdateGraphScale();
             UpdateTimeLabelsFormat();
 
             EnableRedraw(true);
         
             UpdateZoomResetButton();
             CheckZoomChanged();
+        }
+
+        private void UpdateGraphScale()
+        {
+            Scale scale = _scaleAbsolute;
+            if (m_chkAutoScale.Checked)
+            {
+                scale = _scaleFromPoints;
+                double margin = 0.1 + (scale.Max - scale.Min) / 5.0;
+                scale.Min -= margin;
+                scale.Max += margin;
+            }
+
+            chart1.ChartAreas[0].AxisY.Minimum = scale.Min;
+            chart1.ChartAreas[0].AxisY.Maximum = scale.Max;
+            chart1.ChartAreas[0].RecalculateAxesScale();
         }
 
         private void UpdateTimeLabelsFormat()
@@ -347,11 +365,16 @@ namespace BarometerBT.Controls
                 oldSelStart = newSelStart;
                 oldSelEnd = newSelEnd;
 
-                //Zoom has actually changed do your stuff
+                //Zoom has actually changed 
                 return true;
             }
 
             return false;
+        }
+
+        private void m_chkAutoScale_CheckedChanged(object sender, EventArgs e)
+        {
+            UpdateGraphScale();
         }
     }
 

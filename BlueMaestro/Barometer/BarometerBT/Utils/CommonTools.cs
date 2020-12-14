@@ -14,8 +14,11 @@ namespace BarometerBT.Utils
     {
         public static DispatcherOperation ExecuteOnUiThreadBeginInvoke(Action action, DispatcherPriority priority = DispatcherPriority.Normal)
         {
-            if (Application.Current != null)
+            if (Application.Current != null && !Application.Current.Dispatcher.CheckAccess())
                 return Application.Current.Dispatcher.BeginInvoke(action, priority);
+            else
+                action.Invoke();
+
             return null;
         }
 
@@ -25,8 +28,10 @@ namespace BarometerBT.Utils
         {
             try
             {
-                if (Application.Current != null)
+                if (Application.Current != null && !Application.Current.Dispatcher.CheckAccess())
                     Application.Current.Dispatcher.Invoke(action, priority);
+                else
+                    action.Invoke();
             }
             catch (Exception ex)
             {

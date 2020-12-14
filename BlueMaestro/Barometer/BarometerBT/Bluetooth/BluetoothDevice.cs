@@ -11,6 +11,7 @@ namespace BarometerBT.Bluetooth
         public string Name { get; set; }
         public ulong Address { get; set; }
         public string State { get; set; }
+        public string DisplayName { get; set; }
 
         //for serialization
         public BluetoothDevice()
@@ -23,6 +24,7 @@ namespace BarometerBT.Bluetooth
             Name = name;
             Address = address;
             State = state;
+            DisplayName = name;
         }
 
         public string GetAddressString()

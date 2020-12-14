@@ -21,14 +21,20 @@ namespace BarometerBT.Utils
         {
             if (PropertyChanged != null)
             {
-                CommonTools.ExecuteOnUiThreadInvoke(() => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)));
+                CommonTools.ExecuteOnUiThreadInvoke(() => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName)),
+                    System.Windows.Threading.DispatcherPriority.Normal, propertyName);
             }
         }
 
-        public void SetProperty<T>(ref T prop, T val, [CallerMemberName] string propertyName = null)
+        public bool SetProperty<T>(ref T prop, T val, [CallerMemberName] string propertyName = null)
         {
+            if (prop.Equals(val))
+                return false;
+
             prop = val;
             NotifyPropertyChanged(propertyName);
+
+            return true;
         }
     }
 }
