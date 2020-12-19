@@ -28,8 +28,27 @@
             <RowDefinition Height="30"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
+        <StackPanel>
+
+            <WrapPanel>
+                <TextBlock Width="100" Text="Date mask"/>
+                <local:MaskedTextBox Mask="00/00/0000" Width="100" Foreground="Gray"/>
+            </WrapPanel>
+
+            <WrapPanel>
+                <TextBlock Width="100" Text="Time mask"/>
+                <local:MaskedTextBox Mask="90:00" Width="100"/>
+            </WrapPanel>
+
+            <WrapPanel>
+                <TextBlock Width="100" Text="Phone mask"/>
+                <local:MaskedTextBox Mask="(999) 000-0000" Width="100"/>
+            </WrapPanel>
+
+        </StackPanel>
+
         <local:RangeSlider Grid.Row="1" x:Name="rangeSlider" 
-                           MinRange="3" RangeStart="0" RangeStop="1000" RangeStartSelected="10" RangeStopSelected="30"
+                           MinRange="3" RangeStart="0" RangeStop="1000" RangeStartSelected="200" RangeStopSelected="300"
                            Template="{StaticResource rangeSliderTemplate}" />
     </Grid>
 </Window>
