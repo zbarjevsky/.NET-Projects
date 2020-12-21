@@ -77,6 +77,8 @@
             this.m_btnBrowseForFolder = new System.Windows.Forms.Button();
             this.m_errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.m_ctxmnuMoveUP = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_ctxmnuMoveDOWN = new System.Windows.Forms.ToolStripMenuItem();
             this.m_statusStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.m_ContextMenuList.SuspendLayout();
@@ -274,6 +276,8 @@
             this.m_ctxmnuEdit,
             this.m_ctxmnuDownloadAgain,
             this.m_ctxmnuCMD,
+            this.m_ctxmnuMoveUP,
+            this.m_ctxmnuMoveDOWN,
             this.toolStripMenuItem5,
             this.m_ctxmnuOpenSelectedFile,
             this.m_ctxmnuOpenOutputFolder,
@@ -283,7 +287,7 @@
             this.toolStripMenuItem4,
             this.m_ctxmnuExit});
             this.m_ContextMenuList.Name = "contextMenuStrip1";
-            this.m_ContextMenuList.Size = new System.Drawing.Size(220, 330);
+            this.m_ContextMenuList.Size = new System.Drawing.Size(220, 382);
             // 
             // m_ctxmnuAddUrl
             // 
@@ -509,6 +513,22 @@
             // 
             this.m_errorProvider.ContainerControl = this;
             // 
+            // m_ctxmnuMoveUP
+            // 
+            this.m_ctxmnuMoveUP.Image = ((System.Drawing.Image)(resources.GetObject("m_ctxmnuMoveUP.Image")));
+            this.m_ctxmnuMoveUP.Name = "m_ctxmnuMoveUP";
+            this.m_ctxmnuMoveUP.Size = new System.Drawing.Size(219, 26);
+            this.m_ctxmnuMoveUP.Text = "Move UP in Queue";
+            this.m_ctxmnuMoveUP.Click += new System.EventHandler(this.m_ctxmnuMoveUP_Click);
+            // 
+            // m_ctxmnuMoveDOWN
+            // 
+            this.m_ctxmnuMoveDOWN.Image = ((System.Drawing.Image)(resources.GetObject("m_ctxmnuMoveDOWN.Image")));
+            this.m_ctxmnuMoveDOWN.Name = "m_ctxmnuMoveDOWN";
+            this.m_ctxmnuMoveDOWN.Size = new System.Drawing.Size(219, 26);
+            this.m_ctxmnuMoveDOWN.Text = "Move DOWN in Queue";
+            this.m_ctxmnuMoveDOWN.Click += new System.EventHandler(this.m_ctxmnuMoveDOWN_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -597,6 +617,8 @@
         private System.Windows.Forms.ToolStripMenuItem m_ctxmnuCMD;
         private System.Windows.Forms.ToolStripMenuItem m_ctxmnuCopyCommandLine;
         private System.Windows.Forms.ToolStripMenuItem m_ctxmnuEdit;
+        private System.Windows.Forms.ToolStripMenuItem m_ctxmnuMoveUP;
+        private System.Windows.Forms.ToolStripMenuItem m_ctxmnuMoveDOWN;
     }
 }
 

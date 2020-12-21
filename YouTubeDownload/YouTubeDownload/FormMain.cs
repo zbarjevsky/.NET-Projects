@@ -184,6 +184,8 @@ namespace YouTubeDownload
             m_ctxmnuOpenOutputFolder.Enabled = bHasSelection;
             m_ctxmnuOpenSelectedFile.Enabled = bHasSelection;
             m_ctxmnuRemoveSelected.Enabled = bHasSelection;
+            m_ctxmnuMoveUP.Enabled = bHasSelection;
+            m_ctxmnuMoveDOWN.Enabled = bHasSelection;
             m_ctxmnuEdit.Enabled = bHasSelection;
             m_ctxmnuDownloadAgain.Enabled = bHasSelection;
             m_ctxmnuCMD.Enabled = bHasSelection;
@@ -515,6 +517,30 @@ namespace YouTubeDownload
                 UpdateButtonsState();
                 StartDownloadNext(true);
             }
+        }
+
+        private void m_ctxmnuMoveUP_Click(object sender, EventArgs e)
+        {
+            if (m_listUrls.SelectedIndices.Count == 0 || m_listUrls.SelectedIndices[0] < 1)
+                return;
+
+            ListViewItem selected = m_listUrls.SelectedItems[0];
+            int idx = selected.Index;
+
+            m_listUrls.Items.RemoveAt(selected.Index);
+            m_listUrls.Items.Insert(idx - 1, selected);
+        }
+
+        private void m_ctxmnuMoveDOWN_Click(object sender, EventArgs e)
+        {
+            if (m_listUrls.SelectedIndices.Count == 0 || m_listUrls.SelectedIndices[0] >= m_listUrls.Items.Count - 1)
+                return;
+
+            ListViewItem selected = m_listUrls.SelectedItems[0];
+            int idx = selected.Index;
+
+            m_listUrls.Items.RemoveAt(selected.Index);
+            m_listUrls.Items.Insert(idx + 1, selected);
         }
     }
 }
