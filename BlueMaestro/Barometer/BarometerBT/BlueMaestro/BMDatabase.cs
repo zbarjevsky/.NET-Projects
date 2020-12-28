@@ -85,16 +85,95 @@ namespace BarometerBT.BlueMaestro
         {
             lock (Records)
             {
-                Records.AddRange(db.Records);
-                Records.Sort((r1, r2) => r1.Date.CompareTo(r2.Date));
+                List<BMRecordCurrent> records = MergeLinear(Records, db.Records);
+                
+                Records.Clear();
+                Records.AddRange(records);
+            }
+        }
 
-                //remove duplicates
-                for (int i = Records.Count - 1; i > 0; i--)
+        //takes 10x times more time than linear merge
+        public static List<BMRecordCurrent> MergeSimple(List<BMRecordCurrent> r1, List<BMRecordCurrent> r2)
+        {
+            if ((r1 == null || r1.Count == 0) && (r2 == null || r2.Count == 0))
+                return new List<BMRecordCurrent>();
+            if (r1 == null || r1.Count == 0)
+                return new List<BMRecordCurrent>(r2);
+            if (r2 == null || r2.Count == 0)
+                return new List<BMRecordCurrent>(r1);
+
+            List<BMRecordCurrent> recordsIn = new List<BMRecordCurrent>(r1.Count);
+            recordsIn.AddRange(r1);
+            recordsIn.AddRange(r2);
+            recordsIn.Sort((rec1, rec2) => rec1.Date.CompareTo(rec2.Date));
+
+            //remove duplicates
+            List<BMRecordCurrent> recordsOut = new List<BMRecordCurrent>(recordsIn.Count);
+            recordsOut.Add(recordsIn[0]);
+            for (int i = 1; i < recordsIn.Count; i++)
+            {
+                if (recordsIn[i].Date == recordsIn[i - 1].Date)
+                    continue;
+                recordsOut.Add(recordsIn[i]);
+            }
+            return recordsOut;
+        }
+
+        //assuming all DB are sorted by date
+        public static List<BMRecordCurrent> MergeLinear(List<BMRecordCurrent> r1, List<BMRecordCurrent> r2)
+        {
+            if ((r1 == null || r1.Count == 0) && (r2 == null || r2.Count == 0))
+                return new List<BMRecordCurrent>();
+            if (r1 == null || r1.Count == 0)
+                return new List<BMRecordCurrent>(r2);
+            if (r2 == null || r2.Count == 0)
+                return new List<BMRecordCurrent>(r1);
+
+            List<BMRecordCurrent> records = new List<BMRecordCurrent>(r1.Count);
+            BMRecordCurrent current = null, last = null;
+
+            int i1 = 0, i2 = 0;
+            while(i1 < r1.Count || i2 < r2.Count)
+            {
+                if (i1 < r1.Count && i2 < r2.Count)
                 {
-                    if (Records[i].Date == Records[i - 1].Date)
-                        Records.RemoveAt(i);
+                    if (r1[i1].Date == r2[i2].Date)
+                    {
+                        current = r1[i1];
+                        i1++;
+                        i2++;
+                    }
+                    else if (r1[i1].Date < r2[i2].Date)
+                    {
+                        current = r1[i1];
+                        i1++;
+                    }
+                    else
+                    {
+                        current = r2[i2];
+                        i2++;
+                    }
+                }
+                else if (i1 < r1.Count)
+                {
+                    current = r1[i1];
+                    i1++;
+                }
+                else if (i2 < r2.Count)
+                {
+                    current = r2[i2];
+                    i2++;
+                }
+
+
+                if (last == null || current.Date != last.Date)
+                {
+                    records.Add(current);
+                    last = current;
                 }
             }
+
+            return records;
         }
 
         public List<BMRecordCurrent> GetLastRecords(TimeSpan interval)

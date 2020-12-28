@@ -308,6 +308,8 @@ namespace BarometerBT
 
             if (_openFileDialog.ShowDialog(this).Value)
             {
+                this.Cursor = Cursors.Wait;
+
                 //_openDirectory = Path.GetDirectoryName(_openFileDialog.FileName);
 
                 List<string> fileNamesList = new List<string>(_openFileDialog.FileNames);
@@ -323,6 +325,8 @@ namespace BarometerBT
 
                 UpdateDeviceList();
                 UpdateChart();
+
+                this.Cursor = Cursors.Arrow;
             }
         }
 

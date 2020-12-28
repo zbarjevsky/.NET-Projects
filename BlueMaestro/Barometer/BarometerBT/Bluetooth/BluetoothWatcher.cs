@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Threading;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.Advertisement;
 using Windows.Storage.Streams;
@@ -21,6 +22,8 @@ namespace BarometerBT.Bluetooth
     //C:\Program Files(x86)\Reference Assemblies\Microsoft\Framework\.NETCore\v4.5\System.Runtime.WindowsRuntime.dll
     public class BluetoothWatcher
     {
+        public const int OUT_OF_RANGE_TIMEOUT = 50000;
+
         public Action<string> OnBMDeviceMsgReceivedAction = (info) => { };
         public Action<TimeSpan> OnBMDeviceCheckAction = (elapsed) => { };
         public Action<TimeSpan> OnBLEDeviceCheckAction = (elapsed) => { };
@@ -36,7 +39,7 @@ namespace BarometerBT.Bluetooth
         private BMRecordAverages _averages;
         private BMRecordCurrent _current;
 
-        private System.Threading.Timer _timer;
+        private DispatcherTimer _timer;
 
         public class MData
         {
@@ -75,34 +78,43 @@ namespace BarometerBT.Bluetooth
         public BluetoothWatcher()
         {
             //I need watch dog - to check bluetooth connection status once a 1 minute
-            _timer = new Timer((o) => 
-            {
-                TimeSpan tsBM = _stopperBM.Elapsed;
-                TimeSpan tsWD = _watchDog.Elapsed;
-
-                OnBMDeviceCheckAction(tsBM);
-                OnBLEDeviceCheckAction(tsWD);
-
-                //if no message more than one minute - restart BluetoothLEAdvertisementWatcher
-                if (tsWD.TotalMinutes > 1.0)
-                {
-                    try
-                    {
-                        Log.d("Watch Dog Elapsed: " + tsWD);
-                        CommonTools.ErrorMessage("Watcher is Stuck!\nRestarting...\n" + tsWD);
-                        StopBluetoothSearch();
-                        StartBluetoothSearch();
-                    }
-                    catch (Exception err)
-                    {
-                        Log.e("Watch Dog Exception: " + err);
-                        CommonTools.ErrorMessage("Exception on Stuck: " + err);
-                    }
-                }
-            }, null, 10000, 60000);
+            _timer = new DispatcherTimer(DispatcherPriority.Background);
+            _timer.Interval = TimeSpan.FromMilliseconds(OUT_OF_RANGE_TIMEOUT);
+            _timer.Tick += _timer_Tick;
+            _timer.Start();
         }
 
-        public void StartBluetoothSearch(int OutOfRangeTimeout = 5000, int SamplingInterval = 2000)
+        private void _timer_Tick(object sender, EventArgs e)
+        {
+            _timer.Stop();
+
+            TimeSpan tsBM = _stopperBM.Elapsed;
+            TimeSpan tsWD = _watchDog.Elapsed;
+
+            OnBMDeviceCheckAction(tsBM);
+            OnBLEDeviceCheckAction(tsWD);
+
+            //if no message more than one minute - restart BluetoothLEAdvertisementWatcher
+            if (tsWD.TotalMinutes > 1.0)
+            {
+                try
+                {
+                    Log.d("Watch Dog Elapsed: " + tsWD);
+                    CommonTools.ErrorMessage("Watcher is Stuck!\nRestarting...\n" + tsWD);
+                    StopBluetoothSearch();
+                    StartBluetoothSearch();
+                }
+                catch (Exception err)
+                {
+                    Log.e("Watch Dog Exception: " + err);
+                    CommonTools.ErrorMessage("Exception on Stuck: " + err);
+                }
+            }
+
+            _timer.Start();
+        }
+
+        public void StartBluetoothSearch(int OutOfRangeTimeout = OUT_OF_RANGE_TIMEOUT, int SamplingInterval = 2000)
         {
             _watcherBLE.ScanningMode = BluetoothLEScanningMode.Active;
 

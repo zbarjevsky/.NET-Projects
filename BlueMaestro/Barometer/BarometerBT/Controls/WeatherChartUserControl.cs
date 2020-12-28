@@ -19,6 +19,7 @@ namespace BarometerBT.Controls
         private List<ChartPoint> _bufferFilter = new List<ChartPoint>();
 
         private Scale _scaleAbsolute, _scaleFromPoints;
+        HorizontalLineAnnotation _annotationLine = new HorizontalLineAnnotation();
 
         public class Theme
         {
@@ -60,6 +61,19 @@ namespace BarometerBT.Controls
             // set scrollbar small change to blockSize (e.g. 100)
             chartArea.AxisX.ScaleView.SmallScrollSize = oneMinute;
             chartArea.AxisX.ScaleView.SmallScrollMinSize = 0;
+
+            chart1.Annotations.Clear();
+
+            //foreground line
+            _annotationLine.AxisX = chart1.ChartAreas[0].AxisX;
+            _annotationLine.AxisY = chart1.ChartAreas[0].AxisY;
+            _annotationLine.IsSizeAlwaysRelative = false;
+            _annotationLine.AnchorY = 2;
+            _annotationLine.IsInfinitive = true;
+            _annotationLine.ClipToChartArea = chart1.ChartAreas[0].Name;
+            _annotationLine.LineColor = Color.Navy;
+            _annotationLine.LineWidth = 2;
+            chart1.Annotations.Add(_annotationLine);
 
             UpdateZoomResetButton();
             CheckZoomChanged();
@@ -142,6 +156,9 @@ namespace BarometerBT.Controls
             chart1.Series[0].Points.Clear();
             chart1.Series[0].Color = _theme.color;
             chart1.Series[0].Name = _theme.title;
+   
+            _annotationLine.AnchorY = 0;
+            _annotationLine.LineColor = _theme.color;
 
             UpdateZoomResetButton();
 
@@ -191,6 +208,8 @@ namespace BarometerBT.Controls
             }
 
             m_txtValue.Text = points.Last().Value.ToString("0.0") + theme.units;
+
+            _annotationLine.AnchorY = points.Last().Value;
 
             UpdateGraphScale();
             UpdateTimeLabelsFormat();

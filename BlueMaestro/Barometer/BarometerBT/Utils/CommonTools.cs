@@ -47,8 +47,10 @@ namespace BarometerBT.Utils
                 return ts.ToString(@"mm\m\ ss\.f\s");
             if (ts.TotalDays < 1.0)
                 return ts.ToString(@"hh\h\ mm\m\ ss\s");
+            if (ts.TotalDays <= 30.0)
+                return ts.ToString(@"d\d\ hh\h\ mm\m\ ss\s");
 
-            return ts.ToString(@"d\d\ hh\h\ mm\m\ ss\s");
+            return ts.ToString(@"D\d\ hh\h\ mm\m\ ss\s");
         }
 
         public static void WriteInfoLine([CallerMemberName] string caller = "", [CallerFilePath] string file = "")

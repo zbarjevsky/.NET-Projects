@@ -195,4 +195,10 @@
     <SplashScreen Include="Images\SplashScreen.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>if "$(ConfigurationName)" == "Release" (
+ xcopy /E /f /r /y $(TargetDir)*.exe $(ProjectDir)..\..\..\Binaries\$(ProjectName)\
+ rem xcopy /E /f /r /y $(TargetDir)*.dll $(ProjectDir)..\..\..\Binaries\$(ProjectName)\
+)</PostBuildEvent>
+  </PropertyGroup>
 </Project>
