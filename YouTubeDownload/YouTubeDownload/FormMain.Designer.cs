@@ -45,6 +45,8 @@
             this.m_mnuToolsUpdateDL = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
             this.m_mnuToolsOutputFolder = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuSaveList = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuLoadList = new System.Windows.Forms.ToolStripMenuItem();
             this.m_mnuHelp = new System.Windows.Forms.ToolStripMenuItem();
             this.m_mnuHelpAbout = new System.Windows.Forms.ToolStripMenuItem();
             this.m_listUrls = new System.Windows.Forms.ListView();
@@ -70,7 +72,6 @@
             this.m_ctxmnuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.m_btnAddUrl = new System.Windows.Forms.Button();
             this.m_spliMain = new System.Windows.Forms.SplitContainer();
-            this.m_DownloaderUserControl = new YouTubeDownload.DownloaderUserControl();
             this.m_btnClearList = new System.Windows.Forms.Button();
             this.m_lnkOutputFolder = new System.Windows.Forms.LinkLabel();
             this.m_btnPause = new System.Windows.Forms.Button();
@@ -79,8 +80,15 @@
             this.m_btnBrowseForFolder = new System.Windows.Forms.Button();
             this.m_errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.m_mnuSaveList = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_mnuLoadList = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.m_pnlTools = new System.Windows.Forms.Panel();
+            this.m_btnOpen = new System.Windows.Forms.ToolStripButton();
+            this.m_btnSave = new System.Windows.Forms.ToolStripButton();
+            this.m_btnNewDownload = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.m_btnUpdateTB = new System.Windows.Forms.ToolStripButton();
+            this.m_DownloaderUserControl = new YouTubeDownload.DownloaderUserControl();
             this.m_statusStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.m_ContextMenuList.SuspendLayout();
@@ -89,6 +97,8 @@
             this.m_spliMain.Panel2.SuspendLayout();
             this.m_spliMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_errorProvider)).BeginInit();
+            this.toolStrip1.SuspendLayout();
+            this.m_pnlTools.SuspendLayout();
             this.SuspendLayout();
             // 
             // m_statusStrip
@@ -98,7 +108,7 @@
             this.m_Status1,
             this.m_Status2,
             this.m_StatusProgress});
-            this.m_statusStrip.Location = new System.Drawing.Point(0, 531);
+            this.m_statusStrip.Location = new System.Drawing.Point(0, 630);
             this.m_statusStrip.Name = "m_statusStrip";
             this.m_statusStrip.Padding = new System.Windows.Forms.Padding(2, 0, 21, 0);
             this.m_statusStrip.Size = new System.Drawing.Size(984, 31);
@@ -128,7 +138,7 @@
             this.m_btnUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnUpdate.Image = ((System.Drawing.Image)(resources.GetObject("m_btnUpdate.Image")));
             this.m_btnUpdate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnUpdate.Location = new System.Drawing.Point(661, 29);
+            this.m_btnUpdate.Location = new System.Drawing.Point(661, 5);
             this.m_btnUpdate.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnUpdate.Name = "m_btnUpdate";
             this.m_btnUpdate.Size = new System.Drawing.Size(310, 33);
@@ -195,28 +205,42 @@
             // m_mnuToolsSettings
             // 
             this.m_mnuToolsSettings.Name = "m_mnuToolsSettings";
-            this.m_mnuToolsSettings.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuToolsSettings.Size = new System.Drawing.Size(174, 22);
             this.m_mnuToolsSettings.Text = "&Settings";
             this.m_mnuToolsSettings.Click += new System.EventHandler(this.m_mnuToolsSettings_Click);
             // 
             // m_mnuToolsUpdateDL
             // 
             this.m_mnuToolsUpdateDL.Name = "m_mnuToolsUpdateDL";
-            this.m_mnuToolsUpdateDL.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuToolsUpdateDL.Size = new System.Drawing.Size(174, 22);
             this.m_mnuToolsUpdateDL.Text = "Update youtube-dl";
             this.m_mnuToolsUpdateDL.Click += new System.EventHandler(this.m_mnuToolsUpdateDL_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(177, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(171, 6);
             // 
             // m_mnuToolsOutputFolder
             // 
             this.m_mnuToolsOutputFolder.Name = "m_mnuToolsOutputFolder";
-            this.m_mnuToolsOutputFolder.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuToolsOutputFolder.Size = new System.Drawing.Size(174, 22);
             this.m_mnuToolsOutputFolder.Text = "Output Folder...";
             this.m_mnuToolsOutputFolder.Click += new System.EventHandler(this.m_mnuToolsOutputFolder_Click);
+            // 
+            // m_mnuSaveList
+            // 
+            this.m_mnuSaveList.Name = "m_mnuSaveList";
+            this.m_mnuSaveList.Size = new System.Drawing.Size(174, 22);
+            this.m_mnuSaveList.Text = "Save List...";
+            this.m_mnuSaveList.Click += new System.EventHandler(this.m_mnuSaveList_Click);
+            // 
+            // m_mnuLoadList
+            // 
+            this.m_mnuLoadList.Name = "m_mnuLoadList";
+            this.m_mnuLoadList.Size = new System.Drawing.Size(174, 22);
+            this.m_mnuLoadList.Text = "LoadList...";
+            this.m_mnuLoadList.Click += new System.EventHandler(this.m_mnuLoadList_Click);
             // 
             // m_mnuHelp
             // 
@@ -247,7 +271,7 @@
             this.m_listUrls.HideSelection = false;
             this.m_listUrls.Location = new System.Drawing.Point(0, 0);
             this.m_listUrls.Name = "m_listUrls";
-            this.m_listUrls.Size = new System.Drawing.Size(959, 155);
+            this.m_listUrls.Size = new System.Drawing.Size(980, 235);
             this.m_listUrls.TabIndex = 0;
             this.m_listUrls.UseCompatibleStateImageBehavior = false;
             this.m_listUrls.View = System.Windows.Forms.View.Details;
@@ -410,7 +434,7 @@
             // 
             this.m_btnAddUrl.Image = ((System.Drawing.Image)(resources.GetObject("m_btnAddUrl.Image")));
             this.m_btnAddUrl.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnAddUrl.Location = new System.Drawing.Point(10, 29);
+            this.m_btnAddUrl.Location = new System.Drawing.Point(10, 5);
             this.m_btnAddUrl.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnAddUrl.Name = "m_btnAddUrl";
             this.m_btnAddUrl.Size = new System.Drawing.Size(289, 33);
@@ -421,12 +445,10 @@
             // 
             // m_spliMain
             // 
-            this.m_spliMain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.m_spliMain.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.m_spliMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_spliMain.FixedPanel = System.Windows.Forms.FixedPanel.Panel2;
-            this.m_spliMain.Location = new System.Drawing.Point(8, 103);
+            this.m_spliMain.Location = new System.Drawing.Point(0, 129);
             this.m_spliMain.Name = "m_spliMain";
             this.m_spliMain.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -437,24 +459,15 @@
             // m_spliMain.Panel2
             // 
             this.m_spliMain.Panel2.Controls.Add(this.m_DownloaderUserControl);
-            this.m_spliMain.Size = new System.Drawing.Size(963, 421);
-            this.m_spliMain.SplitterDistance = 159;
+            this.m_spliMain.Size = new System.Drawing.Size(984, 501);
+            this.m_spliMain.SplitterDistance = 239;
             this.m_spliMain.TabIndex = 7;
-            // 
-            // m_DownloaderUserControl
-            // 
-            this.m_DownloaderUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_DownloaderUserControl.Location = new System.Drawing.Point(0, 0);
-            this.m_DownloaderUserControl.Margin = new System.Windows.Forms.Padding(4);
-            this.m_DownloaderUserControl.Name = "m_DownloaderUserControl";
-            this.m_DownloaderUserControl.Size = new System.Drawing.Size(959, 254);
-            this.m_DownloaderUserControl.TabIndex = 0;
             // 
             // m_btnClearList
             // 
             this.m_btnClearList.Image = ((System.Drawing.Image)(resources.GetObject("m_btnClearList.Image")));
             this.m_btnClearList.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnClearList.Location = new System.Drawing.Point(319, 64);
+            this.m_btnClearList.Location = new System.Drawing.Point(305, 40);
             this.m_btnClearList.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnClearList.Name = "m_btnClearList";
             this.m_btnClearList.Size = new System.Drawing.Size(139, 33);
@@ -470,7 +483,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_lnkOutputFolder.BackColor = System.Drawing.SystemColors.Control;
             this.m_lnkOutputFolder.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.m_lnkOutputFolder.Location = new System.Drawing.Point(465, 65);
+            this.m_lnkOutputFolder.Location = new System.Drawing.Point(465, 41);
             this.m_lnkOutputFolder.Name = "m_lnkOutputFolder";
             this.m_lnkOutputFolder.Size = new System.Drawing.Size(457, 32);
             this.m_lnkOutputFolder.TabIndex = 6;
@@ -483,7 +496,7 @@
             // 
             this.m_btnPause.Image = ((System.Drawing.Image)(resources.GetObject("m_btnPause.Image")));
             this.m_btnPause.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnPause.Location = new System.Drawing.Point(10, 64);
+            this.m_btnPause.Location = new System.Drawing.Point(10, 40);
             this.m_btnPause.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnPause.Name = "m_btnPause";
             this.m_btnPause.Size = new System.Drawing.Size(136, 33);
@@ -504,7 +517,7 @@
             // 
             this.m_btnRemove.Image = ((System.Drawing.Image)(resources.GetObject("m_btnRemove.Image")));
             this.m_btnRemove.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnRemove.Location = new System.Drawing.Point(154, 64);
+            this.m_btnRemove.Location = new System.Drawing.Point(153, 40);
             this.m_btnRemove.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnRemove.Name = "m_btnRemove";
             this.m_btnRemove.Size = new System.Drawing.Size(145, 33);
@@ -519,7 +532,7 @@
             this.m_btnBrowseForFolder.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnBrowseForFolder.Image = ((System.Drawing.Image)(resources.GetObject("m_btnBrowseForFolder.Image")));
             this.m_btnBrowseForFolder.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnBrowseForFolder.Location = new System.Drawing.Point(928, 65);
+            this.m_btnBrowseForFolder.Location = new System.Drawing.Point(930, 40);
             this.m_btnBrowseForFolder.Name = "m_btnBrowseForFolder";
             this.m_btnBrowseForFolder.Size = new System.Drawing.Size(41, 33);
             this.m_btnBrowseForFolder.TabIndex = 5;
@@ -533,33 +546,100 @@
             // 
             this.m_errorProvider.ContainerControl = this;
             // 
-            // m_mnuSaveList
+            // toolStrip1
             // 
-            this.m_mnuSaveList.Name = "m_mnuSaveList";
-            this.m_mnuSaveList.Size = new System.Drawing.Size(180, 22);
-            this.m_mnuSaveList.Text = "Save List...";
-            this.m_mnuSaveList.Click += new System.EventHandler(this.m_mnuSaveList_Click);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.m_btnNewDownload,
+            this.toolStripSeparator1,
+            this.m_btnOpen,
+            this.m_btnSave,
+            this.toolStripSeparator2,
+            this.m_btnUpdateTB});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 24);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(984, 25);
+            this.toolStrip1.TabIndex = 10;
+            this.toolStrip1.Text = "toolStrip1";
             // 
-            // m_mnuLoadList
+            // m_pnlTools
             // 
-            this.m_mnuLoadList.Name = "m_mnuLoadList";
-            this.m_mnuLoadList.Size = new System.Drawing.Size(180, 22);
-            this.m_mnuLoadList.Text = "LoadList...";
-            this.m_mnuLoadList.Click += new System.EventHandler(this.m_mnuLoadList_Click);
+            this.m_pnlTools.Controls.Add(this.m_btnUpdate);
+            this.m_pnlTools.Controls.Add(this.m_btnAddUrl);
+            this.m_pnlTools.Controls.Add(this.m_btnBrowseForFolder);
+            this.m_pnlTools.Controls.Add(this.m_btnClearList);
+            this.m_pnlTools.Controls.Add(this.m_btnRemove);
+            this.m_pnlTools.Controls.Add(this.m_lnkOutputFolder);
+            this.m_pnlTools.Controls.Add(this.m_btnPause);
+            this.m_pnlTools.Dock = System.Windows.Forms.DockStyle.Top;
+            this.m_pnlTools.Location = new System.Drawing.Point(0, 49);
+            this.m_pnlTools.Name = "m_pnlTools";
+            this.m_pnlTools.Size = new System.Drawing.Size(984, 80);
+            this.m_pnlTools.TabIndex = 1;
+            // 
+            // m_btnOpen
+            // 
+            this.m_btnOpen.Image = ((System.Drawing.Image)(resources.GetObject("m_btnOpen.Image")));
+            this.m_btnOpen.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.m_btnOpen.Name = "m_btnOpen";
+            this.m_btnOpen.Size = new System.Drawing.Size(65, 22);
+            this.m_btnOpen.Text = "Open...";
+            this.m_btnOpen.Click += new System.EventHandler(this.m_mnuLoadList_Click);
+            // 
+            // m_btnSave
+            // 
+            this.m_btnSave.Image = ((System.Drawing.Image)(resources.GetObject("m_btnSave.Image")));
+            this.m_btnSave.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.m_btnSave.Name = "m_btnSave";
+            this.m_btnSave.Size = new System.Drawing.Size(51, 22);
+            this.m_btnSave.Text = "Save";
+            this.m_btnSave.Click += new System.EventHandler(this.m_mnuSaveList_Click);
+            // 
+            // m_btnNewDownload
+            // 
+            this.m_btnNewDownload.Image = ((System.Drawing.Image)(resources.GetObject("m_btnNewDownload.Image")));
+            this.m_btnNewDownload.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.m_btnNewDownload.Name = "m_btnNewDownload";
+            this.m_btnNewDownload.Size = new System.Drawing.Size(117, 22);
+            this.m_btnNewDownload.Text = "New Download...";
+            this.m_btnNewDownload.Click += new System.EventHandler(this.m_btnAddUrl_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // m_btnUpdateTB
+            // 
+            this.m_btnUpdateTB.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.m_btnUpdateTB.Image = ((System.Drawing.Image)(resources.GetObject("m_btnUpdateTB.Image")));
+            this.m_btnUpdateTB.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.m_btnUpdateTB.Name = "m_btnUpdateTB";
+            this.m_btnUpdateTB.Size = new System.Drawing.Size(166, 22);
+            this.m_btnUpdateTB.Text = "Update youtube-dl engine";
+            this.m_btnUpdateTB.Click += new System.EventHandler(this.m_btnUpdate_Click);
+            // 
+            // m_DownloaderUserControl
+            // 
+            this.m_DownloaderUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_DownloaderUserControl.Location = new System.Drawing.Point(0, 0);
+            this.m_DownloaderUserControl.Margin = new System.Windows.Forms.Padding(4);
+            this.m_DownloaderUserControl.Name = "m_DownloaderUserControl";
+            this.m_DownloaderUserControl.Size = new System.Drawing.Size(980, 254);
+            this.m_DownloaderUserControl.TabIndex = 0;
             // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(984, 562);
-            this.Controls.Add(this.m_btnBrowseForFolder);
-            this.Controls.Add(this.m_btnRemove);
-            this.Controls.Add(this.m_btnPause);
-            this.Controls.Add(this.m_lnkOutputFolder);
-            this.Controls.Add(this.m_btnClearList);
+            this.ClientSize = new System.Drawing.Size(984, 661);
             this.Controls.Add(this.m_spliMain);
-            this.Controls.Add(this.m_btnAddUrl);
-            this.Controls.Add(this.m_btnUpdate);
+            this.Controls.Add(this.m_pnlTools);
+            this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.m_statusStrip);
             this.Controls.Add(this.menuStrip1);
             this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
@@ -582,6 +662,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.m_spliMain)).EndInit();
             this.m_spliMain.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.m_errorProvider)).EndInit();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
+            this.m_pnlTools.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -639,6 +722,14 @@
         private System.Windows.Forms.ToolStripMenuItem m_ctxmnuMoveDOWN;
         private System.Windows.Forms.ToolStripMenuItem m_mnuSaveList;
         private System.Windows.Forms.ToolStripMenuItem m_mnuLoadList;
+        private System.Windows.Forms.Panel m_pnlTools;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripButton m_btnOpen;
+        private System.Windows.Forms.ToolStripButton m_btnSave;
+        private System.Windows.Forms.ToolStripButton m_btnNewDownload;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripButton m_btnUpdateTB;
     }
 }
 

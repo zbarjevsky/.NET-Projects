@@ -175,12 +175,14 @@ namespace YouTubeDownload
             bool bHasSelection = m_listUrls.SelectedItems.Count > 0;
 
             m_btnUpdate.Enabled = m_DownloaderUserControl.State != eDownloadState.Working;
+            m_btnUpdateTB.Enabled = m_btnUpdate.Enabled;
 
             m_btnAddUrl.Enabled = true;
             m_btnRemove.Enabled = bHasSelection;
             m_btnClearList.Enabled = m_listUrls.Items.Count > 0;
 
             m_ctxmnuAddUrl.Enabled = m_btnAddUrl.Enabled;
+            m_btnNewDownload.Enabled = m_btnAddUrl.Enabled;
             m_ctxmnuOpenOutputFolder.Enabled = bHasSelection;
             m_ctxmnuOpenSelectedFile.Enabled = bHasSelection;
             m_ctxmnuRemoveSelected.Enabled = bHasSelection;
