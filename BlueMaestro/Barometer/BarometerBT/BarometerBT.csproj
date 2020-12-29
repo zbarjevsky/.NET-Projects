@@ -70,6 +70,12 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="..\..\..\Framework.MkZ\Framework.MkZ\Windows\Log.cs">
+      <Link>Utils\Log.cs</Link>
+    </Compile>
+    <Compile Include="..\..\..\Framework.MkZ\Framework.MkZ\Windows\XmlSerializerHelper.cs">
+      <Link>Utils\XmlSerializerHelper.cs</Link>
+    </Compile>
     <Compile Include="BlueMaestro\BMDatabase.cs" />
     <Compile Include="BlueMaestro\BMDatabaseMap.cs" />
     <Compile Include="BlueMaestro\UX\AutoGrayableImage.cs" />
@@ -107,13 +113,11 @@
     <Compile Include="Utils\CommonTools.cs" />
     <Compile Include="Utils\Entry.cs" />
     <Compile Include="Utils\InvertBoolConverter.cs" />
-    <Compile Include="Utils\Log.cs" />
     <Compile Include="Utils\MainPage.cs" />
     <Compile Include="Utils\NotifyPropertyChangedImpl.cs" />
     <Compile Include="Utils\TextView.cs" />
     <Compile Include="Utils\UnitsDescriptor.cs" />
     <Compile Include="Utils\ViewGroup.cs" />
-    <Compile Include="Utils\XmlHelper.cs" />
     <Page Include="BlueMaestro\UX\BMDeviceRecordUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

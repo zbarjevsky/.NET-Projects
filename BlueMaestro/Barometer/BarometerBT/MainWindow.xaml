@@ -69,13 +69,13 @@
                         <ComboBoxItem Content="Show Last 12 hours" Tag="0.5"/>    
                         <ComboBoxItem Content="Show Last 24 hours" Tag="1"/>    
                         <ComboBoxItem Content="Show Last 3 days" Tag="3"/>    
-                        <ComboBoxItem Content="Show Last 7 days" Tag="7"/>    
+                        <ComboBoxItem Content="Show Last 7 days" Tag="7" IsSelected="True"/>    
                         <ComboBoxItem Content="Show Last 14 days" Tag="14"/>    
                         <ComboBoxItem Content="Show Last 30 days" Tag="30"/>
                         <ComboBoxItem Content="Show Last 90 days" Tag="90"/>
                         <ComboBoxItem Content="Show Last 180 days" Tag="180"/>
                         <ComboBoxItem Content="Show Last 365 days" Tag="365"/>
-                        <ComboBoxItem Content="Show All Available Range" Tag="3000" IsSelected="True"/>    
+                        <ComboBoxItem Content="Show All Available Range" Tag="3000"/>    
                     </ComboBox>
                    <StackPanel Orientation="Horizontal">
                         <CheckBox x:Name="_chkAutoZoom" Content="Auto" Margin="6" VerticalAlignment="Center"

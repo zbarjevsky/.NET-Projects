@@ -1,5 +1,6 @@
 ﻿using BarometerBT.Bluetooth;
 using BarometerBT.Utils;
+using MZ.Tools;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

@@ -51,7 +51,7 @@ namespace YouTubeDownload
 
         private void FormMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (m_DownloaderUserControl.State == DownloadState.Working)
+            if (m_DownloaderUserControl.State == eDownloadState.Working)
             {
                 DialogResult res = MessageBox.Show(this, "Download in progress, Terminate?", "Closing...",
                     MessageBoxButtons.OKCancel, MessageBoxIcon.Question);
@@ -90,7 +90,7 @@ namespace YouTubeDownload
             //foreach (EncodingInfo enc in Encoding.GetEncodings())
             //{
             DownloadData data = frm.Data.Clone();
-            data.State = DownloadState.InQueue;
+            data.State = eDownloadState.InQueue;
             //data.Encoding = enc.GetEncoding();
 
             ListViewItem item = new ListViewItem(data.State.ToString());
@@ -130,7 +130,7 @@ namespace YouTubeDownload
 
         private bool StartDownloadNext(bool noWindow)
         {
-            if (m_DownloaderUserControl.State == DownloadState.Working)
+            if (m_DownloaderUserControl.State == eDownloadState.Working)
                 return false;
             if (_pause)
                 return false;
@@ -138,7 +138,7 @@ namespace YouTubeDownload
             foreach (ListViewItem item in m_listUrls.Items)
             {
                 DownloadData data = item.Tag as DownloadData;
-                if (data.State == DownloadState.InQueue)
+                if (data.State == eDownloadState.InQueue)
                 {
                     this.Cursor = Cursors.AppStarting;
                     m_DownloaderUserControl.Start(data, noWindow);
@@ -161,7 +161,7 @@ namespace YouTubeDownload
                 item.SubItems[1].Text = Path.GetFileName(data.Description.Trim('"'));
                 item.SubItems[2].Text = data.Url;
 
-                if (data.State == DownloadState.Working)
+                if (data.State == eDownloadState.Working)
                     activeData = item;
             }
 
@@ -174,7 +174,7 @@ namespace YouTubeDownload
         {
             bool bHasSelection = m_listUrls.SelectedItems.Count > 0;
 
-            m_btnUpdate.Enabled = m_DownloaderUserControl.State != DownloadState.Working;
+            m_btnUpdate.Enabled = m_DownloaderUserControl.State != eDownloadState.Working;
 
             m_btnAddUrl.Enabled = true;
             m_btnRemove.Enabled = bHasSelection;
@@ -192,8 +192,8 @@ namespace YouTubeDownload
             m_ctxmnuCopyFileName.Enabled = bHasSelection;
             m_ctxmnuCopyURL.Enabled = bHasSelection;
 
-            int queueIdx = FindStateInList(DownloadState.InQueue);
-            int workIdx = FindStateInList(DownloadState.Working);
+            int queueIdx = FindStateInList(eDownloadState.InQueue);
+            int workIdx = FindStateInList(eDownloadState.Working);
             m_btnPause.Enabled = queueIdx >= 0 || workIdx >= 0; //there are items in queue
             if (queueIdx < 0 && workIdx < 0)
             {
@@ -219,7 +219,7 @@ namespace YouTubeDownload
             return -1;
         }
 
-        private int FindStateInList(DownloadState state)
+        private int FindStateInList(eDownloadState state)
         {
             for (int i = 0; i < m_listUrls.Items.Count; i++)
             {
@@ -374,7 +374,7 @@ namespace YouTubeDownload
             try
             {
                 DownloadData data = m_listUrls.SelectedItems[0].Tag as DownloadData;
-                if (data != null && data.State != DownloadState.Failed)
+                if (data != null && data.State != eDownloadState.Failed)
                 {
                     if (File.Exists(data.Description.Trim('"')))
                         Process.Start(data.Description.Trim('"'));
@@ -394,7 +394,7 @@ namespace YouTubeDownload
                 return;
 
             DownloadData data = m_listUrls.SelectedItems[0].Tag as DownloadData;
-            if (data != null && data.State != DownloadState.Failed)
+            if (data != null && data.State != eDownloadState.Failed)
             {
                 if(File.Exists(data.Description.Trim('"')))
                     FileUtils.ShowInFolder(data.Description.Trim('"'));
@@ -446,11 +446,11 @@ namespace YouTubeDownload
             DownloadData data = m_listUrls.SelectedItems[0].Tag as DownloadData;
             if (data != null)
             {
-                if (data.State == DownloadState.Working)
+                if (data.State == eDownloadState.Working)
                 {
                     m_DownloaderUserControl.Stop();
                 }
-                data.State = DownloadState.InQueue;
+                data.State = eDownloadState.InQueue;
                 UpdateButtonsState();
                 StartDownloadNext(noWindow);
             }
@@ -507,7 +507,7 @@ namespace YouTubeDownload
                     return;
 
                 data = frm.Data.Clone();
-                data.State = DownloadState.InQueue;
+                data.State = eDownloadState.InQueue;
 
                 selected.Text = data.State.ToString();
                 selected.SubItems[1].Text = (data.Description);
@@ -541,6 +541,49 @@ namespace YouTubeDownload
 
             m_listUrls.Items.RemoveAt(selected.Index);
             m_listUrls.Items.Insert(idx + 1, selected);
+        }
+
+        private void m_mnuSaveList_Click(object sender, EventArgs e)
+        {
+            DownloadList.Save(m_listUrls);
+        }
+
+        private void m_mnuLoadList_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dlg = new OpenFileDialog();
+            dlg.Multiselect = false;
+            dlg.Filter = "Saved Download Lists *.xml |*.xml| All Files (*.*)|*.*";
+            dlg.FileName = @"*.xml";
+            dlg.InitialDirectory = DownloadList._outPath;
+            dlg.CheckFileExists = true;
+            if (dlg.ShowDialog(this) != DialogResult.OK)
+                return;
+
+            try
+            {
+                DownloadList list = new DownloadList();
+                list.Load(dlg.FileName);
+
+                foreach (DownloadData data in list.Downloads)
+                {
+                    //data.State = eDownloadState.InQueue;
+                    //data.Encoding = enc.GetEncoding();
+
+                    ListViewItem item = new ListViewItem(data.State.ToString());
+                    item.SubItems.Add(data.Description);
+                    item.SubItems.Add(data.Url);
+                    item.Tag = data;
+
+                    m_listUrls.Items.Add(item);
+
+                }
+
+                UpdateButtonsState();
+            }
+            catch (Exception err)
+            {
+                MessageBox.Show(err.Message, "YTD", MessageBoxButtons.OK, MessageBoxIcon.Error); ;
+            }
         }
     }
 }

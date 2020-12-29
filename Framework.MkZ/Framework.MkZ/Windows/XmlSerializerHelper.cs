@@ -8,58 +8,29 @@ using System.Xml.Serialization;
 
 namespace MZ.Tools
 {
-    class XmlSerializerHelper
-    {
-    }
-
     public class XmlHelper
     {
-        public static T Open<T>(string fileName)
-        {
-            XmlSerializer serializer = new XmlSerializer(typeof(T));
-            using (StreamReader streamReader = new StreamReader(fileName))
-            {
-                return (T)serializer.Deserialize(streamReader);
-            }
-        }
+        public const int BUFFER_SIZE = 128 * 1024;
 
-        public static void Save<T>(string fileName, T o)
-        {
-            using (StreamWriter streamReader = new StreamWriter(fileName))
-            {
-                XmlSerializer serializer = new XmlSerializer(typeof(T));
-                serializer.Serialize(streamReader, o);
-            }
-        }
-    }
-
-    public class SerializerHelper
-    {
         public static T Open<T>(string fileName) where T : class, new()
         {
-            try
+            using (StreamReader reader = new StreamReader(fileName, Encoding.UTF8, true, BUFFER_SIZE))
             {
-                return XmlHelper.Open<T>(fileName);
-            }
-            catch (Exception err)
-            {
-                System.Diagnostics.Debug.WriteLine(err);
-                return new T();
+                using (TextReader txt = new StringReader(reader.ReadToEnd()))
+                {
+                    XmlSerializer serializer = new XmlSerializer(typeof(T));
+                    return (T)serializer.Deserialize(txt);
+                }
             }
         }
 
-        public static void Save<T>(string fileName, T o)
+        public static void Save<T>(string fileName, T o) where T : class, new()
         {
-            try
+            using (StreamWriter writer = new StreamWriter(fileName, false, Encoding.UTF8, BUFFER_SIZE))
             {
-                XmlHelper.Save(fileName, o);
-            }
-            catch (Exception err)
-            {
-                System.Diagnostics.Debug.WriteLine(err);
+                XmlSerializer serializer = new XmlSerializer(typeof(T));
+                serializer.Serialize(writer, o);
             }
         }
     }
-
-
 }

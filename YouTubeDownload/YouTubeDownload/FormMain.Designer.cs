@@ -58,6 +58,8 @@
             this.m_ctxmnuEdit = new System.Windows.Forms.ToolStripMenuItem();
             this.m_ctxmnuDownloadAgain = new System.Windows.Forms.ToolStripMenuItem();
             this.m_ctxmnuCMD = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_ctxmnuMoveUP = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_ctxmnuMoveDOWN = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripSeparator();
             this.m_ctxmnuOpenSelectedFile = new System.Windows.Forms.ToolStripMenuItem();
             this.m_ctxmnuOpenOutputFolder = new System.Windows.Forms.ToolStripMenuItem();
@@ -77,8 +79,8 @@
             this.m_btnBrowseForFolder = new System.Windows.Forms.Button();
             this.m_errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.m_ctxmnuMoveUP = new System.Windows.Forms.ToolStripMenuItem();
-            this.m_ctxmnuMoveDOWN = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuSaveList = new System.Windows.Forms.ToolStripMenuItem();
+            this.m_mnuLoadList = new System.Windows.Forms.ToolStripMenuItem();
             this.m_statusStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.m_ContextMenuList.SuspendLayout();
@@ -183,7 +185,9 @@
             this.m_mnuToolsSettings,
             this.m_mnuToolsUpdateDL,
             this.toolStripMenuItem2,
-            this.m_mnuToolsOutputFolder});
+            this.m_mnuToolsOutputFolder,
+            this.m_mnuSaveList,
+            this.m_mnuLoadList});
             this.m_mnuTools.Name = "m_mnuTools";
             this.m_mnuTools.Size = new System.Drawing.Size(47, 20);
             this.m_mnuTools.Text = "&Tools";
@@ -191,26 +195,26 @@
             // m_mnuToolsSettings
             // 
             this.m_mnuToolsSettings.Name = "m_mnuToolsSettings";
-            this.m_mnuToolsSettings.Size = new System.Drawing.Size(174, 22);
+            this.m_mnuToolsSettings.Size = new System.Drawing.Size(180, 22);
             this.m_mnuToolsSettings.Text = "&Settings";
             this.m_mnuToolsSettings.Click += new System.EventHandler(this.m_mnuToolsSettings_Click);
             // 
             // m_mnuToolsUpdateDL
             // 
             this.m_mnuToolsUpdateDL.Name = "m_mnuToolsUpdateDL";
-            this.m_mnuToolsUpdateDL.Size = new System.Drawing.Size(174, 22);
+            this.m_mnuToolsUpdateDL.Size = new System.Drawing.Size(180, 22);
             this.m_mnuToolsUpdateDL.Text = "Update youtube-dl";
             this.m_mnuToolsUpdateDL.Click += new System.EventHandler(this.m_mnuToolsUpdateDL_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(171, 6);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(177, 6);
             // 
             // m_mnuToolsOutputFolder
             // 
             this.m_mnuToolsOutputFolder.Name = "m_mnuToolsOutputFolder";
-            this.m_mnuToolsOutputFolder.Size = new System.Drawing.Size(174, 22);
+            this.m_mnuToolsOutputFolder.Size = new System.Drawing.Size(180, 22);
             this.m_mnuToolsOutputFolder.Text = "Output Folder...";
             this.m_mnuToolsOutputFolder.Click += new System.EventHandler(this.m_mnuToolsOutputFolder_Click);
             // 
@@ -287,7 +291,7 @@
             this.toolStripMenuItem4,
             this.m_ctxmnuExit});
             this.m_ContextMenuList.Name = "contextMenuStrip1";
-            this.m_ContextMenuList.Size = new System.Drawing.Size(220, 382);
+            this.m_ContextMenuList.Size = new System.Drawing.Size(220, 360);
             // 
             // m_ctxmnuAddUrl
             // 
@@ -330,6 +334,22 @@
             this.m_ctxmnuCMD.Size = new System.Drawing.Size(219, 26);
             this.m_ctxmnuCMD.Text = "Download Running CMD...";
             this.m_ctxmnuCMD.Click += new System.EventHandler(this.m_ctxmnuCMD_Click);
+            // 
+            // m_ctxmnuMoveUP
+            // 
+            this.m_ctxmnuMoveUP.Image = ((System.Drawing.Image)(resources.GetObject("m_ctxmnuMoveUP.Image")));
+            this.m_ctxmnuMoveUP.Name = "m_ctxmnuMoveUP";
+            this.m_ctxmnuMoveUP.Size = new System.Drawing.Size(219, 26);
+            this.m_ctxmnuMoveUP.Text = "Move UP in Queue";
+            this.m_ctxmnuMoveUP.Click += new System.EventHandler(this.m_ctxmnuMoveUP_Click);
+            // 
+            // m_ctxmnuMoveDOWN
+            // 
+            this.m_ctxmnuMoveDOWN.Image = ((System.Drawing.Image)(resources.GetObject("m_ctxmnuMoveDOWN.Image")));
+            this.m_ctxmnuMoveDOWN.Name = "m_ctxmnuMoveDOWN";
+            this.m_ctxmnuMoveDOWN.Size = new System.Drawing.Size(219, 26);
+            this.m_ctxmnuMoveDOWN.Text = "Move DOWN in Queue";
+            this.m_ctxmnuMoveDOWN.Click += new System.EventHandler(this.m_ctxmnuMoveDOWN_Click);
             // 
             // toolStripMenuItem5
             // 
@@ -513,21 +533,19 @@
             // 
             this.m_errorProvider.ContainerControl = this;
             // 
-            // m_ctxmnuMoveUP
+            // m_mnuSaveList
             // 
-            this.m_ctxmnuMoveUP.Image = ((System.Drawing.Image)(resources.GetObject("m_ctxmnuMoveUP.Image")));
-            this.m_ctxmnuMoveUP.Name = "m_ctxmnuMoveUP";
-            this.m_ctxmnuMoveUP.Size = new System.Drawing.Size(219, 26);
-            this.m_ctxmnuMoveUP.Text = "Move UP in Queue";
-            this.m_ctxmnuMoveUP.Click += new System.EventHandler(this.m_ctxmnuMoveUP_Click);
+            this.m_mnuSaveList.Name = "m_mnuSaveList";
+            this.m_mnuSaveList.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuSaveList.Text = "Save List...";
+            this.m_mnuSaveList.Click += new System.EventHandler(this.m_mnuSaveList_Click);
             // 
-            // m_ctxmnuMoveDOWN
+            // m_mnuLoadList
             // 
-            this.m_ctxmnuMoveDOWN.Image = ((System.Drawing.Image)(resources.GetObject("m_ctxmnuMoveDOWN.Image")));
-            this.m_ctxmnuMoveDOWN.Name = "m_ctxmnuMoveDOWN";
-            this.m_ctxmnuMoveDOWN.Size = new System.Drawing.Size(219, 26);
-            this.m_ctxmnuMoveDOWN.Text = "Move DOWN in Queue";
-            this.m_ctxmnuMoveDOWN.Click += new System.EventHandler(this.m_ctxmnuMoveDOWN_Click);
+            this.m_mnuLoadList.Name = "m_mnuLoadList";
+            this.m_mnuLoadList.Size = new System.Drawing.Size(180, 22);
+            this.m_mnuLoadList.Text = "LoadList...";
+            this.m_mnuLoadList.Click += new System.EventHandler(this.m_mnuLoadList_Click);
             // 
             // FormMain
             // 
@@ -619,6 +637,8 @@
         private System.Windows.Forms.ToolStripMenuItem m_ctxmnuEdit;
         private System.Windows.Forms.ToolStripMenuItem m_ctxmnuMoveUP;
         private System.Windows.Forms.ToolStripMenuItem m_ctxmnuMoveDOWN;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuSaveList;
+        private System.Windows.Forms.ToolStripMenuItem m_mnuLoadList;
     }
 }
 

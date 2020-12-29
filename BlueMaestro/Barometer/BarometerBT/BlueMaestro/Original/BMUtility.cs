@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 
 using BarometerBT.Utils;
+using MZ.Tools;
 
 namespace BarometerBT.Bluetooth
 {

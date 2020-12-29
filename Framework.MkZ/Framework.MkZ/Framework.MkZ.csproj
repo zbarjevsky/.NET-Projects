@@ -91,6 +91,7 @@
       <DependentUpon>WindowTestWpfMesageBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\IconUtilities.cs" />
+    <Compile Include="Windows\Log.cs" />
     <Compile Include="Windows\MouseHook.cs" />
     <Compile Include="Windows\ProcessExtensions.cs" />
     <Compile Include="Windows\UsbEject.cs" />

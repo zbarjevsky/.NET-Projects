@@ -11,52 +11,6 @@ using MZ.Extensions;
 
 namespace YouTubeDownload
 {
-    public enum DownloadState
-    {
-        None,
-        InQueue,
-        Working,
-        Skipped,
-        Succsess,
-        Failed,
-        Stopped,
-    }
-
-    public class DownloadData
-    {
-        public DownloadState State { get; set; } = DownloadState.None;
-        public string OutputFolder { get; set; } = "";
-        public string Description { get; set; } = "";
-        public string PlayListDescription { get; set; } = "";
-        public string PlayListProgress { get; set; } = "";
-        public string FileNameTemplate { get; set; } = "%(title)s-%(id)s.%(ext)s";
-        public bool NoPlayList { get; set; } = true;
-        public bool AudioOnly { get; set; } = false;
-        public string Url { get; set; } = "";
-        public string AdditionalParameters { get; set; } = "";
-        public double Progress { get; set; } = 0;
-        public Encoding Encoding { get; set; } = Encoding.UTF8;
-
-        public DownloadData Clone()
-        {
-            return new DownloadData()
-            {
-                State = State,
-                OutputFolder = OutputFolder,
-                Description = Description,
-                PlayListDescription = PlayListDescription,
-                PlayListProgress = PlayListProgress,
-                FileNameTemplate = FileNameTemplate,
-                NoPlayList = NoPlayList,
-                AudioOnly = AudioOnly,
-                Url = Url,
-                AdditionalParameters = AdditionalParameters,
-                Progress = Progress,
-                Encoding = Encoding
-            };
-        }
-}
-
     //https://github.com/ytdl-org/youtube-dl/blob/master/README.md#readme
     public class YouTube_DL
     {
@@ -73,7 +27,7 @@ namespace YouTubeDownload
         public void Start(DownloadData data, bool noWindow)
         {
             Data = data;
-            Data.State = DownloadState.Working;
+            Data.State = eDownloadState.Working;
 
             string parameters = PrepareCommanLine(data, out string exePath);
 
@@ -145,9 +99,9 @@ namespace YouTubeDownload
 
             _line = "";
             Data.Progress = 0;
-            if (Data.State == DownloadState.Working)
+            if (Data.State == eDownloadState.Working)
             {
-                Data.State = (exitCode == 1 || exitCode == 0) ? DownloadState.Succsess : DownloadState.InQueue;
+                Data.State = (exitCode == 1 || exitCode == 0) ? eDownloadState.Succsess : eDownloadState.InQueue;
             }
 
             ProcessExited();
@@ -218,7 +172,7 @@ namespace YouTubeDownload
             int pos = line.IndexOf(SUFFIX);
             if (pos > 0)
             {
-                Data.State = DownloadState.Skipped;
+                Data.State = eDownloadState.Skipped;
                 Data.Description = line.Substring(11, line.Length - SUFFIX.Length - 11);
             }
         }

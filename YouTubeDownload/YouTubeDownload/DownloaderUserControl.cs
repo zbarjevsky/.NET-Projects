@@ -21,7 +21,7 @@ namespace YouTubeDownload
         public string Description { get { return _youTube_DL.Data.Description; } }
         public double Progress { get { return _youTube_DL.Data.Progress; } }
 
-        public DownloadState State { get { return _youTube_DL.Data.State; } }
+        public eDownloadState State { get { return _youTube_DL.Data.State; } }
 
         public Action<string> OutputDataReceived = (OutputData) => { };
         public Action ProcessExited = () => { };

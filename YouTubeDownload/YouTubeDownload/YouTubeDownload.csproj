@@ -59,6 +59,7 @@
     <Compile Include="..\..\Framework.MkZ\AssemblyTools\DependenciesTool.cs">
       <Link>Utils\DependenciesTool.cs</Link>
     </Compile>
+    <Compile Include="DownloadData.cs" />
     <Compile Include="DownloaderUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
