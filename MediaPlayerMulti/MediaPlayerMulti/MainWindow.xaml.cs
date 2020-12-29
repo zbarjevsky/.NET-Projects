@@ -12,12 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using DashCamGPSView.Tools;
 
-using MZ.Tools;
-using MZ.WPF;
-
-namespace TestWpfApp
+namespace MediaPlayerMulti
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -27,8 +23,13 @@ namespace TestWpfApp
         public MainWindow()
         {
             InitializeComponent();
+        }
 
-            speedGauge.Draggable(true, new Thickness(-0.5, -0.8, -22, -15));
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            _player.Volume = 0.5;
+            _player.Open(@"c:\Temp\YouTube\Films\Шаманка\Месть Шаманка ] Русские детективы-YzTNtYioF3A.mkv", _player.Volume);
+            _player.Play();
         }
     }
 }
