@@ -13,6 +13,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Serialization;
 using System.Windows.Desktop;
+using MZ.Windows;
 
 namespace DesktopManagerUX
 {
@@ -44,12 +45,12 @@ namespace DesktopManagerUX
 
         public void Save()
         {
-            SerializerHelper.Save<Configuration>(ConfigurationFileName, this);
+            XmlHelper.Save<Configuration>(ConfigurationFileName, this);
         }
 
         public static Configuration Load()
         {
-            Configuration cnf = SerializerHelper.Open<Configuration>(ConfigurationFileName);
+            Configuration cnf = XmlHelper.Open<Configuration>(ConfigurationFileName);
             if (cnf.Layouts.Count == 0) //add one default layout tab
                 cnf.Layouts.Add(new LayoutConfiguration(LayoutConfiguration.LayoutType.Layout));
 
@@ -104,10 +105,10 @@ namespace DesktopManagerUX
         public Visibility RemoveTabBtnVisibility { get; set; }
 
         private string _name = "";
-        public string Name { get { return _name; } set { _name = value; OnPropertyChanged(); } }
+        public string Name { get { return _name; } set { _name = value; NotifyPropertyChanged(); } }
 
         private DisplayInfo _displayInfo;
-        public DisplayInfo SelectedMonitorInfo { get { return _displayInfo; } set { _displayInfo = value; OnPropertyChanged(nameof(MonitorName)); } }
+        public DisplayInfo SelectedMonitorInfo { get { return _displayInfo; } set { _displayInfo = value; NotifyPropertyChanged(nameof(MonitorName)); } }
 
         private GridSizeData _gridSize = new GridSizeData() { Rows = 2, Cols = 2 };
         public GridSizeData GridSize { get { return _gridSize; } set { _gridSize = value; } }
@@ -264,7 +265,7 @@ namespace DesktopManagerUX
             else if (SelectedApps.Count != GridSize.CellCount)
                 UpdateApps(GridSize);
 
-            OnPropertyChanged(nameof(Name));
+            NotifyPropertyChanged(nameof(Name));
         }
 
         public AppInfo this[int row, int col]

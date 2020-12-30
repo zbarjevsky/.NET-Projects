@@ -4,11 +4,59 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MediaPlayerMulti" 
-        xmlns:mediaplayer="clr-namespace:MkZ.MediaPlayer"
+        xmlns:mediaplayer="clr-namespace:MkZ.MediaPlayer" xmlns:controls="clr-namespace:MkZ.MediaPlayer.Controls"
         mc:Ignorable="d" Loaded="Window_Loaded"
         WindowStartupLocation="CenterScreen"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <mediaplayer:VideoPlayerControl x:Name="_player" />
+        <Grid.RowDefinitions>
+            <RowDefinition x:Name="rowHeader" Height="40"></RowDefinition>
+            <RowDefinition x:Name="rowContent" Height="*"></RowDefinition>
+            <RowDefinition x:Name="rowFooter" Height="40"></RowDefinition>
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" FlowDirection="RightToLeft">
+            <Button Width="30" Height="30" Margin="8,0" Padding="1,-5,1,4" 
+                    Background="Red" Foreground="White" FontSize="26" FontWeight="Bold" 
+                    Content="X" ToolTip="Close"
+                    Click="ButtonClose_Click"/>
+            <Button Width="30" Height="30" Margin="8,0" Padding="1,-5,1,4" 
+                    Background="SteelBlue" Foreground="White" FontSize="26" FontWeight="Bold" 
+                    Content="X" ToolTip="Full Screen"
+                    Click="ButtonFullScreen_Click"/>
+        </StackPanel>
+        <TabControl x:Name="tabPlayers" Grid.Column="2" Grid.Row="1">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock>
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0}--{1}">
+                                    <Binding Path="Title" />
+                                    <Binding Path="VideoResolution" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+                        <controls:SmallButtonAdd Margin="4,0,0,0" VerticalAlignment="Top" 
+                                    Visibility="{Binding NewTabBtnVisibility}"
+                                    Click="AddPlayer_Click" />
+                        <controls:SmallButtonClose Margin="4,0,0,0" VerticalAlignment="Top"
+                                    Visibility="{Binding RemoveTabBtnVisibility}"
+                                    Click="RemovePlayer_Click" />
+
+                    </StackPanel>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <mediaplayer:VideoPlayerControl DataContext="{Binding PlayerVM}" />
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+            <TabItem Header="Player 1">
+                <mediaplayer:VideoPlayerControl />
+            </TabItem>
+            <TabItem Header="Player 2">
+                <mediaplayer:VideoPlayerControl />
+            </TabItem>
+        </TabControl>
     </Grid>
 </Window>

@@ -6,7 +6,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{561B8D01-3848-40A7-BC2E-EBAA85F85724}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>MkZ.MediaPlayerMulti</RootNamespace>
+    <RootNamespace>MkZ.MediaPlayer</RootNamespace>
     <AssemblyName>MediaPlayerMulti</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -55,10 +55,26 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\SmallButtonAdd.xaml.cs">
+      <DependentUpon>SmallButtonAdd.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SmallButtonClose.xaml.cs">
+      <DependentUpon>SmallButtonClose.xaml</DependentUpon>
+    </Compile>
     <Compile Include="IVideoPlayer.cs" />
+    <Compile Include="MediaPlayerTabVM.cs" />
     <Compile Include="VideoPlayerControl.xaml.cs">
       <DependentUpon>VideoPlayerControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="VideoPlayerControlVM.cs" />
+    <Page Include="Controls\SmallButtonAdd.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SmallButtonClose.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

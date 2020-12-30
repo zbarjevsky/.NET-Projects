@@ -10,10 +10,10 @@ using System.Windows.Input;
 
 namespace MZ.WPF
 {
-    public class ScrollDragZoom
+    public class ScrollDragZoom : IDisposable
     {
-        private readonly ScrollViewer _scrollViewer;
-        private readonly FrameworkElement _content;
+        private ScrollViewer _scrollViewer;
+        private FrameworkElement _content;
         private Point _scrollMousePoint;
         private double _vOff = 1, _hOff = 1;
 
@@ -83,10 +83,27 @@ namespace MZ.WPF
 
                 _zoom = 1;
 
-                content.MouseRightButtonDown += scrollViewer_MouseRightButtonDown;
-                content.PreviewMouseMove += scrollViewer_PreviewMouseMove;
-                content.PreviewMouseRightButtonUp += scrollViewer_PreviewMouseRightButtonUp;
-                content.MouseWheel += content_MouseWheel;
+                _content.MouseRightButtonDown += scrollViewer_MouseRightButtonDown;
+                _content.PreviewMouseMove += scrollViewer_PreviewMouseMove;
+                _content.PreviewMouseRightButtonUp += scrollViewer_PreviewMouseRightButtonUp;
+                _content.MouseWheel += content_MouseWheel;
+            }
+        }
+
+        public void Dispose()
+        {
+            if (_content != null)
+            {
+                _content.MouseRightButtonDown -= scrollViewer_MouseRightButtonDown;
+                _content.PreviewMouseMove -= scrollViewer_PreviewMouseMove;
+                _content.PreviewMouseRightButtonUp -= scrollViewer_PreviewMouseRightButtonUp;
+                _content.MouseWheel -= content_MouseWheel;
+            }
+            _content = null;
+
+            if(_scrollViewer != null)
+            {
+                _scrollViewer = null;
             }
         }
 
