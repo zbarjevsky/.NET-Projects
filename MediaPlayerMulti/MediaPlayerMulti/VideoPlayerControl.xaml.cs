@@ -69,12 +69,7 @@ namespace MkZ.MediaPlayer
             {
                 // Note that you can have more than one file.
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                _vm.Volume = 0.5;
-                //@"c:\Temp\YouTube\Films\Шаманка\Месть Шаманка ] Русские детективы-YzTNtYioF3A.mkv"
-                _vm.Open(files[0], _vm.Volume);
-                _vm.Play();
-                _vm.FitWindow();
+                _vm.OpenAndPlay(files[0]);
             }
         }
 

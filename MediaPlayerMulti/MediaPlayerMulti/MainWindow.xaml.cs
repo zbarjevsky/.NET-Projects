@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using Microsoft.Win32;
 
 
 using MkZ.MediaPlayer;
@@ -43,6 +44,11 @@ namespace MediaPlayerMulti
         {
             MediaPlayerTabVM o = tabPlayers.Items[idx] as MediaPlayerTabVM;
             return o.PlayerVM;
+        }
+
+        private VideoPlayerControlVM GetSelectedPlayer()
+        {
+            return GetTabItem(tabPlayers.SelectedIndex);
         }
 
         private void ButtonClose_Click(object sender, RoutedEventArgs e)
@@ -76,6 +82,50 @@ namespace MediaPlayerMulti
             MediaPlayerTabVM tab = new MediaPlayerTabVM();
             _players.Add(tab);
             tabPlayers.SelectedIndex = _players.Count - 1;
+        }
+
+        private void Open_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
+        }
+
+        private void Open_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "Media files (*.mp3;*.mpg;*.mpeg)|*.mp3;*.mpg;*.mpeg|All files (*.*)|*.*";
+            if (openFileDialog.ShowDialog() == true)
+                GetSelectedPlayer().OpenAndPlay(openFileDialog.FileName);
+        }
+
+        private void Play_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = (GetSelectedPlayer().IsOpen && GetSelectedPlayer().MediaState != MediaState.Play);
+        }
+
+        private void Play_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            GetSelectedPlayer().Play();
+        }
+
+        private void Pause_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = GetSelectedPlayer().MediaState == MediaState.Play;
+        }
+
+        private void Pause_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            GetSelectedPlayer().Pause();
+        }
+
+        private void Stop_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            MediaState ms = GetSelectedPlayer().MediaState;
+            e.CanExecute = ms == MediaState.Play || ms == MediaState.Pause;
+        }
+
+        private void Stop_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            GetSelectedPlayer().Stop();
         }
     }
 }

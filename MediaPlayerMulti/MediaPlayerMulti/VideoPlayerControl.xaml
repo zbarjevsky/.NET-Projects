@@ -10,12 +10,13 @@
              DataContextChanged="UserControl_DataContextChanged"
              MouseDoubleClick="UserControl_MouseDoubleClick"
              PreviewMouseDown="UserControl_PreviewMouseButtonDown"
-              Background="{Binding Path=Background, FallbackValue=Black}"
+             Background="{Binding Path=Background, FallbackValue=Black}"
              d:DesignHeight="250" d:DesignWidth="600">
-    <Grid MouseWheel="Grid_MouseWheel">
+    <Grid x:Name="_gridMain" MouseWheel="Grid_MouseWheel" >
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="6*" />
+            <RowDefinition Height="*" MinHeight="60" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
@@ -39,9 +40,14 @@
             </TextBox.Background>
         </TextBox>
 
-        <StackPanel Grid.Row="2" Orientation="Horizontal" >
+        <controls:PlayerControls Grid.Row="2" />
+
+        <StackPanel Grid.Row="3" Orientation="Horizontal" >
+            <Button x:Name="btnOpen"  Margin="6"
+                    Content="Open..." ToolTip="Open"
+                     Command="ApplicationCommands.Open" />
             <Button x:Name="btnPlayPause"  Margin="6"
-                    Content="Play/Pause" ToolTip="Maximize"
+                    Content="Play/Pause" ToolTip="Play/Pause"
                     Click="btnPlayPause_Click" />
             <Button x:Name="btnMaximize"  Margin="6"
                     Content="MAX" ToolTip="Maximize"
@@ -60,11 +66,5 @@
                     Click="btnFlipHorizontally_Click" />
             <TextBlock Text="{Binding VideoResolution}" VerticalAlignment="Center"/>
         </StackPanel>
-
-        <controls:PlayerControls Grid.Row="1" Margin="12,0" VerticalAlignment="Bottom" Height="60" >
-            <controls:PlayerControls.Background>
-                <SolidColorBrush Color="Black" Opacity="0.3" />
-            </controls:PlayerControls.Background>
-        </controls:PlayerControls>
     </Grid>
 </UserControl>

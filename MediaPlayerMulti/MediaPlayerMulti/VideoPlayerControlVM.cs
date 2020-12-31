@@ -60,6 +60,7 @@ namespace MkZ.MediaPlayer
         public Action<IVideoPlayer> VideoStarted { get; set; } = (player) => { };
         public Func<ExceptionRoutedEventArgs, MediaElement, bool> VideoFailed = (e, player) => true;
         public Action LeftButtonClick = () => { };
+
         public Action LeftButtonDoubleClick = () => { };
 
         private VideoPlayerState _videoPlayerState = new VideoPlayerState();
@@ -67,6 +68,8 @@ namespace MkZ.MediaPlayer
         public MediaElement VideoPlayerElement { get; private set; } = null;
 
         public bool IsInitialized { get { return VideoPlayerElement != null; } }
+
+        public bool IsOpen { get { return !string.IsNullOrWhiteSpace(FileName); } }
 
         public bool IsAttached { get { return _scrollPlayerContainer != null; } }
 
@@ -311,11 +314,19 @@ namespace MkZ.MediaPlayer
             _scrollDragger.ScrollToCenter();
         }
 
+        public void OpenAndPlay(string fileName)
+        {
+            Open(fileName, 0.5);
+            Play();
+            FitWindow();
+        }
+
         public void Open(string fileName, double volume = 0)
         {
             FileName = fileName;
             VideoPlayerElement.Source = string.IsNullOrEmpty(fileName) ? null : new Uri(fileName);
-            Volume = volume;
+            if(volume != 0)
+                Volume = volume;
             MediaState = MediaState.Manual;
             Title = Path.GetFileName(fileName);
         }

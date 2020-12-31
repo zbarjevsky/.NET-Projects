@@ -4,19 +4,27 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MkZ.MediaPlayer.Controls"
-             mc:Ignorable="d" Background="Black"
-             d:DesignHeight="60" d:DesignWidth="600">
+             mc:Ignorable="d"
+             x:Name="_controls"
+             d:DesignHeight="80" d:DesignWidth="600">
     <UserControl.Resources>
         <ResourceDictionary Source="SliderControlResource.xaml" />
     </UserControl.Resources>
-    <DockPanel Grid.Row="1" Margin="0,6" VerticalAlignment="Top" HorizontalAlignment="Stretch" >
-        <local:ButtonPlay Width="30" Margin="6,0" Foreground="Red" />
-        <local:ButtonPause Width="30" Margin="6,0" Foreground="White" />
-        <local:ButtonStop Width="30" Margin="6,0" Foreground="LimeGreen" />
-        <local:ButtonVolume DockPanel.Dock="Right" Width="30" Margin="6,0" Foreground="LightBlue" />
-        <Slider Style="{StaticResource Horizontal_Slider}" DockPanel.Dock="Top"
-            VerticalAlignment="Center" HorizontalAlignment="Stretch" 
-            TickFrequency="30" LargeChange="100" SmallChange="10"
-            Minimum="0" Maximum="600" Value="400" Margin="5,0"></Slider>
-    </DockPanel>
+    <Viewbox Stretch="Uniform">
+        <Border Width="800" Height="60" CornerRadius="20">
+            <Border.Background>
+                <SolidColorBrush Color="Black" Opacity="0.5" />
+            </Border.Background>
+            <DockPanel Grid.Row="1" Margin="10,6" VerticalAlignment="Top" HorizontalAlignment="Stretch" >
+                <local:ButtonPlay Width="30" Margin="6,0" Foreground="Red" Command="MediaCommands.Play" />
+                <local:ButtonPause Width="30" Margin="6,0" Foreground="White" Command="MediaCommands.Pause" />
+                <local:ButtonStop Width="30" Margin="6,0" Foreground="LimeGreen" Command="MediaCommands.Stop" />
+                <local:ButtonVolume DockPanel.Dock="Right" Width="30" Margin="6,0" Foreground="LightBlue" />
+                <Slider Style="{StaticResource Horizontal_Slider}" DockPanel.Dock="Top"
+                    VerticalAlignment="Center" HorizontalAlignment="Stretch" 
+                    TickFrequency="30" LargeChange="100" SmallChange="10"
+                    Minimum="0" Maximum="600" Value="400" Margin="5,0"></Slider>
+            </DockPanel>
+        </Border>
+    </Viewbox>
 </UserControl>
