@@ -28,6 +28,16 @@ namespace MkZ.MediaPlayer
             get { return PlayerVM.VideoResolution; }
         }
 
+        public string Status
+        {
+            get
+            { 
+                if(PlayerVM.IsInitialized)
+                    return PlayerVM.Position.ToString("mm':'ss");
+                return "00:00/00:00";
+            }
+        }
+
         public string FileName { get { return PlayerVM.FileName; } }
         public TimeSpan Position { get { return PlayerVM.Position; } set { PlayerVM.Position = value; } }
 

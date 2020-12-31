@@ -9,8 +9,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-
-
+using System.Windows.Threading;
 using MZ.Windows;
 using MZ.WPF;
 
@@ -159,6 +158,16 @@ namespace MkZ.MediaPlayer
         public VideoPlayerControlVM()
         {
 
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Tick += timer_Tick;
+            timer.Start();
+        }
+
+        private void timer_Tick(object sender, EventArgs e)
+        {
+            if(IsAttached)
+                NotifyPropertyChanged(nameof(Position));
         }
 
         public void Init(ScrollViewer scrollPlayer)
@@ -236,6 +245,9 @@ namespace MkZ.MediaPlayer
 
         public void RestoreMediaState(MediaState state, TimeSpan position)
         {
+            _videoPlayerState.MediaState = state;
+            _videoPlayerState.Position = position;
+
             Play();
             Position = position;
             if (state == MediaState.Stop)
@@ -431,9 +443,9 @@ namespace MkZ.MediaPlayer
 
                 VideoPlayerElement.MediaOpened += (s, e) =>
                 {
-                    double zoom_save = _scrollDragger.Zoom;
                     _scrollDragger.NaturalSize = new Size(VideoPlayerElement.NaturalVideoWidth, VideoPlayerElement.NaturalVideoHeight);
-                    _scrollDragger.Zoom = zoom_save;
+                    _scrollDragger.Zoom = _videoPlayerState.Zoom;
+                    Position = _videoPlayerState.Position;
                     MediaState = GetMediaState(VideoPlayerElement);
                     VideoStarted(this);
                 };

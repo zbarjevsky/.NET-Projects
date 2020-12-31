@@ -24,7 +24,7 @@
                     Content="X" ToolTip="Full Screen"
                     Click="ButtonFullScreen_Click"/>
         </StackPanel>
-        <TabControl x:Name="tabPlayers" Grid.Column="2" Grid.Row="1">
+        <TabControl x:Name="tabPlayers" Grid.Column="2" Grid.Row="1" >
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
@@ -32,7 +32,7 @@
                             <TextBlock.Text>
                                 <MultiBinding StringFormat="{}{0}--{1}">
                                     <Binding Path="Title" />
-                                    <Binding Path="VideoResolution" />
+                                    <Binding Path="Status" />
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>

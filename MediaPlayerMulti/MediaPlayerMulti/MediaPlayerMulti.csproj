@@ -55,6 +55,21 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\ButtonPause.xaml.cs">
+      <DependentUpon>ButtonPause.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ButtonPlay.xaml.cs">
+      <DependentUpon>ButtonPlay.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ButtonStop.xaml.cs">
+      <DependentUpon>ButtonStop.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ButtonVolume.xaml.cs">
+      <DependentUpon>ButtonVolume.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PlayerControls.xaml.cs">
+      <DependentUpon>PlayerControls.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\SmallButtonAdd.xaml.cs">
       <DependentUpon>SmallButtonAdd.xaml</DependentUpon>
     </Compile>
@@ -67,6 +82,34 @@
       <DependentUpon>VideoPlayerControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="VideoPlayerControlVM.cs" />
+    <Page Include="Controls\ButtonPause.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ButtonPlay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ButtonStop.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ButtonVolume.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\CustomControls.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PlayerControls.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\SliderControlResource.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\SmallButtonAdd.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
