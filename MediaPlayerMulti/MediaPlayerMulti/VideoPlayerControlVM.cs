@@ -23,7 +23,18 @@ namespace MkZ.MediaPlayer
         public double Volume = 0.5;
         public Point ScrollOffset = new Point();
         public double Zoom = 1;
-        
+
+        public void CopyFrom(VideoPlayerState state)
+        {
+            MediaState = state.MediaState;
+            FileName = state.FileName;
+            Position = state.Position;
+            Volume = state.Volume;
+
+            ScrollOffset = state.ScrollOffset;
+            Zoom = state.Zoom;
+        }
+
         public void CopyFrom(VideoPlayerControlVM player, ScrollDragZoom scrollDragZoom)
         {
             if (player.VideoPlayerElement != null)
@@ -59,9 +70,9 @@ namespace MkZ.MediaPlayer
         public Action VideoEnded = () => { };
         public Action<IVideoPlayer> VideoStarted { get; set; } = (player) => { };
         public Func<ExceptionRoutedEventArgs, MediaElement, bool> VideoFailed = (e, player) => true;
-        public Action LeftButtonClick = () => { };
+        public Action<VideoPlayerControlVM> LeftButtonClick = (vm) => { vm.TogglePlayPauseState(); };
 
-        public Action LeftButtonDoubleClick = () => { };
+        public Action<VideoPlayerControlVM> LeftButtonDoubleClick = (vm) => { };
 
         private VideoPlayerState _videoPlayerState = new VideoPlayerState();
 
@@ -178,6 +189,12 @@ namespace MkZ.MediaPlayer
             _scrollPlayerContainer = scrollPlayer;
             RecreateMediaElement(false);
             _videoPlayerState.CopyFrom(this, _scrollDragger);
+        }
+
+        public VideoPlayerState GetPlayerState()
+        {
+            _videoPlayerState.CopyFrom(this, _scrollDragger);
+            return _videoPlayerState;
         }
 
         public void Attach(ScrollViewer scrollPlayer)
@@ -394,7 +411,7 @@ namespace MkZ.MediaPlayer
 
         internal void FitWindow()
         {
-            _scrollDragger.FitWindow();
+            _scrollDragger.FitWindow(0);
         }
 
         /// <summary>
@@ -459,6 +476,7 @@ namespace MkZ.MediaPlayer
                     Position = _videoPlayerState.Position;
                     MediaState = GetMediaState(VideoPlayerElement);
                     NotifyPropertyChanged(nameof(NaturalDuration));
+                    FitWindow();
                     VideoStarted(this);
                 };
                 VideoPlayerElement.MediaEnded += (s, e) => { VideoEnded(); };

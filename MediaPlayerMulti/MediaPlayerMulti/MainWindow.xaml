@@ -7,7 +7,7 @@
         xmlns:mediaplayer="clr-namespace:MkZ.MediaPlayer" xmlns:controls="clr-namespace:MkZ.MediaPlayer.Controls"
         mc:Ignorable="d" Loaded="Window_Loaded"
         WindowStartupLocation="CenterScreen"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="768" Width="1366">
     <Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.Open" CanExecute="Open_CanExecute" Executed="Open_Executed" />
         <CommandBinding Command="MediaCommands.Play" CanExecute="Play_CanExecute" Executed="Play_Executed" />
@@ -16,21 +16,11 @@
     </Window.CommandBindings>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition x:Name="rowHeader" Height="40"></RowDefinition>
+            <RowDefinition x:Name="rowHeader" Height="Auto"></RowDefinition>
             <RowDefinition x:Name="rowContent" Height="*"></RowDefinition>
-            <RowDefinition x:Name="rowFooter" Height="40"></RowDefinition>
+            <RowDefinition x:Name="rowFooter" Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" FlowDirection="RightToLeft">
-            <Button Width="30" Height="30" Margin="8,0" Padding="1,-5,1,4" 
-                    Background="Red" Foreground="White" FontSize="26" FontWeight="Bold" 
-                    Content="X" ToolTip="Close"
-                    Click="ButtonClose_Click"/>
-            <Button Width="30" Height="30" Margin="8,0" Padding="1,-5,1,4" 
-                    Background="SteelBlue" Foreground="White" FontSize="26" FontWeight="Bold" 
-                    Content="X" ToolTip="Full Screen"
-                    Click="ButtonFullScreen_Click"/>
-        </StackPanel>
-        <TabControl x:Name="tabPlayers" Grid.Column="2" Grid.Row="1" >
+        <TabControl x:Name="tabPlayers" Grid.Column="2" Grid.Row="1" FontSize="18" >
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">

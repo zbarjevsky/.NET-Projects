@@ -17,6 +17,7 @@ using Microsoft.Win32;
 
 
 using MkZ.MediaPlayer;
+using MkZ.MediaPlayer.Controls;
 
 namespace MediaPlayerMulti
 {
@@ -58,18 +59,22 @@ namespace MediaPlayerMulti
 
         private void ButtonFullScreen_Click(object sender, RoutedEventArgs e)
         {
-            if(this.WindowStyle == WindowStyle.None)
-            {
-                this.WindowStyle = WindowStyle.ThreeDBorderWindow;
-                this.WindowState = WindowState.Normal;
-            }
-            else
-            {
-                this.WindowStyle = WindowStyle.None;
-                this.WindowState = WindowState.Maximized;
-            }
+            //if(this.WindowStyle == WindowStyle.None)
+            //{
+            //    this.WindowStyle = WindowStyle.ThreeDBorderWindow;
+            //    this.WindowState = WindowState.Normal;
+            //}
+            //else
+            //{
+            //    this.WindowStyle = WindowStyle.None;
+            //    this.WindowState = WindowState.Maximized;
+            //}
 
             //_player.FitWindow();
+
+            FullScreenPlayerWindow fullScreen = new FullScreenPlayerWindow();
+            fullScreen.Owner = this;
+            fullScreen.ShowDialog();
         }
 
         private void RemovePlayer_Click(object sender, RoutedEventArgs e)

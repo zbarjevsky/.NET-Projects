@@ -44,8 +44,9 @@
                             </Ellipse.Fill>
                         </Ellipse>
                         <TextBlock Foreground="Yellow" Margin="0" VerticalAlignment="Top" HorizontalAlignment="Left"  
-                            Text="{Binding Value, Converter={StaticResource TimeFormatConverter},
-                                RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Slider}}}"/>
+                                   FontSize="12"
+                                   Text="{Binding Value, Converter={StaticResource TimeFormatConverter},
+                                       RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Slider}}}"/>
                         
                         <!--<Path Data="M 0 10 L -5 10 L -5 0 L 0 10 L 5 10 L 5 0 L 0 0 Z" Stroke="Magenta" Margin="0,0,0,0" StrokeThickness="3" Fill="Violet" />-->
                         <!--<Line X1="0" Y1="0" X2="0" Y2="7" Stroke="Yellow" StrokeThickness="1" Margin="1,0,0,0" StrokeDashArray="1,1" />-->
@@ -82,7 +83,7 @@
                 </Track.IncreaseRepeatButton>
             </Track>
 
-            <TextBlock Grid.Row="1" Margin="0,0,0,10"
+            <TextBlock Grid.Row="1" Margin="0,0,0,10" FontSize="12"
                        Text="{Binding DataContext.Title, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=???}" 
                        VerticalAlignment="Bottom" Foreground="AliceBlue"/>
 

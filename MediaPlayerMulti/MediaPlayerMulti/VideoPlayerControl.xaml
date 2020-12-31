@@ -17,18 +17,18 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
             <RowDefinition Height="6*" />
-            <RowDefinition Height="*" MinHeight="60" />
+            <RowDefinition Height="*" MinHeight="92" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <ScrollViewer Name="_scrollPlayerContainer" Grid.Row="0" Grid.RowSpan="3"
+        <ScrollViewer Name="_scrollPlayerContainer" Grid.Row="0" Grid.RowSpan="4"
                       HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
             <!--<MediaElement Name="mePlayer" LoadedBehavior="Manual" Stretch="Uniform" 
                           Width="1920" Height="1080"
                           MouseWheel="mePlayer_MouseWheel" />-->
         </ScrollViewer>
 
-        <TextBox BorderThickness="0" Margin="3" Padding="100,0"
+        <TextBox x:Name="_title" BorderThickness="0" Margin="3" Padding="100,0"
                      Foreground="Navy"
                      HorizontalContentAlignment="Center"
                      FontSize="22" FontWeight="Bold" FontFamily="Times New Roman" 
@@ -41,9 +41,21 @@
             </TextBox.Background>
         </TextBox>
 
-        <controls:PlayerControls x:Name="_playControls" Grid.Row="2" />
+        <StackPanel x:Name="_systemButtons" Grid.RowSpan="2" Margin="6" Orientation="Horizontal" FlowDirection="RightToLeft" 
+                    HorizontalAlignment="Right" VerticalAlignment="Top">
+            <Button Width="30" Height="30" Margin="8,0" Padding="1,-5,1,4" 
+                    Background="Red" Foreground="White" FontSize="26" FontWeight="Bold" 
+                    Content="X" ToolTip="Close"
+                    Click="ButtonClose_Click"/>
+            <Button Width="30" Height="30" Margin="8,0" Padding="1,-5,1,4" 
+                    Background="SteelBlue" Foreground="White" FontSize="26" FontWeight="Bold" 
+                    Content="X" ToolTip="Full Screen"
+                    Click="ButtonFullScreen_Click"/>
+        </StackPanel>
 
-        <StackPanel Grid.Row="3" Orientation="Horizontal" >
+        <controls:PlayerControls x:Name="_playControls" Grid.Row="2" Margin="16" />
+
+        <StackPanel x:Name="_testButtons" Grid.Row="3" Orientation="Horizontal" >
             <Button x:Name="btnOpen"  Margin="6"
                     Content="Open..." ToolTip="Open"
                      Command="ApplicationCommands.Open" />

@@ -152,8 +152,8 @@ namespace MZ.WPF
         {
             if (_scrollViewer.ActualHeight > margin && _scrollViewer.ActualWidth > margin)
             {
-                _content.Width = _scrollViewer.ActualWidth - 18;
-                _content.Height = _scrollViewer.ActualHeight - 18;
+                _content.Width = _scrollViewer.ActualWidth - margin;
+                _content.Height = _scrollViewer.ActualHeight - margin;
                 _content.UpdateLayout();
             }
 

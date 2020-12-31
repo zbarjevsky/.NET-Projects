@@ -37,7 +37,8 @@ namespace MkZ.MediaPlayer
         {
             InitializeComponent();
 
-            _controlsHideAndShow = new AnimationHelper(this, _playControls);
+            _controlsHideAndShow = new AnimationHelper(this, 
+                _playControls, _title, _testButtons, _systemButtons);
         }
 
         private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -70,6 +71,28 @@ namespace MkZ.MediaPlayer
         {
         }
 
+        private void ButtonClose_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.MainWindow.Close();
+        }
+
+        private void ButtonFullScreen_Click(object sender, RoutedEventArgs e)
+        {
+            OnFullScreenButtonClick(_vm);
+        }
+
+        //here is for - open full screen window
+        public Action<VideoPlayerControlVM> OnFullScreenButtonClick = (vm) =>
+        {
+            FullScreenPlayerWindow fullScreen = new FullScreenPlayerWindow();
+            fullScreen.Owner = Application.Current.MainWindow;
+            fullScreen.Init(vm.GetPlayerState());
+            vm.Stop();
+            fullScreen.ShowDialog();
+
+            fullScreen.GetPlayerState().RestoreState(vm);
+        };
+
         private void UserControl_Drop(object sender, DragEventArgs e)
         {
             if (e.Data.GetDataPresent(DataFormats.FileDrop))
@@ -83,13 +106,18 @@ namespace MkZ.MediaPlayer
         private void UserControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left)
-                _vm.LeftButtonDoubleClick();
+            {
+                _vm.LeftButtonDoubleClick(_vm);
+                OnFullScreenButtonClick(_vm);
+            }
         }
 
         private void UserControl_PreviewMouseButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ChangedButton == MouseButton.Left && (e.OriginalSource is MediaElement))
-                _vm.LeftButtonClick();
+            {
+                _vm.LeftButtonClick(_vm);
+            }
         }
 
         private void Grid_MouseWheel(object sender, MouseWheelEventArgs e)
@@ -129,7 +157,8 @@ namespace MkZ.MediaPlayer
 
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            _vm.FitWindow();
+            if(_vm != null )
+                _vm.FitWindow();
         }
     }
 }
