@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:MkZ.MediaPlayer" xmlns:controls="clr-namespace:MkZ.MediaPlayer.Controls"
              mc:Ignorable="d" 
              Loaded="UserControl_Loaded"
+             SizeChanged="UserControl_SizeChanged"
              Drop="UserControl_Drop" AllowDrop="True"
              DataContextChanged="UserControl_DataContextChanged"
              MouseDoubleClick="UserControl_MouseDoubleClick"
@@ -40,7 +41,7 @@
             </TextBox.Background>
         </TextBox>
 
-        <controls:PlayerControls Grid.Row="2" />
+        <controls:PlayerControls x:Name="_playControls" Grid.Row="2" />
 
         <StackPanel Grid.Row="3" Orientation="Horizontal" >
             <Button x:Name="btnOpen"  Margin="6"

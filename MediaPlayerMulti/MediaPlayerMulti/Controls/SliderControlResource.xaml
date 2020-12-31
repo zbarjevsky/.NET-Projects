@@ -2,6 +2,8 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:MkZ.MediaPlayer.Controls">
 
+    <local:SecondsToStringConverter x:Key="TimeFormatConverter" />
+    
     <Style x:Key="SliderRepeatButtonUp" TargetType="RepeatButton">
         <Setter Property="SnapsToDevicePixels" Value="true" />
         <Setter Property="OverridesDefaultStyle" Value="true" />
@@ -42,7 +44,8 @@
                             </Ellipse.Fill>
                         </Ellipse>
                         <TextBlock Foreground="Yellow" Margin="0" VerticalAlignment="Top" HorizontalAlignment="Left"  
-                                   Text="{Binding Value, StringFormat=0.0, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Slider}}}"/>
+                            Text="{Binding Value, Converter={StaticResource TimeFormatConverter},
+                                RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Slider}}}"/>
                         
                         <!--<Path Data="M 0 10 L -5 10 L -5 0 L 0 10 L 5 10 L 5 0 L 0 0 Z" Stroke="Magenta" Margin="0,0,0,0" StrokeThickness="3" Fill="Violet" />-->
                         <!--<Line X1="0" Y1="0" X2="0" Y2="7" Stroke="Yellow" StrokeThickness="1" Margin="1,0,0,0" StrokeDashArray="1,1" />-->

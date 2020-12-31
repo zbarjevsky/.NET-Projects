@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\AnimationHelper.cs" />
     <Compile Include="Controls\ButtonPause.xaml.cs">
       <DependentUpon>ButtonPause.xaml</DependentUpon>
     </Compile>
@@ -67,6 +68,10 @@
     <Compile Include="Controls\ButtonVolume.xaml.cs">
       <DependentUpon>ButtonVolume.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ColorConverter.cs" />
+    <Compile Include="Controls\FullScreenPlayerWindow.xaml.cs">
+      <DependentUpon>FullScreenPlayerWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\PlayerControls.xaml.cs">
       <DependentUpon>PlayerControls.xaml</DependentUpon>
     </Compile>
@@ -76,6 +81,7 @@
     <Compile Include="Controls\SmallButtonClose.xaml.cs">
       <DependentUpon>SmallButtonClose.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TimeConverter.cs" />
     <Compile Include="IVideoPlayer.cs" />
     <Compile Include="MediaPlayerTabVM.cs" />
     <Compile Include="VideoPlayerControl.xaml.cs">
@@ -99,6 +105,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\CustomControls.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\FullScreenPlayerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

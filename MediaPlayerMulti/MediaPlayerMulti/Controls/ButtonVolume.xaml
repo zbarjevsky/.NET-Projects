@@ -5,8 +5,11 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:local="clr-namespace:MkZ.MediaPlayer.Controls"
         mc:Ignorable="d" 
-        x:Name="_button"
+        x:Name="_button" Foreground="Magenta"
         d:DesignHeight="45" d:DesignWidth="80">
+    <Button.Resources>
+        <local:BrushToColorConverter x:Key="ColorConverter" />
+    </Button.Resources>
     <Button.Template>
         <ControlTemplate TargetType="Button">
             <ControlTemplate.Resources>
@@ -39,11 +42,28 @@
             </Viewbox>
 
             <ControlTemplate.Triggers>
+                <Trigger Property="IsEnabled" Value="True">
+                    <Setter TargetName="circle" Property="Stroke" >
+                        <Setter.Value>
+                            <SolidColorBrush Color="{Binding ElementName=_button, Path=Foreground, Converter={StaticResource ColorConverter}}" Opacity="0.5" />
+                        </Setter.Value>
+                    </Setter>
+                    <Setter TargetName="circle" Property="Fill">
+                        <Setter.Value>
+                            <SolidColorBrush Color="{Binding ElementName=_button, Path=Foreground, Converter={StaticResource ColorConverter}}" Opacity="0.3" />
+                        </Setter.Value>
+                    </Setter>
+                    <Setter TargetName="cross" Property="Stroke">
+                        <Setter.Value>
+                            <SolidColorBrush Color="{Binding ElementName=_button, Path=Foreground, Converter={StaticResource ColorConverter}}" Opacity="0.5" />
+                        </Setter.Value>
+                    </Setter>
+                </Trigger>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter TargetName="circle" Property="Stroke" Value="{Binding ElementName=_button, Path=Foreground}"/>
                     <Setter TargetName="circle" Property="Fill">
                         <Setter.Value>
-                            <SolidColorBrush Color="{Binding ElementName=_button, Path=Foreground.Color}" Opacity="0.3" />
+                            <SolidColorBrush Color="{Binding ElementName=_button, Path=Foreground, Converter={StaticResource ColorConverter}}" Opacity="0.3" />
                         </Setter.Value>
                     </Setter>
                     <Setter TargetName="cross" Property="Stroke" Value="{Binding ElementName=_button, Path=Foreground}"/>

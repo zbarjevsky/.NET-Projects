@@ -20,6 +20,8 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 
 using MZ.WPF;
+using System.Windows.Media.Animation;
+using MkZ.MediaPlayer.Controls;
 
 namespace MkZ.MediaPlayer
 {
@@ -28,11 +30,14 @@ namespace MkZ.MediaPlayer
     /// </summary>
     public partial class VideoPlayerControl : UserControl
     {
-        VideoPlayerControlVM _vm = null;
+        private VideoPlayerControlVM _vm = null;
+        private readonly AnimationHelper _controlsHideAndShow;
 
         public VideoPlayerControl()
         {
             InitializeComponent();
+
+            _controlsHideAndShow = new AnimationHelper(this, _playControls);
         }
 
         private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -53,6 +58,8 @@ namespace MkZ.MediaPlayer
 
                 if (_vm != null)
                 {
+                    _playControls.DataContext = _vm;
+
                     _vm.Attach(_scrollPlayerContainer);
                     _vm.NotifyPropertyChangedAll();
                 }
@@ -118,6 +125,11 @@ namespace MkZ.MediaPlayer
         private void btnPlayPause_Click(object sender, RoutedEventArgs e)
         {
             _vm.TogglePlayPauseState();
+        }
+
+        private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            _vm.FitWindow();
         }
     }
 }

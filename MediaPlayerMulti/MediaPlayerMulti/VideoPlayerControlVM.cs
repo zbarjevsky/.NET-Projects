@@ -162,7 +162,7 @@ namespace MkZ.MediaPlayer
         {
 
             DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(1);
+            timer.Interval = TimeSpan.FromSeconds(0.233);
             timer.Tick += timer_Tick;
             timer.Start();
         }
@@ -458,6 +458,7 @@ namespace MkZ.MediaPlayer
                     _scrollDragger.Zoom = _videoPlayerState.Zoom;
                     Position = _videoPlayerState.Position;
                     MediaState = GetMediaState(VideoPlayerElement);
+                    NotifyPropertyChanged(nameof(NaturalDuration));
                     VideoStarted(this);
                 };
                 VideoPlayerElement.MediaEnded += (s, e) => { VideoEnded(); };
