@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:MkZ.MediaPlayer.Controls"
+             xmlns:local="clr-namespace:MkZ.MediaPlayer.Controls" 
+             xmlns:utils="clr-namespace:MkZ.MediaPlayer.Utils"
              mc:Ignorable="d"
              x:Name="_controls"
              d:DesignHeight="80" d:DesignWidth="600">
@@ -25,11 +26,12 @@
                 <local:ButtonPause Width="30" Margin="6,0" Foreground="LimeGreen" Command="MediaCommands.Pause" />
                 <local:ButtonStop Width="30" Margin="6,0" Foreground="LimeGreen" Command="MediaCommands.Stop" />
                 <local:ButtonVolume DockPanel.Dock="Right" Width="30" Margin="6,0" Foreground="LightBlue" />
-                <Slider Style="{StaticResource Horizontal_Slider}" DockPanel.Dock="Top"
+                <Slider Style="{StaticResource Horizontal_Slider}" DockPanel.Dock="Top" Margin="5,0"
                     VerticalAlignment="Center" HorizontalAlignment="Stretch" 
-                    TickFrequency="30" LargeChange="100" SmallChange="10"
+                    TickFrequency="10" LargeChange="10" SmallChange="5"
+                    Thumb.DragStarted="Slider_DragStarted" Thumb.DragCompleted="Slider_DragCompleted"
                     Minimum="0" Maximum="{Binding NaturalDuration, Converter={StaticResource TimeConverter}, FallbackValue=100}" 
-                    Value="{Binding Position, Converter={StaticResource TimeConverter}, FallbackValue=90}" Margin="5,0"/>
+                    Value="{Binding Position, Converter={StaticResource TimeConverter}, FallbackValue=90}" />
             </DockPanel>
         </Border>
     </Viewbox>

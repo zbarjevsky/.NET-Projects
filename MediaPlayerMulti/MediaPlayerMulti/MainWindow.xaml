@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MediaPlayerMulti" 
         xmlns:mediaplayer="clr-namespace:MkZ.MediaPlayer" xmlns:controls="clr-namespace:MkZ.MediaPlayer.Controls"
-        mc:Ignorable="d" Loaded="Window_Loaded"
+        mc:Ignorable="d" 
+        Loaded="Window_Loaded"
+        Closed="Window_Closed"
         WindowStartupLocation="CenterScreen"
         Title="MainWindow" Height="768" Width="1366">
     <Grid>

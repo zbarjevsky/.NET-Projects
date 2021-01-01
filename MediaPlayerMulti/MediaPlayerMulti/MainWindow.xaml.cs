@@ -29,6 +29,7 @@ namespace MediaPlayerMulti
     {
         private readonly ObservableCollection<MediaPlayerTabVM> _players = new ObservableCollection<MediaPlayerTabVM>();
         private MediaPlayerCommands _mediaPlayerCommands;
+        private AppConfig _appConfig = new AppConfig();
 
         public MainWindow()
         {
@@ -40,8 +41,29 @@ namespace MediaPlayerMulti
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            AddPlayer_Click(sender, e);
+            _appConfig.Load();
+            
+            if (_appConfig.OpenedFiles.Count > 0)
+            {
+                foreach (VideoPlayerState state in _appConfig.OpenedFiles)
+                {
+                    AddPlayer(state);
+                }
+            }
+            else
+            {
+                AddPlayer();
+            }
+            tabPlayers.SelectedIndex = 0;
+
             _mediaPlayerCommands = new MediaPlayerCommands(GetSelectedPlayer(), this);
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            _appConfig.OpenedFiles.Clear();
+            _appConfig.OpenedFiles = _players.Select(vm => vm.PlayerVM.GetPlayerState()).ToList();
+            _appConfig.Save();
         }
 
         private VideoPlayerControlVM GetTabItem(int idx)
@@ -55,11 +77,6 @@ namespace MediaPlayerMulti
             return GetTabItem(tabPlayers.SelectedIndex);
         }
 
-        private void ButtonClose_Click(object sender, RoutedEventArgs e)
-        {
-            this.Close();
-        }
-
         private void RemovePlayer_Click(object sender, RoutedEventArgs e)
         {
 
@@ -67,9 +84,20 @@ namespace MediaPlayerMulti
 
         private void AddPlayer_Click(object sender, RoutedEventArgs e)
         {
+            AddPlayer();
+            tabPlayers.SelectedIndex = _players.Count - 1;
+        }
+
+        private void AddPlayer(VideoPlayerState state = null)
+        {
             MediaPlayerTabVM tab = new MediaPlayerTabVM();
             _players.Add(tab);
-            tabPlayers.SelectedIndex = _players.Count - 1;
+
+            if (state != null)
+            {
+                tab.PlayerVM.GetPlayerState().CopyFrom(state);
+                tab.PlayerVM.GetPlayerState().MediaState = MediaState.Pause;
+            }
         }
     }
 }

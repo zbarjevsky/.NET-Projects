@@ -24,5 +24,25 @@ namespace MkZ.MediaPlayer.Controls
         {
             InitializeComponent();
         }
+
+        private bool _resume = false;
+        private void Slider_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
+        {
+            if(DataContext is VideoPlayerControlVM vm)
+            {
+                _resume = (vm.MediaState == MediaState.Play);
+                if(_resume)
+                    vm.Pause();
+            }
+        }
+
+        private void Slider_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
+        {
+            if (DataContext is VideoPlayerControlVM vm)
+            {
+                if (_resume)
+                    vm.Play();
+            }
+        }
     }
 }

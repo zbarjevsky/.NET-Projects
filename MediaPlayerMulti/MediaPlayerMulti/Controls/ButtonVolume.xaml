@@ -5,7 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:local="clr-namespace:MkZ.MediaPlayer.Controls"
         mc:Ignorable="d" 
-        x:Name="_button" Foreground="Magenta"
+        x:Name="_button" Foreground="Magenta" Background="Black"
         d:DesignHeight="45" d:DesignWidth="80">
     <Button.Resources>
         <local:BrushToColorConverter x:Key="ColorConverter" />
@@ -21,6 +21,19 @@
             </ControlTemplate.Resources>
             <Viewbox >
                 <Canvas Width="16" Height="16">
+                    <Popup Name="volume" AllowsTransparency="True" StaysOpen="False"
+                           PlacementTarget="{Binding ElementName=circle}" Placement="Top"
+                           HorizontalOffset="-2" VerticalOffset="-2"
+                           MouseLeftButtonDown="popLogFile_MouseLeftButtonDown">
+                        <Viewbox Width="20">
+                            <Border CornerRadius="7" BorderThickness="2" 
+                                    Background="{Binding ElementName=_button, Path=Background}" 
+                                    BorderBrush="{Binding ElementName=_button, Path=Foreground}">
+                                <Slider Orientation="Vertical" Width="20" Height="100" Margin="5"
+                                        Minimum="0" Maximum="1.0" Value="{Binding Volume}"/>
+                            </Border>
+                        </Viewbox>
+                    </Popup>
                     <Path x:Name="circle">
                         <Path.Data>
                             <EllipseGeometry Center="8,8" RadiusX="7" RadiusY="7"/>
@@ -42,6 +55,16 @@
             </Viewbox>
 
             <ControlTemplate.Triggers>
+                <EventTrigger RoutedEvent="MouseEnter">
+                    <BeginStoryboard>
+                        <Storyboard TargetName="volume" TargetProperty="IsOpen">
+                            <BooleanAnimationUsingKeyFrames  FillBehavior="HoldEnd">
+                                <DiscreteBooleanKeyFrame KeyTime="00:00:00" Value="True" />
+                            </BooleanAnimationUsingKeyFrames>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+                
                 <Trigger Property="IsEnabled" Value="True">
                     <Setter TargetName="circle" Property="Stroke" >
                         <Setter.Value>

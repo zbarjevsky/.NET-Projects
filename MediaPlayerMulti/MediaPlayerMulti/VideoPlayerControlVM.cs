@@ -10,19 +10,28 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
+using System.Xml.Serialization;
 using MZ.Windows;
 using MZ.WPF;
 
 namespace MkZ.MediaPlayer
 {
+    [Serializable]
     public class VideoPlayerState
     {
         public MediaState MediaState = MediaState.Manual;
         public string FileName = "";
-        public TimeSpan Position = TimeSpan.FromSeconds(0);
+        public double PositionInSeconds = 0.0;
         public double Volume = 0.5;
         public Point ScrollOffset = new Point();
         public double Zoom = 1;
+
+        [XmlIgnore]
+        public TimeSpan Position
+        {
+            get { return TimeSpan.FromSeconds(PositionInSeconds); }
+            set { PositionInSeconds = value.TotalSeconds; }
+        }
 
         public void CopyFrom(VideoPlayerState state)
         {
@@ -333,19 +342,33 @@ namespace MkZ.MediaPlayer
 
         public void OpenAndPlay(string fileName)
         {
-            Open(fileName, 0.5);
+            Open(fileName, 0.01);
             Play();
             FitWindow();
         }
 
         public void Open(string fileName, double volume = 0)
         {
-            FileName = fileName;
-            VideoPlayerElement.Source = string.IsNullOrEmpty(fileName) ? null : new Uri(fileName);
-            if(volume != 0)
-                Volume = volume;
-            MediaState = MediaState.Manual;
-            Title = Path.GetFileName(fileName);
+            if(File.Exists(fileName))
+            {
+                FileName = fileName;
+                VideoPlayerElement.Source = new Uri(fileName);
+                if (volume != 0)
+                    Volume = volume;
+                Position = _videoPlayerState.Position;
+                MediaState = MediaState.Manual;
+                Title = Path.GetFileName(fileName);
+            }
+            else
+            {
+                FileName = "";
+                VideoPlayerElement.Source = null;
+                if (volume != 0)
+                    Volume = volume;
+                MediaState = MediaState.Manual;
+                Title = "N/A";
+
+            }
         }
 
         public void Close()

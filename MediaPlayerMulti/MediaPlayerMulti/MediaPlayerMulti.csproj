@@ -90,7 +90,9 @@
     <Compile Include="Controls\TimeConverter.cs" />
     <Compile Include="IVideoPlayer.cs" />
     <Compile Include="MediaPlayerTabVM.cs" />
+    <Compile Include="Utils\AppConfig.cs" />
     <Compile Include="Utils\MediaPlayerCommands.cs" />
+    <Compile Include="Utils\SliderIgnoreDelta.cs" />
     <Compile Include="VideoPlayerControl.xaml.cs">
       <DependentUpon>VideoPlayerControl.xaml</DependentUpon>
     </Compile>

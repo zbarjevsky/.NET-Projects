@@ -31,6 +31,7 @@ namespace MkZ.MediaPlayer.Utils
             _owner.InputBindings.Add(new KeyBinding(MediaCommands.Play, new KeyGesture(Key.Play)));
             _owner.InputBindings.Add(new KeyBinding(MediaCommands.Pause, new KeyGesture(Key.Pause)));
             _owner.InputBindings.Add(new KeyBinding(MediaCommands.TogglePlayPause, new KeyGesture(Key.MediaPlayPause)));
+            _owner.InputBindings.Add(new KeyBinding(MediaCommands.TogglePlayPause, new KeyGesture(Key.Space)));
         }
 
         private void TogglePlayPause_CanExecute(object sender, CanExecuteRoutedEventArgs e)

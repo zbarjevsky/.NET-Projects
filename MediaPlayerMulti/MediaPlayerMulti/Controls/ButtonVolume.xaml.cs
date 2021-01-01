@@ -24,5 +24,10 @@ namespace MkZ.MediaPlayer.Controls
         {
             InitializeComponent();
         }
+
+        private void popLogFile_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
     }
 }
