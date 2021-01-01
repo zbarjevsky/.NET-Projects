@@ -18,6 +18,7 @@ using Microsoft.Win32;
 
 using MkZ.MediaPlayer;
 using MkZ.MediaPlayer.Controls;
+using MkZ.MediaPlayer.Utils;
 
 namespace MediaPlayerMulti
 {
@@ -27,6 +28,7 @@ namespace MediaPlayerMulti
     public partial class MainWindow : Window
     {
         private readonly ObservableCollection<MediaPlayerTabVM> _players = new ObservableCollection<MediaPlayerTabVM>();
+        private MediaPlayerCommands _mediaPlayerCommands;
 
         public MainWindow()
         {
@@ -39,6 +41,7 @@ namespace MediaPlayerMulti
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             AddPlayer_Click(sender, e);
+            _mediaPlayerCommands = new MediaPlayerCommands(GetSelectedPlayer(), this);
         }
 
         private VideoPlayerControlVM GetTabItem(int idx)
@@ -57,26 +60,6 @@ namespace MediaPlayerMulti
             this.Close();
         }
 
-        private void ButtonFullScreen_Click(object sender, RoutedEventArgs e)
-        {
-            //if(this.WindowStyle == WindowStyle.None)
-            //{
-            //    this.WindowStyle = WindowStyle.ThreeDBorderWindow;
-            //    this.WindowState = WindowState.Normal;
-            //}
-            //else
-            //{
-            //    this.WindowStyle = WindowStyle.None;
-            //    this.WindowState = WindowState.Maximized;
-            //}
-
-            //_player.FitWindow();
-
-            FullScreenPlayerWindow fullScreen = new FullScreenPlayerWindow();
-            fullScreen.Owner = this;
-            fullScreen.ShowDialog();
-        }
-
         private void RemovePlayer_Click(object sender, RoutedEventArgs e)
         {
 
@@ -87,50 +70,6 @@ namespace MediaPlayerMulti
             MediaPlayerTabVM tab = new MediaPlayerTabVM();
             _players.Add(tab);
             tabPlayers.SelectedIndex = _players.Count - 1;
-        }
-
-        private void Open_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = true;
-        }
-
-        private void Open_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Media files (*.mp3;*.mpg;*.mpeg;*.mkv;*.mp4)|*.mp3;*.mpg;*.mpeg;*.mkv;*.mp4|All files (*.*)|*.*";
-            if (openFileDialog.ShowDialog() == true)
-                GetSelectedPlayer().OpenAndPlay(openFileDialog.FileName);
-        }
-
-        private void Play_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = (GetSelectedPlayer().IsOpen && GetSelectedPlayer().MediaState != MediaState.Play);
-        }
-
-        private void Play_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            GetSelectedPlayer().Play();
-        }
-
-        private void Pause_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            e.CanExecute = GetSelectedPlayer().MediaState == MediaState.Play;
-        }
-
-        private void Pause_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            GetSelectedPlayer().Pause();
-        }
-
-        private void Stop_CanExecute(object sender, CanExecuteRoutedEventArgs e)
-        {
-            MediaState ms = GetSelectedPlayer().MediaState;
-            e.CanExecute = ms == MediaState.Play || ms == MediaState.Pause;
-        }
-
-        private void Stop_Executed(object sender, ExecutedRoutedEventArgs e)
-        {
-            GetSelectedPlayer().Stop();
         }
     }
 }

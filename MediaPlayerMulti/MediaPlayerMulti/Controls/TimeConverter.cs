@@ -39,7 +39,16 @@ namespace MkZ.MediaPlayer.Controls
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             if (value is double dur)
-                return TimeSpan.FromSeconds(dur).ToString("mm':'ss'.'f");
+            {
+                if (dur == 0)
+                    return "";
+                if (dur < 60)
+                    return TimeSpan.FromSeconds(dur).ToString("s'.'f");
+                if (dur < 3600)
+                    return TimeSpan.FromSeconds(dur).ToString("m':'ss"); //'.'f");
+
+                return TimeSpan.FromSeconds(dur).ToString("hh':'mm':'ss"); //'.'f");
+            }
 
             return "--/--";
         }

@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 
@@ -13,11 +15,11 @@ namespace MkZ.MediaPlayer.Controls
     public class AnimationHelper
     {
         private readonly Stopwatch _stopwatch = new Stopwatch();
-        private readonly UIElement _container = null;
+        private readonly UserControl _container = null;
         private readonly DispatcherTimer _timer = new DispatcherTimer();
         private readonly List<UIElement> _controls = new List<UIElement>();
 
-        public AnimationHelper(UIElement container, params UIElement[] controls)
+        public AnimationHelper(UserControl container, params UIElement[] controls)
         {
             _container = container;
             _container.MouseMove += _container_MouseMove;
@@ -60,6 +62,8 @@ namespace MkZ.MediaPlayer.Controls
                     VisibilityShowAnimation(ctrl);
                 }
             }
+
+            _container.Cursor = Cursors.Arrow;
         }
 
         private void timer_Tick(object sender, EventArgs e)
@@ -74,6 +78,9 @@ namespace MkZ.MediaPlayer.Controls
                 {
                     VisibilityHideAnimation(ctrl, Visibility.Hidden);
                 }
+
+                _container.Cursor = Cursors.None;
+
                 return; //do not start timer
             }
             _timer.Start();

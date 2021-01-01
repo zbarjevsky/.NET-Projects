@@ -10,12 +10,16 @@
         Loaded="Window_Loaded"
         mc:Ignorable="d"
         Title="Full Screen Player" Height="450" Width="800">
-    <Window.CommandBindings>
+    <!--<Window.CommandBindings>
         <CommandBinding Command="ApplicationCommands.Open" CanExecute="Open_CanExecute" Executed="Open_Executed" />
+        <CommandBinding Command="ApplicationCommands.Close" CanExecute="Close_CanExecute" Executed="Close_Executed" />
         <CommandBinding Command="MediaCommands.Play" CanExecute="Play_CanExecute" Executed="Play_Executed" />
         <CommandBinding Command="MediaCommands.Pause" CanExecute="Pause_CanExecute" Executed="Pause_Executed" />
         <CommandBinding Command="MediaCommands.Stop" CanExecute="Stop_CanExecute" Executed="Stop_Executed" />
     </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Key="Esc" Command="ApplicationCommands.Close" />
+    </Window.InputBindings>-->
     <Grid>
         <mediaplayer:VideoPlayerControl x:Name="_player" />
     </Grid>

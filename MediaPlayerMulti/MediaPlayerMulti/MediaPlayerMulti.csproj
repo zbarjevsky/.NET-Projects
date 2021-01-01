@@ -56,6 +56,12 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Controls\AnimationHelper.cs" />
+    <Compile Include="Controls\ButtonClose.xaml.cs">
+      <DependentUpon>ButtonClose.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ButtonFullScreen.xaml.cs">
+      <DependentUpon>ButtonFullScreen.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ButtonPause.xaml.cs">
       <DependentUpon>ButtonPause.xaml</DependentUpon>
     </Compile>
@@ -84,10 +90,23 @@
     <Compile Include="Controls\TimeConverter.cs" />
     <Compile Include="IVideoPlayer.cs" />
     <Compile Include="MediaPlayerTabVM.cs" />
+    <Compile Include="Utils\MediaPlayerCommands.cs" />
     <Compile Include="VideoPlayerControl.xaml.cs">
       <DependentUpon>VideoPlayerControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="VideoPlayerControlVM.cs" />
+    <Page Include="Controls\ButtonClose.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ButtonFullScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ButtonPathStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ButtonPause.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

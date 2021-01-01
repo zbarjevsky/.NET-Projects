@@ -12,7 +12,7 @@
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="SliderControlResource.xaml" />
             </ResourceDictionary.MergedDictionaries>
-        <local:TimeSpanToSecondsConverter x:Key="TimeConverter" />
+            <local:TimeSpanToSecondsConverter x:Key="TimeConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Viewbox Stretch="Uniform">
@@ -28,8 +28,8 @@
                 <Slider Style="{StaticResource Horizontal_Slider}" DockPanel.Dock="Top"
                     VerticalAlignment="Center" HorizontalAlignment="Stretch" 
                     TickFrequency="30" LargeChange="100" SmallChange="10"
-                    Minimum="0" Maximum="{Binding NaturalDuration, Converter={StaticResource TimeConverter}}" 
-                    Value="{Binding Position, Converter={StaticResource TimeConverter}}" Margin="5,0"/>
+                    Minimum="0" Maximum="{Binding NaturalDuration, Converter={StaticResource TimeConverter}, FallbackValue=100}" 
+                    Value="{Binding Position, Converter={StaticResource TimeConverter}, FallbackValue=90}" Margin="5,0"/>
             </DockPanel>
         </Border>
     </Viewbox>

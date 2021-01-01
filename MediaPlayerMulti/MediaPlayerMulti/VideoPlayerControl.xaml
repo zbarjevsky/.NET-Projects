@@ -15,7 +15,7 @@
              d:DesignHeight="250" d:DesignWidth="600">
     <Grid x:Name="_gridMain" MouseWheel="Grid_MouseWheel" >
         <Grid.RowDefinitions>
-            <RowDefinition Height="30" />
+            <RowDefinition Height="*" MinHeight="40"/>
             <RowDefinition Height="6*" />
             <RowDefinition Height="*" MinHeight="92" />
             <RowDefinition Height="Auto" />
@@ -28,7 +28,7 @@
                           MouseWheel="mePlayer_MouseWheel" />-->
         </ScrollViewer>
 
-        <TextBox x:Name="_title" BorderThickness="0" Margin="3" Padding="100,0"
+        <!--<TextBox x:Name="_title" BorderThickness="0" Margin="3" Padding="100,0"
                      Foreground="Navy"
                      HorizontalContentAlignment="Center"
                      FontSize="22" FontWeight="Bold" FontFamily="Times New Roman" 
@@ -39,20 +39,26 @@
             <TextBox.Background>
                 <SolidColorBrush Color="White" Opacity="0.2" />
             </TextBox.Background>
-        </TextBox>
+        </TextBox>-->
 
-        <StackPanel x:Name="_systemButtons" Grid.RowSpan="2" Margin="6" Orientation="Horizontal" FlowDirection="RightToLeft" 
-                    HorizontalAlignment="Right" VerticalAlignment="Top">
-            <Button Width="30" Height="30" Margin="8,0" Padding="1,-5,1,4" 
-                    Background="Red" Foreground="White" FontSize="26" FontWeight="Bold" 
-                    Content="X" ToolTip="Close"
-                    Click="ButtonClose_Click"/>
-            <Button Width="30" Height="30" Margin="8,0" Padding="1,-5,1,4" 
-                    Background="SteelBlue" Foreground="White" FontSize="26" FontWeight="Bold" 
-                    Content="X" ToolTip="Full Screen"
-                    Click="ButtonFullScreen_Click"/>
-        </StackPanel>
-
+        <Viewbox x:Name="_systemButtons" Margin="6" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <Border Margin="10" Padding="1" CornerRadius="10" Height="40">
+                <Border.Background>
+                    <SolidColorBrush Color="Black" Opacity="0.1" />
+                </Border.Background>
+                <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" >
+                    <controls:ButtonClose Width="30" Height="30" Margin="8,0" Padding="1,-5,1,4" 
+                            Background="Black" Foreground="Red" FontSize="26" FontWeight="Bold" 
+                            ToolTip="Close"
+                            Click="ButtonClose_Click"/>
+                    <controls:ButtonFullScreen Width="30" Height="30" Margin="8,0" Padding="1,-5,1,4" 
+                            Background="Black" Foreground="Cyan" FontSize="26" FontWeight="Bold" 
+                            ToolTip="Full Screen"
+                            Click="ButtonFullScreen_Click"/>
+                </StackPanel>
+            </Border>
+        </Viewbox>
+        
         <controls:PlayerControls x:Name="_playControls" Grid.Row="2" Margin="16" />
 
         <StackPanel x:Name="_testButtons" Grid.Row="3" Orientation="Horizontal" >

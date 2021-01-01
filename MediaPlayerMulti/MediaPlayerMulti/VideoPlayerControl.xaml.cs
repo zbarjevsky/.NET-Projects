@@ -38,7 +38,7 @@ namespace MkZ.MediaPlayer
             InitializeComponent();
 
             _controlsHideAndShow = new AnimationHelper(this, 
-                _playControls, _title, _testButtons, _systemButtons);
+                _playControls, _testButtons, _systemButtons);
         }
 
         private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
