@@ -11,7 +11,7 @@ namespace MkZ.MediaPlayer
 {
     public interface IVideoPlayer : INotifyPropertyChanged
     {
-        Action<IVideoPlayer> VideoStarted { get; set; }
+        Action<IVideoPlayer> VideoStartedAction { get; set; }
 
         MediaState MediaState { get; }
         string FileName { get; }

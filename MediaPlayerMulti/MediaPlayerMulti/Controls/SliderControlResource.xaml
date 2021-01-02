@@ -4,7 +4,23 @@
 
     <local:SecondsToStringConverter x:Key="TimeFormatConverter" />
     
-    <Style x:Key="SliderRepeatButtonUp" TargetType="RepeatButton">
+    <Style x:Key="SliderRepeatButtonLeft" TargetType="RepeatButton">
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RepeatButton">
+                    <Border SnapsToDevicePixels="True" BorderThickness="2" BorderBrush="DarkGray" Height="10">
+                        <Border.Background>
+                            <SolidColorBrush Color="Red" Opacity="0.75" />
+                        </Border.Background>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="SliderRepeatButtonRight" TargetType="RepeatButton">
         <Setter Property="SnapsToDevicePixels" Value="true" />
         <Setter Property="OverridesDefaultStyle" Value="true" />
         <Setter Property="IsTabStop" Value="false" />
@@ -12,19 +28,11 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="RepeatButton">
-                    <Border SnapsToDevicePixels="True" Background="Transparent" Height="10"/>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style x:Key="SliderRepeatButtonDown" TargetType="RepeatButton">
-        <Setter Property="SnapsToDevicePixels" Value="true" />
-        <Setter Property="OverridesDefaultStyle" Value="true" />
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="RepeatButton">
-                    <Border SnapsToDevicePixels="True" Background="Red" BorderThickness="2" BorderBrush="DarkGray" Height="10"/>
+                    <Border SnapsToDevicePixels="True" Height="6" Margin="-45,0,42,0">
+                        <Border.Background>
+                            <SolidColorBrush Color="LightGreen" Opacity="0.5" />
+                        </Border.Background>
+                    </Border>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -37,7 +45,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="Thumb">
                     <Grid Height="45" Width="45">
-                        <Ellipse Width="15" Height="15" Margin="-7,0,0,0" HorizontalAlignment="Left"
+                        <Ellipse Width="15" Height="15" Margin="-8,0,0,0" HorizontalAlignment="Left"
                                  StrokeThickness="1" Stroke="DarkGoldenrod" >
                             <Ellipse.Fill>
                                 <SolidColorBrush Color="AliceBlue" Opacity="0.75" />
@@ -73,14 +81,14 @@
             
             <Track Grid.Row="1" Grid.RowSpan="2" x:Name="PART_Track" Margin="10,-10,0,0" VerticalAlignment="Center"  >
                 <Track.DecreaseRepeatButton>
-                    <RepeatButton Style="{StaticResource SliderRepeatButtonDown}"  Command="Slider.DecreaseLarge" />
+                    <RepeatButton Style="{StaticResource SliderRepeatButtonLeft}"  Command="Slider.DecreaseLarge" />
                 </Track.DecreaseRepeatButton>
+                <Track.IncreaseRepeatButton>
+                    <RepeatButton Style="{StaticResource SliderRepeatButtonRight}" Command="Slider.IncreaseLarge" />
+                </Track.IncreaseRepeatButton>
                 <Track.Thumb>
                     <Thumb Style="{StaticResource SliderThumb}" Margin="0,10" />
                 </Track.Thumb>
-                <Track.IncreaseRepeatButton>
-                    <RepeatButton Style="{StaticResource SliderRepeatButtonUp}" Command="Slider.IncreaseLarge" />
-                </Track.IncreaseRepeatButton>
             </Track>
 
             <TextBlock Grid.Row="1" Margin="10,0,0,10" FontSize="12"

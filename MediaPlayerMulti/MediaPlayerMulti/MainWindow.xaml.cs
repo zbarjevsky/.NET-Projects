@@ -25,11 +25,15 @@ namespace MediaPlayerMulti
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IPlayerMainWindow
     {
         private readonly ObservableCollection<MediaPlayerTabVM> _players = new ObservableCollection<MediaPlayerTabVM>();
         private MediaPlayerCommands _mediaPlayerCommands;
         private AppConfig _appConfig = new AppConfig();
+
+        public Window Window => this;
+
+        public VideoPlayerControlVM PlayerVM => GetSelectedPlayer();
 
         public MainWindow()
         {
@@ -56,7 +60,7 @@ namespace MediaPlayerMulti
             }
             tabPlayers.SelectedIndex = 0;
 
-            _mediaPlayerCommands = new MediaPlayerCommands(GetSelectedPlayer(), this);
+            _mediaPlayerCommands = new MediaPlayerCommands(this);
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -79,7 +83,11 @@ namespace MediaPlayerMulti
 
         private void RemovePlayer_Click(object sender, RoutedEventArgs e)
         {
-
+            if((sender as Button).DataContext is MediaPlayerTabVM vm)
+                _players.Remove(vm);
+            
+            if (_players.Count == 0)
+                AddPlayer_Click(sender, e);
         }
 
         private void AddPlayer_Click(object sender, RoutedEventArgs e)
@@ -95,8 +103,10 @@ namespace MediaPlayerMulti
 
             if (state != null)
             {
-                tab.PlayerVM.GetPlayerState().CopyFrom(state);
-                tab.PlayerVM.GetPlayerState().MediaState = MediaState.Pause;
+                state.MediaState = MediaState.Pause;
+
+                tab.PlayerVM.Init(state);
+                tab.NotifyPropertyChangedAll();
             }
         }
     }

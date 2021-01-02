@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -25,6 +26,7 @@ namespace MkZ.MediaPlayer
         public double Volume = 0.5;
         public Point ScrollOffset = new Point();
         public double Zoom = 1;
+        public bool IsFlipHorizontally = false;
 
         [XmlIgnore]
         public TimeSpan Position
@@ -39,6 +41,7 @@ namespace MkZ.MediaPlayer
             FileName = state.FileName;
             Position = state.Position;
             Volume = state.Volume;
+            IsFlipHorizontally = state.IsFlipHorizontally;
 
             ScrollOffset = state.ScrollOffset;
             Zoom = state.Zoom;
@@ -52,6 +55,7 @@ namespace MkZ.MediaPlayer
                 FileName = player.FileName;
                 Position = player.Position;
                 Volume = player.Volume;
+                IsFlipHorizontally = player.IsFlipHorizontally;
             }
 
             if (scrollDragZoom != null)
@@ -61,12 +65,22 @@ namespace MkZ.MediaPlayer
             }
         }
 
-        public void RestoreState(VideoPlayerControlVM player)
+        public void RestoreStateTo(VideoPlayerControlVM player)
         {
+            Debug.WriteLine("RestoreState: {0}\nPosition: {1}, Size: {2}, Duration: {3}",
+                FileName, Position, player.NaturalSize, player.NaturalDuration);
+
             player.Zoom = Zoom;
             player.VerticalOffset = ScrollOffset.Y;
-            player.Open(FileName, Volume);
-            player.RestoreMediaState(MediaState, Position);
+            
+            player.Volume = Volume;
+            
+            player.Open(FileName);
+        }
+
+        public override string ToString()
+        {
+            return Position + " " + FileName;
         }
     }
 
@@ -76,14 +90,14 @@ namespace MkZ.MediaPlayer
         private ScrollViewer _scrollPlayerContainer = null;
 
         public Action MaximizeAction = () => { };
-        public Action VideoEnded = () => { };
-        public Action<IVideoPlayer> VideoStarted { get; set; } = (player) => { };
-        public Func<ExceptionRoutedEventArgs, MediaElement, bool> VideoFailed = (e, player) => true;
+        public Action VideoEndedAction = () => { };
+        public Action<IVideoPlayer> VideoStartedAction { get; set; } = (player) => { };
+        public Func<ExceptionRoutedEventArgs, MediaElement, bool> VideoFailedAction = (e, player) => true;
         public Action<VideoPlayerControlVM> LeftButtonClick = (vm) => { vm.TogglePlayPauseState(); };
 
         public Action<VideoPlayerControlVM> LeftButtonDoubleClick = (vm) => { };
 
-        private VideoPlayerState _videoPlayerState = new VideoPlayerState();
+        public VideoPlayerState SavedState { get; private set; } = new VideoPlayerState();
 
         public MediaElement VideoPlayerElement { get; private set; } = null;
 
@@ -112,21 +126,31 @@ namespace MkZ.MediaPlayer
             }
         }
 
+        public string Prompt 
+        { 
+            get { return string.IsNullOrWhiteSpace(_fileName) ? "Use Ctrl+O or Drop file here..." : Title; } 
+        }
+
         private Brush _background = Brushes.Gray;
         public Brush Background
         {
             get { return _background; }
-            set { _background = value; NotifyPropertyChanged(); }
+            set { SetProperty(ref _background, value); }
         }
 
-        private string _videoResolution;
+        private string _videoResolution = "";
         public string VideoResolution
         {
             get { return _videoResolution; }
-            set { _videoResolution = value; NotifyPropertyChanged(); }
+            set { SetProperty(ref _videoResolution, value); }
         }
 
-        public string FileName { get; private set; }
+        private string _fileName = "";
+        public string FileName 
+        { 
+            get { return _fileName; } 
+            private set { SetProperty(ref _fileName, value); NotifyPropertyChanged(nameof(Prompt)); } 
+        }
 
         public bool IsFlipHorizontally
         {
@@ -147,10 +171,7 @@ namespace MkZ.MediaPlayer
 
         public double VerticalOffset
         {
-            get
-            {
-                return _scrollDragger.VerticalOffset;
-            }
+            get { return _scrollDragger.VerticalOffset; }
 
             set
             {
@@ -162,24 +183,19 @@ namespace MkZ.MediaPlayer
                 {
                     _scrollDragger.VerticalOffset = value;
                 }
+                NotifyPropertyChanged();
             }
         }
 
         public double Zoom
         {
-            get
-            {
-                return _scrollDragger.Zoom;
-            }
-
-            set
-            {
-                _scrollDragger.Zoom = value;
-            }
+            get { return _scrollDragger.Zoom; }
+            set { _scrollDragger.Zoom = value; }
         }
 
         public VideoPlayerControlVM()
         {
+            RecreateMediaElement(false);
 
             DispatcherTimer timer = new DispatcherTimer();
             timer.Interval = TimeSpan.FromSeconds(0.233);
@@ -193,17 +209,20 @@ namespace MkZ.MediaPlayer
                 NotifyPropertyChanged(nameof(Position));
         }
 
-        public void Init(ScrollViewer scrollPlayer)
+        public void Init(VideoPlayerState state)
         {
-            _scrollPlayerContainer = scrollPlayer;
-            RecreateMediaElement(false);
-            _videoPlayerState.CopyFrom(this, _scrollDragger);
+            SavedState.CopyFrom(state);
         }
 
         public VideoPlayerState GetPlayerState()
         {
-            _videoPlayerState.CopyFrom(this, _scrollDragger);
-            return _videoPlayerState;
+            VideoPlayerState state = new VideoPlayerState();
+            if (!string.IsNullOrWhiteSpace(_fileName))
+                state.CopyFrom(this, _scrollDragger);
+            else
+                state.CopyFrom(SavedState);
+
+            return state;
         }
 
         public void Attach(ScrollViewer scrollPlayer)
@@ -211,18 +230,12 @@ namespace MkZ.MediaPlayer
             _scrollPlayerContainer = scrollPlayer;
             _scrollPlayerContainer.Content = VideoPlayerElement;
 
-            double vOff = 0;
-            double zoom = 1;
+            VideoPlayerElement.Volume = SavedState.Volume;
+
             if (_scrollDragger != null)
-            {
-                vOff = _scrollDragger.VerticalOffset;
-                zoom = _scrollDragger.Zoom;
                 _scrollDragger.Dispose();
-            }
 
             _scrollDragger = new ScrollDragZoom(VideoPlayerElement, _scrollPlayerContainer);
-            _scrollDragger.Zoom = zoom;
-            _scrollDragger.VerticalOffset = vOff;
 
             _scrollDragger.SizeChangedAction = () =>
             {
@@ -230,14 +243,14 @@ namespace MkZ.MediaPlayer
                     VideoPlayerElement.ActualWidth, VideoPlayerElement.ActualHeight, 100.0 * _scrollDragger.Zoom);
             };
 
-            _videoPlayerState.RestoreState(this);
+            SavedState.RestoreStateTo(this);
         }
 
         public void Detach()
         {
             if(VideoPlayerElement != null)
             {
-                _videoPlayerState.CopyFrom(this, _scrollDragger);
+                SavedState.CopyFrom(this, _scrollDragger);
                 Pause();
             }
 
@@ -257,33 +270,20 @@ namespace MkZ.MediaPlayer
             GC.WaitForPendingFinalizers();
         }
 
-        public void CopyState(VideoPlayerControlVM playerControl, double volume, bool copySource)
-        {
-            if (copySource)
-                VideoPlayerElement.Source = playerControl.VideoPlayerElement.Source;
+        //public void CopyState(VideoPlayerControlVM playerControl, double volume, bool copySource)
+        //{
+        //    if (copySource)
+        //        VideoPlayerElement.Source = playerControl.VideoPlayerElement.Source;
 
-            Volume = volume;
-            MediaState = playerControl.MediaState;
-            Title = playerControl.Title;
-            FileName = playerControl.FileName;
-            IsFlipHorizontally = playerControl.IsFlipHorizontally;
-            Zoom = playerControl.Zoom;
-            VerticalOffset = playerControl.VerticalOffset;
-            Position = playerControl.Position;
-        }
-
-        public void RestoreMediaState(MediaState state, TimeSpan position)
-        {
-            _videoPlayerState.MediaState = state;
-            _videoPlayerState.Position = position;
-
-            Play();
-            Position = position;
-            if (state == MediaState.Stop)
-                Stop();
-            if (state == MediaState.Pause)
-                Pause();
-        }
+        //    Volume = volume;
+        //    MediaState = playerControl.MediaState;
+        //    Title = playerControl.Title;
+        //    FileName = playerControl.FileName;
+        //    IsFlipHorizontally = playerControl.IsFlipHorizontally;
+        //    Zoom = playerControl.Zoom;
+        //    VerticalOffset = playerControl.VerticalOffset;
+        //    Position = playerControl.Position;
+        //}
 
         public bool Play_CanExecute
         {
@@ -342,32 +342,38 @@ namespace MkZ.MediaPlayer
 
         public void OpenAndPlay(string fileName)
         {
-            Open(fileName, 0.01);
-            Play();
-            FitWindow();
+            SavedState = new VideoPlayerState() //reset
+            {
+                FileName = fileName,
+                PositionInSeconds = 0.0,
+                Volume = this.Volume == 0 ? 0.5 : this.Volume,
+                MediaState = MediaState.Play
+            };
+
+            Open(fileName);
         }
 
-        public void Open(string fileName, double volume = 0)
+        public void Open(string fileName)
         {
             if(File.Exists(fileName))
             {
                 FileName = fileName;
                 VideoPlayerElement.Source = new Uri(fileName);
-                if (volume != 0)
-                    Volume = volume;
-                Position = _videoPlayerState.Position;
                 MediaState = MediaState.Manual;
                 Title = Path.GetFileName(fileName);
+
+                Volume = 0; //load silently
+                Position = SavedState.Position;
+
+                //this will open media - reset state on MediaOpened event
+                VideoPlayerElement.Play();
             }
             else
             {
                 FileName = "";
                 VideoPlayerElement.Source = null;
-                if (volume != 0)
-                    Volume = volume;
                 MediaState = MediaState.Manual;
                 Title = "N/A";
-
             }
         }
 
@@ -385,7 +391,8 @@ namespace MkZ.MediaPlayer
             if (VideoPlayerElement.Source != null)
             {
                 VideoPlayerElement.Play();
-                Background = Brushes.Gray;
+                
+                Background = Brushes.Black;
                 MediaState = MediaState.Play;
             }
         }
@@ -395,7 +402,7 @@ namespace MkZ.MediaPlayer
             if (VideoPlayerElement.Source != null)
             {
                 VideoPlayerElement.Pause();
-                Background = Brushes.DarkGray;
+                Background = Brushes.Gray;
                 MediaState = MediaState.Pause;
             }
         }
@@ -434,7 +441,7 @@ namespace MkZ.MediaPlayer
 
         internal void FitWindow()
         {
-            _scrollDragger.FitWindow(0);
+            _scrollDragger.FitWindow(1);
         }
 
         /// <summary>
@@ -445,8 +452,6 @@ namespace MkZ.MediaPlayer
         {
             try
             {
-                _videoPlayerState.CopyFrom(this, _scrollDragger);
-
                 if (VideoPlayerElement != null)
                 {
                     VideoPlayerElement.Stop();
@@ -455,6 +460,12 @@ namespace MkZ.MediaPlayer
                     VideoPlayerElement.Source = null;
                     VideoPlayerElement.Volume = 0;
                     VideoPlayerElement = null;
+
+                    VideoPlayerElement.MouseWheel -= VideoPlayerElement_MouseWheel;
+                    VideoPlayerElement.MediaOpened -= VideoPlayerElement_MediaOpened;
+                    VideoPlayerElement.MediaEnded -= VideoPlayerElement_MediaEnded;
+                    VideoPlayerElement.MediaFailed -= VideoPlayerElement_MediaFailed;
+
                     _scrollPlayerContainer.Content = null;
 
                     GC.Collect();
@@ -464,48 +475,22 @@ namespace MkZ.MediaPlayer
                 MediaState = MediaState.Manual;
 
                 VideoPlayerElement = new MediaElement();
-                VideoPlayerElement.Width = 1920;
-                VideoPlayerElement.Height = 1080;
+                VideoPlayerElement.Width = 320;
+                VideoPlayerElement.Height = 240;
                 VideoPlayerElement.LoadedBehavior = MediaState.Manual;
                 VideoPlayerElement.Stretch = Stretch.Uniform;
-                VideoPlayerElement.MouseWheel += mePlayer_MouseWheel;
-
-                Volume = 0; //reset
-
-                _scrollPlayerContainer.Content = VideoPlayerElement;
-
-                if (_scrollDragger != null)
-                {
-                    _scrollDragger.Dispose();
-                }
-
-                _scrollDragger = new ScrollDragZoom(VideoPlayerElement, _scrollPlayerContainer);
-
-                _scrollDragger.SizeChangedAction = () =>
-                {
-                    VideoResolution = string.Format("{0:0}x{1:0} ({2:0.0}%)",
-                        VideoPlayerElement.ActualWidth, VideoPlayerElement.ActualHeight, 100.0 * _scrollDragger.Zoom);
-                };
 
                 //refresh view when change position
                 VideoPlayerElement.ScrubbingEnabled = true;
 
+                VideoPlayerElement.Volume = 0; //reset
+
                 AddFlipXRenderTransform(VideoPlayerElement, flipHorizontally);
 
-                VideoPlayerElement.MediaOpened += (s, e) =>
-                {
-                    _scrollDragger.NaturalSize = new Size(VideoPlayerElement.NaturalVideoWidth, VideoPlayerElement.NaturalVideoHeight);
-                    _scrollDragger.Zoom = _videoPlayerState.Zoom;
-                    Position = _videoPlayerState.Position;
-                    MediaState = GetMediaState(VideoPlayerElement);
-                    NotifyPropertyChanged(nameof(NaturalDuration));
-                    FitWindow();
-                    VideoStarted(this);
-                };
-                VideoPlayerElement.MediaEnded += (s, e) => { VideoEnded(); };
-                VideoPlayerElement.MediaFailed += (s, e) => { e.Handled = VideoFailed(e, VideoPlayerElement); };
-
-                _videoPlayerState.RestoreState(this);
+                VideoPlayerElement.MouseWheel += VideoPlayerElement_MouseWheel;
+                VideoPlayerElement.MediaOpened += VideoPlayerElement_MediaOpened;
+                VideoPlayerElement.MediaEnded += VideoPlayerElement_MediaEnded;
+                VideoPlayerElement.MediaFailed += VideoPlayerElement_MediaFailed;
             }
             catch (Exception err)
             {
@@ -513,7 +498,39 @@ namespace MkZ.MediaPlayer
             }
         }
 
-        private void mePlayer_MouseWheel(object sender, MouseWheelEventArgs e)
+        private void VideoPlayerElement_MediaOpened(object sender, RoutedEventArgs e)
+        {
+            Position = SavedState.Position;
+
+            _scrollDragger.NaturalSize = new Size(VideoPlayerElement.NaturalVideoWidth, VideoPlayerElement.NaturalVideoHeight);
+            
+            if (SavedState.MediaState == MediaState.Stop)
+                Stop();
+            if (SavedState.MediaState == MediaState.Pause)
+                Pause();
+
+            Volume = SavedState.Volume;
+            MediaState = GetMediaState();
+
+            Debug.WriteLine("Media Opened: {0}\nPosition: {1}, Size: {2}, Duration: {3}",
+                VideoPlayerElement.Source, VideoPlayerElement.Position, NaturalSize, NaturalDuration);
+            
+            FitWindow();
+            NotifyPropertyChanged(nameof(NaturalDuration));
+            VideoStartedAction(this);
+        }
+
+        private void VideoPlayerElement_MediaEnded(object sender, RoutedEventArgs e)
+        {
+            VideoEndedAction();
+        }
+
+        private void VideoPlayerElement_MediaFailed(object sender, ExceptionRoutedEventArgs e)
+        {
+            e.Handled = VideoFailedAction(e, VideoPlayerElement);
+        }
+
+        private void VideoPlayerElement_MouseWheel(object sender, MouseWheelEventArgs e)
         {
         }
 
@@ -533,7 +550,14 @@ namespace MkZ.MediaPlayer
             element.RenderTransform = scaleTransform; // myTransformGroup;
         }
 
-        private MediaState GetMediaState(MediaElement myMedia)
+        public MediaState GetMediaState()
+        {
+            if(VideoPlayerElement != null)
+                return GetMediaState(VideoPlayerElement);
+            return MediaState.Manual;
+        }
+
+        private static MediaState GetMediaState(MediaElement myMedia)
         {
             FieldInfo hlp = typeof(MediaElement).GetField("_helper", BindingFlags.NonPublic | BindingFlags.Instance);
             object helperObject = hlp.GetValue(myMedia);

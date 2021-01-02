@@ -50,11 +50,6 @@ namespace MkZ.MediaPlayer
 
             if (this.DataContext is VideoPlayerControlVM vm)
             {
-                if(vm != null && !vm.IsInitialized)
-                {
-                    vm.Init(_scrollPlayerContainer);
-                }
-
                 _vm = vm;
 
                 if (_vm != null)
@@ -90,7 +85,7 @@ namespace MkZ.MediaPlayer
             vm.Stop();
             fullScreen.ShowDialog();
 
-            fullScreen.GetPlayerState().RestoreState(vm);
+            fullScreen.GetPlayerState().RestoreStateTo(vm);
         };
 
         private void UserControl_Drop(object sender, DragEventArgs e)
@@ -105,7 +100,7 @@ namespace MkZ.MediaPlayer
 
         private void UserControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (e.ChangedButton == MouseButton.Left)
+            if (e.ChangedButton == MouseButton.Left && (e.OriginalSource is MediaElement))
             {
                 _vm.LeftButtonDoubleClick(_vm);
                 OnFullScreenButtonClick(_vm);

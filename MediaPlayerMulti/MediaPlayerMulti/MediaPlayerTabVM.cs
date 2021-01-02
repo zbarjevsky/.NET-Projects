@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,11 +16,13 @@ namespace MkZ.MediaPlayer
         { 
             get 
             {
-                if (string.IsNullOrWhiteSpace(PlayerVM.Title))
+                if (string.IsNullOrWhiteSpace(PlayerVM.SavedState.FileName))
                     return "?";
-                if (PlayerVM.Title.Length < 32)
-                    return PlayerVM.Title;
-                return PlayerVM.Title.Substring(0, 32); 
+
+                string fileName = Path.GetFileName(PlayerVM.SavedState.FileName);
+                if (fileName.Length < 32)
+                    return fileName;
+                return fileName.Substring(0, 32); 
             } 
         }
 
@@ -32,9 +35,9 @@ namespace MkZ.MediaPlayer
         {
             get
             { 
-                if(PlayerVM.IsInitialized)
+                if(PlayerVM.IsInitialized && PlayerVM.Position.TotalSeconds > 0)
                     return PlayerVM.Position.ToString("mm':'ss");
-                return "00:00/00:00";
+                return "";
             }
         }
 
@@ -50,7 +53,15 @@ namespace MkZ.MediaPlayer
 
         private void PlayerVM_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            NotifyPropertyChangedAll();
+            if (e.PropertyName == nameof(VideoPlayerControlVM.Position))
+                NotifyPropertyChanged(nameof(Status));
+            if (e.PropertyName == nameof(VideoPlayerControlVM.FileName))
+                NotifyPropertyChangedAll();
+        }
+
+        public override string ToString()
+        {
+            return PlayerVM.ToString();
         }
     }
 }

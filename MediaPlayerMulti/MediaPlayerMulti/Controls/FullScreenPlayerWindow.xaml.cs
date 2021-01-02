@@ -19,11 +19,15 @@ namespace MkZ.MediaPlayer.Controls
     /// <summary>
     /// Interaction logic for FullScreenPlayerWindow.xaml
     /// </summary>
-    public partial class FullScreenPlayerWindow : Window
+    public partial class FullScreenPlayerWindow : Window, IPlayerMainWindow
     {
         private VideoPlayerControlVM _vm = new VideoPlayerControlVM();
         private VideoPlayerState _playerState = new VideoPlayerState();
         private MediaPlayerCommands _mediaPlayerCommands;
+
+        public Window Window => this;
+
+        public VideoPlayerControlVM PlayerVM => _vm;
 
         public FullScreenPlayerWindow()
         {
@@ -35,7 +39,7 @@ namespace MkZ.MediaPlayer.Controls
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            _playerState.RestoreState(_vm);
+            _playerState.RestoreStateTo(_vm);
 
             //here is - close full screen window
             _player.OnFullScreenButtonClick = (vm) => 
@@ -45,7 +49,7 @@ namespace MkZ.MediaPlayer.Controls
                 this.Close(); 
             };
 
-            _mediaPlayerCommands = new MediaPlayerCommands(_vm, this);
+            _mediaPlayerCommands = new MediaPlayerCommands( this);
         }
 
         public void Init(VideoPlayerState state)
