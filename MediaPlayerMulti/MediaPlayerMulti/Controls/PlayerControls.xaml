@@ -19,7 +19,7 @@
     <Viewbox Stretch="Uniform">
         <Border Width="800" Height="60" CornerRadius="20">
             <Border.Background>
-                <SolidColorBrush Color="Black" Opacity="0.5" />
+                <SolidColorBrush Color="Black" Opacity="0.55" />
             </Border.Background>
             <DockPanel Grid.Row="1" Margin="10,6" VerticalAlignment="Top" HorizontalAlignment="Stretch" >
                 <local:ButtonPlay Width="30" Margin="6,0" Foreground="LimeGreen" Command="MediaCommands.Play" />

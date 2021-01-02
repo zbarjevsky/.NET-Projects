@@ -126,9 +126,11 @@ namespace MkZ.MediaPlayer
             }
         }
 
+        private string _prompt = "Use Ctrl+O or Drop file here...";
         public string Prompt 
-        { 
-            get { return string.IsNullOrWhiteSpace(_fileName) ? "Use Ctrl+O or Drop file here..." : Title; } 
+        {
+            get { return _prompt; }
+            set { SetProperty(ref _prompt, value); }
         }
 
         private Brush _background = Brushes.Gray;
@@ -243,6 +245,7 @@ namespace MkZ.MediaPlayer
                     VideoPlayerElement.ActualWidth, VideoPlayerElement.ActualHeight, 100.0 * _scrollDragger.Zoom);
             };
 
+            Prompt = "Loading, Please Wait...";
             SavedState.RestoreStateTo(this);
         }
 
@@ -512,6 +515,8 @@ namespace MkZ.MediaPlayer
             Volume = SavedState.Volume;
             MediaState = GetMediaState();
 
+            Prompt = Title;
+
             Debug.WriteLine("Media Opened: {0}\nPosition: {1}, Size: {2}, Duration: {3}",
                 VideoPlayerElement.Source, VideoPlayerElement.Position, NaturalSize, NaturalDuration);
             
@@ -522,6 +527,7 @@ namespace MkZ.MediaPlayer
 
         private void VideoPlayerElement_MediaEnded(object sender, RoutedEventArgs e)
         {
+            Stop();
             VideoEndedAction();
         }
 
