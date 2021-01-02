@@ -71,3 +71,8 @@ MessageBox/Binaries/MZ.WPF.MessageBox.dll
 /Binaries/SmartBackup.Config.xml
 /Binaries/SimpleBackup.Config.xml
 /Binaries/PlaybackSoundSwitch.exe
+/BlueMaestro/Binaries/CommonMZ.exe
+/BlueMaestro/Binaries/Common.MkZ.exe
+/BlueMaestro/Binaries/Microsoft.WindowsAPICodePack.dll
+/BlueMaestro/Binaries/Microsoft.WindowsAPICodePack.Shell.dll
+/BlueMaestro/Binaries/Framework.MkZ.exe

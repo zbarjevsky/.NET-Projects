@@ -26,16 +26,16 @@ namespace BarometerBT.Bluetooth
         public const int OUT_OF_RANGE_TIMEOUT = 50000;
 
         public Action<string> OnBMDeviceMsgReceivedAction = (info) => { };
-        public Action<TimeSpan> OnBMDeviceCheckAction = (elapsed) => { };
-        public Action<TimeSpan> OnBLEDeviceCheckAction = (elapsed) => { };
+        public Action<double> OnBMDeviceCheckAction = (elapsed) => { };
+        public Action<double> OnBLEDeviceCheckAction = (elapsed) => { };
 
         // Create Bluetooth Listener
         private BluetoothLEAdvertisementWatcher _watcherBLE = new BluetoothLEAdvertisementWatcher();
         private Dictionary<ushort, DeviceRecordVM> _records = new Dictionary<ushort, DeviceRecordVM>();
         private Dictionary<ulong, BluetoothLEDevice> _blueMaestroDevices = new Dictionary<ulong, BluetoothLEDevice>();
 
-        private Stopwatch _stopperBM = new Stopwatch();
-        private Stopwatch _watchDog = new Stopwatch();
+        private double _stopperBM = 0;
+        private double _watchDog = 0;
 
         private BMRecordAverages _averages;
         private BMRecordCurrent _current;
@@ -80,7 +80,7 @@ namespace BarometerBT.Bluetooth
         {
             //I need watch dog - to check bluetooth connection status once a 1 minute
             _timer = new DispatcherTimer(DispatcherPriority.Background);
-            _timer.Interval = TimeSpan.FromMilliseconds(OUT_OF_RANGE_TIMEOUT);
+            _timer.Interval = TimeSpan.FromSeconds(1);//.FromMilliseconds(OUT_OF_RANGE_TIMEOUT);
             _timer.Tick += _timer_Tick;
             _timer.Start();
         }
@@ -89,19 +89,19 @@ namespace BarometerBT.Bluetooth
         {
             _timer.Stop();
 
-            TimeSpan tsBM = _stopperBM.Elapsed;
-            TimeSpan tsWD = _watchDog.Elapsed;
+            _stopperBM++;
+            _watchDog++;
 
-            OnBMDeviceCheckAction(tsBM);
-            OnBLEDeviceCheckAction(tsWD);
+            OnBMDeviceCheckAction(_stopperBM);
+            OnBLEDeviceCheckAction(_stopperBM);
 
             //if no message more than one minute - restart BluetoothLEAdvertisementWatcher
-            if (tsWD.TotalMinutes > 1.0)
+            if (_watchDog > 60)
             {
                 try
                 {
-                    Log.d("Watch Dog Elapsed: " + tsWD);
-                    CommonTools.ErrorMessage("Watcher is Stuck!\nRestarting...\n" + tsWD);
+                    Log.d("Watch Dog Elapsed: " + _watchDog);
+                    CommonTools.ErrorMessage("Watcher is Stuck!\nRestarting...\n" + _watchDog);
                     StopBluetoothSearch();
                     StartBluetoothSearch();
                 }
@@ -145,7 +145,7 @@ namespace BarometerBT.Bluetooth
 
         private void OnAdvertisementReceived(BluetoothLEAdvertisementWatcher watcher, BluetoothLEAdvertisementReceivedEventArgs e)
         {
-            _watchDog.Restart(); //message received
+            _watchDog = 0; //message received
 
             try
             {
@@ -177,7 +177,7 @@ namespace BarometerBT.Bluetooth
                     if (device != null)
                     {
                         _blueMaestroDevices[e.BluetoothAddress] = device;
-                        _stopperBM.Restart();
+                        _stopperBM = 0;
                     }
                 }
             }
@@ -244,7 +244,7 @@ namespace BarometerBT.Bluetooth
                             }
 
                             string message = recordsCount;
-                            message += "Total: " + CommonTools.TimeSpanToString(_stopperBM.Elapsed) + _lastAverage + _lastCurrent + " \n";
+                            message += "Total: " + CommonTools.TimeSpanToString(TimeSpan.FromSeconds(_stopperBM)) + _lastAverage + _lastCurrent + " \n";
                             message += "Timestamp: " + date.ToString("MMM dd, HH:mm:ss") + " \n";
                             message += _current.ToString() + _averages.ToString();
                             
