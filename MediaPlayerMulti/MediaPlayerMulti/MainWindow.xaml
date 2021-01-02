@@ -9,7 +9,7 @@
         Loaded="Window_Loaded"
         Closed="Window_Closed"
         WindowStartupLocation="CenterScreen"
-        Title="MainWindow" Height="768" Width="1366">
+        Title="MkZ Media Player" Height="768" Width="1366">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition x:Name="rowHeader" Height="Auto"></RowDefinition>

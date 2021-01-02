@@ -67,6 +67,8 @@ namespace MkZ.MediaPlayer
 
         public void RestoreStateTo(VideoPlayerControlVM player)
         {
+            player.SavedState.CopyFrom(this);
+
             Debug.WriteLine("RestoreState: {0}\nPosition: {1}, Size: {2}, Duration: {3}",
                 FileName, Position, player.NaturalSize, player.NaturalDuration);
 
@@ -361,12 +363,15 @@ namespace MkZ.MediaPlayer
             if(File.Exists(fileName))
             {
                 FileName = fileName;
+                VideoPlayerElement.Source = null;
                 VideoPlayerElement.Source = new Uri(fileName);
                 MediaState = MediaState.Manual;
                 Title = Path.GetFileName(fileName);
 
                 Volume = 0; //load silently
                 Position = SavedState.Position;
+
+                Prompt = "Loading, Please Wait...";
 
                 //this will open media - reset state on MediaOpened event
                 VideoPlayerElement.Play();
@@ -377,6 +382,7 @@ namespace MkZ.MediaPlayer
                 VideoPlayerElement.Source = null;
                 MediaState = MediaState.Manual;
                 Title = "N/A";
+                Prompt = "Use Ctrl+O or Drop file here...";
             }
         }
 
@@ -528,6 +534,7 @@ namespace MkZ.MediaPlayer
         private void VideoPlayerElement_MediaEnded(object sender, RoutedEventArgs e)
         {
             Stop();
+            NotifyPropertyChangedAll();
             VideoEndedAction();
         }
 

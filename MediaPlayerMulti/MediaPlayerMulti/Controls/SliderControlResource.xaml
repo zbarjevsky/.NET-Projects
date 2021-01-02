@@ -99,6 +99,9 @@
                      Fill="AliceBlue" Visibility="Collapsed" />
         </Grid>
         <ControlTemplate.Triggers>
+            <Trigger Property="Maximum"  Value="0">
+                <Setter TargetName="PART_Track" Property="Visibility"  Value="Hidden" />
+            </Trigger>
             <Trigger Property="TickPlacement"  Value="TopLeft">
                 <Setter TargetName="TopTick" Property="Visibility"  Value="Visible" />
             </Trigger>

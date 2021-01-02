@@ -34,6 +34,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Media.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -80,6 +83,9 @@
     </Compile>
     <Compile Include="Controls\PlayerControls.xaml.cs">
       <DependentUpon>PlayerControls.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PopupVolumeControlWindow.xaml.cs">
+      <DependentUpon>PopupVolumeControlWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\SmallButtonAdd.xaml.cs">
       <DependentUpon>SmallButtonAdd.xaml</DependentUpon>
@@ -137,6 +143,10 @@
     <Page Include="Controls\PlayerControls.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\PopupVolumeControlWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\SliderControlResource.xaml">
       <SubType>Designer</SubType>
@@ -198,6 +208,9 @@
       <Project>{768af4b8-5edd-4196-97ae-dbc1589dd426}</Project>
       <Name>Framework.MkZ</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Media.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

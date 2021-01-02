@@ -157,6 +157,9 @@ namespace MZ.WPF
                 return;
 
             double line_count = Maximum;
+            if (line_count <= 1)
+                line_count *= 100;
+
             double line_distance = _canvas.ActualWidth / line_count;
             double smallDelta = _canvas.ActualHeight / 10;
             double bigDelta = _canvas.ActualHeight / 4;
