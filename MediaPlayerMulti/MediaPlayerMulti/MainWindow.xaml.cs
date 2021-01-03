@@ -74,10 +74,16 @@ namespace MediaPlayerMulti
                     this.WindowState = WindowState.Maximized;
                 }
             };
+
+            _player.OnFileDropAction = (fileName) =>
+            {
+                AddNewMediaFile(fileName);
+            };
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
+            _player.ClosePlayer();
             _appConfig.MediaFiles.Clear();
             _appConfig.MediaFiles.AddRange(_mediaFiles);
             _appConfig.Save();

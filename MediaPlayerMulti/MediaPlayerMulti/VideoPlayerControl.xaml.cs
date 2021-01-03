@@ -34,6 +34,7 @@ namespace MkZ.MediaPlayer
         private readonly AnimationHelper _controlsHideAndShow;
 
         public Action<VideoPlayerControlVM> OnFullScreenButtonClick = (vm) => { };
+        public Action<string> OnFileDropAction = (fileName) => { };
 
         public MediaFileInfo MediaFileInfo
         {
@@ -47,7 +48,12 @@ namespace MkZ.MediaPlayer
         private static void OnMediaFileInfoChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is VideoPlayerControl This)
-                This.MediaFileInfo.RestoreStateTo(This._playerControlVM);
+                This.UpdateMediaInfo();
+        }
+
+        private void UpdateMediaInfo()
+        {
+            _playerControlVM.SetMediaInfo(MediaFileInfo);
         }
 
         public VideoPlayerControl()
@@ -76,6 +82,11 @@ namespace MkZ.MediaPlayer
             Application.Current.MainWindow.Close();
         }
 
+        public void ClosePlayer()
+        {
+            _playerControlVM.Close();
+        }
+
         private void ButtonFullScreen_Click(object sender, RoutedEventArgs e)
         {
             OnFullScreenButtonClick(_playerControlVM);
@@ -87,7 +98,7 @@ namespace MkZ.MediaPlayer
             {
                 // Note that you can have more than one file.
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                _playerControlVM.OpenAndPlay(files[0]);
+                OnFileDropAction(files[0]);
             }
         }
 
