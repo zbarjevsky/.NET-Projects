@@ -9,8 +9,6 @@
         WindowStartupLocation="Manual"
         WindowStyle="None"
         ResizeMode="NoResize"
-        MouseEnter="Window_MouseEnter"
-        MouseLeave="Window_MouseLeave"
         MouseWheel="Window_MouseWheel"
         Background="Transparent"
         Topmost="True"
@@ -33,7 +31,7 @@
             </Grid.RowDefinitions>
             <wpf:GradientProgressBar  x:Name="_progress"
                 Margin="10" Background="{Binding Background, ElementName=_border}"
-                Minimum="0" Maximum="1"
+                Minimum="0" Maximum="1" 
                 Value="{Binding Value, ElementName=_slider}">
                 <wpf:GradientProgressBar.LayoutTransform>
                     <RotateTransform CenterX="0.5" CenterY="0.5" Angle="-90"/>
@@ -41,6 +39,7 @@
             </wpf:GradientProgressBar>
             <Slider x:Name="_slider" Grid.Column="1" Margin="0,5"
                     Orientation="Vertical" HorizontalAlignment="Center"
+                    SmallChange="0.02" LargeChange="0.1"
                     Minimum="0" Maximum="1" Value="{Binding Volume, FallbackValue=0.951}">
             </Slider>
             <TextBlock Grid.Row="1" Grid.ColumnSpan="2" 

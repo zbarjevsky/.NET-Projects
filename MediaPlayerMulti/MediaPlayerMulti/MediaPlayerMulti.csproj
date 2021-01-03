@@ -78,9 +78,6 @@
       <DependentUpon>ButtonVolume.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ColorConverter.cs" />
-    <Compile Include="Controls\FullScreenPlayerWindow.xaml.cs">
-      <DependentUpon>FullScreenPlayerWindow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\PlayerControls.xaml.cs">
       <DependentUpon>PlayerControls.xaml</DependentUpon>
     </Compile>
@@ -95,7 +92,6 @@
     </Compile>
     <Compile Include="Controls\TimeConverter.cs" />
     <Compile Include="IVideoPlayer.cs" />
-    <Compile Include="MediaPlayerTabVM.cs" />
     <Compile Include="Utils\AppConfig.cs" />
     <Compile Include="Utils\IPlayerMainWindow.cs" />
     <Compile Include="Utils\MediaPlayerCommands.cs" />
@@ -133,10 +129,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\CustomControls.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\FullScreenPlayerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

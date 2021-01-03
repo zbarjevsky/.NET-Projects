@@ -12,42 +12,39 @@ namespace MkZ.MediaPlayer.Utils
 {
     public class MediaPlayerCommands
     {
-        private readonly IPlayerMainWindow _player;
+        private readonly IPlayerMainWindow _mainWindow;
 
-        public MediaPlayerCommands(IPlayerMainWindow player)
+        private VideoPlayerControlVM PlayerVM { get => _mainWindow.MediaPlayerVM; }
+
+        public MediaPlayerCommands(IPlayerMainWindow mainWindow)
         {
-            _player = player;
+            _mainWindow = mainWindow;
 
-            _player.Window.CommandBindings.Clear();
-            _player.Window.CommandBindings.Add(new CommandBinding(ApplicationCommands.Open, Open_Executed, Open_CanExecute));
-            _player.Window.CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, Close_Executed, Close_CanExecute));
-            _player.Window.CommandBindings.Add(new CommandBinding(MediaCommands.TogglePlayPause, TogglePlayPause_Executed, TogglePlayPause_CanExecute));
-            _player.Window.CommandBindings.Add(new CommandBinding(MediaCommands.Play, Play_Executed, Play_CanExecute));
-            _player.Window.CommandBindings.Add(new CommandBinding(MediaCommands.Pause, Pause_Executed, Pause_CanExecute));
-            _player.Window.CommandBindings.Add(new CommandBinding(MediaCommands.Stop, Stop_Executed, Stop_CanExecute));
+            _mainWindow.Window.CommandBindings.Clear();
+            _mainWindow.Window.CommandBindings.Add(new CommandBinding(ApplicationCommands.Open, Open_Executed, Open_CanExecute));
+            _mainWindow.Window.CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, Close_Executed, Close_CanExecute));
+            _mainWindow.Window.CommandBindings.Add(new CommandBinding(MediaCommands.TogglePlayPause, TogglePlayPause_Executed, TogglePlayPause_CanExecute));
+            _mainWindow.Window.CommandBindings.Add(new CommandBinding(MediaCommands.Play, Play_Executed, Play_CanExecute));
+            _mainWindow.Window.CommandBindings.Add(new CommandBinding(MediaCommands.Pause, Pause_Executed, Pause_CanExecute));
+            _mainWindow.Window.CommandBindings.Add(new CommandBinding(MediaCommands.Stop, Stop_Executed, Stop_CanExecute));
 
-            _player.Window.InputBindings.Clear();
-            _player.Window.InputBindings.Add(new KeyBinding(ApplicationCommands.Close, new KeyGesture(Key.Escape)));
-            _player.Window.InputBindings.Add(new KeyBinding(MediaCommands.Play, new KeyGesture(Key.Play)));
-            _player.Window.InputBindings.Add(new KeyBinding(MediaCommands.Pause, new KeyGesture(Key.Pause)));
-            _player.Window.InputBindings.Add(new KeyBinding(MediaCommands.TogglePlayPause, new KeyGesture(Key.MediaPlayPause)));
-            _player.Window.InputBindings.Add(new KeyBinding(MediaCommands.TogglePlayPause, new KeyGesture(Key.Space)));
+            _mainWindow.Window.InputBindings.Clear();
+            _mainWindow.Window.InputBindings.Add(new KeyBinding(ApplicationCommands.Close, new KeyGesture(Key.Escape)));
+            _mainWindow.Window.InputBindings.Add(new KeyBinding(MediaCommands.Play, new KeyGesture(Key.Play)));
+            _mainWindow.Window.InputBindings.Add(new KeyBinding(MediaCommands.Pause, new KeyGesture(Key.Pause)));
+            _mainWindow.Window.InputBindings.Add(new KeyBinding(MediaCommands.TogglePlayPause, new KeyGesture(Key.MediaPlayPause)));
+            _mainWindow.Window.InputBindings.Add(new KeyBinding(MediaCommands.TogglePlayPause, new KeyGesture(Key.Space)));
         }
 
         private void TogglePlayPause_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            MediaState ms = GetSelectedPlayer().MediaState;
+            MediaState ms = PlayerVM.MediaState;
             e.CanExecute = ms == MediaState.Play || ms == MediaState.Pause;
         }
 
         private void TogglePlayPause_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            GetSelectedPlayer().TogglePlayPauseState();
-        }
-
-        private VideoPlayerControlVM GetSelectedPlayer()
-        {
-            return _player.PlayerVM;
+            PlayerVM.TogglePlayPauseState();
         }
 
         public void Open_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -60,38 +57,40 @@ namespace MkZ.MediaPlayer.Utils
             OpenFileDialog openFileDialog = new OpenFileDialog();
             openFileDialog.Filter = "Media files (*.mp3;*.mpg;*.mpeg;*.mkv;*.mp4)|*.mp3;*.mpg;*.mpeg;*.mkv;*.mp4|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
-                GetSelectedPlayer().OpenAndPlay(openFileDialog.FileName);
+            {
+                _mainWindow.AddNewMediaFile(openFileDialog.FileName);
+            }
         }
 
         public void Play_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = (GetSelectedPlayer().IsOpen && GetSelectedPlayer().MediaState != MediaState.Play);
+            e.CanExecute = (PlayerVM.IsOpen && PlayerVM.MediaState != MediaState.Play);
         }
 
         public void Play_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            GetSelectedPlayer().Play();
+            PlayerVM.Play();
         }
 
         public void Pause_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            e.CanExecute = GetSelectedPlayer().MediaState == MediaState.Play;
+            e.CanExecute = PlayerVM.MediaState == MediaState.Play;
         }
 
         public void Pause_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            GetSelectedPlayer().Pause();
+            PlayerVM.Pause();
         }
 
         public void Stop_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            MediaState ms = GetSelectedPlayer().MediaState;
+            MediaState ms = PlayerVM.MediaState;
             e.CanExecute = ms == MediaState.Play || ms == MediaState.Pause;
         }
 
         public void Stop_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            GetSelectedPlayer().Stop();
+            PlayerVM.Stop();
         }
 
         public void Close_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -101,10 +100,8 @@ namespace MkZ.MediaPlayer.Utils
 
         public void Close_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            GetSelectedPlayer().Pause();
-            GetSelectedPlayer().GetPlayerState();
-
-            _player.Window.Close();
+            PlayerVM.Pause();
+            _mainWindow.Window.Close();
         }
     }
 }

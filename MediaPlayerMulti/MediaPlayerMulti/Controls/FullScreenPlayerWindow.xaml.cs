@@ -27,7 +27,7 @@ namespace MkZ.MediaPlayer.Controls
 
         public Window Window => this;
 
-        public VideoPlayerControlVM PlayerVM => _vm;
+        public VideoPlayerControlVM MediaFile => _vm;
 
         public FullScreenPlayerWindow()
         {
@@ -60,6 +60,11 @@ namespace MkZ.MediaPlayer.Controls
         public VideoPlayerState GetPlayerState()
         {
             return _playerState;
+        }
+
+        public void AddNewMediaFile(string fileName)
+        {
+            MessageBox.Show("Not Implemented");
         }
     }
 }

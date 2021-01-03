@@ -12,43 +12,34 @@
         Title="MkZ Media Player" Height="768" Width="1366">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition x:Name="rowHeader" Height="Auto"></RowDefinition>
+            <RowDefinition x:Name="rowHeader" Height="40"></RowDefinition>
             <RowDefinition x:Name="rowContent" Height="*"></RowDefinition>
             <RowDefinition x:Name="rowFooter" Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <TabControl x:Name="tabPlayers" Grid.Column="2" Grid.Row="1" FontSize="18" >
-            <TabControl.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock>
-                            <TextBlock.Text>
-                                <MultiBinding StringFormat="{}{0}--{1}">
-                                    <Binding Path="Title" />
-                                    <Binding Path="Status" />
-                                </MultiBinding>
-                            </TextBlock.Text>
-                        </TextBlock>
-                        <controls:SmallButtonAdd Margin="4,0,0,0" VerticalAlignment="Top" 
-                                    Visibility="{Binding NewTabBtnVisibility}"
-                                    Click="AddPlayer_Click" />
-                        <controls:SmallButtonClose Margin="4,0,0,0" VerticalAlignment="Top"
-                                    Visibility="{Binding RemoveTabBtnVisibility}"
-                                    Click="RemovePlayer_Click" />
+        <DockPanel Background="LightGray">
+            <controls:SmallButtonAdd Margin="4" Command="ApplicationCommands.Open" />
+            <controls:ButtonPlay Margin="4" Command="MediaCommands.TogglePlayPause" />
+            <ComboBox x:Name="_cmbFilesList" IsEditable="False">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock>
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}{0}--{1}">
+                                        <Binding Path="FileName" />
+                                        <Binding Path="MediaState" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
+                            
+                            <controls:SmallButtonClose Margin="4,0,0,0" VerticalAlignment="Top"
+                                    Click="RemoveMediaFile_Click" />
 
-                    </StackPanel>
-                </DataTemplate>
-            </TabControl.ItemTemplate>
-            <TabControl.ContentTemplate>
-                <DataTemplate>
-                    <mediaplayer:VideoPlayerControl DataContext="{Binding PlayerVM}" />
-                </DataTemplate>
-            </TabControl.ContentTemplate>
-            <TabItem Header="Player 1">
-                <mediaplayer:VideoPlayerControl />
-            </TabItem>
-            <TabItem Header="Player 2">
-                <mediaplayer:VideoPlayerControl />
-            </TabItem>
-        </TabControl>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </DockPanel>
+        <mediaplayer:VideoPlayerControl Grid.Row="1" x:Name="_player" MediaFileInfo="{Binding SelectedItem, ElementName=_cmbFilesList}" />
     </Grid>
 </Window>

@@ -27,86 +27,86 @@ namespace MediaPlayerMulti
     /// </summary>
     public partial class MainWindow : Window, IPlayerMainWindow
     {
-        private readonly ObservableCollection<MediaPlayerTabVM> _players = new ObservableCollection<MediaPlayerTabVM>();
         private MediaPlayerCommands _mediaPlayerCommands;
         private AppConfig _appConfig = new AppConfig();
 
+        private readonly ObservableCollection<MediaFileInfo> _mediaFiles = new ObservableCollection<MediaFileInfo>();
+
         public Window Window => this;
 
-        public VideoPlayerControlVM PlayerVM => GetSelectedPlayer();
+        public VideoPlayerControlVM MediaPlayerVM => _player.DataContext as VideoPlayerControlVM;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            tabPlayers.Items.Clear();
-            tabPlayers.ItemsSource = _players;
+            //tabPlayers.Items.Clear();
+            //tabPlayers.ItemsSource = _players;
+
+            _cmbFilesList.Items.Clear();
+            _cmbFilesList.ItemsSource = _mediaFiles;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             _appConfig.Load();
-            
-            if (_appConfig.OpenedFiles.Count > 0)
-            {
-                foreach (VideoPlayerState state in _appConfig.OpenedFiles)
-                {
-                    AddPlayer(state);
-                }
-            }
-            else
-            {
-                AddPlayer();
-            }
-            tabPlayers.SelectedIndex = 0;
+
+            _mediaFiles.Clear();
+            _appConfig.MediaFiles.ForEach(file => { file.MediaState = MediaState.Pause; _mediaFiles.Add(file); });
+
+            if (_mediaFiles.Count > 0)
+                _cmbFilesList.SelectedIndex = 0;
 
             _mediaPlayerCommands = new MediaPlayerCommands(this);
+
+            _player.OnFullScreenButtonClick = (vm) => 
+            {
+                if (this.WindowStyle == WindowStyle.None)
+                {
+                    rowHeader.Height = new GridLength(40);
+                    this.WindowStyle = WindowStyle.ThreeDBorderWindow;
+                    this.WindowState = WindowState.Normal;
+                }
+                else //full screen
+                {
+                    rowHeader.Height = new GridLength(1);
+                    this.WindowStyle = WindowStyle.None;
+                    this.WindowState = WindowState.Maximized;
+                }
+            };
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
-            _appConfig.OpenedFiles.Clear();
-            _appConfig.OpenedFiles = _players.Select(vm => vm.PlayerVM.GetPlayerState()).ToList();
+            _appConfig.MediaFiles.Clear();
+            _appConfig.MediaFiles.AddRange(_mediaFiles);
             _appConfig.Save();
         }
 
-        private VideoPlayerControlVM GetTabItem(int idx)
+        public void AddNewMediaFile(string fileName)
         {
-            MediaPlayerTabVM o = tabPlayers.Items[idx] as MediaPlayerTabVM;
-            return o.PlayerVM;
+            _mediaFiles.Add(new MediaFileInfo() { FileName = fileName, MediaState = MediaState.Play });
+            _cmbFilesList.SelectedIndex = _mediaFiles.Count - 1;
         }
 
-        private VideoPlayerControlVM GetSelectedPlayer()
+        private MediaFileInfo GetMediaItem(int idx)
         {
-            return GetTabItem(tabPlayers.SelectedIndex);
+            MediaFileInfo o = _cmbFilesList.Items[idx] as MediaFileInfo;
+            return o;
         }
 
-        private void RemovePlayer_Click(object sender, RoutedEventArgs e)
+        private MediaFileInfo GetSelectedMediaFile()
         {
-            if((sender as Button).DataContext is MediaPlayerTabVM vm)
-                _players.Remove(vm);
-            
-            if (_players.Count == 0)
-                AddPlayer_Click(sender, e);
+            return GetMediaItem(_cmbFilesList.SelectedIndex);
         }
 
-        private void AddPlayer_Click(object sender, RoutedEventArgs e)
+        private void RemoveMediaFile_Click(object sender, RoutedEventArgs e)
         {
-            AddPlayer();
-            tabPlayers.SelectedIndex = _players.Count - 1;
-        }
-
-        private void AddPlayer(VideoPlayerState state = null)
-        {
-            MediaPlayerTabVM tab = new MediaPlayerTabVM();
-            _players.Add(tab);
-
-            if (state != null)
+            if ((sender as Button).DataContext is MediaFileInfo vm)
             {
-                state.MediaState = MediaState.Pause;
-
-                tab.PlayerVM.Init(state);
-                tab.NotifyPropertyChangedAll();
+                _mediaFiles.Remove(vm);
+                if(_mediaFiles.Count>0)
+                    _cmbFilesList.SelectedIndex = 0;
             }
         }
     }

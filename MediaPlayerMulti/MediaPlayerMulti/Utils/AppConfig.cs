@@ -15,7 +15,7 @@ namespace MkZ.MediaPlayer.Utils
         private string _dataFolder;
         private string _fileName;
 
-        public List<VideoPlayerState> OpenedFiles { get; set; } = new List<VideoPlayerState>();
+        public List<MediaFileInfo> MediaFiles { get; set; } = new List<MediaFileInfo>();
 
         public AppConfig()
         {
@@ -39,7 +39,7 @@ namespace MkZ.MediaPlayer.Utils
             if (File.Exists(_fileName))
             {
                 AppConfig appConfig = XmlHelper.Open<AppConfig>(_fileName);
-                this.OpenedFiles.AddRange(appConfig.OpenedFiles);
+                this.MediaFiles.AddRange(appConfig.MediaFiles);
             }
         }
     }

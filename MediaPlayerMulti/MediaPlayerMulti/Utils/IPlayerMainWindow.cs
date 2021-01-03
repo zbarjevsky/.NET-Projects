@@ -10,6 +10,7 @@ namespace MkZ.MediaPlayer.Utils
     public interface IPlayerMainWindow
     {
         Window Window { get; }
-        VideoPlayerControlVM PlayerVM { get; }
+        VideoPlayerControlVM MediaPlayerVM { get; }
+        void AddNewMediaFile(string fileName);
     }
 }

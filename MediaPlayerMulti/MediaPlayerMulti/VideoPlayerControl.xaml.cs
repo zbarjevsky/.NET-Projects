@@ -30,39 +30,44 @@ namespace MkZ.MediaPlayer
     /// </summary>
     public partial class VideoPlayerControl : UserControl
     {
-        private VideoPlayerControlVM _vm = null;
+        private readonly VideoPlayerControlVM _playerControlVM = new VideoPlayerControlVM();
         private readonly AnimationHelper _controlsHideAndShow;
+
+        public Action<VideoPlayerControlVM> OnFullScreenButtonClick = (vm) => { };
+
+        public MediaFileInfo MediaFileInfo
+        {
+            get { return (MediaFileInfo)GetValue(MediaFileInfoProperty); }
+            set { SetValue(MediaFileInfoProperty, value); }
+        }
+
+        public static readonly DependencyProperty MediaFileInfoProperty =
+            DependencyProperty.Register(nameof(MediaFileInfo), typeof(MediaFileInfo), typeof(VideoPlayerControl), new UIPropertyMetadata(OnMediaFileInfoChanged));
+
+        private static void OnMediaFileInfoChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is VideoPlayerControl This)
+                This.MediaFileInfo.RestoreStateTo(This._playerControlVM);
+        }
 
         public VideoPlayerControl()
         {
+            DataContext = _playerControlVM;
+
             InitializeComponent();
 
-            _controlsHideAndShow = new AnimationHelper(this, 
+            _controlsHideAndShow = new AnimationHelper(this, 2,
                 _playControls, _testButtons, _systemButtons);
-        }
 
-        private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (_vm != null && _vm.IsAttached)
-            {
-                _vm.Detach();
-            }
-
-            if (this.DataContext is VideoPlayerControlVM vm)
-            {
-                _vm = vm;
-
-                if (_vm != null)
-                {
-                    _playControls.DataContext = _vm;
-
-                    _vm.Attach(_scrollPlayerContainer);
-                    _vm.NotifyPropertyChangedAll();
-                }
-            }
+            _playerControlVM.Init(_scrollPlayerContainer);
+            _playControls.DataContext = _playerControlVM;
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
         }
 
@@ -73,20 +78,8 @@ namespace MkZ.MediaPlayer
 
         private void ButtonFullScreen_Click(object sender, RoutedEventArgs e)
         {
-            OnFullScreenButtonClick(_vm);
+            OnFullScreenButtonClick(_playerControlVM);
         }
-
-        //here is for - open full screen window
-        public Action<VideoPlayerControlVM> OnFullScreenButtonClick = (vm) =>
-        {
-            FullScreenPlayerWindow fullScreen = new FullScreenPlayerWindow();
-            fullScreen.Owner = Application.Current.MainWindow;
-            fullScreen.Init(vm.GetPlayerState());
-            vm.Stop();
-            fullScreen.ShowDialog();
-
-            fullScreen.GetPlayerState().RestoreStateTo(vm);
-        };
 
         private void UserControl_Drop(object sender, DragEventArgs e)
         {
@@ -94,7 +87,7 @@ namespace MkZ.MediaPlayer
             {
                 // Note that you can have more than one file.
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                _vm.OpenAndPlay(files[0]);
+                _playerControlVM.OpenAndPlay(files[0]);
             }
         }
 
@@ -102,8 +95,8 @@ namespace MkZ.MediaPlayer
         {
             if (e.ChangedButton == MouseButton.Left && (e.OriginalSource is MediaElement))
             {
-                _vm.LeftButtonDoubleClick(_vm);
-                OnFullScreenButtonClick(_vm);
+                _playerControlVM.LeftButtonDoubleClick(_playerControlVM);
+                OnFullScreenButtonClick(_playerControlVM);
             }
         }
 
@@ -111,7 +104,7 @@ namespace MkZ.MediaPlayer
         {
             if (e.ChangedButton == MouseButton.Left && (e.OriginalSource is MediaElement))
             {
-                _vm.LeftButtonClick(_vm);
+                _playerControlVM.LeftButtonClick(_playerControlVM);
             }
         }
 
@@ -120,40 +113,40 @@ namespace MkZ.MediaPlayer
             //mePlayer.Volume += (e.Delta > 0) ? 0.1 : -0.1;
         }
 
+        private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if(_playerControlVM != null && _playerControlVM.IsAttached)
+                _playerControlVM.FitWindow();
+        }
+
         private void btnFitWidth_Click(object sender, RoutedEventArgs e)
         {
-            _vm.FitWidth(true);
+            _playerControlVM.FitWidth(true);
         }
 
         private void btnMaximize_Click(object sender, RoutedEventArgs e)
         {
-            _vm.MaximizeAction();
+            _playerControlVM.MaximizeAction();
         }
 
         private void btnOriginalSize_Click(object sender, RoutedEventArgs e)
         {
-            _vm.OriginalSize(true);
+            _playerControlVM.OriginalSize(true);
         }
 
         private void btnFitWindow_Click(object sender, RoutedEventArgs e)
         {
-            _vm.FitWindow();
+            _playerControlVM.FitWindow();
         }
 
         private void btnFlipHorizontally_Click(object sender, RoutedEventArgs e)
         {
-            _vm.IsFlipHorizontally = !_vm.IsFlipHorizontally;
+            _playerControlVM.IsFlipHorizontally = !_playerControlVM.IsFlipHorizontally;
         }
 
         private void btnPlayPause_Click(object sender, RoutedEventArgs e)
         {
-            _vm.TogglePlayPauseState();
-        }
-
-        private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            if(_vm != null )
-                _vm.FitWindow();
+            _playerControlVM.TogglePlayPauseState();
         }
     }
 }

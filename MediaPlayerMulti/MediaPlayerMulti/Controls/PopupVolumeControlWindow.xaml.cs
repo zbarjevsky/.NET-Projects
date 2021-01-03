@@ -1,4 +1,5 @@
-﻿using MZ.WPF;
+﻿using MkZ.MediaPlayer.Controls;
+using MZ.WPF;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -23,8 +24,7 @@ namespace MZ.WPF
     /// </summary>
     public partial class PopupVolumeControlWindow : Window
     {
-        private DispatcherTimer m_Timer = new DispatcherTimer(DispatcherPriority.Background);
-        private long _timer_count = 0;
+        private AnimationHelper _controlsHideAndShow;
 
         public TimeSpan CloseTimeOut { get; set; } = TimeSpan.FromSeconds(2);
 
@@ -52,7 +52,7 @@ namespace MZ.WPF
             wndVolume.DataContext = dataContext;
             wndVolume.Closed += (s1, e1) => { wndVolume = null; };
 
-            wndVolume.Show();
+            wndVolume.ShowFadeIn();
         }
 
         private static Window GetParentWindow(UIElement element)
@@ -95,39 +95,24 @@ namespace MZ.WPF
             this.Left = location.X;
             this.Top = location.Y;
 
-            m_Timer.Interval = TimeSpan.FromMilliseconds(100);
-            m_Timer.Tick += Timer_Tick;
-
-            m_Timer.Start();
-            _timer_count = 0;
-
             _progress.ProgressTheme = GradientProgressBar.TicksTheme.GetBase100Theme();
             _progress.Maximum = 1;
             _progress.TickColor = Brushes.Navy;
-        }
 
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            double maxCount = CloseTimeOut.TotalSeconds / m_Timer.Interval.TotalSeconds;
-
-            m_Timer.Stop();
-            if (_timer_count++ > maxCount)
+            _controlsHideAndShow = new AnimationHelper(this, 2, this);
+            _controlsHideAndShow.OnHideCompleted = (element) =>
             {
-                this.Close();
-                return; //do not start timer
-            }
-            m_Timer.Start();
+                if (element is Window wnd)
+                    wnd.Close();
+            }; 
         }
 
-        private void Window_MouseEnter(object sender, MouseEventArgs e)
+        private void ShowFadeIn()
         {
-            m_Timer.Stop();
-        }
-
-        private void Window_MouseLeave(object sender, MouseEventArgs e)
-        {
-            _timer_count = 0;
-            m_Timer.Start();
+            this.Opacity = 0;
+            this.Show();
+            this.Visibility = Visibility.Hidden;
+            _controlsHideAndShow.AnimateFadeIn();
         }
 
         private void Window_MouseWheel(object sender, MouseWheelEventArgs e)

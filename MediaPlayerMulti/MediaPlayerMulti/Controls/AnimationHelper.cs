@@ -15,14 +15,21 @@ namespace MkZ.MediaPlayer.Controls
     public class AnimationHelper
     {
         private readonly Stopwatch _stopwatch = new Stopwatch();
-        private readonly UserControl _container = null;
+        private readonly Control _container = null;
         private readonly DispatcherTimer _timer = new DispatcherTimer();
         private readonly List<UIElement> _controls = new List<UIElement>();
+        private readonly double _hideTimeOutSeconds = 2;
 
-        public AnimationHelper(UserControl container, params UIElement[] controls)
+        public Action<UIElement> OnHideCompleted = (element) => { };
+
+        public AnimationHelper(Control container, double hideTimeOutSeconds, params UIElement[] controls)
         {
             _container = container;
             _container.MouseMove += _container_MouseMove;
+
+            _hideTimeOutSeconds = hideTimeOutSeconds;
+            if (_hideTimeOutSeconds < 1)
+                _hideTimeOutSeconds = 1;
 
             _controls.AddRange(controls);
             foreach (UIElement ctrl in _controls)
@@ -38,21 +45,10 @@ namespace MkZ.MediaPlayer.Controls
             _stopwatch.Restart();
         }
 
-        private bool _isInsideControl = false;
-        private void Ctrl_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            _isInsideControl = true;
-        }
-
-        private void Ctrl_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            _isInsideControl = false;
-        }
-
-        private void _container_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        public void AnimateFadeIn()
         {
             _stopwatch.Restart();
-            if(!_timer.IsEnabled)
+            if (!_timer.IsEnabled)
                 _timer.Start();
 
             foreach (UIElement ctrl in _controls)
@@ -66,13 +62,29 @@ namespace MkZ.MediaPlayer.Controls
             _container.Cursor = Cursors.Arrow;
         }
 
+        private bool _isInsideControl = false;
+        private void Ctrl_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            _isInsideControl = true;
+        }
+
+        private void Ctrl_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            _isInsideControl = false;
+        }
+
+        private void _container_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            AnimateFadeIn();
+        }
+
         private void timer_Tick(object sender, EventArgs e)
         {
             if (_isInsideControl)
                 return;
 
             _timer.Stop();
-            if(_stopwatch.ElapsedMilliseconds > 2000)
+            if(_stopwatch.ElapsedMilliseconds > 1000 * _hideTimeOutSeconds)
             {
                 foreach (UIElement ctrl in _controls)
                 {
@@ -122,6 +134,7 @@ namespace MkZ.MediaPlayer.Controls
             {
                 element.Opacity = 0;
                 element.Visibility = finalVisibility;
+                OnHideCompleted(element);
             };
 
             element.BeginAnimation(UIElement.OpacityProperty, animation);
