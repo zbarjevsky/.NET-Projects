@@ -77,20 +77,21 @@
     <Compile Include="Controls\ButtonVolume.xaml.cs">
       <DependentUpon>ButtonVolume.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ColorConverter.cs" />
+    <Compile Include="Utils\ColorConverter.cs" />
     <Compile Include="Controls\PlayerControls.xaml.cs">
       <DependentUpon>PlayerControls.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\PopupVolumeControlWindow.xaml.cs">
       <DependentUpon>PopupVolumeControlWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\SmallButtonAdd.xaml.cs">
-      <DependentUpon>SmallButtonAdd.xaml</DependentUpon>
+    <Compile Include="Controls\ButtonPlus.xaml.cs">
+      <DependentUpon>ButtonPlus.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\SmallButtonClose.xaml.cs">
       <DependentUpon>SmallButtonClose.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\TimeConverter.cs" />
+    <Compile Include="Utils\ObjectToStringConverter.cs" />
+    <Compile Include="Utils\TimeConverter.cs" />
     <Compile Include="IVideoPlayer.cs" />
     <Compile Include="Utils\AppConfig.cs" />
     <Compile Include="Utils\IPlayerMainWindow.cs" />
@@ -144,7 +145,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\SmallButtonAdd.xaml">
+    <Page Include="Controls\ButtonPlus.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

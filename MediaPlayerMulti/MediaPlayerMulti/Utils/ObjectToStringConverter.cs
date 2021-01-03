@@ -4,25 +4,24 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
-using System.Windows.Media;
 
-namespace MkZ.MediaPlayer.Controls
+namespace MkZ.MediaPlayer.Utils
 {
-    [ValueConversion(typeof(Brush), typeof(Color))]
-    public class BrushToColorConverter : IValueConverter
+    [ValueConversion(typeof(object), typeof(string))]
+    public class ObjectToStringConverter : IValueConverter
     {
         #region IValueConverter Members
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (!(value is SolidColorBrush brush))
-                return Colors.Pink;
+            if (value != null)
+                return value.ToString();
 
-            return brush.Color;
+            return "";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            throw new NotSupportedException();
+            return value;
         }
 
         #endregion

@@ -1,8 +1,9 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:MkZ.MediaPlayer.Controls">
+                    xmlns:local="clr-namespace:MkZ.MediaPlayer.Controls" 
+                    xmlns:utils="clr-namespace:MkZ.MediaPlayer.Utils">
 
-    <local:SecondsToStringConverter x:Key="TimeFormatConverter" />
+    <utils:SecondsToStringConverter x:Key="TimeFormatConverter" />
     
     <Style x:Key="SliderRepeatButtonLeft" TargetType="RepeatButton">
         <Setter Property="SnapsToDevicePixels" Value="true" />

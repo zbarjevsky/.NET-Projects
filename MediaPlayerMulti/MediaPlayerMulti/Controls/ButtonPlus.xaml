@@ -1,4 +1,4 @@
-﻿<Button x:Class="MkZ.MediaPlayer.Controls.ButtonStop"
+﻿<Button x:Class="MkZ.MediaPlayer.Controls.ButtonPlus"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -27,7 +27,14 @@
                             <EllipseGeometry Center="8,8" RadiusX="7" RadiusY="7"/>
                         </Path.Data>
                     </Path>
-                    <Path x:Name="cross" Data="M 5 5 L 11 5 L 11 11 L 5 11 Z" />
+                    <Path x:Name="cross">
+                        <Path.Data>
+                            <GeometryGroup>
+                                <LineGeometry StartPoint="4,8" EndPoint="12,8"/>
+                                <LineGeometry StartPoint="8,4" EndPoint="8,12"/>
+                            </GeometryGroup>
+                        </Path.Data>
+                    </Path>
                 </Canvas>
             </Viewbox>
 
@@ -60,4 +67,5 @@
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>
-    </Button.Template></Button>
+    </Button.Template>
+</Button>

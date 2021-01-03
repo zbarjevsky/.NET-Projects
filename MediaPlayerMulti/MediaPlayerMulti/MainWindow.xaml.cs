@@ -59,21 +59,7 @@ namespace MediaPlayerMulti
 
             _mediaPlayerCommands = new MediaPlayerCommands(this);
 
-            _player.OnFullScreenButtonClick = (vm) => 
-            {
-                if (this.WindowStyle == WindowStyle.None)
-                {
-                    rowHeader.Height = new GridLength(40);
-                    this.WindowStyle = WindowStyle.ThreeDBorderWindow;
-                    this.WindowState = WindowState.Normal;
-                }
-                else //full screen
-                {
-                    rowHeader.Height = new GridLength(1);
-                    this.WindowStyle = WindowStyle.None;
-                    this.WindowState = WindowState.Maximized;
-                }
-            };
+            _player.OnFullScreenButtonClick = (vm) => ToggleFullScreen();
 
             _player.OnFileDropAction = (fileName) =>
             {
@@ -93,6 +79,22 @@ namespace MediaPlayerMulti
         {
             _mediaFiles.Add(new MediaFileInfo() { FileName = fileName, MediaState = MediaState.Play });
             _cmbFilesList.SelectedIndex = _mediaFiles.Count - 1;
+        }
+
+        public void ToggleFullScreen()
+        {
+            if (this.WindowStyle == WindowStyle.None)
+            {
+                rowHeader.Height = new GridLength(40);
+                this.WindowStyle = WindowStyle.ThreeDBorderWindow;
+                this.WindowState = WindowState.Normal;
+            }
+            else //full screen
+            {
+                rowHeader.Height = new GridLength(1);
+                this.WindowStyle = WindowStyle.None;
+                this.WindowState = WindowState.Maximized;
+            }
         }
 
         private MediaFileInfo GetMediaItem(int idx)

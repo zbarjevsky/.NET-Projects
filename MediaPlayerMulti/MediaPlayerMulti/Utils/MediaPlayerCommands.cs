@@ -8,11 +8,17 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
+
+using MZ.WPF;
+
 namespace MkZ.MediaPlayer.Utils
 {
     public class MediaPlayerCommands
     {
         private readonly IPlayerMainWindow _mainWindow;
+        
+        private ICommand F11Command { get; set; }
+        private ICommand EscapeCommand { get; set; }
 
         private VideoPlayerControlVM PlayerVM { get => _mainWindow.MediaPlayerVM; }
 
@@ -29,11 +35,32 @@ namespace MkZ.MediaPlayer.Utils
             _mainWindow.Window.CommandBindings.Add(new CommandBinding(MediaCommands.Stop, Stop_Executed, Stop_CanExecute));
 
             _mainWindow.Window.InputBindings.Clear();
-            _mainWindow.Window.InputBindings.Add(new KeyBinding(ApplicationCommands.Close, new KeyGesture(Key.Escape)));
             _mainWindow.Window.InputBindings.Add(new KeyBinding(MediaCommands.Play, new KeyGesture(Key.Play)));
             _mainWindow.Window.InputBindings.Add(new KeyBinding(MediaCommands.Pause, new KeyGesture(Key.Pause)));
             _mainWindow.Window.InputBindings.Add(new KeyBinding(MediaCommands.TogglePlayPause, new KeyGesture(Key.MediaPlayPause)));
             _mainWindow.Window.InputBindings.Add(new KeyBinding(MediaCommands.TogglePlayPause, new KeyGesture(Key.Space)));
+
+            //Full Screen
+            F11Command = new RelayCommand(FullScreen_Execute, (o) => true);
+            _mainWindow.Window.InputBindings.Add(new KeyBinding(F11Command, new KeyGesture(Key.F11)));
+
+            //Escape Command
+            EscapeCommand = new RelayCommand(Escape_Execute, (o) => true);
+            _mainWindow.Window.InputBindings.Add(new KeyBinding(EscapeCommand, new KeyGesture(Key.Escape)));
+        }
+
+        private void Escape_Execute(object obj)
+        {
+            //if full screen
+            if (_mainWindow.Window.WindowStyle == WindowStyle.None)
+                _mainWindow.ToggleFullScreen();
+
+            Pause_Executed(this, null);
+        }
+
+        private void FullScreen_Execute(object obj)
+        {
+            _mainWindow.ToggleFullScreen();
         }
 
         private void TogglePlayPause_CanExecute(object sender, CanExecuteRoutedEventArgs e)

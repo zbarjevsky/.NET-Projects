@@ -26,6 +26,7 @@ namespace MkZ.MediaPlayer.Controls
         {
             _container = container;
             _container.MouseMove += _container_MouseMove;
+            _container.PreviewMouseDown += _container_PreviewMouseDown;
 
             _hideTimeOutSeconds = hideTimeOutSeconds;
             if (_hideTimeOutSeconds < 1)
@@ -74,6 +75,11 @@ namespace MkZ.MediaPlayer.Controls
         }
 
         private void _container_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            AnimateFadeIn();
+        }
+
+        private void _container_PreviewMouseDown(object sender, MouseButtonEventArgs e)
         {
             AnimateFadeIn();
         }

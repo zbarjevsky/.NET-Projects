@@ -12,5 +12,6 @@ namespace MkZ.MediaPlayer.Utils
         Window Window { get; }
         VideoPlayerControlVM MediaPlayerVM { get; }
         void AddNewMediaFile(string fileName);
+        void ToggleFullScreen();
     }
 }

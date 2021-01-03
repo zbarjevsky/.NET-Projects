@@ -4,40 +4,100 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MediaPlayerMulti" 
-        xmlns:mediaplayer="clr-namespace:MkZ.MediaPlayer" xmlns:controls="clr-namespace:MkZ.MediaPlayer.Controls"
+        xmlns:mediaplayer="clr-namespace:MkZ.MediaPlayer" 
+        xmlns:controls="clr-namespace:MkZ.MediaPlayer.Controls" 
+        xmlns:utils="clr-namespace:MkZ.MediaPlayer.Utils"
         mc:Ignorable="d" 
         Loaded="Window_Loaded"
         Closed="Window_Closed"
         WindowStartupLocation="CenterScreen"
         Title="MkZ Media Player" Height="768" Width="1366">
+    <Window.Resources>
+        <utils:SecondsToStringConverter x:Key="TimeFormatConverter" />
+        <utils:ObjectToStringConverter x:Key="ObjectToStringConverter" />
+    </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition x:Name="rowHeader" Height="40"></RowDefinition>
+            <RowDefinition x:Name="rowHeader" Height="45"></RowDefinition>
             <RowDefinition x:Name="rowContent" Height="*"></RowDefinition>
             <RowDefinition x:Name="rowFooter" Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <DockPanel Background="LightGray">
-            <controls:SmallButtonAdd Margin="4" Command="ApplicationCommands.Open" />
-            <controls:ButtonPlay Margin="4" Command="MediaCommands.TogglePlayPause" />
-            <ComboBox x:Name="_cmbFilesList" IsEditable="False">
+            <controls:ButtonPlus Margin="4" Foreground="Black" Command="ApplicationCommands.Open" />
+            <controls:ButtonPlay Margin="4" Foreground="Black" Command="MediaCommands.TogglePlayPause" />
+            <ComboBox x:Name="_cmbFilesList" Margin="0,5,100,5"  
+                      IsEditable="False" Foreground="Navy" FontWeight="Medium"
+                      HorizontalContentAlignment="Stretch">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBlock>
+                        <Grid Height="30">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock FontSize="18" VerticalAlignment="Center">
                                 <TextBlock.Text>
-                                    <MultiBinding StringFormat="{}{0}--{1}">
-                                        <Binding Path="FileName" />
-                                        <Binding Path="MediaState" />
+                                    <MultiBinding StringFormat="{}{0} ({1})">
+                                        <Binding Path="FileName" FallbackValue="Long File Name" />
+                                        <Binding Path="MediaState" FallbackValue="State" />
                                     </MultiBinding>
                                 </TextBlock.Text>
                             </TextBlock>
-                            
-                            <controls:SmallButtonClose Margin="4,0,0,0" VerticalAlignment="Top"
-                                    Click="RemoveMediaFile_Click" />
 
-                        </StackPanel>
+                            <TextBlock Grid.Column="1" VerticalAlignment="Center" FontSize="18" 
+                                       Text="{Binding NaturalDuration, Converter={StaticResource TimeFormatConverter}, FallbackValue=--/--}"/>
+
+                            <controls:SmallButtonClose Grid.Column="2" Margin="4" Height="20" DockPanel.Dock="Right" 
+                                  VerticalAlignment="Top" Click="RemoveMediaFile_Click" >
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ComboBoxItem}}" Value="{x:Null}">
+                                                <Setter Property="Visibility" Value="Collapsed"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+
+                            </controls:SmallButtonClose>
+                        </Grid>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
+                <ComboBoxItem HorizontalContentAlignment="Stretch">
+                    <Grid Height="30">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock FontSize="18" VerticalAlignment="Center">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} ({1})">
+                                    <Binding Path="FileName" FallbackValue="Long File Name" />
+                                    <Binding Path="MediaState" FallbackValue="State" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
+
+                        <TextBlock Grid.Column="1" VerticalAlignment="Center" FontSize="18" 
+                                       Text="{Binding NaturalDuration, Converter={StaticResource TimeFormatConverter}, FallbackValue=--/--}"/>
+
+                        <controls:SmallButtonClose Grid.Column="2" Margin="4" Height="20" DockPanel.Dock="Right" 
+                                  VerticalAlignment="Top" Click="RemoveMediaFile_Click" >
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ComboBoxItem}}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+
+                        </controls:SmallButtonClose>
+                    </Grid>
+                </ComboBoxItem>
             </ComboBox>
         </DockPanel>
         <mediaplayer:VideoPlayerControl Grid.Row="1" x:Name="_player" MediaFileInfo="{Binding SelectedItem, ElementName=_cmbFilesList}" />

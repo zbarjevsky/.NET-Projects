@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace MkZ.MediaPlayer.Controls
+namespace MkZ.MediaPlayer.Utils
 {
     [ValueConversion(typeof(TimeSpan), typeof(double))]
     public class TimeSpanToSecondsConverter : IValueConverter

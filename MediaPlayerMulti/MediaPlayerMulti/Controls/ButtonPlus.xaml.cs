@@ -18,9 +18,9 @@ namespace MkZ.MediaPlayer.Controls
     /// <summary>
     /// Interaction logic for SmallButtonAdd.xaml
     /// </summary>
-    public partial class SmallButtonAdd : Button
+    public partial class ButtonPlus : Button
     {
-        public SmallButtonAdd()
+        public ButtonPlus()
         {
             InitializeComponent();
         }

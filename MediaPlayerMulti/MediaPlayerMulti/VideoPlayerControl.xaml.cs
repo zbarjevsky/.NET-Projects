@@ -113,9 +113,12 @@ namespace MkZ.MediaPlayer
 
         private void UserControl_PreviewMouseButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.ChangedButton == MouseButton.Left && (e.OriginalSource is MediaElement))
+            if (e.ChangedButton == MouseButton.Left)
             {
-                _playerControlVM.LeftButtonClick(_playerControlVM);
+                if ((e.OriginalSource is MediaElement))
+                    _playerControlVM.LeftButtonClick(_playerControlVM);
+                if ((e.OriginalSource is ScrollViewer))
+                    _playerControlVM.LeftButtonClick(_playerControlVM);
             }
         }
 

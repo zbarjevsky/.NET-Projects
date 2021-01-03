@@ -37,6 +37,9 @@ namespace MkZ.MediaPlayer
         private double _positionInSeconds = 0.0;
         public double PositionInSeconds { get => _positionInSeconds; set => SetProperty(ref _positionInSeconds, value); }
 
+        private double _naturalDuration = 0.0;
+        public double NaturalDuration { get => _naturalDuration; set => SetProperty(ref _naturalDuration, value); }
+
         private double _volume = 0.5;
         public double Volume { get => _volume; set => SetProperty(ref _volume, value); }
 
@@ -500,6 +503,7 @@ namespace MkZ.MediaPlayer
             MediaState = GetMediaState();
 
             Prompt = Title;
+            State.NaturalDuration = NaturalDuration;
 
             Debug.WriteLine("Media Opened: {0}\nPosition: {1}, Size: {2}, Duration: {3}",
                 VideoPlayerElement.Source, VideoPlayerElement.Position, NaturalSize, NaturalDuration);
