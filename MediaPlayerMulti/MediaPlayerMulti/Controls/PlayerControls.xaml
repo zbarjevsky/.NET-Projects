@@ -29,7 +29,7 @@
                 <!--<local:ButtonPause Width="30" Margin="6,0" Foreground="LimeGreen" Command="MediaCommands.Pause" />-->
                 <local:ButtonStop Width="30" Margin="6,0" Foreground="{StaticResource ButtonForegroundPlay}" 
                        Command="MediaCommands.Stop" />
-                <local:ButtonVolume DockPanel.Dock="Right" Width="30" Margin="6,0" Foreground="Cyan"
+                <local:ButtonVolume DockPanel.Dock="Right" Width="30" Margin="6,0" Foreground="{StaticResource ButtonVolumeColor}"
                                     IsChecked="{Binding IsMuted}">
                     <local:ButtonVolume.ToolTip>
                             <TextBlock Text="{Binding Volume, StringFormat=Volume: 0%}"

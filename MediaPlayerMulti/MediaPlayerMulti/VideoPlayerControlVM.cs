@@ -302,7 +302,17 @@ namespace MkZ.MediaPlayer
         public double Volume
         {
             get { return VideoPlayerElement.Volume; }
-            set { if (value >= 0 && value <= 1) VideoPlayerElement.Volume = value; NotifyPropertyChanged(); }
+            set 
+            {
+                if (value < 0)
+                    VideoPlayerElement.Volume = 0;
+                else if (value > 1)
+                    VideoPlayerElement.Volume = 1;
+                else
+                    VideoPlayerElement.Volume = value; 
+                
+                NotifyPropertyChanged(); 
+            }
         }
 
         public bool IsMuted

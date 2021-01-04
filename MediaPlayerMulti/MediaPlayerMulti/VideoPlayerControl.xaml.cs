@@ -67,6 +67,8 @@ namespace MkZ.MediaPlayer
 
             _playerControlVM.Init(_scrollPlayerContainer);
             _playControls.DataContext = _playerControlVM;
+
+            _playerControlVM.PropertyChanged += _playerControlVM_PropertyChanged;
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -75,6 +77,13 @@ namespace MkZ.MediaPlayer
 
         private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
+        }
+
+        private void _playerControlVM_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(VideoPlayerControlVM.Volume))
+            {
+            }
         }
 
         private void ButtonClose_Click(object sender, RoutedEventArgs e)

@@ -56,7 +56,7 @@ namespace MkZ.MediaPlayer.Controls
             {
                 if (ctrl.Visibility != Visibility.Visible)
                 {
-                    VisibilityShowAnimation(ctrl);
+                    VisibilityShowAnimation(ctrl, 0, null);
                 }
             }
 
@@ -94,7 +94,7 @@ namespace MkZ.MediaPlayer.Controls
             {
                 foreach (UIElement ctrl in _controls)
                 {
-                    VisibilityHideAnimation(ctrl, Visibility.Hidden);
+                    VisibilityHideAnimation(ctrl, 0, Visibility.Hidden, OnHideCompleted);
                 }
 
                 _container.Cursor = Cursors.None;
@@ -104,12 +104,20 @@ namespace MkZ.MediaPlayer.Controls
             _timer.Start();
         }
 
-        private void VisibilityShowAnimation(UIElement element)
+        public static void FadeInOutAnimation(UIElement element, double showSeconds = 3)
+        {
+            VisibilityShowAnimation(element, 0, (e) =>
+            {
+                VisibilityHideAnimation(e, 3, Visibility.Hidden, null);
+            });
+        }
+
+        public static void VisibilityShowAnimation(UIElement element, double delaySeconds, Action<UIElement> OnShowCompleted)
         {
             var animation = new DoubleAnimation
             {
                 To = 1,
-                BeginTime = TimeSpan.FromSeconds(0),
+                BeginTime = TimeSpan.FromSeconds(delaySeconds),
                 Duration = TimeSpan.FromSeconds(0.4),
                 FillBehavior = FillBehavior.Stop
             };
@@ -121,17 +129,19 @@ namespace MkZ.MediaPlayer.Controls
             {
                 element.Opacity = 1.0;
                 element.Visibility = Visibility.Visible;
+
+                OnShowCompleted?.Invoke(element);
             };
 
             element.BeginAnimation(UIElement.OpacityProperty, animation);
         }
 
-        private void VisibilityHideAnimation(UIElement element, Visibility finalVisibility = Visibility.Hidden)
+        public static void VisibilityHideAnimation(UIElement element, double delaySeconds, Visibility finalVisibility, Action<UIElement> OnHideCompleted)
         {
             var animation = new DoubleAnimation
             {
                 To = 0,
-                BeginTime = TimeSpan.FromSeconds(0),
+                BeginTime = TimeSpan.FromSeconds(delaySeconds),
                 Duration = TimeSpan.FromSeconds(0.7),
                 FillBehavior = FillBehavior.Stop
             };
@@ -140,7 +150,8 @@ namespace MkZ.MediaPlayer.Controls
             {
                 element.Opacity = 0;
                 element.Visibility = finalVisibility;
-                OnHideCompleted(element);
+
+                OnHideCompleted?.Invoke(element);
             };
 
             element.BeginAnimation(UIElement.OpacityProperty, animation);

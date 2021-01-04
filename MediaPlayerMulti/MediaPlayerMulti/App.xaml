@@ -10,6 +10,7 @@
 
         <SolidColorBrush x:Key="ButtonForegroundMain" Color="Navy" />
         <SolidColorBrush x:Key="ButtonForegroundPlay" Color="LimeGreen" />
+        <SolidColorBrush x:Key="ButtonVolumeColor" Color="Cyan" />
 
         <Style x:Key="{x:Type ToolTip}" TargetType="ToolTip">
             <Setter Property="OverridesDefaultStyle" Value="true" />

@@ -80,6 +80,9 @@
     <Compile Include="Controls\ButtonVolume.xaml.cs">
       <DependentUpon>ButtonVolume.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\FadingTextControl.xaml.cs">
+      <DependentUpon>FadingTextControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utils\ColorConverters.cs" />
     <Compile Include="Controls\PlayerControls.xaml.cs">
       <DependentUpon>PlayerControls.xaml</DependentUpon>
@@ -138,6 +141,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\CustomControls.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\FadingTextControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

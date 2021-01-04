@@ -58,9 +58,16 @@ namespace MkZ.MediaPlayer.Utils
             if (e.Key == Key.Right)
                 Skip(5);
             if (e.Key == Key.Up)
+            {
                 PlayerVM.Volume += 0.05;
+                e.Handled = true;
+            }
+
             if (e.Key == Key.Down)
+            {
                 PlayerVM.Volume -= 0.05;
+                e.Handled = true;
+            }
         }
 
         private void Forward_Execute(object obj)

@@ -13,7 +13,7 @@
              MouseDoubleClick="UserControl_MouseDoubleClick"
              PreviewMouseDown="UserControl_PreviewMouseButtonDown"
              Background="{Binding Path=Background, FallbackValue=DarkGray}"
-             d:DesignHeight="250" d:DesignWidth="600">
+             d:DesignHeight="650" d:DesignWidth="600">
     <Grid x:Name="_gridMain" MouseWheel="Grid_MouseWheel" >
         <Grid.RowDefinitions>
             <RowDefinition Height="*" MinHeight="40"/>
@@ -42,18 +42,7 @@
                           MouseWheel="mePlayer_MouseWheel" />-->
         </ScrollViewer>
 
-        <!--<TextBox x:Name="_title" BorderThickness="0" Margin="3" Padding="100,0"
-                     Foreground="Navy"
-                     HorizontalContentAlignment="Center"
-                     FontSize="22" FontWeight="Bold" FontFamily="Times New Roman" 
-                     Text="{Binding Title, FallbackValue=Title1}" IsReadOnly="True" >
-            <TextBox.BitmapEffect>
-                <DropShadowBitmapEffect Color="DarkViolet" Direction="320" ShadowDepth="6" Opacity="1" Softness="1" />
-            </TextBox.BitmapEffect>
-            <TextBox.Background>
-                <SolidColorBrush Color="White" Opacity="0.2" />
-            </TextBox.Background>
-        </TextBox>-->
+        <controls:FadingTextControl Grid.Row="1" />
 
         <Viewbox x:Name="_systemButtons" Margin="6" HorizontalAlignment="Right" VerticalAlignment="Top">
             <Border Margin="10" Padding="1" CornerRadius="10" Height="40">
