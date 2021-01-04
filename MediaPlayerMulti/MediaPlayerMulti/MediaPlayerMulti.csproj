@@ -80,7 +80,7 @@
     <Compile Include="Controls\ButtonVolume.xaml.cs">
       <DependentUpon>ButtonVolume.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utils\ColorConverter.cs" />
+    <Compile Include="Utils\ColorConverters.cs" />
     <Compile Include="Controls\PlayerControls.xaml.cs">
       <DependentUpon>PlayerControls.xaml</DependentUpon>
     </Compile>

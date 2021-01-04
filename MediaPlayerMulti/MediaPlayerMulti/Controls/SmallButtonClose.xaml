@@ -35,13 +35,11 @@
 
             <ControlTemplate.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter TargetName="circle" Property="Stroke" Value="Red"/>
-                    <Setter TargetName="circle" Property="Fill">
-                        <Setter.Value>
-                            <SolidColorBrush Color="Red" Opacity="0.3" />
-                        </Setter.Value>
-                    </Setter>
-                    <Setter TargetName="cross" Property="Stroke" Value="Red"/>
+                    <Setter TargetName="circle" Property="Stroke" Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}}"/>
+                    <Setter TargetName="circle" Property="Fill" 
+                        Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
+                        Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.3}" />
+                    <Setter TargetName="cross" Property="Stroke" Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}}"/>
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>

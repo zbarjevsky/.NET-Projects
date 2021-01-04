@@ -8,10 +8,10 @@
         mc:Ignorable="d" 
         MouseEnter="_button_MouseEnter"
         Click="_button_Click"
-        x:Name="_button" Foreground="Magenta" Background="Black"
+        Foreground="Magenta" Background="Black"
         d:DesignHeight="45" d:DesignWidth="80">
     <ToggleButton.Resources>
-        <utils:BrushToColorConverter x:Key="ColorConverter" />
+        <utils:MyBrushToColorConverter x:Key="ColorConverter" />
     </ToggleButton.Resources>
     <ToggleButton.Template>
         <ControlTemplate TargetType="ToggleButton">
@@ -43,27 +43,11 @@
                             <EllipseGeometry Center="8,8" RadiusX="7" RadiusY="7"/>
                         </Path.Data>
                     </Path>
-                    <Path x:Name="cross">
-                        <Path.Data>
-                            <GeometryGroup>
-                                <LineGeometry StartPoint="4,6" EndPoint="7,6"/>
-                                <LineGeometry StartPoint="4,6" EndPoint="4,10"/>
-                                <LineGeometry StartPoint="4,10" EndPoint="8,10"/>
-                                <LineGeometry StartPoint="7,6" EndPoint="10,4"/>
-                                <LineGeometry StartPoint="7,10" EndPoint="10,12"/>
-                                <LineGeometry StartPoint="10,4" EndPoint="10,12"/>
-                            </GeometryGroup>
-                        </Path.Data>
-                    </Path>
-                    <Path x:Name="mute" StrokeThickness="4" >
+                    <Path x:Name="cross" Data="M 4,6 L 7,6 L 10,4 L 10,12 L 7,10 L 4,10  Z" />
+                    <Path x:Name="mute" Data="M 2,2 L 14,13 L 13,14 L 1,3  Z" >
                         <Path.Stroke>
                             <SolidColorBrush Color="Red" Opacity="0.65" />
                         </Path.Stroke>
-                        <Path.Data>
-                            <GeometryGroup>
-                                <LineGeometry StartPoint="2,2" EndPoint="14,14"/>
-                            </GeometryGroup>
-                        </Path.Data>
                     </Path>
                 </Canvas>
             </Viewbox>
@@ -80,30 +64,22 @@
                 </EventTrigger>-->
 
                 <Trigger Property="IsEnabled" Value="True">
-                    <Setter TargetName="circle" Property="Stroke" >
-                        <Setter.Value>
-                            <SolidColorBrush Color="{Binding ElementName=_button, Path=Foreground, Converter={StaticResource ColorConverter}}" Opacity="0.5" />
-                        </Setter.Value>
-                    </Setter>
-                    <Setter TargetName="circle" Property="Fill">
-                        <Setter.Value>
-                            <SolidColorBrush Color="{Binding ElementName=_button, Path=Foreground, Converter={StaticResource ColorConverter}}" Opacity="0.3" />
-                        </Setter.Value>
-                    </Setter>
-                    <Setter TargetName="cross" Property="Stroke">
-                        <Setter.Value>
-                            <SolidColorBrush Color="{Binding ElementName=_button, Path=Foreground, Converter={StaticResource ColorConverter}}" Opacity="0.5" />
-                        </Setter.Value>
-                    </Setter>
+                    <Setter TargetName="circle" Property="Stroke"  
+                        Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
+                        Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.5}" />
+                    <Setter TargetName="circle" Property="Fill"  
+                        Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
+                        Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.3}" />
+                    <Setter TargetName="cross" Property="Stroke" 
+                        Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
+                        Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.5}" />
                 </Trigger>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter TargetName="circle" Property="Stroke" Value="{Binding ElementName=_button, Path=Foreground}"/>
-                    <Setter TargetName="circle" Property="Fill">
-                        <Setter.Value>
-                            <SolidColorBrush Color="{Binding ElementName=_button, Path=Foreground, Converter={StaticResource ColorConverter}}" Opacity="0.3" />
-                        </Setter.Value>
-                    </Setter>
-                    <Setter TargetName="cross" Property="Stroke" Value="{Binding ElementName=_button, Path=Foreground}"/>
+                    <Setter TargetName="circle" Property="Stroke" Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}}"/>
+                    <Setter TargetName="circle" Property="Fill" 
+                        Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
+                        Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.3}" />
+                    <Setter TargetName="cross" Property="Stroke" Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}}" />
                 </Trigger>
                 <Trigger Property="ToggleButton.IsChecked" Value="False">
                     <Setter TargetName="mute" Property="Visibility" Value="Hidden"/>

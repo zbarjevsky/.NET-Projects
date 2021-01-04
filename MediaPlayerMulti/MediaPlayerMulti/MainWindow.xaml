@@ -24,9 +24,9 @@
             <RowDefinition x:Name="rowFooter" Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <DockPanel Background="LightGray">
-            <controls:ButtonPlus Margin="4" Foreground="Black" Command="ApplicationCommands.Open" />
-            <controls:ButtonPlayPause Margin="4" Foreground="Black" Command="MediaCommands.TogglePlayPause"
-                     IsChecked="{Binding MediaState, Mode=OneWay, Converter={StaticResource MediaStateToPlayConverter}}"/>
+            <controls:ButtonPlus Margin="4" Foreground="{StaticResource ButtonForegroundMain}" Command="ApplicationCommands.Open" />
+            <controls:ButtonPlayPause Margin="4" Foreground="{StaticResource ButtonForegroundMain}" Command="MediaCommands.TogglePlayPause"
+                     IsChecked="{Binding DataContext.MediaState, ElementName=_player, Mode=OneWay, Converter={StaticResource MediaStateToPlayConverter}}"/>
 
             <ComboBox x:Name="_cmbFilesList" Margin="0,5,100,5"  
                       IsEditable="False" Foreground="Navy" FontWeight="Medium"
@@ -52,7 +52,7 @@
                                        Text="{Binding NaturalDuration, Converter={StaticResource TimeFormatConverter}, FallbackValue=--/--}"/>
 
                             <controls:SmallButtonClose Grid.Column="2" Margin="4" Height="20" DockPanel.Dock="Right" 
-                                  VerticalAlignment="Top" Click="RemoveMediaFile_Click" >
+                                  VerticalAlignment="Top" Foreground="Magenta" Click="RemoveMediaFile_Click" >
                                 <Button.Style>
                                     <Style TargetType="Button">
                                         <Style.Triggers>
@@ -67,7 +67,7 @@
                         </Grid>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
-                <ComboBoxItem HorizontalContentAlignment="Stretch">
+                <!--<ComboBoxItem HorizontalContentAlignment="Stretch">
                     <Grid Height="30">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
@@ -84,7 +84,7 @@
                         </TextBlock>
 
                         <TextBlock Grid.Column="1" VerticalAlignment="Center" FontSize="18" 
-                                       Text="{Binding NaturalDuration, Converter={StaticResource TimeFormatConverter}, FallbackValue=--/--}"/>
+                                       Text="{Binding NaturalDuration, Converter={StaticResource TimeFormatConverter}, FallbackValue=0 min}"/>
 
                         <controls:SmallButtonClose Grid.Column="2" Margin="4" Height="20" DockPanel.Dock="Right" 
                                   VerticalAlignment="Top" Click="RemoveMediaFile_Click" >
@@ -100,7 +100,7 @@
 
                         </controls:SmallButtonClose>
                     </Grid>
-                </ComboBoxItem>
+                </ComboBoxItem>-->
             </ComboBox>
         </DockPanel>
         <mediaplayer:VideoPlayerControl Grid.Row="1" x:Name="_player" IsTabStop="True"

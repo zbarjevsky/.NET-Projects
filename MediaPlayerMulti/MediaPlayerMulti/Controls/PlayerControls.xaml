@@ -23,10 +23,12 @@
                 <SolidColorBrush Color="DimGray" Opacity="0.75" />
             </Border.Background>
             <DockPanel Grid.Row="1" Margin="10,6" VerticalAlignment="Top" HorizontalAlignment="Stretch" >
-                <local:ButtonPlayPause Width="30" Margin="6,0" Foreground="LimeGreen" Command="MediaCommands.TogglePlayPause" 
+                <local:ButtonPlayPause Width="30" Margin="6,0" Foreground="{StaticResource ButtonForegroundPlay}" 
+                      Command="MediaCommands.TogglePlayPause" 
                       IsChecked="{Binding MediaState, Mode=OneWay, Converter={StaticResource MediaStateToPlayConverter}}" />
                 <!--<local:ButtonPause Width="30" Margin="6,0" Foreground="LimeGreen" Command="MediaCommands.Pause" />-->
-                <local:ButtonStop Width="30" Margin="6,0" Foreground="LimeGreen" Command="MediaCommands.Stop" />
+                <local:ButtonStop Width="30" Margin="6,0" Foreground="{StaticResource ButtonForegroundPlay}" 
+                       Command="MediaCommands.Stop" />
                 <local:ButtonVolume DockPanel.Dock="Right" Width="30" Margin="6,0" Foreground="Cyan"
                                     IsChecked="{Binding IsMuted}">
                     <local:ButtonVolume.ToolTip>

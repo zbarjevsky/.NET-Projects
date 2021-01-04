@@ -3,7 +3,7 @@
                     xmlns:local="clr-namespace:MkZ.MediaPlayer.Controls" 
                     xmlns:utils="clr-namespace:MkZ.MediaPlayer.Utils">
 
-    <utils:BrushToColorConverter x:Key="ColorConverter" />
+    <utils:MyBrushToColorConverter x:Key="ColorConverter" />
     
     <Style x:Key="CustomButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="Template">

@@ -5,7 +5,11 @@
              xmlns:utils="clr-namespace:MkZ.MediaPlayer.Utils"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <utils:BrushToColorConverter x:Key="ColorConverter" />
+        <utils:MyBrushToColorConverter x:Key="ColorConverter" />
+        <utils:BrushOpacityConverter x:Key="BrushOpacityConverter" />
+
+        <SolidColorBrush x:Key="ButtonForegroundMain" Color="Navy" />
+        <SolidColorBrush x:Key="ButtonForegroundPlay" Color="LimeGreen" />
 
         <Style x:Key="{x:Type ToolTip}" TargetType="ToolTip">
             <Setter Property="OverridesDefaultStyle" Value="true" />
@@ -13,7 +17,7 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ToolTip">
-                        <Border Name="Border" CornerRadius="4" BorderThickness="1"  Padding="1"
+                        <Border Name="Border" CornerRadius="4" BorderThickness="1.5"  Padding="3,1"
                                 BorderBrush="{TemplateBinding Foreground}"
                             Width="{TemplateBinding Width}"
                             Height="{TemplateBinding Height}">

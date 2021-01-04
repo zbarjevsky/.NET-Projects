@@ -5,11 +5,10 @@
               xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
               xmlns:local="clr-namespace:MkZ.MediaPlayer.Controls" 
               xmlns:utils="clr-namespace:MkZ.MediaPlayer.Utils"
-              mc:Ignorable="d" 
-              x:Name="_button" Foreground="Magenta"
+              mc:Ignorable="d"
               d:DesignHeight="45" d:DesignWidth="80">
     <ToggleButton.Resources>
-        <utils:BrushToColorConverter x:Key="ColorConverter" />
+        <utils:MyBrushToColorConverter x:Key="ColorConverter" />
     </ToggleButton.Resources>
     <ToggleButton.Template>
         <ControlTemplate TargetType="ToggleButton">
@@ -41,36 +40,26 @@
 
             <ControlTemplate.Triggers>
                 <Trigger Property="IsEnabled" Value="True">
-                    <Setter TargetName="circle" Property="Stroke" >
-                        <Setter.Value>
-                            <SolidColorBrush Color="{Binding ElementName=_button, Path=Foreground, Converter={StaticResource ColorConverter}}" Opacity="0.5" />
-                        </Setter.Value>
-                    </Setter>
-                    <Setter TargetName="circle" Property="Fill">
-                        <Setter.Value>
-                            <SolidColorBrush Color="{Binding ElementName=_button, Path=Foreground, Converter={StaticResource ColorConverter}}" Opacity="0.3" />
-                        </Setter.Value>
-                    </Setter>
-                    <Setter TargetName="play" Property="Stroke">
-                        <Setter.Value>
-                            <SolidColorBrush Color="{Binding ElementName=_button, Path=Foreground, Converter={StaticResource ColorConverter}}" Opacity="0.5" />
-                        </Setter.Value>
-                    </Setter>
-                    <Setter TargetName="pause" Property="Stroke">
-                        <Setter.Value>
-                            <SolidColorBrush Color="{Binding ElementName=_button, Path=Foreground, Converter={StaticResource ColorConverter}}" Opacity="0.5" />
-                        </Setter.Value>
-                    </Setter>
+                    <Setter TargetName="circle" Property="Stroke"  
+                        Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
+                        Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.5}" />
+                    <Setter TargetName="circle" Property="Fill" 
+                        Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
+                        Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.3}" />
+                    <Setter TargetName="play" Property="Stroke" 
+                        Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
+                        Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.5}" />
+                    <Setter TargetName="pause" Property="Stroke" 
+                        Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
+                        Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.5}" />
                 </Trigger>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter TargetName="circle" Property="Stroke" Value="{Binding ElementName=_button, Path=Foreground}"/>
-                    <Setter TargetName="circle" Property="Fill">
-                        <Setter.Value>
-                            <SolidColorBrush Color="{Binding ElementName=_button, Path=Foreground, Converter={StaticResource ColorConverter}}" Opacity="0.3" />
-                        </Setter.Value>
-                    </Setter>
-                    <Setter TargetName="play" Property="Stroke" Value="{Binding ElementName=_button, Path=Foreground}"/>
-                    <Setter TargetName="pause" Property="Stroke" Value="{Binding ElementName=_button, Path=Foreground}"/>
+                    <Setter TargetName="circle" Property="Stroke" Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}}" />
+                    <Setter TargetName="circle" Property="Fill" 
+                        Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
+                        Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.3}" />
+                    <Setter TargetName="play" Property="Stroke"  Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}}" />
+                    <Setter TargetName="pause" Property="Stroke"  Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}}" />
                 </Trigger>
                 <Trigger Property="ToggleButton.IsChecked" Value="False">
                     <Setter TargetName="play" Property="Visibility" Value="Visible"/>
