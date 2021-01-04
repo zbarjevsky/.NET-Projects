@@ -71,6 +71,9 @@
     <Compile Include="Controls\ButtonPlay.xaml.cs">
       <DependentUpon>ButtonPlay.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ButtonPlayPause.xaml.cs">
+      <DependentUpon>ButtonPlayPause.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ButtonStop.xaml.cs">
       <DependentUpon>ButtonStop.xaml</DependentUpon>
     </Compile>
@@ -90,6 +93,7 @@
     <Compile Include="Controls\SmallButtonClose.xaml.cs">
       <DependentUpon>SmallButtonClose.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\MediaStateToPlayConverter.cs" />
     <Compile Include="Utils\ObjectToStringConverter.cs" />
     <Compile Include="Utils\TimeConverter.cs" />
     <Compile Include="IVideoPlayer.cs" />
@@ -118,6 +122,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ButtonPlay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ButtonPlayPause.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

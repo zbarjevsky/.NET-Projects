@@ -14,20 +14,24 @@
                 <ResourceDictionary Source="SliderControlResource.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <utils:TimeSpanToSecondsConverter x:Key="TimeConverter" />
+            <utils:MediaStateToPlayConverter x:Key="MediaStateToPlayConverter" />
         </ResourceDictionary>
     </UserControl.Resources>
     <Viewbox Stretch="Uniform">
         <Border Width="800" Height="60" CornerRadius="20">
             <Border.Background>
-                <SolidColorBrush Color="Black" Opacity="0.55" />
+                <SolidColorBrush Color="DimGray" Opacity="0.75" />
             </Border.Background>
             <DockPanel Grid.Row="1" Margin="10,6" VerticalAlignment="Top" HorizontalAlignment="Stretch" >
-                <local:ButtonPlay Width="30" Margin="6,0" Foreground="LimeGreen" Command="MediaCommands.Play" />
-                <local:ButtonPause Width="30" Margin="6,0" Foreground="LimeGreen" Command="MediaCommands.Pause" />
+                <local:ButtonPlayPause Width="30" Margin="6,0" Foreground="LimeGreen" Command="MediaCommands.TogglePlayPause" 
+                      IsChecked="{Binding MediaState, Mode=OneWay, Converter={StaticResource MediaStateToPlayConverter}}" />
+                <!--<local:ButtonPause Width="30" Margin="6,0" Foreground="LimeGreen" Command="MediaCommands.Pause" />-->
                 <local:ButtonStop Width="30" Margin="6,0" Foreground="LimeGreen" Command="MediaCommands.Stop" />
-                <local:ButtonVolume DockPanel.Dock="Right" Width="30" Margin="6,0" Foreground="Cyan" >
+                <local:ButtonVolume DockPanel.Dock="Right" Width="30" Margin="6,0" Foreground="Cyan"
+                                    IsChecked="{Binding IsMuted}">
                     <local:ButtonVolume.ToolTip>
-                        <TextBlock Text="{Binding Volume, StringFormat=Volume: 0%}"/>
+                            <TextBlock Text="{Binding Volume, StringFormat=Volume: 0%}"
+                                       FontSize="18" FontWeight="Medium" />
                     </local:ButtonVolume.ToolTip>
                 </local:ButtonVolume>
                 <Slider Style="{StaticResource Horizontal_Slider}" DockPanel.Dock="Top" Margin="5,0"
