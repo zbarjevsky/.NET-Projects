@@ -111,7 +111,7 @@ namespace MkZ.MediaPlayer.Utils
         private void TogglePlayPause_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             MediaState ms = PlayerVM.MediaState;
-            e.CanExecute = ms == MediaState.Play || ms == MediaState.Pause;
+            e.CanExecute = ms == MediaState.Play || ms == MediaState.Pause || ms == MediaState.Stop;
         }
 
         private void TogglePlayPause_Executed(object sender, ExecutedRoutedEventArgs e)

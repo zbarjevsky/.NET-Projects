@@ -305,6 +305,12 @@ namespace MkZ.MediaPlayer
             set { if (value >= 0 && value <= 1) VideoPlayerElement.Volume = value; NotifyPropertyChanged(); }
         }
 
+        public bool IsMuted
+        {
+            get { return VideoPlayerElement.IsMuted; }
+            set { VideoPlayerElement.IsMuted = value; NotifyPropertyChanged(); }
+        }
+
         public TimeSpan Position
         {
             get { return VideoPlayerElement.Position; }
@@ -434,7 +440,7 @@ namespace MkZ.MediaPlayer
 
         internal void FitWindow()
         {
-            _scrollDragger.FitWindow(1);
+            _scrollDragger.FitWindow(0);
         }
 
         /// <summary>
@@ -447,6 +453,8 @@ namespace MkZ.MediaPlayer
             {
                 if (VideoPlayerElement != null)
                 {
+                    //VideoPlayerElement.Draggable(false);
+
                     VideoPlayerElement.Stop();
                     VideoPlayerElement.Close();
                     VideoPlayerElement.Clock = null;
@@ -479,6 +487,8 @@ namespace MkZ.MediaPlayer
                 VideoPlayerElement.Volume = 0; //reset
 
                 AddFlipXRenderTransform(VideoPlayerElement, flipHorizontally);
+
+                //VideoPlayerElement.Draggable(true);
 
                 VideoPlayerElement.MouseWheel += VideoPlayerElement_MouseWheel;
                 VideoPlayerElement.MediaOpened += VideoPlayerElement_MediaOpened;

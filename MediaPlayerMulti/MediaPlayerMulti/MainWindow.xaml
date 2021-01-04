@@ -15,6 +15,7 @@
     <Window.Resources>
         <utils:SecondsToStringConverter x:Key="TimeFormatConverter" />
         <utils:ObjectToStringConverter x:Key="ObjectToStringConverter" />
+        <utils:MediaStateToPlayConverter x:Key="MediaStateToPlayConverter" />
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -24,7 +25,9 @@
         </Grid.RowDefinitions>
         <DockPanel Background="LightGray">
             <controls:ButtonPlus Margin="4" Foreground="Black" Command="ApplicationCommands.Open" />
-            <controls:ButtonPlay Margin="4" Foreground="Black" Command="MediaCommands.TogglePlayPause" />
+            <controls:ButtonPlayPause Margin="4" Foreground="Black" Command="MediaCommands.TogglePlayPause"
+                     IsChecked="{Binding MediaState, Mode=OneWay, Converter={StaticResource MediaStateToPlayConverter}}"/>
+
             <ComboBox x:Name="_cmbFilesList" Margin="0,5,100,5"  
                       IsEditable="False" Foreground="Navy" FontWeight="Medium"
                       HorizontalContentAlignment="Stretch">
@@ -40,7 +43,7 @@
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{}{0} ({1})">
                                         <Binding Path="FileName" FallbackValue="Long File Name" />
-                                        <Binding Path="MediaState" FallbackValue="State" />
+                                        <Binding Path="NaturalDuration" Converter="{StaticResource TimeFormatConverter}" />
                                     </MultiBinding>
                                 </TextBlock.Text>
                             </TextBlock>
@@ -75,7 +78,7 @@
                             <TextBlock.Text>
                                 <MultiBinding StringFormat="{}{0} ({1})">
                                     <Binding Path="FileName" FallbackValue="Long File Name" />
-                                    <Binding Path="MediaState" FallbackValue="State" />
+                                    <Binding Path="NaturalDuration" Converter="{StaticResource TimeFormatConverter}" />
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>
