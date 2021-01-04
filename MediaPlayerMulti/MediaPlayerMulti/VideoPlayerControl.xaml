@@ -66,7 +66,7 @@
                             Click="ButtonClose_Click"/>
                     <controls:ButtonFullScreen Width="30" Height="30" Margin="8,0" Padding="1,-5,1,4" 
                             Background="Black" Foreground="Cyan" FontSize="26" FontWeight="Bold" 
-                            ToolTip="Full Screen"
+                            ToolTip="Full Screen" IsChecked="{Binding IsFullScreen, Mode=OneWay, FallbackValue=False}"
                             Click="ButtonFullScreen_Click"/>
                 </StackPanel>
             </Border>

@@ -47,6 +47,51 @@ namespace MkZ.MediaPlayer.Utils
             //Escape Command
             EscapeCommand = new RelayCommand(Escape_Execute, (o) => true);
             _mainWindow.Window.InputBindings.Add(new KeyBinding(EscapeCommand, new KeyGesture(Key.Escape)));
+
+            _mainWindow.Window.PreviewKeyDown += Window_PreviewKeyDown;
+        }
+
+        private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Left)
+                Skip(-5);
+            if (e.Key == Key.Right)
+                Skip(5);
+            if (e.Key == Key.Up)
+                PlayerVM.Volume += 0.05;
+            if (e.Key == Key.Down)
+                PlayerVM.Volume -= 0.05;
+        }
+
+        private void Forward_Execute(object obj)
+        {
+            //Skip(5);
+        }
+
+        private void Backward_Execute(object obj)
+        {
+            //Skip(-5);
+        }
+
+        private void Skip(double seconds)
+        {
+            bool resume = false;
+            if (PlayerVM.MediaState == MediaState.Play)
+            {
+                PlayerVM.Pause();
+                resume = true;
+            }
+
+            double pos = PlayerVM.Position.TotalSeconds;
+            pos += seconds;
+            
+            if (pos < 0) pos = 0;
+            if (pos > PlayerVM.NaturalDuration) pos = PlayerVM.NaturalDuration - 1;
+
+            PlayerVM.Position = TimeSpan.FromSeconds(pos);
+
+            if (resume)
+                PlayerVM.Play();
         }
 
         private void Escape_Execute(object obj)

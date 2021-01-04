@@ -15,6 +15,8 @@ namespace MkZ.MediaPlayer.Utils
         private string _dataFolder;
         private string _fileName;
 
+        public int SelectedIndex { get; set; } = 0;
+
         public List<MediaFileInfo> MediaFiles { get; set; } = new List<MediaFileInfo>();
 
         public AppConfig()
@@ -29,6 +31,13 @@ namespace MkZ.MediaPlayer.Utils
             _fileName = Path.Combine(_dataFolder, fileName);
         }
 
+        public void CopyFrom(AppConfig config)
+        {
+            MediaFiles.Clear();
+            MediaFiles.AddRange(config.MediaFiles);
+            SelectedIndex = config.SelectedIndex;
+        }
+
         public void Save()
         {
             XmlHelper.Save(_fileName, this);
@@ -39,7 +48,7 @@ namespace MkZ.MediaPlayer.Utils
             if (File.Exists(_fileName))
             {
                 AppConfig appConfig = XmlHelper.Open<AppConfig>(_fileName);
-                this.MediaFiles.AddRange(appConfig.MediaFiles);
+                this.CopyFrom(appConfig);
             }
         }
     }

@@ -54,8 +54,8 @@ namespace MediaPlayerMulti
             _mediaFiles.Clear();
             _appConfig.MediaFiles.ForEach(file => { file.MediaState = MediaState.Pause; _mediaFiles.Add(file); });
 
-            if (_mediaFiles.Count > 0)
-                _cmbFilesList.SelectedIndex = 0;
+            if (_mediaFiles.Count > 0 && _appConfig.SelectedIndex < _mediaFiles.Count)
+                _cmbFilesList.SelectedIndex = _appConfig.SelectedIndex;
 
             _mediaPlayerCommands = new MediaPlayerCommands(this);
 
@@ -69,6 +69,8 @@ namespace MediaPlayerMulti
 
         private void Window_Closed(object sender, EventArgs e)
         {
+            _appConfig.SelectedIndex = _cmbFilesList.SelectedIndex;
+
             _player.ClosePlayer();
             _appConfig.MediaFiles.Clear();
             _appConfig.MediaFiles.AddRange(_mediaFiles);
@@ -88,12 +90,14 @@ namespace MediaPlayerMulti
                 rowHeader.Height = new GridLength(40);
                 this.WindowStyle = WindowStyle.ThreeDBorderWindow;
                 this.WindowState = WindowState.Normal;
+                MediaPlayerVM.IsFullScreen = false;
             }
             else //full screen
             {
                 rowHeader.Height = new GridLength(1);
                 this.WindowStyle = WindowStyle.None;
                 this.WindowState = WindowState.Maximized;
+                MediaPlayerVM.IsFullScreen = true;
             }
         }
 

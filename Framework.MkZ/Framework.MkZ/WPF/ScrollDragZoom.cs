@@ -152,9 +152,17 @@ namespace MZ.WPF
         {
             if (_scrollViewer.ActualHeight > margin && _scrollViewer.ActualWidth > margin)
             {
+                //hide scrollbars - after fit they are still visible - so hide and then set to Auto
+                _scrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+                _scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+
                 _content.Width = _scrollViewer.ActualWidth - margin;
                 _content.Height = _scrollViewer.ActualHeight - margin;
+                
                 _content.UpdateLayout();
+
+                _scrollViewer.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
+                _scrollViewer.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
             }
 
             InternalUpdateZoomFromContent();

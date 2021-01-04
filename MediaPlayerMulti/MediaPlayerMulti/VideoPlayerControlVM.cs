@@ -157,6 +157,9 @@ namespace MkZ.MediaPlayer
             private set { SetProperty(ref _fileName, value); NotifyPropertyChanged(nameof(Prompt)); }
         }
 
+        private bool _isFullScreen = false;
+        public bool IsFullScreen { get => _isFullScreen; set => SetProperty(ref _isFullScreen, value); }
+
         public bool IsFlipHorizontally
         {
             get
@@ -299,7 +302,7 @@ namespace MkZ.MediaPlayer
         public double Volume
         {
             get { return VideoPlayerElement.Volume; }
-            set { VideoPlayerElement.Volume = value; NotifyPropertyChanged(); }
+            set { if (value >= 0 && value <= 1) VideoPlayerElement.Volume = value; NotifyPropertyChanged(); }
         }
 
         public TimeSpan Position
@@ -431,7 +434,7 @@ namespace MkZ.MediaPlayer
 
         internal void FitWindow()
         {
-            _scrollDragger?.FitWindow(1);
+            _scrollDragger.FitWindow(1);
         }
 
         /// <summary>

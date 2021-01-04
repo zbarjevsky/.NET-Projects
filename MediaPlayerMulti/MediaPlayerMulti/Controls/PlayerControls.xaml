@@ -25,7 +25,11 @@
                 <local:ButtonPlay Width="30" Margin="6,0" Foreground="LimeGreen" Command="MediaCommands.Play" />
                 <local:ButtonPause Width="30" Margin="6,0" Foreground="LimeGreen" Command="MediaCommands.Pause" />
                 <local:ButtonStop Width="30" Margin="6,0" Foreground="LimeGreen" Command="MediaCommands.Stop" />
-                <local:ButtonVolume DockPanel.Dock="Right" Width="30" Margin="6,0" Foreground="Cyan" />
+                <local:ButtonVolume DockPanel.Dock="Right" Width="30" Margin="6,0" Foreground="Cyan" >
+                    <local:ButtonVolume.ToolTip>
+                        <TextBlock Text="{Binding Volume, StringFormat=Volume: 0%}"/>
+                    </local:ButtonVolume.ToolTip>
+                </local:ButtonVolume>
                 <Slider Style="{StaticResource Horizontal_Slider}" DockPanel.Dock="Top" Margin="5,0"
                     VerticalAlignment="Center" HorizontalAlignment="Stretch" 
                     TickFrequency="10" LargeChange="10" SmallChange="5"
