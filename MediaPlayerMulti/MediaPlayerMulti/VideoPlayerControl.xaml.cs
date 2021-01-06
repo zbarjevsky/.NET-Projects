@@ -149,7 +149,7 @@ namespace MkZ.MediaPlayer
 
         private void btnMaximize_Click(object sender, RoutedEventArgs e)
         {
-            _playerControlVM.MaximizeAction();
+            _playerControlVM.MaximizeAction(_playerControlVM);
         }
 
         private void btnOriginalSize_Click(object sender, RoutedEventArgs e)

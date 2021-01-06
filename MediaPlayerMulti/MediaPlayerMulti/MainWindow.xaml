@@ -8,15 +8,23 @@
         xmlns:controls="clr-namespace:MkZ.MediaPlayer.Controls" 
         xmlns:utils="clr-namespace:MkZ.MediaPlayer.Utils"
         mc:Ignorable="d" 
+        FontSize="18"
         Loaded="Window_Loaded"
         Closed="Window_Closed"
         WindowStartupLocation="CenterScreen"
-        Title="MkZ Media Player" Height="768" Width="1366">
+        FocusManager.FocusedElement="{Binding ElementName=_player}"
+        Height="768" Width="1366">
     <Window.Resources>
         <utils:SecondsToStringConverter x:Key="TimeFormatConverter" />
         <utils:ObjectToStringConverter x:Key="ObjectToStringConverter" />
         <utils:MediaStateToPlayConverter x:Key="MediaStateToPlayConverter" />
+        <utils:PathToFileNameConverter x:Key="PathToFileNameConverter" />
     </Window.Resources>
+    <Window.Title>
+        <MultiBinding StringFormat="{}{0} - MkZ Media Player">
+            <Binding Path="SelectedItem.FileName" ElementName="_cmbFilesList" Converter="{StaticResource PathToFileNameConverter}" />
+        </MultiBinding>
+    </Window.Title>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition x:Name="rowHeader" Height="45"></RowDefinition>
@@ -24,11 +32,41 @@
             <RowDefinition x:Name="rowFooter" Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <DockPanel Background="LightGray">
-            <controls:ButtonPlus Margin="4" Foreground="{StaticResource ButtonForegroundMain}" Command="ApplicationCommands.Open" />
-            <controls:ButtonPlayPause Margin="4" Foreground="{StaticResource ButtonForegroundMain}" Command="MediaCommands.TogglePlayPause"
+            <controls:ButtonMenu Margin="4" Foreground="{StaticResource ButtonForegroundMain}" 
+                     ToolTip="Options..." >
+                <controls:DropDownButton.Menu>
+                    <ContextMenu FontWeight="Medium" FontSize="18" Foreground="Navy" HasDropShadow="True">
+                        <MenuItem Header="Open Media File.." Command="ApplicationCommands.Open" Padding="8" />
+                        <MenuItem Header="Previous Track" Command="MediaCommands.PreviousTrack" Padding="8" >
+                            <MenuItem.Icon>
+                                <Image Source="Images/previus_on.ico" Width="20" Height="20" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Next Track" Command="MediaCommands.NextTrack" Padding="8" >
+                            <MenuItem.Icon>
+                                <Image Source="Images/next_on.ico" Width="20" Height="20" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator/>
+                        <MenuItem Header="Options..." Padding="8" Click="OptionsMenuItem_Click" >
+                            <MenuItem.Icon>
+                                <Image Source="Images/Tools.ico" Width="16" Height="16" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                    </ContextMenu>
+                </controls:DropDownButton.Menu>
+            </controls:ButtonMenu>
+            <controls:ButtonPlus Margin="4" Foreground="{StaticResource ButtonForegroundMain}" 
+                     ToolTip="Open Media File..." Command="ApplicationCommands.Open" />
+            <controls:ButtonPlayPause Margin="4" Foreground="{StaticResource ButtonForegroundMain}" 
+                     ToolTip="Tooggle Play Pause" ToolTipService.ShowOnDisabled="True" Command="MediaCommands.TogglePlayPause"
                      IsChecked="{Binding DataContext.MediaState, ElementName=_player, Mode=OneWay, Converter={StaticResource MediaStateToPlayConverter}}"/>
+            <controls:ButtonNext Margin="4" DockPanel.Dock="Right" Foreground="{StaticResource ButtonForegroundMain}" 
+                      ToolTip="Next Track" ToolTipService.ShowOnDisabled="True" Command="MediaCommands.NextTrack" />
+            <controls:ButtonPrev Margin="4" DockPanel.Dock="Right" Foreground="{StaticResource ButtonForegroundMain}" 
+                      ToolTip="Previous Track" ToolTipService.ShowOnDisabled="True" Command="MediaCommands.PreviousTrack" />
 
-            <ComboBox x:Name="_cmbFilesList" Margin="0,5,100,5"  
+            <ComboBox x:Name="_cmbFilesList" Margin="0,5,10,5"  
                       IsEditable="False" Foreground="Navy" FontWeight="Medium"
                       HorizontalContentAlignment="Stretch">
                 <ComboBox.ItemTemplate>
@@ -39,7 +77,7 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock FontSize="18" VerticalAlignment="Center">
+                            <TextBlock VerticalAlignment="Center">
                                 <TextBlock.Text>
                                     <MultiBinding StringFormat="{}{0} ({1})">
                                         <Binding Path="FileName" FallbackValue="Long File Name" />
@@ -103,7 +141,8 @@
                 </ComboBoxItem>-->
             </ComboBox>
         </DockPanel>
-        <mediaplayer:VideoPlayerControl Grid.Row="1" x:Name="_player" IsTabStop="True"
+        <mediaplayer:VideoPlayerControl Grid.Row="1" x:Name="_player" 
+                 IsTabStop="True" Focusable="True"
                  MediaFileInfo="{Binding SelectedItem, ElementName=_cmbFilesList}" />
     </Grid>
 </Window>

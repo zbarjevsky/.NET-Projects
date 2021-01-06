@@ -12,6 +12,8 @@ namespace MkZ.MediaPlayer
     public interface IVideoPlayer : INotifyPropertyChanged
     {
         Action<IVideoPlayer> VideoStartedAction { get; set; }
+        Action<IVideoPlayer> VideoEndedAction { get; set; }
+        Func<ExceptionRoutedEventArgs, MediaElement, bool> VideoFailedAction { get; set; }
 
         MediaState MediaState { get; }
         string FileName { get; }
@@ -20,6 +22,7 @@ namespace MkZ.MediaPlayer
         TimeSpan Position { get; set; }
         Size NaturalSize { get; }
         double NaturalDuration { get; }
+        ePlayMode PlayMode { get; }
 
         void Play();
         void Pause();

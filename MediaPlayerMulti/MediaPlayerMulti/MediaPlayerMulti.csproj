@@ -40,6 +40,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -52,6 +53,7 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -65,6 +67,12 @@
     <Compile Include="Controls\ButtonFullScreen.xaml.cs">
       <DependentUpon>ButtonFullScreen.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ButtonMenu.xaml.cs">
+      <DependentUpon>ButtonMenu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ButtonNext.xaml.cs">
+      <DependentUpon>ButtonNext.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ButtonPause.xaml.cs">
       <DependentUpon>ButtonPause.xaml</DependentUpon>
     </Compile>
@@ -74,14 +82,21 @@
     <Compile Include="Controls\ButtonPlayPause.xaml.cs">
       <DependentUpon>ButtonPlayPause.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ButtonPrev.xaml.cs">
+      <DependentUpon>ButtonPrev.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ButtonStop.xaml.cs">
       <DependentUpon>ButtonStop.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ButtonVolume.xaml.cs">
       <DependentUpon>ButtonVolume.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\DropDownButton.cs" />
     <Compile Include="Controls\FadingTextControl.xaml.cs">
       <DependentUpon>FadingTextControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OptionsWindow.xaml.cs">
+      <DependentUpon>OptionsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\ColorConverters.cs" />
     <Compile Include="Controls\PlayerControls.xaml.cs">
@@ -98,12 +113,14 @@
     </Compile>
     <Compile Include="Utils\MediaStateToPlayConverter.cs" />
     <Compile Include="Utils\ObjectToStringConverter.cs" />
+    <Compile Include="Utils\PathToFileNameConverter.cs" />
     <Compile Include="Utils\TimeConverter.cs" />
     <Compile Include="IVideoPlayer.cs" />
     <Compile Include="Utils\AppConfig.cs" />
     <Compile Include="Utils\IPlayerMainWindow.cs" />
     <Compile Include="Utils\MediaPlayerCommands.cs" />
     <Compile Include="Utils\SliderIgnoreDelta.cs" />
+    <Compile Include="VideoPlayerContext.cs" />
     <Compile Include="VideoPlayerControl.xaml.cs">
       <DependentUpon>VideoPlayerControl.xaml</DependentUpon>
     </Compile>
@@ -113,6 +130,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ButtonFullScreen.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ButtonMenu.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ButtonNext.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -132,6 +157,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\ButtonPrev.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ButtonStop.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -145,6 +174,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\FadingTextControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\OptionsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -219,6 +252,21 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Media.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Cancel.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Tools.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Options.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\next_on.ico" />
+    <Resource Include="Images\pause_on.ico" />
+    <Resource Include="Images\play_on.ico" />
+    <Resource Include="Images\previus_on.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

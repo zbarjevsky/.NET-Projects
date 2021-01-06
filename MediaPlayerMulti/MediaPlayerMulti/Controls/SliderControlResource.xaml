@@ -93,8 +93,15 @@
             </Track>
 
             <TextBlock Grid.Row="1" Margin="10,0,0,10" FontSize="12"
-                       Text="{Binding DataContext.Title, RelativeSource={RelativeSource TemplatedParent}, FallbackValue=--/--}" 
-                       VerticalAlignment="Bottom" Foreground="AliceBlue"/>
+                       VerticalAlignment="Bottom" Foreground="AliceBlue">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{0}/{1} - {2}">
+                        <Binding Path="Value" RelativeSource="{RelativeSource TemplatedParent}" Converter="{StaticResource TimeFormatConverter}" />
+                        <Binding Path="Maximum" RelativeSource="{RelativeSource TemplatedParent}" Converter="{StaticResource TimeFormatConverter}" />
+                        <Binding Path="DataContext.Title" RelativeSource="{RelativeSource TemplatedParent}" FallbackValue="File Name" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
 
             <TickBar x:Name="BottomTick" Grid.Row="2" Placement="Bottom" Height="4" SnapsToDevicePixels="True" 
                      Fill="AliceBlue" Visibility="Collapsed" />

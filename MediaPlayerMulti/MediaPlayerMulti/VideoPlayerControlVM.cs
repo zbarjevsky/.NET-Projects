@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -12,11 +13,21 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using System.Xml.Serialization;
+using MZ.Tools;
 using MZ.Windows;
 using MZ.WPF;
 
 namespace MkZ.MediaPlayer
 {
+    public enum ePlayMode
+    {
+        PlayOne,
+        PlayAll,
+        RepeatOne,
+        RepeatAll,
+        Random
+    }
+
     [Serializable]
     public class MediaFileInfo : NotifyPropertyChangedImpl
     {
@@ -32,6 +43,7 @@ namespace MkZ.MediaPlayer
         public MediaState MediaState { get => _mediaState; set => SetProperty(ref _mediaState, value); }
         
         private string _fileName = "";
+        [XmlAttribute("FileName")]
         public string FileName { get => _fileName; set => SetProperty(ref _fileName, value); }
 
         private double _positionInSeconds = 0.0;
@@ -93,14 +105,23 @@ namespace MkZ.MediaPlayer
         private ScrollDragZoom _scrollDragger = null;
         private ScrollViewer _scrollPlayerContainer = null;
 
-        public Action MaximizeAction = () => { };
-        public Action VideoEndedAction = () => { };
+        public Action<IVideoPlayer> MaximizeAction = (player) => { };
         public Action<IVideoPlayer> VideoStartedAction { get; set; } = (player) => { };
-        public Func<ExceptionRoutedEventArgs, MediaElement, bool> VideoFailedAction = (e, player) => true;
+        public Func<ExceptionRoutedEventArgs, MediaElement, bool> VideoFailedAction { get; set; } = (e, player) => true;
         public Action<VideoPlayerControlVM> LeftButtonClick = (vm) => { vm.TogglePlayPauseState(); };
         public Action<VideoPlayerControlVM> LeftButtonDoubleClick = (vm) => { };
+        public Action<IVideoPlayer> VideoEndedAction { get; set; } = (player) => { };
 
         public MediaFileInfo State { get; set; } = new MediaFileInfo();
+
+        MediaState _mediaState = MediaState.Manual;
+        public MediaState MediaState
+        {
+            get { return _mediaState; }
+            protected set { SetProperty(ref _mediaState, value); }
+        }
+
+        public ePlayMode PlayMode { get { return VideoPlayerContext.Instance.Config.Configuration.PlayMode; } }
 
         public MediaElement VideoPlayerElement { get; private set; } = null;
 
@@ -109,13 +130,6 @@ namespace MkZ.MediaPlayer
         public bool IsOpen { get { return (IsInitialized && VideoPlayerElement.Source  != null); } }
 
         public bool IsAttached { get { return _scrollPlayerContainer != null; } }
-
-        MediaState _mediaState = MediaState.Manual;
-        public MediaState MediaState
-        {
-            get { return _mediaState; }
-            protected set { SetProperty(ref _mediaState, value); }
-        }
 
         private string _title = "N/A";
         public string Title
@@ -358,30 +372,40 @@ namespace MkZ.MediaPlayer
 
         public void Open(string fileName)
         {
-            if(File.Exists(fileName))
+            try
             {
-                FileName = fileName;
-                VideoPlayerElement.Source = null;
-                VideoPlayerElement.Source = new Uri(fileName);
-                MediaState = MediaState.Manual;
-                Title = Path.GetFileName(fileName);
+                if (File.Exists(fileName))
+                {
+                    FileName = fileName;
+                    VideoPlayerElement.Source = null;
+                    VideoPlayerElement.Source = new Uri(fileName);
+                    MediaState = MediaState.Manual;
+                    Title = Path.GetFileName(fileName);
 
-                Volume = 0; //load silently
-                Position = State.Position;
+                    Volume = 0; //load silently
+                    //sometimes loading mp3 stuck
+                    //https://stackoverflow.com/questions/6716100/strange-behavior-with-wpf-mediaelement
+                    VideoPlayerElement.ScrubbingEnabled = false; //faster load
+                    Position = State.Position;
 
-                Prompt = "Loading, Please Wait...";
+                    Prompt = "Loading, Please Wait...";
 
-                //this will open media - reset state on MediaOpened event
-                VideoPlayerElement.Play();
+                    //this will open media - reset state on MediaOpened event
+                    VideoPlayerElement.Play();
+                }
+                else
+                {
+                    FileName = "";
+                    VideoPlayerElement.Source = null;
+                    MediaState = MediaState.Manual;
+                    Title = "N/A";
+                    Prompt = "Use Ctrl+O or Drop file here...";
+                }
             }
-            else
+            catch (Exception err)
             {
-                FileName = "";
-                VideoPlayerElement.Source = null;
-                MediaState = MediaState.Manual;
-                Title = "N/A";
-                Prompt = "Use Ctrl+O or Drop file here...";
-            }
+                Log.e("Open exception: {0}", err);
+            }        
         }
 
         public void Close()
@@ -513,38 +537,53 @@ namespace MkZ.MediaPlayer
 
         private void VideoPlayerElement_MediaOpened(object sender, RoutedEventArgs e)
         {
-            Position = State.Position;
+            try
+            {
+                Position = State.Position;
 
-            _scrollDragger.NaturalSize = new Size(VideoPlayerElement.NaturalVideoWidth, VideoPlayerElement.NaturalVideoHeight);
-            
-            if (State.MediaState == MediaState.Stop)
-                Stop();
-            if (State.MediaState == MediaState.Pause || State.MediaState == MediaState.Manual)
-                Pause();
+                _scrollDragger.NaturalSize = new Size(VideoPlayerElement.NaturalVideoWidth, VideoPlayerElement.NaturalVideoHeight);
 
-            Volume = State.Volume;
-            MediaState = GetMediaState();
+                if (State.MediaState == MediaState.Stop)
+                    Stop();
+                if (State.MediaState == MediaState.Pause || State.MediaState == MediaState.Manual)
+                    Pause();
 
-            Prompt = Title;
-            State.NaturalDuration = NaturalDuration;
+                Thread.Sleep(100);
+                Volume = State.Volume;
+                VideoPlayerElement.ScrubbingEnabled = true; //enable preview
+                MediaState = GetMediaState();
 
-            Debug.WriteLine("Media Opened: {0}\nPosition: {1}, Size: {2}, Duration: {3}",
-                VideoPlayerElement.Source, VideoPlayerElement.Position, NaturalSize, NaturalDuration);
-            
-            FitWindow();
-            NotifyPropertyChanged(nameof(NaturalDuration));
-            VideoStartedAction(this);
+                Prompt = Title;
+                State.NaturalDuration = NaturalDuration;
+
+                Debug.WriteLine("Media Opened: {0}\nPosition: {1}, Size: {2}, Duration: {3}",
+                    VideoPlayerElement.Source, VideoPlayerElement.Position, NaturalSize, NaturalDuration);
+
+                FitWindow();
+                NotifyPropertyChanged(nameof(NaturalDuration));
+                VideoStartedAction(this);
+            }
+            catch (Exception err)
+            {
+                Log.e("VideoPlayerElement_MediaOpened exception: {0}", err);
+            }        
         }
 
         private void VideoPlayerElement_MediaEnded(object sender, RoutedEventArgs e)
         {
             Stop();
+            if (PlayMode == ePlayMode.RepeatOne)
+                Play();
+            else if (PlayMode == ePlayMode.PlayAll)
+                MediaCommands.NextTrack.Execute(this, null);
+
+            VideoEndedAction(this);
             NotifyPropertyChangedAll();
-            VideoEndedAction();
         }
 
         private void VideoPlayerElement_MediaFailed(object sender, ExceptionRoutedEventArgs e)
         {
+            Debug.WriteLine("1 VideoPlayerElement_MediaFailed({0}) - {1} - {2}", State.Volume, State.MediaState, State.FileName);
             e.Handled = VideoFailedAction(e, VideoPlayerElement);
         }
 

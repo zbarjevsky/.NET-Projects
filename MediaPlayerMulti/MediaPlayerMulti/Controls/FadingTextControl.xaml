@@ -18,7 +18,7 @@
                 <Border.Background>
                     <SolidColorBrush Color="Black" Opacity="0.3" />
                 </Border.Background>
-                <TextBlock Text="{Binding Volume, NotifyOnTargetUpdated=True, StringFormat=Volume: 0%, FallbackValue='Volume 12%'}" 
+                <TextBlock Text="{Binding Volume, NotifyOnTargetUpdated=True, StringFormat=Volume: 0.#%, FallbackValue='Volume 12%'}" 
                         Padding="12,0" TextAlignment="Center" VerticalAlignment="Center"
                         TargetUpdated="TextBlock_TextUpdated"   
                         Foreground="Cyan" FontSize="22" FontWeight="Normal" >

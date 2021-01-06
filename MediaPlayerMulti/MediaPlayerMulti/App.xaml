@@ -8,7 +8,7 @@
         <utils:MyBrushToColorConverter x:Key="ColorConverter" />
         <utils:BrushOpacityConverter x:Key="BrushOpacityConverter" />
 
-        <SolidColorBrush x:Key="ButtonForegroundMain" Color="Navy" />
+        <SolidColorBrush x:Key="ButtonForegroundMain" Color="SteelBlue" />
         <SolidColorBrush x:Key="ButtonForegroundPlay" Color="LimeGreen" />
         <SolidColorBrush x:Key="ButtonVolumeColor" Color="Cyan" />
 
@@ -23,7 +23,7 @@
                             Width="{TemplateBinding Width}"
                             Height="{TemplateBinding Height}">
                             <Border.Background>
-                                <SolidColorBrush Color="DimGray" Opacity="0.75" />
+                                <SolidColorBrush Color="White" Opacity="0.75" />
                             </Border.Background>
                             <ContentPresenter Margin="4" HorizontalAlignment="Left" VerticalAlignment="Top" />
                         </Border>

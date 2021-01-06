@@ -44,7 +44,7 @@
             </Slider>
             <TextBlock Grid.Row="1" Grid.ColumnSpan="2" 
                        VerticalAlignment="Center" HorizontalAlignment="Center"
-                       Text="{Binding Value, ElementName=_slider, StringFormat=0.0%}"/>
+                       Text="{Binding Value, ElementName=_slider, StringFormat=0.#%}"/>
         </Grid>
     </Border>
 </Window>

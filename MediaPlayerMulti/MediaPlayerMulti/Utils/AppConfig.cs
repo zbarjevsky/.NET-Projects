@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -10,14 +11,83 @@ using MZ.Tools;
 
 namespace MkZ.MediaPlayer.Utils
 {
+    [Serializable]
+    public class Configuration
+    {
+        public ePlayMode PlayMode { get; set; } = ePlayMode.RepeatOne;
+
+        public void CopyFrom(Configuration config)
+        {
+            PlayMode = config.PlayMode;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("Configuration, PlayMode: {0}", PlayMode);
+        }
+    }
+
+    //directory tree style play list
+    public class PlayList
+    {
+        public List<PlayList> PlayLists { get; set; } = new List<PlayList>();
+
+        public int SelectedIndex { get; set; } = 0;
+
+        public List<MediaFileInfo> MediaFiles { get; set; } = new List<MediaFileInfo>();
+
+        public PlayList GetPlayList(params int[] treePath)
+        {
+            if (treePath == null || treePath.Length == 0)
+                return this;
+
+            int idx = treePath[0];
+            if (idx < PlayLists.Count)
+            {
+                int[] subPath = new int[treePath.Length - 1];
+                Array.Copy(treePath, 1, subPath, 0, treePath.Length - 1);
+
+                return PlayLists[idx].GetPlayList(subPath);
+            }
+
+            throw new IndexOutOfRangeException("PlayList not found, idx: " + idx);
+        }
+
+        public MediaFileInfo FindFile(string subString)
+        {
+            foreach (MediaFileInfo item in MediaFiles)
+            {
+                if (item.FileName.Contains(subString))
+                    return item;
+            }
+
+            foreach (PlayList list in PlayLists)
+            {
+                MediaFileInfo info = list.FindFile(subString);
+                if (info != null)
+                    return info;
+            }
+
+            return null;
+        }
+
+        public override string ToString()
+        {
+            return string.Format(" MediaFiles {0}, SelectedIndex: {1}, PlayLists {2}", 
+                MediaFiles.Count, SelectedIndex, PlayLists.Count);
+        }
+    }
+
     public class AppConfig
     {
         private string _dataFolder;
         private string _fileName;
 
-        public int SelectedIndex { get; set; } = 0;
+        [Category("Config"), TypeConverter(typeof(ExpandableObjectConverter))]
+        public Configuration Configuration { get; set; } = new Configuration();
 
-        public List<MediaFileInfo> MediaFiles { get; set; } = new List<MediaFileInfo>();
+        [Category("Media Database"), TypeConverter(typeof(ExpandableObjectConverter))]
+        public PlayList RootList { get; set; } = new PlayList();
 
         public AppConfig()
         {
@@ -33,9 +103,8 @@ namespace MkZ.MediaPlayer.Utils
 
         public void CopyFrom(AppConfig config)
         {
-            MediaFiles.Clear();
-            MediaFiles.AddRange(config.MediaFiles);
-            SelectedIndex = config.SelectedIndex;
+            RootList = config.RootList;
+            Configuration.CopyFrom(config.Configuration);
         }
 
         public void Save()

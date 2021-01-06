@@ -33,12 +33,13 @@ namespace MkZ.MediaPlayer.Utils
             _mainWindow.Window.CommandBindings.Add(new CommandBinding(MediaCommands.Play, Play_Executed, Play_CanExecute));
             _mainWindow.Window.CommandBindings.Add(new CommandBinding(MediaCommands.Pause, Pause_Executed, Pause_CanExecute));
             _mainWindow.Window.CommandBindings.Add(new CommandBinding(MediaCommands.Stop, Stop_Executed, Stop_CanExecute));
+            _mainWindow.Window.CommandBindings.Add(new CommandBinding(MediaCommands.PreviousTrack, PreviousTrack_Executed, PreviousTrack_CanExecute));
+            _mainWindow.Window.CommandBindings.Add(new CommandBinding(MediaCommands.NextTrack, NextTrack_Executed, NextTrack_CanExecute));
 
             _mainWindow.Window.InputBindings.Clear();
             _mainWindow.Window.InputBindings.Add(new KeyBinding(MediaCommands.Play, new KeyGesture(Key.Play)));
             _mainWindow.Window.InputBindings.Add(new KeyBinding(MediaCommands.Pause, new KeyGesture(Key.Pause)));
             _mainWindow.Window.InputBindings.Add(new KeyBinding(MediaCommands.TogglePlayPause, new KeyGesture(Key.MediaPlayPause)));
-            _mainWindow.Window.InputBindings.Add(new KeyBinding(MediaCommands.TogglePlayPause, new KeyGesture(Key.Space)));
 
             //Full Screen
             F11Command = new RelayCommand(FullScreen_Execute, (o) => true);
@@ -51,36 +52,75 @@ namespace MkZ.MediaPlayer.Utils
             _mainWindow.Window.PreviewKeyDown += Window_PreviewKeyDown;
         }
 
+        private void PreviousTrack_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = _mainWindow.PreviousTrack_CanExecute();
+        }
+
+        private void PreviousTrack_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            _mainWindow.PreviousTrack_Executed();
+        }
+
+        private void NextTrack_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+           e.CanExecute = _mainWindow.NextTrack_CanExecute();
+        }
+
+        private void NextTrack_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            _mainWindow.NextTrack_Executed();
+        }
+
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Left)
-                Skip(-5);
+                e.Handled = Skip(-5);
+            
             if (e.Key == Key.Right)
-                Skip(5);
+                e.Handled = Skip(5);
+
             if (e.Key == Key.Up)
-            {
-                PlayerVM.Volume += 0.05;
-                e.Handled = true;
-            }
+                e.Handled = VolumeDelta(0.05);
 
             if (e.Key == Key.Down)
+                e.Handled = VolumeDelta(-0.05);
+
+            if (e.Key == Key.Space)
             {
-                PlayerVM.Volume -= 0.05;
+                TogglePlayPause_Executed(sender, null);
                 e.Handled = true;
             }
         }
 
-        private void Forward_Execute(object obj)
+        private bool VolumeDelta(double delta)
         {
-            //Skip(5);
+            double vol = 1000 * PlayerVM.Volume;
+
+            delta /= Math.Abs(delta);
+
+            if ((vol + delta) >= 10 && (vol + delta) <= 100)
+            {
+                vol -= (vol % 10); //round to nearest 10
+                delta *= 10;
+            }
+            else if ((vol + delta) > 100)
+            {
+                vol -= (vol % 100); //round to nearest 100
+                delta *= 100;
+            }
+
+            vol += (int)delta;
+
+            if (vol < 0) vol = 0;
+            if (vol > 1000) vol = 1000;
+
+            PlayerVM.Volume = vol / 1000.0;
+
+            return true;
         }
 
-        private void Backward_Execute(object obj)
-        {
-            //Skip(-5);
-        }
-
-        private void Skip(double seconds)
+        private bool Skip(double seconds)
         {
             bool resume = false;
             if (PlayerVM.MediaState == MediaState.Play)
@@ -99,6 +139,8 @@ namespace MkZ.MediaPlayer.Utils
 
             if (resume)
                 PlayerVM.Play();
+
+            return true;
         }
 
         private void Escape_Execute(object obj)
