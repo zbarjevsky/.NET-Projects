@@ -40,6 +40,7 @@
             this.m_cmbListViewType = new System.Windows.Forms.ComboBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.m_cmbDriveLetter = new System.Windows.Forms.ComboBox();
             this.m_btnEjectDrive = new System.Windows.Forms.Button();
             this.chartProgressUserControl1 = new WindowsFormsApp1.ChartProgressUserControl();
             this.m_chkEnable = new System.Windows.Forms.CheckBox();
@@ -60,7 +61,7 @@
             this.displayTopologyUserControl1 = new WpfApplication6.DisplayTopologyUserControl();
             this.panel1 = new System.Windows.Forms.Panel();
             this.m_chkNonStickMouse = new System.Windows.Forms.CheckBox();
-            this.m_cmbDriveLetter = new System.Windows.Forms.ComboBox();
+            this.m_btnWpfListViewDragDrop = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -157,6 +158,7 @@
             // 
             // tabPage3
             // 
+            this.tabPage3.Controls.Add(this.m_btnWpfListViewDragDrop);
             this.tabPage3.Controls.Add(this.m_cmbDriveLetter);
             this.tabPage3.Controls.Add(this.m_btnEjectDrive);
             this.tabPage3.Controls.Add(this.chartProgressUserControl1);
@@ -178,6 +180,14 @@
             this.tabPage3.Text = "Common Controls";
             this.tabPage3.UseVisualStyleBackColor = true;
             // 
+            // m_cmbDriveLetter
+            // 
+            this.m_cmbDriveLetter.FormattingEnabled = true;
+            this.m_cmbDriveLetter.Location = new System.Drawing.Point(161, 162);
+            this.m_cmbDriveLetter.Name = "m_cmbDriveLetter";
+            this.m_cmbDriveLetter.Size = new System.Drawing.Size(41, 21);
+            this.m_cmbDriveLetter.TabIndex = 18;
+            // 
             // m_btnEjectDrive
             // 
             this.m_btnEjectDrive.Location = new System.Drawing.Point(208, 161);
@@ -194,8 +204,8 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.chartProgressUserControl1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.chartProgressUserControl1.GraphBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(135)))), ((int)(((byte)(206)))), ((int)(((byte)(250)))));
-            this.chartProgressUserControl1.GraphMainColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
+            this.chartProgressUserControl1.GraphBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(168)))), ((int)(((byte)(135)))), ((int)(((byte)(206)))), ((int)(((byte)(250)))));
+            this.chartProgressUserControl1.GraphMainColor = System.Drawing.Color.FromArgb(((int)(((byte)(168)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))), ((int)(((byte)(255)))));
             this.chartProgressUserControl1.GraphTitle = "Progress Bar";
             this.chartProgressUserControl1.Location = new System.Drawing.Point(160, 274);
             this.chartProgressUserControl1.Name = "chartProgressUserControl1";
@@ -472,13 +482,15 @@
             this.m_chkNonStickMouse.UseVisualStyleBackColor = true;
             this.m_chkNonStickMouse.CheckedChanged += new System.EventHandler(this.m_chkNonStickMouse_CheckedChanged);
             // 
-            // m_cmbDriveLetter
+            // m_btnWpfListViewDragDrop
             // 
-            this.m_cmbDriveLetter.FormattingEnabled = true;
-            this.m_cmbDriveLetter.Location = new System.Drawing.Point(161, 162);
-            this.m_cmbDriveLetter.Name = "m_cmbDriveLetter";
-            this.m_cmbDriveLetter.Size = new System.Drawing.Size(41, 21);
-            this.m_cmbDriveLetter.TabIndex = 18;
+            this.m_btnWpfListViewDragDrop.Location = new System.Drawing.Point(161, 79);
+            this.m_btnWpfListViewDragDrop.Name = "m_btnWpfListViewDragDrop";
+            this.m_btnWpfListViewDragDrop.Size = new System.Drawing.Size(144, 45);
+            this.m_btnWpfListViewDragDrop.TabIndex = 19;
+            this.m_btnWpfListViewDragDrop.Text = "WPF ListView DragDrop";
+            this.m_btnWpfListViewDragDrop.UseVisualStyleBackColor = true;
+            this.m_btnWpfListViewDragDrop.Click += new System.EventHandler(this.m_btnWpfListViewDragDrop_Click);
             // 
             // FormMainTest
             // 
@@ -540,5 +552,6 @@
         private System.Windows.Forms.CheckBox m_chkNonStickMouse;
         private System.Windows.Forms.Button m_btnEjectDrive;
         private System.Windows.Forms.ComboBox m_cmbDriveLetter;
+        private System.Windows.Forms.Button m_btnWpfListViewDragDrop;
     }
 }

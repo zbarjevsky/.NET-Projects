@@ -1,19 +1,22 @@
-﻿using MkZ.WinForms;
-
-using MkZ.Tools;
+﻿
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+
+
+using MkZ.Tools;
 using MkZ.WPF;
 using MkZ.WPF.MessageBox;
-using System.IO;
 using MkZ.Windows;
+using MkZ.WinForms;
+using ListViewDragDropManagerDemo;
 
 namespace MkZ
 {
@@ -199,6 +202,12 @@ namespace MkZ
         private void m_btnEjectDrive_Click(object sender, EventArgs e)
         {
             //RemoveDriveTools.RemoveDrive(m_cmbDriveLetter.Text);
+        }
+
+        private void m_btnWpfListViewDragDrop_Click(object sender, EventArgs e)
+        {
+            ListViewDragDropManagerTestWindow wnd = new ListViewDragDropManagerTestWindow();
+            wnd.ShowDialog();
         }
     }
 }

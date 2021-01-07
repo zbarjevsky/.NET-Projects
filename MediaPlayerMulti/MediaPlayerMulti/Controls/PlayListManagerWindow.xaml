@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MkZ.MediaPlayer.Controls"
         xmlns:utils="clr-namespace:MkZ.MediaPlayer.Utils"
+        xmlns:mkz="clr-namespace:MkZ.WPF.DragDrop" 
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
         Loaded="Window_Loaded" FontSize="18" FontWeight="Normal"
@@ -98,7 +99,8 @@
             </TreeView.ItemTemplate>
         </TreeView>
         <GridSplitter Grid.Row="1" Grid.Column="1" Background="Goldenrod" HorizontalAlignment="Stretch"/>
-        <ListView Grid.Row="1" Grid.Column="2" x:Name="_listMediaFiles" 
+
+        <ListView Grid.Row="1" Grid.Column="2" x:Name="_listMediaFiles" SelectionMode="Single"
                   ItemsSource="{Binding SelectedItem.MediaFiles, ElementName=_treePlayLists}" >
             <ListView.ItemTemplate>
                 <DataTemplate>

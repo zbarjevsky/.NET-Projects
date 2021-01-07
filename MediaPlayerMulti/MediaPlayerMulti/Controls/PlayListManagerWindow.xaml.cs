@@ -1,4 +1,5 @@
 ﻿using MkZ.MediaPlayer.Utils;
+using MkZ.WPF.DragDrop;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,6 +22,7 @@ namespace MkZ.MediaPlayer.Controls
     public partial class PlayListManagerWindow : Window
     {
         PlayListManagerVM VM = new PlayListManagerVM();
+        ListViewDragDropManager<MediaFileInfo> dragMgr = new ListViewDragDropManager<MediaFileInfo>();
 
         public PlayListManagerWindow()
         {
@@ -31,6 +33,10 @@ namespace MkZ.MediaPlayer.Controls
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            dragMgr.ListView = _listMediaFiles;
+            dragMgr.ShowDragAdorner = true;
+            dragMgr.DragAdornerOpacity = 0.5;
+
             VM.NotifyPropertyChangedAll();
         }
 
