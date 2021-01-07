@@ -1,4 +1,4 @@
-﻿using MZ.Tools;
+﻿using MkZ.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 
-namespace MZ.WPF.MessageBox
+namespace MkZ.WPF.MessageBox
 {
     public static class MessageWindowExtension
     {

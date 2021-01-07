@@ -9,7 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 
 
-using MZ.WPF;
+using MkZ.WPF;
 
 namespace MkZ.MediaPlayer.Utils
 {

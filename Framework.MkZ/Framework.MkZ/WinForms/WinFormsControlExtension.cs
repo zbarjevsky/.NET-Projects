@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MZ.WinForms
+namespace MkZ.WinForms
 {
     public static class ControlExtension
     {

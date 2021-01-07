@@ -1,4 +1,4 @@
-﻿namespace MZ.Extensions
+﻿namespace MkZ.Extensions
 {
     using System.Diagnostics;
     using System.Threading.Tasks;

@@ -7,7 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MZ.Tools
+namespace MkZ.Tools
 {
     public class Log
     {

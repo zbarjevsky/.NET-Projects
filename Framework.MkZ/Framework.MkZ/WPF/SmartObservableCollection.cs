@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MZ.WPF.Utils
+namespace MkZ.WPF.Utils
 {
     public class SmartObservableCollection<T> : ObservableCollection<T>
     {

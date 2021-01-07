@@ -8,7 +8,7 @@ using System.Windows;
 // Show Message Box, using main app window(WinForms or WPF) as owner,
 // If btn*text is null will assign text by 'buttons'
 // </summary>
-namespace MZ.WPF.MessageBox
+namespace MkZ.WPF.MessageBox
 {
     public partial class PopUp
     {

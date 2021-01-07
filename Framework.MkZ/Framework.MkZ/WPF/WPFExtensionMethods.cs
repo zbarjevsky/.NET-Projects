@@ -1,4 +1,4 @@
-﻿using MZ.Tools;
+﻿using MkZ.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
 
-namespace MZ.WPF
+namespace MkZ.WPF
 {
 
     public static class WPFExtensionMethods

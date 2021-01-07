@@ -1,4 +1,4 @@
-﻿namespace MZ.WinForms
+﻿namespace MkZ.WinForms
 {
     partial class FormInPlaceEdit
     {

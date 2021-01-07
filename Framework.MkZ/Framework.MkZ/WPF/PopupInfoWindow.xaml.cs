@@ -1,4 +1,4 @@
-﻿using MZ.WPF;
+﻿using MkZ.WPF;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
-namespace MZ.WPF
+namespace MkZ.WPF
 {
     /// <summary>
     /// Interaction logic for PopupInfoWindow.xaml

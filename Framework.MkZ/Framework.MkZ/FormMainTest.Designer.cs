@@ -1,4 +1,4 @@
-﻿namespace MZ
+﻿namespace MkZ
 {
     partial class FormMainTest
     {
@@ -28,15 +28,15 @@
         /// </summary>
         private void InitializeComponent()
         {
-            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet1 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
-            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet2 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
-            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet3 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
+            MkZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet1 = new MkZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
+            MkZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet2 = new MkZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
+            MkZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet3 = new MkZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMainTest));
             this.m_btnTestEdit = new System.Windows.Forms.Button();
             this.listView1 = new System.Windows.Forms.ListView();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.foldersTreeUserControl1 = new MZ.WinForms.FoldersTreeUserControl();
-            this.fileExplorerUserControl1 = new MZ.WinForms.FileExplorerUserControl();
+            this.foldersTreeUserControl1 = new MkZ.WinForms.FoldersTreeUserControl();
+            this.fileExplorerUserControl1 = new MkZ.WinForms.FileExplorerUserControl();
             this.m_cmbListViewType = new System.Windows.Forms.ComboBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
@@ -48,9 +48,9 @@
             this.m_btnTestWPFMessageBoxWPF = new System.Windows.Forms.Button();
             this.m_btnTestWPFMessageBox = new System.Windows.Forms.Button();
             this.trackBar1 = new ColorSlider.ColorSlider();
-            this.colorBarsProgressBar3 = new MZ.WinForms.ColorBarsProgressBar();
-            this.colorBarsProgressBar2 = new MZ.WinForms.ColorBarsProgressBar();
-            this.colorBarsProgressBar1 = new MZ.WinForms.ColorBarsProgressBar();
+            this.colorBarsProgressBar3 = new MkZ.WinForms.ColorBarsProgressBar();
+            this.colorBarsProgressBar2 = new MkZ.WinForms.ColorBarsProgressBar();
+            this.colorBarsProgressBar1 = new MkZ.WinForms.ColorBarsProgressBar();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.m_btnSaveIcons = new System.Windows.Forms.Button();
@@ -328,7 +328,7 @@
             themeColorSet1.Part2_InactiveColor = System.Drawing.Color.LightGoldenrodYellow;
             themeColorSet1.Part3_ActiveColor = System.Drawing.Color.Red;
             themeColorSet1.Part3_InactiveColor = System.Drawing.Color.MistyRose;
-            themeColorSet1.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Speaker;
+            themeColorSet1.Theme = MkZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Speaker;
             themeColorSet1.Threshold1 = 60;
             themeColorSet1.Threshold2 = 85;
             this.colorBarsProgressBar3.ColorTheme = themeColorSet1;
@@ -350,7 +350,7 @@
             themeColorSet2.Part2_InactiveColor = System.Drawing.Color.Gainsboro;
             themeColorSet2.Part3_ActiveColor = System.Drawing.Color.LimeGreen;
             themeColorSet2.Part3_InactiveColor = System.Drawing.Color.Gainsboro;
-            themeColorSet2.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
+            themeColorSet2.Theme = MkZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
             themeColorSet2.Threshold1 = 101;
             themeColorSet2.Threshold2 = 101;
             this.colorBarsProgressBar2.ColorTheme = themeColorSet2;
@@ -373,7 +373,7 @@
             themeColorSet3.Part2_InactiveColor = System.Drawing.Color.Honeydew;
             themeColorSet3.Part3_ActiveColor = System.Drawing.Color.Red;
             themeColorSet3.Part3_InactiveColor = System.Drawing.Color.MistyRose;
-            themeColorSet3.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Microphone;
+            themeColorSet3.Theme = MkZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Microphone;
             themeColorSet3.Threshold1 = 10;
             themeColorSet3.Threshold2 = 85;
             this.colorBarsProgressBar1.ColorTheme = themeColorSet3;

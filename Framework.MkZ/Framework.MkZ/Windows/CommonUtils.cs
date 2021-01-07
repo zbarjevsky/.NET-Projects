@@ -1,5 +1,5 @@
-﻿using MZ.WinForms;
-using MZ.WPF.MessageBox;
+﻿using MkZ.WinForms;
+using MkZ.WPF.MessageBox;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -11,7 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MZ.Tools
+namespace MkZ.Tools
 {
     public static class CommonUtils
     {

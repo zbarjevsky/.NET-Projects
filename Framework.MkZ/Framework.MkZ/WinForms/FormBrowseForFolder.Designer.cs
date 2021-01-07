@@ -1,4 +1,4 @@
-﻿namespace MZ.WinForms
+﻿namespace MkZ.WinForms
 {
     partial class FormBrowseForFolder
     {
@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormBrowseForFolder));
-            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet1 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
+            MkZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet1 = new MkZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
             this.m_txtSelectedFolder = new System.Windows.Forms.TextBox();
             this.m_btnNewFolder = new System.Windows.Forms.Button();
             this.m_btnOk = new System.Windows.Forms.Button();
@@ -41,9 +41,9 @@
             this.m_pnlMain = new System.Windows.Forms.Panel();
             this.m_btnGoToFolder = new System.Windows.Forms.Button();
             this.m_lblMessage = new System.Windows.Forms.Label();
-            this.m_progressBar = new MZ.WinForms.ColorBarsProgressBar();
+            this.m_progressBar = new MkZ.WinForms.ColorBarsProgressBar();
             this.m_btnRefresh = new System.Windows.Forms.Button();
-            this.m_treeFolders = new MZ.WinForms.FoldersTreeUserControl();
+            this.m_treeFolders = new MkZ.WinForms.FoldersTreeUserControl();
             this.m_ctxmnuTree = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.m_mnuSelect = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripSeparator();
@@ -205,7 +205,7 @@
             themeColorSet1.Part2_InactiveColor = System.Drawing.Color.Gainsboro;
             themeColorSet1.Part3_ActiveColor = System.Drawing.Color.LimeGreen;
             themeColorSet1.Part3_InactiveColor = System.Drawing.Color.Gainsboro;
-            themeColorSet1.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
+            themeColorSet1.Theme = MkZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
             themeColorSet1.Threshold1 = 100;
             themeColorSet1.Threshold2 = 100;
             this.m_progressBar.ColorTheme = themeColorSet1;

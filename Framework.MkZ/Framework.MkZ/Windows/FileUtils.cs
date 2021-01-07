@@ -1,4 +1,4 @@
-﻿using MZ.WinForms;
+﻿using MkZ.WinForms;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MZ.Tools
+namespace MkZ.Tools
 {
     [Flags]
     public enum NotifyOptions

@@ -1,4 +1,4 @@
-﻿using MZ.WPF.MessageBox;
+﻿using MkZ.WPF.MessageBox;
 using System;
 using System.Collections.Generic;
 using System.Linq;

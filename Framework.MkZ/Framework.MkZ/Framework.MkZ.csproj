@@ -7,7 +7,7 @@
     <ProjectGuid>{768AF4B8-5EDD-4196-97AE-DBC1589DD426}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MZ</RootNamespace>
+    <RootNamespace>MkZ</RootNamespace>
     <AssemblyName>Framework.MkZ</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -176,6 +176,8 @@
     <Compile Include="WPF\DisplayTopologyUserControl.xaml.cs">
       <DependentUpon>DisplayTopologyUserControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WPF\DragDrop\DragAdorner.cs" />
+    <Compile Include="WPF\DragDrop\ListViewDragDropManager.cs" />
     <Compile Include="WPF\DraggableExtension.cs" />
     <Compile Include="WPF\GridLengthAnimation.cs" />
     <Compile Include="WPF\ItemsControlExtensions.cs" />

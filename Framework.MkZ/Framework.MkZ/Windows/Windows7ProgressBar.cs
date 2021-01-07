@@ -9,7 +9,7 @@ using System.Windows.Forms;
 //Windows7ProgressBar v1.0, created by Wyatt O'Day
 //Visit: http://wyday.com/windows-7-progress-bar/
 
-namespace MZ.Tools
+namespace MkZ.Tools
 {
     /// <summary>
     /// A Windows progress bar control with Windows Vista & 7 functionality.

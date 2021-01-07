@@ -1,4 +1,4 @@
-﻿using MZ.Tools;
+﻿using MkZ.Tools;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MZ.WinForms
+namespace MkZ.WinForms
 {
     public static class ProgressBarExtension
     {

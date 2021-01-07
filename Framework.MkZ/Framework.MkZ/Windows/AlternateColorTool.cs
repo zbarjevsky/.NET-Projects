@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MZ.Tools
+namespace MkZ.Tools
 {
     public enum AlternateColorPalette
     {

@@ -1,4 +1,4 @@
-﻿using MZ.Tools;
+﻿using MkZ.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MZ.Windows
+namespace MkZ.Windows
 {
     public static class User32_MouseHook
     {

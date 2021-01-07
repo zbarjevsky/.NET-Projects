@@ -1,12 +1,12 @@
-﻿using MZ.Windows;
-using MZ.WPF;
+﻿using MkZ.Windows;
+using MkZ.WPF;
 using System;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
 
-namespace MZ.Tools
+namespace MkZ.Tools
 {
     /// <summary>
     /// https://stackoverflow.com/questions/11607133/global-mouse-event-handler

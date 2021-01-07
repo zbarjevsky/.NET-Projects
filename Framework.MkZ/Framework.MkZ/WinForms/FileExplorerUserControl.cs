@@ -10,11 +10,11 @@ using System.Windows.Forms;
 using System.IO;
 using System.Globalization;
 using System.Windows.Documents;
-using MZ.WPF.MessageBox;
-using MZ.Tools;
+using MkZ.WPF.MessageBox;
+using MkZ.Tools;
 using System.Xml.Serialization;
 
-namespace MZ.WinForms
+namespace MkZ.WinForms
 {
 	public partial class FileExplorerUserControl : UserControl
     {
@@ -235,7 +235,7 @@ namespace MZ.WinForms
 					return;
 
 				Control parent = file.ListView;
-				MZ.Tools.CommonUtils.ExecuteOnUIThread(() =>
+				MkZ.Tools.CommonUtils.ExecuteOnUIThread(() =>
 				{
 					file.Init(e.FullPath, file.Checked);
 					SortList();
@@ -435,7 +435,7 @@ namespace MZ.WinForms
 			_fileSystemWatcherHelper = new FileSystemWatcherHelper(_list);
 			_fileSystemWatcherHelper.OnChangeAction = (path) =>
 			{
-				MZ.Tools.CommonUtils.ExecuteOnUIThread(() => 
+				MkZ.Tools.CommonUtils.ExecuteOnUIThread(() => 
 				{
 					m_listFiles.VirtualListSize = _list.Count;
 					m_listFiles.Invalidate();

@@ -13,7 +13,7 @@ using System.Runtime.CompilerServices;
 using System.Windows.Shapes;
 using System.Windows.Media;
 
-namespace MZ.WPF
+namespace MkZ.WPF
 {
     /// <summary>
     /// Common Control - GradientProgressBar

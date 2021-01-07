@@ -11,7 +11,7 @@ using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace MZ.Windows
+namespace MkZ.Windows
 {
     public static class IconUtilities
     {

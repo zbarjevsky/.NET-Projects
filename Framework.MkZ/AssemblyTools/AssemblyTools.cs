@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace MZ.Framework.Tools
+namespace MkZ.Framework.Tools
 {
     public class AssemblyTools
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Input;
 
-namespace MZ.WPF.MessageBox
+namespace MkZ.WPF.MessageBox
 {
     internal class RelayCommand : ICommand
     {

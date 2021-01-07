@@ -8,7 +8,7 @@ using System.Windows.Forms;
 
 using Microsoft.WindowsAPICodePack.Taskbar;
 
-namespace MZ.Tools
+namespace MkZ.Tools
 {
     //http://www.java2s.com/Open-Source/CSharp_Free_Code/API/Download_C4F_Managed_Taskbar_Sample.htm
     //https://rudigroblerwp.wordpress.com/2011/09/26/anatomy-of-the-windows-7-taskbar-thumbnailtoolbarbutton/

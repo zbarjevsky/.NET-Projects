@@ -19,7 +19,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
-using MZ.WPF;
+using MkZ.WPF;
 using System.Windows.Media.Animation;
 using MkZ.MediaPlayer.Controls;
 

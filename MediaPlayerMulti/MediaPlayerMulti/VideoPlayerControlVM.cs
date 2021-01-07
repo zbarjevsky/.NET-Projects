@@ -13,9 +13,9 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using System.Xml.Serialization;
-using MZ.Tools;
-using MZ.Windows;
-using MZ.WPF;
+using MkZ.Tools;
+using MkZ.Windows;
+using MkZ.WPF;
 
 namespace MkZ.MediaPlayer
 {

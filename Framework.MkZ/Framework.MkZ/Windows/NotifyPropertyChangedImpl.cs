@@ -1,4 +1,4 @@
-﻿using MZ.WPF;
+﻿using MkZ.WPF;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Threading;
 
-namespace MZ.Windows
+namespace MkZ.Windows
 {
     public class NotifyPropertyChangedImpl : INotifyPropertyChanged
     {

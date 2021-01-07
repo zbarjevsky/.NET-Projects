@@ -1,6 +1,6 @@
-﻿using MZ.WinForms;
+﻿using MkZ.WinForms;
 
-using MZ.Tools;
+using MkZ.Tools;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -10,12 +10,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MZ.WPF;
-using MZ.WPF.MessageBox;
+using MkZ.WPF;
+using MkZ.WPF.MessageBox;
 using System.IO;
-using MZ.Windows;
+using MkZ.Windows;
 
-namespace MZ
+namespace MkZ
 {
     public partial class FormMainTest : Form
     {

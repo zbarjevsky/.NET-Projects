@@ -1,8 +1,8 @@
 ﻿using Microsoft.VisualBasic.ApplicationServices;
-using MZ.Tools;
-using MZ.Windows;
-using MZ.WPF;
-using MZ.WPF.Utils;
+using MkZ.Tools;
+using MkZ.Windows;
+using MkZ.WPF;
+using MkZ.WPF.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace MZ.Tools
+namespace MkZ.Tools
 {
     public class NonStickMouse : IDisposable
     {

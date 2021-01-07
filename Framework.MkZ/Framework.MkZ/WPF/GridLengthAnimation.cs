@@ -7,7 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
 
-namespace MZ.WPF
+namespace MkZ.WPF
 {
     public class GridLengthAnimation : AnimationTimeline
     {

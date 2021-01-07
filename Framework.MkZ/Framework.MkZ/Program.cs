@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-using MZ.Framework.Tools;
+using MkZ.Framework.Tools;
 
-namespace MZ.Tools
+namespace MkZ.Tools
 {
 	static class Program
 	{
@@ -37,7 +37,7 @@ namespace MZ.Tools
 
         private static bool SingleInstance()
         {
-            return !(MZ.Tools.SingleInstanceHelper.GlobalShowWindow(FormMainTest.TITLE));
+            return !(MkZ.Tools.SingleInstanceHelper.GlobalShowWindow(FormMainTest.TITLE));
         }//end SingleInstance
     }
 }

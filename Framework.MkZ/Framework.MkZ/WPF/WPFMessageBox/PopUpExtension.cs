@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 
-namespace MZ.WPF.MessageBox
+namespace MkZ.WPF.MessageBox
 {
     public partial class PopUp
     {

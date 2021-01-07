@@ -10,8 +10,8 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Xml.Serialization;
 
-using MZ.Tools;
-using MZ.Windows;
+using MkZ.Tools;
+using MkZ.Windows;
 
 namespace MkZ.MediaPlayer.Utils
 {
@@ -43,6 +43,10 @@ namespace MkZ.MediaPlayer.Utils
         [XmlIgnore]
         public Action<PlayList> OnPlayListSelectedAction = (l) => { };
 
+        private string _name = "NewPlayList";
+        [XmlAttribute]
+        public string Name { get => _name; set => SetProperty(ref _name, value); }
+
         private bool _isSelectedPlayList = false;
         [XmlAttribute]
         public bool IsSelectedPlayList
@@ -52,9 +56,6 @@ namespace MkZ.MediaPlayer.Utils
         }
 
         public bool HasSubLists { get { return PlayLists.Count > 0; } }
-
-        private string _name = "Name1";
-        public string Name { get => _name; set => SetProperty(ref _name, value); }
 
         public int SelectedMediaFileIndex { get; set; } = 0;
 
@@ -209,7 +210,7 @@ namespace MkZ.MediaPlayer.Utils
     public class MediaDatabaseInfo : NotifyPropertyChangedImpl
     {
         [Category("Media Database"), TypeConverter(typeof(ExpandableObjectConverter))]
-        public PlayList RootList { get; set; } = new PlayList();
+        public PlayList RootList { get; set; } = new PlayList() { Name = "--ROOT--" };
 
         [XmlIgnore]
         public Action<PlayList> OnPlayListSelectedAction = (l) => { };
@@ -265,6 +266,7 @@ namespace MkZ.MediaPlayer.Utils
                 playList.GetRootPlayList().SetSelectedPlayList(playList);
                 OnPlayListSelectedAction(playList);
             });
+
             if (RootList.PlayLists.Count == 0)
             {
                 //if no PlayLists defined/loaded - insert default empty list and mark it as selected

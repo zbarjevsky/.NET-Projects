@@ -7,9 +7,9 @@ using System.Windows;
 using System.Windows.Interop;
 
 
-using MZ.Tools;
+using MkZ.Tools;
 
-namespace MZ.WPF.Utils
+namespace MkZ.WPF.Utils
 {
     public class WpfScreen
     {

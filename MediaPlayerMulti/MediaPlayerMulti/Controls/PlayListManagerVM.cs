@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 
 using MkZ.MediaPlayer.Utils;
-using MZ.Windows;
+using MkZ.Windows;
 
 namespace MkZ.MediaPlayer.Controls
 {

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Collections.Generic;
 
-namespace MZ.Tools
+namespace MkZ.Tools
 {
 	/// <summary
 	/// Summary description for WM_Messages

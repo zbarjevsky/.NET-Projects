@@ -1,5 +1,5 @@
-﻿using MZ.WPF;
-using MZ.WPF.Utils;
+﻿using MkZ.WPF;
+using MkZ.WPF.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

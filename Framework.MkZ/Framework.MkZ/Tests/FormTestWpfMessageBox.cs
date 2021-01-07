@@ -1,4 +1,4 @@
-﻿using MZ.WPF.MessageBox;
+﻿using MkZ.WPF.MessageBox;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -45,13 +45,13 @@ namespace WPFMessageBoxTestWinForms
 
         private void FormMain_Load(object sender, EventArgs e)
         {
-            m_cmbIconStyle.DataSource = Enum.GetNames(typeof(MZ.WPF.MessageBox.PopUp.IconStyle));
-            m_cmbIconStyle.Text = MZ.WPF.MessageBox.PopUp.IconType.ToString();
+            m_cmbIconStyle.DataSource = Enum.GetNames(typeof(MkZ.WPF.MessageBox.PopUp.IconStyle));
+            m_cmbIconStyle.Text = MkZ.WPF.MessageBox.PopUp.IconType.ToString();
         }
 
         private void m_cmbIconStyle_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            MZ.WPF.MessageBox.PopUp.IconType = (MZ.WPF.MessageBox.PopUp.IconStyle)Enum.Parse(typeof(MZ.WPF.MessageBox.PopUp.IconStyle), m_cmbIconStyle.SelectedItem.ToString());
+            MkZ.WPF.MessageBox.PopUp.IconType = (MkZ.WPF.MessageBox.PopUp.IconStyle)Enum.Parse(typeof(MkZ.WPF.MessageBox.PopUp.IconStyle), m_cmbIconStyle.SelectedItem.ToString());
         }
 
         private void AddIcon(Icon icon, string name)
@@ -98,7 +98,7 @@ namespace WPFMessageBoxTestWinForms
         {
             PopUp.PopUpResult res = this.MessageBoxEx(richTextBox1.Text, "Title", 
                 MessageBoxImage.Question, TextAlignment.Center, 
-                new MZ.WPF.MessageBox.PopUp.PopUpButtons(
+                new MkZ.WPF.MessageBox.PopUp.PopUpButtons(
                     "Cancel - Da Da Da Da Long Text", "No - Long Long Long Text", "Yes - Long Text", 
                     PopUp.PopUpResult.Btn2));
 
@@ -108,15 +108,15 @@ namespace WPFMessageBoxTestWinForms
         private void m_btnInput_Click(object sender, EventArgs e)
         {
             string inputText = "Type Here...";
-            if(MZ.WPF.MessageBox.PopUp.InputBox(ref inputText, "Title") == MZ.WPF.MessageBox.PopUp.PopUpResult.OK)
+            if(MkZ.WPF.MessageBox.PopUp.InputBox(ref inputText, "Title") == MkZ.WPF.MessageBox.PopUp.PopUpResult.OK)
                 this.MessageInfo(inputText, Text, TextAlignment.Justify);
         }
 
         private void m_btnTimeout_Click(object sender, EventArgs e)
         {
-            MZ.WPF.MessageBox.PopUp.PopUpResult res = this.MessageBoxEx(richTextBox1.Text, "Title", 
+            MkZ.WPF.MessageBox.PopUp.PopUpResult res = this.MessageBoxEx(richTextBox1.Text, "Title", 
                 MessageBoxImage.Question, TextAlignment.Center,
-                new MZ.WPF.MessageBox.PopUp.PopUpButtons("Cancel ", "No", "Yes", MZ.WPF.MessageBox.PopUp.PopUpResult.Btn2),
+                new MkZ.WPF.MessageBox.PopUp.PopUpButtons("Cancel ", "No", "Yes", MkZ.WPF.MessageBox.PopUp.PopUpResult.Btn2),
                 timeout: (int)m_numTimeout.Value);
 
             this.MessageInfo("Result = " + res);

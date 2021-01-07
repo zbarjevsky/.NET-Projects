@@ -12,7 +12,7 @@ using System.Windows.Media;
 // <summary>
 // MarkZ. 2017-08-01
 // </summary>
-namespace MZ.WPF.MessageBox
+namespace MkZ.WPF.MessageBox
 {
     /// <summary>
     /// Interaction logic for MessageWindow.xaml

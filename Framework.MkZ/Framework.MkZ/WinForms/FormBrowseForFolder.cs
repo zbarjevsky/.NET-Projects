@@ -1,5 +1,5 @@
-﻿using MZ.Tools;
-using MZ.WPF.MessageBox;
+﻿using MkZ.Tools;
+using MkZ.WPF.MessageBox;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MZ.WinForms
+namespace MkZ.WinForms
 {
     public partial class FormBrowseForFolder : Form
     {
