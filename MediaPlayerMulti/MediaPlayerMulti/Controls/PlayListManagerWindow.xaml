@@ -1,0 +1,125 @@
+﻿<Window x:Class="MkZ.MediaPlayer.Controls.PlayListManagerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MkZ.MediaPlayer.Controls"
+        xmlns:utils="clr-namespace:MkZ.MediaPlayer.Utils"
+        mc:Ignorable="d"
+        WindowStartupLocation="CenterOwner"
+        Loaded="Window_Loaded" FontSize="18" FontWeight="Normal"
+        Title="PlayList Manager" Height="450" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="5"/>
+            <ColumnDefinition Width="2*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="45"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <DockPanel>
+            <local:ButtonPlus Margin="4" Foreground="{StaticResource ButtonForegroundMain}" DockPanel.Dock="Left" 
+                     ToolTip="Add New Play List" Click="ButtonAddRootPlayList_Click" />
+            <local:ButtonPlayPause Margin="4" Foreground="{StaticResource ButtonForegroundMain}" DockPanel.Dock="Left"
+                     ToolTip="Tooggle Play Pause" ToolTipService.ShowOnDisabled="True" Command="MediaCommands.TogglePlayPause"
+                     IsChecked="False"/>
+
+        </DockPanel>
+        <TreeView Grid.Row="1" x:Name="_treePlayLists" ItemsSource="{Binding PlayListRoot}"
+                  SelectedItemChanged="_treePlayLists_SelectedItemChanged">
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <Setter Property="IsExpanded" Value="True" />
+                </Style>
+            </TreeView.ItemContainerStyle>
+            <TreeView.Resources>
+                <DataTemplate x:Key="NormalTemplate">
+                    <StackPanel Orientation="Horizontal">
+                        <CheckBox IsChecked="{Binding IsSelectedPlayList}" />
+                        <TextBlock Text="{Binding Name}" Margin="3"/>
+                    </StackPanel>
+                </DataTemplate>
+                <DataTemplate x:Key="EditTemplate">
+                    <StackPanel Orientation="Horizontal" Background="White">
+                        <CheckBox IsChecked="{Binding IsSelectedPlayList}" />
+                        <TextBox Text="{Binding Name}" FontWeight="Normal" BorderThickness="0" />
+                        <local:ButtonPlus Margin="0" ToolTip="Add New Play List..."
+                             VerticalAlignment="Top" Click="AddPlayList_Click" />
+                        <local:SmallButtonClose Grid.Column="2" Margin="0" 
+                               ToolTip="Remove This Play List"
+                               VerticalAlignment="Top" Foreground="Magenta" Click="RemovePlayList_Click">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsRoot}" Value="True">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+                        </local:SmallButtonClose>
+                    </StackPanel>
+                </DataTemplate>
+            </TreeView.Resources>
+            <!-- Specify the template that will display a node
+             from AnimalCategories.  I.e., one each for “Amphibians”
+             and “Spiders” in this sample.  It will get its nested
+             items from the "Animals" property of each item -->
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding Path=PlayLists}">
+                    <ContentPresenter Content="{Binding}">
+                        <ContentPresenter.Style>
+                            <Style TargetType="{x:Type ContentPresenter}">
+                                <Setter Property="ContentTemplate" Value="{StaticResource  NormalTemplate}"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsSelected, 
+                                        RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeViewItem}}}"
+                                        Value="True">
+                                        <Setter Property="ContentTemplate" Value="{StaticResource EditTemplate}" />
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ContentPresenter.Style>
+                    </ContentPresenter>
+                    <!--<DockPanel>
+                    --><!-- Display the AnimalCategory by showing it's Category string --><!--
+                        <TextBox FontWeight="Bold" Text="{Binding Path=Name}" />
+                    </DockPanel>
+                    --><!-- Specify the nested template for the individual Animal items
+                     that are within the AnimalCategories.  E.g. “California Newt”, etc. --><!--
+                    <HierarchicalDataTemplate.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Path=Name}"/>
+                        </DataTemplate>
+                    </HierarchicalDataTemplate.ItemTemplate>-->
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+        <GridSplitter Grid.Row="1" Grid.Column="1" Background="Goldenrod" HorizontalAlignment="Stretch"/>
+        <ListView Grid.Row="1" Grid.Column="2" x:Name="_listMediaFiles" 
+                  ItemsSource="{Binding SelectedItem.MediaFiles, ElementName=_treePlayLists}" >
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <DockPanel>
+                        <TextBlock Text="FileName: " />
+                        <TextBlock Text="{Binding FileName}" FontWeight="Bold" />
+                        <local:SmallButtonClose Grid.Column="2" Margin="4" Height="20" DockPanel.Dock="Right" 
+                                      VerticalAlignment="Top" Foreground="Magenta" Click="RemoveMediaFile_Click">
+                            <!--<Button.Style>
+                                <Style TargetType="Button">
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem}}" Value="{x:Null}">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>-->
+                        </local:SmallButtonClose>
+                    </DockPanel>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+    </Grid>
+</Window>

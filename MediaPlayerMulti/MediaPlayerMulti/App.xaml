@@ -7,6 +7,7 @@
     <Application.Resources>
         <utils:MyBrushToColorConverter x:Key="ColorConverter" />
         <utils:BrushOpacityConverter x:Key="BrushOpacityConverter" />
+        <utils:MediaStateToPlayConverter x:Key="MediaStateToPlayConverter" />
 
         <SolidColorBrush x:Key="ButtonForegroundMain" Color="SteelBlue" />
         <SolidColorBrush x:Key="ButtonForegroundPlay" Color="LimeGreen" />

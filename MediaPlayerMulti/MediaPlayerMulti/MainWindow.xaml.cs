@@ -30,9 +30,9 @@ namespace MediaPlayerMulti
         private MediaPlayerCommands _mediaPlayerCommands;
         private AppConfig _appConfig { get { return VideoPlayerContext.Instance.Config; } }
 
-        private readonly ObservableCollection<MediaFileInfo> _mediaFiles = new ObservableCollection<MediaFileInfo>();
-
         public Configuration Config => _appConfig.Configuration;
+
+        public MediaDatabaseInfo DB => _appConfig.MediaDatabaseInfo;
 
         public Window Window => this;
 
@@ -46,43 +46,47 @@ namespace MediaPlayerMulti
             //tabPlayers.ItemsSource = _players;
 
             _cmbFilesList.Items.Clear();
-            _cmbFilesList.ItemsSource = _mediaFiles;
+            _cmbFilesList.ItemsSource = null;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             _appConfig.Load();
 
-            _mediaFiles.Clear();
-            _appConfig.RootList.MediaFiles.ForEach(file => { file.MediaState = MediaState.Pause; _mediaFiles.Add(file); });
-
-            if (_mediaFiles.Count > 0 && _appConfig.RootList.SelectedIndex < _mediaFiles.Count)
-                _cmbFilesList.SelectedIndex = _appConfig.RootList.SelectedIndex;
+            SetPlayList(DB.GetSelectedPlayList());
+            DB.OnPlayListSelectedAction = (playList) =>
+            {
+                SetPlayList(playList);
+            };
 
             _mediaPlayerCommands = new MediaPlayerCommands(this);
 
             _player.OnFullScreenButtonClick = (vm) => ToggleFullScreen();
-
             _player.OnFileDropAction = (fileName) =>
             {
                 AddNewMediaFile(fileName);
             };
         }
 
+        private void SetPlayList(PlayList playList)
+        {
+            _cmbFilesList.ItemsSource = playList.MediaFiles;
+
+            if (playList.MediaFiles.Count > 0 && DB.SelectedMediaFileIndex < playList.MediaFiles.Count)
+                _cmbFilesList.SelectedIndex = playList.SelectedMediaFileIndex;
+        }
+
         private void Window_Closed(object sender, EventArgs e)
         {
-            _appConfig.RootList.SelectedIndex = _cmbFilesList.SelectedIndex;
+            DB.SelectedMediaFileIndex = _cmbFilesList.SelectedIndex;
 
             _player.ClosePlayer();
-            _appConfig.RootList.MediaFiles.Clear();
-            _appConfig.RootList.MediaFiles.AddRange(_mediaFiles);
             _appConfig.Save();
         }
 
         public void AddNewMediaFile(string fileName)
         {
-            _mediaFiles.Insert(0, new MediaFileInfo() { FileName = fileName, MediaState = MediaState.Play });
-            _cmbFilesList.SelectedIndex = 0;
+            _cmbFilesList.SelectedIndex = DB.AddNewMediaFile(fileName);
         }
 
         public void ToggleFullScreen()
@@ -138,15 +142,21 @@ namespace MediaPlayerMulti
         {
             if ((sender as Button).DataContext is MediaFileInfo vm)
             {
-                _mediaFiles.Remove(vm);
-                if(_mediaFiles.Count>0)
-                    _cmbFilesList.SelectedIndex = 0;
+                _cmbFilesList.SelectedIndex = DB.GetSelectedPlayList().DeleteMediaFile(vm);
             }
         }
 
         private void OptionsMenuItem_Click(object sender, RoutedEventArgs e)
         {
             OptionsWindow wnd = new OptionsWindow();
+            wnd.Owner = this;
+            wnd.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            wnd.ShowDialog();
+        }
+
+        private void ButtonPlayListManager_Click(object sender, RoutedEventArgs e)
+        {
+            PlayListManagerWindow wnd = new PlayListManagerWindow();
             wnd.Owner = this;
             wnd.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             wnd.ShowDialog();

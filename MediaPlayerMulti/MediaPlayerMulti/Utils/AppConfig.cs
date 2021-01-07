@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Controls;
+using System.Xml.Serialization;
 
 using MZ.Tools;
+using MZ.Windows;
 
 namespace MkZ.MediaPlayer.Utils
 {
@@ -28,13 +32,35 @@ namespace MkZ.MediaPlayer.Utils
     }
 
     //directory tree style play list
-    public class PlayList
+    public class PlayList : NotifyPropertyChangedImpl
     {
-        public List<PlayList> PlayLists { get; set; } = new List<PlayList>();
+        [XmlIgnore]
+        public bool IsRoot => Owner == null;
 
-        public int SelectedIndex { get; set; } = 0;
+        [XmlIgnore]
+        public PlayList Owner { get; private set; }
 
-        public List<MediaFileInfo> MediaFiles { get; set; } = new List<MediaFileInfo>();
+        [XmlIgnore]
+        public Action<PlayList> OnPlayListSelectedAction = (l) => { };
+
+        private bool _isSelectedPlayList = false;
+        [XmlAttribute]
+        public bool IsSelectedPlayList
+        {
+            get { return _isSelectedPlayList; }
+            set { if(SetProperty(ref _isSelectedPlayList, value) && value) OnPlayListSelectedAction(this); }
+        }
+
+        public bool HasSubLists { get { return PlayLists.Count > 0; } }
+
+        private string _name = "Name1";
+        public string Name { get => _name; set => SetProperty(ref _name, value); }
+
+        public int SelectedMediaFileIndex { get; set; } = 0;
+
+        public ObservableCollection<MediaFileInfo> MediaFiles { get; set; } = new ObservableCollection<MediaFileInfo>();
+
+        public ObservableCollection<PlayList> PlayLists { get; set; } = new ObservableCollection<PlayList>();
 
         public PlayList GetPlayList(params int[] treePath)
         {
@@ -51,6 +77,24 @@ namespace MkZ.MediaPlayer.Utils
             }
 
             throw new IndexOutOfRangeException("PlayList not found, idx: " + idx);
+        }
+
+        public int AddNewMediaFile(string fileName)
+        {
+            MediaFiles.Insert(0, new MediaFileInfo() { FileName = fileName, MediaState = MediaState.Play });
+            SelectedMediaFileIndex = 0;
+            return SelectedMediaFileIndex;
+        }
+
+        public int DeleteMediaFile(MediaFileInfo item)
+        {
+            MediaFiles.Remove(item);
+            if (MediaFiles.Count > 0)
+                SelectedMediaFileIndex = 0;
+            else
+                SelectedMediaFileIndex = -1;
+
+            return SelectedMediaFileIndex;
         }
 
         public MediaFileInfo FindFile(string subString)
@@ -71,10 +115,169 @@ namespace MkZ.MediaPlayer.Utils
             return null;
         }
 
+        public PlayList AddNewPlayList(string name)
+        {
+            PlayList newList = new PlayList() { Name = name };
+
+            GetRootPlayList().SetSelectedPlayList(newList);
+
+            return newList;
+        }
+
+        public PlayList GetRootPlayList()
+        {
+            PlayList list = this;
+            while (list.Owner != null)
+                list = list.Owner;
+            return list;
+        }
+
+        public static PlayList FindSelectedPlayList(PlayList root)
+        {
+            if (root.IsSelectedPlayList)
+                return root;
+
+            for (int i = 0; i < root.PlayLists.Count; i++)
+            {
+                PlayList list = FindSelectedPlayList(root.PlayLists[i]);
+                if (list != null)
+                    return list;
+            }
+
+            return null;
+        }
+
+        public void SetSelectedPlayList(PlayList list2select)
+        {
+            SetSelectedPlayList(this, list2select);
+        }
+
+        public static void SetSelectedPlayList(PlayList root, PlayList list2select)
+        {
+            for (int i = 0; i < root.PlayLists.Count; i++)
+            {
+                root.PlayLists[i].IsSelectedPlayList = (object.ReferenceEquals(root.PlayLists[i], list2select));
+
+                SetSelectedPlayList(root.PlayLists[i], list2select);
+            }
+        }
+
+        public bool DeleteSubList(PlayList list)
+        {
+            return PlayListOp(this, list, (parent, found, index) =>
+            {
+                parent.PlayLists.RemoveAt(index);
+            });
+        }
+
+        public bool PlayListOp(PlayList root, PlayList listToFind, Action<PlayList, PlayList, int> action)
+        {
+            if (action == null)
+                return false;
+
+            for (int i = 0; i < root.PlayLists.Count; i++)
+            {
+                if (object.ReferenceEquals(root.PlayLists[i], listToFind))
+                {
+                    action(root, listToFind, i);
+                    return true;
+                }
+
+                if (PlayListOp(root.PlayLists[i], listToFind, action))
+                    return true;
+            }
+
+            return false;
+        }
+
+        //initialize play list tree
+        public void InitPlayListTree(PlayList owner, Action<PlayList> OnPlayListSelected)
+        {
+            this.Owner = owner;
+            this.OnPlayListSelectedAction = OnPlayListSelected;
+            foreach (PlayList list in PlayLists)
+                list.InitPlayListTree(this, OnPlayListSelected);
+        }
+
         public override string ToString()
         {
-            return string.Format(" MediaFiles {0}, SelectedIndex: {1}, PlayLists {2}", 
-                MediaFiles.Count, SelectedIndex, PlayLists.Count);
+            return string.Format(" MediaFiles {0}, SelectedIndex: {1}, PlayLists {2}",
+                MediaFiles.Count, SelectedMediaFileIndex, PlayLists.Count);
+        }
+    }
+
+    public class MediaDatabaseInfo : NotifyPropertyChangedImpl
+    {
+        [Category("Media Database"), TypeConverter(typeof(ExpandableObjectConverter))]
+        public PlayList RootList { get; set; } = new PlayList();
+
+        [XmlIgnore]
+        public Action<PlayList> OnPlayListSelectedAction = (l) => { };
+
+        public PlayList GetSelectedPlayList() 
+        {
+            PlayList sel = PlayList.FindSelectedPlayList(RootList);
+            if (sel != null)
+                return sel;
+
+            if (RootList.PlayLists.Count == 0)
+                RootList.AddNewPlayList("Default Play List");
+
+            RootList.SetSelectedPlayList(RootList.PlayLists[0]);
+            
+            return RootList.PlayLists[0];
+        }
+
+        public void RemovePlayList(PlayList list)
+        {
+            RootList.DeleteSubList(list);
+
+            //if no PlayLists left - insert default empty list and mark it as selected
+            if (RootList.PlayLists.Count == 0)
+            {
+                RootList.PlayLists.Add(new PlayList() { IsSelectedPlayList = true });
+            }
+        }
+
+        public ObservableCollection<MediaFileInfo> GetSelectedMediaFilesList()
+        {
+            return GetSelectedPlayList().MediaFiles;
+        }
+
+        [XmlIgnore]
+        public int SelectedMediaFileIndex
+        {
+            get => GetSelectedPlayList().SelectedMediaFileIndex;
+            set { GetSelectedPlayList().SelectedMediaFileIndex = value; NotifyPropertyChanged(); }
+        }
+
+        public int AddNewMediaFile(string fileName)
+        {
+            return GetSelectedPlayList().AddNewMediaFile(fileName);
+        }
+
+        public void CopyFrom(MediaDatabaseInfo mediaDatabaseInfo)
+        {
+            RootList = mediaDatabaseInfo.RootList;
+
+            RootList.InitPlayListTree(null, (playList) => 
+            { 
+                playList.GetRootPlayList().SetSelectedPlayList(playList);
+                OnPlayListSelectedAction(playList);
+            });
+            if (RootList.PlayLists.Count == 0)
+            {
+                //if no PlayLists defined/loaded - insert default empty list and mark it as selected
+                RootList.PlayLists.Add(new PlayList() { IsSelectedPlayList = true });
+            }
+        }
+
+        public void AddNewPlayList(string name, PlayList owner)
+        {
+            if (owner != null)
+                owner.AddNewPlayList(name);
+            else
+                RootList.AddNewPlayList(name);
         }
     }
 
@@ -87,7 +290,7 @@ namespace MkZ.MediaPlayer.Utils
         public Configuration Configuration { get; set; } = new Configuration();
 
         [Category("Media Database"), TypeConverter(typeof(ExpandableObjectConverter))]
-        public PlayList RootList { get; set; } = new PlayList();
+        public MediaDatabaseInfo MediaDatabaseInfo { get; set; } = new MediaDatabaseInfo();
 
         public AppConfig()
         {
@@ -103,7 +306,7 @@ namespace MkZ.MediaPlayer.Utils
 
         public void CopyFrom(AppConfig config)
         {
-            RootList = config.RootList;
+            MediaDatabaseInfo.CopyFrom(config.MediaDatabaseInfo);
             Configuration.CopyFrom(config.Configuration);
         }
 

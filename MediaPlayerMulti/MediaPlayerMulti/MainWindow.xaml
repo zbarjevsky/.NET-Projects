@@ -17,7 +17,6 @@
     <Window.Resources>
         <utils:SecondsToStringConverter x:Key="TimeFormatConverter" />
         <utils:ObjectToStringConverter x:Key="ObjectToStringConverter" />
-        <utils:MediaStateToPlayConverter x:Key="MediaStateToPlayConverter" />
         <utils:PathToFileNameConverter x:Key="PathToFileNameConverter" />
     </Window.Resources>
     <Window.Title>
@@ -48,6 +47,12 @@
                             </MenuItem.Icon>
                         </MenuItem>
                         <Separator/>
+                        <MenuItem Header="PlayList Manager..." Padding="8" Click="ButtonPlayListManager_Click" >
+                            <MenuItem.Icon>
+                                <Image Source="Images/Cancel.ico" Width="16" Height="16" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator/>
                         <MenuItem Header="Options..." Padding="8" Click="OptionsMenuItem_Click" >
                             <MenuItem.Icon>
                                 <Image Source="Images/Tools.ico" Width="16" Height="16" />
@@ -62,7 +67,7 @@
                      ToolTip="Tooggle Play Pause" ToolTipService.ShowOnDisabled="True" Command="MediaCommands.TogglePlayPause"
                      IsChecked="{Binding DataContext.MediaState, ElementName=_player, Mode=OneWay, Converter={StaticResource MediaStateToPlayConverter}}"/>
             <controls:ButtonNext Margin="4" DockPanel.Dock="Right" Foreground="{StaticResource ButtonForegroundMain}" 
-                      ToolTip="Next Track" ToolTipService.ShowOnDisabled="True" Command="MediaCommands.NextTrack" />
+                ToolTip="Next Track" ToolTipService.ShowOnDisabled="True" Command="MediaCommands.NextTrack" />
             <controls:ButtonPrev Margin="4" DockPanel.Dock="Right" Foreground="{StaticResource ButtonForegroundMain}" 
                       ToolTip="Previous Track" ToolTipService.ShowOnDisabled="True" Command="MediaCommands.PreviousTrack" />
 
