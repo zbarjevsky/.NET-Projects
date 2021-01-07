@@ -39,7 +39,14 @@
                 <DataTemplate x:Key="NormalTemplate">
                     <StackPanel Orientation="Horizontal">
                         <CheckBox IsChecked="{Binding IsSelectedPlayList}" />
-                        <TextBlock Text="{Binding Name}" Margin="3"/>
+                        <TextBlock Margin="3">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}{0} ({1})">
+                                    <Binding Path="Name" />
+                                    <Binding Path="MediaFiles.Count" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
                     </StackPanel>
                 </DataTemplate>
                 <DataTemplate x:Key="EditTemplate">

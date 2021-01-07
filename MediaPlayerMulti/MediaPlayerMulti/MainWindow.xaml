@@ -84,9 +84,8 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock VerticalAlignment="Center">
                                 <TextBlock.Text>
-                                    <MultiBinding StringFormat="{}{0} ({1})">
+                                    <MultiBinding StringFormat="{}{0}">
                                         <Binding Path="FileName" FallbackValue="Long File Name" />
-                                        <Binding Path="NaturalDuration" Converter="{StaticResource TimeFormatConverter}" />
                                     </MultiBinding>
                                 </TextBlock.Text>
                             </TextBlock>

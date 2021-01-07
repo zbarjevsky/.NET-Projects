@@ -47,7 +47,14 @@ namespace MkZ.MediaPlayer.Controls
 
         private void RemoveMediaFile_Click(object sender, RoutedEventArgs e)
         {
-
+            if (sender is Button btn)
+            {
+                if (btn.DataContext is MediaFileInfo file)
+                {
+                    var files = _listMediaFiles.ItemsSource as System.Collections.ObjectModel.ObservableCollection<MediaFileInfo>;
+                    files.Remove(file);
+                }
+            }
         }
 
         private void RemovePlayList_Click(object sender, RoutedEventArgs e)
