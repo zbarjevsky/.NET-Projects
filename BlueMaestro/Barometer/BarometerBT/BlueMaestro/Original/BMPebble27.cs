@@ -1,7 +1,4 @@
-﻿using BarometerBT.Bluetooth;
-using BarometerBT.Utils;
-using MZ.Tools;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -10,6 +7,11 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
+
+
+using BarometerBT.Bluetooth;
+using BarometerBT.Utils;
+using MkZ.Tools;
 
 namespace BarometerBT.BlueMaestro.Original
 {

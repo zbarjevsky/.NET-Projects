@@ -10,7 +10,7 @@ using System.Xml.Serialization;
 
 using BarometerBT.Bluetooth;
 using BarometerBT.Utils;
-using MZ.Tools;
+using MkZ.Tools;
 
 namespace BarometerBT.BlueMaestro
 {

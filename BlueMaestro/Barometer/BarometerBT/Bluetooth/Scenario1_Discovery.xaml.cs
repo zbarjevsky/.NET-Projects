@@ -1,6 +1,4 @@
-﻿using BarometerBT.Utils;
-using MZ.Tools;
-using SDKTemplate;
+﻿using SDKTemplate;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -17,6 +15,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Windows.Devices.Enumeration;
+
+using BarometerBT.Utils;
+using MkZ.Tools;
 
 namespace BarometerBT.Bluetooth
 {

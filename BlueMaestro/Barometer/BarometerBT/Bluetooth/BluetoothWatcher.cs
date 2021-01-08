@@ -1,7 +1,4 @@
-﻿using BarometerBT.BlueMaestro;
-using BarometerBT.Utils;
-using MZ.Tools;
-using SDKTemplate;
+﻿using SDKTemplate;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,6 +11,11 @@ using System.Windows.Threading;
 using Windows.Devices.Bluetooth;
 using Windows.Devices.Bluetooth.Advertisement;
 using Windows.Storage.Streams;
+
+
+using BarometerBT.BlueMaestro;
+using BarometerBT.Utils;
+using MkZ.Tools;
 
 namespace BarometerBT.Bluetooth
 {

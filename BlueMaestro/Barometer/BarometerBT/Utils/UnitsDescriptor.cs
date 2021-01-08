@@ -16,7 +16,8 @@ namespace BarometerBT.Utils
     {
         MilliBars,
         InchesOfMercury,
-        KiloPascals
+        KiloPascals,
+        MllimetersOfMercury
     }
 
     public enum eRelativeHumidity
@@ -106,6 +107,7 @@ namespace BarometerBT.Utils
         public const String UNITS_HG = "InHg";
         public const String UNITS_MB = "mBar";
         public const String UNITS_PA = "kPa";
+        public const String UNITS_MM = "mmHg";
 
         public eAirPressureUnits Units { get; set; }
         public string Desc
@@ -118,6 +120,8 @@ namespace BarometerBT.Utils
                         return " " + UNITS_HG;
                     case eAirPressureUnits.KiloPascals:
                         return " " + UNITS_PA;
+                    case eAirPressureUnits.MllimetersOfMercury:
+                        return " " + UNITS_MM;
                     case eAirPressureUnits.MilliBars:
                     default:
                         return " " + UNITS_MB;
@@ -143,6 +147,8 @@ namespace BarometerBT.Utils
                     return pressure_mBar / 33.8639;
                 case eAirPressureUnits.KiloPascals:
                     return pressure_mBar / 10.0;
+                case eAirPressureUnits.MllimetersOfMercury:
+                    return pressure_mBar / 1.3332239;
                 case eAirPressureUnits.MilliBars:
                 default:
                     return pressure_mBar;
