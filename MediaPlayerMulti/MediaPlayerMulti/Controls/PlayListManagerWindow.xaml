@@ -32,14 +32,18 @@
                   SelectedItemChanged="_treePlayLists_SelectedItemChanged">
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}">
+                    <Style.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="LimeGreen"/>
+                    </Style.Resources>
                     <Setter Property="IsExpanded" Value="True" />
                 </Style>
             </TreeView.ItemContainerStyle>
             <TreeView.Resources>
                 <DataTemplate x:Key="NormalTemplate">
-                    <StackPanel Orientation="Horizontal">
-                        <CheckBox IsChecked="{Binding IsSelectedPlayList}" />
-                        <TextBlock Margin="3">
+                    <StackPanel Orientation="Horizontal" Margin="5,0">
+                        <local:ButtonRoundCheckBox IsChecked="{Binding IsSelectedPlayList}" IsEnabled="False"
+                                  VerticalAlignment="Center" />
+                        <TextBlock Margin="4,0">
                             <TextBlock.Text>
                                 <MultiBinding StringFormat="{}{0} ({1})">
                                     <Binding Path="Name" />
@@ -50,25 +54,35 @@
                     </StackPanel>
                 </DataTemplate>
                 <DataTemplate x:Key="EditTemplate">
-                    <StackPanel Orientation="Horizontal" Background="White">
-                        <CheckBox IsChecked="{Binding IsSelectedPlayList}" />
-                        <TextBox Text="{Binding Name}" FontWeight="Normal" BorderThickness="0" />
-                        <local:ButtonPlus Margin="0" ToolTip="Add New Play List..."
-                             VerticalAlignment="Top" Click="AddPlayList_Click" />
-                        <local:SmallButtonClose Grid.Column="2" Margin="0" 
+                    <Border Background="White" Margin="-1,0">
+                        <Border CornerRadius="4" BorderThickness="0" BorderBrush="MidnightBlue" Padding="3">
+                            <Border.Background>
+                                <SolidColorBrush Color="SkyBlue" Opacity="1" />
+                            </Border.Background>
+                            <StackPanel Orientation="Horizontal" >
+                                <local:ButtonRoundCheckBox IsChecked="{Binding IsSelectedPlayList}" 
+                                      Margin="3,0"
+                                      Foreground="Navy" VerticalAlignment="Center" />
+                                <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" 
+                                     FontWeight="Medium" BorderThickness="0" Background="Transparent" />
+                                <local:ButtonPlus Margin="4,0,0,0" ToolTip="Add New Play List..."
+                                    VerticalAlignment="Top" Click="AddPlayList_Click" />
+                                <local:SmallButtonClose Grid.Column="2" Margin="4,0" 
                                ToolTip="Remove This Play List"
                                VerticalAlignment="Top" Foreground="Magenta" Click="RemovePlayList_Click">
-                            <Button.Style>
-                                <Style TargetType="Button">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding IsRoot}" Value="True">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>
-                        </local:SmallButtonClose>
-                    </StackPanel>
+                                    <Button.Style>
+                                        <Style TargetType="Button">
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsRoot}" Value="True">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Button.Style>
+                                </local:SmallButtonClose>
+                            </StackPanel>
+                        </Border>
+                    </Border>
                 </DataTemplate>
             </TreeView.Resources>
             <!-- Specify the template that will display a node

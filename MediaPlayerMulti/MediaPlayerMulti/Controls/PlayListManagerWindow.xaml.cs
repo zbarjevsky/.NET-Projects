@@ -63,7 +63,6 @@ namespace MkZ.MediaPlayer.Controls
             {
                 if (btn.DataContext is PlayList list)
                 {
-                    MessageBox.Show("Not Implemented");
                     VM.RemovePlayList(list);
                 }
             }

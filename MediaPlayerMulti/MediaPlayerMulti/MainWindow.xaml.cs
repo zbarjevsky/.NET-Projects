@@ -54,26 +54,32 @@ namespace MediaPlayerMulti
             _appConfig.Load();
 
             SetPlayList(DB.GetSelectedPlayList());
-            DB.OnPlayListSelectedAction = (playList) =>
+            DB.OnPlayListSelectionChangedAction = (playList) =>
             {
-                SetPlayList(playList);
+                 SetPlayList(playList);
             };
+
+            _ctxPlayLists.ItemsSource = DB.RootList.PlayLists;
 
             _mediaPlayerCommands = new MediaPlayerCommands(this);
 
             _player.OnFullScreenButtonClick = (vm) => ToggleFullScreen();
             _player.OnFileDropAction = (fileName) =>
             {
-                AddNewMediaFile(fileName);
+                AddNewMediaFile(fileName, MediaPlayerVM.Volume > 0 ? MediaPlayerVM.Volume : 0.3);
             };
         }
 
         private void SetPlayList(PlayList playList)
         {
-            _cmbFilesList.ItemsSource = playList.MediaFiles;
+            if (playList != null && playList.IsSelectedPlayList)
+            {
+                _btnSelectPlayList.Content = playList.Name;
+                _cmbFilesList.ItemsSource = playList.MediaFiles;
 
-            if (playList.MediaFiles.Count > 0 && DB.SelectedMediaFileIndex < playList.MediaFiles.Count)
-                _cmbFilesList.SelectedIndex = playList.SelectedMediaFileIndex;
+                if (playList.MediaFiles.Count > 0 && DB.SelectedMediaFileIndex < playList.MediaFiles.Count)
+                    _cmbFilesList.SelectedIndex = playList.SelectedMediaFileIndex;
+            }
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -84,9 +90,9 @@ namespace MediaPlayerMulti
             _appConfig.Save();
         }
 
-        public void AddNewMediaFile(string fileName)
+        public void AddNewMediaFile(string fileName, double volume)
         {
-            _cmbFilesList.SelectedIndex = DB.AddNewMediaFile(fileName);
+            _cmbFilesList.SelectedIndex = DB.AddNewMediaFile(fileName, volume);
         }
 
         public void ToggleFullScreen()

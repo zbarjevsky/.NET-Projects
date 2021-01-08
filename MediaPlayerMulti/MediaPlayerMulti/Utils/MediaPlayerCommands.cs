@@ -179,7 +179,7 @@ namespace MkZ.MediaPlayer.Utils
             openFileDialog.Filter = "Media files (*.mp3;*.mpg;*.mpeg;*.mkv;*.mp4)|*.mp3;*.mpg;*.mpeg;*.mkv;*.mp4|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
             {
-                _mainWindow.AddNewMediaFile(openFileDialog.FileName);
+                _mainWindow.AddNewMediaFile(openFileDialog.FileName, PlayerVM.Volume > 0 ? PlayerVM.Volume : 0.5);
             }
         }
 

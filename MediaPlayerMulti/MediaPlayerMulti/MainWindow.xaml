@@ -18,6 +18,53 @@
         <utils:SecondsToStringConverter x:Key="TimeFormatConverter" />
         <utils:ObjectToStringConverter x:Key="ObjectToStringConverter" />
         <utils:PathToFileNameConverter x:Key="PathToFileNameConverter" />
+        
+        <Style TargetType="{x:Type CheckBox}" x:Key="myCheckboxStyle">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type CheckBox}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image x:Name="checkboxImage" Source="{x:Null}" Width="16"/>
+                            <ContentPresenter/>
+                        </StackPanel>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="checkboxImage" Property="Source" Value="/Images/Favorites.ico"/>
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsChecked" Value="False"/>
+                                    <Condition Property="IsMouseOver" Value="True"/>
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="checkboxImage" Property="Source" Value="{x:Null}"/>
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style TargetType="Button" x:Key="myButton">
+            <Setter Property="Foreground" Value="Wheat" />
+            <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="Background" Value="DimGray" />
+            <Setter Property="TextBlock.TextAlignment" Value="Center" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border CornerRadius="8,0,0,8" 
+                                Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding Foreground}" BorderThickness="1" >
+                            <ContentPresenter x:Name="contentPresenter" 
+                                              ContentTemplate="{TemplateBinding ContentTemplate}" 
+                                              Content="{TemplateBinding Content}" 
+                                              HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                              Margin="{TemplateBinding Padding}" 
+                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
     <Window.Title>
         <MultiBinding StringFormat="{}{0} - MkZ Media Player">
@@ -66,7 +113,52 @@
             <controls:ButtonPlayPause Margin="4" Foreground="{StaticResource ButtonForegroundMain}" 
                      ToolTip="Tooggle Play Pause" ToolTipService.ShowOnDisabled="True" Command="MediaCommands.TogglePlayPause"
                      IsChecked="{Binding DataContext.MediaState, ElementName=_player, Mode=OneWay, Converter={StaticResource MediaStateToPlayConverter}}"/>
-            <controls:ButtonNext Margin="4" DockPanel.Dock="Right" Foreground="{StaticResource ButtonForegroundMain}" 
+            <controls:DropDownButton x:Name="_btnSelectPlayList" Content="Default" Margin="5" Padding="5" 
+                                     Style="{StaticResource myButton}" >
+                <controls:DropDownButton.Menu>
+                    <ContextMenu x:Name="_ctxPlayLists" FontWeight="Medium" FontSize="18" Foreground="Navy" HasDropShadow="True">
+                        <ContextMenu.ItemContainerStyle>
+                            <Style TargetType="{x:Type MenuItem}">
+                               <Style.Resources>
+                                    <Image x:Key="IconImage" x:Shared="False">
+                                        <Image.Style>
+                                            <Style TargetType="{x:Type Image}">
+                                                <Setter Property="Source" Value="/Images/Cancel.ico" />
+                                                <!--<Style.Triggers>
+                                                    <DataTrigger Binding="{Binding PluginIcon, Converter={StaticResource isNullConverter}}" Value="False">
+                                                        <Setter Property="Source" Value="{Binding PluginIcon}" />
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding StatusIcon, Converter={StaticResource isNullConverter}}" Value="False">
+                                                        <Setter Property="Source" Value="{Binding StatusIcon}" />
+                                                    </DataTrigger>
+                                                </Style.Triggers>-->
+                                            </Style>
+                                        </Image.Style>
+                                    </Image>
+                                </Style.Resources>
+                                <!--<EventSetter Event="MenuItem.Click" Handler="ButtonSelectPlayList_Click"/>-->
+                                <!--<Setter Property="MenuItem.Icon" Value="{StaticResource IconImage}" />-->
+                                <Setter Property="MenuItem.IsChecked" Value="{Binding IsSelectedPlayList}" />
+                            </Style>
+                        </ContextMenu.ItemContainerStyle>
+                        <ContextMenu.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding PlayLists}" >
+                                <CheckBox IsChecked="{Binding IsSelectedPlayList}"  Style="{StaticResource myCheckboxStyle}" >
+                                        <TextBlock>
+                                            <TextBlock.Text>
+                                                <MultiBinding StringFormat="{}{0} ({1})">
+                                                    <Binding Path="Name" />
+                                                    <Binding Path="MediaFiles.Count" />
+                                                </MultiBinding>
+                                            </TextBlock.Text>
+                                        </TextBlock>
+                                </CheckBox>
+                            </HierarchicalDataTemplate>
+                        </ContextMenu.ItemTemplate>
+                    </ContextMenu>
+                </controls:DropDownButton.Menu>
+                </controls:DropDownButton>
+                <controls:ButtonNext Margin="4" DockPanel.Dock="Right" Foreground="{StaticResource ButtonForegroundMain}" 
                 ToolTip="Next Track" ToolTipService.ShowOnDisabled="True" Command="MediaCommands.NextTrack" />
             <controls:ButtonPrev Margin="4" DockPanel.Dock="Right" Foreground="{StaticResource ButtonForegroundMain}" 
                       ToolTip="Previous Track" ToolTipService.ShowOnDisabled="True" Command="MediaCommands.PreviousTrack" />

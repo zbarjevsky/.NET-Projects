@@ -382,7 +382,8 @@ namespace MkZ.MediaPlayer
                     MediaState = MediaState.Manual;
                     Title = Path.GetFileName(fileName);
 
-                    Volume = 0; //load silently
+                    Volume = State.Volume;
+                    IsMuted = true; //load silently
                     //sometimes loading mp3 stuck
                     //https://stackoverflow.com/questions/6716100/strange-behavior-with-wpf-mediaelement
                     VideoPlayerElement.ScrubbingEnabled = false; //faster load
@@ -550,6 +551,7 @@ namespace MkZ.MediaPlayer
 
                 Thread.Sleep(100);
                 Volume = State.Volume;
+                IsMuted = false;
                 VideoPlayerElement.ScrubbingEnabled = true; //enable preview
                 MediaState = GetMediaState();
 

@@ -102,6 +102,9 @@
     <Compile Include="Controls\PlayListManagerWindow.xaml.cs">
       <DependentUpon>PlayListManagerWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ButtonRoundCheckBox.xaml.cs">
+      <DependentUpon>ButtonRoundCheckBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Utils\ColorConverters.cs" />
     <Compile Include="Controls\PlayerControls.xaml.cs">
       <DependentUpon>PlayerControls.xaml</DependentUpon>
@@ -197,6 +200,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Controls\ButtonRoundCheckBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\SliderControlResource.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -275,6 +282,9 @@
     <Resource Include="Images\pause_on.ico" />
     <Resource Include="Images\play_on.ico" />
     <Resource Include="Images\previus_on.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Favorites.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

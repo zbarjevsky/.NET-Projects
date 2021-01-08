@@ -12,7 +12,7 @@ namespace MkZ.MediaPlayer.Utils
         Configuration Config { get; }
         Window Window { get; }
         VideoPlayerControlVM MediaPlayerVM { get; }
-        void AddNewMediaFile(string fileName);
+        void AddNewMediaFile(string fileName, double volume);
         void ToggleFullScreen();
         bool PreviousTrack_CanExecute();
         void PreviousTrack_Executed();
