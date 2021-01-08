@@ -30,7 +30,7 @@ namespace MkZ.Windows
 
         public bool SetProperty<T>(ref T prop, T val, [CallerMemberName] string propertyName = null)
         {
-            if (prop.Equals(val))
+            if (prop != null && prop.Equals(val))
                 return false;
 
             prop = val;

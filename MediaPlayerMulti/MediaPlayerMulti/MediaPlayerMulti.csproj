@@ -24,6 +24,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,6 +35,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>Media.ico</ApplicationIcon>
@@ -40,6 +44,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -61,6 +67,9 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Controls\AnimationHelper.cs" />
+    <Compile Include="Controls\ButtonBrowse.xaml.cs">
+      <DependentUpon>ButtonBrowse.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ButtonClose.xaml.cs">
       <DependentUpon>ButtonClose.xaml</DependentUpon>
     </Compile>
@@ -118,6 +127,7 @@
     <Compile Include="Controls\SmallButtonClose.xaml.cs">
       <DependentUpon>SmallButtonClose.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\ColorUtils.cs" />
     <Compile Include="Utils\MediaStateToPlayConverter.cs" />
     <Compile Include="Utils\ObjectToStringConverter.cs" />
     <Compile Include="Utils\PathToFileNameConverter.cs" />
@@ -132,6 +142,10 @@
       <DependentUpon>VideoPlayerControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="VideoPlayerControlVM.cs" />
+    <Page Include="Controls\ButtonBrowse.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\ButtonClose.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

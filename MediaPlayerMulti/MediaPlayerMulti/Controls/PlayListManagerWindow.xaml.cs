@@ -81,5 +81,22 @@ namespace MkZ.MediaPlayer.Controls
         {
             VM.DB.AddNewPlayList("NewPlayList", null);
         }
+
+        private void _listMediaFiles_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            MediaFileInfo info = _listMediaFiles.SelectedItem as MediaFileInfo;
+            PlayListManagerVM vm = _listMediaFiles.DataContext as PlayListManagerVM;
+            PlayList list = _treePlayLists.SelectedItem as PlayList;
+
+            if (info != null && vm != null && list != null)
+            {
+                info.MediaState = MediaState.Play;
+                list.SelectedMediaFileIndex = list.MediaFiles.IndexOf(info);
+                list.IsSelectedPlayList = true;
+
+                this.DialogResult = true;
+                this.Close();
+            }
+        }
     }
 }

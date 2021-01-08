@@ -16,18 +16,90 @@ using MkZ.Windows;
 namespace MkZ.MediaPlayer.Utils
 {
     [Serializable]
-    public class Configuration
+    public class Configuration : NotifyPropertyChangedImpl
     {
         public ePlayMode PlayMode { get; set; } = ePlayMode.RepeatOne;
+
+        private string _backgroundImageFileName = "";
+        [Editor(typeof(System.Windows.Forms.Design.FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public string BackgroundImageFileName
+        {
+            get { return _backgroundImageFileName; }
+            set { SetProperty(ref _backgroundImageFileName, value); }
+        }
+
+        public List<string> SupportedImageExtensions { get; set; } = new List<string>()
+        { ".jpg", ".png", ".bmp", ".gif" };
+
+        public List<string> SupportedAudioExtensions { get; set; } = new List<string>()
+        { ".mp3", ".wav", ".ogg" };
+
+        public List<string> SupportedVideoExtensions { get; set; } = new List<string>()
+        { ".mpg", ".mpeg", ".mkv", ".mp4", ".webm" };
 
         public void CopyFrom(Configuration config)
         {
             PlayMode = config.PlayMode;
+            
+            BackgroundImageFileName = config.BackgroundImageFileName;
+
+            SupportedImageExtensions = config.SupportedImageExtensions;
+            SupportedAudioExtensions = config.SupportedAudioExtensions;
+            SupportedVideoExtensions = config.SupportedVideoExtensions;
+        }
+
+        public string GetAllSupportedExtensions()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            SupportedImageExtensions.ForEach((ext) => { sb.Append("*" + ext + ";"); });
+            SupportedAudioExtensions.ForEach((ext) => { sb.Append("*" + ext + ";"); });
+            SupportedVideoExtensions.ForEach((ext) => { sb.Append("*" + ext + ";"); });
+
+            return sb.ToString();
+        }
+
+        public bool IsSupportedImageFile(string fileName)
+        {
+            string ext = System.IO.Path.GetExtension(fileName).ToLower();
+            foreach (string ext1 in SupportedImageExtensions)
+            {
+                if (ext1 == ext) 
+                    return true;
+            } 
+            return false;
+        }
+
+        public bool IsSupportedAudioFile(string fileName)
+        {
+            string ext = System.IO.Path.GetExtension(fileName).ToLower();
+            foreach (string ext1 in SupportedAudioExtensions)
+            {
+                if (ext1 == ext)
+                    return true;
+            }
+            return false;
+        }
+
+        public bool IsSupportedVideoFile(string fileName)
+        {
+            string ext = System.IO.Path.GetExtension(fileName).ToLower();
+            foreach (string ext1 in SupportedVideoExtensions)
+            {
+                if (ext1 == ext)
+                    return true;
+            }
+            return false;
+        }
+
+        public bool IsSupportedMediaFile(string fileName)
+        {
+            return IsSupportedAudioFile(fileName) || IsSupportedVideoFile(fileName);
         }
 
         public override string ToString()
         {
-            return string.Format("Configuration, PlayMode: {0}", PlayMode);
+            return string.Format("Configuration - PlayMode: {0}", PlayMode);
         }
     }
 

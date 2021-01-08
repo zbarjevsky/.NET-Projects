@@ -73,7 +73,7 @@
     </Window.Title>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition x:Name="rowHeader" Height="45"></RowDefinition>
+            <RowDefinition x:Name="rowHeader" Height="46"></RowDefinition>
             <RowDefinition x:Name="rowContent" Height="*"></RowDefinition>
             <RowDefinition x:Name="rowFooter" Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
@@ -82,21 +82,25 @@
                      ToolTip="Options..." >
                 <controls:DropDownButton.Menu>
                     <ContextMenu FontWeight="Medium" FontSize="18" Foreground="Navy" HasDropShadow="True">
-                        <MenuItem Header="Open Media File.." Command="ApplicationCommands.Open" Padding="8" />
+                        <MenuItem Header="Open File.." Command="ApplicationCommands.Open" Padding="8" >
+                            <MenuItem.Icon>
+                                <controls:ButtonBrowse Width="16" Foreground="{StaticResource ButtonForegroundMain}"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
                         <MenuItem Header="Previous Track" Command="MediaCommands.PreviousTrack" Padding="8" >
                             <MenuItem.Icon>
-                                <Image Source="Images/previus_on.ico" Width="20" Height="20" />
+                                <controls:ButtonPrev Width="16" Foreground="{StaticResource ButtonForegroundMain}"/>
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="Next Track" Command="MediaCommands.NextTrack" Padding="8" >
                             <MenuItem.Icon>
-                                <Image Source="Images/next_on.ico" Width="20" Height="20" />
+                                <controls:ButtonNext Width="16" Foreground="{StaticResource ButtonForegroundMain}"/>
                             </MenuItem.Icon>
                         </MenuItem>
                         <Separator/>
                         <MenuItem Header="PlayList Manager..." Padding="8" Click="ButtonPlayListManager_Click" >
                             <MenuItem.Icon>
-                                <Image Source="Images/Cancel.ico" Width="16" Height="16" />
+                                <controls:ButtonMenu Width="16" Foreground="{StaticResource ButtonForegroundMain}"/>
                             </MenuItem.Icon>
                         </MenuItem>
                         <Separator/>
@@ -108,7 +112,7 @@
                     </ContextMenu>
                 </controls:DropDownButton.Menu>
             </controls:ButtonMenu>
-            <controls:ButtonPlus Margin="4" Foreground="{StaticResource ButtonForegroundMain}" 
+            <controls:ButtonBrowse Margin="4" Foreground="{StaticResource ButtonForegroundMain}" 
                      ToolTip="Open Media File..." Command="ApplicationCommands.Open" />
             <controls:ButtonPlayPause Margin="4" Foreground="{StaticResource ButtonForegroundMain}" 
                      ToolTip="Tooggle Play Pause" ToolTipService.ShowOnDisabled="True" Command="MediaCommands.TogglePlayPause"
@@ -238,7 +242,6 @@
             </ComboBox>
         </DockPanel>
         <mediaplayer:VideoPlayerControl Grid.Row="1" x:Name="_player" 
-                 IsTabStop="True" Focusable="True"
                  MediaFileInfo="{Binding SelectedItem, ElementName=_cmbFilesList}" />
     </Grid>
 </Window>

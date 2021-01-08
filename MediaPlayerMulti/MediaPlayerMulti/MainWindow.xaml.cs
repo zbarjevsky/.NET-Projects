@@ -47,6 +47,17 @@ namespace MediaPlayerMulti
 
             _cmbFilesList.Items.Clear();
             _cmbFilesList.ItemsSource = null;
+
+            Config.PropertyChanged += Config_PropertyChanged;
+        }
+
+        private void Config_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == nameof(Config.BackgroundImageFileName))
+            {
+                MediaPlayerVM.BackgroundImage = new BitmapImage(new Uri(Config.BackgroundImageFileName));
+                _player.Background = ColorUtils.CalculateAverageColor(Config.BackgroundImageFileName);
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -92,14 +103,19 @@ namespace MediaPlayerMulti
 
         public void AddNewMediaFile(string fileName, double volume)
         {
-            _cmbFilesList.SelectedIndex = DB.AddNewMediaFile(fileName, volume);
+            if (Config.IsSupportedImageFile(fileName))
+                Config.BackgroundImageFileName = fileName;
+            else if (Config.IsSupportedMediaFile(fileName))
+                _cmbFilesList.SelectedIndex = DB.AddNewMediaFile(fileName, volume);
+            else
+                MessageBox.Show("File type is not supported.\n" + fileName);
         }
 
         public void ToggleFullScreen()
         {
             if (this.WindowStyle == WindowStyle.None)
             {
-                rowHeader.Height = new GridLength(40);
+                rowHeader.Height = new GridLength(46);
                 this.WindowStyle = WindowStyle.ThreeDBorderWindow;
                 this.WindowState = WindowState.Normal;
                 MediaPlayerVM.IsFullScreen = false;
@@ -180,7 +196,10 @@ namespace MediaPlayerMulti
             PlayListManagerWindow wnd = new PlayListManagerWindow();
             wnd.Owner = this;
             wnd.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            wnd.ShowDialog();
+            if(wnd.ShowDialog().Value)
+            {
+                _cmbFilesList.SelectedIndex = DB.GetSelectedPlayList().SelectedMediaFileIndex;
+            }
         }
     }
 }

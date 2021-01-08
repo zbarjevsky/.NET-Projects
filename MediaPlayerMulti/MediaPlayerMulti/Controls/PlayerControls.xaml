@@ -24,11 +24,16 @@
             </Border.Background>
             <DockPanel Grid.Row="1" Margin="10,6" VerticalAlignment="Top" HorizontalAlignment="Stretch" >
                 <local:ButtonPlayPause Width="30" Margin="6,0" Foreground="{StaticResource ButtonForegroundPlay}" 
+                      ToolTip="Toggle Play Pause" ToolTipService.ShowOnDisabled="True"
                       Command="MediaCommands.TogglePlayPause" 
                       IsChecked="{Binding MediaState, Mode=OneWay, Converter={StaticResource MediaStateToPlayConverter}}" />
                 <!--<local:ButtonPause Width="30" Margin="6,0" Foreground="LimeGreen" Command="MediaCommands.Pause" />-->
                 <local:ButtonStop Width="30" Margin="6,0" Foreground="{StaticResource ButtonForegroundPlay}" 
-                       Command="MediaCommands.Stop" />
+                    ToolTip="Stop" ToolTipService.ShowOnDisabled="True"
+                     Command="MediaCommands.Stop" />
+                <local:ButtonNext Width="30" Margin="6,0" Foreground="{StaticResource ButtonForegroundPlay}" 
+                    ToolTip="Next Track" ToolTipService.ShowOnDisabled="True"
+                    Command="MediaCommands.NextTrack" />
                 <local:ButtonVolume DockPanel.Dock="Right" Width="30" Margin="6,0" Foreground="{StaticResource ButtonVolumeColor}"
                                     IsChecked="{Binding IsMuted}">
                     <local:ButtonVolume.ToolTip>

@@ -20,7 +20,10 @@ namespace MkZ.MediaPlayer.Utils
         private ICommand F11Command { get; set; }
         private ICommand EscapeCommand { get; set; }
 
-        private VideoPlayerControlVM PlayerVM { get => _mainWindow.MediaPlayerVM; }
+        private VideoPlayerControlVM PlayerVM  => _mainWindow.MediaPlayerVM;
+
+        public Configuration Config => VideoPlayerContext.Instance.Config.Configuration;
+
 
         public MediaPlayerCommands(IPlayerMainWindow mainWindow)
         {
@@ -175,8 +178,10 @@ namespace MkZ.MediaPlayer.Utils
 
         public void Open_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            string allSupportedExtensions = Config.GetAllSupportedExtensions();
+
             OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.Filter = "Media files (*.mp3;*.mpg;*.mpeg;*.mkv;*.mp4)|*.mp3;*.mpg;*.mpeg;*.mkv;*.mp4|All files (*.*)|*.*";
+            openFileDialog.Filter = "Media files ("+ allSupportedExtensions + ")|"+ allSupportedExtensions + "|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
             {
                 _mainWindow.AddNewMediaFile(openFileDialog.FileName, PlayerVM.Volume > 0 ? PlayerVM.Volume : 0.5);

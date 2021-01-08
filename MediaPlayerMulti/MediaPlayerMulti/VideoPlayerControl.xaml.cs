@@ -64,11 +64,15 @@ namespace MkZ.MediaPlayer
             InitializeComponent();
 
             _controlsHideAndShow = new AnimationHelper(this, 2,
-                _playControls, _testButtons, _systemButtons);
+                _playControls, _testButtons, _systemButtons, _borderPrompt);
+
+            //_imageBackground.Draggable();
+
             _controlsHideAndShow.CanHideControls = () =>
             {
-                string ext = System.IO.Path.GetExtension(_playerControlVM.FileName).ToLower();
-                return ext != ".mp3" && ext != ".wav";
+                Configuration config = VideoPlayerContext.Instance.Config.Configuration;
+                bool isImage = !string.IsNullOrWhiteSpace(config.BackgroundImageFileName);
+                return config.IsSupportedVideoFile(_playerControlVM.State.FileName) || isImage;
             };
 
             _playerControlVM.Init(_scrollPlayerContainer);
@@ -130,9 +134,7 @@ namespace MkZ.MediaPlayer
         {
             if (e.ChangedButton == MouseButton.Left)
             {
-                if ((e.OriginalSource is MediaElement))
-                    _playerControlVM.LeftButtonClick(_playerControlVM);
-                if ((e.OriginalSource is ScrollViewer))
+                if ((e.OriginalSource is MediaElement) || (e.OriginalSource is ScrollViewer) || (e.OriginalSource is Grid))
                     _playerControlVM.LeftButtonClick(_playerControlVM);
             }
         }

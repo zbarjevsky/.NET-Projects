@@ -26,7 +26,7 @@
                             <EllipseGeometry Center="8,8" RadiusX="7" RadiusY="7"/>
                         </Path.Data>
                     </Path>
-                    <Path x:Name="cross" Data="M 11 11 L 11 5 L 6 8 L 6 5 L 5 5 L 5 11 L 6 11 L 6 8 Z" />
+                    <Path x:Name="cross" Data="M 11 11 L 11 5 L 5.2 8 L 5.2 5 L 5 5 L 5 11 L 5.2 11 L 5.2 8 Z" />
                 </Canvas>
             </Viewbox>
 

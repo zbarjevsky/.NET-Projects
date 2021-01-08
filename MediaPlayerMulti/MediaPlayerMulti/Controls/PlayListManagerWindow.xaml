@@ -12,9 +12,9 @@
         Title="PlayList Manager" Height="450" Width="800">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="250"/>
             <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="45"/>
@@ -66,10 +66,10 @@
                                 <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" 
                                      FontWeight="Medium" BorderThickness="0" Background="Transparent" />
                                 <local:ButtonPlus Margin="4,0,0,0" ToolTip="Add New Play List..."
-                                    VerticalAlignment="Top" Click="AddPlayList_Click" />
+                                    Foreground="Gold" VerticalAlignment="Top" Click="AddPlayList_Click" />
                                 <local:SmallButtonClose Grid.Column="2" Margin="4,0" 
-                               ToolTip="Remove This Play List"
-                               VerticalAlignment="Top" Foreground="Magenta" Click="RemovePlayList_Click">
+                                       ToolTip="Remove This Play List"
+                                       VerticalAlignment="Top" Foreground="Red" Click="RemovePlayList_Click">
                                     <Button.Style>
                                         <Style TargetType="Button">
                                             <Style.Triggers>
@@ -122,12 +122,19 @@
         <GridSplitter Grid.Row="1" Grid.Column="1" Background="Goldenrod" HorizontalAlignment="Stretch"/>
 
         <ListView Grid.Row="1" Grid.Column="2" x:Name="_listMediaFiles" SelectionMode="Single"
-                  ItemsSource="{Binding SelectedItem.MediaFiles, ElementName=_treePlayLists}" >
+                  ItemsSource="{Binding SelectedItem.MediaFiles, ElementName=_treePlayLists}" 
+                  MouseDoubleClick="_listMediaFiles_MouseDoubleClick">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <DockPanel>
-                        <TextBlock Text="FileName: " />
-                        <TextBlock Text="{Binding FileName}" FontWeight="Bold" />
+                        <TextBlock FontWeight="Medium">
+                            <TextBlock.Text>
+                                <MultiBinding StringFormat="{}({0}) {1}">
+                                    <Binding Path="Position" />
+                                    <Binding Path="FileName" />
+                                </MultiBinding>
+                            </TextBlock.Text>
+                        </TextBlock>
                         <local:SmallButtonClose Grid.Column="2" Margin="4" Height="20" DockPanel.Dock="Right" 
                                       VerticalAlignment="Top" Foreground="Magenta" Click="RemoveMediaFile_Click">
                             <!--<Button.Style>

@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using System.Xml.Serialization;
 using MkZ.MediaPlayer.Utils;
@@ -151,6 +152,13 @@ namespace MkZ.MediaPlayer
             set { SetProperty(ref _prompt, value); }
         }
 
+        private BitmapSource _backgroundImage = null;
+        public BitmapSource BackgroundImage
+        {
+            get { return _backgroundImage; }
+            set { SetProperty(ref _backgroundImage, value); }
+        }
+
         private Brush _background = Brushes.Gray;
         public Brush Background
         {
@@ -264,6 +272,8 @@ namespace MkZ.MediaPlayer
 
             //replace
             State = info == null? new MediaFileInfo() : info;
+
+            Background = Brushes.Transparent;
 
             Debug.WriteLine("RestoreState: {0}\nPosition: {1}, Size: {2}, Duration: {3}",
                 State.FileName, State.Position, NaturalSize, NaturalDuration);
@@ -417,7 +427,6 @@ namespace MkZ.MediaPlayer
             Stop();
             VideoPlayerElement.Source = null;
             FileName = "";
-            Background = Brushes.LightGray;
             MediaState = MediaState.Close;
         }
 
@@ -427,7 +436,6 @@ namespace MkZ.MediaPlayer
             {
                 VideoPlayerElement.Play();
                 
-                Background = Brushes.Black;
                 MediaState = MediaState.Play;
             }
         }
@@ -437,7 +445,6 @@ namespace MkZ.MediaPlayer
             if (VideoPlayerElement.Source != null)
             {
                 VideoPlayerElement.Pause();
-                Background = Brushes.Gray;
                 MediaState = MediaState.Pause;
             }
         }
@@ -447,7 +454,6 @@ namespace MkZ.MediaPlayer
             if (VideoPlayerElement.Source != null)
             {
                 VideoPlayerElement.Stop();
-                Background = Brushes.DarkGray;
                 MediaState = MediaState.Stop;
             }
         }
@@ -562,6 +568,8 @@ namespace MkZ.MediaPlayer
                 Debug.WriteLine("Media Opened: {0}\nPosition: {1}, Size: {2}, Duration: {3}",
                     VideoPlayerElement.Source, VideoPlayerElement.Position, NaturalSize, NaturalDuration);
 
+                Background = GetBackgroundForOpenedFile();
+
                 FitWindow();
                 NotifyPropertyChanged(nameof(NaturalDuration));
                 VideoStartedAction(this);
@@ -644,6 +652,14 @@ namespace MkZ.MediaPlayer
             FieldInfo stateField = helperObject.GetType().GetField("_currentState", BindingFlags.NonPublic | BindingFlags.Instance);
             MediaState state = (MediaState)stateField.GetValue(helperObject);
             return state;
+        }
+
+        private Brush GetBackgroundForOpenedFile()
+        {
+            if (VideoPlayerContext.Instance.Config.Configuration.IsSupportedVideoFile(State.FileName))
+                return Brushes.Black;
+                
+            return Brushes.Transparent;
         }
 
         public override string ToString()
