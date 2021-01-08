@@ -22,6 +22,7 @@ using System.Windows.Threading;
 using MkZ.WPF;
 using System.Windows.Media.Animation;
 using MkZ.MediaPlayer.Controls;
+using MkZ.MediaPlayer.Utils;
 
 namespace MkZ.MediaPlayer
 {
@@ -64,6 +65,11 @@ namespace MkZ.MediaPlayer
 
             _controlsHideAndShow = new AnimationHelper(this, 2,
                 _playControls, _testButtons, _systemButtons);
+            _controlsHideAndShow.CanHideControls = () =>
+            {
+                string ext = System.IO.Path.GetExtension(_playerControlVM.FileName).ToLower();
+                return ext != ".mp3" && ext != ".wav";
+            };
 
             _playerControlVM.Init(_scrollPlayerContainer);
             _playControls.DataContext = _playerControlVM;

@@ -13,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Threading;
 using System.Xml.Serialization;
+using MkZ.MediaPlayer.Utils;
 using MkZ.Tools;
 using MkZ.Windows;
 using MkZ.WPF;
@@ -575,9 +576,29 @@ namespace MkZ.MediaPlayer
         {
             Stop();
             if (PlayMode == ePlayMode.RepeatOne)
+            {
                 Play();
-            else if (PlayMode == ePlayMode.PlayAll)
+            }
+            else if (PlayMode == ePlayMode.PlayAll && MediaCommands.NextTrack.CanExecute(this, null))
+            {
                 MediaCommands.NextTrack.Execute(this, null);
+            }
+            else if (PlayMode == ePlayMode.RepeatAll)
+            {
+                PlayList playList = VideoPlayerContext.Instance.Config.MediaDatabaseInfo.GetSelectedPlayList();
+
+                if (MediaCommands.NextTrack.CanExecute(this, null))
+                {
+                    playList.MediaFiles[playList.SelectedMediaFileIndex + 1].Volume = Volume;  //same volume as previous
+                    MediaCommands.NextTrack.Execute(this, null);
+                }
+                else
+                {
+                    playList.MediaFiles[0].Volume = Volume; //same volume as previous
+                    playList.SelectedMediaFileIndex = -1;
+                    MediaCommands.NextTrack.Execute(this, null);
+                }
+            }
 
             VideoEndedAction(this);
             NotifyPropertyChangedAll();

@@ -21,6 +21,8 @@ namespace MkZ.MediaPlayer.Controls
         private readonly double _hideTimeOutSeconds = 2;
 
         public Action<UIElement> OnHideCompleted = (element) => { };
+        //do not hide - can be usefull for media files with no video
+        public Func<bool> CanHideControls = () => true;
 
         public AnimationHelper(Control container, double hideTimeOutSeconds, params UIElement[] controls)
         {
@@ -86,7 +88,7 @@ namespace MkZ.MediaPlayer.Controls
 
         private void timer_Tick(object sender, EventArgs e)
         {
-            if (_isInsideControl)
+            if (_isInsideControl || !CanHideControls())
                 return;
 
             _timer.Stop();

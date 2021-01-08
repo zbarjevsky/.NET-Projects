@@ -41,7 +41,7 @@ namespace MkZ.MediaPlayer.Utils
             if (value is double dur)
             {
                 if (dur == 0)
-                    return "";
+                    return "0:00";
                 if (dur < 60)
                     return TimeSpan.FromSeconds(dur).ToString("s'.'f");
                 if (dur < 3600)

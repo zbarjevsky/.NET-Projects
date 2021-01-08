@@ -115,22 +115,37 @@ namespace MediaPlayerMulti
 
         public bool PreviousTrack_CanExecute()
         {
-            return _cmbFilesList.SelectedIndex > 0;
+            PlayList playList = DB.GetSelectedPlayList();
+            return playList.SelectedMediaFileIndex > 0;
         }
 
         public void PreviousTrack_Executed()
         {
-            _cmbFilesList.SelectedIndex--;
+            PlayList playList = DB.GetSelectedPlayList();
+            
+            playList.SelectedMediaFileIndex--;
+
+            playList.MediaFiles[playList.SelectedMediaFileIndex].MediaState = MediaState.Play;
+            playList.MediaFiles[playList.SelectedMediaFileIndex].PositionInSeconds = 0;
+            
+            _cmbFilesList.SelectedIndex = playList.SelectedMediaFileIndex;
         }
 
         public bool NextTrack_CanExecute()
         {
-            return _cmbFilesList.SelectedIndex < _cmbFilesList.Items.Count - 1;
+            PlayList playList = DB.GetSelectedPlayList();
+            return playList.SelectedMediaFileIndex < playList.MediaFiles.Count - 1;
         }
 
         public void NextTrack_Executed()
         {
-            _cmbFilesList.SelectedIndex++;
+            PlayList playList = DB.GetSelectedPlayList();
+            playList.SelectedMediaFileIndex++;
+
+            playList.MediaFiles[playList.SelectedMediaFileIndex].MediaState = MediaState.Play;
+            playList.MediaFiles[playList.SelectedMediaFileIndex].PositionInSeconds = 0;
+
+            _cmbFilesList.SelectedIndex = playList.SelectedMediaFileIndex;
         }
 
         private MediaFileInfo GetMediaItem(int idx)
