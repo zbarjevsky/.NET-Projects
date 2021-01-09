@@ -98,7 +98,7 @@ namespace MkZ.MediaPlayer
 
         public override string ToString()
         {
-            return Position + " " + FileName;
+            return "MediaFileInfo: " + Position + " " + FileName;
         }
     }
 

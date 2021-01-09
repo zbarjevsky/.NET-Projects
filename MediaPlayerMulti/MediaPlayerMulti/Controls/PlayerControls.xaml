@@ -45,6 +45,7 @@
                     VerticalAlignment="Center" HorizontalAlignment="Stretch" 
                     TickFrequency="10" LargeChange="10" SmallChange="5"
                     Thumb.DragStarted="Slider_DragStarted" Thumb.DragCompleted="Slider_DragCompleted"
+                        IsMoveToPointEnabled="True"
                     Minimum="0" Maximum="{Binding NaturalDuration, Converter={StaticResource TimeConverter}, FallbackValue=100}" 
                     Value="{Binding Position, Converter={StaticResource TimeConverter}, FallbackValue=90}" />
             </DockPanel>

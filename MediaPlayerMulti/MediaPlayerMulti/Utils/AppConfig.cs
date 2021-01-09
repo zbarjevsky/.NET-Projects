@@ -28,19 +28,30 @@ namespace MkZ.MediaPlayer.Utils
             set { SetProperty(ref _backgroundImageFileName, value); }
         }
 
-        public List<string> SupportedImageExtensions { get; set; } = new List<string>()
-        { ".jpg", ".png", ".bmp", ".gif" };
+        public List<string> SupportedImageExtensions { get; set; }
 
-        public List<string> SupportedAudioExtensions { get; set; } = new List<string>()
-        { ".mp3", ".wav", ".ogg" };
+        public List<string> SupportedAudioExtensions { get; set; }
 
-        public List<string> SupportedVideoExtensions { get; set; } = new List<string>()
-        { ".mpg", ".mpeg", ".mkv", ".mp4", ".webm" };
+        public List<string> SupportedVideoExtensions { get; set; }
+
+        private void EnsureHasValues()
+        {
+            if (SupportedImageExtensions == null || SupportedImageExtensions.Count == 0)
+                SupportedImageExtensions = new List<string>() { ".jpg", ".png", ".bmp", ".gif" };
+
+            if (SupportedAudioExtensions == null || SupportedAudioExtensions.Count == 0)
+                SupportedAudioExtensions = new List<string>() { ".mp3", ".wav", ".ogg" };
+
+            if (SupportedVideoExtensions == null || SupportedVideoExtensions.Count == 0)
+                SupportedVideoExtensions = new List<string>() { ".mpg", ".mpeg", ".mkv", ".mp4", ".webm" };
+        }
 
         public void CopyFrom(Configuration config)
         {
+            config.EnsureHasValues();
+
             PlayMode = config.PlayMode;
-            
+
             BackgroundImageFileName = config.BackgroundImageFileName;
 
             SupportedImageExtensions = config.SupportedImageExtensions;
