@@ -1,10 +1,13 @@
-﻿using System;
+﻿using MkZ.MediaPlayer.Utils;
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -43,6 +46,37 @@ namespace MkZ.MediaPlayer.Controls
                 if (_resume)
                     vm.Play();
             }
+        }
+
+        private void _sliderPosition_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (sender is Slider slider)
+            {
+                Point currentPos = e.GetPosition(slider);
+                if (currentPos.Y < 30)
+                {
+                    if (!_popupSliderTooltip.IsOpen) 
+                        _popupSliderTooltip.IsOpen = true;
+
+                    Track track = slider.Template.FindName("PART_Track", slider) as Track;
+
+                    Debug.WriteLine("Tooltip Position: " + currentPos);
+
+                    _txtSliderTooltip.Text = SecondsToStringConverter.SeondsToString(track.ValueFromPoint(currentPos));
+
+                    _popupSliderTooltip.HorizontalOffset = currentPos.X - (_borderSliderTooltip.ActualWidth / 2);
+                    _popupSliderTooltip.VerticalOffset = -20;
+                }
+                else
+                {
+                    _popupSliderTooltip.IsOpen = false;
+                }
+            }
+        }
+
+        private void _sliderPosition_MouseLeave(object sender, MouseEventArgs e)
+        {
+            _popupSliderTooltip.IsOpen = false;
         }
     }
 }

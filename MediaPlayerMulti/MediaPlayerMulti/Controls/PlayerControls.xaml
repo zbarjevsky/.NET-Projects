@@ -41,13 +41,27 @@
                                        FontSize="18" FontWeight="Medium" />
                     </local:ButtonVolume.ToolTip>
                 </local:ButtonVolume>
-                <Slider Style="{StaticResource Horizontal_Slider}" DockPanel.Dock="Top" Margin="5,0"
+                
+                <Slider x:Name="_sliderPosition" Style="{StaticResource Horizontal_Slider}" DockPanel.Dock="Top" Margin="5,0"
                     VerticalAlignment="Center" HorizontalAlignment="Stretch" 
-                    TickFrequency="10" LargeChange="10" SmallChange="5"
+                    TickFrequency="30" LargeChange="30" SmallChange="5"
                     Thumb.DragStarted="Slider_DragStarted" Thumb.DragCompleted="Slider_DragCompleted"
-                        IsMoveToPointEnabled="True"
+                    IsMoveToPointEnabled="True" MouseMove="_sliderPosition_MouseMove" MouseLeave="_sliderPosition_MouseLeave"
                     Minimum="0" Maximum="{Binding NaturalDuration, Converter={StaticResource TimeConverter}, FallbackValue=100}" 
                     Value="{Binding Position, Converter={StaticResource TimeConverter}, FallbackValue=90}" />
+                
+                <Popup x:Name="_popupSliderTooltip" AllowsTransparency="True"
+                       Placement="Relative"  PlacementTarget="{Binding ElementName=_sliderPosition}">
+                    <Border Name="_borderSliderTooltip" CornerRadius="4"
+                             BorderBrush="Black" BorderThickness="0" Padding="3,1">
+                        <Border.Background>
+                            <SolidColorBrush Color="Black" Opacity="0.5" />
+                        </Border.Background>
+                        <TextBlock x:Name="_txtSliderTooltip" Text="00:00" 
+                                   FontSize="14" FontWeight="Medium"
+                                   Foreground="{StaticResource ButtonForegroundPlay}"/>
+                    </Border>
+                </Popup>
             </DockPanel>
         </Border>
     </Viewbox>

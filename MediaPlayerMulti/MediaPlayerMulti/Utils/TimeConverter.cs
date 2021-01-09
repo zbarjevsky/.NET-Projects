@@ -38,16 +38,9 @@ namespace MkZ.MediaPlayer.Utils
         #region IValueConverter Members
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
-            if (value is double dur)
+            if (value is double seconds)
             {
-                if (dur == 0)
-                    return "0:00";
-                if (dur < 60)
-                    return TimeSpan.FromSeconds(dur).ToString("s'.'f");
-                if (dur < 3600)
-                    return TimeSpan.FromSeconds(dur).ToString("m':'ss"); //'.'f");
-
-                return TimeSpan.FromSeconds(dur).ToString("hh':'mm':'ss"); //'.'f");
+                return SeondsToString(seconds);
             }
 
             return "--/--";
@@ -59,5 +52,16 @@ namespace MkZ.MediaPlayer.Utils
         }
 
         #endregion
+        public static string SeondsToString(double seconds)
+        {
+            if (seconds == 0)
+                return "0:00";
+            if (seconds < 60)
+                return TimeSpan.FromSeconds(seconds).ToString("s'.'f");
+            if (seconds < 3600)
+                return TimeSpan.FromSeconds(seconds).ToString("m':'ss"); //'.'f");
+
+            return TimeSpan.FromSeconds(seconds).ToString("hh':'mm':'ss"); //'.'f");
+        }
     }
 }
