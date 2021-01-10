@@ -100,9 +100,15 @@
     <Compile Include="Controls\ButtonVolume.xaml.cs">
       <DependentUpon>ButtonVolume.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\CursorArrow.xaml.cs">
+      <DependentUpon>CursorArrow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\DropDownButton.cs" />
     <Compile Include="Controls\FadingTextControl.xaml.cs">
       <DependentUpon>FadingTextControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MagnifyingGlassUserControl.xaml.cs">
+      <DependentUpon>MagnifyingGlassUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\OptionsWindow.xaml.cs">
       <DependentUpon>OptionsWindow.xaml</DependentUpon>
@@ -128,6 +134,7 @@
       <DependentUpon>SmallButtonClose.xaml</DependentUpon>
     </Compile>
     <Compile Include="Utils\ColorUtils.cs" />
+    <Compile Include="Utils\CustomCursor.cs" />
     <Compile Include="Utils\MediaStateToPlayConverter.cs" />
     <Compile Include="Utils\ObjectToStringConverter.cs" />
     <Compile Include="Utils\PathToFileNameConverter.cs" />
@@ -190,6 +197,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Controls\CursorArrow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\CustomControls.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -197,6 +208,10 @@
     <Page Include="Controls\FadingTextControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MagnifyingGlassUserControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Controls\OptionsWindow.xaml">
       <SubType>Designer</SubType>

@@ -21,12 +21,17 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <DockPanel>
-            <local:ButtonPlus Margin="4" Foreground="{StaticResource ButtonForegroundMain}" DockPanel.Dock="Left" 
+            <local:ButtonPlus Margin="4" Foreground="{StaticResource ButtonForegroundMain}"
+                     HorizontalAlignment="Left"
                      ToolTip="Add New Play List" Click="ButtonAddRootPlayList_Click" />
-            <local:ButtonPlayPause Margin="4" Foreground="{StaticResource ButtonForegroundMain}" DockPanel.Dock="Left"
-                     ToolTip="Tooggle Play Pause" ToolTipService.ShowOnDisabled="True" Command="MediaCommands.TogglePlayPause"
+        </DockPanel>
+        <DockPanel Grid.Column="2">
+            <local:ButtonBrowse Margin="4" Foreground="{StaticResource ButtonForegroundMain}" 
+                                Command="ApplicationCommands.Open" />
+            <local:ButtonPlayPause Margin="4" Foreground="{StaticResource ButtonForegroundMain}" 
+                     HorizontalAlignment="Left" Command="MediaCommands.TogglePlayPause"
+                     ToolTip="Tooggle Play Pause" ToolTipService.ShowOnDisabled="True" 
                      IsChecked="False"/>
-
         </DockPanel>
         <TreeView Grid.Row="1" x:Name="_treePlayLists" ItemsSource="{Binding PlayListRoot}"
                   SelectedItemChanged="_treePlayLists_SelectedItemChanged">
@@ -36,6 +41,7 @@
                         <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="LimeGreen"/>
                     </Style.Resources>
                     <Setter Property="IsExpanded" Value="True" />
+                    <Setter Property="IsSelected" Value="{Binding IsSelectedPlayList}" />
                 </Style>
             </TreeView.ItemContainerStyle>
             <TreeView.Resources>
@@ -65,8 +71,8 @@
                                       Foreground="Navy" VerticalAlignment="Center" />
                                 <TextBox Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" 
                                      FontWeight="Medium" BorderThickness="0" Background="Transparent" />
-                                <local:ButtonPlus Margin="4,0,0,0" ToolTip="Add New Play List..."
-                                    Foreground="Gold" VerticalAlignment="Top" Click="AddPlayList_Click" />
+                                <local:ButtonPlus Margin="4,0,0,0" ToolTip="Add Sub Play List..."
+                                    Foreground="DarkGoldenrod" VerticalAlignment="Top" Click="AddPlayList_Click" />
                                 <local:SmallButtonClose Grid.Column="2" Margin="4,0" 
                                        ToolTip="Remove This Play List"
                                        VerticalAlignment="Top" Foreground="Red" Click="RemovePlayList_Click">
@@ -119,7 +125,7 @@
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
-        <GridSplitter Grid.Row="1" Grid.Column="1" Background="Goldenrod" HorizontalAlignment="Stretch"/>
+        <GridSplitter Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" Margin="0,2" Background="Goldenrod" HorizontalAlignment="Stretch"/>
 
         <ListView Grid.Row="1" Grid.Column="2" x:Name="_listMediaFiles" SelectionMode="Single"
                   ItemsSource="{Binding SelectedItem.MediaFiles, ElementName=_treePlayLists}" 
@@ -130,7 +136,7 @@
                         <TextBlock FontWeight="Medium">
                             <TextBlock.Text>
                                 <MultiBinding StringFormat="{}({0}) {1}">
-                                    <Binding Path="Position" />
+                                    <Binding Path="PositionInSeconds" Converter="{StaticResource SecondsToStringConverter}" />
                                     <Binding Path="FileName" />
                                 </MultiBinding>
                             </TextBlock.Text>

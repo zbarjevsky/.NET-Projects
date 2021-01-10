@@ -19,6 +19,7 @@ using Microsoft.Win32;
 using MkZ.MediaPlayer;
 using MkZ.MediaPlayer.Controls;
 using MkZ.MediaPlayer.Utils;
+using MkZ.WPF.Controls;
 
 namespace MediaPlayerMulti
 {
@@ -28,19 +29,18 @@ namespace MediaPlayerMulti
     public partial class MainWindow : Window, IPlayerMainWindow
     {
         private MediaPlayerCommands _mediaPlayerCommands;
-        private AppConfig _appConfig { get { return VideoPlayerContext.Instance.Config; } }
 
-        public Configuration Config => _appConfig.Configuration;
+        private VideoPlayerContext Context { get { return VideoPlayerContext.Instance; } }
 
-        public MediaDatabaseInfo DB => _appConfig.MediaDatabaseInfo;
+        public MediaDatabaseInfo DB => Context.Config.MediaDatabaseInfo;
 
-        public Window Window => this;
-
-        public VideoPlayerControlVM MediaPlayerVM => _player.DataContext as VideoPlayerControlVM;
+        public VideoPlayerControlVM PlayerVM => Context.PlayerVM;
 
         public MainWindow()
         {
             InitializeComponent();
+
+            VideoPlayerContext.Instance.PlayerVM = _player.DataContext as VideoPlayerControlVM;
 
             //tabPlayers.Items.Clear();
             //tabPlayers.ItemsSource = _players;
@@ -48,21 +48,21 @@ namespace MediaPlayerMulti
             _cmbFilesList.Items.Clear();
             _cmbFilesList.ItemsSource = null;
 
-            Config.PropertyChanged += Config_PropertyChanged;
+            Context.Config.Configuration.PropertyChanged += Config_PropertyChanged;
         }
 
         private void Config_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if(e.PropertyName == nameof(Config.BackgroundImageFileName))
+            if(e.PropertyName == nameof(Context.Config.Configuration.BackgroundImageFileName))
             {
-                MediaPlayerVM.BackgroundImage = new BitmapImage(new Uri(Config.BackgroundImageFileName));
-                _player.Background = ColorUtils.CalculateAverageColor(Config.BackgroundImageFileName);
+                PlayerVM.BackgroundImage = new BitmapImage(new Uri(Context.Config.Configuration.BackgroundImageFileName));
+                _player.Background = ColorUtils.CalculateAverageColor(Context.Config.Configuration.BackgroundImageFileName);
             }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            _appConfig.Load();
+            Context.Config.Load();
 
             SetPlayList(DB.GetSelectedPlayList());
             DB.OnPlayListSelectionChangedAction = (playList) =>
@@ -75,9 +75,9 @@ namespace MediaPlayerMulti
             _mediaPlayerCommands = new MediaPlayerCommands(this);
 
             _player.OnFullScreenButtonClick = (vm) => ToggleFullScreen();
-            _player.OnFileDropAction = (fileName) =>
+            _player.OnFileDropAction = (fileNames) =>
             {
-                AddNewMediaFile(fileName, MediaPlayerVM.Volume > 0 ? MediaPlayerVM.Volume : 0.3);
+                AddNewMediaFiles(fileNames, PlayerVM.Volume > 0 ? PlayerVM.Volume : 0.3);
             };
         }
 
@@ -98,17 +98,16 @@ namespace MediaPlayerMulti
             DB.SelectedMediaFileIndex = _cmbFilesList.SelectedIndex;
 
             _player.ClosePlayer();
-            _appConfig.Save();
+            Context.Config.Save();
         }
 
-        public void AddNewMediaFile(string fileName, double volume)
+        #region IPlayerMainWindow
+        public Window Window => this;
+
+        public void AddNewMediaFiles(string[] fileNames, double volume)
         {
-            if (Config.IsSupportedImageFile(fileName))
-                Config.BackgroundImageFileName = fileName;
-            else if (Config.IsSupportedMediaFile(fileName))
-                _cmbFilesList.SelectedIndex = DB.AddNewMediaFile(fileName, volume);
-            else
-                MessageBox.Show("File type is not supported.\n" + fileName);
+            VideoPlayerContext.Instance.AddNewMediaFiles(DB.GetSelectedPlayList(), fileNames, volume);
+            _cmbFilesList.SelectedIndex = DB.GetSelectedPlayList().SelectedMediaFileIndex;
         }
 
         public void ToggleFullScreen()
@@ -118,14 +117,14 @@ namespace MediaPlayerMulti
                 rowHeader.Height = new GridLength(46);
                 this.WindowStyle = WindowStyle.ThreeDBorderWindow;
                 this.WindowState = WindowState.Normal;
-                MediaPlayerVM.IsFullScreen = false;
+                PlayerVM.IsFullScreen = false;
             }
             else //full screen
             {
                 rowHeader.Height = new GridLength(0);
                 this.WindowStyle = WindowStyle.None;
                 this.WindowState = WindowState.Maximized;
-                MediaPlayerVM.IsFullScreen = true;
+                PlayerVM.IsFullScreen = true;
             }
         }
 
@@ -138,12 +137,12 @@ namespace MediaPlayerMulti
         public void PreviousTrack_Executed()
         {
             PlayList playList = DB.GetSelectedPlayList();
-            
+
             playList.SelectedMediaFileIndex--;
 
             playList.MediaFiles[playList.SelectedMediaFileIndex].MediaState = MediaState.Play;
             playList.MediaFiles[playList.SelectedMediaFileIndex].PositionInSeconds = 0;
-            
+
             _cmbFilesList.SelectedIndex = playList.SelectedMediaFileIndex;
         }
 
@@ -174,6 +173,8 @@ namespace MediaPlayerMulti
         {
             return GetMediaItem(_cmbFilesList.SelectedIndex);
         }
+
+        #endregion
 
         private void RemoveMediaFile_Click(object sender, RoutedEventArgs e)
         {

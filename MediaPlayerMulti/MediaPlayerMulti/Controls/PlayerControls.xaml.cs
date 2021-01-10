@@ -60,8 +60,6 @@ namespace MkZ.MediaPlayer.Controls
 
                     Track track = slider.Template.FindName("PART_Track", slider) as Track;
 
-                    Debug.WriteLine("Tooltip Position: " + currentPos);
-
                     _txtSliderTooltip.Text = SecondsToStringConverter.SeondsToString(track.ValueFromPoint(currentPos));
 
                     _popupSliderTooltip.HorizontalOffset = currentPos.X - (_borderSliderTooltip.ActualWidth / 2);

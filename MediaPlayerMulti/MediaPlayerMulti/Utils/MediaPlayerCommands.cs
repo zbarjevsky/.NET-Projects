@@ -20,10 +20,9 @@ namespace MkZ.MediaPlayer.Utils
         private ICommand F11Command { get; set; }
         private ICommand EscapeCommand { get; set; }
 
-        private VideoPlayerControlVM PlayerVM  => _mainWindow.MediaPlayerVM;
+        private VideoPlayerControlVM PlayerVM  => VideoPlayerContext.Instance.PlayerVM;
 
         public Configuration Config => VideoPlayerContext.Instance.Config.Configuration;
-
 
         public MediaPlayerCommands(IPlayerMainWindow mainWindow)
         {
@@ -181,10 +180,11 @@ namespace MkZ.MediaPlayer.Utils
             string allSupportedExtensions = Config.GetAllSupportedExtensions();
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Multiselect = true;
             openFileDialog.Filter = "Media files ("+ allSupportedExtensions + ")|"+ allSupportedExtensions + "|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
             {
-                _mainWindow.AddNewMediaFile(openFileDialog.FileName, PlayerVM.Volume > 0 ? PlayerVM.Volume : 0.5);
+                _mainWindow.AddNewMediaFiles(openFileDialog.FileNames, PlayerVM.Volume > 0 ? PlayerVM.Volume : 0.5);
             }
         }
 

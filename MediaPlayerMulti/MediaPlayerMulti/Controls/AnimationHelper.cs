@@ -88,7 +88,7 @@ namespace MkZ.MediaPlayer.Controls
 
         private void timer_Tick(object sender, EventArgs e)
         {
-            if (_isInsideControl || !CanHideControls())
+            if (_isInsideControl || !CanHideControls() || VideoPlayerContext.Instance.InDesignMode)
                 return;
 
             _timer.Stop();

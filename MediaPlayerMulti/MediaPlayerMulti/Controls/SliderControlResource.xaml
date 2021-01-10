@@ -3,8 +3,6 @@
                     xmlns:local="clr-namespace:MkZ.MediaPlayer.Controls" 
                     xmlns:utils="clr-namespace:MkZ.MediaPlayer.Utils">
 
-    <utils:SecondsToStringConverter x:Key="TimeFormatConverter" />
-    
     <Style x:Key="SliderRepeatButtonLeft" TargetType="RepeatButton">
         <Setter Property="SnapsToDevicePixels" Value="true" />
         <Setter Property="OverridesDefaultStyle" Value="true" />
@@ -54,7 +52,7 @@
                         </Ellipse>
                         <TextBlock Foreground="Yellow" Margin="0,0,0,0" ClipToBounds="False"
                                    VerticalAlignment="Top" HorizontalAlignment="Center" FontSize="12"
-                                   Text="{Binding Value, Converter={StaticResource TimeFormatConverter},
+                                   Text="{Binding Value, Converter={StaticResource SecondsToStringConverter},
                                        RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Slider}}}"/>
                         
                         <!--<Path Data="M 0 10 L -5 10 L -5 0 L 0 10 L 5 10 L 5 0 L 0 0 Z" Stroke="Magenta" Margin="0,0,0,0" StrokeThickness="3" Fill="Violet" />-->
@@ -96,8 +94,8 @@
                        VerticalAlignment="Bottom" Foreground="AliceBlue">
                 <TextBlock.Text>
                     <MultiBinding StringFormat="{}{0}/{1} - {2}">
-                        <Binding Path="Value" RelativeSource="{RelativeSource TemplatedParent}" Converter="{StaticResource TimeFormatConverter}" />
-                        <Binding Path="Maximum" RelativeSource="{RelativeSource TemplatedParent}" Converter="{StaticResource TimeFormatConverter}" />
+                        <Binding Path="Value" RelativeSource="{RelativeSource TemplatedParent}" Converter="{StaticResource SecondsToStringConverter}" />
+                        <Binding Path="Maximum" RelativeSource="{RelativeSource TemplatedParent}" Converter="{StaticResource SecondsToStringConverter}" />
                         <Binding Path="DataContext.Title" RelativeSource="{RelativeSource TemplatedParent}" FallbackValue="File Name" />
                     </MultiBinding>
                 </TextBlock.Text>

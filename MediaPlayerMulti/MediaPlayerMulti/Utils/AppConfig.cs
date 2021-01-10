@@ -94,6 +94,9 @@ namespace MkZ.MediaPlayer.Utils
 
         public bool IsSupportedVideoFile(string fileName)
         {
+            if (VideoPlayerContext.Instance.InDesignMode)
+                return false;
+
             string ext = System.IO.Path.GetExtension(fileName).ToLower();
             foreach (string ext1 in SupportedVideoExtensions)
             {
@@ -169,13 +172,22 @@ namespace MkZ.MediaPlayer.Utils
 
         public int AddNewMediaFile(string fileName, double volume)
         {
-            MediaFiles.Insert(0, new MediaFileInfo() 
-            { 
-                FileName = fileName, 
-                MediaState = MediaState.Play,
-                Volume = volume
-            });
-            SelectedMediaFileIndex = 0;
+            MediaFileInfo info = MediaFiles.FirstOrDefault((file) => file.FileName == fileName);
+            if (info == null)
+            {
+                MediaFiles.Insert(0, new MediaFileInfo()
+                {
+                    FileName = fileName,
+                    MediaState = MediaState.Play,
+                    Volume = volume
+                });
+                SelectedMediaFileIndex = 0;
+            }
+            else //file exists
+            {
+                SelectedMediaFileIndex = MediaFiles.IndexOf(info);
+            }
+
             return SelectedMediaFileIndex;
         }
 

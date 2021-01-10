@@ -15,7 +15,6 @@
         FocusManager.FocusedElement="{Binding ElementName=_player}"
         Height="768" Width="1366">
     <Window.Resources>
-        <utils:SecondsToStringConverter x:Key="TimeFormatConverter" />
         <utils:ObjectToStringConverter x:Key="ObjectToStringConverter" />
         <utils:PathToFileNameConverter x:Key="PathToFileNameConverter" />
         
@@ -187,7 +186,7 @@
                             </TextBlock>
 
                             <TextBlock Grid.Column="1" VerticalAlignment="Center" FontSize="18" 
-                                       Text="{Binding NaturalDuration, Converter={StaticResource TimeFormatConverter}, FallbackValue=--/--}"/>
+                                       Text="{Binding NaturalDuration, Converter={StaticResource SecondsToStringConverter}, FallbackValue=--/--}"/>
 
                             <controls:SmallButtonClose Grid.Column="2" Margin="4" Height="20" DockPanel.Dock="Right" 
                                   VerticalAlignment="Top" Foreground="Magenta" Click="RemoveMediaFile_Click" >
@@ -216,13 +215,13 @@
                             <TextBlock.Text>
                                 <MultiBinding StringFormat="{}{0} ({1})">
                                     <Binding Path="FileName" FallbackValue="Long File Name" />
-                                    <Binding Path="NaturalDuration" Converter="{StaticResource TimeFormatConverter}" />
+                                    <Binding Path="NaturalDuration" Converter="{StaticResource SecondsToStringConverter}" />
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>
 
                         <TextBlock Grid.Column="1" VerticalAlignment="Center" FontSize="18" 
-                                       Text="{Binding NaturalDuration, Converter={StaticResource TimeFormatConverter}, FallbackValue=0 min}"/>
+                                       Text="{Binding NaturalDuration, Converter={StaticResource SecondsToStringConverter}, FallbackValue=0 min}"/>
 
                         <controls:SmallButtonClose Grid.Column="2" Margin="4" Height="20" DockPanel.Dock="Right" 
                                   VerticalAlignment="Top" Click="RemoveMediaFile_Click" >

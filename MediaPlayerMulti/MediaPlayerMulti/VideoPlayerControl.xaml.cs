@@ -23,6 +23,7 @@ using MkZ.WPF;
 using System.Windows.Media.Animation;
 using MkZ.MediaPlayer.Controls;
 using MkZ.MediaPlayer.Utils;
+using MkZ.WPF.Controls;
 
 namespace MkZ.MediaPlayer
 {
@@ -35,7 +36,9 @@ namespace MkZ.MediaPlayer
         private readonly AnimationHelper _controlsHideAndShow;
 
         public Action<VideoPlayerControlVM> OnFullScreenButtonClick = (vm) => { };
-        public Action<string> OnFileDropAction = (fileName) => { };
+        public Action<string[]> OnFileDropAction = (fileNames) => { };
+
+        private CursorArrow _cursorArrow = new CursorArrow();
 
         public MediaFileInfo MediaFileInfo
         {
@@ -64,7 +67,7 @@ namespace MkZ.MediaPlayer
             InitializeComponent();
 
             _controlsHideAndShow = new AnimationHelper(this, 2,
-                _playControls, _testButtons, _systemButtons, _borderPrompt);
+                _playControls, _testButtons, _systemButtons, _borderPrompt, _cursorArrow);
 
             //_imageBackground.Draggable();
 
@@ -83,6 +86,7 @@ namespace MkZ.MediaPlayer
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            _cursorArrow.Load_Cursor(_gridMain, 50, 50);
         }
 
         private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -109,6 +113,15 @@ namespace MkZ.MediaPlayer
         private void ButtonFullScreen_Click(object sender, RoutedEventArgs e)
         {
             OnFullScreenButtonClick(_playerControlVM);
+
+            if(_playerControlVM.IsFullScreen)
+            {
+                _cursorArrow.SetSize(100, 100);
+            }
+            else
+            {
+                _cursorArrow.SetSize(50, 50);
+            }
         }
 
         private void UserControl_Drop(object sender, DragEventArgs e)
@@ -117,7 +130,7 @@ namespace MkZ.MediaPlayer
             {
                 // Note that you can have more than one file.
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-                OnFileDropAction(files[0]);
+                OnFileDropAction(files);
             }
         }
 

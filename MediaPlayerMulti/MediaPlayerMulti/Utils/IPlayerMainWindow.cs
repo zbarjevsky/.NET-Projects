@@ -9,10 +9,8 @@ namespace MkZ.MediaPlayer.Utils
 {
     public interface IPlayerMainWindow
     {
-        Configuration Config { get; }
         Window Window { get; }
-        VideoPlayerControlVM MediaPlayerVM { get; }
-        void AddNewMediaFile(string fileName, double volume);
+        void AddNewMediaFiles(string [] fileNames, double volume);
         void ToggleFullScreen();
         bool PreviousTrack_CanExecute();
         void PreviousTrack_Executed();

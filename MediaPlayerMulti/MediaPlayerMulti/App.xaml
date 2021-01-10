@@ -8,6 +8,7 @@
         <utils:MyBrushToColorConverter x:Key="ColorConverter" />
         <utils:BrushOpacityConverter x:Key="BrushOpacityConverter" />
         <utils:MediaStateToPlayConverter x:Key="MediaStateToPlayConverter" />
+        <utils:SecondsToStringConverter x:Key="SecondsToStringConverter" />
 
         <SolidColorBrush x:Key="ButtonForegroundMain" Color="SteelBlue" />
         <SolidColorBrush x:Key="ButtonForegroundPlay" Color="LimeGreen" />
@@ -16,6 +17,8 @@
         <Style x:Key="{x:Type ToolTip}" TargetType="ToolTip">
             <Setter Property="OverridesDefaultStyle" Value="true" />
             <Setter Property="HasDropShadow" Value="True" />
+            <Setter Property="VerticalOffset" Value="30" />
+            <Setter Property="FontWeight" Value="Medium" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ToolTip">

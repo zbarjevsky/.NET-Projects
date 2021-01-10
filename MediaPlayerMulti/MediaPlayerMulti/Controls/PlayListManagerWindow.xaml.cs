@@ -19,8 +19,10 @@ namespace MkZ.MediaPlayer.Controls
     /// <summary>
     /// Interaction logic for PlayListManagerWindow.xaml
     /// </summary>
-    public partial class PlayListManagerWindow : Window
+    public partial class PlayListManagerWindow : Window, IPlayerMainWindow
     {
+        private MediaPlayerCommands _mediaPlayerCommands;
+
         PlayListManagerVM VM = new PlayListManagerVM();
         ListViewDragDropManager<MediaFileInfo> dragMgr = new ListViewDragDropManager<MediaFileInfo>();
 
@@ -36,6 +38,8 @@ namespace MkZ.MediaPlayer.Controls
             dragMgr.ListView = _listMediaFiles;
             dragMgr.ShowDragAdorner = true;
             dragMgr.DragAdornerOpacity = 0.5;
+
+            _mediaPlayerCommands = new MediaPlayerCommands(this);
 
             VM.NotifyPropertyChangedAll();
         }
@@ -72,7 +76,7 @@ namespace MkZ.MediaPlayer.Controls
         {
             if (sender is Button btn)
             {
-                if(btn.DataContext is PlayList list)
+                if (btn.DataContext is PlayList list)
                     VM.DB.AddNewPlayList("NewPlayList", list);
             }
         }
@@ -98,5 +102,39 @@ namespace MkZ.MediaPlayer.Controls
                 this.Close();
             }
         }
+
+        #region IPlayerMainWindow
+
+        public Window Window => this;
+
+        public void AddNewMediaFiles(string[] fileNames, double volume)
+        {
+            PlayList playList  = _treePlayLists.SelectedItem as PlayList;
+            VideoPlayerContext.Instance.AddNewMediaFiles(playList, fileNames, volume);
+        }
+
+        public void ToggleFullScreen()
+        {
+        }
+
+        public bool PreviousTrack_CanExecute()
+        {
+            return false;
+        }
+
+        public void PreviousTrack_Executed()
+        {
+        }
+
+        public bool NextTrack_CanExecute()
+        {
+            return false;
+        }
+
+        public void NextTrack_Executed()
+        {
+        }
+
+        #endregion    
     }
 }
