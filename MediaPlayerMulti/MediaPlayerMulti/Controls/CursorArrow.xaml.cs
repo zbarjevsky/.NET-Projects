@@ -20,34 +20,47 @@ namespace MkZ.MediaPlayer.Controls
     /// </summary>
     public partial class CursorArrow : UserControl
     {
+        private Grid _parentGrid = null;
+
         public CursorArrow()
         {
             InitializeComponent();
         }
 
-        public void Load_Cursor(Grid grid, double width, double height)
+        public void Load_Cursor(Grid grid)
         {
-            _cursor.Width = width;
-            _cursor.Height = height;
+            _parentGrid = grid;
 
-            grid.Cursor = Cursors.None;
+            Grid_SizeChanged(_parentGrid, null);
+
+            _parentGrid.Cursor = Cursors.None;
             
-            if(grid.RowDefinitions.Count>0)
-                Grid.SetRowSpan(this, grid.RowDefinitions.Count);
-            if(grid.ColumnDefinitions.Count > 0)
-                Grid.SetColumnSpan(this, grid.ColumnDefinitions.Count);
+            if(_parentGrid.RowDefinitions.Count>0)
+                Grid.SetRowSpan(this, _parentGrid.RowDefinitions.Count);
+            if(_parentGrid.ColumnDefinitions.Count > 0)
+                Grid.SetColumnSpan(this, _parentGrid.ColumnDefinitions.Count);
 
-            grid.Children.Add(this);
+            _parentGrid.Children.Add(this);
 
-            grid.MouseMove += Grid_MouseMove;
-            grid.MouseEnter += Grid_MouseEnter;
-            grid.MouseLeave += Grid_MouseLeave;
+            _parentGrid.MouseMove += Grid_MouseMove;
+            _parentGrid.MouseEnter += Grid_MouseEnter;
+            _parentGrid.MouseLeave += Grid_MouseLeave;
+            _parentGrid.SizeChanged += Grid_SizeChanged;
         }
 
-        public void SetSize(double width, double height)
+        private void Grid_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            _cursor.Width = width;
-            _cursor.Height = height;
+            double width = _parentGrid.ActualWidth;
+            double height = _parentGrid.ActualHeight;
+            double size = Math.Min(width, height);
+            size /= 20;
+            if (size < 30)
+                size = 30;
+            if (size > 100)
+                size = 100;
+
+            _cursor.Width = size;
+            _cursor.Height = size;
         }
 
         private void Grid_MouseLeave(object sender, MouseEventArgs e)

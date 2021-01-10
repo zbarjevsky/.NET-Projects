@@ -86,7 +86,7 @@ namespace MkZ.MediaPlayer
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            _cursorArrow.Load_Cursor(_gridMain, 50, 50);
+            _cursorArrow.Load_Cursor(_gridMain);
         }
 
         private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -113,15 +113,6 @@ namespace MkZ.MediaPlayer
         private void ButtonFullScreen_Click(object sender, RoutedEventArgs e)
         {
             OnFullScreenButtonClick(_playerControlVM);
-
-            if(_playerControlVM.IsFullScreen)
-            {
-                _cursorArrow.SetSize(100, 100);
-            }
-            else
-            {
-                _cursorArrow.SetSize(50, 50);
-            }
         }
 
         private void UserControl_Drop(object sender, DragEventArgs e)
