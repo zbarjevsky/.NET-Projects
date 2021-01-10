@@ -31,9 +31,12 @@
                 <local:ButtonStop Width="30" Margin="6,0" Foreground="{StaticResource ButtonForegroundPlay}" 
                     ToolTip="Stop" ToolTipService.ShowOnDisabled="True"
                      Command="MediaCommands.Stop" />
-                <local:ButtonNext Width="30" Margin="6,0" Foreground="{StaticResource ButtonForegroundPlay}" 
-                    ToolTip="Next Track" ToolTipService.ShowOnDisabled="True"
-                    Command="MediaCommands.NextTrack" />
+                <local:ButtonWithText Width="30" Margin="6,0" ButtonText="-10" Foreground="{StaticResource ButtonVolumeColor}" 
+                    ToolTip="Skip Back 10 sec" ToolTipService.ShowOnDisabled="True"
+                    Click="Skip_Backward_Click" />
+                <local:ButtonWithText Width="30" Margin="6,0" ButtonText="+10" Foreground="{StaticResource ButtonVolumeColor}" 
+                    ToolTip="Skip Forward 10 seconds" ToolTipService.ShowOnDisabled="True"
+                    Click="Skip_Forward_Click" />
                 <local:ButtonVolume DockPanel.Dock="Right" Width="30" Margin="6,0" Foreground="{StaticResource ButtonVolumeColor}"
                                     IsChecked="{Binding IsMuted}">
                     <local:ButtonVolume.ToolTip>
@@ -41,6 +44,9 @@
                                        FontSize="18" FontWeight="Medium" />
                     </local:ButtonVolume.ToolTip>
                 </local:ButtonVolume>
+                <local:ButtonNext Width="30" Margin="6,0" Foreground="{StaticResource ButtonForegroundPlay}" 
+                    ToolTip="Next Track" ToolTipService.ShowOnDisabled="True" DockPanel.Dock="Right"
+                    Command="MediaCommands.NextTrack" />
                 
                 <Slider x:Name="_sliderPosition" Style="{StaticResource Horizontal_Slider}" DockPanel.Dock="Top" Margin="5,0"
                     VerticalAlignment="Center" HorizontalAlignment="Stretch" 

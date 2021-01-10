@@ -42,12 +42,20 @@ namespace MkZ.WPF
         {
             if (wndVolume != null)
                 return;
+            //estimate height - assuming volume button is in bottom-right position
+            double sizeY = ancor.TranslatePoint(new Point(), Application.Current.MainWindow).Y / 2.0;
+            if (sizeY < 160) sizeY = 160;
+            double sizeX = sizeY / 4.0;
 
             Point location = ancor.PointToScreen(new Point(0, 0));
-            location.Y -= 250;
-            location.X -= 30;
+            location.Y -= sizeY;
+            location.X -= (sizeX)/2.0;
 
             wndVolume = new PopupVolumeControlWindow(WindowStartupLocation.Manual, location, GetParentWindow(ancor));
+            
+            wndVolume.Width = sizeX;
+            wndVolume.Height = sizeY;
+
             wndVolume.Foreground = ancor.Foreground;
             wndVolume.DataContext = dataContext;
             wndVolume.Closed += (s1, e1) => { wndVolume = null; };

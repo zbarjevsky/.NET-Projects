@@ -94,6 +94,9 @@
     <Compile Include="Controls\ButtonPrev.xaml.cs">
       <DependentUpon>ButtonPrev.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ButtonWithText.xaml.cs">
+      <DependentUpon>ButtonWithText.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ButtonStop.xaml.cs">
       <DependentUpon>ButtonStop.xaml</DependentUpon>
     </Compile>
@@ -186,6 +189,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ButtonPrev.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ButtonWithText.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

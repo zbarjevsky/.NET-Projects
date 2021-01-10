@@ -76,5 +76,30 @@ namespace MkZ.MediaPlayer.Controls
         {
             _popupSliderTooltip.IsOpen = false;
         }
+
+        private void Skip_Backward_Click(object sender, RoutedEventArgs e)
+        {
+            Skip(-10);
+        }
+
+        private void Skip_Forward_Click(object sender, RoutedEventArgs e)
+        {
+            Skip(10);
+        }
+
+        private void Skip(double seconds)
+        {
+            if (DataContext is VideoPlayerControlVM vm)
+            {
+                double pos = vm.Position.TotalSeconds;
+                pos += seconds;
+                if (pos >= vm.NaturalDuration)
+                    pos = vm.NaturalDuration - 1.0;
+                if (pos < 0)
+                    pos = 0;
+
+                vm.Position = TimeSpan.FromSeconds(pos);
+            }
+        }
     }
 }
