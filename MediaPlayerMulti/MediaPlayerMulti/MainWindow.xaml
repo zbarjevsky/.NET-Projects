@@ -16,7 +16,6 @@
         Height="768" Width="1366">
     <Window.Resources>
         <utils:ObjectToStringConverter x:Key="ObjectToStringConverter" />
-        <utils:PathToFileNameConverter x:Key="PathToFileNameConverter" />
         
         <Style TargetType="{x:Type CheckBox}" x:Key="myCheckboxStyle">
             <Setter Property="Template">
@@ -179,8 +178,9 @@
                             </Grid.ColumnDefinitions>
                             <TextBlock VerticalAlignment="Center">
                                 <TextBlock.Text>
-                                    <MultiBinding StringFormat="{}{0}">
-                                        <Binding Path="FileName" FallbackValue="Long File Name" />
+                                    <MultiBinding StringFormat="{}{0} ({1})">
+                                        <Binding Path="FileName" Converter="{StaticResource PathToFileNameConverter}" />
+                                        <Binding Path="FileName" />
                                     </MultiBinding>
                                 </TextBlock.Text>
                             </TextBlock>

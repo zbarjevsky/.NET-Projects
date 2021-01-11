@@ -24,7 +24,7 @@ namespace MkZ.MediaPlayer.Utils
 
         public Configuration Config => VideoPlayerContext.Instance.Config.Configuration;
 
-        public MediaPlayerCommands(IPlayerMainWindow mainWindow)
+        public MediaPlayerCommands(IPlayerMainWindow mainWindow, bool enableKeyboardShortcuts)
         {
             _mainWindow = mainWindow;
 
@@ -51,7 +51,8 @@ namespace MkZ.MediaPlayer.Utils
             EscapeCommand = new RelayCommand(Escape_Execute, (o) => true);
             _mainWindow.Window.InputBindings.Add(new KeyBinding(EscapeCommand, new KeyGesture(Key.Escape)));
 
-            _mainWindow.Window.PreviewKeyDown += Window_PreviewKeyDown;
+            if(enableKeyboardShortcuts)
+                _mainWindow.Window.PreviewKeyDown += Window_PreviewKeyDown;
         }
 
         private void PreviousTrack_CanExecute(object sender, CanExecuteRoutedEventArgs e)

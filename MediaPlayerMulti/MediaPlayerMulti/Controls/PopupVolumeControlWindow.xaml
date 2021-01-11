@@ -9,45 +9,51 @@
         WindowStartupLocation="Manual"
         WindowStyle="None"
         ResizeMode="NoResize"
+        Loaded="_volumeControl_Loaded"
         MouseWheel="Window_MouseWheel"
         Background="Transparent"
         Topmost="True"
         x:Name="_volumeControl"
         AllowsTransparency="True"
-        Height="240" Width="60"
+        Height="320" Width="140"
         Title="{Binding Volume, StringFormat=Volume 0.0%}" >
-    <Viewbox>
-        <Border x:Name="_border" BorderThickness="2" CornerRadius="10" Padding="1" 
-                BorderBrush="{Binding Foreground, ElementName=_volumeControl}">
-            <Border.Background>
-                <SolidColorBrush Color="DarkGray" Opacity="0.9"/>
-            </Border.Background>
-            <Grid Height="240" Width="60" >
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-                <wpf:GradientProgressBar  x:Name="_progress"
-                    Margin="10" Background="{Binding Background, ElementName=_border}"
-                    Minimum="0" Maximum="1" 
-                    Value="{Binding Value, ElementName=_slider}">
-                    <wpf:GradientProgressBar.LayoutTransform>
-                        <RotateTransform CenterX="0.5" CenterY="0.5" Angle="-90"/>
-                    </wpf:GradientProgressBar.LayoutTransform>
-                </wpf:GradientProgressBar>
-                <Slider x:Name="_slider" Grid.Column="1" Margin="0,5"
-                        Orientation="Vertical" HorizontalAlignment="Center"
-                        SmallChange="0.02" LargeChange="0.1"
-                        Minimum="0" Maximum="1" Value="{Binding Volume, FallbackValue=0.951}">
-                </Slider>
-                <TextBlock Grid.Row="1" Grid.ColumnSpan="2" FontWeight="Medium"
-                           VerticalAlignment="Center" HorizontalAlignment="Center"
-                           Text="{Binding Value, ElementName=_slider, StringFormat=0.#%}"/>
-            </Grid>
-        </Border>
-    </Viewbox>
+    <Grid x:Name="_gridMain" Margin="20">
+        <Grid.Background>
+            <SolidColorBrush Color="Black" Opacity="0.01" />
+        </Grid.Background>
+        <Viewbox>
+            <Border x:Name="_border" BorderThickness="2" CornerRadius="10" Padding="1" 
+                    BorderBrush="{Binding Foreground, ElementName=_volumeControl}">
+                <Border.Background>
+                    <SolidColorBrush Color="DarkGray" Opacity="0.75"/>
+                </Border.Background>
+                <Grid Height="240" Width="60" >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <wpf:GradientProgressBar  x:Name="_progress"
+                        Margin="10" Background="{Binding Background, ElementName=_border}"
+                        Minimum="0" Maximum="1" 
+                        Value="{Binding Value, ElementName=_slider}">
+                        <wpf:GradientProgressBar.LayoutTransform>
+                            <RotateTransform CenterX="0.5" CenterY="0.5" Angle="-90"/>
+                        </wpf:GradientProgressBar.LayoutTransform>
+                    </wpf:GradientProgressBar>
+                    <Slider x:Name="_slider" Grid.Column="1" Margin="0,5"
+                            Orientation="Vertical" HorizontalAlignment="Center"
+                            SmallChange="0.02" LargeChange="0.1"
+                            Minimum="0" Maximum="1" Value="{Binding Volume, FallbackValue=0.951}">
+                    </Slider>
+                    <TextBlock Grid.Row="1" Grid.ColumnSpan="2" FontWeight="Medium"
+                               VerticalAlignment="Center" HorizontalAlignment="Center"
+                               Text="{Binding Value, ElementName=_slider, StringFormat=0.#%}"/>
+                </Grid>
+            </Border>
+        </Viewbox>
+    </Grid>
 </Window>

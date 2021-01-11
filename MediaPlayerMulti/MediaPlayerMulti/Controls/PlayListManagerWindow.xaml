@@ -27,11 +27,16 @@
         </DockPanel>
         <DockPanel Grid.Column="2">
             <local:ButtonBrowse Margin="4" Foreground="{StaticResource ButtonForegroundMain}" 
+                                ToolTip="Open Files..." 
                                 Command="ApplicationCommands.Open" />
             <local:ButtonPlayPause Margin="4" Foreground="{StaticResource ButtonForegroundMain}" 
                      HorizontalAlignment="Left" Command="MediaCommands.TogglePlayPause"
                      ToolTip="Tooggle Play Pause" ToolTipService.ShowOnDisabled="True" 
                      IsChecked="False"/>
+            <local:ButtonSort x:Name="_btnSort" Margin="4" Foreground="{StaticResource ButtonForegroundMain}" 
+                     HorizontalAlignment="Left" Click="ButtonSort_Click"
+                     ToolTip="Sort Play List" ToolTipService.ShowOnDisabled="True" 
+                     IsChecked="True" />
         </DockPanel>
         <TreeView Grid.Row="1" x:Name="_treePlayLists" ItemsSource="{Binding PlayListRoot}"
                   SelectedItemChanged="_treePlayLists_SelectedItemChanged">
@@ -130,32 +135,45 @@
         <ListView Grid.Row="1" Grid.Column="2" x:Name="_listMediaFiles" SelectionMode="Single"
                   ItemsSource="{Binding SelectedItem.MediaFiles, ElementName=_treePlayLists}" 
                   MouseDoubleClick="_listMediaFiles_MouseDoubleClick">
-            <ListView.ItemTemplate>
+            <!--<ListView.ItemTemplate>
                 <DataTemplate>
                     <DockPanel>
                         <TextBlock FontWeight="Medium">
                             <TextBlock.Text>
-                                <MultiBinding StringFormat="{}({0}) {1}">
+                                <MultiBinding StringFormat="{}({0}) {1} == {2}">
                                     <Binding Path="PositionInSeconds" Converter="{StaticResource SecondsToStringConverter}" />
+                                    <Binding Path="FileName" Converter="{StaticResource PathToFileNameConverter}" />
                                     <Binding Path="FileName" />
                                 </MultiBinding>
                             </TextBlock.Text>
                         </TextBlock>
                         <local:SmallButtonClose Grid.Column="2" Margin="4" Height="20" DockPanel.Dock="Right" 
                                       VerticalAlignment="Top" Foreground="Magenta" Click="RemoveMediaFile_Click">
-                            <!--<Button.Style>
-                                <Style TargetType="Button">
-                                    <Style.Triggers>
-                                        <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=TreeViewItem}}" Value="{x:Null}">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </Button.Style>-->
                         </local:SmallButtonClose>
                     </DockPanel>
                 </DataTemplate>
-            </ListView.ItemTemplate>
+            </ListView.ItemTemplate>-->
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn Header=" x " Width="40" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <local:SmallButtonClose Grid.Column="2" Margin="4" Height="20" DockPanel.Dock="Right" 
+                                      VerticalAlignment="Top" Foreground="Magenta" Click="RemoveMediaFile_Click"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Position"
+                    DisplayMemberBinding="{Binding PositionInSeconds, Converter={StaticResource SecondsToStringConverter}}"
+                    Width="100" />
+                    <GridViewColumn Header="File Name"
+                    DisplayMemberBinding="{Binding FileName, Converter={StaticResource PathToFileNameConverter}}"
+                    Width="Auto" />
+                    <GridViewColumn Header="Path"
+                    DisplayMemberBinding="{Binding FileName}"
+                    Width="Auto" />
+                </GridView>
+            </ListView.View>
         </ListView>
     </Grid>
 </Window>

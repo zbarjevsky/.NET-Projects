@@ -72,7 +72,7 @@ namespace MediaPlayerMulti
 
             _ctxPlayLists.ItemsSource = DB.RootList.PlayLists;
 
-            _mediaPlayerCommands = new MediaPlayerCommands(this);
+            _mediaPlayerCommands = new MediaPlayerCommands(this, enableKeyboardShortcuts: true);
 
             _player.OnFullScreenButtonClick = (vm) => ToggleFullScreen();
             _player.OnFileDropAction = (fileNames) =>

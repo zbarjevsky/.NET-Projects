@@ -149,7 +149,7 @@ namespace MkZ.MediaPlayer.Utils
 
         public int SelectedMediaFileIndex { get; set; } = 0;
 
-        public ObservableCollection<MediaFileInfo> MediaFiles { get; set; } = new ObservableCollection<MediaFileInfo>();
+        public ObservableRangeCollection<MediaFileInfo> MediaFiles { get; set; } = new ObservableRangeCollection<MediaFileInfo>();
 
         public ObservableCollection<PlayList> PlayLists { get; set; } = new ObservableCollection<PlayList>();
 

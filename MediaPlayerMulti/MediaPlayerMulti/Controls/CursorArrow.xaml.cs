@@ -21,15 +21,19 @@ namespace MkZ.MediaPlayer.Controls
     public partial class CursorArrow : UserControl
     {
         private Grid _parentGrid = null;
+        private double _sizeRatio = 20.0;
 
         public CursorArrow()
         {
             InitializeComponent();
+
+            _cursor.Visibility = Visibility.Hidden;
         }
 
-        public void Load_Cursor(Grid grid)
+        public void Load_Cursor(Grid grid, double sizeRatio)
         {
             _parentGrid = grid;
+            _sizeRatio = sizeRatio;
 
             Grid_SizeChanged(_parentGrid, null);
 
@@ -52,8 +56,8 @@ namespace MkZ.MediaPlayer.Controls
         {
             double width = _parentGrid.ActualWidth;
             double height = _parentGrid.ActualHeight;
-            double size = Math.Min(width, height);
-            size /= 20;
+            double size = height; // Math.Min(width, height);
+            size /= _sizeRatio;
             if (size < 30)
                 size = 30;
             if (size > 100)

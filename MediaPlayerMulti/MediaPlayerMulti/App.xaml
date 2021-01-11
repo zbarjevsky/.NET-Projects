@@ -9,6 +9,7 @@
         <utils:BrushOpacityConverter x:Key="BrushOpacityConverter" />
         <utils:MediaStateToPlayConverter x:Key="MediaStateToPlayConverter" />
         <utils:SecondsToStringConverter x:Key="SecondsToStringConverter" />
+        <utils:PathToFileNameConverter x:Key="PathToFileNameConverter" />
 
         <SolidColorBrush x:Key="ButtonForegroundMain" Color="SteelBlue" />
         <SolidColorBrush x:Key="ButtonForegroundPlay" Color="LimeGreen" />
@@ -19,13 +20,14 @@
             <Setter Property="HasDropShadow" Value="True" />
             <Setter Property="VerticalOffset" Value="30" />
             <Setter Property="FontWeight" Value="Medium" />
+            <Setter Property="Foreground" Value="Navy" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ToolTip">
                         <Border Name="Border" CornerRadius="4" BorderThickness="1.5"  Padding="3,1"
                                 BorderBrush="{TemplateBinding Foreground}"
-                            Width="{TemplateBinding Width}"
-                            Height="{TemplateBinding Height}">
+                                Width="{TemplateBinding Width}"
+                                Height="{TemplateBinding Height}">
                             <Border.Background>
                                 <SolidColorBrush Color="White" Opacity="0.75" />
                             </Border.Background>

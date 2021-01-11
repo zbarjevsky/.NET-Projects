@@ -44,8 +44,8 @@ namespace MkZ.WPF
                 return;
             //estimate height - assuming volume button is in bottom-right position
             double sizeY = ancor.TranslatePoint(new Point(), Application.Current.MainWindow).Y / 2.0;
-            if (sizeY < 160) sizeY = 160;
-            double sizeX = sizeY / 4.0;
+            if (sizeY < 200) sizeY = 200;
+            double sizeX = sizeY / 3.0;
 
             Point location = ancor.PointToScreen(new Point(0, 0));
             location.Y -= sizeY;
@@ -113,6 +113,12 @@ namespace MkZ.WPF
                 if (element is Window wnd)
                     wnd.Close();
             }; 
+        }
+
+        private void _volumeControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            CursorArrow _cursorArrow = new CursorArrow();
+            _cursorArrow.Load_Cursor(_gridMain, sizeRatio: 7);
         }
 
         private void ShowFadeIn()

@@ -2,6 +2,7 @@
 using MkZ.WPF.DragDrop;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,7 +13,6 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace MkZ.MediaPlayer.Controls
 {
@@ -39,7 +39,7 @@ namespace MkZ.MediaPlayer.Controls
             dragMgr.ShowDragAdorner = true;
             dragMgr.DragAdornerOpacity = 0.5;
 
-            _mediaPlayerCommands = new MediaPlayerCommands(this);
+            _mediaPlayerCommands = new MediaPlayerCommands(this, enableKeyboardShortcuts: false);
 
             VM.NotifyPropertyChangedAll();
         }
@@ -47,6 +47,7 @@ namespace MkZ.MediaPlayer.Controls
         private void _treePlayLists_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
         {
             PlayList list = _treePlayLists.SelectedItem as PlayList;
+            _bSortAscending = true;
         }
 
         private void RemoveMediaFile_Click(object sender, RoutedEventArgs e)
@@ -135,6 +136,29 @@ namespace MkZ.MediaPlayer.Controls
         {
         }
 
-        #endregion    
+        #endregion
+
+        private bool _bSortAscending = true;
+        private void ButtonSort_Click(object sender, RoutedEventArgs e)
+        {
+            PlayList playList = _treePlayLists.SelectedItem as PlayList;
+            if(playList != null && playList.MediaFiles.Count > 1)
+            {
+                List<MediaFileInfo> list = new List<MediaFileInfo>(playList.MediaFiles);
+                list.Sort((f1, f2) => 
+                { 
+                    if(_bSortAscending)
+                        return Path.GetFileNameWithoutExtension(f1.FileName).CompareTo(Path.GetFileNameWithoutExtension(f2.FileName)); 
+                    else
+                        return Path.GetFileNameWithoutExtension(f2.FileName).CompareTo(Path.GetFileNameWithoutExtension(f1.FileName));
+                });
+
+                playList.MediaFiles.Clear();
+                playList.MediaFiles.AddRange(list);
+
+                _bSortAscending = !_bSortAscending;
+                _btnSort.IsChecked = _bSortAscending;
+            }
+        }
     }
 }

@@ -1,0 +1,82 @@
+﻿<ToggleButton x:Class="MkZ.MediaPlayer.Controls.ButtonSort"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MkZ.MediaPlayer.Controls"
+              xmlns:utils="clr-namespace:MkZ.MediaPlayer.Utils"
+              mc:Ignorable="d"
+              d:DesignHeight="96" d:DesignWidth="96">
+    <ToggleButton.Resources>
+        <utils:MyBrushToColorConverter x:Key="ColorConverter" />
+    </ToggleButton.Resources>
+    <ToggleButton.Template>
+        <ControlTemplate TargetType="ToggleButton">
+            <ControlTemplate.Resources>
+                <Style TargetType="Path">
+                    <Setter Property="Fill" Value="Transparent"/>
+                    <Setter Property="Stroke" Value="DarkGray"/>
+                    <Setter Property="StrokeThickness" Value="2"/>
+                </Style>
+            </ControlTemplate.Resources>
+            <Viewbox >
+                <Canvas Width="48" Height="48">
+                    <Path x:Name="circle">
+                        <Path.Data>
+                            <EllipseGeometry Center="24,24" RadiusX="22" RadiusY="22"/>
+                        </Path.Data>
+                    </Path>
+                    <Path x:Name="sort_desc" 
+                          Data="M 30 15 L 30 40 L 32 40 L 32 15 L 34 15 L 31 10 L 28 15 Z 
+                                M 12 15 L 24 15 L 24 16 L 12 16 Z 
+                                M 14 20 L 24 20 L 24 21 L 14 21 Z 
+                                M 16 25 L 24 25 L 24 26 L 16 26 Z 
+                                M 18 30 L 24 30 L 24 31 L 18 31 Z 
+                                M 20 35 L 24 35 L 24 36 L 20 36 Z 
+                                  " />
+                    <Path x:Name="sort_asc" 
+                          Data="M 30 10 L 30 35 L 28 35 L 31 40 L 34 35 L 32 35 L 32 10 Z 
+                                M 20 15 L 24 15 L 24 16 L 20 16 Z 
+                                M 18 20 L 24 20 L 24 21 L 18 21 Z 
+                                M 16 25 L 24 25 L 24 26 L 16 26 Z 
+                                M 14 30 L 24 30 L 24 31 L 14 31 Z 
+                                M 12 35 L 24 35 L 24 36 L 12 36 Z 
+                                  " />
+                </Canvas>
+            </Viewbox>
+
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsEnabled" Value="True">
+                    <Setter TargetName="circle" Property="Stroke"  
+                        Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
+                        Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.5}" />
+                    <Setter TargetName="circle" Property="Fill" 
+                        Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
+                        Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.3}" />
+                    <Setter TargetName="sort_desc" Property="Stroke" 
+                        Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
+                        Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.5}" />
+                    <Setter TargetName="sort_asc" Property="Stroke" 
+                        Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
+                        Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.5}" />
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="circle" Property="Stroke" Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}}" />
+                    <Setter TargetName="circle" Property="Fill" 
+                        Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
+                        Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.3}" />
+                    <Setter TargetName="sort_desc" Property="Stroke"  Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}}" />
+                    <Setter TargetName="sort_asc" Property="Stroke"  Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}}" />
+                </Trigger>
+                <Trigger Property="ToggleButton.IsChecked" Value="False">
+                    <Setter TargetName="sort_desc" Property="Visibility" Value="Visible"/>
+                    <Setter TargetName="sort_asc" Property="Visibility" Value="Hidden"/>
+                </Trigger>
+                <Trigger Property="ToggleButton.IsChecked" Value="True">
+                    <Setter TargetName="sort_desc" Property="Visibility" Value="Hidden"/>
+                    <Setter TargetName="sort_asc" Property="Visibility" Value="Visible"/>
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </ToggleButton.Template>
+</ToggleButton>

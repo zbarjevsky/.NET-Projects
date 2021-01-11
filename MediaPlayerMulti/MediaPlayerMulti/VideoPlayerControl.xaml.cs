@@ -86,7 +86,7 @@ namespace MkZ.MediaPlayer
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            _cursorArrow.Load_Cursor(_gridMain);
+            _cursorArrow.Load_Cursor(_gridMain, sizeRatio: 20);
         }
 
         private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
