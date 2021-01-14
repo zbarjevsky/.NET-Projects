@@ -191,15 +191,42 @@ namespace MkZ.MediaPlayer.Utils
             return SelectedMediaFileIndex;
         }
 
-        public int DeleteMediaFile(MediaFileInfo item)
+        public int RemoveMediaFileFromList(MediaFileInfo item)
         {
-            MediaFiles.Remove(item);
-            if (MediaFiles.Count > 0)
-                SelectedMediaFileIndex = 0;
-            else
-                SelectedMediaFileIndex = -1;
+            int idx = MediaFiles.IndexOf(item);
+            if (idx >= 0)
+            {
+                MediaFiles.RemoveAt(idx);
+                if (idx >= MediaFiles.Count)
+                    idx = MediaFiles.Count - 1; //last or -1
+            }
+            return idx;
+        }
 
-            return SelectedMediaFileIndex;
+        public int SelectNextMediaFile(int indexFrom)
+        {
+            if (MediaFiles.Count == 0)
+                return SelectedMediaFileIndex = -1;
+
+            indexFrom++;
+            if (indexFrom >= MediaFiles.Count)
+                indexFrom = 0;
+
+            return SelectedMediaFileIndex = indexFrom;
+        }
+
+        public int SelectPreviousMediaFile(int indexFrom)
+        {
+            if (MediaFiles.Count == 0)
+                return SelectedMediaFileIndex = -1;
+
+            indexFrom--;
+            if (indexFrom >= MediaFiles.Count)
+                indexFrom = 0;
+            if (indexFrom < 0)
+                indexFrom = MediaFiles.Count - 1; //last
+
+            return SelectedMediaFileIndex = indexFrom;
         }
 
         public MediaFileInfo FindFile(string subString)

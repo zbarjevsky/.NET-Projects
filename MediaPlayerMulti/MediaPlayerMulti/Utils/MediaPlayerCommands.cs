@@ -13,10 +13,10 @@ using MkZ.WPF;
 
 namespace MkZ.MediaPlayer.Utils
 {
-    public class MediaPlayerCommands
+    public class MediaPlayerCommands : IDisposable
     {
-        private readonly IPlayerMainWindow _mainWindow;
-        
+        public IPlayerMainWindow MainWindow { get; private set; }
+
         private ICommand F11Command { get; set; }
         private ICommand EscapeCommand { get; set; }
 
@@ -26,53 +26,65 @@ namespace MkZ.MediaPlayer.Utils
 
         public MediaPlayerCommands(IPlayerMainWindow mainWindow, bool enableKeyboardShortcuts)
         {
-            _mainWindow = mainWindow;
+            MainWindow = mainWindow;
 
-            _mainWindow.Window.CommandBindings.Clear();
-            _mainWindow.Window.CommandBindings.Add(new CommandBinding(ApplicationCommands.Open, Open_Executed, Open_CanExecute));
-            _mainWindow.Window.CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, Close_Executed, Close_CanExecute));
-            _mainWindow.Window.CommandBindings.Add(new CommandBinding(MediaCommands.TogglePlayPause, TogglePlayPause_Executed, TogglePlayPause_CanExecute));
-            _mainWindow.Window.CommandBindings.Add(new CommandBinding(MediaCommands.Play, Play_Executed, Play_CanExecute));
-            _mainWindow.Window.CommandBindings.Add(new CommandBinding(MediaCommands.Pause, Pause_Executed, Pause_CanExecute));
-            _mainWindow.Window.CommandBindings.Add(new CommandBinding(MediaCommands.Stop, Stop_Executed, Stop_CanExecute));
-            _mainWindow.Window.CommandBindings.Add(new CommandBinding(MediaCommands.PreviousTrack, PreviousTrack_Executed, PreviousTrack_CanExecute));
-            _mainWindow.Window.CommandBindings.Add(new CommandBinding(MediaCommands.NextTrack, NextTrack_Executed, NextTrack_CanExecute));
+            MainWindow.Window.CommandBindings.Clear();
+            MainWindow.Window.CommandBindings.Add(new CommandBinding(ApplicationCommands.Open, Open_Executed, Open_CanExecute));
+            MainWindow.Window.CommandBindings.Add(new CommandBinding(ApplicationCommands.Close, Close_Executed, Close_CanExecute));
+            MainWindow.Window.CommandBindings.Add(new CommandBinding(MediaCommands.TogglePlayPause, TogglePlayPause_Executed, TogglePlayPause_CanExecute));
+            MainWindow.Window.CommandBindings.Add(new CommandBinding(MediaCommands.Play, Play_Executed, Play_CanExecute));
+            MainWindow.Window.CommandBindings.Add(new CommandBinding(MediaCommands.Pause, Pause_Executed, Pause_CanExecute));
+            MainWindow.Window.CommandBindings.Add(new CommandBinding(MediaCommands.Stop, Stop_Executed, Stop_CanExecute));
+            MainWindow.Window.CommandBindings.Add(new CommandBinding(MediaCommands.PreviousTrack, PreviousTrack_Executed, PreviousTrack_CanExecute));
+            MainWindow.Window.CommandBindings.Add(new CommandBinding(MediaCommands.NextTrack, NextTrack_Executed, NextTrack_CanExecute));
 
-            _mainWindow.Window.InputBindings.Clear();
-            _mainWindow.Window.InputBindings.Add(new KeyBinding(MediaCommands.Play, new KeyGesture(Key.Play)));
-            _mainWindow.Window.InputBindings.Add(new KeyBinding(MediaCommands.Pause, new KeyGesture(Key.Pause)));
-            _mainWindow.Window.InputBindings.Add(new KeyBinding(MediaCommands.TogglePlayPause, new KeyGesture(Key.MediaPlayPause)));
+            MainWindow.Window.InputBindings.Clear();
+            MainWindow.Window.InputBindings.Add(new KeyBinding(MediaCommands.Play, new KeyGesture(Key.Play)));
+            MainWindow.Window.InputBindings.Add(new KeyBinding(MediaCommands.Pause, new KeyGesture(Key.Pause)));
+            MainWindow.Window.InputBindings.Add(new KeyBinding(MediaCommands.TogglePlayPause, new KeyGesture(Key.MediaPlayPause)));
 
             //Full Screen
             F11Command = new RelayCommand(FullScreen_Execute, (o) => true);
-            _mainWindow.Window.InputBindings.Add(new KeyBinding(F11Command, new KeyGesture(Key.F11)));
+            MainWindow.Window.InputBindings.Add(new KeyBinding(F11Command, new KeyGesture(Key.F11)));
 
             //Escape Command
             EscapeCommand = new RelayCommand(Escape_Execute, (o) => true);
-            _mainWindow.Window.InputBindings.Add(new KeyBinding(EscapeCommand, new KeyGesture(Key.Escape)));
+            MainWindow.Window.InputBindings.Add(new KeyBinding(EscapeCommand, new KeyGesture(Key.Escape)));
 
             if(enableKeyboardShortcuts)
-                _mainWindow.Window.PreviewKeyDown += Window_PreviewKeyDown;
+                MainWindow.Window.PreviewKeyDown += Window_PreviewKeyDown;
         }
 
-        private void PreviousTrack_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        public void Dispose()
         {
-            e.CanExecute = _mainWindow.PreviousTrack_CanExecute();
+            if (MainWindow != null)
+            {
+                MainWindow.Window.CommandBindings.Clear();
+                MainWindow.Window.InputBindings.Clear();
+
+                MainWindow.Window.PreviewKeyDown -= Window_PreviewKeyDown;
+            }
+            MainWindow = null;
         }
 
-        private void PreviousTrack_Executed(object sender, ExecutedRoutedEventArgs e)
+        public void PreviousTrack_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            _mainWindow.PreviousTrack_Executed();
+            e.CanExecute = MainWindow.PreviousTrack_CanExecute();
         }
 
-        private void NextTrack_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        public void PreviousTrack_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-           e.CanExecute = _mainWindow.NextTrack_CanExecute();
+            MainWindow.PreviousTrack_Executed(bResetPositionAndPlay: false);
         }
 
-        private void NextTrack_Executed(object sender, ExecutedRoutedEventArgs e)
+        public void NextTrack_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
-            _mainWindow.NextTrack_Executed();
+           e.CanExecute = MainWindow.NextTrack_CanExecute();
+        }
+
+        public void NextTrack_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            MainWindow.NextTrack_Executed(bResetPositionAndPlay: false);
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -146,27 +158,27 @@ namespace MkZ.MediaPlayer.Utils
             return true;
         }
 
-        private void Escape_Execute(object obj)
+        public void Escape_Execute(object obj)
         {
             //if full screen
-            if (_mainWindow.Window.WindowStyle == WindowStyle.None)
-                _mainWindow.ToggleFullScreen();
+            if (MainWindow.Window.WindowStyle == WindowStyle.None)
+                MainWindow.ToggleFullScreen();
 
             Pause_Executed(this, null);
         }
 
-        private void FullScreen_Execute(object obj)
+        public void FullScreen_Execute(object obj)
         {
-            _mainWindow.ToggleFullScreen();
+            MainWindow.ToggleFullScreen();
         }
 
-        private void TogglePlayPause_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        public void TogglePlayPause_CanExecute(object sender, CanExecuteRoutedEventArgs e)
         {
             MediaState ms = PlayerVM.MediaState;
             e.CanExecute = ms == MediaState.Play || ms == MediaState.Pause || ms == MediaState.Stop;
         }
 
-        private void TogglePlayPause_Executed(object sender, ExecutedRoutedEventArgs e)
+        public void TogglePlayPause_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             PlayerVM.TogglePlayPauseState();
         }
@@ -185,7 +197,7 @@ namespace MkZ.MediaPlayer.Utils
             openFileDialog.Filter = "Media files ("+ allSupportedExtensions + ")|"+ allSupportedExtensions + "|All files (*.*)|*.*";
             if (openFileDialog.ShowDialog() == true)
             {
-                _mainWindow.AddNewMediaFiles(openFileDialog.FileNames, PlayerVM.Volume > 0 ? PlayerVM.Volume : 0.5);
+                MainWindow.AddNewMediaFiles(openFileDialog.FileNames, PlayerVM.Volume > 0 ? PlayerVM.Volume : 0.5);
             }
         }
 
@@ -228,7 +240,7 @@ namespace MkZ.MediaPlayer.Utils
         public void Close_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             PlayerVM.Pause();
-            _mainWindow.Window.Close();
+            MainWindow.Window.Close();
         }
     }
 }

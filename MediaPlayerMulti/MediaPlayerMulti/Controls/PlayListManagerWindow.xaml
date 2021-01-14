@@ -9,7 +9,13 @@
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
         Loaded="Window_Loaded" FontSize="18" FontWeight="Normal"
+        Closed="Window_Closed"
         Title="PlayList Manager" Height="450" Width="800">
+    <Window.Resources>
+        <Style TargetType="ListViewItem">
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        </Style>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="250"/>
@@ -46,7 +52,7 @@
                         <SolidColorBrush x:Key="{x:Static SystemColors.ControlBrushKey}" Color="LimeGreen"/>
                     </Style.Resources>
                     <Setter Property="IsExpanded" Value="True" />
-                    <Setter Property="IsSelected" Value="{Binding IsSelectedPlayList}" />
+                    <Setter Property="IsSelected" Value="{Binding IsSelectedPlayList, Mode=OneTime}" />
                 </Style>
             </TreeView.ItemContainerStyle>
             <TreeView.Resources>
@@ -79,7 +85,7 @@
                                 <local:ButtonPlus Margin="4,0,0,0" ToolTip="Add Sub Play List..."
                                     Foreground="DarkGoldenrod" VerticalAlignment="Top" Click="AddPlayList_Click" />
                                 <local:SmallButtonClose Grid.Column="2" Margin="4,0" 
-                                       ToolTip="Remove This Play List"
+                                       ToolTip="Remove This Play List" ToolTipService.ShowOnDisabled="True"
                                        VerticalAlignment="Top" Foreground="Red" Click="RemovePlayList_Click">
                                     <Button.Style>
                                         <Style TargetType="Button">
@@ -116,17 +122,6 @@
                             </Style>
                         </ContentPresenter.Style>
                     </ContentPresenter>
-                    <!--<DockPanel>
-                    --><!-- Display the AnimalCategory by showing it's Category string --><!--
-                        <TextBox FontWeight="Bold" Text="{Binding Path=Name}" />
-                    </DockPanel>
-                    --><!-- Specify the nested template for the individual Animal items
-                     that are within the AnimalCategories.  E.g. “California Newt”, etc. --><!--
-                    <HierarchicalDataTemplate.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding Path=Name}"/>
-                        </DataTemplate>
-                    </HierarchicalDataTemplate.ItemTemplate>-->
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
@@ -135,43 +130,42 @@
         <ListView Grid.Row="1" Grid.Column="2" x:Name="_listMediaFiles" SelectionMode="Single"
                   ItemsSource="{Binding SelectedItem.MediaFiles, ElementName=_treePlayLists}" 
                   MouseDoubleClick="_listMediaFiles_MouseDoubleClick">
-            <!--<ListView.ItemTemplate>
-                <DataTemplate>
-                    <DockPanel>
-                        <TextBlock FontWeight="Medium">
-                            <TextBlock.Text>
-                                <MultiBinding StringFormat="{}({0}) {1} == {2}">
-                                    <Binding Path="PositionInSeconds" Converter="{StaticResource SecondsToStringConverter}" />
-                                    <Binding Path="FileName" Converter="{StaticResource PathToFileNameConverter}" />
-                                    <Binding Path="FileName" />
-                                </MultiBinding>
-                            </TextBlock.Text>
-                        </TextBlock>
-                        <local:SmallButtonClose Grid.Column="2" Margin="4" Height="20" DockPanel.Dock="Right" 
-                                      VerticalAlignment="Top" Foreground="Magenta" Click="RemoveMediaFile_Click">
-                        </local:SmallButtonClose>
-                    </DockPanel>
-                </DataTemplate>
-            </ListView.ItemTemplate>-->
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header=" x " Width="40" >
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <local:SmallButtonClose Grid.Column="2" Margin="4" Height="20" DockPanel.Dock="Right" 
-                                      VerticalAlignment="Top" Foreground="Magenta" Click="RemoveMediaFile_Click"/>
+                                <local:SmallButtonClose Grid.Column="2" Margin="4" Height="20"
+                                      ToolTip="Remove From List"
+                                      Foreground="Red" Click="RemoveMediaFile_Click"/>
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn Header="Position"
-                    DisplayMemberBinding="{Binding PositionInSeconds, Converter={StaticResource SecondsToStringConverter}}"
-                    Width="100" />
-                    <GridViewColumn Header="File Name"
-                    DisplayMemberBinding="{Binding FileName, Converter={StaticResource PathToFileNameConverter}}"
-                    Width="Auto" />
-                    <GridViewColumn Header="Path"
-                    DisplayMemberBinding="{Binding FileName}"
-                    Width="Auto" />
+                    <GridViewColumn Header="Position" Width="Auto" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <TextBlock Text="{Binding PositionInSeconds, Converter={StaticResource SecondsToStringConverter}}"
+                                               TextAlignment="Right" />
+                                </Grid>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="File Name" Width="Auto" >
+                        <GridViewColumn.HeaderContainerStyle>
+                            <Style TargetType="{x:Type GridViewColumnHeader}">
+                                <Setter Property="HorizontalContentAlignment" Value="Left" />
+                            </Style>
+                        </GridViewColumn.HeaderContainerStyle>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Text="{Binding FileName, Mode=OneWay, Converter={StaticResource PathToFileNameConverter}}"
+                                         TextChanged="FileName_TextChanged"
+                                         BorderThickness="0" Background="Transparent"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Header="Path" DisplayMemberBinding="{Binding FileName}" Width="Auto" />
                 </GridView>
             </ListView.View>
         </ListView>

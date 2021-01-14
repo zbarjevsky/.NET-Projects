@@ -21,6 +21,8 @@ namespace MkZ.MediaPlayer.Controls
     /// </summary>
     public partial class PlayListManagerWindow : Window, IPlayerMainWindow
     {
+        private VideoPlayerContext Context => VideoPlayerContext.Instance;
+
         private MediaPlayerCommands _mediaPlayerCommands;
 
         PlayListManagerVM VM = new PlayListManagerVM();
@@ -31,6 +33,8 @@ namespace MkZ.MediaPlayer.Controls
             DataContext = VM;
 
             InitializeComponent();
+
+            Context.MediaPlayerCommands = _mediaPlayerCommands = new MediaPlayerCommands(this, enableKeyboardShortcuts: false);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -39,9 +43,13 @@ namespace MkZ.MediaPlayer.Controls
             dragMgr.ShowDragAdorner = true;
             dragMgr.DragAdornerOpacity = 0.5;
 
-            _mediaPlayerCommands = new MediaPlayerCommands(this, enableKeyboardShortcuts: false);
-
             VM.NotifyPropertyChangedAll();
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            _mediaPlayerCommands.Dispose();
+            _mediaPlayerCommands = null;
         }
 
         private void _treePlayLists_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
@@ -123,7 +131,7 @@ namespace MkZ.MediaPlayer.Controls
             return false;
         }
 
-        public void PreviousTrack_Executed()
+        public void PreviousTrack_Executed(bool bResetPositionAndPlay)
         {
         }
 
@@ -132,8 +140,13 @@ namespace MkZ.MediaPlayer.Controls
             return false;
         }
 
-        public void NextTrack_Executed()
+        public void NextTrack_Executed(bool bResetPositionAndPlay)
         {
+        }
+
+        public void RemoveMediaFileAndSelectNext(MediaFileInfo info, bool bResetPositionAndPlay, bool bRemoveFromList)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion
@@ -158,6 +171,31 @@ namespace MkZ.MediaPlayer.Controls
 
                 _bSortAscending = !_bSortAscending;
                 _btnSort.IsChecked = _bSortAscending;
+            }
+        }
+
+        private void FileName_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            if(sender is TextBox txt)
+            {
+                if (txt.DataContext is MediaFileInfo info)
+                {
+                    try
+                    {
+                        string newFileName = txt.Text;
+                        string newPath = Path.Combine(Path.GetDirectoryName(info.FileName), newFileName);
+                        if (newPath != info.FileName)
+                        {
+                            File.Move(info.FileName, newPath);
+                            info.FileName = newPath;
+                        }
+                    }
+                    catch (Exception err)
+                    {
+                        txt.Text = info.FileName;
+                        MessageBox.Show(err.ToString());
+                    }
+                }
             }
         }
     }

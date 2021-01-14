@@ -18,6 +18,8 @@ namespace MkZ.MediaPlayer
         public VideoPlayerControlVM PlayerVM { get; set; } = null;
         public bool InDesignMode { get; set; }
 
+        public MediaPlayerCommands MediaPlayerCommands { get; set; } = null;
+
         public void AddNewMediaFiles(PlayList playList, string[] fileNames, double volume)
         {
             List<string> unsupported = new List<string>();
@@ -42,7 +44,6 @@ namespace MkZ.MediaPlayer
             if (unsupported.Count > 0)
                 MessageBox.Show("File type is not supported.\n" + unsupported[0], "AddNewMediaFiles");
         }
-
 
         private static bool GetInDesignMode()
         {

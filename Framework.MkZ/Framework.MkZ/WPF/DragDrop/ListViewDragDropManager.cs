@@ -217,7 +217,7 @@ namespace MkZ.WPF.DragDrop
 
 		void listView_PreviewMouseLeftButtonDown( object sender, MouseButtonEventArgs e )
 		{
-			if( this.IsMouseOverScrollbar )
+			if( this.IsMouseOverScrollbar || this.IsMouseOverTextBox )
 			{
 				// 4/13/2007 - Set the flag to false when cursor is over scrollbar.
 				this.canInitiateDrag = false;
@@ -571,9 +571,20 @@ namespace MkZ.WPF.DragDrop
 			return bounds.Contains( mousePos );
 		}
 
-			#endregion // IsMouseOver
+		#endregion // IsMouseOver
 
-			#region IsMouseOverScrollbar
+		#region IsMouseOverScrollbar
+
+		/// <summary>
+		/// Returns true if the mouse cursor is over a scrollbar in the ListView.
+		/// </summary>
+		bool IsMouseOverTextBox
+		{
+			get
+			{
+				return IsMouseOverType<TextBox>();
+			}
+		}
 
 		/// <summary>
 		/// Returns true if the mouse cursor is over a scrollbar in the ListView.
@@ -582,33 +593,37 @@ namespace MkZ.WPF.DragDrop
 		{
 			get
 			{
-				Point ptMouse = User32Mouse.GetMousePosition( this.listView );
-				HitTestResult res = VisualTreeHelper.HitTest( this.listView, ptMouse );
-				if( res == null )
-					return false;
-
-				DependencyObject depObj = res.VisualHit;
-				while( depObj != null )
-				{
-					if( depObj is ScrollBar )
-						return true;
-
-					// VisualTreeHelper works with objects of type Visual or Visual3D.
-					// If the current object is not derived from Visual or Visual3D,
-					// then use the LogicalTreeHelper to find the parent element.
-					if( depObj is Visual || depObj is System.Windows.Media.Media3D.Visual3D )
-						depObj = VisualTreeHelper.GetParent( depObj );
-					else
-						depObj = LogicalTreeHelper.GetParent( depObj );
-				}
-
-				return false;
+				return IsMouseOverType<ScrollBar>();
 			}
 		}
 
-			#endregion // IsMouseOverScrollbar
+		private bool IsMouseOverType<CTRL>() where CTRL : Control
+        {
+			Point ptMouse = User32Mouse.GetMousePosition(this.listView);
+			HitTestResult res = VisualTreeHelper.HitTest(this.listView, ptMouse);
+			if (res == null)
+				return false;
 
-			#region ItemUnderDragCursor
+			DependencyObject depObj = res.VisualHit;
+			while (depObj != null)
+			{
+				if (depObj is CTRL)
+					return true;
+
+				// VisualTreeHelper works with objects of type Visual or Visual3D.
+				// If the current object is not derived from Visual or Visual3D,
+				// then use the LogicalTreeHelper to find the parent element.
+				if (depObj is Visual || depObj is System.Windows.Media.Media3D.Visual3D)
+					depObj = VisualTreeHelper.GetParent(depObj);
+				else
+					depObj = LogicalTreeHelper.GetParent(depObj);
+			}
+
+			return false;
+		}
+		#endregion // IsMouseOverScrollbar
+
+		#region ItemUnderDragCursor
 
 		ItemType ItemUnderDragCursor
 		{

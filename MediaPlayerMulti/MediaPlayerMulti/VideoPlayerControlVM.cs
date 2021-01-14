@@ -18,6 +18,7 @@ using MkZ.MediaPlayer.Utils;
 using MkZ.Tools;
 using MkZ.Windows;
 using MkZ.WPF;
+using MkZ.WPF.MessageBox;
 
 namespace MkZ.MediaPlayer
 {
@@ -104,15 +105,19 @@ namespace MkZ.MediaPlayer
 
     public class VideoPlayerControlVM : NotifyPropertyChangedImpl, IVideoPlayer
     {
+        private VideoPlayerContext Context => VideoPlayerContext.Instance;
+        
         private ScrollDragZoom _scrollDragger = null;
         private ScrollViewer _scrollPlayerContainer = null;
 
         public Action<IVideoPlayer> MaximizeAction = (player) => { };
-        public Action<IVideoPlayer> VideoStartedAction { get; set; } = (player) => { };
-        public Func<ExceptionRoutedEventArgs, MediaElement, bool> VideoFailedAction { get; set; } = (e, player) => true;
+        
+        public Action<IVideoPlayer> MediaStartedAction { get; set; } = (player) => { };
+        public Action<IVideoPlayer> MediaEndedAction { get; set; } = (player) => { };
+        public Func<VideoPlayerControlVM, ExceptionRoutedEventArgs, bool> MediaFailedAction { get; set; } = (vm, e) => true;
+        
         public Action<VideoPlayerControlVM> LeftButtonClick = (vm) => { vm.TogglePlayPauseState(); };
         public Action<VideoPlayerControlVM> LeftButtonDoubleClick = (vm) => { };
-        public Action<IVideoPlayer> VideoEndedAction { get; set; } = (player) => { };
 
         public MediaFileInfo State { get; set; } = new MediaFileInfo();
 
@@ -123,7 +128,7 @@ namespace MkZ.MediaPlayer
             protected set { SetProperty(ref _mediaState, value); }
         }
 
-        public ePlayMode PlayMode { get { return VideoPlayerContext.Instance.Config.Configuration.PlayMode; } }
+        public ePlayMode PlayMode { get { return Context.Config.Configuration.PlayMode; } }
 
         public MediaElement VideoPlayerElement { get; private set; } = null;
 
@@ -265,13 +270,13 @@ namespace MkZ.MediaPlayer
         }
 
         //main method - open and play media file
-        public void SetMediaInfo(MediaFileInfo info)
+        public void Open(MediaFileInfo info)
         {
             //save previous state
-            State.CopyFrom(this, _scrollDragger);
+            Clear();
 
-            //replace
-            State = info == null? new MediaFileInfo() : info;
+            //set new state
+            State = info;
 
             Background = Brushes.Transparent;
 
@@ -284,6 +289,45 @@ namespace MkZ.MediaPlayer
             Volume = State.Volume;
 
             Open(State.FileName);
+        }
+
+        public void Open(string fileName)
+        {
+            try
+            {
+                if (File.Exists(fileName))
+                {
+                    FileName = fileName;
+                    VideoPlayerElement.Source = null;
+                    VideoPlayerElement.Source = new Uri(fileName);
+                    MediaState = MediaState.Manual;
+                    Title = Path.GetFileName(fileName);
+
+                    Volume = State.Volume;
+                    IsMuted = true; //load silently
+                    //sometimes loading mp3 stuck
+                    //https://stackoverflow.com/questions/6716100/strange-behavior-with-wpf-mediaelement
+                    VideoPlayerElement.ScrubbingEnabled = false; //faster load
+                    Position = State.Position;
+
+                    Prompt = "Loading, Please Wait...";
+
+                    //this will open media - reset state on MediaOpened event
+                    VideoPlayerElement.Play();
+                }
+                else
+                {
+                    FileName = "";
+                    VideoPlayerElement.Source = null;
+                    MediaState = MediaState.Manual;
+                    Title = "N/A";
+                    Prompt = "Use Ctrl+O or Drop file here...";
+                }
+            }
+            catch (Exception err)
+            {
+                Log.e("Open exception: {0}", err);
+            }        
         }
 
         public void Detach()
@@ -381,53 +425,22 @@ namespace MkZ.MediaPlayer
             _scrollDragger.ScrollToCenter();
         }
 
-        public void Open(string fileName)
+        public void Clear()
         {
-            try
-            {
-                if (File.Exists(fileName))
-                {
-                    FileName = fileName;
-                    VideoPlayerElement.Source = null;
-                    VideoPlayerElement.Source = new Uri(fileName);
-                    MediaState = MediaState.Manual;
-                    Title = Path.GetFileName(fileName);
-
-                    Volume = State.Volume;
-                    IsMuted = true; //load silently
-                    //sometimes loading mp3 stuck
-                    //https://stackoverflow.com/questions/6716100/strange-behavior-with-wpf-mediaelement
-                    VideoPlayerElement.ScrubbingEnabled = false; //faster load
-                    Position = State.Position;
-
-                    Prompt = "Loading, Please Wait...";
-
-                    //this will open media - reset state on MediaOpened event
-                    VideoPlayerElement.Play();
-                }
-                else
-                {
-                    FileName = "";
-                    VideoPlayerElement.Source = null;
-                    MediaState = MediaState.Manual;
-                    Title = "N/A";
-                    Prompt = "Use Ctrl+O or Drop file here...";
-                }
-            }
-            catch (Exception err)
-            {
-                Log.e("Open exception: {0}", err);
-            }        
-        }
-
-        public void Close()
-        {
-            State.CopyFrom(this, _scrollDragger);
+            if (string.IsNullOrWhiteSpace(this.FileName))
+                State.CopyFrom(this, _scrollDragger);
 
             Stop();
+
+            State = new MediaFileInfo();
             VideoPlayerElement.Source = null;
             FileName = "";
-            MediaState = MediaState.Close;
+            MediaState = MediaState.Manual;
+
+            Title = "N/A";
+            Prompt = "Use Ctrl+O or Drop file here...";
+
+            NotifyPropertyChangedAll();
         }
 
         public void Play()
@@ -572,7 +585,7 @@ namespace MkZ.MediaPlayer
 
                 FitWindow();
                 NotifyPropertyChanged(nameof(NaturalDuration));
-                VideoStartedAction(this);
+                MediaStartedAction(this);
             }
             catch (Exception err)
             {
@@ -583,39 +596,13 @@ namespace MkZ.MediaPlayer
         private void VideoPlayerElement_MediaEnded(object sender, RoutedEventArgs e)
         {
             Stop();
-            if (PlayMode == ePlayMode.RepeatOne)
-            {
-                Play();
-            }
-            else if (PlayMode == ePlayMode.PlayAll && MediaCommands.NextTrack.CanExecute(this, null))
-            {
-                MediaCommands.NextTrack.Execute(this, null);
-            }
-            else if (PlayMode == ePlayMode.RepeatAll)
-            {
-                PlayList playList = VideoPlayerContext.Instance.Config.MediaDatabaseInfo.GetSelectedPlayList();
-
-                if (MediaCommands.NextTrack.CanExecute(this, null))
-                {
-                    playList.MediaFiles[playList.SelectedMediaFileIndex + 1].Volume = Volume;  //same volume as previous
-                    MediaCommands.NextTrack.Execute(this, null);
-                }
-                else
-                {
-                    playList.MediaFiles[0].Volume = Volume; //same volume as previous
-                    playList.SelectedMediaFileIndex = -1;
-                    MediaCommands.NextTrack.Execute(this, null);
-                }
-            }
-
-            VideoEndedAction(this);
-            NotifyPropertyChangedAll();
+            MediaEndedAction(this);
         }
 
         private void VideoPlayerElement_MediaFailed(object sender, ExceptionRoutedEventArgs e)
         {
-            Debug.WriteLine("1 VideoPlayerElement_MediaFailed({0}) - {1} - {2}", State.Volume, State.MediaState, State.FileName);
-            e.Handled = VideoFailedAction(e, VideoPlayerElement);
+            Log.e("1 VideoPlayerElement_MediaFailed({0}) - {1} - {2}", State.Volume, State.MediaState, State.FileName);
+            e.Handled = MediaFailedAction(this, e);
         }
 
         private void VideoPlayerElement_MouseWheel(object sender, MouseWheelEventArgs e)
@@ -656,7 +643,7 @@ namespace MkZ.MediaPlayer
 
         private Brush GetBackgroundForOpenedFile()
         {
-            if (VideoPlayerContext.Instance.Config.Configuration.IsSupportedVideoFile(State.FileName))
+            if (Context.Config.Configuration.IsSupportedVideoFile(State.FileName))
                 return Brushes.Black;
                 
             return Brushes.Transparent;

@@ -57,7 +57,7 @@ namespace MkZ.MediaPlayer
 
         private void UpdateMediaInfo()
         {
-            _playerControlVM.SetMediaInfo(MediaFileInfo);
+            //_playerControlVM.Open(MediaFileInfo);
         }
 
         public VideoPlayerControl()
@@ -107,7 +107,7 @@ namespace MkZ.MediaPlayer
 
         public void ClosePlayer()
         {
-            _playerControlVM.Close();
+            _playerControlVM.Clear();
         }
 
         private void ButtonFullScreen_Click(object sender, RoutedEventArgs e)

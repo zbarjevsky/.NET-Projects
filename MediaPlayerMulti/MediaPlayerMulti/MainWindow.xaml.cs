@@ -20,8 +20,9 @@ using MkZ.MediaPlayer;
 using MkZ.MediaPlayer.Controls;
 using MkZ.MediaPlayer.Utils;
 using MkZ.WPF.Controls;
+using MkZ.WPF.MessageBox;
 
-namespace MediaPlayerMulti
+namespace MkZ.MediaPlayer
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -30,20 +31,18 @@ namespace MediaPlayerMulti
     {
         private MediaPlayerCommands _mediaPlayerCommands;
 
-        private VideoPlayerContext Context { get { return VideoPlayerContext.Instance; } }
+        private VideoPlayerContext Context => VideoPlayerContext.Instance;
 
-        public MediaDatabaseInfo DB => Context.Config.MediaDatabaseInfo;
+        public MediaDatabaseInfo MediaDB => VideoPlayerContext.Instance.Config.MediaDatabaseInfo;
 
-        public VideoPlayerControlVM PlayerVM => Context.PlayerVM;
+        public VideoPlayerControlVM PlayerVM => VideoPlayerContext.Instance.PlayerVM;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            VideoPlayerContext.Instance.PlayerVM = _player.DataContext as VideoPlayerControlVM;
-
-            //tabPlayers.Items.Clear();
-            //tabPlayers.ItemsSource = _players;
+            Context.PlayerVM = _player.DataContext as VideoPlayerControlVM;
+            Context.MediaPlayerCommands = _mediaPlayerCommands = new MediaPlayerCommands(this, enableKeyboardShortcuts: true);
 
             _cmbFilesList.Items.Clear();
             _cmbFilesList.ItemsSource = null;
@@ -51,34 +50,84 @@ namespace MediaPlayerMulti
             Context.Config.Configuration.PropertyChanged += Config_PropertyChanged;
         }
 
-        private void Config_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            if(e.PropertyName == nameof(Context.Config.Configuration.BackgroundImageFileName))
-            {
-                PlayerVM.BackgroundImage = new BitmapImage(new Uri(Context.Config.Configuration.BackgroundImageFileName));
-                _player.Background = ColorUtils.CalculateAverageColor(Context.Config.Configuration.BackgroundImageFileName);
-            }
-        }
-
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             Context.Config.Load();
 
-            SetPlayList(DB.GetSelectedPlayList());
-            DB.OnPlayListSelectionChangedAction = (playList) =>
+            SetPlayList(MediaDB.GetSelectedPlayList());
+            MediaDB.OnPlayListSelectionChangedAction = (playList) =>
             {
                  SetPlayList(playList);
             };
 
-            _ctxPlayLists.ItemsSource = DB.RootList.PlayLists;
-
-            _mediaPlayerCommands = new MediaPlayerCommands(this, enableKeyboardShortcuts: true);
+            _ctxPlayLists.ItemsSource = MediaDB.RootList.PlayLists;
 
             _player.OnFullScreenButtonClick = (vm) => ToggleFullScreen();
             _player.OnFileDropAction = (fileNames) =>
             {
                 AddNewMediaFiles(fileNames, PlayerVM.Volume > 0 ? PlayerVM.Volume : 0.3);
             };
+
+            PlayerVM.MediaEndedAction = (vm) => OnMediaEnded(vm);
+            PlayerVM.MediaFailedAction = (vm, ex) => OnMediaFailed(vm, ex);
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            MediaDB.SelectedMediaFileIndex = _cmbFilesList.SelectedIndex;
+
+            _player.ClosePlayer();
+            Context.Config.Save();
+        }
+
+        private void ComboMediaFiles_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(_cmbFilesList.SelectedItem is MediaFileInfo info)
+            {
+                if (info != null && !string.IsNullOrWhiteSpace(info.FileName))
+                {
+                    Retry:
+                    if (!File.Exists(info.FileName))
+                    {
+                        var res = PopUp.MessageBox("File Not Found: \n" + info.FileName, "Open Media File",
+                            MessageBoxImage.Exclamation, TextAlignment.Left,
+                            new PopUp.PopUpButtons("_Skip to Next", "Re_move & Next", "Re_try", PopUp.PopUpResult.Btn3));
+
+                        if (res == PopUp.PopUpResult.Btn3)
+                            goto Retry;
+
+                        bool bResetPositionAndPlayNext = false;
+                        if (PlayerVM.PlayMode == ePlayMode.PlayAll || PlayerVM.PlayMode == ePlayMode.RepeatAll)
+                            bResetPositionAndPlayNext = true;
+
+                        bool bRemoveFromList = (res == PopUp.PopUpResult.Btn2);
+
+                        RemoveMediaFileAndSelectNext(info, bResetPositionAndPlayNext, bRemoveFromList);
+                        return;
+                    }
+
+                    MediaDB.SelectedMediaFileIndex = _cmbFilesList.SelectedIndex;
+
+                    PlayerVM.Open(info);
+                }
+                else
+                {
+                    PlayerVM.Open(new MediaFileInfo());
+                }
+            }
+            else
+            {
+                PlayerVM.Open(new MediaFileInfo());
+            }
+        }
+
+        private void Config_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Context.Config.Configuration.BackgroundImageFileName))
+            {
+                PlayerVM.BackgroundImage = new BitmapImage(new Uri(Context.Config.Configuration.BackgroundImageFileName));
+                _player.Background = ColorUtils.CalculateAverageColor(Context.Config.Configuration.BackgroundImageFileName);
+            }
         }
 
         private void SetPlayList(PlayList playList)
@@ -88,17 +137,42 @@ namespace MediaPlayerMulti
                 _btnSelectPlayList.Content = playList.Name;
                 _cmbFilesList.ItemsSource = playList.MediaFiles;
 
-                if (playList.MediaFiles.Count > 0 && DB.SelectedMediaFileIndex < playList.MediaFiles.Count)
+                if (playList.MediaFiles.Count > 0 && MediaDB.SelectedMediaFileIndex < playList.MediaFiles.Count)
                     _cmbFilesList.SelectedIndex = playList.SelectedMediaFileIndex;
             }
         }
 
-        private void Window_Closed(object sender, EventArgs e)
+        private void OnMediaEnded(IVideoPlayer vm)
         {
-            DB.SelectedMediaFileIndex = _cmbFilesList.SelectedIndex;
+            bool can_play_next = NextTrack_CanExecute();
+            if (PlayerVM.PlayMode == ePlayMode.RepeatOne)
+            {
+                PlayerVM.Play();
+            }
+            else if (PlayerVM.PlayMode == ePlayMode.PlayAll && can_play_next)
+            {
+                NextTrack_Executed(bResetPositionAndPlay: true);
+            }
+            else if (PlayerVM.PlayMode == ePlayMode.RepeatAll)
+            {
+                PlayList playList = MediaDB.GetSelectedPlayList();
+                if (can_play_next)
+                {
+                    NextTrack_Executed(bResetPositionAndPlay: true);
+                }
+                else if (playList.MediaFiles.Count > 0)
+                {
+                    playList.MediaFiles[0].Volume = PlayerVM.Volume; //same volume as previous
+                    playList.SelectedMediaFileIndex = -1;
+                    NextTrack_Executed(bResetPositionAndPlay: true);
+                }
+            }
+        }
 
-            _player.ClosePlayer();
-            Context.Config.Save();
+        private bool OnMediaFailed(VideoPlayerControlVM vm, ExceptionRoutedEventArgs e)
+        {
+            PopUp.Error("Open Media Failed: \n" + vm.FileName + "\n" + e.ErrorException.Message);
+            return true;
         }
 
         #region IPlayerMainWindow
@@ -106,8 +180,8 @@ namespace MediaPlayerMulti
 
         public void AddNewMediaFiles(string[] fileNames, double volume)
         {
-            VideoPlayerContext.Instance.AddNewMediaFiles(DB.GetSelectedPlayList(), fileNames, volume);
-            _cmbFilesList.SelectedIndex = DB.GetSelectedPlayList().SelectedMediaFileIndex;
+            VideoPlayerContext.Instance.AddNewMediaFiles(MediaDB.GetSelectedPlayList(), fileNames, volume);
+            _cmbFilesList.SelectedIndex = MediaDB.GetSelectedPlayList().SelectedMediaFileIndex;
         }
 
         public void ToggleFullScreen()
@@ -130,48 +204,68 @@ namespace MediaPlayerMulti
 
         public bool PreviousTrack_CanExecute()
         {
-            PlayList playList = DB.GetSelectedPlayList();
+            PlayList playList = MediaDB.GetSelectedPlayList();
             return playList.SelectedMediaFileIndex > 0;
         }
 
-        public void PreviousTrack_Executed()
+        public void PreviousTrack_Executed(bool bResetPositionAndPlay)
         {
-            PlayList playList = DB.GetSelectedPlayList();
+            if (!PreviousTrack_CanExecute())
+                return;
 
+            PlayList playList = MediaDB.GetSelectedPlayList();
             playList.SelectedMediaFileIndex--;
 
-            playList.MediaFiles[playList.SelectedMediaFileIndex].MediaState = MediaState.Play;
-            playList.MediaFiles[playList.SelectedMediaFileIndex].PositionInSeconds = 0;
+            if (bResetPositionAndPlay)
+            {
+                playList.MediaFiles[playList.SelectedMediaFileIndex].MediaState = MediaState.Play;
+                playList.MediaFiles[playList.SelectedMediaFileIndex].PositionInSeconds = 0;
+                playList.MediaFiles[playList.SelectedMediaFileIndex].Volume = PlayerVM.Volume;
+            }
 
             _cmbFilesList.SelectedIndex = playList.SelectedMediaFileIndex;
         }
 
         public bool NextTrack_CanExecute()
         {
-            PlayList playList = DB.GetSelectedPlayList();
+            PlayList playList = MediaDB.GetSelectedPlayList();
             return playList.SelectedMediaFileIndex < playList.MediaFiles.Count - 1;
         }
 
-        public void NextTrack_Executed()
+        public void NextTrack_Executed(bool bResetPositionAndPlay)
         {
-            PlayList playList = DB.GetSelectedPlayList();
+            if (!NextTrack_CanExecute())
+                return;
+
+            PlayList playList = MediaDB.GetSelectedPlayList();
             playList.SelectedMediaFileIndex++;
 
-            playList.MediaFiles[playList.SelectedMediaFileIndex].MediaState = MediaState.Play;
-            playList.MediaFiles[playList.SelectedMediaFileIndex].PositionInSeconds = 0;
+            if (bResetPositionAndPlay)
+            {
+                playList.MediaFiles[playList.SelectedMediaFileIndex].MediaState = MediaState.Play;
+                playList.MediaFiles[playList.SelectedMediaFileIndex].PositionInSeconds = 0;
+                playList.MediaFiles[playList.SelectedMediaFileIndex].Volume = PlayerVM.Volume;
+            }
 
             _cmbFilesList.SelectedIndex = playList.SelectedMediaFileIndex;
         }
 
-        private MediaFileInfo GetMediaItem(int idx)
+        public void RemoveMediaFileAndSelectNext(MediaFileInfo info, bool bResetPositionAndPlay, bool bRemoveFromList)
         {
-            MediaFileInfo o = _cmbFilesList.Items[idx] as MediaFileInfo;
-            return o;
-        }
+            PlayList playList = MediaDB.GetSelectedPlayList();
+            if (bRemoveFromList)
+                playList.SelectedMediaFileIndex = playList.RemoveMediaFileFromList(info);
+            else //skip missing file - select next
+                playList.SelectedMediaFileIndex = playList.SelectNextMediaFile(playList.SelectedMediaFileIndex);
 
-        private MediaFileInfo GetSelectedMediaFile()
-        {
-            return GetMediaItem(_cmbFilesList.SelectedIndex);
+            if (bResetPositionAndPlay)
+            {
+                playList.MediaFiles[playList.SelectedMediaFileIndex].MediaState = MediaState.Play;
+                playList.MediaFiles[playList.SelectedMediaFileIndex].PositionInSeconds = 0;
+                playList.MediaFiles[playList.SelectedMediaFileIndex].Volume = PlayerVM.Volume;
+            }
+
+            _cmbFilesList.SelectedIndex = playList.SelectedMediaFileIndex;
         }
 
         #endregion
@@ -180,7 +274,7 @@ namespace MediaPlayerMulti
         {
             if ((sender as Button).DataContext is MediaFileInfo vm)
             {
-                _cmbFilesList.SelectedIndex = DB.GetSelectedPlayList().DeleteMediaFile(vm);
+                _cmbFilesList.SelectedIndex = MediaDB.GetSelectedPlayList().RemoveMediaFileFromList(vm);
             }
         }
 
@@ -197,9 +291,11 @@ namespace MediaPlayerMulti
             PlayListManagerWindow wnd = new PlayListManagerWindow();
             wnd.Owner = this;
             wnd.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            if(wnd.ShowDialog().Value)
+            bool ok = wnd.ShowDialog().Value;
+            Context.MediaPlayerCommands = _mediaPlayerCommands;
+            if(ok)
             {
-                _cmbFilesList.SelectedIndex = DB.GetSelectedPlayList().SelectedMediaFileIndex;
+                _cmbFilesList.SelectedIndex = MediaDB.GetSelectedPlayList().SelectedMediaFileIndex;
             }
         }
     }
