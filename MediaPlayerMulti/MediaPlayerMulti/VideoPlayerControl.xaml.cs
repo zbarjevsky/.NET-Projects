@@ -67,7 +67,7 @@ namespace MkZ.MediaPlayer
             InitializeComponent();
 
             _controlsHideAndShow = new AnimationHelper(this, 2,
-                _playControls, _testButtons, _systemButtons, _borderPrompt, _cursorArrow);
+                _playControls, _systemButtons, _borderPrompt, _cursorArrow);
 
             //_imageBackground.Draggable();
 

@@ -3,17 +3,22 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:MediaPlayerMulti" 
              xmlns:utils="clr-namespace:MkZ.MediaPlayer.Utils"
+             xmlns:system="clr-namespace:System;assembly=mscorlib"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+        <system:Double x:Key="DefaultFontSize">18</system:Double>
+        
         <utils:MyBrushToColorConverter x:Key="ColorConverter" />
         <utils:BrushOpacityConverter x:Key="BrushOpacityConverter" />
         <utils:MediaStateToPlayConverter x:Key="MediaStateToPlayConverter" />
         <utils:SecondsToStringConverter x:Key="SecondsToStringConverter" />
         <utils:PathToFileNameConverter x:Key="PathToFileNameConverter" />
         <utils:PathToDirectoryConverter x:Key="PathToDirectoryConverter" />
+        <utils:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter" />
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
 
-        <SolidColorBrush x:Key="ButtonForegroundMain" Color="SteelBlue" />
-        <SolidColorBrush x:Key="ButtonForegroundPlay" Color="LimeGreen" />
+        <SolidColorBrush x:Key="ButtonForegroundMain" Color="DeepSkyBlue" />
+        <SolidColorBrush x:Key="ButtonForegroundPlay" Color="DeepSkyBlue" />
         <SolidColorBrush x:Key="ButtonVolumeColor" Color="Cyan" />
 
         <LinearGradientBrush x:Key="GradientBackground" StartPoint="0,0" EndPoint="0,1">

@@ -53,6 +53,8 @@ namespace MkZ.MediaPlayer.Utils
 
             BackgroundImageFileName = config.BackgroundImageFileName;
 
+            ShowTestControls = config.ShowTestControls;
+
             SupportedImageExtensions = config.SupportedImageExtensions;
             SupportedAudioExtensions = config.SupportedAudioExtensions;
             SupportedVideoExtensions = config.SupportedVideoExtensions;

@@ -69,7 +69,8 @@
         </Style>
 
         <ResourceDictionary.MergedDictionaries>
-            <ResourceDictionary Source="/Controls/CustomMenuStyle.xaml" />
+            <ResourceDictionary Source="/Styles/CustomMenuStyle.xaml" />
+            <ResourceDictionary Source="/Styles/ComboBoxDarkStyle.xaml" />
         </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -155,10 +156,15 @@
                     </MenuItem>
                 </Menu>
             </Border>
-            <ComboBox x:Name="_cmbPlayMode" Margin="0,5,10,5" SelectedItem="{Binding Config.MediaDatabaseInfo.SelectedPlayList.PlayMode }">
+            <ComboBox x:Name="_cmbPlayMode" Margin="0,7,10,7" SelectedItem="{Binding Config.MediaDatabaseInfo.SelectedPlayList.PlayMode }"
+                      Background="{StaticResource GradientBackground}" Foreground="{StaticResource ButtonForegroundMain}" 
+                      Style="{StaticResource ComboBoxTest2}" Text="Select One" IsReadOnly="True" MinWidth="60"
+                      FontSize="{StaticResource DefaultFontSize}" FontWeight="Medium" >
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
-                        <TextBlock Text="{Binding}" />
+                        <Grid Background="Transparent" HorizontalAlignment="Stretch">
+                            <TextBlock Text="{Binding}" />
+                        </Grid>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>
@@ -168,7 +174,7 @@
                       ToolTip="Previous Track" ToolTipService.ShowOnDisabled="True" Command="MediaCommands.PreviousTrack" />
 
             <ComboBox x:Name="_cmbFilesList" Margin="0,5,10,5"  
-                      IsEditable="False" Foreground="Navy" FontWeight="Medium"
+                      IsEditable="False" FontWeight="Medium"
                       SelectionChanged="ComboMediaFiles_SelectionChanged"
                       HorizontalContentAlignment="Stretch">
                 <ComboBox.ItemTemplate>
@@ -204,7 +210,6 @@
                                         </Style.Triggers>
                                     </Style>
                                 </Button.Style>
-
                             </controls:SmallButtonClose>
                         </Grid>
                     </DataTemplate>

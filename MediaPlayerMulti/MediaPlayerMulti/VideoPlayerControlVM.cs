@@ -105,7 +105,7 @@ namespace MkZ.MediaPlayer
 
     public class VideoPlayerControlVM : NotifyPropertyChangedImpl, IVideoPlayer
     {
-        private VideoPlayerContext Context => VideoPlayerContext.Instance;
+        public VideoPlayerContext Context => VideoPlayerContext.Instance;
         
         private ScrollDragZoom _scrollDragger = null;
         private ScrollViewer _scrollPlayerContainer = null;

@@ -141,7 +141,7 @@ namespace MkZ.MediaPlayer
         {
             if (playList != null && playList.IsSelectedPlayList)
             {
-                _mnuPlayLists.Header = string.Format("{0} [{1}] ({2})", playList.Name, playList.PlayMode, playList.MediaFiles.Count);
+                _mnuPlayLists.Header = string.Format("{0} [{1}]", playList.Name, playList.MediaFiles.Count);
 
                 //_btnSelectPlayList.Content = playList.Name;
                 _cmbFilesList.ItemsSource = playList.MediaFiles;
