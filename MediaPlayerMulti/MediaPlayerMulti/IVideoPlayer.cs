@@ -22,7 +22,6 @@ namespace MkZ.MediaPlayer
         TimeSpan Position { get; set; }
         Size NaturalSize { get; }
         double NaturalDuration { get; }
-        ePlayMode PlayMode { get; }
 
         void Play();
         void Pause();

@@ -15,8 +15,10 @@
         FocusManager.FocusedElement="{Binding ElementName=_player}"
         Height="768" Width="1366">
     <Window.Resources>
+        <ResourceDictionary>
         <utils:ObjectToStringConverter x:Key="ObjectToStringConverter" />
-        
+        <Image x:Key="imgFavorites" x:Shared="false" Source="/Images/Favorites.ico"/>
+
         <Style TargetType="{x:Type CheckBox}" x:Key="myCheckboxStyle">
             <Setter Property="Template">
                 <Setter.Value>
@@ -63,6 +65,11 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary Source="/Controls/CustomMenuStyle.xaml" />
+        </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
     <Window.Title>
         <MultiBinding StringFormat="{}{0} - MkZ Media Player">
@@ -75,15 +82,7 @@
             <RowDefinition x:Name="rowContent" Height="*"></RowDefinition>
             <RowDefinition x:Name="rowFooter" Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
-        <DockPanel >
-            <DockPanel.Background>
-                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
-                    <GradientStop Color="DimGray" Offset="0.0" />
-                    <GradientStop Color="Gray" Offset="0.25" />
-                    <GradientStop Color="Black" Offset="0.75" />
-                    <GradientStop Color="Black" Offset="1.0" />
-                </LinearGradientBrush>
-            </DockPanel.Background>
+        <DockPanel Background="{StaticResource GradientBackground}">
             <controls:ButtonMenu Margin="4" Foreground="{StaticResource ButtonForegroundMain}" 
                      ToolTip="Options..." >
                 <controls:DropDownButton.Menu>
@@ -126,49 +125,51 @@
             <controls:DropDownButton x:Name="_btnSelectPlayList" Content="Default" Margin="5" Padding="5" 
                                      Style="{StaticResource myButton}" >
                 <controls:DropDownButton.Menu>
-                    <ContextMenu x:Name="_ctxPlayLists" FontWeight="Medium" FontSize="18" Foreground="Navy" HasDropShadow="True">
+                    <ContextMenu x:Name="_ctxPlayLists"
+                                 FontWeight="Medium" FontSize="18" Background="DimGray" HasDropShadow="True">
                         <ContextMenu.ItemContainerStyle>
-                            <Style TargetType="{x:Type MenuItem}">
-                               <Style.Resources>
-                                    <Image x:Key="IconImage" x:Shared="False">
-                                        <Image.Style>
-                                            <Style TargetType="{x:Type Image}">
-                                                <Setter Property="Source" Value="/Images/Cancel.ico" />
-                                                <!--<Style.Triggers>
-                                                    <DataTrigger Binding="{Binding PluginIcon, Converter={StaticResource isNullConverter}}" Value="False">
-                                                        <Setter Property="Source" Value="{Binding PluginIcon}" />
-                                                    </DataTrigger>
-                                                    <DataTrigger Binding="{Binding StatusIcon, Converter={StaticResource isNullConverter}}" Value="False">
-                                                        <Setter Property="Source" Value="{Binding StatusIcon}" />
-                                                    </DataTrigger>
-                                                </Style.Triggers>-->
-                                            </Style>
-                                        </Image.Style>
-                                    </Image>
-                                </Style.Resources>
-                                <!--<EventSetter Event="MenuItem.Click" Handler="ButtonSelectPlayList_Click"/>-->
-                                <!--<Setter Property="MenuItem.Icon" Value="{StaticResource IconImage}" />-->
-                                <Setter Property="MenuItem.IsChecked" Value="{Binding IsSelectedPlayList}" />
+                            <Style TargetType="{x:Type MenuItem}"  BasedOn="{StaticResource MenuItemStyle1}" >
+                                <Setter Property="Background" Value="{StaticResource GradientBackground}" />
+                                <Setter Property="Foreground" Value="Goldenrod" />
+                                <Setter Property="BorderBrush" Value="Green" />
+                                <EventSetter Event="MenuItem.Click" Handler="MenuSelectPlayList_Click"/>
+                                <EventSetter Event="MenuItem.PreviewMouseLeftButtonDown" Handler="MenuSelectPlayList_MouseDown"/>
+                                <EventSetter Event="MenuItem.PreviewMouseLeftButtonUp" Handler="MenuSelectPlayList_MouseUp"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding IsSelectedPlayList}" Value="true">
+                                        <Setter Property="Icon" Value="{StaticResource imgFavorites}"/>
+                                    </DataTrigger>
+                                    <Trigger Property="IsHighlighted" Value="True">
+                                        <Setter Property="Background" Value="Yellow"/>
+                                        <Setter Property="Foreground" Value="Yellow"/>
+                                        <!--<Setter Property="Background" TargetName="Icon"  Value="Red"/>-->
+                                        <Setter Property="BorderThickness" Value="3"/>
+                                    </Trigger>
+                                </Style.Triggers>
                             </Style>
                         </ContextMenu.ItemContainerStyle>
                         <ContextMenu.ItemTemplate>
                             <HierarchicalDataTemplate ItemsSource="{Binding PlayLists}" >
-                                <CheckBox IsChecked="{Binding IsSelectedPlayList}"  Style="{StaticResource myCheckboxStyle}" >
-                                        <TextBlock>
-                                            <TextBlock.Text>
-                                                <MultiBinding StringFormat="{}{0} ({1})">
-                                                    <Binding Path="Name" />
-                                                    <Binding Path="MediaFiles.Count" />
-                                                </MultiBinding>
-                                            </TextBlock.Text>
-                                        </TextBlock>
-                                </CheckBox>
+                                <TextBlock x:Name="txtName">
+                                    <TextBlock.Text>
+                                        <MultiBinding StringFormat="{}{0} ({1})">
+                                            <Binding Path="Name" />
+                                            <Binding Path="MediaFiles.Count" />
+                                        </MultiBinding>
+                                    </TextBlock.Text>
+                                </TextBlock>
+                                <HierarchicalDataTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <!--<Setter Property="Icon.Background" Value="Lime"/>-->
+                                        <!--<Setter Property="Background" TargetName="txtName" Value="Lime"/>-->
+                                    </Trigger>
+                                </HierarchicalDataTemplate.Triggers>
                             </HierarchicalDataTemplate>
                         </ContextMenu.ItemTemplate>
                     </ContextMenu>
                 </controls:DropDownButton.Menu>
-                </controls:DropDownButton>
-                <controls:ButtonNext Margin="4" DockPanel.Dock="Right" Foreground="{StaticResource ButtonForegroundMain}" 
+            </controls:DropDownButton>
+            <controls:ButtonNext Margin="4" DockPanel.Dock="Right" Foreground="{StaticResource ButtonForegroundMain}" 
                 ToolTip="Next Track" ToolTipService.ShowOnDisabled="True" Command="MediaCommands.NextTrack" />
             <controls:ButtonPrev Margin="4" DockPanel.Dock="Right" Foreground="{StaticResource ButtonForegroundMain}" 
                       ToolTip="Previous Track" ToolTipService.ShowOnDisabled="True" Command="MediaCommands.PreviousTrack" />

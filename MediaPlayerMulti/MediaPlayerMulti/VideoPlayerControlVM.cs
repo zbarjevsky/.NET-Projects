@@ -128,8 +128,6 @@ namespace MkZ.MediaPlayer
             protected set { SetProperty(ref _mediaState, value); }
         }
 
-        public ePlayMode PlayMode { get { return Context.Config.Configuration.PlayMode; } }
-
         public MediaElement VideoPlayerElement { get; private set; } = null;
 
         public bool IsInitialized { get { return VideoPlayerElement != null; } }

@@ -15,6 +15,14 @@
         <SolidColorBrush x:Key="ButtonForegroundPlay" Color="LimeGreen" />
         <SolidColorBrush x:Key="ButtonVolumeColor" Color="Cyan" />
 
+        <LinearGradientBrush x:Key="GradientBackground" StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="DimGray" Offset="0.0" />
+            <GradientStop Color="Gray" Offset="0.25" />
+            <GradientStop Color="Black" Offset="0.75" />
+            <GradientStop Color="Black" Offset="1.0" />
+        </LinearGradientBrush>
+
+
         <Style x:Key="{x:Type ToolTip}" TargetType="ToolTip">
             <Setter Property="OverridesDefaultStyle" Value="true" />
             <Setter Property="HasDropShadow" Value="True" />

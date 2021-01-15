@@ -96,8 +96,9 @@ namespace MkZ.MediaPlayer
                         if (res == PopUp.PopUpResult.Btn3)
                             goto Retry;
 
+                        ePlayMode playMode = MediaDB.GetSelectedPlayList().PlayMode;
                         bool bResetPositionAndPlayNext = false;
-                        if (PlayerVM.PlayMode == ePlayMode.PlayAll || PlayerVM.PlayMode == ePlayMode.RepeatAll)
+                        if (playMode == ePlayMode.PlayAll || playMode == ePlayMode.RepeatAll)
                             bResetPositionAndPlayNext = true;
 
                         bool bRemoveFromList = (res == PopUp.PopUpResult.Btn2);
@@ -144,18 +145,19 @@ namespace MkZ.MediaPlayer
 
         private void OnMediaEnded(IVideoPlayer vm)
         {
+            PlayList playList = MediaDB.GetSelectedPlayList();
             bool can_play_next = NextTrack_CanExecute();
-            if (PlayerVM.PlayMode == ePlayMode.RepeatOne)
+
+            if (playList.PlayMode == ePlayMode.RepeatOne)
             {
                 PlayerVM.Play();
             }
-            else if (PlayerVM.PlayMode == ePlayMode.PlayAll && can_play_next)
+            else if (playList.PlayMode == ePlayMode.PlayAll && can_play_next)
             {
                 NextTrack_Executed(bResetPositionAndPlay: true);
             }
-            else if (PlayerVM.PlayMode == ePlayMode.RepeatAll)
+            else if (playList.PlayMode == ePlayMode.RepeatAll)
             {
-                PlayList playList = MediaDB.GetSelectedPlayList();
                 if (can_play_next)
                 {
                     NextTrack_Executed(bResetPositionAndPlay: true);
@@ -296,6 +298,29 @@ namespace MkZ.MediaPlayer
             if(ok)
             {
                 _cmbFilesList.SelectedIndex = MediaDB.GetSelectedPlayList().SelectedMediaFileIndex;
+            }
+        }
+
+        private void MenuSelectPlayList_Click(object sender, RoutedEventArgs e)
+        {
+        }
+
+        private void MenuSelectPlayList_MouseDown(object sender, RoutedEventArgs e)
+        {
+        }
+
+        //MenuItem that has subitems does not fire 'Click' event
+        private void MenuSelectPlayList_MouseUp(object sender, RoutedEventArgs e)
+        {
+            var propDataContext = e.OriginalSource.GetType().GetProperty("DataContext");
+            var dataContext = propDataContext.GetValue(e.OriginalSource);
+
+            if (dataContext is PlayList list)
+            {
+                list.IsSelectedPlayList = true;
+                SetPlayList(list);
+                e.Handled = true;
+                _btnSelectPlayList.Focus(); //close menu
             }
         }
     }

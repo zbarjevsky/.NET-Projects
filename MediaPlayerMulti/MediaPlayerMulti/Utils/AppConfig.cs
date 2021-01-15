@@ -18,8 +18,6 @@ namespace MkZ.MediaPlayer.Utils
     [Serializable]
     public class Configuration : NotifyPropertyChangedImpl
     {
-        public ePlayMode PlayMode { get; set; } = ePlayMode.RepeatOne;
-
         private string _backgroundImageFileName = "";
         [Editor(typeof(System.Windows.Forms.Design.FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
         public string BackgroundImageFileName
@@ -49,8 +47,6 @@ namespace MkZ.MediaPlayer.Utils
         public void CopyFrom(Configuration config)
         {
             config.EnsureHasValues();
-
-            PlayMode = config.PlayMode;
 
             BackgroundImageFileName = config.BackgroundImageFileName;
 
@@ -113,7 +109,7 @@ namespace MkZ.MediaPlayer.Utils
 
         public override string ToString()
         {
-            return string.Format("Configuration - PlayMode: {0}", PlayMode);
+            return string.Format("Configuration - Ext: {0}", GetAllSupportedExtensions());
         }
     }
 
@@ -144,6 +140,8 @@ namespace MkZ.MediaPlayer.Utils
                     OnPlayListSelectionChangedAction(this); 
             }
         }
+
+        public ePlayMode PlayMode { get; set; } = ePlayMode.PlayOne;
 
         public bool HasSubLists { get { return PlayLists.Count > 0; } }
 
