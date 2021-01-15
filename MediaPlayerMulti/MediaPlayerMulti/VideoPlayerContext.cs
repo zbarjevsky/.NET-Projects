@@ -5,11 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+
+
 using MkZ.MediaPlayer.Utils;
+using MkZ.Windows;
 
 namespace MkZ.MediaPlayer
 {
-    public class VideoPlayerContext
+    public class VideoPlayerContext : NotifyPropertyChangedImpl
     {
         public static VideoPlayerContext Instance { get; } = new VideoPlayerContext() { InDesignMode = GetInDesignMode() };
 

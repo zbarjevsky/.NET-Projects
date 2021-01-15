@@ -26,6 +26,9 @@ namespace MkZ.MediaPlayer.Utils
             set { SetProperty(ref _backgroundImageFileName, value); }
         }
 
+        private bool _showTestControls = true;
+        public bool ShowTestControls { get => _showTestControls; set => SetProperty(ref _showTestControls, value); }
+
         public List<string> SupportedImageExtensions { get; set; }
 
         public List<string> SupportedAudioExtensions { get; set; }
@@ -141,7 +144,8 @@ namespace MkZ.MediaPlayer.Utils
             }
         }
 
-        public ePlayMode PlayMode { get; set; } = ePlayMode.PlayOne;
+        private ePlayMode _playMode = ePlayMode.PlayOne;
+        public ePlayMode PlayMode { get => _playMode; set => SetProperty(ref _playMode, value); }
 
         public bool HasSubLists { get { return PlayLists.Count > 0; } }
 

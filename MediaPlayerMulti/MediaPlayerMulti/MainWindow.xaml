@@ -17,9 +17,11 @@
     <Window.Resources>
         <ResourceDictionary>
         <utils:ObjectToStringConverter x:Key="ObjectToStringConverter" />
-        <Image x:Key="imgFavorites" x:Shared="false" Source="/Images/Favorites.ico"/>
+            <Image x:Key="icoFavorites" x:Shared="false" Source="/Images/Favorites.ico"/>
+            <Image x:Key="icoOk" x:Shared="false" Source="/Images/Ok.ico"/>
+            <Image x:Key="icoCancel" x:Shared="false" Source="/Images/Cancel.ico"/>
 
-        <Style TargetType="{x:Type CheckBox}" x:Key="myCheckboxStyle">
+            <Style TargetType="{x:Type CheckBox}" x:Key="myCheckboxStyle">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type CheckBox}">
@@ -125,15 +127,15 @@
             <Border BorderBrush="Gray" BorderThickness="2" CornerRadius="5" Margin="5">
                 <Menu FontSize="18" Foreground="{StaticResource ButtonForegroundMain}" FontWeight="Bold" Background="Transparent" 
                       VerticalAlignment="Center" BorderThickness="0" >
-                    <MenuItem x:Name="_mnuPlayLists" Header="Default (0)" BorderThickness="0">
+                    <MenuItem x:Name="_mnuPlayLists" Header="Default (0)" BorderThickness="0" Style="{StaticResource MenuItemStyle1}">
                         <MenuItem.ItemContainerStyle>
-                            <Style TargetType="{x:Type MenuItem}"  BasedOn="{StaticResource MenuItemStyle1}" >
+                            <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource MenuItemStyle1}" >
                                 <EventSetter Event="MenuItem.Click" Handler="MenuSelectPlayList_Click"/>
                                 <EventSetter Event="MenuItem.PreviewMouseLeftButtonDown" Handler="MenuSelectPlayList_MouseDown"/>
                                 <EventSetter Event="MenuItem.PreviewMouseLeftButtonUp" Handler="MenuSelectPlayList_MouseUp"/>
                                 <Style.Triggers>
                                     <DataTrigger Binding="{Binding IsSelectedPlayList}" Value="true">
-                                        <Setter Property="Icon" Value="{StaticResource imgFavorites}"/>
+                                        <Setter Property="Icon" Value="{StaticResource icoOk}"/>
                                     </DataTrigger>
                                 </Style.Triggers>
                             </Style>
@@ -153,6 +155,13 @@
                     </MenuItem>
                 </Menu>
             </Border>
+            <ComboBox x:Name="_cmbPlayMode" Margin="0,5,10,5" SelectedItem="{Binding Config.MediaDatabaseInfo.SelectedPlayList.PlayMode }">
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
             <controls:ButtonNext Margin="4" DockPanel.Dock="Right" Foreground="{StaticResource ButtonForegroundMain}" 
                 ToolTip="Next Track" ToolTipService.ShowOnDisabled="True" Command="MediaCommands.NextTrack" />
             <controls:ButtonPrev Margin="4" DockPanel.Dock="Right" Foreground="{StaticResource ButtonForegroundMain}" 

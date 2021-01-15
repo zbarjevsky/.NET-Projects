@@ -446,8 +446,9 @@ namespace MkZ.MediaPlayer
             if (VideoPlayerElement.Source != null)
             {
                 VideoPlayerElement.Play();
+                MediaState = MediaStateRetrieve();
                 MediaState = MediaState.Play;
-                State.MediaState = MediaState;
+                State.CopyFrom(this, _scrollDragger);
             }
         }
 
@@ -457,7 +458,7 @@ namespace MkZ.MediaPlayer
             {
                 VideoPlayerElement.Pause();
                 MediaState = MediaState.Pause;
-                State.MediaState = MediaState;
+                State.CopyFrom(this, _scrollDragger);
             }
         }
 
@@ -572,7 +573,7 @@ namespace MkZ.MediaPlayer
                 Volume = State.Volume;
                 IsMuted = false;
                 VideoPlayerElement.ScrubbingEnabled = true; //enable preview
-                MediaState = GetMediaState();
+                MediaState = MediaStateRetrieve();
 
                 Prompt = Title;
                 State.NaturalDuration = NaturalDuration;
@@ -624,7 +625,7 @@ namespace MkZ.MediaPlayer
             element.RenderTransform = scaleTransform; // myTransformGroup;
         }
 
-        public MediaState GetMediaState()
+        public MediaState MediaStateRetrieve()
         {
             if(VideoPlayerElement != null)
                 return GetMediaState(VideoPlayerElement);

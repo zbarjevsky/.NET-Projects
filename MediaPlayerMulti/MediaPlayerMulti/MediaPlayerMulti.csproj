@@ -334,6 +334,9 @@
   <ItemGroup>
     <Resource Include="Images\Favorites.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Ok.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if "$(ConfigurationName)" == "Release" (

@@ -40,11 +40,15 @@ namespace MkZ.MediaPlayer
         {
             InitializeComponent();
 
+            this.DataContext = Context;
+
             Context.PlayerVM = _player.DataContext as VideoPlayerControlVM;
             Context.MediaPlayerCommands = _mediaPlayerCommands = new MediaPlayerCommands(this, enableKeyboardShortcuts: true);
 
             _cmbFilesList.Items.Clear();
             _cmbFilesList.ItemsSource = null;
+
+            _cmbPlayMode.ItemsSource = Enum.GetValues(typeof(ePlayMode)).Cast<ePlayMode>(); ;
 
             Context.Config.Configuration.PropertyChanged += Config_PropertyChanged;
         }
@@ -78,9 +82,8 @@ namespace MkZ.MediaPlayer
         private void Window_Closed(object sender, EventArgs e)
         {
             MediaDB.SelectedMediaFileIndex = _cmbFilesList.SelectedIndex;
-
-            _player.ClosePlayer();
             Context.Config.Save();
+            _player.ClosePlayer();
         }
 
         private void ComboMediaFiles_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -138,12 +141,15 @@ namespace MkZ.MediaPlayer
         {
             if (playList != null && playList.IsSelectedPlayList)
             {
-                _mnuPlayLists.Header = string.Format("{0} ({1})", playList.Name, playList.MediaFiles.Count);
+                _mnuPlayLists.Header = string.Format("{0} [{1}] ({2})", playList.Name, playList.PlayMode, playList.MediaFiles.Count);
+
                 //_btnSelectPlayList.Content = playList.Name;
                 _cmbFilesList.ItemsSource = playList.MediaFiles;
 
                 if (playList.MediaFiles.Count > 0 && MediaDB.SelectedMediaFileIndex < playList.MediaFiles.Count)
                     _cmbFilesList.SelectedIndex = playList.SelectedMediaFileIndex;
+
+                Context.NotifyPropertyChangedAll();
             }
         }
 
