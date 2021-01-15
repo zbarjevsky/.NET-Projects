@@ -119,6 +119,20 @@ namespace MkZ.MediaPlayer.Utils
     }
 
     //directory tree style play list
+    public enum ePlayMode
+    {
+        [Description("Play One")]
+        PlayOne,
+        [Description("Play All")]
+        PlayAll,
+        [Description("Repeat One")]
+        RepeatOne,
+        [Description("Repeat All")]
+        RepeatAll,
+        [Description("Shuffle")]
+        Random
+    }
+
     public class PlayList : NotifyPropertyChangedImpl
     {
         [XmlIgnore]

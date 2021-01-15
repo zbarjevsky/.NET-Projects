@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -22,15 +23,6 @@ using MkZ.WPF.MessageBox;
 
 namespace MkZ.MediaPlayer
 {
-    public enum ePlayMode
-    {
-        PlayOne,
-        PlayAll,
-        RepeatOne,
-        RepeatAll,
-        Random
-    }
-
     [Serializable]
     public class MediaFileInfo : NotifyPropertyChangedImpl
     {

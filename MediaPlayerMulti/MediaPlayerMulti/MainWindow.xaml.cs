@@ -48,7 +48,7 @@ namespace MkZ.MediaPlayer
             _cmbFilesList.Items.Clear();
             _cmbFilesList.ItemsSource = null;
 
-            _cmbPlayMode.ItemsSource = Enum.GetValues(typeof(ePlayMode)).Cast<ePlayMode>(); ;
+            //_cmbPlayMode.ItemsSource = Enum.GetValues(typeof(ePlayMode)).Cast<ePlayMode>(); ;
 
             Context.Config.Configuration.PropertyChanged += Config_PropertyChanged;
         }

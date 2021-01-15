@@ -159,12 +159,11 @@
             <ComboBox x:Name="_cmbPlayMode" Margin="0,7,10,7" SelectedItem="{Binding Config.MediaDatabaseInfo.SelectedPlayList.PlayMode }"
                       Background="{StaticResource GradientBackground}" Foreground="{StaticResource ButtonForegroundMain}" 
                       Style="{StaticResource ComboBoxTest2}" Text="Select One" IsReadOnly="True" MinWidth="60"
+                      ItemsSource="{Binding Source={StaticResource PlayModeEnumValues}}"
                       FontSize="{StaticResource DefaultFontSize}" FontWeight="Medium" >
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
-                        <Grid Background="Transparent" HorizontalAlignment="Stretch">
-                            <TextBlock Text="{Binding}" />
-                        </Grid>
+                        <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
             </ComboBox>

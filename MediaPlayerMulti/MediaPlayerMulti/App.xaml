@@ -15,6 +15,7 @@
         <utils:PathToFileNameConverter x:Key="PathToFileNameConverter" />
         <utils:PathToDirectoryConverter x:Key="PathToDirectoryConverter" />
         <utils:BoolToCollapsedConverter x:Key="BoolToCollapsedConverter" />
+        <utils:EnumDescriptionConverter x:Key="EnumDescriptionConverter" />
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
 
         <SolidColorBrush x:Key="ButtonForegroundMain" Color="DeepSkyBlue" />
@@ -28,6 +29,11 @@
             <GradientStop Color="Black" Offset="1.0" />
         </LinearGradientBrush>
 
+        <ObjectDataProvider MethodName="GetValues" ObjectType="{x:Type system:Enum}" x:Key="PlayModeEnumValues">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="utils:ePlayMode" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
 
         <Style x:Key="{x:Type ToolTip}" TargetType="ToolTip">
             <Setter Property="OverridesDefaultStyle" Value="true" />

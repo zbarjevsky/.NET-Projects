@@ -142,6 +142,7 @@
     </Compile>
     <Compile Include="Utils\ColorUtils.cs" />
     <Compile Include="Utils\CustomCursor.cs" />
+    <Compile Include="Utils\EnumDescriptionConverter.cs" />
     <Compile Include="Utils\MediaStateToPlayConverter.cs" />
     <Compile Include="Utils\ObjectToStringConverter.cs" />
     <Compile Include="Utils\PathToFileNameConverter.cs" />
