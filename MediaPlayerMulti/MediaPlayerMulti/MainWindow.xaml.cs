@@ -16,7 +16,6 @@ using System.Windows.Navigation;
 using Microsoft.Win32;
 
 
-using MkZ.MediaPlayer;
 using MkZ.MediaPlayer.Controls;
 using MkZ.MediaPlayer.Utils;
 using MkZ.WPF.Controls;
@@ -54,13 +53,17 @@ namespace MkZ.MediaPlayer
         {
             Context.Config.Load();
 
-            SetPlayList(MediaDB.GetSelectedPlayList());
+            SetPlayList(MediaDB.SelectedPlayList);
             MediaDB.OnPlayListSelectionChangedAction = (playList) =>
             {
                  SetPlayList(playList);
             };
 
-            _ctxPlayLists.ItemsSource = MediaDB.RootList.PlayLists;
+            //_ctxPlayLists.Items.Clear();
+            //_ctxPlayLists.ItemsSource = MediaDB.RootList.PlayLists;
+
+            //_mnuPlayLists.DataContext = MediaDB.SelectedPlayList;
+            _mnuPlayLists.ItemsSource = MediaDB.RootList.PlayLists;
 
             _player.OnFullScreenButtonClick = (vm) => ToggleFullScreen();
             _player.OnFileDropAction = (fileNames) =>
@@ -96,7 +99,7 @@ namespace MkZ.MediaPlayer
                         if (res == PopUp.PopUpResult.Btn3)
                             goto Retry;
 
-                        ePlayMode playMode = MediaDB.GetSelectedPlayList().PlayMode;
+                        ePlayMode playMode = MediaDB.SelectedPlayList.PlayMode;
                         bool bResetPositionAndPlayNext = false;
                         if (playMode == ePlayMode.PlayAll || playMode == ePlayMode.RepeatAll)
                             bResetPositionAndPlayNext = true;
@@ -135,7 +138,8 @@ namespace MkZ.MediaPlayer
         {
             if (playList != null && playList.IsSelectedPlayList)
             {
-                _btnSelectPlayList.Content = playList.Name;
+                _mnuPlayLists.Header = string.Format("{0} ({1})", playList.Name, playList.MediaFiles.Count);
+                //_btnSelectPlayList.Content = playList.Name;
                 _cmbFilesList.ItemsSource = playList.MediaFiles;
 
                 if (playList.MediaFiles.Count > 0 && MediaDB.SelectedMediaFileIndex < playList.MediaFiles.Count)
@@ -145,7 +149,7 @@ namespace MkZ.MediaPlayer
 
         private void OnMediaEnded(IVideoPlayer vm)
         {
-            PlayList playList = MediaDB.GetSelectedPlayList();
+            PlayList playList = MediaDB.SelectedPlayList;
             bool can_play_next = NextTrack_CanExecute();
 
             if (playList.PlayMode == ePlayMode.RepeatOne)
@@ -182,8 +186,8 @@ namespace MkZ.MediaPlayer
 
         public void AddNewMediaFiles(string[] fileNames, double volume)
         {
-            VideoPlayerContext.Instance.AddNewMediaFiles(MediaDB.GetSelectedPlayList(), fileNames, volume);
-            _cmbFilesList.SelectedIndex = MediaDB.GetSelectedPlayList().SelectedMediaFileIndex;
+            VideoPlayerContext.Instance.AddNewMediaFiles(MediaDB.SelectedPlayList, fileNames, volume);
+            _cmbFilesList.SelectedIndex = MediaDB.SelectedPlayList.SelectedMediaFileIndex;
         }
 
         public void ToggleFullScreen()
@@ -206,8 +210,7 @@ namespace MkZ.MediaPlayer
 
         public bool PreviousTrack_CanExecute()
         {
-            PlayList playList = MediaDB.GetSelectedPlayList();
-            return playList.SelectedMediaFileIndex > 0;
+            return MediaDB.SelectedPlayList.SelectedMediaFileIndex > 0;
         }
 
         public void PreviousTrack_Executed(bool bResetPositionAndPlay)
@@ -215,7 +218,7 @@ namespace MkZ.MediaPlayer
             if (!PreviousTrack_CanExecute())
                 return;
 
-            PlayList playList = MediaDB.GetSelectedPlayList();
+            PlayList playList = MediaDB.SelectedPlayList;
             playList.SelectedMediaFileIndex--;
 
             if (bResetPositionAndPlay)
@@ -230,7 +233,7 @@ namespace MkZ.MediaPlayer
 
         public bool NextTrack_CanExecute()
         {
-            PlayList playList = MediaDB.GetSelectedPlayList();
+            PlayList playList = MediaDB.SelectedPlayList;
             return playList.SelectedMediaFileIndex < playList.MediaFiles.Count - 1;
         }
 
@@ -239,7 +242,7 @@ namespace MkZ.MediaPlayer
             if (!NextTrack_CanExecute())
                 return;
 
-            PlayList playList = MediaDB.GetSelectedPlayList();
+            PlayList playList = MediaDB.SelectedPlayList;
             playList.SelectedMediaFileIndex++;
 
             if (bResetPositionAndPlay)
@@ -254,11 +257,13 @@ namespace MkZ.MediaPlayer
 
         public void RemoveMediaFileAndSelectNext(MediaFileInfo info, bool bResetPositionAndPlay, bool bRemoveFromList)
         {
-            PlayList playList = MediaDB.GetSelectedPlayList();
+            PlayList playList = MediaDB.SelectedPlayList;
+            int infoIdx = playList.MediaFiles.IndexOf(info);
+
             if (bRemoveFromList)
                 playList.SelectedMediaFileIndex = playList.RemoveMediaFileFromList(info);
             else //skip missing file - select next
-                playList.SelectedMediaFileIndex = playList.SelectNextMediaFile(playList.SelectedMediaFileIndex);
+                playList.SelectedMediaFileIndex = playList.SelectNextMediaFile(infoIdx);
 
             if (bResetPositionAndPlay)
             {
@@ -276,7 +281,7 @@ namespace MkZ.MediaPlayer
         {
             if ((sender as Button).DataContext is MediaFileInfo vm)
             {
-                _cmbFilesList.SelectedIndex = MediaDB.GetSelectedPlayList().RemoveMediaFileFromList(vm);
+                _cmbFilesList.SelectedIndex = MediaDB.SelectedPlayList.RemoveMediaFileFromList(vm);
             }
         }
 
@@ -297,7 +302,7 @@ namespace MkZ.MediaPlayer
             Context.MediaPlayerCommands = _mediaPlayerCommands;
             if(ok)
             {
-                _cmbFilesList.SelectedIndex = MediaDB.GetSelectedPlayList().SelectedMediaFileIndex;
+                _cmbFilesList.SelectedIndex = MediaDB.SelectedPlayList.SelectedMediaFileIndex;
             }
         }
 
@@ -320,7 +325,7 @@ namespace MkZ.MediaPlayer
                 list.IsSelectedPlayList = true;
                 SetPlayList(list);
                 e.Handled = true;
-                _btnSelectPlayList.Focus(); //close menu
+                _cmbFilesList.Focus(); //close menu
             }
         }
     }

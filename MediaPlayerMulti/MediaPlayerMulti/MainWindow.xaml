@@ -122,16 +122,12 @@
             <controls:ButtonPlayPause Margin="4" Foreground="{StaticResource ButtonForegroundMain}" 
                      ToolTip="Tooggle Play Pause" ToolTipService.ShowOnDisabled="True" Command="MediaCommands.TogglePlayPause"
                      IsChecked="{Binding DataContext.MediaState, ElementName=_player, Mode=OneWay, Converter={StaticResource MediaStateToPlayConverter}}"/>
-            <controls:DropDownButton x:Name="_btnSelectPlayList" Content="Default" Margin="5" Padding="5" 
-                                     Style="{StaticResource myButton}" >
-                <controls:DropDownButton.Menu>
-                    <ContextMenu x:Name="_ctxPlayLists"
-                                 FontWeight="Medium" FontSize="18" Background="DimGray" HasDropShadow="True">
-                        <ContextMenu.ItemContainerStyle>
+            <Border BorderBrush="Gray" BorderThickness="2" CornerRadius="5" Margin="5">
+                <Menu FontSize="18" Foreground="{StaticResource ButtonForegroundMain}" FontWeight="Bold" Background="Transparent" 
+                      VerticalAlignment="Center" BorderThickness="0" >
+                    <MenuItem x:Name="_mnuPlayLists" Header="Default (0)" BorderThickness="0">
+                        <MenuItem.ItemContainerStyle>
                             <Style TargetType="{x:Type MenuItem}"  BasedOn="{StaticResource MenuItemStyle1}" >
-                                <Setter Property="Background" Value="{StaticResource GradientBackground}" />
-                                <Setter Property="Foreground" Value="Goldenrod" />
-                                <Setter Property="BorderBrush" Value="Green" />
                                 <EventSetter Event="MenuItem.Click" Handler="MenuSelectPlayList_Click"/>
                                 <EventSetter Event="MenuItem.PreviewMouseLeftButtonDown" Handler="MenuSelectPlayList_MouseDown"/>
                                 <EventSetter Event="MenuItem.PreviewMouseLeftButtonUp" Handler="MenuSelectPlayList_MouseUp"/>
@@ -139,18 +135,12 @@
                                     <DataTrigger Binding="{Binding IsSelectedPlayList}" Value="true">
                                         <Setter Property="Icon" Value="{StaticResource imgFavorites}"/>
                                     </DataTrigger>
-                                    <Trigger Property="IsHighlighted" Value="True">
-                                        <Setter Property="Background" Value="Yellow"/>
-                                        <Setter Property="Foreground" Value="Yellow"/>
-                                        <!--<Setter Property="Background" TargetName="Icon"  Value="Red"/>-->
-                                        <Setter Property="BorderThickness" Value="3"/>
-                                    </Trigger>
                                 </Style.Triggers>
                             </Style>
-                        </ContextMenu.ItemContainerStyle>
-                        <ContextMenu.ItemTemplate>
+                        </MenuItem.ItemContainerStyle>
+                        <MenuItem.ItemTemplate>
                             <HierarchicalDataTemplate ItemsSource="{Binding PlayLists}" >
-                                <TextBlock x:Name="txtName">
+                                <TextBlock x:Name="txtName" VerticalAlignment="Center">
                                     <TextBlock.Text>
                                         <MultiBinding StringFormat="{}{0} ({1})">
                                             <Binding Path="Name" />
@@ -158,17 +148,11 @@
                                         </MultiBinding>
                                     </TextBlock.Text>
                                 </TextBlock>
-                                <HierarchicalDataTemplate.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <!--<Setter Property="Icon.Background" Value="Lime"/>-->
-                                        <!--<Setter Property="Background" TargetName="txtName" Value="Lime"/>-->
-                                    </Trigger>
-                                </HierarchicalDataTemplate.Triggers>
                             </HierarchicalDataTemplate>
-                        </ContextMenu.ItemTemplate>
-                    </ContextMenu>
-                </controls:DropDownButton.Menu>
-            </controls:DropDownButton>
+                        </MenuItem.ItemTemplate>
+                    </MenuItem>
+                </Menu>
+            </Border>
             <controls:ButtonNext Margin="4" DockPanel.Dock="Right" Foreground="{StaticResource ButtonForegroundMain}" 
                 ToolTip="Next Track" ToolTipService.ShowOnDisabled="True" Command="MediaCommands.NextTrack" />
             <controls:ButtonPrev Margin="4" DockPanel.Dock="Right" Foreground="{StaticResource ButtonForegroundMain}" 
@@ -186,16 +170,18 @@
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBlock VerticalAlignment="Center">
-                                <TextBlock.Text>
-                                    <MultiBinding StringFormat="{}{0} ({1})">
-                                        <Binding Path="FileName" Converter="{StaticResource PathToFileNameConverter}" />
-                                        <Binding Path="FileName" />
-                                    </MultiBinding>
-                                </TextBlock.Text>
-                            </TextBlock>
+                            <DockPanel Grid.Column="0" Margin="3,0,10,0">
+                                <Border>
+                                    <TextBlock Text="{Binding FileName, Converter={StaticResource PathToFileNameConverter}}" 
+                                         Background="Transparent" VerticalAlignment="Center"/>
+                                </Border>
+                                <TextBlock Text=" " />
+                                <TextBox Text="{Binding FileName, StringFormat={}[{0}] }" 
+                                         IsReadOnly="True" BorderThickness="0" VerticalContentAlignment="Center" VerticalAlignment="Stretch"
+                                         FontSize="18" FontWeight="Normal" Foreground="Gray" Background="Transparent" />
+                            </DockPanel>
 
-                            <TextBlock Grid.Column="1" VerticalAlignment="Center" FontSize="18" 
+                            <TextBlock Grid.Column="1" VerticalAlignment="Center" FontSize="18" Margin="3"
                                        Text="{Binding NaturalDuration, Converter={StaticResource SecondsToStringConverter}, FallbackValue=--/--}"/>
 
                             <controls:SmallButtonClose Grid.Column="2" Margin="4" Height="20" DockPanel.Dock="Right" 
@@ -250,7 +236,7 @@
                 </ComboBoxItem>-->
             </ComboBox>
         </DockPanel>
-        <mediaplayer:VideoPlayerControl Grid.Row="1" x:Name="_player" 
+        <mediaplayer:VideoPlayerControl Grid.Row="1" x:Name="_player"
                  MediaFileInfo="{Binding SelectedItem, ElementName=_cmbFilesList}" />
     </Grid>
 </Window>

@@ -351,18 +351,22 @@ namespace MkZ.MediaPlayer.Utils
         [XmlIgnore]
         public Action<PlayList> OnPlayListSelectionChangedAction = (list) => { };
 
-        public PlayList GetSelectedPlayList() 
+        [XmlIgnore]
+        public PlayList SelectedPlayList 
         {
-            PlayList sel = PlayList.FindSelectedPlayList(RootList);
-            if (sel != null)
-                return sel;
+            get
+            {
+                PlayList sel = PlayList.FindSelectedPlayList(RootList);
+                if (sel != null)
+                    return sel;
 
-            if (RootList.PlayLists.Count == 0)
-                RootList.AddNewPlayList("Default Play List");
+                if (RootList.PlayLists.Count == 0)
+                    RootList.AddNewPlayList("Default Play List");
 
-            RootList.SetSelectedPlayList(RootList.PlayLists[0]);
-            
-            return RootList.PlayLists[0];
+                RootList.SetSelectedPlayList(RootList.PlayLists[0]);
+
+                return RootList.PlayLists[0];
+            }
         }
 
         public void RemovePlayList(PlayList list)
@@ -378,19 +382,19 @@ namespace MkZ.MediaPlayer.Utils
 
         public ObservableCollection<MediaFileInfo> GetSelectedMediaFilesList()
         {
-            return GetSelectedPlayList().MediaFiles;
+            return SelectedPlayList.MediaFiles;
         }
 
         [XmlIgnore]
         public int SelectedMediaFileIndex
         {
-            get => GetSelectedPlayList().SelectedMediaFileIndex;
-            set { GetSelectedPlayList().SelectedMediaFileIndex = value; NotifyPropertyChanged(); }
+            get => SelectedPlayList.SelectedMediaFileIndex;
+            set { SelectedPlayList.SelectedMediaFileIndex = value; NotifyPropertyChanged(); }
         }
 
         public int AddNewMediaFile(string fileName, double volume)
         {
-            return GetSelectedPlayList().AddNewMediaFile(fileName, volume);
+            return SelectedPlayList.AddNewMediaFile(fileName, volume);
         }
 
         public void CopyFrom(MediaDatabaseInfo mediaDatabaseInfo)
@@ -407,7 +411,7 @@ namespace MkZ.MediaPlayer.Utils
                 }
                 else //check if has no selection - set first selected
                 {
-                    GetSelectedPlayList();
+                    var list = SelectedPlayList;
                 }
             });
 

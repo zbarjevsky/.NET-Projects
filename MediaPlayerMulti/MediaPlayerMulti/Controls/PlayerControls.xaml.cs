@@ -101,5 +101,10 @@ namespace MkZ.MediaPlayer.Controls
                 vm.Position = TimeSpan.FromSeconds(pos);
             }
         }
+
+        private void Skip_Forward_1Frame_Click(object sender, RoutedEventArgs e)
+        {
+            Skip(0.03);
+        }
     }
 }

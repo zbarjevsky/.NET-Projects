@@ -5,8 +5,12 @@
 
     <LinearGradientBrush x:Key="MenuItemSelectionFill" EndPoint="0,1" StartPoint="0,0">
         <GradientStop Color="Gray" Offset="0"/>
-        <GradientStop Color="Black" Offset="1"/>
+        <GradientStop Color="DimGray" Offset="1"/>
     </LinearGradientBrush>
+
+    <SolidColorBrush x:Key="MenuBorderSelected1" Color="Gray" />
+    <SolidColorBrush x:Key="MenuBorderSelected2" Color="DimGray" />
+
     <Geometry x:Key="Checkmark">M 0,5.1 L 1.7,5.2 L 3.4,7.1 L 8,0.4 L 9.2,0 L 3.3,10.8 Z</Geometry>
     <ControlTemplate x:Key="{ComponentResourceKey ResourceId=SubmenuItemTemplateKey, TypeInTargetAssembly={x:Type MenuItem}}" TargetType="{x:Type MenuItem}">
         <Grid SnapsToDevicePixels="true">
@@ -22,7 +26,7 @@
                     <ColumnDefinition Width="17"/>
                 </Grid.ColumnDefinitions>
                 <ContentPresenter x:Name="Icon" ContentSource="Icon" Margin="1" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
-                <Border x:Name="GlyphPanel" BorderBrush="Pink" BorderThickness="1" Background="Gray" CornerRadius="3" Height="22" Margin="1" Visibility="Hidden" Width="22">
+                <Border x:Name="GlyphPanel" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1" Background="{TemplateBinding Background}" CornerRadius="3" Height="22" Margin="1" Visibility="Hidden" Width="22">
                     <Path x:Name="Glyph" Data="{StaticResource Checkmark}" Fill="#0C12A1" FlowDirection="LeftToRight" Height="11" Width="9"/>
                 </Border>
                 <ContentPresenter Grid.Column="2" ContentSource="Header" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
@@ -39,7 +43,7 @@
             </Trigger>
             <Trigger Property="IsHighlighted" Value="true">
                 <Setter Property="Fill" TargetName="Bg" Value="{StaticResource MenuItemSelectionFill}"/>
-                <Setter Property="Stroke" TargetName="Bg" Value="LightPink"/>
+                <Setter Property="Stroke" TargetName="Bg" Value="{StaticResource MenuBorderSelected2}"/>
                 <Setter Property="Stroke" TargetName="InnerBorder" Value="#40FFFFFF"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="false">
@@ -50,12 +54,15 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+    
     <LinearGradientBrush x:Key="MenuItemPressedFill" EndPoint="0,1" StartPoint="0,0">
         <GradientStop Color="#28717070" Offset="0"/>
         <GradientStop Color="#50717070" Offset="0.75"/>
         <GradientStop Color="#90717070" Offset="1"/>
     </LinearGradientBrush>
+    
     <Geometry x:Key="UpArrow">M 0,4 L 3.5,0 L 7,4 Z</Geometry>
+    
     <Style x:Key="MenuScrollButton" BasedOn="{x:Null}" TargetType="{x:Type RepeatButton}">
         <Setter Property="ClickMode" Value="Hover"/>
         <Setter Property="MinWidth" Value="0"/>
@@ -91,7 +98,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ScrollViewer}">
-                    <Grid SnapsToDevicePixels="true">
+                    <Grid SnapsToDevicePixels="true" Background="{TemplateBinding Background}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*"/>
                         </Grid.ColumnDefinitions>
@@ -101,7 +108,7 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         <Border Grid.Column="0" Grid.Row="1">
-                            <ScrollContentPresenter Margin="{TemplateBinding Padding}"/>
+                            <ScrollContentPresenter Margin="{TemplateBinding Padding}" />
                         </Border>
                         <RepeatButton Grid.Column="0" CommandTarget="{Binding RelativeSource={RelativeSource TemplatedParent}}" Command="{x:Static ScrollBar.LineUpCommand}" Focusable="false" Grid.Row="0" Style="{StaticResource MenuScrollButton}">
                             <RepeatButton.Visibility>
@@ -139,7 +146,7 @@
     </ControlTemplate>
     <ControlTemplate x:Key="{ComponentResourceKey ResourceId=TopLevelHeaderTemplateKey, TypeInTargetAssembly={x:Type MenuItem}}" TargetType="{x:Type MenuItem}">
         <Grid SnapsToDevicePixels="true">
-            <Rectangle x:Name="OuterBorder" RadiusY="2" RadiusX="2"/>
+            <Rectangle x:Name="OuterBorder" RadiusY="2" RadiusX="2" Margin="3,1" Fill="{TemplateBinding Background}"/>
             <Rectangle x:Name="Bg" Fill="{TemplateBinding Background}" Margin="1" RadiusY="1" RadiusX="1" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="1"/>
             <Rectangle x:Name="InnerBorder" Margin="2"/>
             <DockPanel>
@@ -195,9 +202,9 @@
     </ControlTemplate>
     <ControlTemplate x:Key="{ComponentResourceKey ResourceId=TopLevelItemTemplateKey, TypeInTargetAssembly={x:Type MenuItem}}" TargetType="{x:Type MenuItem}">
         <Grid SnapsToDevicePixels="true">
-            <Rectangle x:Name="OuterBorder" RadiusY="2" RadiusX="2"/>
+            <Rectangle x:Name="OuterBorder" RadiusY="2" RadiusX="2" Fill="{TemplateBinding Background}" />
             <Rectangle x:Name="Bg" Fill="{TemplateBinding Background}" Margin="1" RadiusY="1" RadiusX="1" Stroke="{TemplateBinding BorderBrush}" StrokeThickness="1"/>
-            <Rectangle x:Name="InnerBorder" Margin="2"/>
+            <Rectangle x:Name="InnerBorder" Margin="2" Fill="{TemplateBinding Background}"/>
             <DockPanel Background="{TemplateBinding Background}">
                 <ContentPresenter x:Name="Icon" ContentSource="Icon" Margin="4,0,6,0" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
                 <Path x:Name="GlyphPanel" Data="{StaticResource Checkmark}" Fill="{TemplateBinding Foreground}" FlowDirection="LeftToRight" Margin="7,0,0,0" Visibility="Collapsed" VerticalAlignment="Center"/>
@@ -214,7 +221,7 @@
             </Trigger>
             <Trigger Property="IsHighlighted" Value="true">
                 <Setter Property="Stroke" TargetName="Bg" Value="#90717070"/>
-                <Setter Property="Fill" TargetName="Bg" Value="Pink"/>
+                <Setter Property="Fill" TargetName="Bg" Value="{StaticResource MenuBorderSelected1}" />
                 <Setter Property="Stroke" TargetName="OuterBorder" Value="#50FFFFFF"/>
                 <Setter Property="Stroke" TargetName="InnerBorder" Value="#50FFFFFF"/>
             </Trigger>
@@ -244,7 +251,7 @@
                     <ColumnDefinition Width="17"/>
                 </Grid.ColumnDefinitions>
                 <ContentPresenter x:Name="Icon" ContentSource="Icon" Margin="1" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="Center"/>
-                <Border x:Name="GlyphPanel" BorderBrush="Pink" BorderThickness="2" Background="Violet" CornerRadius="3" Height="22" Margin="1" Visibility="Hidden" Width="22">
+                <Border x:Name="GlyphPanel" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="2" Background="{TemplateBinding Background}" CornerRadius="3" Height="22" Margin="1" Visibility="Hidden" Width="22">
                     <Path x:Name="Glyph" Data="{StaticResource Checkmark}" Fill="#0C12A1" FlowDirection="LeftToRight" Height="11" Width="9"/>
                 </Border>
                 <ContentPresenter Grid.Column="2" ContentSource="Header" Margin="{TemplateBinding Padding}" RecognizesAccessKey="True" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
@@ -266,7 +273,7 @@
                 <Setter Property="PopupAnimation" TargetName="PART_Popup" Value="None"/>
             </Trigger>
             <Trigger Property="IsHighlighted" Value="true">
-                <Setter Property="Stroke" TargetName="InnerBorder" Value="#D1DBF4FF"/>
+                <Setter Property="Stroke" TargetName="InnerBorder" Value="{StaticResource MenuBorderSelected1}"/>
             </Trigger>
             <Trigger Property="Icon" Value="{x:Null}">
                 <Setter Property="Visibility" TargetName="Icon" Value="Collapsed"/>
@@ -281,7 +288,7 @@
             </Trigger>
             <Trigger Property="IsHighlighted" Value="true">
                 <Setter Property="Fill" TargetName="Bg" Value="{StaticResource MenuItemSelectionFill}"/>
-                <Setter Property="Stroke" TargetName="Bg" Value="#8571CBF1"/>
+                <Setter Property="Stroke" TargetName="Bg" Value="{StaticResource MenuBorderSelected1}"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="false">
                 <Setter Property="Foreground" Value="#FF9A9A9A"/>

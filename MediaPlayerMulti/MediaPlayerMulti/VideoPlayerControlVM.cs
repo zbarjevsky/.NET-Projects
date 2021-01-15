@@ -446,8 +446,8 @@ namespace MkZ.MediaPlayer
             if (VideoPlayerElement.Source != null)
             {
                 VideoPlayerElement.Play();
-                
                 MediaState = MediaState.Play;
+                State.MediaState = MediaState;
             }
         }
 
@@ -457,6 +457,7 @@ namespace MkZ.MediaPlayer
             {
                 VideoPlayerElement.Pause();
                 MediaState = MediaState.Pause;
+                State.MediaState = MediaState;
             }
         }
 

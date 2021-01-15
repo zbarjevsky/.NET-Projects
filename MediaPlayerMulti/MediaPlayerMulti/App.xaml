@@ -10,6 +10,7 @@
         <utils:MediaStateToPlayConverter x:Key="MediaStateToPlayConverter" />
         <utils:SecondsToStringConverter x:Key="SecondsToStringConverter" />
         <utils:PathToFileNameConverter x:Key="PathToFileNameConverter" />
+        <utils:PathToDirectoryConverter x:Key="PathToDirectoryConverter" />
 
         <SolidColorBrush x:Key="ButtonForegroundMain" Color="SteelBlue" />
         <SolidColorBrush x:Key="ButtonForegroundPlay" Color="LimeGreen" />
