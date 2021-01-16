@@ -45,7 +45,13 @@ namespace MkZ.MediaPlayer.Utils
                         red = p[idx + 2];
                         green = p[idx + 1];
                         blue = p[idx];
-                        if (Math.Abs(red - green) > minDiversion || Math.Abs(red - blue) > minDiversion || Math.Abs(green - blue) > minDiversion)
+                        if(red == green && green == blue) //gray point
+                        {
+                            totals[2] += red;
+                            totals[1] += green;
+                            totals[0] += blue;
+                        }
+                        else if (Math.Abs(red - green) > minDiversion || Math.Abs(red - blue) > minDiversion || Math.Abs(green - blue) > minDiversion)
                         {
                             totals[2] += red;
                             totals[1] += green;

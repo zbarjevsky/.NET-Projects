@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:utils="clr-namespace:MkZ.MediaPlayer.Utils"
-        mc:Ignorable="d" 
+        mc:Ignorable="d" FontSize="17" FontFamily="Jokerman"
         d:DesignHeight="45" d:DesignWidth="80">
     <RepeatButton.Resources>
         <utils:MyBrushToColorConverter x:Key="ColorConverter" />
@@ -19,16 +19,17 @@
                 </Style>
             </ControlTemplate.Resources>
             <Viewbox >
+                <Grid VerticalAlignment="Center">
                 <Canvas Width="40" Height="40">
                     <Path x:Name="circle">
                         <Path.Data>
                             <EllipseGeometry Center="20,20" RadiusX="18" RadiusY="18"/>
                         </Path.Data>
                     </Path>
-                    <TextBlock x:Name="text" FontSize="18" FontWeight="Bold" FontFamily="Jokerman" Margin="4,7"
-                        Text="{Binding ButtonText, RelativeSource={RelativeSource AncestorType=RepeatButton}, 
-                            FallbackValue=+88}"/>
                 </Canvas>
+                <TextBlock x:Name="text" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"
+                    Text="{Binding ButtonText, RelativeSource={RelativeSource AncestorType=RepeatButton}, FallbackValue=+88}"/>
+                </Grid>
             </Viewbox>
 
             <ControlTemplate.Triggers>
@@ -53,6 +54,15 @@
                     <Setter TargetName="text" Property="Foreground" 
                         Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
                         Converter={StaticResource BrushOpacityConverter}, ConverterParameter=1}" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter TargetName="circle" Property="Stroke" 
+                        Value="Magenta" />
+                    <Setter TargetName="circle" Property="Fill" 
+                        Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
+                        Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.3}" />
+                    <Setter TargetName="text" Property="Foreground" 
+                        Value="Magenta" />
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>

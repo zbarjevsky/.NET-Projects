@@ -147,13 +147,6 @@ namespace MkZ.MediaPlayer
             set { SetProperty(ref _prompt, value); }
         }
 
-        private BitmapSource _backgroundImage = null;
-        public BitmapSource BackgroundImage
-        {
-            get { return _backgroundImage; }
-            set { SetProperty(ref _backgroundImage, value); }
-        }
-
         private Brush _background = Brushes.Gray;
         public Brush Background
         {
@@ -588,6 +581,7 @@ namespace MkZ.MediaPlayer
         private void VideoPlayerElement_MediaEnded(object sender, RoutedEventArgs e)
         {
             Stop();
+            State.CopyFrom(this, _scrollDragger);
             MediaEndedAction(this);
         }
 

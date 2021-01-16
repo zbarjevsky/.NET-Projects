@@ -30,6 +30,15 @@ namespace MkZ.MediaPlayer.Controls
         public static readonly DependencyProperty TextProperty =
             DependencyProperty.Register(nameof(ButtonText), typeof(string), typeof(ButtonWithText), new PropertyMetadata(""));
 
+        //public double TextFontSize
+        //{
+        //    get { return (double)GetValue(TextFontSizeProperty); }
+        //    set { SetValue(TextFontSizeProperty, value); }
+        //}
+
+        //public static readonly DependencyProperty TextFontSizeProperty =
+        //    DependencyProperty.Register(nameof(FontSize), typeof(string), typeof(ButtonWithText), new PropertyMetadata(""));
+
         public ButtonWithText()
         {
             InitializeComponent();

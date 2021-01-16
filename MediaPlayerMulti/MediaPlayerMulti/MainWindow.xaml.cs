@@ -29,6 +29,7 @@ namespace MkZ.MediaPlayer
     public partial class MainWindow : Window, IPlayerMainWindow
     {
         private MediaPlayerCommands _mediaPlayerCommands;
+        private readonly AnimationHelper _controlsHideAndShow;
 
         private VideoPlayerContext Context => VideoPlayerContext.Instance;
 
@@ -48,7 +49,7 @@ namespace MkZ.MediaPlayer
             _cmbFilesList.Items.Clear();
             _cmbFilesList.ItemsSource = null;
 
-            //_cmbPlayMode.ItemsSource = Enum.GetValues(typeof(ePlayMode)).Cast<ePlayMode>(); ;
+            _controlsHideAndShow = new AnimationHelper(this, 2, _imagesNavigation);
 
             Context.Config.Configuration.PropertyChanged += Config_PropertyChanged;
         }
@@ -132,8 +133,7 @@ namespace MkZ.MediaPlayer
         {
             if (e.PropertyName == nameof(Context.Config.Configuration.BackgroundImageFileName))
             {
-                PlayerVM.BackgroundImage = new BitmapImage(new Uri(Context.Config.Configuration.BackgroundImageFileName));
-                _player.Background = ColorUtils.CalculateAverageColor(Context.Config.Configuration.BackgroundImageFileName);
+                this.Background = ColorUtils.CalculateAverageColor(Context.Config.Configuration.BackgroundImageFileName);
             }
         }
 
@@ -333,6 +333,42 @@ namespace MkZ.MediaPlayer
                 e.Handled = true;
                 _cmbFilesList.Focus(); //close menu
             }
+        }
+
+        private void ButtonPrevImage_Click(object sender, RoutedEventArgs e)
+        {
+            OpenClosestImageFile(-1);
+        }
+
+        private void ButtonNextImage_Click(object sender, RoutedEventArgs e)
+        {
+            OpenClosestImageFile(1);
+        }
+
+        private void OpenClosestImageFile(int direction)
+        {
+            string file = Context.Config.Configuration.BackgroundImageFileName;
+            if (!File.Exists(file))
+                return;
+
+            string dir = Path.GetDirectoryName(file);
+            List<string> list = new List<string>();
+            foreach (string ext in Context.Config.Configuration.SupportedImageExtensions)
+            {
+                string filter = "*" + ext;
+                string[] files = Directory.GetFiles(dir, filter);
+                list.AddRange(files);
+            }
+            list.Sort();
+            int idx = list.IndexOf(file);
+
+            idx += direction;
+            if (idx < 0)
+                idx = list.Count - 1;
+            if (idx >= list.Count)
+                idx = 0;
+
+            Context.Config.Configuration.BackgroundImageFileName = list[idx];
         }
     }
 }

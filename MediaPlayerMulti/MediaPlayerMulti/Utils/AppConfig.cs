@@ -71,6 +71,15 @@ namespace MkZ.MediaPlayer.Utils
             return sb.ToString();
         }
 
+        public string GetAllSupportedImagesExtensions()
+        {
+            StringBuilder sb = new StringBuilder();
+
+            SupportedImageExtensions.ForEach((ext) => { sb.Append("*" + ext + ";"); });
+
+            return sb.ToString();
+        }
+
         public bool IsSupportedImageFile(string fileName)
         {
             string ext = System.IO.Path.GetExtension(fileName).ToLower();
