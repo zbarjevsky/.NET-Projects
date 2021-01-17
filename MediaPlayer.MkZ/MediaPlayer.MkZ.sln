@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30320.27
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaPlayerMulti", "MediaPlayerMulti\MediaPlayerMulti.csproj", "{561B8D01-3848-40A7-BC2E-EBAA85F85724}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaPlayer.MkZ", "MediaPlayer.MkZ\MediaPlayer.MkZ.csproj", "{561B8D01-3848-40A7-BC2E-EBAA85F85724}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework.MkZ", "..\Framework.MkZ\Framework.MkZ\Framework.MkZ.csproj", "{768AF4B8-5EDD-4196-97AE-DBC1589DD426}"
 EndProject

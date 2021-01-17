@@ -76,3 +76,7 @@ MessageBox/Binaries/MZ.WPF.MessageBox.dll
 /BlueMaestro/Binaries/Microsoft.WindowsAPICodePack.dll
 /BlueMaestro/Binaries/Microsoft.WindowsAPICodePack.Shell.dll
 /BlueMaestro/Binaries/Framework.MkZ.exe
+/Binaries/MediaPlayer.MkZ/MediaPlayerMkZ.exe
+/Binaries/MediaPlayer.MkZ/MediaPlayerMulti.exe
+/Binaries/MediaPlayer.MkZ/Microsoft.WindowsAPICodePack.dll
+/Binaries/MediaPlayer.MkZ/Microsoft.WindowsAPICodePack.Shell.dll
