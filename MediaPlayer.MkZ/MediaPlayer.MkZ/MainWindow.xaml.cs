@@ -18,6 +18,7 @@ using Microsoft.Win32;
 
 using MkZ.MediaPlayer.Controls;
 using MkZ.MediaPlayer.Utils;
+using MkZ.WPF;
 using MkZ.WPF.Controls;
 using MkZ.WPF.MessageBox;
 
@@ -30,6 +31,8 @@ namespace MkZ.MediaPlayer
     {
         private MediaPlayerCommands _mediaPlayerCommands;
         private readonly AnimationHelper _controlsHideAndShow;
+        ScrollDragZoom _zoom = null;
+        private CursorArrow _cursorArrow = new CursorArrow();
 
         private VideoPlayerContext Context => VideoPlayerContext.Instance;
 
@@ -50,6 +53,10 @@ namespace MkZ.MediaPlayer
             _cmbFilesList.ItemsSource = null;
 
             _controlsHideAndShow = new AnimationHelper(this, 2, _imagesNavigation);
+
+            _clock.Draggable();
+            _cursorArrow.Load_Cursor(_clock.Grid, sizeRatio: 20);
+            _zoom = new ScrollDragZoom(_clock, _scrollMain);
 
             Context.Config.Configuration.PropertyChanged += Config_PropertyChanged;
         }
@@ -369,6 +376,16 @@ namespace MkZ.MediaPlayer
                 idx = 0;
 
             Context.Config.Configuration.BackgroundImageFileName = list[idx];
+        }
+
+        private void ButtonClock_Checked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ButtonClock_Unchecked(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

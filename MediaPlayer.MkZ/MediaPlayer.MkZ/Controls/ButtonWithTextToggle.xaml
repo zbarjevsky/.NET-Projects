@@ -1,0 +1,87 @@
+﻿<ToggleButton x:Class="MkZ.MediaPlayer.Controls.ButtonWithTextToggle"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MkZ.MediaPlayer.Controls"
+        xmlns:utils="clr-namespace:MkZ.MediaPlayer.Utils"
+        mc:Ignorable="d" FontSize="17" FontFamily="Jokerman"
+        d:DesignHeight="45" d:DesignWidth="80">
+    <ToggleButton.Resources>
+        <utils:MyBrushToColorConverter x:Key="ColorConverter" />
+    </ToggleButton.Resources>
+    <ToggleButton.Template>
+        <ControlTemplate TargetType="{x:Type ToggleButton}">
+            <ControlTemplate.Resources>
+                <Style TargetType="{x:Type Path}">
+                    <Setter Property="Fill" Value="Transparent"/>
+                    <Setter Property="Stroke" Value="DarkGray"/>
+                    <Setter Property="StrokeThickness" Value="5"/>
+                </Style>
+            </ControlTemplate.Resources>
+            <Viewbox >
+                <Grid VerticalAlignment="Center">
+                    <Canvas Width="40" Height="40">
+                        <Path x:Name="circle">
+                            <Path.Data>
+                                <EllipseGeometry Center="20,20" RadiusX="18" RadiusY="18"/>
+                            </Path.Data>
+                        </Path>
+                    </Canvas>
+                    <TextBlock x:Name="textUnChecked" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"
+                        Text="{Binding ButtonTextUnchecked, RelativeSource={RelativeSource AncestorType=ToggleButton}, FallbackValue=+14}"/>
+                    <TextBlock x:Name="textChecked" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"
+                        Text="{Binding ButtonTextChecked, RelativeSource={RelativeSource AncestorType=ToggleButton}, FallbackValue=+11}"/>
+                </Grid>
+            </Viewbox>
+
+            <ControlTemplate.Triggers>
+                <Trigger Property="IsEnabled" Value="True">
+                    <Setter TargetName="circle" Property="Stroke" 
+                        Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
+                        Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.5}" />
+                    <Setter TargetName="circle" Property="Fill" 
+                        Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
+                        Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.3}" />
+                    <Setter TargetName="textUnChecked" Property="Foreground" 
+                        Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
+                        Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.5}" />
+                    <Setter TargetName="textChecked" Property="Foreground" 
+                        Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
+                        Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.5}" />
+                </Trigger>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter TargetName="circle" Property="Stroke" 
+                        Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
+                        Converter={StaticResource BrushOpacityConverter}, ConverterParameter=1}" />
+                    <Setter TargetName="circle" Property="Fill" 
+                        Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
+                        Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.3}" />
+                    <Setter TargetName="textUnChecked" Property="Foreground" 
+                        Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
+                        Converter={StaticResource BrushOpacityConverter}, ConverterParameter=1}" />
+                    <Setter TargetName="textChecked" Property="Foreground" 
+                        Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
+                        Converter={StaticResource BrushOpacityConverter}, ConverterParameter=1}" />
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter TargetName="circle" Property="Stroke" 
+                        Value="Magenta" />
+                    <Setter TargetName="circle" Property="Fill" 
+                        Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
+                        Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.3}" />
+                    <Setter TargetName="textUnChecked" Property="Foreground" Value="Magenta" />
+                    <Setter TargetName="textChecked" Property="Foreground" Value="Magenta" />
+                </Trigger>
+                <Trigger Property="IsChecked" Value="True">
+                    <Setter TargetName="textUnChecked" Property="Visibility" Value="Hidden" />
+                    <Setter TargetName="textChecked" Property="Visibility" Value="Visible" />
+                </Trigger>
+                <Trigger Property="IsChecked" Value="False">
+                    <Setter TargetName="textUnChecked" Property="Visibility" Value="Visible" />
+                    <Setter TargetName="textChecked" Property="Visibility" Value="Hidden" />
+                </Trigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+    </ToggleButton.Template>
+    </ToggleButton>

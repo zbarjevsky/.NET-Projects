@@ -21,6 +21,8 @@ namespace MkZ.WPF
     /// </summary>
     public partial class SimpleClockControl : UserControl
     {
+        public Grid Grid => _gridMain;
+
         public SimpleClockControl()
         {
             InitializeComponent();

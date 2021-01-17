@@ -212,7 +212,7 @@ namespace MkZ.WPF
             Thickness margin = _draggables[element].Margin;
 
             Rect bounds = RelativeLocation(element);
-            Debug.WriteLine("location: " + bounds);
+            //Debug.WriteLine("location: " + bounds);
 
             Vector offsetDelta = new Vector(offset.X, offset.Y) - (new Vector(translate.X, translate.Y) - _initialTranslateOffset);
 

@@ -10,6 +10,9 @@ using System.Windows.Input;
 
 namespace MkZ.WPF
 {
+    /// <summary>
+    /// Drag on Right Mouse only if scrolls are enable - content bigger than scrollView
+    /// </summary>
     public class ScrollDragZoom : IDisposable
     {
         private ScrollViewer _scrollViewer;
@@ -83,9 +86,9 @@ namespace MkZ.WPF
 
                 _zoom = 1;
 
-                _content.MouseRightButtonDown += scrollViewer_MouseRightButtonDown;
-                _content.PreviewMouseMove += scrollViewer_PreviewMouseMove;
-                _content.PreviewMouseRightButtonUp += scrollViewer_PreviewMouseRightButtonUp;
+                _content.MouseRightButtonDown += content_MouseRightButtonDown;
+                _content.PreviewMouseMove += content_PreviewMouseMove;
+                _content.PreviewMouseRightButtonUp += content_PreviewMouseRightButtonUp;
                 _content.MouseWheel += content_MouseWheel;
             }
         }
@@ -94,9 +97,9 @@ namespace MkZ.WPF
         {
             if (_content != null)
             {
-                _content.MouseRightButtonDown -= scrollViewer_MouseRightButtonDown;
-                _content.PreviewMouseMove -= scrollViewer_PreviewMouseMove;
-                _content.PreviewMouseRightButtonUp -= scrollViewer_PreviewMouseRightButtonUp;
+                _content.MouseRightButtonDown -= content_MouseRightButtonDown;
+                _content.PreviewMouseMove -= content_PreviewMouseMove;
+                _content.PreviewMouseRightButtonUp -= content_PreviewMouseRightButtonUp;
                 _content.MouseWheel -= content_MouseWheel;
             }
             _content = null;
@@ -185,7 +188,7 @@ namespace MkZ.WPF
             Vector delta = MoveContentAndMouseToCenterAfterZoom(deltaZoom, offsetOld, e); 
         }
 
-        private void scrollViewer_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        private void content_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
             _content.CaptureMouse();
             _scrollMousePoint = e.GetPosition(_scrollViewer);
@@ -193,7 +196,7 @@ namespace MkZ.WPF
             _hOff = _scrollViewer.HorizontalOffset;
         }
 
-        private void scrollViewer_PreviewMouseMove(object sender, MouseEventArgs e)
+        private void content_PreviewMouseMove(object sender, MouseEventArgs e)
         {
             if (_content.IsMouseCaptured)
             {
@@ -205,7 +208,7 @@ namespace MkZ.WPF
             }
         }
 
-        private void scrollViewer_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        private void content_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
             _content.ReleaseMouseCapture();
         }
