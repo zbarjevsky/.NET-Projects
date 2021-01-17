@@ -196,6 +196,9 @@
     </Compile>
     <Compile Include="WPF\RelayCommand.cs" />
     <Compile Include="WPF\ScrollDragZoom.cs" />
+    <Compile Include="WPF\SimpleClockControl.xaml.cs">
+      <DependentUpon>SimpleClockControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF\SmartObservableCollection.cs" />
     <Compile Include="WPF\WPFExtensionMethods.cs" />
     <Compile Include="WPF\WPFMessageBox\MessageWindow.xaml.cs">
@@ -289,6 +292,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="WPF\GradientProgressBar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\SimpleClockControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

@@ -308,7 +308,7 @@ namespace MkZ.MediaPlayer
             Context.MediaPlayerCommands = _mediaPlayerCommands;
             if(ok)
             {
-                _cmbFilesList.SelectedIndex = MediaDB.SelectedPlayList.SelectedMediaFileIndex;
+                SetPlayList(MediaDB.SelectedPlayList);
             }
         }
 
