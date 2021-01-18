@@ -1,7 +1,7 @@
-﻿<Application x:Class="MediaPlayerMulti.App"
+﻿<Application x:Class="MkZ.MediaPlayer.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:MediaPlayerMulti" 
+             xmlns:local="clr-namespace:MkZ.MediaPlayer" 
              xmlns:utils="clr-namespace:MkZ.MediaPlayer.Utils"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
              StartupUri="MainWindow.xaml">

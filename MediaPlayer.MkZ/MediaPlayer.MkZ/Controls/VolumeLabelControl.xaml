@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="MkZ.MediaPlayer.Controls.FadingTextControl"
+﻿<UserControl x:Class="MkZ.MediaPlayer.Controls.VolumeLabelControl"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -14,7 +14,7 @@
         </Grid.RowDefinitions>
         <Viewbox Grid.Row="2" >
             <Border x:Name="_volumeLabel" Grid.Row="1" Height="30" CornerRadius="10" 
-                        HorizontalAlignment="Center" VerticalAlignment="Top" Margin="40,0,30,0">
+                    HorizontalAlignment="Center" VerticalAlignment="Top" Margin="40,0,30,0">
                 <Border.Background>
                     <SolidColorBrush Color="Black" Opacity="0.3" />
                 </Border.Background>

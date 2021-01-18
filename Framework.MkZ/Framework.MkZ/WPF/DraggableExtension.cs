@@ -178,6 +178,7 @@ namespace MkZ.WPF
             _draggables[element].IsDragging = true;
 
             element.CaptureMouse();
+            element.Cursor = Cursors.SizeAll;
         }
 
         static void control_MouseUp(object sender, MouseButtonEventArgs e)

@@ -19,13 +19,13 @@ namespace MkZ.MediaPlayer.Controls
     /// <summary>
     /// Interaction logic for FadingTextControl.xaml
     /// </summary>
-    public partial class FadingTextControl : UserControl
+    public partial class VolumeLabelControl : UserControl
     {
         private readonly DispatcherTimer _timer = new DispatcherTimer();
         private int _counter = 0;
         private bool _bAllowShow = false, _bAllowHide = false;
 
-        public FadingTextControl()
+        public VolumeLabelControl()
         {
             InitializeComponent();
             

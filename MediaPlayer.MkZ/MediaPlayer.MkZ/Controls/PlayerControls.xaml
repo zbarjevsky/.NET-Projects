@@ -37,7 +37,7 @@
                 <local:ButtonWithText Width="30" Margin="6,0" ButtonText="+10" Foreground="{StaticResource ButtonVolumeColor}" 
                     ToolTip="Skip Forward 10 seconds" ToolTipService.ShowOnDisabled="True"
                     Click="Skip_Forward_Click" />
-                <local:ButtonWithText Width="30" Margin="6,0" ButtonText=" +1" Foreground="{StaticResource ButtonVolumeColor}" 
+                <local:ButtonWithText Width="30" Margin="6,0" ButtonText="+1" Foreground="{StaticResource ButtonVolumeColor}" 
                     ToolTip="Skip Forward ~1 Frame" ToolTipService.ShowOnDisabled="True"
                     Click="Skip_Forward_1Frame_Click" />
                 <local:ButtonVolume DockPanel.Dock="Right" Width="30" Margin="6,0" Foreground="{StaticResource ButtonVolumeColor}"

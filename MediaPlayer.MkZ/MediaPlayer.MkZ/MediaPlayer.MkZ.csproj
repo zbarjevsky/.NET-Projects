@@ -114,8 +114,8 @@
       <DependentUpon>CursorArrow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\DropDownButton.cs" />
-    <Compile Include="Controls\FadingTextControl.xaml.cs">
-      <DependentUpon>FadingTextControl.xaml</DependentUpon>
+    <Compile Include="Controls\VolumeLabelControl.xaml.cs">
+      <DependentUpon>VolumeLabelControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\MagnifyingGlassUserControl.xaml.cs">
       <DependentUpon>MagnifyingGlassUserControl.xaml</DependentUpon>
@@ -233,7 +233,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\FadingTextControl.xaml">
+    <Page Include="Controls\VolumeLabelControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

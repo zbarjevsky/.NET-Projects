@@ -20,6 +20,8 @@ namespace MkZ.MediaPlayer.Controls
         private readonly List<UIElement> _controls = new List<UIElement>();
         private readonly double _hideTimeOutSeconds = 2;
 
+        private Cursor _conainerCursor = Cursors.Arrow;
+
         public Action<UIElement> OnHideCompleted = (element) => { };
         //do not hide - can be usefull for media files with no video
         public Func<bool> CanHideControls = () => true;
@@ -27,6 +29,7 @@ namespace MkZ.MediaPlayer.Controls
         public AnimationHelper(Control container, double hideTimeOutSeconds, params UIElement[] controls)
         {
             _container = container;
+            _conainerCursor = container.Cursor;
             _container.MouseMove += _container_MouseMove;
             _container.PreviewMouseDown += _container_PreviewMouseDown;
 
@@ -62,7 +65,7 @@ namespace MkZ.MediaPlayer.Controls
                 }
             }
 
-            _container.Cursor = Cursors.Arrow;
+            _container.Cursor = _conainerCursor;
         }
 
         private bool _isInsideControl = false;

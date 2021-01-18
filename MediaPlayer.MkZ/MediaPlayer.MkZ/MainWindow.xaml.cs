@@ -31,7 +31,7 @@ namespace MkZ.MediaPlayer
     {
         private MediaPlayerCommands _mediaPlayerCommands;
         private readonly AnimationHelper _controlsHideAndShow;
-        ScrollDragZoom _zoom = null;
+        ScrollDragZoom _zoomClock = null, _zoomImage = null;
         private CursorArrow _cursorArrow = new CursorArrow();
 
         private VideoPlayerContext Context => VideoPlayerContext.Instance;
@@ -52,11 +52,15 @@ namespace MkZ.MediaPlayer
             _cmbFilesList.Items.Clear();
             _cmbFilesList.ItemsSource = null;
 
-            _controlsHideAndShow = new AnimationHelper(this, 2, _imagesNavigation);
+            _cursorArrow.Load_Cursor(_gridMain, sizeRatio: 20);
+
+            _controlsHideAndShow = new AnimationHelper(this, 2, _imagesNavigation, _cursorArrow);
 
             _clock.Draggable();
-            _cursorArrow.Load_Cursor(_clock.Grid, sizeRatio: 20);
-            _zoom = new ScrollDragZoom(_clock, _scrollMain);
+            _zoomClock = new ScrollDragZoom(_clock, _scrollMain);
+
+            _zoomImage = new ScrollDragZoom(_imageBackground, _scrollMain);
+            _zoomImage.FitWindow(0);
 
             Context.Config.Configuration.PropertyChanged += Config_PropertyChanged;
         }
@@ -92,6 +96,11 @@ namespace MkZ.MediaPlayer
             MediaDB.SelectedMediaFileIndex = _cmbFilesList.SelectedIndex;
             Context.Config.Save();
             _player.ClosePlayer();
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            _zoomImage.FitWindow(0);
         }
 
         private void ComboMediaFiles_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -376,16 +385,6 @@ namespace MkZ.MediaPlayer
                 idx = 0;
 
             Context.Config.Configuration.BackgroundImageFileName = list[idx];
-        }
-
-        private void ButtonClock_Checked(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void ButtonClock_Unchecked(object sender, RoutedEventArgs e)
-        {
-
         }
     }
 }

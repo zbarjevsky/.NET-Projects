@@ -38,7 +38,7 @@ namespace MkZ.MediaPlayer
         public Action<VideoPlayerControlVM> OnFullScreenButtonClick = (vm) => { };
         public Action<string[]> OnFileDropAction = (fileNames) => { };
 
-        private CursorArrow _cursorArrow = new CursorArrow();
+        //private CursorArrow _cursorArrow = new CursorArrow();
 
         public MediaFileInfo MediaFileInfo
         {
@@ -67,7 +67,7 @@ namespace MkZ.MediaPlayer
             InitializeComponent();
 
             _controlsHideAndShow = new AnimationHelper(this, 2,
-                _playControls, _systemButtons, _borderPrompt, _cursorArrow);
+                _playControls, _systemButtons, _borderPrompt);
 
             //_imageBackground.Draggable();
 
@@ -93,7 +93,7 @@ namespace MkZ.MediaPlayer
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            _cursorArrow.Load_Cursor(_gridMain, sizeRatio: 20);
+            //_cursorArrow.Load_Cursor(_gridMain, sizeRatio: 20);
         }
 
         private void UserControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -152,6 +152,7 @@ namespace MkZ.MediaPlayer
 
         private void Grid_MouseWheel(object sender, MouseWheelEventArgs e)
         {
+            e.Handled = false;
             //mePlayer.Volume += (e.Delta > 0) ? 0.1 : -0.1;
         }
 
