@@ -35,7 +35,7 @@ namespace MkZ.MediaPlayer.Utils
 
         public List<string> SupportedVideoExtensions { get; set; }
 
-        private void EnsureHasValues()
+        public void EnsureHasValues()
         {
             if (SupportedImageExtensions == null || SupportedImageExtensions.Count == 0)
                 SupportedImageExtensions = new List<string>() { ".jpg", ".png", ".bmp", ".gif" };
@@ -501,6 +501,7 @@ namespace MkZ.MediaPlayer.Utils
                 AppConfig appConfig = XmlHelper.Open<AppConfig>(_fileName);
                 this.CopyFrom(appConfig);
             }
+            this.Configuration.EnsureHasValues();
         }
     }
 }
