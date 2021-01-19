@@ -9,7 +9,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using MeditationStopWatch.Tools;
 using System.Diagnostics;
-using MZ.WinForms;
+
+
+using MkZ.WinForms;
 
 namespace MeditationStopWatch
 {

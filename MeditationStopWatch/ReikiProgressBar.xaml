@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:l="clr-namespace:ReiKi" 
-             xmlns:wpf="clr-namespace:MZ.WPF;assembly=Framework.MkZ"
+             xmlns:wpf="clr-namespace:MkZ.WPF;assembly=Framework.MkZ"
              mc:Ignorable="d" 
              x:Name="ReiKi"
              Background="Gainsboro"

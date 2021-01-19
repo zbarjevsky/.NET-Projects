@@ -46,6 +46,7 @@ namespace MkZ.WPF
         {
             public FrameworkElement Element;
             public bool IsDragging = false;
+            public Cursor Cursor;
 
             private Thickness _margin = new Thickness();
 
@@ -73,6 +74,7 @@ namespace MkZ.WPF
             {
                 Element = element;
                 _margin = margin;
+                Cursor = element.Cursor;
                 InitTransform();
             }
 
@@ -188,6 +190,7 @@ namespace MkZ.WPF
 
             FrameworkElement element = sender as FrameworkElement;
             element.ReleaseMouseCapture();
+            element.Cursor = _draggables[(FrameworkElement)sender].Cursor;
         }
 
         private static void control_MouseMove(object sender, MouseEventArgs e)

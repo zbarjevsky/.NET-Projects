@@ -147,7 +147,7 @@ namespace MkZ.MediaPlayer
             set { SetProperty(ref _prompt, value); }
         }
 
-        private Brush _background = Brushes.Gray;
+        private Brush _background = Brushes.Transparent;
         public Brush Background
         {
             get { return _background; }

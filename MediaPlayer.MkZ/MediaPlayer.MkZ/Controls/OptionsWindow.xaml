@@ -6,7 +6,7 @@
         xmlns:swf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         xmlns:local="clr-namespace:MkZ.MediaPlayer.Controls"
         mc:Ignorable="d" Loaded="Window_Loaded"
-        Title="Options" Height="450" Width="600">
+        Title="Options" Height="650" Width="600">
     <Grid>
         <WindowsFormsHost>
             <swf:PropertyGrid x:Name="propertyGrid"/>

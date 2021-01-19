@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MkZ.WinForms;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,7 +30,11 @@ namespace MkZ.MediaPlayer.Controls
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             propertyGrid.SelectedObject = VideoPlayerContext.Instance.Config;
-            propertyGrid.ExpandAllGridItems();
+            propertyGrid.PropertySort = PropertySort.NoSort;
+
+            propertyGrid.ExpandGridItem("Configuration");
+            propertyGrid.ExpandGridItem("Clock Configuration");
+            propertyGrid.ExpandGridItem("Clock Font");
         }
 
         private static void ExpandGroup(PropertyGrid propertyGrid, string groupName)

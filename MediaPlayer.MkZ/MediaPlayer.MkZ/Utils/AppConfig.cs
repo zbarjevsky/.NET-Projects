@@ -12,6 +12,7 @@ using System.Xml.Serialization;
 
 using MkZ.Tools;
 using MkZ.Windows;
+using MkZ.WPF.MessageBox;
 
 namespace MkZ.MediaPlayer.Utils
 {
@@ -35,6 +36,15 @@ namespace MkZ.MediaPlayer.Utils
 
         public List<string> SupportedVideoExtensions { get; set; }
 
+        private WPF.SimpleClockControl.ClockConfig _clockColors = new WPF.SimpleClockControl.ClockConfig();
+        [Category("Clock"), TypeConverter(typeof(ExpandableObjectConverter))]
+        [DisplayName("Clock Configuration")]
+        public WPF.SimpleClockControl.ClockConfig ClockConfig
+        {
+            get { return _clockColors; }
+            set { SetProperty(ref _clockColors, value); }
+        }
+
         public void EnsureHasValues()
         {
             if (SupportedImageExtensions == null || SupportedImageExtensions.Count == 0)
@@ -54,6 +64,7 @@ namespace MkZ.MediaPlayer.Utils
             BackgroundImageFileName = config.BackgroundImageFileName;
 
             ShowTestControls = config.ShowTestControls;
+            ClockConfig = config.ClockConfig;
 
             SupportedImageExtensions = config.SupportedImageExtensions;
             SupportedAudioExtensions = config.SupportedAudioExtensions;
@@ -498,8 +509,15 @@ namespace MkZ.MediaPlayer.Utils
         {
             if (File.Exists(_fileName))
             {
-                AppConfig appConfig = XmlHelper.Open<AppConfig>(_fileName);
-                this.CopyFrom(appConfig);
+                try
+                {
+                    AppConfig appConfig = XmlHelper.Open<AppConfig>(_fileName);
+                    this.CopyFrom(appConfig);
+                }
+                catch (Exception err)
+                {
+                    PopUp.Error(err.ToString(), "Cannot load Settings From File");
+                }            
             }
             this.Configuration.EnsureHasValues();
         }

@@ -9,7 +9,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-using MZ.WinForms;
+using MkZ.WinForms;
 
 namespace MeditationStopWatch
 {

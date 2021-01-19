@@ -6,13 +6,15 @@
         xmlns:local="clr-namespace:MkZ.MediaPlayer" 
         xmlns:mediaplayer="clr-namespace:MkZ.MediaPlayer" 
         xmlns:controls="clr-namespace:MkZ.MediaPlayer.Controls" 
-        xmlns:utils="clr-namespace:MkZ.MediaPlayer.Utils" xmlns:wpf="clr-namespace:MkZ.WPF;assembly=Framework.MkZ"
+        xmlns:utils="clr-namespace:MkZ.MediaPlayer.Utils" 
+        xmlns:wpf="clr-namespace:MkZ.WPF;assembly=Framework.MkZ"
         mc:Ignorable="d" 
         FontSize="18"
         Loaded="Window_Loaded"
         Closed="Window_Closed"
         SizeChanged="Window_SizeChanged"
         WindowStartupLocation="CenterScreen"
+        Background="LightYellow"
         FocusManager.FocusedElement="{Binding ElementName=_player}"
         Height="768" Width="1366" MinHeight="400" MinWidth="600">
     <Window.Resources>
@@ -88,7 +90,7 @@
         </Grid.RowDefinitions>
         <DockPanel Background="{StaticResource GradientBackground}">
             <controls:ButtonMenu Margin="4" Foreground="{StaticResource ButtonForegroundMain}" 
-                     ToolTip="Options..." >
+                     ToolTip="File..." >
                 <controls:DropDownButton.Menu>
                     <ContextMenu FontWeight="Medium" FontSize="18" Foreground="Navy" HasDropShadow="True">
                         <MenuItem Header="Open File.." Command="ApplicationCommands.Open" Padding="8" >
@@ -113,7 +115,7 @@
                             </MenuItem.Icon>
                         </MenuItem>
                         <Separator/>
-                        <MenuItem Header="Options..." Padding="8" Click="OptionsMenuItem_Click" >
+                        <MenuItem Header="Settings..." Padding="8" Click="SettingsMenuItem_Click" >
                             <MenuItem.Icon>
                                 <Image Source="Images/Tools.ico" Width="16" Height="16" />
                             </MenuItem.Icon>

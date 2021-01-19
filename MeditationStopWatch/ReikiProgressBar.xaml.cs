@@ -58,7 +58,7 @@ namespace ReiKi
         {
             InitializeComponent();
 
-            progr.ProgressTheme = MZ.WPF.GradientProgressBar.TicksTheme.GetBase60Theme();
+            progr.ProgressTheme = MkZ.WPF.GradientProgressBar.TicksTheme.GetBase60Theme();
 
             chkBell3min.IsChecked = true;
             mnuBellOnOff.IsChecked = true;

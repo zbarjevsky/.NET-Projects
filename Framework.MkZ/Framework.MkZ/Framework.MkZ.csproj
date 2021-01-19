@@ -52,6 +52,7 @@
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Drawing.Design" />
     <Reference Include="System.Management" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Windows.Forms.DataVisualization" />
@@ -141,6 +142,7 @@
     <Compile Include="WinForms\ListViewVirtualWithCheckBoxes.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="WinForms\PropertyGridExtensions.cs" />
     <Compile Include="WinForms\WinFormsControlExtension.cs" />
     <Compile Include="WinForms\DraggableExtension.cs" />
     <Compile Include="WinForms\FormInPlaceEdit.cs">
@@ -177,7 +179,9 @@
     <Compile Include="Windows\User32_WindowsMessages.cs" />
     <Compile Include="Windows\XmlSerializerHelper.cs" />
     <Compile Include="Windows\CommonUtils.cs" />
+    <Compile Include="WinForms\WpfBrushColorUIEditor.cs" />
     <Compile Include="WPF\AutoGreyableImage.cs" />
+    <Compile Include="WPF\Converters\ColorConverters.cs" />
     <Compile Include="WPF\DisplayTopologyUserControl.xaml.cs">
       <DependentUpon>DisplayTopologyUserControl.xaml</DependentUpon>
     </Compile>

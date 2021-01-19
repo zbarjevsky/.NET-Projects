@@ -9,7 +9,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Windows.Media;
 using System.Diagnostics;
-using MZ.WPF.MessageBox;
+using MkZ.WPF.MessageBox;
 
 namespace MeditationStopWatch
 {

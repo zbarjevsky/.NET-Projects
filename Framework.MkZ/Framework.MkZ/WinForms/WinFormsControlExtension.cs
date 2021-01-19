@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -26,49 +27,6 @@ namespace MkZ.WinForms
                         System.Reflection.BindingFlags.Instance);
 
             aProp.SetValue(c, value, null);
-        }
-
-        public static void ExpandGridItem(this PropertyGrid propertyGrid, string name)
-        {
-            GridItem root = propertyGrid.SelectedGridItem;
-            //Get the parent
-            while (root.Parent != null)
-                root = root.Parent;
-
-            ExpandGridItem(root, name);
-        }
-
-        public static void ExpandGridGroup(this PropertyGrid propertyGrid, string groupName)
-        {
-            GridItem root = propertyGrid.SelectedGridItem;
-            //Get the parent
-            while (root.Parent != null)
-                root = root.Parent;
-
-            if (root != null)
-            {
-                foreach (GridItem g in root.GridItems)
-                {
-                    if (g.GridItemType == GridItemType.Category && g.Label == groupName)
-                    {
-                        g.Expanded = true;
-                        break;
-                    }
-                }
-            }
-        }
-
-        private static void ExpandGridItem(GridItem root, string name)
-        {
-            if (root != null)
-            {
-                foreach (GridItem g in root.GridItems)
-                {
-                    ExpandGridItem(g, name);
-                    if (g.Label == name)
-                        g.Expanded = true;
-                }
-            }
         }
 
         public static void ShowOnDisabled(this ToolTip control, bool bEnable)

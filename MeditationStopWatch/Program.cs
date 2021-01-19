@@ -27,7 +27,7 @@ namespace MeditationStopWatch
 		{
             //MZ.Framework.Tools.DependenciesTool.LoadFrameworkMkZ_Dependency(Properties.Resources.Framework_MkZ);
 
-			if (MZ.Framework.Tools.AssemblyTools.UpdateAssemblyInfoVersion(args))
+			if (MkZ.Framework.Tools.AssemblyTools.UpdateAssemblyInfoVersion(args))
                 return;
 
             if (!SingleInstance())
@@ -49,7 +49,7 @@ namespace MeditationStopWatch
 
         private static bool SingleInstance()
         {
-            return !(MZ.Tools.SingleInstanceHelper.GlobalShowWindow(FormStopWatch.TITLE));
+            return !(MkZ.Tools.SingleInstanceHelper.GlobalShowWindow(FormStopWatch.TITLE));
         }//end SingleInstance
     }
 }

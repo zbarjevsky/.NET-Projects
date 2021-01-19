@@ -69,6 +69,9 @@ namespace MkZ.MediaPlayer
         {
             Context.Config.Load();
 
+            _clock.DataContext = Context.Config.Configuration.ClockConfig;
+            Context.Config.Configuration.ClockConfig.NotifyPropertyChangedAll();
+
             SetPlayList(MediaDB.SelectedPlayList);
             MediaDB.OnPlayListSelectionChangedAction = (playList) =>
             {
@@ -307,12 +310,15 @@ namespace MkZ.MediaPlayer
             }
         }
 
-        private void OptionsMenuItem_Click(object sender, RoutedEventArgs e)
+        private void SettingsMenuItem_Click(object sender, RoutedEventArgs e)
         {
             OptionsWindow wnd = new OptionsWindow();
             wnd.Owner = this;
             wnd.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             wnd.ShowDialog();
+
+            _clock.DataContext = Context.Config.Configuration.ClockConfig;
+            Context.Config.Configuration.ClockConfig.NotifyPropertyChangedAll();
         }
 
         private void ButtonPlayListManager_Click(object sender, RoutedEventArgs e)

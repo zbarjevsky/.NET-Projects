@@ -3,10 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:MkZ.WPF"
-             mc:Ignorable="d" FontSize="50" FontWeight="Bold" FontFamily="Jokerman"
-             Foreground="Wheat"
+             xmlns:local="clr-namespace:MkZ.WPF" 
+             xmlns:converters="clr-namespace:MkZ.WPF.Converters"
+             mc:Ignorable="d" 
+             FontSize="{Binding ClockFont.FontSize, FallbackValue=50.0}" 
+             FontWeight="{Binding ClockFont.FontWeight, FallbackValue=Bold}" 
+             FontFamily="{Binding ClockFont.FontFamily, FallbackValue=Jokerman}"
+             Foreground="{Binding Foreground.B, FallbackValue=Pink}"
              d:DesignHeight="450" d:DesignWidth="450">
+    <UserControl.Resources>
+        <converters:MyBrushToColorConverter x:Key="BrushToColorConverter"/>
+        <converters:BrushOpacityConverter x:Key="BrushOpacityConverter"/>
+    </UserControl.Resources>
     <Grid x:Name="_gridMain" ShowGridLines="False">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -21,7 +29,7 @@
         <Viewbox Grid.RowSpan="3" Grid.ColumnSpan="3">
             <Border CornerRadius="240" Padding="20">
                 <Border.Background>
-                    <SolidColorBrush Color="Black" Opacity="0.5" />
+                    <SolidColorBrush Color="{Binding Background.C, FallbackValue=Black}" Opacity="0.5" />
                 </Border.Background>
                 <Canvas Width="400" Height="400">
 
@@ -39,7 +47,9 @@
                     <TextBlock Text="12" Canvas.Left="176" Canvas.Top="-10" />
 
                     <Path x:Name="hour_hand" 
-                      Stroke="Goldenrod" StrokeThickness="5" Fill="DimGray" 
+                      Stroke="{Binding HourHandBrush.B, FallbackValue=Lime}" StrokeThickness="5" 
+                      Fill="{Binding HourHandBrush.B, Converter={StaticResource BrushOpacityConverter}, 
+                         FallbackValue=Black, ConverterParameter=0.5}" 
                       Width="400" Height="400" RenderTransformOrigin="0.5,0.5">
                         <Path.RenderTransform>
                             <TransformGroup>
@@ -52,10 +62,10 @@
                     </Path>
 
                     <Path x:Name="minute_hand" 
-                      Stroke="DarkCyan" StrokeThickness="3" 
+                      Stroke="{Binding MinuteHandBrush.B, FallbackValue=Blue}" StrokeThickness="3" 
                       Width="400" Height="400" RenderTransformOrigin="0.5,0.5">
                         <Path.Fill>
-                            <SolidColorBrush Color="DarkCyan" Opacity="0.5" />
+                            <SolidColorBrush Color="{Binding MinuteHandBrush.C, FallbackValue=Blue}" Opacity="0.5" />
                         </Path.Fill>
                         <Path.RenderTransform>
                             <TransformGroup>
@@ -68,10 +78,10 @@
                     </Path>
 
                     <Path x:Name="second_hand" 
-                      Stroke="Red" StrokeThickness="1" 
+                      Stroke="{Binding SecondHandBrush.B, FallbackValue=Magenta}" StrokeThickness="1" 
                       Width="400" Height="400" RenderTransformOrigin="0.5,0.5">
                         <Path.Fill>
-                            <SolidColorBrush Color="Red" Opacity="0.5" />
+                            <SolidColorBrush Color="{Binding SecondHandBrush.C, FallbackValue=Violet}" Opacity="0.5" />
                         </Path.Fill>
                         <Path.RenderTransform>
                             <TransformGroup>
