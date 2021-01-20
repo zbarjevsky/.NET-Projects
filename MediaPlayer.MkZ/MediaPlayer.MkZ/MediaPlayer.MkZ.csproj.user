@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
+    <StartArguments>"C:\Temp\YouTube\Films\КАВАЛЕРЫ МОРСКОЙ ЗВЕЗДЫ - Серия 1 _ Детектив. Мелодрама-0eCzUi9mJEI.mp4"</StartArguments>
+  </PropertyGroup>
+</Project>

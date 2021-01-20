@@ -163,6 +163,31 @@ namespace MkZ.WPF
             }
         }
 
+        public static Point GetDraggableOffset(this FrameworkElement element)
+        {
+            if (!_draggables.ContainsKey(element))
+                return new Point();
+
+            TranslateTransform translate = _draggables[element].Translate;
+            if (translate == null)
+                return new Point();
+
+            return new Point(translate.X, translate.Y);
+        }
+
+        public static void SetDraggableOffset(this FrameworkElement element, Point offset)
+        {
+            if (!_draggables.ContainsKey(element))
+                return;
+
+            TranslateTransform translate = _draggables[element].Translate;
+            if (translate == null)
+                return;
+
+            translate.X = offset.X;
+            translate.Y = offset.Y;
+        }
+
         static void control_MouseDown(object sender, MouseButtonEventArgs e)
         {
             FrameworkElement element = sender as FrameworkElement;

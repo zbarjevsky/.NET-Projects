@@ -25,7 +25,6 @@ namespace MkZ.WPF
     /// </summary>
     public partial class SimpleClockControl : UserControl
     {
-
         public class ClockConfig : NotifyPropertyChangedImpl
         {
             private SerializableFontForWpf _font = new SerializableFontForWpf();
@@ -36,6 +35,11 @@ namespace MkZ.WPF
                 get { return _font; }
                 set { SetProperty(ref _font, value); }
             }
+
+            public double Zoom { get; set; } = 1.0;
+
+            //location change from center
+            public Point Offset { get; set; } = new Point();
 
             private SerializableBrush _background = new SerializableBrush(Brushes.Black);
             [Category("Clock"), TypeConverter(typeof(ExpandableObjectConverter))]

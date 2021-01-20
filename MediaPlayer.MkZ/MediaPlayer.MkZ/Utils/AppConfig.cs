@@ -285,6 +285,24 @@ namespace MkZ.MediaPlayer.Utils
             return null;
         }
 
+        public PlayList FindPlayListContainingFile(string subString)
+        {
+            foreach (MediaFileInfo item in MediaFiles)
+            {
+                if (item.FileName.Contains(subString))
+                    return this;
+            }
+
+            foreach (PlayList list in PlayLists)
+            {
+                PlayList info = list.FindPlayListContainingFile(subString);
+                if (info != null)
+                    return info;
+            }
+
+            return null;
+        }
+
         public PlayList AddNewPlayList(string name)
         {
             PlayList newList = new PlayList() 

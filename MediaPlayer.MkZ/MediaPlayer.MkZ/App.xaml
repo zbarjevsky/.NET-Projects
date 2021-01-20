@@ -4,7 +4,7 @@
              xmlns:local="clr-namespace:MkZ.MediaPlayer" 
              xmlns:utils="clr-namespace:MkZ.MediaPlayer.Utils"
              xmlns:system="clr-namespace:System;assembly=mscorlib"
-             StartupUri="MainWindow.xaml">
+             Startup="Application_Startup">
     <Application.Resources>
         <system:Double x:Key="DefaultFontSize">18</system:Double>
         

@@ -40,8 +40,12 @@ namespace MkZ.MediaPlayer
 
         public VideoPlayerControlVM PlayerVM => VideoPlayerContext.Instance.PlayerVM;
 
-        public MainWindow()
+        private readonly string[] _commandLine;
+
+        public MainWindow(string [] commandLine)
         {
+            _commandLine = commandLine;
+
             InitializeComponent();
 
             this.DataContext = Context;
@@ -70,9 +74,15 @@ namespace MkZ.MediaPlayer
             Context.Config.Load();
 
             _clock.DataContext = Context.Config.Configuration.ClockConfig;
+            _zoomClock.Zoom = Context.Config.Configuration.ClockConfig.Zoom;
+            _clock.SetDraggableOffset(Context.Config.Configuration.ClockConfig.Offset);
             Context.Config.Configuration.ClockConfig.NotifyPropertyChangedAll();
 
+            //add or select file if exists
+            ProcessCommandLine();
+
             SetPlayList(MediaDB.SelectedPlayList);
+
             MediaDB.OnPlayListSelectionChangedAction = (playList) =>
             {
                  SetPlayList(playList);
@@ -94,9 +104,43 @@ namespace MkZ.MediaPlayer
             PlayerVM.MediaFailedAction = (vm, ex) => OnMediaFailed(vm, ex);
         }
 
+        private bool ProcessCommandLine()
+        {
+            if(_commandLine == null || _commandLine.Length == 0)
+                return false;
+
+            string fileName = _commandLine[0];
+            if (!File.Exists(fileName))
+                return false;
+
+            if (!Context.Config.Configuration.IsSupportedMediaFile(fileName))
+                return false;
+
+            PlayList list = MediaDB.RootList.FindPlayListContainingFile(fileName);
+            if(list == null)
+            {
+                MediaDB.AddNewMediaFile(fileName, PlayerVM.Volume);
+                MediaFileInfo info = MediaDB.RootList.FindFile(fileName);
+                info.MediaState = MediaState.Play;
+            }
+            else
+            {
+                MediaDB.RootList.SetSelectedPlayList(list);
+                MediaFileInfo info = list.FindFile(fileName);
+                info.MediaState = MediaState.Play;
+                MediaDB.SelectedMediaFileIndex = list.MediaFiles.IndexOf(info);
+            }
+
+            return true;
+        }
+
         private void Window_Closed(object sender, EventArgs e)
         {
             MediaDB.SelectedMediaFileIndex = _cmbFilesList.SelectedIndex;
+
+            Context.Config.Configuration.ClockConfig.Offset = _clock.GetDraggableOffset();
+            Context.Config.Configuration.ClockConfig.Zoom = _zoomClock.Zoom;
+
             Context.Config.Save();
             _player.ClosePlayer();
         }
