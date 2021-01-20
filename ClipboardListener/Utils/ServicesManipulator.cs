@@ -89,7 +89,7 @@ namespace ClipboardManager.Utils
                 _task = new Task(MonitorServicesStatus, TaskCreationOptions.LongRunning);
                 _task.Start();
             }
-            Utils.Log.WriteLine("[ServiceManipulator][Start] TaskStatus: '{0}'", _task.Status);
+            Utils.LogC.WriteLine("[ServiceManipulator][Start] TaskStatus: '{0}'", _task.Status);
             return _task.Status == TaskStatus.Running;
         }
 
@@ -104,7 +104,7 @@ namespace ClipboardManager.Utils
 
             bool stopped = _task.Wait(1500);
             stopped = _task.Status != TaskStatus.Running;
-            Utils.Log.WriteLine("[ServiceManipulator][Stop] TaskStatus: '{0}'", _task.Status);
+            Utils.LogC.WriteLine("[ServiceManipulator][Stop] TaskStatus: '{0}'", _task.Status);
             _task = null;
             return stopped;
         }
@@ -126,12 +126,12 @@ namespace ClipboardManager.Utils
                                 {
                                     if (service.Status != ServicesDictionary[service.DisplayName].Status)
                                     {
-                                        Utils.Log.WriteLineF("[ServiceManipulator][MonitorServicesStatus] Service Status Change: '{0}', Status: '{1}', Start Type: '{2}'",
+                                        Utils.LogC.WriteLineF("[ServiceManipulator][MonitorServicesStatus] Service Status Change: '{0}', Status: '{1}', Start Type: '{2}'",
                                             service.DisplayName, service.Status, service.StartType);
                                     }
                                     if (service.StartType != ServicesDictionary[service.DisplayName].StartType)
                                     {
-                                        Utils.Log.WriteLineF("[ServiceManipulator][MonitorServicesStatus] Service Type Changed: '{0}', Status: '{1}', Start Type: '{2}'",
+                                        Utils.LogC.WriteLineF("[ServiceManipulator][MonitorServicesStatus] Service Type Changed: '{0}', Status: '{1}', Start Type: '{2}'",
                                             service.DisplayName, service.Status, service.StartType);
                                     }
                                     //release previous instance
@@ -140,14 +140,14 @@ namespace ClipboardManager.Utils
                                 }
                                 else
                                 {
-                                    Utils.Log.WriteLineF("[ServiceManipulator][MonitorServicesStatus] Service Info Initialized: '{0}', Status: '{1}', Start Type: '{2}'",
+                                    Utils.LogC.WriteLineF("[ServiceManipulator][MonitorServicesStatus] Service Info Initialized: '{0}', Status: '{1}', Start Type: '{2}'",
                                         service.DisplayName, service.Status, service.StartType);
                                 }
                                 ServicesDictionary[service.DisplayName] = service;
 
                                 if (service.Status == ServiceControllerStatus.Running)
                                 {
-                                    Utils.Log.WriteLineF("[ServiceManipulator][MonitorServicesStatus] Service Is Running and will be stopped: '{0}', Status: '{1}', Start Type: '{2}'",
+                                    Utils.LogC.WriteLineF("[ServiceManipulator][MonitorServicesStatus] Service Is Running and will be stopped: '{0}', Status: '{1}', Start Type: '{2}'",
                                        service.DisplayName, service.Status, service.StartType);
                                     try
                                     {
@@ -156,7 +156,7 @@ namespace ClipboardManager.Utils
                                     }
                                     catch (Exception err)
                                     {
-                                        Utils.Log.WriteLine("[ServiceManipulator][MonitorServicesStatus] Stop Service '{0}' Failed: Exception: {1}",
+                                        Utils.LogC.WriteLine("[ServiceManipulator][MonitorServicesStatus] Stop Service '{0}' Failed: Exception: {1}",
                                             service.DisplayName, err.ToString());
                                     }
                                 }
@@ -169,7 +169,7 @@ namespace ClipboardManager.Utils
                     }
                     catch (Exception err)
                     {
-                        Utils.Log.WriteLine("[ServiceManipulator][MonitorServicesStatus] Exception: {0}", err.ToString());
+                        Utils.LogC.WriteLine("[ServiceManipulator][MonitorServicesStatus] Exception: {0}", err.ToString());
                     }
                 }
 

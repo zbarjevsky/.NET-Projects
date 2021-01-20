@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MZ.Media.ComObjects
+namespace MkZ.Media.ComObjects
 {
     internal sealed class ComTaskScheduler : TaskScheduler, IDisposable
     {

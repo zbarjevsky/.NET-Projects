@@ -1,4 +1,4 @@
-﻿namespace MZ.Media
+﻿namespace MkZ.Media
 {
     partial class MediaDeviceListUserControl
     {

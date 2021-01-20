@@ -1,4 +1,4 @@
-﻿using MZ.Framework.Tools;
+﻿using MkZ.Framework.Tools;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

@@ -8,7 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
-using MZ.WPF.MessageBox;
+
+
+using MkZ.WPF.MessageBox;
 
 namespace DiskCryptorHelper
 {

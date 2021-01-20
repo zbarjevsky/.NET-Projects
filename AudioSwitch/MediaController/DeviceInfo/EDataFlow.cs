@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MZ.Media.Device
+namespace MkZ.Media.Device
 {
     /// <summary>
     ///     The EDataFlow enumeration defines constants that indicate the direction

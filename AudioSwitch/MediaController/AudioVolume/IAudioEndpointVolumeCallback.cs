@@ -22,11 +22,11 @@
   (Modified for NAudio by Mark Heath)
   
 */
-using MZ.Media.ComObjects;
+using MkZ.Media.ComObjects;
 using System;
 using System.Runtime.InteropServices;
 
-namespace MZ.Media.Audio
+namespace MkZ.Media.Audio
 {
     [Guid(ComIIds.AUDIO_ENDPOINT_VOLUME_CALLBACK_IID),
      InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]

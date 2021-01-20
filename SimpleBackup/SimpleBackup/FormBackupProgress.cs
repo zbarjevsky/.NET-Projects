@@ -1,8 +1,4 @@
-﻿using MZ.Tools;
-using MZ.WinForms;
-using SimpleBackup.Settings;
-using SimpleBackup.Tools;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -15,7 +11,11 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static MZ.Tools.FileUtils;
+
+using MkZ.Tools;
+using MkZ.WinForms;
+using SimpleBackup.Settings;
+using SimpleBackup.Tools;
 
 namespace SimpleBackup
 {
@@ -216,7 +216,7 @@ namespace SimpleBackup
             m_chartProgress.GraphMainColor = Color.Blue;
 
             m_progressFile.Style = ProgressBarStyle.Blocks;
-            FileProgress progressCopyBigFile = new FileProgress(m_progressFile, this, NotifyOptions.NotifyPercentChange);
+            MkZ.Tools.FileUtils.FileProgress progressCopyBigFile = new MkZ.Tools.FileUtils.FileProgress(m_progressFile, this, NotifyOptions.NotifyPercentChange);
             progressCopyBigFile.OnChange = (status) =>
             {
                 m_lblProgressFile.Text = string.Format("{0}%", progressCopyBigFile.Percent);

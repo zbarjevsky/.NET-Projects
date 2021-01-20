@@ -1,9 +1,10 @@
-﻿<Window xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+﻿<Window x:Class="MkZ.WPF.WpfAnalogClock.MainWindow" 
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WpfAnalogClock"
-        xmlns:Constrols="clr-namespace:WpfAnalogClock.Constrols" x:Class="WpfAnalogClock.MainWindow"
+        xmlns:local="clr-namespace:MkZ.WPF.WpfAnalogClock"
+        xmlns:controls="clr-namespace:MkZ.WPF.WpfAnalogClock.Controls"
         mc:Ignorable="d"
         AllowsTransparency="True"
         Background="Transparent"
@@ -13,7 +14,7 @@
         Title="WPF Clock" 
         Height="350" Width="350"> 
     <Grid Background="Transparent" MouseDown="ClockGrid_OnMouseDown" MouseMove="ClockGrid_MouseMove">
-        <Constrols:AnalogClock 
+        <controls:AnalogClock 
             Grid.Row="0" Grid.Column="0" x:Name="clock" 
             HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
 

@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace RulerWPF
+namespace MkZ.WPF.RulerWPF
 {
     public static class ExtensionMethods
     {

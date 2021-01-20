@@ -1,7 +1,7 @@
 ﻿using System;
-using MZ.Media.Device;
+using MkZ.Media.Device;
 
-namespace MZ.Media.Device
+namespace MkZ.Media.Device
 {
     public class DeviceInfo : IEquatable<DeviceInfo>, IComparable<DeviceInfo>
     {

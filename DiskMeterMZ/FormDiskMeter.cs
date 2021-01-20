@@ -45,10 +45,10 @@ namespace TestFileBrowser
 				"TestFileBrowser.res.DiskWrite.ico",
 				"TestFileBrowser.res.DiskReadWrite.ico",
 			};
-			m_IconList = new MZ.IconList(svIcons);
+			m_IconList = new MkZ.IconList(svIcons);
 		}//end constructor
 
-		private MZ.IconList m_IconList = null;
+		private MkZ.IconList m_IconList = null;
 
 		/// <summary>
 		/// Clean up any resources being used.

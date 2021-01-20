@@ -21,7 +21,7 @@
 */
 using System;
 
-namespace MZ.Media.Audio
+namespace MkZ.Media.Audio
 {
     /// <summary>
     /// Endpoint Hardware Support

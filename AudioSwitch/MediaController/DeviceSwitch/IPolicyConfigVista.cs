@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using MZ.Media.ComObjects;
+using MkZ.Media.ComObjects;
 
-namespace MZ.Media.DeviceSwitch
+namespace MkZ.Media.DeviceSwitch
 {
     [Guid(ComIIds.POLICY_CONFIG_VISTA_IID)]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]

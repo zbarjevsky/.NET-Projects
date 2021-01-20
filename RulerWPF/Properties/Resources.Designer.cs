@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace RulerWPF.Properties {
+namespace MkZ.WPF.RulerWPF.Properties {
     using System;
     
     
@@ -19,7 +19,7 @@ namespace RulerWPF.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -39,7 +39,7 @@ namespace RulerWPF.Properties {
         internal static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
-                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("RulerWPF.Properties.Resources", typeof(Resources).Assembly);
+                    global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("MkZ.WPF.RulerWPF.Properties.Resources", typeof(Resources).Assembly);
                     resourceMan = temp;
                 }
                 return resourceMan;
@@ -62,15 +62,12 @@ namespace RulerWPF.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to {\rtf1\ansi\ansicpg1251\deff0\deflang1049{\fonttbl{\f0\fnil\fcharset0 Calibri;}}
-        ///{\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\sa200\sl276\slmult1\lang9\f0\fs22\par
-        ///\b\fs32 Use keyboard for fine navigation\b0\par
-        ///Arrow keys to move 1 pixel.\par
-        ///\b Shift \b0 + Left or Right -- resize\par
-        ///\b Shift \b0 + Up or Down -- rotate\par
-        ///\b Ctrl \b0 - will asselerate movements x25\fs22\par
-        ///\par
-        ///}
-        ///.
+        ///{\*\generator Msftedit 5.41.21.2510;}\viewkind4\uc1\pard\fi-270\li990\ri90\sa200\sl276\slmult1\tx90\tx990\tx1440\lang9\f0\fs22\par
+        ///\pard\sa200\sl276\slmult1\b\fs32\tab Use keyboard for fine navigation\b0\par
+        ///\tab Arrow keys \u8593?, \u8595?, \u8592?, \u8594? to move Ruler 1 pixel.\par
+        ///\b\tab Shift \b0 + \u8592? or \u8594? -- resize\par
+        ///\b\tab Shift \b0 + \u8593? or \u8595?-- rotate\par
+        ///\b\tab Ctrl \b0 - will asselerate mo [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string AboutRulerWPF {
             get {

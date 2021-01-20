@@ -1,4 +1,4 @@
-﻿namespace MZ.Media
+﻿namespace MkZ.Media
 {
     partial class VolumeUserControl
     {
@@ -29,11 +29,11 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet1 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
+            MkZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet1 = new MkZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(VolumeUserControl));
             this.m_grpVolume = new System.Windows.Forms.GroupBox();
             this.m_lbl = new System.Windows.Forms.Label();
-            this.m_progrLevel = new MZ.WinForms.ColorBarsProgressBar();
+            this.m_progrLevel = new MkZ.WinForms.ColorBarsProgressBar();
             this.m_btnMute = new System.Windows.Forms.Button();
             this.m_imgListMic = new System.Windows.Forms.ImageList(this.components);
             this.m_trackVolume = new ColorSlider.ColorSlider();
@@ -79,7 +79,7 @@
             themeColorSet1.Part2_InactiveColor = System.Drawing.Color.Gainsboro;
             themeColorSet1.Part3_ActiveColor = System.Drawing.Color.LimeGreen;
             themeColorSet1.Part3_InactiveColor = System.Drawing.Color.Gainsboro;
-            themeColorSet1.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Regular;
+            themeColorSet1.Theme = MkZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Regular;
             themeColorSet1.Threshold1 = 100;
             themeColorSet1.Threshold2 = 100;
             this.m_progrLevel.ColorTheme = themeColorSet1;
@@ -226,7 +226,7 @@
         private System.Windows.Forms.ImageList m_imgListSpk;
         private System.Windows.Forms.Timer m_timer;
         private System.Windows.Forms.ToolTip toolTip1;
-        private MZ.WinForms.ColorBarsProgressBar m_progrLevel;
+        private MkZ.WinForms.ColorBarsProgressBar m_progrLevel;
         private System.Windows.Forms.Label m_lbl;
     }
 }

@@ -8,7 +8,7 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 
-namespace RulerWPF
+namespace MkZ.WPF.RulerWPF
 {
     public static class DraggableExtension
     {

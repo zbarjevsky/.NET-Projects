@@ -24,7 +24,7 @@
 
 using System;
 
-namespace MZ.Media.ComObjects
+namespace MkZ.Media.ComObjects
 {
     /// <summary>
     ///     Device State

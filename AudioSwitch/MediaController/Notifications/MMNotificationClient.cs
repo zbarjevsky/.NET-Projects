@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MarkZ.Timer;
-using MZ.Media.ComObjects;
-using MZ.Media.Device;
-using MZ.Media.Interfaces;
+using MkZ.Media.ComObjects;
+using MkZ.Media.Device;
+using MkZ.Media.Interfaces;
 
-namespace MZ.Media.Notifications
+namespace MkZ.Media.Notifications
 {
     public class MMNotificationClient : IMMNotificationClient, IDisposable
     {

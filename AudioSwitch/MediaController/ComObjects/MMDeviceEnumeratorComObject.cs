@@ -1,6 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace MZ.Media.ComObjects
+namespace MkZ.Media.ComObjects
 {
     /// <summary>
     ///     implements IMMDeviceEnumerator

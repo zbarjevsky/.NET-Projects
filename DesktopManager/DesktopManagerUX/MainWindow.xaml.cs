@@ -1,6 +1,4 @@
-﻿using DesktopManagerUX.Utils;
-using MZ.WPF.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -15,6 +13,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+
+
+using DesktopManagerUX.Utils;
+using MkZ.WPF.Utils;
 
 namespace DesktopManagerUX
 {

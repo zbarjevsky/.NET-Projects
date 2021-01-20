@@ -1,8 +1,8 @@
 ﻿//using NAudio.CoreAudioApi;
-using MZ.Media.Device;
+using MkZ.Media.Device;
 //using SoundSwitch.Common.Framework.Audio.Icon;
 
-namespace MZ.Media.Device
+namespace MkZ.Media.Device
 {
     public class DeviceFullInfo : DeviceInfo
     {

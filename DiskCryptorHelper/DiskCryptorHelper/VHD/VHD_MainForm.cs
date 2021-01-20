@@ -53,7 +53,7 @@ namespace VhdApiExample {
                 }
                 catch (Exception err)
                 {
-                    MZ.WPF.MessageBox.PopUp.Error(err.ToString(), "Open - ERROR");
+                    MkZ.WPF.MessageBox.PopUp.Error(err.ToString(), "Open - ERROR");
                 }
                 UpdateData();
             }
@@ -115,7 +115,7 @@ namespace VhdApiExample {
                 }
                 catch (Exception err)
                 {
-                    MZ.WPF.MessageBox.PopUp.Error(err.ToString(), "Close - ERROR");
+                    MkZ.WPF.MessageBox.PopUp.Error(err.ToString(), "Close - ERROR");
                 }
                 UpdateData();
             }
@@ -131,7 +131,7 @@ namespace VhdApiExample {
             }
             catch (Exception err)
             {
-                MZ.WPF.MessageBox.PopUp.Error(err.ToString(), "Attach - ERROR");
+                MkZ.WPF.MessageBox.PopUp.Error(err.ToString(), "Attach - ERROR");
             }
             UpdateData();
         }
@@ -145,7 +145,7 @@ namespace VhdApiExample {
             }
             catch (Exception err)
             {
-                MZ.WPF.MessageBox.PopUp.Error(err.ToString(), "Detach - ERROR");
+                MkZ.WPF.MessageBox.PopUp.Error(err.ToString(), "Detach - ERROR");
             }
             UpdateData();
         }

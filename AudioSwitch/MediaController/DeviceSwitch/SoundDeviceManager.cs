@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MZ.Media.ComObjects;
-using MZ.Media.Device;
+using MkZ.Media.ComObjects;
+using MkZ.Media.Device;
 
-namespace MZ.Media.DeviceSwitch
+namespace MkZ.Media.DeviceSwitch
 {
     /// <summary>
     /// https://github.com/cdhunt/AudioSwitcher

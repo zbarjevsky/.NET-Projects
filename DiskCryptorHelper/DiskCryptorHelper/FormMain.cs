@@ -21,7 +21,9 @@ using DiskCryptorHelper.Utils;
 using VhdApiExample;
 using System.Reflection;
 using DiskCryptorHelper.VHD;
-using MZ.WPF.MessageBox;
+
+
+using MkZ.WPF.MessageBox;
 
 namespace DiskCryptorHelper
 {
@@ -348,7 +350,7 @@ namespace DiskCryptorHelper
 
                 if (string.IsNullOrWhiteSpace(m_txtPwd.Text))
                 {
-                    MZ.WPF.MessageBox.PopUp.MessageBox("Password is empty", "Error");
+                    MkZ.WPF.MessageBox.PopUp.MessageBox("Password is empty", "Error");
                     return;
                 }
 
@@ -445,7 +447,7 @@ namespace DiskCryptorHelper
 
         private void m_btnUnmountAllandBSOD_Click(object sender, EventArgs e)
         {
-            if (MZ.WPF.MessageBox.PopUp.Question("Are you sure?", "BSOD") != MZ.WPF.MessageBox.PopUp.PopUpResult.OK)
+            if (MkZ.WPF.MessageBox.PopUp.Question("Are you sure?", "BSOD") != MkZ.WPF.MessageBox.PopUp.PopUpResult.OK)
                 return;
 
             m_btnUnmoutAll_Click(sender, e);
@@ -521,7 +523,7 @@ namespace DiskCryptorHelper
             }
             catch (Exception err)
             {
-                MZ.WPF.MessageBox.PopUp.MessageBox(err.Message, "Error in: " + propertyName);
+                MkZ.WPF.MessageBox.PopUp.MessageBox(err.Message, "Error in: " + propertyName);
             }
 
             this.Cursor = Cursors.Arrow;

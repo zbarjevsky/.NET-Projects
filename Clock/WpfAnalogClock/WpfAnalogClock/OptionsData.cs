@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Windows;
 
-namespace WpfAnalogClock
+namespace MkZ.WPF.WpfAnalogClock
 {
     public class OptionsData
     {

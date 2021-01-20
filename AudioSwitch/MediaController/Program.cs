@@ -1,11 +1,11 @@
-﻿using MZ.Framework.Tools;
+﻿using MkZ.Framework.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MZ.Media
+namespace MkZ.Media
 {
     static class Program
     {
@@ -27,7 +27,7 @@ namespace MZ.Media
                     Properties.Settings.Default.Save();
                 }
 
-                if (MZ.Tools.SingleInstanceHelper.GlobalShowWindow(FormMain.TITLE))
+                if (MkZ.Tools.SingleInstanceHelper.GlobalShowWindow(FormMain.TITLE))
                     return; //already running
 
                 Application.EnableVisualStyles();

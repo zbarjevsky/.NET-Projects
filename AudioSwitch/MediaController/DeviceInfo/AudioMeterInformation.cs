@@ -19,11 +19,11 @@
      misrepresented as being the original source code.
   3. This notice may not be removed or altered from any source distribution.
 */
-using MZ.Media.Audio;
+using MkZ.Media.Audio;
 using System;
 using System.Runtime.InteropServices;
 
-namespace MZ.Media.Device
+namespace MkZ.Media.Device
 {
     /// <summary>
     /// Audio Meter Information

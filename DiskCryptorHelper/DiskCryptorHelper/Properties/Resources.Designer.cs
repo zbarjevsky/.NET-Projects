@@ -59,15 +59,5 @@ namespace DiskCryptorHelper.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] MZ_WPF_MessageBox {
-            get {
-                object obj = ResourceManager.GetObject("MZ_WPF_MessageBox", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
     }
 }

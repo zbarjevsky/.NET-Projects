@@ -22,7 +22,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace MZ.Media.Audio
+namespace MkZ.Media.Audio
 {
     /// <summary>
     /// Audio Endpoint Volume Step Information

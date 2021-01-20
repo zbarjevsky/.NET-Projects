@@ -22,7 +22,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-namespace MZ.Media.Device
+namespace MkZ.Media.Device
 {
     /// <summary>
     /// Audio Meter Information Channels

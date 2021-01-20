@@ -1,27 +1,27 @@
-﻿using MZ.Tools;
-using SimpleBackup;
-using SimpleBackup.Settings;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using static MZ.Tools.FileUtils;
+
+
+using MkZ.Tools;
+using SimpleBackup;
+using SimpleBackup.Settings;
 
 namespace SimpleBackup.Tools
 {
     public class CalculateOccupiedSpaceTask
     {
-        private FileProgress _fileProgress;
+        private MkZ.Tools.FileUtils.FileProgress _fileProgress;
         private Thread _threadUpdateInfo = null;
         private BackupEntry _entry = null;
 
         public Action<long, long> OnThreadFinished = (size, count) => { };
 
-        public CalculateOccupiedSpaceTask(FileProgress fileProgress)
+        public CalculateOccupiedSpaceTask(MkZ.Tools.FileUtils.FileProgress fileProgress)
         {
             _fileProgress = fileProgress;
         }

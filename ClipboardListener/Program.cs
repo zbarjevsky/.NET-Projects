@@ -7,9 +7,10 @@ using System.Diagnostics;
 using System.Windows.Forms;
 using System.Globalization;
 
-using MZ.Tools;
+
 using Utils;
-using MZ.Framework.Tools;
+using MkZ.Tools;
+using MkZ.Framework.Tools;
 
 namespace ClipboardManager
 {
@@ -59,15 +60,15 @@ RunAgain:
 			}//end try
 			catch ( Exception err )
 			{
-                Utils.Log.WriteLineF("[Main] Exeption: " + err.ToString());
+                Utils.LogC.WriteLineF("[Main] Exeption: " + err.ToString());
 
 				m_iFailCount++;
-                Utils.Log.LogEventErr("Exception(No:" + m_iFailCount + ") in main: " + err.Message);
+                Utils.LogC.LogEventErr("Exception(No:" + m_iFailCount + ") in main: " + err.Message);
 				if ( m_iFailCount < 4 )
 					goto RunAgain;
 			}//end catch
 
-            Utils.Log.CloseLog();
+            Utils.LogC.CloseLog();
 		}//end Main
 
         public static string GetUserPath()

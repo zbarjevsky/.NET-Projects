@@ -14,13 +14,14 @@ using System.Threading;
 using System.Reflection;
 using ClipboardManager.Zip;
 using ClipboardManager.DesktopUtil;
+using System.Runtime.CompilerServices;
 using Microsoft.Win32;
+
 using Utils;
 using ClipboardManager.Utils;
-using MZ.WPF.MessageBox;
-using MZ.Tools;
-using System.Runtime.CompilerServices;
-using MZ.WPF;
+using MkZ.WPF.MessageBox;
+using MkZ.Tools;
+using MkZ.WPF;
 
 namespace ClipboardManager
 {
@@ -1030,7 +1031,7 @@ namespace ClipboardManager
 		private void m_ToolStripMenuItem_Edit_Test_Click(object sender, EventArgs e)
 		{
             //flush the log file
-            Utils.Log.FlushLog();
+            Utils.LogC.FlushLog();
 
 			LogMethod("m_ToolStripMenuItem_Edit_Test_Click", "Click...");
 			AnimEffect.AnimEffect eff = new AnimEffect.AnimEffect();
@@ -1208,7 +1209,7 @@ namespace ClipboardManager
 		{
 			try
 			{
-                string sMessage = Utils.Log.WriteLineF(bAlwaysAddToDebugWindow, 
+                string sMessage = Utils.LogC.WriteLineF(bAlwaysAddToDebugWindow, 
                     "[{0}][{1}] : {2}", sModule, sMethod, string.Format(sFormat, args));
 
                 //only if debug window is open
@@ -1216,7 +1217,7 @@ namespace ClipboardManager
 			}//end try
 			catch ( Exception err )
 			{
-                Utils.Log.WriteLineF("Problem in LogMethodEx: " + err.ToString());
+                Utils.LogC.WriteLineF("Problem in LogMethodEx: " + err.ToString());
 			}//end catch
 		}//end TraceLnEx
 
@@ -1224,7 +1225,7 @@ namespace ClipboardManager
         {
             if (this.InvokeRequired)
             {
-                Utils.Log.WriteLog(bAlwaysAddToDebugWindow, false, 
+                Utils.LogC.WriteLog(bAlwaysAddToDebugWindow, false, 
                     "[AppendTextToDebugWindow][Invoke Required] : " + sMessage);
 
                 this.BeginInvoke(new MethodInvoker(() => {

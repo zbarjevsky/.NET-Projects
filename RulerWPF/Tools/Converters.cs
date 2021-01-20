@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Data;
 
-namespace RulerWPF
+namespace MkZ.WPF.RulerWPF
 {
     // Extract enum description 
     public class EnumDescriptionConverter : IValueConverter

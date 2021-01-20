@@ -21,7 +21,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
-using MZ.WPF;
+using MkZ.WPF;
 
 namespace DashCamGPSView.Controls
 {

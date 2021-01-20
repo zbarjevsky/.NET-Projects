@@ -4,9 +4,12 @@ using System.Collections.ObjectModel;
 using System.Windows;
 using System;
 using System.Diagnostics;
+
+
 using DashCamGPSView.Tools;
-using MZ.Tools;
-using MZ.WPF;
+
+using MkZ.Tools;
+using MkZ.WPF;
 
 namespace DashCamGPSView.Controls
 {

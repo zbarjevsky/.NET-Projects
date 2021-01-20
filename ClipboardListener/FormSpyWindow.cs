@@ -12,7 +12,7 @@ namespace ClipboardManager
 	using HWND = IntPtr;
     using ClipboardManager.Properties;
     using System.IO;
-    using MZ.Tools;
+    using MkZ.Tools;
 
     /// <summary>
     /// Summary description for SpyWindow.

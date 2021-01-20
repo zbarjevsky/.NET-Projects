@@ -1,8 +1,4 @@
-﻿using DesktopManagerUX.Utils;
-using MZ.Tools;
-using MZ.WPF.Utils;
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Data;
@@ -17,6 +13,12 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Xml.Serialization;
+
+
+using DesktopManagerUX.Utils;
+using MkZ.Tools;
+using MkZ.WPF.Utils;
+using System;
 
 namespace DesktopManagerUX
 {

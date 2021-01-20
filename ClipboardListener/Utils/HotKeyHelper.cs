@@ -1,5 +1,3 @@
-using ClipboardManager.Utils;
-using MZ.Tools;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -7,6 +5,10 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
+
+
+using ClipboardManager.Utils;
+using MkZ.Tools;
 
 namespace ClipboardManager
 {
@@ -101,13 +103,13 @@ namespace ClipboardManager
 
             Keys key = (Keys)((int)keyData.KeyData & 0x0000FFFF); //filter out modifiers
 
-            Log.WriteLine("RegisterHotKey: " + keyData);
+            LogC.WriteLine("RegisterHotKey: " + keyData);
             return User32HotKey.RegisterHotKey(parent.Handle, keyData.AppId, modifiers, key);
 		}//end RegisterHotKey
 
 		public static void UnregisterHotKey(this HotKeyData keyData, Form parent)
 		{
-            Log.WriteLine("UnregisterHotKey: " + keyData);
+            LogC.WriteLine("UnregisterHotKey: " + keyData);
             User32HotKey.UnregisterHotKey(parent.Handle, keyData.AppId);
 		}//end UnregisterHotKey
 	}//end class HotKeyTranslator

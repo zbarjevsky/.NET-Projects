@@ -7,7 +7,7 @@
     <ProjectGuid>{D570FA45-E261-4594-99F9-00982C366EC1}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RulerWPF</RootNamespace>
+    <RootNamespace>MkZ.WPF.RulerWPF</RootNamespace>
     <AssemblyName>RulerWPF</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -112,6 +112,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="Doc\AboutRulerWPF.rtf" />
     <None Include="Properties\Settings.settings">
@@ -128,7 +129,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if "$(ConfigurationName)" == "Release" xcopy /s /f /r /y $(TargetPath) $(SolutionDir)\..\Binaries</PostBuildEvent>
+    <PostBuildEvent>if "$(ConfigurationName)" == "Release" (
+ xcopy /E /f /r /y $(TargetDir)*.exe $(ProjectDir)..\Binaries\$(ProjectName)\
+ rem xcopy /E /f /r /y $(TargetDir)*.dll $(ProjectDir)..\Binaries\$(ProjectName)\
+)</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>if exist "$(TargetPath)" (

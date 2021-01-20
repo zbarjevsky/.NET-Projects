@@ -16,7 +16,7 @@ namespace SimpleBackup
         {
             try
             {
-                if (MZ.Tools.SingleInstanceHelper.GlobalShowWindow(FormMain.TITLE))
+                if (MkZ.Tools.SingleInstanceHelper.GlobalShowWindow(FormMain.TITLE))
                     return; //already running
 
                 Application.EnableVisualStyles();

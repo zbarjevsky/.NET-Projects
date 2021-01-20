@@ -2,11 +2,11 @@
 using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
-using MZ.Tools;
-using MZ.Media.ComObjects;
-using MZ.Media.Device;
+using MkZ.Tools;
+using MkZ.Media.ComObjects;
+using MkZ.Media.Device;
 
-namespace MZ.Media.DeviceSwitch
+namespace MkZ.Media.DeviceSwitch
 {
     public class AudioSwitcher
     {

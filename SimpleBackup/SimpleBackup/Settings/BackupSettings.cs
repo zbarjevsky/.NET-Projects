@@ -9,8 +9,10 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Xml.Serialization;
-using MZ.Tools;
-using MZ.WinForms;
+
+
+using MkZ.Tools;
+using MkZ.WinForms;
 
 namespace SimpleBackup.Settings
 {
@@ -237,7 +239,7 @@ namespace SimpleBackup.Settings
 
         internal static BackupSettings Load()
         {
-            BackupSettings cnf = SerializerHelper.Open<BackupSettings>(ConfigurationFileName);
+            BackupSettings cnf = XmlHelper.Open<BackupSettings>(ConfigurationFileName);
             if (cnf.BackupGroups.Count == 0)
                 cnf.BackupGroups.Add(new BackupGroup());
             return cnf;
@@ -245,7 +247,7 @@ namespace SimpleBackup.Settings
 
         internal void Save()
         {
-            SerializerHelper.Save<BackupSettings>(ConfigurationFileName, this);
+            XmlHelper.Save<BackupSettings>(ConfigurationFileName, this);
         }
 
         internal void Add(BackupGroup entry)

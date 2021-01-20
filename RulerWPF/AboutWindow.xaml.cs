@@ -14,7 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace RulerWPF
+namespace MkZ.WPF.RulerWPF
 {
     /// <summary>
     /// Interaction logic for AboutWindow.xaml

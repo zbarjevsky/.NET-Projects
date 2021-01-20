@@ -1,5 +1,5 @@
-﻿using MZ.Media.Audio;
-using MZ.Media.ComObjects;
+﻿using MkZ.Media.Audio;
+using MkZ.Media.ComObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MZ.Media.Device
+namespace MkZ.Media.Device
 {
     /// <summary>
     /// MM Device

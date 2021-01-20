@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Serialization;
 
-namespace WpfAnalogClock.Tools
+namespace MkZ.WPF.WpfAnalogClock.Tools
 {
     public static class XmlObjectSerializer<T> where T : class
     {

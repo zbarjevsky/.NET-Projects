@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<BackupSettings xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <BackupGroups>
+    <BackupGroup>
+      <Name>Default</Name>
+      <Description>Default</Description>
+      <BackupList />
+    </BackupGroup>
+  </BackupGroups>
+</BackupSettings>

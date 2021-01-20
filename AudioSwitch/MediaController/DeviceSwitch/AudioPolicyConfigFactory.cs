@@ -1,6 +1,6 @@
-﻿using MZ.Media.ComObjects;
+﻿using MkZ.Media.ComObjects;
 
-namespace MZ.Media.DeviceSwitch
+namespace MkZ.Media.DeviceSwitch
 {
     internal sealed class AudioPolicyConfigFactory
     {

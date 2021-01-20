@@ -17,7 +17,7 @@ using System;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 
-namespace MZ.Media.Device
+namespace MkZ.Media.Device
 {
     public class IconExtractionException : Exception
     {

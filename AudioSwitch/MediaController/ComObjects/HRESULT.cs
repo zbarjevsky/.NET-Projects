@@ -1,4 +1,4 @@
-﻿namespace MZ.Media.ComObjects
+﻿namespace MkZ.Media.ComObjects
 {
     public enum HRESULT : uint
     {

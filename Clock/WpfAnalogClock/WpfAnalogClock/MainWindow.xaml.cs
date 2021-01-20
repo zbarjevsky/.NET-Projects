@@ -14,9 +14,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
-using WpfAnalogClock.Tools;
+using MkZ.WPF.WpfAnalogClock.Tools;
 
-namespace WpfAnalogClock
+namespace MkZ.WPF.WpfAnalogClock
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

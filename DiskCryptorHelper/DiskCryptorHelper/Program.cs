@@ -38,15 +38,15 @@ namespace DiskCryptorHelper
 
         private static void UpdateDependencies()
         {
-            string dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string fileName = Path.Combine(dir, "MZ.WPF.MessageBox.dll");
-            if (!File.Exists(fileName))
-                File.WriteAllBytes(fileName, Properties.Resources.MZ_WPF_MessageBox);
+            //string dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+            //string fileName = Path.Combine(dir, "MZ.WPF.MessageBox.dll");
+            //if (!File.Exists(fileName))
+            //    File.WriteAllBytes(fileName, Properties.Resources.MZ_WPF_MessageBox);
         }
 
         private static void UpdateMessageIconType()
         {
-            MZ.WPF.MessageBox.PopUp.IconType = MZ.WPF.MessageBox.PopUp.IconStyle.RegularImages;
+            MkZ.WPF.MessageBox.PopUp.IconType = MkZ.WPF.MessageBox.PopUp.IconStyle.RegularImages;
         }
     }
 }

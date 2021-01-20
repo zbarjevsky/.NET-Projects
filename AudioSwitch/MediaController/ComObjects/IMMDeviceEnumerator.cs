@@ -1,9 +1,9 @@
-﻿using MZ.Media.Device;
-using MZ.Media.Interfaces;
+﻿using MkZ.Media.Device;
+using MkZ.Media.Interfaces;
 using System;
 using System.Runtime.InteropServices;
 
-namespace MZ.Media.ComObjects
+namespace MkZ.Media.ComObjects
 {
     [Guid("A95664D2-9614-4F35-A746-DE8DB63617E6"), InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     [ComVisible(true)]

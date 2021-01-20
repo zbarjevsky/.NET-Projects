@@ -22,7 +22,7 @@
 // modified for NAudio
 using System.Runtime.InteropServices;
 
-namespace MZ.Media.Audio
+namespace MkZ.Media.Audio
 {
     /// <summary>
     /// Audio Endpoint Volume Volume Range

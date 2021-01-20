@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace WpfAnalogClock
+namespace MkZ.WPF.WpfAnalogClock
 {
     [FlagsAttribute]
     public enum EXECUTION_STATE : uint

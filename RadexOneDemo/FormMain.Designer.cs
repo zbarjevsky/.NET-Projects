@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet1 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
+            MkZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet1 = new MkZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.m_btnRequestData = new System.Windows.Forms.Button();
             this.m_lblConnectStatus = new System.Windows.Forms.Label();
@@ -45,7 +45,7 @@
             this.m_numMaxCPM = new System.Windows.Forms.NumericUpDown();
             this.m_splitContainerTools = new System.Windows.Forms.SplitContainer();
             this.m_pnlRadiationStatus = new System.Windows.Forms.Panel();
-            this.m_progressMain = new MZ.WinForms.ColorBarsProgressBar();
+            this.m_progressMain = new MkZ.WinForms.ColorBarsProgressBar();
             this.m_picRadiationStatus = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.m_txtRecords = new System.Windows.Forms.RichTextBox();
@@ -341,7 +341,7 @@
             themeColorSet1.Part2_InactiveColor = System.Drawing.Color.LightGoldenrodYellow;
             themeColorSet1.Part3_ActiveColor = System.Drawing.Color.Red;
             themeColorSet1.Part3_InactiveColor = System.Drawing.Color.MistyRose;
-            themeColorSet1.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Speaker;
+            themeColorSet1.Theme = MkZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Speaker;
             themeColorSet1.Threshold1 = 60;
             themeColorSet1.Threshold2 = 85;
             this.m_progressMain.ColorTheme = themeColorSet1;
@@ -1064,7 +1064,7 @@
         private System.Windows.Forms.CheckBox m_chkAutoRequestData;
         private System.Windows.Forms.TextBox m_txtStatus;
         private System.Windows.Forms.Label m_lblVal;
-        private MZ.WinForms.ColorBarsProgressBar m_progressMain;
+        private MkZ.WinForms.ColorBarsProgressBar m_progressMain;
         private System.Windows.Forms.Button m_btnClear;
         private System.Windows.Forms.Button m_btnVer;
         private System.Windows.Forms.Button m_btnWriteConfig;

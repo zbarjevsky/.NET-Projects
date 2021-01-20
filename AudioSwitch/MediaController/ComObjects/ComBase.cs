@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace MZ.Media.ComObjects
+namespace MkZ.Media.ComObjects
 {
     internal sealed class ComBase
     {

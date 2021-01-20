@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormBackupProgress));
-            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet1 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
+            MkZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet1 = new MkZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
             this.m_listFiles = new System.Windows.Forms.ListView();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -52,8 +52,8 @@
             this.m_btnPrepare = new System.Windows.Forms.Button();
             this.m_spliMain = new System.Windows.Forms.SplitContainer();
             this.m_pnlStatus = new System.Windows.Forms.Panel();
-            this.m_progressFile = new MZ.WinForms.ColorBarsProgressBar();
-            this.m_progressBarMain = new MZ.Tools.Windows7ProgressBar();
+            this.m_progressFile = new MkZ.WinForms.ColorBarsProgressBar();
+            this.m_progressBarMain = new MkZ.Tools.Windows7ProgressBar();
             this.m_chartProgress = new WindowsFormsApp1.ChartProgressUserControl();
             this.m_lblProgressFile = new System.Windows.Forms.Label();
             this.m_lblSpeedFile = new System.Windows.Forms.Label();
@@ -331,7 +331,7 @@
             themeColorSet1.Part2_InactiveColor = System.Drawing.Color.Gainsboro;
             themeColorSet1.Part3_ActiveColor = System.Drawing.Color.LimeGreen;
             themeColorSet1.Part3_InactiveColor = System.Drawing.Color.Gainsboro;
-            themeColorSet1.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
+            themeColorSet1.Theme = MkZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
             themeColorSet1.Threshold1 = 101;
             themeColorSet1.Threshold2 = 101;
             this.m_progressFile.ColorTheme = themeColorSet1;
@@ -426,14 +426,14 @@
         private System.Windows.Forms.TextBox m_txtInfoBottom;
         private System.Windows.Forms.Button m_btnClose;
         private System.Windows.Forms.ColumnHeader columnHeader4;
-        private MZ.Tools.Windows7ProgressBar m_progressBarMain;
+        private MkZ.Tools.Windows7ProgressBar m_progressBarMain;
         private System.Windows.Forms.Button m_btnPause;
         private System.Windows.Forms.Button m_btnContinue;
         private System.Windows.Forms.ComboBox m_cmbOption;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox m_txtInfoTop;
         private System.Windows.Forms.ComboBox m_cmbViewFilter;
-        private MZ.WinForms.ColorBarsProgressBar m_progressFile;
+        private MkZ.WinForms.ColorBarsProgressBar m_progressFile;
         private System.Windows.Forms.ErrorProvider errorProvider1;
         private System.Windows.Forms.Label m_lblStatusProgress;
         private System.Windows.Forms.Button m_btnPrepare;

@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Reflection;
 
-namespace MZ
+namespace MkZ
 {
 	/// <summary>
 	/// Summary description for TrayIconList.

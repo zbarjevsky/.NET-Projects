@@ -1,7 +1,4 @@
-﻿using DesktopManagerUX.Utils;
-using MZ.Tools;
-using MZ.WPF.Utils;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -14,6 +11,11 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
+
+
+using DesktopManagerUX.Utils;
+using MkZ.Tools;
+using MkZ.WPF.Utils;
 
 namespace DesktopManagerUX
 {

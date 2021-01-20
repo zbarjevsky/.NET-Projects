@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
-namespace RulerWPF
+namespace MkZ.WPF.RulerWPF
 {
     public enum MouseMoveOp
     {

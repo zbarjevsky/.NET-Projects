@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using MarkZ.Timer;
-using MZ.Media.ComObjects;
-using MZ.Media.Device;
-using MZ.Media.Interfaces;
-using MZ.Media.Notifications;
+using MkZ.Media.ComObjects;
+using MkZ.Media.Device;
+using MkZ.Media.Interfaces;
+using MkZ.Media.Notifications;
 
-namespace MZ.Media
+namespace MkZ.Media
 {
 	public class MMDeviceEnumerator : IDisposable
 	{
@@ -63,7 +63,7 @@ namespace MZ.Media
                 {
                     string id;
                     device.GetId(out id);
-                    MZ.Tools.Trace.Debug("Can't get name of device {0}, Error: {1}", id, e);
+                    MkZ.Tools.Trace.Debug("Can't get name of device {0}, Error: {1}", id, e);
                     //throw;
                 }
             }

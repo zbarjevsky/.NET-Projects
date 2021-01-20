@@ -7,13 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MZ.Media.Device;
+using MkZ.Media.Device;
 using System.Diagnostics;
-using MZ.Tools;
-using MZ.Media.DeviceSwitch;
-using MZ.WinForms;
+using MkZ.Tools;
+using MkZ.Media.DeviceSwitch;
+using MkZ.WinForms;
 
-namespace MZ.Media
+namespace MkZ.Media
 {
     public partial class MediaDeviceListUserControl : UserControl
     {

@@ -12,7 +12,9 @@ using System.Windows;
 using System.Runtime.CompilerServices;
 using System.Diagnostics;
 using DiskCryptorHelper.Utils;
-using MZ.WPF.MessageBox;
+
+
+using MkZ.WPF.MessageBox;
 
 namespace DiskCryptorHelper.VHD
 {

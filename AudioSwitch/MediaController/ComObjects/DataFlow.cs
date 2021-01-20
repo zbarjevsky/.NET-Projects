@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 
-namespace MZ.Media.ComObjects
+namespace MkZ.Media.ComObjects
 {
     /// <summary>
     ///     The EDataFlow enumeration defines constants that indicate the direction

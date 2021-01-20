@@ -1,9 +1,9 @@
-﻿using MZ.Media.ComObjects;
-using MZ.Media.Device;
+﻿using MkZ.Media.ComObjects;
+using MkZ.Media.Device;
 using System;
 using System.Runtime.InteropServices;
 
-namespace MZ.Media.Interfaces
+namespace MkZ.Media.Interfaces
 {
     /// <summary>
     /// IMMNotificationClient

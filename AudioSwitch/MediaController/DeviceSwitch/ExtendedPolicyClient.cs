@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using MZ.Media.ComObjects;
-using MZ.Media.Device;
+using MkZ.Media.ComObjects;
+using MkZ.Media.Device;
 
-namespace MZ.Media.DeviceSwitch
+namespace MkZ.Media.DeviceSwitch
 {
     internal class ExtendedPolicyClient
     {

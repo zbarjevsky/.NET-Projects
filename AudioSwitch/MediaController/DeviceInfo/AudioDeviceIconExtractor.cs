@@ -17,14 +17,14 @@ using System.Drawing;
 using System.Runtime.Caching;
 //using System.Runtime.Caching;
 //using NAudio.CoreAudioApi;
-using MZ.Media.Device;
-using MZ.Media.Properties;
+using MkZ.Media.Device;
+using MkZ.Media.Properties;
 //using SoundSwitch.Common.Framework.Icon;
 //using Serilog;
 //using SoundSwitch.Common.Framework.Icon;
 //using SoundSwitch.Common.Properties;
 
-namespace MZ.Media.Device
+namespace MkZ.Media.Device
 {
     public class AudioDeviceIconExtractor
     {
@@ -94,7 +94,7 @@ namespace MZ.Media.Device
             catch (Exception e)
             {
                 //Log.Error(e, "Can't extract icon from {path}", path);
-                MZ.Tools.Trace.Debug("Can't extract icon from {0}, Error: {1}", path, e);
+                MkZ.Tools.Trace.Debug("Can't extract icon from {0}, Error: {1}", path, e);
                 switch (dataFlow)
                 {
                     case EDataFlow.Capture:

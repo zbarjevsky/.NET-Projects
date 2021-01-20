@@ -19,11 +19,11 @@
      misrepresented as being the original source code.
   3. This notice may not be removed or altered from any source distribution.
 */
-using MZ.Media.ComObjects;
+using MkZ.Media.ComObjects;
 using System;
 using System.Runtime.InteropServices;
 
-namespace MZ.Media.Audio
+namespace MkZ.Media.Audio
 {
     [Guid(ComIIds.AUDIO_ENDPOINT_VOLUME_IID),
      InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]

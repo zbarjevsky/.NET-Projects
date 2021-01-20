@@ -4,13 +4,13 @@ using System.Linq;
 using System.Runtime.InteropServices;
 //using AudioSwitcher.AudioApi.Hooking.ComObjects;
 //using NAudio.CoreAudioApi;
-using MZ.Media;
-using MZ.Media.ComObjects;
-using MZ.Media.Device;
+using MkZ.Media;
+using MkZ.Media.ComObjects;
+using MkZ.Media.Device;
 //using SoundSwitch.Audio.Manager.Interop.Enum;
 using SoundSwitch.Audio.Manager.Interop.Interface;
 
-namespace MZ.Media.DeviceSwitch
+namespace MkZ.Media.DeviceSwitch
 {
     internal class EnumeratorClient : IDisposable
     {

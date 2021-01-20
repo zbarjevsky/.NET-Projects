@@ -10,7 +10,7 @@ using System.Globalization;
 
 namespace ClipboardManager.Utils
 {
-    public class Log
+    public class LogC
     {
         static StreamWriter m_Log = null;
         //public static bool m_bWriteLog = true;

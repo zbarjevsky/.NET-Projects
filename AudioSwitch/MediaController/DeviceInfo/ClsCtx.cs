@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MZ.Media.Device
+namespace MkZ.Media.Device
 {
     /// <summary>
     ///     is defined in WTypes.h

@@ -44,7 +44,7 @@ namespace ClipboardManager
             if (AbortShutdownIfScheduled && m.Msg == (int)Win32_Shutdown.eMsg.WM_QUERYENDSESSION)
             {
                 Win32_Shutdown.ShutdownBlockReasonCreate(hWnd, "Block Unexpected Shutdown!");
-                Utils.Log.WriteLineF("ProcessShutdownMessage: ShutdownBlockReasonCreate(hWnd = 0x{0:X8})", (uint)hWnd);
+                Utils.LogC.WriteLineF("ProcessShutdownMessage: ShutdownBlockReasonCreate(hWnd = 0x{0:X8})", (uint)hWnd);
 
                 DialogResult res = MessageBox.Show("Allow Windows Shutdown/Reboot/Log off?", Environment.UserName, 
                     MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation, 
@@ -52,7 +52,7 @@ namespace ClipboardManager
 
                 if (res == DialogResult.Yes)
                 {
-                    Utils.Log.WriteLineF("Allow Windows Shutdown/Reboot/Log off...");
+                    Utils.LogC.WriteLineF("Allow Windows Shutdown/Reboot/Log off...");
                     Win32_Shutdown.ShutdownBlockReasonDestroy(hWnd);
                     return false; //Allow Windows to shutdown
                 }
@@ -77,7 +77,7 @@ namespace ClipboardManager
                         //do no use 'InitiateShutdown' it writes event log entry
                         if (AbortSystemShutdown(null) != 0) //shutdown aborted
                         {
-                            Utils.Log.WriteLineF("Shutdown schedule was detected and aborted!!!");
+                            Utils.LogC.WriteLineF("Shutdown schedule was detected and aborted!!!");
                         }
                     }
                     Thread.Sleep(30);
@@ -85,7 +85,7 @@ namespace ClipboardManager
                 catch (Exception err)
                 {
                     Win32Exception error = new Win32Exception(Marshal.GetLastWin32Error());
-                    Utils.Log.WriteLineF("ShutdownMonitoring exception: " + err.ToString());
+                    Utils.LogC.WriteLineF("ShutdownMonitoring exception: " + err.ToString());
                 }
             }
         }
@@ -106,12 +106,12 @@ namespace ClipboardManager
             else if (error_code == Win32_Shutdown.ERROR_SHUTDOWN_IS_SCHEDULED) //this is what I am expecting to abort
             {
                 AbortSystemShutdown(null);
-                Utils.Log.WriteLineF("Shutdown schedule was detected and aborted!!!");
+                Utils.LogC.WriteLineF("Shutdown schedule was detected and aborted!!!");
             }
             else
             {
                 Win32Exception e = new Win32Exception(error_code);
-                Utils.Log.WriteLineF("Error Detecting Shutdown: " + e.Message);
+                Utils.LogC.WriteLineF("Error Detecting Shutdown: " + e.Message);
             }
         }
 
@@ -134,11 +134,11 @@ namespace ClipboardManager
                 if (((uint)m.LParam & (uint)Win32_Shutdown.eLParam.ENDSESSION_LOGOFF) != 0)
                     msg += ", ENDSESSION_LOGOFF";
 
-                Utils.Log.WriteLineF(msg);
+                Utils.LogC.WriteLineF(msg);
             }
             catch (Exception err)
             {
-                Utils.Log.WriteLineF(err.ToString());
+                Utils.LogC.WriteLineF(err.ToString());
             }
         }
 

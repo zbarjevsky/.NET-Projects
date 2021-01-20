@@ -1,7 +1,4 @@
-﻿using ClipboardManager.Zip;
-using MZ.Tools;
-using MZ.WPF;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -14,6 +11,11 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Serialization;
 using Utils;
+
+
+using ClipboardManager.Zip;
+using MkZ.Tools;
+using MkZ.WPF;
 
 namespace ClipboardManager.Utils
 {

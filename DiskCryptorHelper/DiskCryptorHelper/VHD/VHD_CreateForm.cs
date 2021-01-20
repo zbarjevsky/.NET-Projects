@@ -10,7 +10,9 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.Diagnostics;
 using System.Linq;
-using MZ.WPF.MessageBox;
+
+
+using MkZ.WPF.MessageBox;
 
 namespace VhdApiExample
 {

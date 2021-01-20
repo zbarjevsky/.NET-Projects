@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormBackupFolderProperties));
-            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet1 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
+            MkZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet1 = new MkZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.m_btnOk = new System.Windows.Forms.Button();
@@ -44,12 +44,12 @@
             this.m_txtInfo = new System.Windows.Forms.TextBox();
             this.m_cmbSearchOptions = new System.Windows.Forms.ComboBox();
             this.m_splitFolders = new System.Windows.Forms.SplitContainer();
-            this.m_explorerSrc = new MZ.WinForms.FileExplorerUserControl();
-            this.m_explorerDst = new MZ.WinForms.FileExplorerUserControl();
+            this.m_explorerSrc = new MkZ.WinForms.FileExplorerUserControl();
+            this.m_explorerDst = new MkZ.WinForms.FileExplorerUserControl();
             this.m_pnlOptions = new System.Windows.Forms.Panel();
             this.m_btnStartBackup = new System.Windows.Forms.Button();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.m_progressBar = new MZ.WinForms.ColorBarsProgressBar();
+            this.m_progressBar = new MkZ.WinForms.ColorBarsProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitFolders)).BeginInit();
             this.m_splitFolders.Panel1.SuspendLayout();
             this.m_splitFolders.Panel2.SuspendLayout();
@@ -271,7 +271,7 @@
             themeColorSet1.Part2_InactiveColor = System.Drawing.Color.Gainsboro;
             themeColorSet1.Part3_ActiveColor = System.Drawing.Color.LimeGreen;
             themeColorSet1.Part3_InactiveColor = System.Drawing.Color.Gainsboro;
-            themeColorSet1.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
+            themeColorSet1.Theme = MkZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
             themeColorSet1.Threshold1 = 101;
             themeColorSet1.Threshold2 = 101;
             this.m_progressBar.ColorTheme = themeColorSet1;
@@ -331,11 +331,11 @@
         private System.Windows.Forms.ComboBox m_cmbPriority;
         private System.Windows.Forms.TextBox m_txtInfo;
         private System.Windows.Forms.ComboBox m_cmbSearchOptions;
-        private MZ.WinForms.FileExplorerUserControl m_explorerDst;
-        private MZ.WinForms.FileExplorerUserControl m_explorerSrc;
+        private MkZ.WinForms.FileExplorerUserControl m_explorerDst;
+        private MkZ.WinForms.FileExplorerUserControl m_explorerSrc;
         private System.Windows.Forms.SplitContainer m_splitFolders;
         private System.Windows.Forms.Panel m_pnlOptions;
-        private MZ.WinForms.ColorBarsProgressBar m_progressBar;
+        private MkZ.WinForms.ColorBarsProgressBar m_progressBar;
         private System.Windows.Forms.Button m_btnStartBackup;
         private System.Windows.Forms.ErrorProvider errorProvider1;
     }

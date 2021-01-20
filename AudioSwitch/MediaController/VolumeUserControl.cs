@@ -7,11 +7,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using MZ.Media.Properties;
-using MZ.Media.Device;
-using MZ.WinForms;
 
-namespace MZ.Media
+using MkZ.Media.Properties;
+using MkZ.Media.Device;
+using MkZ.WinForms;
+
+namespace MkZ.Media
 {
     public partial class VolumeUserControl : UserControl
     {
@@ -64,7 +65,7 @@ namespace MZ.Media
 
             Device.AudioEndpointVolume.OnVolumeNotification = (notificationData) =>
             {
-                MZ.Tools.CommonUtils.ExecuteOnUIThread(() => {
+                MkZ.Tools.CommonUtils.ExecuteOnUIThread(() => {
                     m_trackVolume.Value = (int)Math.Round(100f * notificationData.MasterVolume);
                 }
                 , this);

@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MZ.Media.ComObjects
+namespace MkZ.Media.ComObjects
 {
     internal static class ComThread
     {

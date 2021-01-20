@@ -17,13 +17,13 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 
 
-using MZ.Media.Device;
-using MZ.Media.DeviceSwitch;
-using MZ.Windows;
-using MZ.WPF;
-using MZ.WPF.Utils;
+using MkZ.Media.Device;
+using MkZ.Media.DeviceSwitch;
+using MkZ.Windows;
+using MkZ.WPF;
+using MkZ.WPF.Utils;
 
-namespace MZ.Media.WPF
+namespace MkZ.Media.WPF
 {
     public class PopupVolumeInfoHelper
     {

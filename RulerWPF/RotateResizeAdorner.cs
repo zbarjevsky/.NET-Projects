@@ -10,7 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
-namespace RulerWPF
+namespace MkZ.WPF.RulerWPF
 {
     public class RotateResizeAdorner : Adorner
     {

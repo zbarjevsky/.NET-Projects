@@ -1,4 +1,4 @@
-﻿namespace MZ.Media.ComObjects
+﻿namespace MkZ.Media.ComObjects
 {
     internal static class ComIIds
     {

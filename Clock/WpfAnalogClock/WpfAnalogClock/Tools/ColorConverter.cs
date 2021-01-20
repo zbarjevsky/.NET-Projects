@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WpfAnalogClock.Tools
+namespace MkZ.WPF.WpfAnalogClock.Tools
 {
     public static class ColorConverter
     {

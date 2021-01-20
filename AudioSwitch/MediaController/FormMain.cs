@@ -11,17 +11,17 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.WindowsAPICodePack.Taskbar;
-using MZ.Tools;
-using MZ.WPF;
-using MZ.Media.ComObjects;
-using MZ.Media.Device;
-using MZ.Media.DeviceSwitch;
-using MZ.Media.Interfaces;
-using MZ.Media.Notifications;
-using MZ.Media.Properties;
-using MZ.Media.WPF;
+using MkZ.Tools;
+using MkZ.WPF;
+using MkZ.Media.ComObjects;
+using MkZ.Media.Device;
+using MkZ.Media.DeviceSwitch;
+using MkZ.Media.Interfaces;
+using MkZ.Media.Notifications;
+using MkZ.Media.Properties;
+using MkZ.Media.WPF;
 
-namespace MZ.Media 
+namespace MkZ.Media 
 {
     public partial class FormMain : Form
     {
@@ -186,7 +186,7 @@ namespace MZ.Media
             string log = string.Format("{0} - ", DateTime.Now.ToString("s"));
             log += string.Format(format, parameters);
             CommonUtils.ExecuteOnUIThread(() => { m_txtLog.Text = log + m_txtLog.Text; }, this);
-            MZ.Tools.Trace.Debug(log);
+            MkZ.Tools.Trace.Debug(log);
             return log;
         }
 

@@ -3,7 +3,8 @@ using System.Windows.Forms;
 using System.Text; 
 using System.Drawing; 
 using System.Runtime.InteropServices;
-using MZ.WPF.MessageBox;
+
+using MkZ.WPF.MessageBox;
 
 namespace Utils
 {

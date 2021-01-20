@@ -1,4 +1,4 @@
-﻿namespace MZ.Media
+﻿namespace MkZ.Media
 {
     partial class FormMain
     {
@@ -29,8 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet1 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
-            MZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet2 = new MZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
+            MkZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet1 = new MkZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
+            MkZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet2 = new MkZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.m_status1 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -39,13 +39,13 @@
             this.m_splitMain = new System.Windows.Forms.SplitContainer();
             this.panel1 = new System.Windows.Forms.Panel();
             this.m_chkTopMost = new System.Windows.Forms.CheckBox();
-            this.m_volumeControlSpk = new MZ.Media.VolumeUserControl();
-            this.m_volumeControlMic = new MZ.Media.VolumeUserControl();
+            this.m_volumeControlSpk = new MkZ.Media.VolumeUserControl();
+            this.m_volumeControlMic = new MkZ.Media.VolumeUserControl();
             this.m_tabDevices = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.m_DeviceListPlayback = new MZ.Media.MediaDeviceListUserControl();
+            this.m_DeviceListPlayback = new MkZ.Media.MediaDeviceListUserControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.m_DeviceListRecording = new MZ.Media.MediaDeviceListUserControl();
+            this.m_DeviceListRecording = new MkZ.Media.MediaDeviceListUserControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.m_imageListTabs = new System.Windows.Forms.ImageList(this.components);
             this.m_txtLog = new System.Windows.Forms.RichTextBox();
@@ -151,7 +151,7 @@
             themeColorSet1.Part2_InactiveColor = System.Drawing.Color.LightGoldenrodYellow;
             themeColorSet1.Part3_ActiveColor = System.Drawing.Color.Red;
             themeColorSet1.Part3_InactiveColor = System.Drawing.Color.MistyRose;
-            themeColorSet1.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
+            themeColorSet1.Theme = MkZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
             themeColorSet1.Threshold1 = 60;
             themeColorSet1.Threshold2 = 85;
             this.m_volumeControlSpk.ColorTheme = themeColorSet1;
@@ -175,7 +175,7 @@
             themeColorSet2.Part2_InactiveColor = System.Drawing.Color.Honeydew;
             themeColorSet2.Part3_ActiveColor = System.Drawing.Color.Red;
             themeColorSet2.Part3_InactiveColor = System.Drawing.Color.MistyRose;
-            themeColorSet2.Theme = MZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Microphone;
+            themeColorSet2.Theme = MkZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Microphone;
             themeColorSet2.Threshold1 = 10;
             themeColorSet2.Threshold2 = 85;
             this.m_volumeControlMic.ColorTheme = themeColorSet2;
@@ -218,7 +218,7 @@
             // 
             // m_DeviceListPlayback
             // 
-            this.m_DeviceListPlayback.AlternateColorPalette = MZ.Tools.AlternateColorPalette.Cold;
+            this.m_DeviceListPlayback.AlternateColorPalette = MkZ.Tools.AlternateColorPalette.Cold;
             this.m_DeviceListPlayback.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_DeviceListPlayback.Location = new System.Drawing.Point(3, 3);
             this.m_DeviceListPlayback.Name = "m_DeviceListPlayback";
@@ -239,7 +239,7 @@
             // 
             // m_DeviceListRecording
             // 
-            this.m_DeviceListRecording.AlternateColorPalette = MZ.Tools.AlternateColorPalette.Cold;
+            this.m_DeviceListRecording.AlternateColorPalette = MkZ.Tools.AlternateColorPalette.Cold;
             this.m_DeviceListRecording.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_DeviceListRecording.Location = new System.Drawing.Point(3, 3);
             this.m_DeviceListRecording.Name = "m_DeviceListRecording";

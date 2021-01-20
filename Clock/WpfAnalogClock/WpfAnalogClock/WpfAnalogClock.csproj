@@ -7,7 +7,7 @@
     <ProjectGuid>{58531D9F-9C81-4E03-81B3-B5C06B6680AF}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>WpfAnalogClock</RootNamespace>
+    <RootNamespace>MkZ.WPF.WpfAnalogClock</RootNamespace>
     <AssemblyName>WpfAnalogClock</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -158,7 +158,10 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>if "$(ConfigurationName)" == "Release" xcopy /s /f /r /y $(TargetPath) $(SolutionDir)\..\..\Binaries</PostBuildEvent>
+    <PostBuildEvent>if "$(ConfigurationName)" == "Release" (
+ xcopy /E /f /r /y $(TargetDir)*.exe $(ProjectDir)..\..\..\Binaries\$(ProjectName)\
+ rem xcopy /E /f /r /y $(TargetDir)*.dll $(ProjectDir)..\..\..\Binaries\$(ProjectName)\
+)</PostBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

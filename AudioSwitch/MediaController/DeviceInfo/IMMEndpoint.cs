@@ -1,8 +1,8 @@
-﻿using MZ.Media.ComObjects;
-using MZ.Media.Device;
+﻿using MkZ.Media.ComObjects;
+using MkZ.Media.Device;
 using System.Runtime.InteropServices;
 
-namespace MZ.Media.Device
+namespace MkZ.Media.Device
 {
     [Guid(ComIIds.IMM_ENDPOINT_IID)]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]

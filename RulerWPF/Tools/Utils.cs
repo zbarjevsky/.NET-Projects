@@ -5,7 +5,7 @@ using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Media;
 
-namespace RulerWPF
+namespace MkZ.WPF.RulerWPF
 {
     public class Utils
     {

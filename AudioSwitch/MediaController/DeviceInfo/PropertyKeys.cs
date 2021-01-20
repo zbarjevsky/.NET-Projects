@@ -20,12 +20,12 @@
   3. This notice may not be removed or altered from any source distribution.
 */
 
-using MZ.Media.Device;
+using MkZ.Media.Device;
 using System;
 
 // This has been modified for use by Audio Switcher
 
-namespace MZ.Media.Device
+namespace MkZ.Media.Device
 {
     /// <summary>
     ///     Property Keys

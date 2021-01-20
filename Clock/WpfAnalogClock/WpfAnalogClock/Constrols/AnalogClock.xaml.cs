@@ -14,7 +14,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
-namespace WpfAnalogClock.Constrols
+namespace MkZ.WPF.WpfAnalogClock.Controls
 {
     /// <summary>
     /// Interaction logic for AnalogClock.xaml

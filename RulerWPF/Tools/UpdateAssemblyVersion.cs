@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace RulerWPF.Tools
+namespace MkZ.WPF.RulerWPF.Tools
 {
     public class UpdateAssemblyVersion
     {

@@ -1,7 +1,7 @@
-﻿using MZ.Media.ComObjects;
+﻿using MkZ.Media.ComObjects;
 using System.Runtime.InteropServices;
 
-namespace MZ.Media.Device
+namespace MkZ.Media.Device
 {
     [Guid(ComIIds.IMM_DEVICE_COLLECTION_IID)]
     [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]

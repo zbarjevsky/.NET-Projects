@@ -23,10 +23,10 @@
 
  */
 
-using MZ.Media.Device;
+using MkZ.Media.Device;
 using System;
 
-namespace MZ.Media.Audio
+namespace MkZ.Media.Audio
 {
     // This class implements the IAudioEndpointVolumeCallback interface,
     // it is implemented in this class because implementing it on AudioEndpointVolume 
