@@ -147,6 +147,9 @@ namespace MkZ.WPF
                 element.MouseDown += control_MouseDown;
                 element.MouseUp += control_MouseUp;
                 element.MouseMove += control_MouseMove;
+
+                if(element.Parent is FrameworkElement parent)
+                    parent.SizeChanged += Parent_SizeChanged;
             }
             else
             {
@@ -155,27 +158,32 @@ namespace MkZ.WPF
                 {  // return if control is not draggable
                     return;
                 }
+
                 // remove event handlers
                 element.MouseDown -= control_MouseDown;
                 element.MouseUp -= control_MouseUp;
                 element.MouseMove -= control_MouseMove;
+
+                if (element.Parent is FrameworkElement parent)
+                    parent.SizeChanged -= Parent_SizeChanged;
+
                 _draggables.Remove(element);
             }
         }
 
-        public static Point GetDraggableOffset(this FrameworkElement element)
+        public static Vector GetDraggableOffset(this FrameworkElement element)
         {
             if (!_draggables.ContainsKey(element))
-                return new Point();
+                return new Vector();
 
             TranslateTransform translate = _draggables[element].Translate;
             if (translate == null)
-                return new Point();
+                return new Vector();
 
-            return new Point(translate.X, translate.Y);
+            return new Vector(translate.X, translate.Y);
         }
 
-        public static void SetDraggableOffset(this FrameworkElement element, Point offset)
+        public static void SetDraggableOffset(this FrameworkElement element, Vector offset)
         {
             if (!_draggables.ContainsKey(element))
                 return;
@@ -184,8 +192,8 @@ namespace MkZ.WPF
             if (translate == null)
                 return;
 
-            translate.X = offset.X;
-            translate.Y = offset.Y;
+            Vector initialOffset = new Vector(translate.X, translate.Y);
+            ApplyOffsetEnsureInsideMargin(element, initialOffset, offset);
         }
 
         static void control_MouseDown(object sender, MouseButtonEventArgs e)
@@ -238,17 +246,45 @@ namespace MkZ.WPF
             if (offset.Length < 0.0001)
                 return;
 
+            ApplyOffsetEnsureInsideMargin(element, _initialTranslateOffset, offset);
+        }
+
+        private static void Parent_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            FrameworkElement parent = sender as FrameworkElement;
+            if (parent == null)
+                return;
+
+            FrameworkElement element = FindElementFromParent(parent);
+            if (element == null)
+                return;
+
+            TranslateTransform translate = _draggables[element].Translate;
+            if (translate == null)
+                return;
+
+            //ensure inside margin - still visible
+            Vector initialOffset = new Vector(translate.X, translate.Y);
+            ApplyOffsetEnsureInsideMargin(element, initialOffset, new Vector());
+        }
+
+        private static void ApplyOffsetEnsureInsideMargin(FrameworkElement element, Vector initialOffset, Vector offset)
+        {
             Thickness margin = _draggables[element].Margin;
+
+            TranslateTransform translate = _draggables[element].Translate;
+            if (translate == null)
+                return;
 
             Rect bounds = RelativeLocation(element);
             //Debug.WriteLine("location: " + bounds);
 
-            Vector offsetDelta = new Vector(offset.X, offset.Y) - (new Vector(translate.X, translate.Y) - _initialTranslateOffset);
+            Vector offsetDelta = new Vector(offset.X, offset.Y) - (new Vector(translate.X, translate.Y) - initialOffset);
 
             double corrX = CalculateCorrectionInsideMargin(bounds.X, offsetDelta.X, element.RenderSize.Width, bounds.Width, margin.Left, margin.Right);
-            translate.X = _initialTranslateOffset.X + offset.X - corrX;
+            translate.X = initialOffset.X + offset.X - corrX;
             double corrY = CalculateCorrectionInsideMargin(bounds.Y, offsetDelta.Y, element.RenderSize.Height, bounds.Height, margin.Top, margin.Bottom);
-            translate.Y = _initialTranslateOffset.Y + offset.Y - corrY;
+            translate.Y = initialOffset.Y + offset.Y - corrY;
         }
 
         //calculate correction to stay inside margin
@@ -257,9 +293,6 @@ namespace MkZ.WPF
             double ctrlSize, double parentSize, 
             double marginLo, double marginHi)
         {
-            if (offsetDelta == 0)
-                return 0;
-
             if (pos + offsetDelta < marginLo)
             {
                 return offsetDelta - (marginLo - pos); //move upto margin
@@ -327,6 +360,19 @@ namespace MkZ.WPF
             {
                 return new Rect(new Point(), parent.RenderSize);
             }
+        }
+
+        private static FrameworkElement FindElementFromParent(FrameworkElement parent)
+        {
+            if (_draggables == null || _draggables.Keys.Count == 0)
+                return null;
+
+            foreach (FrameworkElement element in _draggables.Keys)
+            {
+                if (object.ReferenceEquals(element.Parent, parent))
+                    return element;
+            }
+            return null;
         }
     }
 }

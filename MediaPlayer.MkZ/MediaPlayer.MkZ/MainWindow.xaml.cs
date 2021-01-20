@@ -73,10 +73,7 @@ namespace MkZ.MediaPlayer
         {
             Context.Config.Load();
 
-            _clock.DataContext = Context.Config.Configuration.ClockConfig;
-            _zoomClock.Zoom = Context.Config.Configuration.ClockConfig.Zoom;
-            _clock.SetDraggableOffset(Context.Config.Configuration.ClockConfig.Offset);
-            Context.Config.Configuration.ClockConfig.NotifyPropertyChangedAll();
+            RestoreClockConfig();
 
             //add or select file if exists
             ProcessCommandLine();
@@ -102,6 +99,22 @@ namespace MkZ.MediaPlayer
 
             PlayerVM.MediaEndedAction = (vm) => OnMediaEnded(vm);
             PlayerVM.MediaFailedAction = (vm, ex) => OnMediaFailed(vm, ex);
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            MediaDB.SelectedMediaFileIndex = _cmbFilesList.SelectedIndex;
+
+            Context.Config.Configuration.ClockConfig.Offset = _clock.GetDraggableOffset();
+            Context.Config.Configuration.ClockConfig.Zoom = _zoomClock.Zoom;
+
+            Context.Config.Save();
+            _player.ClosePlayer();
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            _zoomImage.FitWindow(0);
         }
 
         private bool ProcessCommandLine()
@@ -134,20 +147,17 @@ namespace MkZ.MediaPlayer
             return true;
         }
 
-        private void Window_Closed(object sender, EventArgs e)
+        private void RestoreClockConfig()
         {
-            MediaDB.SelectedMediaFileIndex = _cmbFilesList.SelectedIndex;
+            _clock.DataContext = Context.Config.Configuration.ClockConfig;
 
-            Context.Config.Configuration.ClockConfig.Offset = _clock.GetDraggableOffset();
-            Context.Config.Configuration.ClockConfig.Zoom = _zoomClock.Zoom;
+            if (Context.Config.Configuration.ClockConfig.Zoom > 10)
+                Context.Config.Configuration.ClockConfig.Zoom = 10;
+            _zoomClock.Zoom = Context.Config.Configuration.ClockConfig.Zoom;
 
-            Context.Config.Save();
-            _player.ClosePlayer();
-        }
+            _clock.SetDraggableOffset(Context.Config.Configuration.ClockConfig.Offset);
 
-        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            _zoomImage.FitWindow(0);
+            Context.Config.Configuration.ClockConfig.NotifyPropertyChangedAll();
         }
 
         private void ComboMediaFiles_SelectionChanged(object sender, SelectionChangedEventArgs e)

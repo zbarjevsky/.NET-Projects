@@ -39,7 +39,7 @@ namespace MkZ.WPF
             public double Zoom { get; set; } = 1.0;
 
             //location change from center
-            public Point Offset { get; set; } = new Point();
+            public Vector Offset { get; set; } = new Vector();
 
             private SerializableBrush _background = new SerializableBrush(Brushes.Black);
             [Category("Clock"), TypeConverter(typeof(ExpandableObjectConverter))]
