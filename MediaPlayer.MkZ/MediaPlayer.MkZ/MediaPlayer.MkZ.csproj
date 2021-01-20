@@ -107,6 +107,9 @@
     <Compile Include="Controls\ButtonVolume.xaml.cs">
       <DependentUpon>ButtonVolume.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\ButtonWithTextRepeat.xaml.cs">
+      <DependentUpon>ButtonWithTextRepeat.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\ButtonWithTextToggle.xaml.cs">
       <DependentUpon>ButtonWithTextToggle.xaml</DependentUpon>
     </Compile>
@@ -214,6 +217,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ButtonVolume.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\ButtonWithTextRepeat.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

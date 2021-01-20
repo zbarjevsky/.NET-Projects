@@ -105,8 +105,7 @@ namespace MkZ.MediaPlayer
         {
             MediaDB.SelectedMediaFileIndex = _cmbFilesList.SelectedIndex;
 
-            Context.Config.Configuration.ClockConfig.Offset = _clock.GetDraggableOffset();
-            Context.Config.Configuration.ClockConfig.Zoom = _zoomClock.Zoom;
+            ClockLocationSave(Context.Config.Configuration.ClockConfig.OZ_Normal);
 
             Context.Config.Save();
             _player.ClosePlayer();
@@ -151,13 +150,27 @@ namespace MkZ.MediaPlayer
         {
             _clock.DataContext = Context.Config.Configuration.ClockConfig;
 
-            if (Context.Config.Configuration.ClockConfig.Zoom > 10)
-                Context.Config.Configuration.ClockConfig.Zoom = 10;
-            _zoomClock.Zoom = Context.Config.Configuration.ClockConfig.Zoom;
-
-            _clock.SetDraggableOffset(Context.Config.Configuration.ClockConfig.Offset);
+            ClockLocationRestore(Context.Config.Configuration.ClockConfig.OZ_Normal);
 
             Context.Config.Configuration.ClockConfig.NotifyPropertyChangedAll();
+        }
+
+        private void ClockLocationRestore(SimpleClockControl.OffsetAndZoom loc)
+        {
+            Action postMessage = () =>
+            {
+                if (loc.Zoom > 10) loc.Zoom = 10;
+                _zoomClock.Zoom = loc.Zoom;
+
+                _clock.SetDraggableOffset(loc.Offset, bAbsoluteOffset: true);
+            };
+            Application.Current.Dispatcher.BeginInvoke(postMessage);
+        }
+
+        private void ClockLocationSave(SimpleClockControl.OffsetAndZoom loc)
+        {
+            loc.Zoom = _zoomClock.Zoom;
+            loc.Offset = _clock.GetDraggableOffset();
         }
 
         private void ComboMediaFiles_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -273,17 +286,21 @@ namespace MkZ.MediaPlayer
         {
             if (this.WindowStyle == WindowStyle.None)
             {
+                ClockLocationSave(Context.Config.Configuration.ClockConfig.OZ_FullScreen);
                 rowHeader.Height = new GridLength(46);
                 this.WindowStyle = WindowStyle.ThreeDBorderWindow;
                 this.WindowState = WindowState.Normal;
                 PlayerVM.IsFullScreen = false;
+                ClockLocationRestore(Context.Config.Configuration.ClockConfig.OZ_Normal);
             }
             else //full screen
             {
+                ClockLocationSave(Context.Config.Configuration.ClockConfig.OZ_Normal);
                 rowHeader.Height = new GridLength(0);
                 this.WindowStyle = WindowStyle.None;
                 this.WindowState = WindowState.Maximized;
                 PlayerVM.IsFullScreen = true;
+                ClockLocationRestore(Context.Config.Configuration.ClockConfig.OZ_FullScreen);
             }
         }
 

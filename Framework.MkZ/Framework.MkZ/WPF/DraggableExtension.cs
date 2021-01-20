@@ -147,8 +147,9 @@ namespace MkZ.WPF
                 element.MouseDown += control_MouseDown;
                 element.MouseUp += control_MouseUp;
                 element.MouseMove += control_MouseMove;
+                element.SizeChanged += control_SizeChanged;
 
-                if(element.Parent is FrameworkElement parent)
+                if (element.Parent is FrameworkElement parent)
                     parent.SizeChanged += Parent_SizeChanged;
             }
             else
@@ -183,7 +184,7 @@ namespace MkZ.WPF
             return new Vector(translate.X, translate.Y);
         }
 
-        public static void SetDraggableOffset(this FrameworkElement element, Vector offset)
+        public static void SetDraggableOffset(this FrameworkElement element, Vector offset, bool bAbsoluteOffset)
         {
             if (!_draggables.ContainsKey(element))
                 return;
@@ -193,10 +194,13 @@ namespace MkZ.WPF
                 return;
 
             Vector initialOffset = new Vector(translate.X, translate.Y);
+            if (bAbsoluteOffset)
+                initialOffset = new Vector(); //from 0,0
+
             ApplyOffsetEnsureInsideMargin(element, initialOffset, offset);
         }
 
-        static void control_MouseDown(object sender, MouseButtonEventArgs e)
+        private static void control_MouseDown(object sender, MouseButtonEventArgs e)
         {
             FrameworkElement element = sender as FrameworkElement;
             if (element == null)
@@ -216,7 +220,7 @@ namespace MkZ.WPF
             element.Cursor = Cursors.SizeAll;
         }
 
-        static void control_MouseUp(object sender, MouseButtonEventArgs e)
+        private static void control_MouseUp(object sender, MouseButtonEventArgs e)
         {
             // turning off dragging
             _draggables[(FrameworkElement)sender].IsDragging = false;
@@ -247,6 +251,20 @@ namespace MkZ.WPF
                 return;
 
             ApplyOffsetEnsureInsideMargin(element, _initialTranslateOffset, offset);
+        }
+
+        private static void control_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            if (sender is FrameworkElement element)
+            {
+                TranslateTransform translate = _draggables[element].Translate;
+                if (translate == null)
+                    return;
+
+                //ensure inside margin - still visible
+                Vector initialOffset = new Vector(translate.X, translate.Y);
+                ApplyOffsetEnsureInsideMargin(element, initialOffset, new Vector());
+            }
         }
 
         private static void Parent_SizeChanged(object sender, SizeChangedEventArgs e)

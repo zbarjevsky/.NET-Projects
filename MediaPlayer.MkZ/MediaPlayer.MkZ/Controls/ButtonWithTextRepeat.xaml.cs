@@ -17,9 +17,9 @@ using System.Windows.Shapes;
 namespace MkZ.MediaPlayer.Controls
 {
     /// <summary>
-    /// Interaction logic for ButtonSkipForward.xaml
+    /// Interaction logic for ButtonWithTextRepeat.xaml
     /// </summary>
-    public partial class ButtonWithText : Button
+    public partial class ButtonWithTextRepeat : RepeatButton
     {
         public string ButtonText
         {
@@ -28,18 +28,9 @@ namespace MkZ.MediaPlayer.Controls
         }
 
         public static readonly DependencyProperty TextProperty =
-            DependencyProperty.Register(nameof(ButtonText), typeof(string), typeof(ButtonWithText), new PropertyMetadata(""));
+            DependencyProperty.Register(nameof(ButtonText), typeof(string), typeof(ButtonWithTextRepeat), new PropertyMetadata(""));
 
-        //public double TextFontSize
-        //{
-        //    get { return (double)GetValue(TextFontSizeProperty); }
-        //    set { SetValue(TextFontSizeProperty, value); }
-        //}
-
-        //public static readonly DependencyProperty TextFontSizeProperty =
-        //    DependencyProperty.Register(nameof(FontSize), typeof(string), typeof(ButtonWithText), new PropertyMetadata(""));
-
-        public ButtonWithText()
+        public ButtonWithTextRepeat()
         {
             InitializeComponent();
         }

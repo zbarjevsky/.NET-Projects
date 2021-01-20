@@ -25,6 +25,19 @@ namespace MkZ.WPF
     /// </summary>
     public partial class SimpleClockControl : UserControl
     {
+        public class OffsetAndZoom
+        {
+            public double Zoom { get; set; } = 1.0;
+
+            //location change from center
+            public Vector Offset { get; set; } = new Vector();
+
+            public override string ToString()
+            {
+                return string.Format("OffsetAndZoom: X:{0:0.0}, Y:{1:0.0}, Zoom:{2:0.00}", Offset.X, Offset.Y, Zoom);
+            }
+        }
+
         public class ClockConfig : NotifyPropertyChangedImpl
         {
             private SerializableFontForWpf _font = new SerializableFontForWpf();
@@ -35,11 +48,6 @@ namespace MkZ.WPF
                 get { return _font; }
                 set { SetProperty(ref _font, value); }
             }
-
-            public double Zoom { get; set; } = 1.0;
-
-            //location change from center
-            public Vector Offset { get; set; } = new Vector();
 
             private SerializableBrush _background = new SerializableBrush(Brushes.Black);
             [Category("Clock"), TypeConverter(typeof(ExpandableObjectConverter))]
@@ -60,9 +68,14 @@ namespace MkZ.WPF
             private SerializableBrush _secondHandBrush = new SerializableBrush(Brushes.Red);
             [Category("Clock"), TypeConverter(typeof(ExpandableObjectConverter))]
             public SerializableBrush SecondHandBrush { get => _secondHandBrush; set => SetProperty(ref _secondHandBrush, value); }
+
+            public OffsetAndZoom OZ_FullScreen { get; set; } = new OffsetAndZoom();
+            public OffsetAndZoom OZ_Normal { get; set; } = new OffsetAndZoom();
         }
 
         public Grid Grid => _gridMain;
+
+        DispatcherTimer _timer = new DispatcherTimer();
 
         public SimpleClockControl()
         {
@@ -72,10 +85,8 @@ namespace MkZ.WPF
 
             UpdateHands();
 
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(0.033);
-            timer.Tick += timer_Tick;
-            timer.Start();
+            _timer.Interval = TimeSpan.FromSeconds(0.266);
+            _timer.Tick += timer_Tick;
         }
 
         private void timer_Tick(object sender, EventArgs e)
@@ -90,6 +101,14 @@ namespace MkZ.WPF
             _minute.Angle = now.TimeOfDay.TotalMinutes * 6.0;
             _hour.Angle = now.TimeOfDay.TotalHours * 30.0;
             _second.Angle = now.TimeOfDay.TotalSeconds * 6.0;
+        }
+
+        private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (this.Visibility == Visibility.Visible)
+                _timer.Start();
+            else
+                _timer.Stop();
         }
     }
 }
