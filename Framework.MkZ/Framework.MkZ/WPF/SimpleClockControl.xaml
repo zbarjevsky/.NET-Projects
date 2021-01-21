@@ -31,20 +31,9 @@
         <Viewbox Grid.RowSpan="3" Grid.ColumnSpan="3">
             <Border CornerRadius="240" Padding="20" Background="{Binding Background.B, FallbackValue=Black}">
                 <Canvas Width="400" Height="400">
-                    <buttons:ButtonMenu x:Name="_menu" Width="40" Canvas.Left="367" Canvas.Top="-5"
-                                        Foreground="{Binding Foreground.B, FallbackValue=Navy}">
-                        <buttons:DropDownButton.Menu>
-                            <ContextMenu FontWeight="Medium" FontSize="18" HasDropShadow="True" 
-                                         Foreground="Navy" Background="{Binding Foreground.B}">
-                                <MenuItem Header="Settings..." Padding="8" Click="SettingsMenuItem_Click" >
-                                    <MenuItem.Icon>
-                                        <Image Source="/Images/Ok.ico" Width="16" Height="16" />
-                                    </MenuItem.Icon>
-                                </MenuItem>
-                            </ContextMenu>
-                        </buttons:DropDownButton.Menu>
-
-                    </buttons:ButtonMenu>
+                    <buttons:ButtonOptions x:Name="_menu" Width="40" Canvas.Left="378" Canvas.Top="-19"
+                         Foreground="{Binding Foreground.B, FallbackValue=Navy}"
+                                           Click="SettingsMenuItem_Click"/>
 
                     <Grid Canvas.Left="252" Canvas.Top="4" Width="80" Height="80">
                         <TextBlock Text="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
@@ -131,10 +120,11 @@
                     </Path>
 
                     <Path x:Name="circle" Stroke="Red" StrokeThickness="1"
-                      Width="400" Height="400" RenderTransformOrigin="0.5,0.5">
-                        <Path.Fill>
+                      Width="400" Height="400" RenderTransformOrigin="0.5,0.5" 
+                          Fill="{Binding KnobBrush.B, FallbackValue=Cyan}">
+                        <!--<Path.Fill>
                             <SolidColorBrush Color="Red" Opacity="0.85" />
-                        </Path.Fill>
+                        </Path.Fill>-->
                         <Path.Data>
                             <GeometryGroup>
                                 <!--<EllipseGeometry Center="200,200" RadiusX="200" RadiusY="200"/>

@@ -50,8 +50,10 @@ namespace MkZ.WPF
                 set { SetProperty(ref _font, value); }
             }
 
+            //[Category("Clock"), TypeConverter(typeof(ExpandableObjectConverter))]
+            public MyClass MyClass { get; set; } = new MyClass();
+
             private SerializableBrush _background = new SerializableBrush(Brushes.Black);
-            [Category("Clock"), TypeConverter(typeof(ExpandableObjectConverter))]
             public SerializableBrush Background { get => _background; set => SetProperty(ref _background, value); }
 
             private SerializableBrush _foreground = new SerializableBrush(Brushes.Wheat);
@@ -69,6 +71,10 @@ namespace MkZ.WPF
             private SerializableBrush _secondHandBrush = new SerializableBrush(Brushes.Red);
             [Category("Clock"), TypeConverter(typeof(ExpandableObjectConverter))]
             public SerializableBrush SecondHandBrush { get => _secondHandBrush; set => SetProperty(ref _secondHandBrush, value); }
+
+            private SerializableBrush _knobBrush = new SerializableBrush(Brushes.Red);
+            [Category("Clock"), TypeConverter(typeof(ExpandableObjectConverter))]
+            public SerializableBrush KnobBrush { get => _knobBrush; set => SetProperty(ref _knobBrush, value); }
 
             public OffsetAndZoom OZ_FullScreen { get; set; } = new OffsetAndZoom();
             public OffsetAndZoom OZ_Normal { get; set; } = new OffsetAndZoom();

@@ -93,7 +93,7 @@ namespace MkZ.WPF.Converters
             _fontFamily = _font.Name;
             _fontSize = _font.Size;
             _fontWeight = _font.Bold ? FontWeights.Bold : FontWeights.Normal;
-            
+
             NotifyPropertyChangedAll();
         }
 
@@ -128,108 +128,4 @@ namespace MkZ.WPF.Converters
             return "FontData: " + _font.Name;
         }
     }
-
-    //[Editor(typeof(ColorBrushTypeEditor), typeof(System.Drawing.Design.UITypeEditor))]
-    //[TypeConverter(typeof(WinFormsColorConverter))]
-    public class SerializableBrush : NotifyPropertyChangedImpl
-    {
-        [NonSerialized]
-        private readonly System.Windows.Media.BrushConverter _colorConverter = new System.Windows.Media.BrushConverter();
-
-        private SolidColorBrush _brush = Brushes.Transparent;
-        [XmlIgnore]
-        [Browsable(false)]
-        public SolidColorBrush B { get => _brush; set => SetProperty(ref _brush, value); }
-
-        [XmlIgnore]
-        [Browsable(false)]
-        public Color C { get => B.Color; set { B.Color = value; NotifyPropertyChangedAll(); } }
-
-        [XmlIgnore]
-        [Browsable(true)]
-        [DisplayName("Color")]
-        [DefaultValue(typeof(System.Drawing.Color), "DarkGoldenrod")]
-        public System.Drawing.Color ColorW
-        {
-            get => System.Drawing.Color.FromArgb(B.Color.A, B.Color.R, B.Color.G, B.Color.B);
-            set
-            {
-                B.Color = new Color() { A = value.A, R = value.R, G = value.G, B = value.B };
-                NotifyPropertyChangedAll();
-            }
-        }
-
-        public SerializableBrush(SolidColorBrush brush)
-        {
-            B = brush;
-        }
-
-        public SerializableBrush()
-        {
-
-        }
-
-        [Browsable(false)]
-        public string Color
-        {
-            get
-            {
-                return _colorConverter.ConvertToString(B);
-            }
-
-            set
-            {
-                B = (SolidColorBrush)_colorConverter.ConvertFrom(value);
-                NotifyPropertyChangedAll();
-            }
-        }
-        public override string ToString()
-        {
-            return "SerializableBrush: " + ColorW.Name;
-        }
-    }
-
-    public class WinFormsColorConverter : System.Drawing.ColorConverter
-    {
-        public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
-        {
-            return false;
-        }
-
-        public override bool GetStandardValuesExclusive(ITypeDescriptorContext context)
-        {
-            return true;
-        }
-
-        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
-        {
-            Debug.WriteLine("CanConvertFrom type " + sourceType);
-            if(sourceType == typeof(string))
-                return true;
-            return base.CanConvertFrom(context, sourceType);
-        }
-
-        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
-        {
-            Debug.WriteLine("ConvertFrom type " + value);
-            if (value is System.Drawing.Color c)
-                return new SerializableBrush() { ColorW = c };
-            return base.ConvertFrom(context, culture, value);
-        }
-
-        //public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-        //{
-        //    Debug.WriteLine("CanConvertTo type " + destinationType);
-        //    return destinationType == typeof(System.Drawing.Color);
-        //}
-
-        //public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        //{
-        //    Debug.WriteLine("ConvertTo Value: " + value + ", Type: " + destinationType);
-        //    if (value is SerializableBrush br && destinationType == typeof(string))
-        //        return br.ColorW.Name;
-        //    return System.Drawing.Color.Black;
-        //}
-    }
-
 }

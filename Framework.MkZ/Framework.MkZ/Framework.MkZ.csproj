@@ -191,6 +191,9 @@
     <Compile Include="WPF\Buttons\ButtonMenu.xaml.cs">
       <DependentUpon>ButtonMenu.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WPF\Buttons\ButtonOptions.xaml.cs">
+      <DependentUpon>ButtonOptions.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF\Buttons\ButtonWithText.xaml.cs">
       <DependentUpon>ButtonWithText.xaml</DependentUpon>
     </Compile>
@@ -221,6 +224,7 @@
     <Compile Include="WPF\PropertyGrid\OptionsWindow.xaml.cs">
       <DependentUpon>OptionsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WPF\PropertyGrid\SerializableBrush.cs" />
     <Compile Include="WPF\RelayCommand.cs" />
     <Compile Include="WPF\ScrollDragZoom.cs" />
     <Compile Include="WPF\SimpleClockControl.xaml.cs">
@@ -321,6 +325,10 @@
     <Page Include="WPF\Buttons\ButtonMenu.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\Buttons\ButtonOptions.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WPF\Buttons\ButtonWithText.xaml">
       <Generator>MSBuild:Compile</Generator>
