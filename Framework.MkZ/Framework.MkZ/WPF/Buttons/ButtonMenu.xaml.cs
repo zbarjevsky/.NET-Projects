@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MkZ.MediaPlayer.Controls
+namespace MkZ.WPF.Buttons
 {
     /// <summary>
-    /// Interaction logic for ButtonClose.xaml
+    /// Interaction logic for ButtonMenu.xaml
     /// </summary>
-    public partial class ButtonClose : Button
+    public partial class ButtonMenu : DropDownButton
     {
-        public ButtonClose()
+        public ButtonMenu()
         {
             InitializeComponent();
         }

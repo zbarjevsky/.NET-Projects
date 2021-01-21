@@ -14,6 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
+using MkZ.WPF;
+
 namespace MkZ.MediaPlayer.Controls
 {
     /// <summary>

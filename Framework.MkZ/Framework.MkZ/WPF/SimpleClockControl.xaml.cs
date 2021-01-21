@@ -17,6 +17,7 @@ using System.Windows.Threading;
 using System.Xml.Serialization;
 using MkZ.Windows;
 using MkZ.WPF.Converters;
+using MkZ.WPF.PropertyGrid;
 
 namespace MkZ.WPF
 {
@@ -87,6 +88,8 @@ namespace MkZ.WPF
 
             _timer.Interval = TimeSpan.FromSeconds(0.266);
             _timer.Tick += timer_Tick;
+
+            AnimationHelper animationHelper = new AnimationHelper(this, 2, _menu);
         }
 
         private void timer_Tick(object sender, EventArgs e)
@@ -109,6 +112,16 @@ namespace MkZ.WPF
                 _timer.Start();
             else
                 _timer.Stop();
+        }
+
+        private void SettingsMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            OptionsWindow wnd = new OptionsWindow();
+            wnd.Owner = Application.Current.MainWindow;
+            wnd.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            wnd.SetPropertiesObject(this.DataContext); //, "Clock Font");
+            wnd.ExpandAll();
+            wnd.ShowDialog();
         }
     }
 }

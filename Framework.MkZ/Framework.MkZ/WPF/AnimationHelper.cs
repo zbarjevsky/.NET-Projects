@@ -10,7 +10,7 @@ using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 
-namespace MkZ.MediaPlayer.Controls
+namespace MkZ.WPF
 {
     public class AnimationHelper
     {
@@ -91,7 +91,7 @@ namespace MkZ.MediaPlayer.Controls
 
         private void timer_Tick(object sender, EventArgs e)
         {
-            if (_isInsideControl || !CanHideControls() || VideoPlayerContext.Instance.InDesignMode)
+            if (_isInsideControl || !CanHideControls() || WPFUtils.GetInDesignMode())
                 return;
 
             _timer.Stop();

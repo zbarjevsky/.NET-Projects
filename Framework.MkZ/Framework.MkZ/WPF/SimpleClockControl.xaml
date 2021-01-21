@@ -4,14 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MkZ.WPF" 
-             xmlns:converters="clr-namespace:MkZ.WPF.Converters"
+             xmlns:converters="clr-namespace:MkZ.WPF.Converters" 
+             xmlns:buttons="clr-namespace:MkZ.WPF.Buttons"
              mc:Ignorable="d" 
              IsVisibleChanged="UserControl_IsVisibleChanged"
              FontSize="{Binding ClockFont.FontSize, FallbackValue=50.0}" 
              FontWeight="{Binding ClockFont.FontWeight, FallbackValue=Bold}" 
              FontFamily="{Binding ClockFont.FontFamily, FallbackValue=Jokerman}"
              Foreground="{Binding Foreground.B, FallbackValue=Pink}"
-             d:DesignHeight="450" d:DesignWidth="450">
+             d:DesignHeight="400" d:DesignWidth="400">
     <UserControl.Resources>
         <converters:MyBrushToColorConverter x:Key="BrushToColorConverter"/>
         <converters:BrushOpacityConverter x:Key="BrushOpacityConverter"/>
@@ -28,24 +29,59 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Viewbox Grid.RowSpan="3" Grid.ColumnSpan="3">
-            <Border CornerRadius="240" Padding="20">
-                <Border.Background>
-                    <SolidColorBrush Color="{Binding Background.C, FallbackValue=Black}" Opacity="0.5" />
-                </Border.Background>
+            <Border CornerRadius="240" Padding="20" Background="{Binding Background.B, FallbackValue=Black}">
                 <Canvas Width="400" Height="400">
+                    <buttons:ButtonMenu x:Name="_menu" Width="40" Canvas.Left="367" Canvas.Top="-5"
+                                        Foreground="{Binding Foreground.B, FallbackValue=Navy}">
+                        <buttons:DropDownButton.Menu>
+                            <ContextMenu FontWeight="Medium" FontSize="18" HasDropShadow="True" 
+                                         Foreground="Navy" Background="{Binding Foreground.B}">
+                                <MenuItem Header="Settings..." Padding="8" Click="SettingsMenuItem_Click" >
+                                    <MenuItem.Icon>
+                                        <Image Source="/Images/Ok.ico" Width="16" Height="16" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </ContextMenu>
+                        </buttons:DropDownButton.Menu>
 
-                    <TextBlock Text="1" Canvas.Left="277" Canvas.Top="8" />
-                    <TextBlock Text="2" Canvas.Left="334" Canvas.Top="71" />
-                    <TextBlock Text="3" Canvas.Left="355" Canvas.Top="161" />
-                    <TextBlock Text="4" Canvas.Left="330" Canvas.Top="251" />
-                    <TextBlock Text="5" Canvas.Left="264" Canvas.Top="318" />
-                    <TextBlock Text="6" Canvas.Left="178" Canvas.Top="338" />
-                    <TextBlock Text="7" Canvas.Left="95" Canvas.Top="317" />
-                    <TextBlock Text="8" Canvas.Left="33" Canvas.Top="251" />
-                    <TextBlock Text="9" Canvas.Top="161" Canvas.Left="8" />
-                    <TextBlock Text="10" Canvas.Left="23" Canvas.Top="71" />
-                    <TextBlock Text="11" Canvas.Left="93" Canvas.Top="8" />
-                    <TextBlock Text="12" Canvas.Left="176" Canvas.Top="-10" />
+                    </buttons:ButtonMenu>
+
+                    <Grid Canvas.Left="252" Canvas.Top="4" Width="80" Height="80">
+                        <TextBlock Text="1" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Grid>
+                    <Grid Canvas.Left="314" Canvas.Top="71" Width="80" Height="80">
+                        <TextBlock Text="2" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Grid>
+                    <Grid Canvas.Left="338" Canvas.Top="161" Width="80" Height="80">
+                        <TextBlock Text="3" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Grid>
+                    <Grid Canvas.Left="312" Canvas.Top="248" Width="80" Height="80">
+                        <TextBlock Text="4" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Grid>
+                    <Grid  Canvas.Left="251" Canvas.Top="318" Width="80" Height="80">
+                        <TextBlock Text="5" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Grid>
+                    <Grid Canvas.Left="160" Canvas.Top="340" Width="80" Height="80">
+                        <TextBlock Text="6" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Grid>
+                    <Grid Canvas.Left="68" Canvas.Top="322" Width="80" Height="80">
+                        <TextBlock Text="7" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Grid>
+                    <Grid Canvas.Top="248" Width="80" Height="80" Canvas.Left="3">
+                        <TextBlock Text="8" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Grid>
+                    <Grid Canvas.Top="161" Width="80" Height="80" Canvas.Left="-17">
+                        <TextBlock Text="9" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Grid>
+                    <Grid Canvas.Left="14" Canvas.Top="71" Width="80" Height="80">
+                        <TextBlock Text="10" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Grid>
+                    <Grid Canvas.Left="73" Canvas.Top="4" Width="80" Height="80">
+                        <TextBlock Text="11" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Grid>
+                    <Grid Canvas.Left="162" Canvas.Top="-19" Width="80" Height="80">
+                        <TextBlock Text="12" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Grid>
 
                     <Path x:Name="hour_hand" 
                       Stroke="{Binding HourHandBrush.B, FallbackValue=Lime}" StrokeThickness="5" 

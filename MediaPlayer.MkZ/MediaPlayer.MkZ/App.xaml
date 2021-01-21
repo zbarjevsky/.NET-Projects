@@ -3,13 +3,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:MkZ.MediaPlayer" 
              xmlns:utils="clr-namespace:MkZ.MediaPlayer.Utils"
-             xmlns:system="clr-namespace:System;assembly=mscorlib"
+             xmlns:system="clr-namespace:System;assembly=mscorlib" 
+             xmlns:converters="clr-namespace:MkZ.WPF.Converters;assembly=Framework.MkZ"
              Startup="Application_Startup">
     <Application.Resources>
         <system:Double x:Key="DefaultFontSize">18</system:Double>
         
-        <utils:MyBrushToColorConverter x:Key="ColorConverter" />
-        <utils:BrushOpacityConverter x:Key="BrushOpacityConverter" />
+        <converters:MyBrushToColorConverter x:Key="ColorConverter" />
+        <converters:BrushOpacityConverter x:Key="BrushOpacityConverter" />
+        
         <utils:MediaStateToPlayConverter x:Key="MediaStateToPlayConverter" />
         <utils:SecondsToStringConverter x:Key="SecondsToStringConverter" />
         <utils:PathToFileNameConverter x:Key="PathToFileNameConverter" />

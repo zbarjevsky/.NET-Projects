@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MkZ.MediaPlayer" 
-             xmlns:controls="clr-namespace:MkZ.MediaPlayer.Controls"
+             xmlns:controls="clr-namespace:MkZ.MediaPlayer.Controls" 
+             xmlns:buttons="clr-namespace:MkZ.WPF.Buttons;assembly=Framework.MkZ"
              mc:Ignorable="d" 
              Loaded="UserControl_Loaded"
              SizeChanged="UserControl_SizeChanged"
@@ -48,11 +49,11 @@
                     <SolidColorBrush Color="Black" Opacity="0.3" />
                 </Border.Background>
                 <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" >
-                    <controls:ButtonClose Width="30" Height="30" Margin="8,0" Padding="1,-5,1,4" 
+                    <buttons:ButtonClose Width="30" Height="30" Margin="8,0" Padding="1,-5,1,4" 
                             Background="Black" Foreground="Red" FontSize="26" FontWeight="Bold" 
                             ToolTip="Close"
                             Click="ButtonClose_Click"/>
-                    <controls:ButtonFullScreen Width="30" Height="30" Margin="8,0" Padding="1,-5,1,4" 
+                    <buttons:ButtonFullScreen Width="30" Height="30" Margin="8,0" Padding="1,-5,1,4" 
                             Background="Black" Foreground="Cyan" 
                             FontSize="26" FontWeight="Bold" 
                             ToolTip="Full Screen" IsChecked="{Binding IsFullScreen, Mode=OneWay, FallbackValue=False}"

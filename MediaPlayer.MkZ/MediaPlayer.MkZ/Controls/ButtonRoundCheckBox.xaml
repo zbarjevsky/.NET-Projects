@@ -4,11 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MkZ.MediaPlayer.Controls"
-              xmlns:utils="clr-namespace:MkZ.MediaPlayer.Utils"
+        xmlns:converters="clr-namespace:MkZ.WPF.Converters;assembly=Framework.MkZ"
               mc:Ignorable="d"
               d:DesignHeight="45" d:DesignWidth="80">
     <ToggleButton.Resources>
-        <utils:MyBrushToColorConverter x:Key="ColorConverter" />
+        <converters:MyBrushToColorConverter x:Key="ColorConverter" />
     </ToggleButton.Resources>
     <ToggleButton.Template>
         <ControlTemplate TargetType="ToggleButton">

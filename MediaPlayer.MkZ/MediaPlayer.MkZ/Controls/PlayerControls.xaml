@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MkZ.MediaPlayer.Controls" 
-             xmlns:utils="clr-namespace:MkZ.MediaPlayer.Utils"
+             xmlns:utils="clr-namespace:MkZ.MediaPlayer.Utils" 
+             xmlns:buttons="clr-namespace:MkZ.WPF.Buttons;assembly=Framework.MkZ"
              mc:Ignorable="d"
              x:Name="_controls"
              d:DesignHeight="80" d:DesignWidth="600">
@@ -31,13 +32,13 @@
                 <local:ButtonStop Width="30" Margin="6,0" Foreground="{StaticResource ButtonForegroundPlay}" 
                     ToolTip="Stop" ToolTipService.ShowOnDisabled="True"
                      Command="MediaCommands.Stop" />
-                <local:ButtonWithTextRepeat Width="30" Margin="6,0" ButtonText="-10" Foreground="{StaticResource ButtonVolumeColor}" 
+                <buttons:ButtonWithTextRepeat Width="30" Margin="6,0" ButtonText="-10" Foreground="{StaticResource ButtonVolumeColor}" 
                     ToolTip="Skip Back 10 sec" ToolTipService.ShowOnDisabled="True"
                     Click="Skip_Backward_Click" />
-                <local:ButtonWithTextRepeat Width="30" Margin="6,0" ButtonText="+10" Foreground="{StaticResource ButtonVolumeColor}" 
+                <buttons:ButtonWithTextRepeat Width="30" Margin="6,0" ButtonText="+10" Foreground="{StaticResource ButtonVolumeColor}" 
                     ToolTip="Skip Forward 10 seconds" ToolTipService.ShowOnDisabled="True"
                     Click="Skip_Forward_Click" />
-                <local:ButtonWithTextRepeat Width="30" Margin="6,0" ButtonText="+1" Foreground="{StaticResource ButtonVolumeColor}" 
+                <buttons:ButtonWithTextRepeat Width="30" Margin="6,0" ButtonText="+1" Foreground="{StaticResource ButtonVolumeColor}" 
                     ToolTip="Skip Forward ~1 Frame" ToolTipService.ShowOnDisabled="True"
                     Click="Skip_Forward_1Frame_Click" />
                 <local:ButtonVolume DockPanel.Dock="Right" Width="30" Margin="6,0" Foreground="{StaticResource ButtonVolumeColor}"

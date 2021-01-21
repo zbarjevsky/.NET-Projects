@@ -180,7 +180,27 @@
     <Compile Include="Windows\XmlSerializerHelper.cs" />
     <Compile Include="Windows\CommonUtils.cs" />
     <Compile Include="WinForms\WpfBrushColorUIEditor.cs" />
+    <Compile Include="WPF\AnimationHelper.cs" />
     <Compile Include="WPF\AutoGreyableImage.cs" />
+    <Compile Include="WPF\Buttons\ButtonClose.xaml.cs">
+      <DependentUpon>ButtonClose.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF\Buttons\ButtonFullScreen.xaml.cs">
+      <DependentUpon>ButtonFullScreen.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF\Buttons\ButtonMenu.xaml.cs">
+      <DependentUpon>ButtonMenu.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF\Buttons\ButtonWithText.xaml.cs">
+      <DependentUpon>ButtonWithText.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF\Buttons\ButtonWithTextRepeat.xaml.cs">
+      <DependentUpon>ButtonWithTextRepeat.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF\Buttons\ButtonWithTextToggle.xaml.cs">
+      <DependentUpon>ButtonWithTextToggle.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF\Buttons\DropDownButton.cs" />
     <Compile Include="WPF\Converters\ColorConverters.cs" />
     <Compile Include="WPF\DisplayTopologyUserControl.xaml.cs">
       <DependentUpon>DisplayTopologyUserControl.xaml</DependentUpon>
@@ -197,6 +217,9 @@
     </Compile>
     <Compile Include="WPF\GradientProgressBar.xaml.cs">
       <DependentUpon>GradientProgressBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="WPF\PropertyGrid\OptionsWindow.xaml.cs">
+      <DependentUpon>OptionsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="WPF\RelayCommand.cs" />
     <Compile Include="WPF\ScrollDragZoom.cs" />
@@ -287,6 +310,30 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="WPF\Buttons\ButtonClose.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\Buttons\ButtonFullScreen.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\Buttons\ButtonMenu.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\Buttons\ButtonWithText.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\Buttons\ButtonWithTextRepeat.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\Buttons\ButtonWithTextToggle.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="WPF\DisplayTopologyUserControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -296,6 +343,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="WPF\GradientProgressBar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\PropertyGrid\OptionsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

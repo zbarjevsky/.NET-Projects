@@ -8,7 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 
-namespace MkZ.MediaPlayer.Controls
+namespace MkZ.WPF.Buttons
 {
     /// <summary>
     /// https://www.codeproject.com/Tips/1136681/WPF-Drop-Down-Menu-Button

@@ -9,12 +9,13 @@ using System.Windows;
 
 using MkZ.MediaPlayer.Utils;
 using MkZ.Windows;
+using MkZ.WPF;
 
 namespace MkZ.MediaPlayer
 {
     public class VideoPlayerContext : NotifyPropertyChangedImpl
     {
-        public static VideoPlayerContext Instance { get; } = new VideoPlayerContext() { InDesignMode = GetInDesignMode() };
+        public static VideoPlayerContext Instance { get; } = new VideoPlayerContext() { InDesignMode = WPFUtils.GetInDesignMode() };
 
         public AppConfig Config { get; } = new AppConfig();
 
@@ -46,20 +47,6 @@ namespace MkZ.MediaPlayer
 
             if (unsupported.Count > 0)
                 MessageBox.Show("File type is not supported.\n" + unsupported[0], "AddNewMediaFiles");
-        }
-
-        private static bool GetInDesignMode()
-        {
-            if (Application.Current == null) return false;
-            if (Application.Current.Properties != null && Application.Current.Properties.Contains("InDesignMode"))
-            {
-                return (bool)Application.Current.Properties["InDesignMode"];
-            }
-            if (System.ComponentModel.LicenseManager.UsageMode == LicenseUsageMode.Designtime)
-            {
-                return true;
-            }
-            return false;
         }
     }
 }

@@ -67,18 +67,8 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Controls\AnimationHelper.cs" />
     <Compile Include="Controls\ButtonBrowse.xaml.cs">
       <DependentUpon>ButtonBrowse.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ButtonClose.xaml.cs">
-      <DependentUpon>ButtonClose.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ButtonFullScreen.xaml.cs">
-      <DependentUpon>ButtonFullScreen.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ButtonMenu.xaml.cs">
-      <DependentUpon>ButtonMenu.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ButtonNext.xaml.cs">
       <DependentUpon>ButtonNext.xaml</DependentUpon>
@@ -98,33 +88,20 @@
     <Compile Include="Controls\ButtonSort.xaml.cs">
       <DependentUpon>ButtonSort.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ButtonWithText.xaml.cs">
-      <DependentUpon>ButtonWithText.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\ButtonStop.xaml.cs">
       <DependentUpon>ButtonStop.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ButtonVolume.xaml.cs">
       <DependentUpon>ButtonVolume.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\ButtonWithTextRepeat.xaml.cs">
-      <DependentUpon>ButtonWithTextRepeat.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\ButtonWithTextToggle.xaml.cs">
-      <DependentUpon>ButtonWithTextToggle.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\CursorArrow.xaml.cs">
       <DependentUpon>CursorArrow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\DropDownButton.cs" />
     <Compile Include="Controls\VolumeLabelControl.xaml.cs">
       <DependentUpon>VolumeLabelControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\MagnifyingGlassUserControl.xaml.cs">
       <DependentUpon>MagnifyingGlassUserControl.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Controls\OptionsWindow.xaml.cs">
-      <DependentUpon>OptionsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\PlayListManagerVM.cs" />
     <Compile Include="Controls\PlayListManagerWindow.xaml.cs">
@@ -133,7 +110,6 @@
     <Compile Include="Controls\ButtonRoundCheckBox.xaml.cs">
       <DependentUpon>ButtonRoundCheckBox.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Utils\ColorConverters.cs" />
     <Compile Include="Controls\PlayerControls.xaml.cs">
       <DependentUpon>PlayerControls.xaml</DependentUpon>
     </Compile>
@@ -168,18 +144,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ButtonClose.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\ButtonFullScreen.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\ButtonMenu.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Controls\ButtonNext.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -208,23 +172,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\ButtonWithText.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Controls\ButtonStop.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ButtonVolume.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\ButtonWithTextRepeat.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\ButtonWithTextToggle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -247,10 +199,6 @@
     <Page Include="Controls\MagnifyingGlassUserControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
-    </Page>
-    <Page Include="Controls\OptionsWindow.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\PlayerControls.xaml">
       <SubType>Designer</SubType>

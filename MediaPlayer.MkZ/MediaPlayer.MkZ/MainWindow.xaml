@@ -7,7 +7,8 @@
         xmlns:mediaplayer="clr-namespace:MkZ.MediaPlayer" 
         xmlns:controls="clr-namespace:MkZ.MediaPlayer.Controls" 
         xmlns:utils="clr-namespace:MkZ.MediaPlayer.Utils" 
-        xmlns:wpf="clr-namespace:MkZ.WPF;assembly=Framework.MkZ"
+        xmlns:wpf="clr-namespace:MkZ.WPF;assembly=Framework.MkZ" 
+        xmlns:buttons="clr-namespace:MkZ.WPF.Buttons;assembly=Framework.MkZ"
         mc:Ignorable="d" 
         FontSize="18"
         Loaded="Window_Loaded"
@@ -89,9 +90,9 @@
             <RowDefinition x:Name="rowFooter" Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         <DockPanel Background="{StaticResource GradientBackground}">
-            <controls:ButtonMenu Margin="4" Foreground="{StaticResource ButtonForegroundMain}" 
+            <buttons:ButtonMenu Margin="4" Foreground="{StaticResource ButtonForegroundMain}" 
                      ToolTip="File..." >
-                <controls:DropDownButton.Menu>
+                <buttons:DropDownButton.Menu>
                     <ContextMenu FontWeight="Medium" FontSize="18" Foreground="Navy" HasDropShadow="True">
                         <MenuItem Header="Open File.." Command="ApplicationCommands.Open" Padding="8" >
                             <MenuItem.Icon>
@@ -111,7 +112,7 @@
                         <Separator/>
                         <MenuItem Header="PlayList Manager..." Padding="8" Click="ButtonPlayListManager_Click" >
                             <MenuItem.Icon>
-                                <controls:ButtonMenu Width="16" Foreground="{StaticResource ButtonForegroundMain}"/>
+                                <buttons:ButtonMenu Width="16" Foreground="{StaticResource ButtonForegroundMain}"/>
                             </MenuItem.Icon>
                         </MenuItem>
                         <Separator/>
@@ -121,8 +122,8 @@
                             </MenuItem.Icon>
                         </MenuItem>
                     </ContextMenu>
-                </controls:DropDownButton.Menu>
-            </controls:ButtonMenu>
+                </buttons:DropDownButton.Menu>
+            </buttons:ButtonMenu>
             <controls:ButtonBrowse Margin="4" Foreground="{StaticResource ButtonForegroundMain}" 
                      ToolTip="Open Media File..." Command="ApplicationCommands.Open" />
             <controls:ButtonPlayPause Margin="4" Foreground="{StaticResource ButtonForegroundMain}" 
@@ -190,10 +191,10 @@
                                 <ColumnDefinition Width="90"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <controls:ButtonWithText Grid.Column="0" Margin="4" Height="20" 
+                            <buttons:ButtonWithText Grid.Column="0" Margin="4" Height="20" 
                                   ToolTip="Remove From List" ButtonText="--"
                                   VerticalAlignment="Top" Foreground="DarkGoldenrod" Click="RemoveMediaFile_Click" >
-                                <controls:ButtonWithText.Style>
+                                <buttons:ButtonWithText.Style>
                                     <Style TargetType="Button">
                                         <Style.Triggers>
                                             <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=ComboBoxItem}}" Value="{x:Null}">
@@ -201,9 +202,9 @@
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
-                                </controls:ButtonWithText.Style>
-                            </controls:ButtonWithText>
-                            <controls:ButtonWithText Grid.Column="1" Margin="4" Height="20" 
+                                </buttons:ButtonWithText.Style>
+                            </buttons:ButtonWithText>
+                            <buttons:ButtonWithText Grid.Column="1" Margin="4" Height="20" 
                                   ToolTip="Delete file and Remove from list" ButtonText="X"
                                   VerticalAlignment="Top" Foreground="Red" Click="RemoveMediaFile_Click" >
                                 <Button.Style>
@@ -215,7 +216,7 @@
                                         </Style.Triggers>
                                     </Style>
                                 </Button.Style>
-                            </controls:ButtonWithText>
+                            </buttons:ButtonWithText>
                             <TextBlock Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right"
                                        FontSize="18" Margin="3"
                                        Text="{Binding NaturalDuration, Converter={StaticResource SecondsToStringConverter}, FallbackValue=--/--}"/>
@@ -267,17 +268,17 @@
                     <StackPanel Orientation="Horizontal" >
                         <controls:ButtonBrowse Width="30" Margin="4,0" Foreground="{StaticResource ButtonForegroundMain}" 
                             ToolTip="Open Media File..." Command="ApplicationCommands.Open" />
-                        <controls:ButtonWithTextToggle x:Name="_btnToggleClock" Width="30" Margin="4,0"
+                        <buttons:ButtonWithTextToggle x:Name="_btnToggleClock" Width="30" Margin="4,0"
                             ButtonTextUnchecked="Õ" ButtonTextChecked="Ô" FontSize="20"
                             Background="Black" Foreground="{StaticResource ButtonForegroundMain}" 
                             ToolTip="Show/Hide Clock" />
                         <Border Width="3" Height="25" BorderThickness="1" BorderBrush="{StaticResource ButtonForegroundMain}" />
-                        <controls:ButtonWithTextRepeat Width="30" Margin="4,0"
+                        <buttons:ButtonWithTextRepeat Width="30" Margin="4,0"
                             ButtonText="&lt;&lt;" FontSize="26"
                             Background="Black" Foreground="{StaticResource ButtonForegroundMain}" 
                             ToolTip="Previous Image in Folder"
                             Click="ButtonPrevImage_Click"/>
-                        <controls:ButtonWithTextRepeat Width="30" Margin="4,0"
+                        <buttons:ButtonWithTextRepeat Width="30" Margin="4,0"
                             ButtonText="&gt;&gt;" FontSize="26"
                             Background="Black" Foreground="{StaticResource ButtonForegroundMain}" 
                             ToolTip="Next Image in Folder"

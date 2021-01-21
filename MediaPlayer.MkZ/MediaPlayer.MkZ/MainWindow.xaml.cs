@@ -21,6 +21,7 @@ using MkZ.MediaPlayer.Utils;
 using MkZ.WPF;
 using MkZ.WPF.Controls;
 using MkZ.WPF.MessageBox;
+using MkZ.WPF.PropertyGrid;
 
 namespace MkZ.MediaPlayer
 {
@@ -386,10 +387,11 @@ namespace MkZ.MediaPlayer
             OptionsWindow wnd = new OptionsWindow();
             wnd.Owner = this;
             wnd.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            wnd.SetPropertiesObject(Context.Config, "Configuration", "Clock Configuration", "Clock Font");
+            
             wnd.ShowDialog();
 
             _clock.DataContext = Context.Config.Configuration.ClockConfig;
-            Context.Config.Configuration.ClockConfig.NotifyPropertyChangedAll();
         }
 
         private void ButtonPlayListManager_Click(object sender, RoutedEventArgs e)

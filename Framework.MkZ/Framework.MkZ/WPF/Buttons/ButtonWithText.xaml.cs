@@ -14,12 +14,12 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MkZ.MediaPlayer.Controls
+namespace MkZ.WPF.Buttons
 {
     /// <summary>
-    /// Interaction logic for ButtonWithTextRepeat.xaml
+    /// Interaction logic for ButtonSkipForward.xaml
     /// </summary>
-    public partial class ButtonWithTextRepeat : RepeatButton
+    public partial class ButtonWithText : Button
     {
         public string ButtonText
         {
@@ -28,9 +28,18 @@ namespace MkZ.MediaPlayer.Controls
         }
 
         public static readonly DependencyProperty TextProperty =
-            DependencyProperty.Register(nameof(ButtonText), typeof(string), typeof(ButtonWithTextRepeat), new PropertyMetadata(""));
+            DependencyProperty.Register(nameof(ButtonText), typeof(string), typeof(ButtonWithText), new PropertyMetadata(""));
 
-        public ButtonWithTextRepeat()
+        //public double TextFontSize
+        //{
+        //    get { return (double)GetValue(TextFontSizeProperty); }
+        //    set { SetValue(TextFontSizeProperty, value); }
+        //}
+
+        //public static readonly DependencyProperty TextFontSizeProperty =
+        //    DependencyProperty.Register(nameof(FontSize), typeof(string), typeof(ButtonWithText), new PropertyMetadata(""));
+
+        public ButtonWithText()
         {
             InitializeComponent();
         }
