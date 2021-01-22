@@ -50,9 +50,13 @@
                 </Border.Background>
                 <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" >
                     <buttons:ButtonClose Width="30" Height="30" Margin="8,0" Padding="1,-5,1,4" 
-                            Background="Black" Foreground="Red" FontSize="26" FontWeight="Bold" 
+                            Foreground="Red" FontSize="26" FontWeight="Bold" 
                             ToolTip="Close Alt+F4"
-                            Click="ButtonClose_Click"/>
+                            Click="ButtonClose_Click">
+                        <buttons:ButtonClose.Background>
+                            <SolidColorBrush Color="Black" Opacity="0.5" />
+                        </buttons:ButtonClose.Background>
+                    </buttons:ButtonClose>
                     <buttons:ButtonFullScreen Width="30" Height="30" Margin="8,0" Padding="1,-5,1,4" 
                             Background="Black" Foreground="Cyan" 
                             FontSize="26" FontWeight="Bold" 

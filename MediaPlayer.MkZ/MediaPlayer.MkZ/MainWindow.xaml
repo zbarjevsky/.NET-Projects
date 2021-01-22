@@ -238,10 +238,9 @@
             </ComboBox>
         </DockPanel>
 
-        <ScrollViewer x:Name="_scrollMain" Grid.Row="1" Grid.RowSpan="2" 
-                      Background="Transparent" CanContentScroll="True"
-                      HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" >
-            <Image x:Name="_imageBackground" Grid.Row="1" Grid.RowSpan="2"
+        <ScrollViewer x:Name="_scrollMain" Grid.Row="1" Grid.RowSpan="1" 
+                      Background="Transparent" CanContentScroll="True" >
+            <Image x:Name="_imageBackground"
                Source="{Binding Config.Configuration.BackgroundImageFileName}" />
         </ScrollViewer>
 
@@ -270,6 +269,7 @@
                             ToolTip="Open Media File..." Command="ApplicationCommands.Open" />
                         <buttons:ButtonWithTextToggle x:Name="_btnToggleClock" Width="30" Margin="4,0"
                             ButtonTextUnchecked="Õ" ButtonTextChecked="Ô" FontSize="20"
+                            IsChecked="{Binding Config.Configuration.ClockConfig.IsVisible}"
                             Background="Black" Foreground="{StaticResource ButtonForegroundMain}" 
                             ToolTip="Show/Hide Clock" />
                         <Border Width="3" Height="25" BorderThickness="1" BorderBrush="{StaticResource ButtonForegroundMain}" />

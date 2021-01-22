@@ -31,10 +31,15 @@
         <Viewbox Grid.RowSpan="3" Grid.ColumnSpan="3">
             <Border CornerRadius="240" Padding="20" Background="{Binding Background.B, FallbackValue=Black}">
                 <Canvas Width="400" Height="400">
-                    <buttons:ButtonOptions x:Name="_menu" Width="40" Canvas.Left="378" Canvas.Top="-19"
-                         Foreground="{Binding Foreground.B, FallbackValue=Navy}"
-                                           Background="{Binding Background.B}"
+                    <buttons:ButtonOptions x:Name="_btnSettings" Width="40" Canvas.Left="333" Canvas.Top="-19"
+                         Foreground="{Binding Foreground.B, FallbackValue=Pink}" 
+                         Background="{Binding Background.B, FallbackValue=Black}"
                          Click="SettingsMenuItem_Click"/>
+
+                    <buttons:ButtonClose x:Name="_btnHide" Width="40" Canvas.Left="378" Canvas.Top="-19"
+                         Foreground="Red" 
+                         Background="{Binding Background.B, FallbackValue=Black}"
+                         Click="ButtonHide_Click"/>
 
                     <Grid Canvas.Left="252" Canvas.Top="4" Width="80" Height="80">
                         <TextBlock Text="1" HorizontalAlignment="Center" VerticalAlignment="Center" />

@@ -12,12 +12,12 @@ using System.Windows.Threading;
 
 namespace MkZ.WPF
 {
-    public class AnimationHelper
+    public class FadeAnimationHelper
     {
         private readonly Stopwatch _stopwatch = new Stopwatch();
         private readonly Control _container = null;
         private readonly DispatcherTimer _timer = new DispatcherTimer();
-        private readonly List<UIElement> _controls = new List<UIElement>();
+        private readonly List<UIElement> _controlsToFade = new List<UIElement>();
         private readonly double _hideTimeOutSeconds = 2;
 
         private Cursor _conainerCursor = Cursors.Arrow;
@@ -26,7 +26,7 @@ namespace MkZ.WPF
         //do not hide - can be usefull for media files with no video
         public Func<bool> CanHideControls = () => true;
 
-        public AnimationHelper(Control container, double hideTimeOutSeconds, params UIElement[] controls)
+        public FadeAnimationHelper(Control container, double hideTimeOutSeconds, params UIElement[] controls)
         {
             _container = container;
             _conainerCursor = container.Cursor;
@@ -37,8 +37,8 @@ namespace MkZ.WPF
             if (_hideTimeOutSeconds < 1)
                 _hideTimeOutSeconds = 1;
 
-            _controls.AddRange(controls);
-            foreach (UIElement ctrl in _controls)
+            _controlsToFade.AddRange(controls);
+            foreach (UIElement ctrl in _controlsToFade)
             {
                 ctrl.MouseEnter += Ctrl_MouseEnter;
                 ctrl.MouseLeave += Ctrl_MouseLeave;
@@ -57,7 +57,7 @@ namespace MkZ.WPF
             if (!_timer.IsEnabled)
                 _timer.Start();
 
-            foreach (UIElement ctrl in _controls)
+            foreach (UIElement ctrl in _controlsToFade)
             {
                 if (ctrl.Visibility != Visibility.Visible)
                 {
@@ -97,7 +97,7 @@ namespace MkZ.WPF
             _timer.Stop();
             if(_stopwatch.ElapsedMilliseconds > 1000 * _hideTimeOutSeconds)
             {
-                foreach (UIElement ctrl in _controls)
+                foreach (UIElement ctrl in _controlsToFade)
                 {
                     VisibilityHideAnimation(ctrl, 0, Visibility.Hidden, OnHideCompleted);
                 }
@@ -160,6 +160,60 @@ namespace MkZ.WPF
             };
 
             element.BeginAnimation(UIElement.OpacityProperty, animation);
+        }
+    }
+
+    public class GridLengthAnimationHelper
+    {
+        private readonly Control _container = null;
+        private readonly RowDefinition _row;
+
+        public GridLength InitialRowHeight { get; }
+
+        public double InitialControlHeight { get; set; }
+
+        public bool CanHide { get; set; } = false;
+
+        public Action<Control> PostAnimationAction = (ctrl) => { };
+
+        public GridLengthAnimationHelper(Control container, RowDefinition row)
+        {
+            _container = container;
+            InitialControlHeight = _container.Height;
+            _container.MouseMove += _container_MouseMove;
+            
+            _row = row;
+            InitialRowHeight = _row.Height;
+        }
+
+        public void ShowRow(bool bShow, bool canHide)
+        {
+            CanHide = canHide;
+            InitialControlHeight = _container.Height;
+            Action postAction = () => PostAnimationAction(_container);
+
+            if (bShow)
+            {
+                if (_row.Height.Value == 0) //show
+                {
+                    //_row.Height = InitialRowHeight;
+                    GridLengthAnimation.AnimateRow(_row, InitialRowHeight, 500, postAction);
+                }
+            }
+            else
+            {
+                if (_row.Height.Value == InitialRowHeight.Value) //hide
+                {
+                    //_row.Height = new GridLength(0);
+                    GridLengthAnimation.AnimateRow(_row, new GridLength(0), 500, postAction);
+                }
+            }
+        }
+
+        private void _container_MouseMove(object sender, MouseEventArgs e)
+        {
+            Point pt = e.GetPosition(_row);
+            ShowRow(pt.Y < InitialRowHeight.Value || !CanHide, CanHide);
         }
     }
 }

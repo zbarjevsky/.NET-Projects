@@ -45,7 +45,7 @@ namespace MkZ.MediaPlayer.Controls
             if(_bAllowHide && _counter > 5 )
             {
                 _bAllowHide = false;
-                AnimationHelper.VisibilityHideAnimation(this, 0, Visibility.Hidden, (e1) => { _bAllowShow = true; });
+                FadeAnimationHelper.VisibilityHideAnimation(this, 0, Visibility.Hidden, (e1) => { _bAllowShow = true; });
             }
             _timer.Start();
         }
@@ -56,7 +56,7 @@ namespace MkZ.MediaPlayer.Controls
             if (_bAllowShow)
             {
                 _bAllowShow = false;
-                AnimationHelper.VisibilityShowAnimation(this, 0, (e1) => { _bAllowHide = true; });
+                FadeAnimationHelper.VisibilityShowAnimation(this, 0, (e1) => { _bAllowHide = true; });
             }
         }
     }

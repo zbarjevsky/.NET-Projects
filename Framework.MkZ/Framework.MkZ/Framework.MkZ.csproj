@@ -187,6 +187,9 @@
     <Compile Include="WPF\Buttons\ButtonFullScreen.xaml.cs">
       <DependentUpon>ButtonFullScreen.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WPF\Buttons\ButtonWithIcon.xaml.cs">
+      <DependentUpon>ButtonWithIcon.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF\Buttons\ButtonMenu.xaml.cs">
       <DependentUpon>ButtonMenu.xaml</DependentUpon>
     </Compile>
@@ -322,6 +325,10 @@
     <Page Include="WPF\Buttons\ButtonFullScreen.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\Buttons\ButtonWithIcon.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WPF\Buttons\ButtonMenu.xaml">
       <Generator>MSBuild:Compile</Generator>

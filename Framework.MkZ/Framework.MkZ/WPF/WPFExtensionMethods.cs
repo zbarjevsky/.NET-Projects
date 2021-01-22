@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
+using System.Windows.Threading;
 
 namespace MkZ.WPF
 {
@@ -46,5 +47,13 @@ namespace MkZ.WPF
             return res;
         }
 
+        public static void ForceRender(this UIElement element, 
+            Action renderAction = null)
+        {
+            if (renderAction == null)
+                renderAction = () => { };
+
+            element.Dispatcher.Invoke(DispatcherPriority.Render, renderAction);
+        }
     }
 }

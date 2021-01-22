@@ -41,6 +41,14 @@ namespace MkZ.WPF
 
         public class ClockConfig : NotifyPropertyChangedImpl
         {
+            private bool _isVisible = false;
+            [Category("Clock")]
+            public bool IsVisible
+            {
+                get { return _isVisible; }
+                set { SetProperty(ref _isVisible, value); }
+            }
+
             private SerializableFontForWpf _font = new SerializableFontForWpf();
             [Category("Clock")]
             [TypeConverter(typeof(ExpandableObjectConverter))]
@@ -105,7 +113,7 @@ namespace MkZ.WPF
             _timer.Interval = TimeSpan.FromSeconds(0.266);
             _timer.Tick += timer_Tick;
 
-            AnimationHelper animationHelper = new AnimationHelper(this, 2, _menu);
+            FadeAnimationHelper animationHelper = new FadeAnimationHelper(this, 2, _btnHide, _btnSettings);
         }
 
         private void timer_Tick(object sender, EventArgs e)
@@ -136,9 +144,16 @@ namespace MkZ.WPF
             wnd.Owner = Application.Current.MainWindow;
             wnd.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             wnd.Height = 450;
+            wnd.Title = "Clock Settings";
             wnd.SetPropertiesObject(this.DataContext, "Clock Font");
             //wnd.ExpandAll();
             wnd.ShowDialog();
+        }
+
+        private void ButtonHide_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ClockConfig config)
+                config.IsVisible = false;
         }
     }
 }

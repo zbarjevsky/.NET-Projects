@@ -24,7 +24,7 @@ namespace MkZ.WPF
     /// </summary>
     public partial class PopupVolumeControlWindow : Window
     {
-        private AnimationHelper _controlsHideAndShow;
+        private FadeAnimationHelper _controlsHideAndShow;
 
         public TimeSpan CloseTimeOut { get; set; } = TimeSpan.FromSeconds(2);
 
@@ -107,7 +107,7 @@ namespace MkZ.WPF
             _progress.Maximum = 1;
             _progress.TickColor = Brushes.Navy;
 
-            _controlsHideAndShow = new AnimationHelper(this, 2, this);
+            _controlsHideAndShow = new FadeAnimationHelper(this, 2, this);
             _controlsHideAndShow.OnHideCompleted = (element) =>
             {
                 if (element is Window wnd)

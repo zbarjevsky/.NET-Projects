@@ -9,6 +9,7 @@
     <Button.Resources>
         <ResourceDictionary>
             <converters:MyBrushToColorConverter x:Key="ColorConverter" />
+            <converters:BrushOpacityConverter x:Key="BrushOpacityConverter" />
             <!--<ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="ButtonPathStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>-->
@@ -18,7 +19,7 @@
         <ControlTemplate TargetType="Button">
             <ControlTemplate.Resources>
                 <Style TargetType="Path">
-                    <Setter Property="Fill" Value="{Binding Foreground}"/>
+                    <Setter Property="Fill" Value="{Binding Background}"/>
                     <Setter Property="Stroke" Value="{Binding Foreground}"/>
                     <Setter Property="StrokeThickness" Value="4"/>
                 </Style>
@@ -47,8 +48,7 @@
                         Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
                         Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.5}" />
                     <Setter TargetName="circle" Property="Fill"  
-                        Value="{Binding Background, RelativeSource={RelativeSource TemplatedParent}, 
-                        Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.3}" />
+                        Value="{Binding Background, RelativeSource={RelativeSource TemplatedParent}}" />
                     <Setter TargetName="cross" Property="Stroke"  
                         Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
                         Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.5}" />

@@ -33,7 +33,7 @@ namespace MkZ.MediaPlayer
     public partial class VideoPlayerControl : UserControl
     {
         private readonly VideoPlayerControlVM _playerControlVM = new VideoPlayerControlVM();
-        private readonly AnimationHelper _controlsHideAndShow;
+        private readonly FadeAnimationHelper _controlsHideAndShow;
 
         public Action<VideoPlayerControlVM> OnFullScreenButtonClick = (vm) => { };
         public Action<string[]> OnFileDropAction = (fileNames) => { };
@@ -66,7 +66,7 @@ namespace MkZ.MediaPlayer
 
             InitializeComponent();
 
-            _controlsHideAndShow = new AnimationHelper(this, 2,
+            _controlsHideAndShow = new FadeAnimationHelper(this, 2,
                 _playControls, _systemButtons, _borderPrompt);
 
             //_imageBackground.Draggable();

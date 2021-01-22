@@ -31,7 +31,8 @@ namespace MkZ.MediaPlayer
     public partial class MainWindow : Window, IPlayerMainWindow
     {
         private MediaPlayerCommands _mediaPlayerCommands;
-        private readonly AnimationHelper _controlsHideAndShow;
+        private readonly FadeAnimationHelper _controlsHideAndShow;
+        private readonly GridLengthAnimationHelper _hideHeaderAnimationHelper;
         ScrollDragZoom _zoomClock = null, _zoomImage = null;
         private CursorArrow _cursorArrow = new CursorArrow();
 
@@ -59,7 +60,7 @@ namespace MkZ.MediaPlayer
 
             _cursorArrow.Load_Cursor(_gridMain, sizeRatio: 20);
 
-            _controlsHideAndShow = new AnimationHelper(this, 2, _imagesNavigation, _cursorArrow);
+            _controlsHideAndShow = new FadeAnimationHelper(this, 2, _imagesNavigation, _cursorArrow);
 
             _clock.Draggable();
             _zoomClock = new ScrollDragZoom(_clock, _scrollMain);
@@ -68,6 +69,10 @@ namespace MkZ.MediaPlayer
             _zoomImage.FitWindow(0);
 
             Context.Config.Configuration.PropertyChanged += Config_PropertyChanged;
+
+            _hideHeaderAnimationHelper = new GridLengthAnimationHelper(this, rowHeader);
+            //_hideHeaderAnimationHelper.PostAnimationAction = (ctrl) => 
+            //{ this.OnRenderSizeChanged(new SizeChangedInfo(ctrl, new Size(this.Width, this.Height), false, true)); }; 
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -106,7 +111,7 @@ namespace MkZ.MediaPlayer
         {
             MediaDB.SelectedMediaFileIndex = _cmbFilesList.SelectedIndex;
 
-            ClockLocationSave(Context.Config.Configuration.ClockConfig.Bounds_Normal);
+            ClockLocationSave();
 
             Context.Config.Save();
             _player.ClosePlayer();
@@ -168,7 +173,15 @@ namespace MkZ.MediaPlayer
             Application.Current.Dispatcher.BeginInvoke(postMessage);
         }
 
-        private void ClockLocationSave(SimpleClockControl.OffsetAndZoom loc)
+        private void ClockLocationSave()
+        {
+            if (this.WindowStyle == WindowStyle.None) //full screen
+                ClockLocationSave1(Context.Config.Configuration.ClockConfig.Bounds_FullScreen);
+            else
+                ClockLocationSave1(Context.Config.Configuration.ClockConfig.Bounds_Normal);
+        }
+
+        private void ClockLocationSave1(SimpleClockControl.OffsetAndZoom loc)
         {
             loc.Zoom = _zoomClock.Zoom;
             loc.Offset = _clock.GetDraggableOffset();
@@ -285,19 +298,25 @@ namespace MkZ.MediaPlayer
 
         public void ToggleFullScreen()
         {
-            if (this.WindowStyle == WindowStyle.None)
+            ClockLocationSave();
+
+            if (this.WindowStyle == WindowStyle.None)//go normal
             {
-                ClockLocationSave(Context.Config.Configuration.ClockConfig.Bounds_FullScreen);
-                rowHeader.Height = new GridLength(46);
+                //_hideHeaderAnimationHelper.ShowRow(true, false);
+                _hideHeaderAnimationHelper.CanHide = false;
+                rowHeader.Height = _hideHeaderAnimationHelper.InitialRowHeight; //no animation
+
                 this.WindowStyle = WindowStyle.ThreeDBorderWindow;
                 this.WindowState = WindowState.Normal;
                 PlayerVM.IsFullScreen = false;
                 ClockLocationRestore(Context.Config.Configuration.ClockConfig.Bounds_Normal);
             }
-            else //full screen
+            else //go full screen
             {
-                ClockLocationSave(Context.Config.Configuration.ClockConfig.Bounds_Normal);
+                //_hideHeaderAnimationHelper.ShowRow(false, true);
+                _hideHeaderAnimationHelper.CanHide = true;
                 rowHeader.Height = new GridLength(0);
+
                 this.WindowStyle = WindowStyle.None;
                 this.WindowState = WindowState.Maximized;
                 PlayerVM.IsFullScreen = true;
