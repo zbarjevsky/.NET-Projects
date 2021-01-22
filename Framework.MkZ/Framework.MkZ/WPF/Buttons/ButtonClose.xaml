@@ -4,7 +4,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
         xmlns:converters="clr-namespace:MkZ.WPF.Converters"
-        mc:Ignorable="d" Foreground="Red" Background="Black"
+        mc:Ignorable="d" Foreground="Red" Background="Gray"
         d:DesignHeight="45" d:DesignWidth="80">
     <Button.Resources>
         <ResourceDictionary>
@@ -19,8 +19,8 @@
         <ControlTemplate TargetType="Button">
             <ControlTemplate.Resources>
                 <Style TargetType="Path">
-                    <Setter Property="Fill" Value="{Binding Background}"/>
-                    <Setter Property="Stroke" Value="{Binding Foreground}"/>
+                    <Setter Property="Fill" Value="Gray"/>
+                    <Setter Property="Stroke" Value="Red"/>
                     <Setter Property="StrokeThickness" Value="4"/>
                 </Style>
             </ControlTemplate.Resources>

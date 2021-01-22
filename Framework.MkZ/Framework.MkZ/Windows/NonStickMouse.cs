@@ -73,7 +73,7 @@ namespace MkZ.Tools
             _screens.Sort((s1, s2) => (int)(s1.DeviceBounds.Left - s2.DeviceBounds.Left));
 
             foreach (var scr in _screens)
-                Debug.WriteLine(scr);
+                Debug.WriteLine("Screen: "+scr);
 
             _borders = new BorderBetweenDisplays[_screens.Count - 1];
 

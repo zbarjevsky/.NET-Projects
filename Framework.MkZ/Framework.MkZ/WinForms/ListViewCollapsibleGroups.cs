@@ -184,7 +184,7 @@ namespace ListViewExtensions
             }
             catch (Exception err)
             {
-                Debug.WriteLine(err.Message);
+                Debug.WriteLine("SendSetGroupInfo: " + err.Message);
             }
             finally
             {

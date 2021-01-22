@@ -21,6 +21,7 @@ namespace MkZ.WPF.PropertyGrid
     public class SerializableBrush : NotifyPropertyChangedImpl
     {
         public const string BRUSH = "Brush: ";
+
         [NonSerialized]
         private readonly System.Windows.Media.BrushConverter _colorConverter = new System.Windows.Media.BrushConverter();
 
@@ -129,7 +130,7 @@ namespace MkZ.WPF.PropertyGrid
             int val = (int)(0xFF000000 | c.ToArgb());
             foreach (var namedColor in colorLookup[val])
             {
-                Console.WriteLine(namedColor.Name);
+                //Debug.WriteLine("Find Color Name: "+namedColor.Name);
                 return namedColor;
             }
 
@@ -146,7 +147,7 @@ namespace MkZ.WPF.PropertyGrid
 
         public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
         {
-            Debug.WriteLine("SerializableBrush CanConvertFrom type '{0}'", sourceType);
+            //Debug.WriteLine("SerializableBrush CanConvertFrom type '{0}'", sourceType);
             if (sourceType == typeof(string))
                 return true;
             return base.CanConvertFrom(context, sourceType);
@@ -154,7 +155,7 @@ namespace MkZ.WPF.PropertyGrid
 
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
-            Debug.WriteLine("SerializableBrush ConvertFrom value: '{0}'", value);
+            //Debug.WriteLine("SerializableBrush ConvertFrom value: '{0}'", value);
             if (value is string s)
                 return new SerializableBrush(s);
             return base.ConvertFrom(context, culture, value);

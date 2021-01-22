@@ -26,12 +26,12 @@
             </ControlTemplate.Resources>
             <Viewbox >
                 <Canvas Width="16" Height="16">
-                    <Path x:Name="circle" StrokeThickness="0">
+                    <Path x:Name="rectangle" StrokeThickness="0">
                         <Path.Data>
                             <RectangleGeometry Rect="0,0,16,16" RadiusX="3" RadiusY="3" />
                         </Path.Data>
                     </Path>
-                    <Path x:Name="cross">
+                    <Path x:Name="bars">
                         <Path.Data>
                             <GeometryGroup>
                                 <LineGeometry StartPoint="3,4" EndPoint="13,4" />
@@ -45,21 +45,21 @@
 
             <ControlTemplate.Triggers>
                 <Trigger Property="IsEnabled" Value="True">
-                    <Setter TargetName="circle" Property="Stroke"  
+                    <Setter TargetName="rectangle" Property="Stroke"  
                         Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
                         Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.5}" />
-                    <Setter TargetName="circle" Property="Fill"  
+                    <Setter TargetName="rectangle" Property="Fill"  
                         Value="{Binding Background, RelativeSource={RelativeSource TemplatedParent}}" />
-                    <Setter TargetName="cross" Property="Stroke"  
+                    <Setter TargetName="bars" Property="Stroke"  
                         Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
                         Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.5}" />
                 </Trigger>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter TargetName="circle" Property="Stroke"  Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}}" />
-                    <!--<Setter TargetName="circle" Property="Fill" 
+                    <Setter TargetName="rectangle" Property="Stroke"  Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}}" />
+                    <!--<Setter TargetName="rectangle" Property="Fill" 
                         Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
                         Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.3}" />-->
-                    <Setter TargetName="cross" Property="Stroke"  Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}}" />
+                    <Setter TargetName="bars" Property="Stroke"  Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}}" />
                 </Trigger>
             </ControlTemplate.Triggers>
         </ControlTemplate>

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -163,14 +164,13 @@ namespace MkZ.MediaPlayer
 
         private void ClockLocationRestore(SimpleClockControl.OffsetAndZoom loc)
         {
-            Action postMessage = () =>
-            {
-                if (loc.Zoom > 10) loc.Zoom = 10;
-                _zoomClock.Zoom = loc.Zoom;
+            Debug.WriteLine("Restore Clock Zoom from: {0:0.00} to {1:0.00}, Original Size: {2}", 
+                _zoomClock.Zoom, loc.Zoom, _zoomClock.NaturalSize);
 
-                _clock.SetDraggableOffset(loc.Offset, bAbsoluteOffset: true);
-            };
-            Application.Current.Dispatcher.BeginInvoke(postMessage);
+            if (loc.Zoom > 10) loc.Zoom = 10;
+            _zoomClock.Zoom = loc.Zoom;
+
+            _clock.SetDraggableOffset(loc.Offset, bAbsoluteOffset: true);
         }
 
         private void ClockLocationSave()
