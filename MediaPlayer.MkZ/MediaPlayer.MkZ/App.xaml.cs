@@ -17,7 +17,7 @@ namespace MkZ.MediaPlayer
         private void OnDispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
             string errorMessage = string.Format("An unhandled exception occurred: {0}", e.Exception.Message);
-            MessageBox.Show(errorMessage, "Error");
+            MessageBox.Show(errorMessage, "Fatal Error", MessageBoxButton.OK, MessageBoxImage.Error);
             e.Handled = true;
 
             Log.e("OnDispatcherUnhandledException {0}\n{1}", e.Exception, errorMessage);

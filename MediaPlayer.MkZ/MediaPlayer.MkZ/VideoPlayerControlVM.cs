@@ -361,8 +361,10 @@ namespace MkZ.MediaPlayer
                 else if (value > 1)
                     VideoPlayerElement.Volume = 1;
                 else
-                    VideoPlayerElement.Volume = value; 
-                
+                    VideoPlayerElement.Volume = value;
+
+                State.Volume = VideoPlayerElement.Volume;
+
                 NotifyPropertyChanged(); 
             }
         }

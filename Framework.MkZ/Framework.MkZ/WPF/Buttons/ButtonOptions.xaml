@@ -7,7 +7,7 @@
     xmlns:local="clr-namespace:MkZ.WPF.Buttons"
     xmlns:converters="clr-namespace:MkZ.WPF.Converters"
     mc:Ignorable="d" 
-    Foreground="SteelBlue" Background="Black"
+    Foreground="Cyan" Background="Gray"
     d:DesignHeight="45" d:DesignWidth="80">
     <Button.Resources>
         <ResourceDictionary>
@@ -21,7 +21,7 @@
         <ControlTemplate TargetType="Button">
             <ControlTemplate.Resources>
                 <Style TargetType="Path">
-                    <Setter Property="Fill" Value="Transparent"/>
+                    <Setter Property="Fill" Value="DarkGray"/>
                     <Setter Property="Stroke" Value="DarkGray"/>
                     <Setter Property="StrokeThickness" Value="2"/>
                 </Style>
@@ -51,17 +51,16 @@
                         Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
                         Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.5}" />
                     <Setter TargetName="circle" Property="Fill"  
-                        Value="{Binding Background, RelativeSource={RelativeSource TemplatedParent}, 
-                        Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.3}" />
+                        Value="{Binding Background, RelativeSource={RelativeSource TemplatedParent}}" />
                     <Setter TargetName="cross" Property="Stroke"  
                         Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
                         Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.5}" />
                 </Trigger>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter TargetName="circle" Property="Stroke"  Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}}" />
-                    <Setter TargetName="circle" Property="Fill" 
+                    <!--<Setter TargetName="circle" Property="Fill" 
                         Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
-                        Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.3}" />
+                        Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.3}" />-->
                     <Setter TargetName="cross" Property="Stroke"  Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}}" />
                 </Trigger>
             </ControlTemplate.Triggers>

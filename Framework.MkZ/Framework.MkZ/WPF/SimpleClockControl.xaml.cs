@@ -42,7 +42,8 @@ namespace MkZ.WPF
         public class ClockConfig : NotifyPropertyChangedImpl
         {
             private SerializableFontForWpf _font = new SerializableFontForWpf();
-            [Category("Clock"), TypeConverter(typeof(ExpandableObjectConverter))]
+            [Category("Clock")]
+            [TypeConverter(typeof(ExpandableObjectConverter))]
             [DisplayName("Clock Font")]
             public SerializableFontForWpf ClockFont
             {
@@ -50,34 +51,43 @@ namespace MkZ.WPF
                 set { SetProperty(ref _font, value); }
             }
 
-            //[Category("Clock"), TypeConverter(typeof(ExpandableObjectConverter))]
-            public MyClass MyClass { get; set; } = new MyClass();
-
             private SerializableBrush _background = new SerializableBrush(Brushes.Black);
+            [Category("Clock")]
+            //[TypeConverter(typeof(ExpandableObjectConverter))]
             public SerializableBrush Background { get => _background; set => SetProperty(ref _background, value); }
 
             private SerializableBrush _foreground = new SerializableBrush(Brushes.Wheat);
-            [Category("Clock"), TypeConverter(typeof(ExpandableObjectConverter))]
+            [Category("Clock")]
+            //[TypeConverter(typeof(ExpandableObjectConverter))]
             public SerializableBrush Foreground { get => _foreground; set => SetProperty(ref _foreground, value); }
 
             private SerializableBrush _hourHandBrush = new SerializableBrush(Brushes.Goldenrod);
-            [Category("Clock"), TypeConverter(typeof(ExpandableObjectConverter))]
+            [Category("Clock")]
+            //[TypeConverter(typeof(ExpandableObjectConverter))]
             public SerializableBrush HourHandBrush { get => _hourHandBrush; set => SetProperty(ref _hourHandBrush, value); }
 
             private SerializableBrush _minuteHandBrush = new SerializableBrush(Brushes.DarkCyan);
-            [Category("Clock"), TypeConverter(typeof(ExpandableObjectConverter))]
+            [Category("Clock")]
+            //[TypeConverter(typeof(ExpandableObjectConverter))]
             public SerializableBrush MinuteHandBrush { get => _minuteHandBrush; set => SetProperty(ref _minuteHandBrush, value); }
 
             private SerializableBrush _secondHandBrush = new SerializableBrush(Brushes.Red);
-            [Category("Clock"), TypeConverter(typeof(ExpandableObjectConverter))]
+            [Category("Clock")]
+            //[TypeConverter(typeof(ExpandableObjectConverter))]
             public SerializableBrush SecondHandBrush { get => _secondHandBrush; set => SetProperty(ref _secondHandBrush, value); }
 
             private SerializableBrush _knobBrush = new SerializableBrush(Brushes.Red);
-            [Category("Clock"), TypeConverter(typeof(ExpandableObjectConverter))]
+            [Category("Clock")]
+            //[TypeConverter(typeof(ExpandableObjectConverter))]
             public SerializableBrush KnobBrush { get => _knobBrush; set => SetProperty(ref _knobBrush, value); }
 
-            public OffsetAndZoom OZ_FullScreen { get; set; } = new OffsetAndZoom();
-            public OffsetAndZoom OZ_Normal { get; set; } = new OffsetAndZoom();
+            public OffsetAndZoom Bounds_FullScreen { get; set; } = new OffsetAndZoom();
+            public OffsetAndZoom Bounds_Normal { get; set; } = new OffsetAndZoom();
+
+            public bool IsValid()
+            {
+                return Foreground.C.A != 0 && HourHandBrush.C.A != 0;
+            }
         }
 
         public Grid Grid => _gridMain;
@@ -125,8 +135,9 @@ namespace MkZ.WPF
             OptionsWindow wnd = new OptionsWindow();
             wnd.Owner = Application.Current.MainWindow;
             wnd.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            wnd.SetPropertiesObject(this.DataContext); //, "Clock Font");
-            wnd.ExpandAll();
+            wnd.Height = 450;
+            wnd.SetPropertiesObject(this.DataContext, "Clock Font");
+            //wnd.ExpandAll();
             wnd.ShowDialog();
         }
     }

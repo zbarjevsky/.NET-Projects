@@ -64,7 +64,8 @@ namespace MkZ.MediaPlayer.Utils
             BackgroundImageFileName = config.BackgroundImageFileName;
 
             ShowTestControls = config.ShowTestControls;
-            ClockConfig = config.ClockConfig;
+            if(config.ClockConfig.IsValid())
+                ClockConfig = config.ClockConfig;
 
             SupportedImageExtensions = config.SupportedImageExtensions;
             SupportedAudioExtensions = config.SupportedAudioExtensions;
@@ -507,8 +508,12 @@ namespace MkZ.MediaPlayer.Utils
             _dataFolder = Path.Combine(commonPath, "MarkZ", assemblyName);
             Directory.CreateDirectory(_dataFolder);
 
+            string debug = "";
+#if DEBUG
+            debug = "_debug";
+#endif
             string date = DateTime.Now.ToString("yyyy_MM_dd-HH_mm_ss");
-            string fileName = string.Format("{0}_{1}.xml", assemblyName, "Files");
+            string fileName = string.Format("{0}_{1}{2}.xml", assemblyName, "Files", debug);
             _fileName = Path.Combine(_dataFolder, fileName);
         }
 

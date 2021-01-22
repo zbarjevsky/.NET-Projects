@@ -51,12 +51,14 @@
                 <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" >
                     <buttons:ButtonClose Width="30" Height="30" Margin="8,0" Padding="1,-5,1,4" 
                             Background="Black" Foreground="Red" FontSize="26" FontWeight="Bold" 
-                            ToolTip="Close"
+                            ToolTip="Close Alt+F4"
                             Click="ButtonClose_Click"/>
                     <buttons:ButtonFullScreen Width="30" Height="30" Margin="8,0" Padding="1,-5,1,4" 
                             Background="Black" Foreground="Cyan" 
                             FontSize="26" FontWeight="Bold" 
-                            ToolTip="Full Screen" IsChecked="{Binding IsFullScreen, Mode=OneWay, FallbackValue=False}"
+                            ToolTip="{Binding IsFullScreen, Mode=OneWay, Converter={StaticResource BooleanToTextConverter},
+                                ConverterParameter='Exit Full Screen F11|Full Screen F11'}" 
+                            IsChecked="{Binding IsFullScreen, Mode=OneWay, FallbackValue=False}"
                             Click="ButtonFullScreen_Click"/>
                 </StackPanel>
             </Border>

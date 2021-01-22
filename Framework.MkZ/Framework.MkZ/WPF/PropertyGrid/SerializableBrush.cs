@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
@@ -19,6 +20,7 @@ namespace MkZ.WPF.PropertyGrid
     [TypeConverter(typeof(SerializableBrushToColorConverter))]
     public class SerializableBrush : NotifyPropertyChangedImpl
     {
+        public const string BRUSH = "Brush: ";
         [NonSerialized]
         private readonly System.Windows.Media.BrushConverter _colorConverter = new System.Windows.Media.BrushConverter();
 
@@ -26,6 +28,7 @@ namespace MkZ.WPF.PropertyGrid
         public static implicit operator SerializableBrush(System.Drawing.Color color) => new SerializableBrush(color);
 
         private SolidColorBrush _brush = Brushes.Transparent;
+
         [XmlIgnore]
         [Browsable(false)]
         public SolidColorBrush B { get => _brush; set => SetProperty(ref _brush, value); }
@@ -65,12 +68,26 @@ namespace MkZ.WPF.PropertyGrid
             ColorW = color;
         }
 
+        public SerializableBrush(string userDefinedValue)
+        {
+            if (userDefinedValue.StartsWith(BRUSH))
+                userDefinedValue = userDefinedValue.Substring(BRUSH.Length);
+
+            int pos = userDefinedValue.IndexOf(" - ");
+            if (pos > 0)
+                userDefinedValue = userDefinedValue.Substring(0, pos);
+
+            //ColorW = System.Drawing.Color.FromName(userDefinedValue);
+            ColorW = System.Drawing.ColorTranslator.FromHtml(userDefinedValue);
+        }
+
         public SerializableBrush()
         {
 
         }
 
         [Browsable(false)]
+        [XmlAttribute]
         public string Color
         {
             get
@@ -87,66 +104,36 @@ namespace MkZ.WPF.PropertyGrid
 
         public override string ToString()
         {
-            return "SerializableBrush: " + ColorW.Name;
+            string hexARGB = $"#{ColorW.A:X2}{ColorW.R:X2}{ColorW.G:X2}{ColorW.B:X2}";
+            string byteARGB = $"{ColorW.A},{ColorW.R},{ColorW.G},{ColorW.B}";
+            string htmlRGB = System.Drawing.ColorTranslator.ToHtml(ColorW);
+
+            System.Drawing.Color c = KnownColorFinder.FindName(ColorW);
+            if (c.IsKnownColor)
+                return BRUSH + byteARGB + " - " + c.Name;
+            return BRUSH + byteARGB;
         }
     }
 
-    //public class WinFormsColorConverter : System.Drawing.ColorConverter
-    //{
-    //    public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
-    //    {
-    //        return false;
-    //    }
-
-    //    public override bool GetStandardValuesExclusive(ITypeDescriptorContext context)
-    //    {
-    //        return true;
-    //    }
-
-    //    public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
-    //    {
-    //        Debug.WriteLine("CanConvertFrom type " + sourceType);
-    //        if (sourceType == typeof(string))
-    //            return true;
-    //        return base.CanConvertFrom(context, sourceType);
-    //    }
-
-    //    public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
-    //    {
-    //        Debug.WriteLine("ConvertFrom type " + value);
-    //        if (value is System.Drawing.Color c)
-    //            return new SerializableBrush() { ColorW = c };
-    //        return base.ConvertFrom(context, culture, value);
-    //    }
-
-    //    //public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
-    //    //{
-    //    //    Debug.WriteLine("CanConvertTo type " + destinationType);
-    //    //    return destinationType == typeof(System.Drawing.Color);
-    //    //}
-
-    //    //public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-    //    //{
-    //    //    Debug.WriteLine("ConvertTo Value: " + value + ", Type: " + destinationType);
-    //    //    if (value is SerializableBrush br && destinationType == typeof(string))
-    //    //        return br.ColorW.Name;
-    //    //    return System.Drawing.Color.Black;
-    //    //}
-    //}
-
-    [Editor(typeof(SerializableBrushColorEditor), typeof(System.Drawing.Design.UITypeEditor))]
-    //[TypeConverter(typeof(MyTypeConverter))]
-    public class MyClass
+    internal class KnownColorFinder
     {
-        #region Properties
-        [Editor(typeof(SerializableBrushColorEditor), typeof(System.Drawing.Design.UITypeEditor))]
-        [TypeConverter(typeof(SerializableBrushToColorConverter))]
-        public System.Drawing.Color Color { get; set; }
-        #endregion
+        static ILookup<int, System.Drawing.Color> colorLookup = typeof(System.Drawing.Color)
+              .GetProperties(BindingFlags.Public | BindingFlags.Static)
+              .Select(f => (System.Drawing.Color)f.GetValue(null, null))
+              .Where(c => c.IsNamedColor)
+              .ToLookup(c => c.ToArgb());
 
-        public override string ToString()
+        public static System.Drawing.Color FindName(System.Drawing.Color c)
         {
-            return Color.Name;
+            //reset A value
+            int val = (int)(0xFF000000 | c.ToArgb());
+            foreach (var namedColor in colorLookup[val])
+            {
+                Console.WriteLine(namedColor.Name);
+                return namedColor;
+            }
+
+            return c;
         }
     }
 
@@ -156,6 +143,22 @@ namespace MkZ.WPF.PropertyGrid
         {
             return false;
         }
+
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        {
+            Debug.WriteLine("SerializableBrush CanConvertFrom type '{0}'", sourceType);
+            if (sourceType == typeof(string))
+                return true;
+            return base.CanConvertFrom(context, sourceType);
+        }
+
+        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        {
+            Debug.WriteLine("SerializableBrush ConvertFrom value: '{0}'", value);
+            if (value is string s)
+                return new SerializableBrush(s);
+            return base.ConvertFrom(context, culture, value);
+        }
     }
 
     internal class SerializableBrushColorEditor : System.Drawing.Design.UITypeEditor
@@ -164,14 +167,14 @@ namespace MkZ.WPF.PropertyGrid
         {
             return System.Drawing.Design.UITypeEditorEditStyle.DropDown;
         }
-        
-        public override bool GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext context)
-        {
-            return false;
-        }
 
         public override object EditValue(System.ComponentModel.ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
+            //System.Windows.Forms.ColorDialog cd = new System.Windows.Forms.ColorDialog();
+            //cd.Color = value;
+            //cd.ShowDialog();
+            //val = cd.Color;
+
             System.Drawing.Design.ColorEditor cd = new System.Drawing.Design.ColorEditor();
             if (value is SerializableBrush cl)
             {
@@ -181,6 +184,20 @@ namespace MkZ.WPF.PropertyGrid
             }
 
             return value;
+        }
+        
+        public override bool GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext context)
+        {
+            return true;
+        }
+
+        public override void PaintValue(System.Drawing.Design.PaintValueEventArgs e)
+        {
+            string whatImage = e.Value.ToString();
+            if (e.Value is SerializableBrush br)
+            {
+                e.Graphics.FillRectangle(new System.Drawing.SolidBrush(br.ColorW), e.Bounds);
+            }
         }
     }
 }

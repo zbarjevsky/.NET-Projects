@@ -17,7 +17,7 @@
                 <Style TargetType="Path">
                     <Setter Property="Fill" Value="DarkGray"/>
                     <Setter Property="Stroke" Value="DarkGray"/>
-                    <Setter Property="StrokeThickness" Value="2"/>
+                    <Setter Property="StrokeThickness" Value="3"/>
                 </Style>
             </ControlTemplate.Resources>
             <Viewbox >
@@ -30,19 +30,19 @@
                     <Path x:Name="fullScreenOpen">
                         <Path.Data>
                             <GeometryGroup>
-                                <LineGeometry StartPoint="6,18" EndPoint="6,5" />
+                                <LineGeometry StartPoint="6,18" EndPoint="6,4.5" />
                                 <LineGeometry StartPoint="6,6" EndPoint="18,6" />
                                 <LineGeometry StartPoint="18,18" EndPoint="6,6" />
                                 
                                 <LineGeometry StartPoint="22,6" EndPoint="35,6" />
-                                <LineGeometry StartPoint="34,6" EndPoint="34,18" />
+                                <LineGeometry StartPoint="34,5" EndPoint="34,18" />
                                 <LineGeometry StartPoint="22,18" EndPoint="34,6" />
 
-                                <LineGeometry StartPoint="34,22" EndPoint="34,35" />
+                                <LineGeometry StartPoint="34,22" EndPoint="34,35.5" />
                                 <LineGeometry StartPoint="34,34" EndPoint="22,34" />
                                 <LineGeometry StartPoint="22,22" EndPoint="34,34" />
 
-                                <LineGeometry StartPoint="18,34" EndPoint="5,34" />
+                                <LineGeometry StartPoint="18,34" EndPoint="4.5,34" />
                                 <LineGeometry StartPoint="6,34" EndPoint="6,22" />
                                 <LineGeometry StartPoint="18,22" EndPoint="6,34" />
                             </GeometryGroup>

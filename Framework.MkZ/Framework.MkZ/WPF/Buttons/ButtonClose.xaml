@@ -20,21 +20,21 @@
                 <Style TargetType="Path">
                     <Setter Property="Fill" Value="{Binding Foreground}"/>
                     <Setter Property="Stroke" Value="{Binding Foreground}"/>
-                    <Setter Property="StrokeThickness" Value="2"/>
+                    <Setter Property="StrokeThickness" Value="4"/>
                 </Style>
             </ControlTemplate.Resources>
             <Viewbox >
-                <Canvas Width="16" Height="16">
+                <Canvas Width="40" Height="40">
                     <Path x:Name="circle" StrokeThickness="0">
                         <Path.Data>
-                            <RectangleGeometry Rect="0,0,16,16" RadiusX="3" RadiusY="3" />
+                            <RectangleGeometry Rect="0,0,40,40" RadiusX="10" RadiusY="10" />
                         </Path.Data>
                     </Path>
                     <Path x:Name="cross">
                         <Path.Data>
                             <GeometryGroup>
-                                <LineGeometry StartPoint="3,3" EndPoint="13,13" />
-                                <LineGeometry StartPoint="3,13" EndPoint="13,3" />
+                                <LineGeometry StartPoint="6,6" EndPoint="33,33" />
+                                <LineGeometry StartPoint="6,33" EndPoint="33,6" />
                             </GeometryGroup>
                         </Path.Data>
                     </Path>

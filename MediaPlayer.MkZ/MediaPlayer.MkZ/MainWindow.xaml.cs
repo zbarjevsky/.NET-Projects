@@ -106,7 +106,7 @@ namespace MkZ.MediaPlayer
         {
             MediaDB.SelectedMediaFileIndex = _cmbFilesList.SelectedIndex;
 
-            ClockLocationSave(Context.Config.Configuration.ClockConfig.OZ_Normal);
+            ClockLocationSave(Context.Config.Configuration.ClockConfig.Bounds_Normal);
 
             Context.Config.Save();
             _player.ClosePlayer();
@@ -151,7 +151,7 @@ namespace MkZ.MediaPlayer
         {
             _clock.DataContext = Context.Config.Configuration.ClockConfig;
 
-            ClockLocationRestore(Context.Config.Configuration.ClockConfig.OZ_Normal);
+            ClockLocationRestore(Context.Config.Configuration.ClockConfig.Bounds_Normal);
 
             Context.Config.Configuration.ClockConfig.NotifyPropertyChangedAll();
         }
@@ -287,21 +287,21 @@ namespace MkZ.MediaPlayer
         {
             if (this.WindowStyle == WindowStyle.None)
             {
-                ClockLocationSave(Context.Config.Configuration.ClockConfig.OZ_FullScreen);
+                ClockLocationSave(Context.Config.Configuration.ClockConfig.Bounds_FullScreen);
                 rowHeader.Height = new GridLength(46);
                 this.WindowStyle = WindowStyle.ThreeDBorderWindow;
                 this.WindowState = WindowState.Normal;
                 PlayerVM.IsFullScreen = false;
-                ClockLocationRestore(Context.Config.Configuration.ClockConfig.OZ_Normal);
+                ClockLocationRestore(Context.Config.Configuration.ClockConfig.Bounds_Normal);
             }
             else //full screen
             {
-                ClockLocationSave(Context.Config.Configuration.ClockConfig.OZ_Normal);
+                ClockLocationSave(Context.Config.Configuration.ClockConfig.Bounds_Normal);
                 rowHeader.Height = new GridLength(0);
                 this.WindowStyle = WindowStyle.None;
                 this.WindowState = WindowState.Maximized;
                 PlayerVM.IsFullScreen = true;
-                ClockLocationRestore(Context.Config.Configuration.ClockConfig.OZ_FullScreen);
+                ClockLocationRestore(Context.Config.Configuration.ClockConfig.Bounds_FullScreen);
             }
         }
 
@@ -444,7 +444,10 @@ namespace MkZ.MediaPlayer
         {
             string file = Context.Config.Configuration.BackgroundImageFileName;
             if (!File.Exists(file))
+            {
+                ApplicationCommands.Open.Execute(this, null);
                 return;
+            }
 
             string dir = Path.GetDirectoryName(file);
             List<string> list = new List<string>();

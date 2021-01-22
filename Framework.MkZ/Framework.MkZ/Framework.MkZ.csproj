@@ -179,7 +179,6 @@
     <Compile Include="Windows\User32_WindowsMessages.cs" />
     <Compile Include="Windows\XmlSerializerHelper.cs" />
     <Compile Include="Windows\CommonUtils.cs" />
-    <Compile Include="WinForms\WpfBrushColorUIEditor.cs" />
     <Compile Include="WPF\AnimationHelper.cs" />
     <Compile Include="WPF\AutoGreyableImage.cs" />
     <Compile Include="WPF\Buttons\ButtonClose.xaml.cs">
@@ -204,6 +203,7 @@
       <DependentUpon>ButtonWithTextToggle.xaml</DependentUpon>
     </Compile>
     <Compile Include="WPF\Buttons\DropDownButton.cs" />
+    <Compile Include="WPF\Converters\BooleanToTextConverter.cs" />
     <Compile Include="WPF\Converters\ColorConverters.cs" />
     <Compile Include="WPF\DisplayTopologyUserControl.xaml.cs">
       <DependentUpon>DisplayTopologyUserControl.xaml</DependentUpon>
@@ -225,6 +225,7 @@
       <DependentUpon>OptionsWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="WPF\PropertyGrid\SerializableBrush.cs" />
+    <Compile Include="WPF\PropertyGrid\SerializableFontForWpf.cs" />
     <Compile Include="WPF\RelayCommand.cs" />
     <Compile Include="WPF\ScrollDragZoom.cs" />
     <Compile Include="WPF\SimpleClockControl.xaml.cs">
