@@ -36,13 +36,22 @@ namespace MkZ.MediaPlayer.Utils
 
         public List<string> SupportedVideoExtensions { get; set; }
 
-        private WPF.SimpleClockControl.ClockConfig _clockColors = new WPF.SimpleClockControl.ClockConfig();
+        private WPF.SimpleClockControl.ClockConfig _clockConfig = new WPF.SimpleClockControl.ClockConfig();
         [Category("Clock"), TypeConverter(typeof(ExpandableObjectConverter))]
         [DisplayName("Clock Configuration")]
         public WPF.SimpleClockControl.ClockConfig ClockConfig
         {
-            get { return _clockColors; }
-            set { SetProperty(ref _clockColors, value); }
+            get { return _clockConfig; }
+            set { SetProperty(ref _clockConfig, value); }
+        }
+
+        private WPF.ReiKiZoomableProgress.ReiKiConfig _ReiKiConfig = new WPF.ReiKiZoomableProgress.ReiKiConfig();
+        [Category("ReiKi"), TypeConverter(typeof(ExpandableObjectConverter))]
+        [DisplayName("ReiKi Configuration")]
+        public WPF.ReiKiZoomableProgress.ReiKiConfig ReiKiConfig
+        {
+            get { return _ReiKiConfig; }
+            set { SetProperty(ref _ReiKiConfig, value); }
         }
 
         public void EnsureHasValues()
@@ -64,8 +73,12 @@ namespace MkZ.MediaPlayer.Utils
             BackgroundImageFileName = config.BackgroundImageFileName;
 
             ShowTestControls = config.ShowTestControls;
-            if(config.ClockConfig.IsValid())
+
+            if (config.ClockConfig.IsValid())
                 ClockConfig = config.ClockConfig;
+
+            if (config.ReiKiConfig.IsValid())
+                ReiKiConfig = config.ReiKiConfig;
 
             SupportedImageExtensions = config.SupportedImageExtensions;
             SupportedAudioExtensions = config.SupportedAudioExtensions;

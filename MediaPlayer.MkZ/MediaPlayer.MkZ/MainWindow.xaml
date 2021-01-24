@@ -272,6 +272,11 @@
                             IsChecked="{Binding Config.Configuration.ClockConfig.IsVisible}"
                             Background="Black" Foreground="{StaticResource ButtonForegroundMain}" 
                             ToolTip="Show/Hide Clock" />
+                        <buttons:ButtonWithTextToggle x:Name="_btnToggleReiKi" Width="30" Margin="4,0"
+                            ButtonTextUnchecked="R" ButtonTextChecked="r" FontSize="20"
+                            IsChecked="{Binding Config.Configuration.ReiKiConfig.IsVisible}"
+                            Background="Black" Foreground="{StaticResource ButtonForegroundMain}" 
+                            ToolTip="Show/Hide ReiKi Progress" />
                         <Border Width="3" Height="25" BorderThickness="1" BorderBrush="{StaticResource ButtonForegroundMain}" />
                         <buttons:ButtonWithTextRepeat Width="30" Margin="4,0"
                             ButtonText="&lt;&lt;" FontSize="26"
@@ -286,6 +291,10 @@
                     </StackPanel>
                 </Border>
             </Viewbox>
+            <wpf:ReiKiZoomableProgress x:Name="_reiKiProgress" Grid.Row="2" Grid.ColumnSpan="2" Margin="10" 
+                Width="600" Height="60"
+                Visibility="{Binding IsChecked, ElementName=_btnToggleReiKi, Converter={StaticResource BoolToVisibilityConverter}}"
+                VerticalAlignment="Bottom" HorizontalAlignment="Left" />
         </Grid>
     </Grid>
 </Window>

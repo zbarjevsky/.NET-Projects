@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,19 +27,6 @@ namespace MkZ.WPF
     /// </summary>
     public partial class SimpleClockControl : UserControl
     {
-        public class OffsetAndZoom
-        {
-            public double Zoom { get; set; } = 1.0;
-
-            //location change from center
-            public Vector Offset { get; set; } = new Vector();
-
-            public override string ToString()
-            {
-                return string.Format("OffsetAndZoom: X:{0:0.0}, Y:{1:0.0}, Zoom:{2:0.00}", Offset.X, Offset.Y, Zoom);
-            }
-        }
-
         public class ClockConfig : NotifyPropertyChangedImpl
         {
             private bool _isVisible = false;
@@ -100,6 +88,10 @@ namespace MkZ.WPF
 
         public Grid Grid => _gridMain;
 
+        public ScrollDragZoomControl Zoomable { get; private set; }
+
+        public static implicit operator ScrollDragZoomControl(SimpleClockControl clock) => clock.Zoomable;
+
         DispatcherTimer _timer = new DispatcherTimer();
 
         public SimpleClockControl()
@@ -114,6 +106,12 @@ namespace MkZ.WPF
             _timer.Tick += timer_Tick;
 
             FadeAnimationHelper animationHelper = new FadeAnimationHelper(this, 2, _btnHide, _btnSettings);
+
+            Zoomable = new ScrollDragZoomControl(this, null, true);
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
         }
 
         private void timer_Tick(object sender, EventArgs e)

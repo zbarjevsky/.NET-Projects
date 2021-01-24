@@ -34,7 +34,8 @@ namespace MkZ.MediaPlayer
         private MediaPlayerCommands _mediaPlayerCommands;
         private readonly FadeAnimationHelper _controlsHideAndShow;
         private readonly GridLengthAnimationHelper _hideHeaderAnimationHelper;
-        ScrollDragZoom _zoomClock = null, _zoomImage = null;
+        ScrollDragZoom _zoomImage = null;
+
         private CursorArrow _cursorArrow = new CursorArrow();
 
         private VideoPlayerContext Context => VideoPlayerContext.Instance;
@@ -63,11 +64,12 @@ namespace MkZ.MediaPlayer
 
             _controlsHideAndShow = new FadeAnimationHelper(this, 2, _imagesNavigation, _cursorArrow);
 
-            _clock.Draggable();
-            _zoomClock = new ScrollDragZoom(_clock, _scrollMain);
+            _clock.Zoomable.EnableZoom(_scrollMain);
+            _reiKiProgress.Zoomable.EnableZoom(_scrollMain);
 
             _zoomImage = new ScrollDragZoom(_imageBackground, _scrollMain);
             _zoomImage.FitWindow(0);
+
 
             Context.Config.Configuration.PropertyChanged += Config_PropertyChanged;
 
@@ -80,7 +82,7 @@ namespace MkZ.MediaPlayer
         {
             Context.Config.Load();
 
-            RestoreClockConfig();
+            RestoreZoomablesConfig();
 
             //add or select file if exists
             ProcessCommandLine();
@@ -112,7 +114,7 @@ namespace MkZ.MediaPlayer
         {
             MediaDB.SelectedMediaFileIndex = _cmbFilesList.SelectedIndex;
 
-            ClockLocationSave();
+            ZoomablesLocationSave();
 
             Context.Config.Save();
             _player.ClosePlayer();
@@ -153,38 +155,27 @@ namespace MkZ.MediaPlayer
             return true;
         }
 
-        private void RestoreClockConfig()
+        private void RestoreZoomablesConfig()
         {
             _clock.DataContext = Context.Config.Configuration.ClockConfig;
+            _clock.Zoomable.BoundsSet(Context.Config.Configuration.ClockConfig.Bounds_Normal);
 
-            ClockLocationRestore(Context.Config.Configuration.ClockConfig.Bounds_Normal);
-
-            Context.Config.Configuration.ClockConfig.NotifyPropertyChangedAll();
+            _reiKiProgress.DataContext = Context.Config.Configuration.ReiKiConfig;
+            _reiKiProgress.Zoomable.BoundsSet(Context.Config.Configuration.ReiKiConfig.Bounds_Normal);
         }
 
-        private void ClockLocationRestore(SimpleClockControl.OffsetAndZoom loc)
-        {
-            Debug.WriteLine("Restore Clock Zoom from: {0:0.00} to {1:0.00}, Original Size: {2}", 
-                _zoomClock.Zoom, loc.Zoom, _zoomClock.NaturalSize);
-
-            if (loc.Zoom > 10) loc.Zoom = 10;
-            _zoomClock.Zoom = loc.Zoom;
-
-            _clock.SetDraggableOffset(loc.Offset, bAbsoluteOffset: true);
-        }
-
-        private void ClockLocationSave()
+        private void ZoomablesLocationSave()
         {
             if (this.WindowStyle == WindowStyle.None) //full screen
-                ClockLocationSave1(Context.Config.Configuration.ClockConfig.Bounds_FullScreen);
+            {
+                _clock.Zoomable.BoundsUpload(Context.Config.Configuration.ClockConfig.Bounds_FullScreen);
+                _reiKiProgress.Zoomable.BoundsUpload(Context.Config.Configuration.ReiKiConfig.Bounds_FullScreen);
+            }
             else
-                ClockLocationSave1(Context.Config.Configuration.ClockConfig.Bounds_Normal);
-        }
-
-        private void ClockLocationSave1(SimpleClockControl.OffsetAndZoom loc)
-        {
-            loc.Zoom = _zoomClock.Zoom;
-            loc.Offset = _clock.GetDraggableOffset();
+            {
+                _clock.Zoomable.BoundsUpload(Context.Config.Configuration.ClockConfig.Bounds_Normal);
+                _reiKiProgress.Zoomable.BoundsUpload(Context.Config.Configuration.ReiKiConfig.Bounds_Normal);
+            }
         }
 
         private void ComboMediaFiles_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -298,7 +289,7 @@ namespace MkZ.MediaPlayer
 
         public void ToggleFullScreen()
         {
-            ClockLocationSave();
+            ZoomablesLocationSave();
 
             if (this.WindowStyle == WindowStyle.None)//go normal
             {
@@ -309,7 +300,8 @@ namespace MkZ.MediaPlayer
                 this.WindowStyle = WindowStyle.ThreeDBorderWindow;
                 this.WindowState = WindowState.Normal;
                 PlayerVM.IsFullScreen = false;
-                ClockLocationRestore(Context.Config.Configuration.ClockConfig.Bounds_Normal);
+                _clock.Zoomable.BoundsSet(Context.Config.Configuration.ClockConfig.Bounds_Normal);
+                _reiKiProgress.Zoomable.BoundsSet(Context.Config.Configuration.ReiKiConfig.Bounds_Normal);
             }
             else //go full screen
             {
@@ -320,7 +312,8 @@ namespace MkZ.MediaPlayer
                 this.WindowStyle = WindowStyle.None;
                 this.WindowState = WindowState.Maximized;
                 PlayerVM.IsFullScreen = true;
-                ClockLocationRestore(Context.Config.Configuration.ClockConfig.Bounds_FullScreen);
+                _clock.Zoomable.BoundsSet(Context.Config.Configuration.ClockConfig.Bounds_FullScreen);
+                _reiKiProgress.Zoomable.BoundsSet(Context.Config.Configuration.ReiKiConfig.Bounds_FullScreen);
             }
         }
 

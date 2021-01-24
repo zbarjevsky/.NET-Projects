@@ -7,6 +7,7 @@
              xmlns:converters="clr-namespace:MkZ.WPF.Converters" 
              xmlns:buttons="clr-namespace:MkZ.WPF.Buttons"
              mc:Ignorable="d" 
+             Loaded="UserControl_Loaded"
              IsVisibleChanged="UserControl_IsVisibleChanged"
              FontSize="{Binding ClockFont.FontSize, FallbackValue=50.0}" 
              FontWeight="{Binding ClockFont.FontWeight, FallbackValue=Bold}" 

@@ -103,11 +103,7 @@ namespace MkZ.WPF
                 _content.MouseWheel -= content_MouseWheel;
             }
             _content = null;
-
-            if(_scrollViewer != null)
-            {
-                _scrollViewer = null;
-            }
+            _scrollViewer = null;
         }
 
         public void UpdateLayout()

@@ -229,8 +229,12 @@
     </Compile>
     <Compile Include="WPF\PropertyGrid\SerializableBrush.cs" />
     <Compile Include="WPF\PropertyGrid\SerializableFontForWpf.cs" />
+    <Compile Include="WPF\ReiKiZoomableProgress.xaml.cs">
+      <DependentUpon>ReiKiZoomableProgress.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF\RelayCommand.cs" />
     <Compile Include="WPF\ScrollDragZoom.cs" />
+    <Compile Include="WPF\ScrollDragZoomControl.cs" />
     <Compile Include="WPF\SimpleClockControl.xaml.cs">
       <DependentUpon>SimpleClockControl.xaml</DependentUpon>
     </Compile>
@@ -365,6 +369,10 @@
     <Page Include="WPF\PropertyGrid\OptionsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\ReiKiZoomableProgress.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WPF\SimpleClockControl.xaml">
       <Generator>MSBuild:Compile</Generator>
