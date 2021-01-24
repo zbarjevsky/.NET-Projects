@@ -24,6 +24,9 @@
                 <SolidColorBrush Color="DimGray" Opacity="0.75" />
             </Border.Background>
             <DockPanel Grid.Row="1" Margin="10,6" VerticalAlignment="Top" HorizontalAlignment="Stretch" >
+                <buttons:ButtonWithText Width="30" Margin="6,0" ButtonText="O" Foreground="{StaticResource ButtonVolumeColor}" 
+                    ToolTip="Reload" ToolTipService.ShowOnDisabled="True"
+                    Click="Reload_Click" />
                 <local:ButtonPlayPause Width="30" Margin="6,0" Foreground="{StaticResource ButtonForegroundPlay}" 
                       ToolTip="Toggle Play Pause" ToolTipService.ShowOnDisabled="True"
                       Command="MediaCommands.TogglePlayPause" 

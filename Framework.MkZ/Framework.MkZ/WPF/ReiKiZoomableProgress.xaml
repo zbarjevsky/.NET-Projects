@@ -6,17 +6,45 @@
              xmlns:local="clr-namespace:MkZ.WPF"
              mc:Ignorable="d" Foreground="Navy" Background="Transparent"
              Loaded="_control_Loaded"
+             MouseDoubleClick="ReiKi_MouseDoubleClick"
+             IsVisibleChanged="_control_IsVisibleChanged"
              x:Name="_control"
              Width="600" Height="100"
              d:DesignHeight="150" d:DesignWidth="820">
     <Grid x:Name="_gridMain">
+        <Grid.ContextMenu>
+            <ContextMenu>
+                <MenuItem Header="Start" Click="OnStart">
+                    <MenuItem.Icon>
+                        <Image Source="/Images/Ok.ico" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Stop" Click="OnStop">
+                    <MenuItem.Icon>
+                        <Image Source="/Images/Cancel.ico" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator />
+                <MenuItem x:Name="mnuBellOnOff" Header="ThinkerBell at the end" Click="OnBellOnOffClicked"/>
+                <Separator />
+                <MenuItem x:Name="chkNoProgress" Header="None" Click="OnBellIntervalClicked"/>
+                <MenuItem x:Name="chkBell1min" Header="1 Min" Click="OnBellIntervalClicked"/>
+                <MenuItem x:Name="chkBell2min" Header="2 Min" Click="OnBellIntervalClicked"/>
+                <MenuItem x:Name="chkBell3min" Header="3 Min" Click="OnBellIntervalClicked"/>
+                <MenuItem x:Name="chkBell4min" Header="4 Min" Click="OnBellIntervalClicked"/>
+                <MenuItem x:Name="chkBell5min" Header="5 Min" Click="OnBellIntervalClicked"/>
+                <Separator />
+                <MenuItem x:Name="mnuHide" Header="Hide" Click="OnMnuHide"/>
+            </ContextMenu>
+        </Grid.ContextMenu>
+        
         <Viewbox Margin="0">
             <Border x:Name="_border" BorderThickness="2" CornerRadius="10"
                     Width="{Binding Width, ElementName=_control}" 
                     Height="{Binding Height, ElementName=_control}" 
                     BorderBrush="{Binding Foreground, ElementName=_control}">
                 <Border.Background>
-                    <SolidColorBrush Color="Black" Opacity="0.3"/>
+                    <SolidColorBrush Color="Black" Opacity="0.5"/>
                 </Border.Background>
                 <Grid>
                     <Grid.ColumnDefinitions>
@@ -25,17 +53,25 @@
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <local:GradientProgressBar  x:Name="_progress"
-                        Margin="10" Background="{Binding Background, ElementName=_border}"
-                        Minimum="0" Maximum="100" Value="66"
-                        CheckBoxVisibility="Visible">
+                    <local:GradientProgressBar  x:Name="_progress" Margin="10"
+                        Background="{Binding Background, ElementName=_border}"
+                        TickColor="{Binding Foreground, ElementName=_control}"
+                        Minimum="0" Maximum="360" Value="60" 
+                        CheckBoxToolTip="Bell On"  CheckBoxVisibility="Visible">
                         <local:GradientProgressBar.LayoutTransform>
                             <RotateTransform CenterX="0.5" CenterY="0.5" Angle="0"/>
                         </local:GradientProgressBar.LayoutTransform>
                     </local:GradientProgressBar>
-                    <TextBlock Grid.Row="0" Grid.ColumnSpan="2" FontWeight="Medium"
+                    <Viewbox>
+                        <Grid Height="35">
+                            <TextBlock x:Name="_txt" Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,1"
+                               Text="1:18/3:00" FontSize="12" FontWeight="Bold" 
                                VerticalAlignment="Center" HorizontalAlignment="Center"
-                               Text="3 min"/>
+                               Foreground="{Binding Foreground, ElementName=_control, 
+                                Converter={StaticResource BrushOpacityConverter}, ConverterParameter=1}" 
+                               />
+                        </Grid>
+                    </Viewbox>
                 </Grid>
             </Border>
         </Viewbox>

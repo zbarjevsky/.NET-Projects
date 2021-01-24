@@ -95,18 +95,18 @@ namespace MkZ.MediaPlayer
         }
     }
 
-    public class VideoPlayerControlVM : NotifyPropertyChangedImpl, IVideoPlayer
+    public class VideoPlayerControlVM : NotifyPropertyChangedImpl, IMediaPlayer
     {
         public VideoPlayerContext Context => VideoPlayerContext.Instance;
         
         private ScrollDragZoom _scrollDragger = null;
         private ScrollViewer _scrollPlayerContainer = null;
 
-        public Action<IVideoPlayer> MaximizeAction = (player) => { };
+        public Action<IMediaPlayer> MaximizeAction = (player) => { };
         
-        public Action<IVideoPlayer> MediaStartedAction { get; set; } = (player) => { };
-        public Action<IVideoPlayer> MediaEndedAction { get; set; } = (player) => { };
-        public Func<VideoPlayerControlVM, ExceptionRoutedEventArgs, bool> MediaFailedAction { get; set; } = (vm, e) => true;
+        public Action<IMediaPlayer> MediaStartedAction { get; set; } = (player) => { };
+        public Action<IMediaPlayer> MediaEndedAction { get; set; } = (player) => { };
+        public Func<object, ExceptionRoutedEventArgs, bool> MediaFailedAction { get; set; } = (sender, e) => true;
         
         public Action<VideoPlayerControlVM> LeftButtonClick = (vm) => { vm.TogglePlayPauseState(); };
         public Action<VideoPlayerControlVM> LeftButtonDoubleClick = (vm) => { };
@@ -283,7 +283,7 @@ namespace MkZ.MediaPlayer
                     FileName = fileName;
                     VideoPlayerElement.Source = null;
                     VideoPlayerElement.Source = new Uri(fileName);
-                    MediaState = MediaState.Manual;
+                    MediaState = MediaState.Play;
                     Title = Path.GetFileName(fileName);
 
                     Volume = State.Volume;
@@ -291,12 +291,27 @@ namespace MkZ.MediaPlayer
                     //sometimes loading mp3 stuck
                     //https://stackoverflow.com/questions/6716100/strange-behavior-with-wpf-mediaelement
                     VideoPlayerElement.ScrubbingEnabled = false; //faster load
-                    Position = State.Position;
 
+                    //wait for source opened
+                    for (int i = 0; i < 30; i++)
+                    {
+                        Debug.WriteLine("Open Duration: {0}. {1}", i, NaturalDuration);
+                        if (NaturalDuration > 0)
+                            break;
+
+                        VideoPlayerElement.ForceRender();
+                        Thread.Sleep(33);
+                    }
+
+                    State.NaturalDuration = NaturalDuration;
+                    Position = State.Position;
+                    
                     Prompt = "Loading, Please Wait...";
 
                     //this will open media - reset state on MediaOpened event
                     VideoPlayerElement.Play();
+
+                    NotifyPropertyChangedAll();
                 }
                 else
                 {
@@ -551,19 +566,18 @@ namespace MkZ.MediaPlayer
 
                 _scrollDragger.NaturalSize = new Size(VideoPlayerElement.NaturalVideoWidth, VideoPlayerElement.NaturalVideoHeight);
 
+                Thread.Sleep(33); //wait to render 1 frame
                 if (State.MediaState == MediaState.Stop)
                     Stop();
                 if (State.MediaState == MediaState.Pause || State.MediaState == MediaState.Manual)
                     Pause();
 
-                Thread.Sleep(100);
-                Volume = State.Volume;
                 IsMuted = false;
                 VideoPlayerElement.ScrubbingEnabled = true; //enable preview
-                MediaState = MediaStateRetrieve();
 
                 Prompt = Title;
                 State.NaturalDuration = NaturalDuration;
+                State.MediaState = MediaState = MediaStateRetrieve();
 
                 Debug.WriteLine("Media Opened: {0}\nPosition: {1}, Size: {2}, Duration: {3}",
                     VideoPlayerElement.Source, VideoPlayerElement.Position, NaturalSize, NaturalDuration);

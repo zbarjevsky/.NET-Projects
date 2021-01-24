@@ -70,17 +70,18 @@ namespace MkZ.MediaPlayer
             _zoomImage = new ScrollDragZoom(_imageBackground, _scrollMain);
             _zoomImage.FitWindow(0);
 
-
             Context.Config.Configuration.PropertyChanged += Config_PropertyChanged;
 
             _hideHeaderAnimationHelper = new GridLengthAnimationHelper(this, rowHeader);
             //_hideHeaderAnimationHelper.PostAnimationAction = (ctrl) => 
             //{ this.OnRenderSizeChanged(new SizeChangedInfo(ctrl, new Size(this.Width, this.Height), false, true)); }; 
+
+            Context.Config.Load();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            Context.Config.Load();
+            this.ForceRender();
 
             RestoreZoomablesConfig();
 
@@ -244,7 +245,7 @@ namespace MkZ.MediaPlayer
             }
         }
 
-        private void OnMediaEnded(IVideoPlayer vm)
+        private void OnMediaEnded(IMediaPlayer vm)
         {
             PlayList playList = MediaDB.SelectedPlayList;
             bool can_play_next = NextTrack_CanExecute();
@@ -270,11 +271,20 @@ namespace MkZ.MediaPlayer
                     NextTrack_Executed(bResetPositionAndPlay: true);
                 }
             }
+            else if (playList.PlayMode == ePlayMode.Random)
+            {
+
+            }
+            else //no next prev - stop
+            {
+                _reiKiProgress.Pause();
+            }
         }
 
-        private bool OnMediaFailed(VideoPlayerControlVM vm, ExceptionRoutedEventArgs e)
+        private bool OnMediaFailed(object sender, ExceptionRoutedEventArgs e)
         {
-            PopUp.Error("Open Media Failed: \n" + vm.FileName + "\n" + e.ErrorException.Message);
+            if(sender is VideoPlayerControlVM vm)
+                PopUp.Error("Open Media Failed: \n" + vm.FileName + "\n" + e.ErrorException.Message);
             return true;
         }
 

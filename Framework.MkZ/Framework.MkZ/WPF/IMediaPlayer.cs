@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 
-namespace MkZ.MediaPlayer
+namespace MkZ.WPF
 {
-    public interface IVideoPlayer : INotifyPropertyChanged
+    public interface IMediaPlayer : INotifyPropertyChanged
     {
-        Action<IVideoPlayer> MediaStartedAction { get; set; }
-        Action<IVideoPlayer> MediaEndedAction { get; set; }
-        Func<VideoPlayerControlVM, ExceptionRoutedEventArgs, bool> MediaFailedAction { get; set; }
+        Action<IMediaPlayer> MediaStartedAction { get; set; }
+        Action<IMediaPlayer> MediaEndedAction { get; set; }
+        Func<object, ExceptionRoutedEventArgs, bool> MediaFailedAction { get; set; }
 
         MediaState MediaState { get; }
         string FileName { get; }

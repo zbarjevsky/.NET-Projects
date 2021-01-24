@@ -77,6 +77,14 @@ namespace MkZ.MediaPlayer.Controls
             _popupSliderTooltip.IsOpen = false;
         }
 
+        private void Reload_Click(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is VideoPlayerControlVM vm)
+            {
+                vm.Open(vm.State);
+            }
+        }
+
         private void Skip_Backward_Click(object sender, RoutedEventArgs e)
         {
             Skip(-10);

@@ -23,6 +23,9 @@ namespace MkZ.WPF
         }
     }
 
+    /// <summary>
+    /// Common functionality for Scroll Drag and Zoom
+    /// </summary>
     public class ScrollDragZoomControl
     {
         private ScrollDragZoom _scrollDragZoom;

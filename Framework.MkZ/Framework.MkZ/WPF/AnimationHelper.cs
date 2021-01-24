@@ -213,7 +213,7 @@ namespace MkZ.WPF
         private void _container_MouseMove(object sender, MouseEventArgs e)
         {
             Point pt = e.GetPosition(_row);
-            ShowRow(pt.Y < InitialRowHeight.Value || !CanHide, CanHide);
+            ShowRow(pt.Y < 2*InitialRowHeight.Value || !CanHide, CanHide);
         }
     }
 }

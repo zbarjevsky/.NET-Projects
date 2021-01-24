@@ -129,7 +129,6 @@
     <Compile Include="Utils\ObjectToStringConverter.cs" />
     <Compile Include="Utils\PathToFileNameConverter.cs" />
     <Compile Include="Utils\TimeConverter.cs" />
-    <Compile Include="IVideoPlayer.cs" />
     <Compile Include="Utils\AppConfig.cs" />
     <Compile Include="Utils\IPlayerMainWindow.cs" />
     <Compile Include="Utils\MediaPlayerCommands.cs" />

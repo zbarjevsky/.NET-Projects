@@ -98,6 +98,7 @@
     <Compile Include="Windows\IconUtilities.cs" />
     <Compile Include="Windows\Log.cs" />
     <Compile Include="Windows\MouseHook.cs" />
+    <Compile Include="Windows\NETSoundPlayer.cs" />
     <Compile Include="Windows\ObservableRangeCollection.cs" />
     <Compile Include="Windows\ProcessExtensions.cs" />
     <Compile Include="Windows\UsbEject.cs" />
@@ -218,6 +219,7 @@
     <Compile Include="WPF\GridLengthAnimation.cs" />
     <Compile Include="WPF\ItemsControlExtensions.cs" />
     <Compile Include="Windows\NonStickMouse.cs" />
+    <Compile Include="WPF\IMediaPlayer.cs" />
     <Compile Include="WPF\PopupInfoWindow.xaml.cs">
       <DependentUpon>PopupInfoWindow.xaml</DependentUpon>
     </Compile>
@@ -300,6 +302,9 @@
   <ItemGroup>
     <Resource Include="Images\Ok.ico" />
     <Resource Include="Images\Cancel.ico" />
+    <Content Include="Sounds\ding.mp3">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Tools.ico" />
     <Resource Include="WPF\WPFMessageBox\Images\Stop32x32.png" />
     <Resource Include="WPF\WPFMessageBox\Images\ok_plain.ico" />
