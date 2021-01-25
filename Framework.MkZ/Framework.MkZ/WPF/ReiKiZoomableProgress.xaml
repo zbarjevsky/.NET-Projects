@@ -4,12 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MkZ.WPF"
-             mc:Ignorable="d" Foreground="Navy" Background="Transparent"
+             mc:Ignorable="d" Foreground="DarkGreen" Background="Transparent"
              Loaded="_control_Loaded"
              MouseDoubleClick="ReiKi_MouseDoubleClick"
              IsVisibleChanged="_control_IsVisibleChanged"
              x:Name="_control"
-             Width="600" Height="100"
+             Width="600" Height="60" MinWidth="200" MinHeight="40"
              d:DesignHeight="150" d:DesignWidth="820">
     <Grid x:Name="_gridMain">
         <Grid.ContextMenu>
@@ -64,12 +64,18 @@
                     </local:GradientProgressBar>
                     <Viewbox>
                         <Grid Height="35">
-                            <TextBlock x:Name="_txt" Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,1"
-                               Text="1:18/3:00" FontSize="12" FontWeight="Bold" 
-                               VerticalAlignment="Center" HorizontalAlignment="Center"
-                               Foreground="{Binding Foreground, ElementName=_control, 
-                                Converter={StaticResource BrushOpacityConverter}, ConverterParameter=1}" 
-                               />
+                            <Border Margin="9" Padding="2" CornerRadius="3" Background="{Binding Background, ElementName=_border}" >
+                                <!--<Border.Background>
+                                    <SolidColorBrush Color="Black" Opacity="0.5" />
+                                </Border.Background>-->
+                                <TextBlock x:Name="_txt" Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,1"
+                                       Text="1:18/3:00" FontSize="12" FontWeight="Bold" Foreground="Wheat" 
+                                       VerticalAlignment="Center" HorizontalAlignment="Center" >
+                                    <!--<TextBlock.BitmapEffect>
+                                        <DropShadowBitmapEffect Color="Black" Direction="320" ShadowDepth="6" Opacity="0.6" Softness="1" />
+                                    </TextBlock.BitmapEffect>-->
+                                </TextBlock>
+                            </Border>
                         </Grid>
                     </Viewbox>
                 </Grid>

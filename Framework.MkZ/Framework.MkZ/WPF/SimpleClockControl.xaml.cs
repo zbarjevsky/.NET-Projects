@@ -77,6 +77,23 @@ namespace MkZ.WPF
             //[TypeConverter(typeof(ExpandableObjectConverter))]
             public SerializableBrush KnobBrush { get => _knobBrush; set => SetProperty(ref _knobBrush, value); }
 
+            private double _refreshRate = 1000.0;
+            [Category("Clock")]
+            [DisplayName("Clock Refresh Rate (ms)")]
+            public double RefreshTime
+            {
+                get { return _refreshRate; }
+                set 
+                {
+                    if (value > 1000)
+                        value = 1000.0;
+                    if (value < 10)
+                        value = 10;
+
+                    SetProperty(ref _refreshRate, value); 
+                }
+            }
+
             public OffsetAndZoom Bounds_FullScreen { get; set; } = new OffsetAndZoom();
             public OffsetAndZoom Bounds_Normal { get; set; } = new OffsetAndZoom();
 
@@ -94,6 +111,8 @@ namespace MkZ.WPF
 
         DispatcherTimer _timer = new DispatcherTimer();
 
+        private ClockConfig Config => DataContext as ClockConfig;
+
         public SimpleClockControl()
         {
             DataContext = new ClockConfig();
@@ -102,7 +121,7 @@ namespace MkZ.WPF
 
             UpdateHands();
 
-            _timer.Interval = TimeSpan.FromSeconds(0.266);
+            _timer.Interval = TimeSpan.FromMilliseconds(Config.RefreshTime);
             _timer.Tick += timer_Tick;
 
             FadeAnimationHelper animationHelper = new FadeAnimationHelper(this, 2, _btnHide, _btnSettings);
@@ -112,6 +131,14 @@ namespace MkZ.WPF
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
+            _timer.Interval = TimeSpan.FromMilliseconds(Config.RefreshTime);
+            Config.PropertyChanged += Config_PropertyChanged;
+        }
+
+        private void Config_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == nameof(ClockConfig.RefreshTime))
+                _timer.Interval = TimeSpan.FromMilliseconds(Config.RefreshTime);
         }
 
         private void timer_Tick(object sender, EventArgs e)
@@ -125,7 +152,9 @@ namespace MkZ.WPF
 
             _minute.Angle = now.TimeOfDay.TotalMinutes * 6.0;
             _hour.Angle = now.TimeOfDay.TotalHours * 30.0;
-            _second.Angle = now.TimeOfDay.TotalSeconds * 6.0;
+
+            double second = (Config.RefreshTime < 300) ? now.TimeOfDay.TotalSeconds : now.TimeOfDay.Seconds;
+            _second.Angle = second * 6.0;
         }
 
         private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)

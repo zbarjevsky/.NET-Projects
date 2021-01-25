@@ -248,7 +248,7 @@ namespace MkZ.WPF
                 {
                     this.ToolTip = string.Format("Bell: {0}, Interval: {1:0} Time Left: {2:0}",
                         Config.BellAtTheEnd ? "On" : "Off", interval, remaining);
-                    _txt.Text = string.Format("{0}/{1}", value, interval);
+                    _txt.Text = string.Format("{0}/{1}/{2}", value, interval, remaining);
                 }
                 else
                 {
