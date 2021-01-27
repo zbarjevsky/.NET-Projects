@@ -247,7 +247,7 @@
         <mediaplayer:VideoPlayerControl Grid.Row="1" x:Name="_player"
                MediaFileInfo="{Binding SelectedItem, ElementName=_cmbFilesList}" />
         
-        <Grid Grid.Row="1">
+        <Grid x:Name="_gridToolBox" Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="5*"/>
@@ -296,5 +296,10 @@
                 Visibility="{Binding IsChecked, ElementName=_btnToggleReiKi, Converter={StaticResource BoolToVisibilityConverter}}"
                 VerticalAlignment="Bottom" HorizontalAlignment="Left" />
         </Grid>
+
+        <controls:FadingAutoZoomingLabelControl Grid.Row="1" Width="200" Height="40" 
+            Foreground="{StaticResource ButtonVolumeColor}"                                
+            Text="{Binding DataContext.PlayerVM.Volume, ElementName=_gridMain, StringFormat=Volume: 0.#%}"
+            VerticalAlignment="Bottom" Margin="0,0,0,150" />
     </Grid>
 </Window>

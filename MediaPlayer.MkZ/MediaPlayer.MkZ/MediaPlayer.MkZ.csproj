@@ -97,8 +97,8 @@
     <Compile Include="Controls\CursorArrow.xaml.cs">
       <DependentUpon>CursorArrow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\VolumeLabelControl.xaml.cs">
-      <DependentUpon>VolumeLabelControl.xaml</DependentUpon>
+    <Compile Include="Controls\FadingZoomingLabelControl.xaml.cs">
+      <DependentUpon>FadingZoomingLabelControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\MagnifyingGlassUserControl.xaml.cs">
       <DependentUpon>MagnifyingGlassUserControl.xaml</DependentUpon>
@@ -191,7 +191,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\VolumeLabelControl.xaml">
+    <Page Include="Controls\FadingZoomingLabelControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

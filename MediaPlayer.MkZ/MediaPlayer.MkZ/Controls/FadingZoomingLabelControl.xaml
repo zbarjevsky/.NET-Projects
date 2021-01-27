@@ -1,0 +1,35 @@
+﻿<UserControl x:Class="MkZ.MediaPlayer.Controls.FadingAutoZoomingLabelControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MkZ.MediaPlayer.Controls"
+             mc:Ignorable="d" 
+             x:Name="_control"
+             Loaded="_control_Loaded"
+             Unloaded="_control_Unloaded"
+             MouseEnter="_control_MouseEnter"
+             MouseLeave="_control_MouseLeave"
+             Foreground="Red"
+             d:DesignHeight="80" d:DesignWidth="200">
+    <Grid>
+        <Border x:Name="_volumeLabel" Margin="0" CornerRadius="10" 
+                Width="{Binding Width, ElementName=_control}" 
+                Height="{Binding Height, ElementName=_control}" 
+                HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+            <Border.Background>
+                <SolidColorBrush Color="Black" Opacity="0.3" />
+            </Border.Background>
+            <Viewbox>
+                <TextBlock Text="{Binding Text, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, FallbackValue='Volume 33%'}" 
+                    Padding="6,0,6,3" TextAlignment="Center" VerticalAlignment="Center"
+                    TargetUpdated="TextBlock_TextUpdated" FontSize="22" FontWeight="Medium" >
+                    <TextBlock.BitmapEffect>
+                        <DropShadowBitmapEffect Direction="320" ShadowDepth="6" Opacity="1" Softness="1" 
+                            Color="{Binding Foreground, ElementName=_control, Converter={StaticResource ColorConverter}}" />
+                    </TextBlock.BitmapEffect>
+                </TextBlock>
+            </Viewbox>
+        </Border>
+    </Grid>
+</UserControl>

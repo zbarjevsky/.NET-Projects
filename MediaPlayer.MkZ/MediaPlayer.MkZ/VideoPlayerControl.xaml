@@ -41,8 +41,6 @@
                           MouseWheel="mePlayer_MouseWheel" />-->
         </ScrollViewer>
 
-        <controls:VolumeLabelControl Grid.Row="1" />
-
         <Viewbox x:Name="_systemButtons" Margin="6" HorizontalAlignment="Right" VerticalAlignment="Top">
             <Border Margin="10" Padding="1" CornerRadius="10" Height="40">
                 <Border.Background>

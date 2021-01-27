@@ -71,11 +71,11 @@ namespace MkZ.WPF
         /// </summary>
         public IMediaPlayer MediaPlayer
         {
-            get { return (IMediaPlayer)GetValue(ValueProperty); }
-            set { SetValue(ValueProperty, value); }
+            get { return (IMediaPlayer)GetValue(MediaPlayerProperty); }
+            set { SetValue(MediaPlayerProperty, value); }
         }
 
-        public static readonly DependencyProperty ValueProperty =
+        public static readonly DependencyProperty MediaPlayerProperty =
             DependencyProperty.Register(nameof(MediaPlayer), typeof(IMediaPlayer), typeof(ReiKiZoomableProgress), 
                 new UIPropertyMetadata(null, OnValueChanged));
 
@@ -248,7 +248,7 @@ namespace MkZ.WPF
                 {
                     this.ToolTip = string.Format("Bell: {0}, Interval: {1:0} Time Left: {2:0}",
                         Config.BellAtTheEnd ? "On" : "Off", interval, remaining);
-                    _txt.Text = string.Format("{0}/{1}/{2}", value, interval, remaining);
+                    _txt.Text = string.Format("{0} {1} {2}", value, interval, remaining);
                 }
                 else
                 {
