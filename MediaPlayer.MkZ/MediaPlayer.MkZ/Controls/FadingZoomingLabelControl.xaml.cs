@@ -64,7 +64,9 @@ namespace MkZ.MediaPlayer.Controls
             
             _timer.Interval = TimeSpan.FromSeconds(0.333);
             _timer.Tick += timer_Tick;
-            _timer.Start();
+
+            if(!WPFUtils.GetInDesignMode())
+                _timer.Start();
 
             _bAllowShow = true;
 

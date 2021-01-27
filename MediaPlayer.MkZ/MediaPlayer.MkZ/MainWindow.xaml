@@ -299,7 +299,7 @@
 
         <controls:FadingAutoZoomingLabelControl Grid.Row="1" Width="200" Height="40" 
             Foreground="{StaticResource ButtonVolumeColor}"                                
-            Text="{Binding DataContext.PlayerVM.Volume, ElementName=_gridMain, StringFormat=Volume: 0.#%}"
+            Text="{Binding DataContext.PlayerVM.Volume, ElementName=_gridMain, StringFormat=Volume: 0.#%, FallbackValue='Volume: 12%'}"
             VerticalAlignment="Bottom" Margin="0,0,0,150" />
     </Grid>
 </Window>
