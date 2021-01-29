@@ -271,12 +271,16 @@
                             ButtonTextUnchecked="Õ" ButtonTextChecked="Ô" FontSize="20"
                             IsChecked="{Binding Config.Configuration.ClockConfig.IsVisible}"
                             Background="Black" Foreground="{StaticResource ButtonForegroundMain}" 
-                            ToolTip="Show/Hide Clock" />
+                            ToolTip="{Binding Config.Configuration.ClockConfig.IsVisible, 
+                            Converter={StaticResource BooleanToTextConverter}, 
+                            ConverterParameter='Hide Clock|Show Clock'}" />
                         <buttons:ButtonWithTextToggle x:Name="_btnToggleReiKi" Width="30" Margin="4,0"
                             ButtonTextUnchecked="R" ButtonTextChecked="r" FontSize="20"
                             IsChecked="{Binding Config.Configuration.ReiKiConfig.IsVisible}"
                             Background="Black" Foreground="{StaticResource ButtonForegroundMain}" 
-                            ToolTip="Show/Hide ReiKi Progress" />
+                            ToolTip="{Binding Config.Configuration.ReiKiConfig.IsVisible, 
+                            Converter={StaticResource BooleanToTextConverter}, 
+                            ConverterParameter='Hide ReiKi Progress|Show ReiKi Progress'}" />
                         <Border Width="3" Height="25" BorderThickness="1" BorderBrush="{StaticResource ButtonForegroundMain}" />
                         <buttons:ButtonWithTextRepeat Width="30" Margin="4,0"
                             ButtonText="&lt;&lt;" FontSize="26"

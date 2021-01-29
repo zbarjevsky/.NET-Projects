@@ -13,7 +13,7 @@
              Foreground="Red"
              d:DesignHeight="80" d:DesignWidth="200">
     <Grid>
-        <Border x:Name="_volumeLabel" Margin="0" CornerRadius="10" 
+        <Border x:Name="_volumeLabel" Margin="0" CornerRadius="30" 
                 Width="{Binding Width, ElementName=_control}" 
                 Height="{Binding Height, ElementName=_control}" 
                 HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
