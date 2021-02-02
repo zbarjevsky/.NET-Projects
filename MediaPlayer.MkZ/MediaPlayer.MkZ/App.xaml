@@ -38,12 +38,17 @@
             </ObjectDataProvider.MethodParameters>
         </ObjectDataProvider>
 
+        <system:Double x:Key="CursorHeight" >33</system:Double>
+        <local:VideoPlayerContext x:Key="Context" />
+
         <Style x:Key="{x:Type ToolTip}" TargetType="ToolTip">
             <Setter Property="OverridesDefaultStyle" Value="true" />
             <Setter Property="HasDropShadow" Value="True" />
-            <Setter Property="VerticalOffset" Value="30" />
+            <Setter Property="VerticalOffset" Value="{Binding Path=CursorHeight, Source={StaticResource Context}}" />
+            <Setter Property="FontSize" Value="{Binding Path=ToolTipFontSize, Source={StaticResource Context}}" />
+            <Setter Property="FontFamily" Value="Jokerman" />
             <Setter Property="FontWeight" Value="Medium" />
-            <Setter Property="Foreground" Value="Navy" />
+            <Setter Property="Foreground" Value="{Binding Path=ToolTipForeground, Source={StaticResource Context}}" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ToolTip">

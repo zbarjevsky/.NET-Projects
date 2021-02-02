@@ -5,8 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-
-
+using System.Windows.Media;
 using MkZ.MediaPlayer.Utils;
 using MkZ.Windows;
 using MkZ.WPF;
@@ -16,6 +15,10 @@ namespace MkZ.MediaPlayer
     public class VideoPlayerContext : NotifyPropertyChangedImpl
     {
         public static VideoPlayerContext Instance { get; } = new VideoPlayerContext() { InDesignMode = WPFUtils.GetInDesignMode() };
+
+        public static double CursorHeight { get { return Application.Current.MainWindow.ActualHeight / 20; } }
+        public static double ToolTipFontSize { get { return Application.Current.MainWindow.ActualHeight / 40; } }
+        public static Brush ToolTipForeground { get { return Application.Current.MainWindow.Background; } }
 
         public AppConfig Config { get; } = new AppConfig();
 
