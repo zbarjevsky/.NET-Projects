@@ -114,7 +114,7 @@ namespace MkZ.MediaPlayer
 
         public void ClosePlayer()
         {
-            _playerControlVM.Clear();
+            _playerControlVM.SaveAndClear();
         }
 
         private void ButtonFullScreen_Click(object sender, RoutedEventArgs e)

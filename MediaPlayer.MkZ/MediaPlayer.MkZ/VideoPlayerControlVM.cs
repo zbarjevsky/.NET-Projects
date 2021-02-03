@@ -103,7 +103,9 @@ namespace MkZ.MediaPlayer
         private ScrollViewer _scrollPlayerContainer = null;
 
         public Action<IMediaPlayer> MaximizeAction = (player) => { };
-        
+
+        DispatcherTimer _timer = new DispatcherTimer();
+
         public Action<IMediaPlayer> MediaStartedAction { get; set; } = (player) => { };
         public Action<IMediaPlayer> MediaEndedAction { get; set; } = (player) => { };
         public Func<object, ExceptionRoutedEventArgs, bool> MediaFailedAction { get; set; } = (sender, e) => true;
@@ -216,14 +218,15 @@ namespace MkZ.MediaPlayer
         {
             RecreateMediaElement(false);
 
-            DispatcherTimer timer = new DispatcherTimer();
-            timer.Interval = TimeSpan.FromSeconds(0.233);
-            timer.Tick += timer_Tick;
-            timer.Start();
+            _timer.Interval = TimeSpan.FromSeconds(0.233);
+            _timer.Tick += timer_Tick;
         }
 
         private void timer_Tick(object sender, EventArgs e)
         {
+            if (!CheckMediaOpened())
+                return;
+
             if(IsAttached)
                 NotifyPropertyChanged(nameof(Position));
             
@@ -256,12 +259,10 @@ namespace MkZ.MediaPlayer
         public void Open(MediaFileInfo info)
         {
             //save previous state
-            Clear();
+            SaveAndClear();
 
             //set new state
             State = info;
-
-            Background = Brushes.Transparent;
 
             Debug.WriteLine("RestoreState: {0}\nPosition: {1}, Size: {2}, Duration: {3}",
                 State.FileName, State.Position, NaturalSize, NaturalDuration);
@@ -274,7 +275,7 @@ namespace MkZ.MediaPlayer
             Open(State.FileName);
         }
 
-        public void Open(string fileName)
+        private void Open(string fileName)
         {
             try
             {
@@ -293,23 +294,27 @@ namespace MkZ.MediaPlayer
                     VideoPlayerElement.ScrubbingEnabled = false; //faster load
 
                     //wait for source opened
-                    for (int i = 0; i < 30; i++)
+                    for (int i = 0; i < 10; i++)
                     {
-                        Debug.WriteLine("Open Duration: {0}. {1}", i, NaturalDuration);
+                        Debug.WriteLine("Check NaturalDuration, try {0} - {1:###,##0} sec", i, NaturalDuration);
                         if (NaturalDuration > 0)
                             break;
 
                         VideoPlayerElement.ForceRender();
-                        Thread.Sleep(33);
+                        Thread.Sleep(100);
                     }
 
                     State.NaturalDuration = NaturalDuration;
                     Position = State.Position;
-                    
+                    Debug.WriteLine("Open(file): Position: {0} - {1}", State.Position, State.NaturalDuration);
+
                     Prompt = "Loading, Please Wait...";
+                    _stopperMediaOpened.Restart();
 
                     //this will open media - reset state on MediaOpened event
                     VideoPlayerElement.Play();
+
+                    _timer.Start();
 
                     NotifyPropertyChangedAll();
                 }
@@ -425,9 +430,9 @@ namespace MkZ.MediaPlayer
             _scrollDragger.ScrollToCenter();
         }
 
-        public void Clear()
+        public void SaveAndClear()
         {
-            if (string.IsNullOrWhiteSpace(this.FileName))
+            if (!string.IsNullOrWhiteSpace(this.FileName))
                 State.CopyFrom(this, _scrollDragger);
 
             Stop();
@@ -436,6 +441,7 @@ namespace MkZ.MediaPlayer
             VideoPlayerElement.Source = null;
             FileName = "";
             MediaState = MediaState.Manual;
+            Background = Brushes.Transparent;
 
             Title = "N/A";
             Prompt = "Use Ctrl+O or Drop file here...";
@@ -466,10 +472,11 @@ namespace MkZ.MediaPlayer
 
         public void Stop()
         {
+            _timer.Stop();
+            MediaState = MediaState.Stop;
             if (VideoPlayerElement.Source != null)
             {
                 VideoPlayerElement.Stop();
-                MediaState = MediaState.Stop;
             }
         }
 
@@ -558,22 +565,63 @@ namespace MkZ.MediaPlayer
             }
         }
 
+        private Stopwatch _stopperMediaOpened = new Stopwatch();
+        private bool CheckMediaOpened()
+        {
+            if (!_stopperMediaOpened.IsRunning)
+                return true; //media is opened
+
+            //check why media did not open
+            TimeSpan waitToOpen = _stopperMediaOpened.Elapsed;
+            double timeout = 3000.0;
+            if (State.NaturalDuration > 0)
+                timeout = 100.0 + State.NaturalDuration / 1000.0;
+
+            if (waitToOpen.TotalMilliseconds > timeout) //timeout
+            {
+                Debug.WriteLine("Error: Timeout for Open: {0:0.0} ms > {1:0.0} ms, Pos: {2}, FileName: {3}",
+                    waitToOpen.TotalMilliseconds, timeout, State.Position, State.FileName);
+
+                _timer.Stop();
+                Stop();
+                if (File.Exists(State.FileName))
+                {
+                    Open(State.FileName);
+                }
+            }
+            else //not opened yet - wait more
+            {
+                Debug.WriteLine("* Wait for Open: {0:0.0} ms, Pos: {1}, FileName: {2}",
+                    waitToOpen.TotalMilliseconds, State.Position, State.FileName);
+            }
+
+            return false;
+        }
+
         private void VideoPlayerElement_MediaOpened(object sender, RoutedEventArgs e)
         {
             try
             {
+                _stopperMediaOpened.Stop();
+                Debug.WriteLine("MediaOpened: Position: {0} - {1}, Open took: {2:0.0} ms", 
+                    State.Position, State.NaturalDuration, _stopperMediaOpened.Elapsed.TotalMilliseconds);
+
+                TimeSpan waitForRender = TimeSpan.FromSeconds(0.5);
+                if (State.Position > waitForRender)
+                    State.Position -= waitForRender;
+
                 Position = State.Position;
 
                 _scrollDragger.NaturalSize = new Size(VideoPlayerElement.NaturalVideoWidth, VideoPlayerElement.NaturalVideoHeight);
 
-                Thread.Sleep(33); //wait to render 1 frame
+                Thread.Sleep(waitForRender); //wait to render video
                 if (State.MediaState == MediaState.Stop)
                     Stop();
                 if (State.MediaState == MediaState.Pause || State.MediaState == MediaState.Manual)
                     Pause();
 
-                IsMuted = false;
                 VideoPlayerElement.ScrubbingEnabled = true; //enable preview
+                IsMuted = false;
 
                 Prompt = Title;
                 State.NaturalDuration = NaturalDuration;
@@ -603,6 +651,7 @@ namespace MkZ.MediaPlayer
 
         private void VideoPlayerElement_MediaFailed(object sender, ExceptionRoutedEventArgs e)
         {
+            Stop();
             Log.e("1 VideoPlayerElement_MediaFailed({0}) - {1} - {2}", State.Volume, State.MediaState, State.FileName);
             e.Handled = MediaFailedAction(this, e);
         }

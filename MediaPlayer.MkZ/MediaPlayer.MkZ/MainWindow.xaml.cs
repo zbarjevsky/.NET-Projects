@@ -212,12 +212,12 @@ namespace MkZ.MediaPlayer
                 }
                 else
                 {
-                    PlayerVM.Open(new MediaFileInfo());
+                    PlayerVM.SaveAndClear();
                 }
             }
             else
             {
-                PlayerVM.Open(new MediaFileInfo());
+                PlayerVM.SaveAndClear();
             }
         }
 
@@ -231,6 +231,8 @@ namespace MkZ.MediaPlayer
 
         private void SetPlayList(PlayList playList)
         {
+            _cmbFilesList.SelectedIndex = -1;
+
             if (playList != null && playList.IsSelectedPlayList)
             {
                 _mnuPlayLists.Header = string.Format("{0} [{1}]", playList.Name, playList.MediaFiles.Count);
@@ -238,8 +240,11 @@ namespace MkZ.MediaPlayer
                 //_btnSelectPlayList.Content = playList.Name;
                 _cmbFilesList.ItemsSource = playList.MediaFiles;
 
-                if (playList.MediaFiles.Count > 0 && MediaDB.SelectedMediaFileIndex < playList.MediaFiles.Count)
+                if (playList.MediaFiles.Count > 0 && playList.SelectedMediaFileIndex < playList.MediaFiles.Count)
+                {
+                    playList.MediaFiles[playList.SelectedMediaFileIndex].MediaState = MediaState.Pause;
                     _cmbFilesList.SelectedIndex = playList.SelectedMediaFileIndex;
+                }
 
                 Context.NotifyPropertyChangedAll();
             }
@@ -445,8 +450,11 @@ namespace MkZ.MediaPlayer
 
             if (dataContext is PlayList list)
             {
-                list.IsSelectedPlayList = true;
-                SetPlayList(list);
+                if (list.IsSelectedPlayList == false)
+                {
+                    list.IsSelectedPlayList = true;
+                }
+
                 e.Handled = true;
                 _cmbFilesList.Focus(); //close menu
             }
