@@ -289,7 +289,7 @@ namespace MkZ.MediaPlayer
 
                     Volume = State.Volume;
                     IsMuted = true; //load silently
-                    //sometimes loading mp3 stuck
+
                     //https://stackoverflow.com/questions/6716100/strange-behavior-with-wpf-mediaelement
                     VideoPlayerElement.ScrubbingEnabled = false; //faster load
 
@@ -306,9 +306,11 @@ namespace MkZ.MediaPlayer
 
                     State.NaturalDuration = NaturalDuration;
                     Position = State.Position;
-                    Debug.WriteLine("Open(file): Position: {0} - {1}", State.Position, State.NaturalDuration);
+                    Debug.WriteLine("Open(file): Position: {0} - Duration: {1:###,###}", State.Position, State.NaturalDuration);
 
                     Prompt = "Loading, Please Wait...";
+
+                    //sometimes loading media is stuck - use timer to detect it
                     _stopperMediaOpened.Restart();
 
                     //this will open media - reset state on MediaOpened event
@@ -433,7 +435,10 @@ namespace MkZ.MediaPlayer
         public void SaveAndClear()
         {
             if (!string.IsNullOrWhiteSpace(this.FileName))
+            {
+                Pause(); //always save in Pause state
                 State.CopyFrom(this, _scrollDragger);
+            }
 
             Stop();
 
@@ -442,6 +447,7 @@ namespace MkZ.MediaPlayer
             FileName = "";
             MediaState = MediaState.Manual;
             Background = Brushes.Transparent;
+            _OpenMediaTryCount = 0;
 
             Title = "N/A";
             Prompt = "Use Ctrl+O or Drop file here...";
@@ -565,6 +571,7 @@ namespace MkZ.MediaPlayer
             }
         }
 
+        private int _OpenMediaTryCount = 0;
         private Stopwatch _stopperMediaOpened = new Stopwatch();
         private bool CheckMediaOpened()
         {
@@ -579,14 +586,24 @@ namespace MkZ.MediaPlayer
 
             if (waitToOpen.TotalMilliseconds > timeout) //timeout
             {
+                _OpenMediaTryCount++;
                 Debug.WriteLine("Error: Timeout for Open: {0:0.0} ms > {1:0.0} ms, Pos: {2}, FileName: {3}",
                     waitToOpen.TotalMilliseconds, timeout, State.Position, State.FileName);
 
+                _stopperMediaOpened.Stop();
                 _timer.Stop();
                 Stop();
-                if (File.Exists(State.FileName))
+
+                if (_OpenMediaTryCount < 2)
                 {
-                    Open(State.FileName);
+                    if (File.Exists(State.FileName))
+                    {
+                        Open(State.FileName);
+                    }
+                }
+                else //exceed number of tries
+                {
+                    PopUp.Error("Media open FAILED: \n" + State.FileName, "Open Media File Error");
                 }
             }
             else //not opened yet - wait more
@@ -602,25 +619,33 @@ namespace MkZ.MediaPlayer
         {
             try
             {
+                TimeSpan position = State.Position;
+
                 _stopperMediaOpened.Stop();
-                Debug.WriteLine("MediaOpened: Position: {0} - {1}, Open took: {2:0.0} ms", 
-                    State.Position, State.NaturalDuration, _stopperMediaOpened.Elapsed.TotalMilliseconds);
+                Debug.WriteLine("MediaOpened: Position: {0} - {1}, Open took: {2:0.0} ms",
+                    position, State.NaturalDuration, _stopperMediaOpened.Elapsed.TotalMilliseconds);
 
                 TimeSpan waitForRender = TimeSpan.FromSeconds(0.5);
-                if (State.Position > waitForRender)
-                    State.Position -= waitForRender;
+                if (position > waitForRender)
+                {
+                    Position = position - waitForRender;
+                    Thread.Sleep(waitForRender); //wait to render video
+                }
+                else //position is almost zero
+                {
+                    Thread.Sleep(waitForRender); //wait to render video
+                    Position = TimeSpan.FromSeconds(0);
+                }
 
-                Position = State.Position;
+                VideoPlayerElement.ScrubbingEnabled = true; //enable preview
 
-                _scrollDragger.NaturalSize = new Size(VideoPlayerElement.NaturalVideoWidth, VideoPlayerElement.NaturalVideoHeight);
-
-                Thread.Sleep(waitForRender); //wait to render video
                 if (State.MediaState == MediaState.Stop)
                     Stop();
                 if (State.MediaState == MediaState.Pause || State.MediaState == MediaState.Manual)
                     Pause();
 
-                VideoPlayerElement.ScrubbingEnabled = true; //enable preview
+                _scrollDragger.NaturalSize = new Size(VideoPlayerElement.NaturalVideoWidth, VideoPlayerElement.NaturalVideoHeight);
+
                 IsMuted = false;
 
                 Prompt = Title;
@@ -639,7 +664,8 @@ namespace MkZ.MediaPlayer
             catch (Exception err)
             {
                 Log.e("VideoPlayerElement_MediaOpened exception: {0}", err);
-            }        
+                PopUp.Error("VideoPlayerElement_MediaOpened FAILED: \n" + err.ToString(), "Open Media File Error");
+            }
         }
 
         private void VideoPlayerElement_MediaEnded(object sender, RoutedEventArgs e)

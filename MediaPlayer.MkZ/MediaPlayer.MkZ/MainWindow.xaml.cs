@@ -14,6 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
+using System.Windows.Resources;
 using Microsoft.Win32;
 
 
@@ -62,6 +63,9 @@ namespace MkZ.MediaPlayer
 
             _cursorArrow.Load_Cursor(_gridMain, sizeRatio: 20);
 
+            StreamResourceInfo sriCurs = Application.GetResourceStream(new Uri("/Images/ArrowBig.cur", UriKind.Relative));
+            //this.Cursor = new Cursor(sriCurs.Stream);
+
             _controlsHideAndShow = new FadeAnimationHelper(this, 2, _imagesNavigation, _cursorArrow);
 
             _clock.Zoomable.EnableZoom(_scrollMain);
@@ -77,29 +81,14 @@ namespace MkZ.MediaPlayer
             //{ this.OnRenderSizeChanged(new SizeChangedInfo(ctrl, new Size(this.Width, this.Height), false, true)); }; 
 
             Context.Config.Load();
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            this.ForceRender();
-
-            RestoreZoomablesConfig();
 
             //add or select file if exists
             ProcessCommandLine();
 
-            SetPlayList(MediaDB.SelectedPlayList);
-
             MediaDB.OnPlayListSelectionChangedAction = (playList) =>
             {
-                 SetPlayList(playList);
+                SetPlayList(playList);
             };
-
-            //_ctxPlayLists.Items.Clear();
-            //_ctxPlayLists.ItemsSource = MediaDB.RootList.PlayLists;
-
-            //_mnuPlayLists.DataContext = MediaDB.SelectedPlayList;
-            _mnuPlayLists.ItemsSource = MediaDB.RootList.PlayLists;
 
             _player.OnFullScreenButtonClick = (vm) => ToggleFullScreen();
             _player.OnFileDropAction = (fileNames) =>
@@ -109,6 +98,15 @@ namespace MkZ.MediaPlayer
 
             PlayerVM.MediaEndedAction = (vm) => OnMediaEnded(vm);
             PlayerVM.MediaFailedAction = (vm, ex) => OnMediaFailed(vm, ex);
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            _mnuPlayLists.ItemsSource = MediaDB.RootList.PlayLists;
+
+            SetPlayList(MediaDB.SelectedPlayList);
+
+            RestoreZoomablesConfig();
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -332,9 +330,19 @@ namespace MkZ.MediaPlayer
             }
         }
 
+        public MediaFileInfo PreviousTrackInfo()
+        {
+            PlayList playList = MediaDB.SelectedPlayList;
+            if (playList.MediaFiles.Count > 0 && playList.SelectedMediaFileIndex > 0)
+            {
+                return playList.MediaFiles[playList.SelectedMediaFileIndex - 1];
+            }
+            return null;
+        }
+
         public bool PreviousTrack_CanExecute()
         {
-            return MediaDB.SelectedPlayList.SelectedMediaFileIndex > 0;
+            return PreviousTrackInfo() != null;
         }
 
         public void PreviousTrack_Executed(bool bResetPositionAndPlay)
@@ -355,10 +363,19 @@ namespace MkZ.MediaPlayer
             _cmbFilesList.SelectedIndex = playList.SelectedMediaFileIndex;
         }
 
-        public bool NextTrack_CanExecute()
+        public MediaFileInfo NextTrackInfo()
         {
             PlayList playList = MediaDB.SelectedPlayList;
-            return playList.SelectedMediaFileIndex < playList.MediaFiles.Count - 1;
+            if (playList.MediaFiles.Count > 0 && playList.SelectedMediaFileIndex < playList.MediaFiles.Count - 1)
+            {
+                return playList.MediaFiles[playList.SelectedMediaFileIndex + 1];
+            }
+            return null;
+        }
+
+        public bool NextTrack_CanExecute()
+        {
+            return NextTrackInfo() != null;
         }
 
         public void NextTrack_Executed(bool bResetPositionAndPlay)

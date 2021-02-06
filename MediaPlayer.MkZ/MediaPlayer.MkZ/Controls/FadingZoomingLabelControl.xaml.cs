@@ -42,6 +42,11 @@ namespace MkZ.MediaPlayer.Controls
             DependencyProperty.Register(nameof(Text), typeof(string), typeof(FadingAutoZoomingLabelControl), 
                 new PropertyMetadata("", OnTextUpdate, OnCoerceValue));
 
+        private static void OnTextUpdate(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            
+        }
+
         //get notified before set value - use it even if same value
         private static object OnCoerceValue(DependencyObject d, object baseValue)
         {
@@ -49,11 +54,6 @@ namespace MkZ.MediaPlayer.Controls
                 This.TextBlock_TextUpdated(d, null);
 
             return baseValue;
-        }
-
-        private static void OnTextUpdate(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            
         }
 
         public FadingAutoZoomingLabelControl()
@@ -111,12 +111,13 @@ namespace MkZ.MediaPlayer.Controls
 
         private void timer_Tick(object sender, EventArgs e)
         {
+            int timeOut = 5;
             if (bMouseOver)
-                return;
+                timeOut = 50;
 
             _timer.Stop();
             _counter++;
-            if(_bAllowHide && _counter > 5 )
+            if(_bAllowHide && _counter > timeOut)
             {
                 _bAllowHide = false;
                 FadeAnimationHelper.VisibilityHideAnimation(this, 0, Visibility.Hidden, (e1) => { _bAllowShow = true; });
@@ -127,6 +128,11 @@ namespace MkZ.MediaPlayer.Controls
         private void _control_MouseEnter(object sender, MouseEventArgs e)
         {
             bMouseOver = true;
+            _counter = 0;
+        }
+
+        private void _control_MouseMove(object sender, MouseEventArgs e)
+        {
             _counter = 0;
         }
 

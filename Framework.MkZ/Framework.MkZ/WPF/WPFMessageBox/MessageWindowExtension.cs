@@ -58,7 +58,7 @@ namespace MkZ.WPF.MessageBox
             bool bReadonly = true)
         {
             MessageWindow wnd = new MessageWindow(buttons);
-
+            wnd.Topmost = true;
             wnd.WindowStartupLocation = WindowStartupLocation.Manual; // sWindowStartupLocation;
             wnd.ConfigureAppearance(icon);
             wnd.Title = title; //for task bar visible tetx

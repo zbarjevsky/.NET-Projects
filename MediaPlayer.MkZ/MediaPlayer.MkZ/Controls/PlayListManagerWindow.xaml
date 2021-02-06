@@ -12,9 +12,15 @@
         Closed="Window_Closed"
         Title="PlayList Manager" Height="450" Width="800">
     <Window.Resources>
-        <Style TargetType="ListViewItem">
-            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-        </Style>
+        <ResourceDictionary>
+            <Style TargetType="ListViewItem">
+                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            </Style>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/CustomMenuStyle.xaml" />
+                <ResourceDictionary Source="/Styles/ComboBoxDarkStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -39,6 +45,18 @@
                      HorizontalAlignment="Left" Command="MediaCommands.TogglePlayPause"
                      ToolTip="Tooggle Play Pause" ToolTipService.ShowOnDisabled="True" 
                      IsChecked="False"/>
+            <ComboBox x:Name="_cmbPlayMode" Margin="10,7" ToolTip="Repeat Mode..." 
+                      SelectedItem="{Binding SelectedItem.PlayMode, ElementName=_treePlayLists}"
+                      Background="{StaticResource GradientBackground}" Foreground="{StaticResource ButtonForegroundMain}" 
+                      Style="{StaticResource FlatComboBoxDark}" Text="Select One" IsReadOnly="True" MinWidth="60"
+                      ItemsSource="{Binding Source={StaticResource PlayModeEnumValues}}"
+                      FontSize="{StaticResource DefaultFontSize}" FontWeight="Medium" >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding Converter={StaticResource EnumDescriptionConverter}}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
             <local:ButtonSort x:Name="_btnSort" Margin="4" Foreground="{StaticResource ButtonForegroundMain}" 
                      HorizontalAlignment="Left" Click="ButtonSort_Click"
                      ToolTip="Sort Play List" ToolTipService.ShowOnDisabled="True" 
@@ -125,6 +143,7 @@
                 </HierarchicalDataTemplate>
             </TreeView.ItemTemplate>
         </TreeView>
+        
         <GridSplitter Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" Margin="0,2" Background="Goldenrod" HorizontalAlignment="Stretch"/>
 
         <ListView Grid.Row="1" Grid.Column="2" x:Name="_listMediaFiles" SelectionMode="Single"

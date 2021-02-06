@@ -20,62 +20,62 @@
         Height="768" Width="1366" MinHeight="400" MinWidth="600">
     <Window.Resources>
         <ResourceDictionary>
-        <utils:ObjectToStringConverter x:Key="ObjectToStringConverter" />
+            <utils:ObjectToStringConverter x:Key="ObjectToStringConverter" />
             <Image x:Key="icoFavorites" x:Shared="false" Source="/Images/Favorites.ico"/>
             <Image x:Key="icoOk" x:Shared="false" Source="/Images/Ok.ico"/>
             <Image x:Key="icoCancel" x:Shared="false" Source="/Images/Cancel.ico"/>
 
             <Style TargetType="{x:Type CheckBox}" x:Key="myCheckboxStyle">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type CheckBox}">
-                        <StackPanel Orientation="Horizontal">
-                            <Image x:Name="checkboxImage" Source="{x:Null}" Width="16"/>
-                            <ContentPresenter/>
-                        </StackPanel>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsChecked" Value="True">
-                                <Setter TargetName="checkboxImage" Property="Source" Value="/Images/Favorites.ico"/>
-                            </Trigger>
-                            <MultiTrigger>
-                                <MultiTrigger.Conditions>
-                                    <Condition Property="IsChecked" Value="False"/>
-                                    <Condition Property="IsMouseOver" Value="True"/>
-                                </MultiTrigger.Conditions>
-                                <Setter TargetName="checkboxImage" Property="Source" Value="{x:Null}"/>
-                            </MultiTrigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        
-        <Style TargetType="Button" x:Key="myButton">
-            <Setter Property="Foreground" Value="Wheat" />
-            <Setter Property="FontWeight" Value="Medium" />
-            <Setter Property="Background" Value="DimGray" />
-            <Setter Property="TextBlock.TextAlignment" Value="Center" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border CornerRadius="8,0,0,8" 
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type CheckBox}">
+                            <StackPanel Orientation="Horizontal">
+                                <Image x:Name="checkboxImage" Source="{x:Null}" Width="16"/>
+                                <ContentPresenter/>
+                            </StackPanel>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="True">
+                                    <Setter TargetName="checkboxImage" Property="Source" Value="/Images/Favorites.ico"/>
+                                </Trigger>
+                                <MultiTrigger>
+                                    <MultiTrigger.Conditions>
+                                        <Condition Property="IsChecked" Value="False"/>
+                                        <Condition Property="IsMouseOver" Value="True"/>
+                                    </MultiTrigger.Conditions>
+                                    <Setter TargetName="checkboxImage" Property="Source" Value="{x:Null}"/>
+                                </MultiTrigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
+            <Style TargetType="Button" x:Key="myButton">
+                <Setter Property="Foreground" Value="Wheat" />
+                <Setter Property="FontWeight" Value="Medium" />
+                <Setter Property="Background" Value="DimGray" />
+                <Setter Property="TextBlock.TextAlignment" Value="Center" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Border CornerRadius="8,0,0,8" 
                                 Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding Foreground}" BorderThickness="1" >
-                            <ContentPresenter x:Name="contentPresenter" 
+                                <ContentPresenter x:Name="contentPresenter" 
                                               ContentTemplate="{TemplateBinding ContentTemplate}" 
                                               Content="{TemplateBinding Content}" 
                                               HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
                                               Margin="{TemplateBinding Padding}" 
                                               VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
+                            </Border>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
 
-        <ResourceDictionary.MergedDictionaries>
-            <ResourceDictionary Source="/Styles/CustomMenuStyle.xaml" />
-            <ResourceDictionary Source="/Styles/ComboBoxDarkStyle.xaml" />
-        </ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="/Styles/CustomMenuStyle.xaml" />
+                <ResourceDictionary Source="/Styles/ComboBoxDarkStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
     <Window.Title>
@@ -164,7 +164,7 @@
             <ComboBox x:Name="_cmbPlayMode" Margin="0,7,10,7" SelectedItem="{Binding Config.MediaDatabaseInfo.SelectedPlayList.PlayMode }"
                       ToolTip="Repeat Mode..."
                       Background="{StaticResource GradientBackground}" Foreground="{StaticResource ButtonForegroundMain}" 
-                      Style="{StaticResource ComboBoxTest2}" Text="Select One" IsReadOnly="True" MinWidth="60"
+                      Style="{StaticResource FlatComboBoxDark}" Text="Select One" IsReadOnly="True" MinWidth="60"
                       ItemsSource="{Binding Source={StaticResource PlayModeEnumValues}}"
                       FontSize="{StaticResource DefaultFontSize}" FontWeight="Medium" >
                 <ComboBox.ItemTemplate>
@@ -188,7 +188,7 @@
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="90"/>
+                                <ColumnDefinition Width="160"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <buttons:ButtonWithText Grid.Column="0" Margin="4" Height="20" 
@@ -218,10 +218,16 @@
                                 </Button.Style>
                             </buttons:ButtonWithText>
                             <TextBlock Grid.Column="2" VerticalAlignment="Center" HorizontalAlignment="Right"
-                                       FontSize="18" Margin="3"
-                                       Text="{Binding NaturalDuration, Converter={StaticResource SecondsToStringConverter}, FallbackValue=--/--}"/>
+                                       FontSize="18" Margin="3" >
+                                <TextBlock.Text>
+                                    <MultiBinding StringFormat="{}{0}/{1}">
+                                        <Binding Path="Position.TotalSeconds" Converter="{StaticResource SecondsToStringConverter}" />
+                                        <Binding Path="NaturalDuration" Converter="{StaticResource SecondsToStringConverter}" />
+                                    </MultiBinding>
+                                </TextBlock.Text>
+                            </TextBlock>
 
-                            <DockPanel Grid.Column="3" Margin="3,0,10,0">
+                            <DockPanel Grid.Column="3" Margin="10,0,10,0">
                                 <Border>
                                     <TextBlock Text="{Binding FileName, Converter={StaticResource PathToFileNameConverter}}" 
                                          Background="Transparent" VerticalAlignment="Center"/>

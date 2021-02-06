@@ -10,17 +10,16 @@
              Unloaded="_control_Unloaded"
              MouseEnter="_control_MouseEnter"
              MouseLeave="_control_MouseLeave"
+             MouseMove="_control_MouseMove"
              Foreground="Red"
-             d:DesignHeight="80" d:DesignWidth="200">
+             d:DesignHeight="80" d:DesignWidth="250">
     <Grid>
-        <Border x:Name="_volumeLabel" Margin="0" CornerRadius="30" 
-                Width="{Binding Width, ElementName=_control}" 
-                Height="{Binding Height, ElementName=_control}" 
-                HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
-            <Border.Background>
-                <SolidColorBrush Color="Black" Opacity="0.3" />
-            </Border.Background>
-            <Viewbox>
+        <Viewbox>
+            <Border x:Name="_volumeLabel" Margin="0" CornerRadius="10" 
+                    HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <Border.Background>
+                    <SolidColorBrush Color="Black" Opacity="0.3" />
+                </Border.Background>
                 <TextBlock Text="{Binding Text, NotifyOnTargetUpdated=True, NotifyOnSourceUpdated=True, FallbackValue='Volume 33%'}" 
                     Padding="6,0,6,3" TextAlignment="Center" VerticalAlignment="Center"
                     TargetUpdated="TextBlock_TextUpdated" FontSize="22" FontWeight="Medium" >
@@ -29,7 +28,7 @@
                             Color="{Binding Foreground, ElementName=_control, Converter={StaticResource ColorConverter}}" />
                     </TextBlock.BitmapEffect>
                 </TextBlock>
-            </Viewbox>
-        </Border>
+            </Border>
+        </Viewbox>
     </Grid>
 </UserControl>

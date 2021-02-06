@@ -126,6 +126,11 @@ namespace MkZ.MediaPlayer.Controls
         {
         }
 
+        public MediaFileInfo PreviousTrackInfo()
+        {
+            return null;
+        }
+
         public bool PreviousTrack_CanExecute()
         {
             return false;
@@ -133,6 +138,11 @@ namespace MkZ.MediaPlayer.Controls
 
         public void PreviousTrack_Executed(bool bResetPositionAndPlay)
         {
+        }
+
+        public MediaFileInfo NextTrackInfo()
+        {
+            return null;
         }
 
         public bool NextTrack_CanExecute()

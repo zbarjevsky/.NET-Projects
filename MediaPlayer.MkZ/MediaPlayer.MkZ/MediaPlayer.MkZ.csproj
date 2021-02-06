@@ -304,6 +304,18 @@
   <ItemGroup>
     <Resource Include="Images\Ok.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="SplashScreen3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <SplashScreen Include="SplashScreen2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="SplashScreen1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\ArrowBig.cur" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if "$(ConfigurationName)" == "Release" (

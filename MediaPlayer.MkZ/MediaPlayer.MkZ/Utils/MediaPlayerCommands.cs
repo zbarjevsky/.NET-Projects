@@ -74,7 +74,7 @@ namespace MkZ.MediaPlayer.Utils
 
         public void PreviousTrack_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            MainWindow.PreviousTrack_Executed(bResetPositionAndPlay: false);
+            MainWindow.PreviousTrack_Executed(bResetPositionAndPlay: true);
         }
 
         public void NextTrack_CanExecute(object sender, CanExecuteRoutedEventArgs e)
@@ -84,7 +84,7 @@ namespace MkZ.MediaPlayer.Utils
 
         public void NextTrack_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            MainWindow.NextTrack_Executed(bResetPositionAndPlay: false);
+            MainWindow.NextTrack_Executed(bResetPositionAndPlay: true);
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)

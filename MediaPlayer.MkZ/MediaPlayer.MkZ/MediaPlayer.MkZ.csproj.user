@@ -3,4 +3,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <StartArguments>rem "C:\Temp\YouTube\Films\КАВАЛЕРЫ МОРСКОЙ ЗВЕЗДЫ - Серия 1 _ Детектив. Мелодрама-0eCzUi9mJEI.mp4"</StartArguments>
   </PropertyGroup>
+  <PropertyGroup>
+    <ProjectView>ProjectFiles</ProjectView>
+  </PropertyGroup>
 </Project>
