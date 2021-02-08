@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using MkZ.MediaPlayer.Utils;
 using MkZ.Windows;
 
-namespace MkZ.MediaPlayer.Controls
+namespace MkZ.MediaPlayer
 {
     public class PlayListManagerVM : NotifyPropertyChangedImpl
     {

@@ -55,6 +55,7 @@ namespace BarometerBT
 
             _btWatcher.OnBMDeviceMsgReceivedAction = (info) => { SetInfo(info); };
             _btWatcher.OnBMDeviceCheckAction = (elapsed) => { /*UpdateDeviceList();*/ };
+            _btWatcher.OnTimerSaveAction = (elapsed) => { BMDatabaseMap.INSTANCE.Save(); };
             _btWatcher.StartBluetoothSearch();
 
             BMDatabaseMap.INSTANCE.OnRecordAddedAction = (device) => { MainWindow.UpdateAllAsync(device); };

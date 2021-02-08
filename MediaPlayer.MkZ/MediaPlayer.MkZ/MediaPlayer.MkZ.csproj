@@ -103,8 +103,8 @@
     <Compile Include="Controls\MagnifyingGlassUserControl.xaml.cs">
       <DependentUpon>MagnifyingGlassUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\PlayListManagerVM.cs" />
-    <Compile Include="Controls\PlayListManagerWindow.xaml.cs">
+    <Compile Include="PlayListManagerVM.cs" />
+    <Compile Include="PlayListManagerWindow.xaml.cs">
       <DependentUpon>PlayListManagerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\ButtonRoundCheckBox.xaml.cs">
@@ -203,7 +203,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\PlayListManagerWindow.xaml">
+    <Page Include="PlayListManagerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -30,6 +30,7 @@ namespace BarometerBT.Bluetooth
         public Action<string> OnBMDeviceMsgReceivedAction = (info) => { };
         public Action<double> OnBMDeviceCheckAction = (elapsed) => { };
         public Action<double> OnBLEDeviceCheckAction = (elapsed) => { };
+        public Action<double> OnTimerSaveAction = (elapsed) => { };
 
         // Create Bluetooth Listener
         private BluetoothLEAdvertisementWatcher _watcherBLE = new BluetoothLEAdvertisementWatcher();
@@ -38,6 +39,7 @@ namespace BarometerBT.Bluetooth
 
         private double _stopperBM = 0;
         private double _watchDog = 0;
+        private double _saveCounter = 0;
 
         private BMRecordAverages _averages;
         private BMRecordCurrent _current;
@@ -93,6 +95,13 @@ namespace BarometerBT.Bluetooth
 
             _stopperBM++;
             _watchDog++;
+            _saveCounter++;
+
+            if(_saveCounter > 3600) //save every 1 hour
+            {
+                OnTimerSaveAction(_saveCounter);
+                _saveCounter = 0;
+            }
 
             OnBMDeviceCheckAction(_stopperBM);
             OnBLEDeviceCheckAction(_stopperBM);

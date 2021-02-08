@@ -225,6 +225,12 @@ namespace MkZ.MediaPlayer
             {
                 this.Background = ColorUtils.CalculateAverageColor(Context.Config.Configuration.BackgroundImageFileName);
             }
+
+            if (e.PropertyName == nameof(Context.Config.MediaDatabaseInfo.SelectedMediaFileIndex))
+            {
+                if(_cmbFilesList.SelectedIndex != Context.Config.MediaDatabaseInfo.SelectedMediaFileIndex)
+                    _cmbFilesList.SelectedIndex = Context.Config.MediaDatabaseInfo.SelectedMediaFileIndex;
+            }
         }
 
         private void SetPlayList(PlayList playList)

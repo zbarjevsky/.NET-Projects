@@ -480,6 +480,7 @@ namespace MkZ.MediaPlayer
         {
             _timer.Stop();
             MediaState = MediaState.Stop;
+            Position = TimeSpan.FromSeconds(0);
             if (VideoPlayerElement.Source != null)
             {
                 VideoPlayerElement.Stop();

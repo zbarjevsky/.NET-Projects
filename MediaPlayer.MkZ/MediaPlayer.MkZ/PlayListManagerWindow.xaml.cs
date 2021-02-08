@@ -14,7 +14,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace MkZ.MediaPlayer.Controls
+namespace MkZ.MediaPlayer
 {
     /// <summary>
     /// Interaction logic for PlayListManagerWindow.xaml
@@ -66,6 +66,22 @@ namespace MkZ.MediaPlayer.Controls
                 {
                     var files = _listMediaFiles.ItemsSource as System.Collections.ObjectModel.ObservableCollection<MediaFileInfo>;
                     files.Remove(file);
+                }
+            }
+        }
+
+        private void TogglePlayPauseInList_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is System.Windows.Controls.Primitives.ToggleButton btn)
+            {
+                if (btn.DataContext is MediaFileInfo file)
+                {
+                    if (_treePlayLists.SelectedItem is PlayList playList)
+                    {
+                        playList.IsSelectedPlayList = true;
+                        VM.DB.SelectedMediaFileIndex = playList.MediaFiles.IndexOf(file);
+                        _mediaPlayerCommands.TogglePlayPause_Executed(this, null);
+                    }
                 }
             }
         }
