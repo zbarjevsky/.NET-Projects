@@ -1,4 +1,5 @@
-﻿using MkZ.Windows;
+﻿using MkZ.Tools;
+using MkZ.Windows;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -78,8 +79,15 @@ namespace MkZ.WPF.PropertyGrid
             if (pos > 0)
                 userDefinedValue = userDefinedValue.Substring(0, pos);
 
-            //ColorW = System.Drawing.Color.FromName(userDefinedValue);
-            ColorW = System.Drawing.ColorTranslator.FromHtml(userDefinedValue);
+            try
+            {
+                //ColorW = System.Drawing.Color.FromName(userDefinedValue);
+                ColorW = System.Drawing.ColorTranslator.FromHtml(userDefinedValue);
+            }
+            catch (Exception err)
+            {
+                Log.e("SerializableBrush exception: {0}", err);
+            }        
         }
 
         public SerializableBrush()
