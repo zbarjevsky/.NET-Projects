@@ -31,7 +31,7 @@
         </Grid.RowDefinitions>
         <Viewbox Grid.RowSpan="3" Grid.ColumnSpan="3">
             <Border CornerRadius="240" Padding="20" Background="{Binding Background.B, FallbackValue=Black}">
-                <Canvas Width="400" Height="400">
+                <Canvas x:Name="_canvas" Width="400" Height="400">
                     <buttons:ButtonOptions x:Name="_btnSettings" Width="40" Canvas.Left="333" Canvas.Top="-19"
                          Foreground="{Binding Foreground.B, FallbackValue=Pink}" 
                          Background="{Binding Background.B, FallbackValue=Black}"
@@ -90,7 +90,7 @@
                             </TransformGroup>
                         </Path.RenderTransform>
                         <Path.Data>
-                            M 195 100 L 200 90 L 205 100 L 215 200 L 205 230 L 195 230 L 185 200 Z
+                            M 195 90 L 200 80 L 205 90 L 211 200 L 205 230 L 195 230 L 189 200 Z
                         </Path.Data>
                     </Path>
 
@@ -102,11 +102,11 @@
                         </Path.Fill>
                         <Path.RenderTransform>
                             <TransformGroup>
-                                <RotateTransform x:Name="_minute" CenterX="0" CenterY="0" Angle="120"/>
+                                <RotateTransform x:Name="_minute" CenterX="0" CenterY="0" Angle="-30"/>
                             </TransformGroup>
                         </Path.RenderTransform>
                         <Path.Data>
-                            M 195 70 L 200 60 L 205 70 L 210 200 L 205 230 L 195 230 L 190 200 Z
+                            M 196 70 L 200 50 L 204 70 L 207 200 L 203 230 L 197 230 L 193 200 Z
                         </Path.Data>
                     </Path>
 
@@ -139,6 +139,19 @@
                             </GeometryGroup>
                         </Path.Data>
                     </Path>
+
+                    <!--<Path x:Name="tick" Stroke="{Binding Foreground.B, FallbackValue=Red}" StrokeThickness="6">
+                        <Path.RenderTransform>
+                            <TransformGroup>
+                                <RotateTransform x:Name="_tick" CenterX="200" CenterY="200" Angle="-30"/>
+                            </TransformGroup>
+                        </Path.RenderTransform>
+                        <Path.Data>
+                            <GeometryGroup>
+                                <LineGeometry StartPoint="200,0" EndPoint="200,-20" />
+                            </GeometryGroup>
+                        </Path.Data>
+                    </Path>-->
                 </Canvas>
             </Border>
         </Viewbox>

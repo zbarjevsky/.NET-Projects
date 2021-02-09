@@ -57,6 +57,11 @@ namespace MkZ.WPF
             //[TypeConverter(typeof(ExpandableObjectConverter))]
             public SerializableBrush Foreground { get => _foreground; set => SetProperty(ref _foreground, value); }
 
+            private SerializableBrush _tickColor = new SerializableBrush(Brushes.Wheat);
+            [Category("Clock")]
+            //[TypeConverter(typeof(ExpandableObjectConverter))]
+            public SerializableBrush TickColor { get => _tickColor; set => SetProperty(ref _tickColor, value); }
+
             private SerializableBrush _hourHandBrush = new SerializableBrush(Brushes.Goldenrod);
             [Category("Clock")]
             //[TypeConverter(typeof(ExpandableObjectConverter))]
@@ -133,6 +138,7 @@ namespace MkZ.WPF
         {
             _timer.Interval = TimeSpan.FromMilliseconds(Config.RefreshTime);
             Config.PropertyChanged += Config_PropertyChanged;
+            CreateTickMarks();
         }
 
         private void Config_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -155,6 +161,32 @@ namespace MkZ.WPF
 
             double second = (Config.RefreshTime < 300) ? now.TimeOfDay.TotalSeconds : now.TimeOfDay.Seconds;
             _second.Angle = second * 6.0;
+        }
+
+        private void CreateTickMarks()
+        {
+            Point center = new Point(200, 200);
+            for (int i = 0; i < 60; i++)
+            {
+                Path tick = new Path();
+                tick.Stroke = Brushes.Red;
+                if(i%5 == 0)
+                    tick.StrokeThickness = 5;
+                else
+                    tick.StrokeThickness = 2;
+
+                tick.SetBinding(Path.StrokeProperty, "TickColor.B");
+
+                double angle = i * 6;
+
+                tick.RenderTransform = new RotateTransform(angle, center.X, center.Y);
+
+                GeometryGroup group = new GeometryGroup();
+                group.Children.Add(new LineGeometry(new Point(center.X, -7), new Point(center.X, -20)));
+                tick.Data = group;
+
+                _canvas.Children.Add(tick);
+            }
         }
 
         private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
