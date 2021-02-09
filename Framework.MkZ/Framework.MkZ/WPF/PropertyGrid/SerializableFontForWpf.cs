@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing.Text;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +26,7 @@ namespace MkZ.WPF.PropertyGrid
 
         private string _fontFamily = "Jokerman";
         [Browsable(true)]
+        [TypeConverter(typeof(FontFamilyStringConverter))]
         public string FontFamily { get => _fontFamily; set => SetFontFamily(value); }
 
         private double _fontSize = 50;
@@ -32,6 +35,7 @@ namespace MkZ.WPF.PropertyGrid
 
         private FontWeight _fontWeight = FontWeights.Normal;
         [Browsable(true)]
+        [TypeConverter(typeof(FontWeightStringConverter))]
         public FontWeight FontWeight { get => _fontWeight; set => SetFontWeight(value); }
 
         public SerializableFontForWpf()
@@ -78,6 +82,52 @@ namespace MkZ.WPF.PropertyGrid
         public override string ToString()
         {
             return "FontData: " + _font.Name;
+        }
+    }
+
+    public class FontFamilyStringConverter : StringConverter
+    {
+        public override Boolean GetStandardValuesSupported(ITypeDescriptorContext context) { return true; }
+        public override Boolean GetStandardValuesExclusive(ITypeDescriptorContext context) { return true; }
+        public override TypeConverter.StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+        {
+            InstalledFontCollection installedFontCollection = new InstalledFontCollection();
+            return new StandardValuesCollection(installedFontCollection.Families.Select(f => f.Name).ToArray());
+        }
+    }
+
+    internal class FontWeightStringConverter : TypeConverter
+    {
+        //https://docs.microsoft.com/en-us/dotnet/api/system.windows.fontweights?view=net-5.0
+        private FontWeight[] _weights = new FontWeight[] { FontWeights.Bold, FontWeights.Normal };
+
+        public override Boolean GetStandardValuesSupported(ITypeDescriptorContext context) { return true; }
+        public override Boolean GetStandardValuesExclusive(ITypeDescriptorContext context) { return true; }
+        public override TypeConverter.StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+        {
+            return new StandardValuesCollection(_weights);
+        }
+
+        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        {
+            //Debug.WriteLine("SerializableBrush CanConvertFrom type '{0}'", sourceType);
+            if (sourceType == typeof(string))
+                return true;
+            return base.CanConvertFrom(context, sourceType);
+        }
+
+        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        {
+            if (value is string selectedWeight)
+            {
+                foreach (FontWeight weight in _weights)
+                {
+                    if (selectedWeight == weight.ToString())
+                        return weight;
+                }
+                return FontWeights.Normal;
+            }
+            return base.ConvertFrom(context, culture, value);
         }
     }
 }
