@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
 using System.Xml.Serialization;
 
@@ -16,6 +17,64 @@ using MkZ.WPF.MessageBox;
 
 namespace MkZ.MediaPlayer.Utils
 {
+    public class MainWindowState
+    {
+        public System.Windows.Rect Bounds { get; set; }
+
+        public WindowState WindowState { get; set; } = WindowState.Normal;
+
+        public WindowStyle WindowStyle { get; set; } = WindowStyle.ThreeDBorderWindow;
+
+        public MainWindowState()
+        {
+            double width = 1600;
+            if (width > SystemParameters.PrimaryScreenWidth)
+                width = SystemParameters.PrimaryScreenWidth - 80;
+
+            double height = 900;
+            if (height > SystemParameters.PrimaryScreenHeight)
+                height = SystemParameters.PrimaryScreenHeight - 80;
+
+            double x = (SystemParameters.PrimaryScreenWidth - width)/2.0;
+            double y = (SystemParameters.PrimaryScreenHeight - height)/2.0;
+
+            //center screen
+            Bounds = new System.Windows.Rect(x, y, width, height);
+        }
+
+        public void CopyFrom(Window wnd)
+        {
+            if (!wnd.RestoreBounds.IsEmpty)
+                Bounds = wnd.RestoreBounds;
+            else if(wnd.WindowState == WindowState.Normal)
+                Bounds = new Rect(wnd.Left, wnd.Top, wnd.ActualWidth, wnd.ActualHeight);
+
+            WindowState = wnd.WindowState;
+            WindowStyle = wnd.WindowStyle;
+        }
+
+        public void CopyFrom(MainWindowState state)
+        {
+            Bounds = state.Bounds;
+
+            WindowState = state.WindowState;
+            WindowStyle = state.WindowStyle;
+        }
+
+        public void RestoreTo(Window wnd)
+        {
+            wnd.WindowStartupLocation = WindowStartupLocation.Manual;
+
+            wnd.Left = Bounds.Left;
+            wnd.Top = Bounds.Top;
+            wnd.Width = Bounds.Width;
+            wnd.Height = Bounds.Height;
+
+            wnd.WindowState = WindowState;
+            wnd.WindowStyle = WindowStyle;
+        }
+    }
+
     [Serializable]
     public class Configuration : NotifyPropertyChangedImpl
     {
@@ -54,6 +113,9 @@ namespace MkZ.MediaPlayer.Utils
             set { SetProperty(ref _ReiKiConfig, value); }
         }
 
+        [Category("Location")]
+        public MainWindowState MainWindowState { get; set; } = new MainWindowState();
+
         public void EnsureHasValues()
         {
             if (SupportedImageExtensions == null || SupportedImageExtensions.Count == 0)
@@ -79,6 +141,8 @@ namespace MkZ.MediaPlayer.Utils
 
             if (config.ReiKiConfig.IsValid())
                 ReiKiConfig = config.ReiKiConfig;
+
+            MainWindowState.CopyFrom(config.MainWindowState);
 
             SupportedImageExtensions = config.SupportedImageExtensions;
             SupportedAudioExtensions = config.SupportedAudioExtensions;
@@ -552,7 +616,7 @@ namespace MkZ.MediaPlayer.Utils
                 }
                 catch (Exception err)
                 {
-                    PopUp.Error(err.ToString(), "Cannot load Settings From File");
+                    MessageBox.Show(err.ToString(), "Cannot load Settings From File");
                 }            
             }
             this.Configuration.EnsureHasValues();

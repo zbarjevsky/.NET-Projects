@@ -106,7 +106,7 @@
                             </TransformGroup>
                         </Path.RenderTransform>
                         <Path.Data>
-                            M 196 70 L 200 50 L 204 70 L 207 200 L 203 230 L 197 230 L 193 200 Z
+                            M 196 60 L 200 50 L 204 60 L 207 200 L 203 230 L 197 230 L 193 200 Z
                         </Path.Data>
                     </Path>
 
@@ -122,7 +122,7 @@
                             </TransformGroup>
                         </Path.RenderTransform>
                         <Path.Data>
-                            M 199 30 L 201 30 L 203 200 L 201 250 L 199 250 L 197 200 Z
+                            M 199 0 L 201 0 L 203 200 L 201 250 L 199 250 L 197 200 Z
                         </Path.Data>
                     </Path>
 

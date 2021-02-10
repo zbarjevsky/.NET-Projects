@@ -106,14 +106,14 @@ namespace MkZ.MediaPlayer
 
             SetPlayList(MediaDB.SelectedPlayList);
 
-            RestoreZoomablesConfig();
+            LocationsRestore(Context.Config.Configuration);
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
             MediaDB.SelectedMediaFileIndex = _cmbFilesList.SelectedIndex;
 
-            ZoomablesLocationSave();
+            LocationsSave();
 
             Context.Config.Save();
             _player.ClosePlayer();
@@ -154,17 +154,29 @@ namespace MkZ.MediaPlayer
             return true;
         }
 
-        private void RestoreZoomablesConfig()
+        private void LocationsRestore(Configuration config)
         {
-            _clock.DataContext = Context.Config.Configuration.ClockConfig;
-            _clock.Zoomable.BoundsSet(Context.Config.Configuration.ClockConfig.Bounds_Normal);
+            config.MainWindowState.RestoreTo(this);
 
-            _reiKiProgress.DataContext = Context.Config.Configuration.ReiKiConfig;
-            _reiKiProgress.Zoomable.BoundsSet(Context.Config.Configuration.ReiKiConfig.Bounds_Normal);
+            _clock.DataContext = config.ClockConfig;
+            _reiKiProgress.DataContext = config.ReiKiConfig;
+
+            if (this.WindowState == WindowState.Maximized)
+            {
+                _clock.Zoomable.BoundsSet(config.ClockConfig.Bounds_FullScreen);
+                _reiKiProgress.Zoomable.BoundsSet(config.ReiKiConfig.Bounds_FullScreen);
+            }
+            else
+            {
+                _clock.Zoomable.BoundsSet(config.ClockConfig.Bounds_Normal);
+                _reiKiProgress.Zoomable.BoundsSet(config.ReiKiConfig.Bounds_Normal);
+            }
         }
 
-        private void ZoomablesLocationSave()
+        private void LocationsSave()
         {
+            Context.Config.Configuration.MainWindowState.CopyFrom(this);
+
             if (this.WindowStyle == WindowStyle.None) //full screen
             {
                 _clock.Zoomable.BoundsUpload(Context.Config.Configuration.ClockConfig.Bounds_FullScreen);
@@ -308,7 +320,7 @@ namespace MkZ.MediaPlayer
 
         public void ToggleFullScreen()
         {
-            ZoomablesLocationSave();
+            LocationsSave();
 
             if (this.WindowStyle == WindowStyle.None)//go normal
             {
