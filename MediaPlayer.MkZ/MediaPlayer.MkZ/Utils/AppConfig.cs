@@ -9,11 +9,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Xml.Serialization;
 
 using MkZ.Tools;
 using MkZ.Windows;
 using MkZ.WPF.MessageBox;
+using MkZ.WPF.PropertyGrid;
 
 namespace MkZ.MediaPlayer.Utils
 {
@@ -116,6 +118,11 @@ namespace MkZ.MediaPlayer.Utils
         [Category("Location")]
         public MainWindowState MainWindowState { get; set; } = new MainWindowState();
 
+        private SerializableBrush _cursorColor = new SerializableBrush(Brushes.Gold);
+        [Category("Misc")]
+        //[TypeConverter(typeof(ExpandableObjectConverter))]
+        public SerializableBrush CursorColor { get => _cursorColor; set => SetProperty(ref _cursorColor, value); }
+
         public void EnsureHasValues()
         {
             if (SupportedImageExtensions == null || SupportedImageExtensions.Count == 0)
@@ -147,6 +154,8 @@ namespace MkZ.MediaPlayer.Utils
             SupportedImageExtensions = config.SupportedImageExtensions;
             SupportedAudioExtensions = config.SupportedAudioExtensions;
             SupportedVideoExtensions = config.SupportedVideoExtensions;
+
+            CursorColor = config.CursorColor;
         }
 
         public string GetAllSupportedExtensions()

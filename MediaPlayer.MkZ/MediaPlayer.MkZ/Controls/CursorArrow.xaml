@@ -5,19 +5,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MkZ.WPF.Controls"
              mc:Ignorable="d"
-             d:DesignHeight="300" d:DesignWidth="300">
-        <Canvas Name="ContentPanel" IsHitTestVisible="False" Background="Transparent" >
-            <Viewbox x:Name="_cursor" Height="40" Width="40">
-            <Path Stroke="Yellow" StrokeThickness="10" 
-                          Margin="-80,10,0,0"
+             d:DesignHeight="100" d:DesignWidth="100">
+    <Canvas Name="ContentPanel" IsHitTestVisible="False" Background="Transparent" >
+        <Viewbox x:Name="_cursor" Height="40" Width="40">
+            <Path Stroke="{Binding Stroke, FallbackValue=Yellow}" Fill="{Binding Fill, FallbackValue=Goldenrod}" 
+                          Margin="-80,10,0,0" StrokeThickness="10"
                           Data="M 0 0 L 100 90 L 60 99 L 95 168 L 78 178 L 40 110 L 10 140 Z" >
-                <Path.Fill>
-                    <SolidColorBrush Color="DarkGoldenrod" Opacity="0.5" />
-                </Path.Fill>
                 <Path.Effect>
                     <DropShadowEffect />
                 </Path.Effect>
             </Path>
         </Viewbox>
-        </Canvas>
+    </Canvas>
 </UserControl>

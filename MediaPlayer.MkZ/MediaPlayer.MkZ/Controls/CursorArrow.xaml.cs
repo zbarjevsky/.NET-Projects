@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MkZ.WPF.Converters;
+using MkZ.WPF.PropertyGrid;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,10 +25,31 @@ namespace MkZ.MediaPlayer.Controls
         private Grid _parentGrid = null;
         private double _sizeRatio = 20.0;
 
+        public Brush Stroke
+        {
+            get { return (Brush)GetValue(StrokeProperty); }
+            set { SetValue(StrokeProperty, value); }
+        }
+
+        public static readonly DependencyProperty StrokeProperty =
+            DependencyProperty.Register(nameof(Stroke), typeof(Brush), typeof(CursorArrow), 
+                new PropertyMetadata(Brushes.Yellow));
+
+        public Brush Fill
+        {
+            get { return (Brush)GetValue(FillProperty); }
+            set { SetValue(FillProperty, value); }
+        }
+
+        public static readonly DependencyProperty FillProperty =
+            DependencyProperty.Register(nameof(Fill), typeof(Brush), typeof(CursorArrow), 
+                new PropertyMetadata(Brushes.Goldenrod));
+
         public CursorArrow()
         {
             InitializeComponent();
 
+            DataContext = this;
             _cursor.Visibility = Visibility.Hidden;
         }
 
@@ -50,6 +73,20 @@ namespace MkZ.MediaPlayer.Controls
             _parentGrid.MouseEnter += Grid_MouseEnter;
             _parentGrid.MouseLeave += Grid_MouseLeave;
             _parentGrid.SizeChanged += Grid_SizeChanged;
+
+        }
+
+        public void BindToColor(object bindingSource, string bindingPath)
+        {
+            Binding binding = new Binding(bindingPath);
+            binding.Source = bindingSource;
+            this.SetBinding(StrokeProperty, binding);
+
+            binding = new Binding(bindingPath);
+            binding.Source = bindingSource;
+            binding.Converter = new BrushOpacityConverter();
+            binding.ConverterParameter = 0.5;
+            this.SetBinding(FillProperty, binding);
         }
 
         private void Grid_SizeChanged(object sender, SizeChangedEventArgs e)

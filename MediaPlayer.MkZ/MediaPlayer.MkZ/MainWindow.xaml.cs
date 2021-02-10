@@ -61,8 +61,6 @@ namespace MkZ.MediaPlayer
             _cmbFilesList.Items.Clear();
             _cmbFilesList.ItemsSource = null;
 
-            _cursorArrow.Load_Cursor(_gridMain, sizeRatio: 20);
-
             StreamResourceInfo sriCurs = Application.GetResourceStream(new Uri("/Images/ArrowBig.cur", UriKind.Relative));
             //this.Cursor = new Cursor(sriCurs.Stream);
 
@@ -98,6 +96,11 @@ namespace MkZ.MediaPlayer
 
             PlayerVM.MediaEndedAction = (vm) => OnMediaEnded(vm);
             PlayerVM.MediaFailedAction = (vm, ex) => OnMediaFailed(vm, ex);
+
+            _cursorArrow.Load_Cursor(_gridMain, sizeRatio: 20);
+            _cursorArrow.BindToColor(Context.Config.Configuration, "CursorColor.B");
+
+            Context.Config.Configuration.MainWindowState.RestoreTo(this);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -452,8 +455,6 @@ namespace MkZ.MediaPlayer
             wnd.SetPropertiesObject(Context.Config, "Configuration", "Clock Configuration", "Clock Font");
             
             wnd.ShowDialog();
-
-            _clock.DataContext = Context.Config.Configuration.ClockConfig;
         }
 
         private void ButtonPlayListManager_Click(object sender, RoutedEventArgs e)
