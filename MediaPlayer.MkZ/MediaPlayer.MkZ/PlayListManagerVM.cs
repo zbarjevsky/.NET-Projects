@@ -17,8 +17,15 @@ namespace MkZ.MediaPlayer
 
         public ObservableCollection<PlayList> PlayListRoot => DB.RootList.PlayLists;
 
+        public bool IsPlayingSelectedFile { get { return GetSelectedFile().MediaState == System.Windows.Controls.MediaState.Play; } }
+
         public PlayListManagerVM()
         {
+        }
+
+        public MediaFileInfo GetSelectedFile()
+        {
+            return DB.SelectedPlayList.GetSelectedInfo();
         }
 
         public void RemovePlayList(PlayList list)

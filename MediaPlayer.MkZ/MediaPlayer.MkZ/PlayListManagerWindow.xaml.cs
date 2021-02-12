@@ -1,4 +1,5 @@
 ﻿using MkZ.MediaPlayer.Utils;
+using MkZ.WPF;
 using MkZ.WPF.DragDrop;
 using System;
 using System.Collections.Generic;
@@ -76,13 +77,28 @@ namespace MkZ.MediaPlayer
             {
                 if (btn.DataContext is MediaFileInfo file)
                 {
-                    if (_treePlayLists.SelectedItem is PlayList playList)
-                    {
-                        playList.IsSelectedPlayList = true;
-                        VM.DB.SelectedMediaFileIndex = playList.MediaFiles.IndexOf(file);
-                        _mediaPlayerCommands.TogglePlayPause_Executed(this, null);
-                    }
+                    PlayMediaFile(file);
                 }
+            }
+        }
+
+        private void PlayMediaFile(MediaFileInfo file)
+        {
+            if (_treePlayLists.SelectedItem is PlayList playList)
+            {
+                playList.IsSelectedPlayList = true;
+
+                int idx = playList.MediaFiles.IndexOf(file);
+                if (VM.DB.SelectedMediaFileIndex != idx)
+                {
+                    file.MediaState = MediaState.Play;
+                    VM.DB.SelectedMediaFileIndex = idx;
+                }
+                else
+                {
+                    _mediaPlayerCommands.TogglePlayPause_Executed(this, null);
+                }
+                VM.NotifyPropertyChanged(nameof(PlayListManagerVM.IsPlayingSelectedFile));
             }
         }
 
@@ -113,18 +129,19 @@ namespace MkZ.MediaPlayer
 
         private void _listMediaFiles_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            MediaFileInfo info = _listMediaFiles.SelectedItem as MediaFileInfo;
-            PlayListManagerVM vm = _listMediaFiles.DataContext as PlayListManagerVM;
-            PlayList list = _treePlayLists.SelectedItem as PlayList;
+        }
 
-            if (info != null && vm != null && list != null)
+        private void ListViewItem_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (sender is ListViewItem item)
             {
-                info.MediaState = MediaState.Play;
-                list.SelectedMediaFileIndex = list.MediaFiles.IndexOf(info);
-                list.IsSelectedPlayList = true;
+                if (item.DataContext is MediaFileInfo info)
+                {
+                    PlayMediaFile(info);
 
-                this.DialogResult = true;
-                this.Close();
+                    this.DialogResult = true;
+                    this.Close();
+                }
             }
         }
 
@@ -200,9 +217,9 @@ namespace MkZ.MediaPlayer
             }
         }
 
-        private void FileName_TextChanged(object sender, TextChangedEventArgs e)
+        private void FileName_TextChanged(object sender, string newText)
         {
-            if(sender is TextBox txt)
+            if(sender is EditBox txt)
             {
                 if (txt.DataContext is MediaFileInfo info)
                 {
@@ -218,7 +235,7 @@ namespace MkZ.MediaPlayer
                     }
                     catch (Exception err)
                     {
-                        txt.Text = info.FileName;
+                        txt.Text = Path.GetFileName(info.FileName);
                         MessageBox.Show(err.ToString());
                     }
                 }

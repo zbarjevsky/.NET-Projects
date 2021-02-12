@@ -56,8 +56,8 @@ namespace MkZ.MediaPlayer.Utils
         {
             if (seconds == 0)
                 return "0:00";
-            if (seconds < 60)
-                return TimeSpan.FromSeconds(seconds).ToString("s'.'f");
+            //if (seconds < 60)
+            //    return TimeSpan.FromSeconds(seconds).ToString("s'.'f");
             if (seconds < 3600)
                 return TimeSpan.FromSeconds(seconds).ToString("m':'ss"); //'.'f");
 

@@ -59,4 +59,38 @@ namespace MkZ.WPF.Converters
 
         #endregion
     }
+
+    [ValueConversion(typeof(bool), typeof(Brush))]
+    public class BoolToBrushConverter : IValueConverter
+    {
+        #region IValueConverter Members
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value is bool isFirst)
+            {
+                if (parameter is string brushes)
+                {
+                    string[] colors = brushes.Split('|');
+                    if (isFirst)
+                        return StringToBrush(colors[0]);
+                    return StringToBrush(colors[1]);
+                }
+                return Brushes.Black;
+            }
+
+            throw new NotSupportedException();
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            throw new NotSupportedException();
+        }
+
+        #endregion
+
+        private Brush StringToBrush(string sColor)
+        {
+            return new SolidColorBrush((Color)ColorConverter.ConvertFromString(sColor));
+        }
+    }
 }

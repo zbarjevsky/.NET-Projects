@@ -1,0 +1,31 @@
+﻿<UserControl x:Class="MkZ.WPF.EditBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MkZ.WPF"
+             mc:Ignorable="d" 
+             MouseLeftButtonUp="UserControl_MouseLeftButtonUp"
+             x:Name="_editBox"
+             d:DesignHeight="50" d:DesignWidth="200">
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="brushWatermarkBackground" Color="White" />
+        <SolidColorBrush x:Key="brushWatermarkForeground" Color="Gray" />
+        <SolidColorBrush x:Key="brushWatermarkBorder" Color="Indigo" />
+
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+        <!--<local:TextInputToVisibilityConverter x:Key="TextInputToVisibilityConverter" />-->
+    </UserControl.Resources>
+    <Grid>
+        <TextBlock x:Name="_txtBlock" Text="{Binding Text, ElementName=_editBox, FallbackValue='Readonly'}"
+                   Padding="3,0" VerticalAlignment="Center" HorizontalAlignment="Left" />
+        <TextBox Name="_txtBox" Background="LightYellow" Visibility="Collapsed" 
+                 Text="{Binding Text, ElementName=_editBox, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, FallbackValue=Writable}" 
+                 TextChanged="_txtBox_TextChanged" 
+                 LostFocus="_txtBox_LostFocus"
+                 PreviewKeyUp="_txtBox_PreviewKeyUp"
+                 HorizontalAlignment="Left"
+                 VerticalContentAlignment="Center" Padding="0"
+                 BorderBrush="{StaticResource brushWatermarkBorder}" />
+    </Grid>
+</UserControl>

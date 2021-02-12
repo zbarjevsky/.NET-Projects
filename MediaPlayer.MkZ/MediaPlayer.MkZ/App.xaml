@@ -12,6 +12,7 @@
         <converters:MyBrushToColorConverter x:Key="ColorConverter" />
         <converters:BrushOpacityConverter x:Key="BrushOpacityConverter" />
         <converters:BooleanToTextConverter x:Key="BooleanToTextConverter" />
+        <converters:BoolToBrushConverter x:Key="BoolToBrushConverter" />
         
         <utils:MediaStateToPlayConverter x:Key="MediaStateToPlayConverter" />
         <utils:SecondsToStringConverter x:Key="SecondsToStringConverter" />

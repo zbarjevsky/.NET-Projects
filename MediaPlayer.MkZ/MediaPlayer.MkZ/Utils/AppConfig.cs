@@ -316,6 +316,13 @@ namespace MkZ.MediaPlayer.Utils
             return SelectedMediaFileIndex;
         }
 
+        public MediaFileInfo GetSelectedInfo()
+        {
+            if (SelectedMediaFileIndex >= 0 && SelectedMediaFileIndex < MediaFiles.Count)
+                return MediaFiles[SelectedMediaFileIndex];
+            return null;
+        }
+
         public int RemoveMediaFileFromList(MediaFileInfo item)
         {
             int idx = MediaFiles.IndexOf(item);

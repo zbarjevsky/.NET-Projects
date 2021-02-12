@@ -94,9 +94,6 @@
     <Compile Include="Controls\ButtonVolume.xaml.cs">
       <DependentUpon>ButtonVolume.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\CursorArrow.xaml.cs">
-      <DependentUpon>CursorArrow.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\FadingZoomingLabelControl.xaml.cs">
       <DependentUpon>FadingZoomingLabelControl.xaml</DependentUpon>
     </Compile>
@@ -176,10 +173,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\ButtonVolume.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\CursorArrow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

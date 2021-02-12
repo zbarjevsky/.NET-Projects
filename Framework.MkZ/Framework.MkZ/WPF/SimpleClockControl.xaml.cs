@@ -199,14 +199,7 @@ namespace MkZ.WPF
 
         private void SettingsMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            OptionsWindow wnd = new OptionsWindow();
-            wnd.Owner = Application.Current.MainWindow;
-            wnd.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            wnd.Height = 450;
-            wnd.Title = "Clock Settings";
-            wnd.SetPropertiesObject(this.DataContext, "Clock Font");
-            //wnd.ExpandAll();
-            wnd.ShowDialog();
+            OptionsWindow.ShowOptions(Application.Current.MainWindow, DataContext, "Clock Settings", 450, "Clock Font");
         }
 
         private void ButtonHide_Click(object sender, RoutedEventArgs e)

@@ -15,7 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MkZ.MediaPlayer.Controls
+namespace MkZ.WPF
 {
     /// <summary>
     /// Interaction logic for CursorZoom.xaml

@@ -89,6 +89,7 @@
             <RowDefinition x:Name="rowContent" Height="*"></RowDefinition>
             <RowDefinition x:Name="rowFooter" Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
+        
         <DockPanel Background="{StaticResource GradientBackground}">
             <buttons:ButtonMenu Margin="4" Foreground="{StaticResource ButtonForegroundMain}" 
                      ToolTip="File..." >

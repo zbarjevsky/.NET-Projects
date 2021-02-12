@@ -73,6 +73,7 @@ namespace MkZ.MediaPlayer
             _zoomImage.FitWindow(0);
 
             Context.Config.Configuration.PropertyChanged += Config_PropertyChanged;
+            Context.Config.MediaDatabaseInfo.PropertyChanged += MediaDatabaseInfo_PropertyChanged;
 
             _hideHeaderAnimationHelper = new GridLengthAnimationHelper(this, rowHeader);
             //_hideHeaderAnimationHelper.PostAnimationAction = (ctrl) => 
@@ -244,6 +245,15 @@ namespace MkZ.MediaPlayer
             if (e.PropertyName == nameof(Context.Config.MediaDatabaseInfo.SelectedMediaFileIndex))
             {
                 if(_cmbFilesList.SelectedIndex != Context.Config.MediaDatabaseInfo.SelectedMediaFileIndex)
+                    _cmbFilesList.SelectedIndex = Context.Config.MediaDatabaseInfo.SelectedMediaFileIndex;
+            }
+        }
+
+        private void MediaDatabaseInfo_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            if(e.PropertyName == nameof(MediaDatabaseInfo.SelectedMediaFileIndex))
+            {
+                if (_cmbFilesList.SelectedIndex != Context.Config.MediaDatabaseInfo.SelectedMediaFileIndex)
                     _cmbFilesList.SelectedIndex = Context.Config.MediaDatabaseInfo.SelectedMediaFileIndex;
             }
         }
@@ -449,12 +459,14 @@ namespace MkZ.MediaPlayer
 
         private void SettingsMenuItem_Click(object sender, RoutedEventArgs e)
         {
-            OptionsWindow wnd = new OptionsWindow();
-            wnd.Owner = this;
-            wnd.WindowStartupLocation = WindowStartupLocation.CenterOwner;
-            wnd.SetPropertiesObject(Context.Config, "Configuration", "Clock Configuration", "Clock Font");
-            
-            wnd.ShowDialog();
+            Action<Grid> setCustomCursor = (grid) =>
+            {
+                CursorArrow cursorArrow = new CursorArrow();
+                cursorArrow.Load_Cursor(grid, sizeRatio: 25);
+                cursorArrow.BindToColor(Context.Config.Configuration, "CursorColor.B");
+            };
+
+            OptionsWindow.ShowOptionsEx(this, Context.Config, "Settings", setCustomCursor, "Configuration", "Clock Configuration", "Clock Font");
         }
 
         private void ButtonPlayListManager_Click(object sender, RoutedEventArgs e)
@@ -464,10 +476,9 @@ namespace MkZ.MediaPlayer
             wnd.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             bool ok = wnd.ShowDialog().Value;
             Context.MediaPlayerCommands = _mediaPlayerCommands;
-            if(ok)
-            {
-                SetPlayList(MediaDB.SelectedPlayList);
-            }
+
+            LocationsSave();
+            Context.Config.Save();
         }
 
         private void MenuSelectPlayList_Click(object sender, RoutedEventArgs e)

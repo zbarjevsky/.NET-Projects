@@ -4,16 +4,18 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MkZ.MediaPlayer.Controls"
-        xmlns:utils="clr-namespace:MkZ.MediaPlayer.Utils"
+        xmlns:utils="clr-namespace:MkZ.MediaPlayer.Utils" 
+        xmlns:wpf="clr-namespace:MkZ.WPF;assembly=Framework.MkZ"
         mc:Ignorable="d"
         WindowStartupLocation="CenterOwner"
         Loaded="Window_Loaded" FontSize="18" FontWeight="Normal"
         Closed="Window_Closed"
-        Title="PlayList Manager" Height="450" Width="800">
+        Title="PlayList Manager" Height="650" Width="1000">
     <Window.Resources>
         <ResourceDictionary>
-            <Style TargetType="ListViewItem">
+            <Style x:Key="customStyle" TargetType="{x:Type ListViewItem}">
                 <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                <EventSetter Event="MouseDoubleClick" Handler="ListViewItem_MouseDoubleClick"/>
             </Style>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/CustomMenuStyle.xaml" />
@@ -43,7 +45,7 @@
             <local:ButtonPlayPause Margin="4" Foreground="{StaticResource ButtonForegroundMain}" 
                      HorizontalAlignment="Left" Command="MediaCommands.TogglePlayPause"
                      ToolTip="Tooggle Play Pause" ToolTipService.ShowOnDisabled="True" 
-                     IsChecked="False"/>
+                     IsChecked="{Binding IsPlayingSelectedFile, Mode=OneWay}"/>
             <ComboBox x:Name="_cmbPlayMode" Margin="10,7" ToolTip="Repeat Mode..." 
                       SelectedItem="{Binding SelectedItem.PlayMode, ElementName=_treePlayLists}"
                       Background="{StaticResource GradientBackground}" Foreground="{StaticResource ButtonForegroundMain}" 
@@ -145,7 +147,8 @@
         
         <GridSplitter Grid.Row="0" Grid.RowSpan="2" Grid.Column="1" Margin="0,2" Background="Goldenrod" HorizontalAlignment="Stretch"/>
 
-        <ListView Grid.Row="1" Grid.Column="2" x:Name="_listMediaFiles" SelectionMode="Single"
+        <ListView Grid.Row="1" Grid.Column="2" x:Name="_listMediaFiles" ItemContainerStyle="{StaticResource customStyle}"
+                  SelectionMode="Single"
                   ItemsSource="{Binding SelectedItem.MediaFiles, ElementName=_treePlayLists}" 
                   MouseDoubleClick="_listMediaFiles_MouseDoubleClick">
             <ListView.View>
@@ -154,7 +157,10 @@
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
                                 <DockPanel>
-                                    <local:ButtonPlayPause Height="20" Foreground="SteelBlue"
+                                    <local:ButtonPlayPause x:Name="_btnPause" Height="20"
+                                          Foreground="{Binding IsChecked, ElementName=_btnPause, Converter={StaticResource BoolToBrushConverter}, 
+                                                ConverterParameter=Red|Gray}"
+                                          IsChecked="{Binding MediaState, Mode=OneWay, Converter={StaticResource MediaStateToPlayConverter}}"
                                           Click="TogglePlayPauseInList_Click" />
                                     <local:SmallButtonClose Height="20"
                                           ToolTip="Remove From List"
@@ -182,9 +188,8 @@
                         </GridViewColumn.HeaderContainerStyle>
                         <GridViewColumn.CellTemplate>
                             <DataTemplate>
-                                <TextBox Text="{Binding FileName, Mode=OneWay, Converter={StaticResource PathToFileNameConverter}}"
-                                         TextChanged="FileName_TextChanged"
-                                         BorderThickness="0" Background="Transparent"/>
+                                <wpf:EditBox Text="{Binding FileName, Mode=OneWay, Converter={StaticResource PathToFileNameConverter}}"
+                                         TextChanged="FileName_TextChanged" />
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>

@@ -7,10 +7,25 @@
         xmlns:local="clr-namespace:MkZ.WPF.PropertyGrid"
         mc:Ignorable="d"
         Title="Options" 
-        Height="650" Width="600">
+        Height="700" Width="650">
+    <Window.CommandBindings>
+        <CommandBinding Command="ApplicationCommands.Close" Executed="CloseCommandBinding_Executed" CanExecute="CloseCommandBinding_CanExecute" />
+    </Window.CommandBindings>
+    <Window.InputBindings>
+        <KeyBinding Gesture="ALT+F4" Command="ApplicationCommands.Close" />
+    </Window.InputBindings>
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="34" />
+        </Grid.RowDefinitions>
         <WindowsFormsHost>
             <swf:PropertyGrid x:Name="_propertyGrid"/>
         </WindowsFormsHost>
+        <Grid x:Name="_gridMain" Grid.Row="0" Grid.RowSpan="2" Background="LightYellow" >
+            <Button Content="Close" Margin="5" Padding="8,2"
+                    Command="ApplicationCommands.Close"
+                    VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+        </Grid>
     </Grid>
 </Window>

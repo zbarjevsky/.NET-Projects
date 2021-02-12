@@ -23,6 +23,31 @@ namespace MkZ.WPF.PropertyGrid
     /// </summary>
     public partial class OptionsWindow : Window
     {
+        public static bool? ShowOptions(Window owner, object options, string title, double height, params string[] expandNames)
+        {
+            OptionsWindow wnd = new OptionsWindow();
+            wnd.Owner = owner;
+            wnd.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            wnd.Height = height;
+            wnd.Title = title;
+            wnd.SetPropertiesObject(options, expandNames);
+
+            return wnd.ShowDialog();
+        }
+
+        public static bool? ShowOptionsEx(Window owner, object options, string title, Action<Grid> initAction, params string[] expandNames)
+        {
+            OptionsWindow wnd = new OptionsWindow();
+            wnd.Owner = owner;
+            wnd.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            wnd.Title = title;
+            wnd.SetPropertiesObject(options, expandNames);
+
+            initAction?.Invoke(wnd._gridMain);
+
+            return wnd.ShowDialog();
+        }
+
         public OptionsWindow()
         {
             InitializeComponent();
@@ -42,6 +67,16 @@ namespace MkZ.WPF.PropertyGrid
         public void ExpandAll()
         {
             _propertyGrid.ExpandAllGridItems();
+        }
+
+        private void CloseCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void CloseCommandBinding_CanExecute(object sender, CanExecuteRoutedEventArgs e)
+        {
+            e.CanExecute = true;
         }
     }
 }

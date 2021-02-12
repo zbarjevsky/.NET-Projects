@@ -209,6 +209,9 @@
     <Compile Include="WPF\Buttons\DropDownButton.cs" />
     <Compile Include="WPF\Converters\BooleanToTextConverter.cs" />
     <Compile Include="WPF\Converters\ColorConverters.cs" />
+    <Compile Include="WPF\CursorArrow.xaml.cs">
+      <DependentUpon>CursorArrow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF\DisplayTopologyUserControl.xaml.cs">
       <DependentUpon>DisplayTopologyUserControl.xaml</DependentUpon>
     </Compile>
@@ -216,6 +219,9 @@
     <Compile Include="WPF\DragDrop\ListViewDragDropManager.cs" />
     <Compile Include="WPF\DragDrop\ListViewDragDropHelper.cs" />
     <Compile Include="WPF\DraggableExtension.cs" />
+    <Compile Include="WPF\EditBox.xaml.cs">
+      <DependentUpon>EditBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF\GridLengthAnimation.cs" />
     <Compile Include="WPF\ItemsControlExtensions.cs" />
     <Compile Include="Windows\NonStickMouse.cs" />
@@ -359,9 +365,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="WPF\CursorArrow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="WPF\DisplayTopologyUserControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\EditBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WPF\PopupInfoWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
