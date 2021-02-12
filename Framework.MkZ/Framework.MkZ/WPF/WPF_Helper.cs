@@ -240,7 +240,7 @@ namespace MkZ.WPF
             return (T)topmost.Invoke(action);
         }
 
-        public static ImageSource GetResourceImage(string imageResourcePath)
+        public static BitmapImage GetResourceImage(string imageResourcePath)
         {
             try
             {

@@ -102,15 +102,16 @@ namespace MkZ.MediaPlayer
             _cursorArrow.BindToColor(Context.Config.Configuration, "CursorColor.B");
 
             Context.Config.Configuration.MainWindowState.RestoreTo(this);
+            //_imageBackground.ForceRender();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             _mnuPlayLists.ItemsSource = MediaDB.RootList.PlayLists;
 
-            SetPlayList(MediaDB.SelectedPlayList);
-
             LocationsRestore(Context.Config.Configuration);
+
+            Application.Current.Dispatcher.BeginInvoke(new Action(() => SetPlayList(MediaDB.SelectedPlayList)));
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -241,12 +242,6 @@ namespace MkZ.MediaPlayer
             {
                 this.Background = ColorUtils.CalculateAverageColor(Context.Config.Configuration.BackgroundImageFileName);
             }
-
-            if (e.PropertyName == nameof(Context.Config.MediaDatabaseInfo.SelectedMediaFileIndex))
-            {
-                if(_cmbFilesList.SelectedIndex != Context.Config.MediaDatabaseInfo.SelectedMediaFileIndex)
-                    _cmbFilesList.SelectedIndex = Context.Config.MediaDatabaseInfo.SelectedMediaFileIndex;
-            }
         }
 
         private void MediaDatabaseInfo_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -269,7 +264,7 @@ namespace MkZ.MediaPlayer
                 //_btnSelectPlayList.Content = playList.Name;
                 _cmbFilesList.ItemsSource = playList.MediaFiles;
 
-                if (playList.MediaFiles.Count > 0 && playList.SelectedMediaFileIndex < playList.MediaFiles.Count)
+                if (playList.SelectedMediaFileIndex >= 0 && playList.SelectedMediaFileIndex < playList.MediaFiles.Count)
                 {
                     playList.MediaFiles[playList.SelectedMediaFileIndex].MediaState = MediaState.Pause;
                     _cmbFilesList.SelectedIndex = playList.SelectedMediaFileIndex;

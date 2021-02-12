@@ -7,6 +7,7 @@
         xmlns:local="clr-namespace:MkZ.WPF.Buttons"
         xmlns:converters="clr-namespace:MkZ.WPF.Converters"
         mc:Ignorable="d" 
+    x:Name="button"
         FontSize="17" FontFamily="Jokerman" Foreground="Black"
         d:DesignHeight="45" d:DesignWidth="80">
     <ToggleButton.Resources>
@@ -35,9 +36,11 @@
                         </Path>
                     </Canvas>
                     <TextBlock x:Name="textUnChecked" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"
-                        Text="{Binding ButtonTextUnchecked, RelativeSource={RelativeSource AncestorType=ToggleButton}, FallbackValue=+14}"/>
+                               Foreground="{Binding Stroke, ElementName=circle}"
+                        Text="{Binding ButtonTextUnchecked, ElementName=button, FallbackValue=+14}"/>
                     <TextBlock x:Name="textChecked" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"
-                        Text="{Binding ButtonTextChecked, RelativeSource={RelativeSource AncestorType=ToggleButton}, FallbackValue=+11}"/>
+                               Foreground="{Binding Stroke, ElementName=circle}"
+                        Text="{Binding ButtonTextChecked, ElementName=button, FallbackValue=+11}"/>
                 </Grid>
             </Viewbox>
 
@@ -50,10 +53,10 @@
                         Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
                         Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.3}" />
                     <Setter TargetName="textUnChecked" Property="Foreground" 
-                        Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
+                        Value="{Binding Stroke, ElementName=circle, 
                         Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.5}" />
                     <Setter TargetName="textChecked" Property="Foreground" 
-                        Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
+                        Value="{Binding Stroke, ElementName=circle, 
                         Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.5}" />
                 </Trigger>
                 <Trigger Property="IsMouseOver" Value="True">
@@ -64,10 +67,10 @@
                         Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
                         Converter={StaticResource BrushOpacityConverter}, ConverterParameter=0.3}" />
                     <Setter TargetName="textUnChecked" Property="Foreground" 
-                        Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
+                        Value="{Binding Stroke, ElementName=circle, 
                         Converter={StaticResource BrushOpacityConverter}, ConverterParameter=1}" />
                     <Setter TargetName="textChecked" Property="Foreground" 
-                        Value="{Binding Foreground, RelativeSource={RelativeSource TemplatedParent}, 
+                        Value="{Binding Stroke, ElementName=circle, 
                         Converter={StaticResource BrushOpacityConverter}, ConverterParameter=1}" />
                 </Trigger>
                 <Trigger Property="IsPressed" Value="True">
@@ -90,4 +93,4 @@
             </ControlTemplate.Triggers>
         </ControlTemplate>
     </ToggleButton.Template>
-    </ToggleButton>
+</ToggleButton>

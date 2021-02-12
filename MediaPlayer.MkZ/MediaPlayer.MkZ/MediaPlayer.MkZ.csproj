@@ -309,6 +309,9 @@
   <ItemGroup>
     <Resource Include="Images\ArrowBig.cur" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\GradientProgress48x48.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if "$(ConfigurationName)" == "Release" (

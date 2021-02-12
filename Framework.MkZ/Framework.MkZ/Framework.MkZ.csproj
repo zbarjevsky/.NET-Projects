@@ -188,6 +188,9 @@
     <Compile Include="WPF\Buttons\ButtonFullScreen.xaml.cs">
       <DependentUpon>ButtonFullScreen.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WPF\Buttons\ButtonImageToggle.xaml.cs">
+      <DependentUpon>ButtonImageToggle.xaml</DependentUpon>
+    </Compile>
     <Compile Include="WPF\Buttons\ButtonWithIcon.xaml.cs">
       <DependentUpon>ButtonWithIcon.xaml</DependentUpon>
     </Compile>
@@ -303,11 +306,15 @@
     <None Include="Images\SmallX.ico" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Images\RedX.ico" />
+    <Resource Include="Images\RedX.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Ok.ico" />
     <Resource Include="Images\Cancel.ico" />
+    <Content Include="Images\Clock.ico" />
+    <Resource Include="Images\Clock256x256.png" />
+    <Resource Include="Images\Clock48x48.png" />
+    <Resource Include="Images\Clock48x48_1.png" />
     <Content Include="Sounds\ding.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -340,6 +347,10 @@
     <Page Include="WPF\Buttons\ButtonFullScreen.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="WPF\Buttons\ButtonImageToggle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="WPF\Buttons\ButtonWithIcon.xaml">
       <SubType>Designer</SubType>
