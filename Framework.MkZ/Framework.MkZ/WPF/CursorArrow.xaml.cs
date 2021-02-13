@@ -24,6 +24,7 @@ namespace MkZ.WPF
     {
         private Grid _parentGrid = null;
         private double _sizeRatio = 20.0;
+        private AdornerContentPresenter adornerContentPresenter;
 
         public Brush Stroke
         {
@@ -61,12 +62,15 @@ namespace MkZ.WPF
             Grid_SizeChanged(_parentGrid, null);
 
             _parentGrid.Cursor = Cursors.None;
-            
-            if(_parentGrid.RowDefinitions.Count>0)
+
+            if (_parentGrid.RowDefinitions.Count > 0)
                 Grid.SetRowSpan(this, _parentGrid.RowDefinitions.Count);
-            if(_parentGrid.ColumnDefinitions.Count > 0)
+            if (_parentGrid.ColumnDefinitions.Count > 0)
                 Grid.SetColumnSpan(this, _parentGrid.ColumnDefinitions.Count);
 
+            //adornerContentPresenter = new AdornerContentPresenter(grid, _cursor);
+            //var al = AdornerLayer.GetAdornerLayer(_parentGrid);
+            //al.Add(adornerContentPresenter);
             _parentGrid.Children.Add(this);
 
             _parentGrid.MouseMove += Grid_MouseMove;

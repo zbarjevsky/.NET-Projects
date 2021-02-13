@@ -180,6 +180,7 @@
     <Compile Include="Windows\User32_WindowsMessages.cs" />
     <Compile Include="Windows\XmlSerializerHelper.cs" />
     <Compile Include="Windows\CommonUtils.cs" />
+    <Compile Include="WPF\AdornerContentPresenter.cs" />
     <Compile Include="WPF\AnimationHelper.cs" />
     <Compile Include="WPF\AutoGreyableImage.cs" />
     <Compile Include="WPF\Buttons\ButtonClose.xaml.cs">
@@ -229,6 +230,7 @@
     <Compile Include="WPF\ItemsControlExtensions.cs" />
     <Compile Include="Windows\NonStickMouse.cs" />
     <Compile Include="WPF\IMediaPlayer.cs" />
+    <Compile Include="WPF\PopupBehavior.cs" />
     <Compile Include="WPF\PopupInfoWindow.xaml.cs">
       <DependentUpon>PopupInfoWindow.xaml</DependentUpon>
     </Compile>

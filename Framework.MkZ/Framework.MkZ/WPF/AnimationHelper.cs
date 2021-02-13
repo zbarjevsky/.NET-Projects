@@ -181,7 +181,8 @@ namespace MkZ.WPF
             _container = container;
             InitialControlHeight = _container.Height;
             _container.MouseMove += _container_MouseMove;
-            
+            _container.MouseLeave += _container_MouseLeave;
+
             _row = row;
             InitialRowHeight = _row.Height;
         }
@@ -213,7 +214,28 @@ namespace MkZ.WPF
         private void _container_MouseMove(object sender, MouseEventArgs e)
         {
             Point pt = e.GetPosition(_row);
-            ShowRow(pt.Y < 2*InitialRowHeight.Value || !CanHide, CanHide);
+
+            if(_row.Height.Value == InitialRowHeight.Value) //fully visible
+            {
+                if (!CanHide)
+                    return;
+
+                if (e.OriginalSource is Grid && pt.Y > InitialRowHeight.Value * 2.0)
+                    ShowRow(false, CanHide);
+            }
+            else if(_row.Height.Value == 0) //not visible - show
+            {
+                if (pt.Y < InitialRowHeight.Value / 2.0)
+                    ShowRow(true, CanHide);
+            }
+        }
+
+        private void _container_MouseLeave(object sender, MouseEventArgs e)
+        {
+            Point pt = e.GetPosition(_row);
+            Debug.WriteLine("AnimationHelper::MouseLeave Pos: {0}, Source: {1}", pt, e.OriginalSource);
+            if (CanHide && _row.Height.Value == InitialRowHeight.Value)
+                ShowRow(false, CanHide);
         }
     }
 }

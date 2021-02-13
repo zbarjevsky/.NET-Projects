@@ -102,7 +102,6 @@ namespace MkZ.MediaPlayer
             _cursorArrow.BindToColor(Context.Config.Configuration, "CursorColor.B");
 
             Context.Config.Configuration.MainWindowState.RestoreTo(this);
-            //_imageBackground.ForceRender();
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -110,6 +109,8 @@ namespace MkZ.MediaPlayer
             _mnuPlayLists.ItemsSource = MediaDB.RootList.PlayLists;
 
             LocationsRestore(Context.Config.Configuration);
+
+            //CursorWindow.ShowCursor(this);
 
             Application.Current.Dispatcher.BeginInvoke(new Action(() => SetPlayList(MediaDB.SelectedPlayList)));
         }
@@ -168,11 +169,13 @@ namespace MkZ.MediaPlayer
 
             if (this.WindowState == WindowState.Maximized)
             {
+                _hideHeaderAnimationHelper.CanHide = true;
                 _clock.Zoomable.BoundsSet(config.ClockConfig.Bounds_FullScreen);
                 _reiKiProgress.Zoomable.BoundsSet(config.ReiKiConfig.Bounds_FullScreen);
             }
             else
             {
+                _hideHeaderAnimationHelper.CanHide = false;
                 _clock.Zoomable.BoundsSet(config.ClockConfig.Bounds_Normal);
                 _reiKiProgress.Zoomable.BoundsSet(config.ReiKiConfig.Bounds_Normal);
             }
@@ -457,7 +460,7 @@ namespace MkZ.MediaPlayer
             Action<Grid> setCustomCursor = (grid) =>
             {
                 CursorArrow cursorArrow = new CursorArrow();
-                cursorArrow.Load_Cursor(grid, sizeRatio: 25);
+                cursorArrow.Load_Cursor(_gridMain, sizeRatio: 25);
                 cursorArrow.BindToColor(Context.Config.Configuration, "CursorColor.B");
             };
 
