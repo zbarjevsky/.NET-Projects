@@ -66,7 +66,7 @@ namespace MkZ.WPF
             _control.SetDraggableOffset(loc.Offset, bAbsoluteOffset: true);
         }
 
-        public void BoundsUpload(OffsetAndZoom loc)
+        public void BoundsGet(OffsetAndZoom loc)
         {
             loc.Zoom = _scrollDragZoom.Zoom;
             loc.Offset = _control.GetDraggableOffset();

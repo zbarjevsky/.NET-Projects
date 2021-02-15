@@ -24,7 +24,6 @@ namespace MkZ.WPF
     {
         private Grid _parentGrid = null;
         private double _sizeRatio = 20.0;
-        private AdornerContentPresenter adornerContentPresenter;
 
         public Brush Stroke
         {
@@ -51,7 +50,9 @@ namespace MkZ.WPF
             InitializeComponent();
 
             DataContext = this;
-            _cursor.Visibility = Visibility.Hidden;
+
+            //SetCursorPos(new Point(100, 100));
+            //_cursor.Visibility = Visibility.Hidden;
         }
 
         public void Load_Cursor(Grid grid, double sizeRatio)
@@ -68,16 +69,12 @@ namespace MkZ.WPF
             if (_parentGrid.ColumnDefinitions.Count > 0)
                 Grid.SetColumnSpan(this, _parentGrid.ColumnDefinitions.Count);
 
-            //adornerContentPresenter = new AdornerContentPresenter(grid, _cursor);
-            //var al = AdornerLayer.GetAdornerLayer(_parentGrid);
-            //al.Add(adornerContentPresenter);
             _parentGrid.Children.Add(this);
 
             _parentGrid.MouseMove += Grid_MouseMove;
             _parentGrid.MouseEnter += Grid_MouseEnter;
             _parentGrid.MouseLeave += Grid_MouseLeave;
             _parentGrid.SizeChanged += Grid_SizeChanged;
-
         }
 
         public void BindToColor(object bindingSource, string bindingPath)
@@ -91,6 +88,18 @@ namespace MkZ.WPF
             binding.Converter = new BrushOpacityConverter();
             binding.ConverterParameter = 0.5;
             this.SetBinding(FillProperty, binding);
+        }
+
+        public void SetCursorSize(double size)
+        {
+            _cursor.Width = size;
+            _cursor.Height = size;
+        }
+
+        public void SetCursorPos(Point pos)
+        {
+            _cursor.SetValue(Canvas.LeftProperty, pos.X);
+            _cursor.SetValue(Canvas.TopProperty, pos.Y);
         }
 
         private void Grid_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -120,9 +129,7 @@ namespace MkZ.WPF
 
         private void Grid_MouseMove(object sender, MouseEventArgs e)
         {
-            Point pos = e.GetPosition(ContentPanel);
-            _cursor.SetValue(Canvas.LeftProperty, pos.X);
-            _cursor.SetValue(Canvas.TopProperty, pos.Y);
+            SetCursorPos(e.GetPosition(ContentPanel));
         }
     }
 }

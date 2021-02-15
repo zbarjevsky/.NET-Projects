@@ -11,7 +11,7 @@ namespace MkZ.MediaPlayer.Utils
     {
         Window Window { get; }
         void AddNewMediaFiles(string [] fileNames, double volume);
-        void ToggleFullScreen();
+        void FullScreenToggle();
         bool PreviousTrack_CanExecute();
         MediaFileInfo PreviousTrackInfo();
         void PreviousTrack_Executed(bool bResetPositionAndPlay);

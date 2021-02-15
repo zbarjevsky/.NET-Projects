@@ -61,9 +61,6 @@ namespace MkZ.MediaPlayer
             _cmbFilesList.Items.Clear();
             _cmbFilesList.ItemsSource = null;
 
-            StreamResourceInfo sriCurs = Application.GetResourceStream(new Uri("/Images/ArrowBig.cur", UriKind.Relative));
-            //this.Cursor = new Cursor(sriCurs.Stream);
-
             _controlsHideAndShow = new FadeAnimationHelper(this, 2, _imagesNavigation, _cursorArrow);
 
             _clock.Zoomable.EnableZoom(_scrollMain);
@@ -76,8 +73,6 @@ namespace MkZ.MediaPlayer
             Context.Config.MediaDatabaseInfo.PropertyChanged += MediaDatabaseInfo_PropertyChanged;
 
             _hideHeaderAnimationHelper = new GridLengthAnimationHelper(this, rowHeader);
-            //_hideHeaderAnimationHelper.PostAnimationAction = (ctrl) => 
-            //{ this.OnRenderSizeChanged(new SizeChangedInfo(ctrl, new Size(this.Width, this.Height), false, true)); }; 
 
             Context.Config.Load();
 
@@ -89,7 +84,7 @@ namespace MkZ.MediaPlayer
                 SetPlayList(playList);
             };
 
-            _player.OnFullScreenButtonClick = (vm) => ToggleFullScreen();
+            _player.OnFullScreenButtonClick = (vm) => FullScreenToggle();
             _player.OnFileDropAction = (fileNames) =>
             {
                 AddNewMediaFiles(fileNames, PlayerVM.Volume > 0 ? PlayerVM.Volume : 0.3);
@@ -98,10 +93,8 @@ namespace MkZ.MediaPlayer
             PlayerVM.MediaEndedAction = (vm) => OnMediaEnded(vm);
             PlayerVM.MediaFailedAction = (vm, ex) => OnMediaFailed(vm, ex);
 
-            _cursorArrow.Load_Cursor(_gridMain, sizeRatio: 20);
-            _cursorArrow.BindToColor(Context.Config.Configuration, "CursorColor.B");
-
             Context.Config.Configuration.MainWindowState.RestoreTo(this);
+            this.WindowState = WindowState.Normal; //always normal - to position on correct screen for maximize
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -110,7 +103,14 @@ namespace MkZ.MediaPlayer
 
             LocationsRestore(Context.Config.Configuration);
 
-            //CursorWindow.ShowCursor(this);
+            //CursorArrow arrow = new CursorArrow();
+            //arrow.SetCursorSize(50);
+            //arrow.BindToColor(Context.Config.Configuration, "CursorColor.B");
+            //this.Cursor = CursorFromControl.Create(arrow, new Size(80, 80));
+
+            _cursorArrow.Visibility = Visibility.Hidden;
+            _cursorArrow.Load_Cursor(_gridMain, sizeRatio: 20);
+            _cursorArrow.BindToColor(Context.Config.Configuration, "CursorColor.B");
 
             Application.Current.Dispatcher.BeginInvoke(new Action(() => SetPlayList(MediaDB.SelectedPlayList)));
         }
@@ -164,21 +164,12 @@ namespace MkZ.MediaPlayer
         {
             config.MainWindowState.RestoreTo(this);
 
+            bool bFullScreen = config.MainWindowState.WindowStyle == WindowStyle.None;
+
+            FullScreenSet(bFullScreen);
+
             _clock.DataContext = config.ClockConfig;
             _reiKiProgress.DataContext = config.ReiKiConfig;
-
-            if (this.WindowState == WindowState.Maximized)
-            {
-                _hideHeaderAnimationHelper.CanHide = true;
-                _clock.Zoomable.BoundsSet(config.ClockConfig.Bounds_FullScreen);
-                _reiKiProgress.Zoomable.BoundsSet(config.ReiKiConfig.Bounds_FullScreen);
-            }
-            else
-            {
-                _hideHeaderAnimationHelper.CanHide = false;
-                _clock.Zoomable.BoundsSet(config.ClockConfig.Bounds_Normal);
-                _reiKiProgress.Zoomable.BoundsSet(config.ReiKiConfig.Bounds_Normal);
-            }
         }
 
         private void LocationsSave()
@@ -187,13 +178,13 @@ namespace MkZ.MediaPlayer
 
             if (this.WindowStyle == WindowStyle.None) //full screen
             {
-                _clock.Zoomable.BoundsUpload(Context.Config.Configuration.ClockConfig.Bounds_FullScreen);
-                _reiKiProgress.Zoomable.BoundsUpload(Context.Config.Configuration.ReiKiConfig.Bounds_FullScreen);
+                _clock.Zoomable.BoundsGet(Context.Config.Configuration.ClockConfig.Bounds_FullScreen);
+                _reiKiProgress.Zoomable.BoundsGet(Context.Config.Configuration.ReiKiConfig.Bounds_FullScreen);
             }
             else
             {
-                _clock.Zoomable.BoundsUpload(Context.Config.Configuration.ClockConfig.Bounds_Normal);
-                _reiKiProgress.Zoomable.BoundsUpload(Context.Config.Configuration.ReiKiConfig.Bounds_Normal);
+                _clock.Zoomable.BoundsGet(Context.Config.Configuration.ClockConfig.Bounds_Normal);
+                _reiKiProgress.Zoomable.BoundsGet(Context.Config.Configuration.ReiKiConfig.Bounds_Normal);
             }
         }
 
@@ -329,11 +320,17 @@ namespace MkZ.MediaPlayer
             _cmbFilesList.SelectedIndex = MediaDB.SelectedPlayList.SelectedMediaFileIndex;
         }
 
-        public void ToggleFullScreen()
+        public void FullScreenToggle()
         {
             LocationsSave();
 
-            if (this.WindowStyle == WindowStyle.None)//go normal
+            bool bFullScreen = this.WindowStyle != WindowStyle.None;
+            FullScreenSet(bFullScreen);
+        }
+
+        public void FullScreenSet(bool bFullScreen)
+        {
+            if (bFullScreen == false)//go normal
             {
                 //_hideHeaderAnimationHelper.ShowRow(true, false);
                 _hideHeaderAnimationHelper.CanHide = false;

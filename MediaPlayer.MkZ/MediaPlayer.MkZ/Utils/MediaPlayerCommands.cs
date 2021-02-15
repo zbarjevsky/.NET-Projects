@@ -162,14 +162,14 @@ namespace MkZ.MediaPlayer.Utils
         {
             //if full screen
             if (MainWindow.Window.WindowStyle == WindowStyle.None)
-                MainWindow.ToggleFullScreen();
+                MainWindow.FullScreenToggle();
 
             Pause_Executed(this, null);
         }
 
         public void FullScreen_Execute(object obj)
         {
-            MainWindow.ToggleFullScreen();
+            MainWindow.FullScreenToggle();
         }
 
         public void TogglePlayPause_CanExecute(object sender, CanExecuteRoutedEventArgs e)

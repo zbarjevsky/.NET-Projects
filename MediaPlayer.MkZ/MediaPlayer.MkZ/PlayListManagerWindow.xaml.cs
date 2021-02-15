@@ -155,7 +155,7 @@ namespace MkZ.MediaPlayer
             VideoPlayerContext.Instance.AddNewMediaFiles(playList, fileNames, volume);
         }
 
-        public void ToggleFullScreen()
+        public void FullScreenToggle()
         {
         }
 

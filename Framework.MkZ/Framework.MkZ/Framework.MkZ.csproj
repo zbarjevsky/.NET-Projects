@@ -216,6 +216,7 @@
     <Compile Include="WPF\CursorArrow.xaml.cs">
       <DependentUpon>CursorArrow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="WPF\CursorFromControl.cs" />
     <Compile Include="WPF\DisplayTopologyUserControl.xaml.cs">
       <DependentUpon>DisplayTopologyUserControl.xaml</DependentUpon>
     </Compile>

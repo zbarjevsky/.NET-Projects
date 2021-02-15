@@ -75,6 +75,11 @@ namespace MkZ.MediaPlayer.Utils
             wnd.WindowState = WindowState;
             wnd.WindowStyle = WindowStyle;
         }
+
+        public override string ToString()
+        {
+            return string.Format("MainWindowState: {0}, Bounds: {1}", WindowState, Bounds);
+        }
     }
 
     [Serializable]

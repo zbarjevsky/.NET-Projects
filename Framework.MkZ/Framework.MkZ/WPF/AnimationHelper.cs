@@ -20,8 +20,6 @@ namespace MkZ.WPF
         private readonly List<UIElement> _controlsToFade = new List<UIElement>();
         private readonly double _hideTimeOutSeconds = 2;
 
-        private Cursor _conainerCursor = Cursors.Arrow;
-
         public Action<UIElement> OnHideCompleted = (element) => { };
         //do not hide - can be usefull for media files with no video
         public Func<bool> CanHideControls = () => true;
@@ -29,7 +27,6 @@ namespace MkZ.WPF
         public FadeAnimationHelper(Control container, double hideTimeOutSeconds, params UIElement[] controls)
         {
             _container = container;
-            _conainerCursor = container.Cursor;
             _container.MouseMove += _container_MouseMove;
             _container.PreviewMouseDown += _container_PreviewMouseDown;
 
@@ -64,8 +61,6 @@ namespace MkZ.WPF
                     VisibilityShowAnimation(ctrl, 0, null);
                 }
             }
-
-            _container.Cursor = _conainerCursor;
         }
 
         private bool _isInsideControl = false;
@@ -101,8 +96,6 @@ namespace MkZ.WPF
                 {
                     VisibilityHideAnimation(ctrl, 0, Visibility.Hidden, OnHideCompleted);
                 }
-
-                _container.Cursor = Cursors.None;
 
                 return; //do not start timer
             }
@@ -220,8 +213,9 @@ namespace MkZ.WPF
                 if (!CanHide)
                     return;
 
-                if (e.OriginalSource is Grid && pt.Y > InitialRowHeight.Value * 2.0)
-                    ShowRow(false, CanHide);
+                if(pt.Y > InitialRowHeight.Value * 2.0)
+                    if (e.OriginalSource is Grid || e.OriginalSource is MediaElement)
+                        ShowRow(false, CanHide);
             }
             else if(_row.Height.Value == 0) //not visible - show
             {

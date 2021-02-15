@@ -16,6 +16,7 @@
         SizeChanged="Window_SizeChanged"
         WindowStartupLocation="CenterScreen"
         Background="LightYellow"
+        x:Name="main"
         FocusManager.FocusedElement="{Binding ElementName=_player}"
         Height="768" Width="1366" MinHeight="400" MinWidth="600">
     <Window.Resources>
@@ -72,6 +73,10 @@
                 </Setter>
             </Style>
 
+            <Style x:Key="cmbItemCursor" TargetType="{x:Type ComboBoxItem}">
+                <Setter Property="Cursor" Value="{Binding Cursor, ElementName=main}" />
+            </Style>
+
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="/Styles/CustomMenuStyle.xaml" />
                 <ResourceDictionary Source="/Styles/ComboBoxDarkStyle.xaml" />
@@ -90,7 +95,7 @@
             <RowDefinition x:Name="rowFooter" Height="Auto"></RowDefinition>
         </Grid.RowDefinitions>
         
-        <DockPanel Panel.ZIndex="10" Background="{StaticResource GradientBackground}">
+        <DockPanel Background="{StaticResource GradientBackground}">
             <Border BorderThickness="3" CornerRadius="3" BorderBrush="{StaticResource GradientBackground}" Margin="3,7">
                 <Menu x:Name="mnuFile" FontSize="18" Foreground="{StaticResource ButtonForegroundMain}" FontWeight="Bold" 
                       Background="Transparent" >
@@ -214,6 +219,7 @@
 
             <ComboBox x:Name="_cmbFilesList" Margin="0,5,10,5"  
                       IsEditable="False" FontWeight="Medium"
+                      ItemContainerStyle="{StaticResource cmbItemCursor}"
                       SelectionChanged="ComboMediaFiles_SelectionChanged"
                       HorizontalContentAlignment="Stretch">
                 <ComboBox.ItemTemplate>
