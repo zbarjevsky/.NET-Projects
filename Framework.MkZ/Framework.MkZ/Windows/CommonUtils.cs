@@ -88,5 +88,11 @@ namespace MkZ.Tools
             }
             else return source.ToString();
         }
+
+        public static List<T> EnumToList<T>(T enumType) 
+        {
+            Array values = Enum.GetValues(typeof(T));
+            return values.Cast<T>().ToList();
+        }
     }
 }

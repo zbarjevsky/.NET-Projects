@@ -3,10 +3,87 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WindowColors"
+        xmlns:local="clr-namespace:WindowColors" 
+        xmlns:utils="clr-namespace:WindowColors.Utils" 
+        xmlns:buttons="clr-namespace:MkZ.WPF.Buttons;assembly=Framework.MkZ" 
+        xmlns:system="clr-namespace:System;assembly=mscorlib"
+        WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        FontSize="16"
+        Title="Window Color and Appearance" 
+        Height="850" Width="650">
+    <Window.Resources>
+    </Window.Resources>
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <DockPanel Background="LightGray">
+            <TextBlock Margin="2" Text="Registry path: " VerticalAlignment="Center" />
+            <ComboBox x:Name="_cmbRegistryKeys" SelectionChanged="ComboBox_SelectionChanged">
+                <ComboBoxItem Content="{x:Static utils:ColorsHelper.COLORS_REGISTRY_KEY1}" IsSelected="True" />
+                <ComboBoxItem Content="{x:Static utils:ColorsHelper.COLORS_REGISTRY_KEY2}" />
+            </ComboBox>
+        </DockPanel>
+        <ListView x:Name="_listColors" Grid.Row="1" Background="White"
+                  GridViewColumnHeader.Click="ListColorsHeader_Click">
+            <ListView.View>
+                <GridView AllowsColumnReorder="True" >
+                    <GridViewColumn Width="100" >
+                        <GridViewColumn.Header>
+                            <GridViewColumnHeader Content="Color" IsEnabled="False" />
+                        </GridViewColumn.Header>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <Rectangle Width="85" Height="20" Fill="{Binding Brush}" Stroke="Black" StrokeThickness="1" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="50" Header="ID">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Margin="4,0" Text="{Binding Index, Mode=OneWay}" 
+                                         IsReadOnly="True" BorderThickness="0" Background="Transparent" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="170" Header="Name" >
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Margin="4,0" Text="{Binding Desc, Mode=OneWay}" IsReadOnly="True" BorderThickness="0" Background="Transparent" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" Header="HEX Value">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Margin="4,0" Text="{Binding HEXValue, Mode=OneWay}" IsReadOnly="True" BorderThickness="0" Background="Transparent" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="120" Header="RGB Value">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Margin="4,0" Text="{Binding RGBValue, Mode=OneWay}" IsReadOnly="True" BorderThickness="0" Background="Transparent" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn Width="40" Header="OP">
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <buttons:ButtonWithText ButtonText="+" ToolTip="Change Color" Width="20"
+                                                Foreground="SteelBlue" Background="{Binding Brush}"
+                                                Click="ButtonEditColor_Click" />
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </Window>
