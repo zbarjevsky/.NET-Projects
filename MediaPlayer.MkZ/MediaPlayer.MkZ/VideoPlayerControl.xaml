@@ -15,6 +15,53 @@
              PreviewMouseDown="UserControl_PreviewMouseButtonDown"
              Background="Transparent"
              d:DesignHeight="650" d:DesignWidth="800">
+    <UserControl.ContextMenu>
+        <ContextMenu Foreground="{StaticResource ButtonForegroundMain}" FontSize="{StaticResource DefaultFontSize}">
+            <MenuItem Header="Add Bookmark..." Click="AddBookmark_Click" />
+            <MenuItem Header="Bookmarks" ItemsSource="{Binding BookMarks}" HorizontalContentAlignment="Stretch" >
+                <MenuItem.ItemContainerStyle>
+                    <Style TargetType="{x:Type MenuItem}">
+                        <EventSetter Event="Click" Handler="Bookmark_Click"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseDirectlyOver" Value="True">
+                                <Setter Property="BorderThickness" Value="1" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                    
+                </MenuItem.ItemContainerStyle>                
+                <MenuItem.ItemTemplate>
+                    <DataTemplate >
+                        <Grid ShowGridLines="False" Background="Transparent" >
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="60"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="40"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock HorizontalAlignment="Right" Text="{Binding PositionInSeconds, Converter={StaticResource SecondsToStringConverter}}" />
+                            <TextBox x:Name="text" Grid.Column="1" Margin="8,0,0,0" Text="{Binding Name}" 
+                                     BorderThickness="0" Padding="4,0"
+                                     Background="Transparent" Foreground="{StaticResource ButtonForegroundMain}" />
+                            <controls:SmallButtonClose Grid.Column="2" Margin="8,0,0,0" Width="20"
+                                     Foreground="Red" HorizontalAlignment="Right"
+                                     ToolTip="Remove Bookmark" Click="RemoveBookmark_Click"/>
+                        </Grid>
+                    </DataTemplate>
+                </MenuItem.ItemTemplate>
+
+            </MenuItem>
+            <Separator />
+            <MenuItem Header="Play" Command="MediaCommands.Play" />
+            <MenuItem Header="Pause" Command="MediaCommands.Pause" />
+            <MenuItem Header="Stop" Command="MediaCommands.Stop" />
+            <MenuItem Header="Reload" />
+            <Separator />
+            <MenuItem Header="Next Track" Command="MediaCommands.NextTrack" />
+            <MenuItem Header="Previous Track" Command="MediaCommands.PreviousTrack" />
+            <Separator />
+            <MenuItem Header="Exit" Command="ApplicationCommands.Close" />
+        </ContextMenu>
+    </UserControl.ContextMenu>
     <Grid x:Name="_gridMain" MouseWheel="Grid_MouseWheel" >
         <Grid.RowDefinitions>
             <RowDefinition Height="*" MinHeight="40"/>

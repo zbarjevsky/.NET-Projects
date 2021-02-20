@@ -22,10 +22,14 @@ namespace MkZ.WPF
             SaveBitmap(bmp);
 
             Cursor cur = CreateCursor(bmp, (int)ptHotSpot.X, (int)ptHotSpot.Y);
-            string name = cur.ToString();
 
             return cur;
         }
+
+        //public static System.Windows.Forms.Cursor Convert(System.Windows.Input.Cursor cursor)
+        //{
+        //    return new System.Windows.Forms.Cursor(cursor.)
+        //}
 
         public static RenderTargetBitmap CreateBitmap(UserControl control, Size desiredSize)
         {

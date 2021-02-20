@@ -13,6 +13,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="SliderControlResource.xaml" />
+                <ResourceDictionary Source="/Styles/CustomMenuStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
             <utils:TimeSpanToSecondsConverter x:Key="TimeConverter" />
             <utils:MediaStateToPlayConverter x:Key="MediaStateToPlayConverter" />

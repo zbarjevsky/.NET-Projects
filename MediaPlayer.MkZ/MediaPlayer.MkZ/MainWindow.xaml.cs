@@ -456,9 +456,10 @@ namespace MkZ.MediaPlayer
         {
             Action<Grid> setCustomCursor = (grid) =>
             {
-                CursorArrow cursorArrow = new CursorArrow();
-                cursorArrow.Load_Cursor(_gridMain, sizeRatio: 25);
-                cursorArrow.BindToColor(Context.Config.Configuration, "CursorColor.B");
+                CursorArrow arrow = new CursorArrow();
+                arrow.SetCursorSize(50);
+                arrow.BindToColor(Context.Config.Configuration, "CursorColor.B");
+                grid.Cursor = CursorFromControl.Create(arrow, new Size(80, 80));
             };
 
             OptionsWindow.ShowOptionsEx(this, Context.Config, "Settings", setCustomCursor, "Configuration", "Clock Configuration", "Clock Font");

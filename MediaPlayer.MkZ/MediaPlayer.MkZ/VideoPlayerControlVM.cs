@@ -23,6 +23,17 @@ using MkZ.WPF.MessageBox;
 
 namespace MkZ.MediaPlayer
 {
+    public class BookMark
+    {
+        public double PositionInSeconds { get; set; }
+        public string Name { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("BookMark: {0} : {1:0.0}", Name, PositionInSeconds);
+        }
+    }
+
     [Serializable]
     public class MediaFileInfo : NotifyPropertyChangedImpl
     {
@@ -59,6 +70,8 @@ namespace MkZ.MediaPlayer
         private bool _isFlipHorizontally = false;
         public bool IsFlipHorizontally { get => _isFlipHorizontally; set => SetProperty(ref _isFlipHorizontally, value); }
 
+        public ObservableRangeCollection<BookMark> BookMarks { get; set; } = new ObservableRangeCollection<BookMark>();
+
         public void CopyFrom(MediaFileInfo state)
         {
             MediaState = state.MediaState;
@@ -66,6 +79,7 @@ namespace MkZ.MediaPlayer
             Position = state.Position;
             Volume = state.Volume;
             IsFlipHorizontally = state.IsFlipHorizontally;
+            BookMarks = new ObservableRangeCollection<BookMark>(state.BookMarks);
 
             ScrollOffset = state.ScrollOffset;
             Zoom = state.Zoom;
@@ -80,6 +94,7 @@ namespace MkZ.MediaPlayer
                 Position = player.Position;
                 Volume = player.Volume;
                 IsFlipHorizontally = player.IsFlipHorizontally;
+                BookMarks = new ObservableRangeCollection<BookMark>(player.State.BookMarks);
             }
 
             if (scrollDragZoom != null)
@@ -214,6 +229,28 @@ namespace MkZ.MediaPlayer
             set { _scrollDragger.Zoom = value; }
         }
 
+        public ObservableRangeCollection<BookMark> BookMarks { get => State.BookMarks; }
+
+        public void AddBookMark()
+        {
+            BookMark bookMark = new BookMark()
+            { Name = "Book Mark", PositionInSeconds = VideoPlayerElement.Position.TotalSeconds };
+
+            BookMark bk = State.BookMarks.FirstOrDefault(b => b.PositionInSeconds == bookMark.PositionInSeconds);
+            if (bk == null)
+                State.BookMarks.Add(bookMark);
+            State.BookMarks.OrderBy(b => b.PositionInSeconds);
+            NotifyPropertyChanged(nameof(BookMarks));
+        }
+
+        public void RemoveBookmark(BookMark bookMark)
+        {
+            BookMark bk = State.BookMarks.FirstOrDefault(b => b.PositionInSeconds == bookMark.PositionInSeconds);
+            if (bk != null)
+                State.BookMarks.Remove(bk);
+            NotifyPropertyChanged(nameof(BookMarks));
+        }
+
         public VideoPlayerControlVM()
         {
             RecreateMediaElement(false);
@@ -263,6 +300,7 @@ namespace MkZ.MediaPlayer
 
             //set new state
             State = info;
+            NotifyPropertyChanged(nameof(BookMarks));
 
             Debug.WriteLine("RestoreState: {0}\nPosition: {1}, Size: {2}, Duration: {3}",
                 State.FileName, State.Position, NaturalSize, NaturalDuration);
@@ -463,6 +501,9 @@ namespace MkZ.MediaPlayer
                 MediaState = MediaStateRetrieve();
                 MediaState = MediaState.Play;
                 State.CopyFrom(this, _scrollDragger);
+
+                if (_timer.IsEnabled == false)
+                    _timer.Start();
             }
         }
 

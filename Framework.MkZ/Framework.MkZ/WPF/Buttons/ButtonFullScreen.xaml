@@ -30,42 +30,42 @@
                     <Path x:Name="fullScreenOpen">
                         <Path.Data>
                             <GeometryGroup>
-                                <LineGeometry StartPoint="6,18" EndPoint="6,4.5" />
-                                <LineGeometry StartPoint="6,6" EndPoint="18,6" />
-                                <LineGeometry StartPoint="18,18" EndPoint="6,6" />
+                                <LineGeometry StartPoint="6,15" EndPoint="6,4.5" />
+                                <LineGeometry StartPoint="6,6" EndPoint="15,6" />
+                                <LineGeometry StartPoint="17,17" EndPoint="6,6" />
                                 
-                                <LineGeometry StartPoint="22,6" EndPoint="35,6" />
-                                <LineGeometry StartPoint="34,5" EndPoint="34,18" />
-                                <LineGeometry StartPoint="22,18" EndPoint="34,6" />
+                                <LineGeometry StartPoint="25,6" EndPoint="35,6" />
+                                <LineGeometry StartPoint="34,5" EndPoint="34,15" />
+                                <LineGeometry StartPoint="23,17" EndPoint="34,6" />
 
-                                <LineGeometry StartPoint="34,22" EndPoint="34,35.5" />
-                                <LineGeometry StartPoint="34,34" EndPoint="22,34" />
-                                <LineGeometry StartPoint="22,22" EndPoint="34,34" />
+                                <LineGeometry StartPoint="34,25" EndPoint="34,35.5" />
+                                <LineGeometry StartPoint="34,34" EndPoint="25,34" />
+                                <LineGeometry StartPoint="23,23" EndPoint="34,34" />
 
-                                <LineGeometry StartPoint="18,34" EndPoint="4.5,34" />
-                                <LineGeometry StartPoint="6,34" EndPoint="6,22" />
-                                <LineGeometry StartPoint="18,22" EndPoint="6,34" />
+                                <LineGeometry StartPoint="15,34" EndPoint="4.5,34" />
+                                <LineGeometry StartPoint="6,34" EndPoint="6,25" />
+                                <LineGeometry StartPoint="17,23" EndPoint="6,34" />
                             </GeometryGroup>
                         </Path.Data>
                     </Path>
                     <Path x:Name="fullScreenClose">
                         <Path.Data>
                             <GeometryGroup>
-                                <LineGeometry StartPoint="6,18" EndPoint="18,18" />
-                                <LineGeometry StartPoint="18,6" EndPoint="18,18" />
+                                <LineGeometry StartPoint="7,17" EndPoint="17,17" />
+                                <LineGeometry StartPoint="17,7" EndPoint="17,17" />
                                 <LineGeometry StartPoint="18.5,18.5" EndPoint="6,6" />
 
-                                <LineGeometry StartPoint="22,6" EndPoint="22,18" />
-                                <LineGeometry StartPoint="22,18" EndPoint="34,18" />
-                                <LineGeometry StartPoint="21.5,18.5" EndPoint="34,6" />
+                                <LineGeometry StartPoint="23,7" EndPoint="23,17" />
+                                <LineGeometry StartPoint="23,17" EndPoint="33,17" />
+                                <LineGeometry StartPoint="22,18" EndPoint="34,6" />
 
-                                <LineGeometry StartPoint="34,22" EndPoint="22,22" />
-                                <LineGeometry StartPoint="22,22" EndPoint="22,34" />
-                                <LineGeometry StartPoint="21.5,21.5" EndPoint="34,34" />
+                                <LineGeometry StartPoint="33,23" EndPoint="23,23" />
+                                <LineGeometry StartPoint="23,23" EndPoint="23,33" />
+                                <LineGeometry StartPoint="22,22" EndPoint="34,34" />
 
-                                <LineGeometry StartPoint="18,34" EndPoint="18,22" />
-                                <LineGeometry StartPoint="18,22" EndPoint="6,22" />
-                                <LineGeometry StartPoint="18.5,21.5" EndPoint="6,34" />
+                                <LineGeometry StartPoint="17,33" EndPoint="17,23" />
+                                <LineGeometry StartPoint="17,23" EndPoint="7,23" />
+                                <LineGeometry StartPoint="18,22" EndPoint="6,34" />
                             </GeometryGroup>
                         </Path.Data>
                     </Path>

@@ -172,9 +172,9 @@
             <Border BorderBrush="{StaticResource GradientBackground}" BorderThickness="3" CornerRadius="3" Margin="3,7">
                 <Menu FontSize="18" Foreground="{StaticResource ButtonForegroundMain}" FontWeight="Bold" Background="Transparent" 
                       ToolTip="Play Lists.." >
-                    <MenuItem x:Name="_mnuPlayLists" Header="Default (0)" BorderThickness="0" Style="{StaticResource MenuItemStyle1}">
+                    <MenuItem x:Name="_mnuPlayLists" Header="Default (0)" BorderThickness="0" Style="{StaticResource DarkMenuItemStyle}">
                         <MenuItem.ItemContainerStyle>
-                            <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource MenuItemStyle1}" >
+                            <Style TargetType="{x:Type MenuItem}" BasedOn="{StaticResource DarkMenuItemStyle}" >
                                 <EventSetter Event="MenuItem.Click" Handler="MenuSelectPlayList_Click"/>
                                 <EventSetter Event="MenuItem.PreviewMouseLeftButtonDown" Handler="MenuSelectPlayList_MouseDown"/>
                                 <EventSetter Event="MenuItem.PreviewMouseLeftButtonUp" Handler="MenuSelectPlayList_MouseUp"/>

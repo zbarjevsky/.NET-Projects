@@ -18,18 +18,18 @@ namespace MkZ.MediaPlayer.Controls
     /// <summary>
     /// Interaction logic for CursorWindow.xaml
     /// </summary>
-    public partial class CursorWindow : Window
+    public partial class CursorControl : UserControl
     {
         private Window _owner;
 
-        public CursorWindow()
+        public CursorControl()
         {
             InitializeComponent();
         }
 
         public static void ShowCursor(Window parent)
         {
-            CursorWindow wnd = new CursorWindow();
+            CursorControl wnd = new CursorControl();
             wnd._owner = parent;
             //wnd.Owner = parent;
             //wnd.WindowStartupLocation = WindowStartupLocation.Manual;
@@ -63,8 +63,8 @@ namespace MkZ.MediaPlayer.Controls
             //VerticalOffset = pos.Y + 1;
             //HorizontalOffset = pos.X + 1;
             pos = PointToScreen(pos);
-            this.Top = pos.Y + 1;
-            this.Left = pos.X + 1;
+            //this.Top = pos.Y + 1;
+            //this.Left = pos.X + 1;
             //_cursor.SetValue(Canvas.LeftProperty, pos.X);
             //_cursor.SetValue(Canvas.TopProperty, pos.Y);
         }

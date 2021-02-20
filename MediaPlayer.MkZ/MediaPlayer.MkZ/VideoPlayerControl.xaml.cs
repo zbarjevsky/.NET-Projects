@@ -191,5 +191,32 @@ namespace MkZ.MediaPlayer
         {
             _playerControlVM.TogglePlayPauseState();
         }
+
+        private void AddBookmark_Click(object sender, RoutedEventArgs e)
+        {
+            _playerControlVM.AddBookMark();
+        }
+
+        private void Bookmark_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem item)
+            {
+                if (item.DataContext is BookMark bookMark)
+                {
+                    _playerControlVM.Position = TimeSpan.FromSeconds(bookMark.PositionInSeconds);
+                }
+            }
+        }
+
+        private void RemoveBookmark_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button item)
+            {
+                if (item.DataContext is BookMark bookMark)
+                {
+                    _playerControlVM.RemoveBookmark(bookMark);
+                }
+            }
+        }
     }
 }

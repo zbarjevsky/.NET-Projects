@@ -1,12 +1,11 @@
-﻿<Window x:Class="MkZ.MediaPlayer.Controls.CursorWindow"
+﻿<UserControl x:Class="MkZ.MediaPlayer.Controls.CursorControl"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MkZ.MediaPlayer.Controls"
         xmlns:wpf="clr-namespace:MkZ.WPF;assembly=Framework.MkZ" 
-        mc:Ignorable="d" wpf:PopupBehavior.IsPopupEventTransparent="true"
-        AllowsTransparency="True"
+        mc:Ignorable="d" 
         Height="100" Width="100">
     <Canvas Name="ContentPanel" IsHitTestVisible="False" Background="Transparent" >
         <Viewbox x:Name="_cursor" Height="40" Width="40">
@@ -19,4 +18,4 @@
             </Path>
         </Viewbox>
     </Canvas>
-</Window>
+</UserControl>
