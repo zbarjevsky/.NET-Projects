@@ -1,5 +1,4 @@
-﻿using MkZ.Tools;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -7,6 +6,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
+
+
+using MkZ.Tools;
+using MkZ.Windows.Win32API;
 
 namespace MkZ.WPF.MessageBox
 {

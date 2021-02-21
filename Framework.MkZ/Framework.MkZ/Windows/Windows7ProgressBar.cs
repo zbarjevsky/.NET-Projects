@@ -5,6 +5,8 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 
+using MkZ.Windows.Win32API;
+
 
 //Windows7ProgressBar v1.0, created by Wyatt O'Day
 //Visit: http://wyday.com/windows-7-progress-bar/

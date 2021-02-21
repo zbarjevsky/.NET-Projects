@@ -14,6 +14,25 @@
         Title="Window Color and Appearance" 
         Height="850" Width="650">
     <Window.Resources>
+        <ResourceDictionary>
+
+            <ResourceDictionary.MergedDictionaries>
+                <!--<XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />-->
+                <!-- Other merged dictionaries here -->
+
+                <!--<ColorPaletteResources 
+                    Accent="Yellow" 
+                    AltHigh="BlueViolet" 
+                    AltLow="Coral" 
+                    AltMedium="DarkKhaki" 
+                    AltMediumHigh="Aqua" 
+                    AltMediumLow="DarkGreen" 
+                    BaseHigh="Red" 
+                    BaseLow="Gainsboro">
+                </ColorPaletteResources>-->
+            </ResourceDictionary.MergedDictionaries>
+            <!-- Other app resources here -->
+        </ResourceDictionary>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -28,6 +47,7 @@
             <ComboBox x:Name="_cmbRegistryKeys" SelectionChanged="ComboBox_SelectionChanged">
                 <ComboBoxItem Content="{x:Static utils:ColorsHelper.COLORS_REGISTRY_KEY1}" IsSelected="True" />
                 <ComboBoxItem Content="{x:Static utils:ColorsHelper.COLORS_REGISTRY_KEY2}" />
+                <ComboBoxItem Content="{x:Static utils:ColorsHelper.WIN10_COLOR_REG_KEY}" />
             </ComboBox>
         </DockPanel>
         <ListView x:Name="_listColors" Grid.Row="1" Background="White"

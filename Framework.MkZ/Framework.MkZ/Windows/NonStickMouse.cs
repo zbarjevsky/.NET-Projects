@@ -1,8 +1,4 @@
 ﻿using Microsoft.VisualBasic.ApplicationServices;
-using MkZ.Tools;
-using MkZ.Windows;
-using MkZ.WPF;
-using MkZ.WPF.Utils;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,6 +6,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+
+
+using MkZ.Tools;
+using MkZ.Windows;
+using MkZ.Windows.Win32API;
+using MkZ.WPF;
+using MkZ.WPF.Utils;
 
 namespace MkZ.Tools
 {

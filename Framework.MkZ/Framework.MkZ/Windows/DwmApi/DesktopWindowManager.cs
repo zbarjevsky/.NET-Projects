@@ -1,5 +1,5 @@
 ﻿using MkZ.Tools;
-
+using MkZ.Windows.Win32API;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +7,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace System.Windows.Desktop
+namespace MkZ.Windows.DwmApi
 {
     //https://docs.microsoft.com/en-us/windows/win32/dwm/dwm-overview
     public class DesktopWindowManager

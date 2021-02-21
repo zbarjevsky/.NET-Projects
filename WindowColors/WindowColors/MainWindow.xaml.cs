@@ -17,18 +17,29 @@ using System.Windows.Shapes;
 
 using WindowColors.Utils;
 using MkZ.Windows;
+using Microsoft.Win32;
+using System.Diagnostics;
 
 namespace WindowColors
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// https://stackoverflow.com/questions/5094447/how-do-i-use-the-correct-windows-system-colors
+    /// https://blogs.windows.com/windowsdeveloper/2018/10/10/fluent-xaml-theme-editor-preview-released/
     /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
         {
             InitializeComponent();
+
+            SystemEvents.UserPreferenceChanged += SystemEvents_UserPreferenceChanged;
+        }
+
+        private void SystemEvents_UserPreferenceChanged(object sender, UserPreferenceChangedEventArgs e)
+        {
+            Debug.WriteLine("SystemEvents_UserPreferenceChanged: " + e.Category);
+            ComboBox_SelectionChanged(sender, null);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -42,13 +53,15 @@ namespace WindowColors
             {
                 if(btn.DataContext is SysColorVM col)
                 {
+                    string key = (_cmbRegistryKeys.SelectedItem as ComboBoxItem).Content.ToString();
+
                     System.Windows.Forms.ColorDialog dlg = new System.Windows.Forms.ColorDialog();
                     dlg.Color = System.Drawing.Color.FromArgb(col.Brush.Color.A, col.Brush.Color.R, col.Brush.Color.G, col.Brush.Color.B);
                     dlg.AllowFullOpen = true;
                     dlg.FullOpen = true;
                     if (dlg.ShowDialog() == System.Windows.Forms.DialogResult.OK)
                     {
-                        col.SetFormsColor(dlg.Color, apply: true);
+                        col.SetFormsColor(dlg.Color, key, apply: true);
                     }
                 }
             }
@@ -61,7 +74,16 @@ namespace WindowColors
 
             if (_cmbRegistryKeys.SelectedItem is ComboBoxItem item)
             {
-                _listColors.ItemsSource = ColorsHelper.GetSysColorList(item.Content.ToString());
+                string key = item.Content.ToString();
+                if (key == ColorsHelper.WIN10_COLOR_REG_KEY)
+                {
+                    _listColors.ItemsSource = ColorsHelper.GetWin10Specific();
+                }
+                else
+                {
+                    _listColors.ItemsSource = ColorsHelper.GetSysColorList(key);
+
+                }
             }
         }
 

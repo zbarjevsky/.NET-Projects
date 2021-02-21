@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace MkZ.Tools
+namespace MkZ.Windows.Win32API
 {
     using HWND = IntPtr;
 

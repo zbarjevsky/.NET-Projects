@@ -1,5 +1,4 @@
-﻿using MkZ.Tools;
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
@@ -11,6 +10,9 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+
+using MkZ.Tools;
+using MkZ.Windows.Win32API;
 
 namespace MkZ.WPF
 {

@@ -22,6 +22,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -95,14 +96,42 @@
     <Compile Include="Tests\WindowTestWpfMesageBox.xaml.cs">
       <DependentUpon>WindowTestWpfMesageBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\DwmApi\CorrespondingTypeAttribute.cs" />
+    <Compile Include="Windows\DwmApi\DwmApi.cs" />
+    <Compile Include="Windows\DwmApi\Handles.cs" />
+    <Compile Include="Windows\DwmApi\PinnedObject.cs" />
+    <Compile Include="Windows\Gdi32\WinGdi.Bitmap.cs" />
+    <Compile Include="Windows\Gdi32\WinGdi.BITMAPINFO.cs" />
+    <Compile Include="Windows\Gdi32\WinGdi.Brush.cs" />
+    <Compile Include="Windows\Gdi32\WinGdi.cs" />
+    <Compile Include="Windows\Gdi32\WinGdi.DevCtxt.cs" />
+    <Compile Include="Windows\EnumExtensions.cs" />
+    <Compile Include="Windows\Gdi32\WinGdi.DEVMODE.cs" />
+    <Compile Include="Windows\Gdi32\WinGdi.FontText.cs" />
+    <Compile Include="Windows\Gdi32\WinGdi.LOGFONT.cs" />
+    <Compile Include="Windows\Gdi32\WinGdi.Pen.cs" />
+    <Compile Include="Windows\Gdi32\WinGdi.SafeDCHandles.cs" />
+    <Compile Include="Windows\Gdi32\WinGdi.TEXTMETRIC.cs" />
     <Compile Include="Windows\IconUtilities.cs" />
     <Compile Include="Windows\Log.cs" />
     <Compile Include="Windows\MouseHook.cs" />
     <Compile Include="Windows\NETSoundPlayer.cs" />
     <Compile Include="Windows\ObservableRangeCollection.cs" />
+    <Compile Include="Windows\Win32API\COLORREF.cs" />
+    <Compile Include="Windows\Win32API\FieldValueHash.cs" />
+    <Compile Include="Windows\Win32API\HRESULT.cs" />
+    <Compile Include="Windows\Win32API\HRESULT.Values.cs" />
+    <Compile Include="Windows\Win32API\IErrorProvider.cs" />
+    <Compile Include="Windows\Win32API\Lib.cs" />
+    <Compile Include="Windows\Win32API\NTStatus.cs" />
+    <Compile Include="Windows\Win32API\NTStatus.Values.cs" />
+    <Compile Include="Windows\Win32API\PInvokeDataAttribute.cs" />
     <Compile Include="Windows\ProcessExtensions.cs" />
     <Compile Include="Windows\UsbEject.cs" />
-    <Compile Include="Windows\User32_MouseHook.cs" />
+    <Compile Include="Windows\Win32API\SIZE.cs" />
+    <Compile Include="Windows\Win32API\User32_MouseHook.cs" />
+    <Compile Include="Windows\Win32API\Win32Error.cs" />
+    <Compile Include="Windows\Win32API\Win32Error.Values.cs" />
     <Compile Include="WinForms\ChartProgressUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -167,17 +196,17 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Windows\AlternateColorTool.cs" />
-    <Compile Include="Windows\DesktopWindowManager.cs" />
+    <Compile Include="Windows\DwmApi\DesktopWindowManager.cs" />
     <Compile Include="Windows\FileUtils.cs" />
     <Compile Include="Windows\NotifyPropertyChangedImpl.cs" />
     <Compile Include="Windows\IconsExtractor.cs" />
     <Compile Include="Windows\SingleInstanceHelper.cs" />
     <Compile Include="Windows\TaskbarManagerHelper.cs" />
-    <Compile Include="Windows\User32.cs" />
+    <Compile Include="Windows\Win32API\User32.cs" />
     <Compile Include="Windows\Windows7ProgressBar.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Windows\User32_WindowsMessages.cs" />
+    <Compile Include="Windows\Win32API\User32_WindowsMessages.cs" />
     <Compile Include="Windows\XmlSerializerHelper.cs" />
     <Compile Include="Windows\CommonUtils.cs" />
     <Compile Include="WPF\AdornerContentPresenter.cs" />

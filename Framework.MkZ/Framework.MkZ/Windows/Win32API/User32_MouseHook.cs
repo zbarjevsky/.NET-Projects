@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MkZ.Windows
+namespace MkZ.Windows.Win32API
 {
     public static class User32_MouseHook
     {

@@ -12,6 +12,7 @@ using System.Windows.Media;
 
 using MkZ.Tools;
 using System.Runtime.CompilerServices;
+using MkZ.Windows.DwmApi;
 
 namespace WindowColors.Utils
 {
@@ -123,13 +124,15 @@ namespace WindowColors.Utils
             return System.Drawing.Color.FromArgb(Color.A, Color.R, Color.G, Color.B);
         }
 
-        public void SetFormsColor(System.Drawing.Color c, bool apply)
+        public void SetFormsColor(System.Drawing.Color c, string registryKey, bool apply)
         {
             Color = Color.FromArgb(c.A, c.R, c.G, c.B);
             Brush = new SolidColorBrush(Color);
 
             if (apply)
-                ColorsHelper.SetSysColors(this);
+            {
+                ColorsHelper.SetSysColors(this, registryKey);
+            }
 
             NotifyPropertyChangedAll();
         }
@@ -166,6 +169,34 @@ namespace WindowColors.Utils
             foreach (string colorName in sysColors.Keys)
             {
                 sysColorList.Add(new SysColorVM(colorName, sysColors[colorName]));
+            }
+
+            return sysColorList;
+        }
+
+        public const string WIN10_COLOR_REG_KEY = @"Software\Microsoft\Windows\DWM";
+
+        public static List<SysColorVM> GetWin10Specific()
+        {
+            List<SysColorVM> sysColorList = new List<SysColorVM>();
+
+            Microsoft.Win32.RegistryKey key = Microsoft.Win32.Registry.CurrentUser.OpenSubKey(WIN10_COLOR_REG_KEY, true);
+            if (key == null)
+                return sysColorList;
+
+            string[] valueNames = key.GetValueNames();
+            foreach (string valueName in valueNames)
+            {
+                if (valueName.EndsWith("Color"))
+                {
+                    object o = key.GetValue(valueName);
+                    if (o != null)
+                    {
+                        Int32 color = Convert.ToInt32(o);
+                        byte[] bytes = BitConverter.GetBytes(color);
+                        sysColorList.Add(new SysColorVM(valueName, Color.FromArgb(bytes[3], bytes[2], bytes[1], bytes[0])));
+                    }
+                }
             }
 
             return sysColorList;
@@ -221,7 +252,20 @@ namespace WindowColors.Utils
             object o = key.GetValue(sysColor.Desc);
             if (o != null)
             {
-                key.SetValue(sysColor.Name, string.Format("{0} {1} {2}", sysColor.Color.R, sysColor.Color.G, sysColor.Color.B));
+                if (subKeyPath == WIN10_COLOR_REG_KEY)
+                {
+                    DwmApi.DwmpGetColorizationParameters(out DwmApi.DWM_COLORIZATION_PARAMS colors);
+
+                    int color = BitConverter.ToInt32(new byte[] { sysColor.Color.B, sysColor.Color.G, sysColor.Color.R, sysColor.Color.A }, 0);
+                    key.SetValue(sysColor.Desc, color);
+
+                    colors.clrColor.Color = sysColor.GetFormsColor();
+                    DwmApi.DwmpSetColorizationParameters(colors);
+                }
+                else
+                {
+                    key.SetValue(sysColor.Desc, string.Format("{0} {1} {2}", sysColor.Color.R, sysColor.Color.G, sysColor.Color.B));
+                }
                 ColorsHelper.ForceUpdateSystemSettings();
                 res = true;
             }
@@ -307,7 +351,16 @@ namespace WindowColors.Utils
         public static void ForceUpdateSystemSettings()
         {
             SendMessageTimeout(HWND_BROADCAST, WM_SETTINGCHANGE, IntPtr.Zero, null, SMTO_ABORTIFHUNG, 100, IntPtr.Zero);
+            SendMessageTimeout(HWND_BROADCAST, WM_SETTINGCHANGE, IntPtr.Zero, null, SMTO_ABORTIFHUNG, 100, IntPtr.Zero);
         }
 
+        [DllImport("user32.dll", CharSet = CharSet.Auto)]
+        private static extern Int32 SystemParametersInfo(UInt32 action, UInt32 uParam, String vParam, UInt32 winIni);
+
+        //public static SysColorVM GetAccenColor()
+        //{
+        //    UISettings.GetColorValue
+        //}
     }
+
 }

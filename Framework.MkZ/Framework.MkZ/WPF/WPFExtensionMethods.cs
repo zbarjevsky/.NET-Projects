@@ -1,5 +1,4 @@
-﻿using MkZ.Tools;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -9,6 +8,10 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Threading;
+
+
+using MkZ.Tools;
+using MkZ.Windows.Win32API;
 
 namespace MkZ.WPF
 {

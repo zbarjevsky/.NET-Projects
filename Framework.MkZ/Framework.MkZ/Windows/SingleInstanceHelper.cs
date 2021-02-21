@@ -6,6 +6,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using MkZ.Windows.Win32API;
+
 namespace MkZ.Tools
 {
     public class SingleInstanceHelper
