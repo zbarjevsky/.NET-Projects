@@ -31,9 +31,9 @@ namespace MkZ.Tools
 
         static Log()
         {
-            var assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
-            string commonPath = Environment.GetFolderPath(Environment.SpecialFolder.CommonApplicationData);
-            _dataFolder = Path.Combine(commonPath, "MarkZ", assemblyName);
+            var assemblyName = Assembly.GetEntryAssembly().GetName().Name;
+            string commonPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            _dataFolder = Path.Combine(commonPath, "MkZ", assemblyName);
             Directory.CreateDirectory(_dataFolder);
 
             string date = DateTime.Now.ToString("yyyy_MM_dd-HH_mm_ss");

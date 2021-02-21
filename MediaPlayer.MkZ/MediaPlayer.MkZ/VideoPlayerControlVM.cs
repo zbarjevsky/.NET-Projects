@@ -645,6 +645,7 @@ namespace MkZ.MediaPlayer
                 }
                 else //exceed number of tries
                 {
+                    Log.e("Media open FAILED: {0}, after retries: {2}", State.FileName, _OpenMediaTryCount);
                     PopUp.Error("Media open FAILED: \n" + State.FileName, "Open Media File Error");
                 }
             }
@@ -719,8 +720,11 @@ namespace MkZ.MediaPlayer
 
         private void VideoPlayerElement_MediaFailed(object sender, ExceptionRoutedEventArgs e)
         {
+            Log.e("VideoPlayerElement_MediaFailed({0}) - Volume {1} - State: {2}, Try: {3}", 
+                State.FileName, State.Volume, State.MediaState, _OpenMediaTryCount);
+
             Stop();
-            Log.e("1 VideoPlayerElement_MediaFailed({0}) - {1} - {2}", State.Volume, State.MediaState, State.FileName);
+            
             e.Handled = MediaFailedAction(this, e);
         }
 

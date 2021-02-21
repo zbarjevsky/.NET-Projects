@@ -20,6 +20,7 @@ using Microsoft.Win32;
 
 using MkZ.MediaPlayer.Controls;
 using MkZ.MediaPlayer.Utils;
+using MkZ.Tools;
 using MkZ.WPF;
 using MkZ.WPF.Controls;
 using MkZ.WPF.MessageBox;
@@ -50,6 +51,7 @@ namespace MkZ.MediaPlayer
         public MainWindow(string [] commandLine)
         {
             _commandLine = commandLine;
+            Log.d("MediaPlayer.MkZ - MainWindow - c-tor");
 
             InitializeComponent();
 
