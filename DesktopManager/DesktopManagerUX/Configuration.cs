@@ -10,12 +10,13 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Serialization;
-using System.Windows.Desktop;
 
 
 using MkZ.Tools;
 using MkZ.WPF.Utils;
 using MkZ.Windows;
+using MkZ.Windows.DwmApi;
+using MkZ.Windows.Win32API;
 
 namespace DesktopManagerUX
 {
@@ -52,7 +53,10 @@ namespace DesktopManagerUX
 
         public static Configuration Load()
         {
-            Configuration cnf = XmlHelper.Open<Configuration>(ConfigurationFileName);
+            Configuration cnf = new Configuration();
+            if (File.Exists(ConfigurationFileName))
+                cnf = XmlHelper.Open<Configuration>(ConfigurationFileName);
+
             if (cnf.Layouts.Count == 0) //add one default layout tab
                 cnf.Layouts.Add(new LayoutConfiguration(LayoutConfiguration.LayoutType.Layout));
 

@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 
 using DesktopManagerUX.Utils;
 using MkZ.Tools;
+using MkZ.Windows.Win32API;
 using MkZ.WPF.Utils;
 
 namespace DesktopManagerUX

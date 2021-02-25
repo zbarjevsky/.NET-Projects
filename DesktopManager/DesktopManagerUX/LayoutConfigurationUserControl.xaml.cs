@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
-using System.Windows.Desktop;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -17,6 +16,7 @@ using System.Windows.Shapes;
 
 using DesktopManagerUX.Utils;
 using MkZ.Tools;
+using MkZ.Windows.Win32API;
 
 namespace DesktopManagerUX
 {

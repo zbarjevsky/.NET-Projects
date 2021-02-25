@@ -21,6 +21,7 @@ using System.Windows.Threading;
 
 using DesktopManagerUX.Utils;
 using MkZ.Tools;
+using MkZ.Windows.Win32API;
 
 namespace DesktopManagerUX
 {
