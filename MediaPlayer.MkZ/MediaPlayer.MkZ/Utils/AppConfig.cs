@@ -96,11 +96,11 @@ namespace MkZ.MediaPlayer.Utils
         private bool _showTestControls = true;
         public bool ShowTestControls { get => _showTestControls; set => SetProperty(ref _showTestControls, value); }
 
-        public List<string> SupportedImageExtensions { get; set; }
+        public string[] SupportedImageExtensions { get; set; } = new string[0];
 
-        public List<string> SupportedAudioExtensions { get; set; }
+        public string[] SupportedAudioExtensions { get; set; } = new string[0];
 
-        public List<string> SupportedVideoExtensions { get; set; }
+        public string[] SupportedVideoExtensions { get; set; } = new string[0];
 
         private WPF.SimpleClockControl.ClockConfig _clockConfig = new WPF.SimpleClockControl.ClockConfig();
         [Category("Clock"), TypeConverter(typeof(ExpandableObjectConverter))]
@@ -130,14 +130,14 @@ namespace MkZ.MediaPlayer.Utils
 
         public void EnsureHasValues()
         {
-            if (SupportedImageExtensions == null || SupportedImageExtensions.Count == 0)
-                SupportedImageExtensions = new List<string>() { ".jpg", ".png", ".bmp", ".gif" };
+            if (SupportedImageExtensions == null || SupportedImageExtensions.Length == 0)
+                SupportedImageExtensions = new string[] { ".jpg", ".png", ".bmp", ".gif" };
 
-            if (SupportedAudioExtensions == null || SupportedAudioExtensions.Count == 0)
-                SupportedAudioExtensions = new List<string>() { ".mp3", ".wav", ".ogg" };
+            if (SupportedAudioExtensions == null || SupportedAudioExtensions.Length == 0)
+                SupportedAudioExtensions = new string[] { ".mp3", ".wav", ".ogg" };
 
-            if (SupportedVideoExtensions == null || SupportedVideoExtensions.Count == 0)
-                SupportedVideoExtensions = new List<string>() { ".mpg", ".mpeg", ".mkv", ".mp4", ".webm" };
+            if (SupportedVideoExtensions == null || SupportedVideoExtensions.Length == 0)
+                SupportedVideoExtensions = new string[] { ".avi", ".mpg", ".mpeg", ".mkv", ".mp4", ".webm" };
         }
 
         public void CopyFrom(Configuration config)
@@ -167,9 +167,9 @@ namespace MkZ.MediaPlayer.Utils
         {
             StringBuilder sb = new StringBuilder();
 
-            SupportedImageExtensions.ForEach((ext) => { sb.Append("*" + ext + ";"); });
-            SupportedAudioExtensions.ForEach((ext) => { sb.Append("*" + ext + ";"); });
-            SupportedVideoExtensions.ForEach((ext) => { sb.Append("*" + ext + ";"); });
+            SupportedImageExtensions.ToList().ForEach((ext) => { sb.Append("*" + ext + ";"); });
+            SupportedAudioExtensions.ToList().ForEach((ext) => { sb.Append("*" + ext + ";"); });
+            SupportedVideoExtensions.ToList().ForEach((ext) => { sb.Append("*" + ext + ";"); });
 
             return sb.ToString();
         }
@@ -178,7 +178,7 @@ namespace MkZ.MediaPlayer.Utils
         {
             StringBuilder sb = new StringBuilder();
 
-            SupportedImageExtensions.ForEach((ext) => { sb.Append("*" + ext + ";"); });
+            SupportedImageExtensions.ToList().ForEach((ext) => { sb.Append("*" + ext + ";"); });
 
             return sb.ToString();
         }

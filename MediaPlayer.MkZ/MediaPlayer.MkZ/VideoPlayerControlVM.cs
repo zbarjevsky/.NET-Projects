@@ -636,7 +636,7 @@ namespace MkZ.MediaPlayer
                 _timer.Stop();
                 Stop();
 
-                if (_OpenMediaTryCount < 2)
+                if (_OpenMediaTryCount < 3)
                 {
                     if (File.Exists(State.FileName))
                     {
@@ -645,7 +645,7 @@ namespace MkZ.MediaPlayer
                 }
                 else //exceed number of tries
                 {
-                    Log.e("Media open FAILED: {0}, after retries: {2}", State.FileName, _OpenMediaTryCount);
+                    Log.e("Media open FAILED: {0}, after retries: {1}", State.FileName, _OpenMediaTryCount);
                     PopUp.Error("Media open FAILED: \n" + State.FileName, "Open Media File Error");
                 }
             }

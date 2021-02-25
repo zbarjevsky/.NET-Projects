@@ -60,11 +60,18 @@ namespace MkZ.Tools
         {
             lock (_fileName)
             {
-                string text = string.Format(format, args);
-                string message = string.Format("{0} - {1} - {2}\n", 
-                    DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffK"), logType, text);
-                File.AppendAllText(_fileName, message);
-                Debug.Write(message);
+                try
+                {
+                    string text = string.Format(format, args);
+                    string message = string.Format("{0} - {1} - {2}\n",
+                        DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'.'fffK"), logType, text);
+                    File.AppendAllText(_fileName, message);
+                    Debug.Write(message);
+                }
+                catch (Exception err)
+                {
+                    Debug.WriteLine("!!!Exception in Log!!! " + err.ToString());
+                }            
             }
         }
     }
