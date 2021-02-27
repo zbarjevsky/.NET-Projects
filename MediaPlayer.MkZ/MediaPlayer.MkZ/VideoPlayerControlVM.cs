@@ -58,9 +58,6 @@ namespace MkZ.MediaPlayer
         private double _naturalDuration = 0.0;
         public double NaturalDuration { get => _naturalDuration; set => SetProperty(ref _naturalDuration, value); }
 
-        private double _volume = 0.5;
-        public double Volume { get => _volume; set => SetProperty(ref _volume, value); }
-
         private Point _scrollOffset = new Point();
         public Point ScrollOffset { get => _scrollOffset; set => SetProperty(ref _scrollOffset, value); }
 
@@ -77,7 +74,7 @@ namespace MkZ.MediaPlayer
             MediaState = state.MediaState;
             FileName = state.FileName;
             Position = state.Position;
-            Volume = state.Volume;
+            //Volume = state.Volume;
             IsFlipHorizontally = state.IsFlipHorizontally;
             BookMarks = new ObservableRangeCollection<BookMark>(state.BookMarks);
 
@@ -92,7 +89,7 @@ namespace MkZ.MediaPlayer
                 MediaState = player.MediaState;
                 FileName = player.FileName;
                 Position = player.Position;
-                Volume = player.Volume;
+                //Volume = player.Volume;
                 IsFlipHorizontally = player.IsFlipHorizontally;
                 BookMarks = new ObservableRangeCollection<BookMark>(player.State.BookMarks);
             }
@@ -276,7 +273,7 @@ namespace MkZ.MediaPlayer
             _scrollPlayerContainer = scrollPlayer;
             _scrollPlayerContainer.Content = VideoPlayerElement;
 
-            VideoPlayerElement.Volume = State.Volume;
+            VideoPlayerElement.Volume = Context.Config.Configuration.Volume; // State.Volume;
 
             if (_scrollDragger != null)
                 _scrollDragger.Dispose();
@@ -308,7 +305,7 @@ namespace MkZ.MediaPlayer
             Zoom = State.Zoom;
             VerticalOffset = State.ScrollOffset.Y;
 
-            Volume = State.Volume;
+            Volume = Context.Config.Configuration.Volume; // State.Volume;
 
             Open(State.FileName);
         }
@@ -325,7 +322,7 @@ namespace MkZ.MediaPlayer
                     MediaState = MediaState.Play;
                     Title = Path.GetFileName(fileName);
 
-                    Volume = State.Volume;
+                    Volume = Context.Config.Configuration.Volume; //State.Volume;
                     IsMuted = true; //load silently
 
                     //https://stackoverflow.com/questions/6716100/strange-behavior-with-wpf-mediaelement
@@ -423,7 +420,7 @@ namespace MkZ.MediaPlayer
                 else
                     VideoPlayerElement.Volume = value;
 
-                State.Volume = VideoPlayerElement.Volume;
+                Context.Config.Configuration.Volume = VideoPlayerElement.Volume;
 
                 NotifyPropertyChanged(); 
             }
@@ -721,7 +718,7 @@ namespace MkZ.MediaPlayer
         private void VideoPlayerElement_MediaFailed(object sender, ExceptionRoutedEventArgs e)
         {
             Log.e("VideoPlayerElement_MediaFailed({0}) - Volume {1} - State: {2}, Try: {3}", 
-                State.FileName, State.Volume, State.MediaState, _OpenMediaTryCount);
+                State.FileName, Volume, State.MediaState, _OpenMediaTryCount);
 
             Stop();
             

@@ -39,18 +39,14 @@ namespace MkZ.WPF
             [Browsable(false)]
             public bool BellAtTheEnd { get; set; } = false;
 
-            public int BellVolume { get; set; } = 500;
 
-            private bool _isVisible = false;
+            private BoundsSettings _bounds = new BoundsSettings();
             [Category("ReiKi")]
-            public bool IsVisible
+            public BoundsSettings BoundsSettings
             {
-                get { return _isVisible; }
-                set { SetProperty(ref _isVisible, value); }
+                get { return _bounds; }
+                set { SetProperty(ref _bounds, value); }
             }
-
-            public OffsetAndZoom Bounds_FullScreen { get; set; } = new OffsetAndZoom();
-            public OffsetAndZoom Bounds_Normal { get; set; } = new OffsetAndZoom();
         }
 
         private DispatcherTimer _Timer;
@@ -77,9 +73,9 @@ namespace MkZ.WPF
 
         public static readonly DependencyProperty MediaPlayerProperty =
             DependencyProperty.Register(nameof(MediaPlayer), typeof(IMediaPlayer), typeof(ReiKiZoomableProgress), 
-                new UIPropertyMetadata(null, OnValueChanged));
+                new UIPropertyMetadata(null, OnMediaPlayerChanged));
 
-        private static void OnValueChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void OnMediaPlayerChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             if (d is ReiKiZoomableProgress This)
                 This.Initialize();
@@ -107,6 +103,8 @@ namespace MkZ.WPF
             _Timer = new DispatcherTimer();
             _Timer.Interval = TimeSpan.FromSeconds(0.3);
             _Timer.Tick += Timer_Tick;
+
+            this.DataContextChanged += ReiKiZoomableProgress_DataContextChanged;
         }
 
         private void _control_Loaded(object sender, RoutedEventArgs e)
@@ -130,6 +128,11 @@ namespace MkZ.WPF
                 MediaPlayer.PropertyChanged += MediaPlayer_PropertyChanged;
                 MediaPlayer.MediaStartedAction = (mp) => { };
             }
+        }
+
+        private void ReiKiZoomableProgress_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            Initialize();
         }
 
         private void MediaPlayer_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -230,7 +233,7 @@ namespace MkZ.WPF
         public void PlayDing()
         {
             string sDingFileName = System.IO.Path.Combine(m_sExePath, "Sounds", "ding.mp3");
-            m_SoundPlayer.Play(sDingFileName, "ding", Config.BellVolume);
+            m_SoundPlayer.Play(sDingFileName, "ding", (int)(MediaPlayer.Volume * 1000.0));
         }
 
         private void UpdateTooltip(double secondsLeft)
@@ -345,9 +348,9 @@ namespace MkZ.WPF
             Start(bPaused: false);
         }
 
-        private void OnMnuHide(object sender, RoutedEventArgs e)
+        private void OnMenuHide(object sender, RoutedEventArgs e)
         {
-            Config.IsVisible = false;
+            Config.BoundsSettings.IsVisible = false;
         }
     }
 }

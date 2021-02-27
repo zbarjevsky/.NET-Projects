@@ -14,6 +14,7 @@ using System.Xml.Serialization;
 
 using MkZ.Tools;
 using MkZ.Windows;
+using MkZ.WPF;
 using MkZ.WPF.MessageBox;
 using MkZ.WPF.PropertyGrid;
 
@@ -102,6 +103,17 @@ namespace MkZ.MediaPlayer.Utils
 
         public string[] SupportedVideoExtensions { get; set; } = new string[0];
 
+        [Category("Location")]
+        public MainWindowState MainWindowState { get; set; } = new MainWindowState();
+
+        private SerializableBrush _cursorColor = new SerializableBrush(Brushes.Gold);
+        [Category("Misc")]
+        //[TypeConverter(typeof(ExpandableObjectConverter))]
+        public SerializableBrush CursorColor { get => _cursorColor; set => SetProperty(ref _cursorColor, value); }
+
+        private double _volume = 0.5;
+        public double Volume { get => _volume; set => SetProperty(ref _volume, value); }
+
         private WPF.SimpleClockControl.ClockConfig _clockConfig = new WPF.SimpleClockControl.ClockConfig();
         [Category("Clock"), TypeConverter(typeof(ExpandableObjectConverter))]
         [DisplayName("Clock Configuration")]
@@ -110,23 +122,6 @@ namespace MkZ.MediaPlayer.Utils
             get { return _clockConfig; }
             set { SetProperty(ref _clockConfig, value); }
         }
-
-        private WPF.ReiKiZoomableProgress.ReiKiConfig _ReiKiConfig = new WPF.ReiKiZoomableProgress.ReiKiConfig();
-        [Category("ReiKi"), TypeConverter(typeof(ExpandableObjectConverter))]
-        [DisplayName("ReiKi Configuration")]
-        public WPF.ReiKiZoomableProgress.ReiKiConfig ReiKiConfig
-        {
-            get { return _ReiKiConfig; }
-            set { SetProperty(ref _ReiKiConfig, value); }
-        }
-
-        [Category("Location")]
-        public MainWindowState MainWindowState { get; set; } = new MainWindowState();
-
-        private SerializableBrush _cursorColor = new SerializableBrush(Brushes.Gold);
-        [Category("Misc")]
-        //[TypeConverter(typeof(ExpandableObjectConverter))]
-        public SerializableBrush CursorColor { get => _cursorColor; set => SetProperty(ref _cursorColor, value); }
 
         public void EnsureHasValues()
         {
@@ -148,13 +143,10 @@ namespace MkZ.MediaPlayer.Utils
 
             ShowTestControls = config.ShowTestControls;
 
+            MainWindowState.CopyFrom(config.MainWindowState);
+
             if (config.ClockConfig.IsValid())
                 ClockConfig = config.ClockConfig;
-
-            if (config.ReiKiConfig.IsValid())
-                ReiKiConfig = config.ReiKiConfig;
-
-            MainWindowState.CopyFrom(config.MainWindowState);
 
             SupportedImageExtensions = config.SupportedImageExtensions;
             SupportedAudioExtensions = config.SupportedAudioExtensions;
@@ -279,6 +271,26 @@ namespace MkZ.MediaPlayer.Utils
 
         public int SelectedMediaFileIndex { get; set; } = 0;
 
+        //if (config.ClockConfig.IsValid())
+        //    ClockConfig = config.ClockConfig;
+
+        private BoundsSettings _bounds = new BoundsSettings();
+        [Category("Clock")]
+        public BoundsSettings ClockBounds
+        {
+            get { return _bounds; }
+            set { SetProperty(ref _bounds, value); }
+        }
+
+        private WPF.ReiKiZoomableProgress.ReiKiConfig _ReiKiConfig = new WPF.ReiKiZoomableProgress.ReiKiConfig();
+        [Category("ReiKi"), TypeConverter(typeof(ExpandableObjectConverter))]
+        [DisplayName("ReiKi Configuration")]
+        public WPF.ReiKiZoomableProgress.ReiKiConfig ReiKiConfig
+        {
+            get { return _ReiKiConfig; }
+            set { SetProperty(ref _ReiKiConfig, value); }
+        }
+
         public ObservableRangeCollection<MediaFileInfo> MediaFiles { get; set; } = new ObservableRangeCollection<MediaFileInfo>();
 
         public ObservableCollection<PlayList> PlayLists { get; set; } = new ObservableCollection<PlayList>();
@@ -309,7 +321,7 @@ namespace MkZ.MediaPlayer.Utils
                 {
                     FileName = fileName,
                     MediaState = MediaState.Play,
-                    Volume = volume
+                    //Volume = volume
                 });
                 SelectedMediaFileIndex = 0;
             }

@@ -314,10 +314,10 @@
                         <controls:ButtonBrowse Width="30" Margin="4,0" Foreground="{StaticResource ButtonForegroundMain}" 
                             ToolTip="Open Media File..." Command="ApplicationCommands.Open" />
                         <buttons:ButtonImageToggle x:Name="_btnToggleClock" Width="30" Margin="4,0"
-                            IsChecked="{Binding Config.Configuration.ClockConfig.IsVisible}"
+                            IsChecked="{Binding Config.MediaDatabaseInfo.SelectedPlayList.ClockBounds.IsVisible}"
                             Foreground="{StaticResource ButtonForegroundMain}" 
                             Background="{StaticResource ButtonForegroundMain}"
-                            ToolTip="{Binding Config.Configuration.ClockConfig.IsVisible, 
+                            ToolTip="{Binding Config.MediaDatabaseInfo.SelectedPlayList.ClockBounds.IsVisible, 
                                 Converter={StaticResource BooleanToTextConverter}, 
                                 ConverterParameter='Hide Clock|Show Clock'}" />
                         <!--<buttons:ButtonWithTextToggle x:Name="_btnToggleClock" Width="30" Margin="4,0"
@@ -335,12 +335,12 @@
                             Converter={StaticResource BooleanToTextConverter}, 
                             ConverterParameter='Hide ReiKi Progress|Show ReiKi Progress'}" />-->
                         <buttons:ButtonImageToggle x:Name="_btnToggleReiKi" Width="30" Margin="4,0"
-                            IsChecked="{Binding Config.Configuration.ReiKiConfig.IsVisible}"
+                            IsChecked="{Binding Config.MediaDatabaseInfo.SelectedPlayList.ReiKiConfig.BoundsSettings.IsVisible}"
                             ImageChecked="/Images/GradientProgress48x48.png"
                             ImageUnchecked="/Images/GradientProgress48x48.png"
                             Foreground="{StaticResource ButtonForegroundMain}" 
                             Background="{StaticResource ButtonForegroundMain}"
-                            ToolTip="{Binding Config.Configuration.ReiKiConfig.IsVisible, 
+                            ToolTip="{Binding Config.MediaDatabaseInfo.SelectedPlayList.ReiKiConfig.BoundsSettings.IsVisible, 
                             Converter={StaticResource BooleanToTextConverter}, 
                             ConverterParameter='Hide ReiKi Progress|Show ReiKi Progress'}" />
                         <Border Width="3" Height="25" BorderThickness="1" BorderBrush="{StaticResource ButtonForegroundMain}" />

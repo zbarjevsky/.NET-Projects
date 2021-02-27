@@ -34,7 +34,7 @@
                 <MenuItem x:Name="chkBell4min" Header="4 Min" Click="OnBellIntervalClicked"/>
                 <MenuItem x:Name="chkBell5min" Header="5 Min" Click="OnBellIntervalClicked"/>
                 <Separator />
-                <MenuItem x:Name="mnuHide" Header="Hide" Click="OnMnuHide"/>
+                <MenuItem x:Name="mnuHide" Header="Hide" Click="OnMenuHide"/>
             </ContextMenu>
         </Grid.ContextMenu>
         

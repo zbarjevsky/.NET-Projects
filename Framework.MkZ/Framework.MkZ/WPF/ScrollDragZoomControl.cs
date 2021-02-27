@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MkZ.Windows;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -19,7 +20,25 @@ namespace MkZ.WPF
 
         public override string ToString()
         {
-            return string.Format("Offset & Zoom: X:{0:0.0}, Y:{1:0.0}, Zoom:{2:0.00}", Offset.X, Offset.Y, Zoom);
+            return string.Format("Offset: X:{0:0.0}, Y:{1:0.0}, Zoom:{2:0.00}", Offset.X, Offset.Y, Zoom);
+        }
+    }
+
+    public class BoundsSettings : NotifyPropertyChangedImpl
+    {
+        private bool _isVisible = false;
+        public bool IsVisible
+        {
+            get { return _isVisible; }
+            set { SetProperty(ref _isVisible, value); }
+        }
+
+        public OffsetAndZoom FullScreen { get; set; } = new OffsetAndZoom();
+        public OffsetAndZoom Normal { get; set; } = new OffsetAndZoom();
+
+        public override string ToString()
+        {
+            return string.Format("BoundsSettings - IsVisible={0}, Normal: {1}, Full: {2}", IsVisible, Normal, FullScreen);
         }
     }
 
@@ -41,20 +60,44 @@ namespace MkZ.WPF
             EnableZoom(scrollViewer);
 
             _control.Draggable(bEnableDrag);
+            if (bEnableDrag)
+            {
+                _control.DraggableSubscribeForChange(() =>
+                {
+                    if (_attachedState != null)
+                        _attachedState.Offset = _control.GetDraggableOffset();
+                });
+            }
         }
 
         public void EnableZoom(ScrollViewer scrollViewer)
         {
             if (_scrollDragZoom != null)
+            {
+                _scrollDragZoom.SizeChangedAction = () => { };
                 _scrollDragZoom.Dispose();
+            }
             _scrollDragZoom = null;
 
             if (scrollViewer != null)
+            {
                 _scrollDragZoom = new ScrollDragZoom(_control, scrollViewer);
+                _scrollDragZoom.SizeChangedAction = () =>
+                {
+                    if (_attachedState != null)
+                        _attachedState.Zoom = _scrollDragZoom.Zoom;
+                };
+            }
         }
 
-        public void BoundsSet(OffsetAndZoom loc)
+        private OffsetAndZoom _attachedState = null;
+        public void BoundsAttach(OffsetAndZoom loc)
         {
+            _attachedState = null; //pause update
+            
+            if (loc == null)
+                loc = new OffsetAndZoom();
+
             Debug.WriteLine("Restore {0} Zoom from: {1:0.00} to {2:0.00}, Original Size: {3}",
                 Name, _scrollDragZoom.Zoom, loc.Zoom, _scrollDragZoom.NaturalSize);
 
@@ -64,6 +107,8 @@ namespace MkZ.WPF
             Debug.WriteLine("Restore {0} Offset to: {1:0.00}", Name, loc.Offset);
 
             _control.SetDraggableOffset(loc.Offset, bAbsoluteOffset: true);
+
+            _attachedState = loc; //continue update
         }
 
         public void BoundsGet(OffsetAndZoom loc)

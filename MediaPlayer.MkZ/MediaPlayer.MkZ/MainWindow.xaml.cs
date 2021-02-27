@@ -169,25 +169,22 @@ namespace MkZ.MediaPlayer
             bool bFullScreen = config.MainWindowState.WindowStyle == WindowStyle.None;
 
             FullScreenSet(bFullScreen);
-
-            _clock.DataContext = config.ClockConfig;
-            _reiKiProgress.DataContext = config.ReiKiConfig;
         }
 
         private void LocationsSave()
         {
             Context.Config.Configuration.MainWindowState.CopyFrom(this);
 
-            if (this.WindowStyle == WindowStyle.None) //full screen
-            {
-                _clock.Zoomable.BoundsGet(Context.Config.Configuration.ClockConfig.Bounds_FullScreen);
-                _reiKiProgress.Zoomable.BoundsGet(Context.Config.Configuration.ReiKiConfig.Bounds_FullScreen);
-            }
-            else
-            {
-                _clock.Zoomable.BoundsGet(Context.Config.Configuration.ClockConfig.Bounds_Normal);
-                _reiKiProgress.Zoomable.BoundsGet(Context.Config.Configuration.ReiKiConfig.Bounds_Normal);
-            }
+            //if (this.WindowStyle == WindowStyle.None) //full screen
+            //{
+            //    _clock.Zoomable.BoundsGet(MediaDB.SelectedPlayList.ClockBounds.FullScreen);
+            //    _reiKiProgress.Zoomable.BoundsGet(MediaDB.SelectedPlayList.ReiKiConfig.BoundsSettings.FullScreen);
+            //}
+            //else
+            //{
+            //    _clock.Zoomable.BoundsGet(MediaDB.SelectedPlayList.ClockBounds.Normal);
+            //    _reiKiProgress.Zoomable.BoundsGet(MediaDB.SelectedPlayList.ReiKiConfig.BoundsSettings.Normal);
+            //}
         }
 
         private void ComboMediaFiles_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -266,6 +263,12 @@ namespace MkZ.MediaPlayer
                     _cmbFilesList.SelectedIndex = playList.SelectedMediaFileIndex;
                 }
 
+                _clock.DataContext = Context.Config.Configuration.ClockConfig;
+                _reiKiProgress.DataContext = MediaDB.SelectedPlayList.ReiKiConfig;
+
+                bool bFullScreen = this.WindowStyle == WindowStyle.None;
+                UpdateAttachedBounds(bFullScreen);
+
                 Context.NotifyPropertyChangedAll();
             }
         }
@@ -291,7 +294,7 @@ namespace MkZ.MediaPlayer
                 }
                 else if (playList.MediaFiles.Count > 0)
                 {
-                    playList.MediaFiles[0].Volume = PlayerVM.Volume; //same volume as previous
+                    //playList.MediaFiles[0].Volume = PlayerVM.Volume; //same volume as previous
                     playList.SelectedMediaFileIndex = -1;
                     NextTrack_Executed(bResetPositionAndPlay: true);
                 }
@@ -332,6 +335,8 @@ namespace MkZ.MediaPlayer
 
         public void FullScreenSet(bool bFullScreen)
         {
+            AttachedBoundsPauseUpdate();
+
             if (bFullScreen == false)//go normal
             {
                 //_hideHeaderAnimationHelper.ShowRow(true, false);
@@ -341,8 +346,6 @@ namespace MkZ.MediaPlayer
                 this.WindowStyle = WindowStyle.ThreeDBorderWindow;
                 this.WindowState = WindowState.Normal;
                 PlayerVM.IsFullScreen = false;
-                _clock.Zoomable.BoundsSet(Context.Config.Configuration.ClockConfig.Bounds_Normal);
-                _reiKiProgress.Zoomable.BoundsSet(Context.Config.Configuration.ReiKiConfig.Bounds_Normal);
             }
             else //go full screen
             {
@@ -353,8 +356,28 @@ namespace MkZ.MediaPlayer
                 this.WindowStyle = WindowStyle.None;
                 this.WindowState = WindowState.Maximized;
                 PlayerVM.IsFullScreen = true;
-                _clock.Zoomable.BoundsSet(Context.Config.Configuration.ClockConfig.Bounds_FullScreen);
-                _reiKiProgress.Zoomable.BoundsSet(Context.Config.Configuration.ReiKiConfig.Bounds_FullScreen);
+            }
+
+            UpdateAttachedBounds(bFullScreen);
+        }
+
+        public void AttachedBoundsPauseUpdate()
+        {
+            _clock.Zoomable.BoundsAttach(null);
+            _reiKiProgress.Zoomable.BoundsAttach(null);
+        }
+
+        public void UpdateAttachedBounds(bool bFullScreen)
+        {
+            if (bFullScreen == false)//go normal
+            {
+                _clock.Zoomable.BoundsAttach(MediaDB.SelectedPlayList.ClockBounds.Normal);
+                _reiKiProgress.Zoomable.BoundsAttach(MediaDB.SelectedPlayList.ReiKiConfig.BoundsSettings.Normal);
+            }
+            else //go full screen
+            {
+                _clock.Zoomable.BoundsAttach(MediaDB.SelectedPlayList.ClockBounds.FullScreen);
+                _reiKiProgress.Zoomable.BoundsAttach(MediaDB.SelectedPlayList.ReiKiConfig.BoundsSettings.FullScreen);
             }
         }
 
@@ -385,7 +408,7 @@ namespace MkZ.MediaPlayer
             {
                 playList.MediaFiles[playList.SelectedMediaFileIndex].MediaState = MediaState.Play;
                 playList.MediaFiles[playList.SelectedMediaFileIndex].PositionInSeconds = 0;
-                playList.MediaFiles[playList.SelectedMediaFileIndex].Volume = PlayerVM.Volume;
+                //playList.MediaFiles[playList.SelectedMediaFileIndex].Volume = PlayerVM.Volume;
             }
 
             _cmbFilesList.SelectedIndex = playList.SelectedMediaFileIndex;
@@ -418,7 +441,7 @@ namespace MkZ.MediaPlayer
             {
                 playList.MediaFiles[playList.SelectedMediaFileIndex].MediaState = MediaState.Play;
                 playList.MediaFiles[playList.SelectedMediaFileIndex].PositionInSeconds = 0;
-                playList.MediaFiles[playList.SelectedMediaFileIndex].Volume = PlayerVM.Volume;
+                //playList.MediaFiles[playList.SelectedMediaFileIndex].Volume = PlayerVM.Volume;
             }
 
             _cmbFilesList.SelectedIndex = playList.SelectedMediaFileIndex;
@@ -438,7 +461,7 @@ namespace MkZ.MediaPlayer
             {
                 playList.MediaFiles[playList.SelectedMediaFileIndex].MediaState = MediaState.Play;
                 playList.MediaFiles[playList.SelectedMediaFileIndex].PositionInSeconds = 0;
-                playList.MediaFiles[playList.SelectedMediaFileIndex].Volume = PlayerVM.Volume;
+                //playList.MediaFiles[playList.SelectedMediaFileIndex].Volume = PlayerVM.Volume;
             }
 
             _cmbFilesList.SelectedIndex = playList.SelectedMediaFileIndex;

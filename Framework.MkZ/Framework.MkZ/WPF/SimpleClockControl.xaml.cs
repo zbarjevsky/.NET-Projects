@@ -29,14 +29,6 @@ namespace MkZ.WPF
     {
         public class ClockConfig : NotifyPropertyChangedImpl
         {
-            private bool _isVisible = false;
-            [Category("Clock")]
-            public bool IsVisible
-            {
-                get { return _isVisible; }
-                set { SetProperty(ref _isVisible, value); }
-            }
-
             private SerializableFontForWpf _font = new SerializableFontForWpf();
             [Category("Clock")]
             [TypeConverter(typeof(ExpandableObjectConverter))]
@@ -99,9 +91,6 @@ namespace MkZ.WPF
                 }
             }
 
-            public OffsetAndZoom Bounds_FullScreen { get; set; } = new OffsetAndZoom();
-            public OffsetAndZoom Bounds_Normal { get; set; } = new OffsetAndZoom();
-
             public bool IsValid()
             {
                 return Foreground.C.A != 0 && HourHandBrush.C.A != 0;
@@ -117,6 +106,14 @@ namespace MkZ.WPF
         DispatcherTimer _timer = new DispatcherTimer();
 
         private ClockConfig Config => DataContext as ClockConfig;
+
+        private BoundsSettings _bounds = new BoundsSettings();
+        [Category("Clock")]
+        public BoundsSettings BoundsSettings
+        {
+            get { return _bounds; }
+            set { _bounds = value; }
+        }
 
         public SimpleClockControl()
         {
@@ -204,8 +201,8 @@ namespace MkZ.WPF
 
         private void ButtonHide_Click(object sender, RoutedEventArgs e)
         {
-            if (DataContext is ClockConfig config)
-                config.IsVisible = false;
+            //if (DataContext is ClockConfig config)
+            BoundsSettings.IsVisible = false;
         }
     }
 }

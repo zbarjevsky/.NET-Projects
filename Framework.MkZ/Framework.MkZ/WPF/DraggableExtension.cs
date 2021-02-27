@@ -47,6 +47,7 @@ namespace MkZ.WPF
             public FrameworkElement Element;
             public bool IsDragging = false;
             public Cursor Cursor;
+            public Action OnChange = null;
 
             private Thickness _margin = new Thickness();
 
@@ -127,6 +128,16 @@ namespace MkZ.WPF
         private static Point _initialMouseOffset;
         private static Vector _initialTranslateOffset;
 
+        public static void DraggableSubscribeForChange(this FrameworkElement element, Action onChange)
+        {
+            if (!_draggables.ContainsKey(element))
+            {  // return if control is not draggable
+                return;
+            }
+
+            _draggables[element].OnChange = onChange;
+        }
+
         /// <summary>
         /// Enabling/disabling dragging for control
         /// </summary>
@@ -159,6 +170,8 @@ namespace MkZ.WPF
                 {  // return if control is not draggable
                     return;
                 }
+
+                _draggables[element].OnChange = null;
 
                 // remove event handlers
                 element.MouseDown -= control_MouseDown;
@@ -288,6 +301,9 @@ namespace MkZ.WPF
 
         private static void ApplyOffsetEnsureInsideMargin(FrameworkElement element, Vector initialOffset, Vector offset)
         {
+            if (!_draggables.ContainsKey(element))
+                return;
+
             Thickness margin = _draggables[element].Margin;
 
             TranslateTransform translate = _draggables[element].Translate;
@@ -303,6 +319,9 @@ namespace MkZ.WPF
             translate.X = initialOffset.X + offset.X - corrX;
             double corrY = CalculateCorrectionInsideMargin(bounds.Y, offsetDelta.Y, element.RenderSize.Height, bounds.Height, margin.Top, margin.Bottom);
             translate.Y = initialOffset.Y + offset.Y - corrY;
+
+            if (_draggables[element].OnChange != null)
+                _draggables[element].OnChange();
         }
 
         //calculate correction to stay inside margin

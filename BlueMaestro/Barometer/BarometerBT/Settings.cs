@@ -10,7 +10,12 @@ namespace BarometerBT
 {
     public class Settings : NotifyPropertyChangedImpl
     {
+#if DEBUG
+        public const string BarometerMkZ = "BarometerMkZ_Debug";
+#else
         public const string BarometerMkZ = "BarometerMkZ";
+#endif
+
         public static readonly string ApplicationPath = System.Reflection.Assembly.GetExecutingAssembly().Location;
 
         private bool _isStartWithWindows = GetLoadWithWindows();
