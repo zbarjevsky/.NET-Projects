@@ -108,13 +108,13 @@
     <Compile Include="Controls\WeatherChartUserControl.Designer.cs">
       <DependentUpon>WeatherChartUserControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="Settings.cs" />
     <Compile Include="Utils\BMLineChart.cs" />
     <Compile Include="Utils\BMChart.cs" />
     <Compile Include="Utils\CommonTools.cs" />
     <Compile Include="Utils\Entry.cs" />
     <Compile Include="Utils\InvertBoolConverter.cs" />
     <Compile Include="Utils\MainPage.cs" />
-    <Compile Include="Utils\NotifyPropertyChangedImpl.cs" />
     <Compile Include="Utils\TextView.cs" />
     <Compile Include="Utils\UnitsDescriptor.cs" />
     <Compile Include="Utils\ViewGroup.cs" />
@@ -197,6 +197,12 @@
   </ItemGroup>
   <ItemGroup>
     <SplashScreen Include="Images\SplashScreen.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Framework.MkZ\Framework.MkZ\Framework.MkZ.csproj">
+      <Project>{768af4b8-5edd-4196-97ae-dbc1589dd426}</Project>
+      <Name>Framework.MkZ</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

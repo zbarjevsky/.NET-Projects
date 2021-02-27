@@ -122,7 +122,7 @@
                             </MenuItem.Icon>
                         </MenuItem>
                         <Separator/>
-                        <MenuItem Header="Settings..." Padding="8" Click="SettingsMenuItem_Click" >
+                        <MenuItem Header="Settings..." Padding="8" Click="MenuSettings_Click" >
                             <MenuItem.Icon>
                                 <Image Source="Images/Tools.ico" Width="16" Height="16" />
                             </MenuItem.Icon>

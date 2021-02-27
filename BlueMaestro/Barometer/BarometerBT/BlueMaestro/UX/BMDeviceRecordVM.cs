@@ -7,6 +7,7 @@ using System.Windows.Media;
 
 
 using BarometerBT.Utils;
+using MkZ.Windows;
 
 namespace BarometerBT.BlueMaestro.UX
 {

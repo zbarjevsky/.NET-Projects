@@ -454,7 +454,7 @@ namespace MkZ.MediaPlayer
             }
         }
 
-        private void SettingsMenuItem_Click(object sender, RoutedEventArgs e)
+        private void MenuSettings_Click(object sender, RoutedEventArgs e)
         {
             Action<Grid> setCustomCursor = (grid) =>
             {

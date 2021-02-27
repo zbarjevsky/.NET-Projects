@@ -20,6 +20,7 @@ using BarometerBT.BlueMaestro.UX;
 using BarometerBT.Bluetooth;
 using BarometerBT.Utils;
 using Microsoft.Win32;
+using MkZ.WPF.PropertyGrid;
 
 namespace BarometerBT
 {
@@ -31,6 +32,8 @@ namespace BarometerBT
         private readonly BluetoothWatcher _btWatcher = new BluetoothWatcher();
 
         private readonly ObservableCollection<BMDeviceRecordVM> _devices = new ObservableCollection<BMDeviceRecordVM>();
+
+        private static Settings Settings { get; } = new Settings();
 
         public MainWindow()
         {
@@ -383,6 +386,16 @@ namespace BarometerBT
             if (IsUserDragged(_cmbInterval))
                 _chkAutoZoom.IsChecked = false;
             UpdateChart();
+        }
+
+        private void MenuSettings_Click(object sender, RoutedEventArgs e)
+        {
+            OptionsWindow.ShowOptions(this, Settings, "Barometer App Settings", 300);
+        }
+
+        private void MenuExit_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

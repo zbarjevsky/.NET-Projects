@@ -26,11 +26,21 @@
             <ColumnDefinition Width="20"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
+            <RowDefinition Height="45"/>
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <ListView x:Name="_listDevices" Margin="6" SelectionMode="Single" Background="LightYellow"
+        <Border Grid.ColumnSpan="3" BorderThickness="1" BorderBrush="DarkGoldenrod" CornerRadius="3" Margin="6,3">
+            <Menu Margin="6,0"  FontSize="16" VerticalAlignment="Center" Background="Transparent">
+                <MenuItem Header="File">
+                    <MenuItem Header="Settings" Click="MenuSettings_Click" />
+                    <Separator/>
+                    <MenuItem Header="Exit" Click="MenuExit_Click" />
+                </MenuItem>
+            </Menu>
+        </Border>
+        <ListView Grid.Row="1" x:Name="_listDevices" Margin="6" SelectionMode="Single" Background="LightYellow"
                   ScrollViewer.CanContentScroll="False"
                   SelectionChanged="_listDevices_SelectionChanged">
             <ListView.Resources>
@@ -47,7 +57,7 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <ScrollViewer Grid.Row="1" Margin="6" Background="LightYellow" 
+        <ScrollViewer Grid.Row="2" Margin="6" Background="LightYellow" 
                       HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
             <StackPanel Orientation="Vertical">
                 <StackPanel Margin="6" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top"
@@ -102,17 +112,17 @@
                 
             </StackPanel>
         </ScrollViewer>
-        <GridSplitter Grid.Column="1" Grid.RowSpan="3" HorizontalAlignment="Stretch" Background="DarkGoldenrod" />
-        <TextBox x:Name="_txtInfo" Grid.Row="2" Margin="6" Background="LightYellow" />
-        <WindowsFormsHost Grid.Row="0" Grid.Column="2" Margin="6" Background="White" >
+        <GridSplitter Grid.Row="1" Grid.Column="1" Grid.RowSpan="3" HorizontalAlignment="Stretch" Background="DarkGoldenrod" />
+        <TextBox x:Name="_txtInfo" Grid.Row="3" Margin="6" Background="LightYellow" />
+        <WindowsFormsHost Grid.Row="1" Grid.Column="2" Margin="6" Background="White" >
             <controls:WeatherChartUserControl x:Name="_chart1" />
         </WindowsFormsHost>
-        <WindowsFormsHost Grid.Row="1" Grid.Column="2" Margin="6" Background="White" >
+        <WindowsFormsHost Grid.Row="2" Grid.Column="2" Margin="6" Background="White" >
             <controls:WeatherChartUserControl x:Name="_chart2" />
         </WindowsFormsHost>
-        <WindowsFormsHost Grid.Row="2" Grid.Column="2" Margin="6" Background="White" >
+        <WindowsFormsHost Grid.Row="3" Grid.Column="2" Margin="6" Background="White" >
             <controls:WeatherChartUserControl x:Name="_chart3" />
         </WindowsFormsHost>
-        <GridSplitter Grid.Column="3" Grid.RowSpan="3" HorizontalAlignment="Stretch" Background="DarkGoldenrod" />
+        <GridSplitter Grid.Row="1" Grid.Column="3" Grid.RowSpan="3" HorizontalAlignment="Stretch" Background="DarkGoldenrod" />
     </Grid>
 </Window>
