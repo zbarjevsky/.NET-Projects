@@ -200,7 +200,7 @@
                     </MenuItem>
                 </Menu>
             </Border>
-            <ComboBox x:Name="_cmbPlayMode" Margin="0,7,10,7" SelectedItem="{Binding Config.MediaDatabaseInfo.SelectedPlayList.PlayMode }"
+            <ComboBox x:Name="_cmbPlayMode" Margin="0,7,10,7" SelectedItem="{Binding AppConfig.MediaDatabaseInfo.SelectedPlayList.PlayMode }"
                       ToolTip="Repeat Mode..."
                       Background="{StaticResource GradientBackground}" Foreground="{StaticResource ButtonForegroundMain}" 
                       Style="{StaticResource FlatComboBoxDark}" Text="Select One" IsReadOnly="True" MinWidth="60"
@@ -287,7 +287,7 @@
         <ScrollViewer x:Name="_scrollMain" Grid.Row="1" Grid.RowSpan="1" 
                       Background="Transparent" CanContentScroll="True" >
             <Image x:Name="_imageBackground"
-               Source="{Binding Config.Configuration.BackgroundImageFileName}" />
+               Source="{Binding AppConfig.Settings.BackgroundImageFileName}" />
         </ScrollViewer>
 
         <mediaplayer:VideoPlayerControl Grid.Row="1" x:Name="_player"
@@ -314,33 +314,33 @@
                         <controls:ButtonBrowse Width="30" Margin="4,0" Foreground="{StaticResource ButtonForegroundMain}" 
                             ToolTip="Open Media File..." Command="ApplicationCommands.Open" />
                         <buttons:ButtonImageToggle x:Name="_btnToggleClock" Width="30" Margin="4,0"
-                            IsChecked="{Binding Config.MediaDatabaseInfo.SelectedPlayList.ClockBounds.IsVisible}"
+                            IsChecked="{Binding AppConfig.MediaDatabaseInfo.SelectedPlayList.ClockBounds.IsVisible}"
                             Foreground="{StaticResource ButtonForegroundMain}" 
                             Background="{StaticResource ButtonForegroundMain}"
-                            ToolTip="{Binding Config.MediaDatabaseInfo.SelectedPlayList.ClockBounds.IsVisible, 
+                            ToolTip="{Binding AppConfig.MediaDatabaseInfo.SelectedPlayList.ClockBounds.IsVisible, 
                                 Converter={StaticResource BooleanToTextConverter}, 
                                 ConverterParameter='Hide Clock|Show Clock'}" />
                         <!--<buttons:ButtonWithTextToggle x:Name="_btnToggleClock" Width="30" Margin="4,0"
                             ButtonTextUnchecked="Õ" ButtonTextChecked="Ô" FontSize="20"
-                            IsChecked="{Binding Config.Configuration.ClockConfig.IsVisible}"
+                            IsChecked="{Binding AppConfig.Settings.ClockConfig.IsVisible}"
                             Background="Black" Foreground="{StaticResource ButtonForegroundMain}" 
-                            ToolTip="{Binding Config.Configuration.ClockConfig.IsVisible, 
+                            ToolTip="{Binding AppConfig.Settings.ClockConfig.IsVisible, 
                             Converter={StaticResource BooleanToTextConverter}, 
                             ConverterParameter='Hide Clock|Show Clock'}" />
                         <buttons:ButtonWithTextToggle x:Name="_btnToggleReiKi" Width="30" Margin="4,0"
                             ButtonTextUnchecked="R" ButtonTextChecked="r" FontSize="20"
-                            IsChecked="{Binding Config.Configuration.ReiKiConfig.IsVisible}"
+                            IsChecked="{Binding AppConfig.Settings.ReiKiConfig.IsVisible}"
                             Background="Black" Foreground="{StaticResource ButtonForegroundMain}" 
-                            ToolTip="{Binding Config.Configuration.ReiKiConfig.IsVisible, 
+                            ToolTip="{Binding AppConfig.Settings.ReiKiConfig.IsVisible, 
                             Converter={StaticResource BooleanToTextConverter}, 
                             ConverterParameter='Hide ReiKi Progress|Show ReiKi Progress'}" />-->
                         <buttons:ButtonImageToggle x:Name="_btnToggleReiKi" Width="30" Margin="4,0"
-                            IsChecked="{Binding Config.MediaDatabaseInfo.SelectedPlayList.ReiKiConfig.BoundsSettings.IsVisible}"
+                            IsChecked="{Binding AppConfig.MediaDatabaseInfo.SelectedPlayList.ReiKiConfig.BoundsSettings.IsVisible}"
                             ImageChecked="/Images/GradientProgress48x48.png"
                             ImageUnchecked="/Images/GradientProgress48x48.png"
                             Foreground="{StaticResource ButtonForegroundMain}" 
                             Background="{StaticResource ButtonForegroundMain}"
-                            ToolTip="{Binding Config.MediaDatabaseInfo.SelectedPlayList.ReiKiConfig.BoundsSettings.IsVisible, 
+                            ToolTip="{Binding AppConfig.MediaDatabaseInfo.SelectedPlayList.ReiKiConfig.BoundsSettings.IsVisible, 
                             Converter={StaticResource BooleanToTextConverter}, 
                             ConverterParameter='Hide ReiKi Progress|Show ReiKi Progress'}" />
                         <Border Width="3" Height="25" BorderThickness="1" BorderBrush="{StaticResource ButtonForegroundMain}" />

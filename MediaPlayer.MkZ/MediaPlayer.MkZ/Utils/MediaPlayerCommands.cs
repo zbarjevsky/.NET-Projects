@@ -20,9 +20,9 @@ namespace MkZ.MediaPlayer.Utils
         private ICommand F11Command { get; set; }
         private ICommand EscapeCommand { get; set; }
 
-        private VideoPlayerControlVM PlayerVM  => VideoPlayerContext.Instance.PlayerVM;
+        private VideoPlayerControlVM PlayerVM  => MediaPlayerContext.Instance.PlayerVM;
 
-        public Configuration Config => VideoPlayerContext.Instance.Config.Configuration;
+        public Configuration Config => MediaPlayerContext.Instance.AppConfig.Settings;
 
         public MediaPlayerCommands(IPlayerMainWindow mainWindow, bool enableKeyboardShortcuts)
         {

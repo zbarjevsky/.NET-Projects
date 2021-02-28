@@ -35,7 +35,7 @@ namespace TestWpfCursor
             arrow.Stroke = Brushes.Lime;
             arrow.SetCursorSize(70);
 
-            //arrow.BindToColor(Context.Config.Configuration, "CursorColor.B");
+            //arrow.BindToColor(Context.AppConfig.Configuration, "CursorColor.B");
             this.Cursor = CursorFromControl.Create(arrow, new Size(80, 80));
             _cmb.Cursor = this.Cursor;
 
@@ -51,7 +51,7 @@ namespace TestWpfCursor
             arrow.Stroke = Brushes.Lime;
             arrow.SetCursorSize(70);
 
-            //arrow.BindToColor(Context.Config.Configuration, "CursorColor.B");
+            //arrow.BindToColor(Context.AppConfig.Configuration, "CursorColor.B");
             this.Cursor = CursorFromControl.Create(arrow, new Size(80, 80));
             _cmb.Cursor = this.Cursor;
 

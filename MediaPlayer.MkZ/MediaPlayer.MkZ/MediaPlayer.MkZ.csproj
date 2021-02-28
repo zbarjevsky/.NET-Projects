@@ -134,7 +134,7 @@
     <Compile Include="Utils\MediaPlayerCommands.cs" />
     <Compile Include="Utils\SliderIgnoreDelta.cs" />
     <Compile Include="Utils\VisibilityConverters.cs" />
-    <Compile Include="VideoPlayerContext.cs" />
+    <Compile Include="MediaPlayerContext.cs" />
     <Compile Include="VideoPlayerControl.xaml.cs">
       <DependentUpon>VideoPlayerControl.xaml</DependentUpon>
     </Compile>

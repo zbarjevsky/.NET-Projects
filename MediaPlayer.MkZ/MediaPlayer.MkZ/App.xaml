@@ -40,7 +40,7 @@
         </ObjectDataProvider>
 
         <system:Double x:Key="CursorHeight" >33</system:Double>
-        <local:VideoPlayerContext x:Key="Context" />
+        <local:MediaPlayerContext x:Key="Context" />
 
         <Style x:Key="{x:Type ToolTip}" TargetType="ToolTip">
             <Setter Property="OverridesDefaultStyle" Value="true" />

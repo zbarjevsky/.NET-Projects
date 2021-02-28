@@ -22,7 +22,7 @@ namespace MkZ.MediaPlayer
     /// </summary>
     public partial class PlayListManagerWindow : Window, IPlayerMainWindow
     {
-        private VideoPlayerContext Context => VideoPlayerContext.Instance;
+        private MediaPlayerContext Context => MediaPlayerContext.Instance;
 
         private MediaPlayerCommands _mediaPlayerCommands;
 
@@ -152,7 +152,7 @@ namespace MkZ.MediaPlayer
         public void AddNewMediaFiles(string[] fileNames, double volume)
         {
             PlayList playList  = _treePlayLists.SelectedItem as PlayList;
-            VideoPlayerContext.Instance.AddNewMediaFiles(playList, fileNames, volume);
+            MediaPlayerContext.Instance.AddNewMediaFiles(playList, fileNames, volume);
         }
 
         public void FullScreenToggle()

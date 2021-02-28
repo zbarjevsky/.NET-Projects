@@ -75,7 +75,7 @@ namespace MkZ.MediaPlayer
             {
                 if (!string.IsNullOrWhiteSpace(_playerControlVM.State.FileName))
                 {
-                    Configuration config = VideoPlayerContext.Instance.Config.Configuration;
+                    Configuration config = MediaPlayerContext.Instance.AppConfig.Settings;
                     bool isImage = !string.IsNullOrWhiteSpace(config.BackgroundImageFileName);
                     return config.IsSupportedVideoFile(_playerControlVM.State.FileName) || isImage;
                 }

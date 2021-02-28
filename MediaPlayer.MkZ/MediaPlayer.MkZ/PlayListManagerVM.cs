@@ -13,11 +13,11 @@ namespace MkZ.MediaPlayer
 {
     public class PlayListManagerVM : NotifyPropertyChangedImpl
     {
-        public MediaDatabaseInfo DB => VideoPlayerContext.Instance.Config.MediaDatabaseInfo;
+        public MediaDatabaseInfo DB => MediaPlayerContext.Instance.AppConfig.MediaDatabaseInfo;
 
         public ObservableCollection<PlayList> PlayListRoot => DB.RootList.PlayLists;
 
-        public bool IsPlayingSelectedFile { get { return GetSelectedFile().MediaState == System.Windows.Controls.MediaState.Play; } }
+        public bool IsPlayingSelectedFile { get { return GetSelectedFile()?.MediaState == System.Windows.Controls.MediaState.Play; } }
 
         public PlayListManagerVM()
         {

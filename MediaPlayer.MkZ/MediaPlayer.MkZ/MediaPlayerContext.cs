@@ -12,15 +12,15 @@ using MkZ.WPF;
 
 namespace MkZ.MediaPlayer
 {
-    public class VideoPlayerContext : NotifyPropertyChangedImpl
+    public class MediaPlayerContext : NotifyPropertyChangedImpl
     {
-        public static VideoPlayerContext Instance { get; } = new VideoPlayerContext() { InDesignMode = WPFUtils.GetInDesignMode() };
+        public static MediaPlayerContext Instance { get; } = new MediaPlayerContext() { InDesignMode = WPFUtils.GetInDesignMode() };
 
         public static double CursorHeight { get { return Application.Current.MainWindow.ActualHeight / 20; } }
         public static double ToolTipFontSize { get { return Application.Current.MainWindow.ActualHeight / 40; } }
         public static Brush ToolTipForeground { get { return Application.Current.MainWindow.Background; } }
 
-        public AppConfig Config { get; } = new AppConfig();
+        public AppConfig AppConfig { get; } = new AppConfig();
 
         public VideoPlayerControlVM PlayerVM { get; set; } = null;
         public bool InDesignMode { get; set; }
@@ -33,11 +33,11 @@ namespace MkZ.MediaPlayer
             int index = -1, count = 0;
             foreach (string fileName in fileNames)
             {
-                if (Config.Configuration.IsSupportedImageFile(fileName))
+                if (AppConfig.Settings.IsSupportedImageFile(fileName))
                 {
-                    Config.Configuration.BackgroundImageFileName = fileName;
+                    AppConfig.Settings.BackgroundImageFileName = fileName;
                 }
-                else if (Config.Configuration.IsSupportedMediaFile(fileName))
+                else if (AppConfig.Settings.IsSupportedMediaFile(fileName))
                 {
                     count++;
                     index = playList.AddNewMediaFile(fileName, volume);

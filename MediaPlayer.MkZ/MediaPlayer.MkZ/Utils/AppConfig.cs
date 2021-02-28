@@ -145,6 +145,8 @@ namespace MkZ.MediaPlayer.Utils
 
             MainWindowState.CopyFrom(config.MainWindowState);
 
+            Volume = config.Volume;
+
             if (config.ClockConfig.IsValid())
                 ClockConfig = config.ClockConfig;
 
@@ -199,7 +201,7 @@ namespace MkZ.MediaPlayer.Utils
 
         public bool IsSupportedVideoFile(string fileName)
         {
-            if (VideoPlayerContext.Instance.InDesignMode)
+            if (MediaPlayerContext.Instance.InDesignMode)
                 return false;
 
             string ext = System.IO.Path.GetExtension(fileName).ToLower();
@@ -606,7 +608,7 @@ namespace MkZ.MediaPlayer.Utils
         private string _fileName;
 
         [Category("Config"), TypeConverter(typeof(ExpandableObjectConverter))]
-        public Configuration Configuration { get; set; } = new Configuration();
+        public Configuration Settings { get; set; } = new Configuration();
 
         [Category("Media Database"), TypeConverter(typeof(ExpandableObjectConverter))]
         public MediaDatabaseInfo MediaDatabaseInfo { get; set; } = new MediaDatabaseInfo();
@@ -615,7 +617,7 @@ namespace MkZ.MediaPlayer.Utils
         {
             var assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
             string commonPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            _dataFolder = Path.Combine(commonPath, "MarkZ", assemblyName);
+            _dataFolder = Path.Combine(commonPath, "MkZ", assemblyName);
             Directory.CreateDirectory(_dataFolder);
 
             string debug = "";
@@ -630,7 +632,7 @@ namespace MkZ.MediaPlayer.Utils
         public void CopyFrom(AppConfig config)
         {
             MediaDatabaseInfo.CopyFrom(config.MediaDatabaseInfo);
-            Configuration.CopyFrom(config.Configuration);
+            Settings.CopyFrom(config.Settings);
         }
 
         public void Save()
@@ -652,7 +654,7 @@ namespace MkZ.MediaPlayer.Utils
                     MessageBox.Show(err.ToString(), "Cannot load Settings From File");
                 }            
             }
-            this.Configuration.EnsureHasValues();
+            this.Settings.EnsureHasValues();
         }
     }
 }

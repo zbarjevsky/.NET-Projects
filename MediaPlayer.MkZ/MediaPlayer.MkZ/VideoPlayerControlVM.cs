@@ -109,7 +109,7 @@ namespace MkZ.MediaPlayer
 
     public class VideoPlayerControlVM : NotifyPropertyChangedImpl, IMediaPlayer
     {
-        public VideoPlayerContext Context => VideoPlayerContext.Instance;
+        public MediaPlayerContext Context => MediaPlayerContext.Instance;
         
         private ScrollDragZoom _scrollDragger = null;
         private ScrollViewer _scrollPlayerContainer = null;
@@ -273,7 +273,7 @@ namespace MkZ.MediaPlayer
             _scrollPlayerContainer = scrollPlayer;
             _scrollPlayerContainer.Content = VideoPlayerElement;
 
-            VideoPlayerElement.Volume = Context.Config.Configuration.Volume; // State.Volume;
+            VideoPlayerElement.Volume = Context.AppConfig.Settings.Volume; // State.Volume;
 
             if (_scrollDragger != null)
                 _scrollDragger.Dispose();
@@ -305,7 +305,7 @@ namespace MkZ.MediaPlayer
             Zoom = State.Zoom;
             VerticalOffset = State.ScrollOffset.Y;
 
-            Volume = Context.Config.Configuration.Volume; // State.Volume;
+            Volume = Context.AppConfig.Settings.Volume; // State.Volume;
 
             Open(State.FileName);
         }
@@ -322,7 +322,7 @@ namespace MkZ.MediaPlayer
                     MediaState = MediaState.Play;
                     Title = Path.GetFileName(fileName);
 
-                    Volume = Context.Config.Configuration.Volume; //State.Volume;
+                    Volume = Context.AppConfig.Settings.Volume; //State.Volume;
                     IsMuted = true; //load silently
 
                     //https://stackoverflow.com/questions/6716100/strange-behavior-with-wpf-mediaelement
@@ -420,7 +420,7 @@ namespace MkZ.MediaPlayer
                 else
                     VideoPlayerElement.Volume = value;
 
-                Context.Config.Configuration.Volume = VideoPlayerElement.Volume;
+                Context.AppConfig.Settings.Volume = VideoPlayerElement.Volume;
 
                 NotifyPropertyChanged(); 
             }
@@ -763,7 +763,7 @@ namespace MkZ.MediaPlayer
 
         private Brush GetBackgroundForOpenedFile()
         {
-            if (Context.Config.Configuration.IsSupportedVideoFile(State.FileName))
+            if (Context.AppConfig.Settings.IsSupportedVideoFile(State.FileName))
                 return Brushes.Black;
                 
             return Brushes.Transparent;

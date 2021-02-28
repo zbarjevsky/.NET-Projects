@@ -40,11 +40,11 @@ namespace MkZ.MediaPlayer
 
         private CursorArrow _cursorArrow = new CursorArrow();
 
-        private VideoPlayerContext Context => VideoPlayerContext.Instance;
+        private MediaPlayerContext Context => MediaPlayerContext.Instance;
 
-        public MediaDatabaseInfo MediaDB => VideoPlayerContext.Instance.Config.MediaDatabaseInfo;
+        public MediaDatabaseInfo MediaDB => MediaPlayerContext.Instance.AppConfig.MediaDatabaseInfo;
 
-        public VideoPlayerControlVM PlayerVM => VideoPlayerContext.Instance.PlayerVM;
+        public VideoPlayerControlVM PlayerVM => MediaPlayerContext.Instance.PlayerVM;
 
         private readonly string[] _commandLine;
 
@@ -71,12 +71,12 @@ namespace MkZ.MediaPlayer
             _zoomImage = new ScrollDragZoom(_imageBackground, _scrollMain);
             _zoomImage.FitWindow(0);
 
-            Context.Config.Configuration.PropertyChanged += Config_PropertyChanged;
-            Context.Config.MediaDatabaseInfo.PropertyChanged += MediaDatabaseInfo_PropertyChanged;
+            Context.AppConfig.Settings.PropertyChanged += Config_PropertyChanged;
+            Context.AppConfig.MediaDatabaseInfo.PropertyChanged += MediaDatabaseInfo_PropertyChanged;
 
             _hideHeaderAnimationHelper = new GridLengthAnimationHelper(this, rowHeader);
 
-            Context.Config.Load();
+            Context.AppConfig.Load();
 
             //add or select file if exists
             ProcessCommandLine();
@@ -95,7 +95,7 @@ namespace MkZ.MediaPlayer
             PlayerVM.MediaEndedAction = (vm) => OnMediaEnded(vm);
             PlayerVM.MediaFailedAction = (vm, ex) => OnMediaFailed(vm, ex);
 
-            Context.Config.Configuration.MainWindowState.RestoreTo(this);
+            Context.AppConfig.Settings.MainWindowState.RestoreTo(this);
             this.WindowState = WindowState.Normal; //always normal - to position on correct screen for maximize
         }
 
@@ -103,16 +103,16 @@ namespace MkZ.MediaPlayer
         {
             _mnuPlayLists.ItemsSource = MediaDB.RootList.PlayLists;
 
-            LocationsRestore(Context.Config.Configuration);
+            ConfigurationRestore(Context.AppConfig.Settings);
 
             //CursorArrow arrow = new CursorArrow();
             //arrow.SetCursorSize(50);
-            //arrow.BindToColor(Context.Config.Configuration, "CursorColor.B");
+            //arrow.BindToColor(Context.AppConfig.Configuration, "CursorColor.B");
             //this.Cursor = CursorFromControl.Create(arrow, new Size(80, 80));
 
             _cursorArrow.Visibility = Visibility.Hidden;
             _cursorArrow.Load_Cursor(_gridMain, sizeRatio: 20);
-            _cursorArrow.BindToColor(Context.Config.Configuration, "CursorColor.B");
+            _cursorArrow.BindToColor(Context.AppConfig.Settings, "CursorColor.B");
 
             Application.Current.Dispatcher.BeginInvoke(new Action(() => SetPlayList(MediaDB.SelectedPlayList)));
         }
@@ -121,9 +121,9 @@ namespace MkZ.MediaPlayer
         {
             MediaDB.SelectedMediaFileIndex = _cmbFilesList.SelectedIndex;
 
-            LocationsSave();
+            ConfigurationUpdate(Context.AppConfig.Settings);
 
-            Context.Config.Save();
+            Context.AppConfig.Save();
             _player.ClosePlayer();
         }
 
@@ -141,7 +141,7 @@ namespace MkZ.MediaPlayer
             if (!File.Exists(fileName))
                 return false;
 
-            if (!Context.Config.Configuration.IsSupportedMediaFile(fileName))
+            if (!Context.AppConfig.Settings.IsSupportedMediaFile(fileName))
                 return false;
 
             PlayList list = MediaDB.RootList.FindPlayListContainingFile(fileName);
@@ -162,8 +162,9 @@ namespace MkZ.MediaPlayer
             return true;
         }
 
-        private void LocationsRestore(Configuration config)
+        private void ConfigurationRestore(Configuration config)
         {
+            PlayerVM.Volume = config.Volume;
             config.MainWindowState.RestoreTo(this);
 
             bool bFullScreen = config.MainWindowState.WindowStyle == WindowStyle.None;
@@ -171,20 +172,10 @@ namespace MkZ.MediaPlayer
             FullScreenSet(bFullScreen);
         }
 
-        private void LocationsSave()
+        private void ConfigurationUpdate(Configuration config)
         {
-            Context.Config.Configuration.MainWindowState.CopyFrom(this);
-
-            //if (this.WindowStyle == WindowStyle.None) //full screen
-            //{
-            //    _clock.Zoomable.BoundsGet(MediaDB.SelectedPlayList.ClockBounds.FullScreen);
-            //    _reiKiProgress.Zoomable.BoundsGet(MediaDB.SelectedPlayList.ReiKiConfig.BoundsSettings.FullScreen);
-            //}
-            //else
-            //{
-            //    _clock.Zoomable.BoundsGet(MediaDB.SelectedPlayList.ClockBounds.Normal);
-            //    _reiKiProgress.Zoomable.BoundsGet(MediaDB.SelectedPlayList.ReiKiConfig.BoundsSettings.Normal);
-            //}
+            config.Volume = PlayerVM.Volume;
+            config.MainWindowState.CopyFrom(this);
         }
 
         private void ComboMediaFiles_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -231,9 +222,9 @@ namespace MkZ.MediaPlayer
 
         private void Config_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(Context.Config.Configuration.BackgroundImageFileName))
+            if (e.PropertyName == nameof(Context.AppConfig.Settings.BackgroundImageFileName))
             {
-                this.Background = ColorUtils.CalculateAverageColor(Context.Config.Configuration.BackgroundImageFileName);
+                this.Background = ColorUtils.CalculateAverageColor(Context.AppConfig.Settings.BackgroundImageFileName);
             }
         }
 
@@ -241,8 +232,8 @@ namespace MkZ.MediaPlayer
         {
             if(e.PropertyName == nameof(MediaDatabaseInfo.SelectedMediaFileIndex))
             {
-                if (_cmbFilesList.SelectedIndex != Context.Config.MediaDatabaseInfo.SelectedMediaFileIndex)
-                    _cmbFilesList.SelectedIndex = Context.Config.MediaDatabaseInfo.SelectedMediaFileIndex;
+                if (_cmbFilesList.SelectedIndex != Context.AppConfig.MediaDatabaseInfo.SelectedMediaFileIndex)
+                    _cmbFilesList.SelectedIndex = Context.AppConfig.MediaDatabaseInfo.SelectedMediaFileIndex;
             }
         }
 
@@ -263,7 +254,7 @@ namespace MkZ.MediaPlayer
                     _cmbFilesList.SelectedIndex = playList.SelectedMediaFileIndex;
                 }
 
-                _clock.DataContext = Context.Config.Configuration.ClockConfig;
+                _clock.DataContext = Context.AppConfig.Settings.ClockConfig;
                 _reiKiProgress.DataContext = MediaDB.SelectedPlayList.ReiKiConfig;
 
                 bool bFullScreen = this.WindowStyle == WindowStyle.None;
@@ -321,13 +312,13 @@ namespace MkZ.MediaPlayer
 
         public void AddNewMediaFiles(string[] fileNames, double volume)
         {
-            VideoPlayerContext.Instance.AddNewMediaFiles(MediaDB.SelectedPlayList, fileNames, volume);
+            MediaPlayerContext.Instance.AddNewMediaFiles(MediaDB.SelectedPlayList, fileNames, volume);
             _cmbFilesList.SelectedIndex = MediaDB.SelectedPlayList.SelectedMediaFileIndex;
         }
 
         public void FullScreenToggle()
         {
-            LocationsSave();
+            ConfigurationUpdate(Context.AppConfig.Settings);
 
             bool bFullScreen = this.WindowStyle != WindowStyle.None;
             FullScreenSet(bFullScreen);
@@ -483,11 +474,11 @@ namespace MkZ.MediaPlayer
             {
                 CursorArrow arrow = new CursorArrow();
                 arrow.SetCursorSize(50);
-                arrow.BindToColor(Context.Config.Configuration, "CursorColor.B");
+                arrow.BindToColor(Context.AppConfig.Settings, "CursorColor.B");
                 grid.Cursor = CursorFromControl.Create(arrow, new Size(80, 80));
             };
 
-            OptionsWindow.ShowOptionsEx(this, Context.Config, "Settings", setCustomCursor, "Configuration", "Clock Configuration", "Clock Font");
+            OptionsWindow.ShowOptionsEx(this, Context.AppConfig, "Settings", setCustomCursor, "Settings", "Clock Configuration", "Clock Font");
         }
 
         private void ButtonPlayListManager_Click(object sender, RoutedEventArgs e)
@@ -498,8 +489,9 @@ namespace MkZ.MediaPlayer
             bool ok = wnd.ShowDialog().Value;
             Context.MediaPlayerCommands = _mediaPlayerCommands;
 
-            LocationsSave();
-            Context.Config.Save();
+            ConfigurationUpdate(Context.AppConfig.Settings);
+
+            Context.AppConfig.Save();
         }
 
         private void MenuSelectPlayList_Click(object sender, RoutedEventArgs e)
@@ -540,7 +532,7 @@ namespace MkZ.MediaPlayer
 
         private void OpenClosestImageFile(int direction)
         {
-            string file = Context.Config.Configuration.BackgroundImageFileName;
+            string file = Context.AppConfig.Settings.BackgroundImageFileName;
             if (!File.Exists(file))
             {
                 ApplicationCommands.Open.Execute(this, null);
@@ -549,7 +541,7 @@ namespace MkZ.MediaPlayer
 
             string dir = Path.GetDirectoryName(file);
             List<string> list = new List<string>();
-            foreach (string ext in Context.Config.Configuration.SupportedImageExtensions)
+            foreach (string ext in Context.AppConfig.Settings.SupportedImageExtensions)
             {
                 string filter = "*" + ext;
                 string[] files = Directory.GetFiles(dir, filter);
@@ -564,7 +556,7 @@ namespace MkZ.MediaPlayer
             if (idx >= list.Count)
                 idx = 0;
 
-            Context.Config.Configuration.BackgroundImageFileName = list[idx];
+            Context.AppConfig.Settings.BackgroundImageFileName = list[idx];
         }
     }
 }

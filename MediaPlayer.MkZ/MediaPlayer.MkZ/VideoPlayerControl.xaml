@@ -116,7 +116,7 @@
         <controls:PlayerControls x:Name="_playControls" Grid.Row="2" Margin="16" />
 
         <StackPanel x:Name="_testButtons" Grid.Row="3" Orientation="Horizontal"
-                    Visibility="{Binding Context.Config.Configuration.ShowTestControls, Converter={StaticResource BoolToCollapsedConverter}}" >
+                    Visibility="{Binding Context.AppConfig.Settings.ShowTestControls, Converter={StaticResource BoolToCollapsedConverter}}" >
             <Button x:Name="btnOpen"  Margin="6"
                     Content="Open..." ToolTip="Open"
                      Command="ApplicationCommands.Open" />
