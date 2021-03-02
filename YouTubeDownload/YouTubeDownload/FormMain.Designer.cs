@@ -72,6 +72,7 @@
             this.m_ctxmnuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.m_btnAddUrl = new System.Windows.Forms.Button();
             this.m_spliMain = new System.Windows.Forms.SplitContainer();
+            this.m_DownloaderUserControl = new YouTubeDownload.DownloaderUserControl();
             this.m_btnClearList = new System.Windows.Forms.Button();
             this.m_lnkOutputFolder = new System.Windows.Forms.LinkLabel();
             this.m_btnPause = new System.Windows.Forms.Button();
@@ -81,14 +82,13 @@
             this.m_errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.m_pnlTools = new System.Windows.Forms.Panel();
-            this.m_btnOpen = new System.Windows.Forms.ToolStripButton();
-            this.m_btnSave = new System.Windows.Forms.ToolStripButton();
             this.m_btnNewDownload = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.m_btnOpen = new System.Windows.Forms.ToolStripButton();
+            this.m_btnSave = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.m_btnUpdateTB = new System.Windows.Forms.ToolStripButton();
-            this.m_DownloaderUserControl = new YouTubeDownload.DownloaderUserControl();
+            this.m_pnlTools = new System.Windows.Forms.Panel();
             this.m_statusStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.m_ContextMenuList.SuspendLayout();
@@ -199,7 +199,7 @@
             this.m_mnuSaveList,
             this.m_mnuLoadList});
             this.m_mnuTools.Name = "m_mnuTools";
-            this.m_mnuTools.Size = new System.Drawing.Size(47, 20);
+            this.m_mnuTools.Size = new System.Drawing.Size(46, 20);
             this.m_mnuTools.Text = "&Tools";
             // 
             // m_mnuToolsSettings
@@ -275,6 +275,7 @@
             this.m_listUrls.TabIndex = 0;
             this.m_listUrls.UseCompatibleStateImageBehavior = false;
             this.m_listUrls.View = System.Windows.Forms.View.Details;
+            this.m_listUrls.ItemDrag += new System.Windows.Forms.ItemDragEventHandler(this.m_listUrls_ItemDrag);
             this.m_listUrls.SelectedIndexChanged += new System.EventHandler(this.m_listUrls_SelectedIndexChanged);
             this.m_listUrls.DoubleClick += new System.EventHandler(this.m_listUrls_DoubleClick);
             this.m_listUrls.MouseDoubleClick += new System.Windows.Forms.MouseEventHandler(this.m_listUrls_MouseDoubleClick);
@@ -463,6 +464,15 @@
             this.m_spliMain.SplitterDistance = 239;
             this.m_spliMain.TabIndex = 7;
             // 
+            // m_DownloaderUserControl
+            // 
+            this.m_DownloaderUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_DownloaderUserControl.Location = new System.Drawing.Point(0, 0);
+            this.m_DownloaderUserControl.Margin = new System.Windows.Forms.Padding(4);
+            this.m_DownloaderUserControl.Name = "m_DownloaderUserControl";
+            this.m_DownloaderUserControl.Size = new System.Drawing.Size(980, 254);
+            this.m_DownloaderUserControl.TabIndex = 0;
+            // 
             // m_btnClearList
             // 
             this.m_btnClearList.Image = ((System.Drawing.Image)(resources.GetObject("m_btnClearList.Image")));
@@ -561,20 +571,19 @@
             this.toolStrip1.TabIndex = 10;
             this.toolStrip1.Text = "toolStrip1";
             // 
-            // m_pnlTools
+            // m_btnNewDownload
             // 
-            this.m_pnlTools.Controls.Add(this.m_btnUpdate);
-            this.m_pnlTools.Controls.Add(this.m_btnAddUrl);
-            this.m_pnlTools.Controls.Add(this.m_btnBrowseForFolder);
-            this.m_pnlTools.Controls.Add(this.m_btnClearList);
-            this.m_pnlTools.Controls.Add(this.m_btnRemove);
-            this.m_pnlTools.Controls.Add(this.m_lnkOutputFolder);
-            this.m_pnlTools.Controls.Add(this.m_btnPause);
-            this.m_pnlTools.Dock = System.Windows.Forms.DockStyle.Top;
-            this.m_pnlTools.Location = new System.Drawing.Point(0, 49);
-            this.m_pnlTools.Name = "m_pnlTools";
-            this.m_pnlTools.Size = new System.Drawing.Size(984, 80);
-            this.m_pnlTools.TabIndex = 1;
+            this.m_btnNewDownload.Image = ((System.Drawing.Image)(resources.GetObject("m_btnNewDownload.Image")));
+            this.m_btnNewDownload.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.m_btnNewDownload.Name = "m_btnNewDownload";
+            this.m_btnNewDownload.Size = new System.Drawing.Size(117, 22);
+            this.m_btnNewDownload.Text = "New Download...";
+            this.m_btnNewDownload.Click += new System.EventHandler(this.m_btnAddUrl_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
             // m_btnOpen
             // 
@@ -594,20 +603,6 @@
             this.m_btnSave.Text = "Save";
             this.m_btnSave.Click += new System.EventHandler(this.m_mnuSaveList_Click);
             // 
-            // m_btnNewDownload
-            // 
-            this.m_btnNewDownload.Image = ((System.Drawing.Image)(resources.GetObject("m_btnNewDownload.Image")));
-            this.m_btnNewDownload.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.m_btnNewDownload.Name = "m_btnNewDownload";
-            this.m_btnNewDownload.Size = new System.Drawing.Size(117, 22);
-            this.m_btnNewDownload.Text = "New Download...";
-            this.m_btnNewDownload.Click += new System.EventHandler(this.m_btnAddUrl_Click);
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
-            // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
@@ -623,14 +618,20 @@
             this.m_btnUpdateTB.Text = "Update youtube-dl engine";
             this.m_btnUpdateTB.Click += new System.EventHandler(this.m_btnUpdate_Click);
             // 
-            // m_DownloaderUserControl
+            // m_pnlTools
             // 
-            this.m_DownloaderUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_DownloaderUserControl.Location = new System.Drawing.Point(0, 0);
-            this.m_DownloaderUserControl.Margin = new System.Windows.Forms.Padding(4);
-            this.m_DownloaderUserControl.Name = "m_DownloaderUserControl";
-            this.m_DownloaderUserControl.Size = new System.Drawing.Size(980, 254);
-            this.m_DownloaderUserControl.TabIndex = 0;
+            this.m_pnlTools.Controls.Add(this.m_btnUpdate);
+            this.m_pnlTools.Controls.Add(this.m_btnAddUrl);
+            this.m_pnlTools.Controls.Add(this.m_btnBrowseForFolder);
+            this.m_pnlTools.Controls.Add(this.m_btnClearList);
+            this.m_pnlTools.Controls.Add(this.m_btnRemove);
+            this.m_pnlTools.Controls.Add(this.m_lnkOutputFolder);
+            this.m_pnlTools.Controls.Add(this.m_btnPause);
+            this.m_pnlTools.Dock = System.Windows.Forms.DockStyle.Top;
+            this.m_pnlTools.Location = new System.Drawing.Point(0, 49);
+            this.m_pnlTools.Name = "m_pnlTools";
+            this.m_pnlTools.Size = new System.Drawing.Size(984, 80);
+            this.m_pnlTools.TabIndex = 1;
             // 
             // FormMain
             // 

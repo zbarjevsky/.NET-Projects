@@ -589,5 +589,21 @@ namespace YouTubeDownload
                 MessageBox.Show(err.Message, "YTD", MessageBoxButtons.OK, MessageBoxIcon.Error); ;
             }
         }
+
+        private void m_listUrls_ItemDrag(object sender, ItemDragEventArgs e)
+        {
+            if (e.Item is ListViewItem item)
+            {
+                if (item.Tag is DownloadData data)
+                {
+                    string fileName = data.Description.Trim('"').Trim('\\');
+                    if (File.Exists(fileName))
+                    {
+                        string[] files = new string[] { fileName };
+                        this.DoDragDrop(new DataObject(DataFormats.FileDrop, files), DragDropEffects.Copy);
+                    }
+                }
+            }
+        }
     }
 }

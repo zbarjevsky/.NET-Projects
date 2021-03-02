@@ -1,12 +1,15 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
+using MkZ.Tools;
 using MkZ.Windows.DwmApi;
 using MkZ.Windows.Win32API.PInvoke;
+using static MkZ.Tools.CommonUtils;
 
 namespace MkZ.Windows.Win32API
 {
@@ -52,6 +55,31 @@ namespace MkZ.Windows.Win32API
 		private const int facilityShift = 16;
 		private const uint severityMask = 0x80000000;
 		private const int severityShift = 31;
+
+		public static readonly Dictionary<int, string> _descInt = new Dictionary<int, string>();
+		public static readonly Dictionary<string, FieldData> _descData;
+		static HRESULT()
+        {
+			_descInt = new Dictionary<int, string>();
+            _descData = CommonUtils.GetFields(typeof(HRESULT));
+            foreach (FieldData data in _descData.Values)
+            {
+				if (data.Value is HRESULT hr)
+				{
+					if (!_descInt.ContainsKey(hr._value))
+						_descInt.Add(hr._value, data.Desc);
+					//else
+					//	_descInt[hr._value] = data.Desc;
+				}
+				else if (data.Value is int hr1)
+				{
+					if (!_descInt.ContainsKey(hr1))
+						_descInt.Add(hr1, data.Desc);
+					//else
+					//	_descInt[hr1] = data.Desc;
+				}
+			}
+		}
 
 		/// <summary>Initializes a new instance of the <see cref="HRESULT"/> structure.</summary>
 		/// <param name="rawValue">The raw HRESULT value.</param>
@@ -467,6 +495,8 @@ namespace MkZ.Windows.Win32API
 			Fail = 1
 		}
 
+		public string Description => GetDescription(_value);
+
 		/// <summary>Gets the code portion of the <see cref="HRESULT"/>.</summary>
 		/// <value>The code value (bits 0-15).</value>
 		public int Code => GetCode(_value);
@@ -519,6 +549,16 @@ namespace MkZ.Windows.Win32API
 #endif
 			return E_FAIL;
 		}
+
+		/// <summary>Gets the code value from a 32-bit value.</summary>
+		/// <param name="hresult">The 32-bit raw HRESULT value.</param>
+		/// <returns>The code value (bits 0-15).</returns>
+		public static string GetDescription(int hresult)
+        {
+			if (_descInt.ContainsKey(hresult))
+				return _descInt[hresult];
+			return "N/A";
+        }
 
 		/// <summary>Gets the code value from a 32-bit value.</summary>
 		/// <param name="hresult">The 32-bit raw HRESULT value.</param>

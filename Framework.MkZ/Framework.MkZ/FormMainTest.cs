@@ -17,6 +17,7 @@ using MkZ.WPF.MessageBox;
 using MkZ.Windows;
 using MkZ.WinForms;
 using ListViewDragDropManagerDemo;
+using MkZ.Windows.Win32API;
 
 namespace MkZ
 {
@@ -29,7 +30,7 @@ namespace MkZ
         List<double> _values = new List<double>();
 
 
-    public FormMainTest()
+        public FormMainTest()
         {
             InitializeComponent();
 
@@ -45,6 +46,9 @@ namespace MkZ
             {
                 _values.Add(256 + 256 * Math.Sin(6 * Math.PI * i / 180.0));
             }
+
+            HRESULT hr = new HRESULT(0xC00D109B);
+            string desc = HRESULT.GetDescription(0);
         }
 
         private void FormMainTest_Load(object sender, EventArgs e)
@@ -66,7 +70,7 @@ namespace MkZ
 
             //NonStickMouse.EnableMouseCorrection(true);
 
-            DriveInfo [] ifo = DriveInfo.GetDrives();
+            DriveInfo[] ifo = DriveInfo.GetDrives();
             m_cmbDriveLetter.Items.AddRange(ifo.Where(d => d.DriveType == DriveType.Removable).ToArray());
         }
 
@@ -105,7 +109,7 @@ namespace MkZ
 
         private void trackBar1_Scroll(object sender, ScrollEventArgs e)
         {
-            if(trackBar1.Value <= colorBarsProgressBar1.Maximum)
+            if (trackBar1.Value <= colorBarsProgressBar1.Maximum)
                 colorBarsProgressBar1.Value = (int)trackBar1.Value;
             if (trackBar1.Value <= colorBarsProgressBar2.Maximum)
                 colorBarsProgressBar2.Value = (int)trackBar1.Value;
@@ -113,11 +117,11 @@ namespace MkZ
 
             //chart values
             List<double> values = new List<double>();
-            for (int i = 0; i < trackBar1.Value; i+=10)
+            for (int i = 0; i < trackBar1.Value; i += 10)
             {
                 values.Add(_values[i]);
             }
-            chartProgressUserControl1.SetHistory(values, 10, "Trackbar Value "+ trackBar1.Value);
+            chartProgressUserControl1.SetHistory(values, 10, "Trackbar Value " + trackBar1.Value);
         }
 
         private void m_btnTestWPFMessageBox_Click(object sender, EventArgs e)
@@ -141,8 +145,8 @@ namespace MkZ
         private void m_btnGradientWpfProgress_Click(object sender, EventArgs e)
         {
             PopupInfoWindow wnd = new PopupInfoWindow(
-                System.Windows.WindowStartupLocation.Manual, 
-                new System.Windows.Point(100, 100), 
+                System.Windows.WindowStartupLocation.Manual,
+                new System.Windows.Point(100, 100),
                 this.Handle);
             wnd.ShowActivated = false;
             wnd.Show();
@@ -184,7 +188,7 @@ namespace MkZ
             catch (Exception err)
             {
                 this.MessageError(err.Message);
-            }        
+            }
         }
 
         private void m_btnSaveIcons_Click(object sender, EventArgs e)

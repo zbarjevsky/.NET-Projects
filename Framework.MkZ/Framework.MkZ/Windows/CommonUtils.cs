@@ -89,6 +89,45 @@ namespace MkZ.Tools
             else return source.ToString();
         }
 
+        public static Dictionary<string, FieldData> GetFields<T>(this T source) where T : class
+        {
+            return GetFields(source.GetType());
+        }
+
+        public class FieldData
+        {
+            public string Name = "";
+            public string Desc = "";
+            public object Value = null;
+
+            public FieldData(FieldInfo info)
+            {
+                Name = info.Name;
+                if (Attribute.IsDefined(info, typeof(DescriptionAttribute)))
+                {
+                    Desc = (Attribute.GetCustomAttribute(info, typeof(DescriptionAttribute)) as DescriptionAttribute).Description;
+                    Value = info.GetValue(null);
+                }
+            }
+
+            public override string ToString()
+            {
+                return string.Format("FieldData - Name: {0} Value: {1} Desc: {2}", Name, Value, Desc);
+            }
+        }
+
+        public static Dictionary<string, FieldData> GetFields(this Type source)
+        {
+            List<FieldInfo> properties = source.GetRuntimeFields().ToList();
+            return properties.Select(p => new FieldData(p)).ToDictionary(f => f.Name, f => f);
+
+            //PropertyInfo [] properties = source.GetType().GetProperties();
+            //return properties.Select(p => new {
+            //    FiledName = p.Name,
+            //    FieldValue = p.GetValue().ToString(),
+            //    Desc = Attribute.IsDefined(p, typeof(DescriptionAttribute)) ? (Attribute.GetCustomAttribute(p, typeof(DescriptionAttribute)) as DescriptionAttribute).Description : p.Name).ToArray();
+        }
+
         public static List<T> EnumToList<T>(T enumType) 
         {
             Array values = Enum.GetValues(typeof(T));

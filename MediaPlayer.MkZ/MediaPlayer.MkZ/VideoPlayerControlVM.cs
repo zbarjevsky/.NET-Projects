@@ -18,6 +18,7 @@ using System.Xml.Serialization;
 using MkZ.MediaPlayer.Utils;
 using MkZ.Tools;
 using MkZ.Windows;
+using MkZ.Windows.Win32API;
 using MkZ.WPF;
 using MkZ.WPF.MessageBox;
 
@@ -715,13 +716,17 @@ namespace MkZ.MediaPlayer
             MediaEndedAction(this);
         }
 
+        //https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.mediaelement.mediafailed?redirectedfrom=MSDN&view=net-5.0
         private void VideoPlayerElement_MediaFailed(object sender, ExceptionRoutedEventArgs e)
         {
             Log.e("VideoPlayerElement_MediaFailed({0}) - Volume {1} - State: {2}, Try: {3}", 
                 State.FileName, Volume, State.MediaState, _OpenMediaTryCount);
 
-            Stop();
+            HRESULT err = new HRESULT(e.ErrorException.HResult);
+            Log.e("VideoPlayerElement_MediaFailed({0}) - {1}", e.ErrorException.Message, err.Description);
             
+            Pause();
+
             e.Handled = MediaFailedAction(this, e);
         }
 

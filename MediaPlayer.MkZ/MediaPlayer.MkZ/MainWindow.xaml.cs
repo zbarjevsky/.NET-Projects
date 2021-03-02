@@ -21,6 +21,7 @@ using Microsoft.Win32;
 using MkZ.MediaPlayer.Controls;
 using MkZ.MediaPlayer.Utils;
 using MkZ.Tools;
+using MkZ.Windows.Win32API;
 using MkZ.WPF;
 using MkZ.WPF.Controls;
 using MkZ.WPF.MessageBox;
@@ -302,8 +303,18 @@ namespace MkZ.MediaPlayer
 
         private bool OnMediaFailed(object sender, ExceptionRoutedEventArgs e)
         {
-            if(sender is VideoPlayerControlVM vm)
-                PopUp.Error("Open Media Failed: \n" + vm.FileName + "\n" + e.ErrorException.Message);
+            HRESULT err = new HRESULT(e.ErrorException.HResult);
+            Log.e("MainWindow OnMediaFailed({0}) - {1}", e.ErrorException.Message, err.Description);
+
+            string fileName = "";
+            if (sender is VideoPlayerControlVM vm)
+                fileName = vm.FileName;
+
+            string message = string.Format("Open Media Failed: \n{0}\n{1}\n{2}", 
+                err.Description, e.ErrorException.Message, fileName);
+
+            PopUp.Error(message);
+
             return true;
         }
 
