@@ -1,13 +1,8 @@
-﻿using MkZ.Framework.Tools;
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System;
 using System.Windows.Forms;
+
+
+using MkZ.Windows;
 
 namespace YouTubeDownload
 {
@@ -31,9 +26,6 @@ namespace YouTubeDownload
         [STAThread]
         static void Main(string[] args)
         {
-            if (YouTubeDownload.Utils.Utils.UpdateAssemblyInfoVersion(args))
-                return;
-
             UpdateDependencies();
 
             Application.EnableVisualStyles();

@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Data;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Globalization;
-using System.Windows.Documents;
+
+
 using MkZ.WPF.MessageBox;
 using MkZ.Tools;
-using System.Xml.Serialization;
+using MkZ.Windows;
 
 namespace MkZ.WinForms
 {
-	public partial class FileExplorerUserControl : UserControl
+    public partial class FileExplorerUserControl : UserControl
     {
 		public const string PARENT_FOLDER_TEXT = "[..]";
 
@@ -235,7 +233,7 @@ namespace MkZ.WinForms
 					return;
 
 				Control parent = file.ListView;
-				MkZ.Tools.CommonUtils.ExecuteOnUIThread(() =>
+				CommonUtils.ExecuteOnUIThread(() =>
 				{
 					file.Init(e.FullPath, file.Checked);
 					SortList();
@@ -435,7 +433,7 @@ namespace MkZ.WinForms
 			_fileSystemWatcherHelper = new FileSystemWatcherHelper(_list);
 			_fileSystemWatcherHelper.OnChangeAction = (path) =>
 			{
-				MkZ.Tools.CommonUtils.ExecuteOnUIThread(() => 
+				CommonUtils.ExecuteOnUIThread(() => 
 				{
 					m_listFiles.VirtualListSize = _list.Count;
 					m_listFiles.Invalidate();

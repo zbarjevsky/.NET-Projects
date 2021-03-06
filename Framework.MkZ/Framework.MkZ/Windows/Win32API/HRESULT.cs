@@ -6,10 +6,10 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Security;
-using MkZ.Tools;
+
+
 using MkZ.Windows.DwmApi;
 using MkZ.Windows.Win32API.PInvoke;
-using static MkZ.Tools.CommonUtils;
 
 namespace MkZ.Windows.Win32API
 {
@@ -57,12 +57,12 @@ namespace MkZ.Windows.Win32API
 		private const int severityShift = 31;
 
 		public static readonly Dictionary<int, string> _descInt = new Dictionary<int, string>();
-		public static readonly Dictionary<string, FieldData> _descData;
+		public static readonly Dictionary<string, CommonUtils.FieldData> _descData;
 		static HRESULT()
         {
 			_descInt = new Dictionary<int, string>();
             _descData = CommonUtils.GetFields(typeof(HRESULT));
-            foreach (FieldData data in _descData.Values)
+            foreach (CommonUtils.FieldData data in _descData.Values)
             {
 				if (data.Value is HRESULT hr)
 				{

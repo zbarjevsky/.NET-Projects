@@ -56,9 +56,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\Framework.MkZ\AssemblyTools\DependenciesTool.cs">
-      <Link>Utils\DependenciesTool.cs</Link>
-    </Compile>
     <Compile Include="DownloadData.cs" />
     <Compile Include="DownloaderUserControl.cs">
       <SubType>UserControl</SubType>
@@ -94,7 +91,6 @@
     <Compile Include="ProcessHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Utils\Utils.cs" />
     <Compile Include="YouTube_DL.cs" />
     <EmbeddedResource Include="DownloaderUserControl.resx">
       <DependentUpon>DownloaderUserControl.cs</DependentUpon>
@@ -160,8 +156,8 @@
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>if $(ConfigurationName) == Debug (
-   if exist "$(TargetPath)" (
-      "$(TargetPath)" -FILE"$(ProjectDir)Properties\AssemblyInfo.cs"
+   if exist "$(SolutionDir)..\Binaries\AssemblyTool.exe" (
+      "$(SolutionDir)..\Binaries\AssemblyTool.exe" -FILE"$(ProjectDir)Properties\AssemblyInfo.cs"
    )
 )
 </PreBuildEvent>

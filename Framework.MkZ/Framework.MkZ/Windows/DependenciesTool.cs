@@ -9,22 +9,22 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Forms;
 
-namespace MkZ.Framework.Tools
+namespace MkZ.Windows
 {
     public class DependenciesTool
     {
-        //Load FrameworkMkZ.exe from resource - no need on disk
-        public static Version LoadFrameworkMkZ_Dependency(byte [] rawAssembly)
-        {
-            //Assembly assembly = Assembly.ReflectionOnlyLoad(rawAssembly);
-            ////Assembly assembly = AppDomain.CurrentDomain.Load(rawAssembly);
-            //AssemblyName assemblyName = assembly.GetName();
-            //Console.WriteLine("Loaded Assembly: " + assemblyName);
+        ////Load FrameworkMkZ.exe from resource - no need on disk
+        //public static Version LoadFrameworkMkZ_Dependency(byte [] rawAssembly)
+        //{
+        //    //Assembly assembly = Assembly.ReflectionOnlyLoad(rawAssembly);
+        //    ////Assembly assembly = AppDomain.CurrentDomain.Load(rawAssembly);
+        //    //AssemblyName assemblyName = assembly.GetName();
+        //    //Console.WriteLine("Loaded Assembly: " + assemblyName);
 
-            return UpdateDependency("Framework.MkZ.dll", rawAssembly);
+        //    return UpdateDependency("Framework.MkZ.dll", rawAssembly);
 
-            //return assemblyName.Version;
-        }
+        //    //return assemblyName.Version;
+        //}
 
         //Add dependency as resource
         public static Version UpdateDependency(string dependencyFileName, byte[] rawAssembly)
@@ -51,7 +51,7 @@ namespace MkZ.Framework.Tools
             }
             catch (Exception err)
             {
-                Utils.ErrorMessage(
+                CommonUtils.ErrorMessage(
                     "Error while Processing Dependency: \n" + dependencyPath + "\nError:\n " + err.Message,
                     "UpdateDependencies");
                 return null;
@@ -89,7 +89,7 @@ namespace MkZ.Framework.Tools
             }
             catch (Exception err)
             {
-                Utils.ErrorMessage(
+                CommonUtils.ErrorMessage(
                     "Error while Processing Dependency: \n" + dependencyPath + "\nError:\n " + err.Message,
                     "UpdateDependenciesSfx"); 
                 return false;

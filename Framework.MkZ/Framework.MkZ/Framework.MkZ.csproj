@@ -94,6 +94,7 @@
     <Compile Include="Tests\WindowTestWpfMesageBox.xaml.cs">
       <DependentUpon>WindowTestWpfMesageBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Windows\DependenciesTool.cs" />
     <Compile Include="Windows\DwmApi\CorrespondingTypeAttribute.cs" />
     <Compile Include="Windows\DwmApi\DwmApi.cs" />
     <Compile Include="Windows\DwmApi\Handles.cs" />
