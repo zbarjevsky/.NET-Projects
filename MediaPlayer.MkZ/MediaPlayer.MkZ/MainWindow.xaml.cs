@@ -312,10 +312,21 @@ namespace MkZ.MediaPlayer
 
             string message = string.Format("Open Media Failed: \n{0}\n{1}\n{2}", 
                 err.Description, e.ErrorException.Message, fileName);
+            if (Path.GetExtension(fileName) == ".webm")
+                message += "\nTry to rename extension to .mkv\n";
+            message += "\nKeep file in Play List?";
 
-            PopUp.Error(message);
+            PopUp.PopUpResult res = this.MessageQuestion(message, "Open Media Failed", PopUp.PopUpButtonsType.CancelNoYes);
+            if(res == PopUp.PopUpResult.No)
+            {
+                if(MediaDB.SelectedPlayList.MediaFiles[MediaDB.SelectedMediaFileIndex].FileName == fileName)
+                {
+                    int idx = MediaDB.SelectedPlayList.RemoveMediaFileFromList(MediaDB.SelectedPlayList.MediaFiles[MediaDB.SelectedMediaFileIndex]);
+                    _cmbFilesList.SelectedIndex = idx;
+                }
+            }
 
-            return true;
+            return res == PopUp.PopUpResult.Yes;
         }
 
         #region IPlayerMainWindow

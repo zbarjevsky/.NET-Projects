@@ -107,12 +107,22 @@ namespace MkZ.WPF
 
         private ClockConfig Config => DataContext as ClockConfig;
 
-        private BoundsSettings _bounds = new BoundsSettings();
-        [Category("Clock")]
-        public BoundsSettings BoundsSettings
+        public bool IsClockVisible
         {
-            get { return _bounds; }
-            set { _bounds = value; }
+            get { return (bool)GetValue(IsClockVisibleProperty); }
+            set { SetValue(IsClockVisibleProperty, value); }
+        }
+
+        public static readonly DependencyProperty IsClockVisibleProperty =
+            DependencyProperty.Register(nameof(IsClockVisible), typeof(bool), typeof(SimpleClockControl),
+                new PropertyMetadata(true, OnIsClockVisibleChanged));
+
+        private static void OnIsClockVisibleChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if(d is SimpleClockControl This)
+            {
+                This.Visibility = This.IsClockVisible ? Visibility.Visible : Visibility.Hidden;
+            }
         }
 
         public SimpleClockControl()
@@ -188,7 +198,8 @@ namespace MkZ.WPF
 
         private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (this.Visibility == Visibility.Visible)
+            IsClockVisible = (this.Visibility == Visibility.Visible);
+            if (IsClockVisible)
                 _timer.Start();
             else
                 _timer.Stop();
@@ -201,8 +212,7 @@ namespace MkZ.WPF
 
         private void ButtonHide_Click(object sender, RoutedEventArgs e)
         {
-            //if (DataContext is ClockConfig config)
-            BoundsSettings.IsVisible = false;
+            IsClockVisible = false;
         }
     }
 }

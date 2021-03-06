@@ -507,10 +507,11 @@ namespace MkZ.MediaPlayer
 
         public void Pause()
         {
+            _timer.Stop();
+            MediaState = MediaState.Pause;
             if (VideoPlayerElement.Source != null)
             {
                 VideoPlayerElement.Pause();
-                MediaState = MediaState.Pause;
                 State.CopyFrom(this, _scrollDragger);
             }
         }
@@ -616,7 +617,7 @@ namespace MkZ.MediaPlayer
         private bool CheckMediaOpened()
         {
             if (!_stopperMediaOpened.IsRunning)
-                return true; //media is opened
+                return true; //media is opened or failed
 
             //check why media did not open
             TimeSpan waitToOpen = _stopperMediaOpened.Elapsed;
@@ -716,9 +717,15 @@ namespace MkZ.MediaPlayer
             MediaEndedAction(this);
         }
 
+        private bool _inFailedHandler = false;
         //https://docs.microsoft.com/en-us/dotnet/api/system.windows.controls.mediaelement.mediafailed?redirectedfrom=MSDN&view=net-5.0
         private void VideoPlayerElement_MediaFailed(object sender, ExceptionRoutedEventArgs e)
         {
+            if (_inFailedHandler)
+                return;
+            _inFailedHandler = true;
+
+            _stopperMediaOpened.Stop();
             Log.e("VideoPlayerElement_MediaFailed({0}) - Volume {1} - State: {2}, Try: {3}", 
                 State.FileName, Volume, State.MediaState, _OpenMediaTryCount);
 
@@ -728,6 +735,8 @@ namespace MkZ.MediaPlayer
             Pause();
 
             e.Handled = MediaFailedAction(this, e);
+
+            _inFailedHandler = false;
         }
 
         private void VideoPlayerElement_MouseWheel(object sender, MouseWheelEventArgs e)

@@ -316,7 +316,7 @@
             this.toolStripMenuItem4,
             this.m_ctxmnuExit});
             this.m_ContextMenuList.Name = "contextMenuStrip1";
-            this.m_ContextMenuList.Size = new System.Drawing.Size(220, 360);
+            this.m_ContextMenuList.Size = new System.Drawing.Size(220, 382);
             // 
             // m_ctxmnuAddUrl
             // 
@@ -394,7 +394,7 @@
             this.m_ctxmnuOpenOutputFolder.Image = ((System.Drawing.Image)(resources.GetObject("m_ctxmnuOpenOutputFolder.Image")));
             this.m_ctxmnuOpenOutputFolder.Name = "m_ctxmnuOpenOutputFolder";
             this.m_ctxmnuOpenOutputFolder.Size = new System.Drawing.Size(219, 26);
-            this.m_ctxmnuOpenOutputFolder.Text = "Open Folder";
+            this.m_ctxmnuOpenOutputFolder.Text = "Show in Folder...";
             this.m_ctxmnuOpenOutputFolder.Click += new System.EventHandler(this.m_mnuOpenOutputFolder_Click);
             // 
             // m_ctxmnuCopyFileName

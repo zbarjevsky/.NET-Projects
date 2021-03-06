@@ -164,10 +164,11 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_cmbFileName.FormattingEnabled = true;
             this.m_cmbFileName.Items.AddRange(new object[] {
-            "%(title)s--%(id)s.%(ext)s",
+            "%(upload_date)s--%(title)s--%(id)s.%(ext)s",
             "%(title)s.%(ext)s",
             "%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s",
-            "%(playlist_index)s. %(title)s--%(id)s.%(ext)s"});
+            "%(playlist_index)s. %(title)s--%(id)s.%(ext)s",
+            "%(upload_date)s-%(playlist_index)s. %(title)s--%(id)s.%(ext)s"});
             this.m_cmbFileName.Location = new System.Drawing.Point(281, 103);
             this.m_cmbFileName.Name = "m_cmbFileName";
             this.m_cmbFileName.Size = new System.Drawing.Size(436, 28);

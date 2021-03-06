@@ -63,6 +63,7 @@ namespace MkZ.WPF
             Grid_SizeChanged(_parentGrid, null);
 
             _parentGrid.Cursor = Cursors.None;
+            _cursor.Visibility = Visibility.Hidden;
 
             if (_parentGrid.RowDefinitions.Count > 0)
                 Grid.SetRowSpan(this, _parentGrid.RowDefinitions.Count);

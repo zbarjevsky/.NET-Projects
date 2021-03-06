@@ -224,11 +224,13 @@
                       HorizontalContentAlignment="Stretch">
                 <ComboBox.ItemTemplate>
                     <DataTemplate>
-                        <Grid Height="30">
+                        <Grid Height="30" Width="{Binding ActualWidth, ElementName=main}">
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="Auto"/>
                                 <ColumnDefinition Width="160"/>
+                                <ColumnDefinition Width="2*" MinWidth="300" SharedSizeGroup="GroupName"/>
+                                <ColumnDefinition Width="3"/>
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <buttons:ButtonWithText Grid.Column="0" Margin="4" Height="20" 
@@ -267,17 +269,17 @@
                                 </TextBlock.Text>
                             </TextBlock>
 
-                            <DockPanel Grid.Column="3" Margin="10,0,10,0">
-                                <Border>
-                                    <TextBlock Text="{Binding FileName, Converter={StaticResource PathToFileNameConverter}}" 
-                                         Background="Transparent" VerticalAlignment="Center"/>
-                                </Border>
-                                <TextBlock Text=" " />
-                                <TextBox Text="{Binding FileName, StringFormat={}[{0}] }" 
+                            <Border Grid.Column="3" Margin="10,0">
+                                <TextBlock Text="{Binding FileName, Converter={StaticResource PathToFileNameConverter}}"
+                                           ToolTip="{Binding FileName}"
+                                         Background="Transparent" VerticalAlignment="Center" TextWrapping="NoWrap"/>
+                            </Border>
+                            
+                            <GridSplitter Grid.Column="4" HorizontalAlignment="Stretch" Background="DarkGray" />
+                            
+                            <TextBox Grid.Column="5" Margin="10,0" Text="{Binding FileName, StringFormat={}[{0}] }" 
                                          IsReadOnly="True" BorderThickness="0" VerticalContentAlignment="Center" VerticalAlignment="Stretch"
                                          FontSize="18" FontWeight="Normal" Foreground="Gray" Background="Transparent" />
-                            </DockPanel>
-
                         </Grid>
                     </DataTemplate>
                 </ComboBox.ItemTemplate>
@@ -304,7 +306,7 @@
                 <RowDefinition Height="8*"/>
             </Grid.RowDefinitions>
             <wpf:SimpleClockControl x:Name="_clock" Grid.RowSpan="3" Grid.ColumnSpan="3" Width="300" Height="300"
-                 Visibility="{Binding IsChecked, ElementName=_btnToggleClock, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                                    IsClockVisible="{Binding IsChecked, ElementName=_btnToggleClock, Mode=TwoWay}" />
             <Viewbox x:Name="_imagesNavigation" Grid.Row="1" MinHeight="40" MinWidth="120" ClipToBounds="False" >
                 <Border Margin="10" Padding="1" CornerRadius="10" Height="40" HorizontalAlignment="Right" VerticalAlignment="Top">
                     <Border.Background>
