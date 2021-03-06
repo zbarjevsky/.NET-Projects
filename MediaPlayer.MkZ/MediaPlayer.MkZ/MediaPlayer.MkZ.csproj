@@ -327,4 +327,9 @@
  xcopy /E /f /r /y $(TargetDir)Sounds\*.* $(ProjectDir)..\..\Binaries\$(ProjectName)\Sounds\
 )</PostBuildEvent>
   </PropertyGroup>
+  <PropertyGroup>
+    <PreBuildEvent>if exist "$(SolutionDir)..\Binaries\AssemblyTool.exe" (
+    "$(SolutionDir)..\Binaries\AssemblyTool.exe" -FILE"$(ProjectDir)Properties\AssemblyInfo.cs"
+)</PreBuildEvent>
+  </PropertyGroup>
 </Project>

@@ -456,10 +456,8 @@
 )</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
-    <PreBuildEvent>if $(ConfigurationName) == Debug (
-   if exist "$(SolutionDir)..\Binaries\AssemblyTool.exe" (
-      "$(SolutionDir)..\Binaries\AssemblyTool.exe" -FILE"$(ProjectDir)Properties\AssemblyInfo.cs"
-   )
+    <PreBuildEvent>if exist "$(SolutionDir)..\Binaries\AssemblyTool.exe" (
+    "$(SolutionDir)..\Binaries\AssemblyTool.exe" -FILE"$(ProjectDir)Properties\AssemblyInfo.cs"
 )
 </PreBuildEvent>
   </PropertyGroup>
