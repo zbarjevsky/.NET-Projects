@@ -89,6 +89,7 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.m_btnUpdateTB = new System.Windows.Forms.ToolStripButton();
             this.m_pnlTools = new System.Windows.Forms.Panel();
+            this.m_btnRenameFIles = new System.Windows.Forms.ToolStripButton();
             this.m_statusStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.m_ContextMenuList.SuspendLayout();
@@ -316,7 +317,7 @@
             this.toolStripMenuItem4,
             this.m_ctxmnuExit});
             this.m_ContextMenuList.Name = "contextMenuStrip1";
-            this.m_ContextMenuList.Size = new System.Drawing.Size(220, 382);
+            this.m_ContextMenuList.Size = new System.Drawing.Size(220, 360);
             // 
             // m_ctxmnuAddUrl
             // 
@@ -564,7 +565,8 @@
             this.m_btnOpen,
             this.m_btnSave,
             this.toolStripSeparator2,
-            this.m_btnUpdateTB});
+            this.m_btnUpdateTB,
+            this.m_btnRenameFIles});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(984, 25);
@@ -632,6 +634,15 @@
             this.m_pnlTools.Name = "m_pnlTools";
             this.m_pnlTools.Size = new System.Drawing.Size(984, 80);
             this.m_pnlTools.TabIndex = 1;
+            // 
+            // m_btnRenameFIles
+            // 
+            this.m_btnRenameFIles.Image = ((System.Drawing.Image)(resources.GetObject("m_btnRenameFIles.Image")));
+            this.m_btnRenameFIles.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.m_btnRenameFIles.Name = "m_btnRenameFIles";
+            this.m_btnRenameFIles.Size = new System.Drawing.Size(105, 22);
+            this.m_btnRenameFIles.Text = "Rename Files...";
+            this.m_btnRenameFIles.Click += new System.EventHandler(this.m_btnRenameFIles_Click);
             // 
             // FormMain
             // 
@@ -731,6 +742,7 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton m_btnUpdateTB;
+        private System.Windows.Forms.ToolStripButton m_btnRenameFIles;
     }
 }
 

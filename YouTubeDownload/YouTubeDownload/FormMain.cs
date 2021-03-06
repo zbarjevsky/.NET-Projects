@@ -605,5 +605,11 @@ namespace YouTubeDownload
                 }
             }
         }
+
+        private void m_btnRenameFIles_Click(object sender, EventArgs e)
+        {
+            FormRenameFiles frm = new FormRenameFiles(_folderName);
+            frm.ShowDialog(this);
+        }
     }
 }
