@@ -7,6 +7,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Forms;
 
 namespace MkZ.Framework.Tools
 {
@@ -50,7 +51,7 @@ namespace MkZ.Framework.Tools
             }
             catch (Exception err)
             {
-                ErrorMessage(
+                Utils.ErrorMessage(
                     "Error while Processing Dependency: \n" + dependencyPath + "\nError:\n " + err.Message,
                     "UpdateDependencies");
                 return null;
@@ -88,7 +89,7 @@ namespace MkZ.Framework.Tools
             }
             catch (Exception err)
             {
-                ErrorMessage(
+                Utils.ErrorMessage(
                     "Error while Processing Dependency: \n" + dependencyPath + "\nError:\n " + err.Message,
                     "UpdateDependenciesSfx"); 
                 return false;
@@ -110,10 +111,5 @@ namespace MkZ.Framework.Tools
             return verion;
         }
 
-        public static void ErrorMessage(string message, string title = "ERROR")
-        {
-            MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Error,
-                MessageBoxResult.OK, MessageBoxOptions.ServiceNotification);
-        }
     }
 }

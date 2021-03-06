@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using MkZ.Tools;
+using MkZ.WinForms;
 
 namespace YouTubeDownload
 {
@@ -23,6 +24,7 @@ namespace YouTubeDownload
         {
             InitializeComponent();
 
+            m_listFileNames.SetDoubleBuffered(true);
             UpdateOutputFolder(initialFolder);
         }
 

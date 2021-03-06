@@ -84,7 +84,6 @@ namespace YouTubeDownload
             this.m_listFileNames.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.columnHeader1,
             this.columnHeader2});
-            this.m_listFileNames.FullRowSelect = true;
             this.m_listFileNames.GridLines = true;
             this.m_listFileNames.HideSelection = false;
             this.m_listFileNames.LabelEdit = true;

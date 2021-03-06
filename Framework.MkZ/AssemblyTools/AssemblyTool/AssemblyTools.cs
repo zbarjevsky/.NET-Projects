@@ -31,8 +31,10 @@ namespace MkZ.Framework.Tools
             if (string.IsNullOrWhiteSpace(fileName))
                 return false; //no expected command line args
 
-            Version version = Assembly.GetEntryAssembly().GetName().Version;
-            Console.WriteLine("AssemblyVersion: " + version.ToString());
+            //Utils.ErrorMessage(fileName);
+
+            //Version version = Assembly.GetEntryAssembly().GetName().Version;
+            //Console.WriteLine("AssemblyVersion: " + version.ToString());
 
             FileInfo fi = new FileInfo(fileName);
             if (!fi.Exists)
@@ -43,7 +45,7 @@ namespace MkZ.Framework.Tools
 
             if (!IsVersionUpdateNeeded(fileName))
             {
-                Console.WriteLine("AssemblyVersion is good :) " + fileName);
+                //Console.WriteLine("AssemblyVersion is good :) " + fileName);
                 return true; //processing requested but not needed
             }
 
@@ -85,7 +87,7 @@ namespace MkZ.Framework.Tools
                 }
                 catch (Exception err)
                 {
-                    ErrorMessage(err.Message, "SetVersionAsYYYYMMDD_InAssemblyVersion");
+                    Utils.ErrorMessage(err.Message, "SetVersionAsYYYYMMDD_InAssemblyVersion");
                 }
         }
 
@@ -101,8 +103,18 @@ namespace MkZ.Framework.Tools
                     Version ver;
                     if (Version.TryParse(parts[1], out ver))
                     {
+                        Console.Write("Current version: " + parts[1]);
                         int mmdd = int.Parse(DateTime.Now.ToString("MMdd"));
-                        return (ver.Build != DateTime.Now.Year || ver.Revision != mmdd);
+                        if (ver.Build != DateTime.Now.Year || ver.Revision != mmdd)
+                        {
+                            Console.WriteLine(" - Update Needed");
+                            return true;
+                        }
+                        else
+                        {
+                            Console.WriteLine(" - Version is Good!");
+                            return false;
+                        }
                     }
                 }
             }
@@ -130,7 +142,7 @@ namespace MkZ.Framework.Tools
                 }
                 catch (Exception err)
                 {
-                    ErrorMessage(err.Message, "IncrementBuildNumberInAssemblyVersion");
+                    Utils.ErrorMessage(err.Message, "IncrementBuildNumberInAssemblyVersion");
                 }
             }
         }
@@ -147,12 +159,6 @@ namespace MkZ.Framework.Tools
             }
 
             return "";
-        }
-
-        public static void ErrorMessage(string message, string title = "ERROR")
-        {
-            MessageBox.Show(message, title, MessageBoxButton.OK, MessageBoxImage.Error,
-                MessageBoxResult.OK, MessageBoxOptions.ServiceNotification);
         }
     }
 }

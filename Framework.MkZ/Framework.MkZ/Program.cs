@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-using MkZ.Framework.Tools;
-
 namespace MkZ.Tools
 {
 	static class Program
@@ -15,9 +13,6 @@ namespace MkZ.Tools
 		[STAThread]
 		static void Main(string[] args)
 		{
-			if (AssemblyTools.UpdateAssemblyInfoVersion(args))
-				return; //version updated
-
             if (!SingleInstance())
                 return; //already running
 
