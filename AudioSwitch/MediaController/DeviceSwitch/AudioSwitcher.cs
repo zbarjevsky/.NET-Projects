@@ -1,10 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Runtime.InteropServices;
-using MkZ.Tools;
+﻿using System.Linq;
+
+
 using MkZ.Media.ComObjects;
 using MkZ.Media.Device;
+using MkZ.Windows.Win32API;
 
 namespace MkZ.Media.DeviceSwitch
 {

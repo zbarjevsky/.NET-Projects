@@ -1,5 +1,4 @@
-﻿using MkZ.Framework.Tools;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,9 +16,6 @@ namespace MkZ.Media
         {
             try
             {
-                if (AssemblyTools.UpdateAssemblyInfoVersion(args))
-                    return;
-
                 if(Properties.Settings.Default.IsUpgradeNeeded)
                 {
                     Properties.Settings.Default.Upgrade();

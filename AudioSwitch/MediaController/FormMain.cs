@@ -1,27 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Deployment.Application;
-using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
-using System.Media;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using Microsoft.WindowsAPICodePack.Taskbar;
+
+
 using MkZ.Tools;
-using MkZ.WPF;
 using MkZ.Media.ComObjects;
 using MkZ.Media.Device;
 using MkZ.Media.DeviceSwitch;
-using MkZ.Media.Interfaces;
-using MkZ.Media.Notifications;
-using MkZ.Media.Properties;
 using MkZ.Media.WPF;
+using MkZ.Windows;
 
-namespace MkZ.Media 
+namespace MkZ.Media
 {
     public partial class FormMain : Form
     {

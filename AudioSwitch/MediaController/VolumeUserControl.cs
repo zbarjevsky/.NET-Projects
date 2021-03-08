@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 using MkZ.Media.Properties;
 using MkZ.Media.Device;
 using MkZ.WinForms;
+using MkZ.Windows;
 
 namespace MkZ.Media
 {
@@ -65,7 +60,7 @@ namespace MkZ.Media
 
             Device.AudioEndpointVolume.OnVolumeNotification = (notificationData) =>
             {
-                MkZ.Tools.CommonUtils.ExecuteOnUIThread(() => {
+                CommonUtils.ExecuteOnUIThread(() => {
                     m_trackVolume.Value = (int)Math.Round(100f * notificationData.MasterVolume);
                 }
                 , this);
