@@ -33,10 +33,12 @@ namespace MkZ.WPF.PropertyGrid
         [Browsable(true)]
         public double FontSize { get => _fontSize; set => SetFontSize(value); }
 
-        private FontWeight _fontWeight = FontWeights.Normal;
+        public System.Drawing.FontStyle FontStyle = System.Drawing.FontStyle.Bold;
+
         [Browsable(true)]
+        [XmlIgnore]
         [TypeConverter(typeof(FontWeightStringConverter))]
-        public FontWeight FontWeight { get => _fontWeight; set => SetFontWeight(value); }
+        public FontWeight FontWeight { get => WeightFromStyle(FontStyle); set => SetFontWeight(value); }
 
         public SerializableFontForWpf()
         {
@@ -48,22 +50,21 @@ namespace MkZ.WPF.PropertyGrid
             _font = font;
             _fontFamily = _font.Name;
             _fontSize = _font.Size;
-            _fontWeight = _font.Bold ? FontWeights.Bold : FontWeights.Normal;
+
+            FontStyle = _font.Bold ? System.Drawing.FontStyle.Bold : System.Drawing.FontStyle.Regular;
 
             NotifyPropertyChangedAll();
         }
 
         public void SetFontFamily(string fontFamily)
         {
-            System.Drawing.FontStyle style = StyleFromWeight(_fontWeight);
-            System.Drawing.Font font = new System.Drawing.Font(fontFamily, (float)_fontSize, style);
+            System.Drawing.Font font = new System.Drawing.Font(fontFamily, (float)_fontSize, FontStyle);
             SetFont(font);
         }
 
         public void SetFontSize(double size)
         {
-            System.Drawing.FontStyle style = StyleFromWeight(_fontWeight);
-            System.Drawing.Font font = new System.Drawing.Font(_fontFamily, (float)size, style);
+            System.Drawing.Font font = new System.Drawing.Font(_fontFamily, (float)size, FontStyle);
             SetFont(font);
         }
 
@@ -72,6 +73,11 @@ namespace MkZ.WPF.PropertyGrid
             System.Drawing.FontStyle style = StyleFromWeight(weight);
             System.Drawing.Font font = new System.Drawing.Font(_fontFamily, (float)_fontSize, style);
             SetFont(font);
+        }
+
+        public FontWeight WeightFromStyle(System.Drawing.FontStyle style)
+        {
+            return style == System.Drawing.FontStyle.Bold ? FontWeights.Bold : FontWeights.Normal;
         }
 
         public System.Drawing.FontStyle StyleFromWeight(FontWeight weight)

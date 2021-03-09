@@ -4,6 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+
+using MkZ.Tools;
+
 namespace MkZ.Media
 {
     static class Program
@@ -14,8 +17,12 @@ namespace MkZ.Media
         [STAThread]
         static void Main(string[] args)
         {
+            Application.ThreadException += Application_ThreadException;
+            AppDomain.CurrentDomain.UnhandledException += CurrentDomain_UnhandledException;
+
             try
             {
+                Log.i("Starting Media Controller...");
                 if(Properties.Settings.Default.IsUpgradeNeeded)
                 {
                     Properties.Settings.Default.Upgrade();
@@ -32,8 +39,21 @@ namespace MkZ.Media
             }
             catch (Exception err)
             {
+                Log.e("Main Exception in {0}\n{1}", FormMain.TITLE, err.ToString());
                 MessageBox.Show(err.Message, FormMain.TITLE, MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        private static void CurrentDomain_UnhandledException(object sender, UnhandledExceptionEventArgs e)
+        {
+            Log.e("Unhandled Exception in {0}\n{1}", FormMain.TITLE, e.ExceptionObject.ToString());
+            MessageBox.Show("UnhandledException", FormMain.TITLE, MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
+
+        private static void Application_ThreadException(object sender, System.Threading.ThreadExceptionEventArgs e)
+        {
+            Log.e("Thread Exception in {0}\n{1}", FormMain.TITLE, e.Exception.ToString());
+            MessageBox.Show(e.Exception.Message, FormMain.TITLE, MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
     }
 }

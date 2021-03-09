@@ -70,9 +70,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="..\..\..\Framework.MkZ\Framework.MkZ\Windows\Log.cs">
-      <Link>Utils\Log.cs</Link>
-    </Compile>
     <Compile Include="..\..\..\Framework.MkZ\Framework.MkZ\Windows\XmlSerializerHelper.cs">
       <Link>Utils\XmlSerializerHelper.cs</Link>
     </Compile>
