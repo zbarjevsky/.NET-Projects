@@ -66,12 +66,25 @@ namespace MkZ.MediaPlayer.Utils
 
         public void RestoreTo(Window wnd)
         {
-            wnd.WindowStartupLocation = WindowStartupLocation.Manual;
+            Rect virtScreen = new Rect(
+                SystemParameters.VirtualScreenLeft, 
+                SystemParameters.VirtualScreenTop, 
+                SystemParameters.VirtualScreenWidth, 
+                SystemParameters.VirtualScreenHeight);
 
-            wnd.Left = Bounds.Left;
-            wnd.Top = Bounds.Top;
-            wnd.Width = Bounds.Width;
-            wnd.Height = Bounds.Height;
+            if (virtScreen.Contains(Bounds))
+            {
+                wnd.WindowStartupLocation = WindowStartupLocation.Manual;
+
+                wnd.Left = Bounds.Left;
+                wnd.Top = Bounds.Top;
+                wnd.Width = Bounds.Width;
+                wnd.Height = Bounds.Height;
+            }
+            else
+            {
+                wnd.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            }
 
             wnd.WindowState = WindowState;
             wnd.WindowStyle = WindowStyle;
