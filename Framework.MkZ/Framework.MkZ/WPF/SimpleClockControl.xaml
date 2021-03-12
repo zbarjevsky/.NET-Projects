@@ -38,8 +38,8 @@
                          Background="{Binding Background.B, FallbackValue=Black}"
                          Click="SettingsMenuItem_Click"/>
 
-                    <buttons:ButtonClose x:Name="_btnHide" Width="40" Canvas.Left="378" Canvas.Top="-19"
-                         Foreground="Red" 
+                    <buttons:ButtonClose x:Name="_btnHide" Width="30" Canvas.Left="378" Canvas.Top="-17"
+                         Foreground="{Binding Foreground.B, FallbackValue=Pink}" 
                          Background="{Binding Background.B, FallbackValue=Black}"
                          Click="ButtonHide_Click"/>
 
