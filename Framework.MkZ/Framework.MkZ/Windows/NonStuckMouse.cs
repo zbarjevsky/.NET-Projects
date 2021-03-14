@@ -16,7 +16,7 @@ using MkZ.WPF.Utils;
 
 namespace MkZ.Tools
 {
-    public class NonStickMouse : IDisposable
+    public class NonStuckMouse : IDisposable
     {
         private class BorderBetweenDisplays
         {
@@ -41,15 +41,15 @@ namespace MkZ.Tools
 
         private bool IsButtonDown {  get { return _lBtnDown || _rBtnDown; } }
 
-        public static NonStickMouse Instance { get; private set; }
+        public static NonStuckMouse Instance { get; private set; }
 
-        static NonStickMouse()
+        static NonStuckMouse()
         {
-            Instance = new NonStickMouse();
+            Instance = new NonStuckMouse();
             Instance.Init();
         }
 
-        public NonStickMouse()
+        public NonStuckMouse()
         {
             MouseHook.Hook.OnMouseMessage += mouseHook_OnMouseMessage;
             Microsoft.Win32.SystemEvents.DisplaySettingsChanged += SystemEvents_DisplaySettingsChanged;
@@ -135,11 +135,11 @@ namespace MkZ.Tools
             if (IsButtonDown || _screens.Count == 1 || !MouseHook.Hook.Enabled)
                 return; //ignore dragging or if one sceen only or if not enabled
 
-            int screenSrcIndex = WpfScreen.ScreenIndexFromPoint(ptPrev.X, ptPrev.Y);
+            int screenSrcIndex = WpfScreen.ScreenIndexFromPoint(ptPrev.X, ptPrev.Y, _screens);
             if (screenSrcIndex < 0) //point out of screens
                 return;
 
-            int screenDstIndex = WpfScreen.ScreenIndexFromPoint(ptCurr.X, ptCurr.Y);
+            int screenDstIndex = WpfScreen.ScreenIndexFromPoint(ptCurr.X, ptCurr.Y, _screens);
             if (screenSrcIndex == screenDstIndex)
                 return;
 
@@ -201,7 +201,7 @@ namespace MkZ.Tools
             return (int)dstY;
         }
 
-        private int CorrectYIfNeeded(User32.POINT ptCurr, Rect rFrom, Rect rTo, User32.POINT delta)
+        private int CorrectYifNeeded(User32.POINT ptCurr, Rect rFrom, Rect rTo, User32.POINT delta)
         {
             if (ptCurr.Y > rTo.Top && ptCurr.Y < rTo.Bottom)
                 return ptCurr.Y + delta.Y; //no correction needed

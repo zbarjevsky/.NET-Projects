@@ -131,6 +131,7 @@
     <Compile Include="Windows\Win32API\User32_MouseHook.cs" />
     <Compile Include="Windows\Win32API\Win32Error.cs" />
     <Compile Include="Windows\Win32API\Win32Error.Values.cs" />
+    <Compile Include="Windows\WindowsRegistryHelper.cs" />
     <Compile Include="WinForms\ChartProgressUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -257,7 +258,7 @@
     </Compile>
     <Compile Include="WPF\GridLengthAnimation.cs" />
     <Compile Include="WPF\ItemsControlExtensions.cs" />
-    <Compile Include="Windows\NonStickMouse.cs" />
+    <Compile Include="Windows\NonStuckMouse.cs" />
     <Compile Include="WPF\IMediaPlayer.cs" />
     <Compile Include="WPF\PopupBehavior.cs" />
     <Compile Include="WPF\PopupInfoWindow.xaml.cs">

@@ -16,6 +16,7 @@ using Utils;
 using ClipboardManager.Zip;
 using MkZ.Tools;
 using MkZ.WPF;
+using MkZ.Windows;
 
 namespace ClipboardManager.Utils
 {
@@ -42,6 +43,9 @@ namespace ClipboardManager.Utils
         [TypeConverter(typeof(ExpandableObjectConverter))]
         public EncodingsList EncodingsList { get; set; } = new EncodingsList();
 
+        private const string _strAppKey = @"ClipboardHistoryMZ";
+        private WindowsRegistryHelper _windowsRegistryHelper = new WindowsRegistryHelper(_strAppKey, RegKeyType.LocalMachine);
+
         [XmlIgnore] //read from registry and not from XML
         [Category("Startup Options")]
         [Description("Load application when Windows starts")]
@@ -50,25 +54,12 @@ namespace ClipboardManager.Utils
         {
             get
             {
-                var key = OpenRegKey(writable: false);
-                if (key == null)
-                    return false;
-                bool run = (key.GetValue(_strAppKey) != null);
-                key.Close();
-                return run;
+                return _windowsRegistryHelper.IsLoadWithWindows;
             }//end get
 
             set
             {
-                var key = OpenRegKey(writable: true);
-                if (key == null)
-                    return;
-
-                if (value)
-                    key.SetValue(_strAppKey, "\"" + Application.ExecutablePath + "\"");
-                else
-                    key.DeleteValue(_strAppKey, false);
-                key.Close();
+                _windowsRegistryHelper.IsLoadWithWindows = value;
             }//end set
         }//end LoadWithWindows
 
@@ -126,7 +117,6 @@ namespace ClipboardManager.Utils
             EncodingsList = s.EncodingsList;
         }
 
-        private const string _strAppKey = @"ClipboardHistoryMZ";
         private Microsoft.Win32.RegistryKey OpenRegKey(bool writable)
         {
             //const string REG_KEY = @"Software\Microsoft\Windows\CurrentVersion\Run";
@@ -144,7 +134,7 @@ namespace ClipboardManager.Utils
 
         public static void UpdateMouseCorrection(bool isCorrectMouse)
         {
-            NonStickMouse.Instance.EnableMouseCorrection(isCorrectMouse);
+            NonStuckMouse.Instance.EnableMouseCorrection(isCorrectMouse);
         }
     }
 

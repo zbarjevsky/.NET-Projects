@@ -52,7 +52,11 @@ namespace MkZ.WPF.Utils
 
         public static int ScreenIndexFromPoint(int x, int y)
         {
-            List<WpfScreen> screens = AllScreens();
+            return ScreenIndexFromPoint(x, y, AllScreens());
+        }
+
+        public static int ScreenIndexFromPoint(int x, int y, List<WpfScreen> screens)
+        {
             for (int i = 0; i < screens.Count; i++)
             {
                 if (screens[i].DeviceBounds.Contains(x, y))

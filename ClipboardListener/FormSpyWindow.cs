@@ -13,6 +13,7 @@ namespace ClipboardManager
     using ClipboardManager.Properties;
     using System.IO;
     using MkZ.Tools;
+    using MkZ.Windows.Win32API;
 
     /// <summary>
     /// Summary description for SpyWindow.

@@ -133,6 +133,7 @@ namespace MkZ.Windows
             Array values = Enum.GetValues(typeof(T));
             return values.Cast<T>().ToList();
         }
+       
         public static void ErrorMessage(string message, string title = "ERROR")
         {
             MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Error,

@@ -10,7 +10,6 @@ using System.Globalization;
 
 using Utils;
 using MkZ.Tools;
-using MkZ.Framework.Tools;
 
 namespace ClipboardManager
 {
@@ -38,9 +37,6 @@ namespace ClipboardManager
         [STAThread]
 		static void Main(string [] args)
 		{
-            if (AssemblyTools.UpdateAssemblyInfoVersion(args))
-                return;
-
             Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 

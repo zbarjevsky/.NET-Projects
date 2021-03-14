@@ -76,7 +76,7 @@ namespace MkZ
 
         private void FormMainTest_FormClosed(object sender, FormClosedEventArgs e)
         {
-            NonStickMouse.Instance.Dispose();
+            NonStuckMouse.Instance.Dispose();
         }
 
         private void m_btnTestEdit_Click(object sender, EventArgs e)
@@ -200,7 +200,7 @@ namespace MkZ
 
         private void m_chkNonStickMouse_CheckedChanged(object sender, EventArgs e)
         {
-            NonStickMouse.Instance.EnableMouseCorrection(m_chkNonStickMouse.Checked);
+            NonStuckMouse.Instance.EnableMouseCorrection(m_chkNonStuckMouse.Checked);
         }
 
         private void m_btnEjectDrive_Click(object sender, EventArgs e)

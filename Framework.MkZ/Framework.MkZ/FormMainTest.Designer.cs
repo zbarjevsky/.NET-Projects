@@ -40,6 +40,7 @@
             this.m_cmbListViewType = new System.Windows.Forms.ComboBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.m_btnWpfListViewDragDrop = new System.Windows.Forms.Button();
             this.m_cmbDriveLetter = new System.Windows.Forms.ComboBox();
             this.m_btnEjectDrive = new System.Windows.Forms.Button();
             this.chartProgressUserControl1 = new WindowsFormsApp1.ChartProgressUserControl();
@@ -60,8 +61,7 @@
             this.elementHost1 = new System.Windows.Forms.Integration.ElementHost();
             this.displayTopologyUserControl1 = new WpfApplication6.DisplayTopologyUserControl();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.m_chkNonStickMouse = new System.Windows.Forms.CheckBox();
-            this.m_btnWpfListViewDragDrop = new System.Windows.Forms.Button();
+            this.m_chkNonStuckMouse = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -179,6 +179,16 @@
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Common Controls";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // m_btnWpfListViewDragDrop
+            // 
+            this.m_btnWpfListViewDragDrop.Location = new System.Drawing.Point(161, 79);
+            this.m_btnWpfListViewDragDrop.Name = "m_btnWpfListViewDragDrop";
+            this.m_btnWpfListViewDragDrop.Size = new System.Drawing.Size(144, 45);
+            this.m_btnWpfListViewDragDrop.TabIndex = 19;
+            this.m_btnWpfListViewDragDrop.Text = "WPF ListView DragDrop";
+            this.m_btnWpfListViewDragDrop.UseVisualStyleBackColor = true;
+            this.m_btnWpfListViewDragDrop.Click += new System.EventHandler(this.m_btnWpfListViewDragDrop_Click);
             // 
             // m_cmbDriveLetter
             // 
@@ -464,33 +474,23 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.m_chkNonStickMouse);
+            this.panel1.Controls.Add(this.m_chkNonStuckMouse);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Location = new System.Drawing.Point(0, 393);
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(742, 35);
             this.panel1.TabIndex = 1;
             // 
-            // m_chkNonStickMouse
+            // m_chkNonStuckMouse
             // 
-            this.m_chkNonStickMouse.AutoSize = true;
-            this.m_chkNonStickMouse.Location = new System.Drawing.Point(13, 9);
-            this.m_chkNonStickMouse.Name = "m_chkNonStickMouse";
-            this.m_chkNonStickMouse.Size = new System.Drawing.Size(102, 17);
-            this.m_chkNonStickMouse.TabIndex = 0;
-            this.m_chkNonStickMouse.Text = "NonStickMouse";
-            this.m_chkNonStickMouse.UseVisualStyleBackColor = true;
-            this.m_chkNonStickMouse.CheckedChanged += new System.EventHandler(this.m_chkNonStickMouse_CheckedChanged);
-            // 
-            // m_btnWpfListViewDragDrop
-            // 
-            this.m_btnWpfListViewDragDrop.Location = new System.Drawing.Point(161, 79);
-            this.m_btnWpfListViewDragDrop.Name = "m_btnWpfListViewDragDrop";
-            this.m_btnWpfListViewDragDrop.Size = new System.Drawing.Size(144, 45);
-            this.m_btnWpfListViewDragDrop.TabIndex = 19;
-            this.m_btnWpfListViewDragDrop.Text = "WPF ListView DragDrop";
-            this.m_btnWpfListViewDragDrop.UseVisualStyleBackColor = true;
-            this.m_btnWpfListViewDragDrop.Click += new System.EventHandler(this.m_btnWpfListViewDragDrop_Click);
+            this.m_chkNonStuckMouse.AutoSize = true;
+            this.m_chkNonStuckMouse.Location = new System.Drawing.Point(13, 9);
+            this.m_chkNonStuckMouse.Name = "m_chkNonStuckMouse";
+            this.m_chkNonStuckMouse.Size = new System.Drawing.Size(106, 17);
+            this.m_chkNonStuckMouse.TabIndex = 0;
+            this.m_chkNonStuckMouse.Text = "NonStuckMouse";
+            this.m_chkNonStuckMouse.UseVisualStyleBackColor = true;
+            this.m_chkNonStuckMouse.CheckedChanged += new System.EventHandler(this.m_chkNonStickMouse_CheckedChanged);
             // 
             // FormMainTest
             // 
@@ -549,7 +549,7 @@
         private System.Windows.Forms.Button m_btnSaveIcons;
         private System.Windows.Forms.Button m_btnOpenIconsFile;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.CheckBox m_chkNonStickMouse;
+        private System.Windows.Forms.CheckBox m_chkNonStuckMouse;
         private System.Windows.Forms.Button m_btnEjectDrive;
         private System.Windows.Forms.ComboBox m_cmbDriveLetter;
         private System.Windows.Forms.Button m_btnWpfListViewDragDrop;

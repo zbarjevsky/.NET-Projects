@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 
 using ClipboardManager.Utils;
 using MkZ.Tools;
+using MkZ.Windows.Win32API;
 
 namespace ClipboardManager
 {

@@ -2,30 +2,22 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Text;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
-using System.Collections;
 using System.Diagnostics;
-using System.Xml;
 using System.Threading;
-using System.Reflection;
-using ClipboardManager.Zip;
 using ClipboardManager.DesktopUtil;
-using System.Runtime.CompilerServices;
-using Microsoft.Win32;
 
 using Utils;
 using ClipboardManager.Utils;
 using MkZ.WPF.MessageBox;
+using MkZ.Windows.Win32API;
 using MkZ.Tools;
-using MkZ.WPF;
 
 namespace ClipboardManager
 {
-	public partial class FormClipboard : Form
+    public partial class FormClipboard : Form
 	{
 		private IntPtr m_NextClipboardViewer			= IntPtr.Zero;
         private String m_sSettingsFileName              = "ClipboardListener.Settings.xml";
@@ -192,7 +184,7 @@ namespace ClipboardManager
 			m_Settings.globalSettings.HotKeyInfo.UnregisterHotKey(this);
             ShutdownHandler.CancelMonitoringShutdown();
             Utils.ServicesManipulator.Stop();
-			NonStickMouse.Instance.Dispose();
+			NonStuckMouse.Instance.Dispose();
             User32Clipboard.ChangeClipboardChain(this.Handle, m_NextClipboardViewer);
 
 			Save();
