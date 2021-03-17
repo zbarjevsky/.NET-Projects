@@ -128,6 +128,9 @@ namespace MkZ.WPF
                 MediaPlayer.PropertyChanged += MediaPlayer_PropertyChanged;
                 MediaPlayer.MediaStartedAction = (mp) => { };
             }
+
+            string sDingFileName = System.IO.Path.Combine(m_sExePath, "Sounds", "ding.mp3");
+            m_SoundPlayer.Open(sDingFileName, "ding");
         }
 
         private void ReiKiZoomableProgress_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -180,7 +183,7 @@ namespace MkZ.WPF
         public void Pause()
         {
             _bPaused = true;
-            PlayDing();
+            //PlayDing();
         }
 
         public void Resume()
@@ -232,8 +235,8 @@ namespace MkZ.WPF
 
         public void PlayDing()
         {
-            string sDingFileName = System.IO.Path.Combine(m_sExePath, "Sounds", "ding.mp3");
-            m_SoundPlayer.Play(sDingFileName, "ding", (int)(MediaPlayer.Volume * 1000.0));
+            m_SoundPlayer.SetVolume((int)(MediaPlayer.Volume * 1000.0));
+            m_SoundPlayer.CmdPlay();
         }
 
         private void UpdateTooltip(double secondsLeft)
