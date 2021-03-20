@@ -13,8 +13,8 @@ namespace ClipboardManager.Utils
     {
         private List<ClipboardEntryLogic> _history = new List<ClipboardEntryLogic>();
 
-        public Action<ClipboardEntryLogic> AddToFavorites = (clp) => { };
-        public Action<ClipboardEntryLogic> RemoveFromMain = (clp) => { };
+        public Action<List<ClipboardEntryLogic>> AddToFavorites = (selectedItems) => { };
+        public Action<List<ClipboardEntryLogic>> RemoveFromMain = (selectedItems) => { };
         public Action<ClipboardEntryLogic> SelectMainEntry = (clp) => { };
 
         public ClipboardHistoryListControl()
@@ -113,7 +113,7 @@ namespace ClipboardManager.Utils
             if (this.m_listHistory.SelectedIndices.Count == 0)
                 return;
 
-            AddToFavorites(_history[m_listHistory.SelectedIndices[0]]);
+            AddToFavorites(GetSelectedItems());
         }
 
         private void m_contextMenuStrip_ClipboardEntry_Edit_Click(object sender, EventArgs e)
@@ -129,7 +129,27 @@ namespace ClipboardManager.Utils
             if (this.m_listHistory.SelectedIndices.Count == 0)
                 return;
 
-            RemoveFromMain(_history[m_listHistory.SelectedIndices[0]]);
+            RemoveFromMain(GetSelectedItems());
+        }
+
+        private void m_btnDelete_Click(object sender, EventArgs e)
+        {
+            m_contextMenuStrip_ClipboardEntry_Remove_Click(sender, e);
+        }
+
+        private List<ClipboardEntryLogic> GetSelectedItems()
+        {
+            List<ClipboardEntryLogic> selectedItems = new List<ClipboardEntryLogic>();
+
+            if (this.m_listHistory.SelectedIndices.Count == 0)
+                return selectedItems;
+
+            foreach (int idx in this.m_listHistory.SelectedIndices)
+            {
+                selectedItems.Add(_history[idx]);
+            }
+
+            return selectedItems;
         }
     }
 }

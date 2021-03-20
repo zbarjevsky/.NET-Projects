@@ -167,8 +167,8 @@ namespace ClipboardManager
             this.Hide();
 
             m_listHistory.SelectMainEntry = (clp) => SetAsActiveItem(clp);
-            m_listHistory.RemoveFromMain = (clp) => RemoveFromMainList(clp);
-            m_listHistory.AddToFavorites = (clp) => AddToFavorites(clp);
+            m_listHistory.RemoveFromMain = (selectedIndices) => RemoveFromMainList(selectedIndices);
+            m_listHistory.AddToFavorites = (selectedIndices) => AddToFavorites(selectedIndices);
         }//end FormClipboard_Load
 
 		private void FormClipboard_FormClosing(object sender, FormClosingEventArgs e)
@@ -628,7 +628,15 @@ namespace ClipboardManager
             AddToFavorites(itm.Tag as ClipboardEntryLogic);
         }//end m_contextMenuStrip_ClipboardEntry_AddToFavorites_Click
 
-        private void AddToFavorites(ClipboardEntryLogic clp)
+		private void AddToFavorites(List<ClipboardEntryLogic> selectedItems)
+		{
+            foreach (ClipboardEntryLogic clp in selectedItems)
+            {
+				AddToFavorites(clp, false);
+            }
+		}
+
+        private void AddToFavorites(ClipboardEntryLogic clp, bool rebuildMenu = true)
         {
             try
             {
@@ -636,11 +644,14 @@ namespace ClipboardManager
 
                 m_ClipboardListFavorites.AddEntry(clp);
 
-                //rebuild favorites list
-                m_contextMenuStripClipboard_Favorites.DropDownItems.Clear();
-                m_contextMenuStripClipboard_Favorites.DropDownItems.AddRange(BuildFavoritesList(true));
+				if (rebuildMenu)
+				{
+					//rebuild favorites list
+					m_contextMenuStripClipboard_Favorites.DropDownItems.Clear();
+					m_contextMenuStripClipboard_Favorites.DropDownItems.AddRange(BuildFavoritesList(true));
 
-                m_contextMenuStripClipboard.Focus();
+					m_contextMenuStripClipboard.Focus();
+				}
             }//end try
             finally
             {
@@ -667,6 +678,14 @@ namespace ClipboardManager
 
             RemoveFromMainList(itm.Tag as ClipboardEntryLogic);
 		}//end m_contextMenuStrip_ClipboardEntry_Remove_Click
+
+		private void RemoveFromMainList(List<ClipboardEntryLogic> selectedItems)
+		{
+            for (int i = selectedItems.Count - 1; i >= 0; i--)
+            {
+				RemoveFromMainList(selectedItems[i]);
+            }
+		}
 
         private void RemoveFromMainList(ClipboardEntryLogic clp)
         {

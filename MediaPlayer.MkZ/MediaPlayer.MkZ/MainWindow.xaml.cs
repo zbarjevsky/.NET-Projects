@@ -77,6 +77,8 @@ namespace MkZ.MediaPlayer
 
             _hideHeaderAnimationHelper = new GridLengthAnimationHelper(this, rowHeader);
 
+            SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
+
             Context.AppConfig.Load();
 
             //add or select file if exists
@@ -131,6 +133,18 @@ namespace MkZ.MediaPlayer
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             _zoomImage.FitWindow(0);
+        }
+
+        private void SystemEvents_PowerModeChanged(object sender, PowerModeChangedEventArgs e)
+        {
+            switch (e.Mode)
+            {
+                case PowerModes.Resume:
+                    break;
+                case PowerModes.Suspend:
+                    PlayerVM.Pause();
+                    break;
+            }
         }
 
         private bool ProcessCommandLine()
