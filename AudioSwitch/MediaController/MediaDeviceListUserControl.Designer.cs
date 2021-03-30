@@ -136,7 +136,6 @@
             listViewGroup2,
             listViewGroup3,
             listViewGroup4});
-            this.m_listDevices.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.Nonclickable;
             this.m_listDevices.HideSelection = false;
             this.m_listDevices.Location = new System.Drawing.Point(0, 0);
             this.m_listDevices.MultiSelect = false;

@@ -119,7 +119,8 @@ namespace ListViewExtensions
         /// <summary>
         /// Case insensitive comparer object
         /// </summary>
-        private CaseInsensitiveComparer ObjectCompare;
+        private static CaseInsensitiveComparer ObjectCompare = new CaseInsensitiveComparer();
+
         private ListView _listView;
 
         private int _sortColumn = 0;
@@ -139,9 +140,6 @@ namespace ListViewExtensions
         /// </summary>
         public ListViewColumnSorter(ListView listView)
         {
-            // Initialize the CaseInsensitiveComparer object
-            ObjectCompare = new CaseInsensitiveComparer();
-
             _listView = listView;
             _listView.ColumnClick += listView_ColumnClick;
         }
@@ -154,35 +152,42 @@ namespace ListViewExtensions
         /// <returns>The result of the comparison. "0" if equal, negative if 'x' is less than 'y' and positive if 'x' is greater than 'y'</returns>
         public int Compare(object x, object y)
         {
-            int compareResult;
+            return Compare(x, y, SortColumn, SortOrder);
+        }
+
+        /// <summary>
+        /// This method is inherited from the IComparer interface.  It compares the two objects passed using a case insensitive comparison.
+        /// </summary>
+        /// <param name="x">First object to be compared</param>
+        /// <param name="y">Second object to be compared</param>
+        /// <returns>The result of the comparison. "0" if equal, negative if 'x' is less than 'y' and positive if 'x' is greater than 'y'</returns>
+        public static int Compare(object x, object y, int sortColumn, SortOrder sortOrder)
+        {
             ListViewItem listviewX, listviewY;
 
             // Cast the objects to be compared to ListViewItem objects
             listviewX = (ListViewItem)x;
             listviewY = (ListViewItem)y;
 
-            string s1 = listviewX.SubItems[SortColumn].Text;
-            string s2 = listviewY.SubItems[SortColumn].Text;
+            string s1 = listviewX.SubItems[sortColumn].Text;
+            string s2 = listviewY.SubItems[sortColumn].Text;
 
-            int test;
-            if (int.TryParse(s1, out test))
-                s1 = test.ToString("D10");
-            if (int.TryParse(s2, out test))
-                s2 = test.ToString("D10");
-
-            // Compare the two items
-            compareResult = ObjectCompare.Compare(s1, s2);
+            int number; 
+            if (int.TryParse(s1, out number))
+                s1 = number.ToString("D10");
+            if (int.TryParse(s2, out number))
+                s2 = number.ToString("D10");
 
             // Calculate correct return value based on object comparison
-            if (SortOrder == SortOrder.Ascending)
+            if (sortOrder == SortOrder.Ascending)
             {
                 // Ascending sort is selected, return normal result of compare operation
-                return compareResult;
+                return ObjectCompare.Compare(s1, s2);
             }
-            else if (SortOrder == SortOrder.Descending)
+            else if (sortOrder == SortOrder.Descending)
             {
                 // Descending sort is selected, return negative result of compare operation
-                return (-compareResult);
+                return -ObjectCompare.Compare(s1, s2);
             }
             else
             {
@@ -201,13 +206,17 @@ namespace ListViewExtensions
             if (e.Column == this.SortColumn)
             {
                 // Reverse the current sort direction for this column.
-                if (this.SortOrder == SortOrder.Ascending)
+                if (this.SortOrder == SortOrder.None)
+                {
+                    this.SortOrder = SortOrder.Ascending;// Perform the sort with these new sort options.
+                }
+                else if (this.SortOrder == SortOrder.Ascending)
                 {
                     this.SortOrder = SortOrder.Descending;// Perform the sort with these new sort options.
                 }
-                else
+                else if(this.SortOrder == SortOrder.Descending)
                 {
-                    this.SortOrder = SortOrder.Ascending;// Perform the sort with these new sort options.
+                    this.SortOrder = SortOrder.None;// Perform the sort with these new sort options.
                 }
             }
             else

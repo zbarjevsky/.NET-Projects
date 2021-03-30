@@ -12,6 +12,7 @@ using System.Diagnostics;
 using MkZ.Tools;
 using MkZ.Media.DeviceSwitch;
 using MkZ.WinForms;
+using ListViewExtensions;
 
 namespace MkZ.Media
 {
@@ -28,6 +29,8 @@ namespace MkZ.Media
 
         public AlternateColorPalette AlternateColorPalette { get; set; } = AlternateColorPalette.Cold;
 
+        public Action<List<ListViewItem>> OnSortChanged { get; set; } = (group) => { };
+
         public MediaDeviceListUserControl()
         {
             InitializeComponent();
@@ -42,6 +45,14 @@ namespace MkZ.Media
             };
 
             m_listDevices.SetDoubleBuffered(true);
+            m_listDevices.SetListViewColumnSorter();
+            m_listDevices.ColumnClick += ListDevices_ColumnClick; ;
+        }
+
+        private void ListDevices_ColumnClick(object sender, ColumnClickEventArgs e)
+        {
+            List<ListViewItem> activeGroup = GetItemGroupSorted(EDeviceState.Active);
+            OnSortChanged(activeGroup);
         }
 
         private void MediaDeviceListUserControl_Load(object sender, EventArgs e)
@@ -122,6 +133,17 @@ namespace MkZ.Media
                 default:
                     return m_listDevices.Groups[3];
             }
+        }
+
+        public List<ListViewItem> GetItemGroupSorted(EDeviceState state)
+        {
+            ListViewGroup activeGroup = GetItemGroup(EDeviceState.Active);
+            List<ListViewItem> list = activeGroup.Items.OfType<ListViewItem>().Select(i => i).ToList();
+
+            ListViewColumnSorter sorter = m_listDevices.ListViewItemSorter as ListViewColumnSorter;
+            list.Sort((i1, i2) => ListViewColumnSorter.Compare(i1,i2, sorter.SortColumn, sorter.SortOrder));
+
+            return list;
         }
 
         private void SetActiveDeviceToBold(MMDevice device)
@@ -269,9 +291,8 @@ namespace MkZ.Media
 
         public void SetActiveDevice(int index)
         {
-            ListViewGroup activeGroup = m_listDevices.Groups[0];
-            ListViewItem item = activeGroup.Items[index];
-            DeviceFullInfo dev = item.Tag as DeviceFullInfo;
+            List<ListViewItem> devices = GetItemGroupSorted(EDeviceState.Active);
+            DeviceFullInfo dev = devices[index].Tag as DeviceFullInfo;
             SetActiveDevice(dev);
         }
 

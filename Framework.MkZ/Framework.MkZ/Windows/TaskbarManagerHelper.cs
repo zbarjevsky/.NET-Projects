@@ -63,7 +63,7 @@ namespace MkZ.Tools
             }
         }
 
-        public static void ShowButtons(ListView.ListViewItemCollection items, string disableButtonWithThisTooltip)
+        public static void ShowButtons(List<ListViewItem> items, string disableButtonWithThisTooltip)
         {
             List<string> tooltips = items.OfType<ListViewItem>().Select(i => i.Text).ToList();
             List<Image> images = items.OfType<ListViewItem>().Select(item => item.ImageList.Images[item.ImageKey]).ToList();

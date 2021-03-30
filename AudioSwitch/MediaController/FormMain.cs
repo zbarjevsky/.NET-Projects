@@ -56,6 +56,8 @@ namespace MkZ.Media
             m_volumeControlSpk.OnVolumeChanged = (volume) => { UpdateUI(null); UpdatePopupVolume(); };
             m_volumeControlMic.OnVolumeChanged = (volume) => { UpdateUI(null); };
 
+            m_DeviceListPlayback.OnSortChanged = (group) => { UpdateTaskbarButtons(group); };
+
             _popupVolumeInfoWindow = new PopupVolumeInfoHelper(
                 Properties.Settings.Default.PopupLocation, 
                 (volume) => { m_volumeControlSpk.Volume = volume; });
@@ -129,8 +131,9 @@ namespace MkZ.Media
                     m_volumeControlMic.SetDevice(activeMic);
 
                     this.Text = activeSpk.FriendlyName + " - " + TITLE;
- 
-                    UpdateTaskbarButtons();
+
+                    List<ListViewItem> activeGroup = m_DeviceListPlayback.GetItemGroupSorted(EDeviceState.Active);
+                    UpdateTaskbarButtons(activeGroup);
                 }
                 catch (Exception err)
                 {
@@ -150,13 +153,12 @@ namespace MkZ.Media
             return m_DeviceListPlayback.GetEnabledDevices();
         }
 
-        private void UpdateTaskbarButtons()
+        private void UpdateTaskbarButtons(List<ListViewItem> activeGroup)
         {
-            ListViewGroup activeGroup = m_DeviceListPlayback.GetItemGroup(EDeviceState.Active);
-            TaskbarManagerHelper.ShowButtons(activeGroup.Items, m_DeviceListPlayback.ActiveDevice.FriendlyName);
+            TaskbarManagerHelper.ShowButtons(activeGroup, m_DeviceListPlayback.ActiveDevice.FriendlyName);
 
             //hide preview on click
-            for (int i = 0; i < activeGroup.Items.Count; i++)
+            for (int i = 0; i < activeGroup.Count; i++)
             {
                 TaskbarManagerHelper.Button(i).DismissOnClick = true;
             }
