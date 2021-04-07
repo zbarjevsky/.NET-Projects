@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,7 +34,17 @@ namespace MkZ.MediaPlayer
             int index = -1, count = 0;
             foreach (string fileName in fileNames)
             {
-                if (AppConfig.Settings.IsSupportedImageFile(fileName))
+                if(Directory.Exists(fileName))
+                {
+                    string[] fileNames1 = GetAllSupportedFiles(fileName);
+                    if (fileNames1 != null && fileNames1.Length > 0)
+                    {
+                        string name = Path.GetFileNameWithoutExtension(fileName);
+                        PlayList newPlayList = playList.AddNewPlayList(name);
+                        AddNewMediaFiles(newPlayList, fileNames1, volume);
+                    }
+                }
+                else if (AppConfig.Settings.IsSupportedImageFile(fileName))
                 {
                     AppConfig.Settings.BackgroundImageFileName = fileName;
                 }
@@ -50,6 +61,22 @@ namespace MkZ.MediaPlayer
 
             if (unsupported.Count > 0)
                 MessageBox.Show("File type is not supported.\n" + unsupported[0], "AddNewMediaFiles");
+        }
+
+        private string[] GetAllSupportedFiles(string directory, SearchOption searchOption = SearchOption.TopDirectoryOnly)
+        {
+            if(!Directory.Exists(directory))
+                return new string[0];
+
+            List<string> output = new List<string>();
+            string [] fileNames = Directory.GetFiles(directory, "*.*", searchOption);
+            foreach (string fileName in fileNames)
+            {
+                if (AppConfig.Settings.IsSupportedMediaFile(fileName) || Directory.Exists(fileName))
+                    output.Add(fileName);
+            }
+
+            return output.ToArray();
         }
     }
 }

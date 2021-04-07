@@ -6,6 +6,7 @@ using MkZ.Media.Properties;
 using MkZ.Media.Device;
 using MkZ.WinForms;
 using MkZ.Windows;
+using MkZ.Windows.Win32API;
 
 namespace MkZ.Media
 {
@@ -174,6 +175,7 @@ namespace MkZ.Media
             }
             catch (Exception err)
             {
+                HRESULT hr = new HRESULT(err.HResult);
                 System.Diagnostics.Debug.WriteLine(err);
             }        
         }

@@ -315,8 +315,10 @@ namespace BarometerBT
                 for (int i = 0; i < fileNamesList.Count; i++)
                 {
                     BMDatabase db = BMDatabase.Open(fileNamesList[i]);
-                    if(db != null)
+                    if (db != null)
                         dbAll = BMDatabaseMap.INSTANCE.Merge(db);
+                    else
+                        MessageBox.Show("Error open file: \n" + fileNamesList[i]);
                 }
 
                 UpdateDeviceList();

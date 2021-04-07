@@ -304,7 +304,7 @@ namespace BarometerBT.BlueMaestro
             BMDatabase db = new BMDatabase(this);
             List<BMRecordCurrent> records = new List<BMRecordCurrent>(db.Records);
             db.Records.Clear();
-            db.Records.AddRange(BMDatabase.DilluteByTime(records, bucketIntervalInSec));
+            db.Records.AddRange(DilluteByTime(records, bucketIntervalInSec));
 
             Save(fileName, db);
         }
@@ -314,7 +314,9 @@ namespace BarometerBT.BlueMaestro
             string fileName = string.Format("BMDatabase_{0}_{1}_Main.xml", Device.Name, Device.Address);
             fileName = Path.Combine(DataFolder, fileName);
 
-            Save(fileName, this);
+            const double DILLUTE_INTERVAL = 300.0;
+            SaveAs(fileName, DILLUTE_INTERVAL);
+            //Save(fileName, this);
         }
 
         public static void Save(string fileName, BMDatabase db)
