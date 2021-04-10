@@ -242,7 +242,7 @@ namespace MkZ.WPF
             return (T)topmost.Invoke(action);
         }
 
-        public static BitmapImage GetResourceImage(string imageResourcePath)
+        public static BitmapImage GetResourceImage(string imageResourcePath, string assemblyName = null)
         {
             try
             {
@@ -253,9 +253,11 @@ namespace MkZ.WPF
                 //UriParser.Register(
                 //    new GenericUriParser(GenericUriParserOptions.GenericAuthority), "pack", -1
                 //);
+                if (string.IsNullOrWhiteSpace(assemblyName))
+                    assemblyName = _assemblyName;
 
                 Uri oUri = new Uri("pack://application:,,,/"
-                    + _assemblyName
+                    + assemblyName
                     + ";component/" 
                     + imageResourcePath, UriKind.Absolute);
 
