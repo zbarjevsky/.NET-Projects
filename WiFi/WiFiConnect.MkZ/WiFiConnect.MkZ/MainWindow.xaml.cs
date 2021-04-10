@@ -37,6 +37,12 @@ namespace WiFiConnect.MkZ
             WiFiConnector.DiscoverAllWiFiAdapters();
         }
 
+        private void btnRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            WiFiConnector.ResultCollection.Clear();
+            WiFiConnector.DiscoverAllWiFiAdapters();
+        }
+
         private void ResultsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             var selectedNetwork = ResultsListView.SelectedItem as WiFiNetworkVM;
