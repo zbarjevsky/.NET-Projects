@@ -17,9 +17,11 @@ namespace WiFiConnect.MkZ.WiFi
     public class WiFiConnector
     {
         public WiFiAdapter firstAdapter { get; private set; }
-        private IReadOnlyList<ConnectionProfile> connectionProfiles;
+        private List<ConnectionProfile> _connectionProfiles;
 
         public ObservableCollection<WiFiNetworkVM> ResultCollection { get; } = new ObservableCollection<WiFiNetworkVM>();
+
+        public Action DiscoverySuccededAction = () => { };
 
         public async void DiscoverAllWiFiAdapters()
         {
@@ -36,7 +38,6 @@ namespace WiFiConnect.MkZ.WiFi
                 var result = await Windows.Devices.Enumeration.DeviceInformation.FindAllAsync(WiFiAdapter.GetDeviceSelector());
                 if (result.Count >= 1)
                 {
-                    connectionProfiles = NetworkInformation.GetConnectionProfiles();
                     firstAdapter = await WiFiAdapter.FromIdAsync(result[0].Id);
                     ScanWiFi(firstAdapter);
                     //var button = new Button();
@@ -74,6 +75,8 @@ namespace WiFiConnect.MkZ.WiFi
             ResultCollection.Clear();
             ConcurrentDictionary<string, WiFiNetworkVM> dictionary = new ConcurrentDictionary<string, WiFiNetworkVM>();
 
+            List<ConnectionProfile> connectionProfiles = ConnectionProfiles;
+
             foreach (var network in report.AvailableNetworks)
             {
                 var item = new WiFiNetworkVM(network, firstAdapter);
@@ -92,7 +95,7 @@ namespace WiFiConnect.MkZ.WiFi
             foreach (var item in values)
             {
                 item.Update();
-                if (IsConnected(item.AvailableNetwork))
+                if (IsConnected(item.AvailableNetwork, connectionProfiles))
                 {
                     ResultCollection.Insert(0, item);
                     //ResultsListView.SelectedItem = ResultsListView.Items[0];
@@ -104,17 +107,28 @@ namespace WiFiConnect.MkZ.WiFi
                     ResultCollection.Add(item);
                 }
             }
+
+            DiscoverySuccededAction();
             //ResultsListView.Focus(FocusState.Pointer);
         }
 
-        public bool IsConnected(WiFiAvailableNetwork network)
+        public List<ConnectionProfile> ConnectionProfiles
+        {
+            get
+            {
+                _connectionProfiles = new List<ConnectionProfile>(NetworkInformation.GetConnectionProfiles());
+                return _connectionProfiles;
+            }
+        }
+
+        public static bool IsConnected(WiFiAvailableNetwork network, List<ConnectionProfile> connectionProfiles)
         {
             if (network == null)
                 return false;
 
-            string profileName = GetCurrentWifiNetwork();
-            if (!String.IsNullOrEmpty(network.Ssid) &&
-                !String.IsNullOrEmpty(profileName) &&
+            string profileName = GetCurrentWifiNetwork(connectionProfiles);
+            if (!string.IsNullOrEmpty(network.Ssid) &&
+                !string.IsNullOrEmpty(profileName) &&
                 (network.Ssid == profileName))
             {
                 return true;
@@ -123,7 +137,7 @@ namespace WiFiConnect.MkZ.WiFi
             return false;
         }
 
-        public string GetCurrentWifiNetwork()
+        public static string GetCurrentWifiNetwork(IReadOnlyList<ConnectionProfile> connectionProfiles)
         {
             //var connectionProfiles = NetworkInformation.GetConnectionProfiles();
 

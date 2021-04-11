@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
@@ -15,33 +16,35 @@ namespace WiFiConnect.MkZ.WiFi
 {
     public class WiFiNetworkVM
     {
-        private WiFiAdapter adapter;
+        private WiFiAdapter _adapter;
         private static readonly string _assemblyName = Assembly.GetExecutingAssembly().GetName().Name; //"sD.WPF.MessageBox";
+
+        public WiFiAvailableNetwork AvailableNetwork { get; private set; }
 
         public WiFiNetworkVM(WiFiAvailableNetwork availableNetwork, WiFiAdapter adapter)
         {
             AvailableNetwork = availableNetwork;
-            this.adapter = adapter;
+            this._adapter = adapter;
         }
 
-        public async void Update()
+        public void Update()
         {
-            WPF_Helper.ExecuteOnUIThreadWPF(async () => 
+            Func<Task> update = async () =>
             {
                 UpdateWiFiImage();
                 UpdateNetworkKeyVisibility();
                 UpdateHiddenSsidTextBoxVisibility();
                 await UpdateConnectivityLevelAsync();
                 await UpdateWpsPushButtonAvailableAsync();
+            };
 
-                return 0;
-            });
+            WPF_Helper.ExecuteOnUIThreadWPF(update);
         }
 
         private void UpdateHiddenSsidTextBoxVisibility()
         {
             IsHiddenNetwork = string.IsNullOrEmpty(AvailableNetwork.Ssid);
-            OnPropertyChanged("IsHiddenNetwork");
+            OnPropertyChanged(nameof(IsHiddenNetwork));
         }
 
         private void UpdateNetworkKeyVisibility()
@@ -71,8 +74,7 @@ namespace WiFiConnect.MkZ.WiFi
 
             WiFiImage = WPF_Helper.GetResourceImage(imageFileName, _assemblyName);
 
-            OnPropertyChanged("WiFiImage");
-
+            OnPropertyChanged(nameof(WiFiImage));
         }
 
         public async Task UpdateConnectivityLevelAsync()
@@ -80,7 +82,7 @@ namespace WiFiConnect.MkZ.WiFi
             string connectivityLevel = "Not Connected";
             string connectedSsid = null;
 
-            var connectedProfile = await adapter.NetworkAdapter.GetConnectedProfileAsync();
+            var connectedProfile = await _adapter.NetworkAdapter.GetConnectedProfileAsync();
             if (connectedProfile != null &&
                 connectedProfile.IsWlanConnectionProfile &&
                 connectedProfile.WlanConnectionProfileDetails != null)
@@ -98,18 +100,30 @@ namespace WiFiConnect.MkZ.WiFi
             }
 
             ConnectivityLevel = connectivityLevel;
-            OnPropertyChanged("ConnectivityLevel");
+            OnPropertyChanged(nameof(ConnectivityLevel));
+        }
+
+        public ConnectionProfile GetConnectedProfileAsync()
+        {
+            ConnectionProfile connectedProfile = null;
+            Func<Task> get1 = async () =>
+            {
+                connectedProfile = await _adapter.NetworkAdapter.GetConnectedProfileAsync();
+            };
+
+            get1.Invoke();
+            return connectedProfile;
         }
 
         public async Task UpdateWpsPushButtonAvailableAsync()
         {
             IsWpsPushButtonAvailable = await IsWpsPushButtonAvailableAsync();
-            OnPropertyChanged("IsWpsPushButtonAvailable");
+            OnPropertyChanged(nameof(IsWpsPushButtonAvailable));
         }
 
         public void Disconnect()
         {
-            adapter.Disconnect();
+            _adapter.Disconnect();
         }
 
         public bool IsWpsPushButtonAvailable { get; set; }
@@ -121,71 +135,26 @@ namespace WiFiConnect.MkZ.WiFi
         private bool usePassword = false;
         public bool UsePassword
         {
-            get
-            {
-                return usePassword;
-            }
-            set
-            {
-                usePassword = value;
-                OnPropertyChanged("UsePassword");
-            }
+            get { return usePassword; }
+            set { usePassword = value; OnPropertyChanged(); }
         }
 
         private bool connectAutomatically = false;
         public bool ConnectAutomatically
         {
-            get
-            {
-                return connectAutomatically;
-            }
-            set
-            {
-                connectAutomatically = value;
-                OnPropertyChanged("ConnectAutomatically");
-            }
+            get { return connectAutomatically; }
+            set { connectAutomatically = value; OnPropertyChanged(); }
         }
 
-        public String Ssid
-        {
-            get
-            {
-                return string.IsNullOrEmpty(AvailableNetwork.Ssid) ? "Hidden Network" : AvailableNetwork.Ssid;
-            }
-        }
+        public string Ssid => string.IsNullOrEmpty(AvailableNetwork.Ssid) ? "Hidden Network" : AvailableNetwork.Ssid;
 
-        public String Bssid
-        {
-            get
-            {
-                return AvailableNetwork.Bssid;
+        public string Bssid => AvailableNetwork.Bssid;
 
-            }
-        }
+        public string ChannelCenterFrequency => string.Format("{0}kHz", AvailableNetwork.ChannelCenterFrequencyInKilohertz);
 
-        public string ChannelCenterFrequency
-        {
-            get
-            {
-                return string.Format("{0}kHz", AvailableNetwork.ChannelCenterFrequencyInKilohertz);
-            }
-        }
+        public string Rssi => string.Format("{0}dBm", AvailableNetwork.NetworkRssiInDecibelMilliwatts);
 
-        public string Rssi
-        {
-            get
-            {
-                return string.Format("{0}dBm", AvailableNetwork.NetworkRssiInDecibelMilliwatts);
-            }
-        }
-
-        public string SecuritySettings
-        {
-            get
-            {
-                return string.Format("Authentication: {0}; Encryption: {1}", AvailableNetwork.SecuritySettings.NetworkAuthenticationType, AvailableNetwork.SecuritySettings.NetworkEncryptionType);
-            }
-        }
+        public string SecuritySettings => string.Format("Authentication: {0}; Encryption: {1}", AvailableNetwork.SecuritySettings.NetworkAuthenticationType, AvailableNetwork.SecuritySettings.NetworkEncryptionType);
 
         public string ConnectivityLevel
         {
@@ -203,28 +172,28 @@ namespace WiFiConnect.MkZ.WiFi
         public string UserName
         {
             get { return userName; }
-            set { userName = value; OnPropertyChanged("UserName"); }
+            set { userName = value; OnPropertyChanged(); }
         }
 
         private string password;
         public string Password
         {
             get { return password; }
-            set { password = value; OnPropertyChanged("Password"); }
+            set { password = value; OnPropertyChanged(); }
         }
 
         private string domain;
         public string Domain
         {
             get { return domain; }
-            set { domain = value; OnPropertyChanged("Domain"); }
+            set { domain = value; OnPropertyChanged(); }
         }
 
         private string hiddenSsid;
         public string HiddenSsid
         {
             get { return hiddenSsid; }
-            set { hiddenSsid = value; OnPropertyChanged("HiddenSsid"); }
+            set { hiddenSsid = value; OnPropertyChanged(); }
         }
 
         public bool IsEapAvailable
@@ -240,19 +209,27 @@ namespace WiFiConnect.MkZ.WiFi
         {
             if (ApiInformation.IsApiContractPresent("Windows.Foundation.UniversalApiContract", 5, 0))
             {
-                var result = await adapter.GetWpsConfigurationAsync(AvailableNetwork);
+                var result = await _adapter.GetWpsConfigurationAsync(AvailableNetwork);
                 if (result.SupportedWpsKinds.Contains(WiFiWpsKind.PushButton))
                     return true;
             }
 
             return false;
         }
-        public WiFiAvailableNetwork AvailableNetwork { get; private set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged(string name)
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+            WPF_Helper.ExecuteOnUIThreadWPF(() => 
+            { 
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                return 0;
+            });
+        }
+
+        public override string ToString()
+        {
+            return "VM: " + Ssid;
         }
     }
 }

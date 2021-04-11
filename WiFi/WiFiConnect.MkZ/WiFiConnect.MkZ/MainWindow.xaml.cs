@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -18,6 +19,7 @@ using System.Windows.Shapes;
 using WiFiConnect.MkZ.WiFi;
 using Windows.Devices.WiFi;
 using Windows.Foundation.Metadata;
+using Windows.Networking.Connectivity;
 using Windows.Security.Credentials;
 
 namespace WiFiConnect.MkZ
@@ -29,9 +31,26 @@ namespace WiFiConnect.MkZ
     {
         private WiFiConnector WiFiConnector = new WiFiConnector();
 
+        public enum eWifiState
+        {
+            WifiInitialState,
+            WifiConnectState,
+            WifiConnectingState,
+            WifiConnectedState,
+        }
+
         public MainWindow()
         {
             InitializeComponent();
+
+            WiFiConnector.DiscoverySuccededAction = () => 
+            { 
+                ResultsListView.SelectedIndex = 0;
+                if (WiFiConnector.ResultCollection.Count > 0)
+                    Title = WiFiConnector.ResultCollection[0].Ssid + " - WiFi Connect";
+                else
+                    Title = "WiFi Connect";
+            };
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -57,19 +76,19 @@ namespace WiFiConnect.MkZ
 
             foreach (var item in e.RemovedItems)
             {
-                SwitchToItemState(item, "WifiInitialState", true);
+                SwitchToItemState(item, eWifiState.WifiInitialState, true);
             }
 
             foreach (var item in e.AddedItems)
             {
                 var network = item as WiFiNetworkVM;
-                SetSelectedItemState(network);
+                UpdateSelectedItemState(network);
             }
         }
 
-        private ListViewItem SwitchToItemState(object dataContext, string templateKey, bool forceUpdate)
+        private ListViewItem SwitchToItemState(object dataContext, eWifiState templateKey, bool forceUpdate)
         {
-            DataTemplate dataTemplate = FindResource(templateKey) as DataTemplate;
+            DataTemplate dataTemplate = FindResource(templateKey.ToString()) as DataTemplate;
 
             if (forceUpdate)
             {
@@ -90,29 +109,30 @@ namespace WiFiConnect.MkZ
             return item;
         }
 
-        private void SetSelectedItemState(WiFiNetworkVM network)
+        private void UpdateSelectedItemState(WiFiNetworkVM network)
         {
             if (network == null)
                 return;
 
-            if (WiFiConnector.IsConnected(network.AvailableNetwork))
+            List<ConnectionProfile> connectionProfiles = WiFiConnector.ConnectionProfiles;
+            if (WiFiConnector.IsConnected(network.AvailableNetwork, connectionProfiles))
             {
-                SwitchToItemState(network, "WifiConnectedState", true);
+                SwitchToItemState(network, eWifiState.WifiConnectedState, true);
             }
             else
             {
-                SwitchToItemState(network, "WifiConnectState", true);
+                SwitchToItemState(network, eWifiState.WifiConnectState, true);
             }
         }
 
         private void ConnectButton_Click(object sender, RoutedEventArgs e)
         {
-            DoWifiConnect(sender, e, false);
+            DoWifiConnect(false);
         }
 
         private void PushButtonConnect_Click(object sender, RoutedEventArgs e)
         {
-            DoWifiConnect(sender, e, true);
+            DoWifiConnect(true);
         }
 
         private void Disconnect_Click(object sender, RoutedEventArgs e)
@@ -125,10 +145,11 @@ namespace WiFiConnect.MkZ
             }
 
             selectedNetwork.Disconnect();
-            SetSelectedItemState(selectedNetwork);
+            Thread.Sleep(1000);
+            UpdateSelectedItemState(selectedNetwork);
         }
 
-        private async void DoWifiConnect(object sender, RoutedEventArgs e, bool pushButtonConnect)
+        private async void DoWifiConnect(bool pushButtonConnect)
         {
             var selectedNetwork = ResultsListView.SelectedItem as WiFiNetworkVM;
             if (selectedNetwork == null || WiFiConnector.firstAdapter == null)
@@ -195,7 +216,7 @@ namespace WiFiConnect.MkZ
                 }
             }
 
-            SwitchToItemState(selectedNetwork, "WifiConnectingState", false);
+            SwitchToItemState(selectedNetwork, eWifiState.WifiConnectingState, false);
 
             if (didConnect != null)
             {
@@ -216,7 +237,7 @@ namespace WiFiConnect.MkZ
                 ResultsListView.SelectedItem = ResultsListView.Items[0];
                 ResultsListView.ScrollIntoView(ResultsListView.SelectedItem);
 
-                SwitchToItemState(selectedNetwork, "WifiConnectedState", false);
+                SwitchToItemState(selectedNetwork, eWifiState.WifiConnectedState, false);
             }
             else
             {
@@ -227,13 +248,14 @@ namespace WiFiConnect.MkZ
                     WiFiConnector.firstAdapter.Disconnect();
                 }
                 Log(string.Format("Could not connect to {0}. Error: {1}", selectedNetwork.Ssid, (result != null ? result.ConnectionStatus : WiFiConnectionStatus.UnspecifiedFailure)));
-                SwitchToItemState(selectedNetwork, "WifiConnectState", false);
+                
+                SwitchToItemState(selectedNetwork, eWifiState.WifiConnectState, false);
             }
 
             // Since a connection attempt was made, update the connectivity level displayed for each
             foreach (var network in WiFiConnector.ResultCollection)
             {
-                var task = network.UpdateConnectivityLevelAsync();
+                network.UpdateConnectivityLevelAsync();
             }
         }
 

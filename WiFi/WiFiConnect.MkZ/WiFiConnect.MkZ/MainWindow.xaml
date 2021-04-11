@@ -8,7 +8,7 @@
         WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded"
         Background="{Binding Source={x:Static SystemParameters.WindowGlassBrush}}"
-        Title="MainWindow" Height="450" Width="800">
+        Title="WiFi Connect" Height="450" Width="800">
     <Window.Resources>
         <DataTemplate x:Name="WifiInitialState" x:Key="WifiInitialState">
             <StackPanel Orientation="Horizontal">
