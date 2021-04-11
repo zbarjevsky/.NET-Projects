@@ -286,14 +286,15 @@ namespace MkZ.MediaPlayer
 
             if (playList.PlayMode == ePlayMode.RepeatOne)
             {
-                PlayerVM.Play();
+                vm.Position = TimeSpan.FromSeconds(0);
             }
             else if (playList.PlayMode == ePlayMode.PlayOne)
             {
-                
+                vm.Pause();
             }
             else if (playList.PlayMode == ePlayMode.PlayAll && can_play_next)
             {
+                vm.Stop();
                 NextTrack_Executed(bResetPositionAndPlay: true);
             }
             else if (playList.PlayMode == ePlayMode.RepeatAll)
@@ -311,10 +312,11 @@ namespace MkZ.MediaPlayer
             }
             else if (playList.PlayMode == ePlayMode.Random)
             {
-
+                vm.Stop();
             }
             else //no next prev - stop
             {
+                vm.Stop();
                 _reiKiProgress.Pause();
             }
         }

@@ -22,7 +22,6 @@ namespace WiFiConnect.MkZ.WiFi
         {
             AvailableNetwork = availableNetwork;
             this.adapter = adapter;
-            ConnectAutomatically = availableNetwork.Reco
         }
 
         public async void Update()
@@ -164,7 +163,7 @@ namespace WiFiConnect.MkZ.WiFi
             }
         }
 
-        public String ChannelCenterFrequency
+        public string ChannelCenterFrequency
         {
             get
             {
@@ -172,7 +171,7 @@ namespace WiFiConnect.MkZ.WiFi
             }
         }
 
-        public String Rssi
+        public string Rssi
         {
             get
             {
@@ -180,7 +179,7 @@ namespace WiFiConnect.MkZ.WiFi
             }
         }
 
-        public String SecuritySettings
+        public string SecuritySettings
         {
             get
             {
@@ -188,7 +187,7 @@ namespace WiFiConnect.MkZ.WiFi
             }
         }
 
-        public String ConnectivityLevel
+        public string ConnectivityLevel
         {
             get;
             private set;
