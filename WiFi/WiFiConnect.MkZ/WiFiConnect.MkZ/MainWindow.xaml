@@ -175,6 +175,11 @@
         
         <Button x:Name="btnRefresh" Grid.Column="1" Margin="12,6" Width="120" Content="Refresh" Click="btnRefresh_Click"/>
 
+        <TextBox x:Name="txtLog" Grid.Row="2" Grid.Column="0" Margin="4" 
+                 Background="{x:Static SystemColors.InfoBrush}"
+                 TextWrapping="NoWrap"
+                 HorizontalScrollBarVisibility="Auto" />
+
         <Border Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Margin="10"  BorderBrush="AntiqueWhite" BorderThickness="1">
             <ListView x:Name="ResultsListView" SelectionMode="Single" 
                       ScrollViewer.VerticalScrollBarVisibility="Auto" ScrollViewer.CanContentScroll="False"

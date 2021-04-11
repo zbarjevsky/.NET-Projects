@@ -47,13 +47,18 @@ namespace MkZ.MediaPlayer.Utils
 
         public void CopyFrom(Window wnd)
         {
+            bool bFullScreen = wnd.WindowStyle == WindowStyle.None;
+
             if (!wnd.RestoreBounds.IsEmpty)
                 Bounds = wnd.RestoreBounds;
             else if(wnd.WindowState == WindowState.Normal)
                 Bounds = new Rect(wnd.Left, wnd.Top, wnd.ActualWidth, wnd.ActualHeight);
 
-            WindowState = wnd.WindowState;
             WindowStyle = wnd.WindowStyle;
+            if (!bFullScreen)
+            {
+                WindowState = wnd.WindowState;
+            }
         }
 
         public void CopyFrom(MainWindowState state)

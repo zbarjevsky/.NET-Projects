@@ -712,7 +712,7 @@ namespace MkZ.MediaPlayer
 
         private void VideoPlayerElement_MediaEnded(object sender, RoutedEventArgs e)
         {
-            Stop();
+            Pause();
             State.CopyFrom(this, _scrollDragger);
             MediaEndedAction(this);
         }

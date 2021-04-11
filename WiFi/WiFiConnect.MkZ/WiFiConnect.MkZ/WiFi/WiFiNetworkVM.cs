@@ -22,6 +22,7 @@ namespace WiFiConnect.MkZ.WiFi
         {
             AvailableNetwork = availableNetwork;
             this.adapter = adapter;
+            ConnectAutomatically = availableNetwork.Reco
         }
 
         public async void Update()

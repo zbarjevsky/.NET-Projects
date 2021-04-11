@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,9 @@ using System.Windows.Shapes;
 
 
 using WiFiConnect.MkZ.WiFi;
+using Windows.Devices.WiFi;
+using Windows.Foundation.Metadata;
+using Windows.Security.Credentials;
 
 namespace WiFiConnect.MkZ
 {
@@ -71,11 +75,18 @@ namespace WiFiConnect.MkZ
             {
                 ResultsListView.UpdateLayout();
             }
+            
             var item = ResultsListView.ItemContainerGenerator.ContainerFromItem(dataContext) as ListViewItem;
             if (item != null)
             {
                 item.ContentTemplate = dataTemplate;
             }
+
+            if (forceUpdate)
+            {
+                ResultsListView.UpdateLayout();
+            }
+            
             return item;
         }
 
@@ -96,17 +107,140 @@ namespace WiFiConnect.MkZ
 
         private void ConnectButton_Click(object sender, RoutedEventArgs e)
         {
-
+            DoWifiConnect(sender, e, false);
         }
 
         private void PushButtonConnect_Click(object sender, RoutedEventArgs e)
         {
-
+            DoWifiConnect(sender, e, true);
         }
 
         private void Disconnect_Click(object sender, RoutedEventArgs e)
         {
+            var selectedNetwork = ResultsListView.SelectedItem as WiFiNetworkVM;
+            if (selectedNetwork == null || WiFiConnector.firstAdapter == null)
+            {
+                Log("Network not selected");
+                return;
+            }
 
+            selectedNetwork.Disconnect();
+            SetSelectedItemState(selectedNetwork);
+        }
+
+        private async void DoWifiConnect(object sender, RoutedEventArgs e, bool pushButtonConnect)
+        {
+            var selectedNetwork = ResultsListView.SelectedItem as WiFiNetworkVM;
+            if (selectedNetwork == null || WiFiConnector.firstAdapter == null)
+            {
+                Log("Network not selected");
+                return;
+            }
+
+            var ssid = selectedNetwork.AvailableNetwork.Ssid;
+            if (string.IsNullOrEmpty(ssid))
+            {
+                if (string.IsNullOrEmpty(selectedNetwork.HiddenSsid))
+                {
+                    Log("Ssid required for connection to hidden network.");
+                    return;
+                }
+                else
+                {
+                    ssid = selectedNetwork.HiddenSsid;
+                }
+            }
+
+            WiFiReconnectionKind reconnectionKind = WiFiReconnectionKind.Manual;
+            if (selectedNetwork.ConnectAutomatically)
+            {
+                reconnectionKind = WiFiReconnectionKind.Automatic;
+            }
+
+            Task<WiFiConnectionResult> didConnect = null;
+            WiFiConnectionResult result = null;
+            if (pushButtonConnect)
+            {
+                if (ApiInformation.IsApiContractPresent("Windows.Foundation.UniversalApiContract", 5, 0))
+                {
+                    didConnect = WiFiConnector.firstAdapter.ConnectAsync(selectedNetwork.AvailableNetwork, reconnectionKind, null, string.Empty, WiFiConnectionMethod.WpsPushButton).AsTask();
+                }
+            }
+            else
+            {
+                PasswordCredential credential = new PasswordCredential();
+                if (selectedNetwork.IsEapAvailable && selectedNetwork.UsePassword)
+                {
+                    if (!String.IsNullOrEmpty(selectedNetwork.Domain))
+                    {
+                        credential.Resource = selectedNetwork.Domain;
+                    }
+
+                    credential.UserName = selectedNetwork.UserName ?? "";
+                    credential.Password = selectedNetwork.Password ?? "";
+                }
+                else if (!String.IsNullOrEmpty(selectedNetwork.Password))
+                {
+                    credential.Password = selectedNetwork.Password;
+                }
+
+                if (selectedNetwork.IsHiddenNetwork)
+                {
+                    // Hidden networks require the SSID to be supplied
+                    didConnect = WiFiConnector.firstAdapter.ConnectAsync(selectedNetwork.AvailableNetwork, reconnectionKind, credential, ssid).AsTask();
+                }
+                else
+                {
+                    didConnect = WiFiConnector.firstAdapter.ConnectAsync(selectedNetwork.AvailableNetwork, reconnectionKind, credential).AsTask();
+                }
+            }
+
+            SwitchToItemState(selectedNetwork, "WifiConnectingState", false);
+
+            if (didConnect != null)
+            {
+                result = await didConnect;
+            }
+
+            if (result != null && result.ConnectionStatus == WiFiConnectionStatus.Success)
+            {
+                Log(string.Format("Successfully connected to {0}.", selectedNetwork.Ssid));
+
+                // refresh the webpage
+                //webViewGrid.Visibility = Visibility.Visible;
+                //toggleBrowserButton.Content = "Hide Browser Control";
+                //refreshBrowserButton.Visibility = Visibility.Visible;
+
+                WiFiConnector.ResultCollection.Remove(selectedNetwork);
+                WiFiConnector.ResultCollection.Insert(0, selectedNetwork);
+                ResultsListView.SelectedItem = ResultsListView.Items[0];
+                ResultsListView.ScrollIntoView(ResultsListView.SelectedItem);
+
+                SwitchToItemState(selectedNetwork, "WifiConnectedState", false);
+            }
+            else
+            {
+                // Entering the wrong password may cause connection attempts to timeout
+                // Disconnecting the adapter will return it to a non-busy state
+                if (result.ConnectionStatus == WiFiConnectionStatus.Timeout)
+                {
+                    WiFiConnector.firstAdapter.Disconnect();
+                }
+                Log(string.Format("Could not connect to {0}. Error: {1}", selectedNetwork.Ssid, (result != null ? result.ConnectionStatus : WiFiConnectionStatus.UnspecifiedFailure)));
+                SwitchToItemState(selectedNetwork, "WifiConnectState", false);
+            }
+
+            // Since a connection attempt was made, update the connectivity level displayed for each
+            foreach (var network in WiFiConnector.ResultCollection)
+            {
+                var task = network.UpdateConnectivityLevelAsync();
+            }
+        }
+
+        private void Log(string log)
+        {
+            Debug.WriteLine(log);
+            txtLog.Text += (log + "\n");
         }
     }
 }

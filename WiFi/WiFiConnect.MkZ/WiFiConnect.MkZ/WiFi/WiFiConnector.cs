@@ -16,7 +16,7 @@ namespace WiFiConnect.MkZ.WiFi
     //https://docs.microsoft.com/en-us/windows/apps/desktop/modernize/desktop-to-uwp-enhance
     public class WiFiConnector
     {
-        private WiFiAdapter firstAdapter;
+        public WiFiAdapter firstAdapter { get; private set; }
         private IReadOnlyList<ConnectionProfile> connectionProfiles;
 
         public ObservableCollection<WiFiNetworkVM> ResultCollection { get; } = new ObservableCollection<WiFiNetworkVM>();
@@ -146,5 +146,6 @@ namespace WiFiConnect.MkZ.WiFi
 
             return firstProfile.ProfileName;
         }
+
     }
 }

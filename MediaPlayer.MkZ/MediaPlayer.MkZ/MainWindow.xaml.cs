@@ -288,6 +288,10 @@ namespace MkZ.MediaPlayer
             {
                 PlayerVM.Play();
             }
+            else if (playList.PlayMode == ePlayMode.PlayOne)
+            {
+                
+            }
             else if (playList.PlayMode == ePlayMode.PlayAll && can_play_next)
             {
                 NextTrack_Executed(bResetPositionAndPlay: true);
@@ -371,7 +375,8 @@ namespace MkZ.MediaPlayer
                 rowHeader.Height = _hideHeaderAnimationHelper.InitialRowHeight; //no animation
 
                 this.WindowStyle = WindowStyle.ThreeDBorderWindow;
-                this.WindowState = WindowState.Normal;
+                this.WindowState = Context.AppConfig.Settings.MainWindowState.WindowState;
+
                 PlayerVM.IsFullScreen = false;
             }
             else //go full screen
