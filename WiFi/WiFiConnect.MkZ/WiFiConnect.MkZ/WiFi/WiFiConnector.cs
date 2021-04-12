@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MkZ.WPF;
+using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -11,20 +12,40 @@ using Windows.Networking.Connectivity;
 
 namespace WiFiConnect.MkZ.WiFi
 {
+    public enum SortOrder
+    {
+        Ascending,
+        Descending,
+        Secured,
+        Open,
+        Strength,
+    }
+
     //https://docs.microsoft.com/en-us/samples/microsoft/windows-iotcore-samples/wifi-connector/
     //https://www.thomasclaudiushuber.com/2019/04/26/calling-windows-10-apis-from-your-wpf-application/
     //https://docs.microsoft.com/en-us/windows/apps/desktop/modernize/desktop-to-uwp-enhance
     public class WiFiConnector
     {
-        public WiFiAdapter firstAdapter { get; private set; }
+        public WiFiAdapter _firstAdapter { get; private set; }
         private List<ConnectionProfile> _connectionProfiles;
+        public ILog Log { get; }
 
-        public ObservableCollection<WiFiNetworkVM> ResultCollection { get; } = new ObservableCollection<WiFiNetworkVM>();
+        public ObservableCollection<WiFiNetworkVM> ResultCollection { get; private set; }
 
         public Action DiscoverySuccededAction = () => { };
 
+        public Action<WiFiAdapter, object> AvailableNetworksChanged = (adapter, o) => { };
+
+        public WiFiConnector(ILog log)
+        {
+            Log = log;
+        }
+
         public async void DiscoverAllWiFiAdapters()
         {
+            if (ResultCollection != null)
+                ResultCollection.Clear();
+
             // RequestAccessAsync must have been called at least once by the app before using the API
             // Calling it multiple times is fine but not necessary
             // RequestAccessAsync must be called from the UI thread
@@ -35,22 +56,39 @@ namespace WiFiConnect.MkZ.WiFi
             }
             else
             {
-                var result = await Windows.Devices.Enumeration.DeviceInformation.FindAllAsync(WiFiAdapter.GetDeviceSelector());
-                if (result.Count >= 1)
+                //var result = await Windows.Devices.Enumeration.DeviceInformation.FindAllAsync(WiFiAdapter.GetDeviceSelector());
+                await Task.Factory.StartNew(async () =>
                 {
-                    firstAdapter = await WiFiAdapter.FromIdAsync(result[0].Id);
-                    ScanWiFi(firstAdapter);
-                    //var button = new Button();
-                    //button.Content = string.Format("Scan Available Wifi Networks");
-                    //button.Click += Button_Click;
-                    //Buttons.Children.Add(button);
-                }
-                else
-                {
-                    firstAdapter = null;
-                    Debug.WriteLine("No WiFi Adapters detected on this machine.");
-                }
+                    var result = await WiFiAdapter.FindAllAdaptersAsync();
+                    if (result.Count >= 1)
+                    {
+                        if (_firstAdapter != null)
+                            _firstAdapter.AvailableNetworksChanged -= FirstAdapter_AvailableNetworksChanged;
+
+                        //_firstAdapter = await WiFiAdapter.FromIdAsync(result[0].Id);
+                        _firstAdapter = result[0];
+
+                        _firstAdapter.AvailableNetworksChanged += FirstAdapter_AvailableNetworksChanged;
+
+                        ScanWiFi(_firstAdapter);
+                    }
+                    else
+                    {
+                        _firstAdapter = null;
+                        Debug.WriteLine("No WiFi Adapters detected on this machine.");
+                    }
+                });
             }
+        }
+
+        private void FirstAdapter_AvailableNetworksChanged(WiFiAdapter sender, object args)
+        {
+            Log.Log("AvailableNetworksChanged");
+
+            if (ResultCollection == null)
+                return;
+
+            AvailableNetworksChanged(sender, args);
         }
 
         private async void ScanWiFi(WiFiAdapter firstAdapter)
@@ -61,7 +99,7 @@ namespace WiFiConnect.MkZ.WiFi
             }
             catch (Exception err)
             {
-                Debug.WriteLine(String.Format("Error scanning WiFi adapter: 0x{0:X}: {1}", err.HResult, err.Message));
+                Log.Log("Error scanning WiFi adapter: 0x{0:X}: {1}", err.HResult, err.Message);
                 return;
             }
 
@@ -70,16 +108,16 @@ namespace WiFiConnect.MkZ.WiFi
 
         private void DisplayNetworkReport(WiFiNetworkReport report)
         {
-            Debug.WriteLine(string.Format("Network Report Timestamp: {0}", report.Timestamp));
+            Log.Log("Network Report Timestamp: {0}", report.Timestamp);
 
-            ResultCollection.Clear();
+            ResultCollection = new ObservableCollection<WiFiNetworkVM>();
             ConcurrentDictionary<string, WiFiNetworkVM> dictionary = new ConcurrentDictionary<string, WiFiNetworkVM>();
 
             List<ConnectionProfile> connectionProfiles = ConnectionProfiles;
 
             foreach (var network in report.AvailableNetworks)
             {
-                var item = new WiFiNetworkVM(network, firstAdapter);
+                var item = new WiFiNetworkVM(network, _firstAdapter, Log);
                 if (!String.IsNullOrEmpty(network.Ssid))
                 {
                     dictionary.TryAdd(network.Ssid, item);
@@ -112,11 +150,46 @@ namespace WiFiConnect.MkZ.WiFi
             //ResultsListView.Focus(FocusState.Pointer);
         }
 
+        public void SortResults(SortOrder order)
+        {
+            IOrderedEnumerable<WiFiNetworkVM> sorted = null;
+            switch (order)
+            {
+                case SortOrder.Ascending:
+                    sorted = ResultCollection.OrderBy(n => n.Ssid);
+                    break;
+                case SortOrder.Descending:
+                    sorted = ResultCollection.OrderByDescending(n => n.Ssid);
+                    break;
+                case SortOrder.Secured:
+                    break;
+                case SortOrder.Open:
+                    break;
+                case SortOrder.Strength:
+                    break;
+                default:
+                    break;
+            }
+
+            if(sorted != null)
+            {
+                List<WiFiNetworkVM> vms = new List<WiFiNetworkVM>(sorted);
+                ResultCollection.Clear();
+                foreach (WiFiNetworkVM vm in vms)
+                {
+                    ResultCollection.Add(vm);
+                }
+            }
+        }
+
         public List<ConnectionProfile> ConnectionProfiles
         {
             get
             {
-                _connectionProfiles = new List<ConnectionProfile>(NetworkInformation.GetConnectionProfiles());
+                _connectionProfiles = WPF_Helper.ExecuteOnWorkerThread(() =>
+                {
+                    return new List<ConnectionProfile>(NetworkInformation.GetConnectionProfiles());
+                });
                 return _connectionProfiles;
             }
         }
@@ -146,10 +219,19 @@ namespace WiFiConnect.MkZ.WiFi
                 return null;
             }
 
-            var validProfiles = connectionProfiles.Where(profile =>
+            var validProfiles = WPF_Helper.ExecuteOnUIThreadWPF(() =>
             {
-                return (profile.IsWlanConnectionProfile && profile.GetNetworkConnectivityLevel() != NetworkConnectivityLevel.None);
+                return connectionProfiles.Where(profile =>
+                {
+                    NetworkConnectivityLevel level = WPF_Helper.ExecuteOnWorkerThread(() => { return profile.GetNetworkConnectivityLevel(); });
+                    return (profile.IsWlanConnectionProfile && level != NetworkConnectivityLevel.None);
+                });
             });
+
+            //var validProfiles = connectionProfiles.Where(profile =>
+            //{
+            //    return (profile.IsWlanConnectionProfile && profile.GetNetworkConnectivityLevel() != NetworkConnectivityLevel.None);
+            //});
 
             if (validProfiles.Count() < 1)
             {

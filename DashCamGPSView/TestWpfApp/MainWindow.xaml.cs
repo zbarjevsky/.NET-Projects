@@ -14,8 +14,8 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using DashCamGPSView.Tools;
 
-using MZ.Tools;
-using MZ.WPF;
+using MkZ.Tools;
+using MkZ.WPF;
 
 namespace TestWpfApp
 {

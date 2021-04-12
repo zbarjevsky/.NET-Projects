@@ -4,11 +4,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WiFiConnect.MkZ"
+        xmlns:wifi="clr-namespace:WiFiConnect.MkZ.WiFi"
+        xmlns:gif="clr-namespace:WpfAnimatedGif;assembly=Framework.MkZ"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded"
         Background="{Binding Source={x:Static SystemParameters.WindowGlassBrush}}"
-        Title="WiFi Connect" Height="450" Width="800">
+        Foreground="{Binding Source={x:Static SystemColors.HighlightTextBrush}}"
+        Title="WiFi Connect" Height="750" Width="800">
     <Window.Resources>
         <DataTemplate x:Name="WifiInitialState" x:Key="WifiInitialState">
             <StackPanel Orientation="Horizontal">
@@ -165,20 +168,32 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition Width="2*"/>
-            <ColumnDefinition/>
+            <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        
-        <Button x:Name="btnRefresh" Grid.Column="1" Margin="12,6" Width="120" Content="Refresh" Click="btnRefresh_Click"/>
 
-        <TextBox x:Name="txtLog" Grid.Row="2" Grid.Column="0" Margin="4" 
+        <DockPanel Grid.ColumnSpan="3">
+            <Button x:Name="btnRefreshList" Margin="12,6" Width="120" Content="Update List" Click="btnUpdateList_Click"/>
+            <Button x:Name="btnRefreshStatus" Margin="12,6" Width="120" Content="Update Status" Click="btnUpdateStatus_Click"/>
+            <Label Content="Sort:" />
+            <ComboBox x:Name="cmbSort" Margin="4" SelectedIndex="0" SelectionChanged="cmbSort_SelectionChanged" >
+                <ComboBoxItem Content="{x:Static wifi:SortOrder.Ascending}" IsSelected="True" />
+                <ComboBoxItem Content="{x:Static wifi:SortOrder.Descending}" />
+                <ComboBoxItem Content="{x:Static wifi:SortOrder.Secured}" />
+                <ComboBoxItem Content="{x:Static wifi:SortOrder.Open}" />
+                <ComboBoxItem Content="{x:Static wifi:SortOrder.Strength}" />
+            </ComboBox>
+            <ProgressBar x:Name="progress" Margin="4"/>
+        </DockPanel>
+
+        <TextBox x:Name="txtLog" Grid.Row="1" Grid.RowSpan="2" Grid.Column="2" Margin="10" 
                  Background="{x:Static SystemColors.InfoBrush}"
                  TextWrapping="NoWrap"
-                 HorizontalScrollBarVisibility="Auto" />
+                 HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" />
 
         <Border Grid.Row="1" Grid.Column="1" Grid.RowSpan="2" Margin="10"  BorderBrush="AntiqueWhite" BorderThickness="1">
             <ListView x:Name="ResultsListView" SelectionMode="Single" 
@@ -190,5 +205,12 @@
                       SelectionChanged="ResultsListView_SelectionChanged">
             </ListView>
         </Border>
+        
+        <Image x:Name="animatedImage" Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="3" Margin="10" 
+               Stretch="Uniform" HorizontalAlignment="Center" Opacity="0.1" 
+                           gif:ImageBehavior.AnimateInDesignMode="True"
+                           gif:ImageBehavior.RepeatBehavior="Forever"
+                           gif:ImageBehavior.AnimatedSource="/Images/CatAni.gif"/>
+
     </Grid>
 </Window>

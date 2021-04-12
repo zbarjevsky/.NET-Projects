@@ -87,26 +87,6 @@
     <Compile Include="Controls\WaitScreenUserControl.xaml.cs">
       <DependentUpon>WaitScreenUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\WpfAnimatedGif\AnimationCache.cs" />
-    <Compile Include="Controls\WpfAnimatedGif\Decoding\GifApplicationExtension.cs" />
-    <Compile Include="Controls\WpfAnimatedGif\Decoding\GifBlock.cs" />
-    <Compile Include="Controls\WpfAnimatedGif\Decoding\GifBlockKind.cs" />
-    <Compile Include="Controls\WpfAnimatedGif\Decoding\GifColor.cs" />
-    <Compile Include="Controls\WpfAnimatedGif\Decoding\GifCommentExtension.cs" />
-    <Compile Include="Controls\WpfAnimatedGif\Decoding\GifDecoderException.cs" />
-    <Compile Include="Controls\WpfAnimatedGif\Decoding\GifExtension.cs" />
-    <Compile Include="Controls\WpfAnimatedGif\Decoding\GifFile.cs" />
-    <Compile Include="Controls\WpfAnimatedGif\Decoding\GifFrame.cs" />
-    <Compile Include="Controls\WpfAnimatedGif\Decoding\GifGraphicControlExtension.cs" />
-    <Compile Include="Controls\WpfAnimatedGif\Decoding\GifHeader.cs" />
-    <Compile Include="Controls\WpfAnimatedGif\Decoding\GifHelpers.cs" />
-    <Compile Include="Controls\WpfAnimatedGif\Decoding\GifImageData.cs" />
-    <Compile Include="Controls\WpfAnimatedGif\Decoding\GifImageDescriptor.cs" />
-    <Compile Include="Controls\WpfAnimatedGif\Decoding\GifLogicalScreenDescriptor.cs" />
-    <Compile Include="Controls\WpfAnimatedGif\Decoding\GifPlainTextExtension.cs" />
-    <Compile Include="Controls\WpfAnimatedGif\Decoding\GifTrailer.cs" />
-    <Compile Include="Controls\WpfAnimatedGif\ImageAnimationController.cs" />
-    <Compile Include="Controls\WpfAnimatedGif\ImageBehavior.cs" />
     <Compile Include="CustomMarkers\CustomMarkerBase.cs" />
     <Compile Include="CustomMarkers\CustomMarkerCar.xaml.cs">
       <DependentUpon>CustomMarkerCar.xaml</DependentUpon>

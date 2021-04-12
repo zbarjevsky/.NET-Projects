@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MkZ.WPF;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -27,9 +28,9 @@ namespace WiFiConnect.MkZ
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, ILog
     {
-        private WiFiConnector WiFiConnector = new WiFiConnector();
+        private WiFiConnector WiFiConnector { get; }
 
         public enum eWifiState
         {
@@ -43,26 +44,38 @@ namespace WiFiConnect.MkZ
         {
             InitializeComponent();
 
+            WiFiConnector = new WiFiConnector(this);
+
             WiFiConnector.DiscoverySuccededAction = () => 
-            { 
-                ResultsListView.SelectedIndex = 0;
-                if (WiFiConnector.ResultCollection.Count > 0)
-                    Title = WiFiConnector.ResultCollection[0].Ssid + " - WiFi Connect";
-                else
-                    Title = "WiFi Connect";
+            {
+                WPF_Helper.ExecuteOnUIThreadWPF(() =>
+                {
+                    ResultsListView.ItemsSource = WiFiConnector.ResultCollection;
+                    ResultsListView.SelectedIndex = 0;
+                    if (WiFiConnector.ResultCollection.Count > 0)
+                        Title = WiFiConnector.ResultCollection[0].Ssid + " - WiFi Connect";
+                    else
+                        Title = "WiFi Connect";
+
+                    animatedImage.Visibility = Visibility.Collapsed;
+
+                    return 0;
+                });
+            };
+
+            WiFiConnector.AvailableNetworksChanged = (adapter, o) =>
+            {
+                WPF_Helper.ExecuteOnUIThreadWPF(() =>
+                {
+                    var selectedNetwork = ResultsListView.SelectedItem as WiFiNetworkVM;
+                    UpdateSelectedItemState(selectedNetwork);
+                    return 0;
+                });
             };
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            ResultsListView.ItemsSource = WiFiConnector.ResultCollection;
-
-            WiFiConnector.DiscoverAllWiFiAdapters();
-        }
-
-        private void btnRefresh_Click(object sender, RoutedEventArgs e)
-        {
-            WiFiConnector.ResultCollection.Clear();
             WiFiConnector.DiscoverAllWiFiAdapters();
         }
 
@@ -138,21 +151,21 @@ namespace WiFiConnect.MkZ
         private void Disconnect_Click(object sender, RoutedEventArgs e)
         {
             var selectedNetwork = ResultsListView.SelectedItem as WiFiNetworkVM;
-            if (selectedNetwork == null || WiFiConnector.firstAdapter == null)
+            if (selectedNetwork == null || WiFiConnector._firstAdapter == null)
             {
                 Log("Network not selected");
                 return;
             }
 
             selectedNetwork.Disconnect();
-            Thread.Sleep(1000);
+            Thread.Sleep(500);
             UpdateSelectedItemState(selectedNetwork);
         }
 
         private async void DoWifiConnect(bool pushButtonConnect)
         {
             var selectedNetwork = ResultsListView.SelectedItem as WiFiNetworkVM;
-            if (selectedNetwork == null || WiFiConnector.firstAdapter == null)
+            if (selectedNetwork == null || WiFiConnector._firstAdapter == null)
             {
                 Log("Network not selected");
                 return;
@@ -184,7 +197,7 @@ namespace WiFiConnect.MkZ
             {
                 if (ApiInformation.IsApiContractPresent("Windows.Foundation.UniversalApiContract", 5, 0))
                 {
-                    didConnect = WiFiConnector.firstAdapter.ConnectAsync(selectedNetwork.AvailableNetwork, reconnectionKind, null, string.Empty, WiFiConnectionMethod.WpsPushButton).AsTask();
+                    didConnect = WiFiConnector._firstAdapter.ConnectAsync(selectedNetwork.AvailableNetwork, reconnectionKind, null, string.Empty, WiFiConnectionMethod.WpsPushButton).AsTask();
                 }
             }
             else
@@ -208,11 +221,11 @@ namespace WiFiConnect.MkZ
                 if (selectedNetwork.IsHiddenNetwork)
                 {
                     // Hidden networks require the SSID to be supplied
-                    didConnect = WiFiConnector.firstAdapter.ConnectAsync(selectedNetwork.AvailableNetwork, reconnectionKind, credential, ssid).AsTask();
+                    didConnect = WiFiConnector._firstAdapter.ConnectAsync(selectedNetwork.AvailableNetwork, reconnectionKind, credential, ssid).AsTask();
                 }
                 else
                 {
-                    didConnect = WiFiConnector.firstAdapter.ConnectAsync(selectedNetwork.AvailableNetwork, reconnectionKind, credential).AsTask();
+                    didConnect = WiFiConnector._firstAdapter.ConnectAsync(selectedNetwork.AvailableNetwork, reconnectionKind, credential).AsTask();
                 }
             }
 
@@ -245,7 +258,7 @@ namespace WiFiConnect.MkZ
                 // Disconnecting the adapter will return it to a non-busy state
                 if (result.ConnectionStatus == WiFiConnectionStatus.Timeout)
                 {
-                    WiFiConnector.firstAdapter.Disconnect();
+                    WiFiConnector._firstAdapter.Disconnect();
                 }
                 Log(string.Format("Could not connect to {0}. Error: {1}", selectedNetwork.Ssid, (result != null ? result.ConnectionStatus : WiFiConnectionStatus.UnspecifiedFailure)));
                 
@@ -255,14 +268,48 @@ namespace WiFiConnect.MkZ
             // Since a connection attempt was made, update the connectivity level displayed for each
             foreach (var network in WiFiConnector.ResultCollection)
             {
-                network.UpdateConnectivityLevelAsync();
+                var task = network.UpdateConnectivityLevelAsync();
             }
         }
 
-        private void Log(string log)
+        public void Log(string format, params object[] args)
         {
-            Debug.WriteLine(log);
-            txtLog.Text += (log + "\n");
+            string time = DateTime.Now.ToString("HH:mm:ss.fff");
+            string log = time + " - " + string.Format(format, args) + "\n";
+
+            Debug.Write(log);
+
+            WPF_Helper.ExecuteOnUIThreadWPF(() => { txtLog.Text += log; return 0; });
+        }
+
+        private void cmbSort_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (WiFiConnector == null)
+                return;
+
+            if (cmbSort.SelectedItem is ComboBoxItem item)
+                if (item.Content is SortOrder order)
+                {
+                    WiFiConnector.SortResults(order);
+                    ResultsListView.ItemsSource = WiFiConnector.ResultCollection;
+                }
+        }
+
+        private void btnUpdateList_Click(object sender, RoutedEventArgs e)
+        {
+            animatedImage.Visibility = Visibility.Visible;
+            WiFiConnector.DiscoverAllWiFiAdapters();
+        }
+
+        private void btnUpdateStatus_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var network in WiFiConnector.ResultCollection)
+            {
+                var task = network.UpdateConnectivityLevelAsync();
+            }
+
+            var selectedNetwork = ResultsListView.SelectedItem as WiFiNetworkVM;
+            UpdateSelectedItemState(selectedNetwork);
         }
     }
 }

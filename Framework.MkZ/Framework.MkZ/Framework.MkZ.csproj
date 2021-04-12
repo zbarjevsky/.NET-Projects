@@ -282,6 +282,26 @@
       <DependentUpon>SimpleClockControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="WPF\SmartObservableCollection.cs" />
+    <Compile Include="WPF\WpfAnimatedGif\AnimationCache.cs" />
+    <Compile Include="WPF\WpfAnimatedGif\Decoding\GifApplicationExtension.cs" />
+    <Compile Include="WPF\WpfAnimatedGif\Decoding\GifBlock.cs" />
+    <Compile Include="WPF\WpfAnimatedGif\Decoding\GifBlockKind.cs" />
+    <Compile Include="WPF\WpfAnimatedGif\Decoding\GifColor.cs" />
+    <Compile Include="WPF\WpfAnimatedGif\Decoding\GifCommentExtension.cs" />
+    <Compile Include="WPF\WpfAnimatedGif\Decoding\GifDecoderException.cs" />
+    <Compile Include="WPF\WpfAnimatedGif\Decoding\GifExtension.cs" />
+    <Compile Include="WPF\WpfAnimatedGif\Decoding\GifFile.cs" />
+    <Compile Include="WPF\WpfAnimatedGif\Decoding\GifFrame.cs" />
+    <Compile Include="WPF\WpfAnimatedGif\Decoding\GifGraphicControlExtension.cs" />
+    <Compile Include="WPF\WpfAnimatedGif\Decoding\GifHeader.cs" />
+    <Compile Include="WPF\WpfAnimatedGif\Decoding\GifHelpers.cs" />
+    <Compile Include="WPF\WpfAnimatedGif\Decoding\GifImageData.cs" />
+    <Compile Include="WPF\WpfAnimatedGif\Decoding\GifImageDescriptor.cs" />
+    <Compile Include="WPF\WpfAnimatedGif\Decoding\GifLogicalScreenDescriptor.cs" />
+    <Compile Include="WPF\WpfAnimatedGif\Decoding\GifPlainTextExtension.cs" />
+    <Compile Include="WPF\WpfAnimatedGif\Decoding\GifTrailer.cs" />
+    <Compile Include="WPF\WpfAnimatedGif\ImageAnimationController.cs" />
+    <Compile Include="WPF\WpfAnimatedGif\ImageBehavior.cs" />
     <Compile Include="WPF\WPFExtensionMethods.cs" />
     <Compile Include="WPF\WPFMessageBox\MessageWindow.xaml.cs">
       <DependentUpon>MessageWindow.xaml</DependentUpon>

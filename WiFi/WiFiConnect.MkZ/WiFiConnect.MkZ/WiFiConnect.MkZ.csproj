@@ -58,6 +58,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ILog.cs" />
     <Compile Include="WiFi\WiFiConnector.cs" />
     <Compile Include="WiFi\WiFiNetworkVM.cs" />
     <Page Include="MainWindow.xaml">
@@ -127,6 +128,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="secure_5bar.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\CatAni.gif" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

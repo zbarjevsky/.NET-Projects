@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Runtime.ExceptionServices;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media;
@@ -213,6 +214,15 @@ namespace MkZ.WPF
             {
                 return action.Invoke();
             }
+        }
+
+        public static T ExecuteOnWorkerThread<T>(Func<T> func)
+        {
+            T result = default(T);
+            Action action = () => { result = func.Invoke(); };
+            Task task = Task.Factory.StartNew(action);
+            task.Wait();
+            return result;
         }
 
         public static System.Windows.Forms.Form TopmostForm()

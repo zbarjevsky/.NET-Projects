@@ -21,8 +21,11 @@ namespace WiFiConnect.MkZ.WiFi
 
         public WiFiAvailableNetwork AvailableNetwork { get; private set; }
 
-        public WiFiNetworkVM(WiFiAvailableNetwork availableNetwork, WiFiAdapter adapter)
+        public ILog Log { get; }
+
+        public WiFiNetworkVM(WiFiAvailableNetwork availableNetwork, WiFiAdapter adapter, ILog log)
         {
+            Log = log;
             AvailableNetwork = availableNetwork;
             this._adapter = adapter;
         }
@@ -82,21 +85,29 @@ namespace WiFiConnect.MkZ.WiFi
             string connectivityLevel = "Not Connected";
             string connectedSsid = null;
 
-            var connectedProfile = await _adapter.NetworkAdapter.GetConnectedProfileAsync();
-            if (connectedProfile != null &&
-                connectedProfile.IsWlanConnectionProfile &&
-                connectedProfile.WlanConnectionProfileDetails != null)
+            try
             {
-                connectedSsid = connectedProfile.WlanConnectionProfileDetails.GetConnectedSsid();
-            }
-
-            if (!string.IsNullOrEmpty(connectedSsid))
-            {
-                if (connectedSsid.Equals(AvailableNetwork.Ssid) ||
-                    connectedSsid.Equals(HiddenSsid))
+                ConnectionProfile connectedProfile = await _adapter.NetworkAdapter.GetConnectedProfileAsync();
+                if (connectedProfile != null &&
+                    connectedProfile.IsWlanConnectionProfile &&
+                    connectedProfile.WlanConnectionProfileDetails != null)
                 {
-                    connectivityLevel = connectedProfile.GetNetworkConnectivityLevel().ToString();
+                    connectedSsid = connectedProfile.WlanConnectionProfileDetails.GetConnectedSsid();
                 }
+
+                if (!string.IsNullOrWhiteSpace(connectedSsid))
+                {
+                    if (connectedSsid.Equals(AvailableNetwork.Ssid) ||
+                        connectedSsid.Equals(HiddenSsid))
+                    {
+                        NetworkConnectivityLevel level = WPF_Helper.ExecuteOnWorkerThread(() => connectedProfile.GetNetworkConnectivityLevel());
+                        connectivityLevel = level.ToString();
+                    }
+                }
+            }
+            catch (Exception err)
+            {
+                Log.Log("UpdateConnectivityLevelAsync - {0} Err: {1}", connectedSsid, err.Message);
             }
 
             ConnectivityLevel = connectivityLevel;
