@@ -388,6 +388,7 @@ namespace MkZ.MediaPlayer
                 rowHeader.Height = new GridLength(0);
 
                 this.WindowStyle = WindowStyle.None;
+                this.WindowState = WindowState.Normal; //toggle normal/maximize to fill whole screen
                 this.WindowState = WindowState.Maximized;
                 PlayerVM.IsFullScreen = true;
             }
