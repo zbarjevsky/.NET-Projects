@@ -239,9 +239,13 @@ namespace SimpleBackup.Settings
 
         internal static BackupSettings Load()
         {
-            BackupSettings cnf = XmlHelper.Open<BackupSettings>(ConfigurationFileName);
+            BackupSettings cnf = new BackupSettings();
+            if (File.Exists(ConfigurationFileName))
+                cnf = XmlHelper.Open<BackupSettings>(ConfigurationFileName);
+
             if (cnf.BackupGroups.Count == 0)
                 cnf.BackupGroups.Add(new BackupGroup());
+
             return cnf;
         }
 

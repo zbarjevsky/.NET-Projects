@@ -14,6 +14,7 @@ using System.Windows.Forms;
 
 using MkZ.Tools;
 using MkZ.WinForms;
+using MkZ.WPF;
 using SimpleBackup.Settings;
 using SimpleBackup.Tools;
 
@@ -63,14 +64,15 @@ namespace SimpleBackup
             _calculateSpaceDifferenceTask = new CalculateSpaceDifferenceTask(_fileProgress);
             _calculateSpaceDifferenceTask.OnThreadFinished = (status, error) => 
             {
-                CommonUtils.ExecuteOnUIThread(() => 
+                WPF_Helper.ExecuteOnUIThreadForm(() => 
                 {
                     m_txtInfoTop.Text = status;
                     m_progressFile.Value = 0;
                     errorProvider1.SetError(m_txtInfoTop, error);
                     m_lblStatusProgress.Visible = false;
                     EnableControls(true, false);
-                }, this);
+                    return 0;
+                });
             };
         }
 
@@ -136,7 +138,7 @@ namespace SimpleBackup
 
             _logic.Load(_Priority, _fileProgress, (error) =>
             {
-                CommonUtils.ExecuteOnUIThread(() => 
+                WPF_Helper.ExecuteOnUIThreadForm(() => 
                 {
                     if (string.IsNullOrWhiteSpace(error))
                     {
@@ -149,7 +151,8 @@ namespace SimpleBackup
                         m_lblStatusProgress.Text = error;
                         EnableControls(false, false, true);
                     }
-                }, this);
+                    return 0;
+                });
             });
         }
 
@@ -249,12 +252,13 @@ namespace SimpleBackup
                         if (file.IsBigFile())
                         {
                             updateProgressCount = 1;
-                            CommonUtils.ExecuteOnUIThread(() =>
+                            WPF_Helper.ExecuteOnUIThreadForm(() =>
                             {
                                 file.Status = BackupStatus.InProgress;
                                 m_listFiles.EnsureVisible(i);
                                 m_listFiles.Refresh();
-                            }, this);
+                                return 0;
+                            });
                         }
 
                         if (file.PerformBackup(progressCopyBigFile, options) == BackupStatus.Error)
@@ -293,7 +297,7 @@ namespace SimpleBackup
 
         private void UpdateUI(bool isRunning)
         {
-            CommonUtils.ExecuteOnUIThread(() =>
+            WPF_Helper.ExecuteOnUIThreadForm(() =>
             {
                 EnableControls(true, isRunning);
 
@@ -325,7 +329,8 @@ namespace SimpleBackup
                     m_progressBarMain.Value = 0;
 
                 //Application.DoEvents();
-            }, this);
+                return 0;
+            });
         }
 
         private void EnableControls(bool bEnable, bool isRunning, bool prepare = true)
@@ -346,7 +351,7 @@ namespace SimpleBackup
             if (_pause)
                 state = Windows7ProgressBar.ProgressBarState.Pause;
 
-            CommonUtils.ExecuteOnUIThread(() =>
+            WPF_Helper.ExecuteOnUIThreadForm(() =>
             {
                 int errCount = 0;
                 for (int i = 0; i < _backupFilesList.Count; i++)
@@ -367,7 +372,9 @@ namespace SimpleBackup
                     (_startIndex + 1), _backupFilesList.Count, 
                     _progressSpeedData.iBytesCount / BackupLogic.i1MB, errCount, 
                     _progressSpeedData.ElapsedTime.ToString("mm':'ss"), _progressSpeedData.SpeedAvgKB());
-            }, this);
+                
+                return 0;
+            });
         }
 
         private void SetProgressState(Windows7ProgressBar.ProgressBarState state)

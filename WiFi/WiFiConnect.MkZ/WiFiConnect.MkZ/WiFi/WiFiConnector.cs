@@ -52,7 +52,7 @@ namespace WiFiConnect.MkZ.WiFi
             var access = await WiFiAdapter.RequestAccessAsync();
             if (access != WiFiAccessStatus.Allowed)
             {
-                Debug.WriteLine("Access denied");
+                Log.Log("DiscoverAllWiFiAdapters: Access denied");
             }
             else
             {
@@ -133,7 +133,7 @@ namespace WiFiConnect.MkZ.WiFi
             foreach (var item in values)
             {
                 item.Update();
-                if (IsConnected(item.AvailableNetwork, connectionProfiles))
+                if (IsConnected(item.Network, connectionProfiles))
                 {
                     ResultCollection.Insert(0, item);
                     //ResultsListView.SelectedItem = ResultsListView.Items[0];
@@ -152,14 +152,18 @@ namespace WiFiConnect.MkZ.WiFi
 
         public void SortResults(SortOrder order)
         {
-            IOrderedEnumerable<WiFiNetworkVM> sorted = null;
+            if (ResultCollection == null || ResultCollection.Count == 0)
+                return;
+
+            List<WiFiNetworkVM> vms = new List<WiFiNetworkVM>(ResultCollection);
+            vms.RemoveAt(0); //sort all but first - active
             switch (order)
             {
                 case SortOrder.Ascending:
-                    sorted = ResultCollection.OrderBy(n => n.Ssid);
+                    vms.Sort((n1, n2) => string.Compare(n1.Ssid, n2.Ssid, true));
                     break;
                 case SortOrder.Descending:
-                    sorted = ResultCollection.OrderByDescending(n => n.Ssid);
+                    vms.Sort((n1, n2) => string.Compare(n2.Ssid, n1.Ssid, true));
                     break;
                 case SortOrder.Secured:
                     break;
@@ -171,14 +175,12 @@ namespace WiFiConnect.MkZ.WiFi
                     break;
             }
 
-            if(sorted != null)
+            vms.Insert(0, ResultCollection[0]);
+            ResultCollection.Clear();
+
+            foreach (WiFiNetworkVM vm in vms)
             {
-                List<WiFiNetworkVM> vms = new List<WiFiNetworkVM>(sorted);
-                ResultCollection.Clear();
-                foreach (WiFiNetworkVM vm in vms)
-                {
-                    ResultCollection.Add(vm);
-                }
+                ResultCollection.Add(vm);
             }
         }
 
@@ -219,29 +221,23 @@ namespace WiFiConnect.MkZ.WiFi
                 return null;
             }
 
-            var validProfiles = WPF_Helper.ExecuteOnUIThreadWPF(() =>
+            return WPF_Helper.ExecuteOnUIThreadWPF(() =>
             {
-                return connectionProfiles.Where(profile =>
+                var validProfiles = connectionProfiles.Where(profile =>
                 {
                     NetworkConnectivityLevel level = WPF_Helper.ExecuteOnWorkerThread(() => { return profile.GetNetworkConnectivityLevel(); });
                     return (profile.IsWlanConnectionProfile && level != NetworkConnectivityLevel.None);
                 });
+
+                if (validProfiles.Count() < 1)
+                {
+                    return null;
+                }
+
+                ConnectionProfile firstProfile = validProfiles.First();
+
+                return firstProfile.ProfileName;
             });
-
-            //var validProfiles = connectionProfiles.Where(profile =>
-            //{
-            //    return (profile.IsWlanConnectionProfile && profile.GetNetworkConnectivityLevel() != NetworkConnectivityLevel.None);
-            //});
-
-            if (validProfiles.Count() < 1)
-            {
-                return null;
-            }
-
-            ConnectionProfile firstProfile = validProfiles.First();
-
-            return firstProfile.ProfileName;
         }
-
     }
 }

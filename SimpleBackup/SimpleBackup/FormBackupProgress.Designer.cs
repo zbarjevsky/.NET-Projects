@@ -51,16 +51,15 @@
             this.m_lblStatusProgress = new System.Windows.Forms.Label();
             this.m_btnPrepare = new System.Windows.Forms.Button();
             this.m_spliMain = new System.Windows.Forms.SplitContainer();
-            this.m_pnlStatus = new System.Windows.Forms.Panel();
+            this.m_lblSpeedFile = new System.Windows.Forms.Label();
+            this.m_lblProgressFile = new System.Windows.Forms.Label();
             this.m_progressFile = new MkZ.WinForms.ColorBarsProgressBar();
             this.m_progressBarMain = new MkZ.Tools.Windows7ProgressBar();
-            this.m_chartProgress = new WindowsFormsApp1.ChartProgressUserControl();
-            this.m_lblProgressFile = new System.Windows.Forms.Label();
-            this.m_lblSpeedFile = new System.Windows.Forms.Label();
+            this.m_chartProgress = new MkZ.WinForms.ChartProgressUserControl();
+            this.m_pnlStatus = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.m_spliMain)).BeginInit();
             this.m_spliMain.Panel1.SuspendLayout();
-            this.m_spliMain.Panel2.SuspendLayout();
             this.m_spliMain.SuspendLayout();
             this.m_pnlStatus.SuspendLayout();
             this.SuspendLayout();
@@ -311,15 +310,25 @@
             this.m_spliMain.SplitterDistance = 319;
             this.m_spliMain.TabIndex = 0;
             // 
-            // m_pnlStatus
+            // m_lblSpeedFile
             // 
-            this.m_pnlStatus.Controls.Add(this.m_btnClose);
-            this.m_pnlStatus.Controls.Add(this.m_txtInfoBottom);
-            this.m_pnlStatus.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.m_pnlStatus.Location = new System.Drawing.Point(0, 476);
-            this.m_pnlStatus.Name = "m_pnlStatus";
-            this.m_pnlStatus.Size = new System.Drawing.Size(831, 38);
-            this.m_pnlStatus.TabIndex = 1;
+            this.m_lblSpeedFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_lblSpeedFile.AutoSize = true;
+            this.m_lblSpeedFile.Location = new System.Drawing.Point(742, 267);
+            this.m_lblSpeedFile.Name = "m_lblSpeedFile";
+            this.m_lblSpeedFile.Size = new System.Drawing.Size(51, 13);
+            this.m_lblSpeedFile.TabIndex = 14;
+            this.m_lblSpeedFile.Text = "0.0 MB/s";
+            // 
+            // m_lblProgressFile
+            // 
+            this.m_lblProgressFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.m_lblProgressFile.AutoSize = true;
+            this.m_lblProgressFile.Location = new System.Drawing.Point(11, 267);
+            this.m_lblProgressFile.Name = "m_lblProgressFile";
+            this.m_lblProgressFile.Size = new System.Drawing.Size(30, 13);
+            this.m_lblProgressFile.TabIndex = 13;
+            this.m_lblProgressFile.Text = "0.0%";
             // 
             // m_progressFile
             // 
@@ -365,25 +374,15 @@
             this.m_chartProgress.Size = new System.Drawing.Size(829, 151);
             this.m_chartProgress.TabIndex = 16;
             // 
-            // m_lblProgressFile
+            // m_pnlStatus
             // 
-            this.m_lblProgressFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.m_lblProgressFile.AutoSize = true;
-            this.m_lblProgressFile.Location = new System.Drawing.Point(11, 267);
-            this.m_lblProgressFile.Name = "m_lblProgressFile";
-            this.m_lblProgressFile.Size = new System.Drawing.Size(30, 13);
-            this.m_lblProgressFile.TabIndex = 13;
-            this.m_lblProgressFile.Text = "0.0%";
-            // 
-            // m_lblSpeedFile
-            // 
-            this.m_lblSpeedFile.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_lblSpeedFile.AutoSize = true;
-            this.m_lblSpeedFile.Location = new System.Drawing.Point(742, 267);
-            this.m_lblSpeedFile.Name = "m_lblSpeedFile";
-            this.m_lblSpeedFile.Size = new System.Drawing.Size(51, 13);
-            this.m_lblSpeedFile.TabIndex = 14;
-            this.m_lblSpeedFile.Text = "0.0 MB/s";
+            this.m_pnlStatus.Controls.Add(this.m_btnClose);
+            this.m_pnlStatus.Controls.Add(this.m_txtInfoBottom);
+            this.m_pnlStatus.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.m_pnlStatus.Location = new System.Drawing.Point(0, 476);
+            this.m_pnlStatus.Name = "m_pnlStatus";
+            this.m_pnlStatus.Size = new System.Drawing.Size(831, 38);
+            this.m_pnlStatus.TabIndex = 1;
             // 
             // FormBackupProgress
             // 
@@ -405,7 +404,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.m_spliMain.Panel1.ResumeLayout(false);
             this.m_spliMain.Panel1.PerformLayout();
-            this.m_spliMain.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.m_spliMain)).EndInit();
             this.m_spliMain.ResumeLayout(false);
             this.m_pnlStatus.ResumeLayout(false);
@@ -439,7 +437,7 @@
         private System.Windows.Forms.Button m_btnPrepare;
         private System.Windows.Forms.SplitContainer m_spliMain;
         private System.Windows.Forms.Panel m_pnlStatus;
-        private WindowsFormsApp1.ChartProgressUserControl m_chartProgress;
+        private MkZ.WinForms.ChartProgressUserControl m_chartProgress;
         private System.Windows.Forms.Label m_lblSpeedFile;
         private System.Windows.Forms.Label m_lblProgressFile;
     }

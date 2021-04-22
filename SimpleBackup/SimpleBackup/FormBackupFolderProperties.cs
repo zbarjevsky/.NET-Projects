@@ -14,6 +14,8 @@ using System.Windows.Forms;
 
 
 using MkZ.Tools;
+using MkZ.WPF;
+using MkZ.Windows;
 
 namespace SimpleBackup
 {
@@ -48,7 +50,7 @@ namespace SimpleBackup
             _calculateSpaceTask = new CalculateOccupiedSpaceTask(_fileProgress);
             _calculateSpaceTask.OnThreadFinished = (size, count) =>
             {
-                CommonUtils.ExecuteOnUIThread(() =>
+                WPF_Helper.ExecuteOnUIThreadForm(() =>
                 {
                     string diskInfo = "";
                     if (!string.IsNullOrWhiteSpace(_dstBaseFolder))
@@ -59,7 +61,9 @@ namespace SimpleBackup
                     m_txtInfo.Text = string.Format("Selected SRC {0:###,##0} files, Total size: {1:###,##0.0} MB, {2}",
                         count, size / s1MB, diskInfo);
                     m_progressBar.Value = 0;
-                }, this);
+
+                    return 0;
+                });
             };
         }
 

@@ -1,4 +1,4 @@
-﻿namespace WindowsFormsApp1
+﻿namespace MkZ.WinForms
 {
     partial class ChartProgressUserControl
     {

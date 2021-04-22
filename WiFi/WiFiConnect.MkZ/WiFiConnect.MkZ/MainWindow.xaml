@@ -5,22 +5,23 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WiFiConnect.MkZ"
         xmlns:wifi="clr-namespace:WiFiConnect.MkZ.WiFi"
-        xmlns:gif="clr-namespace:WpfAnimatedGif;assembly=Framework.MkZ"
+        xmlns:gif="clr-namespace:WpfAnimatedGif;assembly=Framework.MkZ" 
+        xmlns:controls="clr-namespace:WiFiConnect.MkZ.Controls"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded"
         Background="{Binding Source={x:Static SystemParameters.WindowGlassBrush}}"
         Foreground="{Binding Source={x:Static SystemColors.HighlightTextBrush}}"
-        Title="WiFi Connect" Height="750" Width="800">
+        Title="WiFi Connect" Height="750" Width="900">
     <Window.Resources>
         <DataTemplate x:Name="WifiInitialState" x:Key="WifiInitialState">
-            <StackPanel Orientation="Horizontal">
+            <DockPanel HorizontalAlignment="Stretch" Background="{Binding Background, FallbackValue=Navy}">
                 <Image Source="{Binding Path=WiFiImage}" Stretch="UniformToFill" Height="32" Width="32" Margin="5"/>
                 <StackPanel Orientation="Horizontal" Margin="5">
                     <TextBlock Text="Ssid:" Margin="0,0,5,0" VerticalAlignment="Center"/>
                     <TextBlock Text="{Binding Path=Ssid}" FontWeight="Bold" TextWrapping="Wrap" VerticalAlignment="Center" Margin="0,0,5,0"/>
                 </StackPanel>
-            </StackPanel>
+            </DockPanel>
         </DataTemplate>
         <DataTemplate x:Name="WifiConnectState" x:Key="WifiConnectState">
             <StackPanel Orientation="Vertical">
@@ -85,7 +86,7 @@
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Button Click="ConnectButton_Click" Margin="5">Connect</Button>
-                        <Button Click="PushButtonConnect_Click" Margin="5" Visibility="{Binding Path=IsWpsPushButtonAvailable, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <Button Click="WpsButtonConnect_Click" Margin="5" Visibility="{Binding Path=IsWpsPushButtonAvailable, Converter={StaticResource BoolToVisibilityConverter}}">
                             <StackPanel Orientation="Horizontal">
                                 <Image Source="./Images/wps-button40x40.png" Width="20" Height="20"/>
                                 <TextBlock Text="WPS" Margin="5,0,0,0"/>
@@ -132,54 +133,58 @@
             </StackPanel>
         </DataTemplate>
         <DataTemplate x:Name="WifiConnectedState" x:Key="WifiConnectedState">
-            <StackPanel Orientation="Vertical">
-                <StackPanel Orientation="Horizontal">
-                    <Image Source="{Binding Path=WiFiImage}" Stretch="UniformToFill" Height="32" Width="32" Margin="5"/>
-                    <StackPanel Orientation="Horizontal" Margin="5">
-                        <TextBlock Text="Ssid:" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                        <TextBlock Text="{Binding Path=Ssid}" FontWeight="Bold" TextWrapping="Wrap" Margin="0,0,5,0" VerticalAlignment="Center"/>
+            <Border BorderBrush="AliceBlue" BorderThickness="0" >
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="{Binding Path=WiFiImage}" Stretch="UniformToFill" Height="32" Width="32" Margin="5"/>
+                        <StackPanel Orientation="Horizontal" Margin="5" >
+                            <TextBlock Text="Ssid:" VerticalAlignment="Center" Margin="0,0,5,0" />
+                            <TextBlock Text="{Binding Path=Ssid}" 
+                                       FontWeight="Bold" TextWrapping="Wrap" Margin="0,0,5,0" VerticalAlignment="Center"/>
+                        </StackPanel>
                     </StackPanel>
+                    <StackPanel Orientation="Vertical" Margin="5">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Bssid:" Margin="0,0,5,0"/>
+                            <TextBlock Text="{Binding Path=Bssid}" TextWrapping="Wrap" />
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Rssi:" Margin="0,0,5,0"/>
+                            <TextBlock Text="{Binding Path=Rssi}"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="Ch. Frequency:" Margin="0,0,5,0"/>
+                            <TextBlock Text="{Binding Path=ChannelCenterFrequency}" TextWrapping="Wrap"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Path=SecuritySettings}" TextWrapping="Wrap" Margin="0,0,5,0"/>
+                        </StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock FontWeight="Bold" Text="{Binding Path=ConnectivityLevel}" TextWrapping="Wrap" Margin="0,0,5,0"/>
+                        </StackPanel>
+                    </StackPanel>
+                    <Button Click="Disconnect_Click" Margin="5">Disconnect</Button>
                 </StackPanel>
-                <StackPanel Orientation="Vertical" Margin="5">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Bssid:" Margin="0,0,5,0"/>
-                        <TextBlock Text="{Binding Path=Bssid}" TextWrapping="Wrap" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Rssi:" Margin="0,0,5,0"/>
-                        <TextBlock Text="{Binding Path=Rssi}"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Ch. Frequency:" Margin="0,0,5,0"/>
-                        <TextBlock Text="{Binding Path=ChannelCenterFrequency}" TextWrapping="Wrap"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding Path=SecuritySettings}" TextWrapping="Wrap" Margin="0,0,5,0"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock FontWeight="Bold" Text="{Binding Path=ConnectivityLevel}" TextWrapping="Wrap" Margin="0,0,5,0"/>
-                    </StackPanel>
-                </StackPanel>
-                <Button Click="Disconnect_Click" Margin="5">Disconnect</Button>
-            </StackPanel>
+            </Border>
         </DataTemplate>
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="300"/>
+            <ColumnDefinition Width="300"/>
             <ColumnDefinition Width="2*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
 
-        <DockPanel Grid.ColumnSpan="3">
+        <DockPanel Grid.ColumnSpan="3" >
             <Button x:Name="btnRefreshList" Margin="12,6" Width="120" Content="Update List" Click="btnUpdateList_Click"/>
             <Button x:Name="btnRefreshStatus" Margin="12,6" Width="120" Content="Update Status" Click="btnUpdateStatus_Click"/>
-            <Label Content="Sort:" />
+            <Label Content="Sort:" VerticalAlignment="Center" />
             <ComboBox x:Name="cmbSort" Margin="4" SelectedIndex="0" SelectionChanged="cmbSort_SelectionChanged" >
                 <ComboBoxItem Content="{x:Static wifi:SortOrder.Ascending}" IsSelected="True" />
                 <ComboBoxItem Content="{x:Static wifi:SortOrder.Descending}" />
@@ -187,10 +192,19 @@
                 <ComboBoxItem Content="{x:Static wifi:SortOrder.Open}" />
                 <ComboBoxItem Content="{x:Static wifi:SortOrder.Strength}" />
             </ComboBox>
-            <ProgressBar x:Name="progress" Margin="4"/>
+            <CheckBox x:Name="_chkTimer" IsChecked="True" Content="Timer" VerticalAlignment="Center"
+                      Checked="ChkTimer_CheckedChanged" Unchecked="ChkTimer_CheckedChanged"/>
+            <ProgressBar x:Name="progress" Margin="12,8" Value="43"/>
         </DockPanel>
 
-        <TextBox x:Name="txtLog" Grid.Row="1" Grid.RowSpan="2" Grid.Column="2" Margin="10" 
+        <Border Grid.Row="1" Margin="10" BorderBrush="DarkViolet" BorderThickness="1">
+            <Label x:Name="_connectedItem"
+                   Foreground="{Binding Source={x:Static SystemColors.HighlightTextBrush}}"
+                   Content="{Binding}"
+                   ContentTemplate="{StaticResource WifiInitialState}" />
+        </Border>
+
+        <TextBox x:Name="txtLog" Grid.Row="1" Grid.RowSpan="1" Grid.Column="2" Margin="10" 
                  Background="{x:Static SystemColors.InfoBrush}"
                  TextWrapping="NoWrap"
                  HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" />
@@ -203,14 +217,28 @@
                       ItemTemplate="{StaticResource WifiInitialState}"
                       ItemsSource="{Binding Path=ResultCollection}"
                       SelectionChanged="ResultsListView_SelectionChanged">
+                <ListView.ItemContainerStyle>
+                    <Style TargetType="ListViewItem">
+                        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                    </Style>
+                </ListView.ItemContainerStyle>
             </ListView>
         </Border>
-        
-        <Image x:Name="animatedImage" Grid.Row="0" Grid.Column="0" Grid.RowSpan="3" Grid.ColumnSpan="3" Margin="10" 
+
+        <WindowsFormsHost Grid.Row="2" Grid.Column="2" Margin="6" Background="White" >
+            <controls:PingChartUserControl x:Name="_chart" />
+        </WindowsFormsHost>
+
+        <Image x:Name="animatedImage" Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" Grid.ColumnSpan="3" Margin="10" 
                Stretch="Uniform" HorizontalAlignment="Center" Opacity="0.1" 
                            gif:ImageBehavior.AnimateInDesignMode="True"
                            gif:ImageBehavior.RepeatBehavior="Forever"
                            gif:ImageBehavior.AnimatedSource="/Images/CatAni.gif"/>
 
+        <Border x:Name="_borderStatus" Grid.Row="3" Grid.ColumnSpan="3" Margin="2"
+                BorderBrush="Wheat" BorderThickness="1" CornerRadius="2">
+            <TextBlock x:Name="_txtStatus" Text="Ready" Margin="6,0"
+                       VerticalAlignment="Center" FontSize="16" />
+        </Border>
     </Grid>
 </Window>

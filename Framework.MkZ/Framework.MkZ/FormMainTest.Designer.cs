@@ -43,7 +43,7 @@
             this.m_btnWpfListViewDragDrop = new System.Windows.Forms.Button();
             this.m_cmbDriveLetter = new System.Windows.Forms.ComboBox();
             this.m_btnEjectDrive = new System.Windows.Forms.Button();
-            this.chartProgressUserControl1 = new WindowsFormsApp1.ChartProgressUserControl();
+            this.chartProgressUserControl1 = new MkZ.WinForms.ChartProgressUserControl();
             this.m_chkEnable = new System.Windows.Forms.CheckBox();
             this.m_btnGradientWpfProgress = new System.Windows.Forms.Button();
             this.m_btnColorSlider = new System.Windows.Forms.Button();
@@ -542,7 +542,7 @@
         private System.Windows.Forms.Button m_btnColorSlider;
         private System.Windows.Forms.Button m_btnGradientWpfProgress;
         private System.Windows.Forms.CheckBox m_chkEnable;
-        private WindowsFormsApp1.ChartProgressUserControl chartProgressUserControl1;
+        private MkZ.WinForms.ChartProgressUserControl chartProgressUserControl1;
         private System.Windows.Forms.TabPage tabPage4;
         private System.Windows.Forms.Integration.ElementHost elementHost1;
         private WpfApplication6.DisplayTopologyUserControl displayTopologyUserControl1;
