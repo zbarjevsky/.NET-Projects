@@ -150,7 +150,8 @@ namespace WiFiConnect.MkZ.Controls
             chart1.Series[1].Color = Color.Red;
 
             chart1.Series[0].Name = _theme.title;
-   
+            chart1.Series[1].Name = "Errors";
+
             _annotationLine.AnchorY = 0;
             _annotationLine.LineColor = _theme.color;
 
@@ -221,7 +222,7 @@ namespace WiFiConnect.MkZ.Controls
                 scale.Max += margin;
             }
 
-            chart1.ChartAreas[0].AxisY.Minimum = scale.Min;
+            chart1.ChartAreas[0].AxisY.Minimum = 0; // scale.Min;
             chart1.ChartAreas[0].AxisY.Maximum = scale.Max;
             chart1.ChartAreas[0].RecalculateAxesScale();
         }
@@ -318,13 +319,19 @@ namespace WiFiConnect.MkZ.Controls
 
             try
             {
-                PingPoint pt = ChartHelper.FindInterpolateValueY(chart1, out desc, out ToolTipIcon icon);
+                //PingPoint pt = ChartHelper.FindInterpolateValueY(chart1, out desc, out ToolTipIcon icon);
+                PingPoint pt = ChartHelper.FindInterpolatedPingPoint(chart1, _bufferFull, out desc, out ToolTipIcon icon);
                 _tooltip.ToolTipIcon = icon;
 
-                if (!double.IsNaN(pt.Value) || !double.IsNaN(pt.Error))
+                if (pt.Error > 0)
                 {
-                    double d = (pt.Value != 0.0) ? pt.Value : pt.Error;
-                    txt = string.Format("[{0:0.0}{1}]\n{2}", d, _theme.units, pt.Date.ToString("MMM dd, HH:mm:ss"));
+                    desc = "Ping Error:";
+                    txt = string.Format("[{0:0.0}{1}]\n{2}", pt.Error, _theme.units, pt.Date.ToString("MMM dd, HH:mm:ss"));
+                }
+                else if (pt.Value > 0)
+                {
+                    desc = "Ping Value:";
+                    txt = string.Format("[{0:0.0}{1}]\n{2}", pt.Value, _theme.units, pt.Date.ToString("MMM dd, HH:mm:ss"));
                 }
                 else
                 {
@@ -336,7 +343,7 @@ namespace WiFiConnect.MkZ.Controls
                 txt = err.Message;
             }
 
-            _tooltip.ToolTipTitle = string.Format("{0}{1}", _theme.title, desc);
+            _tooltip.ToolTipTitle = string.Format("{0}{1}", "", desc);
             _tooltip.Show("", this.chart1, pos.X, pos.Y + 20, 5000); //bug fix
             _tooltip.Show(txt, this.chart1, pos.X + 10, pos.Y + 20, 5000);
         }
@@ -570,6 +577,62 @@ namespace WiFiConnect.MkZ.Controls
             icon = ToolTipIcon.Warning;
             double approximateValue = ptVal0.YValues[0] + coefficient * (ptVal1.YValues[0] - ptVal0.YValues[0]);
             return new PingPoint(xval, approximateValue);
+        }
+
+        public static PingPoint FindInterpolatedPingPoint(Chart chart, List<PingPoint> buffer, out string desc, out ToolTipIcon icon)
+        {
+            double xval = chart.ChartAreas[0].CursorX.Position;
+            DateTime date = DateTime.FromOADate(xval);
+
+            desc = "";
+            icon = ToolTipIcon.Info;
+            if (buffer == null || buffer.Count == 0)
+                return new PingPoint(double.NaN, double.NaN, double.NaN);
+
+            desc = "Ping";
+            if (buffer.Count == 1)
+                return new PingPoint(buffer[0]);
+
+            PingPoint ptVal0 = buffer[0];
+            PingPoint ptVal1 = buffer.Last();
+
+            desc = "(out of range)";
+            icon = ToolTipIcon.Warning;
+            if (date < ptVal0.Date || date > ptVal1.Date)
+                return new PingPoint(double.NaN, double.NaN, double.NaN); //out of range
+
+            TimeSpan timePerPoint = TimeSpan.FromMilliseconds((ptVal1.Date - ptVal0.Date).TotalMilliseconds / chart.Width);
+            if (chart.ChartAreas[0].AxisX.ScaleView.IsZoomed)
+            {
+                DateTime min = DateTime.FromOADate(chart.ChartAreas[0].AxisX.ScaleView.ViewMinimum);
+                DateTime max = DateTime.FromOADate(chart.ChartAreas[0].AxisX.ScaleView.ViewMaximum);
+                timePerPoint = TimeSpan.FromMilliseconds((max - min).TotalMilliseconds / chart.Width);
+            }
+            TimeSpan proximityInterval = TimeSpan.FromMilliseconds(10 * timePerPoint.TotalMilliseconds);
+
+            ptVal0 = buffer.Last(x => x.Date <= date);
+            ptVal1 = buffer.First(x => x.Date >= date);
+
+            TimeSpan deltaX = ptVal1.Date - ptVal0.Date;
+            TimeSpan deltaX0 = date - ptVal0.Date;
+            TimeSpan deltaX1 = ptVal1.Date - date;
+
+            desc = "";
+            icon = ToolTipIcon.Info;
+            if (deltaX1 < proximityInterval)
+                return new PingPoint(ptVal1);
+
+            if (deltaX0 < proximityInterval)
+                return new PingPoint(ptVal0);
+
+            //interpolate
+            double coefficient = (date - ptVal0.Date).TotalMilliseconds / (ptVal1.Date - ptVal0.Date).TotalMilliseconds;
+
+            desc = "(approximate)";
+            icon = ToolTipIcon.Warning;
+            double approximateValue = ptVal0.Value + coefficient * (ptVal1.Value - ptVal0.Value);
+            double approximateError = Math.Max(ptVal0.Error, ptVal1.Error);
+            return new PingPoint(xval, approximateValue, approximateError);
         }
 
         private static double Length(double X, double Y)
