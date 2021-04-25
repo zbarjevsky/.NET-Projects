@@ -228,15 +228,7 @@ namespace WiFiConnect.MkZ.WiFi
                     NetworkConnectivityLevel level = WPF_Helper.ExecuteOnWorkerThread(() => { return profile.GetNetworkConnectivityLevel(); });
                     return (profile.IsWlanConnectionProfile && level != NetworkConnectivityLevel.None);
                 });
-
-                if (validProfiles.Count() < 1)
-                {
-                    return null;
-                }
-
-                ConnectionProfile firstProfile = validProfiles.First();
-
-                return firstProfile.ProfileName;
+                return validProfiles.FirstOrDefault()?.ProfileName;
             });
         }
     }

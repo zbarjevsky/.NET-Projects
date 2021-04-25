@@ -13,15 +13,15 @@ namespace WiFiConnect.MkZ.Controls
 {
     public partial class PingChartUserControl : UserControl
     {
-        private List<ChartPoint> _bufferFull = new List<ChartPoint>();
-        private List<ChartPoint> _bufferFilter = new List<ChartPoint>();
+        private List<PingPoint> _bufferFull = new List<PingPoint>();
+        private List<PingPoint> _bufferFilter = new List<PingPoint>();
 
-        public struct Scale
+        public struct MinMax
         {
             public double Min;
             public double Max;
 
-            public Scale(double min, double max)
+            public MinMax(double min, double max)
             {
                 Min = min;
                 Max = max;
@@ -34,7 +34,7 @@ namespace WiFiConnect.MkZ.Controls
             }
         }
 
-        private Scale _scaleAbsolute, _scaleFromPoints;
+        private MinMax _scaleAbsolute, _scaleFromPoints;
         HorizontalLineAnnotation _annotationLine = new HorizontalLineAnnotation();
 
         public class Theme
@@ -50,7 +50,7 @@ namespace WiFiConnect.MkZ.Controls
         {
             InitializeComponent();
 
-            _scaleAbsolute = new Scale(0, 500);
+            _scaleAbsolute = new MinMax(0, 500);
         }
 
         private void WeatherChartUserControl_Load(object sender, EventArgs e)
@@ -134,7 +134,7 @@ namespace WiFiConnect.MkZ.Controls
             }
         }
 
-        public void UpdateChart(List<ChartPoint> records, 
+        public void UpdateChart(List<PingPoint> records, 
             string title, Color color, string units)
         {
             _theme.color = Color.FromArgb(128, color);
@@ -144,7 +144,11 @@ namespace WiFiConnect.MkZ.Controls
             _bufferFull.Clear();
 
             chart1.Series[0].Points.Clear();
+            chart1.Series[1].Points.Clear();
+
             chart1.Series[0].Color = _theme.color;
+            chart1.Series[1].Color = Color.Red;
+
             chart1.Series[0].Name = _theme.title;
    
             _annotationLine.AnchorY = 0;
@@ -155,10 +159,7 @@ namespace WiFiConnect.MkZ.Controls
             if (records == null || records.Count == 0)
                 return;
 
-            for (int i = 0; i < records.Count; i++)
-            {
-                _bufferFull.Add(records[i]);
-            }
+            _bufferFull.AddRange(records);
 
             UpdateChart();
         }
@@ -175,7 +176,7 @@ namespace WiFiConnect.MkZ.Controls
             _inUpdate = false;
         }
 
-        private void InternalSet(List<ChartPoint> points, Theme theme)
+        private void InternalSet(List<PingPoint> points, Theme theme)
         {
             chart1.Series[0].Points.Clear();
             chart1.Series[0].Color = theme.color;
@@ -186,11 +187,12 @@ namespace WiFiConnect.MkZ.Controls
 
             EnableRedraw(false);
 
-            _scaleFromPoints = new Scale(points[0].Value, points[0].Value);
+            _scaleFromPoints = new MinMax(points[0].Value, points[0].Value);
 
             for (int i = 0; i < points.Count; i++)
             {
                 chart1.Series[0].Points.AddXY(points[i].Date, points[i].Value);
+                chart1.Series[1].Points.AddXY(points[i].Date, points[i].Error);
 
                 _scaleFromPoints.Update(points[i].Value);
             }
@@ -210,7 +212,7 @@ namespace WiFiConnect.MkZ.Controls
 
         private void UpdateGraphScale()
         {
-            Scale scale = _scaleAbsolute;
+            MinMax scale = _scaleAbsolute;
             if (m_chkAutoScale.Checked)
             {
                 scale = _scaleFromPoints;
@@ -316,14 +318,13 @@ namespace WiFiConnect.MkZ.Controls
 
             try
             {
-                ChartPoint pt = ChartHelper.FindInterpolateValueY(chart1, out desc, out ToolTipIcon icon);
+                PingPoint pt = ChartHelper.FindInterpolateValueY(chart1, out desc, out ToolTipIcon icon);
                 _tooltip.ToolTipIcon = icon;
 
-                if (!double.IsNaN(pt.Value))
+                if (!double.IsNaN(pt.Value) || !double.IsNaN(pt.Error))
                 {
-                    txt = string.Format("[{0:0.0}{1}]\n{2}",
-                    pt.Value, _theme.units,
-                    pt.Date.ToString("MMM dd, HH:mm:ss"));
+                    double d = (pt.Value != 0.0) ? pt.Value : pt.Error;
+                    txt = string.Format("[{0:0.0}{1}]\n{2}", d, _theme.units, pt.Date.ToString("MMM dd, HH:mm:ss"));
                 }
                 else
                 {
@@ -385,46 +386,50 @@ namespace WiFiConnect.MkZ.Controls
         }
     }
 
-    public class ChartPoint
+    public class PingPoint
     {
         public DateTime Date;
         public double Value;
+        public double Error;
 
-        public ChartPoint(DateTime date, double val)
+        public PingPoint(DateTime date, double val = 0, double err = 0)
         {
             Date = date;
             Value = val;
+            Error = err;
         }
 
-        public ChartPoint(double date, double val)
+        public PingPoint(double date, double val = 0, double err = 0)
         {
             Date = DateTime.FromOADate(date);
             Value = val;
+            Error = err;
         }
 
-        public ChartPoint(DataPoint pt) 
-            : this(pt.XValue, pt.YValues[0])
+        public PingPoint(DataPoint ptVal, DataPoint ptErr) 
+            : this(ptVal.XValue, ptVal.YValues[0], ptErr.YValues[0])
         {
         }
 
-        public ChartPoint(ChartPoint pt)
+        public PingPoint(PingPoint pt)
         {
             Date = pt.Date;
             Value = pt.Value;
+            Error = pt.Error;
         }
 
-        public static ChartPoint operator +(ChartPoint point1, ChartPoint point2)
+        public static PingPoint operator +(PingPoint point1, PingPoint point2)
         {
             //date in the middle
             TimeSpan ts = point1.Date - point2.Date;
-            TimeSpan ts1 = TimeSpan.FromMilliseconds(ts.TotalMilliseconds / 2);
+            TimeSpan ts1 = TimeSpan.FromMilliseconds(ts.TotalMilliseconds / 2.0);
 
-            return new ChartPoint(point1.Date - ts1, point1.Value + point2.Value);
+            return new PingPoint(point1.Date - ts1, (point1.Value + point2.Value)/2.0, Math.Max(point1.Error, point2.Error));
         }
 
         public override string ToString()
         {
-            return string.Format("{0:0.0} -- {1}", Value, Date.ToString("g"));
+            return string.Format("V:{0:0}, E:{1:0} -- {2}", Value, Error, Date.ToString("g"));
         }
     }
 
@@ -509,28 +514,32 @@ namespace WiFiConnect.MkZ.Controls
             return null;
         }
 
-        public static ChartPoint FindInterpolateValueY(Chart chart, out string desc, out ToolTipIcon icon)
+        public static PingPoint FindInterpolateValueY(Chart chart, out string desc, out ToolTipIcon icon)
         {
             double xval = chart.ChartAreas[0].CursorX.Position;
-            DataPointCollection points = chart.Series[0].Points;
+            DataPointCollection pointsVal = chart.Series[0].Points;
+            DataPointCollection pointsErr = chart.Series[1].Points;
 
             desc = "";
             icon = ToolTipIcon.Info;
-            if (points.Count == 0)
-                return new ChartPoint(double.NaN, double.NaN);
+            if (pointsVal.Count == 0)
+                return new PingPoint(double.NaN, double.NaN, double.NaN);
 
-            if (points.Count == 1)
-                return new ChartPoint(points[0]);
+            if (pointsVal.Count == 1)
+                return new PingPoint(pointsVal[0], pointsErr[0]);
 
-            DataPoint pt0 = points[0];
-            DataPoint pt1 = points.Last();
+            DataPoint ptVal0 = pointsVal[0];
+            DataPoint ptVal1 = pointsVal.Last();
+
+            DataPoint ptErr0 = pointsErr[0];
+            DataPoint ptErr1 = pointsErr.Last();
 
             desc = "(out of range)";
             icon = ToolTipIcon.Warning;
-            if (xval < pt0.XValue || xval > pt1.XValue)
-                return new ChartPoint(double.NaN, double.NaN); //out of range
+            if (xval < ptVal0.XValue || xval > ptVal1.XValue)
+                return new PingPoint(double.NaN, double.NaN, double.NaN); //out of range
 
-            double timePerPoint = (pt1.XValue - pt0.XValue)/chart.Width;
+            double timePerPoint = (ptVal1.XValue - ptVal0.XValue)/chart.Width;
             if(chart.ChartAreas[0].AxisX.ScaleView.IsZoomed)
             {
                 double min = chart.ChartAreas[0].AxisX.ScaleView.ViewMinimum;
@@ -539,28 +548,28 @@ namespace WiFiConnect.MkZ.Controls
             }
             double proximityInterval = 10 * timePerPoint;
 
-            pt0 = points.Last(x => x.XValue <= xval);
-            pt1 = points.First(x => x.XValue >= xval);
+            ptVal0 = pointsVal.Last(x => x.XValue <= xval);
+            ptVal1 = pointsVal.First(x => x.XValue >= xval);
 
-            double deltaX = pt1.XValue - pt0.XValue;
-            double deltaX0 = xval - pt0.XValue;
-            double deltaX1 = pt1.XValue - xval;
+            double deltaX = ptVal1.XValue - ptVal0.XValue;
+            double deltaX0 = xval - ptVal0.XValue;
+            double deltaX1 = ptVal1.XValue - xval;
 
             desc = "";
             icon = ToolTipIcon.Info;
             if (deltaX1 < proximityInterval)
-                return new ChartPoint(pt1);
+                return new PingPoint(ptVal1, ptErr1);
 
             if (deltaX0 < proximityInterval)
-                return new ChartPoint(pt0);
+                return new PingPoint(ptVal0, ptErr0);
 
             //interpolate
-            double coefficient = (xval - pt0.XValue) / (pt1.XValue - pt0.XValue);
+            double coefficient = (xval - ptVal0.XValue) / (ptVal1.XValue - ptVal0.XValue);
 
             desc = "(approximate)";
             icon = ToolTipIcon.Warning;
-            double approximateValue = pt0.YValues[0] + coefficient * (pt1.YValues[0] - pt0.YValues[0]);
-            return new ChartPoint(xval, approximateValue);
+            double approximateValue = ptVal0.YValues[0] + coefficient * (ptVal1.YValues[0] - ptVal0.YValues[0]);
+            return new PingPoint(xval, approximateValue);
         }
 
         private static double Length(double X, double Y)
@@ -568,7 +577,7 @@ namespace WiFiConnect.MkZ.Controls
             return Math.Sqrt(X * X + Y * Y);
         }
 
-        public static List<ChartPoint> GetSubBuffer(List<ChartPoint> history, int startIdx, int count)
+        public static List<PingPoint> GetSubBuffer(List<PingPoint> history, int startIdx, int count)
         {
             if (count > history.Count)
             {
@@ -580,7 +589,7 @@ namespace WiFiConnect.MkZ.Controls
                 startIdx = history.Count - count;
             }
 
-            List<ChartPoint> buffer = new List<ChartPoint>(count);
+            List<PingPoint> buffer = new List<PingPoint>(count);
 
             for (int i = startIdx; i < (startIdx + count); i++)
             {
@@ -591,15 +600,15 @@ namespace WiFiConnect.MkZ.Controls
         }
 
         //Dillute - create one point per minute
-        public static List<ChartPoint> CompactHistoryByPoints(List<ChartPoint> input, int divider)
+        public static List<PingPoint> CompactHistoryByPoints(List<PingPoint> input, int divider)
         {
             int maxPoints = (int)(input.Count / (double)divider);
             if (input.Count <= maxPoints)
                 return input;
 
-            List<ChartPoint> history = new List<ChartPoint>(maxPoints);
+            List<PingPoint> history = new List<PingPoint>(maxPoints);
 
-            List<ChartPoint> bucket = new List<ChartPoint>();
+            List<PingPoint> bucket = new List<PingPoint>();
 
             for (int i = 0; i < input.Count; i++)
             {
@@ -621,12 +630,12 @@ namespace WiFiConnect.MkZ.Controls
             return history;
         }
 
-        private static ChartPoint Average_Point(List<ChartPoint> bucket)
+        private static PingPoint Average_Point(List<PingPoint> bucket)
         {
             if (bucket == null || bucket.Count == 0)
                 return null;
 
-            ChartPoint pt = new ChartPoint(bucket.First());
+            PingPoint pt = new PingPoint(bucket.First());
             for (int i = 1; i < bucket.Count; i++)
             {
                 pt += bucket[i];

@@ -34,7 +34,7 @@ namespace WiFiConnect.MkZ
         private WiFiConnector WiFiConnector { get; }
         private FileSystemWatchHelper _fileSystemWatch { get; }
 
-        private List<Controls.ChartPoint> _bufferPings = new List<Controls.ChartPoint>();
+        private List<Controls.PingPoint> _bufferPings = new List<Controls.PingPoint>();
 
         public enum eWifiState
         {
@@ -388,6 +388,7 @@ namespace WiFiConnect.MkZ
 
         private int _disconnectCount = 0;
         private bool _isInPing = false;
+        private int[] _timeouts = new int [] { 3000, 4000, 5000 };
         public void PingNetwork(string hostNameOrAddress)
         {
             Task.Factory.StartNew(() =>
@@ -398,12 +399,13 @@ namespace WiFiConnect.MkZ
 
                 bool pingStatus = false;
                 string status = "";
-                Controls.ChartPoint pingPoint = new Controls.ChartPoint(DateTime.Now, 0);
+                int timeout = _timeouts[_disconnectCount]; //
+
+                Controls.PingPoint pingPoint = new Controls.PingPoint(DateTime.Now, 0, timeout);
 
                 using (Ping p = new Ping())
                 {
-                    byte[] buffer = Encoding.ASCII.GetBytes("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-                    const int timeout = 3000; // 3s
+                    byte[] buffer = Encoding.ASCII.GetBytes(hostNameOrAddress);
 
                     try
                     {
@@ -412,12 +414,16 @@ namespace WiFiConnect.MkZ
                         status = string.Format("Ping: '{0}' Status: {1}, Time: {2} ms", hostNameOrAddress, reply.Status, reply.RoundtripTime);
                         if (!pingStatus)
                         {
-                            pingPoint.Value = timeout;
+                            pingPoint.Error = timeout;
                             status = string.Format("Ping: '{0}' Status: {1}: {2}", hostNameOrAddress, reply.Status, timeout);
+                            UpdateChart(pingPoint);
+                            UpdateChart(new PingPoint(DateTime.Now, 0, timeout));
                         }
                         else
                         {
                             pingPoint.Value = reply.RoundtripTime;
+                            pingPoint.Error = 0;
+                            UpdateChart(pingPoint);
                         }
 
                         WPF_Helper.ExecuteOnUIThread(() => { _txtStatus.Text = status; return 0; });
@@ -430,8 +436,11 @@ namespace WiFiConnect.MkZ
 
                         Log(status);
                         WPF_Helper.ExecuteOnUIThread(() => { _txtStatus.Text = status; return 0; });
+
                         pingStatus = false;
-                        pingPoint.Value = timeout;
+                        pingPoint.Error = timeout;
+                        UpdateChart(pingPoint);
+                        UpdateChart(new PingPoint(DateTime.Now, 0, timeout));
                     }
                 }
 
@@ -452,18 +461,19 @@ namespace WiFiConnect.MkZ
                         Log("Error {0}, count: {1}", status, _disconnectCount);
                 }
 
-                UpdateChart(pingPoint);
-
                 _isInPing = false;
             });
 
         }
 
-        private void UpdateChart(ChartPoint pingPoint)
+        private void UpdateChart(PingPoint pingPoint)
         {
             WPF_Helper.ExecuteOnUIThreadWPF(() =>
             {
                 _bufferPings.Add(pingPoint);
+                if (_bufferPings.Count > 3000)
+                    _bufferPings.RemoveAt(0);
+
                 _chart.UpdateChart(_bufferPings, "Pings", System.Drawing.Color.Blue, "ms");
 
                 return 0;
