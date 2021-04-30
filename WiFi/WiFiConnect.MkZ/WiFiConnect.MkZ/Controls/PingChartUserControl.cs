@@ -34,7 +34,7 @@ namespace WiFiConnect.MkZ.Controls
             }
         }
 
-        private MinMax _scaleAbsolute, _scaleFromPoints;
+        private MinMax _scaleFromPoints;
         HorizontalLineAnnotation _annotationLine = new HorizontalLineAnnotation();
 
         public class Theme
@@ -49,8 +49,6 @@ namespace WiFiConnect.MkZ.Controls
         public PingChartUserControl()
         {
             InitializeComponent();
-
-            _scaleAbsolute = new MinMax(0, 500);
         }
 
         private void WeatherChartUserControl_Load(object sender, EventArgs e)
@@ -213,7 +211,9 @@ namespace WiFiConnect.MkZ.Controls
 
         private void UpdateGraphScale()
         {
-            MinMax scale = _scaleAbsolute;
+            m_numMaxPing.Enabled = !m_chkAutoScale.Checked;
+
+            MinMax scale = new MinMax(0, (double)m_numMaxPing.Value);
             if (m_chkAutoScale.Checked)
             {
                 scale = _scaleFromPoints;
@@ -320,17 +320,17 @@ namespace WiFiConnect.MkZ.Controls
             try
             {
                 //PingPoint pt = ChartHelper.FindInterpolateValueY(chart1, out desc, out ToolTipIcon icon);
-                PingPoint pt = ChartHelper.FindInterpolatedPingPoint(chart1, _bufferFull, out desc, out ToolTipIcon icon);
+                PingPoint pt = ChartHelper.FindInterpolatedPingPoint(chart1, _bufferFull, out ToolTipIcon icon);
                 _tooltip.ToolTipIcon = icon;
 
                 if (pt.Error > 0)
                 {
-                    desc = "Ping Error:";
+                    desc = pt.Message;
                     txt = string.Format("[{0:0.0}{1}]\n{2}", pt.Error, _theme.units, pt.Date.ToString("MMM dd, HH:mm:ss"));
                 }
                 else if (pt.Value > 0)
                 {
-                    desc = "Ping Value:";
+                    desc = pt.Message;
                     txt = string.Format("[{0:0.0}{1}]\n{2}", pt.Value, _theme.units, pt.Date.ToString("MMM dd, HH:mm:ss"));
                 }
                 else
@@ -395,27 +395,34 @@ namespace WiFiConnect.MkZ.Controls
 
     public class PingPoint
     {
-        public DateTime Date;
-        public double Value;
-        public double Error;
+        const string MSG = "Ping Value";
 
-        public PingPoint(DateTime date, double val = 0, double err = 0)
+        public DateTime Date = DateTime.Now;
+        public double Value = 0.0;
+        public double Error = 0.0;
+        public string Message = MSG;
+
+        public PingPoint(DateTime date, double val = 0, double err = 0, string message = MSG)
         {
             Date = date;
             Value = val;
             Error = err;
+            Message = message;
         }
 
-        public PingPoint(double date, double val = 0, double err = 0)
+        public PingPoint(double date, double val = 0, double err = 0, string message = MSG)
         {
             Date = DateTime.FromOADate(date);
             Value = val;
             Error = err;
+            Message = message;
         }
 
         public PingPoint(DataPoint ptVal, DataPoint ptErr) 
-            : this(ptVal.XValue, ptVal.YValues[0], ptErr.YValues[0])
+            : this(ptVal.XValue, ptVal.YValues[0], ptErr.YValues[0], MSG)
         {
+            if (Error != 0.0)
+                Message = "Error";
         }
 
         public PingPoint(PingPoint pt)
@@ -423,6 +430,7 @@ namespace WiFiConnect.MkZ.Controls
             Date = pt.Date;
             Value = pt.Value;
             Error = pt.Error;
+            Message = pt.Message;
         }
 
         public static PingPoint operator +(PingPoint point1, PingPoint point2)
@@ -436,7 +444,7 @@ namespace WiFiConnect.MkZ.Controls
 
         public override string ToString()
         {
-            return string.Format("V:{0:0}, E:{1:0} -- {2}", Value, Error, Date.ToString("g"));
+            return string.Format("V:{0:0}, E:{1:0} -- {2} - {3}", Value, Error, Date.ToString("g"), Message);
         }
     }
 
@@ -579,27 +587,24 @@ namespace WiFiConnect.MkZ.Controls
             return new PingPoint(xval, approximateValue);
         }
 
-        public static PingPoint FindInterpolatedPingPoint(Chart chart, List<PingPoint> buffer, out string desc, out ToolTipIcon icon)
+        public static PingPoint FindInterpolatedPingPoint(Chart chart, List<PingPoint> buffer, out ToolTipIcon icon)
         {
             double xval = chart.ChartAreas[0].CursorX.Position;
             DateTime date = DateTime.FromOADate(xval);
 
-            desc = "";
             icon = ToolTipIcon.Info;
             if (buffer == null || buffer.Count == 0)
-                return new PingPoint(double.NaN, double.NaN, double.NaN);
+                return new PingPoint(double.NaN, double.NaN, double.NaN, "No Data");
 
-            desc = "Ping";
             if (buffer.Count == 1)
                 return new PingPoint(buffer[0]);
 
             PingPoint ptVal0 = buffer[0];
             PingPoint ptVal1 = buffer.Last();
 
-            desc = "(out of range)";
             icon = ToolTipIcon.Warning;
             if (date < ptVal0.Date || date > ptVal1.Date)
-                return new PingPoint(double.NaN, double.NaN, double.NaN); //out of range
+                return new PingPoint(double.NaN, double.NaN, double.NaN, "(out of range)"); //out of range
 
             TimeSpan timePerPoint = TimeSpan.FromMilliseconds((ptVal1.Date - ptVal0.Date).TotalMilliseconds / chart.Width);
             if (chart.ChartAreas[0].AxisX.ScaleView.IsZoomed)
@@ -617,7 +622,6 @@ namespace WiFiConnect.MkZ.Controls
             TimeSpan deltaX0 = date - ptVal0.Date;
             TimeSpan deltaX1 = ptVal1.Date - date;
 
-            desc = "";
             icon = ToolTipIcon.Info;
             if (deltaX1 < proximityInterval)
                 return new PingPoint(ptVal1);
@@ -628,11 +632,10 @@ namespace WiFiConnect.MkZ.Controls
             //interpolate
             double coefficient = (date - ptVal0.Date).TotalMilliseconds / (ptVal1.Date - ptVal0.Date).TotalMilliseconds;
 
-            desc = "(approximate)";
             icon = ToolTipIcon.Warning;
             double approximateValue = ptVal0.Value + coefficient * (ptVal1.Value - ptVal0.Value);
             double approximateError = Math.Max(ptVal0.Error, ptVal1.Error);
-            return new PingPoint(xval, approximateValue, approximateError);
+            return new PingPoint(xval, approximateValue, approximateError, ptVal1.Message + "(approximate)");
         }
 
         private static double Length(double X, double Y)

@@ -1,4 +1,5 @@
-﻿using MkZ.WPF;
+﻿using Microsoft.Win32;
+using MkZ.WPF;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -87,12 +88,35 @@ namespace WiFiConnect.MkZ
             _timer.Interval = TimeSpan.FromSeconds(3);
             _timer.Tick += Timer_Tick;
             _timer.Start();
+
+            SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
+
         }
 
+        private void SystemEvents_PowerModeChanged(object sender, PowerModeChangedEventArgs e)
+        {
+            switch (e.Mode)
+            {
+                case PowerModes.Resume:
+                    _bufferPings.Add(new PingPoint(DateTime.Now, 0, 0, "Resume"));
+                    _timer.Start();
+                    break;
+                case PowerModes.StatusChange:
+                    break;
+                case PowerModes.Suspend:
+                    _timer.Stop();
+                    _bufferPings.Add(new PingPoint(DateTime.Now, 0, 0, "Sleep"));
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private string _pingServerUrl = "www.google.com";
         private void Timer_Tick(object sender, EventArgs e)
         {
             UpdateStatus();
-            PingNetwork("www.amazon.com");
+            PingNetwork(_pingServerUrl);
 
             if(_disconnectCount>2)
             {
@@ -411,22 +435,24 @@ namespace WiFiConnect.MkZ
                     {
                         PingReply reply = p.Send(hostNameOrAddress, timeout, buffer);
                         pingStatus = (reply.Status == IPStatus.Success);
-                        status = string.Format("Ping: '{0}' Status: {1}, Time: {2} ms", hostNameOrAddress, reply.Status, reply.RoundtripTime);
+                        status = "N/A";
                         if (!pingStatus)
                         {
                             pingPoint.Error = timeout;
+                            pingPoint.Message = reply.Status.ToString();
+                            
                             status = string.Format("Ping: '{0}' Status: {1}: {2}", hostNameOrAddress, reply.Status, timeout);
-                            UpdateChart(pingPoint);
-                            UpdateChart(new PingPoint(DateTime.Now, 0, timeout));
+                            UpdateChart(pingPoint, status);
+                            UpdateChart(new PingPoint(DateTime.Now, 0, timeout, pingPoint.Message), status);
                         }
-                        else
+                        else //ping ok
                         {
                             pingPoint.Value = reply.RoundtripTime;
                             pingPoint.Error = 0;
-                            UpdateChart(pingPoint);
-                        }
 
-                        WPF_Helper.ExecuteOnUIThread(() => { _txtStatus.Text = status; return 0; });
+                            status = string.Format("Ping: '{0}' Status: {1}, Time: {2} ms", hostNameOrAddress, reply.Status, reply.RoundtripTime);
+                            UpdateChart(pingPoint, status);
+                        }
                     }
                     catch (Exception err)
                     {
@@ -435,12 +461,12 @@ namespace WiFiConnect.MkZ
                             status += ", " + err.InnerException.Message;
 
                         Log(status);
-                        WPF_Helper.ExecuteOnUIThread(() => { _txtStatus.Text = status; return 0; });
 
                         pingStatus = false;
                         pingPoint.Error = timeout;
-                        UpdateChart(pingPoint);
-                        UpdateChart(new PingPoint(DateTime.Now, 0, timeout));
+                        pingPoint.Message = err.Message;
+                        UpdateChart(pingPoint, status);
+                        UpdateChart(new PingPoint(DateTime.Now, 0, timeout, err.Message), status);
                     }
                 }
 
@@ -466,15 +492,25 @@ namespace WiFiConnect.MkZ
 
         }
 
-        private void UpdateChart(PingPoint pingPoint)
+        private void UpdateChart(PingPoint pingPoint, string status)
         {
             WPF_Helper.ExecuteOnUIThreadWPF(() =>
             {
+                DateTime now = DateTime.Now;
+
                 _bufferPings.Add(pingPoint);
-                if (_bufferPings.Count > 3000)
-                    _bufferPings.RemoveAt(0);
+
+                UpdateBuffer();
 
                 _chart.UpdateChart(_bufferPings, "Pings", System.Drawing.Color.Blue, "ms");
+
+                TimeSpan delta = DateTime.Now - now;
+
+                _txtStatus.Text = status;
+                _txtStatus.Text += string.Format(", Processing time: {0:0.000} ms, Points: {1}", 
+                    delta.TotalMilliseconds, _bufferPings.Count);
+
+                //Debug.WriteLine(string.Format("Update time: {0:0.000} ms", delta.TotalMilliseconds));
 
                 return 0;
             });
@@ -486,6 +522,33 @@ namespace WiFiConnect.MkZ
                 _timer.Start();
             else
                 _timer.Stop();
+        }
+
+        private void btnReset_Click(object sender, RoutedEventArgs e)
+        {
+            _bufferPings.Clear();
+            _chart.UpdateChart(_bufferPings, "Pings", System.Drawing.Color.Blue, "ms");
+        }
+
+        private void ComboBoxBufferSize_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            UpdateBuffer();
+        }
+
+        private TimeSpan _maxBufferSize = TimeSpan.FromHours(1);
+        private void UpdateBuffer()
+        {
+            int hours = (int)Math.Pow(2, cmbBufferSize.SelectedIndex);
+            _maxBufferSize = TimeSpan.FromHours(hours);
+
+            DateTime now = DateTime.Now;
+            while (_bufferPings.Count > 0 && (now - _bufferPings[0].Date) > _maxBufferSize)
+                _bufferPings.RemoveAt(0);
+        }
+
+        private void cmbServerUrl_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            _pingServerUrl = cmbServerUrl.Text;
         }
     }
 }

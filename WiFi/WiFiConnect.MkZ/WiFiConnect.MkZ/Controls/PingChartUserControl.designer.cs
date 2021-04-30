@@ -39,8 +39,10 @@
             this.m_grpControls = new System.Windows.Forms.GroupBox();
             this.m_btnReset = new System.Windows.Forms.Button();
             this._tooltip = new System.Windows.Forms.ToolTip(this.components);
+            this.m_numMaxPing = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.m_grpControls.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.m_numMaxPing)).BeginInit();
             this.SuspendLayout();
             // 
             // chart1
@@ -101,7 +103,8 @@
             this.m_chkAutoScale.BackColor = System.Drawing.Color.White;
             this.m_chkAutoScale.Checked = true;
             this.m_chkAutoScale.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.m_chkAutoScale.Location = new System.Drawing.Point(4, 82);
+            this.m_chkAutoScale.ForeColor = System.Drawing.Color.Black;
+            this.m_chkAutoScale.Location = new System.Drawing.Point(5, 79);
             this.m_chkAutoScale.Name = "m_chkAutoScale";
             this.m_chkAutoScale.Size = new System.Drawing.Size(78, 17);
             this.m_chkAutoScale.TabIndex = 30;
@@ -113,12 +116,13 @@
             // 
             this.m_grpControls.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_grpControls.BackColor = System.Drawing.Color.White;
+            this.m_grpControls.Controls.Add(this.m_numMaxPing);
             this.m_grpControls.Controls.Add(this.m_btnReset);
             this.m_grpControls.Controls.Add(this.m_chkAutoScale);
             this.m_grpControls.Controls.Add(this.m_txtValue);
             this.m_grpControls.Location = new System.Drawing.Point(363, 43);
             this.m_grpControls.Name = "m_grpControls";
-            this.m_grpControls.Size = new System.Drawing.Size(91, 105);
+            this.m_grpControls.Size = new System.Drawing.Size(91, 132);
             this.m_grpControls.TabIndex = 31;
             this.m_grpControls.TabStop = false;
             // 
@@ -137,6 +141,34 @@
             // 
             this._tooltip.IsBalloon = true;
             // 
+            // m_numMaxPing
+            // 
+            this.m_numMaxPing.Increment = new decimal(new int[] {
+            100,
+            0,
+            0,
+            0});
+            this.m_numMaxPing.Location = new System.Drawing.Point(6, 103);
+            this.m_numMaxPing.Maximum = new decimal(new int[] {
+            10000,
+            0,
+            0,
+            0});
+            this.m_numMaxPing.Minimum = new decimal(new int[] {
+            10,
+            0,
+            0,
+            0});
+            this.m_numMaxPing.Name = "m_numMaxPing";
+            this.m_numMaxPing.Size = new System.Drawing.Size(74, 20);
+            this.m_numMaxPing.TabIndex = 32;
+            this.m_numMaxPing.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.m_numMaxPing.Value = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
+            // 
             // PingChartUserControl
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -148,6 +180,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
             this.m_grpControls.ResumeLayout(false);
             this.m_grpControls.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.m_numMaxPing)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -160,5 +193,6 @@
         private System.Windows.Forms.GroupBox m_grpControls;
         private System.Windows.Forms.ToolTip _tooltip;
         private System.Windows.Forms.Button m_btnReset;
+        private System.Windows.Forms.NumericUpDown m_numMaxPing;
     }
 }
