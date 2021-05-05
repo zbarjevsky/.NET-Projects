@@ -71,6 +71,7 @@
     </Compile>
     <Compile Include="FileSystemWatchHelper.cs" />
     <Compile Include="ILog.cs" />
+    <Compile Include="Settings.cs" />
     <Compile Include="WiFi\WiFiConnector.cs" />
     <Compile Include="WiFi\WiFiNetworkVM.cs" />
     <Page Include="MainWindow.xaml">

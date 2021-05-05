@@ -6,6 +6,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Security.Principal;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -138,6 +139,17 @@ namespace MkZ.Windows
         {
             MessageBox.Show(message, title, MessageBoxButtons.OK, MessageBoxIcon.Error,
                 MessageBoxDefaultButton.Button1, MessageBoxOptions.ServiceNotification);
+        }
+
+        public static bool IsAdministrator()
+        {
+            bool isElevated = false;
+            using (WindowsIdentity identity = WindowsIdentity.GetCurrent())
+            {
+                WindowsPrincipal principal = new WindowsPrincipal(identity);
+                isElevated = principal.IsInRole(WindowsBuiltInRole.Administrator);
+            }
+            return isElevated;
         }
     }
 }

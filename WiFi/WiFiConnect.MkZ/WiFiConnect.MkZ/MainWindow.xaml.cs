@@ -35,7 +35,7 @@ namespace WiFiConnect.MkZ
         private WiFiConnector WiFiConnector { get; }
         private FileSystemWatchHelper _fileSystemWatch { get; }
 
-        private List<Controls.PingPoint> _bufferPings = new List<Controls.PingPoint>();
+        private Settings Settings { get; } = new Settings();
 
         public enum eWifiState
         {
@@ -85,6 +85,8 @@ namespace WiFiConnect.MkZ
                 });
             };
 
+            Settings.Load();
+
             _timer.Interval = TimeSpan.FromSeconds(3);
             _timer.Tick += Timer_Tick;
             _timer.Start();
@@ -98,18 +100,23 @@ namespace WiFiConnect.MkZ
             switch (e.Mode)
             {
                 case PowerModes.Resume:
-                    _bufferPings.Add(new PingPoint(DateTime.Now, 0, 0, "Resume"));
+                    UpdateBuffers(new PingPoint(DateTime.Now, 0, 0, "Resume"));
                     _timer.Start();
                     break;
                 case PowerModes.StatusChange:
                     break;
                 case PowerModes.Suspend:
                     _timer.Stop();
-                    _bufferPings.Add(new PingPoint(DateTime.Now, 0, 0, "Sleep"));
+                    UpdateBuffers(new PingPoint(DateTime.Now, 0, 0, "Sleep"));
                     break;
                 default:
                     break;
             }
+        }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            WiFiConnector.DiscoverAllWiFiAdapters();
         }
 
         private string _pingServerUrl = "www.google.com";
@@ -133,11 +140,6 @@ namespace WiFiConnect.MkZ
                     }
                 }
             }
-        }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            WiFiConnector.DiscoverAllWiFiAdapters();
         }
 
         private void ResultsListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -498,17 +500,15 @@ namespace WiFiConnect.MkZ
             {
                 DateTime now = DateTime.Now;
 
-                _bufferPings.Add(pingPoint);
+                UpdateBuffers(pingPoint);
 
-                UpdateBuffer();
-
-                _chart.UpdateChart(_bufferPings, "Pings", System.Drawing.Color.Blue, "ms");
+                _chart.UpdateChart(Settings.BufferPings, "Pings", System.Drawing.Color.Blue, "ms");
 
                 TimeSpan delta = DateTime.Now - now;
 
                 _txtStatus.Text = status;
                 _txtStatus.Text += string.Format(", Processing time: {0:0.000} ms, Points: {1}", 
-                    delta.TotalMilliseconds, _bufferPings.Count);
+                    delta.TotalMilliseconds, Settings.BufferPings.Count);
 
                 //Debug.WriteLine(string.Format("Update time: {0:0.000} ms", delta.TotalMilliseconds));
 
@@ -526,24 +526,33 @@ namespace WiFiConnect.MkZ
 
         private void btnReset_Click(object sender, RoutedEventArgs e)
         {
-            _bufferPings.Clear();
-            _chart.UpdateChart(_bufferPings, "Pings", System.Drawing.Color.Blue, "ms");
+            Settings.BufferPings.Clear();
+            _chart.UpdateChart(Settings.BufferPings, "Pings", System.Drawing.Color.Blue, "ms");
         }
 
         private void ComboBoxBufferSize_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            UpdateBuffer();
+            UpdateBuffers(null);
         }
 
         private TimeSpan _maxBufferSize = TimeSpan.FromHours(1);
-        private void UpdateBuffer()
+        private void UpdateBuffers(PingPoint ping)
         {
+            if (ping != null)
+            {
+                Settings.BufferFull.Add(ping);
+                Settings.BufferPings.Add(ping);
+            }
+
             int hours = (int)Math.Pow(2, cmbBufferSize.SelectedIndex);
             _maxBufferSize = TimeSpan.FromHours(hours);
 
+            while (Settings.BufferFull.Count > 100 * 1000)
+                Settings.BufferFull.RemoveAt(0);
+            
             DateTime now = DateTime.Now;
-            while (_bufferPings.Count > 0 && (now - _bufferPings[0].Date) > _maxBufferSize)
-                _bufferPings.RemoveAt(0);
+            while (Settings.BufferPings.Count > 0 && (now - Settings.BufferPings[0].Date) > _maxBufferSize)
+                Settings.BufferPings.RemoveAt(0);
         }
 
         private void cmbServerUrl_TextChanged(object sender, TextChangedEventArgs e)
