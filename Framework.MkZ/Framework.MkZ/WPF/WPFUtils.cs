@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace MkZ.WPF
@@ -35,9 +37,22 @@ namespace MkZ.WPF
             return false;
         }
 
-        public static void ExecuteOnUIThread(Action action)
+        public static void UpdateGridLinesStyle(Brush color)
         {
-            ExecuteOnUIThread(() => { action(); return 0; }); 
+            var tGridLinesRenderer = Type.GetType(
+                "System.Windows.Controls.Grid+GridLinesRenderer," +
+                " PresentationFramework, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35");
+
+            var gridLinesRenderer = Activator.CreateInstance(tGridLinesRenderer);
+            Type t = gridLinesRenderer.GetType();
+
+            Pen penOdd = new Pen(color, 0.5);
+            //penOdd.DashStyle = DashStyles.Dot;
+            t.GetField("s_oddDashPen", BindingFlags.Static | BindingFlags.NonPublic).SetValue(gridLinesRenderer, penOdd);
+
+            Pen penEven = new Pen(color, 0.5);
+            //penEven.DashStyle = DashStyles.Dash;
+            t.GetField("s_evenDashPen", BindingFlags.Static | BindingFlags.NonPublic).SetValue(gridLinesRenderer, penEven);
         }
 
         public static DispatcherOperation ExecuteOnUiThreadBeginInvoke(Action action, DispatcherPriority priority = DispatcherPriority.Normal)
@@ -65,6 +80,11 @@ namespace MkZ.WPF
             {
                 Log.e("ExecuteOnUiThreadInvoke({0}), exeption: {1}\n", propertyName, ex);
             }
+        }
+
+        public static void ExecuteOnUIThread(Action action)
+        {
+            ExecuteOnUIThread(() => { action(); return 0; }); 
         }
 
         public static T ExecuteOnUIThread<T>(Func<T> action)

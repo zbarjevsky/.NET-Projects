@@ -145,7 +145,7 @@ namespace WiFiConnect.MkZ.Controls
             chart1.Series[1].Points.Clear();
 
             chart1.Series[0].Color = _theme.color;
-            chart1.Series[1].Color = Color.Red;
+            chart1.Series[1].Color = Color.FromArgb(128, Color.Red);
 
             chart1.Series[0].Name = _theme.title;
             chart1.Series[1].Name = "Errors";

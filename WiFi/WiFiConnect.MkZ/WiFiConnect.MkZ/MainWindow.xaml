@@ -204,7 +204,7 @@
                    ContentTemplate="{StaticResource WifiInitialState}" />
         </Border>
 
-        <Border Grid.Row="2" Margin="10" Height="80" BorderBrush="Gray" BorderThickness="1"
+        <Border Grid.Row="2" Margin="10" Height="160" BorderBrush="Gray" BorderThickness="1"
                 VerticalAlignment="Top">
             <StackPanel>
                 <DockPanel>
@@ -229,6 +229,14 @@
                         <ComboBoxItem Content="www.google.com" />
                         <ComboBoxItem Content="www.amazon.com" />
                         <ComboBoxItem Content="www.microsoft.com" />
+                    </ComboBox>
+                </DockPanel>
+                <DockPanel>
+                    <Label Content="Buffer Select: " VerticalContentAlignment="Center" />
+                    <ComboBox x:Name="cmbBufferIdx" Margin="6" SelectedIndex="0" IsReadOnly="True" 
+                              IsEditable="True" TextBoxBase.TextChanged="cmbServerUrl_TextChanged" >
+                        <ComboBoxItem Content="Ping Buffer" />
+                        <ComboBoxItem Content="Main Buffer" />
                     </ComboBox>
                 </DockPanel>
             </StackPanel>

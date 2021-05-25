@@ -101,6 +101,7 @@ namespace WiFiConnect.MkZ
             {
                 case PowerModes.Resume:
                     UpdateBuffers(new PingPoint(DateTime.Now, 0, 0, "Resume"));
+                    Thread.Sleep(2000);
                     _timer.Start();
                     break;
                 case PowerModes.StatusChange:
@@ -498,17 +499,23 @@ namespace WiFiConnect.MkZ
         {
             WPF_Helper.ExecuteOnUIThreadWPF(() =>
             {
+                if (cmbBufferIdx == null)
+                    return 0;
+
                 DateTime now = DateTime.Now;
 
                 UpdateBuffers(pingPoint);
 
-                _chart.UpdateChart(Settings.BufferPings, "Pings", System.Drawing.Color.Blue, "ms");
+                List<PingPoint> buffer = Settings.GetBuffer(cmbBufferIdx.SelectedIndex == 0);
+                System.Drawing.Color color = cmbBufferIdx.SelectedIndex == 0 ? System.Drawing.Color.Blue : System.Drawing.Color.Goldenrod;
+
+                _chart.UpdateChart(buffer, "Pings", color, "ms");
 
                 TimeSpan delta = DateTime.Now - now;
 
                 _txtStatus.Text = status;
                 _txtStatus.Text += string.Format(", Processing time: {0:0.000} ms, Points: {1}", 
-                    delta.TotalMilliseconds, Settings.BufferPings.Count);
+                    delta.TotalMilliseconds, buffer.Count);
 
                 //Debug.WriteLine(string.Format("Update time: {0:0.000} ms", delta.TotalMilliseconds));
 
@@ -527,32 +534,21 @@ namespace WiFiConnect.MkZ
         private void btnReset_Click(object sender, RoutedEventArgs e)
         {
             Settings.BufferPings.Clear();
-            _chart.UpdateChart(Settings.BufferPings, "Pings", System.Drawing.Color.Blue, "ms");
+            _chart.UpdateChart(Settings.GetBuffer(cmbBufferIdx.SelectedIndex == 0), "Pings", System.Drawing.Color.Blue, "ms");
         }
 
         private void ComboBoxBufferSize_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            UpdateBuffers(null);
+            UpdateChart(null, "Update");
         }
 
         private TimeSpan _maxBufferSize = TimeSpan.FromHours(1);
         private void UpdateBuffers(PingPoint ping)
         {
-            if (ping != null)
-            {
-                Settings.BufferFull.Add(ping);
-                Settings.BufferPings.Add(ping);
-            }
-
             int hours = (int)Math.Pow(2, cmbBufferSize.SelectedIndex);
             _maxBufferSize = TimeSpan.FromHours(hours);
 
-            while (Settings.BufferFull.Count > 100 * 1000)
-                Settings.BufferFull.RemoveAt(0);
-            
-            DateTime now = DateTime.Now;
-            while (Settings.BufferPings.Count > 0 && (now - Settings.BufferPings[0].Date) > _maxBufferSize)
-                Settings.BufferPings.RemoveAt(0);
+            Settings.UpdateBuffers(ping, _maxBufferSize);
         }
 
         private void cmbServerUrl_TextChanged(object sender, TextChangedEventArgs e)
