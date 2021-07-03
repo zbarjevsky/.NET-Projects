@@ -159,6 +159,7 @@ namespace MkZ.Media
                     bool isActive = dev.ID == ID;
                     item.Font = isActive ? _fontBold : _fontNorm;
                     item.SubItems[1].Text = isActive ? "Active" : "";
+                    //item.SubItems[2].Text = dev.Device.AudioEndpointVolume.MasterVolumeLevelScalar.ToString("0%");
                     item.Selected = false; // dev.Id == sel.ID;
                     item.ForeColor = dev.State == EDeviceState.Active ? Color.Black : Color.DarkGray;
                     //alternate color inside each group
@@ -175,13 +176,15 @@ namespace MkZ.Media
             if (ActiveDevice == null)
                 return;
 
-            if(volume == 0)
-                volume = ActiveDevice.AudioEndpointVolume.MasterVolumeLevelScalar;
-
             foreach (ListViewItem item in m_listDevices.Items)
             {
-                if (item.Font.Bold)
+                DeviceFullInfo dev = item.Tag as DeviceFullInfo;
+
+                if (dev.ID == _activeDevice.ID)
                 {
+                    if (volume == 0)
+                        volume = dev.Device.AudioEndpointVolume.MasterVolumeLevelScalar;
+
                     item.SubItems[2].Text = volume.ToString("0%");
                 }
                 else
