@@ -59,7 +59,7 @@ namespace MkZ.Media.WPF
                 _popupVolumeInfoWindow.OnBeforeCloseAnimation = (window) => 
                 {
                     _location = new System.Windows.Point(window.Left, window.Top);
-                    _popupVolumeInfoWindow = null; 
+                    //_popupVolumeInfoWindow = null; 
                     return true; 
                 };
             }
@@ -243,7 +243,7 @@ namespace MkZ.Media.WPF
             { 
                 this.Opacity = 0; 
                 this.Visibility = Visibility.Collapsed;
-                this.Close();
+                //this.Close();
                 OnAfterCloseAnimation();
             };
 
