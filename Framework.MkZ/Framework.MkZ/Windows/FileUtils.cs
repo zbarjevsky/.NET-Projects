@@ -226,14 +226,19 @@ namespace MkZ.Tools
                     fileProgress.SubStatus = string.Format("? {0:###,##0} Folders, ? {1:###,##0} Files", totalFoldersCount, listFiles.Count);
                 }
 
-                string[] fileList = null;
+                List<string> fileList = new List<string>();
                 try
                 {
-                    fileList = Directory.GetFiles(path, searchPattern, SearchOption.TopDirectoryOnly);
+                    string[] exts = searchPattern.Split(',', ';');
+                    var files = Directory.EnumerateFiles(path, "*.*", SearchOption.TopDirectoryOnly);
+                    for (int i = 0; i < exts.Length; i++)
+                    {
+                        fileList.AddRange(files.Where(s => s.EndsWith(exts[i])));
+                    }
                 }
                 catch (Exception e) { Debug.WriteLine("Get Files Path: {0} - Error: {1}", path, e); }
 
-                if (fileList != null && fileList.Length != 0)
+                if (fileList != null && fileList.Count != 0)
                 {
                     listFiles.AddRange(fileList);
                     //foreach (string file in fileList)
