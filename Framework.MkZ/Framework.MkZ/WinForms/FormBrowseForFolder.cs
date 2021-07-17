@@ -63,13 +63,24 @@ namespace MkZ.WinForms
 
         private void m_btnNewFolder_Click(object sender, EventArgs e)
         {
-            string oldFolder = m_txtSelectedFolder.Text;
-            string newFolder = Path.Combine(oldFolder, "NewFolder");
+            string parentFolder = m_txtSelectedFolder.Text;
+            string newFolder = NewFolderUniqueName(parentFolder);
             Directory.CreateDirectory(newFolder);
-            m_treeFolders.RefreshFolder(oldFolder); //load new folder
+            m_treeFolders.RefreshFolder(parentFolder); //load new folder
             m_treeFolders.SelectFolder(newFolder, false);
             m_treeFolders.EditFolder(newFolder);
             m_txtSelectedFolder.Text = newFolder;
+        }
+
+        private string NewFolderUniqueName(string baseFolder)
+        {
+            int idx = 1;
+            string newFolder = Path.Combine(baseFolder, "NewFolder");
+            while (Directory.Exists(newFolder))
+            {
+                newFolder = Path.Combine(baseFolder, "NewFolder"+idx++);
+            }
+            return newFolder;
         }
 
         private void m_btnOk_Click(object sender, EventArgs e)
