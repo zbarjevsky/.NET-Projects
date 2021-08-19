@@ -204,9 +204,12 @@ namespace MkZ.Windows.Win32API
     public class User32
     {
         public const uint SWP_SHOWWINDOW = 0x0001;
-        public const uint SW_RESTORE = 0x09;
         public const uint SW_SHOWNOACTIVATE = 0x04;
         
+        public const uint SW_HIDE = 0;
+        public const uint SW_SHOW = 5;
+        public const uint SW_RESTORE = 0x09;
+
         public const uint SW_MAXIMIZE = 3;
         public const uint SW_MINIMIZE = 6;
         public const uint SW_FORCEMINIMIZE = 11;
