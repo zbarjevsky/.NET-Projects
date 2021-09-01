@@ -195,6 +195,9 @@ namespace MkZ.MediaPlayer
 
         private void ComboMediaFiles_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            PlayerVM.Pause();
+            Context.AppConfig.Save();
+
             if(_cmbFilesList.SelectedItem is MediaFileInfo info)
             {
                 if (info != null && !string.IsNullOrWhiteSpace(info.FileName))
@@ -204,7 +207,7 @@ namespace MkZ.MediaPlayer
                     {
                         var res = PopUp.MessageBox("File Not Found: \n" + info.FileName, "Open Media File",
                             MessageBoxImage.Exclamation, TextAlignment.Left,
-                            new PopUp.PopUpButtons("_Skip to Next", "Re_move & Next", "Re_try", PopUp.PopUpResult.Btn3));
+                            new PopUp.PopUpButtons("_Skip to Next", "Re_move & Next", "Re_try", PopUp.PopUpResult.Btn1), 12000);
 
                         if (res == PopUp.PopUpResult.Btn3)
                             goto Retry;
@@ -336,8 +339,12 @@ namespace MkZ.MediaPlayer
                 message += "\nTry to rename extension to .mkv\n";
             message += "\nKeep file in Play List?";
 
-            PopUp.PopUpResult res = this.MessageQuestion(message, "Open Media Failed", PopUp.PopUpButtonsType.CancelNoYes);
-            if(res == PopUp.PopUpResult.No)
+            PopUp.PopUpResult res = PopUp.MessageBox(message, "Open Media Failed",
+               MessageBoxImage.Exclamation, TextAlignment.Left,
+               new PopUp.PopUpButtons("_Skip to Next", "Re_move & Next", "Re_try", PopUp.PopUpResult.Btn1), 12000);
+
+            //PopUp.PopUpResult res = this.MessageQuestion(message, "Open Media Failed", PopUp.PopUpButtonsType.CancelNoYes);
+            if(res == PopUp.PopUpResult.Btn2)
             {
                 if(MediaDB.SelectedPlayList.MediaFiles[MediaDB.SelectedMediaFileIndex].FileName == fileName)
                 {
@@ -345,8 +352,16 @@ namespace MkZ.MediaPlayer
                     _cmbFilesList.SelectedIndex = idx;
                 }
             }
+            else if(res == PopUp.PopUpResult.Btn3) //retry
+            {
+                this.PlayerVM.Play();
+            }
+            else //next
+            {
+                OnMediaEnded(this.PlayerVM);
+            }
 
-            return res == PopUp.PopUpResult.Yes;
+            return true;
         }
 
         #region IPlayerMainWindow

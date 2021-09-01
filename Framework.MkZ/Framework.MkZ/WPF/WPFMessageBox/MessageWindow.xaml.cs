@@ -261,6 +261,8 @@ namespace MkZ.WPF.MessageBox
                     if (IsVisible)
                         WPF_Helper.ExecuteOnUIThread(() => { DefaultCommand.Execute(this); return 0; });
                 });
+
+            t.IsBackground = true;
             t.Name = "AutoCloseMessage";
             t.Start();
             return t;

@@ -623,7 +623,7 @@ namespace MkZ.MediaPlayer
             TimeSpan waitToOpen = _stopperMediaOpened.Elapsed;
             double timeout = 3000.0;
             if (State.NaturalDuration > 0)
-                timeout = 100.0 + State.NaturalDuration / 1000.0;
+                timeout = 333.3 + Math.Min(10000, State.NaturalDuration);
 
             if (waitToOpen.TotalMilliseconds > timeout) //timeout
             {
@@ -645,7 +645,12 @@ namespace MkZ.MediaPlayer
                 else //exceed number of tries
                 {
                     Log.e("Media open FAILED: {0}, after retries: {1}", State.FileName, _OpenMediaTryCount);
-                    PopUp.Error("Media open FAILED: \n" + State.FileName, "Open Media File Error");
+                    //PopUp.Error("Media open FAILED: \n" + State.FileName, "Open Media File Error");
+
+                    string message = "Media open FAILED: \n" + State.FileName;
+                    PopUp.PopUpResult res = PopUp.MessageBox(message, "Open Media File Error",
+                       MessageBoxImage.Exclamation, TextAlignment.Left,
+                       new PopUp.PopUpButtons("_Skip to Next", "Re_move & Next", "Re_try", PopUp.PopUpResult.Btn1), 12000);
                 }
             }
             else //not opened yet - wait more
@@ -662,8 +667,11 @@ namespace MkZ.MediaPlayer
             try
             {
                 TimeSpan position = State.Position;
+                if (NaturalDuration > 3 && Math.Abs(NaturalDuration - State.Position.TotalSeconds) <= 1.0)
+                    position = State.Position = TimeSpan.FromSeconds(0);
 
                 _stopperMediaOpened.Stop();
+
                 Debug.WriteLine("MediaOpened: Position: {0} - {1}, Open took: {2:0.0} ms",
                     position, State.NaturalDuration, _stopperMediaOpened.Elapsed.TotalMilliseconds);
 

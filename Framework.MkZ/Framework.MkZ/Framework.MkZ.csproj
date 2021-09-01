@@ -367,6 +367,7 @@
     <Resource Include="Images\Clock256x256.png" />
     <Resource Include="Images\Clock48x48.png" />
     <Resource Include="Images\Clock48x48_1.png" />
+    <Resource Include="Images\COPY.PNG" />
     <Content Include="Sounds\ding.mp3">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
