@@ -354,7 +354,8 @@ namespace MkZ.MediaPlayer
             }
             else if(res == PopUp.PopUpResult.Btn3) //retry
             {
-                this.PlayerVM.Play();
+                System.Threading.Thread.Sleep(1000);
+                Dispatcher.BeginInvoke(new Action(() => { this.PlayerVM.Play(); }));
             }
             else //next
             {
