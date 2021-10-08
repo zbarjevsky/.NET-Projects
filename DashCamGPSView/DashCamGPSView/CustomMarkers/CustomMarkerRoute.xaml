@@ -43,7 +43,7 @@
                 </PathGeometry>
             </Path.Data>
         </Path>
-        <Image Name="_car" Source="/Images/CompassCarRed.png" 
+        <Image Name="_carMoving" Source="/Images/CompassCarRed.png" 
                Canvas.Left="80" Canvas.Top="190"
                Opacity="0.4" RenderTransformOrigin=".5,.25"
                Height="40" Width="20" >
@@ -54,5 +54,7 @@
                 </TransformGroup>
             </Image.RenderTransform>
         </Image>
+        <Ellipse x:Name="_carStopped" Canvas.Left="85" Canvas.Top="195" 
+                 Fill="LightBlue" Stroke="Navy" StrokeThickness="2" Width="20" Height="20"/>
     </Canvas>
 </UserControl>

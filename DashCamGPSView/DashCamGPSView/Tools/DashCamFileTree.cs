@@ -28,11 +28,12 @@ namespace DashCamGPSView.Tools
             List<FileInfoWithDateFromFileName> allInfos = fileList.Select(f => new FileInfoWithDateFromFileName(f)).ToList();
 
             List<DashCamFileInfo> infoList = new List<DashCamFileInfo>();
-            foreach (FileInfoWithDateFromFileName currentInfo in allInfos)
+            for (int idx = 0; idx < allInfos.Count; idx++)
             {
+                FileInfoWithDateFromFileName currentInfo = allInfos[idx];
                 DashCamFileInfo info = new DashCamFileInfo(allInfos, currentInfo, Settings.Default.SpeedUnits);
-                DashCamFileInfo i1 = (infoList.FirstOrDefault(i => i.FrontFileName == info.FrontFileName));
-                if(i1 == null)
+                DashCamFileInfo existing = (infoList.FirstOrDefault(i => i.FrontFileName == info.FrontFileName));
+                if(existing == null)
                     infoList.Add(info);
             }
 

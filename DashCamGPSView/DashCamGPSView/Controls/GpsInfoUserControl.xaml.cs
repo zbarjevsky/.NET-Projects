@@ -33,16 +33,17 @@ namespace DashCamGPSView.Controls
             {
                 GpsPointData inf = gps[pointIdx];
 
-                compass.Direction = inf.Course;
+                compass.SetDirection(inf.Course, inf.SpeedMph);
 
                 txtSpeed.Text = "Speed: " + inf.SpeedMph.ToString("0.0 mph");
                 txtLat.Text = "Lattitude:  " + SexagesimalAngle.ToString(inf.Latitude);
                 txtLon.Text = "Longtitude: " + SexagesimalAngle.ToString(inf.Longitude);
-                txtTime.Text = inf.FixTime.AddHours(gps.TimeZone).ToString("yyyy/MM/dd HH:mm:ss");
+                if(gps.TimeZone > -24 && gps.TimeZone < 24)
+                    txtTime.Text = inf.FixTime.AddHours(gps.TimeZone).ToString("yyyy/MM/dd HH:mm:ss");
             }
             else
             {
-                compass.Direction = 0;
+                compass.SetDirection(0, false);
 
                 txtSpeed.Text = "Speed: N/A";
                 txtLat.Text = "...";

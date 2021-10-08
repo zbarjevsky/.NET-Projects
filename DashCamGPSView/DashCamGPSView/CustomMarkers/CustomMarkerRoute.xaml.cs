@@ -107,20 +107,35 @@ namespace DashCamGPSView.CustomMarkers
             //update car position
             if (_iCurrentPointIndex >= 0)
             {
-                _car.Opacity = 0.8;
 
                 GMap.NET.PointLatLng currentPosition = new GMap.NET.PointLatLng(RouteMain[_iCurrentPointIndex].Latitude, RouteMain[_iCurrentPointIndex].Longitude);
                 GMap.NET.GPoint pt0 = map.FromLatLngToLocal(currentPosition);
                 Point ptCar = new Point(pt0.X, pt0.Y);
 
-                Canvas.SetLeft(_car, ptCar.X - _car.ActualWidth * _car.RenderTransformOrigin.X); //middle width
-                Canvas.SetTop(_car, ptCar.Y - _car.ActualHeight * _car.RenderTransformOrigin.Y); //toward the front of car
-                carDirection.Angle = RouteMain[_iCurrentPointIndex].Course;
+                if (RouteMain[_iCurrentPointIndex].SpeedMph > 1)
+                {
+                    _carMoving.Opacity = 0.8;
+                    _carStopped.Opacity = 0.01;
+
+                    Canvas.SetLeft(_carMoving, ptCar.X - _carMoving.ActualWidth * _carMoving.RenderTransformOrigin.X); //middle width
+                    Canvas.SetTop(_carMoving, ptCar.Y - _carMoving.ActualHeight * _carMoving.RenderTransformOrigin.Y); //toward the front of car
+                    carDirection.Angle = RouteMain[_iCurrentPointIndex].Course;
+                }
+                else
+                {
+                    _carMoving.Opacity = 0.01;
+                    _carStopped.Opacity = 0.8;
+
+                    Canvas.SetLeft(_carStopped, ptCar.X - _carStopped.ActualWidth /2); //middle width
+                    Canvas.SetTop(_carStopped, ptCar.Y - _carStopped.ActualHeight /2); //
+                }
+
                 UpdateCarScale(map.Zoom);
             }
             else
             {
-                _car.Opacity = 0.1;
+                _carMoving.Opacity = 0.01;
+                _carStopped.Opacity = 0.01;
             }
 
             Visibility = Visibility.Visible;

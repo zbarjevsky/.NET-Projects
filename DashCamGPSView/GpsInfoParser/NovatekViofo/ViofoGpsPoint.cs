@@ -41,6 +41,8 @@ namespace NovatekViofoGPSParser
 
         public static ViofoGpsPoint Parse(IBufferReader reader, uint expectedSize)
         {
+            const uint OFFSET_V2_48 = 48, OFFSET_V1_16 = 16;
+
             long start = reader.Position;
 
             byte[] buffer = reader.ReadBuffer(expectedSize);
@@ -70,8 +72,7 @@ namespace NovatekViofoGPSParser
             }
             else if ((char)c == 'L')
             {
-                const uint OFFSET_V2 = 48, OFFSET_V1 = 16; 
-                reader.Position = start + OFFSET_V2;
+                reader.Position = start + OFFSET_V2_48;
 
                 //# Datetime data
                 int hour = (int)reader.ReadUintLE();
@@ -105,8 +106,7 @@ namespace NovatekViofoGPSParser
             }
             else if(c == 240)
             {
-                const uint OFFSET_V2 = 48, OFFSET_V1 = 16;
-                reader.Position = start + OFFSET_V1;
+                reader.Position = start + OFFSET_V1_16;
 
                 //# Datetime data
                 int hour = (int)reader.ReadUintLE();

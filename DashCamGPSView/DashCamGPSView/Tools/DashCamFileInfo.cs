@@ -31,7 +31,7 @@ namespace DashCamGPSView.Tools
 
             fileName = Path.GetFileNameWithoutExtension(fileName);
 
-            if (fileName.Length >= 16 && fileName.Length < 22)
+            if (fileName.Length >= 16 && fileName.Length <= 22)
             {
                 string date_time = fileName.Substring(0, 16); //"2019_0624_075333_296P"
                 Date = DateTime.ParseExact(date_time, "yyyy_MMdd_HHmmss", CultureInfo.InvariantCulture);
@@ -45,6 +45,11 @@ namespace DashCamGPSView.Tools
             {
                 Date = DateTime.MinValue;
             }
+        }
+
+        public override string ToString()
+        {
+            return Date + " " + Info.FullName;
         }
     }
 
@@ -121,7 +126,9 @@ namespace DashCamGPSView.Tools
             else //different format
             {
                 GpsFileFormat = GpsFileFormat.Viofo;
-                FileDate = FromViofoFileName(allFiles, currentInfo, ref FrontFileName, ref RearFileName, ref InsideFileName);
+                FileDate = currentInfo.Date;
+                if(!FromViofoFileName(allFiles, currentInfo, ref FrontFileName, ref RearFileName, ref InsideFileName))
+                    FrontFileName = currentInfo.Info.FullName;
             }
         }
 
@@ -201,7 +208,7 @@ namespace DashCamGPSView.Tools
             _dGpsDelaySeconds = delta.TotalSeconds;
         }
 
-        private DateTime FromViofoFileName(List<FileInfoWithDateFromFileName> allFiles, FileInfoWithDateFromFileName currentInfo, 
+        private bool FromViofoFileName(List<FileInfoWithDateFromFileName> allFiles, FileInfoWithDateFromFileName currentInfo, 
             ref string frontFileName, ref string rearFileName, ref string insideFileName)
         {
             frontFileName = "";
@@ -222,7 +229,18 @@ namespace DashCamGPSView.Tools
                 }
             }
 
-            return currentInfo.Date;
+            //check for forein file name
+            string name = currentInfo.Info.FullName;
+            if (string.Compare(name, frontFileName, true) != 0 &&
+                string.Compare(name, rearFileName, true) != 0 &&
+                string.Compare(name, insideFileName, true) != 0 )
+            {
+                frontFileName = name;
+                rearFileName = "";
+                insideFileName = "";
+            }
+
+            return !string.IsNullOrWhiteSpace(frontFileName);
         }
 
         private DateTime FromDuDuBellFileName(string fileName)

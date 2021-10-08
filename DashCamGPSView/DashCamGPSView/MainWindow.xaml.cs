@@ -49,6 +49,7 @@ namespace DashCamGPSView
 
             waitScreen.Show(RepeatBehavior.Forever);
             speedGauge.Draggable(true, new Thickness(-10));
+            compass.Draggable(true, new Thickness(-10));
 
             playerF.Volume = Settings.Default.SoundVolume;
             playerR.Volume = 0;
@@ -543,17 +544,20 @@ namespace DashCamGPSView
             if (_dashCamFileInfo.HasGpsInfo)
             {
                 speedGauge.Visibility = Visibility.Visible;
+                compass.Visibility = Visibility.Visible;
 
                 if (idx >= 0 && idx < _dashCamFileInfo.GpsInfo.Count)
                 {
                     speedGauge.SpeedUnits = _dashCamFileInfo.SpeedUnits.ToString();
                     speedGauge.Speed = _dashCamFileInfo.GetSpeed(idx).ToString("0");
+                    compass.SetDirection(_dashCamFileInfo[idx].Course, _dashCamFileInfo.GetSpeed(idx));
 
                     _lastValidPosition = _dashCamFileInfo.Position(idx);
                 }
                 else
                 {
                     speedGauge.Speed = "---";
+                    compass.SetDirection(0, false);
                 }
 
                 gpsInfo.UpdateInfo(_dashCamFileInfo, idx);
@@ -565,6 +569,7 @@ namespace DashCamGPSView
                 //speedGauge.DialText = "Speed Mph";
                 speedGauge.Speed = "?";
                 speedGauge.Visibility = Visibility.Hidden;
+                compass.Visibility = Visibility.Hidden;
             }
 
             graphSpeedInfo.SetCarPosition(idx);

@@ -30,5 +30,16 @@ namespace DashCamGPSView.Controls
             get { return arrowDirection.Angle; }
             set { arrowDirection.Angle = value; }
         }
+
+        public void SetDirection(double direction, bool bShowCar)
+        {
+            Direction = direction;
+            car.Visibility = bShowCar ? Visibility.Visible : Visibility.Collapsed;
+        }
+
+        public void SetDirection(double direction, double speed)
+        {
+            SetDirection(direction, speed > 1);
+        }
     }
 }

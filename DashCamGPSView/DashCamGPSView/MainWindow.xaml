@@ -80,9 +80,9 @@
 
         <Grid x:Name="_gridPlayers" Grid.Row="1" Grid.RowSpan="4" Grid.Column="0" Grid.ColumnSpan="3" >
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="5"/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="3*" x:Name="rowRearView"/>
@@ -96,7 +96,7 @@
             <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
             <Border x:Name="borderPlayerI" Grid.Row="0" Grid.Column="2"
                 BorderThickness="2" BorderBrush="Gray" >
-                <controls:VideoPlayerControl x:Name="playerI" Title="Rear View" />
+                <controls:VideoPlayerControl x:Name="playerI" Title="Inner View" />
             </Border>
             <GridSplitter Grid.Row="1" 
                       HorizontalAlignment="Stretch"
@@ -106,8 +106,13 @@
                 <controls:VideoPlayerControl x:Name="playerF" Title="Front View" />
             </Border>
 
-            <speedGauge:Gauge180UserControl x:Name="speedGauge" Grid.RowSpan="3" 
+            <speedGauge:Gauge180UserControl x:Name="speedGauge" Grid.RowSpan="3" Grid.ColumnSpan="3"
                  Width="180" Height="100" MaxSpeed="140" SpeedColor="Gold"
+                 HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="40,0,40,20"/>
+
+            <controls:CompassUserControl x:Name="compass" Direction="10" 
+                 Grid.RowSpan="3" Grid.ColumnSpan="3"
+                 Width="280" Height="150" 
                  HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="40,0,40,20"/>
             
             <!--<Viewbox Grid.Column="2" Grid.Row="3" 

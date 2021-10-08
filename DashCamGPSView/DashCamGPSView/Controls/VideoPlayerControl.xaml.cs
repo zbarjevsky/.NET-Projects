@@ -243,6 +243,10 @@ namespace DashCamGPSView.Controls
                 this.Background = Brushes.Gray;
                 MediaState = MediaState.Play;
             }
+            else
+            {
+                Close();
+            }
         }
 
         public void Pause()
