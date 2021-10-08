@@ -79,6 +79,11 @@
         </ToolBar>
 
         <Grid x:Name="_gridPlayers" Grid.Row="1" Grid.RowSpan="4" Grid.Column="0" Grid.ColumnSpan="3" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="3*" x:Name="rowRearView"/>
                 <RowDefinition Height="5"/>
@@ -88,11 +93,16 @@
                 BorderThickness="2" BorderBrush="Gray" >
                 <controls:VideoPlayerControl x:Name="playerR" Title="Rear View" />
             </Border>
+            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" />
+            <Border x:Name="borderPlayerI" Grid.Row="0" Grid.Column="2"
+                BorderThickness="2" BorderBrush="Gray" >
+                <controls:VideoPlayerControl x:Name="playerI" Title="Rear View" />
+            </Border>
             <GridSplitter Grid.Row="1" 
                       HorizontalAlignment="Stretch"
                       DragCompleted="GridSplitter1_DragCompleted"/>
 
-            <Border x:Name="borderPlayerF" Grid.Row="2" BorderThickness="2" BorderBrush="Gray">
+            <Border x:Name="borderPlayerF" Grid.Row="2" Grid.ColumnSpan="3" BorderThickness="2" BorderBrush="Gray">
                 <controls:VideoPlayerControl x:Name="playerF" Title="Front View" />
             </Border>
 

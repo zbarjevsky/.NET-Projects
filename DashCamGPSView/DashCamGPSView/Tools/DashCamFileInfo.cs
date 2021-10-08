@@ -20,11 +20,39 @@ namespace DashCamGPSView.Tools
         Unkn
     }
 
+    public class FileInfoWithDateFromFileName
+    {
+        public FileInfo Info { get; }
+        public DateTime Date { get; }
+
+        public FileInfoWithDateFromFileName(string fileName)
+        {
+            Info = new FileInfo(fileName);
+
+            fileName = Path.GetFileNameWithoutExtension(fileName);
+
+            if (fileName.Length >= 16 && fileName.Length < 22)
+            {
+                string date_time = fileName.Substring(0, 16); //"2019_0624_075333_296P"
+                Date = DateTime.ParseExact(date_time, "yyyy_MMdd_HHmmss", CultureInfo.InvariantCulture);
+            }
+            else if (fileName.Length == 15)
+            {
+                string date_time = fileName.Substring(0, 15); //"20190624_075333"
+                Date = DateTime.ParseExact(date_time, "yyyyMMdd_HHmmss", CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                Date = DateTime.MinValue;
+            }
+        }
+    }
+
     public class DashCamFileInfo
     {
         public GpsFileFormat GpsFileFormat = GpsFileFormat.Unkn;
 
-        public string FrontFileName, BackFileName, NmeaFileName;
+        public string FrontFileName, RearFileName, InsideFileName, NmeaFileName;
 
         private List<GpsPointData> _gpsInfo = new List<GpsPointData>();
         public List<GpsPointData> GpsInfo
@@ -60,8 +88,9 @@ namespace DashCamGPSView.Tools
         private double _dGpsDelaySeconds = 2.3;
         private int _iGpsTimeZoneHours = 0;
 
-        public DashCamFileInfo(string fileName, string speedUnits)
+        public DashCamFileInfo(List<FileInfoWithDateFromFileName> allFiles, FileInfoWithDateFromFileName currentInfo, string speedUnits)
         {
+            string fileName = currentInfo.Info.FullName;
             SpeedUnits = (SpeedUnits)Enum.Parse(typeof(SpeedUnits), speedUnits);
 
             string name = Path.GetFileNameWithoutExtension(fileName);
@@ -85,17 +114,32 @@ namespace DashCamGPSView.Tools
                 NmeaFileName = Path.Combine(dirF, name + "F.NMEA");
                 if (!File.Exists(NmeaFileName))
                     NmeaFileName = null;
-                BackFileName = Path.Combine(dirR, name + "R.MP4");
-                if (!File.Exists(BackFileName))
-                    BackFileName = null;
+                RearFileName = Path.Combine(dirR, name + "R.MP4");
+                if (!File.Exists(RearFileName))
+                    RearFileName = null;
             }
             else //different format
             {
                 GpsFileFormat = GpsFileFormat.Viofo;
-                FileDate = FromViofoFileName(fileName);
-
-                FrontFileName = fileName;
+                FileDate = FromViofoFileName(allFiles, currentInfo, ref FrontFileName, ref RearFileName, ref InsideFileName);
             }
+        }
+
+        public DashCamFileInfo(DashCamFileInfo source, string speedUnits)
+        {
+            SpeedUnits = (SpeedUnits)Enum.Parse(typeof(SpeedUnits), speedUnits);
+            GpsFileFormat = source.GpsFileFormat;
+
+            FrontFileName = source.FrontFileName;
+            RearFileName = source.RearFileName;
+            InsideFileName = source.InsideFileName;
+            NmeaFileName = source.NmeaFileName;
+
+            FileDate = source.FileDate;
+
+            _iGpsTimeZoneHours = source._iGpsTimeZoneHours;
+            _isGpsInfoInitialized = source._isGpsInfoInitialized;
+            _gpsInfo = source._gpsInfo;
         }
 
         private bool _isGpsInfoInitialized = false;
@@ -131,8 +175,8 @@ namespace DashCamGPSView.Tools
                     File.Delete(FrontFileName);
                 if (File.Exists(NmeaFileName))
                     File.Delete(NmeaFileName);
-                if (File.Exists(BackFileName))
-                    File.Delete(BackFileName);
+                if (File.Exists(RearFileName))
+                    File.Delete(RearFileName);
             }
             catch (Exception err)
             {
@@ -157,20 +201,28 @@ namespace DashCamGPSView.Tools
             _dGpsDelaySeconds = delta.TotalSeconds;
         }
 
-        private DateTime FromViofoFileName(string fileName)
+        private DateTime FromViofoFileName(List<FileInfoWithDateFromFileName> allFiles, FileInfoWithDateFromFileName currentInfo, 
+            ref string frontFileName, ref string rearFileName, ref string insideFileName)
         {
-            fileName = Path.GetFileNameWithoutExtension(fileName);
-            if (fileName.Length >= 16 && fileName.Length < 22)
+            frontFileName = "";
+            rearFileName = "";
+            insideFileName = "";
+
+            foreach (FileInfoWithDateFromFileName info in allFiles)
             {
-                string date_time = fileName.Substring(0, 16); //"2019_0624_075333_296P"
-                return DateTime.ParseExact(date_time, "yyyy_MMdd_HHmmss", CultureInfo.InvariantCulture);
+                double delta = Math.Abs((info.Date - currentInfo.Date).TotalSeconds);
+                if (delta < 3)
+                {
+                    if (info.Info.Name.EndsWith("_F.MP4", true, CultureInfo.InvariantCulture))
+                        frontFileName = info.Info.FullName;
+                    else if (info.Info.Name.EndsWith("_R.MP4", true, CultureInfo.InvariantCulture))
+                        rearFileName = info.Info.FullName;
+                    else if (info.Info.Name.EndsWith("_I.MP4", true, CultureInfo.InvariantCulture))
+                        insideFileName = info.Info.FullName;
+                }
             }
-            else if (fileName.Length == 15)
-            {
-                string date_time = fileName.Substring(0, 15); //"20190624_075333"
-                return DateTime.ParseExact(date_time, "yyyyMMdd_HHmmss", CultureInfo.InvariantCulture);
-            }
-            return DateTime.MinValue;
+
+            return currentInfo.Date;
         }
 
         private DateTime FromDuDuBellFileName(string fileName)
@@ -187,7 +239,7 @@ namespace DashCamGPSView.Tools
                 return "No GPS info...";
 
             string info = "Time: " + GpsInfo[idx].FixTime.AddHours(_iGpsTimeZoneHours).ToString("yyyy/MM/dd HH:mm:ss") + 
-                ", " + new PointLatLng(GpsInfo[idx].Latitude, GpsInfo[idx].Longitude).ToString() + 
+                ", " + new GMap.NET.PointLatLng(GpsInfo[idx].Latitude, GpsInfo[idx].Longitude).ToString() + 
                 ", Speed: " + GpsInfo[idx].SpeedMph.ToString("0.0 mph") + 
                 ", Azimuth: " + GpsInfo[idx].Course.ToString("0.0");
             return info;

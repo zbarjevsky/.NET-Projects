@@ -17,19 +17,23 @@ namespace DashCamGPSView.Tools
         /// </summary>
         /// <param name="fileName"></param>
         /// <param name="deltaMinutesBetweenGroups"></param>
-        public DashCamFileTree(string fileName, double deltaMinutesBetweenGroups = 10.0)
+        public DashCamFileTree(string selectFile, double deltaMinutesBetweenGroups = 10.0)
         {
-            string dirParent = Path.GetDirectoryName(fileName);
-            string ext = Path.GetExtension(fileName);
+            string dirParent = Path.GetDirectoryName(selectFile);
+            string ext = Path.GetExtension(selectFile);
 
             string [] fileList = Directory.GetFiles(dirParent, "*"+ext);
-
             Array.Sort(fileList, StringComparer.InvariantCultureIgnoreCase);
 
+            List<FileInfoWithDateFromFileName> allInfos = fileList.Select(f => new FileInfoWithDateFromFileName(f)).ToList();
+
             List<DashCamFileInfo> infoList = new List<DashCamFileInfo>();
-            foreach (string file in fileList)
+            foreach (FileInfoWithDateFromFileName currentInfo in allInfos)
             {
-                infoList.Add(new DashCamFileInfo(file, Settings.Default.SpeedUnits));
+                DashCamFileInfo info = new DashCamFileInfo(allInfos, currentInfo, Settings.Default.SpeedUnits);
+                DashCamFileInfo i1 = (infoList.FirstOrDefault(i => i.FrontFileName == info.FrontFileName));
+                if(i1 == null)
+                    infoList.Add(info);
             }
 
             List<DashCamFileInfo> group = new List<DashCamFileInfo>();

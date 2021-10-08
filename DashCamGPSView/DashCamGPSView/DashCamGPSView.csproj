@@ -127,6 +127,8 @@
       <DependentUpon>VideoPlayerControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Tools\ExportUtils.cs" />
+    <Compile Include="Tools\PointLatLngUI.cs" />
+    <Compile Include="Tools\SizeLatLngUI.cs" />
     <Compile Include="Tools\Tools.cs" />
     <Page Include="Controls\PlayerTimeLineBarUserControl.xaml">
       <SubType>Designer</SubType>

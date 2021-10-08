@@ -23,5 +23,8 @@
     <Setting Name="SpeedUnits" Type="System.String" Scope="User">
       <Value Profile="(Default)">mph</Value>
     </Setting>
+    <Setting Name="InnerPlayerVerticalOffset" Type="System.Double" Scope="User">
+      <Value Profile="(Default)">0.5</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

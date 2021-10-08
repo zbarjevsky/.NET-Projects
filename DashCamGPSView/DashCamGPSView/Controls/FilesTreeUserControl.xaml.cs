@@ -23,7 +23,7 @@ namespace DashCamGPSView.Controls
     /// </summary>
     public partial class FilesTreeUserControl : UserControl
     {
-        public Action<string> TreeItemDoubleClickAction = (fileName) => { };
+        public Action<VideoFile> TreeItemDoubleClickAction = (video) => { };
         public Action OpenFileAction = () => { };
         public Action<List<DashCamFileInfo>> ExportGPSAction = (infos) => { };
         public Action<ObservableCollection<VideoFile>> DeleteRecordingsAction = (videos) => { };
@@ -53,7 +53,7 @@ namespace DashCamGPSView.Controls
             };
         }
 
-        public VideoFile LoadTree(DashCamFileTree tree, string selectedFileName)
+        public VideoFile LoadTree(DashCamFileTree tree, string selectFile)
         {
             _itemsSource.Clear();
             foreach (List<DashCamFileInfo> group in tree.fileGroups)
@@ -63,7 +63,7 @@ namespace DashCamGPSView.Controls
             
             treeFiles.ItemsSource = _itemsSource;
             treeFiles.UpdateLayout();
-            return SelectFile(selectedFileName);
+            return SelectFile(selectFile);
         }
 
         internal VideoFile SelectFile(string fileName)
@@ -77,7 +77,7 @@ namespace DashCamGPSView.Controls
                     TreeViewItem childItem = tvi.ItemContainerGenerator.ContainerFromItem(videoFile) as TreeViewItem;
                     if (childItem != null)
                     {
-                        childItem.IsSelected = (string.Compare(fileName, videoFile.FileName, true) == 0);
+                        childItem.IsSelected = videoFile.HasFileName(fileName);
                         if (childItem.IsSelected)
                         {
                             v = videoFile;
@@ -130,7 +130,7 @@ namespace DashCamGPSView.Controls
             }
         }
 
-        internal string FindNextFile(string fileName)
+        internal VideoFile FindNextFile(string fileName)
         {
             foreach (VideoGroup group in treeFiles.Items)
             {
@@ -141,14 +141,14 @@ namespace DashCamGPSView.Controls
                     if (string.Compare(fileName, v.FileName, true) == 0)
                     {
                         if (i + 1 < group.Members.Count) //has next
-                            return group.Members[i + 1].FileName;
+                            return group.Members[i + 1];
                     }
                 }
             }
             return null;
         }
 
-        internal string FindPrevFile(string fileName)
+        internal VideoFile FindPrevFile(string fileName)
         {
             foreach (VideoGroup group in treeFiles.Items)
             {
@@ -159,7 +159,7 @@ namespace DashCamGPSView.Controls
                     if (string.Compare(fileName, v.FileName, true) == 0)
                     {
                         if (i - 1 >= 0) //has prev
-                            return group.Members[i - 1].FileName;
+                            return group.Members[i - 1];
                     }
                 }
             }
@@ -172,7 +172,7 @@ namespace DashCamGPSView.Controls
             {
                 if (item.DataContext is VideoFile v)
                 {
-                    TreeItemDoubleClickAction(v.FileName);
+                    TreeItemDoubleClickAction(v);
                 }
                 else if (item.DataContext is VideoGroup g)
                 {
@@ -225,7 +225,7 @@ namespace DashCamGPSView.Controls
             {
                 if (item.DataContext is VideoFile v)
                 {
-                    TreeItemDoubleClickAction(v.FileName);
+                    TreeItemDoubleClickAction(v);
                 }
             }
         }
@@ -352,6 +352,18 @@ namespace DashCamGPSView.Controls
 
             FileInfo fi = new FileInfo(FileName);
             Description = string.Format(" ({0:###,###.0} KB)", fi.Length / 1024.0);
+        }
+
+        internal bool HasFileName(string fileName)
+        {
+            if (string.Compare(fileName, _dashCamFileInfo.FrontFileName, true) == 0)
+                return true;
+            if (string.Compare(fileName, _dashCamFileInfo.RearFileName, true) == 0)
+                return true;
+            if (string.Compare(fileName, _dashCamFileInfo.InsideFileName, true) == 0)
+                return true;
+
+            return false;
         }
     }
 }
