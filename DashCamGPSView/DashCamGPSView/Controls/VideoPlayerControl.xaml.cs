@@ -33,7 +33,7 @@ namespace DashCamGPSView.Controls
         private ScrollDragZoom _scrollDragger;
 
         public Action MaximizeAction = () => { };
-        public Action VideoEnded = () => { };
+        public Action<IVideoPlayer> VideoEnded = (player) => { };
         public Action<IVideoPlayer> VideoStarted { get; set; } = (player) => { };
         public Func<ExceptionRoutedEventArgs, MediaElement, bool> VideoFailed = (e, player) => true;
         public Action LeftButtonClick = () => { };
@@ -79,7 +79,7 @@ namespace DashCamGPSView.Controls
             }
         }
 
-        public double VerticalOffset
+        public double ScrollOffsetY
         {
             get
             {
@@ -111,6 +111,29 @@ namespace DashCamGPSView.Controls
                 _scrollDragger.Zoom = value;
             }
         }
+        public  void ZoomStateSet(eZoomState zoom, bool adjustScroll)
+        {
+            switch (zoom)
+            {
+                case eZoomState.Original:
+                    OriginalSize(adjustScroll);
+                    break;
+                case eZoomState.FitWidth:
+                    FitWidth(adjustScroll);
+                    break;
+                case eZoomState.FitWindow:
+                    FitWindow();
+                    break;
+                case eZoomState.Custom:
+                default:
+                    break;
+            }
+        }
+
+        public eZoomState ZoomStateGet()
+        {
+            return _scrollDragger.ZoomState;
+        }
 
         public VideoPlayerControl()
         {
@@ -137,7 +160,8 @@ namespace DashCamGPSView.Controls
             FileName = player.FileName;
             IsFlipHorizontally = player.IsFlipHorizontally;
             Zoom = player.Zoom;
-            VerticalOffset = player.VerticalOffset;
+            ZoomStateSet(player.ZoomStateGet(), true);
+            ScrollOffsetY = player.ScrollOffsetY;
             Position = player.Position;
         }
 
@@ -373,7 +397,7 @@ namespace DashCamGPSView.Controls
                     MediaState = GetMediaState(VideoPlayerElement); 
                     VideoStarted(this); 
                 };
-                VideoPlayerElement.MediaEnded += (s, e) => { VideoEnded(); };
+                VideoPlayerElement.MediaEnded += (s, e) => { VideoEnded(this); };
                 VideoPlayerElement.MediaFailed += (s, e) => { e.Handled = VideoFailed(e, VideoPlayerElement); };
             }
             catch (Exception err)

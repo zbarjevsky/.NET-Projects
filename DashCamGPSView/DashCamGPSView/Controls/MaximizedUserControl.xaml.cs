@@ -38,7 +38,7 @@ namespace DashCamGPSView.Controls
             
             _player.LeftButtonClick = TogglePlayPauseState;
             _player.LeftButtonDoubleClick = () => btnClose_Click(this, null);
-            _player.VideoEnded = () => { _player.Pause(); };
+            _player.VideoEnded = (player) => { player.Pause(); };
             //Player.VideoStarted = (player) => { /*UpdateSliderLimits();*/ };
 
             //statusBar.SetPlayer(Player);

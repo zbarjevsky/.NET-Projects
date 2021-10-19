@@ -39,9 +39,10 @@ namespace DashCamGPSView
     public partial class MainWindow : Window, IVideoPlayer
     {
         private DashCamFileInfo _dashCamFileInfo;
+        private AppConfig AppConfig = new AppConfig();
 
         //this action needed to Update View Once file is loaded
-        private Action<IVideoPlayer, bool> VideoStartedPostAction = (player, reset) => { };
+        private Action<IVideoPlayer, PlayerControlSettings, bool> VideoStartedPostAction = (player, config, reset) => { };
 
         public MainWindow()
         {
@@ -51,7 +52,7 @@ namespace DashCamGPSView
             speedGauge.Draggable(true, new Thickness(-10));
             compass.Draggable(true, new Thickness(-10));
 
-            playerF.Volume = Settings.Default.SoundVolume;
+            playerF.Volume = AppConfig.PlayerF.SoundVolume;
             playerR.Volume = 0;
             playerI.Volume = 0;
 
@@ -78,9 +79,6 @@ namespace DashCamGPSView
                 ClosePayer();
             };
 
-            playerF.VerticalOffset = Settings.Default.FrontPlayerVerticalOffset;
-            playerR.VerticalOffset = Settings.Default.RearPlayerVerticalOffset;
-
             maxScreen.CloseAction = (position, state, volume) => CloseMaximizedPlayer(position, state, volume);
             playerF.MaximizeAction = () => MaximizePlayer(playerF);
             playerR.MaximizeAction = () => MaximizePlayer(playerR);
@@ -90,14 +88,21 @@ namespace DashCamGPSView
             { 
                 UpdateGpsInfo(false);
                 bool isFrontPlayerOnly = string.IsNullOrWhiteSpace(playerR.FileName);
-                VideoStartedPostAction(player, isFrontPlayerOnly); //reset now if there is no R player
+                VideoStartedPostAction(player, AppConfig.PlayerF, isFrontPlayerOnly); //reset now if there is no R player
                 VideoStarted(player);
                 waitScreen.Hide(); 
             };
-            playerR.VideoStarted = (player) => { VideoStartedPostAction(player, true); };
-            playerI.VideoStarted = (player) => { VideoStartedPostAction(player, true); };
+            playerR.VideoStarted = (player) => { VideoStartedPostAction(player, AppConfig.PlayerR, false); };
+            playerI.VideoStarted = (player) => { VideoStartedPostAction(player, AppConfig.PlayerI, false); };
 
-            playerF.VideoEnded = () => { if (chkAutoPlay.IsChecked.Value) PlayNext(); };
+            playerF.VideoEnded = (player) => 
+            { 
+                VideoEndedPostAction(player, AppConfig.PlayerF); 
+                if (chkAutoPlay.IsChecked.Value) 
+                    PlayNext(); 
+            };
+            playerR.VideoEnded = (player) => VideoEndedPostAction(player, AppConfig.PlayerR);
+            playerI.VideoEnded = (player) => VideoEndedPostAction(player, AppConfig.PlayerI);
 
             playerF.LeftButtonClick = TogglePlayPauseState;
             playerR.LeftButtonClick = TogglePlayPauseState;
@@ -114,18 +119,28 @@ namespace DashCamGPSView
             playerF.PropertyChanged += (s, e) => { OnPropertyChanged(e.PropertyName); }; //delegate property changes from player
 
             statusBar.OnVideoPositionChanged = (position) => { UpdateGpsInfo(); };
+
+            LoadState();
+        }
+
+        private void VideoEndedPostAction(IVideoPlayer player, PlayerControlSettings config)
+        {
+            config.SoundVolume = player.Volume;
+            config.ZoomState = player.ZoomStateGet();
+            config.FlipHorizontally = player.IsFlipHorizontally;
+            config.ScrollOffsetY = player.ScrollOffsetY;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            this.Left = Settings.Default.InitialLocation.X;
-            this.Top = Settings.Default.InitialLocation.Y;
-            this.WindowState = WindowState.Maximized;
+            //this.Left = Settings.Default.InitialLocation.X;
+            //this.Top = Settings.Default.InitialLocation.Y;
+            //this.WindowState = WindowState.Maximized;
 
-            if (File.Exists(Settings.Default.LastFileName))
+            if (File.Exists(AppConfig.LastSelectedFileName))
             {
-                DashCamFileTree groups = new DashCamFileTree(Settings.Default.LastFileName);
-                VideoFile v = treeGroups.LoadTree(groups, Settings.Default.LastFileName);
+                DashCamFileTree groups = new DashCamFileTree(AppConfig.LastSelectedFileName, AppConfig.SpeedUnits);
+                VideoFile v = treeGroups.LoadTree(groups, AppConfig.LastSelectedFileName);
                 if (v != null && v._dashCamFileInfo.HasGpsInfo) //initial location
                 {
                     MainMap.Position = v._dashCamFileInfo.Position(0);
@@ -135,9 +150,9 @@ namespace DashCamGPSView
 
             //FIRST time ONLY - fit width after file opened
             //I need <reset> to remove this action after both controls adjusted
-            VideoStartedPostAction = (player, reset) =>
+            VideoStartedPostAction = (player, config, reset) =>
             {
-                player.FitWidth(false);
+                config.RestoreTo(player, true);
 
                 if (_dashCamFileInfo.HasGpsInfo)
                 {
@@ -147,7 +162,7 @@ namespace DashCamGPSView
 
                 //reset this action until next time
                 if (reset)
-                    VideoStartedPostAction = (p, r) => { };
+                    VideoStartedPostAction = (p, c, r) => { };
             };
 
             waitScreen.Hide();
@@ -156,17 +171,70 @@ namespace DashCamGPSView
         private void Window_Closed(object sender, EventArgs e)
         {
             ClosePayer();
-            Settings.Default.SoundVolume = playerF.Volume;
+            SaveState();
+        }
 
-            Settings.Default.FrontPlayerVerticalOffset = playerF.VerticalOffset;
-            Settings.Default.RearPlayerVerticalOffset = playerR.VerticalOffset;
-            Settings.Default.InnerPlayerVerticalOffset = playerI.VerticalOffset;
+        private void LoadState()
+        {
+            AppConfig.Load();
 
+            AppConfig.MainWindowState.RestoreTo(this);
+            //this.WindowState = WindowState.Normal; //always normal - to position on correct screen for maximize
+
+            //Right Panel
+            if (AppConfig.RightPanel.SplitterOffset != 0)
+                _gridMain.ColumnDefinitions[4].Width = new GridLength(AppConfig.RightPanel.SplitterOffset, GridUnitType.Pixel);
+            //Speed Chart
+            if (AppConfig.SpeedChart.SplitterOffset != 0)
+                _gridMain.RowDefinitions[6].Height = new GridLength(AppConfig.SpeedChart.SplitterOffset, GridUnitType.Pixel);
+            //Main splitter
+            if (AppConfig.PlayerF.SplitterOffset != 0)
+                _gridPlayers.RowDefinitions[2].Height = new GridLength(AppConfig.PlayerF.SplitterOffset, GridUnitType.Pixel);
+            //Rear View
+            if (AppConfig.PlayerR.SplitterOffset != 0)
+                _gridPlayers.ColumnDefinitions[0].Width = new GridLength(AppConfig.PlayerR.SplitterOffset, GridUnitType.Pixel);
+            //GPS Info
+            if (AppConfig.GpsInfo.SplitterOffset != 0)
+                _gridRightPanel.RowDefinitions[6].Height = new GridLength(AppConfig.GpsInfo.SplitterOffset, GridUnitType.Pixel);
+
+            LoadPlayersState();
+        }
+
+        private void LoadPlayersState()
+        {
+            AppConfig.PlayerF.RestoreTo(playerF, true);
+            AppConfig.PlayerI.RestoreTo(playerI, false);
+            AppConfig.PlayerR.RestoreTo(playerR, false);
+        }
+
+        private void SaveState()
+        {
             if (_dashCamFileInfo != null)
-                Settings.Default.SpeedUnits = _dashCamFileInfo.SpeedUnits.ToString();
+                AppConfig.SpeedUnits = _dashCamFileInfo.SpeedUnits.ToString();
 
-            Settings.Default.InitialLocation = new System.Drawing.Point((int)this.Left, (int)this.Top);
-            Settings.Default.Save();
+            AppConfig.MainWindowState.CopyFrom(this);
+
+            SavePlayersState();
+
+            //Right Panel
+            AppConfig.RightPanel.SplitterOffset = _gridMain.ColumnDefinitions[4].Width.Value;
+            //Speed Chart
+            AppConfig.SpeedChart.SplitterOffset = _gridMain.RowDefinitions[6].Height.Value;
+            //Main splitter
+            AppConfig.PlayerF.SplitterOffset = _gridPlayers.RowDefinitions[2].Height.Value;
+            //Rear View
+            AppConfig.PlayerR.SplitterOffset = _gridPlayers.ColumnDefinitions[0].Width.Value;
+            //GPS Info
+            AppConfig.GpsInfo.SplitterOffset = _gridRightPanel.RowDefinitions[6].Height.Value;
+
+            AppConfig.Save();
+        }
+
+        private void SavePlayersState()
+        {
+            AppConfig.PlayerF.CopyFrom(playerF);
+            AppConfig.PlayerI.CopyFrom(playerI);
+            AppConfig.PlayerR.CopyFrom(playerR);
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -252,13 +320,18 @@ namespace DashCamGPSView
             else if (MediaState == MediaState.Play)
                 Pause();
         }
-
-        public void FitWidth(bool adjustScroll)
+        
+        public void ZoomStateSet(eZoomState zoom, bool adjustScroll)
         {
-            playerF.FitWidth(adjustScroll);
-            playerR.FitWidth(adjustScroll);
-            playerI.FitWidth(adjustScroll);
+            playerF.ZoomStateSet(zoom, adjustScroll);
         }
+        public eZoomState ZoomStateGet()
+        {
+            return playerF.ZoomStateGet();
+        }
+
+        public bool IsFlipHorizontally { get => playerF.IsFlipHorizontally; set => playerF.IsFlipHorizontally = value; }
+        public double ScrollOffsetY { get => playerF.ScrollOffsetY; set => playerF.ScrollOffsetY = value; }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
@@ -281,15 +354,12 @@ namespace DashCamGPSView
 
             gpsInfo.UpdateInfo(null, -1); //reset GPS Info control
 
-            _dashCamFileInfo = new DashCamFileInfo(fileInfo, Settings.Default.SpeedUnits);
+            _dashCamFileInfo = new DashCamFileInfo(fileInfo, AppConfig.SpeedUnits);
 
             txtFileName.Text = _dashCamFileInfo.FrontFileName;
             playerF.Open(_dashCamFileInfo.FrontFileName, playerF.Volume);
             playerR.Open(_dashCamFileInfo.RearFileName, 0);
             playerI.Open(_dashCamFileInfo.InsideFileName, 0);
-
-            Settings.Default.LastFileName = playerF.FileName;
-            Settings.Default.Save();
 
             graphSpeedInfo.SetGpsInfo(_dashCamFileInfo.GpsInfo);
 
@@ -347,6 +417,9 @@ namespace DashCamGPSView
             playerF.Play();
             playerR.Play();
             playerI.Play();
+
+            AppConfig.LastSelectedFileName = playerF.FileName;
+            SaveState();
         }
 
         private void ClosePayer()
@@ -360,6 +433,8 @@ namespace DashCamGPSView
 
         private void PlayNext()
         {
+            Stop();
+
             VideoFile video = treeGroups.FindNextFile(_dashCamFileInfo.FrontFileName);
             if (video == null || !File.Exists(video._dashCamFileInfo.FrontFileName))
                 return;
@@ -386,7 +461,7 @@ namespace DashCamGPSView
                 //Task myTask = Task.Factory.StartNew(() => { });
                 //myTask.Wait();
 
-                DashCamFileTree groups = new DashCamFileTree(openFileDialog.FileName);
+                DashCamFileTree groups = new DashCamFileTree(openFileDialog.FileName, AppConfig.SpeedUnits);
                 VideoFile selected =  treeGroups.LoadTree(groups, openFileDialog.FileName);
 
                 MainMap.SetRouteAndCar(null); //reset
@@ -604,7 +679,7 @@ namespace DashCamGPSView
         {
             MediaState state = playerF.MediaState;
             double position = statusBar.sliProgress.Value;
-            Settings.Default.SoundVolume = playerF.Volume;
+            AppConfig.PlayerF.SoundVolume = playerF.Volume;
 
             playerF.RecreateMediaElement(false);
             playerR.RecreateMediaElement(true);

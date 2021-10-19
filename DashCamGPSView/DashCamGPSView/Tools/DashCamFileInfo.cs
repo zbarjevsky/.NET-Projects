@@ -184,6 +184,8 @@ namespace DashCamGPSView.Tools
                     File.Delete(NmeaFileName);
                 if (File.Exists(RearFileName))
                     File.Delete(RearFileName);
+                if (File.Exists(InsideFileName))
+                    File.Delete(InsideFileName);
             }
             catch (Exception err)
             {
@@ -220,11 +222,11 @@ namespace DashCamGPSView.Tools
                 double delta = Math.Abs((info.Date - currentInfo.Date).TotalSeconds);
                 if (delta < 3)
                 {
-                    if (info.Info.Name.EndsWith("_F.MP4", true, CultureInfo.InvariantCulture))
+                    if (info.Info.Name.EndsWith("F.MP4", true, CultureInfo.InvariantCulture))
                         frontFileName = info.Info.FullName;
-                    else if (info.Info.Name.EndsWith("_R.MP4", true, CultureInfo.InvariantCulture))
+                    else if (info.Info.Name.EndsWith("R.MP4", true, CultureInfo.InvariantCulture))
                         rearFileName = info.Info.FullName;
-                    else if (info.Info.Name.EndsWith("_I.MP4", true, CultureInfo.InvariantCulture))
+                    else if (info.Info.Name.EndsWith("I.MP4", true, CultureInfo.InvariantCulture))
                         insideFileName = info.Info.FullName;
                 }
             }

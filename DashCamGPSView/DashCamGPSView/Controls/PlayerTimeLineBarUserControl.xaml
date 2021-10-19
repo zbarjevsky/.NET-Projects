@@ -25,7 +25,7 @@
                 <TextBlock Name="lblProgressStatus" FontSize="16">00:00:00.000/00:00:00</TextBlock>
             </StatusBarItem>
             <StatusBarItem Grid.Column="1" Margin="2,0" >
-                <Button FontSize="16" Content="ᗈ" ToolTip="Next Frame" Click="btnNextFrame_Click" />
+                <RepeatButton FontSize="16" Content="ᗈ" ToolTip="Next Frame" Click="btnNextFrame_Click" />
             </StatusBarItem>
             <StatusBarItem Grid.Column="2" HorizontalContentAlignment="Stretch" Margin="2,0" >
                 <StackPanel Orientation="Vertical" Width="200">
@@ -45,7 +45,7 @@
                 </StackPanel>
             </StatusBarItem>
             <StatusBarItem Grid.Column="3" HorizontalContentAlignment="Stretch" Margin="2,0" >
-                <Slider Name="sliProgress" Foreground="Black"
+                <Slider Name="sliProgress" Foreground="Black" IsMoveToPointEnabled="True"
                         SmallChange="1" LargeChange="10" TickPlacement="TopLeft" 
                         ValueChanged="sliProgress_ValueChanged" />
             </StatusBarItem>

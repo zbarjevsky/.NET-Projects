@@ -116,7 +116,7 @@ namespace DashCamGPSView.Controls
                 {
                     if(v.FileName == file.FileName)
                     {
-                        v._dashCamFileInfo.DeleteRecording();
+                        v.DeleteRecording();
                         g.Members.Remove(v);
                         break;
                     }
@@ -350,8 +350,24 @@ namespace DashCamGPSView.Controls
             IsSelected = false;
             FileNameForDisplay = string.Format("{0:000}. {1}", indexInGroup+1, Path.GetFileNameWithoutExtension(FileName));
 
-            FileInfo fi = new FileInfo(FileName);
-            Description = string.Format(" ({0:###,###.0} KB)", fi.Length / 1024.0);
+            FileInfo fi1 = new FileInfo(info.FrontFileName);
+
+            string cameras = "FR";
+            long size = fi1.Length;
+            if (File.Exists(info.InsideFileName))
+            {
+                FileInfo fi2 = new FileInfo(info.InsideFileName);
+                cameras += "+IN";
+                size += fi2.Length; 
+            }
+            if (File.Exists(info.RearFileName))
+            {
+                FileInfo fi3 = new FileInfo(info.RearFileName);
+                cameras += "+RR";
+                size += fi3.Length;
+            }
+
+            Description = string.Format(" ({0}, {1:###,###.0} MB)", cameras, size / (1024.0*1024.0));
         }
 
         internal bool HasFileName(string fileName)
@@ -364,6 +380,11 @@ namespace DashCamGPSView.Controls
                 return true;
 
             return false;
+        }
+
+        internal void DeleteRecording()
+        {
+            _dashCamFileInfo.DeleteRecording();
         }
     }
 }

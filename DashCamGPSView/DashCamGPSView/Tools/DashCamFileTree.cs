@@ -17,7 +17,7 @@ namespace DashCamGPSView.Tools
         /// </summary>
         /// <param name="fileName"></param>
         /// <param name="deltaMinutesBetweenGroups"></param>
-        public DashCamFileTree(string selectFile, double deltaMinutesBetweenGroups = 10.0)
+        public DashCamFileTree(string selectFile, string speedUnits, double deltaMinutesBetweenGroups = 10.0)
         {
             string dirParent = Path.GetDirectoryName(selectFile);
             string ext = Path.GetExtension(selectFile);
@@ -31,7 +31,7 @@ namespace DashCamGPSView.Tools
             for (int idx = 0; idx < allInfos.Count; idx++)
             {
                 FileInfoWithDateFromFileName currentInfo = allInfos[idx];
-                DashCamFileInfo info = new DashCamFileInfo(allInfos, currentInfo, Settings.Default.SpeedUnits);
+                DashCamFileInfo info = new DashCamFileInfo(allInfos, currentInfo, speedUnits);
                 DashCamFileInfo existing = (infoList.FirstOrDefault(i => i.FrontFileName == info.FrontFileName));
                 if(existing == null)
                     infoList.Add(info);

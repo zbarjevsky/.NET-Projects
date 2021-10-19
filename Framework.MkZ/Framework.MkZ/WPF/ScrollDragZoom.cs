@@ -10,6 +10,14 @@ using System.Windows.Input;
 
 namespace MkZ.WPF
 {
+    public enum eZoomState
+    {
+        Custom = 0, //manual zoom
+        Original = 1, // zoom 1:1
+        FitWidth,
+        FitWindow
+    }
+
     /// <summary>
     /// Drag on Right Mouse only if scrolls are enable - content bigger than scrollView
     /// </summary>
@@ -19,6 +27,8 @@ namespace MkZ.WPF
         private FrameworkElement _content;
         private Point _scrollMousePoint;
         private double _vOff = 1, _hOff = 1;
+
+        public eZoomState ZoomState { get; private set; } = eZoomState.Custom;
 
         public double VerticalOffset
         {
@@ -40,6 +50,8 @@ namespace MkZ.WPF
             set
             {
                 _zoom = value;
+                ZoomState = eZoomState.Custom;
+
                 if (_zoom < MIN_ZOOM) _zoom = MIN_ZOOM;
                 if (_zoom > MAX_ZOOM) _zoom = MAX_ZOOM;
 
@@ -135,6 +147,8 @@ namespace MkZ.WPF
 
             InternalUpdateZoomFromContent();
 
+            ZoomState = eZoomState.FitWidth;
+
             SizeChangedAction();
         }
 
@@ -143,6 +157,8 @@ namespace MkZ.WPF
             _content.Width = NaturalSize.Width;
             _content.Height = NaturalSize.Height;
             _zoom = 1;
+
+            ZoomState = eZoomState.Original;
 
             SizeChangedAction();
         }
@@ -168,6 +184,8 @@ namespace MkZ.WPF
 
             ScrollToCenter();
 
+            ZoomState = eZoomState.FitWindow;
+
             SizeChangedAction();
         }
 
@@ -186,6 +204,7 @@ namespace MkZ.WPF
 
         private void content_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
         {
+            _content.Cursor = Cursors.SizeAll;
             _content.CaptureMouse();
             _scrollMousePoint = e.GetPosition(_scrollViewer);
             _vOff = _scrollViewer.VerticalOffset;
@@ -207,6 +226,7 @@ namespace MkZ.WPF
         private void content_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
             _content.ReleaseMouseCapture();
+            _content.Cursor = Cursors.Arrow;
         }
 
         private Vector MoveContentAndMouseToCenterAfterZoom(double deltaZoom, Point offsetOld, MouseWheelEventArgs e)

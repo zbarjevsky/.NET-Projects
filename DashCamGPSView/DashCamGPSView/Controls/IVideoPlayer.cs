@@ -1,4 +1,6 @@
-﻿using System;
+﻿using DashCamGPSView.Tools;
+using MkZ.WPF;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -26,6 +28,10 @@ namespace DashCamGPSView.Controls
         void Stop();
         void TogglePlayPauseState();
 
-        void FitWidth(bool adjustScroll);
+        void ZoomStateSet(eZoomState zoom, bool adjustScroll);
+        eZoomState ZoomStateGet();
+
+        bool IsFlipHorizontally { get; set; }
+        double ScrollOffsetY { get; set; }
     }
 }
