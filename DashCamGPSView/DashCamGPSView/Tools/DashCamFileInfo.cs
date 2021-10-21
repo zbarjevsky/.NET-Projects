@@ -254,7 +254,7 @@ namespace DashCamGPSView.Tools
 
         internal string GetLocationInfoForTime(double elapsedSeconds, double totalSeconds)
         {
-            int idx = FindGpsInfo(elapsedSeconds, totalSeconds);
+            int idx = FindGpsInfoIdx(elapsedSeconds, totalSeconds);
             if (idx < 0)
                 return "No GPS info...";
 
@@ -265,7 +265,7 @@ namespace DashCamGPSView.Tools
             return info;
         }
 
-        internal int FindGpsInfo(double elapsedSeconds, double totalSeconds)
+        internal int FindGpsInfoIdx(double elapsedSeconds, double totalSeconds)
         {
             if (_gpsInfo == null || _gpsInfo.Count == 0 || totalSeconds == 0)
                 return -1;

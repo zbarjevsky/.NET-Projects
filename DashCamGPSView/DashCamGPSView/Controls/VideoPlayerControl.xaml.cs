@@ -88,11 +88,11 @@ namespace DashCamGPSView.Controls
 
             set
             {
-                if (value < 1) //relative to Height
+                if (value > 0 && value <= 1) //relative to Height
                 {
                     _scrollDragger.VerticalOffset = value * scrollPlayer.ScrollableHeight;
                 }
-                else
+                else if(value > 1)
                 {
                     _scrollDragger.VerticalOffset = value;
                 }
@@ -111,6 +111,13 @@ namespace DashCamGPSView.Controls
                 _scrollDragger.Zoom = value;
             }
         }
+
+        public eZoomState ZoomState 
+        { 
+            get => _scrollDragger.ZoomState; 
+            set => ZoomStateSet(value, true); 
+        }
+
         public  void ZoomStateSet(eZoomState zoom, bool adjustScroll)
         {
             switch (zoom)
@@ -126,8 +133,10 @@ namespace DashCamGPSView.Controls
                     break;
                 case eZoomState.Custom:
                 default:
+                    Zoom = Zoom;
                     break;
             }
+            OnPropertyChanged(nameof(ZoomState));
         }
 
         public eZoomState ZoomStateGet()
@@ -147,6 +156,11 @@ namespace DashCamGPSView.Controls
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             DataContext = this;
+        }
+
+        private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            ZoomState = ZoomState; //update zoom
         }
 
         public void CopyState(VideoPlayerControl player, double volume, bool copySource)
@@ -380,8 +394,8 @@ namespace DashCamGPSView.Controls
 
                 _scrollDragger.SizeChangedAction = () => 
                 {
-                    txtVideoResolution.Text = string.Format("{0:0}x{1:0} ({2:0.0}%)",
-                        VideoPlayerElement.ActualWidth, VideoPlayerElement.ActualHeight, 100.0 * _scrollDragger.Zoom);
+                    UpdateResolutionText();
+                    OnPropertyChanged(nameof(ZoomState));
                 };
 
                 //refresh view when change position
@@ -399,11 +413,26 @@ namespace DashCamGPSView.Controls
                 };
                 VideoPlayerElement.MediaEnded += (s, e) => { VideoEnded(this); };
                 VideoPlayerElement.MediaFailed += (s, e) => { e.Handled = VideoFailed(e, VideoPlayerElement); };
+
+                UpdateResolutionText();
             }
             catch (Exception err)
             {
                 MessageBox.Show(err.ToString());
             }        
+        }
+
+        private void UpdateResolutionText()
+        {
+            if (VideoPlayerElement.ActualWidth > 0)
+            {
+                txtVideoResolution.Text = string.Format("{0:0}x{1:0} ({2:0.0}%)",
+                    VideoPlayerElement.ActualWidth, VideoPlayerElement.ActualHeight, 100.0 * _scrollDragger.Zoom);
+            }
+            else
+            {
+                txtVideoResolution.Text = "";
+            }
         }
 
         internal void AddFlipXRenderTransform(UIElement element, bool bFlipHorizontally)

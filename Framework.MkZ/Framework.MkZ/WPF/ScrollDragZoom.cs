@@ -32,8 +32,8 @@ namespace MkZ.WPF
 
         public double VerticalOffset
         {
-            get { return _scrollViewer.VerticalOffset; }
-            set { _scrollViewer.ScrollToVerticalOffset(value); }
+            get => _scrollViewer.VerticalOffset;
+            set => _scrollViewer.ScrollToVerticalOffset(value);
         }
 
         public Point ScrollOffset
@@ -50,7 +50,6 @@ namespace MkZ.WPF
             set
             {
                 _zoom = value;
-                ZoomState = eZoomState.Custom;
 
                 if (_zoom < MIN_ZOOM) _zoom = MIN_ZOOM;
                 if (_zoom > MAX_ZOOM) _zoom = MAX_ZOOM;
@@ -59,6 +58,8 @@ namespace MkZ.WPF
                 _content.Height = _zoom * _origHeight;
 
                 _content.UpdateLayout();
+
+                ZoomState = eZoomState.Custom;
 
                 SizeChangedAction();
             }
@@ -136,6 +137,7 @@ namespace MkZ.WPF
 
         public void FitWidth(double margin = 18)
         {
+            ZoomState = eZoomState.FitWidth;
             if (_scrollViewer.ActualWidth < margin)
                 return;
 
@@ -147,24 +149,25 @@ namespace MkZ.WPF
 
             InternalUpdateZoomFromContent();
 
-            ZoomState = eZoomState.FitWidth;
 
             SizeChangedAction();
         }
 
         public void OriginalSize()
         {
+            ZoomState = eZoomState.Original;
+
             _content.Width = NaturalSize.Width;
             _content.Height = NaturalSize.Height;
             _zoom = 1;
-
-            ZoomState = eZoomState.Original;
 
             SizeChangedAction();
         }
 
         public void FitWindow(double margin = 18)
         {
+            ZoomState = eZoomState.FitWindow;
+
             if (_scrollViewer.ActualHeight > margin && _scrollViewer.ActualWidth > margin)
             {
                 //hide scrollbars - after fit they are still visible - so hide and then set to Auto
@@ -183,8 +186,6 @@ namespace MkZ.WPF
             InternalUpdateZoomFromContent();
 
             ScrollToCenter();
-
-            ZoomState = eZoomState.FitWindow;
 
             SizeChangedAction();
         }

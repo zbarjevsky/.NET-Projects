@@ -126,6 +126,7 @@
     <Compile Include="Controls\VideoPlayerControl.xaml.cs">
       <DependentUpon>VideoPlayerControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Tools\EnumBooleanConverter.cs" />
     <Compile Include="Tools\ExportUtils.cs" />
     <Compile Include="Tools\MainWindowState.cs" />
     <Compile Include="Tools\PointLatLngUI.cs" />

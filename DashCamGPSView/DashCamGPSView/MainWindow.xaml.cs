@@ -119,8 +119,6 @@ namespace DashCamGPSView
             playerF.PropertyChanged += (s, e) => { OnPropertyChanged(e.PropertyName); }; //delegate property changes from player
 
             statusBar.OnVideoPositionChanged = (position) => { UpdateGpsInfo(); };
-
-            LoadState();
         }
 
         private void VideoEndedPostAction(IVideoPlayer player, PlayerControlSettings config)
@@ -137,6 +135,8 @@ namespace DashCamGPSView
             //this.Top = Settings.Default.InitialLocation.Y;
             //this.WindowState = WindowState.Maximized;
 
+            LoadState();
+
             if (File.Exists(AppConfig.LastSelectedFileName))
             {
                 DashCamFileTree groups = new DashCamFileTree(AppConfig.LastSelectedFileName, AppConfig.SpeedUnits);
@@ -149,7 +149,7 @@ namespace DashCamGPSView
             }
 
             //FIRST time ONLY - fit width after file opened
-            //I need <reset> to remove this action after both controls adjusted
+            //I need <reset> to remove this action after all controls adjusted
             VideoStartedPostAction = (player, config, reset) =>
             {
                 config.RestoreTo(player, true);
@@ -174,6 +174,11 @@ namespace DashCamGPSView
             SaveState();
         }
 
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            RearrangeSplitters();
+        }
+
         private void LoadState()
         {
             AppConfig.Load();
@@ -182,22 +187,42 @@ namespace DashCamGPSView
             //this.WindowState = WindowState.Normal; //always normal - to position on correct screen for maximize
 
             //Right Panel
-            if (AppConfig.RightPanel.SplitterOffset != 0)
-                _gridMain.ColumnDefinitions[4].Width = new GridLength(AppConfig.RightPanel.SplitterOffset, GridUnitType.Pixel);
+            if (AppConfig.RightPanel.SplitterOffset.Value != 0)
+                mapColumn.Width = AppConfig.RightPanel.SplitterOffset.GetGridLength();
             //Speed Chart
-            if (AppConfig.SpeedChart.SplitterOffset != 0)
-                _gridMain.RowDefinitions[6].Height = new GridLength(AppConfig.SpeedChart.SplitterOffset, GridUnitType.Pixel);
+            if (AppConfig.SpeedChart.SplitterOffset.Value != 0)
+                rowSpeedGraph.Height = AppConfig.SpeedChart.SplitterOffset.GetGridLength();
             //Main splitter
-            if (AppConfig.PlayerF.SplitterOffset != 0)
-                _gridPlayers.RowDefinitions[2].Height = new GridLength(AppConfig.PlayerF.SplitterOffset, GridUnitType.Pixel);
+            if (AppConfig.PlayerF.SplitterOffset.Value != 0)
+                rowPlayerF.Height = AppConfig.PlayerF.SplitterOffset.GetGridLength();
             //Rear View
-            if (AppConfig.PlayerR.SplitterOffset != 0)
-                _gridPlayers.ColumnDefinitions[0].Width = new GridLength(AppConfig.PlayerR.SplitterOffset, GridUnitType.Pixel);
+            if (AppConfig.PlayerR.SplitterOffset.Value != 0)
+                columnPlayerR.Width = AppConfig.PlayerR.SplitterOffset.GetGridLength();
             //GPS Info
-            if (AppConfig.GpsInfo.SplitterOffset != 0)
-                _gridRightPanel.RowDefinitions[6].Height = new GridLength(AppConfig.GpsInfo.SplitterOffset, GridUnitType.Pixel);
+            //if (AppConfig.GpsInfo.SplitterOffset.Value != 0)
+            //    rowGpsInfo.Height = new GridLength(AppConfig.GpsInfo.SplitterOffset, GridUnitType.Pixel);
+            //Map Info
+            if (AppConfig.GpsMap.SplitterOffset.Value != 0)
+                rowMaps.Height = AppConfig.GpsMap.SplitterOffset.GetGridLength();
 
             LoadPlayersState();
+        }
+
+        private void RearrangeSplitters()
+        {
+            mapColumn.Width = new GridLength(1, GridUnitType.Star);
+            //Speed Chart
+            rowSpeedGraph.Height = new GridLength(1, GridUnitType.Star);
+            //Main splitter
+            rowPlayerF.Height = new GridLength(5, GridUnitType.Star);
+            //Rear View
+            columnPlayerR.Width = new GridLength(2, GridUnitType.Star);
+            //Rear View
+            columnPlayerI.Width = new GridLength(1, GridUnitType.Star);
+            //GPS Info
+            rowGpsInfo.Height = new GridLength(1, GridUnitType.Star);
+            //Map Info
+            rowMaps.Height = new GridLength(8, GridUnitType.Star);
         }
 
         private void LoadPlayersState()
@@ -217,15 +242,17 @@ namespace DashCamGPSView
             SavePlayersState();
 
             //Right Panel
-            AppConfig.RightPanel.SplitterOffset = _gridMain.ColumnDefinitions[4].Width.Value;
+            AppConfig.RightPanel.SplitterOffset.SetGridLength(mapColumn);
             //Speed Chart
-            AppConfig.SpeedChart.SplitterOffset = _gridMain.RowDefinitions[6].Height.Value;
+            AppConfig.SpeedChart.SplitterOffset.SetGridLength(rowSpeedGraph);
             //Main splitter
-            AppConfig.PlayerF.SplitterOffset = _gridPlayers.RowDefinitions[2].Height.Value;
+            AppConfig.PlayerF.SplitterOffset.SetGridLength(rowPlayerF);
             //Rear View
-            AppConfig.PlayerR.SplitterOffset = _gridPlayers.ColumnDefinitions[0].Width.Value;
+            AppConfig.PlayerR.SplitterOffset.SetGridLength(columnPlayerR);
             //GPS Info
-            AppConfig.GpsInfo.SplitterOffset = _gridRightPanel.RowDefinitions[6].Height.Value;
+            AppConfig.GpsInfo.SplitterOffset.SetGridLength(rowGpsInfo);
+            //Map Info
+            AppConfig.GpsMap.SplitterOffset.SetGridLength(rowMaps);
 
             AppConfig.Save();
         }
@@ -354,6 +381,9 @@ namespace DashCamGPSView
 
             gpsInfo.UpdateInfo(null, -1); //reset GPS Info control
 
+            if (_dashCamFileInfo != null)
+                SavePlayersState();
+
             _dashCamFileInfo = new DashCamFileInfo(fileInfo, AppConfig.SpeedUnits);
 
             txtFileName.Text = _dashCamFileInfo.FrontFileName;
@@ -398,8 +428,8 @@ namespace DashCamGPSView
                 if (_bRearViewWasCollapsed)
                 {
                     _bRearViewWasCollapsed = false;
-                    GridLengthAnimation.AnimateRow(rowFrontView, new GridLength(5, GridUnitType.Star));
-                    GridLengthAnimation.AnimateRow(rowRearView, new GridLength(3, GridUnitType.Star));
+                    GridLengthAnimation.AnimateRow(rowPlayerF, new GridLength(5, GridUnitType.Star));
+                    GridLengthAnimation.AnimateRow(rowPlayerR, new GridLength(3, GridUnitType.Star));
                 }
             }
             else
@@ -407,8 +437,8 @@ namespace DashCamGPSView
                 if(!_bRearViewWasCollapsed)
                 {
                     _bRearViewWasCollapsed = true;
-                    GridLengthAnimation.AnimateRow(rowFrontView, new GridLength(5, GridUnitType.Star));
-                    GridLengthAnimation.AnimateRow(rowRearView, new GridLength(0));
+                    GridLengthAnimation.AnimateRow(rowPlayerF, new GridLength(5, GridUnitType.Star));
+                    GridLengthAnimation.AnimateRow(rowPlayerR, new GridLength(0));
                 }
             }
 
@@ -418,8 +448,8 @@ namespace DashCamGPSView
             playerR.Play();
             playerI.Play();
 
+            LoadPlayersState();
             AppConfig.LastSelectedFileName = playerF.FileName;
-            SaveState();
         }
 
         private void ClosePayer()
@@ -615,9 +645,10 @@ namespace DashCamGPSView
             if (_dashCamFileInfo == null)
                 return;
 
-            int idx = _dashCamFileInfo.FindGpsInfo(playerF.Position.TotalSeconds, playerF.NaturalDuration);
+            int idx = -1;
             if (_dashCamFileInfo.HasGpsInfo)
             {
+                idx = _dashCamFileInfo.FindGpsInfoIdx(playerF.Position.TotalSeconds, playerF.NaturalDuration);
                 speedGauge.Visibility = Visibility.Visible;
                 compass.Visibility = Visibility.Visible;
 
@@ -652,9 +683,11 @@ namespace DashCamGPSView
 
         private void GridSplitter1_DragCompleted(object sender, DragCompletedEventArgs e)
         {
-            playerF.FitWidth(false);
-            playerR.FitWidth(false);
-            playerI.FitWidth(false);
+            playerF.ZoomState = playerF.ZoomState;
+            playerI.ZoomState = playerI.ZoomState;
+            playerR.ZoomState = playerR.ZoomState;
+
+            SavePlayersState();
         }
 
         private void Screenshot_Click(object sender, RoutedEventArgs e)

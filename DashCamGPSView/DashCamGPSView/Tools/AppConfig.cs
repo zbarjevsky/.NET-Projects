@@ -6,7 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-
+using System.Windows.Controls;
 using DashCamGPSView.Controls;
 using GPSDataParser;
 
@@ -16,6 +16,37 @@ using MkZ.WPF;
 
 namespace DashCamGPSView.Tools
 {
+    public class SplitterPosition
+    {
+        public double Value { get; set; } = 1;
+        public GridUnitType Type { get; set; } = GridUnitType.Star;
+
+        public GridLength GetGridLength() { return new GridLength(Value, Type); }
+
+        public void SetGridLength(ColumnDefinition col)
+        {
+            Value = col.Width.Value;
+            Type = col.Width.GridUnitType;
+
+            if (col.ActualWidth == col.Width.Value)
+                Type = GridUnitType.Pixel;
+        }
+
+        public void SetGridLength(RowDefinition row)
+        {
+            Value = row.Height.Value;
+            Type = row.Height.GridUnitType;
+
+            if (row.ActualHeight == row.Height.Value)
+                Type = GridUnitType.Pixel;
+        }
+
+        public override string ToString()
+        {
+            return GetGridLength().ToString();
+        }
+    }
+
     public class PlayerControlSettings
     {
         public double SoundVolume { get; set; } = 0.5;
@@ -24,7 +55,7 @@ namespace DashCamGPSView.Tools
         public eZoomState ZoomState { get; set; } = eZoomState.FitWidth;
         public double ScrollOffsetX { get; set; } = 0.5;
         public double ScrollOffsetY { get; set; } = 0.5;
-        public double SplitterOffset { get; set; } = 0.0;
+        public SplitterPosition SplitterOffset { get; set; } = new SplitterPosition();
 
         public void CopyFrom(PlayerControlSettings player)
         {
@@ -42,7 +73,7 @@ namespace DashCamGPSView.Tools
             SoundVolume = v.Volume;
             FlipHorizontally = v.IsFlipHorizontally;
             ScrollOffsetY = v.ScrollOffsetY;
-            ZoomState = v.ZoomStateGet();
+            ZoomState = v.ZoomState;
         }
 
         public void RestoreTo(IVideoPlayer v, bool bRestoreVolume)
@@ -66,12 +97,31 @@ namespace DashCamGPSView.Tools
         public MainWindowState MainWindowState { get; set; } = new MainWindowState();
 
         public PlayerControlSettings SpeedChart { get; set; } = new PlayerControlSettings();
-        public PlayerControlSettings GpsInfo { get; set; } = new PlayerControlSettings();
         public PlayerControlSettings RightPanel { get; set; } = new PlayerControlSettings();
+        public PlayerControlSettings GpsMap { get; set; } = new PlayerControlSettings();
+        public PlayerControlSettings GpsInfo { get; set; } = new PlayerControlSettings();
 
         public PlayerControlSettings PlayerF { get; set; } = new PlayerControlSettings();
         public PlayerControlSettings PlayerI { get; set; } = new PlayerControlSettings();
         public PlayerControlSettings PlayerR { get; set; } = new PlayerControlSettings();
+
+        private void CopyFrom(AppConfig settings)
+        {
+            LastSelectedFileName = settings.LastSelectedFileName;
+
+            SpeedUnits = settings.SpeedUnits;
+
+            MainWindowState.CopyFrom(settings.MainWindowState);
+
+            RightPanel.CopyFrom(settings.RightPanel);
+            SpeedChart.CopyFrom(settings.SpeedChart);
+            GpsMap.CopyFrom(settings.GpsMap);
+            GpsInfo.CopyFrom(settings.GpsInfo);
+
+            PlayerF.CopyFrom(settings.PlayerF);
+            PlayerI.CopyFrom(settings.PlayerI);
+            PlayerR.CopyFrom(settings.PlayerR);
+        }
 
         public AppConfig()
         {
@@ -108,23 +158,6 @@ namespace DashCamGPSView.Tools
                     MessageBox.Show(err.ToString(), "Cannot load Settings From File");
                 }
             }
-        }
-
-        private void CopyFrom(AppConfig settings)
-        {
-            LastSelectedFileName = settings.LastSelectedFileName;
-
-            SpeedUnits = settings.SpeedUnits;
-
-            MainWindowState.CopyFrom(settings.MainWindowState);
-
-            RightPanel.CopyFrom(settings.RightPanel);
-            SpeedChart.CopyFrom(settings.SpeedChart);
-            GpsInfo.CopyFrom(settings.GpsInfo);
-
-            PlayerF.CopyFrom(settings.PlayerF);
-            PlayerI.CopyFrom(settings.PlayerI);
-            PlayerR.CopyFrom(settings.PlayerR);
         }
     }
 }

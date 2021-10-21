@@ -9,7 +9,10 @@
         xmlns:speedGauge="clr-namespace:SpeedGauge;assembly=CircularGauge" 
         xmlns:wpf="clr-namespace:MkZ.WPF;assembly=Framework.MkZ"
         mc:Ignorable="d"
-        Loaded="Window_Loaded" Closed="Window_Closed" PreviewKeyDown="Window_PreviewKeyDown"
+        Loaded="Window_Loaded" 
+        Closed="Window_Closed" 
+        PreviewKeyDown="Window_PreviewKeyDown"
+        SizeChanged="Window_SizeChanged"
         WindowStartupLocation="Manual"
         Left="10" Top="10"
         Title="DashCam GPS Viewer" Icon="DashMap.ico"
@@ -28,20 +31,16 @@
     </Window.InputBindings>-->
     <Grid x:Name="_gridMain">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*"/>
+            <ColumnDefinition Width="2*" />
             <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="5*"/>
-            <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="500" x:Name="mapColumn"/>
+            <ColumnDefinition Width="*" x:Name="mapColumn"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="40" MaxHeight="40" MinHeight="40"/>
-            <RowDefinition Height="3*" />
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="5*"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="10*" />
             <RowDefinition Height="5"/>
-            <RowDefinition Height="1.3*" x:Name="rowSpeedGraph"/>
+            <RowDefinition Height="*" x:Name="rowSpeedGraph"/>
+            <RowDefinition Height="40"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
@@ -78,30 +77,27 @@
             </Viewbox>
         </ToolBar>
 
-        <Grid x:Name="_gridPlayers" Grid.Row="1" Grid.RowSpan="4" Grid.Column="0" Grid.ColumnSpan="3" >
+        <Grid x:Name="_gridPlayers" Grid.Row="1" Grid.Column="0" >
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="2*" x:Name="columnPlayerR"/>
                 <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" x:Name="columnPlayerI"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="3*" x:Name="rowRearView"/>
-                <RowDefinition Height="5"/>
-                <RowDefinition Height="5*" x:Name="rowFrontView"/>
+                <RowDefinition Height="3*" x:Name="rowPlayerR" />
+                <RowDefinition Height="5" />
+                <RowDefinition Height="5*" x:Name="rowPlayerF" />
             </Grid.RowDefinitions>
-            <Border x:Name="borderPlayerR" Grid.Row="0"
-                BorderThickness="2" BorderBrush="Gray" >
+            <Border x:Name="borderPlayerR" Grid.Row="0" BorderThickness="2" BorderBrush="Gray" >
                 <controls:VideoPlayerControl x:Name="playerR" Title="Rear View" />
             </Border>
             <GridSplitter x:Name="_splitterRear" Grid.Column="1" HorizontalAlignment="Stretch" />
-            <Border x:Name="borderPlayerI" Grid.Row="0" Grid.Column="2"
-                BorderThickness="2" BorderBrush="Gray" >
+            <Border x:Name="borderPlayerI" Grid.Row="0" Grid.Column="2" BorderThickness="2" BorderBrush="Gray" >
                 <controls:VideoPlayerControl x:Name="playerI" Title="Inner View" />
             </Border>
-            <GridSplitter x:Name="_splitterMain" Grid.Row="1" 
+            <GridSplitter x:Name="_splitterMain" Grid.Row="1" Grid.ColumnSpan="3"
                       HorizontalAlignment="Stretch"
                       DragCompleted="GridSplitter1_DragCompleted"/>
-
             <Border x:Name="borderPlayerF" Grid.Row="2" Grid.ColumnSpan="3" BorderThickness="2" BorderBrush="Gray">
                 <controls:VideoPlayerControl x:Name="playerF" Title="Front View" />
             </Border>
@@ -114,121 +110,45 @@
                  Grid.RowSpan="3" Grid.ColumnSpan="3"
                  Width="280" Height="150" 
                  HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="40,0,40,20"/>
-
-            <!--<Viewbox Grid.Column="2" Grid.Row="3" 
-                 Width="150" Height="150"
-                 HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="40">
-            <gauge:CircularGaugeControl x:Name="speedGauge" 
-                                            OuterFrameThickness="4"
-                                            Radius="150" 
-                                            ScaleRadius="140" 
-                                            ScaleStartAngle="150" 
-                                            ScaleSweepAngle="240"
-                                            PointerLength="85" 
-                                            PointerCapRadius="45" 
-                                            MinValue="0" 
-                                            MaxValue="140" 
-                                            MajorDivisionsCount="7" 
-                                            MinorDivisionsCount="10" 
-                                            CurrentValue="{Binding Score, FallbackValue=80}"
-                                            ImageSource="/Images/map_32px.png"
-                                            ImageSize="40,50"
-                                            RangeIndicatorThickness="8"
-                                            RangeIndicatorRadius="80"
-                                            RangeIndicatorLightRadius="10"
-                                            RangeIndicatorLightOffset="60"
-                                            OptimalRangeStartValue="25"
-                                            OptimalRangeEndValue="80" 
-                                            ScaleLabelRadius="120"
-                                            ScaleLabelSize="40,30"
-                                            ScaleLabelFontSize="20"
-                                            ScaleLabelForeground="WhiteSmoke"
-                                            MajorTickSize="10,3"
-                                            MinorTickSize="3,1"
-                                            MajorTickColor="LightGray"
-                                            MinorTickColor="LightGray"
-                                            ImageOffset="-50"
-                                            GaugeBackgroundColor="Black"
-                                            PointerThickness ="16"
-                                            DialTextOffset="90" 
-                                            DialText="Speed MPH"
-                                            DialTextColor="Wheat"
-                                            DialTextFontSize="24"
-                                            >
-
-            </gauge:CircularGaugeControl>
-        </Viewbox>-->
         </Grid>
 
-        <GridSplitter x:Name="_splitterRightPane" Grid.Column="3" Grid.Row="1" Grid.RowSpan="6" HorizontalAlignment="Stretch"/>
+        <GridSplitter x:Name="_splitterRightPane" Grid.Column="1" Grid.Row="1" Grid.RowSpan="6" 
+                      Background="Pink" HorizontalAlignment="Stretch"/>
 
-        <Grid x:Name="_gridRightPanel" Grid.Row="1" Grid.RowSpan="7" Grid.Column="4">
+        <Grid x:Name="_gridRightPanel" Grid.Row="1" Grid.RowSpan="7" Grid.Column="2" Background="AliceBlue">
             <Grid.RowDefinitions>
-                <RowDefinition Height="149*" x:Name="rowFilesTree" />
+                <RowDefinition Height="*" x:Name="rowFilesTree" />
                 <RowDefinition Height="5"/>
-                <RowDefinition Height="349*" x:Name="rowMaps" />
-                <RowDefinition Height="23*"/>
-                <RowDefinition Height="5"/>
-                <RowDefinition Height="229*" x:Name="rowGpsInfo"/>
-                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="5*" />
             </Grid.RowDefinitions>
-            <Border Grid.Column="0" Grid.Row="0" BorderThickness="2" BorderBrush="Gray" Background="Beige">
-                <controls:FilesTreeUserControl x:Name="treeGroups"/>
-            </Border>
-            <GridSplitter Grid.Column="0" Grid.Row="1" Grid.RowSpan="1" HorizontalAlignment="Stretch"/>
-            <Border Grid.Row="2" BorderThickness="2" BorderBrush="Gray" Grid.RowSpan="2">
-                <controls:GMapUserControl x:Name="MainMap" MaxZoom="24" MinZoom="1" />
-            </Border>
-            <GridSplitter x:Name="_splitterGpsInfo" Grid.Row="4" HorizontalAlignment="Stretch"/>
-            <Border Grid.Row="5" BorderThickness="2" BorderBrush="Gray" Grid.RowSpan="2">
-                <controls:GpsInfoUserControl x:Name="gpsInfo"/>
-            </Border>
+            <Grid Grid.Row="0">
+                 <Border Grid.Row="0" BorderThickness="2" BorderBrush="Gray" Background="Beige">
+                    <controls:FilesTreeUserControl x:Name="treeGroups"/>
+                </Border>
+            </Grid>
+            <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" Background="Lime"/>
+            <Grid Grid.Row="2" ShowGridLines="True">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="8*" x:Name="rowMaps" />
+                    <RowDefinition Height="5"/>
+                    <RowDefinition Height="*" x:Name="rowGpsInfo"/>
+                </Grid.RowDefinitions>
+                <Border Grid.Row="0" BorderThickness="2" BorderBrush="Gray" Grid.RowSpan="2">
+                    <controls:GMapUserControl x:Name="MainMap" MaxZoom="24" MinZoom="1" />
+                </Border>
+                <GridSplitter x:Name="_splitterGpsInfo" Grid.Row="1" HorizontalAlignment="Stretch" Background="Pink"/>
+                <Border Grid.Row="2" BorderThickness="2" BorderBrush="Gray" Background="Beige" >
+                    <controls:GpsInfoUserControl x:Name="gpsInfo"/>
+                </Border>
+            </Grid>
         </Grid>
 
-        <GridSplitter x:Name="_splitterSpeedChart" Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Stretch"/>
+        <GridSplitter x:Name="_splitterSpeedChart" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="1" HorizontalAlignment="Stretch"/>
 
-        <controls:SpeedChartUserControl x:Name="graphSpeedInfo" Grid.Row="6" Grid.ColumnSpan="3" />
+        <controls:SpeedChartUserControl x:Name="graphSpeedInfo" Grid.Row="3" />
 
-        <controls:PlayerTimelineBarUserControl x:Name="statusBar" Grid.Row="7" Grid.ColumnSpan="3"  Background="Gray" 
+        <controls:PlayerTimelineBarUserControl x:Name="statusBar" Grid.Row="4" Background="Gray" 
                            ExternalPlayer="{Binding MainPlayer, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
-
-        <!--<StatusBar Grid.Row="7" Grid.ColumnSpan="3"  Background="Gray">
-            <StatusBar.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-                    </Grid>
-                </ItemsPanelTemplate>
-            </StatusBar.ItemsPanel>
-            <StatusBarItem Grid.Column="0">
-                <TextBlock Name="lblProgressStatus" FontSize="16">00:00:00/00:00:00</TextBlock>
-            </StatusBarItem>
-            -->
-        <!--<StatusBarItem Grid.Column="1">
-                <Button FontSize="16" ToolTip="Next Frame" Click="btnNextFrame_Click" >ᗈ</Button>
-            </StatusBarItem>-->
-        <!--
-            <StatusBarItem Grid.Column="2" HorizontalContentAlignment="Stretch">
-                <Slider Name="sliProgress" Foreground="Black" Minimum="0"
-                        SmallChange="1" LargeChange="10" TickPlacement="TopLeft" 
-                        Thumb.DragStarted="sliProgress_DragStarted"  
-                        Thumb.DragCompleted="sliProgress_DragCompleted" 
-                        ValueChanged="sliProgress_ValueChanged" />
-            </StatusBarItem>
-            <StatusBarItem Grid.Column="3">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Volume: " FontSize="16" />
-                    <Slider Name="pbVolume" Width="110" 
-                            Maximum="1" SmallChange="0.05" LargeChange="0.1"
-                            Value="{Binding ElementName=playerF, Path=Volume}" />
-                </StackPanel>
-            </StatusBarItem>
-        </StatusBar>-->
 
         <controls:MaximizedUserControl x:Name="maxScreen" Grid.RowSpan="8" Grid.ColumnSpan="5" Visibility="Hidden" />
         <controls:WaitScreenUserControl x:Name="waitScreen" Grid.RowSpan="8" Grid.ColumnSpan="5" Visibility="Hidden" />

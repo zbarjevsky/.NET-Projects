@@ -4,12 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DashCamGPSView"
-             xmlns:controls="clr-namespace:DashCamGPSView.Controls"
+             xmlns:controls="clr-namespace:DashCamGPSView.Controls" 
+             xmlns:tools="clr-namespace:DashCamGPSView.Tools"
              mc:Ignorable="d" 
              Loaded="UserControl_Loaded"
+             SizeChanged="UserControl_SizeChanged"
              MouseDoubleClick="UserControl_MouseDoubleClick"
              PreviewMouseDown="UserControl_PreviewMouseButtonDown"
-             d:DesignHeight="150" d:DesignWidth="800">
+             d:DesignHeight="250" d:DesignWidth="800">
+    <UserControl.Resources>
+        <tools:EnumBooleanConverter x:Key="EnumToBoolConverter"/>
+    </UserControl.Resources>
     <Grid MouseWheel="Grid_MouseWheel">
         <Grid.RowDefinitions>
             <RowDefinition Height="30" />
@@ -24,6 +29,22 @@
                           MouseWheel="mePlayer_MouseWheel" />-->
         </ScrollViewer>
 
+        <Border Grid.Row="1" Margin="12" HorizontalAlignment="Left" VerticalAlignment="Top" CornerRadius="10">
+                <Border.Background>
+                    <SolidColorBrush Color="White" Opacity="0.2" />
+                </Border.Background>
+            <StackPanel Margin="8" >
+                <RadioButton IsChecked="{Binding ZoomState, 
+                    Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Original}">Original Size</RadioButton>
+                <RadioButton IsChecked="{Binding ZoomState, 
+                    Converter={StaticResource EnumToBoolConverter}, ConverterParameter=FitWidth}">Fit Width</RadioButton>
+                <RadioButton IsChecked="{Binding ZoomState, 
+                    Converter={StaticResource EnumToBoolConverter}, ConverterParameter=FitWindow}">Fit Window</RadioButton>
+                <RadioButton IsChecked="{Binding ZoomState, 
+                    Converter={StaticResource EnumToBoolConverter}, ConverterParameter=Custom}">Custom</RadioButton>
+            </StackPanel>
+        </Border>
+
         <TextBox x:Name="txtTitle" BorderThickness="0" Margin="3" Padding="100,0"
                      Foreground="Navy"
                      HorizontalContentAlignment="Center"
@@ -37,11 +58,8 @@
             </TextBox.Background>
         </TextBox>
 
-        <StackPanel Orientation="Horizontal" >
-            <Button x:Name="btnMaximize"  Margin="6"
-                    Content="MAX" ToolTip="Maximize"
-                    Click="btnMaximize_Click" />
-            <Button x:Name="btnOriginalSize"  Margin="6"
+        <DockPanel HorizontalAlignment="Stretch">
+            <!--<Button x:Name="btnOriginalSize"  Margin="6"
                     Content="1:1" ToolTip="Original Size"
                     Click="btnOriginalSize_Click" />
             <Button x:Name="btnFitWidth"  Margin="6"
@@ -49,12 +67,15 @@
                     Click="btnFitWidth_Click" />
             <Button x:Name="btnFitWindow"  Margin="6"
                     Content="Fit Window" ToolTip="Fit Window"
-                    Click="btnFitWindow_Click" />
-            <Button x:Name="btnFlipHorizontally"  Margin="6"
-                    Content="Flip Horizontally" ToolTip="Flip Horizontally"
-                    Click="btnFlipHorizontally_Click" />
+                    Click="btnFitWindow_Click" />-->
+            <CheckBox x:Name="btnFlipHorizontally"  Margin="20,0" VerticalAlignment="Center"
+                      Content="Flip Horizontally" ToolTip="Flip Horizontally"
+                      IsChecked="{Binding IsFlipHorizontally}" />
+            <Button x:Name="btnMaximize" Padding="12,0" Margin="32,4" DockPanel.Dock="Right"
+                    Content="MAX" ToolTip="Maximize" 
+                    Click="btnMaximize_Click" />
             <TextBlock x:Name="txtVideoResolution" Text="1920x1080"
                        VerticalAlignment="Center"/>
-        </StackPanel>
+        </DockPanel>
     </Grid>
 </UserControl>
