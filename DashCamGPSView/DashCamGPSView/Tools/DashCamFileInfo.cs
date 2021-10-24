@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using GMap.NET;
 using GPSDataParser;
 using NmeaParser.Nmea;
@@ -187,20 +188,27 @@ namespace DashCamGPSView.Tools
 
         internal void DeleteRecording()
         {
+            Action<string> deleteFile = (name) =>
+            {
+                if (File.Exists(name))
+                {
+                    FileInfo f = new FileInfo(name);
+                    f.IsReadOnly = false;
+                    File.Delete(name);
+                }
+            };
+
             try
             {
-                if (File.Exists(FileNameFront))
-                    File.Delete(FileNameFront);
-                if (File.Exists(FileNameNmea))
-                    File.Delete(FileNameNmea);
-                if (File.Exists(FileNameRear))
-                    File.Delete(FileNameRear);
-                if (File.Exists(FileNameInside))
-                    File.Delete(FileNameInside);
+                deleteFile(FileNameFront);
+                deleteFile(FileNameNmea);
+                deleteFile(FileNameRear);
+                deleteFile(FileNameInside);
             }
             catch (Exception err)
             {
                 Debug.WriteLine("Exception deleting files: " + err);
+                MessageBox.Show("Exception deleting files: " + err);
             }
         }
 
