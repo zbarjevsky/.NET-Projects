@@ -20,10 +20,28 @@ namespace DashCamGPSView.Tools
         public DashCamFileTree(string selectFile, string speedUnits, double deltaMinutesBetweenGroups = 10.0)
         {
             string dirParent = Path.GetDirectoryName(selectFile);
+            if(dirParent.EndsWith(@"\RO") || dirParent.EndsWith(@"Parking"))
+                dirParent = Path.GetDirectoryName(dirParent);
+
+            string dirParking = Path.Combine(dirParent, "Parking");
+            string dirReadOnly = Path.Combine(dirParent, "RO");
+
             string ext = Path.GetExtension(selectFile);
 
-            string [] fileList = Directory.GetFiles(dirParent, "*"+ext);
-            Array.Sort(fileList, StringComparer.InvariantCultureIgnoreCase);
+            List<string> fileList = Directory.GetFiles(dirParent, "*"+ext).ToList();
+            if (Directory.Exists(dirParking))
+            {
+                string[] parkingFiles = Directory.GetFiles(dirParking, "*" + ext);
+                fileList.AddRange(parkingFiles);
+            }
+
+            if (Directory.Exists(dirReadOnly))
+            {
+                string[] readOnlyFiles = Directory.GetFiles(dirReadOnly, "*" + ext);
+                fileList.AddRange(readOnlyFiles);
+            }
+
+            fileList.Sort((f1,f2) => string.Compare(f1,f2, true));
 
             List<FileInfoWithDateFromFileName> allInfos = fileList.Select(f => new FileInfoWithDateFromFileName(f)).ToList();
 
@@ -32,7 +50,7 @@ namespace DashCamGPSView.Tools
             {
                 FileInfoWithDateFromFileName currentInfo = allInfos[idx];
                 DashCamFileInfo info = new DashCamFileInfo(allInfos, currentInfo, speedUnits);
-                DashCamFileInfo existing = (infoList.FirstOrDefault(i => i.FrontFileName == info.FrontFileName));
+                DashCamFileInfo existing = (infoList.FirstOrDefault(i => i.FileNameFront == info.FileNameFront));
                 if(existing == null)
                     infoList.Add(info);
             }

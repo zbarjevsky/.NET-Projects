@@ -128,6 +128,7 @@
     </Compile>
     <Compile Include="Tools\EnumBooleanConverter.cs" />
     <Compile Include="Tools\ExportUtils.cs" />
+    <Compile Include="Tools\FileTypeToIconConverter.cs" />
     <Compile Include="Tools\MainWindowState.cs" />
     <Compile Include="Tools\PointLatLngUI.cs" />
     <Compile Include="Tools\AppConfig.cs" />
@@ -328,6 +329,18 @@
   <ItemGroup>
     <Resource Include="Images\CatAni.gif" />
     <Resource Include="Images\spinning-wheel.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Locked.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Parking.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Warning.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Star.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

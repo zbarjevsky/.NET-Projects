@@ -20,6 +20,14 @@ namespace DashCamGPSView.Tools
         Unkn
     }
 
+    public enum FileType : int
+    {
+        Unknown = 0,
+        Recording,
+        Parking,
+        ReadOnly,
+    }
+
     public class FileInfoWithDateFromFileName
     {
         public FileInfo Info { get; }
@@ -57,7 +65,9 @@ namespace DashCamGPSView.Tools
     {
         public GpsFileFormat GpsFileFormat = GpsFileFormat.Unkn;
 
-        public string FrontFileName, RearFileName, InsideFileName, NmeaFileName;
+        public FileType FileType = FileType.Unknown;
+
+        public string FileNameFront, FileNameRear, FileNameInside, FileNameNmea;
 
         private List<GpsPointData> _gpsInfo = new List<GpsPointData>();
         public List<GpsPointData> GpsInfo
@@ -111,24 +121,25 @@ namespace DashCamGPSView.Tools
             if (Directory.Exists(dirF) && Directory.Exists(dirR))
             {
                 GpsFileFormat = GpsFileFormat.DuDuBell;
+                FileType = FileType.Recording;
                 FileDate = FromDuDuBellFileName(fileName);
 
-                FrontFileName = Path.Combine(dirF, name + "F.MP4");
-                if (!File.Exists(FrontFileName))
-                    FrontFileName = null;
-                NmeaFileName = Path.Combine(dirF, name + "F.NMEA");
-                if (!File.Exists(NmeaFileName))
-                    NmeaFileName = null;
-                RearFileName = Path.Combine(dirR, name + "R.MP4");
-                if (!File.Exists(RearFileName))
-                    RearFileName = null;
+                FileNameFront = Path.Combine(dirF, name + "F.MP4");
+                if (!File.Exists(FileNameFront))
+                    FileNameFront = null;
+                FileNameNmea = Path.Combine(dirF, name + "F.NMEA");
+                if (!File.Exists(FileNameNmea))
+                    FileNameNmea = null;
+                FileNameRear = Path.Combine(dirR, name + "R.MP4");
+                if (!File.Exists(FileNameRear))
+                    FileNameRear = null;
             }
             else //different format
             {
                 GpsFileFormat = GpsFileFormat.Viofo;
                 FileDate = currentInfo.Date;
-                if(!FromViofoFileName(allFiles, currentInfo, ref FrontFileName, ref RearFileName, ref InsideFileName))
-                    FrontFileName = currentInfo.Info.FullName;
+                if(!FromViofoFileName(allFiles, currentInfo, ref FileType, ref FileNameFront, ref FileNameRear, ref FileNameInside))
+                    FileNameFront = currentInfo.Info.FullName;
             }
         }
 
@@ -137,10 +148,10 @@ namespace DashCamGPSView.Tools
             SpeedUnits = (SpeedUnits)Enum.Parse(typeof(SpeedUnits), speedUnits);
             GpsFileFormat = source.GpsFileFormat;
 
-            FrontFileName = source.FrontFileName;
-            RearFileName = source.RearFileName;
-            InsideFileName = source.InsideFileName;
-            NmeaFileName = source.NmeaFileName;
+            FileNameFront = source.FileNameFront;
+            FileNameRear = source.FileNameRear;
+            FileNameInside = source.FileNameInside;
+            FileNameNmea = source.FileNameNmea;
 
             FileDate = source.FileDate;
 
@@ -156,12 +167,12 @@ namespace DashCamGPSView.Tools
             {
                 if (GpsFileFormat == GpsFileFormat.DuDuBell)
                 {
-                    if (File.Exists(NmeaFileName))
-                        _gpsInfo = GpsPointData.Convert(NMEAParser.NMEAParser.ReadFile(NmeaFileName));
+                    if (File.Exists(FileNameNmea))
+                        _gpsInfo = GpsPointData.Convert(NMEAParser.NMEAParser.ReadFile(FileNameNmea));
                 }
                 else if (GpsFileFormat == GpsFileFormat.Viofo)
                 {
-                    _gpsInfo = GpsPointData.Convert(NovatekViofoGPSParser.ViofoParser.ReadMP4FileGpsInfo(FrontFileName));
+                    _gpsInfo = GpsPointData.Convert(NovatekViofoGPSParser.ViofoParser.ReadMP4FileGpsInfo(FileNameFront));
                 }
                 else
                 {
@@ -178,14 +189,14 @@ namespace DashCamGPSView.Tools
         {
             try
             {
-                if (File.Exists(FrontFileName))
-                    File.Delete(FrontFileName);
-                if (File.Exists(NmeaFileName))
-                    File.Delete(NmeaFileName);
-                if (File.Exists(RearFileName))
-                    File.Delete(RearFileName);
-                if (File.Exists(InsideFileName))
-                    File.Delete(InsideFileName);
+                if (File.Exists(FileNameFront))
+                    File.Delete(FileNameFront);
+                if (File.Exists(FileNameNmea))
+                    File.Delete(FileNameNmea);
+                if (File.Exists(FileNameRear))
+                    File.Delete(FileNameRear);
+                if (File.Exists(FileNameInside))
+                    File.Delete(FileNameInside);
             }
             catch (Exception err)
             {
@@ -210,8 +221,8 @@ namespace DashCamGPSView.Tools
             _dGpsDelaySeconds = delta.TotalSeconds;
         }
 
-        private bool FromViofoFileName(List<FileInfoWithDateFromFileName> allFiles, FileInfoWithDateFromFileName currentInfo, 
-            ref string frontFileName, ref string rearFileName, ref string insideFileName)
+        private bool FromViofoFileName(List<FileInfoWithDateFromFileName> allFiles, FileInfoWithDateFromFileName currentInfo,
+            ref FileType fileType, ref string frontFileName, ref string rearFileName, ref string insideFileName)
         {
             frontFileName = "";
             rearFileName = "";
@@ -222,16 +233,44 @@ namespace DashCamGPSView.Tools
                 double delta = Math.Abs((info.Date - currentInfo.Date).TotalSeconds);
                 if (delta < 3)
                 {
-                    if (info.Info.Name.EndsWith("F.MP4", true, CultureInfo.InvariantCulture))
+                    if (info.Info.Name.EndsWith("_F.MP4", true, CultureInfo.InvariantCulture))
+                    {
                         frontFileName = info.Info.FullName;
-                    else if (info.Info.Name.EndsWith("R.MP4", true, CultureInfo.InvariantCulture))
+                        FileType = FileType.Recording;
+                    }
+                    else if (info.Info.Name.EndsWith("_R.MP4", true, CultureInfo.InvariantCulture))
+                    {
                         rearFileName = info.Info.FullName;
-                    else if (info.Info.Name.EndsWith("I.MP4", true, CultureInfo.InvariantCulture))
+                        FileType = FileType.Recording;
+                    }
+                    else if (info.Info.Name.EndsWith("_I.MP4", true, CultureInfo.InvariantCulture))
+                    {
                         insideFileName = info.Info.FullName;
+                        FileType = FileType.Recording;
+                    }
+                    else if (info.Info.Name.EndsWith("_PF.MP4", true, CultureInfo.InvariantCulture))
+                    {
+                        frontFileName = info.Info.FullName;
+                        FileType = FileType.Parking;
+                    }
+                    else if (info.Info.Name.EndsWith("_PR.MP4", true, CultureInfo.InvariantCulture))
+                    {
+                        rearFileName = info.Info.FullName;
+                        FileType = FileType.Parking;
+                    }
+                    else if (info.Info.Name.EndsWith("_PI.MP4", true, CultureInfo.InvariantCulture))
+                    {
+                        insideFileName = info.Info.FullName;
+                        FileType = FileType.Parking;
+                    }
+
+                    if (info.Info.IsReadOnly)
+                        FileType = FileType.ReadOnly;
                 }
             }
 
-            //check for forein file name
+            //check for simple file name
+            //for one camera only
             string name = currentInfo.Info.FullName;
             if (string.Compare(name, frontFileName, true) != 0 &&
                 string.Compare(name, rearFileName, true) != 0 &&
@@ -302,7 +341,7 @@ namespace DashCamGPSView.Tools
 
         public override string ToString()
         {
-            string name = Path.GetFileName(FrontFileName);
+            string name = Path.GetFileName(FileNameFront);
             string gps = _gpsInfo == null ? "No Data" : _gpsInfo.Count.ToString();
             return "N: " + name + ", GPS Data: " + gps;
         }

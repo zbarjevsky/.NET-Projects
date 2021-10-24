@@ -3,9 +3,13 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:DashCamGPSView.Controls"
+             xmlns:local="clr-namespace:DashCamGPSView.Controls" 
+             xmlns:tools="clr-namespace:DashCamGPSView.Tools"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.Resources>
+        <tools:FileTypeToIconConverter x:Key="FileTypeToIconConverter" />
+    </UserControl.Resources>
     <Grid>
         <TreeView x:Name="treeFiles">
             <TreeView.ItemContainerStyle>
@@ -62,7 +66,8 @@
                                 </MenuItem>
                             </ContextMenu>
                         </StackPanel.ContextMenu>
-                        <Image Source="/Images/Movie48.png" Margin="0,0,5,0"  Width="18" Height="18" />
+                        <Image Source="{Binding FileType, Converter={StaticResource FileTypeToIconConverter}}" 
+                               Margin="0,0,5,0"  Width="18" Height="18" />
                         <TextBlock Text="{Binding FileNameForDisplay}" FontFamily="Courier New" VerticalAlignment="Center"/>
                         <TextBlock Text="{Binding Description}" Foreground="Goldenrod" VerticalAlignment="Center" />
                     </StackPanel>

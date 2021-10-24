@@ -146,6 +146,9 @@ namespace DashCamGPSView
                     MainMap.Position = v._dashCamFileInfo.Position(0);
                     MainMap.Zoom = 16;
                 }
+
+                PlayFile(v._dashCamFileInfo);
+                Pause();
             }
 
             //FIRST time ONLY - fit width after file opened
@@ -202,8 +205,8 @@ namespace DashCamGPSView
             //if (AppConfig.GpsInfo.SplitterOffset.Value != 0)
             //    rowGpsInfo.Height = new GridLength(AppConfig.GpsInfo.SplitterOffset, GridUnitType.Pixel);
             //Map Info
-            if (AppConfig.GpsMap.SplitterOffset.Value != 0)
-                rowMaps.Height = AppConfig.GpsMap.SplitterOffset.GetGridLength();
+            //if (AppConfig.GpsMap.SplitterOffset.Value != 0)
+            //    rowMaps.Height = AppConfig.GpsMap.SplitterOffset.GetGridLength();
 
             LoadPlayersState();
         }
@@ -220,9 +223,9 @@ namespace DashCamGPSView
             //Rear View
             columnPlayerI.Width = new GridLength(1, GridUnitType.Star);
             //GPS Info
-            rowGpsInfo.Height = new GridLength(1, GridUnitType.Star);
+            columnGpsInfo.Width = new GridLength(400, GridUnitType.Pixel);
             //Map Info
-            rowMaps.Height = new GridLength(8, GridUnitType.Star);
+            //rowMaps.Height = new GridLength(8, GridUnitType.Star);
         }
 
         private void LoadPlayersState()
@@ -250,9 +253,9 @@ namespace DashCamGPSView
             //Rear View
             AppConfig.PlayerR.SplitterOffset.SetGridLength(columnPlayerR);
             //GPS Info
-            AppConfig.GpsInfo.SplitterOffset.SetGridLength(rowGpsInfo);
+            AppConfig.GpsInfo.SplitterOffset.SetGridLength(columnGpsInfo);
             //Map Info
-            AppConfig.GpsMap.SplitterOffset.SetGridLength(rowMaps);
+            //AppConfig.GpsMap.SplitterOffset.SetGridLength(rowMaps);
 
             AppConfig.Save();
         }
@@ -373,8 +376,8 @@ namespace DashCamGPSView
         private bool _bRearViewWasCollapsed = false;
         private void PlayFile(DashCamFileInfo fileInfo, double startFrom = 0)
         {
-            VideoFile prevFile = treeGroups.FindPrevFile(fileInfo.FrontFileName);
-            if(prevFile == null || (_dashCamFileInfo != null && prevFile._dashCamFileInfo.FrontFileName != _dashCamFileInfo.FrontFileName))
+            VideoFile prevFile = treeGroups.FindPrevFile(fileInfo.FileNameFront);
+            if(prevFile == null || (_dashCamFileInfo != null && prevFile._dashCamFileInfo.FileNameFront != _dashCamFileInfo.FileNameFront))
             {
                 MainMap.SetRouteAndCar(null); //reset route 
             }
@@ -386,10 +389,10 @@ namespace DashCamGPSView
 
             _dashCamFileInfo = new DashCamFileInfo(fileInfo, AppConfig.SpeedUnits);
 
-            txtFileName.Text = _dashCamFileInfo.FrontFileName;
-            playerF.Open(_dashCamFileInfo.FrontFileName, playerF.Volume);
-            playerR.Open(_dashCamFileInfo.RearFileName, 0);
-            playerI.Open(_dashCamFileInfo.InsideFileName, 0);
+            txtFileName.Text = _dashCamFileInfo.FileNameFront;
+            playerF.Open(_dashCamFileInfo.FileNameFront, playerF.Volume);
+            playerR.Open(_dashCamFileInfo.FileNameRear, 0);
+            playerI.Open(_dashCamFileInfo.FileNameInside, 0);
 
             graphSpeedInfo.SetGpsInfo(_dashCamFileInfo.GpsInfo);
 
@@ -404,9 +407,9 @@ namespace DashCamGPSView
                     MainMap.Zoom = 16;
                     //GridLengthAnimation.AnimateColumn(mapColumn, mapColumn.Width, 500);
                     //select file AFTER map is expanded
-                    GridLengthAnimation.AnimateRow(rowMaps, new GridLength(5, GridUnitType.Star), 500, () => treeGroups.SelectFile(_dashCamFileInfo.FrontFileName));
-                    GridLengthAnimation.AnimateRow(rowGpsInfo, new GridLength(2, GridUnitType.Star));
-                    GridLengthAnimation.AnimateRow(rowSpeedGraph, new GridLength(1.3, GridUnitType.Star));
+                    GridLengthAnimation.AnimateRow(rowMap, new GridLength(5, GridUnitType.Star), 500, () => treeGroups.SelectFile(_dashCamFileInfo.FileNameFront));
+                    GridLengthAnimation.AnimateRow(rowFilesTree, new GridLength(1, GridUnitType.Star));
+                    GridLengthAnimation.AnimateRow(rowSpeedGraph, new GridLength(1, GridUnitType.Star));
                 }
             }
             else //no GPS info
@@ -417,13 +420,13 @@ namespace DashCamGPSView
                     _bMapWasCollapsed = true;
                     MainMap.Zoom = 2;
 
-                    GridLengthAnimation.AnimateRow(rowMaps, new GridLength(0));
-                    GridLengthAnimation.AnimateRow(rowGpsInfo, new GridLength(0));
+                    GridLengthAnimation.AnimateRow(rowMap, new GridLength(0));
+                    //GridLengthAnimation.AnimateRow(rowGpsInfo, new GridLength(0));
                     GridLengthAnimation.AnimateRow(rowSpeedGraph, new GridLength(0));
                 }
             }
 
-            if(File.Exists(_dashCamFileInfo.RearFileName))
+            if(File.Exists(_dashCamFileInfo.FileNameRear))
             {
                 if (_bRearViewWasCollapsed)
                 {
@@ -442,7 +445,7 @@ namespace DashCamGPSView
                 }
             }
 
-            treeGroups.SelectFile(_dashCamFileInfo.FrontFileName);
+            treeGroups.SelectFile(_dashCamFileInfo.FileNameFront);
 
             playerF.Play();
             playerR.Play();
@@ -465,8 +468,8 @@ namespace DashCamGPSView
         {
             Stop();
 
-            VideoFile video = treeGroups.FindNextFile(_dashCamFileInfo.FrontFileName);
-            if (video == null || !File.Exists(video._dashCamFileInfo.FrontFileName))
+            VideoFile video = treeGroups.FindNextFile(_dashCamFileInfo.FileNameFront);
+            if (video == null || !File.Exists(video._dashCamFileInfo.FileNameFront))
                 return;
 
             PlayFile(video._dashCamFileInfo);
@@ -474,8 +477,8 @@ namespace DashCamGPSView
 
         private void PlayPrev()
         {
-            VideoFile video = treeGroups.FindPrevFile(_dashCamFileInfo.FrontFileName); 
-            if (video == null || !File.Exists(video._dashCamFileInfo.FrontFileName))
+            VideoFile video = treeGroups.FindPrevFile(_dashCamFileInfo.FileNameFront); 
+            if (video == null || !File.Exists(video._dashCamFileInfo.FileNameFront))
               return;
 
             PlayFile(video._dashCamFileInfo);
@@ -515,7 +518,7 @@ namespace DashCamGPSView
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.Filter = "Google GPS Format (Extended KML) (*.kml)|*.kml|Google GPS Format (Simple KML) (*.kml)|*.kml|GPS Exchange Format (GPX) (*.gpx)|*.gpx";
             saveFileDialog.FilterIndex = 1;
-            string baseFileName = System.IO.Path.GetFileNameWithoutExtension(infos[0].FrontFileName);
+            string baseFileName = System.IO.Path.GetFileNameWithoutExtension(infos[0].FileNameFront);
             saveFileDialog.FileName = string.Format("TrackData_{0}.kml", baseFileName);
 
             if (saveFileDialog.ShowDialog() == true)
@@ -554,9 +557,9 @@ namespace DashCamGPSView
             e.CanExecute = false;
             if (_dashCamFileInfo != null)
             {
-                video = treeGroups.FindNextFile(_dashCamFileInfo.FrontFileName);
+                video = treeGroups.FindNextFile(_dashCamFileInfo.FileNameFront);
                 if(video != null)
-                    e.CanExecute = File.Exists(video._dashCamFileInfo.FrontFileName);
+                    e.CanExecute = File.Exists(video._dashCamFileInfo.FileNameFront);
             }
         }
 
@@ -571,9 +574,9 @@ namespace DashCamGPSView
             e.CanExecute = false;
             if (_dashCamFileInfo != null)
             {
-                video = treeGroups.FindPrevFile(_dashCamFileInfo.FrontFileName);
+                video = treeGroups.FindPrevFile(_dashCamFileInfo.FileNameFront);
                 if(video != null)
-                    e.CanExecute = File.Exists(video._dashCamFileInfo.FrontFileName);
+                    e.CanExecute = File.Exists(video._dashCamFileInfo.FileNameFront);
             }
         }
 
@@ -648,7 +651,8 @@ namespace DashCamGPSView
             int idx = -1;
             if (_dashCamFileInfo.HasGpsInfo)
             {
-                idx = _dashCamFileInfo.FindGpsInfoIdx(playerF.Position.TotalSeconds, playerF.NaturalDuration);
+                double seconds = playerF.Position.TotalSeconds;
+                idx = _dashCamFileInfo.FindGpsInfoIdx(seconds, playerF.NaturalDuration);
                 speedGauge.Visibility = Visibility.Visible;
                 compass.Visibility = Visibility.Visible;
 
@@ -657,6 +661,11 @@ namespace DashCamGPSView
                     speedGauge.SpeedUnits = _dashCamFileInfo.SpeedUnits.ToString();
                     speedGauge.Speed = _dashCamFileInfo.GetSpeed(idx).ToString("0");
                     compass.SetDirection(_dashCamFileInfo[idx].Course, _dashCamFileInfo.GetSpeed(idx));
+                    _txtGpsInfo.Text = string.Format("{0} of {1}\nSpeed: {2:0.0} {3}\nCourse: {4:0.0}°", 
+                        idx, _dashCamFileInfo.GpsInfo.Count, 
+                        _dashCamFileInfo.GetSpeed(idx), speedGauge.SpeedUnits,
+                        _dashCamFileInfo[idx].Course
+                        );
 
                     _lastValidPosition = _dashCamFileInfo.Position(idx);
                 }
@@ -664,6 +673,7 @@ namespace DashCamGPSView
                 {
                     speedGauge.Speed = "---";
                     compass.SetDirection(0, false);
+                    _txtGpsInfo.Text = "---";
                 }
 
                 gpsInfo.UpdateInfo(_dashCamFileInfo, idx);
@@ -674,6 +684,7 @@ namespace DashCamGPSView
             {
                 //speedGauge.DialText = "Speed Mph";
                 speedGauge.Speed = "?";
+                _txtGpsInfo.Text = "No GPS info";
                 speedGauge.Visibility = Visibility.Hidden;
                 compass.Visibility = Visibility.Hidden;
             }
@@ -696,7 +707,7 @@ namespace DashCamGPSView
             string fileName = @"C:\Temp\Screenshot.png";
             if (_dashCamFileInfo != null)
             {
-                fileName = _dashCamFileInfo.FrontFileName;
+                fileName = _dashCamFileInfo.FileNameFront;
                 format = _dashCamFileInfo.GpsFileFormat;
             }
 

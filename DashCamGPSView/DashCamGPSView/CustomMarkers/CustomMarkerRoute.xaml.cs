@@ -175,11 +175,13 @@ namespace DashCamGPSView.CustomMarkers
             if (route.Count == 0)
                 return;
 
-            figure.StartPoint = GetPoint(route[0], map);
-            for (int i = 0; i < route.Count; i++)
+            List<GpsPointData> cleanRoute = route.Where(p => p.Latitude != 0 && p.Longitude != 0).ToList();
+
+            figure.StartPoint = GetPoint(cleanRoute[0], map);
+            for (int i = 0; i < cleanRoute.Count; i++)
             {
-                Point pt = GetPoint(route[i], map);
-                if(i>0) //not first point
+                Point pt = GetPoint(cleanRoute[i], map);
+                if(segment.Points.Count > 1) //not first point
                 {
                     Vector v = pt - segment.Points.Last();
                     if (v.Length < 4)

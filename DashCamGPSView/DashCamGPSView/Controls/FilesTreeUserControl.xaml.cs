@@ -311,7 +311,7 @@ namespace DashCamGPSView.Controls
                     Members.Add(new VideoFile(i, group[i]));
                 }
 
-                string dir = Path.GetDirectoryName(group[0].FrontFileName);
+                string dir = Path.GetDirectoryName(group[0].FileNameFront);
                 GroupName = group[0].FileDate.ToString("yyyy/MM/dd HH:mm:ss") + ", " + dir;
             }
             else
@@ -338,7 +338,9 @@ namespace DashCamGPSView.Controls
 
         public bool IsSelected { get; set; } = false;
 
-        public string FileName { get { return _dashCamFileInfo.FrontFileName; } }
+        public string FileName { get { return _dashCamFileInfo.FileNameFront; } }
+
+        public FileType FileType { get => _dashCamFileInfo.FileType; }
 
         public string FileNameForDisplay { get; private set; }
 
@@ -350,19 +352,19 @@ namespace DashCamGPSView.Controls
             IsSelected = false;
             FileNameForDisplay = string.Format("{0:000}. {1}", indexInGroup+1, Path.GetFileNameWithoutExtension(FileName));
 
-            FileInfo fi1 = new FileInfo(info.FrontFileName);
+            FileInfo fi1 = new FileInfo(info.FileNameFront);
 
             string cameras = "FR";
             long size = fi1.Length;
-            if (File.Exists(info.InsideFileName))
+            if (File.Exists(info.FileNameInside))
             {
-                FileInfo fi2 = new FileInfo(info.InsideFileName);
+                FileInfo fi2 = new FileInfo(info.FileNameInside);
                 cameras += "+IN";
                 size += fi2.Length; 
             }
-            if (File.Exists(info.RearFileName))
+            if (File.Exists(info.FileNameRear))
             {
-                FileInfo fi3 = new FileInfo(info.RearFileName);
+                FileInfo fi3 = new FileInfo(info.FileNameRear);
                 cameras += "+RR";
                 size += fi3.Length;
             }
@@ -372,11 +374,11 @@ namespace DashCamGPSView.Controls
 
         internal bool HasFileName(string fileName)
         {
-            if (string.Compare(fileName, _dashCamFileInfo.FrontFileName, true) == 0)
+            if (string.Compare(fileName, _dashCamFileInfo.FileNameFront, true) == 0)
                 return true;
-            if (string.Compare(fileName, _dashCamFileInfo.RearFileName, true) == 0)
+            if (string.Compare(fileName, _dashCamFileInfo.FileNameRear, true) == 0)
                 return true;
-            if (string.Compare(fileName, _dashCamFileInfo.InsideFileName, true) == 0)
+            if (string.Compare(fileName, _dashCamFileInfo.FileNameInside, true) == 0)
                 return true;
 
             return false;

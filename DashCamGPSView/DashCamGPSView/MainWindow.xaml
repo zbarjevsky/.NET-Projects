@@ -112,43 +112,43 @@
                  HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="40,0,40,20"/>
         </Grid>
 
-        <GridSplitter x:Name="_splitterRightPane" Grid.Column="1" Grid.Row="1" Grid.RowSpan="6" 
-                      Background="Pink" HorizontalAlignment="Stretch"/>
+        <GridSplitter x:Name="_splitterRightPane" Grid.Column="1" Grid.Row="1" Grid.RowSpan="6" Margin="1"
+                      Background="Goldenrod" HorizontalAlignment="Stretch"/>
 
-        <Grid x:Name="_gridRightPanel" Grid.Row="1" Grid.RowSpan="7" Grid.Column="2" Background="AliceBlue">
+        <Grid x:Name="_gridRightPanel" Grid.Row="1" Grid.RowSpan="7" Grid.Column="2" >
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" x:Name="rowFilesTree" />
                 <RowDefinition Height="5"/>
-                <RowDefinition Height="5*" />
+                <RowDefinition Height="5*" x:Name="rowMap"/>
+                <RowDefinition Height="40"/>
             </Grid.RowDefinitions>
-            <Grid Grid.Row="0">
-                 <Border Grid.Row="0" BorderThickness="2" BorderBrush="Gray" Background="Beige">
-                    <controls:FilesTreeUserControl x:Name="treeGroups"/>
-                </Border>
-            </Grid>
-            <GridSplitter Grid.Row="1" HorizontalAlignment="Stretch" Background="Lime"/>
-            <Grid Grid.Row="2" ShowGridLines="True">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="8*" x:Name="rowMaps" />
-                    <RowDefinition Height="5"/>
-                    <RowDefinition Height="*" x:Name="rowGpsInfo"/>
-                </Grid.RowDefinitions>
-                <Border Grid.Row="0" BorderThickness="2" BorderBrush="Gray" Grid.RowSpan="2">
-                    <controls:GMapUserControl x:Name="MainMap" MaxZoom="24" MinZoom="1" />
-                </Border>
-                <GridSplitter x:Name="_splitterGpsInfo" Grid.Row="1" HorizontalAlignment="Stretch" Background="Pink"/>
-                <Border Grid.Row="2" BorderThickness="2" BorderBrush="Gray" Background="Beige" >
-                    <controls:GpsInfoUserControl x:Name="gpsInfo"/>
-                </Border>
-            </Grid>
+            <Border Grid.Row="0" BorderThickness="2" BorderBrush="Gray" Background="Beige">
+                <controls:FilesTreeUserControl x:Name="treeGroups"/>
+            </Border>
+            <GridSplitter Grid.Row="1" Margin="1" HorizontalAlignment="Stretch" Background="Goldenrod"/>
+            <Border Grid.Row="2" BorderThickness="2" BorderBrush="Gray" Grid.RowSpan="2">
+                <controls:GMapUserControl x:Name="MainMap" MaxZoom="24" MinZoom="1" />
+            </Border>
         </Grid>
 
         <GridSplitter x:Name="_splitterSpeedChart" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="1" HorizontalAlignment="Stretch"/>
-
-        <controls:SpeedChartUserControl x:Name="graphSpeedInfo" Grid.Row="3" />
-
+        
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="420" x:Name="columnGpsInfo"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*" x:Name="columnSpeedChart"/>
+                <ColumnDefinition Width="200"/>
+            </Grid.ColumnDefinitions>
+            <Border BorderThickness="2" BorderBrush="Gray" Background="Beige" >
+                <controls:GpsInfoUserControl x:Name="gpsInfo"/>
+            </Border>
+            <GridSplitter x:Name="_splitterGpsInfo" Grid.Column="1" Margin="1" HorizontalAlignment="Stretch" Background="Goldenrod"/>
+            <controls:SpeedChartUserControl Grid.Column="2" x:Name="graphSpeedInfo" />
+            <TextBlock x:Name="_txtGpsInfo" Grid.Column="3" Margin="4" Background="LightYellow" />
+        </Grid>
         <controls:PlayerTimelineBarUserControl x:Name="statusBar" Grid.Row="4" Background="Gray" 
-                           ExternalPlayer="{Binding MainPlayer, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
+               ExternalPlayer="{Binding MainPlayer, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
 
         <controls:MaximizedUserControl x:Name="maxScreen" Grid.RowSpan="8" Grid.ColumnSpan="5" Visibility="Hidden" />
         <controls:WaitScreenUserControl x:Name="waitScreen" Grid.RowSpan="8" Grid.ColumnSpan="5" Visibility="Hidden" />
