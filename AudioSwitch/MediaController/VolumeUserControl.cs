@@ -37,6 +37,7 @@ namespace MkZ.Media
             m_imgListSpk.Images.AddStrip(Resources.SpeakerImgList);
         }
 
+        private bool _doUpdateDevice = false;
         public void SetDevice(MMDevice device)
         {
             if (Device != null)
@@ -61,8 +62,15 @@ namespace MkZ.Media
 
             Device.AudioEndpointVolume.OnVolumeNotification = (notificationData) =>
             {
-                CommonUtils.ExecuteOnUIThread(() => {
-                    m_trackVolume.Value = (int)Math.Round(100f * notificationData.MasterVolume);
+                CommonUtils.ExecuteOnUIThread(() => 
+                {
+                    int volume = (int)Math.Round(100f * notificationData.MasterVolume);
+                    if (m_trackVolume.Value != volume)
+                    {
+                        _doUpdateDevice = false;
+                        m_trackVolume.Value = volume;
+                        _doUpdateDevice = true;
+                    }
                 }
                 , this);
             };
@@ -79,7 +87,14 @@ namespace MkZ.Media
         public int Volume
         {
             get { return (int)m_trackVolume.Value; }
-            set { m_trackVolume.Value = value; UpdateDeviceVolume(); }
+            set 
+            {
+                if (m_trackVolume.Value != value)
+                {
+                    m_trackVolume.Value = value;
+                    UpdateDeviceVolume((float)m_trackVolume.Value / 100f);
+                }
+            }
         }
 
         //actual device level
@@ -89,24 +104,28 @@ namespace MkZ.Media
             set { m_progrLevel.Value = value; }
         }
 
-        private void UpdateDeviceVolume()
+        private void UpdateDeviceVolume(float volume)
         {
-            if(Device != null)
-                Device.AudioEndpointVolume.MasterVolumeLevelScalar = (float)m_trackVolume.Value / 100f;
+            if (!_doUpdateDevice)
+                return;
+
+            if(Device != null && Device.AudioEndpointVolume.MasterVolumeLevelScalar != volume)
+                Device.AudioEndpointVolume.MasterVolumeLevelScalar = volume;
         }
 
         private void m_trackVolume_Scroll(object sender, ScrollEventArgs e)
         {
-            UpdateDeviceVolume();
-            OnVolumeChanged((float)m_trackVolume.Value / 100f);
+            UpdateDeviceVolume(Volume / 100f);
             UpdateUI();
+            OnVolumeChanged(Volume / 100f);
             //SystemSounds.Beep.Play();
         }
 
         private void m_trackVolume_ValueChanged(object sender, EventArgs e)
         {
-            OnVolumeChanged((float)m_trackVolume.Value / 100f);
+            UpdateDeviceVolume(Volume / 100f);
             UpdateUI();
+            OnVolumeChanged(Volume / 100f);
         }
 
         private void m_btnMute_Click(object sender, EventArgs e)
@@ -123,7 +142,7 @@ namespace MkZ.Media
                 return;
             
             this.Text = Device.FriendlyName;
-            this.m_lbl.Text = m_trackVolume.Value + "%";
+            this.m_lbl.Text = Volume + "%";
 
             bool isMuted = Device.AudioEndpointVolume.Mute;
             string mute = isMuted ? "Muted: " : "Mute: ";

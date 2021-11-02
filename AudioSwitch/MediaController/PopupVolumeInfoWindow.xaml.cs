@@ -129,7 +129,7 @@ namespace MkZ.Media.WPF
         public void UpdateAndShow(int volume, string deviceName, List<DeviceFullInfo> enabledDevices, bool bForceShow)
         {
             InfoText = deviceName;
-            if (this.Volume != volume || bForceShow) 
+            if (this.Volume != volume || bForceShow)
             {
                 CreateDevicesContextMenu(enabledDevices);
 
@@ -139,9 +139,9 @@ namespace MkZ.Media.WPF
 
                 m_Timer.Stop();
                 m_Timer.Start();
+            }
 
-                this.Show();
-           }
+            this.Show();
         }
 
         private PopupVolumeInfoWindow() 
