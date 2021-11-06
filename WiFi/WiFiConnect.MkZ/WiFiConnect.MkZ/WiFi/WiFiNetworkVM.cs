@@ -21,7 +21,7 @@ namespace WiFiConnect.MkZ.WiFi
 {
     public class WiFiNetworkVM : NotifyPropertyChangedImpl
     {
-        public ILog Log { get; }
+        public static ILog Log { get; private set; }
         public WiFiAdapter Adapter { get; }
         private static readonly string _assemblyName = Assembly.GetExecutingAssembly().GetName().Name; //"sD.WPF.MessageBox";
 
@@ -35,7 +35,7 @@ namespace WiFiConnect.MkZ.WiFi
             this.Adapter = adapter;
         }
 
-        public WiFiNetworkVM(WiFiNetworkVM vm) : this(vm.Network, vm.Adapter, vm.Log)
+        public WiFiNetworkVM(WiFiNetworkVM vm) : this(vm.Network, vm.Adapter, Log)
         {
             WiFiImage = vm.WiFiImage;
             NetworkKeyInfoVisibility = vm.NetworkKeyInfoVisibility;
@@ -57,7 +57,8 @@ namespace WiFiConnect.MkZ.WiFi
                 UpdateWiFiImage();
                 UpdateNetworkKeyVisibility();
                 UpdateHiddenSsidTextBoxVisibility();
-                await UpdateConnectivityLevelAsync();
+                var info = await GetConnectivityLevelAsync(Adapter);
+                UpdateConnectivityLevel(info);
                 await UpdateWpsPushButtonAvailableAsync();
             };
 
@@ -100,10 +101,29 @@ namespace WiFiConnect.MkZ.WiFi
             NotifyPropertyChanged(nameof(WiFiImage));
         }
 
-        public static async IAsyncOperation<Connection> GetConnectivityLevelAsync(WiFiAdapter adapter)
+        public class ConnectionInfo
         {
-            string connectedSsid = null;
-            NetworkConnectivityLevel level = NetworkConnectivityLevel.None;
+            public string Ssid = null;
+            public NetworkConnectivityLevel Level = NetworkConnectivityLevel.None;
+            public string sLevel
+            {
+                get
+                {
+                    if(Level == NetworkConnectivityLevel.None)
+                        return "Not Connected";
+                    return Level.ToString();
+                }
+            }
+
+            public override string ToString()
+            {
+                return sLevel + " " + Ssid;
+            }
+        }
+
+        public static async Task<ConnectionInfo> GetConnectivityLevelAsync(WiFiAdapter adapter)
+        {
+            ConnectionInfo connectionInfo = new ConnectionInfo();
 
             try
             {
@@ -112,53 +132,36 @@ namespace WiFiConnect.MkZ.WiFi
                     connectedProfile.IsWlanConnectionProfile &&
                     connectedProfile.WlanConnectionProfileDetails != null)
                 {
-                    connectedSsid = connectedProfile.WlanConnectionProfileDetails.GetConnectedSsid();
+                    connectionInfo.Ssid = connectedProfile.WlanConnectionProfileDetails.GetConnectedSsid();
                 }
 
-                if (!string.IsNullOrWhiteSpace(connectedSsid))
+                if (!string.IsNullOrWhiteSpace(connectionInfo.Ssid))
                 {
-                    level = WPF_Helper.ExecuteOnWorkerThread(() => connectedProfile.GetNetworkConnectivityLevel());
+                    connectionInfo.Level = WPF_Helper.ExecuteOnWorkerThread(() => connectedProfile.GetNetworkConnectivityLevel());
                 }
             }
             catch (Exception err)
             {
-                Log.Log("UpdateConnectivityLevelAsync - {0} Err: {1}", connectedSsid, err.Message);
+                Log.Log("UpdateConnectivityLevelAsync - {0} Err: {1}", connectionInfo.Ssid, err.Message);
             }
+
+            return connectionInfo;
         }
 
-        public async Task UpdateConnectivityLevelAsync(ConnectionProfile connectedProfile, NetworkConnectivityLevel level)
+        public void UpdateConnectivityLevel(ConnectionInfo activeConnectionInfo)
         {
-            string connectivityLevel = "Not Connected";
-            string connectedSsid = null;
-            NetworkConnectivityLevel level = NetworkConnectivityLevel.None;
+            Background = Brushes.Transparent;
+            ConnectivityLevel = "Not Connected";
 
-            try
+            if (activeConnectionInfo != null)
             {
-                ConnectionProfile connectedProfile = await Adapter.NetworkAdapter.GetConnectedProfileAsync();
-                if (connectedProfile != null &&
-                    connectedProfile.IsWlanConnectionProfile &&
-                    connectedProfile.WlanConnectionProfileDetails != null)
+                if (activeConnectionInfo.Ssid.Equals(Network.Ssid) || activeConnectionInfo.Ssid.Equals(HiddenSsid))
                 {
-                    connectedSsid = connectedProfile.WlanConnectionProfileDetails.GetConnectedSsid();
-                }
-
-                if (!string.IsNullOrWhiteSpace(connectedSsid))
-                {
-                    if (connectedSsid.Equals(Network.Ssid) ||
-                        connectedSsid.Equals(HiddenSsid))
-                    {
-                        level = WPF_Helper.ExecuteOnWorkerThread(() => connectedProfile.GetNetworkConnectivityLevel());
-                        connectivityLevel = level.ToString();
-                    }
+                    Background = activeConnectionInfo.Level == NetworkConnectivityLevel.None ? Brushes.Transparent : Brushes.Navy;
+                    ConnectivityLevel = activeConnectionInfo.sLevel;
                 }
             }
-            catch (Exception err)
-            {
-                Log.Log("UpdateConnectivityLevelAsync - {0} Err: {1}", connectedSsid, err.Message);
-            }
 
-            Background = level == NetworkConnectivityLevel.None ? Brushes.Transparent : Brushes.Navy;
-            ConnectivityLevel = connectivityLevel;
             NotifyPropertyChanged(nameof(ConnectivityLevel));
         }
 

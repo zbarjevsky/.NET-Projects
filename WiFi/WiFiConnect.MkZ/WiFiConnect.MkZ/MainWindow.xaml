@@ -211,7 +211,7 @@
                     <Button x:Name="btnReset" Content="Reset Graph" Margin="6" Width="Auto"
                         Click="btnReset_Click"/>
                     <Label Margin="6" Content="Buffer Size:" VerticalContentAlignment="Center" />
-                    <ComboBox x:Name="cmbBufferSize" SelectedIndex="0" Margin="6" 
+                    <ComboBox x:Name="cmbBufferSize" SelectedIndex="1" Margin="6" 
                           VerticalContentAlignment="Center"
                           SelectionChanged="ComboBoxBufferSize_SelectionChanged">
                         <ComboBoxItem Content="1h" />

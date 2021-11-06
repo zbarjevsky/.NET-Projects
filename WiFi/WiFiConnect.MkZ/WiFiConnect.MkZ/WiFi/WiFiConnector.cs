@@ -83,7 +83,7 @@ namespace WiFiConnect.MkZ.WiFi
 
         private void FirstAdapter_AvailableNetworksChanged(WiFiAdapter sender, object args)
         {
-            Log.Log("AvailableNetworksChanged");
+            //Log.Log("AvailableNetworksChanged");
 
             if (ResultCollection == null)
                 return;

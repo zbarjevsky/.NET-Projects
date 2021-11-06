@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.NetworkInformation;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -77,12 +78,7 @@ namespace WiFiConnect.MkZ
 
             WiFiConnector.AvailableNetworksChanged = (adapter, o) =>
             {
-                WPF_Helper.ExecuteOnUIThreadWPF(() =>
-                {
-                    WiFiNetworkVM selectedNetwork = UpdateStatus();
-                    Log("AvailableNetworksChanged: {0}", selectedNetwork?.Ssid);
-                    return 0;
-                });
+                UpdateStatus(true, "AvailableNetworksChanged");
             };
 
             Settings.Load();
@@ -123,7 +119,7 @@ namespace WiFiConnect.MkZ
         private string _pingServerUrl = "www.google.com";
         private void Timer_Tick(object sender, EventArgs e)
         {
-            UpdateStatus();
+            UpdateStatus(false, "Timer");
             PingNetwork(_pingServerUrl);
 
             if(_disconnectCount>2)
@@ -348,10 +344,12 @@ namespace WiFiConnect.MkZ
                 SwitchToItemState(selectedNetwork, eWifiState.WifiConnectState, false);
             }
 
+            WiFiNetworkVM.ConnectionInfo connectionInfo = await WiFiNetworkVM.GetConnectivityLevelAsync(WiFiConnector._firstAdapter);
+
             // Since a connection attempt was made, update the connectivity level displayed for each
             foreach (var network in WiFiConnector.ResultCollection)
             {
-                var task = network.UpdateConnectivityLevelAsync();
+                network.UpdateConnectivityLevel(connectionInfo);
             }
         }
 
@@ -392,26 +390,48 @@ namespace WiFiConnect.MkZ
 
         private void btnUpdateStatus_Click(object sender, RoutedEventArgs e)
         {
-            WiFiNetworkVM selectedNetwork = UpdateStatus();
-            Log("btnUpdateStatus_Click: {0}", selectedNetwork?.Ssid);
+            UpdateStatus(true, "Button");
         }
 
-        private WiFiNetworkVM UpdateStatus()
+        private void UpdateStatus(bool bLog, string callerName)
         {
             if (WiFiConnector.ResultCollection == null)
-                return null;
+                return;
 
-            foreach (WiFiNetworkVM network in WiFiConnector.ResultCollection)
+            string selectedSSID = WPF_Helper.ExecuteOnUIThreadWPF(() =>
             {
-                var task = network.UpdateConnectivityLevelAsync();
-            }
+                WiFiNetworkVM selectedNetwork = ResultsListView.SelectedItem as WiFiNetworkVM;
+                if(selectedNetwork != null)
+                    return selectedNetwork.Ssid;
+                return "";
+            });
 
-            WiFiNetworkVM selectedNetwork = ResultsListView.SelectedItem as WiFiNetworkVM;
-            UpdateItemState(selectedNetwork);
+            WiFiNetworkVM.ConnectionInfo connectionInfo = null;
 
-            return selectedNetwork;
+            Task.Factory.StartNew(async () =>
+            {
+                connectionInfo = await WiFiNetworkVM.GetConnectivityLevelAsync(WiFiConnector._firstAdapter);
+
+                foreach (WiFiNetworkVM network in WiFiConnector.ResultCollection)
+                {
+                    network.UpdateConnectivityLevel(connectionInfo);
+                }
+
+                WPF_Helper.ExecuteOnUIThreadWPF(() =>
+                {
+                    WiFiNetworkVM selectedNetwork = ResultsListView.SelectedItem as WiFiNetworkVM;
+                    string newSsid = "";
+                    if (selectedNetwork != null)
+                        newSsid = selectedNetwork.Ssid;
+
+                    UpdateItemState(selectedNetwork);
+                    if(bLog && newSsid != selectedSSID)
+                        Log("Update from: {0}: {1}", callerName, newSsid);
+
+                    return 0;
+                });
+            });
         }
-
 
         private int _disconnectCount = 0;
         private bool _isInPing = false;
