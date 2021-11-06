@@ -31,7 +31,7 @@ namespace YouTubeDownload
         public string Description { get; set; } = "";
         public string PlayListDescription { get; set; } = "";
         public string PlayListProgress { get; set; } = "";
-        public string FileNameTemplate { get; set; } = "%(title)s-%(id)s.%(ext)s";
+        public string FileNameTemplate { get; set; } = "%(upload_date)s--%(title)s--%(id)s.%(ext)s";
         public bool NoPlayList { get; set; } = true;
         public bool AudioOnly { get; set; } = false;
         public string Url { get; set; } = "";

@@ -15,6 +15,7 @@ using System.Windows.Media;
 
 using MkZ.Windows;
 using MkZ.WPF;
+using Windows.Foundation;
 
 namespace WiFiConnect.MkZ.WiFi
 {
@@ -99,7 +100,33 @@ namespace WiFiConnect.MkZ.WiFi
             NotifyPropertyChanged(nameof(WiFiImage));
         }
 
-        public async Task UpdateConnectivityLevelAsync()
+        public static async IAsyncOperation<Connection> GetConnectivityLevelAsync(WiFiAdapter adapter)
+        {
+            string connectedSsid = null;
+            NetworkConnectivityLevel level = NetworkConnectivityLevel.None;
+
+            try
+            {
+                ConnectionProfile connectedProfile = await adapter.NetworkAdapter.GetConnectedProfileAsync();
+                if (connectedProfile != null &&
+                    connectedProfile.IsWlanConnectionProfile &&
+                    connectedProfile.WlanConnectionProfileDetails != null)
+                {
+                    connectedSsid = connectedProfile.WlanConnectionProfileDetails.GetConnectedSsid();
+                }
+
+                if (!string.IsNullOrWhiteSpace(connectedSsid))
+                {
+                    level = WPF_Helper.ExecuteOnWorkerThread(() => connectedProfile.GetNetworkConnectivityLevel());
+                }
+            }
+            catch (Exception err)
+            {
+                Log.Log("UpdateConnectivityLevelAsync - {0} Err: {1}", connectedSsid, err.Message);
+            }
+        }
+
+        public async Task UpdateConnectivityLevelAsync(ConnectionProfile connectedProfile, NetworkConnectivityLevel level)
         {
             string connectivityLevel = "Not Connected";
             string connectedSsid = null;

@@ -23,7 +23,8 @@ namespace MkZ.Media
             m_btnMute.Enabled = bEnable;
             m_trackVolume.Enabled = bEnable;
             m_progrLevel.Enabled = bEnable;
-            m_trackVolume.Value = 0;
+            if(Device == null)
+                m_trackVolume.Value = 0;
         }
 
         public VolumeUserControl()
@@ -62,15 +63,12 @@ namespace MkZ.Media
 
             Device.AudioEndpointVolume.OnVolumeNotification = (notificationData) =>
             {
-                CommonUtils.ExecuteOnUIThread(() => 
+                int volume = (int)Math.Round(100f * notificationData.MasterVolume);
+                CommonUtils.ExecuteOnUIThread(() =>
                 {
-                    int volume = (int)Math.Round(100f * notificationData.MasterVolume);
-                    if (m_trackVolume.Value != volume)
-                    {
-                        _doUpdateDevice = false;
-                        m_trackVolume.Value = volume;
-                        _doUpdateDevice = true;
-                    }
+                    _doUpdateDevice = false;
+                    m_trackVolume.Value = volume;
+                    _doUpdateDevice = true;
                 }
                 , this);
             };

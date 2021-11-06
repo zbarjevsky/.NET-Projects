@@ -97,20 +97,20 @@ namespace YouTubeDownload
                 Data.AudioOnly = m_chkAudioOnly.Checked;
                 Data.AdditionalParameters = m_cmbAdditionalParameters.Text;
 
-                if (!string.IsNullOrWhiteSpace(m_cmbFileName.Text))
-                    Data.FileNameTemplate = m_cmbFileName.Text;
+                if (!string.IsNullOrWhiteSpace(m_cmbFileNameTemplate.Text))
+                    Data.FileNameTemplate = m_cmbFileNameTemplate.Text;
                 else
-                    Data.FileNameTemplate = m_cmbFileName.Items[0].ToString();
+                    Data.FileNameTemplate = m_cmbFileNameTemplate.Items[0].ToString();
             }
         }
 
         private void UpdateFileName(string format)
         {
-            List<string> items = new List<string>(m_cmbFileName.Items.OfType<string>());
+            List<string> items = new List<string>(m_cmbFileNameTemplate.Items.OfType<string>());
             int idx = items.IndexOf(format);
             if (idx < 0)
-                idx = m_cmbFileName.Items.Add(format);
-            m_cmbFileName.SelectedIndex = idx;
+                idx = m_cmbFileNameTemplate.Items.Add(format);
+            m_cmbFileNameTemplate.SelectedIndex = idx;
         }
 
         private void UpdateOutputFolder(string newFolder)

@@ -39,7 +39,7 @@
             this.m_btnAddUrl = new System.Windows.Forms.Button();
             this.m_errorProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.m_btnCancel = new System.Windows.Forms.Button();
-            this.m_cmbFileName = new System.Windows.Forms.ComboBox();
+            this.m_cmbFileNameTemplate = new System.Windows.Forms.ComboBox();
             this.m_lnkOutputFileName = new System.Windows.Forms.LinkLabel();
             this.m_pnlButtons = new System.Windows.Forms.Panel();
             this.m_cmbAdditionalParameters = new System.Windows.Forms.ComboBox();
@@ -160,19 +160,19 @@
             // 
             // m_cmbFileName
             // 
-            this.m_cmbFileName.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.m_cmbFileNameTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_cmbFileName.FormattingEnabled = true;
-            this.m_cmbFileName.Items.AddRange(new object[] {
+            this.m_cmbFileNameTemplate.FormattingEnabled = true;
+            this.m_cmbFileNameTemplate.Items.AddRange(new object[] {
             "%(upload_date)s--%(title)s--%(id)s.%(ext)s",
             "%(title)s.%(ext)s",
             "%(playlist)s/%(playlist_index)s - %(title)s.%(ext)s",
             "%(playlist_index)s. %(title)s--%(id)s.%(ext)s",
             "%(upload_date)s-%(playlist_index)s. %(title)s--%(id)s.%(ext)s"});
-            this.m_cmbFileName.Location = new System.Drawing.Point(281, 103);
-            this.m_cmbFileName.Name = "m_cmbFileName";
-            this.m_cmbFileName.Size = new System.Drawing.Size(436, 28);
-            this.m_cmbFileName.TabIndex = 9;
+            this.m_cmbFileNameTemplate.Location = new System.Drawing.Point(281, 103);
+            this.m_cmbFileNameTemplate.Name = "m_cmbFileName";
+            this.m_cmbFileNameTemplate.Size = new System.Drawing.Size(436, 28);
+            this.m_cmbFileNameTemplate.TabIndex = 9;
             // 
             // m_lnkOutputFileName
             // 
@@ -231,7 +231,7 @@
             this.Controls.Add(this.m_cmbAdditionalParameters);
             this.Controls.Add(this.m_pnlButtons);
             this.Controls.Add(this.m_lnkOutputFileName);
-            this.Controls.Add(this.m_cmbFileName);
+            this.Controls.Add(this.m_cmbFileNameTemplate);
             this.Controls.Add(this.m_btnBrowseForFolder);
             this.Controls.Add(this.m_chkAudioOnly);
             this.Controls.Add(this.m_lnkOutputFolder);
@@ -266,7 +266,7 @@
         private System.Windows.Forms.Button m_btnAddUrl;
         private System.Windows.Forms.ErrorProvider m_errorProvider;
         private System.Windows.Forms.Button m_btnCancel;
-        private System.Windows.Forms.ComboBox m_cmbFileName;
+        private System.Windows.Forms.ComboBox m_cmbFileNameTemplate;
         private System.Windows.Forms.LinkLabel m_lnkOutputFileName;
         private System.Windows.Forms.Panel m_pnlButtons;
         private System.Windows.Forms.ComboBox m_cmbAdditionalParameters;
