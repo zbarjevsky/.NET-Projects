@@ -78,7 +78,7 @@ namespace WiFiConnect.MkZ
 
             WiFiConnector.AvailableNetworksChanged = (adapter, o) =>
             {
-                UpdateStatus(true, "AvailableNetworksChanged");
+                UpdateStatus();
             };
 
             Settings.Load();
@@ -119,7 +119,7 @@ namespace WiFiConnect.MkZ
         private string _pingServerUrl = "www.google.com";
         private void Timer_Tick(object sender, EventArgs e)
         {
-            UpdateStatus(false, "Timer");
+            UpdateStatus();
             PingNetwork(_pingServerUrl);
 
             if(_disconnectCount>2)
@@ -390,27 +390,30 @@ namespace WiFiConnect.MkZ
 
         private void btnUpdateStatus_Click(object sender, RoutedEventArgs e)
         {
-            UpdateStatus(true, "Button");
+            UpdateStatus();
         }
 
-        private void UpdateStatus(bool bLog, string callerName)
+        private string ConnectedSsid = "";
+
+        private void UpdateStatus()
         {
             if (WiFiConnector.ResultCollection == null)
                 return;
 
-            string selectedSSID = WPF_Helper.ExecuteOnUIThreadWPF(() =>
-            {
-                WiFiNetworkVM selectedNetwork = ResultsListView.SelectedItem as WiFiNetworkVM;
-                if(selectedNetwork != null)
-                    return selectedNetwork.Ssid;
-                return "";
-            });
-
-            WiFiNetworkVM.ConnectionInfo connectionInfo = null;
-
             Task.Factory.StartNew(async () =>
             {
-                connectionInfo = await WiFiNetworkVM.GetConnectivityLevelAsync(WiFiConnector._firstAdapter);
+                WiFiNetworkVM.ConnectionInfo connectionInfo = await WiFiNetworkVM.GetConnectivityLevelAsync(WiFiConnector._firstAdapter);
+
+                if(connectionInfo != null)
+                {
+                    if(ConnectedSsid != connectionInfo.Ssid)
+                        Log("Connected Network Change: new: {0}  old: {1}", connectionInfo.Ssid, ConnectedSsid);
+                    ConnectedSsid = connectionInfo.Ssid;
+                }
+                else
+                {
+                    ConnectedSsid = "";
+                }
 
                 foreach (WiFiNetworkVM network in WiFiConnector.ResultCollection)
                 {
@@ -420,14 +423,7 @@ namespace WiFiConnect.MkZ
                 WPF_Helper.ExecuteOnUIThreadWPF(() =>
                 {
                     WiFiNetworkVM selectedNetwork = ResultsListView.SelectedItem as WiFiNetworkVM;
-                    string newSsid = "";
-                    if (selectedNetwork != null)
-                        newSsid = selectedNetwork.Ssid;
-
                     UpdateItemState(selectedNetwork);
-                    if(bLog && newSsid != selectedSSID)
-                        Log("Update from: {0}: {1}", callerName, newSsid);
-
                     return 0;
                 });
             });
