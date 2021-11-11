@@ -41,9 +41,11 @@ namespace DashCamGPSView.Tools
                 fileList.AddRange(readOnlyFiles);
             }
 
-            fileList.Sort((f1,f2) => string.Compare(f1,f2, true));
+            fileList.Sort((f1,f2) => string.Compare(Path.GetFileName(f1),Path.GetFileName(f2), true));
 
             List<FileInfoWithDateFromFileName> allInfos = fileList.Select(f => new FileInfoWithDateFromFileName(f)).ToList();
+
+            allInfos.Sort((f1, f2) => f1.Info.LastWriteTime.CompareTo(f2.Info.LastWriteTime));
 
             List<DashCamFileInfo> infoList = new List<DashCamFileInfo>();
             for (int idx = 0; idx < allInfos.Count; idx++)

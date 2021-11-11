@@ -40,43 +40,9 @@
             <RowDefinition Height="10*" />
             <RowDefinition Height="5"/>
             <RowDefinition Height="*" x:Name="rowSpeedGraph"/>
-            <RowDefinition Height="40"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="86"/>
+            <RowDefinition Height="8"/>
         </Grid.RowDefinitions>
-
-        <ToolBar Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" >
-            <Button Command="ApplicationCommands.Open" ToolTip="Open">
-                <wpf:AutoGreyableImage Source="/DashCamGPSView;component/Images/map_32px.png" />
-            </Button>
-            <Separator />
-            <Button Command="MediaCommands.PreviousTrack" ToolTip="Previous File" >
-                <wpf:AutoGreyableImage Source="/Images/PrevE.png" />
-            </Button>
-            <Separator />
-            <Button Command="MediaCommands.Play" ToolTip="Play" >
-                <wpf:AutoGreyableImage  Source="/Images/PlayE.png" />
-            </Button>
-            <Button Command="MediaCommands.Pause" ToolTip="Pause" >
-                <wpf:AutoGreyableImage Source="/Images/PauseE.png" />
-            </Button>
-            <Button Command="MediaCommands.Stop" ToolTip="Stop" >
-                <wpf:AutoGreyableImage Source="/Images/StopE.png" />
-            </Button>
-            <Separator />
-            <Button Command="MediaCommands.NextTrack" ToolTip="Next File" >
-                <wpf:AutoGreyableImage Source="/Images/nextE.png" />
-            </Button>
-            <Button  ToolTip="Screen Shot" Click="Screenshot_Click" >
-                <wpf:AutoGreyableImage Source="/Images/Screenshot.png" />
-            </Button>
-            <Button Margin="6,0" ToolTip="Settings" Content="Settings..." Click="Settings_Click" />
-            <Button  ToolTip="Test" Content="Test" Click="Test_Click" />
-            <TextBox Name="txtFileName"  Text="..." IsReadOnly="True"
-                     VerticalAlignment="Center" Margin="10,0" FontSize="16"/>
-            <Viewbox Margin="6">
-                <CheckBox x:Name="chkAutoPlay" IsChecked="True" Content="Auto Play Next"/>
-            </Viewbox>
-        </ToolBar>
 
         <Grid x:Name="_gridPlayers" Grid.Row="1" Grid.Column="0" >
             <Grid.ColumnDefinitions>
@@ -148,8 +114,48 @@
             <controls:SpeedChartUserControl Grid.Column="2" x:Name="graphSpeedInfo" />
             <TextBlock x:Name="_txtGpsInfo" Grid.Column="3" Margin="4" Background="LightYellow" />
         </Grid>
-        <controls:PlayerTimelineBarUserControl x:Name="statusBar" Grid.Row="4" Background="Gray" 
+
+        <Grid Grid.Row="4">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <ToolBar Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" >
+                <Button Command="ApplicationCommands.Open" ToolTip="Open">
+                    <wpf:AutoGreyableImage Source="/DashCamGPSView;component/Images/map_32px.png" />
+                </Button>
+                <Separator />
+                <Button Command="MediaCommands.PreviousTrack" ToolTip="Previous File" >
+                    <wpf:AutoGreyableImage Source="/Images/PrevE.png" />
+                </Button>
+                <Separator />
+                <Button Command="MediaCommands.Play" ToolTip="Play" >
+                    <wpf:AutoGreyableImage  Source="/Images/PlayE.png" />
+                </Button>
+                <Button Command="MediaCommands.Pause" ToolTip="Pause" >
+                    <wpf:AutoGreyableImage Source="/Images/PauseE.png" />
+                </Button>
+                <Button Command="MediaCommands.Stop" ToolTip="Stop" >
+                    <wpf:AutoGreyableImage Source="/Images/StopE.png" />
+                </Button>
+                <Separator />
+                <Button Command="MediaCommands.NextTrack" ToolTip="Next File" >
+                    <wpf:AutoGreyableImage Source="/Images/nextE.png" />
+                </Button>
+                <Button  ToolTip="Screen Shot" Click="Screenshot_Click" >
+                    <wpf:AutoGreyableImage Source="/Images/Screenshot.png" />
+                </Button>
+                <Button Margin="6,0" ToolTip="Settings" Content="Settings..." Click="Settings_Click" />
+                <Button  ToolTip="Test" Content="Test" Click="Test_Click" />
+                <TextBox Name="txtFileName"  Text="..." IsReadOnly="True"
+                     VerticalAlignment="Center" Margin="10,0" FontSize="16"/>
+                <Viewbox Margin="6">
+                    <CheckBox x:Name="chkAutoPlay" IsChecked="True" Content="Auto Play Next"/>
+                </Viewbox>
+            </ToolBar>
+            <controls:PlayerTimelineBarUserControl x:Name="statusBar" Grid.Row="1" Background="Gray" 
                ExternalPlayer="{Binding MainPlayer, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
+        </Grid>
 
         <controls:MaximizedUserControl x:Name="maxScreen" Grid.RowSpan="8" Grid.ColumnSpan="5" Visibility="Hidden" />
         <controls:WaitScreenUserControl x:Name="waitScreen" Grid.RowSpan="8" Grid.ColumnSpan="5" Visibility="Hidden" />

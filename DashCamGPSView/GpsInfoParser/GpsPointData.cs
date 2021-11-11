@@ -136,7 +136,8 @@ namespace GPSDataParser
         public override string ToString()
         {
             string gps = (Active ? "Active, Speed: " : "Inactive, Speed: ") + SpeedMph.ToString("0.0") + " mph" +
-                ", Lat: " + SexagesimalAngle.ToString(Latitude) + ", Lon: " + SexagesimalAngle.ToString(Longitude);
+                ", Lat: " + SexagesimalAngle.ToString(Latitude) + ", Lon: " + SexagesimalAngle.ToString(Longitude) + 
+                ", Date: " + FixTime.ToString("yyyy/MM/dd HH:mm:ss.fff");
             return gps;
         }
 

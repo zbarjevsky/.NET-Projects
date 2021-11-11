@@ -12,18 +12,18 @@ using System.Xml.Serialization;
 
 namespace DashCamGPSView.Tools
 {
-    [TypeConverter(typeof(ExpandableObjectConverter))]
+    //[TypeConverter(typeof(ExpandableObjectConverter))]
+    [TypeConverter(typeof(TimeZoneUITypeConverter))]
+    [Editor(typeof(TimeZoneUITypeEditor), typeof(UITypeEditor))]
     public class TimeZoneUI
     {
         [Browsable(false)] // don't show in the property grid 
         public string SelectedId { get; set; } = "";
 
         [XmlIgnore]
-        [TypeConverter(typeof(TimeZoneTypeConverter))]
-        [Editor(typeof(TimeZoneTypeEditor), typeof(UITypeEditor))]
         public TimeZoneInfo TimeZone
         {
-            get => GetTimeZoneInfo(SelectedId);
+            get => FindTimeZoneInfo(SelectedId);
             set => SelectedId = value.Id;
         }
 
@@ -42,7 +42,7 @@ namespace DashCamGPSView.Tools
             }
         }
 
-        private TimeZoneInfo GetTimeZoneInfo(string selectedId)
+        private TimeZoneInfo FindTimeZoneInfo(string selectedId)
         {
             TimeZoneInfo tz = TimeZones.FirstOrDefault(t => t.Id == selectedId);
             if (tz != null)
@@ -52,13 +52,13 @@ namespace DashCamGPSView.Tools
 
         public override string ToString()
         {
-            return "TimeZone " + TimeZone.ToString();
+            return TimeZone.ToString();
         }
     }
 
     // this defines a custom type converter to convert from an IBenchmark to a string
     // used by the property grid to display item when non edited
-    public class TimeZoneTypeConverter : TypeConverter
+    public class TimeZoneUITypeConverter : TypeConverter
     {
         public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
         {
@@ -71,9 +71,9 @@ namespace DashCamGPSView.Tools
             if (typeof(string) == destinationType)
             {
                 // just use the benchmark name
-                TimeZoneInfo timeZone = value as TimeZoneInfo;
+                TimeZoneUI timeZone = value as TimeZoneUI;
                 if (timeZone != null)
-                    return timeZone.DisplayName;
+                    return timeZone.TimeZone.DisplayName;
             }
             return "(none)";
         }
@@ -81,7 +81,7 @@ namespace DashCamGPSView.Tools
 
     // this defines a custom UI type editor to display a list of possible benchmarks
     // used by the property grid to display item in edit mode
-    public class TimeZoneTypeEditor : UITypeEditor
+    public class TimeZoneUITypeEditor : UITypeEditor
     {
         private IWindowsFormsEditorService _editorService;
 
@@ -97,11 +97,14 @@ namespace DashCamGPSView.Tools
 
             // use a list box
             ListBox lb = new ListBox();
+            lb.Height = 300;
             lb.SelectionMode = SelectionMode.One;
             lb.SelectedValueChanged += OnListBoxSelectedValueChanged;
 
             // use the IBenchmark.Name property for list box display
-            lb.DisplayMember = "DisplayName";
+            lb.DisplayMember = "TimeZone";
+
+            TimeZoneUI tzValue = (TimeZoneUI)value;
 
             // get the analytic object from context
             // this is how we get the list of possible benchmarks
@@ -110,7 +113,7 @@ namespace DashCamGPSView.Tools
             {
                 // we store benchmarks objects directly in the listbox
                 int index = lb.Items.Add(timeZone);
-                if (timeZone.Equals(value))
+                if (timeZone.Equals(tzValue.TimeZone))
                 {
                     lb.SelectedIndex = index;
                 }
@@ -121,7 +124,7 @@ namespace DashCamGPSView.Tools
             if (lb.SelectedItem == null) // no selection, return the passed-in value as is
                 return value;
 
-            return lb.SelectedItem;
+            return new TimeZoneUI() { TimeZone = (TimeZoneInfo)lb.SelectedItem };
         }
 
         private void OnListBoxSelectedValueChanged(object sender, EventArgs e)

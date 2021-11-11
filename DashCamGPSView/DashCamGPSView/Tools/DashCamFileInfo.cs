@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using GMap.NET;
 using GPSDataParser;
+using Microsoft.WindowsAPICodePack.Shell;
+using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 using NmeaParser.Nmea;
 using NMEAParser;
 
@@ -38,27 +40,27 @@ namespace DashCamGPSView.Tools
         {
             Info = new FileInfo(fileName);
 
-            fileName = Path.GetFileNameWithoutExtension(fileName);
+            //fileName = Path.GetFileNameWithoutExtension(fileName);
 
-            if (fileName.Length >= 16 && fileName.Length <= 22)
+            //if (fileName.Length >= 16 && fileName.Length <= 22)
+            //{
+            //    string date_time = fileName.Substring(0, 16); //"2019_0624_075333_296P"
+            //    Date = DateTime.ParseExact(date_time, "yyyy_MMdd_HHmmss", CultureInfo.InvariantCulture);
+            //}
+            //else if (fileName.Length == 15)
+            //{
+            //    string date_time = fileName.Substring(0, 15); //"20190624_075333"
+            //    Date = DateTime.ParseExact(date_time, "yyyyMMdd_HHmmss", CultureInfo.InvariantCulture);
+            //}
+            //else
             {
-                string date_time = fileName.Substring(0, 16); //"2019_0624_075333_296P"
-                Date = DateTime.ParseExact(date_time, "yyyy_MMdd_HHmmss", CultureInfo.InvariantCulture);
-            }
-            else if (fileName.Length == 15)
-            {
-                string date_time = fileName.Substring(0, 15); //"20190624_075333"
-                Date = DateTime.ParseExact(date_time, "yyyyMMdd_HHmmss", CultureInfo.InvariantCulture);
-            }
-            else
-            {
-                Date = DateTime.MinValue;
+                Date = Info.LastWriteTime;
             }
         }
 
         public override string ToString()
         {
-            return Date + " " + Info.FullName;
+            return $"{Date} - {Info.CreationTime} - {Info.FullName}";
         }
     }
 
@@ -138,9 +140,11 @@ namespace DashCamGPSView.Tools
             else //different format
             {
                 GpsFileFormat = GpsFileFormat.Viofo;
-                FileDate = currentInfo.Date;
+                FileDate = currentInfo.Info.LastWriteTime;
                 if(!FromViofoFileName(allFiles, currentInfo, ref FileType, ref FileNameFront, ref FileNameRear, ref FileNameInside))
                     FileNameFront = currentInfo.Info.FullName;
+
+                TimeSpan ts = this.Duration;
             }
         }
 
@@ -159,6 +163,20 @@ namespace DashCamGPSView.Tools
             _iGpsTimeZoneHours = source._iGpsTimeZoneHours;
             _isGpsInfoInitialized = source._isGpsInfoInitialized;
             _gpsInfo = source._gpsInfo;
+        }
+
+        public TimeSpan Duration
+        {
+            get
+            {
+                using (ShellObject shell = ShellObject.FromParsingName(FileNameFront))
+                {
+                    // alternatively: shell.Properties.GetProperty("System.Media.Duration");
+                    uint duration = (uint)shell.Properties.System.Media.Duration.Value;
+                    TimeSpan ts = TimeSpan.FromSeconds(duration/10000000);
+                    return ts;
+                }
+            }
         }
 
         private bool _isGpsInfoInitialized = false;
@@ -351,7 +369,7 @@ namespace DashCamGPSView.Tools
         {
             string name = Path.GetFileName(FileNameFront);
             string gps = _gpsInfo == null ? "No Data" : _gpsInfo.Count.ToString();
-            return "N: " + name + ", GPS Data: " + gps;
+            return "N: " + name + ", GPS Data: " + gps + ", Date: " + FileDate.ToString("yyyy/MM/dd HH:mm:ss.fff");
         }
     }
 }
