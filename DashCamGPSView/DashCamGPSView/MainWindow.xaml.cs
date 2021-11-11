@@ -30,6 +30,7 @@ using DashCamGPSView.Controls;
 using System.Runtime.CompilerServices;
 using MkZ.Tools;
 using MkZ.WPF;
+using MkZ.WPF.PropertyGrid;
 
 namespace DashCamGPSView
 {
@@ -712,6 +713,12 @@ namespace DashCamGPSView
             }
 
             Tools.Tools.Screenshot(format, fileName, playerF.Position, this);
+        }
+
+        private void Settings_Click(object sender, RoutedEventArgs e)
+        {
+            OptionsWindow.ShowOptionsEx(this, AppConfig, 
+                "Settings", null, "Settings", "Clock Configuration", "Clock Font");
         }
 
         private void Test_Click(object sender, RoutedEventArgs e)

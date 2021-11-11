@@ -116,10 +116,14 @@ namespace DashCamGPSView.Controls
             //cmbMapType.Items.Add(GMapProviders.NearSatelliteMap);
 
             // set cache mode only if no internet avaible
-            if (!Stuff.PingNetwork("pingtest.com"))
+            if (!Stuff.PingNetwork("www.google.com"))
             {
                 GMap.Manager.Mode = AccessMode.CacheOnly;
-                MessageBox.Show("No internet connection available, going to CacheOnly mode.", "GMap.NET - Demo.WindowsPresentation", MessageBoxButton.OK, MessageBoxImage.Warning);
+                System.Windows.Forms.MessageBox.Show(
+                    "No internet connection available, going to CacheOnly mode.", 
+                    "GMap.NET - Demo.WindowsPresentation", 
+                    System.Windows.Forms.MessageBoxButtons.OK,
+                    System.Windows.Forms.MessageBoxIcon.Warning);
             }
 
             //default config map

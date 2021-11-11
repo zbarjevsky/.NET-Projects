@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -47,6 +48,7 @@ namespace DashCamGPSView.Tools
         }
     }
 
+    [TypeConverter(typeof(ExpandableObjectConverter))]
     public class PlayerControlSettings
     {
         public double SoundVolume { get; set; } = 0.5;
@@ -83,6 +85,11 @@ namespace DashCamGPSView.Tools
             v.ZoomStateSet(ZoomState, true);
             v.ScrollOffsetY = ScrollOffsetY;
         }
+
+        public override string ToString()
+        {
+            return "PlayerControlSettings: " + SplitterOffset;
+        }
     }
 
     public class AppConfig
@@ -93,6 +100,8 @@ namespace DashCamGPSView.Tools
         public string LastSelectedFileName { get; set; } = "";
 
         public string SpeedUnits { get; set; } = GPSDataParser.SpeedUnits.mph.ToString();
+
+        public TimeZoneUI TimeZone { get; set; } = new TimeZoneUI();
 
         public MainWindowState MainWindowState { get; set; } = new MainWindowState();
 

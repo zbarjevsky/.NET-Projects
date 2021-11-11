@@ -69,6 +69,7 @@
             <Button  ToolTip="Screen Shot" Click="Screenshot_Click" >
                 <wpf:AutoGreyableImage Source="/Images/Screenshot.png" />
             </Button>
+            <Button Margin="6,0" ToolTip="Settings" Content="Settings..." Click="Settings_Click" />
             <Button  ToolTip="Test" Content="Test" Click="Test_Click" />
             <TextBox Name="txtFileName"  Text="..." IsReadOnly="True"
                      VerticalAlignment="Center" Margin="10,0" FontSize="16"/>

@@ -133,6 +133,7 @@
     <Compile Include="Tools\PointLatLngUI.cs" />
     <Compile Include="Tools\AppConfig.cs" />
     <Compile Include="Tools\SizeLatLngUI.cs" />
+    <Compile Include="Tools\TimeZoneUI.cs" />
     <Compile Include="Tools\Tools.cs" />
     <Page Include="Controls\PlayerTimeLineBarUserControl.xaml">
       <SubType>Designer</SubType>
