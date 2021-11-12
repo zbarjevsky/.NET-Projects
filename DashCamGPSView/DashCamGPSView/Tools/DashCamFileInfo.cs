@@ -103,6 +103,8 @@ namespace DashCamGPSView.Tools
 
         public DateTime FileDateEnd { get; private set; } = DateTime.MinValue;
 
+        public FileInfoWithDateFromFileName Info { get; private set; } = null;
+
         public int TimeZone { get { return _iGpsTimeZoneHours; } }
 
         private double _dGpsDelaySeconds = 2.3;
@@ -127,6 +129,7 @@ namespace DashCamGPSView.Tools
             {
                 GpsFileFormat = GpsFileFormat.DuDuBell;
                 FileType = FileType.Recording;
+                Info = currentInfo;
                 FileDateStart = FromDuDuBellFileName(fileName);
                 FileDateEnd = currentInfo.Info.LastWriteTime;
 
@@ -146,7 +149,10 @@ namespace DashCamGPSView.Tools
                 FileDateStart = currentInfo.Date;
                 FileDateEnd = currentInfo.Info.LastWriteTime;
                 if (!FromViofoFileName(allFiles, currentInfo, ref FileType, ref FileNameFront, ref FileNameRear, ref FileNameInside))
+                {
                     FileNameFront = currentInfo.Info.FullName;
+                    Info = currentInfo;
+                }
             }
         }
 
@@ -266,6 +272,7 @@ namespace DashCamGPSView.Tools
                     {
                         frontFileName = info.Info.FullName;
                         FileType = FileType.Recording;
+                        Info = info;
                     }
                     else if (info.Info.Name.EndsWith("_R.MP4", true, CultureInfo.InvariantCulture))
                     {
@@ -281,6 +288,7 @@ namespace DashCamGPSView.Tools
                     {
                         frontFileName = info.Info.FullName;
                         FileType = FileType.Parking;
+                        Info = info;
                     }
                     else if (info.Info.Name.EndsWith("_PR.MP4", true, CultureInfo.InvariantCulture))
                     {

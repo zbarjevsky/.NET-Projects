@@ -30,34 +30,33 @@
             <StatusBarItem Grid.Column="2" HorizontalContentAlignment="Stretch" Margin="2,0" >
                 <StackPanel Orientation="Vertical" Width="300">
                     <UniformGrid Columns="10">
-                        <TextBlock Text="1/30" HorizontalAlignment="Center"/>
-                        <TextBlock Text="1/15" HorizontalAlignment="Center"/>
-                        <TextBlock Text="1/10" HorizontalAlignment="Center"/>
-                        <TextBlock Text="1/6" HorizontalAlignment="Center"/>
-                        <TextBlock Text="1/3" HorizontalAlignment="Center"/>
-                        <TextBlock Text="1/2" HorizontalAlignment="Center"/>
+                        <TextBlock Text="1fps" HorizontalAlignment="Center"/>
+                        <TextBlock Text="2fps" HorizontalAlignment="Center"/>
+                        <TextBlock Text="3fps" HorizontalAlignment="Center"/>
+                        <TextBlock Text="5fps" HorizontalAlignment="Center"/>
+                        <TextBlock Text="10fps" HorizontalAlignment="Center"/>
+                        <TextBlock Text="15fps" HorizontalAlignment="Center"/>
                         <TextBlock Text="x1" HorizontalAlignment="Center"/>
                         <TextBlock Text="x2" HorizontalAlignment="Center"/>
                         <TextBlock Text="x4" HorizontalAlignment="Center"/>
                         <TextBlock Text="x8" HorizontalAlignment="Center"/>
                     </UniformGrid>
                     <Slider Name="sliSpeed" Foreground="Black" Margin="10,0"
-                            Minimum="0" Maximum="9" IsSnapToTickEnabled="True"
+                            Minimum="0" Maximum="9" IsSnapToTickEnabled="True" IsMoveToPointEnabled="True"
                             Value="{Binding SpeedRatio, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}, FallbackValue=6}"
                             SmallChange="1" LargeChange="1" TickPlacement="TopLeft" />
                 </StackPanel>
             </StatusBarItem>
             <StatusBarItem Grid.Column="3" HorizontalContentAlignment="Stretch" Margin="2,0" >
-                <Slider Name="sliProgress" Foreground="White" Background="Black" 
-                        Margin="0,-4" IsMoveToPointEnabled="True"
-                        SmallChange="1" LargeChange="10" TickPlacement="TopLeft" 
-                        ValueChanged="sliProgress_ValueChanged" />
+                <Slider Name="sliProgress" Foreground="White" Background="Black" IsMoveToPointEnabled="True"
+                        SmallChange="1" LargeChange="10" TickPlacement="Both" 
+                        ValueChanged="sliProgress_ValueChanged" Height="30" />
             </StatusBarItem>
             <StatusBarItem Grid.Column="4" Margin="2,0" >
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Volume: " FontSize="16" />
                     <Slider Name="pbVolume" Width="110" VerticalAlignment="Bottom"
-                            TickPlacement="TopLeft" 
+                            TickPlacement="TopLeft" IsMoveToPointEnabled="True"
                             Maximum="1" SmallChange="0.05" LargeChange="0.1"
                             Value="{Binding ExternalPlayer.Volume, RelativeSource={RelativeSource FindAncestor, AncestorType=UserControl}}" />
                 </StackPanel>

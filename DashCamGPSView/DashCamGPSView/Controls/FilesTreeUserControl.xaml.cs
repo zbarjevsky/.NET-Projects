@@ -354,6 +354,12 @@ namespace DashCamGPSView.Controls
 
             FileInfo fi1 = new FileInfo(info.FileNameFront);
 
+            TimeSpan duration = info.FileDateEnd - info.FileDateStart;
+            duration += TimeSpan.FromSeconds(1); //correct for last second
+            string sDuration = duration.TotalSeconds.ToString("0");
+            if (duration.TotalSeconds > 1000)
+                sDuration = duration.ToString();
+
             string cameras = "FR";
             long size = fi1.Length;
             if (File.Exists(info.FileNameInside))
@@ -369,7 +375,8 @@ namespace DashCamGPSView.Controls
                 size += fi3.Length;
             }
 
-            Description = string.Format(" ({0}, {1:###,###.0} MB)", cameras, size / (1024.0*1024.0));
+            Description = string.Format(" ({0}, {1:###,###.0} MB, {2} s)", 
+                cameras, size / (1024.0*1024.0), sDuration);
         }
 
         internal bool HasFileName(string fileName)

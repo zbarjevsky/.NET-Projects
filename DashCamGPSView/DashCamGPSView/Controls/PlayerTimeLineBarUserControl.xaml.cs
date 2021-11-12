@@ -118,7 +118,7 @@ namespace DashCamGPSView.Controls
                 if (ExternalPlayer.Position == tsPos)
                     return; //no update needed
 
-                ExternalPlayer.Position = tsPos;
+                ExternalPlayer.PositionSet(tsPos, false);
                 //System.Diagnostics.Debug.WriteLine("Player(2): " + Player.Position);
                 if (sliProgress.Value - ExternalPlayer.Position.TotalSeconds > 0.0001)
                     sliProgress.Value = ExternalPlayer.Position.TotalSeconds;
@@ -170,7 +170,9 @@ namespace DashCamGPSView.Controls
             if (ExternalPlayer.MediaState == MediaState.Play)
                 ExternalPlayer.Pause();
 
-            sliProgress.Value += 0.064;
+            TimeSpan pos = ExternalPlayer.Position;
+            pos += TimeSpan.FromMilliseconds(21);
+            ExternalPlayer.PositionSet(pos, notify: true);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

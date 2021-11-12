@@ -48,7 +48,7 @@ namespace DashCamGPSView.Controls
                 if(item != null)
                 {
                     Pause();
-                    _player.Position = TimeSpan.FromSeconds(item.start);
+                    _player.PositionSet(TimeSpan.FromSeconds(item.start), true);
                 }
             };
         }

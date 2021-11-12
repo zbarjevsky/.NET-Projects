@@ -319,7 +319,14 @@ namespace DashCamGPSView
         public string FileName { get { return playerF.FileName; } }
         public double SpeedRatio { get { return playerF.SpeedRatio; } set { playerF.SpeedRatio = playerR.SpeedRatio = playerI.SpeedRatio = value; } }
         public double Volume { get { return playerF.Volume; } set { playerF.Volume = value; } }
-        public TimeSpan Position { get { return playerF.Position; } set { playerF.Position = playerR.Position = playerI.Position = value; UpdateGpsInfo(); } }
+        public TimeSpan Position { get { return playerF.Position; } } 
+        public void PositionSet(TimeSpan position, bool notify) 
+        {
+            playerF.PositionSet(position, notify);
+            playerR.PositionSet(position, notify);
+            playerI.PositionSet(position, notify);
+            UpdateGpsInfo(); 
+        }
         public Size NaturalSize { get { return playerF.NaturalSize; } }
         public double NaturalDuration { get { return playerF.NaturalDuration; } }
 
@@ -628,9 +635,9 @@ namespace DashCamGPSView
             playerR.Volume = 0;
             playerI.Volume = 0;
 
-            playerF.Position = TimeSpan.FromSeconds(position);
-            playerR.Position = TimeSpan.FromSeconds(position);
-            playerI.Position = TimeSpan.FromSeconds(position);
+            playerF.PositionSet(TimeSpan.FromSeconds(position), true);
+            playerR.PositionSet(TimeSpan.FromSeconds(position), true);
+            playerI.PositionSet(TimeSpan.FromSeconds(position), true);
 
             //sliProgress.Value = position;
 
@@ -664,11 +671,20 @@ namespace DashCamGPSView
                     speedGauge.SpeedUnits = _dashCamFileInfo.SpeedUnits.ToString();
                     speedGauge.Speed = _dashCamFileInfo.GetSpeed(idx).ToString("0");
                     compass.SetDirection(_dashCamFileInfo[idx].Course, _dashCamFileInfo.GetSpeed(idx));
-                    _txtGpsInfo.Text = string.Format("{0} of {1}\nSpeed: {2:0.0} {3}\nCourse: {4:0.0}°", 
-                        idx, _dashCamFileInfo.GpsInfo.Count, 
-                        _dashCamFileInfo.GetSpeed(idx), speedGauge.SpeedUnits,
-                        _dashCamFileInfo[idx].Course
-                        );
+
+                    DateTime curr = TimeZoneCorrect(_dashCamFileInfo.GpsInfo[idx].FixTime);
+                    DateTime start = TimeZoneCorrect(_dashCamFileInfo.GpsInfo[0].FixTime);
+                    DateTime end = TimeZoneCorrect(_dashCamFileInfo.GpsInfo[_dashCamFileInfo.GpsInfo.Count - 1].FixTime);
+                    TimeSpan duration = end - start;
+
+                    _txtGpsInfo.Text = 
+                        $"Point {idx} of {_dashCamFileInfo.GpsInfo.Count}\n"+
+                        $"Speed: {_dashCamFileInfo.GetSpeed(idx):0.0} {speedGauge.SpeedUnits}\n"+
+                        $"Course: {_dashCamFileInfo[idx].Course:0.0}°\n"+
+                        $"Duration: {duration}\n"+
+                        $"Start: {start.TimeOfDay}\n"+
+                        $" Curr: {curr.TimeOfDay}\n"+
+                        $" Last: {end.TimeOfDay}";
 
                     _lastValidPosition = _dashCamFileInfo.Position(idx);
                 }
@@ -693,6 +709,12 @@ namespace DashCamGPSView
             }
 
             graphSpeedInfo.SetCarPosition(idx);
+        }
+
+        public DateTime TimeZoneCorrect(DateTime utc)
+        {
+            TimeSpan ts = AppConfig.TimeZone.TimeZone.GetUtcOffset(utc);
+            return utc + ts;
         }
 
         private void GridSplitter1_DragCompleted(object sender, DragCompletedEventArgs e)

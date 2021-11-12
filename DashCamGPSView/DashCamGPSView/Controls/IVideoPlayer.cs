@@ -19,7 +19,8 @@ namespace DashCamGPSView.Controls
         string FileName { get; }
         double SpeedRatio { get; set; }
         double Volume { get; set; }
-        TimeSpan Position { get; set; }
+        TimeSpan Position { get; }
+        void PositionSet(TimeSpan position, bool notify);
         Size NaturalSize { get; }
         double NaturalDuration { get; }
 

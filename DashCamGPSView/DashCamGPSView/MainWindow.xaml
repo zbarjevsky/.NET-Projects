@@ -79,9 +79,7 @@
                     <RowDefinition/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <controls:PlayerTimelineBarUserControl x:Name="statusBar" Grid.Row="0" Background="Gray" 
-               ExternalPlayer="{Binding MainPlayer, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
-                <DockPanel Grid.Row="1" Margin="2" >
+                <DockPanel Grid.Row="0" Margin="2" >
                     <Button Command="ApplicationCommands.Open" ToolTip="Open" Margin="2">
                         <wpf:AutoGreyableImage Source="/DashCamGPSView;component/Images/map_32px.png" />
                     </Button>
@@ -128,6 +126,8 @@
                     <TextBox Name="txtFileName"  Text="..." IsReadOnly="True"
                         VerticalAlignment="Center" Margin="10,0" FontSize="16"/>
                 </DockPanel>
+                <controls:PlayerTimelineBarUserControl x:Name="statusBar" Grid.Row="1" Background="Gray" 
+                    ExternalPlayer="{Binding MainPlayer, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
             </Grid>
 
             <speedGauge:Gauge180UserControl x:Name="speedGauge" Grid.RowSpan="3" Grid.ColumnSpan="3"
@@ -145,18 +145,18 @@
 
         <Grid x:Name="_gridRightPanel" Grid.Row="1" Grid.RowSpan="7" Grid.Column="2" >
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" x:Name="rowFilesTree" />
-                <RowDefinition Height="5"/>
                 <RowDefinition Height="5*" x:Name="rowMap"/>
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="5"/>
+                <RowDefinition Height="*" x:Name="rowFilesTree" />
+                <RowDefinition Height="4"/>
             </Grid.RowDefinitions>
-            <Border Grid.Row="0" BorderThickness="2" BorderBrush="Gray" Background="Beige">
+            <Border Grid.Row="0" BorderThickness="2" BorderBrush="Gray" Grid.RowSpan="2">
+                <controls:GMapUserControl x:Name="MainMap" MaxZoom="24" MinZoom="1" />
+            </Border>
+            <Border Grid.Row="2" BorderThickness="2" BorderBrush="Gray" Background="Beige">
                 <controls:FilesTreeUserControl x:Name="treeGroups"/>
             </Border>
             <GridSplitter Grid.Row="1" Margin="1" HorizontalAlignment="Stretch" Background="Goldenrod"/>
-            <Border Grid.Row="2" BorderThickness="2" BorderBrush="Gray" Grid.RowSpan="2">
-                <controls:GMapUserControl x:Name="MainMap" MaxZoom="24" MinZoom="1" />
-            </Border>
         </Grid>
 
         <GridSplitter x:Name="_splitterSpeedChart" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="1" 
@@ -164,7 +164,7 @@
         
         <Grid x:Name="_gridGpsInfo" Grid.Row="3">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="420" x:Name="columnGpsInfo"/>
+                <ColumnDefinition Width="520" x:Name="columnGpsInfo"/>
                 <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="*" x:Name="columnSpeedChart"/>
                 <ColumnDefinition Width="200"/>
@@ -172,9 +172,13 @@
             <Border BorderThickness="2" BorderBrush="Gray" Background="Beige" >
                 <controls:GpsInfoUserControl x:Name="gpsInfo"/>
             </Border>
-            <GridSplitter x:Name="_splitterGpsInfo" Grid.Column="1" Margin="1" HorizontalAlignment="Stretch" Background="Goldenrod"/>
+            <GridSplitter x:Name="_splitterGpsInfo" Grid.Column="1" Margin="1" 
+                          HorizontalAlignment="Stretch" Background="Goldenrod"/>
             <controls:SpeedChartUserControl Grid.Column="2" x:Name="graphSpeedInfo" />
-            <TextBlock x:Name="_txtGpsInfo" Grid.Column="3" Margin="4" Background="LightYellow" />
+            <ScrollViewer Grid.Column="3">
+                <TextBlock x:Name="_txtGpsInfo" Grid.Column="3" Margin="4" 
+                           Background="LightYellow" FontFamily="Courier New" />
+            </ScrollViewer>
         </Grid>
 
         <controls:MaximizedUserControl x:Name="maxScreen" Grid.RowSpan="8" Grid.ColumnSpan="5" Visibility="Hidden" />

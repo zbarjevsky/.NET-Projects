@@ -176,13 +176,13 @@ namespace DashCamGPSView.Controls
             Zoom = player.Zoom;
             ZoomStateSet(player.ZoomStateGet(), true);
             ScrollOffsetY = player.ScrollOffsetY;
-            Position = player.Position;
+            PositionSet(player.Position, true);
         }
 
         public void RestoreMediaState(MediaState state, TimeSpan position)
         {
             Play();
-            Position = position;
+            PositionSet(position, true);
             if (state == MediaState.Stop)
                 Stop();
             if (state == MediaState.Pause)
@@ -224,7 +224,14 @@ namespace DashCamGPSView.Controls
         public TimeSpan Position 
         { 
             get { return VideoPlayerElement.Position; }
-            set { VideoPlayerElement.Position = value; OnPropertyChanged(); } 
+            //set { VideoPlayerElement.Position = value; OnPropertyChanged(); } 
+        }
+
+        public void PositionSet(TimeSpan position, bool notify)
+        {
+            VideoPlayerElement.Position = position; 
+            if(notify)
+                OnPropertyChanged(nameof(Position));
         }
 
         public Size NaturalSize

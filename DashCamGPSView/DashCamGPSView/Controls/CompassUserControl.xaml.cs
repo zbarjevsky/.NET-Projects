@@ -39,7 +39,7 @@ namespace DashCamGPSView.Controls
 
         public void SetDirection(double direction, double speed)
         {
-            SetDirection(direction, speed > 1);
+            SetDirection(direction, true); // speed > 1);
         }
     }
 }
