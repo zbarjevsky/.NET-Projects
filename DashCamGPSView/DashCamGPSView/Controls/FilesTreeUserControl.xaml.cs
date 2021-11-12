@@ -312,7 +312,7 @@ namespace DashCamGPSView.Controls
                 }
 
                 string dir = Path.GetDirectoryName(group[0].FileNameFront);
-                GroupName = group[0].FileDate.ToString("yyyy/MM/dd HH:mm:ss") + ", " + dir;
+                GroupName = group[0].FileDateStart.ToString("yyyy/MM/dd HH:mm:ss") + ", " + dir;
             }
             else
             {

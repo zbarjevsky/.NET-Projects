@@ -36,11 +36,10 @@
             <ColumnDefinition Width="*" x:Name="mapColumn"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="40" MaxHeight="40" MinHeight="40"/>
+            <RowDefinition Height="4" />
             <RowDefinition Height="10*" />
             <RowDefinition Height="5"/>
             <RowDefinition Height="*" x:Name="rowSpeedGraph"/>
-            <RowDefinition Height="86"/>
             <RowDefinition Height="8"/>
         </Grid.RowDefinitions>
 
@@ -54,20 +53,82 @@
                 <RowDefinition Height="3*" x:Name="rowPlayerR" />
                 <RowDefinition Height="5" />
                 <RowDefinition Height="5*" x:Name="rowPlayerF" />
+                <RowDefinition Height="96" MaxHeight="96" MinHeight="96"/>
             </Grid.RowDefinitions>
+            
             <Border x:Name="borderPlayerR" Grid.Row="0" BorderThickness="2" BorderBrush="Gray" >
                 <controls:VideoPlayerControl x:Name="playerR" Title="Rear View" />
             </Border>
+            
             <GridSplitter x:Name="_splitterRear" Grid.Column="1" HorizontalAlignment="Stretch" />
+            
             <Border x:Name="borderPlayerI" Grid.Row="0" Grid.Column="2" BorderThickness="2" BorderBrush="Gray" >
                 <controls:VideoPlayerControl x:Name="playerI" Title="Inner View" />
             </Border>
+            
             <GridSplitter x:Name="_splitterMain" Grid.Row="1" Grid.ColumnSpan="3"
                       HorizontalAlignment="Stretch"
                       DragCompleted="GridSplitter1_DragCompleted"/>
+            
             <Border x:Name="borderPlayerF" Grid.Row="2" Grid.ColumnSpan="3" BorderThickness="2" BorderBrush="Gray">
                 <controls:VideoPlayerControl x:Name="playerF" Title="Front View" />
             </Border>
+
+            <Grid x:Name="_gridControls" Grid.Row="3" Grid.ColumnSpan="3">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <controls:PlayerTimelineBarUserControl x:Name="statusBar" Grid.Row="0" Background="Gray" 
+               ExternalPlayer="{Binding MainPlayer, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
+                <DockPanel Grid.Row="1" Margin="2" >
+                    <Button Command="ApplicationCommands.Open" ToolTip="Open" Margin="2">
+                        <wpf:AutoGreyableImage Source="/DashCamGPSView;component/Images/map_32px.png" />
+                    </Button>
+                    <Separator />
+                    <Button Command="MediaCommands.PreviousTrack" ToolTip="Previous File" Margin="2" >
+                        <wpf:AutoGreyableImage Source="/Images/PrevE.png" />
+                    </Button>
+                    <Separator />
+                    <Button Command="MediaCommands.Play" ToolTip="Play" Margin="2" >
+                        <wpf:AutoGreyableImage  Source="/Images/PlayE.png" />
+                    </Button>
+                    <Button Command="MediaCommands.Pause" ToolTip="Pause" Margin="2" >
+                        <wpf:AutoGreyableImage Source="/Images/PauseE.png" Margin="2" />
+                    </Button>
+                    <Button Command="MediaCommands.Stop" ToolTip="Stop" Margin="2" >
+                        <wpf:AutoGreyableImage Source="/Images/StopE.png" />
+                    </Button>
+                    <Separator />
+                    <Button Command="MediaCommands.NextTrack" ToolTip="Next File" Margin="2" >
+                        <wpf:AutoGreyableImage Source="/Images/nextE.png" />
+                    </Button>
+                    <Button  ToolTip="Screen Shot" Click="Screenshot_Click" Margin="2" >
+                        <wpf:AutoGreyableImage Source="/Images/Screenshot.png" />
+                    </Button>
+                    <Button Margin="6" ToolTip="Settings" Content="Settings..." Click="Settings_Click" />
+                    <Button Margin="6" ToolTip="Test" Content="Test" Click="Test_Click" />
+                    <Viewbox Margin="10" >
+                        <CheckBox x:Name="chkTimeLapse" IsChecked="False" Content="Time Lapse" />
+                    </Viewbox>
+                    <ComboBox x:Name="_cmbFPS" Margin="8" 
+                              VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
+                              IsEnabled="{Binding IsChecked, ElementName=chkTimeLapse}"
+                              SelectedIndex="1">
+                        <ComboBoxItem>1 fps</ComboBoxItem>
+                        <ComboBoxItem>2 fps</ComboBoxItem>
+                        <ComboBoxItem>3 fps</ComboBoxItem>
+                        <ComboBoxItem>5 fps</ComboBoxItem>
+                        <ComboBoxItem>10 fps</ComboBoxItem>
+                        <ComboBoxItem>15 fps</ComboBoxItem>
+                    </ComboBox>
+                    <Viewbox Margin="8" DockPanel.Dock="Right">
+                        <CheckBox x:Name="chkAutoPlay" IsChecked="True" Content="Auto Play Next"/>
+                    </Viewbox>
+                    <TextBox Name="txtFileName"  Text="..." IsReadOnly="True"
+                        VerticalAlignment="Center" Margin="10,0" FontSize="16"/>
+                </DockPanel>
+            </Grid>
 
             <speedGauge:Gauge180UserControl x:Name="speedGauge" Grid.RowSpan="3" Grid.ColumnSpan="3"
                  Width="180" Height="100" MaxSpeed="140" SpeedColor="Gold"
@@ -98,9 +159,10 @@
             </Border>
         </Grid>
 
-        <GridSplitter x:Name="_splitterSpeedChart" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="1" HorizontalAlignment="Stretch"/>
+        <GridSplitter x:Name="_splitterSpeedChart" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="1" 
+                      Background="Goldenrod" HorizontalAlignment="Stretch"/>
         
-        <Grid Grid.Row="3">
+        <Grid x:Name="_gridGpsInfo" Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="420" x:Name="columnGpsInfo"/>
                 <ColumnDefinition Width="5"/>
@@ -113,48 +175,6 @@
             <GridSplitter x:Name="_splitterGpsInfo" Grid.Column="1" Margin="1" HorizontalAlignment="Stretch" Background="Goldenrod"/>
             <controls:SpeedChartUserControl Grid.Column="2" x:Name="graphSpeedInfo" />
             <TextBlock x:Name="_txtGpsInfo" Grid.Column="3" Margin="4" Background="LightYellow" />
-        </Grid>
-
-        <Grid Grid.Row="4">
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <ToolBar Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" >
-                <Button Command="ApplicationCommands.Open" ToolTip="Open">
-                    <wpf:AutoGreyableImage Source="/DashCamGPSView;component/Images/map_32px.png" />
-                </Button>
-                <Separator />
-                <Button Command="MediaCommands.PreviousTrack" ToolTip="Previous File" >
-                    <wpf:AutoGreyableImage Source="/Images/PrevE.png" />
-                </Button>
-                <Separator />
-                <Button Command="MediaCommands.Play" ToolTip="Play" >
-                    <wpf:AutoGreyableImage  Source="/Images/PlayE.png" />
-                </Button>
-                <Button Command="MediaCommands.Pause" ToolTip="Pause" >
-                    <wpf:AutoGreyableImage Source="/Images/PauseE.png" />
-                </Button>
-                <Button Command="MediaCommands.Stop" ToolTip="Stop" >
-                    <wpf:AutoGreyableImage Source="/Images/StopE.png" />
-                </Button>
-                <Separator />
-                <Button Command="MediaCommands.NextTrack" ToolTip="Next File" >
-                    <wpf:AutoGreyableImage Source="/Images/nextE.png" />
-                </Button>
-                <Button  ToolTip="Screen Shot" Click="Screenshot_Click" >
-                    <wpf:AutoGreyableImage Source="/Images/Screenshot.png" />
-                </Button>
-                <Button Margin="6,0" ToolTip="Settings" Content="Settings..." Click="Settings_Click" />
-                <Button  ToolTip="Test" Content="Test" Click="Test_Click" />
-                <TextBox Name="txtFileName"  Text="..." IsReadOnly="True"
-                     VerticalAlignment="Center" Margin="10,0" FontSize="16"/>
-                <Viewbox Margin="6">
-                    <CheckBox x:Name="chkAutoPlay" IsChecked="True" Content="Auto Play Next"/>
-                </Viewbox>
-            </ToolBar>
-            <controls:PlayerTimelineBarUserControl x:Name="statusBar" Grid.Row="1" Background="Gray" 
-               ExternalPlayer="{Binding MainPlayer, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
         </Grid>
 
         <controls:MaximizedUserControl x:Name="maxScreen" Grid.RowSpan="8" Grid.ColumnSpan="5" Visibility="Hidden" />

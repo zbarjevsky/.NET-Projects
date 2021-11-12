@@ -29,7 +29,7 @@ namespace DashCamGPSView.Controls
 
         public void UpdateInfo(DashCamFileInfo gps, int pointIdx)
         {
-            if (pointIdx >= 0)
+            if (pointIdx >= 0 && pointIdx < gps.GpsInfo.Count)
             {
                 GpsPointData inf = gps[pointIdx];
 

@@ -52,13 +52,13 @@ namespace DashCamGPSView.Controls
             get
             {
                 if(ExternalPlayer != null)
-                    return ConvertSpeedRatio(ExternalPlayer.SpeedRatio);
-                return 3;
+                    return ConvertSpeedRatioToIdx(ExternalPlayer.SpeedRatio);
+                return 6;
             }
 
             set
             {
-                ExternalPlayer.SpeedRatio = ConvertSpeedRatio((int)value); OnPropertyChanged();
+                ExternalPlayer.SpeedRatio = ConvertSpeedRatioFromIdx((int)value); OnPropertyChanged();
             }
         }
 
@@ -66,7 +66,7 @@ namespace DashCamGPSView.Controls
         {
             InitializeComponent();
 
-            _timer.Interval = TimeSpan.FromSeconds(0.3);
+            _timer.Interval = TimeSpan.FromMilliseconds(125);
             _timer.Tick += timer_Tick;
         }
 
@@ -146,14 +146,15 @@ namespace DashCamGPSView.Controls
             }
         }
 
-        double[] speedMultipliers = new double [] { 0.033, 0.25, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0 };
-        private double ConvertSpeedRatio(int sliderPosition)
+        double[] speedMultipliers = new double [] { 0.0333, 0.0667, 0.1, 0.167, 0.333, 0.5, 1.0, 2.0, 4.0, 8.0, 16.0 };
+        private double ConvertSpeedRatioFromIdx(int sliderPosition)
         {
             if (sliderPosition >= 0 && sliderPosition < speedMultipliers.Length)
                 return speedMultipliers[sliderPosition];
             return 1;
         }
-        private int ConvertSpeedRatio(double playerSpeedRatio)
+
+        private int ConvertSpeedRatioToIdx(double playerSpeedRatio)
         {
             for (int i = 1; i < speedMultipliers.Length; i++)
             {

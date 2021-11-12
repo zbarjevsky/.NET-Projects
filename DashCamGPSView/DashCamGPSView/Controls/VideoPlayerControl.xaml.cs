@@ -278,7 +278,7 @@ namespace DashCamGPSView.Controls
             if (VideoPlayerElement.Source != null) 
             { 
                 VideoPlayerElement.Play(); 
-                this.Background = Brushes.Gray;
+                this.Background = Brushes.Black;
                 MediaState = MediaState.Play;
             }
             else

@@ -643,6 +643,7 @@ namespace DashCamGPSView
             UpdateGpsInfo();
         }
 
+        private int[] FpsFromComboIndex = { 1, 2, 3, 5, 10, 15, 30 };
         private PointLatLng _lastValidPosition;
         private void UpdateGpsInfo(bool updateSlider = true)
         {
@@ -652,8 +653,9 @@ namespace DashCamGPSView
             int idx = -1;
             if (_dashCamFileInfo.HasGpsInfo)
             {
+                int fps = FpsFromComboIndex[_cmbFPS.SelectedIndex];
                 double seconds = playerF.Position.TotalSeconds;
-                idx = _dashCamFileInfo.FindGpsInfoIdx(seconds, playerF.NaturalDuration);
+                idx = _dashCamFileInfo.FindGpsInfoIdx(seconds, playerF.NaturalDuration, chkTimeLapse.IsChecked.Value, fps, SpeedRatio);
                 speedGauge.Visibility = Visibility.Visible;
                 compass.Visibility = Visibility.Visible;
 

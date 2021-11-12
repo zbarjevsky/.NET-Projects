@@ -41,10 +41,9 @@ namespace DashCamGPSView.Tools
                 fileList.AddRange(readOnlyFiles);
             }
 
-            fileList.Sort((f1,f2) => string.Compare(Path.GetFileName(f1),Path.GetFileName(f2), true));
-
             List<FileInfoWithDateFromFileName> allInfos = fileList.Select(f => new FileInfoWithDateFromFileName(f)).ToList();
 
+            //sorting by LastWriteTime - seems to be more accurate
             allInfos.Sort((f1, f2) => f1.Info.LastWriteTime.CompareTo(f2.Info.LastWriteTime));
 
             List<DashCamFileInfo> infoList = new List<DashCamFileInfo>();
@@ -62,7 +61,7 @@ namespace DashCamGPSView.Tools
             //if date difference more than 'groupMinutes' minutes - start new group
             foreach (DashCamFileInfo info in infoList)
             {
-                if (group.Count == 0 || (info.FileDate - group.Last().FileDate).TotalMinutes < deltaMinutesBetweenGroups)
+                if (group.Count == 0 || (info.FileDateStart - group.Last().FileDateEnd).TotalMinutes < deltaMinutesBetweenGroups)
                 {
                     group.Add(info);
                 }
