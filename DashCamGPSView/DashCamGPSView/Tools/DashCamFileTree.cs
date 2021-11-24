@@ -47,10 +47,9 @@ namespace DashCamGPSView.Tools
             allInfos.Sort((f1, f2) => f1.Info.LastWriteTime.CompareTo(f2.Info.LastWriteTime));
 
             List<DashCamFileInfo> infoList = new List<DashCamFileInfo>();
-            for (int idx = 0; idx < allInfos.Count; idx++)
+            for (int idx = 0; idx < allInfos.Count; )
             {
-                FileInfoWithDateFromFileName currentInfo = allInfos[idx];
-                DashCamFileInfo info = new DashCamFileInfo(allInfos, currentInfo, speedUnits);
+                DashCamFileInfo info = new DashCamFileInfo(allInfos, ref idx, speedUnits);
                 DashCamFileInfo existing = (infoList.FirstOrDefault(i => i.FileNameFront == info.FileNameFront));
                 if(existing == null)
                     infoList.Add(info);

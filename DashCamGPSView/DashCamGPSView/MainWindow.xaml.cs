@@ -772,6 +772,13 @@ namespace DashCamGPSView
         private bool VideoFailed(ExceptionRoutedEventArgs e, MediaElement player)
         {
             waitScreen.Hide();
+            if ((uint)e.ErrorException.HResult == 0x8898050C)
+            {
+                Debug.WriteLine("VideoFailed Exception: " + e.ErrorException.Message);
+                Debug.WriteLine("VideoFailed SpeedRatio: " + player.SpeedRatio);
+                return true;
+            }
+
             MessageBox.Show("Media Failed: " + e.ErrorException.Message +
                 "\nMediaState: " + playerF.MediaState +
                 "\nSource: " + player.Source +

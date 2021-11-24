@@ -8,7 +8,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
-        <tools:FileTypeToIconConverter x:Key="FileTypeToIconConverter" />
+        <tools:VideoFileToIconConverter x:Key="VideoFileToIconConverter" />
     </UserControl.Resources>
     <Grid>
         <TreeView x:Name="treeFiles">
@@ -50,7 +50,7 @@
                     <StackPanel Orientation="Horizontal" Margin="1">
                         <StackPanel.ContextMenu>
                             <ContextMenu>
-                                <MenuItem Header="Play" Click="FileMenu_Play_Click">
+                                <MenuItem Header="Play" FontWeight="Bold" Click="FileMenu_Play_Click">
                                     <MenuItem.Icon>
                                         <Image Source="/Images/PlayE.png" Width="16" Height="16" />
                                     </MenuItem.Icon>
@@ -58,7 +58,10 @@
                                 <Separator/>
                                 <MenuItem Header="Export GPS Data As..." Click="GroupMenu_Export_Click" />
                                 <Separator/>
-                                <MenuItem Header="Open Containing Folder..." Click="GroupMenu_OpenFolder_Click" />
+                                <MenuItem Header="Show in Folder..." Click="GroupMenu_OpenFolder_Click" />
+                                <Separator/>
+                                <MenuItem Header="Is Protected" Click="GroupMenu_Protect_Click" 
+                                          IsChecked="{Binding IsProtected, Mode=OneWay}" />
                                 <MenuItem Header="Delete Selected Recordings" Click="GroupMenu_Delete_Click" >
                                     <MenuItem.Icon>
                                         <Image Source="/Images/Delete.png" Width="16" Height="16" />
@@ -66,8 +69,7 @@
                                 </MenuItem>
                             </ContextMenu>
                         </StackPanel.ContextMenu>
-                        <Image Source="{Binding FileType, Converter={StaticResource FileTypeToIconConverter}}" 
-                               Margin="0,0,5,0"  Width="18" Height="18" />
+                        <Image Source="{Binding IconUri}" Margin="0,0,5,0"  Width="18" Height="18" />
                         <TextBlock Text="{Binding FileNameForDisplay}" FontFamily="Courier New" VerticalAlignment="Center"/>
                         <TextBlock Text="{Binding Description}" Foreground="Goldenrod" VerticalAlignment="Center" />
                     </StackPanel>

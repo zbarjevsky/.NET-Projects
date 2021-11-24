@@ -15,6 +15,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 
 using DashCamGPSView.Tools;
+using MkZ.Windows;
 
 namespace DashCamGPSView.Controls
 {
@@ -266,6 +267,17 @@ namespace DashCamGPSView.Controls
             System.Diagnostics.Process.Start("explorer.exe", argument);
         }
 
+        private void GroupMenu_Protect_Click(object sender, RoutedEventArgs e)
+        {
+            if(sender is MenuItem item)
+            {
+                if (item.DataContext is VideoFile v)
+                {
+                    v.SetProtected(!v.IsProtected);
+                }
+            }
+        }
+
         private void GroupMenu_Delete_Click(object sender, RoutedEventArgs e)
         {
             if (sender is MenuItem item)
@@ -332,15 +344,19 @@ namespace DashCamGPSView.Controls
         }
     }
 
-    public class VideoFile
+    public class VideoFile : NotifyPropertyChangedImpl
     {
         public DashCamFileInfo _dashCamFileInfo { get; } = null;
 
         public bool IsSelected { get; set; } = false;
 
+        public bool IsProtected { get; private set; }
+
+        public Uri IconUri { get; private set; } = new Uri("/Images/Movie48.png", UriKind.RelativeOrAbsolute);
+
         public string FileName { get { return _dashCamFileInfo.FileNameFront; } }
 
-        public FileType FileType { get => _dashCamFileInfo.FileType; }
+        public RecordingType FileType { get => _dashCamFileInfo.RecordingType; }
 
         public string FileNameForDisplay { get; private set; }
 
@@ -349,6 +365,7 @@ namespace DashCamGPSView.Controls
         public VideoFile(int indexInGroup, DashCamFileInfo info)
         {
             _dashCamFileInfo = info;
+            IsProtected = info.IsProtected;
             IsSelected = false;
             FileNameForDisplay = string.Format("{0:000}. {1}", indexInGroup+1, Path.GetFileNameWithoutExtension(FileName));
 
@@ -375,6 +392,8 @@ namespace DashCamGPSView.Controls
                 size += fi3.Length;
             }
 
+            UpdateIconUri();
+
             Description = string.Format(" ({0}, {1:###,###.0} MB, {2} s)", 
                 cameras, size / (1024.0*1024.0), sDuration);
         }
@@ -394,6 +413,39 @@ namespace DashCamGPSView.Controls
         internal void DeleteRecording()
         {
             _dashCamFileInfo.DeleteRecording();
+        }
+
+        internal void SetProtected(bool protect)
+        {
+            _dashCamFileInfo.SetProtected(protect);
+            IsProtected = _dashCamFileInfo.IsProtected;
+            NotifyPropertyChanged(nameof(IsProtected));
+            UpdateIconUri();
+        }
+
+        private void UpdateIconUri()
+        {
+            switch (FileType)
+            {
+                case RecordingType.Parking:
+                    if (IsProtected)
+                        IconUri = new Uri("/Images/Warning.png", UriKind.RelativeOrAbsolute);
+                    else
+                        IconUri = new Uri("/Images/Parking.png", UriKind.RelativeOrAbsolute);
+                    break;
+                //case RecordingType.ReadOnly:
+                //    return new Uri("/Images/Warning.png", UriKind.RelativeOrAbsolute);
+                case RecordingType.Unknown:
+                case RecordingType.Driving:
+                default:
+                    if (IsProtected)
+                        IconUri = new Uri("/Images/Warning.png", UriKind.RelativeOrAbsolute);
+                    else
+                        IconUri = new Uri("/Images/Movie48.png", UriKind.RelativeOrAbsolute);
+                    break;
+            }
+
+            NotifyPropertyChanged(nameof(IconUri));
         }
     }
 }

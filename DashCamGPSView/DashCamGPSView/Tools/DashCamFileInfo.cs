@@ -23,12 +23,11 @@ namespace DashCamGPSView.Tools
         Unkn
     }
 
-    public enum FileType : int
+    public enum RecordingType : int
     {
         Unknown = 0,
-        Recording,
+        Driving,
         Parking,
-        ReadOnly,
     }
 
     public class FileInfoWithDateFromFileName
@@ -60,7 +59,7 @@ namespace DashCamGPSView.Tools
 
         public override string ToString()
         {
-            return $"{Date} - {Info.CreationTime} - {Info.FullName}";
+            return $"File: {Date:s} - Created: {Info.CreationTime:s} - End: {Info.LastWriteTime:s} - Name: {Info.Name}";
         }
     }
 
@@ -68,7 +67,9 @@ namespace DashCamGPSView.Tools
     {
         public GpsFileFormat GpsFileFormat = GpsFileFormat.Unkn;
 
-        public FileType FileType = FileType.Unknown;
+        public RecordingType RecordingType = RecordingType.Unknown;
+
+        public bool IsProtected { get; private set; } = false;
 
         public string FileNameFront, FileNameRear, FileNameInside, FileNameNmea;
 
@@ -110,8 +111,10 @@ namespace DashCamGPSView.Tools
         private double _dGpsDelaySeconds = 2.3;
         private int _iGpsTimeZoneHours = 0;
 
-        public DashCamFileInfo(List<FileInfoWithDateFromFileName> allFiles, FileInfoWithDateFromFileName currentInfo, string speedUnits)
+        public DashCamFileInfo(List<FileInfoWithDateFromFileName> allFiles, ref int idx, string speedUnits)
         {
+            FileInfoWithDateFromFileName currentInfo = allFiles[idx];
+
             string fileName = currentInfo.Info.FullName;
             SpeedUnits = (SpeedUnits)Enum.Parse(typeof(SpeedUnits), speedUnits);
 
@@ -128,7 +131,8 @@ namespace DashCamGPSView.Tools
             if (Directory.Exists(dirF) && Directory.Exists(dirR))
             {
                 GpsFileFormat = GpsFileFormat.DuDuBell;
-                FileType = FileType.Recording;
+                RecordingType = RecordingType.Driving;
+                IsProtected = false;
                 Info = currentInfo;
                 FileDateStart = FromDuDuBellFileName(fileName);
                 FileDateEnd = currentInfo.Info.LastWriteTime;
@@ -142,17 +146,23 @@ namespace DashCamGPSView.Tools
                 FileNameRear = Path.Combine(dirR, name + "R.MP4");
                 if (!File.Exists(FileNameRear))
                     FileNameRear = null;
+
+                idx++;
             }
-            else //different format
+            else //viofo 2ch or 3ch format
             {
                 GpsFileFormat = GpsFileFormat.Viofo;
                 FileDateStart = currentInfo.Date;
                 FileDateEnd = currentInfo.Info.LastWriteTime;
-                if (!FromViofoFileName(allFiles, currentInfo, ref FileType, ref FileNameFront, ref FileNameRear, ref FileNameInside))
+                if (!FromViofoFileName(allFiles, ref idx, ref RecordingType, ref FileNameFront, ref FileNameRear, ref FileNameInside))
                 {
                     FileNameFront = currentInfo.Info.FullName;
                     Info = currentInfo;
+                    idx++;
                 }
+
+                string dir = Path.GetDirectoryName(FileNameFront);
+                IsProtected = dir.EndsWith("RO");
             }
         }
 
@@ -160,6 +170,8 @@ namespace DashCamGPSView.Tools
         {
             SpeedUnits = (SpeedUnits)Enum.Parse(typeof(SpeedUnits), speedUnits);
             GpsFileFormat = source.GpsFileFormat;
+
+            IsProtected = source.IsProtected;
 
             FileNameFront = source.FileNameFront;
             FileNameRear = source.FileNameRear;
@@ -213,6 +225,64 @@ namespace DashCamGPSView.Tools
             }
         }
 
+        internal void SetProtected(bool protect)
+        {
+            if (protect == IsProtected)
+                return;
+
+            string dirParent = Path.GetDirectoryName(FileNameFront);
+            if (dirParent.EndsWith(@"\RO") || dirParent.EndsWith(@"Parking"))
+                dirParent = Path.GetDirectoryName(dirParent);
+
+            string moveToDir = dirParent;
+            if (protect)
+            {
+                moveToDir = Path.Combine(dirParent, "RO");
+            }
+            else
+            {
+                if (this.RecordingType == RecordingType.Parking)
+                    moveToDir = Path.Combine(dirParent, "Parking");
+            }
+
+            MoveAllFiles(moveToDir, protect);
+        }
+
+        internal void MoveAllFiles(string moveToDir, bool protect)
+        {
+            try
+            {
+                Directory.CreateDirectory(moveToDir);
+
+                MoveFile(ref FileNameFront, moveToDir, protect);
+                MoveFile(ref FileNameNmea, moveToDir, protect);
+                MoveFile(ref FileNameRear, moveToDir, protect);
+                MoveFile(ref FileNameInside, moveToDir, protect);
+
+                IsProtected = protect;
+            }
+            catch (Exception err)
+            {
+                Debug.WriteLine("Exception moving files: " + err);
+                MessageBox.Show("Exception moving files: " + err);
+            }
+        }
+
+        private void MoveFile(ref string src, string dstDir, bool setReadonly)
+        {
+            if (File.Exists(src))
+            {
+                FileInfo f = new FileInfo(src);
+                f.IsReadOnly = false;
+                string dst = Path.Combine(dstDir, f.Name);
+
+                File.Move(src, dst);
+                f = new FileInfo(dst);
+                f.IsReadOnly = setReadonly;
+                src = dst;
+            }
+        }
+
         internal void DeleteRecording()
         {
             Action<string> deleteFile = (name) =>
@@ -256,66 +326,64 @@ namespace DashCamGPSView.Tools
             _dGpsDelaySeconds = delta.TotalSeconds;
         }
 
-        private bool FromViofoFileName(List<FileInfoWithDateFromFileName> allFiles, FileInfoWithDateFromFileName currentInfo,
-            ref FileType fileType, ref string frontFileName, ref string rearFileName, ref string insideFileName)
+        private bool FromViofoFileName(List<FileInfoWithDateFromFileName> allFiles, ref int idx,
+            ref RecordingType fileType, ref string frontFileName, ref string rearFileName, ref string insideFileName)
         {
             frontFileName = "";
             rearFileName = "";
             insideFileName = "";
 
-            foreach (FileInfoWithDateFromFileName info in allFiles)
+            FileInfoWithDateFromFileName currentInfo = allFiles[idx];
+
+            int start = idx; int end = idx + 3;
+            for (int i = start; i < end; i++)
             {
+                FileInfoWithDateFromFileName info = allFiles[i];
+
                 double delta = Math.Abs((info.Info.LastWriteTime - currentInfo.Info.LastWriteTime).TotalSeconds);
                 if (delta < 3)
                 {
                     if (info.Info.Name.EndsWith("_F.MP4", true, CultureInfo.InvariantCulture))
                     {
                         frontFileName = info.Info.FullName;
-                        FileType = FileType.Recording;
+                        RecordingType = RecordingType.Driving;
                         Info = info;
+                        idx++;
                     }
                     else if (info.Info.Name.EndsWith("_R.MP4", true, CultureInfo.InvariantCulture))
                     {
                         rearFileName = info.Info.FullName;
-                        FileType = FileType.Recording;
+                        RecordingType = RecordingType.Driving;
+                        idx++;
                     }
                     else if (info.Info.Name.EndsWith("_I.MP4", true, CultureInfo.InvariantCulture))
                     {
                         insideFileName = info.Info.FullName;
-                        FileType = FileType.Recording;
+                        RecordingType = RecordingType.Driving;
+                        idx++;
                     }
                     else if (info.Info.Name.EndsWith("_PF.MP4", true, CultureInfo.InvariantCulture))
                     {
                         frontFileName = info.Info.FullName;
-                        FileType = FileType.Parking;
+                        RecordingType = RecordingType.Parking;
                         Info = info;
+                        idx++;
                     }
                     else if (info.Info.Name.EndsWith("_PR.MP4", true, CultureInfo.InvariantCulture))
                     {
                         rearFileName = info.Info.FullName;
-                        FileType = FileType.Parking;
+                        RecordingType = RecordingType.Parking;
+                        idx++;
                     }
                     else if (info.Info.Name.EndsWith("_PI.MP4", true, CultureInfo.InvariantCulture))
                     {
                         insideFileName = info.Info.FullName;
-                        FileType = FileType.Parking;
+                        RecordingType = RecordingType.Parking;
+                        idx++;
                     }
 
-                    if (info.Info.IsReadOnly)
-                        FileType = FileType.ReadOnly;
+                    IsProtected = info.Info.IsReadOnly;
                 }
-            }
-
-            //check for simple file name
-            //for one camera only
-            string name = currentInfo.Info.FullName;
-            if (string.Compare(name, frontFileName, true) != 0 &&
-                string.Compare(name, rearFileName, true) != 0 &&
-                string.Compare(name, insideFileName, true) != 0 )
-            {
-                frontFileName = name;
-                rearFileName = "";
-                insideFileName = "";
             }
 
             return !string.IsNullOrWhiteSpace(frontFileName);

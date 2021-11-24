@@ -107,21 +107,26 @@ namespace DashCamGPSView.Controls
                 _timer.Stop();
         }
 
+        private bool _isInSliderChange = false;
         private void sliProgress_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             TimeSpan tsPos = TimeSpan.FromSeconds(sliProgress.Value);
             TimeSpan tsMax = TimeSpan.FromSeconds(ExternalPlayer.NaturalDuration);
 
             //System.Diagnostics.Debug.WriteLine("Slider: " + tsPos);
-            if (!_isInTimer)
+            if (!_isInTimer && !_isInSliderChange)
             {
                 if (ExternalPlayer.Position == tsPos)
                     return; //no update needed
 
+                _isInSliderChange = true;
+
                 ExternalPlayer.PositionSet(tsPos, false);
                 //System.Diagnostics.Debug.WriteLine("Player(2): " + Player.Position);
-                if (sliProgress.Value - ExternalPlayer.Position.TotalSeconds > 0.0001)
-                    sliProgress.Value = ExternalPlayer.Position.TotalSeconds;
+                //if (sliProgress.Value - ExternalPlayer.Position.TotalSeconds > 0.0001)
+                //    sliProgress.Value = ExternalPlayer.Position.TotalSeconds;
+
+                _isInSliderChange = false;
             }
 
             if(ExternalPlayer.NaturalDuration > 0)

@@ -132,7 +132,7 @@
     </Compile>
     <Compile Include="Tools\EnumBooleanConverter.cs" />
     <Compile Include="Tools\ExportUtils.cs" />
-    <Compile Include="Tools\FileTypeToIconConverter.cs" />
+    <Compile Include="Tools\VideoFileToIconConverter.cs" />
     <Compile Include="Tools\MainWindowState.cs" />
     <Compile Include="Tools\PointLatLngUI.cs" />
     <Compile Include="Tools\AppConfig.cs" />
@@ -346,6 +346,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Star.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Movie48RO.png" />
+    <Resource Include="Images\ParkingRO.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
