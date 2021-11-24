@@ -200,6 +200,7 @@ namespace MkZ.Media
 
             UpdateActiveDeviceVolume();
 
+            m_btnProperties.Enabled = false;
             m_btnActivate.Enabled = false;
             m_mnuActivate.Enabled = false;
             m_mnuActivate.Image = null;
@@ -209,6 +210,8 @@ namespace MkZ.Media
 
             if (m_listDevices.SelectedItems.Count > 0)
             {
+                m_btnProperties.Enabled = true;
+
                 m_mnuActivate.Image = m_listDevices.SmallImageList.Images[m_listDevices.SelectedItems[0].ImageKey];
 
                 DeviceFullInfo device = GetSelectedDevice();
@@ -321,6 +324,11 @@ namespace MkZ.Media
             SetActiveDevice();
         }
 
+        private void m_mnuProperties_Click(object sender, EventArgs e)
+        {
+            m_btnProperties_Click(sender, e);
+        }
+
         private void m_mnuMute_Click(object sender, EventArgs e)
         {
             if (_activeDevice == null)
@@ -330,6 +338,16 @@ namespace MkZ.Media
             _activeDevice.AudioEndpointVolume.Mute = !_activeDevice.AudioEndpointVolume.Mute;
             UpdateUI(action + _activeDevice.FriendlyName);
             UpdateStatus(action +_activeDevice.FriendlyName);
+        }
+
+        private void m_btnProperties_Click(object sender, EventArgs e)
+        {
+            Process.Start("control.exe", $"mmsys.cpl sounds {_activeDevice.ID}");
+        }
+
+        private void m_btnSound_Click(object sender, EventArgs e)
+        {
+            Process.Start("control.exe", "mmsys.cpl sounds");
         }
     }
 }
