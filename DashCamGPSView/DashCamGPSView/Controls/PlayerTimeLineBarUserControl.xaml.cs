@@ -82,21 +82,16 @@ namespace DashCamGPSView.Controls
             };
         }
 
-        private void UpdateSliderPosition()
-        {
-            _isInTimer = true;
-            if (ExternalPlayer != null)
-            {
-                sliProgress.Value = ExternalPlayer.Position.TotalSeconds;
-                OnVideoPositionChanged(ExternalPlayer.Position);
-            }
-            _isInTimer = false;
-        }
-
         private bool _isInTimer = false;
         private void timer_Tick(object sender, EventArgs e)
         {
+            if (_isInTimer)
+                return;
+            _isInTimer = true;
+           
             UpdateSliderPosition();
+            
+            _isInTimer = false;
         }
 
         private void UpdateTimerState()
@@ -105,6 +100,19 @@ namespace DashCamGPSView.Controls
                 _timer.Start();
             else
                 _timer.Stop();
+        }
+
+        private void UpdateSliderPosition()
+        {
+            if (ExternalPlayer != null)
+            {
+                _isInSliderChange = true;
+
+                sliProgress.Value = ExternalPlayer.Position.TotalSeconds;
+                OnVideoPositionChanged(ExternalPlayer.Position);
+
+                _isInSliderChange = false;
+            }
         }
 
         private bool _isInSliderChange = false;

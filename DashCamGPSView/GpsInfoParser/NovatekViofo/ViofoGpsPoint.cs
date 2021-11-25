@@ -138,6 +138,40 @@ namespace NovatekViofoGPSParser
 
                 return gps;
             }
+            else if (c == 32)
+            {
+                reader.Position = start + OFFSET_V1_16 + 1;
+
+                //# Datetime data
+                int hour = (int)reader.ReadUintLE();
+                int minute = (int)reader.ReadUintLE();
+                int second = (int)reader.ReadUintLE();
+                int year = (int)reader.ReadUintLE();
+                int month = (int)reader.ReadUintLE();
+                int day = (int)reader.ReadUintLE();
+
+                try { gps.Date = new DateTime(2000 + year, month, day, hour, minute, second); }
+                catch (Exception err) { Debug.WriteLine(err.ToString()); return null; }
+
+                //# Coordinate data
+                char active = (char)reader.ReadByte();
+                gps.IsActive = (active == 'A');
+
+                gps.Latitude_hemisphere = (char)reader.ReadByte();
+                gps.Longtitude_hemisphere = (char)reader.ReadByte();
+                gps.Unknown = reader.ReadByte();
+
+                float lat = reader.ReadFloatLE();
+                gps.Latitude = FixCoordinate(lat, gps.Latitude_hemisphere);
+
+                float lon = reader.ReadFloatLE();
+                gps.Longtitude = FixCoordinate(lon, gps.Longtitude_hemisphere);
+
+                gps.Speed = reader.ReadFloatLE();
+                gps.Bearing = reader.ReadFloatLE();
+
+                return gps;
+            }
 
             return null;
         }

@@ -71,7 +71,9 @@ namespace DashCamGPSView.Tools
 
         public bool IsProtected { get; private set; } = false;
 
-        public string FileNameFront, FileNameRear, FileNameInside, FileNameNmea;
+        public string FileNameFront = "", FileNameRear = "", FileNameInside = "", FileNameNmea = "";
+
+        public string FileName => Info.Info.FullName;
 
         private List<GpsPointData> _gpsInfo = new List<GpsPointData>();
         public List<GpsPointData> GpsInfo
@@ -100,9 +102,9 @@ namespace DashCamGPSView.Tools
 
         public double GetSpeed(int idx) { return this[idx].GetSpeed(SpeedUnits); }
 
-        public DateTime FileDateStart { get; private set; } = DateTime.MinValue;
+        public DateTime FileDateStart { get; private set; } = new DateTime(1970, 1, 1);
 
-        public DateTime FileDateEnd { get; private set; } = DateTime.MinValue;
+        public DateTime FileDateEnd { get; private set; } = new DateTime(1970, 1, 1);
 
         public FileInfoWithDateFromFileName Info { get; private set; } = null;
 
@@ -161,7 +163,7 @@ namespace DashCamGPSView.Tools
                     idx++;
                 }
 
-                string dir = Path.GetDirectoryName(FileNameFront);
+                string dir = Path.GetDirectoryName(Info.Info.FullName);
                 IsProtected = dir.EndsWith("RO");
             }
         }
@@ -171,6 +173,7 @@ namespace DashCamGPSView.Tools
             SpeedUnits = (SpeedUnits)Enum.Parse(typeof(SpeedUnits), speedUnits);
             GpsFileFormat = source.GpsFileFormat;
 
+            Info = source.Info;
             IsProtected = source.IsProtected;
 
             FileNameFront = source.FileNameFront;
@@ -190,7 +193,7 @@ namespace DashCamGPSView.Tools
         {
             get
             {
-                using (ShellObject shell = ShellObject.FromParsingName(FileNameFront))
+                using (ShellObject shell = ShellObject.FromParsingName(this.FileName))
                 {
                     // alternatively: shell.Properties.GetProperty("System.Media.Duration");
                     uint duration = (uint)shell.Properties.System.Media.Duration.Value;
@@ -212,7 +215,7 @@ namespace DashCamGPSView.Tools
                 }
                 else if (GpsFileFormat == GpsFileFormat.Viofo)
                 {
-                    _gpsInfo = GpsPointData.Convert(NovatekViofoGPSParser.ViofoParser.ReadMP4FileGpsInfo(FileNameFront));
+                    _gpsInfo = GpsPointData.Convert(NovatekViofoGPSParser.ViofoParser.ReadMP4FileGpsInfo(Info.Info.FullName));
                 }
                 else
                 {
@@ -335,12 +338,12 @@ namespace DashCamGPSView.Tools
 
             FileInfoWithDateFromFileName currentInfo = allFiles[idx];
 
-            int start = idx; int end = idx + 3;
+            int start = idx; int end = Math.Min(idx + 3, allFiles.Count);
             for (int i = start; i < end; i++)
             {
                 FileInfoWithDateFromFileName info = allFiles[i];
 
-                double delta = Math.Abs((info.Info.LastWriteTime - currentInfo.Info.LastWriteTime).TotalSeconds);
+                double delta = Math.Abs((info.Date - currentInfo.Date).TotalSeconds);
                 if (delta < 3)
                 {
                     if (info.Info.Name.EndsWith("_F.MP4", true, CultureInfo.InvariantCulture))
@@ -385,8 +388,12 @@ namespace DashCamGPSView.Tools
                     IsProtected = info.Info.IsReadOnly;
                 }
             }
+            if (Info == null)
+                Info = currentInfo;
 
-            return !string.IsNullOrWhiteSpace(frontFileName);
+            return  !string.IsNullOrWhiteSpace(frontFileName) || 
+                    !string.IsNullOrWhiteSpace(rearFileName) || 
+                    !string.IsNullOrWhiteSpace(insideFileName);
         }
 
         private DateTime FromDuDuBellFileName(string fileName)
@@ -453,7 +460,7 @@ namespace DashCamGPSView.Tools
 
         public override string ToString()
         {
-            string name = Path.GetFileName(FileNameFront);
+            string name = Info.Info?.Name;
             string gps = _gpsInfo == null ? "No Data" : _gpsInfo.Count.ToString();
             return "N: " + name + ", GPS Data: " + gps + ", Date: " + FileDateStart.ToString("yyyy/MM/dd HH:mm:ss.fff");
         }

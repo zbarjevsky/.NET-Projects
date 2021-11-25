@@ -44,13 +44,13 @@ namespace DashCamGPSView.Tools
             List<FileInfoWithDateFromFileName> allInfos = fileList.Select(f => new FileInfoWithDateFromFileName(f)).ToList();
 
             //sorting by LastWriteTime - seems to be more accurate
-            allInfos.Sort((f1, f2) => f1.Info.LastWriteTime.CompareTo(f2.Info.LastWriteTime));
+            allInfos.Sort((f1, f2) => f1.Date.CompareTo(f2.Date));
 
             List<DashCamFileInfo> infoList = new List<DashCamFileInfo>();
             for (int idx = 0; idx < allInfos.Count; )
             {
                 DashCamFileInfo info = new DashCamFileInfo(allInfos, ref idx, speedUnits);
-                DashCamFileInfo existing = (infoList.FirstOrDefault(i => i.FileNameFront == info.FileNameFront));
+                DashCamFileInfo existing = (infoList.FirstOrDefault(i => i.FileName == info.FileName));
                 if(existing == null)
                     infoList.Add(info);
             }

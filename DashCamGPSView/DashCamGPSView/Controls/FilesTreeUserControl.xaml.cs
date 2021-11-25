@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -191,6 +192,11 @@ namespace DashCamGPSView.Controls
             }
         }
 
+        private void ContextMenu_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+        {
+            Debug.WriteLine("ContextMenu_ContextMenuOpening()");
+        }
+
         private void GroupMenu_Export_Click(object sender, RoutedEventArgs e)
         {
             if (sender is MenuItem item)
@@ -323,7 +329,7 @@ namespace DashCamGPSView.Controls
                     Members.Add(new VideoFile(i, group[i]));
                 }
 
-                string dir = Path.GetDirectoryName(group[0].FileNameFront);
+                string dir = Path.GetDirectoryName(group[0].Info.Info.FullName);
                 GroupName = group[0].FileDateStart.ToString("yyyy/MM/dd HH:mm:ss") + ", " + dir;
             }
             else
@@ -354,7 +360,7 @@ namespace DashCamGPSView.Controls
 
         public Uri IconUri { get; private set; } = new Uri("/Images/Movie48.png", UriKind.RelativeOrAbsolute);
 
-        public string FileName { get { return _dashCamFileInfo.FileNameFront; } }
+        public string FileName { get { return _dashCamFileInfo.FileName; } }
 
         public RecordingType FileType { get => _dashCamFileInfo.RecordingType; }
 
@@ -369,7 +375,7 @@ namespace DashCamGPSView.Controls
             IsSelected = false;
             FileNameForDisplay = string.Format("{0:000}. {1}", indexInGroup+1, Path.GetFileNameWithoutExtension(FileName));
 
-            FileInfo fi1 = new FileInfo(info.FileNameFront);
+            //FileInfo fi1 = info.Info.Info;
 
             TimeSpan duration = info.FileDateEnd - info.FileDateStart;
             duration += TimeSpan.FromSeconds(1); //correct for last second
@@ -377,13 +383,19 @@ namespace DashCamGPSView.Controls
             if (duration.TotalSeconds > 1000)
                 sDuration = duration.ToString();
 
-            string cameras = "FR";
-            long size = fi1.Length;
+            string cameras = "";
+            long size = 0;
+            if (File.Exists(info.FileNameFront))
+            {
+                FileInfo fi1 = new FileInfo(info.FileNameFront);
+                cameras += "FR";
+                size += fi1.Length;
+            }
             if (File.Exists(info.FileNameInside))
             {
                 FileInfo fi2 = new FileInfo(info.FileNameInside);
                 cameras += "+IN";
-                size += fi2.Length; 
+                size += fi2.Length;
             }
             if (File.Exists(info.FileNameRear))
             {

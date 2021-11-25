@@ -26,7 +26,7 @@
                 <HierarchicalDataTemplate DataType="{x:Type local:VideoGroup}" ItemsSource="{Binding Members}">
                     <StackPanel Orientation="Horizontal">
                         <StackPanel.ContextMenu>
-                            <ContextMenu>
+                            <ContextMenu ContextMenuOpening="ContextMenu_ContextMenuOpening">
                                 <MenuItem Header="Play This Route Recordings..." Click="GroupMenu_Open_Click"/>
                                 <Separator/>
                                 <MenuItem Header="Export GPS Data As..." Click="GroupMenu_Export_Click" />
@@ -49,7 +49,7 @@
                 <DataTemplate DataType="{x:Type local:VideoFile}">
                     <StackPanel Orientation="Horizontal" Margin="1">
                         <StackPanel.ContextMenu>
-                            <ContextMenu>
+                            <ContextMenu ContextMenuOpening="ContextMenu_ContextMenuOpening">
                                 <MenuItem Header="Play" FontWeight="Bold" Click="FileMenu_Play_Click">
                                     <MenuItem.Icon>
                                         <Image Source="/Images/PlayE.png" Width="16" Height="16" />
