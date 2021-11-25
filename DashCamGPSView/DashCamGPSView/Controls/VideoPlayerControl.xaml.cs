@@ -34,7 +34,7 @@ namespace DashCamGPSView.Controls
 
         public Action MaximizeAction = () => { };
         public Action<IVideoPlayer> VideoEnded = (player) => { };
-        public Action<IVideoPlayer> VideoStarted { get; set; } = (player) => { };
+        public Action<IVideoPlayer> VideoStartedAction { get; set; } = (player) => { };
         public Func<ExceptionRoutedEventArgs, MediaElement, bool> VideoFailed = (e, player) => true;
         public Action LeftButtonClick = () => { };
         public Action LeftButtonDoubleClick = () => { };
@@ -413,10 +413,12 @@ namespace DashCamGPSView.Controls
                 VideoPlayerElement.MediaOpened += (s, e) => 
                 {
                     double zoom_save = _scrollDragger.Zoom;
+                    eZoomState zoomState = _scrollDragger.ZoomState;
                     _scrollDragger.NaturalSize = new Size(VideoPlayerElement.NaturalVideoWidth, VideoPlayerElement.NaturalVideoHeight);
-                    _scrollDragger.Zoom = zoom_save; 
+                    _scrollDragger.Zoom = zoom_save;
+                    ZoomStateSet(zoomState, false);
                     MediaState = GetMediaState(VideoPlayerElement); 
-                    VideoStarted(this); 
+                    VideoStartedAction(this); 
                 };
                 VideoPlayerElement.MediaEnded += (s, e) => { VideoEnded(this); };
                 VideoPlayerElement.MediaFailed += (s, e) => { e.Handled = VideoFailed(e, VideoPlayerElement); };

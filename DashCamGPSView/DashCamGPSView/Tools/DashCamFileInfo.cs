@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using DashCam.Tools;
 using GMap.NET;
 using GPSDataParser;
 using Microsoft.WindowsAPICodePack.Shell;
@@ -96,7 +97,7 @@ namespace DashCamGPSView.Tools
 
         public GpsPointData this[int index] { get { return GpsInfo[index]; } }
 
-        public PointLatLng Position(int i) { return new PointLatLng(this[i].Latitude, this[i].Longitude); }
+        public PointLatLngUI Position(int i) { return new PointLatLngUI(this[i].Latitude, this[i].Longitude); }
 
         public SpeedUnits SpeedUnits { get; set; } = SpeedUnits.mph;
 
@@ -410,7 +411,7 @@ namespace DashCamGPSView.Tools
                 return "No GPS info...";
 
             string info = "Time: " + GpsInfo[idx].FixTime.AddHours(_iGpsTimeZoneHours).ToString("yyyy/MM/dd HH:mm:ss") + 
-                ", " + new GMap.NET.PointLatLng(GpsInfo[idx].Latitude, GpsInfo[idx].Longitude).ToString() + 
+                ", " + new PointLatLngUI(GpsInfo[idx].Latitude, GpsInfo[idx].Longitude).ToString() + 
                 ", Speed: " + GpsInfo[idx].SpeedMph.ToString("0.0 mph") + 
                 ", Azimuth: " + GpsInfo[idx].Course.ToString("0.0");
             return info;

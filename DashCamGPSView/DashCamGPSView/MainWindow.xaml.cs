@@ -22,7 +22,7 @@ using System.Windows.Threading;
 using DashCamGPSView.Properties;
 using DashCamGPSView.Tools;
 using GMap.NET;
-using GMap.NET.MapProviders;
+//using GMap.NET.MapProviders;
 using GMap.NET.WindowsPresentation;
 using GPSDataParser;
 using System.Windows.Media.Animation;
@@ -31,6 +31,7 @@ using System.Runtime.CompilerServices;
 using MkZ.Tools;
 using MkZ.WPF;
 using MkZ.WPF.PropertyGrid;
+using DashCam.Tools;
 
 namespace DashCamGPSView
 {
@@ -80,17 +81,11 @@ namespace DashCamGPSView
             playerR.MaximizeAction = () => MaximizePlayer(playerR);
             playerI.MaximizeAction = () => MaximizePlayer(playerI);
 
-            playerF.VideoStarted = (player) => { VideoStartedPostAction(player, AppConfig.PlayerF, false); };
-            playerR.VideoStarted = (player) => { VideoStartedPostAction(player, AppConfig.PlayerR, false); };
-            playerI.VideoStarted = (player) => { VideoStartedPostAction(player, AppConfig.PlayerI, false); };
+            playerF.VideoStartedAction = (player) => OnVideoStarted(player, AppConfig.PlayerF);
+            playerR.VideoStartedAction = (player) => OnVideoStarted(player, AppConfig.PlayerR);
+            playerI.VideoStartedAction = (player) => OnVideoStarted(player, AppConfig.PlayerI);
 
-            playerF.VideoEnded = (player) => 
-            { 
-                VideoEndedPostAction(player, AppConfig.PlayerF); 
-                if (chkAutoPlay.IsChecked.Value) 
-                    PlayNext(); 
-            };
-
+            playerF.VideoEnded = (player) => VideoEndedPostAction(player, AppConfig.PlayerF);
             playerR.VideoEnded = (player) => VideoEndedPostAction(player, AppConfig.PlayerR);
             playerI.VideoEnded = (player) => VideoEndedPostAction(player, AppConfig.PlayerI);
 
@@ -119,7 +114,7 @@ namespace DashCamGPSView
                 OnPropertyChanged(e.PropertyName);
         }
 
-        private void VideoStartedPostAction(IVideoPlayer player, PlayerControlSettings config, bool reset)
+        private void OnVideoStarted(IVideoPlayer player, PlayerControlSettings config)
         {
             if(player == _player) //Main player
             {
@@ -129,10 +124,10 @@ namespace DashCamGPSView
                     MainMap.Zoom = 16;
                 }
 
-                UpdateGpsInfo(false);
+                UpdateGpsInfo();
                 //bool isFrontPlayerOnly = string.IsNullOrWhiteSpace(playerR.FileName);
                 //VideoStartedPostAction(player, AppConfig.PlayerF, isFrontPlayerOnly); //reset now if there is no R player
-                VideoStarted(player);
+                VideoStartedAction(player);
                 waitScreen.Hide();
             }
         }
@@ -232,8 +227,8 @@ namespace DashCamGPSView
         private void LoadPlayersState()
         {
             AppConfig.PlayerF.RestoreTo(playerF, true);
-            AppConfig.PlayerI.RestoreTo(playerI, false);
-            AppConfig.PlayerR.RestoreTo(playerR, false);
+            AppConfig.PlayerI.RestoreTo(playerI, true);
+            AppConfig.PlayerR.RestoreTo(playerR, true);
         }
 
         private void SaveState()
@@ -327,7 +322,7 @@ namespace DashCamGPSView
             }
         }
 
-        public Action<IVideoPlayer> VideoStarted { get; set; } = (player) => { };
+        public Action<IVideoPlayer> VideoStartedAction { get; set; } = (player) => { };
 
         public MediaState MediaState { get { return _player.MediaState; } }
         public string FileName { get { return _player.FileName; } }
@@ -454,11 +449,9 @@ namespace DashCamGPSView
 
             double volume = Volume;
             
-            playerF.Open(_dashCamFileInfo.FileNameFront, 0);
-            playerR.Open(_dashCamFileInfo.FileNameRear, 0);
-            playerI.Open(_dashCamFileInfo.FileNameInside, 0);
-
-            Volume = volume;
+            playerF.Open(_dashCamFileInfo.FileNameFront);
+            playerR.Open(_dashCamFileInfo.FileNameRear);
+            playerI.Open(_dashCamFileInfo.FileNameInside);
 
             graphSpeedInfo.SetGpsInfo(_dashCamFileInfo.GpsInfo);
 
@@ -473,8 +466,8 @@ namespace DashCamGPSView
                     MainMap.Zoom = 16;
                     //GridLengthAnimation.AnimateColumn(mapColumn, mapColumn.Width, 500);
                     //select file AFTER map is expanded
-                    GridLengthAnimation.AnimateRow(rowMap, new GridLength(5, GridUnitType.Star), 500, () => treeGroups.SelectFile(_dashCamFileInfo.FileName));
-                    GridLengthAnimation.AnimateRow(rowFilesTree, new GridLength(1, GridUnitType.Star));
+                    //GridLengthAnimation.AnimateRow(rowMap, new GridLength(5, GridUnitType.Star), 500, () => treeGroups.SelectFile(_dashCamFileInfo.FileName));
+                    //GridLengthAnimation.AnimateRow(rowFilesTree, new GridLength(1, GridUnitType.Star));
                     GridLengthAnimation.AnimateRow(rowSpeedGraph, new GridLength(1, GridUnitType.Star));
                 }
             }
@@ -486,7 +479,7 @@ namespace DashCamGPSView
                     _bMapWasCollapsed = true;
                     MainMap.Zoom = 2;
 
-                    GridLengthAnimation.AnimateRow(rowMap, new GridLength(0));
+                    //GridLengthAnimation.AnimateRow(rowMap, new GridLength(0));
                     //GridLengthAnimation.AnimateRow(rowGpsInfo, new GridLength(0));
                     GridLengthAnimation.AnimateRow(rowSpeedGraph, new GridLength(0));
                 }
@@ -516,6 +509,8 @@ namespace DashCamGPSView
             this.Play();
 
             LoadPlayersState();
+
+            Volume = volume;
 
             AppConfig.LastSelectedFileName = _player.FileName;
         }
@@ -697,10 +692,10 @@ namespace DashCamGPSView
         }
 
         private int[] FpsFromComboIndex = { 1, 2, 3, 5, 10, 15, 30 };
-        private PointLatLng _lastValidPosition;
-        private void UpdateGpsInfo(bool updateSlider = true)
+        private PointLatLngUI _lastValidPosition;
+        private void UpdateGpsInfo()
         {
-            if (_dashCamFileInfo == null)
+            if (_dashCamFileInfo == null || !chkSyncGps.IsChecked.Value)
                 return;
 
             int idx = -1;

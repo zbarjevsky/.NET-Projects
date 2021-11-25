@@ -121,6 +121,9 @@
                         <ComboBoxItem>15 fps</ComboBoxItem>
                     </ComboBox>
                     <Viewbox Margin="8" DockPanel.Dock="Right">
+                        <CheckBox x:Name="chkSyncGps" IsChecked="True" Content="Sync GPS"/>
+                    </Viewbox>
+                    <Viewbox Margin="8" DockPanel.Dock="Right">
                         <CheckBox x:Name="chkAutoPlay" IsChecked="True" Content="Auto Play Next"/>
                     </Viewbox>
                     <TextBox Name="txtFileName"  Text="..." IsReadOnly="True"

@@ -23,6 +23,7 @@ using GMap.NET.WindowsPresentation;
 using DashCamGPSView.CustomMarkers;
 using GPSDataParser;
 using DashCamGPSView.Tools;
+using DashCam.Tools;
 
 namespace DashCamGPSView.Controls
 {
@@ -59,12 +60,14 @@ namespace DashCamGPSView.Controls
             set { GMap.MaxZoom = value; OnPropertyChanged(); }
         }
 
-        public PointLatLng Position
+        public PointLatLngUI Position
         {
-            get { return GMap.Position; }
+            get { return new PointLatLngUI(GMap.Position.Lat, GMap.Position.Lng); }
             set 
             { 
-                GMap.Position = value; 
+                GMap.Position = new PointLatLng(value.Lat, value.Lng);
+                _txtLattitude.Text = value.Lat.ToString("0.00000");
+                _txtLongtitude.Text = value.Lng.ToString("0.00000");
                 OnPropertyChanged(); 
             }
         }
@@ -74,9 +77,9 @@ namespace DashCamGPSView.Controls
             _route.SetRouteAndCar(dashCamFileInfo);
         }
 
-        public void UpdateRouteAndCar(PointLatLng currentPosition, int idx)
+        public void UpdateRouteAndCar(PointLatLngUI currentPosition, int idx)
         {
-            GMap.Position = currentPosition;
+            Position = currentPosition;
             _route.UpdateRouteAndCar(idx, GMap);
         }
 
@@ -84,7 +87,7 @@ namespace DashCamGPSView.Controls
         //{
         //    GPoint pt = GMap.FromLatLngToLocal(pointLatLng);
         //    _car.UpdatePosition(pt.X, pt.Y, course);
-        //    GMap.Position = pointLatLng;
+        //    Position = pointLatLng;
         //}
 
         public PointLatLng FromLocalToLatLng(int x, int y)
@@ -153,12 +156,12 @@ namespace DashCamGPSView.Controls
 
             _route.MouseWheel += (s, e) => { GMap.RaiseEvent(e); }; //routing event to GMap under car image
 
-            GMap.Position = new PointLatLng(40.754910, -73.994100); //Time Square, NYC
+            Position = new PointLatLngUI(40.754910, -73.994100); //Time Square, NYC
         }
 
         private void MainMap_Loaded(object sender, RoutedEventArgs e)
         {
-            //GMap.Position = new PointLatLng(45, -93);
+            //Position = new PointLatLng(45, -93);
         }
 
         void MainMap_MouseEnter(object sender, MouseEventArgs e)
@@ -522,6 +525,14 @@ namespace DashCamGPSView.Controls
                 PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
+        private void GoButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (double.TryParse(_txtLattitude.Text, out double lat) && double.TryParse(_txtLongtitude.Text, out double lng))
+            {
+                PointLatLngUI currentPosition = new PointLatLngUI(lat, lng);
+                UpdateRouteAndCar(currentPosition, -1);
+            }
+        }
     }
 
     public class Map: GMapControl

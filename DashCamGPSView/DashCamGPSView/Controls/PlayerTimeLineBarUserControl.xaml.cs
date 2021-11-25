@@ -72,7 +72,7 @@ namespace DashCamGPSView.Controls
 
         private void ExternalPlayerBinded()
         {
-            ExternalPlayer.VideoStarted = (player) => { UpdateTimeLineSliderLimits(); };
+            ExternalPlayer.VideoStartedAction = (player) => { UpdateTimeLineSliderLimits(); };
             ExternalPlayer.PropertyChanged += (s, p) =>
             {
                 if (p.PropertyName == nameof(ExternalPlayer.MediaState))
