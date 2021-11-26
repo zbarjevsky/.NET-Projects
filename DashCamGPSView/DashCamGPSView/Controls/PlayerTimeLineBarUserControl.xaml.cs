@@ -88,9 +88,9 @@ namespace DashCamGPSView.Controls
             if (_isInTimer)
                 return;
             _isInTimer = true;
-           
+
             UpdateSliderPosition();
-            
+
             _isInTimer = false;
         }
 

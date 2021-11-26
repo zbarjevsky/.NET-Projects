@@ -198,11 +198,11 @@ namespace DashCamGPSView
             if (AppConfig.PlayerR.SplitterOffset.Value != 0)
                 columnPlayerR.Width = AppConfig.PlayerR.SplitterOffset.GetGridLength();
             //GPS Info
-            //if (AppConfig.GpsInfo.SplitterOffset.Value != 0)
-            //    rowGpsInfo.Height = new GridLength(AppConfig.GpsInfo.SplitterOffset, GridUnitType.Pixel);
+            if (AppConfig.GpsInfo.SplitterOffset.Value != 0)
+                columnGpsInfo.Width = AppConfig.GpsInfo.SplitterOffset.GetGridLength();
             //Map Info
-            //if (AppConfig.GpsMap.SplitterOffset.Value != 0)
-            //    rowMaps.Height = AppConfig.GpsMap.SplitterOffset.GetGridLength();
+            if (AppConfig.GpsMap.SplitterOffset.Value != 0)
+                rowMap.Height = AppConfig.GpsMap.SplitterOffset.GetGridLength();
 
             LoadPlayersState();
         }
@@ -219,7 +219,7 @@ namespace DashCamGPSView
             //Rear View
             columnPlayerI.Width = new GridLength(1, GridUnitType.Star);
             //GPS Info
-            columnGpsInfo.Width = new GridLength(400, GridUnitType.Pixel);
+            columnGpsInfo.Width = new GridLength(520, GridUnitType.Pixel);
             //Map Info
             //rowMaps.Height = new GridLength(8, GridUnitType.Star);
         }
@@ -251,7 +251,7 @@ namespace DashCamGPSView
             //GPS Info
             AppConfig.GpsInfo.SplitterOffset.SetGridLength(columnGpsInfo);
             //Map Info
-            //AppConfig.GpsMap.SplitterOffset.SetGridLength(rowMaps);
+            AppConfig.GpsMap.SplitterOffset.SetGridLength(rowMap);
 
             AppConfig.Save();
         }
@@ -338,8 +338,8 @@ namespace DashCamGPSView
             set 
             {
                 playerF.Volume = 0;
-                playerF.Volume = 0;
-                playerF.Volume = 0;
+                playerR.Volume = 0;
+                playerI.Volume = 0;
                 _player.Volume = value;
             }
         }

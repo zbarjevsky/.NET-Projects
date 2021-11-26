@@ -24,6 +24,7 @@ using DashCamGPSView.CustomMarkers;
 using GPSDataParser;
 using DashCamGPSView.Tools;
 using DashCam.Tools;
+using System.Diagnostics;
 
 namespace DashCamGPSView.Controls
 {
@@ -533,6 +534,11 @@ namespace DashCamGPSView.Controls
                 UpdateRouteAndCar(currentPosition, -1);
             }
         }
+
+        private void UrlButton_Click(object sender, RoutedEventArgs e)
+        {
+            Process.Start($"https://www.google.com/maps/@{_txtLattitude.Text},{_txtLongtitude.Text},15z");
+        }
     }
 
     public class Map: GMapControl
@@ -549,7 +555,7 @@ namespace DashCamGPSView.Controls
         }
 
         // tile loading stops
-        void MainMap_OnTileLoadComplete(long elapsedMilliseconds)
+        private void MainMap_OnTileLoadComplete(long elapsedMilliseconds)
         {
             _elapsedMilliseconds = elapsedMilliseconds;
 

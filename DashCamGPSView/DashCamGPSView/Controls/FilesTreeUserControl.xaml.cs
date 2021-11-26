@@ -273,6 +273,17 @@ namespace DashCamGPSView.Controls
             System.Diagnostics.Process.Start("explorer.exe", argument);
         }
 
+        private void FileMenu_CopyFullPath_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem item)
+            {
+                if (item.DataContext is VideoFile v)
+                {
+                    Clipboard.SetText(v.FileName);
+                }
+            }
+        }
+
         private void GroupMenu_Protect_Click(object sender, RoutedEventArgs e)
         {
             if(sender is MenuItem item)

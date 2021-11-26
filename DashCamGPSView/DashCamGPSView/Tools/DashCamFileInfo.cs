@@ -111,7 +111,7 @@ namespace DashCamGPSView.Tools
 
         public int TimeZone { get { return _iGpsTimeZoneHours; } }
 
-        private double _dGpsDelaySeconds = 2.3;
+        private double _dGpsDelaySeconds = 1;
         private int _iGpsTimeZoneHours = 0;
 
         public DashCamFileInfo(List<FileInfoWithDateFromFileName> allFiles, ref int idx, string speedUnits)
@@ -186,6 +186,7 @@ namespace DashCamGPSView.Tools
             FileDateEnd = source.FileDateEnd;
 
             _iGpsTimeZoneHours = source._iGpsTimeZoneHours;
+            _dGpsDelaySeconds = source._dGpsDelaySeconds;
             _isGpsInfoInitialized = source._isGpsInfoInitialized;
             _gpsInfo = source._gpsInfo;
         }
@@ -337,60 +338,65 @@ namespace DashCamGPSView.Tools
             rearFileName = "";
             insideFileName = "";
 
-            FileInfoWithDateFromFileName currentInfo = allFiles[idx];
+            FileInfoWithDateFromFileName info1 = allFiles[idx];
+            DateTime startDate1 = info1.Date;
+            DateTime endDate1 = info1.Info.LastWriteTime;
 
             int start = idx; int end = Math.Min(idx + 3, allFiles.Count);
             for (int i = start; i < end; i++)
             {
-                FileInfoWithDateFromFileName info = allFiles[i];
+                FileInfoWithDateFromFileName info2 = allFiles[i];
+                DateTime startDate2 = info2.Date;
+                DateTime endDate2 = info2.Info.LastWriteTime;
 
-                double delta = Math.Abs((info.Date - currentInfo.Date).TotalSeconds);
-                if (delta < 3)
+                double delta1 = Math.Abs((startDate2 - startDate1).TotalSeconds);
+                double delta2 = Math.Abs((endDate2 - endDate1).TotalSeconds);
+                if (delta1 < 3 || delta2 < 3)
                 {
-                    if (info.Info.Name.EndsWith("_F.MP4", true, CultureInfo.InvariantCulture))
+                    if (info2.Info.Name.EndsWith("_F.MP4", true, CultureInfo.InvariantCulture))
                     {
-                        frontFileName = info.Info.FullName;
+                        frontFileName = info2.Info.FullName;
                         RecordingType = RecordingType.Driving;
-                        Info = info;
+                        Info = info2;
                         idx++;
                     }
-                    else if (info.Info.Name.EndsWith("_R.MP4", true, CultureInfo.InvariantCulture))
+                    else if (info2.Info.Name.EndsWith("_R.MP4", true, CultureInfo.InvariantCulture))
                     {
-                        rearFileName = info.Info.FullName;
-                        RecordingType = RecordingType.Driving;
-                        idx++;
-                    }
-                    else if (info.Info.Name.EndsWith("_I.MP4", true, CultureInfo.InvariantCulture))
-                    {
-                        insideFileName = info.Info.FullName;
+                        rearFileName = info2.Info.FullName;
                         RecordingType = RecordingType.Driving;
                         idx++;
                     }
-                    else if (info.Info.Name.EndsWith("_PF.MP4", true, CultureInfo.InvariantCulture))
+                    else if (info2.Info.Name.EndsWith("_I.MP4", true, CultureInfo.InvariantCulture))
                     {
-                        frontFileName = info.Info.FullName;
+                        insideFileName = info2.Info.FullName;
+                        RecordingType = RecordingType.Driving;
+                        idx++;
+                    }
+                    else if (info2.Info.Name.EndsWith("_PF.MP4", true, CultureInfo.InvariantCulture))
+                    {
+                        frontFileName = info2.Info.FullName;
                         RecordingType = RecordingType.Parking;
-                        Info = info;
+                        Info = info2;
                         idx++;
                     }
-                    else if (info.Info.Name.EndsWith("_PR.MP4", true, CultureInfo.InvariantCulture))
+                    else if (info2.Info.Name.EndsWith("_PR.MP4", true, CultureInfo.InvariantCulture))
                     {
-                        rearFileName = info.Info.FullName;
+                        rearFileName = info2.Info.FullName;
                         RecordingType = RecordingType.Parking;
                         idx++;
                     }
-                    else if (info.Info.Name.EndsWith("_PI.MP4", true, CultureInfo.InvariantCulture))
+                    else if (info2.Info.Name.EndsWith("_PI.MP4", true, CultureInfo.InvariantCulture))
                     {
-                        insideFileName = info.Info.FullName;
+                        insideFileName = info2.Info.FullName;
                         RecordingType = RecordingType.Parking;
                         idx++;
                     }
 
-                    IsProtected = info.Info.IsReadOnly;
+                    IsProtected = info2.Info.IsReadOnly;
                 }
             }
             if (Info == null)
-                Info = currentInfo;
+                Info = info1;
 
             return  !string.IsNullOrWhiteSpace(frontFileName) || 
                     !string.IsNullOrWhiteSpace(rearFileName) || 
@@ -438,7 +444,7 @@ namespace DashCamGPSView.Tools
             {
                 TimeSpan delta = _gpsInfo[i].FixTime - start;
                 if (delta.TotalSeconds >= (elapsedSeconds))
-                    return i;
+                    return Math.Max(0, i-1);
             }
             return _gpsInfo.Count - 1; //last index
         }

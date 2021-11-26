@@ -106,10 +106,7 @@
                     </Button>
                     <Button Margin="6" ToolTip="Settings" Content="Settings..." Click="Settings_Click" />
                     <Button Margin="6" ToolTip="Test" Content="Test" Click="Test_Click" />
-                    <Viewbox Margin="10" >
-                        <CheckBox x:Name="chkTimeLapse" IsChecked="False" Content="Time Lapse" />
-                    </Viewbox>
-                    <ComboBox x:Name="_cmbFPS" Margin="8" 
+                    <ComboBox x:Name="_cmbFPS" Margin="8"  DockPanel.Dock="Right"
                               VerticalContentAlignment="Center" HorizontalContentAlignment="Center"
                               IsEnabled="{Binding IsChecked, ElementName=chkTimeLapse}"
                               SelectedIndex="1">
@@ -120,6 +117,9 @@
                         <ComboBoxItem>10 fps</ComboBoxItem>
                         <ComboBoxItem>15 fps</ComboBoxItem>
                     </ComboBox>
+                    <Viewbox Margin="10"  DockPanel.Dock="Right">
+                        <CheckBox x:Name="chkTimeLapse" IsChecked="False" Content="Time Lapse" />
+                    </Viewbox>
                     <Viewbox Margin="8" DockPanel.Dock="Right">
                         <CheckBox x:Name="chkSyncGps" IsChecked="True" Content="Sync GPS"/>
                     </Viewbox>
@@ -173,7 +173,7 @@
                 <ColumnDefinition Width="200"/>
             </Grid.ColumnDefinitions>
             <Border BorderThickness="2" BorderBrush="Gray" Background="Beige" >
-                <controls:GpsInfoUserControl x:Name="gpsInfo"/>
+                <controls:GpsInfoUserControl x:Name="gpsInfo" HorizontalAlignment="Stretch" />
             </Border>
             <GridSplitter x:Name="_splitterGpsInfo" Grid.Column="1" Margin="1" 
                           HorizontalAlignment="Stretch" Background="Goldenrod"/>

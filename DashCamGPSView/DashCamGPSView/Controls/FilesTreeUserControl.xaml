@@ -59,6 +59,7 @@
                                 <MenuItem Header="Export GPS Data As..." Click="GroupMenu_Export_Click" />
                                 <Separator/>
                                 <MenuItem Header="Show in Folder..." Click="GroupMenu_OpenFolder_Click" />
+                                <MenuItem Header="Copy Full Path" Click="FileMenu_CopyFullPath_Click" />
                                 <Separator/>
                                 <MenuItem Header="Is Protected" Click="GroupMenu_Protect_Click" 
                                           IsChecked="{Binding IsProtected, Mode=OneWay}" />
