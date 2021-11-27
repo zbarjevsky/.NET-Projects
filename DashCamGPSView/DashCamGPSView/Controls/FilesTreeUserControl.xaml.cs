@@ -369,7 +369,7 @@ namespace DashCamGPSView.Controls
 
         public bool IsProtected { get; private set; }
 
-        public Uri IconUri { get; private set; } = new Uri("/Images/Movie48.png", UriKind.RelativeOrAbsolute);
+        public ImageSource IconSource { get; private set; } = RecordingTypeImageSource[2];
 
         public string FileName { get { return _dashCamFileInfo.FileName; } }
 
@@ -446,15 +446,22 @@ namespace DashCamGPSView.Controls
             UpdateIconUri();
         }
 
+        private static readonly List<ImageSource> RecordingTypeImageSource = new List<ImageSource>()
+        {
+            new BitmapImage(new Uri("/Images/Warning.png", UriKind.Relative)),
+            new BitmapImage(new Uri("/Images/Parking.png", UriKind.Relative)),
+            new BitmapImage(new Uri("/Images/Movie48.png", UriKind.Relative)),
+        };
+
         private void UpdateIconUri()
         {
             switch (FileType)
             {
                 case RecordingType.Parking:
                     if (IsProtected)
-                        IconUri = new Uri("/Images/Warning.png", UriKind.RelativeOrAbsolute);
+                        IconSource = RecordingTypeImageSource[0];
                     else
-                        IconUri = new Uri("/Images/Parking.png", UriKind.RelativeOrAbsolute);
+                        IconSource = RecordingTypeImageSource[1];
                     break;
                 //case RecordingType.ReadOnly:
                 //    return new Uri("/Images/Warning.png", UriKind.RelativeOrAbsolute);
@@ -462,13 +469,13 @@ namespace DashCamGPSView.Controls
                 case RecordingType.Driving:
                 default:
                     if (IsProtected)
-                        IconUri = new Uri("/Images/Warning.png", UriKind.RelativeOrAbsolute);
+                        IconSource = RecordingTypeImageSource[0];
                     else
-                        IconUri = new Uri("/Images/Movie48.png", UriKind.RelativeOrAbsolute);
+                        IconSource = RecordingTypeImageSource[2];
                     break;
             }
 
-            NotifyPropertyChanged(nameof(IconUri));
+            NotifyPropertyChanged(nameof(IconSource));
         }
     }
 }

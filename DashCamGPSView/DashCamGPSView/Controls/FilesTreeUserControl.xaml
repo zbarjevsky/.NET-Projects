@@ -70,7 +70,7 @@
                                 </MenuItem>
                             </ContextMenu>
                         </StackPanel.ContextMenu>
-                        <Image Source="{Binding IconUri}" Margin="0,0,5,0"  Width="18" Height="18" />
+                        <Image Source="{Binding IconSource}" Margin="0,0,5,0"  Width="18" Height="18" />
                         <TextBlock Text="{Binding FileNameForDisplay}" FontFamily="Courier New" VerticalAlignment="Center"/>
                         <TextBlock Text="{Binding Description}" Foreground="Goldenrod" VerticalAlignment="Center" />
                     </StackPanel>
