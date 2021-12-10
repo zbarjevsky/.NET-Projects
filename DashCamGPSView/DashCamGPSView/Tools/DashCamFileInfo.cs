@@ -444,9 +444,24 @@ namespace DashCamGPSView.Tools
             {
                 TimeSpan delta = _gpsInfo[i].FixTime - start;
                 if (delta.TotalSeconds >= (elapsedSeconds))
-                    return Math.Max(0, i-1);
+                    return Math.Max(0, i);
             }
             return _gpsInfo.Count - 1; //last index
+        }
+
+        public TimeSpan FindPositionFromGpsIndex(int idx, bool isTimeLapse, int fps)
+        {
+            if (_gpsInfo == null || _gpsInfo.Count == 0 || idx < 0)
+                return TimeSpan.FromSeconds(0);
+
+            double pos = (_gpsInfo[idx].FixTime - _gpsInfo.First().FixTime).TotalSeconds - _dGpsDelaySeconds;
+
+            if(isTimeLapse)
+            {
+
+            }
+
+            return TimeSpan.FromSeconds(pos);
         }
 
         public static string GetScreenshotFileName(GpsFileFormat format, string videoFileName)

@@ -453,7 +453,7 @@ namespace DashCamGPSView
             playerR.Open(_dashCamFileInfo.FileNameRear);
             playerI.Open(_dashCamFileInfo.FileNameInside);
 
-            graphSpeedInfo.SetGpsInfo(_dashCamFileInfo.GpsInfo);
+            graphSpeedInfo.SetInfo(_dashCamFileInfo, this);
 
             if (_dashCamFileInfo.HasGpsInfo)
             {
