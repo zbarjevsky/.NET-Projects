@@ -88,8 +88,10 @@
             this.m_btnSave = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.m_btnUpdateTB = new System.Windows.Forms.ToolStripButton();
-            this.m_pnlTools = new System.Windows.Forms.Panel();
             this.m_btnRenameFIles = new System.Windows.Forms.ToolStripButton();
+            this.m_pnlTools = new System.Windows.Forms.Panel();
+            this.m_cmbEngine = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.m_statusStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.m_ContextMenuList.SuspendLayout();
@@ -138,13 +140,13 @@
             // 
             this.m_btnUpdate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_btnUpdate.Image = ((System.Drawing.Image)(resources.GetObject("m_btnUpdate.Image")));
-            this.m_btnUpdate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.m_btnUpdate.Location = new System.Drawing.Point(661, 5);
+            this.m_btnUpdate.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.m_btnUpdate.Location = new System.Drawing.Point(833, 7);
             this.m_btnUpdate.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_btnUpdate.Name = "m_btnUpdate";
-            this.m_btnUpdate.Size = new System.Drawing.Size(310, 33);
+            this.m_btnUpdate.Size = new System.Drawing.Size(138, 29);
             this.m_btnUpdate.TabIndex = 0;
-            this.m_btnUpdate.Text = "Update youtube-dl engine...";
+            this.m_btnUpdate.Text = "Update... ";
             this.m_btnUpdate.UseVisualStyleBackColor = true;
             this.m_btnUpdate.Click += new System.EventHandler(this.m_btnUpdate_Click);
             // 
@@ -520,8 +522,8 @@
             // 
             this.m_imageListStartStop.ImageStream = ((System.Windows.Forms.ImageListStreamer)(resources.GetObject("m_imageListStartStop.ImageStream")));
             this.m_imageListStartStop.TransparentColor = System.Drawing.Color.Transparent;
-            this.m_imageListStartStop.Images.SetKeyName(0, "play_on.PNG");
-            this.m_imageListStartStop.Images.SetKeyName(1, "pause_on.PNG");
+            this.m_imageListStartStop.Images.SetKeyName(0, "pause_on.PNG");
+            this.m_imageListStartStop.Images.SetKeyName(1, "play_on.PNG");
             this.m_imageListStartStop.Images.SetKeyName(2, "stop_on.PNG");
             // 
             // m_btnRemove
@@ -620,8 +622,19 @@
             this.m_btnUpdateTB.Text = "Update youtube-dl engine";
             this.m_btnUpdateTB.Click += new System.EventHandler(this.m_btnUpdate_Click);
             // 
+            // m_btnRenameFIles
+            // 
+            this.m_btnRenameFIles.Image = ((System.Drawing.Image)(resources.GetObject("m_btnRenameFIles.Image")));
+            this.m_btnRenameFIles.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.m_btnRenameFIles.Name = "m_btnRenameFIles";
+            this.m_btnRenameFIles.Size = new System.Drawing.Size(105, 22);
+            this.m_btnRenameFIles.Text = "Rename Files...";
+            this.m_btnRenameFIles.Click += new System.EventHandler(this.m_btnRenameFIles_Click);
+            // 
             // m_pnlTools
             // 
+            this.m_pnlTools.Controls.Add(this.m_cmbEngine);
+            this.m_pnlTools.Controls.Add(this.label1);
             this.m_pnlTools.Controls.Add(this.m_btnUpdate);
             this.m_pnlTools.Controls.Add(this.m_btnAddUrl);
             this.m_pnlTools.Controls.Add(this.m_btnBrowseForFolder);
@@ -635,14 +648,28 @@
             this.m_pnlTools.Size = new System.Drawing.Size(984, 80);
             this.m_pnlTools.TabIndex = 1;
             // 
-            // m_btnRenameFIles
+            // m_cmbEngine
             // 
-            this.m_btnRenameFIles.Image = ((System.Drawing.Image)(resources.GetObject("m_btnRenameFIles.Image")));
-            this.m_btnRenameFIles.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.m_btnRenameFIles.Name = "m_btnRenameFIles";
-            this.m_btnRenameFIles.Size = new System.Drawing.Size(105, 22);
-            this.m_btnRenameFIles.Text = "Rename Files...";
-            this.m_btnRenameFIles.Click += new System.EventHandler(this.m_btnRenameFIles_Click);
+            this.m_cmbEngine.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_cmbEngine.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.m_cmbEngine.FormattingEnabled = true;
+            this.m_cmbEngine.Items.AddRange(new object[] {
+            "youtube-dl\\youtube-dl.exe",
+            "yt-dlp\\yt-dlp.exe"});
+            this.m_cmbEngine.Location = new System.Drawing.Point(553, 7);
+            this.m_cmbEngine.Name = "m_cmbEngine";
+            this.m_cmbEngine.Size = new System.Drawing.Size(269, 28);
+            this.m_cmbEngine.TabIndex = 8;
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(484, 11);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(63, 20);
+            this.label1.TabIndex = 7;
+            this.label1.Text = "Engine:";
             // 
             // FormMain
             // 
@@ -677,6 +704,7 @@
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.m_pnlTools.ResumeLayout(false);
+            this.m_pnlTools.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -743,6 +771,8 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripButton m_btnUpdateTB;
         private System.Windows.Forms.ToolStripButton m_btnRenameFIles;
+        private System.Windows.Forms.ComboBox m_cmbEngine;
+        private System.Windows.Forms.Label label1;
     }
 }
 

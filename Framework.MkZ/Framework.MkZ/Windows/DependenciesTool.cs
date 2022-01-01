@@ -59,17 +59,17 @@ namespace MkZ.Windows
         }
 
         //Add dependency as resource
-        public static bool UpdateDependenciesSfx(string dependencyFolder, string dependencyFileName, byte[] resource)
+        public static bool UpdateDependenciesSfx(string dependencyFolder, string fileToCheckForExistence, byte[] resource)
         {
             string dir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-            string dependencyPath = Path.Combine(dir, dependencyFolder, dependencyFileName);
+            string dependencyPath = Path.Combine(dir, fileToCheckForExistence);
 
             try
             {
                 if (File.Exists(dependencyPath))
                     return true; //already extracted
 
-                string sfx = Path.Combine(dir, "", "Dependencies.sfx.exe");
+                string sfx = Path.Combine(dir, "Dependencies.sfx.exe");
                 if (File.Exists(sfx))
                     File.Delete(sfx);
 

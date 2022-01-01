@@ -17,7 +17,7 @@ namespace YouTubeDownload
 {
     public partial class DownloaderUserControl : UserControl
     {
-        YouTube_DL _youTube_DL = new YouTube_DL();
+        YouTubeDownloadEngine _youTube_DL = new YouTubeDownloadEngine();
         Stopwatch _stopwatch = new Stopwatch();
 
         public string Description { get { return _youTube_DL.Data.Description; } }
@@ -87,10 +87,10 @@ namespace YouTubeDownload
             }
         }
 
-        public void Start(DownloadData data, bool noWindow)
+        public void Start(DownloadData data, string pathToEngine, bool noWindow)
         {
             timer1.Start();
-           _youTube_DL.Start(data, noWindow);
+           _youTube_DL.Start(data, pathToEngine, noWindow);
         }
 
         public void Stop()

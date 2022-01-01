@@ -22,11 +22,13 @@ namespace YouTubeDownload
         private void FormAbout_Load(object sender, EventArgs e)
         {
             string ver1 = Assembly.GetEntryAssembly().GetName().Version.ToString();
-            string ver2 = YouTube_DL.GetVersion();
-            string ver3 = YouTube_DL.GetVersionFFMpeg();
+            string verDL = YouTubeDownloadEngine.GetVersion(YouTubeDownloadEngine.DL);
+            string verDLP = YouTubeDownloadEngine.GetVersion(YouTubeDownloadEngine.DLP);
+            string ver3 = YouTubeDownloadEngine.GetVersionFFMpeg();
 
-            m_lblVer.Text = "YouTube Download ver: " + ver1;
-            m_lnkYouTubeDL.Text = "youtube-dl ver: " + ver2;
+            m_lblVer1.Text = "YouTube Download ver: " + ver1;
+            m_lnkYouTubeDL.Text = "youtube-dl ver: " + verDL;
+            m_lnkYouTubeDLP.Text = "yt-dlp ver: " + verDLP;
             m_lnkFFMpeg.Text = "ffmpeg";
             m_txtVer.Text = ver3;
         }

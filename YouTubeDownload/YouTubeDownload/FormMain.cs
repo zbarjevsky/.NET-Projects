@@ -32,6 +32,11 @@ namespace YouTubeDownload
             _progressBarInPlace.Visible = false;
             _progressBarInPlace.Maximum = 100;
             _progressBarInPlace.Step = 1;
+
+            m_cmbEngine.Items.Clear();
+            m_cmbEngine.Items.Add(YouTubeDownloadEngine.DL);
+            m_cmbEngine.Items.Add(YouTubeDownloadEngine.DLP);
+            m_cmbEngine.SelectedIndex = Properties.Settings.Default.SelectedEngineIndex;
         }
 
         private void FormMain_Load(object sender, EventArgs e)
@@ -58,6 +63,9 @@ namespace YouTubeDownload
             }
 
             m_DownloaderUserControl.Stop();
+
+            Properties.Settings.Default.SelectedEngineIndex = m_cmbEngine.SelectedIndex;
+            Properties.Settings.Default.Save();
         }
 
         private void m_mnuFileAdd_Click(object sender, EventArgs e)
@@ -136,7 +144,7 @@ namespace YouTubeDownload
                 if (data.State == eDownloadState.InQueue)
                 {
                     this.Cursor = Cursors.AppStarting;
-                    m_DownloaderUserControl.Start(data, noWindow);
+                    m_DownloaderUserControl.Start(data, m_cmbEngine.Text, noWindow);
                     UpdateUrlList();
                     return true;
                 }
@@ -269,9 +277,9 @@ namespace YouTubeDownload
         private void m_btnUpdate_Click(object sender, EventArgs e)
         {
             Cursor = Cursors.WaitCursor;
-            string ver1 = YouTube_DL.GetVersion();
-            List<string> result = YouTube_DL.Update();
-            string ver2 = YouTube_DL.GetVersion();
+            string ver1 = YouTubeDownloadEngine.GetVersion(m_cmbEngine.Text);
+            List<string> result = YouTubeDownloadEngine.Update(m_cmbEngine.Text);
+            string ver2 = YouTubeDownloadEngine.GetVersion(m_cmbEngine.Text);
 
             string message = "Update DL finished.\nWas: " + ver1 + "\nNew: " + ver2;
             if (result != null && result.Count > 0)
@@ -422,7 +430,7 @@ namespace YouTubeDownload
                 return;
 
             DownloadData data = m_listUrls.SelectedItems[0].Tag as DownloadData;
-            string parameters = YouTube_DL.PrepareCommanLine(data, out string exePath);
+            string parameters = YouTubeDownloadEngine.PrepareCommanLine(data, m_cmbEngine.Text, out string exePath);
 
             string fileNameBat = "C:\\Temp\\RunIt.bat";
             File.WriteAllText(fileNameBat, "\"" + exePath + "\" " + parameters + "\npause\n");
@@ -485,7 +493,7 @@ namespace YouTubeDownload
             DownloadData data = m_listUrls.SelectedItems[0].Tag as DownloadData;
             if (data != null)
             {
-                string cmd = YouTube_DL.PrepareCommanLine(data, out string exePath);
+                string cmd = YouTubeDownloadEngine.PrepareCommanLine(data, m_cmbEngine.Text, out string exePath);
                 Clipboard.SetText(exePath + " " + cmd);
             }
         }
