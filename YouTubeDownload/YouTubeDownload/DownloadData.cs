@@ -36,6 +36,7 @@ namespace YouTubeDownload
         public bool AudioOnly { get; set; } = false;
         public string Url { get; set; } = "";
         public string AdditionalParameters { get; set; } = "";
+        public int SelectedEngineIndex { get; set; } = 0;
         [XmlIgnore]
         public double Progress { get; set; } = 0;
         [XmlIgnore]
@@ -62,7 +63,8 @@ namespace YouTubeDownload
                 Url = Url,
                 AdditionalParameters = AdditionalParameters,
                 Progress = Progress,
-                Encoding = Encoding
+                Encoding = Encoding,
+                SelectedEngineIndex = SelectedEngineIndex
             };
         }
     }

@@ -18,8 +18,15 @@ namespace YouTubeDownload
     public class YouTubeDownloadEngine
     {
         public const string FF = @"Engine/youtube-dl/ffmpeg.exe";
-        public const string DL = @"Engine/youtube-dl/youtube-dl.exe";
-        public const string DLP = @"Engine/yt-dlp/yt-dlp.exe";
+
+        public static readonly string[] ENGINES = 
+        {
+            @"Engine\youtube-dl\youtube-dl.exe",
+            @"Engine\yt-dlp\yt-dlp.exe"
+        };
+
+        //public const string DL = @"Engine/youtube-dl/youtube-dl.exe";
+        //public const string DLP = @"Engine/yt-dlp/yt-dlp.exe";
 
         public DownloadData Data = new DownloadData();
 
@@ -28,12 +35,13 @@ namespace YouTubeDownload
 
         private Process _DL_Process = null;
 
-        public void Start(DownloadData data, string pathToEngine, bool noWindow)
+        public void Start(DownloadData data, bool noWindow)
         {
             Data = data;
             Data.State = eDownloadState.Working;
 
-            string parameters = PrepareCommanLine(data, pathToEngine, out string exePath);
+            string pathToEngine = YouTubeDownloadEngine.ENGINES[data.SelectedEngineIndex];
+            string parameters = PrepareCommanLine(data, out string exePath);
 
             _DL_Process = ProcessHelper.Create(exePath, parameters, data.Encoding, noWindow);
 
@@ -45,8 +53,9 @@ namespace YouTubeDownload
             _DL_Process.BeginOutputReadLine();
         }
 
-        public static string PrepareCommanLine(DownloadData data, string pathToEngine, out string exePath)
+        public static string PrepareCommanLine(DownloadData data, out string exePath)
         {
+            string pathToEngine = YouTubeDownloadEngine.ENGINES[data.SelectedEngineIndex];
             exePath = Path.Combine(Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location), pathToEngine);
 
             string parameters = "--encoding UTF8 ";

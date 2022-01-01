@@ -14,10 +14,15 @@ namespace YouTubeDownload
         const string DNL_PREFIX = "Output Folder: ";
         public DownloadData Data { get; } = new DownloadData();
 
-        public FormAddUrl(string outputFolder)
+        public FormAddUrl(string outputFolder, int selectedEngineIndex)
         {
             InitializeComponent();
 
+            m_cmbEngine.Items.Clear();
+            m_cmbEngine.Items.AddRange(YouTubeDownloadEngine.ENGINES);
+            m_cmbEngine.SelectedIndex = selectedEngineIndex;
+
+            Data.SelectedEngineIndex = selectedEngineIndex;
             Data.OutputFolder = outputFolder;
             Data.NoPlayList = true; // Properties.Settings.Default.NoPlayList;
 
@@ -30,6 +35,10 @@ namespace YouTubeDownload
         public FormAddUrl(DownloadData data)
         {
             InitializeComponent();
+
+            m_cmbEngine.Items.Clear();
+            m_cmbEngine.Items.AddRange(YouTubeDownloadEngine.ENGINES);
+            m_cmbEngine.SelectedIndex = data.SelectedEngineIndex;
 
             m_btnAddUrl.Text = "Update && &Start";
             Data = data.Clone();
@@ -85,6 +94,7 @@ namespace YouTubeDownload
                 m_chkNoPlayList.Checked = Data.NoPlayList;
                 m_chkAudioOnly.Checked = Data.AudioOnly;
                 m_cmbAdditionalParameters.Text = Data.AdditionalParameters;
+                m_cmbEngine.SelectedIndex = Data.SelectedEngineIndex;
                 UpdateFileName(Data.FileNameTemplate);
             }
             else
@@ -96,6 +106,7 @@ namespace YouTubeDownload
                 Data.NoPlayList = m_chkNoPlayList.Checked;
                 Data.AudioOnly = m_chkAudioOnly.Checked;
                 Data.AdditionalParameters = m_cmbAdditionalParameters.Text;
+                Data.SelectedEngineIndex = m_cmbEngine.SelectedIndex;
 
                 if (!string.IsNullOrWhiteSpace(m_cmbFileNameTemplate.Text))
                     Data.FileNameTemplate = m_cmbFileNameTemplate.Text;

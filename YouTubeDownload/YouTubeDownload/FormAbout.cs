@@ -22,8 +22,8 @@ namespace YouTubeDownload
         private void FormAbout_Load(object sender, EventArgs e)
         {
             string ver1 = Assembly.GetEntryAssembly().GetName().Version.ToString();
-            string verDL = YouTubeDownloadEngine.GetVersion(YouTubeDownloadEngine.DL);
-            string verDLP = YouTubeDownloadEngine.GetVersion(YouTubeDownloadEngine.DLP);
+            string verDL = YouTubeDownloadEngine.GetVersion(YouTubeDownloadEngine.ENGINES[0]);
+            string verDLP = YouTubeDownloadEngine.GetVersion(YouTubeDownloadEngine.ENGINES[1]);
             string ver3 = YouTubeDownloadEngine.GetVersionFFMpeg();
 
             m_lblVer1.Text = "YouTube Download ver: " + ver1;

@@ -34,8 +34,7 @@ namespace YouTubeDownload
             _progressBarInPlace.Step = 1;
 
             m_cmbEngine.Items.Clear();
-            m_cmbEngine.Items.Add(YouTubeDownloadEngine.DL);
-            m_cmbEngine.Items.Add(YouTubeDownloadEngine.DLP);
+            m_cmbEngine.Items.AddRange(YouTubeDownloadEngine.ENGINES);
             m_cmbEngine.SelectedIndex = Properties.Settings.Default.SelectedEngineIndex;
         }
 
@@ -75,9 +74,11 @@ namespace YouTubeDownload
 
         private void m_btnAddUrl_Click(object sender, EventArgs e)
         {
-            FormAddUrl frm = new FormAddUrl(_folderName);
+            FormAddUrl frm = new FormAddUrl(_folderName, m_cmbEngine.SelectedIndex);
             if (frm.ShowDialog(this) != DialogResult.OK)
                 return;
+
+            m_cmbEngine.SelectedIndex = frm.Data.SelectedEngineIndex;
 
             int urlIdx = FindDataInList(frm.Data.Url);
             if (urlIdx >= 0)
@@ -144,7 +145,7 @@ namespace YouTubeDownload
                 if (data.State == eDownloadState.InQueue)
                 {
                     this.Cursor = Cursors.AppStarting;
-                    m_DownloaderUserControl.Start(data, m_cmbEngine.Text, noWindow);
+                    m_DownloaderUserControl.Start(data, noWindow);
                     UpdateUrlList();
                     return true;
                 }
@@ -430,7 +431,7 @@ namespace YouTubeDownload
                 return;
 
             DownloadData data = m_listUrls.SelectedItems[0].Tag as DownloadData;
-            string parameters = YouTubeDownloadEngine.PrepareCommanLine(data, m_cmbEngine.Text, out string exePath);
+            string parameters = YouTubeDownloadEngine.PrepareCommanLine(data, out string exePath);
 
             string fileNameBat = "C:\\Temp\\RunIt.bat";
             File.WriteAllText(fileNameBat, "\"" + exePath + "\" " + parameters + "\npause\n");
@@ -493,7 +494,7 @@ namespace YouTubeDownload
             DownloadData data = m_listUrls.SelectedItems[0].Tag as DownloadData;
             if (data != null)
             {
-                string cmd = YouTubeDownloadEngine.PrepareCommanLine(data, m_cmbEngine.Text, out string exePath);
+                string cmd = YouTubeDownloadEngine.PrepareCommanLine(data, out string exePath);
                 Clipboard.SetText(exePath + " " + cmd);
             }
         }

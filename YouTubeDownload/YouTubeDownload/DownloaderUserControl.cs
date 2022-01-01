@@ -17,13 +17,13 @@ namespace YouTubeDownload
 {
     public partial class DownloaderUserControl : UserControl
     {
-        YouTubeDownloadEngine _youTube_DL = new YouTubeDownloadEngine();
+        YouTubeDownloadEngine _engine = new YouTubeDownloadEngine();
         Stopwatch _stopwatch = new Stopwatch();
 
-        public string Description { get { return _youTube_DL.Data.Description; } }
-        public double Progress { get { return _youTube_DL.Data.Progress; } }
+        public string Description { get { return _engine.Data.Description; } }
+        public double Progress { get { return _engine.Data.Progress; } }
 
-        public eDownloadState State { get { return _youTube_DL.Data.State; } }
+        public eDownloadState State { get { return _engine.Data.State; } }
 
         public Action<string> OutputDataReceived = (OutputData) => { };
         public Action ProcessExited = () => { };
@@ -35,8 +35,8 @@ namespace YouTubeDownload
 
         private void DownloaderUserControl_Load(object sender, EventArgs e)
         {
-            _youTube_DL.OutputDataReceived = DL_Process_OutputDataReceived;
-            _youTube_DL.ProcessExited = DL_Process_Exited;
+            _engine.OutputDataReceived = DL_Process_OutputDataReceived;
+            _engine.ProcessExited = DL_Process_Exited;
 
             m_lnkDestination.LinkArea = new LinkArea();
             m_lnkDestination.Text = "...";
@@ -79,7 +79,7 @@ namespace YouTubeDownload
         {
             try
             {
-                Process.Start(_youTube_DL.Data.OutputFolder);
+                Process.Start(_engine.Data.OutputFolder);
             }
             catch (Exception err)
             {
@@ -87,15 +87,15 @@ namespace YouTubeDownload
             }
         }
 
-        public void Start(DownloadData data, string pathToEngine, bool noWindow)
+        public void Start(DownloadData data, bool noWindow)
         {
             timer1.Start();
-           _youTube_DL.Start(data, pathToEngine, noWindow);
+           _engine.Start(data, noWindow);
         }
 
         public void Stop()
         {
-            _youTube_DL.Stop();
+            _engine.Stop();
         }
 
         private void DL_Process_Exited()
@@ -104,9 +104,9 @@ namespace YouTubeDownload
             {
                 this.Cursor = Cursors.Arrow;
                 timer1.Stop();
-                UpdateOutput("======================= Done: "+ _youTube_DL.Data.State + " ========================");
+                UpdateOutput("======================= Done: "+ _engine.Data.State + " ========================");
                 m_ProgressBar.Style = ProgressBarStyle.Continuous;
-                m_ProgressBar.Value = (int)_youTube_DL.Data.Progress;
+                m_ProgressBar.Value = (int)_engine.Data.Progress;
                 m_ProgressBar.ShowInTaskbar = false;
                 m_lblTime.Text = "...";
                 ProcessExited();
@@ -139,7 +139,7 @@ namespace YouTubeDownload
 
             m_lblStatus.Text = "Status: " + line;
 
-            m_ProgressBar.Value = (int)_youTube_DL.Data.Progress;
+            m_ProgressBar.Value = (int)_engine.Data.Progress;
             m_ProgressBar.State = Windows7ProgressBar.ProgressBarState.Normal;
             if(m_ProgressBar.Value == 0)
             {
@@ -157,13 +157,13 @@ namespace YouTubeDownload
             }
 
             const string PREFIX = "Description: ";
-            if (!string.IsNullOrWhiteSpace(_youTube_DL.Data.Description))
+            if (!string.IsNullOrWhiteSpace(_engine.Data.Description))
             {
-                m_lnkDestination.Text = PREFIX + _youTube_DL.Data.Description;
-                m_lnkDestination.LinkArea = new LinkArea(PREFIX.Length, _youTube_DL.Data.Description.Length);
+                m_lnkDestination.Text = PREFIX + _engine.Data.Description;
+                m_lnkDestination.LinkArea = new LinkArea(PREFIX.Length, _engine.Data.Description.Length);
             }
 
-            m_lblPlayListStatus.Text = _youTube_DL.Data.PlayListProgress;
+            m_lblPlayListStatus.Text = _engine.Data.PlayListProgress;
         }
 
         private void timer1_Tick(object sender, EventArgs e)

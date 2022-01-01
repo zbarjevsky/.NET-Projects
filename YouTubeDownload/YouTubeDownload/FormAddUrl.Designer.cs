@@ -44,6 +44,8 @@
             this.m_pnlButtons = new System.Windows.Forms.Panel();
             this.m_cmbAdditionalParameters = new System.Windows.Forms.ComboBox();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.m_cmbEngine = new System.Windows.Forms.ComboBox();
+            this.m_lblEngine = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.m_errorProvider)).BeginInit();
             this.m_pnlButtons.SuspendLayout();
             this.SuspendLayout();
@@ -158,7 +160,7 @@
             this.m_btnCancel.Text = "Cancel";
             this.m_btnCancel.UseVisualStyleBackColor = true;
             // 
-            // m_cmbFileName
+            // m_cmbFileNameTemplate
             // 
             this.m_cmbFileNameTemplate.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
@@ -170,7 +172,7 @@
             "%(playlist_index)s. %(title)s--%(id)s.%(ext)s",
             "%(upload_date)s-%(playlist_index)s. %(title)s--%(id)s.%(ext)s"});
             this.m_cmbFileNameTemplate.Location = new System.Drawing.Point(281, 103);
-            this.m_cmbFileNameTemplate.Name = "m_cmbFileName";
+            this.m_cmbFileNameTemplate.Name = "m_cmbFileNameTemplate";
             this.m_cmbFileNameTemplate.Size = new System.Drawing.Size(436, 28);
             this.m_cmbFileNameTemplate.TabIndex = 9;
             // 
@@ -191,7 +193,7 @@
             this.m_pnlButtons.Controls.Add(this.m_btnCancel);
             this.m_pnlButtons.Controls.Add(this.m_btnAddUrl);
             this.m_pnlButtons.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.m_pnlButtons.Location = new System.Drawing.Point(0, 206);
+            this.m_pnlButtons.Location = new System.Drawing.Point(0, 247);
             this.m_pnlButtons.Name = "m_pnlButtons";
             this.m_pnlButtons.Size = new System.Drawing.Size(964, 58);
             this.m_pnlButtons.TabIndex = 11;
@@ -220,13 +222,38 @@
             this.linkLabel1.Text = "Additional Parameters:";
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.m_lnkOutputFileName_LinkClicked);
             // 
+            // m_cmbEngine
+            // 
+            this.m_cmbEngine.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_cmbEngine.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.m_cmbEngine.FormattingEnabled = true;
+            this.m_cmbEngine.Items.AddRange(new object[] {
+            "youtube-dl\\youtube-dl.exe",
+            "yt-dlp\\yt-dlp.exe"});
+            this.m_cmbEngine.Location = new System.Drawing.Point(281, 200);
+            this.m_cmbEngine.Name = "m_cmbEngine";
+            this.m_cmbEngine.Size = new System.Drawing.Size(269, 28);
+            this.m_cmbEngine.TabIndex = 17;
+            // 
+            // m_lblEngine
+            // 
+            this.m_lblEngine.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.m_lblEngine.AutoSize = true;
+            this.m_lblEngine.Location = new System.Drawing.Point(95, 203);
+            this.m_lblEngine.Name = "m_lblEngine";
+            this.m_lblEngine.Size = new System.Drawing.Size(130, 20);
+            this.m_lblEngine.TabIndex = 16;
+            this.m_lblEngine.Text = "Selected Engine:";
+            // 
             // FormAddUrl
             // 
             this.AcceptButton = this.m_btnAddUrl;
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.m_btnCancel;
-            this.ClientSize = new System.Drawing.Size(964, 264);
+            this.ClientSize = new System.Drawing.Size(964, 305);
+            this.Controls.Add(this.m_cmbEngine);
+            this.Controls.Add(this.m_lblEngine);
             this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.m_cmbAdditionalParameters);
             this.Controls.Add(this.m_pnlButtons);
@@ -271,5 +298,7 @@
         private System.Windows.Forms.Panel m_pnlButtons;
         private System.Windows.Forms.ComboBox m_cmbAdditionalParameters;
         private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.ComboBox m_cmbEngine;
+        private System.Windows.Forms.Label m_lblEngine;
     }
 }
