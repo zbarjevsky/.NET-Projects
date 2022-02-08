@@ -50,9 +50,10 @@ namespace BarometerBT.BlueMaestro
             if (!_map.ContainsKey(device.Address))
                 _map[device.Address] = new BMDatabase(device);
 
-            var record = _map[device.Address].AddRecord(device, rssi, recordDate, data);
+               var record = _map[device.Address].AddRecord(device, rssi, recordDate, data);
 
-            OnRecordAddedAction(device);
+            if (record.IsValid)
+                 OnRecordAddedAction(device);
 
             return record;
         }

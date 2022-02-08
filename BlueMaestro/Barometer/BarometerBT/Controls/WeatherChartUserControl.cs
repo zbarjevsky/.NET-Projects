@@ -168,6 +168,9 @@ namespace BarometerBT.Controls
             for (int i = 0; i < records.Count; i++)
             {
                 BMRecordCurrent record = records[i];
+                if (!record.IsValid)
+                    continue;
+
                 double val = GetValue(record);
                 _bufferFull.Add(new ChartPoint(record.Date, val));
             }

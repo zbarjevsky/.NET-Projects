@@ -28,6 +28,9 @@ namespace BarometerBT.BlueMaestro
 
         public DateTime Date { get; set; }
 
+        [XmlIgnore]
+        public bool IsValid => Temperature != 0 && AirHumidity != 0 && AirPressure != 0;
+
         public static bool IsManufacturerID(ushort manufacturerID)
         {
             return manufacturerID == MANUFACTURER_ID;

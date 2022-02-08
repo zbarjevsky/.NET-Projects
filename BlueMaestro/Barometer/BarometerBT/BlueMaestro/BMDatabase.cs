@@ -62,23 +62,24 @@ namespace BarometerBT.BlueMaestro
         {
             BMRecordCurrent record = new BMRecordCurrent(device, rssi, recordDate, data);
 
-            lock (Records)
-            {
-                BMRecordCurrent last = Records.LastOrDefault();
-                if (last != null && last == record) //not changed - update 
+            if (record.IsValid)
+                lock (Records)
                 {
-                    Records[Records.Count - 1] = record;
-                }
-                else //new record
-                {
-                    if (last == null)
+                    BMRecordCurrent last = Records.LastOrDefault();
+                    if (last != null && last == record) //not changed - update 
                     {
-                        last = record;
+                        Records[Records.Count - 1] = record;
                     }
+                    else //new record
+                    {
+                        if (last == null)
+                        {
+                            last = record;
+                        }
 
-                    Records.Add(record);
+                        Records.Add(record);
+                    }
                 }
-            }
 
             return record;
         }
@@ -277,11 +278,16 @@ namespace BarometerBT.BlueMaestro
                 return rec;
 
             int count = 1;
+            int validCount = 1;
             for (int i = start + 1; i < records.Count && i < (start + bucketSize); i++, count++)
             {
-                rec += records[i];
+                if (records[i].IsValid)
+                {
+                    rec += records[i];
+                    validCount++;
+                }
             }
-            rec /= count;
+            rec /= validCount;
 
             TimeSpan interval = records[start + count - 1].Date - records[start].Date;
             TimeSpan halfInterval = TimeSpan.FromMilliseconds(interval.TotalMilliseconds / 2);
