@@ -7,10 +7,8 @@ using System.Management;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Forms;
-using RadexOneDemo;
 
-namespace sD
+namespace RadexOneLib
 {
     public class RadexOneConnection
     {
@@ -87,27 +85,27 @@ namespace sD
             SendRequest(new CommandGetData());
         }
 
-        internal void SendRequestVer()
+        public void SendRequestVer()
         {
             SendRequest(new CommandGetVersion());
         }
 
-        internal void SendRequestGetSettings()
+        public void SendRequestGetSettings()
         {
             SendRequest(new CommandGetSettings());
         }
 
-        internal void SendRequestSetSettings(bool snd, bool vbr, double threshold)
+        public void SendRequestSetSettings(bool snd, bool vbr, double threshold)
         {
             SendRequest(new CommandConfigure(snd, vbr, threshold));
         }
 
-        internal void RequestResetDose()
+        public void RequestResetDose()
         {
             SendRequest(new CommandResetDose());
         }
 
-        internal void RequestTestCmd()
+        public void RequestTestCmd()
         {
             SendRequest(new CommandTest());
         }

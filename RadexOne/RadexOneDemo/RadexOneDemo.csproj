@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>RadexOneDemo</RootNamespace>
     <AssemblyName>RadexOneDemo</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <SccProjectName>SAK</SccProjectName>
@@ -64,8 +64,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="RadiationLog.cs" />
-    <Compile Include="Commands.cs" />
-    <Compile Include="CommDataModel.cs" />
+    <Compile Include="RadexOneOld\Commands.cs" />
+    <Compile Include="RadexOneOld\CommDataModel.cs" />
     <Compile Include="Docs\LogReader.cs" />
     <Compile Include="FormAboutLevels.cs">
       <SubType>Form</SubType>
@@ -94,8 +94,8 @@
     <Compile Include="PlaySound.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RadexOneConfig.cs" />
-    <Compile Include="RadexOneConnection.cs" />
+    <Compile Include="RadexOneOld\RadexOneConfig.cs" />
+    <Compile Include="RadexOneOld\RadexOneConnection.cs" />
     <Compile Include="RadiationConverterControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -203,9 +203,13 @@
     <Folder Include="Utils\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Framework.MkZ\Framework.MkZ\Framework.MkZ.csproj">
+    <ProjectReference Include="..\..\Framework.MkZ\Framework.MkZ\Framework.MkZ.csproj">
       <Project>{768af4b8-5edd-4196-97ae-dbc1589dd426}</Project>
       <Name>Framework.MkZ</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\RadexOneLib\RadexOneLib.csproj">
+      <Project>{d69e1289-09e0-4473-a3f3-c00ae0557fb9}</Project>
+      <Name>RadexOneLib</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

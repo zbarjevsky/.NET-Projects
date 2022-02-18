@@ -6,7 +6,7 @@ using System.Text;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-namespace RadexOneDemo
+namespace RadexOneDemo.Old
 {
     public class RadexOneConfig : INotifyPropertyChanged
     {
