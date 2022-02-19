@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework.MkZ", "..\Framewo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlueMaestroLib", "BlueMaestroLib\BlueMaestroLib.csproj", "{5E7765A7-6F01-40FB-944B-CBF26FC2589A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RadexOneLib", "..\RadexOne\RadexOneLib\RadexOneLib.csproj", "{D69E1289-09E0-4473-A3F3-C00AE0557FB9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{5E7765A7-6F01-40FB-944B-CBF26FC2589A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E7765A7-6F01-40FB-944B-CBF26FC2589A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E7765A7-6F01-40FB-944B-CBF26FC2589A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D69E1289-09E0-4473-A3F3-C00AE0557FB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D69E1289-09E0-4473-A3F3-C00AE0557FB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D69E1289-09E0-4473-A3F3-C00AE0557FB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D69E1289-09E0-4473-A3F3-C00AE0557FB9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

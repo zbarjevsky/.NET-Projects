@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 
 using MkZ.Bluetooth;
-using BarometerBT.Utils;
+using MkZ.WeatherStation.Utils;
 using MkZ.Tools;
 
 namespace BlueMaestro.Old

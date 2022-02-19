@@ -9,7 +9,7 @@ using System.Xml.Serialization;
 
 
 using MkZ.Bluetooth;
-using BarometerBT.Utils;
+using MkZ.WeatherStation.Utils;
 using MkZ.Tools;
 
 namespace BlueMaestro.Old

@@ -11,13 +11,13 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
-namespace BarometerBT.BlueMaestro.UX
+namespace MkZ.WPF
 {
     /// <summary>
     /// Image that switches to monochrome when disabled.
     /// https://www.engineeringsolutions.de/creating-an-automatic-adjusting-image-for-buttons-in-wpf/#:~:text=The%20following%20class%20is%20a,control%20is%20set%20to%20false.
     /// </summary>
-    public class AutoGrayableImage : Image
+    public class AutoGrayableImage1 : Image
     {
         // References to original and grayscale ImageSources
         private ImageSource _sourceColor;
@@ -26,9 +26,9 @@ namespace BarometerBT.BlueMaestro.UX
         private Brush _opacityMaskColor;
         private Brush _opacityMaskGray;
 
-        static AutoGrayableImage()
+        static AutoGrayableImage1()
         {
-            DefaultStyleKeyProperty.OverrideMetadata(typeof(AutoGrayableImage), new FrameworkPropertyMetadata(typeof(AutoGrayableImage)));
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(AutoGrayableImage1), new FrameworkPropertyMetadata(typeof(AutoGrayableImage1)));
         }
 
         /// <summary>

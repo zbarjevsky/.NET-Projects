@@ -10,7 +10,7 @@ using System.Windows.Media;
 
 
 using MkZ.Bluetooth;
-using BarometerBT.Utils;
+//using MkZWeatherStation.Utils;
 using MkZ.Tools;
 using BlueMaestro.Old.Bluetooth;
 

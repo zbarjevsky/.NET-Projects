@@ -10,7 +10,7 @@ using System.Windows.Threading;
 
 using MkZ.Tools;
 
-namespace BarometerBT.Utils
+namespace MkZ.WeatherStation.Utils
 {
     public class CommonTools
     {

@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 using System.Windows.Media;
 
 
-using BarometerBT.Utils;
+//using MkZWeatherStation.Utils;
 using MkZ.BlueMaestroLib;
 using MkZ.Windows;
 
-namespace BarometerBT.BlueMaestro.UX
+namespace MkZ.WeatherStation.BlueMaestro.UX
 {
     public class BMDeviceRecordVM : NotifyPropertyChangedImpl
     {

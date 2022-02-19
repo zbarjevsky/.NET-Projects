@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-using BarometerBT.Utils;
+//using MkZWeatherStation.Utils;
 using MkZ.Windows;
 
-namespace BarometerBT.BlueMaestro.UX
+namespace MkZ.WeatherStation.BlueMaestro.UX
 {
     public class MeasurementVM : NotifyPropertyChangedImpl
     {

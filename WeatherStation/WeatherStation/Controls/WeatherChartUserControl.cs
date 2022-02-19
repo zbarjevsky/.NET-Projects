@@ -10,11 +10,11 @@ using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
 
-using BarometerBT.Utils;
+//using MkZWeatherStation.Utils;
 using MkZ.BlueMaestroLib;
 using MkZ.Bluetooth;
 
-namespace BarometerBT.Controls
+namespace MkZ.WeatherStation.Controls
 {
     public partial class WeatherChartUserControl : UserControl
     {

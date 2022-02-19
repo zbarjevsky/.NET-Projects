@@ -5,18 +5,18 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-
-
-using BarometerBT.BlueMaestro;
-using BarometerBT.BlueMaestro.UX;
-using MkZ.Bluetooth;
-using BarometerBT.Utils;
 using Microsoft.Win32;
+
+
+using MkZ.WeatherStation.BlueMaestro;
+using MkZ.WeatherStation.BlueMaestro.UX;
+using MkZ.Bluetooth;
+using MkZ.WeatherStation.Utils;
 using MkZ.WPF.PropertyGrid;
 using MkZ.BlueMaestroLib;
 using MkZ.Bluetooth.Sample;
 
-namespace BarometerBT
+namespace MkZWeatherStation
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

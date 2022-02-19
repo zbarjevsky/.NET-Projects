@@ -10,7 +10,7 @@ using System.Windows.Navigation;
 
 using MkZ.Bluetooth;
 
-namespace BarometerBT
+namespace MkZWeatherStation
 {
     /// <summary>
     /// Interaction logic for App.xaml

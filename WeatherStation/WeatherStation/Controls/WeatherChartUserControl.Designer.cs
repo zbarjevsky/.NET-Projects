@@ -1,4 +1,4 @@
-﻿namespace BarometerBT.Controls
+﻿namespace MkZ.WeatherStation.Controls
 {
     partial class WeatherChartUserControl
     {

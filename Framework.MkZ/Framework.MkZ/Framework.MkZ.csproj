@@ -231,6 +231,7 @@
     <Compile Include="Windows\CommonUtils.cs" />
     <Compile Include="WPF\AdornerContentPresenter.cs" />
     <Compile Include="WPF\AnimationHelper.cs" />
+    <Compile Include="WPF\AutoGrayableImage1.cs" />
     <Compile Include="WPF\AutoGreyableImage.cs" />
     <Compile Include="WPF\Buttons\ButtonClose.xaml.cs">
       <DependentUpon>ButtonClose.xaml</DependentUpon>

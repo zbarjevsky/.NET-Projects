@@ -72,7 +72,6 @@
     </ApplicationDefinition>
     <Compile Include="BlueMaestro.Old\BMDatabase.cs" />
     <Compile Include="BlueMaestro.Old\BMDatabaseMap.cs" />
-    <Compile Include="BlueMaestro.Old\UX\AutoGrayableImage.cs" />
     <Compile Include="BlueMaestro.Old\UX\BMDeviceRecordUserControl.xaml.cs">
       <DependentUpon>BMDeviceRecordUserControl.xaml</DependentUpon>
     </Compile>
@@ -93,13 +92,13 @@
       <DependentUpon>WeatherChartUserControl.cs</DependentUpon>
     </Compile>
     <Compile Include="Settings.cs" />
-    <Compile Include="Utils\BMLineChart.cs" />
-    <Compile Include="Utils\BMChart.cs" />
+    <Compile Include="BlueMaestro.Old\BMLineChart.cs" />
+    <Compile Include="BlueMaestro.Old\BMChart.cs" />
     <Compile Include="Utils\CommonTools.cs" />
-    <Compile Include="Utils\Entry.cs" />
+    <Compile Include="BlueMaestro.Old\Entry.cs" />
     <Compile Include="Utils\InvertBoolConverter.cs" />
-    <Compile Include="Utils\TextView.cs" />
-    <Compile Include="Utils\ViewGroup.cs" />
+    <Compile Include="BlueMaestro.Old\TextView.cs" />
+    <Compile Include="BlueMaestro.Old\ViewGroup.cs" />
     <Page Include="BlueMaestro.Old\UX\BMDeviceRecordUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

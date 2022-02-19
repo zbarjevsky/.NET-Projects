@@ -15,7 +15,7 @@ using Windows.Storage.Streams;
 using MkZ.Tools;
 using MkZ.WPF.MessageBox;
 using MkZ.BlueMaestroLib;
-using BarometerBT.Utils;
+using MkZ.WeatherStation.Utils;
 
 namespace MkZ.Bluetooth
 {

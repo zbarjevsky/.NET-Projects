@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Media;
 
-namespace BarometerBT.Utils
+namespace BlueMaestro.Old
 {
     public class BMLineChart : BMChart
     {

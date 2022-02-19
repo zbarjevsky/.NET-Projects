@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace BarometerBT.BlueMaestro.UX
+namespace MkZ.WeatherStation.BlueMaestro.UX
 {
     /// <summary>
     /// Interaction logic for MeasurementUserControl.xaml
