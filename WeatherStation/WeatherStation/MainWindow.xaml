@@ -30,6 +30,7 @@
             <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
+            <RowDefinition />
         </Grid.RowDefinitions>
         <Border Grid.ColumnSpan="3" BorderThickness="1" BorderBrush="DarkGoldenrod" CornerRadius="3" Margin="6,3">
             <Menu Margin="6,0"  FontSize="16" VerticalAlignment="Center" Background="Transparent">
@@ -57,63 +58,69 @@
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-        <ScrollViewer Grid.Row="2" Margin="6" Background="LightYellow" 
-                      HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
-            <StackPanel Orientation="Vertical">
-                <StackPanel Margin="6" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top"
-                            Background="{Binding SelectedItem.Background, ElementName=_listDevices}" >
-                    <Button Margin="6" Content="Open..." Click="OpenButton_Click"/>
-                    <Button Margin="6" Content="Save As" Click="SaveButton_Click"/>
-                    <Button Margin="6" Content="Reset" Click="ResetButton_Click"/>
-                    <Button Margin="6" Content="Download" Click="DownloadButton_Click"/>
-                    <Button Margin="6" Content="Scenario1..." Click="Scenario1Button_Click"/>
-                    <Viewbox Height="20">
-                        <CheckBox x:Name="_chkAutoUpdate" IsChecked="True" Background="LightGray" />
-                    </Viewbox>
-                    <TextBlock Margin="0,6,10,6" Text="Auto Update" Background="LightGray" VerticalAlignment="Center"/>
-                </StackPanel>
-                <StackPanel Margin="6" Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Left"
-                            Width="400" Background="{Binding SelectedItem.Background, ElementName=_listDevices}" >
-                   <ComboBox x:Name="_cmbDays" Margin="6" SelectionChanged="OnUpdateChart">
-                        <ComboBoxItem Content="Show Last 6 hours" Tag="0.25"/>    
-                        <ComboBoxItem Content="Show Last 12 hours" Tag="0.5"/>    
-                        <ComboBoxItem Content="Show Last 24 hours" Tag="1"/>    
-                        <ComboBoxItem Content="Show Last 3 days" Tag="3"/>    
-                        <ComboBoxItem Content="Show Last 7 days" Tag="7" IsSelected="True"/>    
-                        <ComboBoxItem Content="Show Last 14 days" Tag="14"/>    
-                        <ComboBoxItem Content="Show Last 30 days" Tag="30"/>
-                        <ComboBoxItem Content="Show Last 90 days" Tag="90"/>
-                        <ComboBoxItem Content="Show Last 180 days" Tag="180"/>
-                        <ComboBoxItem Content="Show Last 365 days" Tag="365"/>
-                        <ComboBoxItem Content="Show All Available Range" Tag="3000"/>    
-                    </ComboBox>
-                   <StackPanel Orientation="Horizontal">
-                        <CheckBox x:Name="_chkAutoZoom" Content="Auto" Margin="6" VerticalAlignment="Center"
-                                  IsChecked="True" Checked="OnUpdateChart"/>
-                        <ComboBox x:Name="_cmbInterval" Margin="6" SelectionChanged="_cmbInterval_SelectionChanged">
-                            <ComboBoxItem Content="Sample Interval: All Values" Tag="0.01" IsSelected="True"/>
-                            <ComboBoxItem Content="Sample Interval: 1 minute" Tag="1"/>
-                            <ComboBoxItem Content="Sample Interval: 5 minutes" Tag="5"/>
-                            <ComboBoxItem Content="Sample Interval: 10 minutes" Tag="10"/>
-                            <ComboBoxItem Content="Sample Interval: 15 minutes" Tag="15"/>
-                            <ComboBoxItem Content="Sample Interval: 30 minutes" Tag="30"/>
-                            <ComboBoxItem Content="Sample Interval: 1 hour" Tag="60"/>
-                            <ComboBoxItem Content="Sample Interval: 2 hours" Tag="120"/>
-                            <ComboBoxItem Content="Sample Interval: 3 hours" Tag="180"/>
-                            <ComboBoxItem Content="Sample Interval: 6 hours" Tag="360"/>
-                            <ComboBoxItem Content="Sample Interval: 12 hours" Tag="720"/>
-                        </ComboBox>
-                        <Button Margin="6" Content=" Save Dilluted... " Click="SaveDillutedButton_Click" />
+        <Grid Grid.Row="2" Grid.RowSpan="3">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <ScrollViewer Grid.Row="0" Grid.RowSpan="1"  Margin="6" Background="LightYellow" 
+                          HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
+                <StackPanel Orientation="Vertical">
+                    <StackPanel Margin="6" Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top"
+                                Background="{Binding SelectedItem.Background, ElementName=_listDevices}" >
+                        <Button Margin="6" Content="Open..." Click="OpenButton_Click"/>
+                        <Button Margin="6" Content="Save As" Click="SaveButton_Click"/>
+                        <Button Margin="6" Content="Reset" Click="ResetButton_Click"/>
+                        <Button Margin="6" Content="Download" Click="DownloadButton_Click"/>
+                        <Button Margin="6" Content="Scenario1..." Click="Scenario1Button_Click"/>
+                        <Viewbox Height="20">
+                            <CheckBox x:Name="_chkAutoUpdate" IsChecked="True" Background="LightGray" />
+                        </Viewbox>
+                        <TextBlock Margin="0,6,10,6" Text="Auto Update" Background="LightGray" VerticalAlignment="Center"/>
                     </StackPanel>
-                    <TextBlock x:Name="_txtDilluteResult" MinWidth="100" Margin="6" Text="All: 0 -> Days: 0 -> Interval: 0"/>
-                    <ComboBox x:Name="_cmbTemperatureUnits" Margin="6" SelectionChanged="OnUpdateChart" />
-                    <ComboBox x:Name="_cmbAirPressureUnits" Margin="6" SelectionChanged="OnUpdateChart" />
-                </StackPanel>
+                    <StackPanel Margin="6" Orientation="Vertical" VerticalAlignment="Top" HorizontalAlignment="Left"
+                                Width="400" Background="{Binding SelectedItem.Background, ElementName=_listDevices}" >
+                       <ComboBox x:Name="_cmbDays" Margin="6" SelectionChanged="OnUpdateChart">
+                            <ComboBoxItem Content="Show Last 6 hours" Tag="0.25"/>    
+                            <ComboBoxItem Content="Show Last 12 hours" Tag="0.5"/>    
+                            <ComboBoxItem Content="Show Last 24 hours" Tag="1"/>    
+                            <ComboBoxItem Content="Show Last 3 days" Tag="3"/>    
+                            <ComboBoxItem Content="Show Last 7 days" Tag="7" IsSelected="True"/>    
+                            <ComboBoxItem Content="Show Last 14 days" Tag="14"/>    
+                            <ComboBoxItem Content="Show Last 30 days" Tag="30"/>
+                            <ComboBoxItem Content="Show Last 90 days" Tag="90"/>
+                            <ComboBoxItem Content="Show Last 180 days" Tag="180"/>
+                            <ComboBoxItem Content="Show Last 365 days" Tag="365"/>
+                            <ComboBoxItem Content="Show All Available Range" Tag="3000"/>    
+                        </ComboBox>
+                       <StackPanel Orientation="Horizontal">
+                            <CheckBox x:Name="_chkAutoZoom" Content="Auto" Margin="6" VerticalAlignment="Center"
+                                      IsChecked="True" Checked="OnUpdateChart"/>
+                            <ComboBox x:Name="_cmbInterval" Margin="6" SelectionChanged="_cmbInterval_SelectionChanged">
+                                <ComboBoxItem Content="Sample Interval: All Values" Tag="0.01" IsSelected="True"/>
+                                <ComboBoxItem Content="Sample Interval: 1 minute" Tag="1"/>
+                                <ComboBoxItem Content="Sample Interval: 5 minutes" Tag="5"/>
+                                <ComboBoxItem Content="Sample Interval: 10 minutes" Tag="10"/>
+                                <ComboBoxItem Content="Sample Interval: 15 minutes" Tag="15"/>
+                                <ComboBoxItem Content="Sample Interval: 30 minutes" Tag="30"/>
+                                <ComboBoxItem Content="Sample Interval: 1 hour" Tag="60"/>
+                                <ComboBoxItem Content="Sample Interval: 2 hours" Tag="120"/>
+                                <ComboBoxItem Content="Sample Interval: 3 hours" Tag="180"/>
+                                <ComboBoxItem Content="Sample Interval: 6 hours" Tag="360"/>
+                                <ComboBoxItem Content="Sample Interval: 12 hours" Tag="720"/>
+                            </ComboBox>
+                            <Button Margin="6" Content=" Save Dilluted... " Click="SaveDillutedButton_Click" />
+                        </StackPanel>
+                        <TextBlock x:Name="_txtDilluteResult" MinWidth="100" Margin="6" Text="All: 0 -> Days: 0 -> Interval: 0"/>
+                        <ComboBox x:Name="_cmbTemperatureUnits" Margin="6" SelectionChanged="OnUpdateChart" />
+                        <ComboBox x:Name="_cmbAirPressureUnits" Margin="6" SelectionChanged="OnUpdateChart" />
+                    </StackPanel>
                 
-            </StackPanel>
-        </ScrollViewer>
-        <GridSplitter Grid.Row="1" Grid.Column="1" Grid.RowSpan="3" HorizontalAlignment="Stretch" Background="DarkGoldenrod" />
-        <TextBox x:Name="_txtInfo" Grid.Row="3" Margin="6" Background="LightYellow" />
+                </StackPanel>
+            </ScrollViewer>
+            <TextBox x:Name="_txtInfo" Grid.Row="1" Grid.RowSpan="1" Margin="6" Background="LightYellow" />
+        </Grid>
+        <GridSplitter Grid.Row="1" Grid.Column="1" Grid.RowSpan="4" HorizontalAlignment="Stretch" Background="DarkGoldenrod" />
         <WindowsFormsHost Grid.Row="1" Grid.Column="2" Margin="6" Background="White" >
             <controls:WeatherChartUserControl x:Name="_chart1" />
         </WindowsFormsHost>
@@ -123,6 +130,9 @@
         <WindowsFormsHost Grid.Row="3" Grid.Column="2" Margin="6" Background="White" >
             <controls:WeatherChartUserControl x:Name="_chart3" />
         </WindowsFormsHost>
-        <GridSplitter Grid.Row="1" Grid.Column="3" Grid.RowSpan="3" HorizontalAlignment="Stretch" Background="DarkGoldenrod" />
+        <WindowsFormsHost Grid.Row="4" Grid.Column="2" Margin="6" Background="White" >
+            <controls:RadiationGraphControl x:Name="_chart4" />
+        </WindowsFormsHost>
+        <GridSplitter Grid.Row="1" Grid.Column="3" Grid.RowSpan="4" HorizontalAlignment="Stretch" Background="DarkGoldenrod" />
     </Grid>
 </Window>

@@ -15,6 +15,8 @@ using MkZ.WeatherStation.Utils;
 using MkZ.WPF.PropertyGrid;
 using MkZ.BlueMaestroLib;
 using MkZ.Bluetooth.Sample;
+using MkZ.Weather.RadexOne;
+using MkZ.RadexOne;
 
 namespace MkZWeatherStation
 {
@@ -26,6 +28,8 @@ namespace MkZWeatherStation
         private readonly BluetoothWatcher _btWatcher = new BluetoothWatcher();
 
         private readonly ObservableCollection<BMDeviceRecordVM> _devices = new ObservableCollection<BMDeviceRecordVM>();
+
+        private readonly RadexOneDeviceManager _radexDevice = new RadexOneDeviceManager();
 
         private static Settings Settings { get; } = new Settings();
 
@@ -56,6 +60,8 @@ namespace MkZWeatherStation
             _btWatcher.StartBluetoothSearch();
 
             BMDatabaseMap.INSTANCE.OnRecordAddedAction = (device) => { UpdateAllAsync(device); };
+
+            _radexDevice.Init();
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -159,6 +165,13 @@ namespace MkZWeatherStation
                 if(device == null || selected.Device.Address == device.Address)
                     UpdateChartFromSelectedDB(selected);
             }
+            UpdateRadiationChart();
+        }
+
+        private void UpdateRadiationChart()
+        {
+            List<RadiationDataPoint> points = _radexDevice.GetLog();
+            _chart4?.Set(points, true, true);
         }
 
         private bool _isInUpdate = false;

@@ -40,14 +40,14 @@ namespace RadexOneLib
             set { if (_threshold == value) return; _threshold = value; OnPropertyChanged(); }
         }
 
-        public void Set(CommandGetSettings cmd)
+        public void SetSettings(CommandGetSettings cmd)
         {
             Sound = cmd.Sound;
             Vibrate = cmd.Vibrate;
             Threshold = cmd.Threshold;
         }
 
-        public void Set(CommandGetVersion cmd)
+        public void SetVersion(CommandGetVersion cmd)
         {
             SerialNumber = cmd.SerialNumber;
         }

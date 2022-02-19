@@ -84,7 +84,7 @@ namespace RadexOneDemo
             {
                 Utils.ExecuteOnUiThreadInvoke(this, () =>
                 {
-                    _radexConfig.Set(cmd);
+                    _radexConfig.SetVersion(cmd);
                     _history.UpdateSerialNumber(cmd.SerialNumber);
                     m_lblSN.Text = _radexConfig.SerialNumber.ToString();
                 });
@@ -94,7 +94,7 @@ namespace RadexOneDemo
             {
                 Utils.ExecuteOnUiThreadInvoke(this, () =>
                 {
-                    _radexConfig.Set(cmd);
+                    _radexConfig.SetSettings(cmd);
                     _isSettingsChanged = false;
                 });
             };
