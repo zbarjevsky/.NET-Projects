@@ -13,6 +13,8 @@ using System.Windows.Forms.DataVisualization.Charting;
 //using MkZWeatherStation.Utils;
 using MkZ.BlueMaestroLib;
 using MkZ.Bluetooth;
+using MkZ.Physics;
+using MkZ.RadexOne;
 
 namespace MkZ.WeatherStation.Controls
 {
@@ -64,6 +66,8 @@ namespace MkZ.WeatherStation.Controls
             // set scrollbar small change to blockSize (e.g. 100)
             chartArea.AxisX.ScaleView.SmallScrollSize = oneMinute;
             chartArea.AxisX.ScaleView.SmallScrollMinSize = 0;
+
+            chartArea.AxisY.LabelStyle.Format = "{0}";
 
             chart1.Annotations.Clear();
 
@@ -119,36 +123,47 @@ namespace MkZ.WeatherStation.Controls
             }
         }
 
-        public void UpdateChartTemperature(List<BMRecordCurrent> records, UnitsDescriptor units, bool isActive)
+        public void UpdateChartTemperature(List<Physics.IDataPoint> records, IUnitBase<eTemperatureUnits> temperatureUnits, bool isActive)
         {
-            _scaleAbsolute = units.TemperatureUnits.Scale;
+            _scaleAbsolute = temperatureUnits.Scale;
 
             Color c = isActive ? Color.Red : Color.DarkGray;
-            UpdateChart(records, "Temperature", c, units.TemperatureUnits.Desc,
-                (record) => { return record.GetTemperature(units); });
+            UpdateChart(records, "Temperature", c, temperatureUnits.Desc,
+                (record) => { return record.GetValue(temperatureUnits); });
         }
 
-        public void UpdateChartHumidity(List<BMRecordCurrent> records, UnitsDescriptor units, bool isActive)
+        public void UpdateChartHumidity(List<Physics.IDataPoint> records, IUnitBase<eRelativeHumidity> humidityUnits, bool isActive)
         {
-            _scaleAbsolute = units.RelativeHumidityUnits.Scale;
+            _scaleAbsolute = humidityUnits.Scale;
 
             Color c = isActive ? Color.Green : Color.DarkGray;
-            UpdateChart(records, "Humidity", c, units.RelativeHumidityUnits.Desc,
-                (record) => { return record.GetAirHumidity(); });
+            UpdateChart(records, "Humidity", c, humidityUnits.Desc,
+                (record) => { return record.GetValue(humidityUnits); });
         }
 
-        public void UpdateChartAirPressure(List<BMRecordCurrent> records, UnitsDescriptor units, bool isActive)
+        public void UpdateChartAirPressure(List<Physics.IDataPoint> records, IUnitBase<eAirPressureUnits> pressureUnits, bool isActive)
         {
-            _scaleAbsolute = units.AirPressureUnits.Scale;
+            _scaleAbsolute = pressureUnits.Scale;
 
             Color c = isActive ? Color.Blue : Color.DarkGray;
-            UpdateChart(records, "Air Pressure", c, units.AirPressureUnits.Desc,
-                (record) => { return record.GetAirPressure(units); });
+            UpdateChart(records, "Air Pressure", c, pressureUnits.Desc,
+                (record) => { return record.GetValue(pressureUnits); });
         }
 
-        public void UpdateChart(List<BMRecordCurrent> records, 
+        public void UpdateChartRadiation(List<Physics.IDataPoint> records, IUnitBase<eRadiationUnits> radiationUnits, bool isActive)
+        {
+            chart1.ChartAreas[0].AxisY.LabelStyle.Format = "{0.000}";
+
+            _scaleAbsolute = radiationUnits.Scale;
+
+            Color c = isActive ? Color.Goldenrod : Color.DarkGray;
+            UpdateChart(records, "Radiation", c, radiationUnits.Desc,
+                (record) => { return record.GetValue(radiationUnits); });
+        }
+
+        public void UpdateChart(List<Physics.IDataPoint> records, 
             string title, Color color, string units, 
-            Func<BMRecordCurrent, double> GetValue)
+            Func<Physics.IDataPoint, double> GetValue)
         {
             _theme.color = Color.FromArgb(128, color);
             _theme.title = title;
@@ -170,7 +185,7 @@ namespace MkZ.WeatherStation.Controls
 
             for (int i = 0; i < records.Count; i++)
             {
-                BMRecordCurrent record = records[i];
+                Physics.IDataPoint record = records[i];
                 if (!record.IsValid)
                     continue;
 
@@ -283,10 +298,10 @@ namespace MkZ.WeatherStation.Controls
             double max = chartArea.AxisX.ScaleView.ViewMaximum;
 
             // these are the respective DataPoints:
-            DataPoint pt0 = series.Points.Select(x => x)
+            System.Windows.Forms.DataVisualization.Charting.DataPoint pt0 = series.Points.Select(x => x)
                              .Where(x => x.XValue >= min)
                              .DefaultIfEmpty(series.Points.First()).First();
-            DataPoint pt1 = series.Points.Select(x => x)
+            System.Windows.Forms.DataVisualization.Charting.DataPoint pt1 = series.Points.Select(x => x)
                              .Where(x => x.XValue <= max)
                              .DefaultIfEmpty(series.Points.Last()).Last();
 
@@ -420,7 +435,7 @@ namespace MkZ.WeatherStation.Controls
             Value = val;
         }
 
-        public ChartPoint(DataPoint pt) 
+        public ChartPoint(System.Windows.Forms.DataVisualization.Charting.DataPoint pt) 
             : this(pt.XValue, pt.YValues[0])
         {
         }
@@ -462,9 +477,9 @@ namespace MkZ.WeatherStation.Controls
             if (count < 10)
                 return;
 
-            DataPoint pt1 = points[count - 1];
-            DataPoint pt2 = points[count - 2];
-            DataPoint pt3 = points[count - 3];
+            System.Windows.Forms.DataVisualization.Charting.DataPoint pt1 = points[count - 1];
+            System.Windows.Forms.DataVisualization.Charting.DataPoint pt2 = points[count - 2];
+            System.Windows.Forms.DataVisualization.Charting.DataPoint pt3 = points[count - 3];
 
             if (pt1.YValues[0] == pt2.YValues[0] && pt2.YValues[0] == pt3.YValues[0])
                 points.RemoveAt(count - 2);
@@ -504,7 +519,7 @@ namespace MkZ.WeatherStation.Controls
             {
                 if (result.ChartElementType == ChartElementType.DataPoint)
                 {
-                    DataPoint prop = result.Object as DataPoint;
+                    System.Windows.Forms.DataVisualization.Charting.DataPoint prop = result.Object as System.Windows.Forms.DataVisualization.Charting.DataPoint;
                     if (prop != null)
                     {
                         var pointXPixel = result.ChartArea.AxisX.ValueToPixelPosition(prop.XValue);
@@ -540,8 +555,8 @@ namespace MkZ.WeatherStation.Controls
             if (points.Count == 1)
                 return new ChartPoint(points[0]);
 
-            DataPoint pt0 = points[0];
-            DataPoint pt1 = points.Last();
+            System.Windows.Forms.DataVisualization.Charting.DataPoint pt0 = points[0];
+            System.Windows.Forms.DataVisualization.Charting.DataPoint pt1 = points.Last();
 
             desc = "(out of range)";
             icon = ToolTipIcon.Warning;

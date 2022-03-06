@@ -90,6 +90,8 @@
     <Compile Include="Bluetooth\Sample\Scenario2_Client.xaml.cs">
       <DependentUpon>Scenario2_Client.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Physics\IDataPoint.cs" />
+    <Compile Include="Physics\UnitsDescriptor.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

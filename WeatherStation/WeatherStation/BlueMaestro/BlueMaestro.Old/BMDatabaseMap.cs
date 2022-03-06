@@ -13,7 +13,7 @@ namespace BlueMaestro.Old
 {
     public class BMDatabaseMap
     {
-        public Action<BluetoothDevice> OnRecordAddedAction = (dev) => { MainWindow.UpdateAllAsync(dev); };
+        public Action<BluetoothDevice> OnRecordAddedAction = (dev) => { /*MainWindow.UpdateAllAsync(dev, rec);*/ };
 
         private Dictionary<ulong, BMDatabase> _map { get; } = new Dictionary<ulong, BMDatabase>();
 

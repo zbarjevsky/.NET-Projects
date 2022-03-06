@@ -7,13 +7,13 @@ using System.Xml.Serialization;
 
 
 using MkZ.Bluetooth;
-
+using MkZ.Physics;
 
 namespace MkZ.BlueMaestroLib
 {
 
     [Serializable]
-    public class BMRecordBase
+    public class BMRecordBase : IDataPoint
     {
         public const ushort MANUFACTURER_ID = 0x0133;
 
@@ -41,10 +41,27 @@ namespace MkZ.BlueMaestroLib
         public double AirHumidity { get; set; }
         public double AirPressure { get; set; }
 
-        public double GetTemperature(UnitsDescriptor units) { return units.TemperatureUnits.Convert(Temperature); }
+        public double GetTemperature(IUnitBase<eTemperatureUnits> measurementType) { return measurementType.Convert(Temperature); }
         public double GetAirHumidity() { return AirHumidity; }
-        public double GetAirPressure(UnitsDescriptor units) { return units.AirPressureUnits.Convert(AirPressure); }
-        public double GetAirDewPoint(UnitsDescriptor units) { return (this.GetTemperature(units) - ((100 - this.AirHumidity) / 5)); }
+        public double GetAirPressure(IUnitBase<eAirPressureUnits> measurementType) { return measurementType.Convert(AirPressure); }
+        public double GetAirDewPoint(IUnitBase<eTemperatureUnits> measurementType) { return (this.GetTemperature(measurementType) - ((100 - this.AirHumidity) / 5)); }
+
+        public double GetValue<T>(IUnitBase<T> measurementType) where T : struct, IConvertible
+        {
+            if (measurementType is TemperatureUnits t)
+            {
+                return t.Convert(Temperature);
+            }
+            if (measurementType is AirPressureUnits a)
+            {
+                return a.Convert(AirPressure);
+            }
+            if (measurementType is RelativeHumidityUnits)
+            {
+                return AirHumidity;
+            }
+            return 0;
+        }
 
         //for serialization
         public BMRecordBase()

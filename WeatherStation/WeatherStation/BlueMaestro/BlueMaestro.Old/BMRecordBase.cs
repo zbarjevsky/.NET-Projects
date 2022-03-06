@@ -7,6 +7,7 @@ using System.Xml.Serialization;
 
 
 using MkZ.Bluetooth;
+using MkZ.Physics;
 //using MkZWeatherStation.Utils;
 
 namespace BlueMaestro.Old
@@ -41,10 +42,10 @@ namespace BlueMaestro.Old
         public double AirHumidity { get; set; }
         public double AirPressure { get; set; }
 
-        public double GetTemperature(MkZ.BlueMaestroLib.UnitsDescriptor units) { return units.TemperatureUnits.Convert(Temperature); }
+        public double GetTemperature(IUnitBase<eTemperatureUnits> units) { return units.Convert(Temperature); }
         public double GetAirHumidity() { return AirHumidity; }
-        public double GetAirPressure(MkZ.BlueMaestroLib.UnitsDescriptor units) { return units.AirPressureUnits.Convert(AirPressure); }
-        public double GetAirDewPoint(MkZ.BlueMaestroLib.UnitsDescriptor units) { return (this.GetTemperature(units) - ((100 - this.AirHumidity) / 5)); }
+        public double GetAirPressure(IUnitBase<eAirPressureUnits> units) { return units.Convert(AirPressure); }
+        public double GetAirDewPoint(IUnitBase<eTemperatureUnits> units) { return (this.GetTemperature(units) - ((100 - this.AirHumidity) / 5)); }
 
         //for serialization
         public BMRecordBase()

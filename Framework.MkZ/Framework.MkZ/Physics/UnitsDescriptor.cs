@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MkZ.BlueMaestroLib
+namespace MkZ.Physics
 {
     public enum eTemperatureUnits
     {
@@ -23,6 +23,14 @@ namespace MkZ.BlueMaestroLib
     public enum eRelativeHumidity
     {
         Percent
+    }
+
+    //https://remm.hhs.gov/radmeasurement.htm
+    //https://www.britannica.com/science/rem-unit-of-measurement#:~:text=rem%2C%20unit%20of%20radiation%20dosage,X%20rays%20or%20gamma%20rays.
+    public enum eRadiationUnits
+    {
+        μSv, //micro sievert (International System of Units (SI) Unit) 1 sievert (Sv) = 100 rem
+        mRem //milli Roentgen equivalent man (Common Unit Terminology) 1 rem = 0.01 sievert (Sv)
     }
 
     public struct Scale
@@ -99,6 +107,56 @@ namespace MkZ.BlueMaestroLib
         public IEnumerable<eTemperatureUnits> GetEnum()
         {
             return Enum.GetValues(typeof(eTemperatureUnits)).Cast<eTemperatureUnits>();
+        }
+    }
+
+    //https://remm.hhs.gov/radmeasurement.htm
+    public class RadiationUnits : IUnitBase<eRadiationUnits>
+    {
+        public const String UNITS_μSV = "μSv/h";
+        public const String UNITS_mREM = "mRem/h";
+
+        public eRadiationUnits Units { get; set; }
+        public string Desc
+        {
+            get
+            {
+                switch (Units)
+                {
+                    case eRadiationUnits.μSv:
+                        return " " + UNITS_μSV;
+                    case eRadiationUnits.mRem:
+                    default:
+                        return " " + UNITS_mREM;
+                }
+            }
+        }
+
+        public Scale Scale
+        {
+            get { return new Scale(Convert(0.001), Convert(1000.0)); }
+        }
+
+        public void Reset()
+        {
+            Units = eRadiationUnits.μSv;
+        }
+
+        public double Convert(double radiationInμSv)
+        {
+            switch (Units)
+            {
+                case eRadiationUnits.mRem:
+                    return radiationInμSv * 0.1; //1 sievert (Sv) = 100 rem
+                case eRadiationUnits.μSv:
+                default:
+                    return radiationInμSv;
+            }
+        }
+
+        public IEnumerable<eRadiationUnits> GetEnum()
+        {
+            return Enum.GetValues(typeof(eRadiationUnits)).Cast<eRadiationUnits>();
         }
     }
 
@@ -203,9 +261,11 @@ namespace MkZ.BlueMaestroLib
 
         public AirPressureUnits AirPressureUnits { get; set; } = new AirPressureUnits();
 
+        public RadiationUnits RadiationUnits { get; set; } = new RadiationUnits();
+
         public RelativeHumidityUnits RelativeHumidityUnits { get; set; } = new RelativeHumidityUnits();
 
-        public static UnitsDescriptor DefaultUnits { get; } = new UnitsDescriptor();
+        //public static UnitsDescriptor DefaultUnits { get; } = new UnitsDescriptor();
 
         public UnitsDescriptor()
         {
@@ -216,6 +276,7 @@ namespace MkZ.BlueMaestroLib
         {
             this.TemperatureUnits.Units = units.TemperatureUnits.Units;
             this.AirPressureUnits.Units = units.AirPressureUnits.Units;
+            this.RadiationUnits.Units = units.RadiationUnits.Units;
             this.RelativeHumidityUnits.Units = units.RelativeHumidityUnits.Units;
         }
 
@@ -223,6 +284,7 @@ namespace MkZ.BlueMaestroLib
         {
             this.TemperatureUnits.Reset();
             this.AirPressureUnits.Reset();
+            this.RadiationUnits.Reset();
             this.RelativeHumidityUnits.Reset();
         }
     }

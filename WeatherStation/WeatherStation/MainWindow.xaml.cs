@@ -17,6 +17,8 @@ using MkZ.BlueMaestroLib;
 using MkZ.Bluetooth.Sample;
 using MkZ.Weather.RadexOne;
 using MkZ.RadexOne;
+using MkZ.Weather;
+using MkZ.Physics;
 
 namespace MkZWeatherStation
 {
@@ -32,6 +34,8 @@ namespace MkZWeatherStation
         private readonly RadexOneDeviceManager _radexDevice = new RadexOneDeviceManager();
 
         private static Settings Settings { get; } = new Settings();
+        
+        public UnitsDescriptor Units { get; set; } = new UnitsDescriptor();
 
         public MainWindow()
         {
@@ -39,8 +43,8 @@ namespace MkZWeatherStation
 
             _listDevices.ItemsSource = _devices;
 
-            _cmbTemperatureUnits.ItemsSource = UnitsDescriptor.DefaultUnits.TemperatureUnits.GetEnum();
-            _cmbAirPressureUnits.ItemsSource = UnitsDescriptor.DefaultUnits.AirPressureUnits.GetEnum();
+            _cmbTemperatureUnits.ItemsSource = Units.TemperatureUnits.GetEnum();
+            _cmbAirPressureUnits.ItemsSource = Units.AirPressureUnits.GetEnum();
             
             _cmbTemperatureUnits.SelectedIndex = 0;
             _cmbAirPressureUnits.SelectedIndex = 0;
@@ -51,6 +55,9 @@ namespace MkZWeatherStation
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             BMDatabaseMap.INSTANCE.Load();
+            WeatherDataManager.INSTANCE.Load();
+            WeatherDataManager.INSTANCE.Merge(BMDatabaseMap.INSTANCE.Databases[0]);
+
             UpdateDeviceList();
             UpdateChart();
 
@@ -59,7 +66,7 @@ namespace MkZWeatherStation
             _btWatcher.OnTimerSaveAction = (elapsed) => { BMDatabaseMap.INSTANCE.Save(); };
             _btWatcher.StartBluetoothSearch();
 
-            BMDatabaseMap.INSTANCE.OnRecordAddedAction = (device) => { UpdateAllAsync(device); };
+            BMDatabaseMap.INSTANCE.OnRecordAddedAction = (device, record) => { UpdateAllAsync(device, record); };
 
             _radexDevice.Init();
         }
@@ -68,6 +75,7 @@ namespace MkZWeatherStation
         {
             _btWatcher.StopBluetoothSearch();
             BMDatabaseMap.INSTANCE.Save();
+            WeatherDataManager.INSTANCE.Save();
         }
 
         private void _listDevices_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -89,8 +97,10 @@ namespace MkZWeatherStation
             });
         }
 
-        public static void UpdateAllAsync(BluetoothDevice device)
+        public static void UpdateAllAsync(BluetoothDevice device, BMRecordCurrent record)
         {
+            WeatherDataManager.INSTANCE.weatherDB.BMRecords.Add(record);
+
             CommonTools.ExecuteOnUiThreadBeginInvoke(() =>
             {
                 MainWindow wnd = (Application.Current.MainWindow as MainWindow);
@@ -135,11 +145,11 @@ namespace MkZWeatherStation
             BMDeviceRecordVM dev = _devices.FirstOrDefault(d => d.DeviceAddress == db.Device.Address);
             if(dev == null)
             {
-                dev = new BMDeviceRecordVM(db);
+                dev = new BMDeviceRecordVM(db, Units);
                 _devices.Add(dev);
             }
             dev.Index = _devices.IndexOf(dev);
-            dev.Update(db);
+            dev.Update(db, Units);
         }
 
         public static void UpdateChartData()
@@ -171,7 +181,8 @@ namespace MkZWeatherStation
         private void UpdateRadiationChart()
         {
             List<RadiationDataPoint> points = _radexDevice.GetLog();
-            _chart4?.Set(points, true, true);
+            WeatherDataManager.INSTANCE.Merge(points);
+            _chart4?.UpdateChartRadiation(WeatherDataManager.INSTANCE.weatherDB.RadiationDataPoints.ToList<IDataPoint>(), Units.RadiationUnits, true);
         }
 
         private bool _isInUpdate = false;
@@ -183,12 +194,12 @@ namespace MkZWeatherStation
 
             DateTime startUpdateTime = DateTime.Now;
 
-            this.Title = "Barometer - " + db.Device;
+            this.Title = "Weather - " + db.Device;
 
             this.Cursor = Cursors.AppStarting;
 
-            db.Units.TemperatureUnits.Units = (eTemperatureUnits)_cmbTemperatureUnits.SelectedItem;
-            db.Units.AirPressureUnits.Units = (eAirPressureUnits)_cmbAirPressureUnits.SelectedItem;
+            Units.TemperatureUnits.Units = (eTemperatureUnits)_cmbTemperatureUnits.SelectedItem;
+            Units.AirPressureUnits.Units = (eAirPressureUnits)_cmbAirPressureUnits.SelectedItem;
 
             double days = double.Parse(((ComboBoxItem)_cmbDays.SelectedItem).Tag.ToString());
             TimeSpan daysBack = TimeSpan.FromDays(days);
@@ -231,9 +242,9 @@ namespace MkZWeatherStation
             }
 
             BMDeviceRecordVM dev = _listDevices.SelectedItem as BMDeviceRecordVM;
-            _chart1.UpdateChartTemperature(recordsOut, db.Units, dev.IsActive);
-            _chart2.UpdateChartHumidity(recordsOut, db.Units, dev.IsActive);
-            _chart3.UpdateChartAirPressure(recordsOut, db.Units, dev.IsActive);
+            _chart1.UpdateChartTemperature(recordsOut.ToList<IDataPoint>(), Units.TemperatureUnits, dev.IsActive);
+            _chart2.UpdateChartHumidity(recordsOut.ToList<IDataPoint>(), Units.RelativeHumidityUnits, dev.IsActive);
+            _chart3.UpdateChartAirPressure(recordsOut.ToList<IDataPoint>(), Units.AirPressureUnits, dev.IsActive);
 
             TimeSpan tsElapsed = DateTime.Now - startUpdateTime;
             _txtDilluteResult.Text = string.Format("Total: {0:###,###} -> {1:###,###} -> {2} ({3:0.0} ms)", 
@@ -261,10 +272,10 @@ namespace MkZWeatherStation
                 return;
             _isInUpdate = true;
 
-            UnitsDescriptor units = new UnitsDescriptor();
-            _chart1.UpdateChartTemperature(null, units, false);
-            _chart2.UpdateChartHumidity(null, units, false);
-            _chart3.UpdateChartAirPressure(null, units, false);
+            _chart1.UpdateChartTemperature(null, Units.TemperatureUnits, false);
+            _chart2.UpdateChartHumidity(null, Units.RelativeHumidityUnits, false);
+            _chart3.UpdateChartAirPressure(null, Units.AirPressureUnits, false);
+            _chart4.UpdateChartRadiation(null, Units.RadiationUnits, false);
 
             _isInUpdate = false;
         }

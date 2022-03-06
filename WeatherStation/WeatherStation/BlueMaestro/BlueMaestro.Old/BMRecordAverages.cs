@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using MkZ.Bluetooth;
 using MkZ.WeatherStation.Utils;
 using MkZ.Tools;
+using MkZ.Physics;
 
 namespace BlueMaestro.Old
 {
@@ -78,7 +79,7 @@ namespace BlueMaestro.Old
             desc += base.ToString();
             desc += ("AVG24 Temperature: " + Avg24.Temperature + " ºC \n");
             desc += ("AVG24 Humidity: " + Avg24.AirHumidity + " %RH \n");
-            desc += ("AVG24 Dew Point: " + Avg24.GetAirDewPoint(MkZ.BlueMaestroLib.UnitsDescriptor.DefaultUnits) + " ºC \n");
+            desc += ("AVG24 Dew Point: " + Avg24.GetAirDewPoint(new TemperatureUnits()) + " ºC \n");
             desc += ("AVG24 AirPressure: " + Avg24.AirPressure + " mBar \n");
             return desc;
         }

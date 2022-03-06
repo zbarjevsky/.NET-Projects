@@ -8,6 +8,7 @@ using System.Windows.Media;
 
 //using MkZWeatherStation.Utils;
 using MkZ.BlueMaestroLib;
+using MkZ.Physics;
 using MkZ.Windows;
 
 namespace MkZ.WeatherStation.BlueMaestro.UX
@@ -104,12 +105,12 @@ namespace MkZ.WeatherStation.BlueMaestro.UX
 
         public BMDatabase Database { get; private set; }
 
-        public BMDeviceRecordVM(BMDatabase db)
+        public BMDeviceRecordVM(BMDatabase db, UnitsDescriptor units)
         {
-            Update(db);
+            Update(db, units);
         }
 
-        public void Update(BMDatabase db)
+        public void Update(BMDatabase db, UnitsDescriptor units)
         {
             Database = db;
 
@@ -132,17 +133,17 @@ namespace MkZ.WeatherStation.BlueMaestro.UX
             LogsCount = "Logs: " + db.Records.Count;
             Battery = "Bat: " + r.BatteryLevel + "%";
 
-            Temperature.Value = (r.GetTemperature(db.Units)).ToString("0.0");
-            Temperature.Units = db.Units.TemperatureUnits.Desc;
+            Temperature.Value = (r.GetTemperature(units.TemperatureUnits)).ToString("0.0");
+            Temperature.Units = units.TemperatureUnits.Desc;
 
             AirHumidity.Value = (r.GetAirHumidity()).ToString("0.0");
-            AirHumidity.Units = db.Units.RelativeHumidityUnits.Desc;
+            AirHumidity.Units = units.RelativeHumidityUnits.Desc;
 
-            AirPressure.Value = (r.GetAirPressure(db.Units)).ToString("0.0");
-            AirPressure.Units = db.Units.AirPressureUnits.Desc;
+            AirPressure.Value = (r.GetAirPressure(units.AirPressureUnits)).ToString("0.0");
+            AirPressure.Units = units.AirPressureUnits.Desc;
 
-            AirDewPoint.Value = (r.GetAirDewPoint(db.Units)).ToString("0.0");
-            AirDewPoint.Units = db.Units.TemperatureUnits.Desc;
+            AirDewPoint.Value = (r.GetAirDewPoint(units.TemperatureUnits)).ToString("0.0");
+            AirDewPoint.Units = units.TemperatureUnits.Desc;
         }
     }
 }

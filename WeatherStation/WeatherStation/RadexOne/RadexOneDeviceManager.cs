@@ -77,7 +77,7 @@ namespace MkZ.Weather.RadexOne
                 });
             };
 
-            _radexDevice.Interval = 3000; //3 sec interval, start when connected to 1st port
+            _radexDevice.Interval = 15000; //3 sec interval, start when connected to 1st port
 
             _connectionCheckTask = Task.Run(() =>
             {
@@ -96,7 +96,7 @@ namespace MkZ.Weather.RadexOne
                         Debug.WriteLine(err.ToString());
                     }
 
-                    Thread.Sleep(1000);
+                    Thread.Sleep(3000); //wait 3 sec to check connection
                 }
             });
         }

@@ -131,7 +131,7 @@
             <controls:WeatherChartUserControl x:Name="_chart3" />
         </WindowsFormsHost>
         <WindowsFormsHost Grid.Row="4" Grid.Column="2" Margin="6" Background="White" >
-            <controls:RadiationGraphControl x:Name="_chart4" />
+            <controls:WeatherChartUserControl x:Name="_chart4" />
         </WindowsFormsHost>
         <GridSplitter Grid.Row="1" Grid.Column="3" Grid.RowSpan="4" HorizontalAlignment="Stretch" Background="DarkGoldenrod" />
     </Grid>

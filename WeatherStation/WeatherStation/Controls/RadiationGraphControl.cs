@@ -46,6 +46,11 @@ namespace MkZ.WeatherStation.Controls
         private void RadiationGraphControl_Load(object sender, EventArgs e)
         {
             //m_chart1.ChartAreas[0].AxisX.LabelStyle.Format = "MMM-dd HH:mm:ss";
+            
+            //To position Inner plotting area in % of  chart
+            m_chart1.ChartAreas[0].InnerPlotPosition.Auto = false;
+            m_chart1.ChartAreas[0].InnerPlotPosition.Width = 90;
+            m_chart1.ChartAreas[0].InnerPlotPosition.Height = 80;
         }
 
         private void EnableRedraw(bool bEnable)
@@ -109,8 +114,8 @@ namespace MkZ.WeatherStation.Controls
             if (points.Count == 0)
                 return;
 
-            DateTime first = points[0].date;
-            DateTime last = points.Last().date;
+            DateTime first = points[0].Date;
+            DateTime last = points.Last().Date;
             TimeSpan ts = (last - first);
             if (ts.TotalMinutes < 3)
             {
@@ -159,9 +164,9 @@ namespace MkZ.WeatherStation.Controls
             ChartHelper.ClearChart(m_chart1);
             foreach (RadiationDataPoint pt in points)
             {
-                ChartHelper.AddPointXY(m_chart1, 0, pt.RATE, pt.date);
-                ChartHelper.AddPointXY(m_chart1, 1, pt.CPM, pt.date);
-                ChartHelper.AddPointXY(m_chart1, 2, pt.Threshold, pt.date);
+                ChartHelper.AddPointXY(m_chart1, 0, pt.RATE, pt.Date);
+                ChartHelper.AddPointXY(m_chart1, 1, pt.CPM, pt.Date);
+                ChartHelper.AddPointXY(m_chart1, 2, pt.Threshold, pt.Date);
             }
 
             UpdateTimeLabelsFormat(points);

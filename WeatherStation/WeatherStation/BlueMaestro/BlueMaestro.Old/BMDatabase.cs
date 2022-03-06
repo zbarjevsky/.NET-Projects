@@ -9,6 +9,7 @@ using System.Xml.Serialization;
 
 //using MkZWeatherStation.Utils;
 using MkZ.Bluetooth;
+using MkZ.Physics;
 using MkZ.Tools;
 
 namespace BlueMaestro.Old
@@ -21,8 +22,8 @@ namespace BlueMaestro.Old
 
         public List<BMRecordCurrent> Records { get; } = new List<BMRecordCurrent>();
 
-        [XmlIgnore]
-        public MkZ.BlueMaestroLib.UnitsDescriptor Units { get; set; } = new MkZ.BlueMaestroLib.UnitsDescriptor();
+        //[XmlIgnore]
+        //public UnitsDescriptor Units { get; set; } = new UnitsDescriptor();
 
         public static string DataFolder
         {
@@ -55,7 +56,7 @@ namespace BlueMaestro.Old
         {
             Device = db.Device;
             Records.AddRange(db.Records);
-            Units = new MkZ.BlueMaestroLib.UnitsDescriptor(db.Units);
+            //Units = new MkZ.BlueMaestroLib.UnitsDescriptor(db.Units);
         }
 
         public BMRecordCurrent AddRecord(BluetoothDevice device, short rssi, DateTime recordDate, byte[] data)

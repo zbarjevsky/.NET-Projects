@@ -12,7 +12,7 @@ namespace MkZ.BlueMaestroLib
 {
     public class BMDatabaseMap
     {
-        public Action<BluetoothDevice> OnRecordAddedAction = null; // (dev) => { MainWindow.UpdateAllAsync(dev); };
+        public Action<BluetoothDevice, BMRecordCurrent> OnRecordAddedAction = null; // (dev) => { MainWindow.UpdateAllAsync(dev); };
 
         private Dictionary<ulong, BMDatabase> _map { get; } = new Dictionary<ulong, BMDatabase>();
 
@@ -46,16 +46,15 @@ namespace MkZ.BlueMaestroLib
             }
         }
 
-
         public BMRecordCurrent AddRecord(BluetoothDevice device, short rssi, DateTime recordDate, byte[] data)
         {
             if (!_map.ContainsKey(device.Address))
                 _map[device.Address] = new BMDatabase(device);
 
-               var record = _map[device.Address].AddRecord(device, rssi, recordDate, data);
+            BMRecordCurrent record = _map[device.Address].AddRecord(device, rssi, recordDate, data);
 
             if (record.IsValid)
-                 OnRecordAddedAction?.Invoke(device);
+                 OnRecordAddedAction?.Invoke(device, record);
 
             return record;
         }

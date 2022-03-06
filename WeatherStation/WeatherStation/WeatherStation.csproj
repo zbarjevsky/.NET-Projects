@@ -107,6 +107,8 @@
     <Compile Include="Utils\InvertBoolConverter.cs" />
     <Compile Include="BlueMaestro\BlueMaestro.Old\TextView.cs" />
     <Compile Include="BlueMaestro\BlueMaestro.Old\ViewGroup.cs" />
+    <Compile Include="Utils\ListUtils.cs" />
+    <Compile Include="WeatherDB.cs" />
     <Page Include="BlueMaestro\UX\BMDeviceRecordUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

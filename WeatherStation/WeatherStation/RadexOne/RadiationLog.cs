@@ -5,20 +5,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms.DataVisualization.Charting;
+using MkZ.Physics;
 using MkZ.Tools;
 using RadexOneLib;
 
 namespace MkZ.RadexOne
 {
-    public class RadiationDataPoint
+    public class RadiationDataPoint : Physics.IDataPoint
     {
-        public DateTime date = DateTime.Now;
+        public DateTime Date { get; set; } = DateTime.Now;
+
         public double CPM, RATE, DOSE, Threshold = 80;
+
+        public bool IsValid => RATE != 0.0;
+
+        public double GetValue<T>(IUnitBase<T> measurementType) where T : struct, IConvertible
+        {
+            return measurementType.Convert(RATE);
+        }
 
         public override string ToString()
         {
             return string.Format("{0} - Rate: {1:0.00} µSv/h, CPM: {2}, Dose: {3:##0.00} µSv, Threshold: {4} CPM", 
-                date.ToString("s"), RATE, CPM, DOSE, Threshold);
+                Date.ToString("s"), RATE, CPM, DOSE, Threshold);
         }
     }
 
