@@ -35,6 +35,24 @@ namespace MkZ.Weather
             BMRecords = ListUtils<BMRecordCurrent>.Merge(BMRecords, bMDatabase.Records,
                 (p1, p2) => { return p1.Date.CompareTo(p2.Date); });
         }
+
+        public List<RadiationDataPoint> GetLastRecords(TimeSpan interval)
+        {
+            List<RadiationDataPoint> records = new List<RadiationDataPoint>();
+            if (RadiationDataPoints.Count < 2)
+                return RadiationDataPoints;
+
+            DateTime last = RadiationDataPoints.Last().Date;
+            DateTime first = last - interval;
+
+            for (int i = 0; i < RadiationDataPoints.Count; i++)
+            {
+                if (RadiationDataPoints[i].Date > first)
+                    records.Add(RadiationDataPoints[i]);
+            }
+
+            return records;
+        }
     }
 
     public class WeatherDataManager
@@ -93,6 +111,19 @@ namespace MkZ.Weather
         public void Merge(BMDatabase bMDatabase)
         {
             weatherDB.Merge(bMDatabase);
+        }
+
+        public static string GenerateFileName()
+        {
+            string date = DateTime.Now.ToString("yyyy_MM_dd-HH_mm_ss");
+            string fileName = string.Format("WeatherDatabase_V1_{0}.xml", date);
+            fileName = Path.Combine(DataFolder, fileName);
+            return fileName;
+        }
+
+        public void SaveAs(string fileName, double bucketIntervalInSec)
+        {
+            XmlHelper.Save(fileName, weatherDB);
         }
     }
 }

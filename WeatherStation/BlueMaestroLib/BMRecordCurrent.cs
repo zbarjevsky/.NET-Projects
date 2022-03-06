@@ -128,7 +128,7 @@ namespace MkZ.BlueMaestroLib
 
         public static BMRecordCurrent operator +(BMRecordCurrent r1, BMRecordCurrent r2)
         {
-            BMRecordCurrent rec = new BMRecordCurrent(r2); //later one for time, battery level etc.
+            BMRecordCurrent rec = new BMRecordCurrent(r2); //lates one for time, battery level etc.
             rec.Temperature += r1.Temperature;
             rec.AirHumidity += r1.AirHumidity;
             rec.AirPressure += r1.AirPressure;

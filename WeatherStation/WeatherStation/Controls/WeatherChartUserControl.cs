@@ -31,6 +31,7 @@ namespace MkZ.WeatherStation.Controls
             public Color color = Color.Black;
             public string title = "Loading...";
             public string units = " " + TemperatureUnits.UNITS_C;
+            public string num_fmt = "0.0";
         }
 
         private Theme _theme = new Theme();
@@ -153,6 +154,7 @@ namespace MkZ.WeatherStation.Controls
         public void UpdateChartRadiation(List<Physics.IDataPoint> records, IUnitBase<eRadiationUnits> radiationUnits, bool isActive)
         {
             chart1.ChartAreas[0].AxisY.LabelStyle.Format = "{0.000}";
+            _theme.num_fmt = "0.0##";
 
             _scaleAbsolute = radiationUnits.Scale;
 
@@ -228,7 +230,7 @@ namespace MkZ.WeatherStation.Controls
                 _scaleFromPoints.Update(points[i].Value);
             }
 
-            m_txtValue.Text = points.Last().Value.ToString("0.0") + theme.units;
+            m_txtValue.Text = points.Last().Value.ToString(_theme.num_fmt) + theme.units;
 
             _annotationLine.AnchorY = points.Last().Value;
 
@@ -247,9 +249,7 @@ namespace MkZ.WeatherStation.Controls
             if (m_chkAutoScale.Checked)
             {
                 scale = _scaleFromPoints;
-                double margin = 0.1 + (scale.Max - scale.Min) / 5.0;
-                scale.Min -= margin;
-                scale.Max += margin;
+                scale.AddMargin(0.2);
             }
 
             chart1.ChartAreas[0].AxisY.Minimum = scale.Min;
@@ -354,8 +354,8 @@ namespace MkZ.WeatherStation.Controls
 
                 if (!double.IsNaN(pt.Value))
                 {
-                    txt = string.Format("[{0:0.0}{1}]\n{2}",
-                    pt.Value, _theme.units,
+                    txt = string.Format("[{0}{1}]\n{2}",
+                    pt.Value.ToString(_theme.num_fmt), _theme.units,
                     pt.Date.ToString("MMM dd, HH:mm:ss"));
                 }
                 else

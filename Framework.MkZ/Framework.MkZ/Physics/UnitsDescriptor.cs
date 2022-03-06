@@ -30,7 +30,7 @@ namespace MkZ.Physics
     public enum eRadiationUnits
     {
         μSv, //micro sievert (International System of Units (SI) Unit) 1 sievert (Sv) = 100 rem
-        mRem //milli Roentgen equivalent man (Common Unit Terminology) 1 rem = 0.01 sievert (Sv)
+        mRem //milli 'Roentgen equivalent man' (Common Unit Terminology) 1 rem = 0.01 sievert (Sv)
     }
 
     public struct Scale
@@ -48,6 +48,13 @@ namespace MkZ.Physics
         {
             Max = Math.Max(Max, val);
             Min = Math.Min(Min, val);
+        }
+
+        public void AddMargin(double percents = 0.2)
+        {
+            double margin = 0.001 + (Max - Min) * percents;
+            Min -= margin;
+            Max += margin;
         }
     }
 
@@ -134,7 +141,7 @@ namespace MkZ.Physics
 
         public Scale Scale
         {
-            get { return new Scale(Convert(0.001), Convert(1000.0)); }
+            get { return new Scale(Convert(0.0), Convert(0.8)); }
         }
 
         public void Reset()

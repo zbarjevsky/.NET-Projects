@@ -182,7 +182,24 @@ namespace MkZWeatherStation
         {
             List<RadiationDataPoint> points = _radexDevice.GetLog();
             WeatherDataManager.INSTANCE.Merge(points);
-            _chart4?.UpdateChartRadiation(WeatherDataManager.INSTANCE.weatherDB.RadiationDataPoints.ToList<IDataPoint>(), Units.RadiationUnits, true);
+
+            double days = double.Parse(((ComboBoxItem)_cmbDays.SelectedItem).Tag.ToString());
+            TimeSpan daysBack = TimeSpan.FromDays(days);
+
+            List<RadiationDataPoint> recordsIn = WeatherDataManager.INSTANCE.weatherDB.GetLastRecords(daysBack);
+            if(recordsIn == null || recordsIn.Count == 0)
+            {
+                //_chart4?.Clea
+            }
+            else
+            {
+                double bucketIntervalInSec = GetSelectedIntervalInSeconds(recordsIn.First().Date, recordsIn.Last().Date, recordsIn.Count);
+
+                List<IDataPoint> recordsOut = IDataPoint.ThinningByTime<RadiationDataPoint>(recordsIn, bucketIntervalInSec, eBucketingType.Maximum).ToList<IDataPoint>();
+
+                _chart4?.UpdateChartRadiation(recordsOut, Units.RadiationUnits, true);
+
+            }
         }
 
         private bool _isInUpdate = false;
@@ -206,7 +223,7 @@ namespace MkZWeatherStation
 
             List<BMRecordCurrent> recordsIn = db.GetLastRecords(daysBack);
 
-            List<BMRecordCurrent> recordsOut;
+            //List<BMRecordCurrent> recordsOut;
             //bool isIntervalZoom = false;
             //if (isIntervalZoom)
             //{
@@ -222,29 +239,18 @@ namespace MkZWeatherStation
             //    recordsOut = db.DilluteByPointAndConvertUnits(recordsIn, zoom);
             //}
             //else //dillute by time
-            {
-                double bucketIntervalInSec = 60 * double.Parse(((ComboBoxItem)_cmbInterval.SelectedItem).Tag.ToString());
-                if (_chkAutoZoom.IsChecked.Value)
-                {
-                    bucketIntervalInSec = 15;
-                    //_cmbInterval.SelectedIndex = 0; //all
-                    if(recordsIn.Count >= BMDatabase.MIN_RECORDS_TO_FILTER)
-                    {
-                        TimeSpan range = recordsIn.Last().Date - recordsIn.First().Date;
-                        bucketIntervalInSec = range.TotalSeconds / 1000; //interval in seconds to get 1000 points
-                        bucketIntervalInSec = GetClosestIntervalAndSetSelectInComboBox(bucketIntervalInSec);
-                    }
-                }
+            //{
+                double bucketIntervalInSec = GetSelectedIntervalInSeconds(recordsIn.First().Date, recordsIn.Last().Date, recordsIn.Count);
 
                 ////////
                 //
-                recordsOut = BMDatabase.DilluteByTime(recordsIn, bucketIntervalInSec);
-            }
+                List<IDataPoint> recordsOut = IDataPoint.ThinningByTime<BMRecordCurrent>(recordsIn, bucketIntervalInSec, eBucketingType.Average).ToList<IDataPoint>();
+            //}
 
             BMDeviceRecordVM dev = _listDevices.SelectedItem as BMDeviceRecordVM;
-            _chart1.UpdateChartTemperature(recordsOut.ToList<IDataPoint>(), Units.TemperatureUnits, dev.IsActive);
-            _chart2.UpdateChartHumidity(recordsOut.ToList<IDataPoint>(), Units.RelativeHumidityUnits, dev.IsActive);
-            _chart3.UpdateChartAirPressure(recordsOut.ToList<IDataPoint>(), Units.AirPressureUnits, dev.IsActive);
+            _chart1.UpdateChartTemperature(recordsOut, Units.TemperatureUnits, dev.IsActive);
+            _chart2.UpdateChartHumidity(recordsOut, Units.RelativeHumidityUnits, dev.IsActive);
+            _chart3.UpdateChartAirPressure(recordsOut, Units.AirPressureUnits, dev.IsActive);
 
             TimeSpan tsElapsed = DateTime.Now - startUpdateTime;
             _txtDilluteResult.Text = string.Format("Total: {0:###,###} -> {1:###,###} -> {2} ({3:0.0} ms)", 
@@ -253,6 +259,23 @@ namespace MkZWeatherStation
             this.Cursor = Cursors.Arrow;
 
             _isInUpdate = false;
+        }
+
+        private double GetSelectedIntervalInSeconds(DateTime firstDate, DateTime lastDate, int recordsCount)
+        {
+            double bucketIntervalInSec = 60 * double.Parse(((ComboBoxItem)_cmbInterval.SelectedItem).Tag.ToString());
+            if (_chkAutoZoom.IsChecked.Value)
+            {
+                bucketIntervalInSec = 15;
+                //_cmbInterval.SelectedIndex = 0; //all
+                if (recordsCount >= IDataPoint.MIN_RECORDS_TO_FILTER)
+                {
+                    TimeSpan range = lastDate - firstDate;
+                    bucketIntervalInSec = range.TotalSeconds / 1000; //interval in seconds to get 1000 points
+                    bucketIntervalInSec = GetClosestIntervalAndSetSelectInComboBox(bucketIntervalInSec);
+                }
+            }
+            return bucketIntervalInSec;
         }
 
         private double GetClosestIntervalAndSetSelectInComboBox(double interval)
@@ -287,6 +310,7 @@ namespace MkZWeatherStation
             {
                 db.SaveAs(db.GenerateFileName(), 1);
             }
+            WeatherDataManager.INSTANCE.SaveAs(WeatherDataManager.GenerateFileName(), 1);
             this.Cursor = Cursors.Arrow;
         }
 
