@@ -57,6 +57,8 @@ namespace MkZWeatherStation
             BMDatabaseMap.INSTANCE.Load();
             WeatherDataManager.INSTANCE.Load();
             WeatherDataManager.INSTANCE.Merge(BMDatabaseMap.INSTANCE.Databases[0]);
+            //add empty point at the end - to show disconnection
+            WeatherDataManager.INSTANCE.weatherDB.RadiationDataPoints.Add(new RadiationDataPoint());
 
             UpdateDeviceList();
             UpdateChart();
@@ -74,7 +76,12 @@ namespace MkZWeatherStation
         private void Window_Closed(object sender, EventArgs e)
         {
             _btWatcher.StopBluetoothSearch();
+            _radexDevice.Dispose();
+
             BMDatabaseMap.INSTANCE.Save();
+
+            //add empty point at the end - to show disconnection
+            WeatherDataManager.INSTANCE.weatherDB.RadiationDataPoints.Add(new RadiationDataPoint());
             WeatherDataManager.INSTANCE.Save();
         }
 
@@ -195,7 +202,7 @@ namespace MkZWeatherStation
             {
                 double bucketIntervalInSec = GetSelectedIntervalInSeconds(recordsIn.First().Date, recordsIn.Last().Date, recordsIn.Count);
 
-                List<IDataPoint> recordsOut = IDataPoint.ThinningByTime<RadiationDataPoint>(recordsIn, bucketIntervalInSec, eBucketingType.Maximum).ToList<IDataPoint>();
+                List<IDataPoint> recordsOut = IDataPoint.ThinningByTime<RadiationDataPoint>(recordsIn, bucketIntervalInSec, eBucketingType.Maximum, true).ToList<IDataPoint>();
 
                 _chart4?.UpdateChartRadiation(recordsOut, Units.RadiationUnits, true);
 
@@ -244,7 +251,7 @@ namespace MkZWeatherStation
 
                 ////////
                 //
-                List<IDataPoint> recordsOut = IDataPoint.ThinningByTime<BMRecordCurrent>(recordsIn, bucketIntervalInSec, eBucketingType.Average).ToList<IDataPoint>();
+                List<IDataPoint> recordsOut = IDataPoint.ThinningByTime<BMRecordCurrent>(recordsIn, bucketIntervalInSec, eBucketingType.Average, false).ToList<IDataPoint>();
             //}
 
             BMDeviceRecordVM dev = _listDevices.SelectedItem as BMDeviceRecordVM;

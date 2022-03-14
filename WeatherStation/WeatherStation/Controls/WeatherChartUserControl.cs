@@ -153,7 +153,7 @@ namespace MkZ.WeatherStation.Controls
 
         public void UpdateChartRadiation(List<Physics.IDataPoint> records, IUnitBase<eRadiationUnits> radiationUnits, bool isActive)
         {
-            chart1.ChartAreas[0].AxisY.LabelStyle.Format = "{0.000}";
+            chart1.ChartAreas[0].AxisY.LabelStyle.Format = "{0.00}";
             _theme.num_fmt = "0.0##";
 
             _scaleAbsolute = radiationUnits.Scale;
@@ -188,18 +188,18 @@ namespace MkZ.WeatherStation.Controls
             for (int i = 0; i < records.Count; i++)
             {
                 Physics.IDataPoint record = records[i];
-                if (!record.IsValid)
-                    continue;
+                //if (!record.IsValid)
+                //    continue;
 
                 double val = GetValue(record);
                 _bufferFull.Add(new ChartPoint(record.Date, val));
             }
 
-            UpdateChart();
+            UpdateChartData();
         }
 
         private bool _inUpdate = false;
-        private void UpdateChart()
+        private void UpdateChartData()
         {
             if (_inUpdate)
                 return;
@@ -221,7 +221,7 @@ namespace MkZ.WeatherStation.Controls
 
             EnableRedraw(false);
 
-            _scaleFromPoints = new Scale(points[0].Value, points[0].Value);
+            _scaleFromPoints = new Scale(points[0].Value, points[0].Value, _scaleAbsolute.MarginMinRelative, _scaleAbsolute.MarginMaxRelative);
 
             for (int i = 0; i < points.Count; i++)
             {
@@ -249,12 +249,35 @@ namespace MkZ.WeatherStation.Controls
             if (m_chkAutoScale.Checked)
             {
                 scale = _scaleFromPoints;
-                scale.AddMargin(0.2);
+                scale.ApplyMargin();
             }
 
             chart1.ChartAreas[0].AxisY.Minimum = scale.Min;
             chart1.ChartAreas[0].AxisY.Maximum = scale.Max;
             chart1.ChartAreas[0].RecalculateAxesScale();
+
+            UpdateValueLabelsFormat(scale);
+        }
+
+        private void UpdateValueLabelsFormat(Scale scale)
+        {
+            if (chart1.Series[0].Points.Count == 0)
+                return;
+
+            double count = chart1.Height / 24; // 24 pixels per interval
+            double valueRange = (scale.Max - scale.Min) / count;
+            double[] intervals = { 0.02, 0.05, 0.1, 0.2, 0.5, 1, 2, 5, 10, 20, 50, 100 };
+            string[] formats = { "{0.00}", "{0.00}", "{0.0}", "{0.0}", "{0.0}", "{0}", "{0}", "{0}", "{0}", "{0}", "{0}", "{0}" };
+            for (int i = 0; i < intervals.Length; i++)
+            {
+                double interval = intervals[i];
+                if (interval > valueRange)
+                {
+                    chart1.ChartAreas[0].AxisY.Interval = interval;
+                    chart1.ChartAreas[0].AxisY.LabelStyle.Format = formats[i];
+                    break;
+                }
+            }
         }
 
         private void UpdateTimeLabelsFormat()
@@ -410,6 +433,11 @@ namespace MkZ.WeatherStation.Controls
             }
 
             return false;
+        }
+
+        private void chart1_SizeChanged(object sender, EventArgs e)
+        {
+            UpdateGraphScale();
         }
 
         private void m_chkAutoScale_CheckedChanged(object sender, EventArgs e)

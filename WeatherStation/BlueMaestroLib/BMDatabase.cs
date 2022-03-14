@@ -312,7 +312,7 @@ namespace MkZ.BlueMaestroLib
             BMDatabase db = new BMDatabase(this);
             List<BMRecordCurrent> records = new List<BMRecordCurrent>(db.Records);
             db.Records.Clear();
-            db.Records.AddRange(IDataPoint.ThinningByTime<BMRecordCurrent>(records, bucketIntervalInSec, eBucketingType.Average));
+            db.Records.AddRange(IDataPoint.ThinningByTime<BMRecordCurrent>(records, bucketIntervalInSec, eBucketingType.Average, false));
 
             Save(fileName, db);
         }

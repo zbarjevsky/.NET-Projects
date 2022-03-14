@@ -32,7 +32,7 @@ namespace MkZ.Physics
 
         public const int MIN_RECORDS_TO_FILTER = 1000;
 
-        public static List<T> ThinningByTime<T>(List<T> recordsIn, double bucketIntervalInSec, eBucketingType bucketingMode) where T : IDataPoint, new()
+        public static List<T> ThinningByTime<T>(List<T> recordsIn, double bucketIntervalInSec, eBucketingType bucketingType, bool includeInvalidPoints) where T : IDataPoint, new()
         {
             lock (recordsIn)
             {
@@ -55,13 +55,9 @@ namespace MkZ.Physics
                     int idx = (int)(secondsFromFirst / bucketIntervalInSec);
                     if (idx > bucketIndex) //next bucket
                     {
-                        T rec = new T();
-                        if (bucketingMode == eBucketingType.Average)
-                            rec = GetAverageValue(recordsIn, bucketStart, i - bucketStart);
-                        else if (bucketingMode == eBucketingType.Maximum)
-                            rec = GetMaximumValue(recordsIn, bucketStart, i - bucketStart);
+                         List<T> rec = GetBucketValue(recordsIn, bucketStart, i - bucketStart, bucketingType, includeInvalidPoints);
 
-                        recordsOut.Add(rec);
+                        recordsOut.AddRange(rec);
                         bucketStart = i;
                         bucketIndex = idx;
                     }
@@ -88,49 +84,67 @@ namespace MkZ.Physics
             }
         }
 
-        public static T GetMaximumValue<T>(List<T> records, int start, int bucketSize) where T : IDataPoint, new()
+        private static List<T> GetBucketValue<T>(List<T> records, int start, int bucketSize, eBucketingType bucketingType, bool includeInvalidPoints) where T : IDataPoint, new()
         {
+            List<T> list = new List<T>();
             if (start >= records.Count || bucketSize <= 0)
-                return default(T);
+                return list;
 
-            T rec = new T();
-            rec.CopyFrom(records[start]);
             if (bucketSize == 1)
-                return rec;
-
-            int count = 1;
-            int validCount = 1;
-            for (int i = start + 1; i < records.Count && i < (start + bucketSize); i++, count++)
             {
-                if (records[i].IsValid)
+                T rec0 = new T();
+                rec0.CopyFrom(records[start]);
+                list.Add(rec0);
+                return list;
+            }
+
+            if (!includeInvalidPoints)
+            {
+                T rec0 = GetBucketValueForValidRecords(records, start, bucketSize, bucketingType);
+                list.Add(rec0);
+                return list;
+            }
+
+            //break into sub buckets if there are invalid items
+            //each invalid item will be inserted, other will be calculated sub bucket value
+            int subBucketStart = start;
+            int subBucketSize = 0;
+            for (int i = start; i < records.Count && i < (start + bucketSize); i++)
+            {
+                if (!records[i].IsValid)
                 {
-                    for (int v = 0; v < rec.Values.Length; v++)
+                    if (subBucketSize > 0)
                     {
-                        rec.Values[v] = Math.Max(rec.Values[v], records[i].Values[v]);
+                        T rec1 = GetBucketValueForValidRecords(records, subBucketStart, subBucketSize, bucketingType);
+                        list.Add(rec1);
                     }
-                    validCount++;
+
+                    subBucketStart = i + 1;
+                    subBucketSize = 0;
+
+                    T rec0 = new T();
+                    rec0.CopyFrom(records[i]);
+                    list.Add(rec0);
+
+                    continue;
                 }
+
+                subBucketSize++;
             }
 
-            //for (int v = 0; v < rec.Values.Length; v++)
-            //{
-            //    rec.Values[v] /= validCount;
-            //}
-
-            TimeSpan interval = records[start + count - 1].Date - records[start].Date;
-            TimeSpan halfInterval = TimeSpan.FromMilliseconds(interval.TotalMilliseconds / 2);
-            rec.Date = records[start].Date + halfInterval;
-
-            if (interval.TotalSeconds < 1.0)
+            if (subBucketSize > 0)
             {
-                Log.d("Interval is too small: idx: {0} count: {1} time: {2}", start, bucketSize, interval);
+                T rec1 = GetBucketValueForValidRecords(records, subBucketStart, subBucketSize, bucketingType);
+                list.Add(rec1);
             }
 
-            return rec;
+            return list;
         }
 
-        public static T GetAverageValue<T>(List<T> records, int start, int bucketSize) where T : IDataPoint, new()
+        //use to calculate one value for backet that has valid values only
+        private static T GetBucketValueForValidRecords<T>(List<T> records, int start, int bucketSize, eBucketingType bucketingType) where T : IDataPoint, new()
         {
+            List<T> list = new List<T>();
             if (start >= records.Count || bucketSize <= 0)
                 return default(T);
 
@@ -145,26 +159,43 @@ namespace MkZ.Physics
             {
                 if (records[i].IsValid)
                 {
-                    for (int v = 0; v < rec.Values.Length; v++)
-                    {
-                        rec.Values[v] += records[i].Values[v];
-                    }
                     validCount++;
+                    if (bucketingType == eBucketingType.Maximum)
+                    {
+                        for (int v = 0; v < rec.Values.Length; v++)
+                        {
+                            rec.Values[v] = Math.Max(rec.Values[v], records[i].Values[v]);
+                        }
+                    }
+                    else if (bucketingType == eBucketingType.Average)
+                    {
+                        for (int v = 0; v < rec.Values.Length; v++)
+                        {
+                            rec.Values[v] += records[i].Values[v];
+                        }
+                    }
                 }
             }
 
-            for (int v = 0; v < rec.Values.Length; v++)
+            if (bucketingType == eBucketingType.Average)
             {
-                rec.Values[v] /= validCount;
+                for (int v = 0; v < rec.Values.Length; v++)
+                {
+                    rec.Values[v] /= validCount;
+                }
+
+                TimeSpan interval = records[start + count - 1].Date - records[start].Date;
+                TimeSpan halfInterval = TimeSpan.FromMilliseconds(interval.TotalMilliseconds / 2);
+                rec.Date = records[start].Date + halfInterval;
+
+                if (interval.TotalSeconds < 1.0)
+                {
+                    Log.d("Interval is too small: idx: {0} count: {1} time: {2}", start, bucketSize, interval);
+                }
             }
-
-            TimeSpan interval = records[start + count - 1].Date - records[start].Date;
-            TimeSpan halfInterval = TimeSpan.FromMilliseconds(interval.TotalMilliseconds / 2);
-            rec.Date = records[start].Date + halfInterval;
-
-            if (interval.TotalSeconds < 1.0)
+            else if (bucketingType == eBucketingType.Maximum)
             {
-                Log.d("Interval is too small: idx: {0} count: {1} time: {2}", start, bucketSize, interval);
+                //rec.Date = records[start].Date; //already set
             }
 
             return rec;

@@ -23,7 +23,9 @@ namespace RadexOneLib
 
         public Action<string> DisconnectEvent = (reason) => { };
 
-        public bool Pause = false;
+        public volatile bool Pause = false;
+
+        private Thread _connectionThread = null;
 
         private int _interval = 500;
         public int Interval
@@ -77,7 +79,7 @@ namespace RadexOneLib
             if (!_radexPort.IsOpen)
                 return;
 
-            OnDisconnected("");
+            OnDisconnected("Close");
         }
 
         public void SendRequestData()
@@ -131,8 +133,11 @@ namespace RadexOneLib
         {
             if (bStart)
             {
+                if (_connectionThread != null)
+                    return;
+
                 _cancel = false;
-                Thread t = new Thread(new ThreadStart(() =>
+                _connectionThread = new Thread(new ThreadStart(() =>
                 {
                     while (!_cancel)
                     {
@@ -149,12 +154,19 @@ namespace RadexOneLib
                                 break;
                             }
                         }
-                        Thread.Sleep(_interval);
+
+                        int count = _interval / 100;
+                        for (int i = 0; i < count && !_cancel; i++)
+                        {
+                            Thread.Sleep(_interval/count);
+                        }
                     }
+
+                    _connectionThread = null;
                 }));
-                t.Name = "RadexConnectionThread";
-                t.IsBackground = true;
-                t.Start();
+                _connectionThread.Name = "RadexConnectionThread";
+                _connectionThread.IsBackground = true;
+                _connectionThread.Start();
             }
             else
             {

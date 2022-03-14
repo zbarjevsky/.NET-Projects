@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Win32;
 using MkZ.RadexOne;
 using MkZ.WPF;
 using RadexOneLib;
@@ -13,6 +14,8 @@ namespace MkZ.Weather.RadexOne
 {
     public class RadexOneDeviceManager : IDisposable
     {
+        public const int CONNECTION_CHECK_TIMEOUT = 3000;
+
         private readonly RadexOneConnection _radexDevice = new RadexOneConnection();
         private List<RadexComPortDesc> _radexPorts = new List<RadexComPortDesc>();
         private readonly RadexOneConfig _radexConfig = new RadexOneConfig();
@@ -41,9 +44,7 @@ namespace MkZ.Weather.RadexOne
                     Threshold = 60 // (double)m_numMaxCPM.Value
                 };
 
-                _history.Log.Add(pt);
-                if (_history.Log.Count > 1024 * 1024) //max size 1M
-                    _history.Log.RemoveAt(0);
+                AddPoint(pt);
 
                 WPFUtils.ExecuteOnUiThreadInvoke(() =>
                 {
@@ -77,7 +78,7 @@ namespace MkZ.Weather.RadexOne
                 });
             };
 
-            _radexDevice.Interval = 15000; //3 sec interval, start when connected to 1st port
+            _radexDevice.Interval = 15000; //15 sec interval, start when connected to 1st port
 
             _connectionCheckTask = Task.Run(() =>
             {
@@ -96,9 +97,46 @@ namespace MkZ.Weather.RadexOne
                         Debug.WriteLine(err.ToString());
                     }
 
-                    Thread.Sleep(3000); //wait 3 sec to check connection
+                    int count = CONNECTION_CHECK_TIMEOUT / 100;
+                    for (int i = 0; i < count; i++)
+                    {
+                        if (_cancel)
+                            break;
+                        Thread.Sleep(100); //wait 3 sec to check connection
+                    }
                 }
             });
+
+            SystemEvents.PowerModeChanged += SystemEvents_PowerModeChanged;
+        }
+
+        private void SystemEvents_PowerModeChanged(object sender, PowerModeChangedEventArgs e)
+        {
+            switch (e.Mode)
+            {
+                case PowerModes.Resume:
+                    AddPoint(new RadiationDataPoint());// "Resume"));
+                    _radexDevice.Pause = false;
+                    break;
+                case PowerModes.StatusChange:
+                    break;
+                case PowerModes.Suspend:
+                    _radexDevice.Pause = true;
+                    AddPoint(new RadiationDataPoint());// "Sleep"));
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public void AddPoint(RadiationDataPoint pt)
+        {
+            lock (_history)
+            {
+                _history.Log.Add(pt);
+                if (_history.Log.Count > 1024 * 1024) //max size 1M
+                    _history.Log.RemoveAt(0);
+            }
         }
 
         public List<RadiationDataPoint> GetLog()
@@ -134,8 +172,13 @@ namespace MkZ.Weather.RadexOne
 
         public void Dispose()
         {
+            if (_connectionCheckTask == null)
+                return;
+
+            _radexDevice.Close();
+
             _cancel = true;
-            _connectionCheckTask?.Wait(2000);
+            _connectionCheckTask?.Wait(CONNECTION_CHECK_TIMEOUT);
             _connectionCheckTask = null;
         }
     }

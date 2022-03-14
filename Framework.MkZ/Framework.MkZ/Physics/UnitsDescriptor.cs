@@ -35,13 +35,13 @@ namespace MkZ.Physics
 
     public struct Scale
     {
-        public double Min;
-        public double Max;
+        public double Min, MarginMinRelative;
+        public double Max, MarginMaxRelative;
 
-        public Scale(double min, double max)
+        public Scale(double min, double max, double marginMinRelative = 0.2, double marginMaxRelative = 0.2)
         {
-            Min = min;
-            Max = max;
+            Min = min; MarginMinRelative = marginMinRelative;
+            Max = max; MarginMaxRelative = marginMaxRelative;
         }
 
         public void Update(double val)
@@ -50,11 +50,12 @@ namespace MkZ.Physics
             Min = Math.Min(Min, val);
         }
 
-        public void AddMargin(double percents = 0.2)
+        public void ApplyMargin()
         {
-            double margin = 0.001 + (Max - Min) * percents;
-            Min -= margin;
-            Max += margin;
+            double marginMax = Math.Abs(Max - Min) * MarginMaxRelative;
+            double marginMin = Math.Abs(Max - Min) * MarginMinRelative;
+            Min -= marginMin;
+            Max += marginMax;
         }
     }
 
@@ -141,7 +142,7 @@ namespace MkZ.Physics
 
         public Scale Scale
         {
-            get { return new Scale(Convert(0.0), Convert(0.8)); }
+            get { return new Scale(Convert(0.0), Convert(0.8), 0, 0.2); }
         }
 
         public void Reset()
