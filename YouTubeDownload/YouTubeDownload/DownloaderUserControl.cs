@@ -12,6 +12,7 @@ using System.IO;
 
 
 using MkZ.Tools;
+using System.Threading;
 
 namespace YouTubeDownload
 {
@@ -89,7 +90,7 @@ namespace YouTubeDownload
 
         public void Start(DownloadData data, bool noWindow)
         {
-            timer1.Start();
+            _timerUpdateProgress.Start();
            _engine.Start(data, noWindow);
         }
 
@@ -103,7 +104,7 @@ namespace YouTubeDownload
             this.BeginInvoke(new MethodInvoker(() =>
             {
                 this.Cursor = Cursors.Arrow;
-                timer1.Stop();
+                _timerUpdateProgress.Stop();
                 UpdateOutput("======================= Done: "+ _engine.Data.State + " ========================");
                 m_ProgressBar.Style = ProgressBarStyle.Continuous;
                 m_ProgressBar.Value = (int)_engine.Data.Progress;
@@ -125,6 +126,7 @@ namespace YouTubeDownload
                     OutputDataReceived(line);
                 }));
             }
+            Thread.Sleep(10);
         }
 
         private void UpdateOutput(string line)
@@ -132,8 +134,8 @@ namespace YouTubeDownload
             _stopwatch.Restart();
             m_lblTime.Text = "Downloading... ";
 
-            if (m_txtOutput.Text.Length > 64000)
-                m_txtOutput.Text = m_txtOutput.Text.Substring(0, 64000);
+            if (m_txtOutput.Text.Length > 4000)
+                m_txtOutput.Text = m_txtOutput.Text.Substring(0, 4000);
 
             m_txtOutput.Text = (line + "\n") + m_txtOutput.Text;
 

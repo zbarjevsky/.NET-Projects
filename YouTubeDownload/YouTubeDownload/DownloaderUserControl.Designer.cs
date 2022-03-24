@@ -37,7 +37,7 @@
             this.m_lblTime = new System.Windows.Forms.Label();
             this.m_pnlLinks = new System.Windows.Forms.Panel();
             this.m_lblPlayListStatus = new System.Windows.Forms.Label();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this._timerUpdateProgress = new System.Windows.Forms.Timer(this.components);
             this.m_pnlOutput.SuspendLayout();
             this.m_pnlLinks.SuspendLayout();
             this.SuspendLayout();
@@ -50,11 +50,11 @@
             this.m_txtOutput.BackColor = System.Drawing.Color.Black;
             this.m_txtOutput.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.m_txtOutput.ForeColor = System.Drawing.Color.Pink;
-            this.m_txtOutput.Location = new System.Drawing.Point(1, 22);
-            this.m_txtOutput.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.m_txtOutput.Location = new System.Drawing.Point(1, 18);
+            this.m_txtOutput.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.m_txtOutput.Name = "m_txtOutput";
             this.m_txtOutput.ReadOnly = true;
-            this.m_txtOutput.Size = new System.Drawing.Size(588, 186);
+            this.m_txtOutput.Size = new System.Drawing.Size(441, 150);
             this.m_txtOutput.TabIndex = 4;
             this.m_txtOutput.Text = "Output";
             this.m_txtOutput.WordWrap = false;
@@ -63,10 +63,9 @@
             // 
             this.m_lnkDestination.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_lnkDestination.Location = new System.Drawing.Point(4, 4);
-            this.m_lnkDestination.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.m_lnkDestination.Location = new System.Drawing.Point(3, 3);
             this.m_lnkDestination.Name = "m_lnkDestination";
-            this.m_lnkDestination.Size = new System.Drawing.Size(584, 16);
+            this.m_lnkDestination.Size = new System.Drawing.Size(438, 13);
             this.m_lnkDestination.TabIndex = 5;
             this.m_lnkDestination.TabStop = true;
             this.m_lnkDestination.Text = "Destination: N/A";
@@ -77,20 +76,18 @@
             this.m_ProgressBar.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.m_ProgressBar.Location = new System.Drawing.Point(1, 0);
-            this.m_ProgressBar.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_ProgressBar.Name = "m_ProgressBar";
             this.m_ProgressBar.ShowInTaskbar = true;
-            this.m_ProgressBar.Size = new System.Drawing.Size(439, 17);
+            this.m_ProgressBar.Size = new System.Drawing.Size(329, 14);
             this.m_ProgressBar.TabIndex = 6;
             // 
             // m_lblStatus
             // 
             this.m_lblStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_lblStatus.Location = new System.Drawing.Point(4, 55);
-            this.m_lblStatus.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.m_lblStatus.Location = new System.Drawing.Point(3, 45);
             this.m_lblStatus.Name = "m_lblStatus";
-            this.m_lblStatus.Size = new System.Drawing.Size(584, 16);
+            this.m_lblStatus.Size = new System.Drawing.Size(438, 13);
             this.m_lblStatus.TabIndex = 8;
             this.m_lblStatus.Text = "Status: N/A";
             // 
@@ -100,20 +97,18 @@
             this.m_pnlOutput.Controls.Add(this.m_txtOutput);
             this.m_pnlOutput.Controls.Add(this.m_ProgressBar);
             this.m_pnlOutput.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_pnlOutput.Location = new System.Drawing.Point(0, 76);
-            this.m_pnlOutput.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.m_pnlOutput.Location = new System.Drawing.Point(0, 62);
             this.m_pnlOutput.Name = "m_pnlOutput";
-            this.m_pnlOutput.Size = new System.Drawing.Size(592, 210);
+            this.m_pnlOutput.Size = new System.Drawing.Size(444, 170);
             this.m_pnlOutput.TabIndex = 9;
             // 
             // m_lblTime
             // 
             this.m_lblTime.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_lblTime.AutoSize = true;
-            this.m_lblTime.Location = new System.Drawing.Point(448, 1);
-            this.m_lblTime.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.m_lblTime.Location = new System.Drawing.Point(336, 1);
             this.m_lblTime.Name = "m_lblTime";
-            this.m_lblTime.Size = new System.Drawing.Size(20, 17);
+            this.m_lblTime.Size = new System.Drawing.Size(16, 13);
             this.m_lblTime.TabIndex = 7;
             this.m_lblTime.Text = "...";
             // 
@@ -124,35 +119,33 @@
             this.m_pnlLinks.Controls.Add(this.m_lblStatus);
             this.m_pnlLinks.Dock = System.Windows.Forms.DockStyle.Top;
             this.m_pnlLinks.Location = new System.Drawing.Point(0, 0);
-            this.m_pnlLinks.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.m_pnlLinks.Name = "m_pnlLinks";
-            this.m_pnlLinks.Size = new System.Drawing.Size(592, 76);
+            this.m_pnlLinks.Size = new System.Drawing.Size(444, 62);
             this.m_pnlLinks.TabIndex = 10;
             // 
             // m_lblPlayListStatus
             // 
             this.m_lblPlayListStatus.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.m_lblPlayListStatus.Location = new System.Drawing.Point(4, 30);
-            this.m_lblPlayListStatus.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.m_lblPlayListStatus.Location = new System.Drawing.Point(3, 24);
             this.m_lblPlayListStatus.Name = "m_lblPlayListStatus";
-            this.m_lblPlayListStatus.Size = new System.Drawing.Size(584, 16);
+            this.m_lblPlayListStatus.Size = new System.Drawing.Size(438, 13);
             this.m_lblPlayListStatus.TabIndex = 9;
             this.m_lblPlayListStatus.Text = "Status: N/A";
             // 
-            // timer1
+            // _timerUpdateProgress
             // 
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            this._timerUpdateProgress.Interval = 500;
+            this._timerUpdateProgress.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // DownloaderUserControl
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.m_pnlOutput);
             this.Controls.Add(this.m_pnlLinks);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "DownloaderUserControl";
-            this.Size = new System.Drawing.Size(592, 286);
+            this.Size = new System.Drawing.Size(444, 232);
             this.Load += new System.EventHandler(this.DownloaderUserControl_Load);
             this.m_pnlOutput.ResumeLayout(false);
             this.m_pnlOutput.PerformLayout();
@@ -171,6 +164,6 @@
         private System.Windows.Forms.Panel m_pnlLinks;
         private System.Windows.Forms.Label m_lblPlayListStatus;
         private System.Windows.Forms.Label m_lblTime;
-        private System.Windows.Forms.Timer timer1;
+        private System.Windows.Forms.Timer _timerUpdateProgress;
     }
 }
