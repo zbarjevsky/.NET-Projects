@@ -206,11 +206,18 @@ namespace MkZ.WPF
             if (translate == null)
                 return;
 
-            Vector initialOffset = new Vector(translate.X, translate.Y);
             if (bAbsoluteOffset)
-                initialOffset = new Vector(); //from 0,0
-
-            ApplyOffsetEnsureInsideMargin(element, initialOffset, offset);
+            {
+                translate.X = offset.X;
+                translate.Y = offset.Y;
+                //Vector initialOffset = new Vector();
+                //ApplyOffsetEnsureInsideMargin(element, initialOffset, offset);
+            }
+            else
+            {
+                Vector initialOffset = new Vector(translate.X, translate.Y);
+                ApplyOffsetEnsureInsideMargin(element, initialOffset, offset);
+            }
         }
 
         private static void control_MouseDown(object sender, MouseButtonEventArgs e)
@@ -299,7 +306,7 @@ namespace MkZ.WPF
             ApplyOffsetEnsureInsideMargin(element, initialOffset, new Vector());
         }
 
-        private static void ApplyOffsetEnsureInsideMargin(FrameworkElement element, Vector initialOffset, Vector offset)
+        private static void ApplyOffsetEnsureInsideMargin(FrameworkElement element, Vector initialOffset, Vector newOffset)
         {
             if (!_draggables.ContainsKey(element))
                 return;
@@ -310,15 +317,18 @@ namespace MkZ.WPF
             if (translate == null)
                 return;
 
-            Rect bounds = RelativeLocation(element);
+            Vector currentOffset = new Vector(translate.X, translate.Y);
+
+            Rect bounds = ParentRelativeBounds(element);
             //Debug.WriteLine("location: " + bounds);
 
-            Vector offsetDelta = new Vector(offset.X, offset.Y) - (new Vector(translate.X, translate.Y) - initialOffset);
+            Vector offsetDelta = new Vector(newOffset.X, newOffset.Y) - (currentOffset - initialOffset);
+            //Vector offsetDelta = new Vector(newOffset.X, newOffset.Y) - (initialOffset);
 
             double corrX = CalculateCorrectionInsideMargin(bounds.X, offsetDelta.X, element.RenderSize.Width, bounds.Width, margin.Left, margin.Right);
-            translate.X = initialOffset.X + offset.X - corrX;
+            translate.X = initialOffset.X + newOffset.X - corrX;
             double corrY = CalculateCorrectionInsideMargin(bounds.Y, offsetDelta.Y, element.RenderSize.Height, bounds.Height, margin.Top, margin.Bottom);
-            translate.Y = initialOffset.Y + offset.Y - corrY;
+            translate.Y = initialOffset.Y + newOffset.Y - corrY;
 
             if (_draggables[element].OnChange != null)
                 _draggables[element].OnChange();
@@ -344,9 +354,9 @@ namespace MkZ.WPF
             return 0; //no correction
         }
 
-        //rect.TopLeft is elemnt relative position to container grid row/column
+        //rect.TopLeft is element relative position to container grid row/column
         //rect.Size - is cell size counting rowSpan and column span 
-        private static Rect RelativeLocation(FrameworkElement element)
+        private static Rect ParentRelativeBounds(FrameworkElement element)
         {
             FrameworkElement parent = element.Parent as FrameworkElement;
 

@@ -28,6 +28,17 @@ namespace MkZ.MediaPlayer
 
         public MediaPlayerCommands MediaPlayerCommands { get; set; } = null;
 
+        [Editor(typeof(System.Windows.Forms.Design.FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
+        public string BackgroundImageFileName
+        {
+            get => AppConfig.MediaDatabaseInfo.SelectedPlayList.BackgroundImageFile;
+            set
+            {
+                AppConfig.MediaDatabaseInfo.SelectedPlayList.BackgroundImageFile = value;
+                NotifyPropertyChanged();
+            }
+        }
+
         public void AddNewMediaFiles(PlayList playList, string[] fileNames, double volume)
         {
             List<string> unsupported = new List<string>();
@@ -46,7 +57,7 @@ namespace MkZ.MediaPlayer
                 }
                 else if (AppConfig.Settings.IsSupportedImageFile(fileName))
                 {
-                    AppConfig.Settings.BackgroundImageFileName = fileName;
+                    BackgroundImageFileName = fileName;
                 }
                 else if (AppConfig.Settings.IsSupportedMediaFile(fileName))
                 {

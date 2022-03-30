@@ -72,7 +72,7 @@ namespace MkZ.MediaPlayer
             _zoomImage = new ScrollDragZoom(_imageBackground, _scrollMain);
             _zoomImage.FitWindow(0);
 
-            Context.AppConfig.Settings.PropertyChanged += Config_PropertyChanged;
+            Context.PropertyChanged += Config_PropertyChanged;
             Context.AppConfig.MediaDatabaseInfo.PropertyChanged += MediaDatabaseInfo_PropertyChanged;
 
             _hideHeaderAnimationHelper = new GridLengthAnimationHelper(this, rowHeader);
@@ -240,9 +240,9 @@ namespace MkZ.MediaPlayer
 
         private void Config_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(Context.AppConfig.Settings.BackgroundImageFileName))
+            if (e.PropertyName == nameof(Context.BackgroundImageFileName))
             {
-                this.Background = ColorUtils.CalculateAverageColor(Context.AppConfig.Settings.BackgroundImageFileName);
+                this.Background = ColorUtils.CalculateAverageColor(Context.BackgroundImageFileName);
             }
         }
 
@@ -592,7 +592,7 @@ namespace MkZ.MediaPlayer
 
         private void OpenClosestImageFile(int direction)
         {
-            string file = Context.AppConfig.Settings.BackgroundImageFileName;
+            string file = Context.BackgroundImageFileName;
             if (!File.Exists(file))
             {
                 ApplicationCommands.Open.Execute(this, null);
@@ -616,7 +616,7 @@ namespace MkZ.MediaPlayer
             if (idx >= list.Count)
                 idx = 0;
 
-            Context.AppConfig.Settings.BackgroundImageFileName = list[idx];
+            Context.BackgroundImageFileName = list[idx];
         }
     }
 }

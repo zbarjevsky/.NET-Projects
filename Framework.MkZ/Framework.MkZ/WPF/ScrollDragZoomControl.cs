@@ -94,21 +94,23 @@ namespace MkZ.WPF
         public void BoundsAttach(OffsetAndZoom loc)
         {
             _attachedState = null; //pause update
-            
-            if (loc == null)
-                loc = new OffsetAndZoom();
+
+            OffsetAndZoom tmpLoc = loc;
+            if (loc == null) //detach
+                tmpLoc = new OffsetAndZoom();
 
             Debug.WriteLine("Restore {0} Zoom from: {1:0.00} to {2:0.00}, Original Size: {3}",
-                Name, _scrollDragZoom.Zoom, loc.Zoom, _scrollDragZoom.NaturalSize);
+                Name, _scrollDragZoom.Zoom, tmpLoc.Zoom, _scrollDragZoom.NaturalSize);
 
-            if (loc.Zoom > 10) loc.Zoom = 10;
-            _scrollDragZoom.Zoom = loc.Zoom;
+            if (tmpLoc.Zoom > 10) tmpLoc.Zoom = 10;
+            _scrollDragZoom.Zoom = tmpLoc.Zoom;
 
-            Debug.WriteLine("Restore {0} Offset to: {1:0.00}", Name, loc.Offset);
+            Debug.WriteLine("Restore {0} Offset to: {1:0.00}", Name, tmpLoc.Offset);
 
-            _control.SetDraggableOffset(loc.Offset, bAbsoluteOffset: true);
+            _control.SetDraggableOffset(tmpLoc.Offset, bAbsoluteOffset: true);
 
-            _attachedState = loc; //continue update
+            if(loc != null)
+                _attachedState = tmpLoc; //attach to updates
         }
 
         public void BoundsGet(OffsetAndZoom loc)

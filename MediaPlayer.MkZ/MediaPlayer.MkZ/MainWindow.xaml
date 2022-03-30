@@ -289,7 +289,7 @@
         <ScrollViewer x:Name="_scrollMain" Grid.Row="1" Grid.RowSpan="1" 
                       Background="Transparent" CanContentScroll="True" >
             <Image x:Name="_imageBackground"
-               Source="{Binding AppConfig.Settings.BackgroundImageFileName}" />
+               Source="{Binding BackgroundImageFileName}" />
         </ScrollViewer>
 
         <mediaplayer:VideoPlayerControl Grid.Row="1" x:Name="_player"

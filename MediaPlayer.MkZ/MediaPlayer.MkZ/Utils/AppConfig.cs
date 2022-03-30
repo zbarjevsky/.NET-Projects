@@ -104,14 +104,6 @@ namespace MkZ.MediaPlayer.Utils
     [Serializable]
     public class Configuration : NotifyPropertyChangedImpl
     {
-        private string _backgroundImageFileName = "";
-        [Editor(typeof(System.Windows.Forms.Design.FileNameEditor), typeof(System.Drawing.Design.UITypeEditor))]
-        public string BackgroundImageFileName
-        {
-            get { return _backgroundImageFileName; }
-            set { SetProperty(ref _backgroundImageFileName, value); }
-        }
-
         private bool _showTestControls = true;
         public bool ShowTestControls { get => _showTestControls; set => SetProperty(ref _showTestControls, value); }
 
@@ -156,8 +148,6 @@ namespace MkZ.MediaPlayer.Utils
         public void CopyFrom(Configuration config)
         {
             config.EnsureHasValues();
-
-            BackgroundImageFileName = config.BackgroundImageFileName;
 
             ShowTestControls = config.ShowTestControls;
 
@@ -293,6 +283,8 @@ namespace MkZ.MediaPlayer.Utils
 
         //if (config.ClockConfig.IsValid())
         //    ClockConfig = config.ClockConfig;
+
+        public string BackgroundImageFile { get; set; } = "";
 
         private BoundsSettings _bounds = new BoundsSettings();
         [Category("Clock")]
