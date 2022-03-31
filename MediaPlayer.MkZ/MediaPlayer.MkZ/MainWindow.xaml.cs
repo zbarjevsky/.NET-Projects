@@ -278,6 +278,7 @@ namespace MkZ.MediaPlayer
                 bool bFullScreen = this.WindowStyle == WindowStyle.None;
                 UpdateAttachedBounds(bFullScreen);
 
+                Context.NotifyPropertyChanged(nameof(Context.BackgroundImageFileName));
                 Context.NotifyPropertyChangedAll();
             }
         }

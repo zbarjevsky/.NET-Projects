@@ -311,6 +311,7 @@ namespace MkZ.WPF
             SetInterval(mnuClicked, chkBell3min, 180);
             SetInterval(mnuClicked, chkBell4min, 240);
             SetInterval(mnuClicked, chkBell5min, 300);
+            SetInterval(mnuClicked, chkBell10min, 600);
         }
 
         private void SetInterval(MenuItem mnuClicked, MenuItem mnuInterval, int iTimeout)

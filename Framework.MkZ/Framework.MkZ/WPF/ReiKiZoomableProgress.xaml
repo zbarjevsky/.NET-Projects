@@ -9,7 +9,7 @@
              MouseDoubleClick="ReiKi_MouseDoubleClick"
              IsVisibleChanged="_control_IsVisibleChanged"
              x:Name="_control"
-             Width="600" Height="60" MinWidth="200" MinHeight="40"
+             Width="600" Height="40" MinWidth="200" MinHeight="30"
              d:DesignHeight="150" d:DesignWidth="820">
     <Grid x:Name="_gridMain">
         <Grid.ContextMenu>
@@ -33,13 +33,14 @@
                 <MenuItem x:Name="chkBell3min" Header="3 Min" Click="OnBellIntervalClicked"/>
                 <MenuItem x:Name="chkBell4min" Header="4 Min" Click="OnBellIntervalClicked"/>
                 <MenuItem x:Name="chkBell5min" Header="5 Min" Click="OnBellIntervalClicked"/>
+                <MenuItem x:Name="chkBell10min" Header="10 Min" Click="OnBellIntervalClicked"/>
                 <Separator />
                 <MenuItem x:Name="mnuHide" Header="Hide" Click="OnMenuHide"/>
             </ContextMenu>
         </Grid.ContextMenu>
         
         <Viewbox Margin="0">
-            <Border x:Name="_border" BorderThickness="2" CornerRadius="10"
+            <Border x:Name="_border" BorderThickness="2" CornerRadius="4"
                     Width="{Binding Width, ElementName=_control}" 
                     Height="{Binding Height, ElementName=_control}" 
                     BorderBrush="{Binding Foreground, ElementName=_control}">
@@ -53,7 +54,7 @@
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <local:GradientProgressBar  x:Name="_progress" Margin="10"
+                    <local:GradientProgressBar  x:Name="_progress" Margin="3"
                         Background="{Binding Background, ElementName=_border}"
                         TickColor="{Binding Foreground, ElementName=_control}"
                         Minimum="0" Maximum="360" Value="60" 
