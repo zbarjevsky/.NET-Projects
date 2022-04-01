@@ -142,9 +142,14 @@ namespace MkZ.WPF
             if (_canvas.ActualWidth == 0 || _canvas.ActualHeight == 0)
                 return;
 
+            double CORNER_RADIUS = _rcColor.CornerRadius.TopLeft;
+
             double ratio = (Value - Minimum) / (Maximum - Minimum);
             double left = ratio * _canvas.ActualWidth;
             _rcGray.Margin = new Thickness(left, 0, 0, 0);
+
+            if(left <= CORNER_RADIUS) //adjust corner radius to hide black corners on the left side when value is close to 0
+                _rcGray.CornerRadius = new CornerRadius(CORNER_RADIUS - left, CORNER_RADIUS, CORNER_RADIUS, CORNER_RADIUS - left);
         }
 
         private void DrawTicks()

@@ -360,7 +360,7 @@
                 </Border>
             </Viewbox>
             <wpf:ReiKiZoomableProgress x:Name="_reiKiProgress" Grid.Row="2" Grid.ColumnSpan="2" Margin="10" 
-                Width="600" Height="40" MediaPlayer="{Binding DataContext.PlayerVM, ElementName=_gridMain}"
+                Width="600" Height="50" MediaPlayer="{Binding DataContext.PlayerVM, ElementName=_gridMain}"
                 Visibility="{Binding IsChecked, ElementName=_btnToggleReiKi, Converter={StaticResource BoolToVisibilityConverter}}"
                 VerticalAlignment="Bottom" HorizontalAlignment="Left" />
         </Grid>

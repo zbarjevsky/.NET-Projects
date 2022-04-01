@@ -9,7 +9,7 @@
              MouseDoubleClick="ReiKi_MouseDoubleClick"
              IsVisibleChanged="_control_IsVisibleChanged"
              x:Name="_control"
-             Width="600" Height="40" MinWidth="200" MinHeight="30"
+             Width="600" Height="50" MinWidth="200" MinHeight="30"
              d:DesignHeight="150" d:DesignWidth="820">
     <Grid x:Name="_gridMain">
         <Grid.ContextMenu>
@@ -40,7 +40,7 @@
         </Grid.ContextMenu>
         
         <Viewbox Margin="0">
-            <Border x:Name="_border" BorderThickness="2" CornerRadius="4"
+            <Border x:Name="_border" BorderThickness="2" CornerRadius="9"
                     Width="{Binding Width, ElementName=_control}" 
                     Height="{Binding Height, ElementName=_control}" 
                     BorderBrush="{Binding Foreground, ElementName=_control}">
@@ -54,22 +54,22 @@
                     <Grid.RowDefinitions>
                         <RowDefinition/>
                     </Grid.RowDefinitions>
-                    <local:GradientProgressBar  x:Name="_progress" Margin="3"
-                        Background="{Binding Background, ElementName=_border}"
-                        TickColor="{Binding Foreground, ElementName=_control}"
-                        Minimum="0" Maximum="360" Value="60" 
-                        CheckBoxToolTip="Bell On"  CheckBoxVisibility="Visible">
-                        <local:GradientProgressBar.LayoutTransform>
-                            <RotateTransform CenterX="0.5" CenterY="0.5" Angle="0"/>
-                        </local:GradientProgressBar.LayoutTransform>
-                    </local:GradientProgressBar>
+                        <local:GradientProgressBar  x:Name="_progress" Margin="5"
+                            Background="Transparent"
+                            TickColor="{Binding Foreground, ElementName=_control}"
+                            Minimum="0" Maximum="360" Value="60" 
+                            CheckBoxToolTip="Bell On"  CheckBoxVisibility="Visible">
+                            <local:GradientProgressBar.LayoutTransform>
+                                <RotateTransform CenterX="0.5" CenterY="0.5" Angle="0"/>
+                            </local:GradientProgressBar.LayoutTransform>
+                        </local:GradientProgressBar>
                     <Viewbox>
                         <Grid Height="35">
-                            <Border Margin="9" Padding="2" CornerRadius="3" Background="{Binding Background, ElementName=_border}" >
+                            <Border Margin="6" Padding="2" CornerRadius="3" Background="{Binding Background, ElementName=_border}" >
                                 <!--<Border.Background>
                                     <SolidColorBrush Color="Black" Opacity="0.5" />
                                 </Border.Background>-->
-                                <TextBlock x:Name="_txt" Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,1"
+                                <TextBlock x:Name="_txt" Grid.Row="0" Grid.ColumnSpan="2" Margin="3,0,3,1"
                                        Text="1:18/3:00" FontSize="12" FontWeight="Bold" Foreground="Wheat" 
                                        VerticalAlignment="Center" HorizontalAlignment="Center" >
                                     <!--<TextBlock.BitmapEffect>

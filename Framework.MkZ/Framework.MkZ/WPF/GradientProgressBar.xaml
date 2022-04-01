@@ -8,23 +8,25 @@
              x:Name="_gradientProgressBar"
              MouseDoubleClick="Progress_MouseDoubleClick"
              SizeChanged="Progress_SizeChanged"
-             Background="AliceBlue"
+             Background="Transparent"
              FocusManager.FocusedElement="{Binding RelativeSource={x:Static RelativeSource.Self}, Mode=OneTime}"
              d:DesignHeight="60" d:DesignWidth="400">
     <Grid>
-        <Rectangle x:Name="_rcColor">
-            <Rectangle.Fill>
+        <Border x:Name="_rcColor" CornerRadius="8">
+            <Border.Background>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
                     <GradientStop Offset="0" Color="#FF00FF00"/>
                     <GradientStop Offset="0.9" Color="#FFFFFF00"/>
                     <GradientStop Offset="1" Color="#FFFF0000"/>
                 </LinearGradientBrush>
-            </Rectangle.Fill>
-        </Rectangle>
+            </Border.Background>
+        </Border>
 
-        <Rectangle x:Name="_rcGray" Margin="190,0,0,0" 
-                   Fill="{Binding Background, ElementName=_gradientProgressBar}">
-        </Rectangle>
+        <Border x:Name="_rcGray" Margin="190,0,0,0" CornerRadius="8,8,8,8">
+            <Border.Background>
+                <SolidColorBrush Color="Black" Opacity="0.55"/>
+            </Border.Background>
+        </Border>
 
         <Canvas x:Name="_canvas" />
 
