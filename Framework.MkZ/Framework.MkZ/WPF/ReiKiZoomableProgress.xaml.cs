@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -16,10 +17,22 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using System.Xml.Serialization;
 using MkZ.Windows;
 
 namespace MkZ.WPF
 {
+    public enum TimeIntervals : int
+    {
+        chkNoProgress =  1,
+        chkBell1min  =  60,
+        chkBell2min =  120,
+        chkBell3min =  180,
+        chkBell4min =  240,
+        chkBell5min =  300,
+        chkBell10min = 600,
+    }
+
     /// <summary>
     /// Interaction logic for ReiKiZoomableProgress.xaml
     /// </summary>
@@ -32,13 +45,17 @@ namespace MkZ.WPF
                 return true;
             }
 
+            private TimeIntervals _timeInterval = TimeIntervals.chkBell3min;
             [Browsable(false)]
-            [DefaultValue(180.0)]
-            public double ProgressInterval { get; set; } = 180.0; //seconds = 3 min
+            [DefaultValue(TimeIntervals.chkBell3min)]
+            public TimeIntervals ProgressInterval 
+            { 
+                get => _timeInterval; 
+                set => SetProperty(ref _timeInterval, value); 
+            }
 
             [Browsable(false)]
             public bool BellAtTheEnd { get; set; } = false;
-
 
             private BoundsSettings _bounds = new BoundsSettings();
             [Category("ReiKi")]
@@ -47,6 +64,10 @@ namespace MkZ.WPF
                 get { return _bounds; }
                 set { SetProperty(ref _bounds, value); }
             }
+
+            [XmlIgnore]
+            [Browsable(false)]
+            public ICommand SetIntervalCommand { get; set; }
         }
 
         private DispatcherTimer _Timer;
@@ -116,6 +137,8 @@ namespace MkZ.WPF
         {
             if (Config == null)
                 return;
+
+            Config.SetIntervalCommand = new RelayCommand(SetIntervalCommand_Execute, (o) => true);
 
             mnuBellOnOff.IsChecked = Config.BellAtTheEnd;
             _progress.IsChecked = Config.BellAtTheEnd;
@@ -245,7 +268,7 @@ namespace MkZ.WPF
             //{
                 const string FMT = @"m\:ss"; // @"hh\:mm\:ss"
 
-                string interval = TimeSpan.FromSeconds(Config.ProgressInterval).ToString(FMT);
+                string interval = TimeSpan.FromSeconds((int)Config.ProgressInterval).ToString(FMT);
                 string remaining = TimeSpan.FromSeconds(secondsLeft).ToString(FMT);
                 string value = TimeSpan.FromSeconds(_progress.Value).ToString(FMT);
 
@@ -298,53 +321,23 @@ namespace MkZ.WPF
             }
         }
 
-        private void OnBellIntervalClicked(object sender, RoutedEventArgs e)
+        private void SetIntervalCommand_Execute(object o)
         {
-            SetInterval(e.Source as MenuItem);
+            if(o is TimeIntervals interval)
+                SetInterval(interval);
         }
 
-        private void SetInterval(MenuItem mnuClicked)
+        private void SetInterval(TimeIntervals interval)
         {
-            SetInterval(mnuClicked, chkNoProgress, 1);
-            SetInterval(mnuClicked, chkBell1min, 60);
-            SetInterval(mnuClicked, chkBell2min, 120);
-            SetInterval(mnuClicked, chkBell3min, 180);
-            SetInterval(mnuClicked, chkBell4min, 240);
-            SetInterval(mnuClicked, chkBell5min, 300);
-            SetInterval(mnuClicked, chkBell10min, 600);
-        }
-
-        private void SetInterval(MenuItem mnuClicked, MenuItem mnuInterval, int iTimeout)
-        {
-            if (mnuClicked.Name == mnuInterval.Name)
-            {
-                mnuInterval.IsChecked = true;
-                _progress.Maximum = iTimeout;
-                Config.ProgressInterval = iTimeout;
-                _txt.Text = string.Format("{0} min", iTimeout/60);
-            }
-            else
-            {
-                mnuInterval.IsChecked = false;
-            }
+            _progress.Maximum = (int)interval;
+            Config.ProgressInterval = interval;
+            _txt.Text = string.Format("{0} min", (int)interval / 60);
         }
 
         private void InitInterval()
         {
-            if (Config.ProgressInterval < 31)
-                SetInterval(chkNoProgress);
-            else if (Config.ProgressInterval > 30 && Config.ProgressInterval < 61)
-                SetInterval(chkBell1min);
-            else if (Config.ProgressInterval > 60 && Config.ProgressInterval < 121)
-                SetInterval(chkBell2min);
-            else if (Config.ProgressInterval > 120 && Config.ProgressInterval < 181)
-                SetInterval(chkBell3min);
-            else if (Config.ProgressInterval > 180 && Config.ProgressInterval < 241)
-                SetInterval(chkBell4min);
-            else if (Config.ProgressInterval > 240)
-                SetInterval(chkBell5min);
-            else //default
-                SetInterval(chkBell3min);
+            SetInterval(Config.ProgressInterval);
+            Start(bPaused: true);
         }
 
         private void ReiKi_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -355,6 +348,20 @@ namespace MkZ.WPF
         private void OnMenuHide(object sender, RoutedEventArgs e)
         {
             Config.BoundsSettings.IsVisible = false;
+        }
+    }
+
+    public class TimeIntervalsToBooleanConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            TimeIntervals selected = (TimeIntervals)parameter;
+            return (TimeIntervals)value == selected;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            return null;
         }
     }
 }

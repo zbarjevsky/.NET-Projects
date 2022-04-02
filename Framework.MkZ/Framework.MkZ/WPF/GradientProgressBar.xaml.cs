@@ -150,6 +150,8 @@ namespace MkZ.WPF
 
             if(left <= CORNER_RADIUS) //adjust corner radius to hide black corners on the left side when value is close to 0
                 _rcGray.CornerRadius = new CornerRadius(CORNER_RADIUS - left, CORNER_RADIUS, CORNER_RADIUS, CORNER_RADIUS - left);
+            else
+                _rcGray.CornerRadius = new CornerRadius(0, CORNER_RADIUS, CORNER_RADIUS, 0);
         }
 
         private void DrawTicks()

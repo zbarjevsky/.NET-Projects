@@ -11,6 +11,11 @@
              x:Name="_control"
              Width="600" Height="50" MinWidth="200" MinHeight="30"
              d:DesignHeight="150" d:DesignWidth="820">
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <local:TimeIntervalsToBooleanConverter x:Key="TimeIntervalsToBooleanConverter"/>
+        </ResourceDictionary>
+    </UserControl.Resources>
     <Grid x:Name="_gridMain">
         <Grid.ContextMenu>
             <ContextMenu>
@@ -27,13 +32,41 @@
                 <Separator />
                 <MenuItem x:Name="mnuBellOnOff" Header="ThinkerBell at the end" Click="OnBellOnOffClicked"/>
                 <Separator />
-                <MenuItem x:Name="chkNoProgress" Header="None" Click="OnBellIntervalClicked"/>
-                <MenuItem x:Name="chkBell1min" Header="1 Min" Click="OnBellIntervalClicked"/>
-                <MenuItem x:Name="chkBell2min" Header="2 Min" Click="OnBellIntervalClicked"/>
-                <MenuItem x:Name="chkBell3min" Header="3 Min" Click="OnBellIntervalClicked"/>
-                <MenuItem x:Name="chkBell4min" Header="4 Min" Click="OnBellIntervalClicked"/>
-                <MenuItem x:Name="chkBell5min" Header="5 Min" Click="OnBellIntervalClicked"/>
-                <MenuItem x:Name="chkBell10min" Header="10 Min" Click="OnBellIntervalClicked"/>
+                <!--<MenuItem x:Name="chkNoProgress" Header="None" 
+                    IsChecked="{Binding ProgressInterval, 
+                        Converter={StaticResource TimeIntervalsToBooleanConverter}, 
+                        ConverterParameter={x:Static local:TimeIntervals.chkNoProgress}}"
+                    Command="{Binding SetIntervaCommand}" CommandParameter="{x:Static local:TimeIntervals.chkNoProgress}" />-->
+                <MenuItem x:Name="chkBell1min" Header="1 Min" 
+                    IsChecked="{Binding ProgressInterval, 
+                        Converter={StaticResource TimeIntervalsToBooleanConverter}, 
+                        ConverterParameter={x:Static local:TimeIntervals.chkBell1min}}"
+                    Command="{Binding SetIntervalCommand}" CommandParameter="{x:Static local:TimeIntervals.chkBell1min}" />
+                <MenuItem x:Name="chkBell2min" Header="2 Min" 
+                    IsChecked="{Binding ProgressInterval, 
+                        Converter={StaticResource TimeIntervalsToBooleanConverter}, 
+                        ConverterParameter={x:Static local:TimeIntervals.chkBell2min}}"
+                    Command="{Binding SetIntervalCommand}" CommandParameter="{x:Static local:TimeIntervals.chkBell2min}" />
+                <MenuItem x:Name="chkBell3min" Header="3 Min" 
+                    IsChecked="{Binding ProgressInterval, 
+                        Converter={StaticResource TimeIntervalsToBooleanConverter}, 
+                        ConverterParameter={x:Static local:TimeIntervals.chkBell3min}}"
+                    Command="{Binding SetIntervalCommand}" CommandParameter="{x:Static local:TimeIntervals.chkBell3min}" />
+                <MenuItem x:Name="chkBell4min" Header="4 Min" 
+                    IsChecked="{Binding ProgressInterval, 
+                        Converter={StaticResource TimeIntervalsToBooleanConverter}, 
+                        ConverterParameter={x:Static local:TimeIntervals.chkBell4min}}"
+                    Command="{Binding SetIntervalCommand}" CommandParameter="{x:Static local:TimeIntervals.chkBell4min}" />
+                <MenuItem x:Name="chkBell5min" Header="5 Min" 
+                    IsChecked="{Binding ProgressInterval, 
+                        Converter={StaticResource TimeIntervalsToBooleanConverter}, 
+                        ConverterParameter={x:Static local:TimeIntervals.chkBell5min}}"
+                    Command="{Binding SetIntervalCommand}" CommandParameter="{x:Static local:TimeIntervals.chkBell5min}" />
+                <MenuItem x:Name="chkBell10min" Header="10 Min" 
+                    IsChecked="{Binding ProgressInterval, 
+                        Converter={StaticResource TimeIntervalsToBooleanConverter}, 
+                        ConverterParameter={x:Static local:TimeIntervals.chkBell10min}}"
+                    Command="{Binding SetIntervalCommand}" CommandParameter="{x:Static local:TimeIntervals.chkBell10min}" />
                 <Separator />
                 <MenuItem x:Name="mnuHide" Header="Hide" Click="OnMenuHide"/>
             </ContextMenu>
