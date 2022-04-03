@@ -80,6 +80,8 @@ namespace MkZ.WPF
 
         public ScrollDragZoomControl Zoomable { get; private set; }
 
+        private ClickAndDoubleClickHandler _clickAndDoubleClickHandler;
+
         //use as ScrollDragZoomControl z = ReiKi;
         public static implicit operator ScrollDragZoomControl(ReiKiZoomableProgress reiKi) => reiKi.Zoomable;
 
@@ -126,6 +128,8 @@ namespace MkZ.WPF
             _Timer.Tick += Timer_Tick;
 
             this.DataContextChanged += ReiKiZoomableProgress_DataContextChanged;
+
+            _clickAndDoubleClickHandler = new ClickAndDoubleClickHandler(this, ReiKi_MouseDoubleClick, ReiKi_MouseClick);
         }
 
         private void _control_Loaded(object sender, RoutedEventArgs e)
@@ -340,8 +344,27 @@ namespace MkZ.WPF
             Start(bPaused: true);
         }
 
+        private void ReiKi_MouseClick(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton != MouseButton.Left)
+                return;
+
+            Debug.WriteLine("ReiKi_MouseClick ");
+
+            Point ptMouse = Mouse.GetPosition(_progress);
+            double clickPlace = ptMouse.X / _progress.ActualWidth;
+            double seconds = clickPlace * _progress.Maximum;
+            _ElapsedTime = TimeSpan.FromSeconds(seconds);
+            _LastTime = DateTime.Now;
+        }
+
         private void ReiKi_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
+            if (e.ChangedButton != MouseButton.Left)
+                return;
+
+            Debug.WriteLine("ReiKi_MouseDoubleClick");
+
             Start(bPaused: false);
         }
 

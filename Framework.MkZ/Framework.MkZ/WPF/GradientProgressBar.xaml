@@ -6,7 +6,6 @@
              xmlns:l="clr-namespace:MkZ.WPF"
              mc:Ignorable="d" 
              x:Name="_gradientProgressBar"
-             MouseDoubleClick="Progress_MouseDoubleClick"
              SizeChanged="Progress_SizeChanged"
              Background="Transparent"
              FocusManager.FocusedElement="{Binding RelativeSource={x:Static RelativeSource.Self}, Mode=OneTime}"

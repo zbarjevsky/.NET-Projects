@@ -12,6 +12,7 @@ using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows.Shapes;
 using System.Windows.Media;
+using System.Diagnostics;
 
 namespace MkZ.WPF
 {
@@ -205,10 +206,6 @@ namespace MkZ.WPF
 
                 _canvas.Children.Add(line);
             }
-        }
-
-        private void Progress_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
         }
 
         private void Progress_SizeChanged(object sender, SizeChangedEventArgs e)

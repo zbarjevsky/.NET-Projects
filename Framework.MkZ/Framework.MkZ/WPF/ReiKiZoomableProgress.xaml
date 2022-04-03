@@ -6,7 +6,6 @@
              xmlns:local="clr-namespace:MkZ.WPF"
              mc:Ignorable="d" Foreground="DarkGreen" Background="Transparent"
              Loaded="_control_Loaded"
-             MouseDoubleClick="ReiKi_MouseDoubleClick"
              IsVisibleChanged="_control_IsVisibleChanged"
              x:Name="_control"
              Width="600" Height="50" MinWidth="200" MinHeight="30"

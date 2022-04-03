@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Interop;
 using System.Windows.Threading;
@@ -57,6 +59,83 @@ namespace MkZ.WPF
                 renderAction = () => { };
 
             element.Dispatcher.Invoke(DispatcherPriority.Render, renderAction);
+        }
+    }
+
+    public class ClickAndDoubleClickHandler
+    {
+        private UserControl _owner;
+
+        private static readonly int DoubleClickTime = System.Windows.Forms.SystemInformation.DoubleClickTime;
+
+        private static DispatcherTimer _clickWaitTimer;
+
+        private Action<object, MouseButtonEventArgs> _mouseDoubleClick;
+        private Action<object, MouseButtonEventArgs> _mouseClick;
+
+        public ClickAndDoubleClickHandler(UserControl owner, 
+            Action<object, MouseButtonEventArgs> mouseDoubleClick,
+            Action<object, MouseButtonEventArgs> mouseClick)
+        {
+            _owner = owner;
+            _owner.MouseDown += _owner_MouseDown;
+            _owner.MouseUp += _owner_MouseUp;
+            _owner.MouseDoubleClick += _owner_MouseDoubleClick;
+
+            _mouseDoubleClick = mouseDoubleClick;
+            _mouseClick = mouseClick;
+
+            _clickWaitTimer = new DispatcherTimer(
+                TimeSpan.FromMilliseconds(DoubleClickTime),
+                DispatcherPriority.Background,
+                mouseWaitTimer_Tick,
+                Dispatcher.CurrentDispatcher);
+            _clickWaitTimer.Stop();
+        }
+
+        private Point _ptMouse;
+        private void _owner_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            _ptMouse = _owner.PointToScreen(Mouse.GetPosition(_owner));
+        }
+
+        private bool _isDoubleClick = false;
+        private void _owner_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            // Stop the timer from ticking.
+            _clickWaitTimer.Stop();
+
+            Debug.WriteLine("ClickAndDoubleClickHandler::Double Click");
+            _isDoubleClick = true;
+
+            _mouseDoubleClick?.Invoke(sender, e);
+        }
+
+        private MouseButtonEventArgs _eClick;
+        private void _owner_MouseUp(object sender, MouseButtonEventArgs e)
+        {
+            Point ptMouse = _owner.PointToScreen(Mouse.GetPosition(_owner));
+            bool isMouseMove = (ptMouse != _ptMouse); //was dragged between 'down' and 'up'
+
+            if (_isDoubleClick || isMouseMove)
+            {
+                Debug.WriteLine("ClickAndDoubleClickHandler::Mouse UP: dbl clk OR mouse move");
+                _isDoubleClick = false;
+                return;
+            }
+
+            _eClick = e;
+            _clickWaitTimer.Start();
+        }
+
+        private void mouseWaitTimer_Tick(object sender, EventArgs e)
+        {
+            _clickWaitTimer.Stop();
+
+            // Handle Single Click Actions
+            Trace.WriteLine("ClickAndDoubleClickHandler::Single Click");
+
+            _mouseClick?.Invoke(sender, _eClick);
         }
     }
 }
