@@ -30,10 +30,10 @@ namespace MkZ.Bluetooth
         public List<GattDeviceService> _services = new List<GattDeviceService>();
 
         #region Error Codes
-        readonly int E_BLUETOOTH_ATT_WRITE_NOT_PERMITTED = unchecked((int)0x80650003);
-        readonly int E_BLUETOOTH_ATT_INVALID_PDU = unchecked((int)0x80650004);
-        readonly int E_ACCESSDENIED = unchecked((int)0x80070005);
-        readonly int E_DEVICE_NOT_AVAILABLE = unchecked((int)0x800710df); // HRESULT_FROM_WIN32(ERROR_DEVICE_NOT_AVAILABLE)
+        const int E_BLUETOOTH_ATT_WRITE_NOT_PERMITTED = unchecked((int)0x80650003);
+        const int E_BLUETOOTH_ATT_INVALID_PDU = unchecked((int)0x80650004);
+        const int E_ACCESSDENIED = unchecked((int)0x80070005);
+        const int E_DEVICE_NOT_AVAILABLE = unchecked((int)0x800710df); // HRESULT_FROM_WIN32(ERROR_DEVICE_NOT_AVAILABLE)
         #endregion
 
         //https://docs.microsoft.com/en-us/windows/uwp/devices-sensors/gatt-client

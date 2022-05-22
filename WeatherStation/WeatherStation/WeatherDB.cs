@@ -53,6 +53,21 @@ namespace MkZ.Weather
 
             return records;
         }
+
+        public void CopyFrom(WeatherDB weatherDB)
+        {
+            Clear();
+
+            //remove points with exactly same date
+            RadiationDataPoints.AddRange(weatherDB.RadiationDataPoints.GroupBy(p => new {p.Date.Year, p.Date.Month, p.Date.Day, p.Date.Hour, p.Date.Minute, p.Date.Second })
+                .Select(g => g.FirstOrDefault()).ToList());
+            RadiationDataPoints.Sort((p1, p2) => p1.Date.CompareTo(p2.Date));
+
+            //remove points with exactly same date
+            BMRecords.AddRange(weatherDB.BMRecords.GroupBy(p => new { p.Date.Year, p.Date.Month, p.Date.Day, p.Date.Hour, p.Date.Minute, p.Date.Second })
+                .Select(g => g.FirstOrDefault()).ToList());
+            BMRecords.Sort((p1, p2) => p1.Date.CompareTo(p2.Date));
+        }
     }
 
     public class WeatherDataManager
@@ -88,7 +103,7 @@ namespace MkZ.Weather
             files.Sort();
             string fileName = files.Last();
 
-            weatherDB = XmlHelper.Open<WeatherDB>(fileName);
+            weatherDB.CopyFrom(XmlHelper.Open<WeatherDB>(fileName));
         }
 
         public void Save()

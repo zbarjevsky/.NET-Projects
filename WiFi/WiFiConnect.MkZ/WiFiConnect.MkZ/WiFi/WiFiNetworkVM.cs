@@ -153,7 +153,7 @@ namespace WiFiConnect.MkZ.WiFi
             Background = Brushes.Transparent;
             ConnectivityLevel = "Not Connected";
 
-            if (activeConnectionInfo != null)
+            if (activeConnectionInfo != null && activeConnectionInfo.Ssid != null)
             {
                 if (activeConnectionInfo.Ssid.Equals(Network.Ssid) || activeConnectionInfo.Ssid.Equals(HiddenSsid))
                 {

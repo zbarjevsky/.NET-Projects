@@ -246,7 +246,7 @@ namespace MkZ.WeatherStation.Controls
         private void UpdateGraphScale()
         {
             Scale scale = _scaleAbsolute;
-            if (m_chkAutoScale.Checked)
+            if (m_chkAutoScale.Checked && _bufferFull.Count > 1)
             {
                 scale = _scaleFromPoints;
                 scale.ApplyMargin();

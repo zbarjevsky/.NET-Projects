@@ -458,9 +458,9 @@ namespace DashCamGPSView.Controls
             switch (FileType)
             {
                 case RecordingType.Parking:
-                    if (IsProtected)
-                        IconSource = RecordingTypeImageSource[0];
-                    else
+                    //if (IsProtected)
+                    //    IconSource = RecordingTypeImageSource[0];
+                    //else
                         IconSource = RecordingTypeImageSource[1];
                     break;
                 //case RecordingType.ReadOnly:
@@ -468,9 +468,9 @@ namespace DashCamGPSView.Controls
                 case RecordingType.Unknown:
                 case RecordingType.Driving:
                 default:
-                    if (IsProtected)
-                        IconSource = RecordingTypeImageSource[0];
-                    else
+                    //if (IsProtected)
+                    //    IconSource = RecordingTypeImageSource[0];
+                    //else
                         IconSource = RecordingTypeImageSource[2];
                     break;
             }

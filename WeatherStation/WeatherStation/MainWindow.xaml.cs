@@ -65,7 +65,7 @@ namespace MkZWeatherStation
 
             _btWatcher.OnBMDeviceMsgReceivedAction = (info) => { SetInfo(info); };
             _btWatcher.OnBMDeviceCheckAction = (elapsed) => { /*UpdateDeviceList();*/ };
-            _btWatcher.OnTimerSaveAction = (elapsed) => { BMDatabaseMap.INSTANCE.Save(); };
+            _btWatcher.OnTimerSaveAction = (elapsed) => { BMDatabaseMap.INSTANCE.Save(); WeatherDataManager.INSTANCE.Save(); };
             _btWatcher.StartBluetoothSearch();
 
             BMDatabaseMap.INSTANCE.OnRecordAddedAction = (device, record) => { UpdateAllAsync(device, record); };

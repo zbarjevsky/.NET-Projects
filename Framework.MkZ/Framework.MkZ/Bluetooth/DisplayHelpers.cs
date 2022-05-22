@@ -119,7 +119,7 @@ namespace MkZ.Bluetooth
             UpdateGlyphBitmapImage();
         }
 
-        private async void UpdateGlyphBitmapImage()
+        private /*async*/ void UpdateGlyphBitmapImage()
         {
             //DeviceThumbnail deviceThumbnail = await DeviceInformation.GetGlyphThumbnailAsync();
             //var glyphBitmapImage = new BitmapImage();

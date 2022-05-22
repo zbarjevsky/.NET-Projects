@@ -9,6 +9,7 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <tools:VideoFileToIconConverter x:Key="VideoFileToIconConverter" />
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     </UserControl.Resources>
     <Grid>
         <TreeView x:Name="treeFiles">
@@ -70,7 +71,11 @@
                                 </MenuItem>
                             </ContextMenu>
                         </StackPanel.ContextMenu>
-                        <Image Source="{Binding IconSource}" Margin="0,0,5,0"  Width="18" Height="18" />
+                        <Grid>
+                            <Image Source="{Binding IconSource}" Margin="0,0,12,5"  Width="20" Height="20" />
+                            <Image Source="/Images/Lock_16.png" Margin="10,4,0,0"  Width="16" Height="16"
+                                   Visibility="{Binding IsProtected, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        </Grid>
                         <TextBlock Text="{Binding FileNameForDisplay}" FontFamily="Courier New" VerticalAlignment="Center"/>
                         <TextBlock Text="{Binding Description}" Foreground="Goldenrod" VerticalAlignment="Center" />
                     </StackPanel>

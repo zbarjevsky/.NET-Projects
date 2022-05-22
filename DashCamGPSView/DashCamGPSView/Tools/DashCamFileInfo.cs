@@ -33,10 +33,15 @@ namespace DashCamGPSView.Tools
 
     public class FileInfoWithDateFromFileName
     {
-        public FileInfo Info { get; }
-        public DateTime Date { get; }
+        public FileInfo Info { get; private set; }
+        public DateTime Date { get; private set; }
 
         public FileInfoWithDateFromFileName(string fileName)
+        {
+            Create(fileName);
+        }
+
+        public void Create(string fileName)
         {
             Info = new FileInfo(fileName);
 
@@ -55,6 +60,24 @@ namespace DashCamGPSView.Tools
             else
             {
                 Date = Info.CreationTime;
+            }
+        }
+
+        public void CopyFrom(FileInfoWithDateFromFileName info)
+        {
+            Info = new FileInfo(info.Info.FullName);
+            Date = info.Date;
+        }
+
+        public void MoveInfo(params string [] newFileNames)
+        {
+            foreach (string newFileName in newFileNames)
+            {
+                if(File.Exists(newFileName))
+                {
+                    Create(newFileName);
+                    break;
+                }
             }
         }
 
@@ -264,6 +287,8 @@ namespace DashCamGPSView.Tools
                 MoveFile(ref FileNameRear, moveToDir, protect);
                 MoveFile(ref FileNameInside, moveToDir, protect);
 
+                Info.MoveInfo(FileNameFront, FileNameInside, FileNameRear);
+
                 IsProtected = protect;
             }
             catch (Exception err)
@@ -285,6 +310,10 @@ namespace DashCamGPSView.Tools
                 f = new FileInfo(dst);
                 f.IsReadOnly = setReadonly;
                 src = dst;
+            }
+            else if (!string.IsNullOrWhiteSpace(src))
+            {
+                throw new FileNotFoundException("Mov not found: "+src);
             }
         }
 

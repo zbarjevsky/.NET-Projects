@@ -351,6 +351,9 @@
     <Resource Include="Images\Movie48RO.png" />
     <Resource Include="Images\ParkingRO.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Lock_16.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>if "$(ConfigurationName)" == "Release" (

@@ -80,8 +80,8 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <DockPanel Grid.Row="0" Margin="2" >
-                    <Button Command="ApplicationCommands.Open" ToolTip="Open" Margin="2">
-                        <wpf:AutoGreyableImage Source="/DashCamGPSView;component/Images/map_32px.png" />
+                    <Button Command="ApplicationCommands.Open" ToolTip="Open" Margin="2,2,12,2">
+                        <wpf:AutoGreyableImage Source="/DashCamGPSView;component/Images/Folder48.png" />
                     </Button>
                     <Separator />
                     <Button Command="MediaCommands.PreviousTrack" ToolTip="Previous File" Margin="2" >
@@ -101,7 +101,7 @@
                     <Button Command="MediaCommands.NextTrack" ToolTip="Next File" Margin="2" >
                         <wpf:AutoGreyableImage Source="/Images/nextE.png" />
                     </Button>
-                    <Button  ToolTip="Screen Shot" Click="Screenshot_Click" Margin="2" >
+                    <Button  ToolTip="Screen Shot" Click="Screenshot_Click" Margin="12,2" Padding="3" >
                         <wpf:AutoGreyableImage Source="/Images/Screenshot.png" />
                     </Button>
                     <Button Margin="6" ToolTip="Settings" Content="Settings..." Click="Settings_Click" />

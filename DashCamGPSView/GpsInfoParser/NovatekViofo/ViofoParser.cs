@@ -17,7 +17,7 @@ namespace NovatekViofoGPSParser
             const uint maxSize = 1024 * 1024 * 1024;
 
             FileInfo info = new FileInfo(fileName);
-            if (info.Length > maxSize) //more than 1 GB
+            if (!info.Exists || info.Length > maxSize) //more than 1 GB
                 return null;
 
             byte[] buff = File.ReadAllBytes(fileName);

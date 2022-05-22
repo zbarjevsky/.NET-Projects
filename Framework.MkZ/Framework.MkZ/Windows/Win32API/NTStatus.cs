@@ -339,11 +339,11 @@ namespace MkZ.Windows.Win32API
 		/// <returns>The equivalent NTSTATUS value.</returns>
 		public static NTStatus NTSTATUS_FROM_WIN32(uint x) => unchecked((int)x) <= 0 ? unchecked((int)x) : unchecked((int)(((x) & 0x0000FFFF) | ((uint)FacilityCode.FACILITY_NTWIN32 << 16) | 0xC0000000U));
 
-		/// <summary>Implements the operator !=.</summary>
-		/// <param name="hrLeft">The first <see cref="NTStatus"/>.</param>
-		/// <param name="hrRight">The second <see cref="NTStatus"/>.</param>
-		/// <returns>The result of the operator.</returns>
-		public static bool operator !=(NTStatus hrLeft, NTStatus hrRight) => !(hrLeft == hrRight);
+        /// <summary>Implements the operator !=.</summary>
+        /// <param name="hrLeft">The first <see cref="NTStatus"/>.</param>
+        /// <param name="hrRight">The second <see cref="NTStatus"/>.</param>
+        /// <returns>The result of the operator.</returns>
+        public static bool operator !=(NTStatus hrLeft, NTStatus hrRight) => !(hrLeft == hrRight);
 
 		/// <summary>Implements the operator !=.</summary>
 		/// <param name="hrLeft">The first <see cref="NTStatus"/>.</param>
@@ -429,6 +429,15 @@ namespace MkZ.Windows.Win32API
 		/// <param name="other">An object to compare with this object.</param>
 		/// <returns>true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.</returns>
 		public bool Equals(uint other) => unchecked((int)other) == _value;
+
+		public override bool Equals(object obj)
+		{
+			if (object.ReferenceEquals(this, obj))
+				return true;
+			if (obj is NTStatus st)
+				return this.Equals(st);
+			return base.Equals(obj);
+		}
 
 		///// <summary>Determines whether the specified <see cref="object"/>, is equal to this instance.</summary>
 		///// <param name="obj">The <see cref="object"/> to compare with this instance.</param>
