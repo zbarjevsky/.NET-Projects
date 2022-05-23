@@ -180,6 +180,21 @@ namespace DashCamGPSView.Tools
                 GpsFileFormat = GpsFileFormat.Viofo;
                 FileDateStart = currentInfo.Date;
                 FileDateEnd = currentInfo.Info.LastWriteTime;
+
+                //sometimes last write time is before create time
+                if(FileDateEnd < FileDateStart)
+                {
+                    double minutes = FileDateEnd.Minute - FileDateStart.Minute;
+                    double seconds = FileDateEnd.Second - FileDateStart.Second;
+                    if (minutes < 0)
+                        minutes += 60;
+                    if (seconds < 0)
+                        seconds += 60;
+                    if (minutes == 0 && seconds > 0)
+                        minutes = seconds / 60;
+                    FileDateEnd = FileDateStart.AddMinutes(minutes);
+                }
+
                 if (!FromViofoFileName(allFiles, ref idx, ref RecordingType, ref FileNameFront, ref FileNameRear, ref FileNameInside))
                 {
                     FileNameFront = currentInfo.Info.FullName;

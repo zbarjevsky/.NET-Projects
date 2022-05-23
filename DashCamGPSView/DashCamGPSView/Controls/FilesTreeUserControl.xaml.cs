@@ -396,29 +396,33 @@ namespace DashCamGPSView.Controls
 
             string cameras = "";
             long size = 0;
+            int count = 0;
             if (File.Exists(info.FileNameFront))
             {
                 FileInfo fi1 = new FileInfo(info.FileNameFront);
                 cameras += "FR";
                 size += fi1.Length;
+                count++;
             }
             if (File.Exists(info.FileNameInside))
             {
                 FileInfo fi2 = new FileInfo(info.FileNameInside);
                 cameras += "+IN";
                 size += fi2.Length;
+                count++;
             }
             if (File.Exists(info.FileNameRear))
             {
                 FileInfo fi3 = new FileInfo(info.FileNameRear);
                 cameras += "+RR";
                 size += fi3.Length;
+                count++;
             }
 
             UpdateIconUri();
 
-            Description = string.Format(" ({0}, {1:###,###.0} MB, {2} s)", 
-                cameras, size / (1024.0*1024.0), sDuration);
+            Description = string.Format(" ({0} {1}, {2:###,###.0} MB, {3} s)", 
+                count, cameras, size / (1024.0*1024.0), sDuration);
         }
 
         internal bool HasFileName(string fileName)
