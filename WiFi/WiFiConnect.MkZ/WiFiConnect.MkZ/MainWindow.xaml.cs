@@ -96,7 +96,7 @@ namespace WiFiConnect.MkZ
             switch (e.Mode)
             {
                 case PowerModes.Resume:
-                    UpdateBuffers(new PingPoint(DateTime.Now, 0, 0, "Resume"));
+                    UpdateBuffers(new PingPoint("", DateTime.Now, 0, 0, "Resume"));
                     Thread.Sleep(2000);
                     _timer.Start();
                     break;
@@ -104,7 +104,7 @@ namespace WiFiConnect.MkZ
                     break;
                 case PowerModes.Suspend:
                     _timer.Stop();
-                    UpdateBuffers(new PingPoint(DateTime.Now, 0, 0, "Sleep"));
+                    UpdateBuffers(new PingPoint("", DateTime.Now, 0, 0, "Sleep"));
                     break;
                 default:
                     break;
@@ -444,7 +444,7 @@ namespace WiFiConnect.MkZ
                 string status = "";
                 int timeout = _timeouts[_disconnectCount]; //
 
-                Controls.PingPoint pingPoint = new Controls.PingPoint(DateTime.Now, 0, timeout);
+                Controls.PingPoint pingPoint = new Controls.PingPoint(_pingServerUrl, DateTime.Now, 0, timeout);
 
                 using (Ping p = new Ping())
                 {
@@ -462,7 +462,7 @@ namespace WiFiConnect.MkZ
                             
                             status = string.Format("Ping: '{0}' Status: {1}: {2}", hostNameOrAddress, reply.Status, timeout);
                             UpdateChart(pingPoint, status);
-                            UpdateChart(new PingPoint(DateTime.Now, 0, timeout, pingPoint.Message), status);
+                            UpdateChart(new PingPoint(_pingServerUrl, DateTime.Now, 0, timeout, pingPoint.Message), status);
                         }
                         else //ping ok
                         {
@@ -485,7 +485,7 @@ namespace WiFiConnect.MkZ
                         pingPoint.Error = timeout;
                         pingPoint.Message = err.Message;
                         UpdateChart(pingPoint, status);
-                        UpdateChart(new PingPoint(DateTime.Now, 0, timeout, err.Message), status);
+                        UpdateChart(new PingPoint(_pingServerUrl, DateTime.Now, 0, timeout, err.Message), status);
                     }
                 }
 

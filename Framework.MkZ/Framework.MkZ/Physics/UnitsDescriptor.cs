@@ -44,8 +44,11 @@ namespace MkZ.Physics
             Max = max; MarginMaxRelative = marginMaxRelative;
         }
 
-        public void Update(double val)
+        public void Update(double val, double invalid_value)
         {
+            if (val == invalid_value)
+                return;
+
             Max = Math.Max(Max, val);
             Min = Math.Min(Min, val);
         }
@@ -56,6 +59,8 @@ namespace MkZ.Physics
             double marginMin = Math.Abs(Max - Min) * MarginMinRelative;
             Min -= marginMin;
             Max += marginMax;
+            if (Min == Max)
+                Max = Min + 0.001;
         }
     }
 

@@ -326,12 +326,12 @@ namespace WiFiConnect.MkZ.Controls
                 if (pt.Error > 0)
                 {
                     desc = pt.Message;
-                    txt = string.Format("[{0:0.0}{1}]\n{2}", pt.Error, _theme.units, pt.Date.ToString("MMM dd, HH:mm:ss"));
+                    txt = string.Format("[{0:0.0}{1}]\n{2}\n{3}", pt.Error, _theme.units, pt.Site, pt.Date.ToString("MMM dd, HH:mm:ss"));
                 }
                 else if (pt.Value > 0)
                 {
                     desc = pt.Message;
-                    txt = string.Format("[{0:0.0}{1}]\n{2}", pt.Value, _theme.units, pt.Date.ToString("MMM dd, HH:mm:ss"));
+                    txt = string.Format("[{0:0.0}{1}]\n{2}\n{3}", pt.Value, _theme.units, pt.Site, pt.Date.ToString("MMM dd, HH:mm:ss"));
                 }
                 else
                 {
@@ -401,25 +401,28 @@ namespace WiFiConnect.MkZ.Controls
         public double Value = 0.0;
         public double Error = 0.0;
         public string Message = MSG;
+        public string Site = "";
 
-        public PingPoint(DateTime date, double val = 0, double err = 0, string message = MSG)
+        public PingPoint(string site, DateTime date, double val = 0, double err = 0, string message = MSG)
         {
             Date = date;
             Value = val;
             Error = err;
             Message = message;
+            Site = site;
         }
 
-        public PingPoint(double date, double val = 0, double err = 0, string message = MSG)
+        public PingPoint(string site, double date, double val = 0, double err = 0, string message = MSG)
         {
             Date = DateTime.FromOADate(date);
             Value = val;
             Error = err;
             Message = message;
+            Site = site;
         }
 
-        public PingPoint(DataPoint ptVal, DataPoint ptErr) 
-            : this(ptVal.XValue, ptVal.YValues[0], ptErr.YValues[0], MSG)
+        public PingPoint(string site, DataPoint ptVal, DataPoint ptErr) 
+            : this(site, ptVal.XValue, ptVal.YValues[0], ptErr.YValues[0], MSG)
         {
             if (Error != 0.0)
                 Message = "Error";
@@ -431,6 +434,7 @@ namespace WiFiConnect.MkZ.Controls
             Value = pt.Value;
             Error = pt.Error;
             Message = pt.Message;
+            Site = pt.Site;
         }
 
         public static PingPoint operator +(PingPoint point1, PingPoint point2)
@@ -439,12 +443,12 @@ namespace WiFiConnect.MkZ.Controls
             TimeSpan ts = point1.Date - point2.Date;
             TimeSpan ts1 = TimeSpan.FromMilliseconds(ts.TotalMilliseconds / 2.0);
 
-            return new PingPoint(point1.Date - ts1, (point1.Value + point2.Value)/2.0, Math.Max(point1.Error, point2.Error));
+            return new PingPoint(point1.Site, point1.Date - ts1, (point1.Value + point2.Value)/2.0, Math.Max(point1.Error, point2.Error));
         }
 
         public override string ToString()
         {
-            return string.Format("V:{0:0}, E:{1:0} -- {2} - {3}", Value, Error, Date.ToString("g"), Message);
+            return string.Format("V:{0:0}, E:{1:0} -- {2} - {3} - {4}", Value, Error, Date.ToString("g"), Message, Site);
         }
     }
 
@@ -538,10 +542,10 @@ namespace WiFiConnect.MkZ.Controls
             desc = "";
             icon = ToolTipIcon.Info;
             if (pointsVal.Count == 0)
-                return new PingPoint(double.NaN, double.NaN, double.NaN);
+                return new PingPoint("", double.NaN, double.NaN, double.NaN);
 
             if (pointsVal.Count == 1)
-                return new PingPoint(pointsVal[0], pointsErr[0]);
+                return new PingPoint("", pointsVal[0], pointsErr[0]);
 
             DataPoint ptVal0 = pointsVal[0];
             DataPoint ptVal1 = pointsVal.Last();
@@ -552,7 +556,7 @@ namespace WiFiConnect.MkZ.Controls
             desc = "(out of range)";
             icon = ToolTipIcon.Warning;
             if (xval < ptVal0.XValue || xval > ptVal1.XValue)
-                return new PingPoint(double.NaN, double.NaN, double.NaN); //out of range
+                return new PingPoint("", double.NaN, double.NaN, double.NaN); //out of range
 
             double timePerPoint = (ptVal1.XValue - ptVal0.XValue)/chart.Width;
             if(chart.ChartAreas[0].AxisX.ScaleView.IsZoomed)
@@ -573,10 +577,10 @@ namespace WiFiConnect.MkZ.Controls
             desc = "";
             icon = ToolTipIcon.Info;
             if (deltaX1 < proximityInterval)
-                return new PingPoint(ptVal1, ptErr1);
+                return new PingPoint("", ptVal1, ptErr1);
 
             if (deltaX0 < proximityInterval)
-                return new PingPoint(ptVal0, ptErr0);
+                return new PingPoint("", ptVal0, ptErr0);
 
             //interpolate
             double coefficient = (xval - ptVal0.XValue) / (ptVal1.XValue - ptVal0.XValue);
@@ -584,7 +588,7 @@ namespace WiFiConnect.MkZ.Controls
             desc = "(approximate)";
             icon = ToolTipIcon.Warning;
             double approximateValue = ptVal0.YValues[0] + coefficient * (ptVal1.YValues[0] - ptVal0.YValues[0]);
-            return new PingPoint(xval, approximateValue);
+            return new PingPoint("", xval, approximateValue);
         }
 
         public static PingPoint FindInterpolatedPingPoint(Chart chart, List<PingPoint> buffer, out ToolTipIcon icon)
@@ -594,7 +598,7 @@ namespace WiFiConnect.MkZ.Controls
 
             icon = ToolTipIcon.Info;
             if (buffer == null || buffer.Count == 0)
-                return new PingPoint(double.NaN, double.NaN, double.NaN, "No Data");
+                return new PingPoint("", double.NaN, double.NaN, double.NaN, "No Data");
 
             if (buffer.Count == 1)
                 return new PingPoint(buffer[0]);
@@ -604,7 +608,7 @@ namespace WiFiConnect.MkZ.Controls
 
             icon = ToolTipIcon.Warning;
             if (date < ptVal0.Date || date > ptVal1.Date)
-                return new PingPoint(double.NaN, double.NaN, double.NaN, "(out of range)"); //out of range
+                return new PingPoint("", double.NaN, double.NaN, double.NaN, "(out of range)"); //out of range
 
             TimeSpan timePerPoint = TimeSpan.FromMilliseconds((ptVal1.Date - ptVal0.Date).TotalMilliseconds / chart.Width);
             if (chart.ChartAreas[0].AxisX.ScaleView.IsZoomed)
@@ -635,7 +639,7 @@ namespace WiFiConnect.MkZ.Controls
             icon = ToolTipIcon.Warning;
             double approximateValue = ptVal0.Value + coefficient * (ptVal1.Value - ptVal0.Value);
             double approximateError = Math.Max(ptVal0.Error, ptVal1.Error);
-            return new PingPoint(xval, approximateValue, approximateError, ptVal1.Message + "(approximate)");
+            return new PingPoint(ptVal0.Site, xval, approximateValue, approximateError, ptVal1.Message + "(approximate)");
         }
 
         private static double Length(double X, double Y)

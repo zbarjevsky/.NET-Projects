@@ -32,6 +32,7 @@ namespace MkZ.WeatherStation.Controls
             public string title = "Loading...";
             public string units = " " + TemperatureUnits.UNITS_C;
             public string num_fmt = "0.0";
+            public double invalid_value = 0.0;
         }
 
         private Theme _theme = new Theme();
@@ -129,7 +130,7 @@ namespace MkZ.WeatherStation.Controls
             _scaleAbsolute = temperatureUnits.Scale;
 
             Color c = isActive ? Color.Red : Color.DarkGray;
-            UpdateChart(records, "Temperature", c, temperatureUnits.Desc,
+            UpdateChart(records, "Temperature", c, temperatureUnits.Desc, 0.0,
                 (record) => { return record.GetValue(temperatureUnits); });
         }
 
@@ -138,7 +139,7 @@ namespace MkZ.WeatherStation.Controls
             _scaleAbsolute = humidityUnits.Scale;
 
             Color c = isActive ? Color.Green : Color.DarkGray;
-            UpdateChart(records, "Humidity", c, humidityUnits.Desc,
+            UpdateChart(records, "Humidity", c, humidityUnits.Desc, 0.0,
                 (record) => { return record.GetValue(humidityUnits); });
         }
 
@@ -147,7 +148,7 @@ namespace MkZ.WeatherStation.Controls
             _scaleAbsolute = pressureUnits.Scale;
 
             Color c = isActive ? Color.Blue : Color.DarkGray;
-            UpdateChart(records, "Air Pressure", c, pressureUnits.Desc,
+            UpdateChart(records, "Air Pressure", c, pressureUnits.Desc, 0.0,
                 (record) => { return record.GetValue(pressureUnits); });
         }
 
@@ -159,17 +160,18 @@ namespace MkZ.WeatherStation.Controls
             _scaleAbsolute = radiationUnits.Scale;
 
             Color c = isActive ? Color.Goldenrod : Color.DarkGray;
-            UpdateChart(records, "Radiation", c, radiationUnits.Desc,
+            UpdateChart(records, "Radiation", c, radiationUnits.Desc, -1,
                 (record) => { return record.GetValue(radiationUnits); });
         }
 
         public void UpdateChart(List<Physics.IDataPoint> records, 
-            string title, Color color, string units, 
+            string title, Color color, string units, double invalid_value,
             Func<Physics.IDataPoint, double> GetValue)
         {
             _theme.color = Color.FromArgb(128, color);
             _theme.title = title;
             _theme.units = units;
+            _theme.invalid_value = invalid_value;
 
             _bufferFull.Clear();
 
@@ -227,7 +229,7 @@ namespace MkZ.WeatherStation.Controls
             {
                 chart1.Series[0].Points.AddXY(points[i].Date, points[i].Value);
 
-                _scaleFromPoints.Update(points[i].Value);
+                _scaleFromPoints.Update(points[i].Value, _theme.invalid_value);
             }
 
             m_txtValue.Text = points.Last().Value.ToString(_theme.num_fmt) + theme.units;
