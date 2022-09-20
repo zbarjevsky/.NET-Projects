@@ -11,8 +11,8 @@ namespace DynamicMap.NET.MapProviders
          Copyright = string.Format("©{0} ESRI - Map data ©{0} ArcGIS", DateTime.Today.Year);
       }
 
-      #region GMapProvider Members
-      public override Guid Id
+        #region DynMapProvider Members
+        public override Guid Id
       {
          get
          {
@@ -64,8 +64,8 @@ namespace DynamicMap.NET.MapProviders
          Copyright = string.Format("©{0} ESRI - Map data ©{0} ArcGIS", DateTime.Today.Year);
       }
 
-      #region GMapProvider Members
-      public override Guid Id
+        #region DynMapProvider Members
+        public override Guid Id
       {
          get
          {
@@ -125,9 +125,9 @@ namespace DynamicMap.NET.MapProviders
          Instance = new ArcGIS_StreetMap_World_2D_MapProvider();
       }
 
-      #region GMapProvider Members
+        #region DynMapProvider Members
 
-      readonly Guid id = new Guid("00BF56D4-4B48-4939-9B11-575BBBE4A718");
+        readonly Guid id = new Guid("00BF56D4-4B48-4939-9B11-575BBBE4A718");
       public override Guid Id
       {
          get

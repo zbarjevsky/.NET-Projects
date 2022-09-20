@@ -19,7 +19,7 @@ namespace DynamicMap.NET.MapProviders
          Instance = new OviSatelliteMapProvider();
       }
 
-      #region GMapProvider Members
+      #region DynMapProvider Members
 
       readonly Guid id = new Guid("6696CE12-7694-4073-BC48-79EE849F2563");
       public override Guid Id

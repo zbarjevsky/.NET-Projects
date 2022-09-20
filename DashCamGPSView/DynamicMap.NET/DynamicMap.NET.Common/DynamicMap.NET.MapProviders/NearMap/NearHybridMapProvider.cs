@@ -19,7 +19,7 @@ namespace DynamicMap.NET.MapProviders
          Instance = new NearHybridMapProvider();
       }
 
-      #region GMapProvider Members
+      #region DynMapProvider Members
 
       readonly Guid id = new Guid("4BF8819A-635D-4A94-8DC7-94C0E0F04BFD");
       public override Guid Id

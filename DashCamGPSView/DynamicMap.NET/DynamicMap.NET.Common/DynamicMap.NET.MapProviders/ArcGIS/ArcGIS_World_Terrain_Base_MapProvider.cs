@@ -19,9 +19,9 @@ namespace DynamicMap.NET.MapProviders
          Instance = new ArcGIS_World_Terrain_Base_MapProvider();
       }
 
-      #region GMapProvider Members
+        #region DynMapProvider Members
 
-      readonly Guid id = new Guid("927F175B-5200-4D95-A99B-1C87C93099DA");
+        readonly Guid id = new Guid("927F175B-5200-4D95-A99B-1C87C93099DA");
       public override Guid Id
       {
          get

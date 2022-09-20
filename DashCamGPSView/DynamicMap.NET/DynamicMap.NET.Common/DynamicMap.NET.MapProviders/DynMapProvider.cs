@@ -638,7 +638,7 @@ namespace DynamicMap.NET.MapProviders
             Instance = new EmptyProvider();
         }
 
-        #region GMapProvider Members
+        #region DynMapProvider Members
 
         public override Guid Id
         {

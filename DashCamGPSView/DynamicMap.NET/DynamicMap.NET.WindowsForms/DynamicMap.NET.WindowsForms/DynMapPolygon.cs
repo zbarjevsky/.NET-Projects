@@ -10,16 +10,16 @@ namespace DynamicMap.NET.WindowsForms
    using System;
 
    /// <summary>
-   /// GMap.NET polygon
+   /// DynamicMap.NET polygon
    /// </summary>
    [System.Serializable]
 #if !PocketPC
-   public class GMapPolygon : MapRoute, ISerializable, IDeserializationCallback, IDisposable
+   public class DynMapPolygon : MapRoute, ISerializable, IDeserializationCallback, IDisposable
 #else
-   public class GMapPolygon : MapRoute, IDisposable
+   public class DynMapPolygon : MapRoute, IDisposable
 #endif
-   {
-      private bool visible = true;
+    {
+        private bool visible = true;
 
       /// <summary>
       /// is polygon visible
@@ -218,7 +218,7 @@ namespace DynamicMap.NET.WindowsForms
 
       public readonly List<DynPoint> LocalPoints = new List<DynPoint>();
 
-      static GMapPolygon()
+      static DynMapPolygon()
       {
 #if !PocketPC
           DefaultStroke.LineJoin = LineJoin.Round;
@@ -226,7 +226,7 @@ namespace DynamicMap.NET.WindowsForms
           DefaultStroke.Width = 5;
       }
 
-      public GMapPolygon(List<PointLatLng> points, string name)
+      public DynMapPolygon(List<PointLatLng> points, string name)
          : base(points, name)
       {
          LocalPoints.Capacity = Points.Count;
@@ -293,7 +293,7 @@ namespace DynamicMap.NET.WindowsForms
       /// </summary>
       /// <param name="info">The info.</param>
       /// <param name="context">The context.</param>
-      protected GMapPolygon(SerializationInfo info, StreamingContext context)
+      protected DynMapPolygon(SerializationInfo info, StreamingContext context)
          : base(info, context)
       {
          this.deserializedLocalPoints = Extensions.GetValue<DynPoint[]>(info, "LocalPoints");
@@ -346,8 +346,8 @@ namespace DynamicMap.NET.WindowsForms
       #endregion
    }
 
-   public delegate void PolygonClick(GMapPolygon item, MouseEventArgs e);
-   public delegate void PolygonEnter(GMapPolygon item);
-   public delegate void PolygonLeave(GMapPolygon item);
-   public delegate void PolygonDoubleClick(GMapPolygon item, MouseEventArgs e);
+   public delegate void PolygonClick(DynMapPolygon item, MouseEventArgs e);
+   public delegate void PolygonEnter(DynMapPolygon item);
+   public delegate void PolygonLeave(DynMapPolygon item);
+   public delegate void PolygonDoubleClick(DynMapPolygon item, MouseEventArgs e);
 }

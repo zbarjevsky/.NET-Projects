@@ -24,9 +24,9 @@ namespace DynamicMap.NET.MapProviders
          Instance = new ArcGIS_DarbAE_Q2_2011_NAVTQ_Eng_V5_MapProvider();
       }
 
-      #region GMapProvider Members
+        #region DynMapProvider Members
 
-      readonly Guid id = new Guid("E03CFEDF-9277-49B3-9912-D805347F934B");
+        readonly Guid id = new Guid("E03CFEDF-9277-49B3-9912-D805347F934B");
       public override Guid Id
       {
          get

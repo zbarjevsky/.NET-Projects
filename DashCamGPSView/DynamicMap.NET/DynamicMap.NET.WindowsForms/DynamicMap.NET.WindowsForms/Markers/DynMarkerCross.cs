@@ -7,13 +7,13 @@ namespace DynamicMap.NET.WindowsForms.Markers
 
 #if !PocketPC
    [Serializable]
-   public class GMarkerCross : GMapMarker, ISerializable
+   public class DynMarkerCross : DynMapMarker, ISerializable
 #else
-   public class GMarkerCross : GMapMarker
+   public class DynMarkerCross : DynMapMarker
 #endif
-   {
+    {
 #if !PocketPC
-         public static readonly Pen DefaultPen = new Pen(Brushes.Red, 1);
+        public static readonly Pen DefaultPen = new Pen(Brushes.Red, 1);
 #else
          public static readonly Pen DefaultPen = new Pen(Color.Red, 1);
 #endif
@@ -21,7 +21,7 @@ namespace DynamicMap.NET.WindowsForms.Markers
       [NonSerialized]
       public Pen Pen = DefaultPen;
 
-      public GMarkerCross(PointLatLng p)
+      public DynMarkerCross(PointLatLng p)
          : base(p)
       {
          IsHitTestVisible = false;
@@ -57,7 +57,7 @@ namespace DynamicMap.NET.WindowsForms.Markers
          base.GetObjectData(info, context);
       }
 
-      protected GMarkerCross(SerializationInfo info, StreamingContext context)
+      protected DynMarkerCross(SerializationInfo info, StreamingContext context)
          : base(info, context)
       {
       }

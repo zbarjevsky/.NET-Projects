@@ -33,7 +33,7 @@ namespace DynamicMap.NET.MapProviders
          "ORTOFOTOS","ORTOFOTOS","ORTOFOTOS","ORTOFOTOS"
       };
 
-      #region GMapProvider Members
+      #region DynMapProvider Members
 
       readonly Guid id = new Guid("7B70ABB0-1265-4D34-9442-F0788F4F689F");
       public override Guid Id

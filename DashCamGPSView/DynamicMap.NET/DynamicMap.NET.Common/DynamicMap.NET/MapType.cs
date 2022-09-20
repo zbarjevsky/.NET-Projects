@@ -1,8 +1,8 @@
-﻿
-namespace GMap.NET
-{
-   using System;
+﻿   using System;
 
+
+namespace DynamicMap.NET
+{
    /// <summary>
    /// types of great maps, legacy, not used anymore,
    /// left for old ids                                          

@@ -21,7 +21,7 @@ namespace DynamicMap.NET.MapProviders
 
       public string Version = "h@333000000";
 
-      #region GMapProvider Members
+      #region DynMapProvider Members
 
       readonly Guid id = new Guid("B076C255-6D12-4466-AAE0-4A73D20A7E6A");
       public override Guid Id

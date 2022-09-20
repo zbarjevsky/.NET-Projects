@@ -23,7 +23,7 @@ namespace DynamicMap.NET.MapProviders
          Instance = new TurkeyMapProvider();
       }
 
-      #region GMapProvider Members
+      #region DynMapProvider Members
 
       readonly Guid id = new Guid("EDE895BD-756D-4BE4-8D03-D54DD8856F1D");
       public override Guid Id

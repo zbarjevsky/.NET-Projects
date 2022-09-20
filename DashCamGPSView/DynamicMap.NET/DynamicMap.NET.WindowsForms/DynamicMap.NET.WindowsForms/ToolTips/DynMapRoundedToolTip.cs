@@ -8,14 +8,14 @@ namespace DynamicMap.NET.WindowsForms.ToolTips
 
 #if !PocketPC
    /// <summary>
-   /// GMap.NET marker
+   /// DynamicMap.NET marker
    /// </summary>
    [Serializable]
-   public class GMapRoundedToolTip : GMapToolTip, ISerializable
+   public class DynMapRoundedToolTip : DynMapToolTip, ISerializable
    {
       public float Radius = 10f;
 
-      public GMapRoundedToolTip(GMapMarker marker)
+      public DynMapRoundedToolTip(DynMapMarker marker)
          : base(marker)
       {
          TextPadding = new Size((int)Radius, (int)Radius);
@@ -73,7 +73,7 @@ namespace DynamicMap.NET.WindowsForms.ToolTips
          base.GetObjectData(info, context);
       }
 
-      protected GMapRoundedToolTip(SerializationInfo info, StreamingContext context)
+      protected DynMapRoundedToolTip(SerializationInfo info, StreamingContext context)
          : base(info, context)
       {
          this.Radius = Extensions.GetStruct<float>(info, "Radius", 10f);

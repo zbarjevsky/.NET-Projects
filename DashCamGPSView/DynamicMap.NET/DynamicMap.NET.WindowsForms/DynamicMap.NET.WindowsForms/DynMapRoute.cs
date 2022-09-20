@@ -10,13 +10,13 @@ namespace DynamicMap.NET.WindowsForms
     using DynamicMap.NET;    
 
     /// <summary>
-    /// GMap.NET route
+    /// DynamicMap.NET route
     /// </summary>
     [Serializable]
 #if !PocketPC
-   public class GMapRoute : MapRoute, ISerializable, IDeserializationCallback, IDisposable
+   public class DynMapRoute : MapRoute, ISerializable, IDeserializationCallback, IDisposable
 #else
-    public class GMapRoute : MapRoute, IDisposable
+    public class DynMapRoute : MapRoute, IDisposable
 #endif
     {
         DynMapOverlay overlay;
@@ -189,7 +189,7 @@ namespace DynamicMap.NET.WindowsForms
 
         public readonly List<DynPoint> LocalPoints = new List<DynPoint>();
 
-        static GMapRoute()
+        static DynMapRoute()
         {
 #if !PocketPC
             DefaultStroke.LineJoin = LineJoin.Round;
@@ -197,13 +197,13 @@ namespace DynamicMap.NET.WindowsForms
             DefaultStroke.Width = 5;
         }
 
-        public GMapRoute(string name)
+        public DynMapRoute(string name)
             : base(name)
         {
 
         }
 
-        public GMapRoute(IEnumerable<PointLatLng> points, string name)
+        public DynMapRoute(IEnumerable<PointLatLng> points, string name)
             : base(points, name)
         {
 
@@ -232,11 +232,11 @@ namespace DynamicMap.NET.WindowsForms
       }
 
       /// <summary>
-      /// Initializes a new instance of the <see cref="GMapRoute"/> class.
+      /// Initializes a new instance of the <see cref="DynMapRoute"/> class.
       /// </summary>
       /// <param name="info">The info.</param>
       /// <param name="context">The context.</param>
-      protected GMapRoute(SerializationInfo info, StreamingContext context)
+      protected DynMapRoute(SerializationInfo info, StreamingContext context)
          : base(info, context)
       {
          //this.Stroke = Extensions.GetValue<Pen>(info, "Stroke", new Pen(Color.FromArgb(144, Color.MidnightBlue)));
@@ -290,8 +290,8 @@ namespace DynamicMap.NET.WindowsForms
         #endregion
     }
 
-    public delegate void RouteClick(GMapRoute item, MouseEventArgs e);
-    public delegate void RouteEnter(GMapRoute item);
-    public delegate void RouteLeave(GMapRoute item);
-    public delegate void RouteDoubleClick(GMapRoute item, MouseEventArgs e);
+    public delegate void RouteClick(DynMapRoute item, MouseEventArgs e);
+    public delegate void RouteEnter(DynMapRoute item);
+    public delegate void RouteLeave(DynMapRoute item);
+    public delegate void RouteDoubleClick(DynMapRoute item, MouseEventArgs e);
 }

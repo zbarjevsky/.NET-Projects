@@ -13,7 +13,7 @@ namespace DynamicMap.NET.MapProviders
          Copyright = string.Format("©{0} OVI Nokia - Map data ©{0} NAVTEQ, Imagery ©{0} DigitalGlobe", DateTime.Today.Year);
       }
 
-      #region GMapProvider Members
+      #region DynMapProvider Members
       public override Guid Id
       {
          get
@@ -76,7 +76,7 @@ namespace DynamicMap.NET.MapProviders
          Instance = new OviMapProvider();
       }
 
-      #region GMapProvider Members
+      #region DynMapProvider Members
 
       readonly Guid id = new Guid("30DC1083-AC4D-4471-A232-D8A67AC9373A");
       public override Guid Id

@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DashCamGPSView.Controls"
-             xmlns:windowspresentation="clr-namespace:DynamicMap.NET.WindowsPresentation;assembly=GMap.NET.WindowsPresentation"
+             xmlns:windowspresentation="clr-namespace:DynamicMap.NET.WindowsPresentation;assembly=DynamicMap.NET.WindowsPresentation"
              xmlns:custommarkers="clr-namespace:DashCamGPSView.CustomMarkers"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="450">
@@ -68,9 +68,9 @@
                 </Border>
                 <Slider x:Name="sliderZoom" Margin="14"
                     Orientation="Vertical" IsSnapToTickEnabled="True"
-                    Value="{Binding Zoom, ElementName=GMap}"
+                    Value="{Binding Zoom, ElementName=DynMap}"
                     SmallChange="1" LargeChange="3" TickPlacement="TopLeft" Foreground="Black"
-                    Minimum="{Binding MinZoom, ElementName=GMap}" Maximum="{Binding MaxZoom, ElementName=GMap}" >
+                    Minimum="{Binding MinZoom, ElementName=DynMap}" Maximum="{Binding MaxZoom, ElementName=DynMap}" >
                 </Slider>
             </StackPanel>
         </Border>
@@ -97,7 +97,7 @@
             </Grid>
             <ComboBox x:Name="cmbMapType" Margin="4" 
                       IsEditable="False" FontSize="16"
-                      SelectedItem="{Binding ElementName=GMap, Path=MapProvider}"/>
+                      SelectedItem="{Binding ElementName=DynMap, Path=MapProvider}"/>
 
         </DockPanel>
     </Grid>

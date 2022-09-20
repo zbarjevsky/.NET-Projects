@@ -304,9 +304,9 @@ namespace DynamicMap.NET.CacheProviders
 #if !PocketPC
                            cmd.CommandText = Properties.Resources.CreateTileDb;
 #else
-                           cmd.CommandText = GMap.NET.WindowsMobile.Properties.Resources.CreateTileDb;
+                           cmd.CommandText = DynamicMap.NET.WindowsMobile.Properties.Resources.CreateTileDb;
 #endif
-                           cmd.ExecuteNonQuery();
+                                    cmd.ExecuteNonQuery();
                         }
                         tr.Commit();
                      }

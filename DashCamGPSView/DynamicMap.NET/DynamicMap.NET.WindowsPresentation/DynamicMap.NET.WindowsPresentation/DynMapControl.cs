@@ -23,7 +23,7 @@ using DynamicMap.NET.Projections;
 namespace DynamicMap.NET.WindowsPresentation
 {
    /// <summary>
-   /// GMap.NET control for Windows Presentation
+   /// DynamicMap.NET control for Windows Presentation
    /// </summary>
    public class DynMapControl : ItemsControl, DynamicMap.NET.IDynMapInterface, IDisposable
    {
@@ -117,7 +117,7 @@ namespace DynamicMap.NET.WindowsPresentation
       /// <summary>
       /// map zoom
       /// </summary>
-      [Category("GMap.NET")]
+      [Category("DynamicMap.NET")]
       public double Zoom
       {
          get
@@ -166,7 +166,7 @@ namespace DynamicMap.NET.WindowsPresentation
       /// remainder of 0.25 <code>ScaleUp</code> is applied, for bigger
       /// remainders <code>ScaleDown</code>.
       /// </summary>
-      [Category("GMap.NET")]
+      [Category("DynamicMap.NET")]
       [Description("map scale type")]
       public ScaleModes ScaleMode
       {
@@ -280,7 +280,7 @@ namespace DynamicMap.NET.WindowsPresentation
       /// <summary>
       /// max zoom
       /// </summary>
-      [Category("GMap.NET")]
+      [Category("DynamicMap.NET")]
       [Description("maximum zoom level of map")]
       public int MaxZoom
       {
@@ -297,7 +297,7 @@ namespace DynamicMap.NET.WindowsPresentation
       /// <summary>
       /// min zoom
       /// </summary>
-      [Category("GMap.NET")]
+      [Category("DynamicMap.NET")]
       [Description("minimum zoom level of map")]
       public int MinZoom
       {
@@ -340,7 +340,7 @@ namespace DynamicMap.NET.WindowsPresentation
       /// <summary>
       /// map zooming type for mouse wheel
       /// </summary>
-      [Category("GMap.NET")]
+      [Category("DynamicMap.NET")]
       [Description("map zooming type for mouse wheel")]
       public DynamicMap.NET.MouseWheelZoomType MouseWheelZoomType
       {
@@ -357,7 +357,7 @@ namespace DynamicMap.NET.WindowsPresentation
       /// <summary>
       /// enable map zoom on mouse wheel
       /// </summary>
-      [Category("GMap.NET")]
+      [Category("DynamicMap.NET")]
       [Description("enable map zoom on mouse wheel")]
       public bool MouseWheelZoomEnabled
       {
@@ -392,7 +392,7 @@ namespace DynamicMap.NET.WindowsPresentation
       /// Gets or sets a value indicating whether [multi touch enabled].
       /// </summary>
       /// <value><c>true</c> if [multi touch enabled]; otherwise, <c>false</c>.</value>
-      [Category("GMap.NET")]
+      [Category("DynamicMap.NET")]
       [Description("Enable pinch map zoom")]
       public bool MultiTouchEnabled
       {
@@ -409,7 +409,7 @@ namespace DynamicMap.NET.WindowsPresentation
       /// <summary>
       /// map dragg button
       /// </summary>
-      [Category("GMap.NET")]
+      [Category("DynamicMap.NET")]
       public MouseButton DragButton = MouseButton.Left;
 
       /// <summary>
@@ -420,7 +420,7 @@ namespace DynamicMap.NET.WindowsPresentation
       /// <summary>
       /// shows tile gridlines
       /// </summary>
-      [Category("GMap.NET")]
+      [Category("DynamicMap.NET")]
       public bool ShowTileGridLines
       {
          get
@@ -633,9 +633,9 @@ namespace DynamicMap.NET.WindowsPresentation
             Core.RenderMode = DynamicMap.NET.RenderMode.WPF;
 
             Core.OnMapZoomChanged += new MapZoomChanged(ForceUpdateOverlays);
-            Loaded += new RoutedEventHandler(GMapControl_Loaded);
+            Loaded += new RoutedEventHandler(DynMapControl_Loaded);
             Dispatcher.ShutdownStarted += new EventHandler(Dispatcher_ShutdownStarted);
-            SizeChanged += new SizeChangedEventHandler(GMapControl_SizeChanged);
+            SizeChanged += new SizeChangedEventHandler(DynMapControl_SizeChanged);
 
             // by default its internal property, feel free to use your own
             if(ItemsSource == null)
@@ -649,7 +649,7 @@ namespace DynamicMap.NET.WindowsPresentation
 
       static DynMapControl()
       {
-         GMapImageProxy.Enable();
+         DynMapImageProxy.Enable();
 #if !PocketPC
          DynMaps.Instance.SQLitePing();
 #endif
@@ -712,7 +712,7 @@ namespace DynamicMap.NET.WindowsPresentation
       /// </summary>
       /// <param name="sender"></param>
       /// <param name="e"></param>
-      void GMapControl_Loaded(object sender, RoutedEventArgs e)
+      void DynMapControl_Loaded(object sender, RoutedEventArgs e)
       {
          if(!Core.IsStarted)
          {
@@ -760,7 +760,7 @@ namespace DynamicMap.NET.WindowsPresentation
       /// </summary>
       /// <param name="sender"></param>
       /// <param name="e"></param>
-      void GMapControl_SizeChanged(object sender, SizeChangedEventArgs e)
+      void DynMapControl_SizeChanged(object sender, SizeChangedEventArgs e)
       {
          System.Windows.Size constraint = e.NewSize;
 
@@ -900,7 +900,7 @@ namespace DynamicMap.NET.WindowsPresentation
                   Tile t = Core.Matrix.GetTileWithNoLock(Core.Zoom, tilePoint.PosXY);
                   if(t.NotEmpty)
                   {
-                     foreach(GMapImage img in t.Overlays)
+                     foreach(DynMapImage img in t.Overlays)
                      {
                         if(img != null && img.Img != null)
                         {
@@ -949,7 +949,7 @@ namespace DynamicMap.NET.WindowsPresentation
 
                         // render tile
                         {
-                           foreach(GMapImage img in parentTile.Overlays)
+                           foreach(DynMapImage img in parentTile.Overlays)
                            {
                               if(img != null && img.Img != null && !img.IsParent)
                               {
@@ -1239,7 +1239,7 @@ namespace DynamicMap.NET.WindowsPresentation
       /// <summary>
       /// bearing for rotation of the map
       /// </summary>
-      [Category("GMap.NET")]
+      [Category("DynamicMap.NET")]
       public float Bearing
       {
          get
@@ -2167,10 +2167,10 @@ namespace DynamicMap.NET.WindowsPresentation
             dlg.AddExtension = true;
             dlg.DefaultExt = "gmdb";
             dlg.ValidateNames = true;
-            dlg.Title = "GMap.NET: Export map to db, if file exsist only new data will be added";
+            dlg.Title = "DynamicMap.NET: Export map to db, if file exsist only new data will be added";
             dlg.FileName = "DataExp";
             dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            dlg.Filter = "GMap.NET DB files (*.gmdb)|*.gmdb";
+            dlg.Filter = "DynamicMap.NET DB files (*.gmdb)|*.gmdb";
             dlg.FilterIndex = 1;
             dlg.RestoreDirectory = true;
 
@@ -2179,11 +2179,11 @@ namespace DynamicMap.NET.WindowsPresentation
                bool ok = DynMaps.Instance.ExportToGMDB(dlg.FileName);
                if(ok)
                {
-                  MessageBox.Show("Complete!", "GMap.NET", MessageBoxButton.OK, MessageBoxImage.Information);
+                  MessageBox.Show("Complete!", "DynamicMap.NET", MessageBoxButton.OK, MessageBoxImage.Information);
                }
                else
                {
-                  MessageBox.Show("  Failed!", "GMap.NET", MessageBoxButton.OK, MessageBoxImage.Warning);
+                  MessageBox.Show("  Failed!", "DynamicMap.NET", MessageBoxButton.OK, MessageBoxImage.Warning);
                }
 
                return ok;
@@ -2202,10 +2202,10 @@ namespace DynamicMap.NET.WindowsPresentation
             dlg.AddExtension = true;
             dlg.DefaultExt = "gmdb";
             dlg.ValidateNames = true;
-            dlg.Title = "GMap.NET: Import to db, only new data will be added";
+            dlg.Title = "DynamicMap.NET: Import to db, only new data will be added";
             dlg.FileName = "DataImport";
             dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            dlg.Filter = "GMap.NET DB files (*.gmdb)|*.gmdb";
+            dlg.Filter = "DynamicMap.NET DB files (*.gmdb)|*.gmdb";
             dlg.FilterIndex = 1;
             dlg.RestoreDirectory = true;
 
@@ -2216,12 +2216,12 @@ namespace DynamicMap.NET.WindowsPresentation
                bool ok = DynMaps.Instance.ImportFromGMDB(dlg.FileName);
                if(ok)
                {
-                  MessageBox.Show("Complete!", "GMap.NET", MessageBoxButton.OK, MessageBoxImage.Information);
+                  MessageBox.Show("Complete!", "DynamicMap.NET", MessageBoxButton.OK, MessageBoxImage.Information);
                   ReloadMap();
                }
                else
                {
-                  MessageBox.Show("  Failed!", "GMap.NET", MessageBoxButton.OK, MessageBoxImage.Warning);
+                  MessageBox.Show("  Failed!", "DynamicMap.NET", MessageBoxButton.OK, MessageBoxImage.Warning);
                }
 
                Cursor = Cursors.Arrow;
@@ -2308,7 +2308,7 @@ namespace DynamicMap.NET.WindowsPresentation
          }
       }
 
-      [Category("GMap.NET")]
+      [Category("DynamicMap.NET")]
       public bool CanDragMap
       {
          get
@@ -2431,9 +2431,9 @@ namespace DynamicMap.NET.WindowsPresentation
          if(Core.IsStarted)
          {
             Core.OnMapZoomChanged -= new MapZoomChanged(ForceUpdateOverlays);
-            Loaded -= new RoutedEventHandler(GMapControl_Loaded);
+            Loaded -= new RoutedEventHandler(DynMapControl_Loaded);
             Dispatcher.ShutdownStarted -= new EventHandler(Dispatcher_ShutdownStarted);
-            SizeChanged -= new SizeChangedEventHandler(GMapControl_SizeChanged);
+            SizeChanged -= new SizeChangedEventHandler(DynMapControl_SizeChanged);
             if(_loadedApp != null)
             {
                _loadedApp.SessionEnding -= new SessionEndingCancelEventHandler(Current_SessionEnding);

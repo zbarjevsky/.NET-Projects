@@ -99,7 +99,7 @@ namespace DynamicMap.NET.Internals
 
          if(!string.IsNullOrEmpty(path))
          {
-            path += Path.DirectorySeparatorChar + "GMap.NET" + Path.DirectorySeparatorChar;
+            path += Path.DirectorySeparatorChar + "DynamicMap.NET" + Path.DirectorySeparatorChar;
          }
 
          return path;
@@ -173,7 +173,7 @@ namespace DynamicMap.NET.Internals
          string sd = Native.GetRemovableStorageDirectory();
          if(!string.IsNullOrEmpty(sd))
          {
-            CacheLocation = sd + Path.DirectorySeparatorChar +  "GMap.NET" + Path.DirectorySeparatorChar;
+            CacheLocation = sd + Path.DirectorySeparatorChar +  "DynamicMap.NET" + Path.DirectorySeparatorChar;
          }
          else
 #endif
@@ -183,7 +183,7 @@ namespace DynamicMap.NET.Internals
 #else
             string newCache = CacheLocator.Location;
 
-            string oldCache = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + Path.DirectorySeparatorChar + "GMap.NET" + Path.DirectorySeparatorChar;
+            string oldCache = System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData) + Path.DirectorySeparatorChar + "DynamicMap.NET" + Path.DirectorySeparatorChar;
 
             // move database to non-roaming user directory
             if(Directory.Exists(oldCache))

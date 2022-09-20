@@ -21,7 +21,7 @@ namespace DynamicMap.NET.MapProviders
          Instance = new MapBenderWMSProvider();
       }
 
-      #region GMapProvider Members
+      #region DynMapProvider Members
 
       readonly Guid id = new Guid("45742F8D-B552-4CAF-89AE-F20951BBDB2B");
       public override Guid Id

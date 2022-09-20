@@ -13,7 +13,7 @@ namespace DynamicMap.NET.WindowsForms
     using System.Drawing.Text;
 
     using DynamicMap.NET;
-    //using GMap.NET.Internals;
+    //using DynamicMap.NET.Internals;
     using DynamicMap.NET.ObjectModel;
     using DynamicMap.NET.MapProviders;
 
@@ -26,9 +26,9 @@ namespace DynamicMap.NET.WindowsForms
 #endif
 
     /// <summary>
-    /// GMap.NET control for Windows Forms
+    /// DynamicMap.NET control for Windows Forms
     /// </summary>   
-    public partial class GMapControl : UserControl, IDynMapInterface
+    public partial class DynMapControl : UserControl, IDynMapInterface
     {
 #if !PocketPC
         /// <summary>
@@ -105,7 +105,7 @@ namespace DynamicMap.NET.WindowsForms
         /// <summary>
         /// max zoom
         /// </summary>         
-        [Category("GMap.NET")]
+        [Category("DynamicMap.NET")]
         [Description("maximum zoom level of map")]
         public int MaxZoom
         {
@@ -122,7 +122,7 @@ namespace DynamicMap.NET.WindowsForms
         /// <summary>
         /// min zoom
         /// </summary>      
-        [Category("GMap.NET")]
+        [Category("DynamicMap.NET")]
         [Description("minimum zoom level of map")]
         public int MinZoom
         {
@@ -139,7 +139,7 @@ namespace DynamicMap.NET.WindowsForms
         /// <summary>
         /// map zooming type for mouse wheel
         /// </summary>
-        [Category("GMap.NET")]
+        [Category("DynamicMap.NET")]
         [Description("map zooming type for mouse wheel")]
         public MouseWheelZoomType MouseWheelZoomType
         {
@@ -156,7 +156,7 @@ namespace DynamicMap.NET.WindowsForms
         /// <summary>
         /// enable map zoom on mouse wheel
         /// </summary>
-        [Category("GMap.NET")]
+        [Category("DynamicMap.NET")]
         [Description("enable map zoom on mouse wheel")]
         public bool MouseWheelZoomEnabled
         {
@@ -209,7 +209,7 @@ namespace DynamicMap.NET.WindowsForms
         /// <summary>
         /// background of selected area
         /// </summary>
-        [Category("GMap.NET")]
+        [Category("DynamicMap.NET")]
         [Description("background color od the selected area")]
         public Color SelectedAreaFillColor
         {
@@ -294,7 +294,7 @@ namespace DynamicMap.NET.WindowsForms
         /// <summary>
         /// color of empty tile background
         /// </summary>
-        [Category("GMap.NET")]
+        [Category("DynamicMap.NET")]
         [Description("background color of the empty tile")]
         public Color EmptyTileColor
         {
@@ -375,7 +375,7 @@ namespace DynamicMap.NET.WindowsForms
         /// <summary>
         /// map dragg button
         /// </summary>
-        [Category("GMap.NET")]
+        [Category("DynamicMap.NET")]
         public MouseButtons DragButton = MouseButtons.Left;
 
         private bool showTileGridLines = false;
@@ -383,7 +383,7 @@ namespace DynamicMap.NET.WindowsForms
         /// <summary>
         /// shows tile gridlines
         /// </summary>
-        [Category("GMap.NET")]
+        [Category("DynamicMap.NET")]
         [Description("shows tile gridlines")]
         public bool ShowTileGridLines
         {
@@ -473,7 +473,7 @@ namespace DynamicMap.NET.WindowsForms
 #if !PocketPC
         private bool _GrayScale = false;
 
-        [Category("GMap.NET")]
+        [Category("DynamicMap.NET")]
         public bool GrayScaleMode
         {
             get
@@ -489,7 +489,7 @@ namespace DynamicMap.NET.WindowsForms
 
         private bool _Negative = false;
 
-        [Category("GMap.NET")]
+        [Category("DynamicMap.NET")]
         public bool NegativeMode
         {
             get
@@ -516,9 +516,9 @@ namespace DynamicMap.NET.WindowsForms
             set
             {
                 colorMatrix = value;
-                if (DynMapProvider.TileImageProxy != null && DynMapProvider.TileImageProxy is GMapImageProxy)
+                if (DynMapProvider.TileImageProxy != null && DynMapProvider.TileImageProxy is DynMapImageProxy)
                 {
-                    (DynMapProvider.TileImageProxy as GMapImageProxy).ColorMatrix = value;
+                    (DynMapProvider.TileImageProxy as DynMapImageProxy).ColorMatrix = value;
                     if (Core.IsStarted)
                     {
                         ReloadMap();
@@ -551,7 +551,7 @@ namespace DynamicMap.NET.WindowsForms
         /// <summary>
         /// construct
         /// </summary>
-        public GMapControl()
+        public DynMapControl()
         {
 #if !PocketPC
             if (!IsDesignerHosted)
@@ -595,13 +595,13 @@ namespace DynamicMap.NET.WindowsForms
 
 #endif
 
-        static GMapControl()
+        static DynMapControl()
         {
 #if !PocketPC
             if (!IsDesignerHosted)
 #endif
             {
-                GMapImageProxy.Enable();
+                DynMapImageProxy.Enable();
 #if !PocketPC
                 DynMaps.Instance.SQLitePing();
 #endif
@@ -659,7 +659,7 @@ namespace DynamicMap.NET.WindowsForms
         /// updates markers local position
         /// </summary>
         /// <param name="marker"></param>
-        public void UpdateMarkerLocalPosition(GMapMarker marker)
+        public void UpdateMarkerLocalPosition(DynMapMarker marker)
         {
             DynPoint p = FromLatLngToLocal(marker.Position);
             {
@@ -677,7 +677,7 @@ namespace DynamicMap.NET.WindowsForms
         /// updates routes local position
         /// </summary>
         /// <param name="route"></param>
-        public void UpdateRouteLocalPosition(GMapRoute route)
+        public void UpdateRouteLocalPosition(DynMapRoute route)
         {
           route.LocalPoints.Clear();
           
@@ -702,7 +702,7 @@ namespace DynamicMap.NET.WindowsForms
         /// updates polygons local position
         /// </summary>
         /// <param name="polygon"></param>
-        public void UpdatePolygonLocalPosition(GMapPolygon polygon)
+        public void UpdatePolygonLocalPosition(DynMapPolygon polygon)
         {
           polygon.LocalPoints.Clear();
 
@@ -829,7 +829,7 @@ namespace DynamicMap.NET.WindowsForms
                 {
                     if (o.IsVisibile && o.Markers.Count > 0)
                     {
-                        foreach (GMapMarker m in o.Markers)
+                        foreach (DynMapMarker m in o.Markers)
                         {
                             if (m.IsVisible)
                             {
@@ -890,7 +890,7 @@ namespace DynamicMap.NET.WindowsForms
                 {
                     if (o.IsVisibile && o.Routes.Count > 0)
                     {
-                        foreach (GMapRoute route in o.Routes)
+                        foreach (DynMapRoute route in o.Routes)
                         {
                             if (route.IsVisible && route.From.HasValue && route.To.HasValue)
                             {
@@ -1329,7 +1329,7 @@ namespace DynamicMap.NET.WindowsForms
                             {
                                 // render tile
                                 {
-                                    foreach (GMapImage img in t.Overlays)
+                                    foreach (DynMapImage img in t.Overlays)
                                     {
                                         if (img != null && img.Img != null)
                                         {
@@ -1386,7 +1386,7 @@ namespace DynamicMap.NET.WindowsForms
 
                                     // render tile 
                                     {
-                                        foreach (GMapImage img in parentTile.Overlays)
+                                        foreach (DynMapImage img in parentTile.Overlays)
                                         {
                                             if (img != null && img.Img != null && !img.IsParent)
                                             {
@@ -1610,7 +1610,7 @@ namespace DynamicMap.NET.WindowsForms
         /// <summary>
         /// bearing for rotation of the map
         /// </summary>
-        [Category("GMap.NET")]
+        [Category("DynamicMap.NET")]
         public float Bearing
         {
             get
@@ -1859,7 +1859,7 @@ namespace DynamicMap.NET.WindowsForms
                     DynMapOverlay o = Overlays[i];
                     if (o != null && o.IsVisibile && o.IsHitTestVisible)
                     {
-                        foreach (GMapMarker m in o.Markers)
+                        foreach (DynMapMarker m in o.Markers)
                         {
                             if (m.IsVisible && m.IsHitTestVisible)
                             {
@@ -1885,7 +1885,7 @@ namespace DynamicMap.NET.WindowsForms
                             }
                         }
 
-                        foreach (GMapRoute m in o.Routes)
+                        foreach (DynMapRoute m in o.Routes)
                         {
                             if (m.IsVisible && m.IsHitTestVisible)
                             {
@@ -1910,7 +1910,7 @@ namespace DynamicMap.NET.WindowsForms
                             }
                         }
 
-                        foreach (GMapPolygon m in o.Polygons)
+                        foreach (DynMapPolygon m in o.Polygons)
                         {
                             if (m.IsVisible && m.IsHitTestVisible)
                             {
@@ -1948,7 +1948,7 @@ namespace DynamicMap.NET.WindowsForms
                     DynMapOverlay o = Overlays[i];
                     if (o != null && o.IsVisibile && o.IsHitTestVisible)
                     {
-                        foreach (GMapMarker m in o.Markers)
+                        foreach (DynMapMarker m in o.Markers)
                         {
                             if (m.IsVisible && m.IsHitTestVisible)
                             {
@@ -1974,7 +1974,7 @@ namespace DynamicMap.NET.WindowsForms
                             }
                         }
 
-                        foreach (GMapRoute m in o.Routes)
+                        foreach (DynMapRoute m in o.Routes)
                         {
                             if (m.IsVisible && m.IsHitTestVisible)
                             {
@@ -1999,7 +1999,7 @@ namespace DynamicMap.NET.WindowsForms
                             }
                         }
 
-                        foreach (GMapPolygon m in o.Polygons)
+                        foreach (DynMapPolygon m in o.Polygons)
                         {
                             if (m.IsVisible && m.IsHitTestVisible)
                             {
@@ -2156,7 +2156,7 @@ namespace DynamicMap.NET.WindowsForms
                             DynMapOverlay o = Overlays[i];
                             if (o != null && o.IsVisibile && o.IsHitTestVisible)
                             {
-                                foreach (GMapMarker m in o.Markers)
+                                foreach (DynMapMarker m in o.Markers)
                                 {
                                     if (m.IsVisible && m.IsHitTestVisible)
                                     {
@@ -2206,7 +2206,7 @@ namespace DynamicMap.NET.WindowsForms
                                 }
 
 #if !PocketPC
-                                foreach (GMapRoute m in o.Routes)
+                                foreach (DynMapRoute m in o.Routes)
                                 {
                                     if (m.IsVisible && m.IsHitTestVisible)
                                     {
@@ -2259,7 +2259,7 @@ namespace DynamicMap.NET.WindowsForms
                                 }
 #endif
 
-                                foreach (GMapPolygon m in o.Polygons)
+                                foreach (DynMapPolygon m in o.Polygons)
                                 {
                                     if (m.IsVisible && m.IsHitTestVisible)
                                     {
@@ -2585,10 +2585,10 @@ namespace DynamicMap.NET.WindowsForms
                 dlg.AddExtension = true;
                 dlg.DefaultExt = "gmdb";
                 dlg.ValidateNames = true;
-                dlg.Title = "GMap.NET: Export map to db, if file exsist only new data will be added";
+                dlg.Title = "DynamicMap.NET: Export map to db, if file exsist only new data will be added";
                 dlg.FileName = "DataExp";
                 dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                dlg.Filter = "GMap.NET DB files (*.gmdb)|*.gmdb";
+                dlg.Filter = "DynamicMap.NET DB files (*.gmdb)|*.gmdb";
                 dlg.FilterIndex = 1;
                 dlg.RestoreDirectory = true;
 
@@ -2597,11 +2597,11 @@ namespace DynamicMap.NET.WindowsForms
                     bool ok = DynMaps.Instance.ExportToGMDB(dlg.FileName);
                     if (ok)
                     {
-                        MessageBox.Show("Complete!", "GMap.NET", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Complete!", "DynamicMap.NET", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                     else
                     {
-                        MessageBox.Show("Failed!", "GMap.NET", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show("Failed!", "DynamicMap.NET", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
 
                     return ok;
@@ -2624,10 +2624,10 @@ namespace DynamicMap.NET.WindowsForms
                 dlg.AddExtension = true;
                 dlg.DefaultExt = "gmdb";
                 dlg.ValidateNames = true;
-                dlg.Title = "GMap.NET: Import to db, only new data will be added";
+                dlg.Title = "DynamicMap.NET: Import to db, only new data will be added";
                 dlg.FileName = "DataImport";
                 dlg.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-                dlg.Filter = "GMap.NET DB files (*.gmdb)|*.gmdb";
+                dlg.Filter = "DynamicMap.NET DB files (*.gmdb)|*.gmdb";
                 dlg.FilterIndex = 1;
                 dlg.RestoreDirectory = true;
 
@@ -2636,12 +2636,12 @@ namespace DynamicMap.NET.WindowsForms
                     bool ok = DynMaps.Instance.ImportFromGMDB(dlg.FileName);
                     if (ok)
                     {
-                        MessageBox.Show("Complete!", "GMap.NET", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("Complete!", "DynamicMap.NET", MessageBoxButtons.OK, MessageBoxIcon.Information);
                         ReloadMap();
                     }
                     else
                     {
-                        MessageBox.Show("Failed!", "GMap.NET", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        MessageBox.Show("Failed!", "DynamicMap.NET", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
 
                     return ok;
@@ -2654,7 +2654,7 @@ namespace DynamicMap.NET.WindowsForms
 
         private ScaleModes scaleMode = ScaleModes.Integer;
 
-        [Category("GMap.NET")]
+        [Category("DynamicMap.NET")]
         [Description("map scale type")]
         public ScaleModes ScaleMode
         {
@@ -2668,7 +2668,7 @@ namespace DynamicMap.NET.WindowsForms
             }
         }
 
-        [Category("GMap.NET"), DefaultValue(0)]
+        [Category("DynamicMap.NET"), DefaultValue(0)]
         public double Zoom
         {
             get
@@ -2962,7 +2962,7 @@ namespace DynamicMap.NET.WindowsForms
         /// <summary>
         /// is routes enabled
         /// </summary>
-        [Category("GMap.NET")]
+        [Category("DynamicMap.NET")]
         public bool RoutesEnabled
         {
             get
@@ -2978,7 +2978,7 @@ namespace DynamicMap.NET.WindowsForms
         /// <summary>
         /// is polygons enabled
         /// </summary>
-        [Category("GMap.NET")]
+        [Category("DynamicMap.NET")]
         public bool PolygonsEnabled
         {
             get
@@ -2994,7 +2994,7 @@ namespace DynamicMap.NET.WindowsForms
         /// <summary>
         /// is markers enabled
         /// </summary>
-        [Category("GMap.NET")]
+        [Category("DynamicMap.NET")]
         public bool MarkersEnabled
         {
             get
@@ -3010,7 +3010,7 @@ namespace DynamicMap.NET.WindowsForms
         /// <summary>
         /// can user drag map
         /// </summary>
-        [Category("GMap.NET")]
+        [Category("DynamicMap.NET")]
         public bool CanDragMap
         {
             get

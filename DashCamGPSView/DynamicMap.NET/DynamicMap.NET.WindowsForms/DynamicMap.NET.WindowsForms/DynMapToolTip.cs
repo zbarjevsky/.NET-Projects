@@ -9,17 +9,17 @@ using System.Collections;
     using System.Collections.Generic;
 
    /// <summary>
-   /// GMap.NET marker
+   /// DynamicMap.NET marker
    /// </summary>
    [Serializable]
 #if !PocketPC
-   public class GMapToolTip : ISerializable, IDisposable
+   public class DynMapToolTip : ISerializable, IDisposable
 #else
-   public class GMapToolTip: IDisposable
+   public class DynMapToolTip: IDisposable
 #endif
-   {
-      GMapMarker marker;
-      public GMapMarker Marker
+    {
+        DynMapMarker marker;
+      public DynMapMarker Marker
       {
          get
          {
@@ -90,7 +90,7 @@ using System.Collections;
       /// </summary>
       public Size TextPadding = new Size(10, 10);
 
-      static GMapToolTip()
+      static DynMapToolTip()
       {
           DefaultStroke.Width = 2;
 
@@ -105,7 +105,7 @@ using System.Collections;
           DefaultFormat.Alignment = StringAlignment.Center;
       }   
 
-      public GMapToolTip(GMapMarker marker)
+      public DynMapToolTip(DynMapMarker marker)
       {
          this.Marker = marker;
          this.Offset = new Point(14, -44);
@@ -133,11 +133,11 @@ using System.Collections;
       #region ISerializable Members
 
       /// <summary>
-      /// Initializes a new instance of the <see cref="GMapToolTip"/> class.
+      /// Initializes a new instance of the <see cref="DynMapToolTip"/> class.
       /// </summary>
       /// <param name="info">The info.</param>
       /// <param name="context">The context.</param>
-      protected GMapToolTip(SerializationInfo info, StreamingContext context)
+      protected DynMapToolTip(SerializationInfo info, StreamingContext context)
       {
          this.Offset = Extensions.GetStruct<Point>(info, "Offset", Point.Empty);
          this.TextPadding = Extensions.GetStruct<Size>(info, "TextPadding", new Size(10, 10));

@@ -20,7 +20,7 @@ namespace DynamicMap.NET.MapProviders
       public string AppId = string.Empty;
       public int MinExpectedQuality = 39;
 
-      #region GMapProvider Members
+      #region DynMapProvider Members
       public override Guid Id
       {
          get
@@ -379,7 +379,7 @@ namespace DynamicMap.NET.MapProviders
 
       public string Version = "2.1";
 
-      #region GMapProvider Members
+      #region DynMapProvider Members
 
       readonly Guid id = new Guid("65DB032C-6869-49B0-A7FC-3AE41A26AF4D");
       public override Guid Id

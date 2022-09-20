@@ -9,7 +9,7 @@ namespace DynamicMap.NET.WindowsForms.Markers
    using System;
    using System.Runtime.Serialization;
 #else
-   using GMap.NET.WindowsMobile.Properties;
+   using DynamicMap.NET.WindowsMobile.Properties;
 #endif
 
    public enum GMarkerGoogleType
@@ -56,9 +56,9 @@ namespace DynamicMap.NET.WindowsForms.Markers
 
 #if !PocketPC
    [Serializable]
-   public class GMarkerGoogle : GMapMarker, ISerializable, IDeserializationCallback
+   public class DynMarkerGoogle : DynMapMarker, ISerializable, IDeserializationCallback
 #else
-   public class GMarkerGoogle : GMapMarker
+   public class DynMarkerGoogle : DynMapMarker
 #endif
    {
       Bitmap Bitmap;
@@ -71,7 +71,7 @@ namespace DynamicMap.NET.WindowsForms.Markers
 
       public readonly GMarkerGoogleType Type;
 
-      public GMarkerGoogle(PointLatLng p, GMarkerGoogleType type)
+      public DynMarkerGoogle(PointLatLng p, GMarkerGoogleType type)
          : base(p)
       {
          this.Type = type;
@@ -187,7 +187,7 @@ namespace DynamicMap.NET.WindowsForms.Markers
       /// </summary>
       /// <param name="p"></param>
       /// <param name="Bitmap"></param>
-      public GMarkerGoogle(PointLatLng p, Bitmap Bitmap)
+      public DynMarkerGoogle(PointLatLng p, Bitmap Bitmap)
          : base(p)
       {
          this.Bitmap = Bitmap;
@@ -254,7 +254,7 @@ namespace DynamicMap.NET.WindowsForms.Markers
          base.GetObjectData(info, context);
       }
 
-      protected GMarkerGoogle(SerializationInfo info, StreamingContext context)
+      protected DynMarkerGoogle(SerializationInfo info, StreamingContext context)
          : base(info, context)
       {
          this.Type = Extensions.GetStruct<GMarkerGoogleType>(info, "type", GMarkerGoogleType.none);

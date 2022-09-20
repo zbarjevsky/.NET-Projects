@@ -28,7 +28,7 @@ namespace DynamicMap.NET.MapProviders
          Instance = new OpenStreet4UMapProvider();
       }
 
-      #region GMapProvider Members
+      #region DynMapProvider Members
 
       readonly Guid id = new Guid("3E3D919E-9814-4978-B430-6AAB2C1E41B2");
       public override Guid Id

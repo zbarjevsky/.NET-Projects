@@ -6,9 +6,9 @@ namespace DynamicMap.NET.CacheProviders
    using System.Data;
    using System.Diagnostics;
    using System.IO;
-   using GMap.NET;
+   using DynamicMap.NET;
    using MySql.Data.MySqlClient;
-   using GMap.NET.MapProviders;
+   using DynamicMap.NET.MapProviders;
 
    /// <summary>
    /// image cache for mysql server
@@ -75,7 +75,7 @@ namespace DynamicMap.NET.CacheProviders
          {
             if(!initialized)
             {
-               #region prepare mssql & cache table
+    #region prepare mssql & cache table
                try
                {
                   // different connections so the multi-thread inserts and selects don't collide on open readers.
@@ -86,7 +86,7 @@ namespace DynamicMap.NET.CacheProviders
 
                   {
                      using(MySqlCommand cmd = new MySqlCommand(
-                        @" CREATE TABLE IF NOT EXISTS `gmapnetcache` (
+                        @" CREATE TABLE IF NOT EXISTS `dynmapnetcache` (
                              `Type` int(10) NOT NULL,
                              `Zoom` int(10) NOT NULL,
                              `X` int(10) NOT NULL,
@@ -99,14 +99,14 @@ namespace DynamicMap.NET.CacheProviders
                      }
                   }
 
-                  this.cmdFetch = new MySqlCommand("SELECT Tile FROM `gmapnetcache` WHERE Type=@type AND Zoom=@zoom AND X=@x AND Y=@y", cnGet);
+                  this.cmdFetch = new MySqlCommand("SELECT Tile FROM `dynmapnetcache` WHERE Type=@type AND Zoom=@zoom AND X=@x AND Y=@y", cnGet);
                   this.cmdFetch.Parameters.Add("@type", MySqlDbType.Int32);
                   this.cmdFetch.Parameters.Add("@zoom", MySqlDbType.Int32);
                   this.cmdFetch.Parameters.Add("@x", MySqlDbType.Int32);
                   this.cmdFetch.Parameters.Add("@y", MySqlDbType.Int32);
                   this.cmdFetch.Prepare();
 
-                  this.cmdInsert = new MySqlCommand("INSERT INTO `gmapnetcache` ( Type, Zoom, X, Y, Tile ) VALUES ( @type, @zoom, @x, @y, @tile )", cnSet);
+                  this.cmdInsert = new MySqlCommand("INSERT INTO `dynmapnetcache` ( Type, Zoom, X, Y, Tile ) VALUES ( @type, @zoom, @x, @y, @tile )", cnSet);
                   this.cmdInsert.Parameters.Add("@type", MySqlDbType.Int32);
                   this.cmdInsert.Parameters.Add("@zoom", MySqlDbType.Int32);
                   this.cmdInsert.Parameters.Add("@x", MySqlDbType.Int32);
@@ -121,13 +121,13 @@ namespace DynamicMap.NET.CacheProviders
                   this.initialized = false;
                   Debug.WriteLine(ex.Message);
                }
-               #endregion
+    #endregion
             }
             return initialized;
          }
       }
 
-      #region IDisposable Members
+    #region IDisposable Members
 
       public void Dispose()
       {
@@ -162,9 +162,9 @@ namespace DynamicMap.NET.CacheProviders
          }
          Initialized = false;
       }
-      #endregion
+    #endregion
 
-      #region PureImageCache Members
+    #region PureImageCache Members
       public bool PutImageToCache(byte[] tile, int type, GPoint pos, int zoom)
       {
          bool ret = true;
@@ -231,9 +231,9 @@ namespace DynamicMap.NET.CacheProviders
                      byte[] tile = (byte[])odata;
                      if(tile != null && tile.Length > 0)
                      {
-                        if(GMapProvider.TileImageProxy != null)
+                        if(DynMapProvider.TileImageProxy != null)
                         {
-                           ret = GMapProvider.TileImageProxy.FromArray(tile);
+                           ret = DynMapProvider.TileImageProxy.FromArray(tile);
                         }
                      }
                      tile = null;
@@ -254,7 +254,7 @@ namespace DynamicMap.NET.CacheProviders
       {
          throw new NotImplementedException();
       }
-      #endregion
+    #endregion
    }
 #endif
 }

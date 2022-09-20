@@ -20,7 +20,7 @@ namespace DynamicMap.NET.MapProviders
          Instance = new OpenCycleMapProvider();
       }
 
-      #region GMapProvider Members
+      #region DynMapProvider Members
 
       readonly Guid id = new Guid("D7E1826E-EE1E-4441-9F15-7C2DE0FE0B0A");
       public override Guid Id

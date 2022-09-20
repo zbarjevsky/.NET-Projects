@@ -8,7 +8,7 @@ namespace DynamicMap.NET.CacheProviders
    using System.IO;
    using SqlCommand = System.Data.SqlServerCe.SqlCeCommand;
    using SqlConnection = System.Data.SqlServerCe.SqlCeConnection;
-    using GMap.NET.MapProviders;
+    using DynamicMap.NET.MapProviders;
 
    /// <summary>
    /// image cache for ms sql server
@@ -30,7 +30,7 @@ namespace DynamicMap.NET.CacheProviders
          set
          {
             cache = value; 
-            gtileCache = Path.Combine(cache, "TileDBv3") + Path.DirectorySeparatorChar + GMapProvider.LanguageStr + Path.DirectorySeparatorChar;
+            gtileCache = Path.Combine(cache, "TileDBv3") + Path.DirectorySeparatorChar + DynMapProvider.LanguageStr + Path.DirectorySeparatorChar;
          }
       }
 
@@ -52,7 +52,7 @@ namespace DynamicMap.NET.CacheProviders
       {
          if(!Initialized)
          {
-   #region prepare mssql & cache table
+    #region prepare mssql & cache table
             try
             {
                // precrete dir
@@ -77,13 +77,13 @@ namespace DynamicMap.NET.CacheProviders
                         c.Open();
 
                         using(SqlCommand cmd = new SqlCommand(
-                           "CREATE TABLE [GMapNETcache] ( \n"
+                           "CREATE TABLE [DynMapNETcache] ( \n"
                   + "   [Type] [int]   NOT NULL, \n"
                   + "   [Zoom] [int]   NOT NULL, \n"
                   + "   [X]    [int]   NOT NULL, \n"
                   + "   [Y]    [int]   NOT NULL, \n"
                   + "   [Tile] [image] NOT NULL, \n"
-                  + "   CONSTRAINT [PK_GMapNETcache] PRIMARY KEY (Type, Zoom, X, Y) \n"
+                  + "   CONSTRAINT [PK_DynMapNETcache] PRIMARY KEY (Type, Zoom, X, Y) \n"
                   + ")", c))
                         {
                            cmd.ExecuteNonQuery();
@@ -110,14 +110,14 @@ namespace DynamicMap.NET.CacheProviders
                this.cnSet = new SqlConnection(connectionString);
                this.cnSet.Open();
 
-               this.cmdFetch = new SqlCommand("SELECT [Tile] FROM [GMapNETcache] WITH (NOLOCK) WHERE [X]=@x AND [Y]=@y AND [Zoom]=@zoom AND [Type]=@type", cnGet);
+               this.cmdFetch = new SqlCommand("SELECT [Tile] FROM [DynMapNETcache] WITH (NOLOCK) WHERE [X]=@x AND [Y]=@y AND [Zoom]=@zoom AND [Type]=@type", cnGet);
                this.cmdFetch.Parameters.Add("@x", System.Data.SqlDbType.Int);
                this.cmdFetch.Parameters.Add("@y", System.Data.SqlDbType.Int);
                this.cmdFetch.Parameters.Add("@zoom", System.Data.SqlDbType.Int);
                this.cmdFetch.Parameters.Add("@type", System.Data.SqlDbType.Int);
                this.cmdFetch.Prepare();
 
-               this.cmdInsert = new SqlCommand("INSERT INTO [GMapNETcache] ( [X], [Y], [Zoom], [Type], [Tile] ) VALUES ( @x, @y, @zoom, @type, @tile )", cnSet);
+               this.cmdInsert = new SqlCommand("INSERT INTO [DynMapNETcache] ( [X], [Y], [Zoom], [Type], [Tile] ) VALUES ( @x, @y, @zoom, @type, @tile )", cnSet);
                this.cmdInsert.Parameters.Add("@x", System.Data.SqlDbType.Int);
                this.cmdInsert.Parameters.Add("@y", System.Data.SqlDbType.Int);
                this.cmdInsert.Parameters.Add("@zoom", System.Data.SqlDbType.Int);
@@ -132,12 +132,12 @@ namespace DynamicMap.NET.CacheProviders
                Initialized = false;
                Debug.WriteLine(ex.Message);
             }
-   #endregion
+    #endregion
          }
          return Initialized;
       }
 
-   #region IDisposable Members
+    #region IDisposable Members
       public void Dispose()
       {
          lock(cmdInsert)
@@ -171,9 +171,9 @@ namespace DynamicMap.NET.CacheProviders
          }
          Initialized = false;
       }
-   #endregion
+    #endregion
 
-   #region PureImageCache Members
+    #region PureImageCache Members
       public bool PutImageToCache(byte[] tile, int type, GPoint pos, int zoom)
       {
          bool ret = true;
@@ -226,9 +226,9 @@ namespace DynamicMap.NET.CacheProviders
                      byte[] tile = (byte[])odata;
                      if(tile != null && tile.Length > 0)
                      {
-                        if(GMapProvider.TileImageProxy != null)
+                        if(DynMapProvider.TileImageProxy != null)
                         {
-                           ret = GMapProvider.TileImageProxy.FromArray(tile);
+                           ret = DynMapProvider.TileImageProxy.FromArray(tile);
                         }
                      }
                      tile = null;
@@ -249,7 +249,7 @@ namespace DynamicMap.NET.CacheProviders
       {
          throw new NotImplementedException();
       }
-   #endregion
+    #endregion
    }
 #endif
 }

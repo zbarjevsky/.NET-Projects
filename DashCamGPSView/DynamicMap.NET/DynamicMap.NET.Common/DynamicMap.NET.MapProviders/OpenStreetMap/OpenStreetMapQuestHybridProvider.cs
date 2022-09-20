@@ -20,7 +20,7 @@ namespace DynamicMap.NET.MapProviders
          Instance = new OpenStreetMapQuestHybridProvider();
       }
 
-      #region GMapProvider Members
+      #region DynMapProvider Members
 
       readonly Guid id = new Guid("95E05027-F846-4429-AB7A-9445ABEEFA2A");
       public override Guid Id

@@ -5,58 +5,58 @@ namespace DynamicMap.NET.MapProviders
    using DynamicMap.NET.Projections;
    using DynamicMap.NET.Internals;
 
-   public abstract class YandexMapProviderBase : DynMapProvider
-   {
-      #region GMapProvider Members
-      public override Guid Id
-      {
-         get
-         {
-            throw new NotImplementedException();
-         }
-      }
-
-      public override string Name
-      {
-         get
-         {
-            throw new NotImplementedException();
-         }
-      }
-
-      public override PureProjection Projection
-      {
-         get
-         {
-            return MercatorProjectionYandex.Instance;
-         }
-      }
-
-      DynMapProvider[] overlays;
-      public override DynMapProvider[] Overlays
-      {
-         get
-         {
-            if(overlays == null)
+    public abstract class YandexMapProviderBase : DynMapProvider
+    {
+        #region DynMapProvider Members
+        public override Guid Id
+        {
+            get
             {
-               overlays = new DynMapProvider[] { this };
+                throw new NotImplementedException();
             }
-            return overlays;
-         }
-      }
+        }
 
-      public override PureImage GetTileImage(DynPoint pos, int zoom)
-      {
-         throw new NotImplementedException();
-      }
-      #endregion
+        public override string Name
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
 
-      protected string Version = "4.6.9";
+        public override PureProjection Projection
+        {
+            get
+            {
+                return MercatorProjectionYandex.Instance;
+            }
+        }
 
-      public readonly string Server /*d{'_'}b*/ = /*{^_^}*/ Stuff.GString /*{"_"}*/ (/* ;}~ */"MECxW6okUK3Ir7a9ue/vIA=="/* ;}~ */);
-      public readonly string ServerRu /*d{'_'}b*/ = /*{^_^}*/ Stuff.GString /*{"_"}*/ (/* ;}~ */"MECxW6okUK0FRlRPbF0BQg=="/* ;}~ */);
-      public readonly string ServerCom /*d{'_'}b*/ = /*{^_^}*/ Stuff.GString/*{"_"}*/ (/* ;}~ */"MECxW6okUK2JNHOW5AuimA=="/* ;}~ */);     
-   }
+        DynMapProvider[] overlays;
+        public override DynMapProvider[] Overlays
+        {
+            get
+            {
+                if (overlays == null)
+                {
+                    overlays = new DynMapProvider[] { this };
+                }
+                return overlays;
+            }
+        }
+
+        public override PureImage GetTileImage(DynPoint pos, int zoom)
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        public readonly string Server = "maps.yandex.net";      // Stuff.EncriptedPasswordString("MECxW6okUK3Ir7a9ue/vIA==");
+        public readonly string ServerRu = "maps.yandex.ru";     // Stuff.EncriptedPasswordString("MECxW6okUK0FRlRPbF0BQg==");
+        public readonly string ServerCom = "maps.yandex.com";   // Stuff.EncriptedPasswordString("MECxW6okUK2JNHOW5AuimA==");     
+
+        protected string Version = "4.6.9";
+    }
 
    /// <summary>
    /// YenduxMap provider
@@ -75,7 +75,7 @@ namespace DynamicMap.NET.MapProviders
          Instance = new YandexMapProvider();
       }
 
-      #region GMapProvider Members
+      #region DynMapProvider Members
 
       readonly Guid id = new Guid("82DC969D-0491-40F3-8C21-4D90B67F47EB");
       public override Guid Id

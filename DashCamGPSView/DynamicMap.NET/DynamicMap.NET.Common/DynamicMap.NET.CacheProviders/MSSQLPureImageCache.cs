@@ -83,7 +83,7 @@ namespace DynamicMap.NET.CacheProviders
                   this.cnSet.Open();
 
                   bool tableexists = false;
-                  using(SqlCommand cmd = new SqlCommand("select object_id('GMapNETcache')", cnGet))
+                  using(SqlCommand cmd = new SqlCommand("select object_id('DynMapNETcache')", cnGet))
                   {
                      object objid = cmd.ExecuteScalar();
                      tableexists = (objid != null && objid != DBNull.Value);
@@ -91,27 +91,27 @@ namespace DynamicMap.NET.CacheProviders
                   if(!tableexists)
                   {
                      using(SqlCommand cmd = new SqlCommand(
-                        "CREATE TABLE [GMapNETcache] ( \n"
+                        "CREATE TABLE [DynMapNETcache] ( \n"
                   + "   [Type] [int]   NOT NULL, \n"
                   + "   [Zoom] [int]   NOT NULL, \n"
                   + "   [X]    [int]   NOT NULL, \n"
                   + "   [Y]    [int]   NOT NULL, \n"
                   + "   [Tile] [image] NOT NULL, \n"
-                  + "   CONSTRAINT [PK_GMapNETcache] PRIMARY KEY CLUSTERED (Type, Zoom, X, Y) \n"
+                  + "   CONSTRAINT [PK_DynMapNETcache] PRIMARY KEY CLUSTERED (Type, Zoom, X, Y) \n"
                   + ")", cnGet))
                      {
                         cmd.ExecuteNonQuery();
                      }
                   }
 
-                  this.cmdFetch = new SqlCommand("SELECT [Tile] FROM [GMapNETcache] WITH (NOLOCK) WHERE [X]=@x AND [Y]=@y AND [Zoom]=@zoom AND [Type]=@type", cnGet);
+                  this.cmdFetch = new SqlCommand("SELECT [Tile] FROM [DynMapNETcache] WITH (NOLOCK) WHERE [X]=@x AND [Y]=@y AND [Zoom]=@zoom AND [Type]=@type", cnGet);
                   this.cmdFetch.Parameters.Add("@x", System.Data.SqlDbType.Int);
                   this.cmdFetch.Parameters.Add("@y", System.Data.SqlDbType.Int);
                   this.cmdFetch.Parameters.Add("@zoom", System.Data.SqlDbType.Int);
                   this.cmdFetch.Parameters.Add("@type", System.Data.SqlDbType.Int);
                   this.cmdFetch.Prepare();
 
-                  this.cmdInsert = new SqlCommand("INSERT INTO [GMapNETcache] ( [X], [Y], [Zoom], [Type], [Tile] ) VALUES ( @x, @y, @zoom, @type, @tile )", cnSet);
+                  this.cmdInsert = new SqlCommand("INSERT INTO [DynMapNETcache] ( [X], [Y], [Zoom], [Type], [Tile] ) VALUES ( @x, @y, @zoom, @type, @tile )", cnSet);
                   this.cmdInsert.Parameters.Add("@x", System.Data.SqlDbType.Int);
                   this.cmdInsert.Parameters.Add("@y", System.Data.SqlDbType.Int);
                   this.cmdInsert.Parameters.Add("@zoom", System.Data.SqlDbType.Int);

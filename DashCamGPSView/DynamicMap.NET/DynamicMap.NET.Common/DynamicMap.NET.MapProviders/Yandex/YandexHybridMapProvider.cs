@@ -19,7 +19,7 @@ namespace DynamicMap.NET.MapProviders
          Instance = new YandexHybridMapProvider();
       }
 
-      #region GMapProvider Members
+      #region DynMapProvider Members
 
       readonly Guid id = new Guid("78A3830F-5EE3-432C-A32E-91B7AF6BBCB9");
       public override Guid Id

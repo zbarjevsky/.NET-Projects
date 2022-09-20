@@ -26,7 +26,7 @@ namespace DynamicMap.NET.MapProviders
          Instance = new OpenStreetOsmProvider();
       }
 
-   #region GMapProvider Members
+   #region DynMapProvider Members
 
       readonly Guid id = new Guid("07EF8CBC-A91D-4B2F-8B2D-70DBE384EF18");
       public override Guid Id
@@ -46,14 +46,14 @@ namespace DynamicMap.NET.MapProviders
          }
       }
 
-      GMapProvider[] overlays;
-      public override GMapProvider[] Overlays
+      DynMapProvider[] overlays;
+      public override DynMapProvider[] Overlays
       {
          get
          {
             if(overlays == null)
             {
-               overlays = new GMapProvider[] { this };
+               overlays = new DynMapProvider[] { this };
             }
             return overlays;
          }
@@ -70,7 +70,7 @@ namespace DynamicMap.NET.MapProviders
 
       string MakeTileImageUrl(GPoint pos, int zoom, string language)
       {
-         char letter = ServerLetters[GMapProvider.GetServerNum(pos, 3)];
+         char letter = ServerLetters[DynMapProvider.GetServerNum(pos, 3)];
          return string.Format(UrlFormat, letter, zoom, pos.X, pos.Y);
       }
 

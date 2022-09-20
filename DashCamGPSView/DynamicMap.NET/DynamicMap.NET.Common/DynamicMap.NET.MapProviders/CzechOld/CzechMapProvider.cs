@@ -12,7 +12,7 @@ namespace DynamicMap.NET.MapProviders
          Area = new RectLatLng(51.2024819920053, 11.8401353319027, 7.22833716731277, 2.78312271922872);
       }
 
-      #region GMapProvider Members
+      #region DynMapProvider Members
       public override Guid Id
       {
          get
@@ -73,7 +73,7 @@ namespace DynamicMap.NET.MapProviders
          Instance = new CzechMapProviderOld();
       }
 
-      #region GMapProvider Members
+      #region DynMapProvider Members
 
       readonly Guid id = new Guid("6A1AF99A-84C6-4EF6-91A5-77B9D03257C2");
       public override Guid Id

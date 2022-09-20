@@ -19,7 +19,7 @@ namespace DynamicMap.NET.MapProviders
          Instance = new LithuaniaHybridMapProvider();
       }
 
-      #region GMapProvider Members
+      #region DynMapProvider Members
 
       readonly Guid id = new Guid("279AB0E0-4704-4AA6-86AD-87D13B1F8975");
       public override Guid Id

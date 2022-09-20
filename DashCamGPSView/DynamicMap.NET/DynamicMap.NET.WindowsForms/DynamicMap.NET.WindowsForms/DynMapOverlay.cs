@@ -8,16 +8,16 @@ namespace DynamicMap.NET.WindowsForms
    using DynamicMap.NET.ObjectModel;
 
    /// <summary>
-   /// GMap.NET overlay
+   /// DynamicMap.NET overlay
    /// </summary>
    [Serializable]
 #if !PocketPC
    public class DynMapOverlay : ISerializable, IDeserializationCallback, IDisposable
 #else
-   public class GMapOverlay: IDisposable
+   public class DynMapOverlay: IDisposable
 #endif
-   {
-      bool isVisibile = true;
+    {
+        bool isVisibile = true;
 
       /// <summary>
       /// is overlay visible
@@ -102,20 +102,20 @@ namespace DynamicMap.NET.WindowsForms
       /// <summary>
       /// list of markers, should be thread safe
       /// </summary>
-      public readonly ObservableCollectionThreadSafe<GMapMarker> Markers = new ObservableCollectionThreadSafe<GMapMarker>();
+      public readonly ObservableCollectionThreadSafe<DynMapMarker> Markers = new ObservableCollectionThreadSafe<DynMapMarker>();
 
       /// <summary>
       /// list of routes, should be thread safe
       /// </summary>
-      public readonly ObservableCollectionThreadSafe<GMapRoute> Routes = new ObservableCollectionThreadSafe<GMapRoute>();
+      public readonly ObservableCollectionThreadSafe<DynMapRoute> Routes = new ObservableCollectionThreadSafe<DynMapRoute>();
 
       /// <summary>
       /// list of polygons, should be thread safe
       /// </summary>
-      public readonly ObservableCollectionThreadSafe<GMapPolygon> Polygons = new ObservableCollectionThreadSafe<GMapPolygon>();
+      public readonly ObservableCollectionThreadSafe<DynMapPolygon> Polygons = new ObservableCollectionThreadSafe<DynMapPolygon>();
 
-      GMapControl control;
-      public GMapControl Control
+      DynMapControl control;
+      public DynMapControl Control
       {
          get
          {
@@ -163,7 +163,7 @@ namespace DynamicMap.NET.WindowsForms
       {
          if(e.NewItems != null)
          {
-            foreach(GMapPolygon obj in e.NewItems)
+            foreach(DynMapPolygon obj in e.NewItems)
             {
                if(obj != null)
                {
@@ -200,7 +200,7 @@ namespace DynamicMap.NET.WindowsForms
       {
          if(e.NewItems != null)
          {
-            foreach(GMapRoute obj in e.NewItems)
+            foreach(DynMapRoute obj in e.NewItems)
             {
                if(obj != null)
                {
@@ -237,7 +237,7 @@ namespace DynamicMap.NET.WindowsForms
       {
          if(e.NewItems != null)
          {
-            foreach(GMapMarker obj in e.NewItems)
+            foreach(DynMapMarker obj in e.NewItems)
             {
                if(obj != null)
                {
@@ -277,7 +277,7 @@ namespace DynamicMap.NET.WindowsForms
       {
          if(Control != null)
          {
-            foreach(GMapMarker obj in Markers)
+            foreach(DynMapMarker obj in Markers)
             {
                if(obj.IsVisible)
                {
@@ -285,7 +285,7 @@ namespace DynamicMap.NET.WindowsForms
                }
             }
 
-            foreach(GMapPolygon obj in Polygons)
+            foreach(DynMapPolygon obj in Polygons)
             {
                if(obj.IsVisible)
                {
@@ -293,7 +293,7 @@ namespace DynamicMap.NET.WindowsForms
                }
             }
 
-            foreach(GMapRoute obj in Routes)
+            foreach(DynMapRoute obj in Routes)
             {
                if(obj.IsVisible)
                {
@@ -313,7 +313,7 @@ namespace DynamicMap.NET.WindowsForms
          {
             if(Control.RoutesEnabled)
             {
-               foreach(GMapRoute r in Routes)
+               foreach(DynMapRoute r in Routes)
                {
                   if(r.IsVisible)
                   {
@@ -324,7 +324,7 @@ namespace DynamicMap.NET.WindowsForms
 
             if(Control.PolygonsEnabled)
             {
-               foreach(GMapPolygon r in Polygons)
+               foreach(DynMapPolygon r in Polygons)
                {
                   if(r.IsVisible)
                   {
@@ -336,7 +336,7 @@ namespace DynamicMap.NET.WindowsForms
             if(Control.MarkersEnabled)
             {
                // markers
-               foreach(GMapMarker m in Markers)
+               foreach(DynMapMarker m in Markers)
                {
                   //if(m.IsVisible && (m.DisableRegionCheck || Control.Core.currentRegion.Contains(m.LocalPosition.X, m.LocalPosition.Y)))
                   if(m.IsVisible || m.DisableRegionCheck)
@@ -346,7 +346,7 @@ namespace DynamicMap.NET.WindowsForms
                }
 
                // tooltips above
-               foreach(GMapMarker m in Markers)
+               foreach(DynMapMarker m in Markers)
                {
                   //if(m.ToolTip != null && m.IsVisible && Control.Core.currentRegion.Contains(m.LocalPosition.X, m.LocalPosition.Y))
                   if(m.ToolTip != null && m.IsVisible)
@@ -377,22 +377,22 @@ namespace DynamicMap.NET.WindowsForms
          info.AddValue("Id", this.Id);
          info.AddValue("IsVisible", this.IsVisibile);
 
-         GMapMarker[] markerArray = new GMapMarker[this.Markers.Count];
+         DynMapMarker[] markerArray = new DynMapMarker[this.Markers.Count];
          this.Markers.CopyTo(markerArray, 0);
          info.AddValue("Markers", markerArray);
 
-         GMapRoute[] routeArray = new GMapRoute[this.Routes.Count];
+         DynMapRoute[] routeArray = new DynMapRoute[this.Routes.Count];
          this.Routes.CopyTo(routeArray, 0);
          info.AddValue("Routes", routeArray);
 
-         GMapPolygon[] polygonArray = new GMapPolygon[this.Polygons.Count];
+         DynMapPolygon[] polygonArray = new DynMapPolygon[this.Polygons.Count];
          this.Polygons.CopyTo(polygonArray, 0);
          info.AddValue("Polygons", polygonArray);         
       }
 
-      private GMapMarker[] deserializedMarkerArray;
-      private GMapRoute[] deserializedRouteArray;
-      private GMapPolygon[] deserializedPolygonArray;
+      private DynMapMarker[] deserializedMarkerArray;
+      private DynMapRoute[] deserializedRouteArray;
+      private DynMapPolygon[] deserializedPolygonArray;
 
       /// <summary>
       /// Initializes a new instance of the <see cref="DynMapOverlay"/> class.
@@ -404,9 +404,9 @@ namespace DynamicMap.NET.WindowsForms
          this.Id = info.GetString("Id");
          this.IsVisibile = info.GetBoolean("IsVisible");
 
-         this.deserializedMarkerArray = Extensions.GetValue<GMapMarker[]>(info, "Markers", new GMapMarker[0]);
-         this.deserializedRouteArray = Extensions.GetValue<GMapRoute[]>(info, "Routes", new GMapRoute[0]);
-         this.deserializedPolygonArray = Extensions.GetValue<GMapPolygon[]>(info, "Polygons", new GMapPolygon[0]);
+         this.deserializedMarkerArray = Extensions.GetValue<DynMapMarker[]>(info, "Markers", new DynMapMarker[0]);
+         this.deserializedRouteArray = Extensions.GetValue<DynMapRoute[]>(info, "Routes", new DynMapRoute[0]);
+         this.deserializedPolygonArray = Extensions.GetValue<DynMapPolygon[]>(info, "Polygons", new DynMapPolygon[0]);
 
          CreateEvents();
       }
@@ -422,21 +422,21 @@ namespace DynamicMap.NET.WindowsForms
       public void OnDeserialization(object sender)
       {
          // Populate Markers
-         foreach(GMapMarker marker in deserializedMarkerArray)
+         foreach(DynMapMarker marker in deserializedMarkerArray)
          {
             marker.Overlay = this;
             this.Markers.Add(marker);
          }
 
          // Populate Routes
-         foreach(GMapRoute route in deserializedRouteArray)
+         foreach(DynMapRoute route in deserializedRouteArray)
          {
             route.Overlay = this;
             this.Routes.Add(route);
          }
 
          // Populate Polygons
-         foreach(GMapPolygon polygon in deserializedPolygonArray)
+         foreach(DynMapPolygon polygon in deserializedPolygonArray)
          {
             polygon.Overlay = this;
             this.Polygons.Add(polygon);

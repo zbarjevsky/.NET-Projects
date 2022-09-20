@@ -12,7 +12,7 @@ namespace DynamicMap.NET.WindowsPresentation
    using System;
 
    /// <summary>
-   /// GMap.NET marker
+   /// DynamicMap.NET marker
    /// </summary>
    public class DynMapMarker : INotifyPropertyChanged
    {

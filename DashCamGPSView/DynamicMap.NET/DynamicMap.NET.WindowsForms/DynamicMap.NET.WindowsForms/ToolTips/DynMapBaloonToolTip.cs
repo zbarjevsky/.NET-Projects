@@ -8,16 +8,16 @@ namespace DynamicMap.NET.WindowsForms.ToolTips
 
 #if !PocketPC
    /// <summary>
-   /// GMap.NET marker
+   /// DynamicMap.NET marker
    /// </summary>
    [Serializable]
-   public class GMapBaloonToolTip : GMapToolTip, ISerializable
+   public class DynMapBaloonToolTip : DynMapToolTip, ISerializable
    {
       public float Radius = 10f;
 
       //public static readonly Pen DefaultStroke = new Pen(Color.FromArgb(140, Color.Navy));
 
-      static GMapBaloonToolTip()
+      static DynMapBaloonToolTip()
       {
           DefaultStroke.Width = 3;
 
@@ -27,7 +27,7 @@ namespace DynamicMap.NET.WindowsForms.ToolTips
 #endif
       }
 
-      public GMapBaloonToolTip(GMapMarker marker)
+      public DynMapBaloonToolTip(DynMapMarker marker)
          : base(marker)
       {
          Stroke = DefaultStroke;
@@ -75,7 +75,7 @@ namespace DynamicMap.NET.WindowsForms.ToolTips
          base.GetObjectData(info, context);
       }
 
-      protected GMapBaloonToolTip(SerializationInfo info, StreamingContext context)
+      protected DynMapBaloonToolTip(SerializationInfo info, StreamingContext context)
          : base(info, context)
       {
          this.Radius = Extensions.GetStruct<float>(info, "Radius", 10f);

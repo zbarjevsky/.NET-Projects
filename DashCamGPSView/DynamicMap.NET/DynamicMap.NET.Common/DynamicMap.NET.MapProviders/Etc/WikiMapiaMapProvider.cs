@@ -13,7 +13,7 @@ namespace DynamicMap.NET.MapProviders
          Copyright = string.Format("© WikiMapia.org - Map data ©{0} WikiMapia", DateTime.Today.Year);
       }
 
-      #region GMapProvider Members
+      #region DynMapProvider Members
 
       public override Guid Id
       {
@@ -76,7 +76,7 @@ namespace DynamicMap.NET.MapProviders
          Instance = new WikiMapiaMapProvider();
       }
 
-      #region GMapProvider Members
+      #region DynMapProvider Members
 
       readonly Guid id = new Guid("7974022B-1AA6-41F1-8D01-F49940E4B48C");
       public override Guid Id

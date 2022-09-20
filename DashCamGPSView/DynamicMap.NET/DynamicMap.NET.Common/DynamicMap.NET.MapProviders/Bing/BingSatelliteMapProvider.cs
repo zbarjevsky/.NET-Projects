@@ -19,9 +19,9 @@ namespace DynamicMap.NET.MapProviders
          Instance = new BingSatelliteMapProvider();
       }
 
-      #region GMapProvider Members
+        #region DynMapProvider Members
 
-      readonly Guid id = new Guid("3AC742DD-966B-4CFB-B67D-33E7F82F2D37");
+        readonly Guid id = new Guid("3AC742DD-966B-4CFB-B67D-33E7F82F2D37");
       public override Guid Id
       {
          get

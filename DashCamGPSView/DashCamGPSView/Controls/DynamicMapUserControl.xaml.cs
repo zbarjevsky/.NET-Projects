@@ -29,7 +29,7 @@ using DynamicMap.NET.MapProviders;
 namespace DashCamGPSView.Controls
 {
     /// <summary>
-    /// Interaction logic for GMapUserControl.xaml
+    /// Interaction logic for DynamicMapUserControl.xaml
     /// </summary>
     public partial class DynamicMapUserControl : UserControl, INotifyPropertyChanged
     {
@@ -86,7 +86,7 @@ namespace DashCamGPSView.Controls
 
         //internal void UpdateCarPosition(PointLatLng pointLatLng, double course)
         //{
-        //    GPoint pt = GMap.FromLatLngToLocal(pointLatLng);
+        //    DynPoint pt = DynMap.FromLatLngToLocal(pointLatLng);
         //    _car.UpdatePosition(pt.X, pt.Y, course);
         //    Position = pointLatLng;
         //}
@@ -109,7 +109,7 @@ namespace DashCamGPSView.Controls
             cmbMapType.Items.Add(MapProviders.BingMap);
             cmbMapType.Items.Add(MapProviders.BingHybridMap);
             cmbMapType.Items.Add(MapProviders.BingSatelliteMap);
-            //cmbMapType.Items.Add(GMapProviders.YahooMap);
+            //cmbMapType.Items.Add(MapProviders.YahooMap);
             //cmbMapType.Items.Add(MapProviders.YahooHybridMap);
             //cmbMapType.Items.Add(MapProviders.YahooSatelliteMap);
             //cmbMapType.Items.Add(MapProviders.OviMap);
@@ -125,7 +125,7 @@ namespace DashCamGPSView.Controls
                 DynMap.Manager.Mode = AccessMode.CacheOnly;
                 MessageBox.Show(
                     "No internet connection available, going to CacheOnly mode.", 
-                    "GMap.NET - Demo.WindowsPresentation", 
+                    "DynamicMap.NET - Demo.WindowsPresentation", 
                     MessageBoxButton.OK,
                     MessageBoxImage.Warning, 
                     MessageBoxResult.OK, MessageBoxOptions.ServiceNotification);
@@ -156,7 +156,7 @@ namespace DashCamGPSView.Controls
             _currentMarker.ZIndex = int.MaxValue;
             DynMap.Markers.Add(_currentMarker);
 
-            _route.MouseWheel += (s, e) => { DynMap.RaiseEvent(e); }; //routing event to GMap under car image
+            _route.MouseWheel += (s, e) => { DynMap.RaiseEvent(e); }; //routing event to DynMap under car image
 
             Position = new PointLatLngUI(40.754910, -73.994100); //Time Square, NYC
         }
@@ -215,7 +215,7 @@ namespace DashCamGPSView.Controls
         //void timer_Tick(object sender, EventArgs e)
         //{
         //    var pos = new PointLatLng(NextDouble(r, MainMap.ViewArea.Top, MainMap.ViewArea.Bottom), NextDouble(r, MainMap.ViewArea.Left, MainMap.ViewArea.Right));
-        //    GMapMarker m = new GMapMarker(pos);
+        //    DynMapMarker m = new DynMapMarker(pos);
         //    {
         //        var s = new Test((tt++).ToString());
 
@@ -263,10 +263,10 @@ namespace DashCamGPSView.Controls
         //BackgroundWorker transport = new BackgroundWorker();
 
         //readonly List<VehicleData> trolleybus = new List<VehicleData>();
-        //readonly Dictionary<int, GMapMarker> trolleybusMarkers = new Dictionary<int, GMapMarker>();
+        //readonly Dictionary<int, DynMapMarker> trolleybusMarkers = new Dictionary<int, DynMapMarker>();
 
         //readonly List<VehicleData> bus = new List<VehicleData>();
-        //readonly Dictionary<int, GMapMarker> busMarkers = new Dictionary<int, GMapMarker>();
+        //readonly Dictionary<int, DynMapMarker> busMarkers = new Dictionary<int, DynMapMarker>();
 
         //bool firstLoadTrasport = true;
 
@@ -278,11 +278,11 @@ namespace DashCamGPSView.Controls
         //        {
         //            foreach (VehicleData d in trolleybus)
         //            {
-        //                GMapMarker marker;
+        //                DynMapMarker marker;
 
         //                if (!trolleybusMarkers.TryGetValue(d.Id, out marker))
         //                {
-        //                    marker = new GMapMarker(new PointLatLng(d.Lat, d.Lng));
+        //                    marker = new DynMapMarker(new PointLatLng(d.Lat, d.Lng));
         //                    marker.Tag = d.Id;
         //                    marker.Shape = new CircleVisual(marker, Brushes.Red);
 
@@ -311,11 +311,11 @@ namespace DashCamGPSView.Controls
         //        {
         //            foreach (VehicleData d in bus)
         //            {
-        //                GMapMarker marker;
+        //                DynMapMarker marker;
 
         //                if (!busMarkers.TryGetValue(d.Id, out marker))
         //                {
-        //                    marker = new GMapMarker(new PointLatLng(d.Lat, d.Lng));
+        //                    marker = new DynMapMarker(new PointLatLng(d.Lat, d.Lng));
         //                    marker.Tag = d.Id;
 
         //                    var v = new CircleVisual(marker, Brushes.Blue);
@@ -401,7 +401,7 @@ namespace DashCamGPSView.Controls
         //        // add objects to zone
         //        foreach (var o in objectsInArea)
         //        {
-        //            GMapMarker it = new GMapMarker(o.Obj.Point);
+        //            DynMapMarker it = new DynMapMarker(o.Obj.Point);
         //            {
         //                it.ZIndex = 55;
         //                var s = new CustomMarkerDemo(this, it, o.Obj.Info + ", distance from center: " + o.Dist + "km.");
@@ -414,7 +414,7 @@ namespace DashCamGPSView.Controls
         //        // add zone circle
         //        //if(false)
         //        {
-        //            GMapMarker it = new GMapMarker(center);
+        //            DynMapMarker it = new DynMapMarker(center);
         //            it.ZIndex = -1;
 
         //            Circle c = new Circle();
@@ -444,7 +444,7 @@ namespace DashCamGPSView.Controls
 
         //    c.Width = 55 + pxCircleRadius * 2;
         //    c.Height = 55 + pxCircleRadius * 2;
-        //    (c.Tag as GMapMarker).Offset = new System.Windows.Point(-c.Width / 2, -c.Height / 2);
+        //    (c.Tag as DynMapMarker).Offset = new System.Windows.Point(-c.Width / 2, -c.Height / 2);
         //}
 
         void MainMap_OnMapTypeChanged(DynMapProvider type)
@@ -488,7 +488,7 @@ namespace DashCamGPSView.Controls
             panMap.From = new Point(MainMap.Position.Lat, MainMap.Position.Lng);
             panMap.To = new Point(0, 0);
             Storyboard.SetTarget(panMap, MainMap);
-            Storyboard.SetTargetProperty(panMap, new PropertyPath(GMapControl.MapPointProperty));
+            Storyboard.SetTargetProperty(panMap, new PropertyPath(DynMapControl.MapPointProperty));
 
             Storyboard panMapStoryBoard = new Storyboard();
             panMapStoryBoard.Children.Add(panMap);
@@ -517,7 +517,7 @@ namespace DashCamGPSView.Controls
         void MainMap_OnCurrentPositionChanged(PointLatLng point)
         {
             _route.UpdateRouteAndCarRefresh(DynMap);
-            //mapgroup.Header = "gmap: " + point;
+            //mapgroup.Header = "map: " + point;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

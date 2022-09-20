@@ -21,7 +21,7 @@ namespace DynamicMap.NET.MapProviders
          //try ForceBasicHttpAuthentication(...);
       }     
 
-      #region GMapProvider Members
+      #region DynMapProvider Members
       public override Guid Id
       {
          get
@@ -136,7 +136,7 @@ namespace DynamicMap.NET.MapProviders
          Instance = new NearMapProvider();
       }
 
-      #region GMapProvider Members
+      #region DynMapProvider Members
 
       readonly Guid id = new Guid("E33803DF-22CB-4FFA-B8E3-15383ED9969D");
       public override Guid Id

@@ -19,7 +19,7 @@ namespace DynamicMap.NET.MapProviders
          Instance = new CzechSatelliteMapProviderOld();
       }
 
-      #region GMapProvider Members
+      #region DynMapProvider Members
 
       readonly Guid id = new Guid("7846D655-5F9C-4042-8652-60B6BF629C3C");
       public override Guid Id

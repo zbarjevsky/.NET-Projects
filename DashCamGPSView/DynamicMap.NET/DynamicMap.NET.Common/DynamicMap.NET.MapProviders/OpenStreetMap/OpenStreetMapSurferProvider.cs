@@ -25,7 +25,7 @@ namespace DynamicMap.NET.MapProviders
          Instance = new OpenStreetMapSurferProvider();
       }
 
-      #region GMapProvider Members
+      #region DynMapProvider Members
 
       readonly Guid id = new Guid("6282888B-2F01-4029-9CD8-0CFFCB043995");
       public override Guid Id
@@ -45,14 +45,14 @@ namespace DynamicMap.NET.MapProviders
          }
       }
 
-      GMapProvider[] overlays;
-      public override GMapProvider[] Overlays
+      DynMapProvider[] overlays;
+      public override DynMapProvider[] Overlays
       {
          get
          {
             if(overlays == null)
             {
-               overlays = new GMapProvider[] { this };
+               overlays = new DynMapProvider[] { this };
             }
             return overlays;
          }

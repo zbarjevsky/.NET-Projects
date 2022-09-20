@@ -8,24 +8,24 @@ namespace DynamicMap.NET.WindowsForms
    using DynamicMap.NET.WindowsForms.ToolTips;
 
    /// <summary>
-   /// GMap.NET marker
+   /// DynamicMap.NET marker
    /// </summary>
    [Serializable]
 #if !PocketPC
-   public abstract class GMapMarker : ISerializable, IDisposable
+   public abstract class DynMapMarker : ISerializable, IDisposable
 #else
-   public class GMapMarker: IDisposable
+   public class DynMapMarker: IDisposable
 #endif
-   {
+    {
 #if PocketPC
       static readonly System.Drawing.Imaging.ImageAttributes attr = new System.Drawing.Imaging.ImageAttributes();
 
-      static GMapMarker()
+      static DynMapMarker()
       {
          attr.SetColorKey(Color.White, Color.White);
       }
 #endif
-      DynMapOverlay overlay;
+        DynMapOverlay overlay;
       public DynMapOverlay Overlay
       {
          get
@@ -150,7 +150,7 @@ namespace DynamicMap.NET.WindowsForms
          }
       }
 
-      public GMapToolTip ToolTip;
+      public DynMapToolTip ToolTip;
 
       public MarkerTooltipMode ToolTipMode = MarkerTooltipMode.OnMouseOver;
 
@@ -167,12 +167,12 @@ namespace DynamicMap.NET.WindowsForms
             if(ToolTip == null && !string.IsNullOrEmpty(value))
             {
 #if !PocketPC
-               ToolTip = new GMapRoundedToolTip(this);
+               ToolTip = new DynMapRoundedToolTip(this);
 #else
-               ToolTip = new GMapToolTip(this);
+               ToolTip = new DynMapToolTip(this);
 #endif
-            }
-            toolTipText = value;
+                }
+                toolTipText = value;
          }
       }
 
@@ -248,7 +248,7 @@ namespace DynamicMap.NET.WindowsForms
          }
       }
 
-      public GMapMarker(PointLatLng pos)
+      public DynMapMarker(PointLatLng pos)
       {
          this.Position = pos;
       }
@@ -291,18 +291,18 @@ namespace DynamicMap.NET.WindowsForms
       }
 
       /// <summary>
-      /// Initializes a new instance of the <see cref="GMapMarker"/> class.
+      /// Initializes a new instance of the <see cref="DynMapMarker"/> class.
       /// </summary>
       /// <param name="info">The info.</param>
       /// <param name="context">The context.</param>
-      protected GMapMarker(SerializationInfo info, StreamingContext context)
+      protected DynMapMarker(SerializationInfo info, StreamingContext context)
       {
          this.Position = Extensions.GetStruct<PointLatLng>(info, "Position", PointLatLng.Empty);
          this.Tag = Extensions.GetValue<object>(info, "Tag", null);
          this.Offset = Extensions.GetStruct<Point>(info, "Offset", Point.Empty);
          this.area = Extensions.GetStruct<Rectangle>(info, "Area", Rectangle.Empty);
          
-         this.ToolTip = Extensions.GetValue<GMapToolTip>(info, "ToolTip", null);
+         this.ToolTip = Extensions.GetValue<DynMapToolTip>(info, "ToolTip", null);
          if (this.ToolTip != null) this.ToolTip.Marker = this;
 
          this.ToolTipMode = Extensions.GetStruct<MarkerTooltipMode>(info, "ToolTipMode", MarkerTooltipMode.OnMouseOver);
@@ -339,10 +339,10 @@ namespace DynamicMap.NET.WindowsForms
       #endregion
    }
 
-   public delegate void MarkerClick(GMapMarker item, MouseEventArgs e);
-   public delegate void MarkerEnter(GMapMarker item);
-   public delegate void MarkerLeave(GMapMarker item);
-   public delegate void MarkerDoubleClick(GMapMarker item, MouseEventArgs e);
+   public delegate void MarkerClick(DynMapMarker item, MouseEventArgs e);
+   public delegate void MarkerEnter(DynMapMarker item);
+   public delegate void MarkerLeave(DynMapMarker item);
+   public delegate void MarkerDoubleClick(DynMapMarker item, MouseEventArgs e);
 
    /// <summary>
    /// modeof tooltip

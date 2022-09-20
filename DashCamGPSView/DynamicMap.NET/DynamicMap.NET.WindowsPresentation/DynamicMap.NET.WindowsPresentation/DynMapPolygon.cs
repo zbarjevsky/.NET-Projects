@@ -7,9 +7,9 @@ namespace DynamicMap.NET.WindowsPresentation
    using System.Windows.Media.Effects;
    using System.Windows.Shapes;
 
-   public class GMapPolygon : DynMapMarker, IShapable
+   public class DynMapPolygon : DynMapMarker, IShapable
    {
-      public GMapPolygon(IEnumerable<PointLatLng> points)
+      public DynMapPolygon(IEnumerable<PointLatLng> points)
       {
          Points = new List<PointLatLng>(points);
       }

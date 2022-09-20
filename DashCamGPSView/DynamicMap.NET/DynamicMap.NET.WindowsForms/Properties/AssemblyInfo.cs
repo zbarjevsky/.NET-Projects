@@ -5,9 +5,9 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("GMap.NET.WindowsForms")]
-[assembly: AssemblyDescription("GMap.NET - Great Maps for Windows Forms")]
-[assembly: AssemblyProduct("GMap.NET.WindowsForms")]
+[assembly: AssemblyTitle("DynamicMap.NET.WindowsForms")]
+[assembly: AssemblyDescription("DynamicMap.NET - Great Maps for Windows Forms")]
+[assembly: AssemblyProduct("DynamicMap.NET.WindowsForms")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 

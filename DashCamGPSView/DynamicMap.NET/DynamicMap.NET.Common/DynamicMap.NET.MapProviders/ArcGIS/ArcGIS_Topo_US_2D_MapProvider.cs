@@ -19,7 +19,7 @@ namespace DynamicMap.NET.MapProviders
          Instance = new ArcGIS_Topo_US_2D_MapProvider();
       }
 
-      #region GMapProvider Members
+      #region DynMapProvider Members
 
       readonly Guid id = new Guid("7652CC72-5C92-40F5-B572-B8FEAA728F6D");
       public override Guid Id

@@ -18,7 +18,7 @@
             Instance = new CzechGeographicMapProvider();
         }
 
-        #region GMapProvider Members
+        #region DynMapProvider Members
 
         readonly Guid id = new Guid("50EC9FCC-E4D7-4F53-8700-2D1DB73A1D48");
         public override Guid Id

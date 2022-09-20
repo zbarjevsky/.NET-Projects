@@ -105,7 +105,7 @@
          this.ShowIcon = false;
          this.ShowInTaskbar = false;
          this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-         this.Text = "GMap.NET - esc to cancel fetching";
+         this.Text = "DynamicMap.NET - esc to cancel fetching";
          this.FormClosed += new System.Windows.Forms.FormClosedEventHandler(this.Prefetch_FormClosed);
          this.PreviewKeyDown += new System.Windows.Forms.PreviewKeyDownEventHandler(this.Prefetch_PreviewKeyDown);
          this.tableLayoutPanel1.ResumeLayout(false);

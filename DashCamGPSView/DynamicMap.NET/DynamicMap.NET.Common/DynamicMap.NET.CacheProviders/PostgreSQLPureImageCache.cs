@@ -7,7 +7,7 @@ namespace DynamicMap.NET.CacheProviders
    using System.IO;
    using Npgsql;
    using NpgsqlTypes;
-   using GMap.NET.MapProviders;
+   using Dynamic.NET.MapProviders;
 
    /// <summary>
    /// image cache for postgresql server
@@ -74,7 +74,7 @@ namespace DynamicMap.NET.CacheProviders
          {
             if(!Initialized)
             {
-   #region prepare postgresql & cache table
+    #region prepare postgresql & cache table
 
                try
                {
@@ -87,7 +87,7 @@ namespace DynamicMap.NET.CacheProviders
                   bool tableexists = false;
                   using(NpgsqlCommand cmd = new NpgsqlCommand())
                   {
-                     cmd.CommandText = "SELECT COUNT(*) FROM information_schema.tables WHERE table_name='GMapNETcache'";
+                     cmd.CommandText = "SELECT COUNT(*) FROM information_schema.tables WHERE table_name='DynMapNETcache'";
                      cmd.Connection = cnGet;
                      object cnt = cmd.ExecuteScalar();
                      tableexists = ((long)cnt == 1);
@@ -100,36 +100,36 @@ namespace DynamicMap.NET.CacheProviders
                         cmd.Connection = cnGet;
 
                         // create tile-cache table
-                        cmd.CommandText = "CREATE TABLE \"GMapNETcache\" ( \n"
+                        cmd.CommandText = "CREATE TABLE \"DynMapNETcache\" ( \n"
                             + " \"Type\" integer NOT NULL, \n"
                             + " \"Zoom\" integer NOT NULL, \n"
                             + " \"X\"    integer NOT NULL, \n"
                             + " \"Y\"    integer NOT NULL, \n"
                             + " \"Tile\" bytea   NOT NULL, \n"
-                            + " CONSTRAINT \"PK_GMapNETcache\" PRIMARY KEY ( \"Type\", \"Zoom\", \"X\", \"Y\" ) )";
+                            + " CONSTRAINT \"PK_DynMapNETcache\" PRIMARY KEY ( \"Type\", \"Zoom\", \"X\", \"Y\" ) )";
                         cmd.ExecuteNonQuery();
 
                         // allows out-of-line storage but not compression of tile data
                         // see http://www.postgresql.org/docs/9.0/static/storage-toast.html
-                        cmd.CommandText = "ALTER TABLE \"GMapNETcache\" \n"
+                        cmd.CommandText = "ALTER TABLE \"DynMapNETcache\" \n"
                             + " ALTER COLUMN \"Tile\" SET STORAGE EXTERNAL";
                         cmd.ExecuteNonQuery();
 
                         // select pk index for cluster operations
-                        cmd.CommandText = "ALTER TABLE \"GMapNETcache\" \n"
-                            + " CLUSTER ON \"PK_GMapNETcache\"";
+                        cmd.CommandText = "ALTER TABLE \"DynMapNETcache\" \n"
+                            + " CLUSTER ON \"PK_DynMapNETcache\"";
                         cmd.ExecuteNonQuery();
                      }
                   }
 
-                  this.cmdFetch = new NpgsqlCommand("SELECT \"Tile\" FROM \"GMapNETcache\" WHERE \"X\"=@x AND \"Y\"=@y AND \"Zoom\"=@zoom AND \"Type\"=@type", cnGet);
+                  this.cmdFetch = new NpgsqlCommand("SELECT \"Tile\" FROM \"DynMapNETcache\" WHERE \"X\"=@x AND \"Y\"=@y AND \"Zoom\"=@zoom AND \"Type\"=@type", cnGet);
                   this.cmdFetch.Parameters.Add("@x", NpgsqlDbType.Integer);
                   this.cmdFetch.Parameters.Add("@y", NpgsqlDbType.Integer);
                   this.cmdFetch.Parameters.Add("@zoom", NpgsqlDbType.Integer);
                   this.cmdFetch.Parameters.Add("@type", NpgsqlDbType.Integer);
                   this.cmdFetch.Prepare();
 
-                  this.cmdInsert = new NpgsqlCommand("INSERT INTO \"GMapNETcache\" ( \"X\", \"Y\", \"Zoom\", \"Type\", \"Tile\" ) VALUES ( @x, @y, @zoom, @type, @tile )", cnSet);
+                  this.cmdInsert = new NpgsqlCommand("INSERT INTO \"DynMapNETcache\" ( \"X\", \"Y\", \"Zoom\", \"Type\", \"Tile\" ) VALUES ( @x, @y, @zoom, @type, @tile )", cnSet);
                   this.cmdInsert.Parameters.Add("@x", NpgsqlDbType.Integer);
                   this.cmdInsert.Parameters.Add("@y", NpgsqlDbType.Integer);
                   this.cmdInsert.Parameters.Add("@zoom", NpgsqlDbType.Integer);
@@ -145,14 +145,14 @@ namespace DynamicMap.NET.CacheProviders
                   Debug.WriteLine(ex.Message);
                }
 
-   #endregion
+    #endregion
             }
 
             return Initialized;
          }
       }
 
-   #region IDisposable Members
+    #region IDisposable Members
 
       public void Dispose()
       {
@@ -189,9 +189,9 @@ namespace DynamicMap.NET.CacheProviders
          Initialized = false;
       }
 
-   #endregion
+    #endregion
 
-   #region PureImageCache Members
+    #region PureImageCache Members
 
       public bool PutImageToCache(byte[] tile, int type, GPoint pos, int zoom)
       {
@@ -245,9 +245,9 @@ namespace DynamicMap.NET.CacheProviders
                   byte[] tile = (byte[])odata;
                   if(tile != null && tile.Length > 0)
                   {
-                     if(GMapProvider.TileImageProxy != null)
+                     if(DynMapProvider.TileImageProxy != null)
                      {
-                        ret = GMapProvider.TileImageProxy.FromArray(tile);
+                        ret = DynMapProvider.TileImageProxy.FromArray(tile);
                      }
                   }
                   tile = null;
@@ -269,7 +269,7 @@ namespace DynamicMap.NET.CacheProviders
          throw new NotImplementedException();
       }
 
-   #endregion
+    #endregion
    }
 #endif
 }

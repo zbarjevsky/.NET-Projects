@@ -25,7 +25,7 @@ namespace DynamicMap.NET.MapProviders
          MaxZoom = null;
       }
 
-      #region GMapProvider Members
+      #region DynMapProvider Members
       public override Guid Id
       {
          get
@@ -522,7 +522,7 @@ namespace DynamicMap.NET.MapProviders
          Instance = new CloudMadeMapProvider();
       }
 
-      #region GMapProvider Members
+      #region DynMapProvider Members
 
       readonly Guid id = new Guid("00403A36-725F-4BC4-934F-BFC1C164D003");
       public override Guid Id

@@ -7,9 +7,9 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("GMap.NET.WindowsPresentation")]
-[assembly: AssemblyDescription("GMap.NET - Great Maps for Windows Presentation")]
-[assembly: AssemblyProduct("GMap.NET.WindowsPresentation")]
+[assembly: AssemblyTitle("DynamicMap.NET.WindowsPresentation")]
+[assembly: AssemblyDescription("DynamicMap.NET - Great Maps for Windows Presentation")]
+[assembly: AssemblyProduct("DynamicMap.NET.WindowsPresentation")]
 
 // Setting ComVisible to false makes the types in this assembly not visible 
 // to COM components.  If you need to access a type in this assembly from 

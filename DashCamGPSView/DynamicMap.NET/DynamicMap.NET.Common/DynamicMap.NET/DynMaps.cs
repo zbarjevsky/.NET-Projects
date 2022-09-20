@@ -158,7 +158,7 @@ namespace DynamicMap.NET
 
                   foreach (var a in AssembliesLoaded)
                   {
-                      if (a.FullName.Contains("GMap.NET.WindowsForms") || a.FullName.Contains("GMap.NET.WindowsPresentation"))
+                      if (a.FullName.Contains("DynamicMap.NET.WindowsForms") || a.FullName.Contains("DynamicMap.NET.WindowsPresentation"))
                       {
                           l = a;
                           break;
@@ -169,8 +169,8 @@ namespace DynamicMap.NET
                   {
                       var jj = Assembly.GetExecutingAssembly().Location;
                       var hh = Path.GetDirectoryName(jj);
-                      var f1 = hh + Path.DirectorySeparatorChar + "GMap.NET.WindowsForms.dll";
-                      var f2 = hh + Path.DirectorySeparatorChar + "GMap.NET.WindowsPresentation.dll";
+                      var f1 = hh + Path.DirectorySeparatorChar + "DynamicMap.NET.WindowsForms.dll";
+                      var f2 = hh + Path.DirectorySeparatorChar + "DynamicMap.NET.WindowsPresentation.dll";
                       if (File.Exists(f1))
                       {
                           l = Assembly.LoadFile(f1);
@@ -185,13 +185,13 @@ namespace DynamicMap.NET
                   {
                       Type t = null;
 
-                      if (l.FullName.Contains("GMap.NET.WindowsForms"))
+                      if (l.FullName.Contains("DynamicMap.NET.WindowsForms"))
                       {
-                          t = l.GetType("GMap.NET.WindowsForms.GMapImageProxy");
+                          t = l.GetType("DynamicMap.NET.WindowsForms.DynMapImageProxy");
                       }
-                      else if (l.FullName.Contains("GMap.NET.WindowsPresentation"))
+                      else if (l.FullName.Contains("DynamicMap.NET.WindowsPresentation"))
                       {
-                          t = l.GetType("GMap.NET.WindowsPresentation.GMapImageProxy");
+                          t = l.GetType("DynamicMap.NET.WindowsPresentation.DynMapImageProxy");
                       }
 
                       if (t != null)
@@ -202,7 +202,7 @@ namespace DynamicMap.NET
               }
               catch (Exception ex)
               {
-                  Debug.WriteLine("GMaps, try set TileImageProxy failed: " + ex.Message);
+                  Debug.WriteLine("DynMaps, try set TileImageProxy failed: " + ex.Message);
               }
           }
       }
@@ -598,7 +598,7 @@ namespace DynamicMap.NET
          {
             gpxType gpx = new gpxType();
             {
-               gpx.creator = "GMap.NET - http://greatmaps.codeplex.com";
+               gpx.creator = "DynamicMap.NET";
                gpx.trk = new trkType[1];
                gpx.trk[0] = new trkType();
             }

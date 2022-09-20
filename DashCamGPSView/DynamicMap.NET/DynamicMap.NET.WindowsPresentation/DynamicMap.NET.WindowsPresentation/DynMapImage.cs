@@ -13,7 +13,7 @@ namespace DynamicMap.NET.WindowsPresentation
    /// <summary>
    /// image abstraction
    /// </summary>
-   public class GMapImage : PureImage
+   public class DynMapImage : PureImage
    {
       public ImageSource Img;
 
@@ -35,9 +35,9 @@ namespace DynamicMap.NET.WindowsPresentation
    /// <summary>
    /// image abstraction proxy
    /// </summary>
-   public class GMapImageProxy : PureImageProxy
+   public class DynMapImageProxy : PureImageProxy
    {
-      GMapImageProxy()
+      DynMapImageProxy()
       {
 
       }
@@ -47,7 +47,7 @@ namespace DynamicMap.NET.WindowsPresentation
             DynMapProvider.TileImageProxy = Instance;
       }
 
-      public static readonly GMapImageProxy Instance = new GMapImageProxy();
+      public static readonly DynMapImageProxy Instance = new DynMapImageProxy();
 
       //static readonly byte[] pngHeader = { 0x89, 0x50, 0x4E, 0x47, 0x0D, 0x0A, 0x1A, 0x0A };
       //static readonly byte[] jpgHeader = { 0xFF, 0xD8, 0xFF };
@@ -56,7 +56,7 @@ namespace DynamicMap.NET.WindowsPresentation
 
       public override PureImage FromStream(System.IO.Stream stream)
       {
-         GMapImage ret = null;
+         DynMapImage ret = null;
          if(stream != null)
          {
             var type = stream.ReadByte();
@@ -121,7 +121,7 @@ namespace DynamicMap.NET.WindowsPresentation
 
             if(m != null)
             {
-               ret = new GMapImage();
+               ret = new DynMapImage();
                ret.Img = m;
                if(ret.Img.CanFreeze)
                {
@@ -134,7 +134,7 @@ namespace DynamicMap.NET.WindowsPresentation
 
       public override bool Save(System.IO.Stream stream, PureImage image)
       {
-         GMapImage ret = (GMapImage)image;
+         DynMapImage ret = (DynMapImage)image;
          if(ret.Img != null)
          {
             try

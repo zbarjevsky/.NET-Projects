@@ -20,9 +20,9 @@ namespace DynamicMap.NET.MapProviders
          Instance = new CzechHistoryMapProvider();
       }
 
-      #region GMapProvider Members
+        #region DynMapProvider Members
 
-      readonly Guid id = new Guid("CD44C19D-5EED-4623-B367-FB39FDC55B8F");
+        readonly Guid id = new Guid("CD44C19D-5EED-4623-B367-FB39FDC55B8F");
       public override Guid Id
       {
          get

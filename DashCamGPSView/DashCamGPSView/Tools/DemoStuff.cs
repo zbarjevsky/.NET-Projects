@@ -236,9 +236,9 @@ namespace DashCamGPSView
          }
 
 #if !PocketPC
-         url += "&app=GMap.NET.Desktop";
+         url += "&app=DynamicMap.NET.Desktop";
 #else
-         url += "&app=GMap.NET.WindowsMobile";
+         url += "&app=DynamicMap.NET.WindowsMobile";
 #endif
 
          string xml = string.Empty;

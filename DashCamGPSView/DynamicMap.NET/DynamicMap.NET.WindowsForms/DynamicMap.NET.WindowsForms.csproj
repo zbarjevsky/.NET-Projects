@@ -69,32 +69,32 @@
       <Link>Properties\VersionInfo.cs</Link>
     </Compile>
     <Compile Include="DynamicMap.NET.WindowsForms\ColorMatrixs.cs" />
-    <Compile Include="DynamicMap.NET.WindowsForms\GMapPolygon.cs" />
-    <Compile Include="DynamicMap.NET.WindowsForms\Markers\GMarkerGoogle.cs" />
-    <Compile Include="DynamicMap.NET.WindowsForms\ToolTips\GMapBaloonToolTip.cs" />
-    <Compile Include="DynamicMap.NET.WindowsForms\ToolTips\GMapRoundedToolTip.cs" />
-    <Compile Include="DynamicMap.NET.WindowsForms\GMapToolTip.cs" />
+    <Compile Include="DynamicMap.NET.WindowsForms\DynMapPolygon.cs" />
+    <Compile Include="DynamicMap.NET.WindowsForms\Markers\DynMarkerGoogle.cs" />
+    <Compile Include="DynamicMap.NET.WindowsForms\ToolTips\DynMapBaloonToolTip.cs" />
+    <Compile Include="DynamicMap.NET.WindowsForms\ToolTips\DynMapRoundedToolTip.cs" />
+    <Compile Include="DynamicMap.NET.WindowsForms\DynMapToolTip.cs" />
     <Compile Include="DynamicMap.NET.WindowsForms\TilePrefetcher.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="DynamicMap.NET.WindowsForms\TilePrefetcher.Designer.cs">
       <DependentUpon>TilePrefetcher.cs</DependentUpon>
     </Compile>
-    <Compile Include="DynamicMap.NET.WindowsForms\GMapMarker.cs" />
-    <Compile Include="DynamicMap.NET.WindowsForms\Markers\GMarkerCross.cs" />
+    <Compile Include="DynamicMap.NET.WindowsForms\DynMapMarker.cs" />
+    <Compile Include="DynamicMap.NET.WindowsForms\Markers\DynMarkerCross.cs" />
     <Compile Include="DynamicMap.NET.WindowsForms\DynMapOverlay.cs" />
-    <Compile Include="DynamicMap.NET.WindowsForms\GMapImage.cs" />
+    <Compile Include="DynamicMap.NET.WindowsForms\DynMapImage.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="DynamicMap.NET.WindowsForms\GMapRoute.cs" />
+    <Compile Include="DynamicMap.NET.WindowsForms\DynMapRoute.cs" />
     <Compile Include="DynamicMap.NET.ObjectModel\ObservableCollection.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="DynamicMap.NET.ObjectModel\ObservableCollectionThreadSafe.cs" />
-    <Compile Include="DynamicMap.NET.WindowsForms\GMapControl.cs">
+    <Compile Include="DynamicMap.NET.WindowsForms\DynMapControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -14,7 +14,7 @@ namespace DynamicMap.NET.MapProviders
          Area = new RectLatLng(56.431489960361, 20.8962105239809, 5.8924169643369, 2.58940626652217);
       }
 
-      #region GMapProvider Members
+      #region DynMapProvider Members
       public override Guid Id
       {
          get
@@ -75,7 +75,7 @@ namespace DynamicMap.NET.MapProviders
          Instance = new LithuaniaMapProvider();
       }
 
-      #region GMapProvider Members
+      #region DynMapProvider Members
 
       readonly Guid id = new Guid("5859079F-1B5E-484B-B05C-41CE664D8A93");
       public override Guid Id

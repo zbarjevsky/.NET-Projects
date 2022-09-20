@@ -19,9 +19,9 @@ namespace DynamicMap.NET.MapProviders
          Instance = new ArcGIS_World_Shaded_Relief_MapProvider();
       }
 
-      #region GMapProvider Members
+        #region DynMapProvider Members
 
-      readonly Guid id = new Guid("2E821FEF-8EA1-458A-BC82-4F699F4DEE79");
+        readonly Guid id = new Guid("2E821FEF-8EA1-458A-BC82-4F699F4DEE79");
       public override Guid Id
       {
          get

@@ -20,7 +20,7 @@ namespace DynamicMap.NET.MapProviders
          Instance = new OpenSeaMapHybridProvider();
       }
 
-      #region GMapProvider Members
+      #region DynMapProvider Members
 
       readonly Guid id = new Guid("FAACDE73-4B90-4AE6-BB4A-ADE4F3545592");
       public override Guid Id

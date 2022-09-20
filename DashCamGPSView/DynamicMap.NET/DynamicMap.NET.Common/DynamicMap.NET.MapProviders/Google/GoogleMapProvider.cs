@@ -27,13 +27,11 @@ namespace DynamicMap.NET.MapProviders
             Copyright = string.Format("©{0} Google - Map data ©{0} Tele Atlas, Imagery ©{0} TerraMetrics", DateTime.Today.Year);
         }
 
-        public readonly string ServerAPIs /* ;}~~ */ = Stuff.GString(/*{^_^}*/"9gERyvblybF8iMuCt/LD6w=="/*d{'_'}b*/);
-        public readonly string Server /* ;}~~~~ */ = Stuff.GString(/*{^_^}*/"gosr2U13BoS+bXaIxt6XWg=="/*d{'_'}b*/);
-        public readonly string ServerChina /* ;}~ */ = Stuff.GString(/*{^_^}*/"gosr2U13BoTEJoJJuO25gQ=="/*d{'_'}b*/);
-        public readonly string ServerKorea /* ;}~~ */ = Stuff.GString(/*{^_^}*/"8ZVBOEsBinzi+zmP7y7pPA=="/*d{'_'}b*/);
-        public readonly string ServerKoreaKr /* ;}~ */ = Stuff.GString(/*{^_^}*/"gosr2U13BoQyz1gkC4QLfg=="/*d{'_'}b*/);
-
-        public string SecureWord = "Galileo";
+        public readonly string ServerAPIs = "googleapis.com";   // Stuff.EncriptedPasswordString("9gERyvblybF8iMuCt/LD6w==");
+        public readonly string Server = "google.com";           // Stuff.EncriptedPasswordString("gosr2U13BoS+bXaIxt6XWg==");
+        public readonly string ServerChina = "google.cn";       // Stuff.EncriptedPasswordString("gosr2U13BoTEJoJJuO25gQ==");
+        public readonly string ServerKorea = "gmaptiles.co.kr"; // Stuff.EncriptedPasswordString("8ZVBOEsBinzi+zmP7y7pPA==");
+        public readonly string ServerKoreaKr = "google.co.kr";  // Stuff.EncriptedPasswordString("gosr2U13BoQyz1gkC4QLfg==");
 
         /// <summary>
         /// Your application's API key, obtained from the Google Developers Console.
@@ -42,7 +40,7 @@ namespace DynamicMap.NET.MapProviders
         /// </summary>
         public string ApiKey = string.Empty;
 
-        #region GMapProvider Members
+        #region DynMapProvider Members
         public override Guid Id
         {
             get
@@ -67,14 +65,14 @@ namespace DynamicMap.NET.MapProviders
             }
         }
 
-        DynMapProvider [] overlays;
-        public override DynMapProvider [] Overlays
+        DynMapProvider[] overlays;
+        public override DynMapProvider[] Overlays
         {
             get
             {
                 if (overlays == null)
                 {
-                    overlays = new DynMapProvider [] { this };
+                    overlays = new DynMapProvider[] { this };
                 }
                 return overlays;
             }
@@ -92,7 +90,7 @@ namespace DynamicMap.NET.MapProviders
         public override void OnInitialized()
         {
             if (!init && TryCorrectVersion)
-            {               
+            {
                 string url = string.Format("https://maps.{0}/maps/api/js?client=google-maps-lite&amp;libraries=search&amp;language=en&amp;region=", ServerAPIs);
                 try
                 {
@@ -121,20 +119,20 @@ namespace DynamicMap.NET.MapProviders
                             int count = gc.Count;
                             if (count > 0)
                             {
-                                string ver = string.Format("m@{0}", gc [1].Value);
+                                string ver = string.Format("m@{0}", gc[1].Value);
                                 string old = MapProviders.GoogleMap.Version;
 
                                 MapProviders.GoogleMap.Version = ver;
                                 MapProviders.GoogleChinaMap.Version = ver;
-                                
-                                string verh = string.Format("h@{0}", gc [1].Value);
+
+                                string verh = string.Format("h@{0}", gc[1].Value);
                                 string oldh = MapProviders.GoogleHybridMap.Version;
 
                                 MapProviders.GoogleHybridMap.Version = verh;
                                 MapProviders.GoogleChinaHybridMap.Version = verh;
 #if DEBUG
-                                Debug.WriteLine("GMapProviders.GoogleMap.Version: " + ver + ", " + (ver == old ? "OK" : "old: " + old + ", consider updating source"));
-                                Debug.WriteLine("GMapProviders.GoogleHybridMap.Version: " + verh + ", " + (verh == oldh ? "OK" : "old: " + oldh + ", consider updating source"));
+                                Debug.WriteLine("MapProviders.GoogleMap.Version: " + ver + ", " + (ver == old ? "OK" : "old: " + old + ", consider updating source"));
+                                Debug.WriteLine("MapProviders.GoogleHybridMap.Version: " + verh + ", " + (verh == oldh ? "OK" : "old: " + oldh + ", consider updating source"));
 
                                 if (Debugger.IsAttached && ver != old)
                                 {
@@ -152,14 +150,14 @@ namespace DynamicMap.NET.MapProviders
                             int count = gc.Count;
                             if (count > 0)
                             {
-                                string ver = gc [1].Value;
+                                string ver = gc[1].Value;
                                 string old = MapProviders.GoogleSatelliteMap.Version;
 
                                 MapProviders.GoogleSatelliteMap.Version = ver;
                                 MapProviders.GoogleKoreaSatelliteMap.Version = ver;
                                 MapProviders.GoogleChinaSatelliteMap.Version = "s@" + ver;
 #if DEBUG
-                                Debug.WriteLine("GMapProviders.GoogleSatelliteMap.Version: " + ver + ", " + (ver == old ? "OK" : "old: " + old + ", consider updating source"));
+                                Debug.WriteLine("MapProviders.GoogleSatelliteMap.Version: " + ver + ", " + (ver == old ? "OK" : "old: " + old + ", consider updating source"));
                                 if (Debugger.IsAttached && ver != old)
                                 {
                                     Thread.Sleep(1111);
@@ -176,13 +174,13 @@ namespace DynamicMap.NET.MapProviders
                             int count = gc.Count;
                             if (count > 1)
                             {
-                                string ver = string.Format("t@{0},r@{1}", gc [1].Value, gc [2].Value);
+                                string ver = string.Format("t@{0},r@{1}", gc[1].Value, gc[2].Value);
                                 string old = MapProviders.GoogleTerrainMap.Version;
 
                                 MapProviders.GoogleTerrainMap.Version = ver;
                                 MapProviders.GoogleChinaTerrainMap.Version = ver;
 #if DEBUG
-                                Debug.WriteLine("GMapProviders.GoogleTerrainMap.Version: " + ver + ", " + (ver == old ? "OK" : "old: " + old + ", consider updating source"));
+                                Debug.WriteLine("MapProviders.GoogleTerrainMap.Version: " + ver + ", " + (ver == old ? "OK" : "old: " + old + ", consider updating source"));
                                 if (Debugger.IsAttached && ver != old)
                                 {
                                     Thread.Sleep(1111);
@@ -204,17 +202,19 @@ namespace DynamicMap.NET.MapProviders
 
         internal void GetSecureWords(DynPoint pos, out string sec1, out string sec2)
         {
+            const string SecureWord = "Gandalf"; //"Galileo";
+
             sec1 = string.Empty; // after &x=...
             sec2 = string.Empty; // after &zoom=...
             int seclen = (int)((pos.X * 3) + pos.Y) % 8;
             sec2 = SecureWord.Substring(0, seclen);
             if (pos.Y >= 10000 && pos.Y < 100000)
             {
-                sec1 = Sec1;
+                sec1 = SEC1;
             }
         }
 
-        static readonly string Sec1 = "&s=";
+        private static readonly string SEC1 = "&s=";
 
         #region RoutingProvider Members
 
@@ -426,12 +426,12 @@ namespace DynamicMap.NET.MapProviders
 
                             for (int i = 0; i < levels.Length; i++)
                             {
-                                int zi = pLevels.IndexOf(levels [i]);
+                                int zi = pLevels.IndexOf(levels[i]);
                                 if (zi > 0)
                                 {
                                     if (zi * numLevel > zoom)
                                     {
-                                        removedPoints.Add(points [i]);
+                                        removedPoints.Add(points[i]);
                                     }
                                 }
                             }
@@ -477,7 +477,7 @@ namespace DynamicMap.NET.MapProviders
         {
             List<PointLatLng> pointList;
             status = GetPoints(keywords, out pointList);
-            return pointList != null && pointList.Count > 0 ? pointList [0] : (PointLatLng?)null;
+            return pointList != null && pointList.Count > 0 ? pointList[0] : (PointLatLng?)null;
         }
 
         /// <summary>
@@ -511,7 +511,7 @@ namespace DynamicMap.NET.MapProviders
         {
             List<Placemark> pointList;
             status = GetPlacemarks(location, out pointList);
-            return pointList != null && pointList.Count > 0 ? pointList [0] : (Placemark?)null;
+            return pointList != null && pointList.Count > 0 ? pointList[0] : (Placemark?)null;
         }
 
         #region -- internals --
@@ -1282,62 +1282,62 @@ namespace DynamicMap.NET.MapProviders
                                                         switch (type)
                                                         {
                                                             case "street_address":
-                                                            {
-                                                                ret.StreetNumber = nn.InnerText;
-                                                            }
-                                                            break;
+                                                                {
+                                                                    ret.StreetNumber = nn.InnerText;
+                                                                }
+                                                                break;
 
                                                             case "route":
-                                                            {
-                                                                ret.ThoroughfareName = nn.InnerText;
-                                                            }
-                                                            break;
+                                                                {
+                                                                    ret.ThoroughfareName = nn.InnerText;
+                                                                }
+                                                                break;
 
                                                             case "postal_code":
-                                                            {
-                                                                ret.PostalCodeNumber = nn.InnerText;
-                                                            }
-                                                            break;
+                                                                {
+                                                                    ret.PostalCodeNumber = nn.InnerText;
+                                                                }
+                                                                break;
 
                                                             case "country":
-                                                            {
-                                                                ret.CountryName = nn.InnerText;
-                                                            }
-                                                            break;
+                                                                {
+                                                                    ret.CountryName = nn.InnerText;
+                                                                }
+                                                                break;
 
                                                             case "locality":
-                                                            {
-                                                                ret.LocalityName = nn.InnerText;
-                                                            }
-                                                            break;
+                                                                {
+                                                                    ret.LocalityName = nn.InnerText;
+                                                                }
+                                                                break;
 
                                                             case "administrative_area_level_2":
-                                                            {
-                                                              ret.DistrictName = nn.InnerText;
-                                                            }
-                                                            break;
+                                                                {
+                                                                    ret.DistrictName = nn.InnerText;
+                                                                }
+                                                                break;
 
                                                             case "administrative_area_level_1":
-                                                            {
-                                                                ret.AdministrativeAreaName = nn.InnerText;
-                                                            }
-                                                            break;
+                                                                {
+                                                                    ret.AdministrativeAreaName = nn.InnerText;
+                                                                }
+                                                                break;
 
                                                             case "administrative_area_level_3":
-                                                            {
-                                                                ret.SubAdministrativeAreaName = nn.InnerText;
-                                                            }
-                                                            break;
+                                                                {
+                                                                    ret.SubAdministrativeAreaName = nn.InnerText;
+                                                                }
+                                                                break;
 
                                                             case "neighborhood":
-                                                            {
-                                                                ret.Neighborhood = nn.InnerText;
-                                                            }
-                                                            break;
+                                                                {
+                                                                    ret.Neighborhood = nn.InnerText;
+                                                                }
+                                                                break;
                                                         }
                                                     }
                                                 }
-                                            }                                            
+                                            }
 
                                             placemarkList.Add(ret);
                                         }
@@ -1346,7 +1346,7 @@ namespace DynamicMap.NET.MapProviders
                                 #endregion
                             }
                         }
-        #endregion
+                        #endregion
                     }
                 }
             }
@@ -2125,7 +2125,7 @@ namespace DynamicMap.NET.MapProviders
             var hashAlgorithm = new HMACSHA1(_privateKeyBytes);
             byte[] hashed = hashAlgorithm.ComputeHash(encodedPathQuery);
             return Convert.ToBase64String(hashed).Replace("+", "-").Replace("/", "_");
-        } 
+        }
         #endregion
     }
 
@@ -2147,7 +2147,7 @@ namespace DynamicMap.NET.MapProviders
 
         public string Version = "m@333000000";
 
-        #region GMapProvider Members
+        #region DynMapProvider Members
 
         readonly Guid id = new Guid("D7287DA0-A7FF-405F-8166-B6BAF26D066C");
         public override Guid Id
@@ -2176,7 +2176,7 @@ namespace DynamicMap.NET.MapProviders
 
         #endregion
 
-        string MakeTileImageUrl(DynPoint pos, int zoom, string language)
+        private string MakeTileImageUrl(DynPoint pos, int zoom, string language)
         {
             string sec1 = string.Empty; // after &x=...
             string sec2 = string.Empty; // after &zoom=...

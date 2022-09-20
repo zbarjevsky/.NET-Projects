@@ -290,7 +290,7 @@ namespace DynamicMap.NET
                  var r2 = Overlay.Control.MapProvider.Projection.GetGroundResolution((int)Overlay.Control.Zoom, p.Lat);
                  var sizeDiff = r2 / r1;
 
-                 GMapMarkerTile m = new GMapMarkerTile(p, (int)(Overlay.Control.MapProvider.Projection.TileSize.Width / sizeDiff));
+                 DynMapMarkerTile m = new DynMapMarkerTile(p, (int)(Overlay.Control.MapProvider.Projection.TileSize.Width / sizeDiff));
                  Overlay.Markers.Add(m);
              }
          }
@@ -310,11 +310,11 @@ namespace DynamicMap.NET
       }
    }
 
-   class GMapMarkerTile : GMapMarker
+   class DynMapMarkerTile : DynMapMarker
    {
       static  Brush Fill = new SolidBrush(Color.FromArgb(155, Color.Blue));
 
-      public GMapMarkerTile(PointLatLng p, int size) : base(p)
+      public DynMapMarkerTile(PointLatLng p, int size) : base(p)
       {
          Size = new System.Drawing.Size(size, size);
       }
