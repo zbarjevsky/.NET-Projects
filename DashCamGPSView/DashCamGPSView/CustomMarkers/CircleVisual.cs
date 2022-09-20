@@ -17,9 +17,9 @@ namespace DashCamGPSView.CustomMarkers
    {
       public readonly Popup Popup = new Popup();
       public readonly TrolleyTooltip Tooltip = new TrolleyTooltip();
-      public readonly GMapMarker Marker;
+      public readonly DynMapMarker Marker;
 
-      public CircleVisual(GMapMarker m, Brush background)
+      public CircleVisual(DynMapMarker m, Brush background)
       {
          Marker = m;
          Marker.ZIndex = 100;

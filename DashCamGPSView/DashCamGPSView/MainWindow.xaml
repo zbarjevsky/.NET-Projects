@@ -154,7 +154,7 @@
                 <RowDefinition Height="4"/>
             </Grid.RowDefinitions>
             <Border Grid.Row="0" BorderThickness="2" BorderBrush="Gray" Grid.RowSpan="2">
-                <controls:GMapUserControl x:Name="MainMap" MaxZoom="24" MinZoom="1" />
+                <controls:DynamicMapUserControl x:Name="MainMap" MaxZoom="24" MinZoom="1" />
             </Border>
             <Border Grid.Row="2" BorderThickness="2" BorderBrush="Gray" Background="Beige">
                 <controls:FilesTreeUserControl x:Name="treeGroups"/>

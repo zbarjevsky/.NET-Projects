@@ -76,7 +76,7 @@ namespace DashCamGPSView.CustomMarkers
         }
 
         //update route when index change
-        public void UpdateRouteAndCar(int idx, GMapControl map)
+        public void UpdateRouteAndCar(int idx, DynMapControl map)
         {
             if (RouteMain == null || RouteMain.Count == 0)
             {
@@ -93,7 +93,7 @@ namespace DashCamGPSView.CustomMarkers
         /// Map moved to new position by dragging
         /// </summary>
         /// <param name="point"></param>
-        public void UpdateRouteAndCarRefresh(GMapControl map)
+        public void UpdateRouteAndCarRefresh(DynMapControl map)
         {
             if (RouteMain.Count == 0)
             {
@@ -109,7 +109,7 @@ namespace DashCamGPSView.CustomMarkers
             {
 
                 DynamicMap.NET.PointLatLng currentPosition = new DynamicMap.NET.PointLatLng(RouteMain[_iCurrentPointIndex].Latitude, RouteMain[_iCurrentPointIndex].Longitude);
-                DynamicMap.NET.GPoint pt0 = map.FromLatLngToLocal(currentPosition);
+                DynamicMap.NET.DynPoint pt0 = map.FromLatLngToLocal(currentPosition);
                 Point ptCar = new Point(pt0.X, pt0.Y);
 
                 if (RouteMain[_iCurrentPointIndex].SpeedMph > 1)
@@ -169,7 +169,7 @@ namespace DashCamGPSView.CustomMarkers
             }
         }
 
-        private void UpdateRouteUIPoints(PolyLineSegment segment, PathFigure figure, List<GpsPointData> route, GMapControl map)
+        private void UpdateRouteUIPoints(PolyLineSegment segment, PathFigure figure, List<GpsPointData> route, DynMapControl map)
         {
             segment.Points.Clear();
             if (route.Count == 0)
@@ -191,9 +191,9 @@ namespace DashCamGPSView.CustomMarkers
             }
         }
 
-        private Point GetPoint(GpsPointData data, GMapControl map)
+        private Point GetPoint(GpsPointData data, DynMapControl map)
         {
-            DynamicMap.NET.GPoint pt0 = map.FromLatLngToLocal(new DynamicMap.NET.PointLatLng(data.Latitude, data.Longitude));
+            DynamicMap.NET.DynPoint pt0 = map.FromLatLngToLocal(new DynamicMap.NET.PointLatLng(data.Latitude, data.Longitude));
             return new Point(pt0.X, pt0.Y);
         }
 

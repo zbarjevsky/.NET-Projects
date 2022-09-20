@@ -76,8 +76,8 @@
     <Compile Include="Controls\SpeedChartUserControl.xaml.cs">
       <DependentUpon>SpeedChartUserControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\GMapUserControl.xaml.cs">
-      <DependentUpon>GMapUserControl.xaml</DependentUpon>
+    <Compile Include="Controls\DynamicMapUserControl.xaml.cs">
+      <DependentUpon>DynamicMapUserControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\GpsInfoUserControl.xaml.cs">
       <DependentUpon>GpsInfoUserControl.xaml</DependentUpon>
@@ -155,7 +155,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Controls\GMapUserControl.xaml">
+    <Page Include="Controls\DynamicMapUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -281,11 +281,11 @@
       <Project>{6efd5895-177b-4bbb-af52-29f4d53b3fbd}</Project>
       <Name>CircularGauge</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GMap.NET\GMap.NET.Core\DynamicMap.NET.Core.csproj">
+    <ProjectReference Include="..\DynamicMap.NET\DynamicMap.NET.Common\DynamicMap.NET.Common.csproj">
       <Project>{d0c39d9d-bed0-418b-9a5e-713176caf40c}</Project>
-      <Name>DynamicMap.NET.Core</Name>
+      <Name>DynamicMap.NET.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GMap.NET\GMap.NET.WindowsPresentation\DynamicMap.NET.WindowsPresentation.csproj">
+    <ProjectReference Include="..\DynamicMap.NET\DynamicMap.NET.WindowsPresentation\DynamicMap.NET.WindowsPresentation.csproj">
       <Project>{644fe7d4-0184-400f-b2d7-99cb41360658}</Project>
       <Name>DynamicMap.NET.WindowsPresentation</Name>
     </ProjectReference>

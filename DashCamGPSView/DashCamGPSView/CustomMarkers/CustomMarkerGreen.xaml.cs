@@ -14,7 +14,7 @@ namespace DashCamGPSView.CustomMarkers
     /// </summary>
     public partial class CustomMarkerGreen : CustomMarkerBase
     {
-        public CustomMarkerGreen(GMapControl map, GMapMarker marker, string title)
+        public CustomMarkerGreen(DynMapControl map, DynMapMarker marker, string title)
               : base(map, marker, title)
         {
             this.InitializeComponent();

@@ -18,9 +18,9 @@ namespace DashCamGPSView.CustomMarkers
         private Popup _popup;
         private Label _label;
         private Image _image;
-        private GMapControl _map;
+        private DynMapControl _map;
 
-        protected GMapMarker _marker;
+        protected DynMapMarker _marker;
 
         public bool IsDraggable = true; //allow to drag control
 
@@ -34,7 +34,7 @@ namespace DashCamGPSView.CustomMarkers
             _marker.Offset = new Point(-width / 2, -heigth); //bottom-middle
         }
 
-        public CustomMarkerBase(GMapControl map, GMapMarker marker, string title)
+        public CustomMarkerBase(DynMapControl map, DynMapMarker marker, string title)
         {
             _map = map;
 

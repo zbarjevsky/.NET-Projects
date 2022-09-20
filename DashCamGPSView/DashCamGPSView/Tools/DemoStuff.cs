@@ -245,9 +245,9 @@ namespace DashCamGPSView
          {
             HttpWebRequest request = (HttpWebRequest) WebRequest.Create(url);
 
-            request.UserAgent = GMapProvider.UserAgent;
-            request.Timeout = GMapProvider.TimeoutMs;
-            request.ReadWriteTimeout = GMapProvider.TimeoutMs * 6;
+            request.UserAgent = DynMapProvider.UserAgent;
+            request.Timeout = DynMapProvider.TimeoutMs;
+            request.ReadWriteTimeout = DynMapProvider.TimeoutMs * 6;
             request.Accept = "*/*";
             request.KeepAlive = true;
 
@@ -477,9 +477,9 @@ namespace DashCamGPSView
 
          HttpWebRequest request = (HttpWebRequest) WebRequest.Create(url);
 
-         request.UserAgent = GMapProvider.UserAgent;
-         request.Timeout = GMapProvider.TimeoutMs;
-         request.ReadWriteTimeout = GMapProvider.TimeoutMs * 6;
+         request.UserAgent = DynMapProvider.UserAgent;
+         request.Timeout = DynMapProvider.TimeoutMs;
+         request.ReadWriteTimeout = DynMapProvider.TimeoutMs * 6;
          request.Accept = "*/*";
          request.Referer = "http://www.flightradar24.com/";
          request.KeepAlive = true;
