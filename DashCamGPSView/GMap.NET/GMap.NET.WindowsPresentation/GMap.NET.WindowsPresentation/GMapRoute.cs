@@ -1,5 +1,5 @@
 ﻿
-namespace GMap.NET.WindowsPresentation
+namespace DynamicMap.NET.WindowsPresentation
 {
    using System;
    using System.Collections.Generic;

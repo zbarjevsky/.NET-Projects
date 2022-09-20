@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace GMap.NET.ObjectModel
+namespace DynamicMap.NET.ObjectModel
 {
    public class ObservableCollectionThreadSafe<T> : ObservableCollection<T>
    {

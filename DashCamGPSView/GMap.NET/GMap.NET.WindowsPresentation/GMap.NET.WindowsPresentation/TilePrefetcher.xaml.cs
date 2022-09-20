@@ -1,14 +1,14 @@
 ﻿
-namespace GMap.NET.WindowsPresentation
+namespace DynamicMap.NET.WindowsPresentation
 {
    using System;
    using System.Collections.Generic;
    using System.ComponentModel;
    using System.Windows;
    using System.Windows.Input;
-   using GMap.NET.Internals;
-   using GMap.NET;
-   using GMap.NET.MapProviders;
+   using DynamicMap.NET.Internals;
+   using DynamicMap.NET;
+   using DynamicMap.NET.MapProviders;
    using System.Threading;
    using System.Windows.Threading;
 
@@ -25,7 +25,7 @@ namespace GMap.NET.WindowsPresentation
       int all;
       public bool ShowCompleteMessage = false;
       RectLatLng area;
-      GMap.NET.GSize maxOfTiles;
+      DynamicMap.NET.GSize maxOfTiles;
 
       public TilePrefetcher()
       {

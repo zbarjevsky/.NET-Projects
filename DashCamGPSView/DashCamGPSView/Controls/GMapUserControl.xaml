@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:DashCamGPSView.Controls"
-             xmlns:windowspresentation="clr-namespace:GMap.NET.WindowsPresentation;assembly=GMap.NET.WindowsPresentation"
+             xmlns:windowspresentation="clr-namespace:DynamicMap.NET.WindowsPresentation;assembly=GMap.NET.WindowsPresentation"
              xmlns:custommarkers="clr-namespace:DashCamGPSView.CustomMarkers"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="450">

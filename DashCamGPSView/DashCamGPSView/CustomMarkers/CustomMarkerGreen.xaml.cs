@@ -3,7 +3,7 @@ using System.Windows.Controls;
 using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
-using GMap.NET.WindowsPresentation;
+using DynamicMap.NET.WindowsPresentation;
 using System.Diagnostics;
 using DashCamGPSView;
 

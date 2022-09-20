@@ -5,13 +5,13 @@ VisualStudioVersion = 16.0.29509.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DashCamGPSView", "DashCamGPSView\DashCamGPSView.csproj", "{538A1CFF-E4E6-4A34-8B0D-4D17EAD89995}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GMap.NET", "GMap.NET", "{DEC2FE20-4F0E-43D6-95BC-B2A3AB1E5979}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DynamicMap.NET", "DynamicMap.NET", "{DEC2FE20-4F0E-43D6-95BC-B2A3AB1E5979}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMap.NET.Core", "GMap.NET\GMap.NET.Core\GMap.NET.Core.csproj", "{D0C39D9D-BED0-418B-9A5E-713176CAF40C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicMap.NET.Core", "GMap.NET\GMap.NET.Core\DynamicMap.NET.Core.csproj", "{D0C39D9D-BED0-418B-9A5E-713176CAF40C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMap.NET.WindowsPresentation", "GMap.NET\GMap.NET.WindowsPresentation\GMap.NET.WindowsPresentation.csproj", "{644FE7D4-0184-400F-B2D7-99CB41360658}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicMap.NET.WindowsPresentation", "GMap.NET\GMap.NET.WindowsPresentation\DynamicMap.NET.WindowsPresentation.csproj", "{644FE7D4-0184-400F-B2D7-99CB41360658}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GMap.NET.WindowsForms", "GMap.NET\GMap.NET.WindowsForms\GMap.NET.WindowsForms.csproj", "{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DynamicMap.NET.WindowsForms", "GMap.NET\GMap.NET.WindowsForms\DynamicMap.NET.WindowsForms.csproj", "{E06DEF77-F933-42FB-AFD7-DB2D0D8D6A98}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GpsInfoParser", "GpsInfoParser\GpsInfoParser.csproj", "{08FD88C1-418B-4376-806D-F3ED46BA3C0C}"
 EndProject

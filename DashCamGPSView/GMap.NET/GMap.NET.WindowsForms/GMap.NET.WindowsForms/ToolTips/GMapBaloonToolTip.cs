@@ -1,5 +1,5 @@
 ﻿
-namespace GMap.NET.WindowsForms.ToolTips
+namespace DynamicMap.NET.WindowsForms.ToolTips
 {
    using System.Drawing;
    using System.Drawing.Drawing2D;

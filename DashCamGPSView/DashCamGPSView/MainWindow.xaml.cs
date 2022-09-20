@@ -21,9 +21,9 @@ using System.Windows.Threading;
 
 using DashCamGPSView.Properties;
 using DashCamGPSView.Tools;
-using GMap.NET;
+using DynamicMap.NET;
 //using GMap.NET.MapProviders;
-using GMap.NET.WindowsPresentation;
+using DynamicMap.NET.WindowsPresentation;
 using GPSDataParser;
 using System.Windows.Media.Animation;
 using DashCamGPSView.Controls;

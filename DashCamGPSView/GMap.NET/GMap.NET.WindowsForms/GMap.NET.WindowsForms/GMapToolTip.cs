@@ -1,5 +1,5 @@
 ﻿
-namespace GMap.NET.WindowsForms
+namespace DynamicMap.NET.WindowsForms
 {
    using System;
    using System.Drawing;

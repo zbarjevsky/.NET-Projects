@@ -1,11 +1,11 @@
 ﻿
-namespace GMap.NET.WindowsForms
+namespace DynamicMap.NET.WindowsForms
 {
    using System;
    using System.Drawing;
    using System.Runtime.Serialization;
    using System.Windows.Forms;
-   using GMap.NET.ObjectModel;
+   using DynamicMap.NET.ObjectModel;
 
    /// <summary>
    /// GMap.NET overlay

@@ -281,13 +281,13 @@
       <Project>{6efd5895-177b-4bbb-af52-29f4d53b3fbd}</Project>
       <Name>CircularGauge</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GMap.NET\GMap.NET.Core\GMap.NET.Core.csproj">
+    <ProjectReference Include="..\GMap.NET\GMap.NET.Core\DynamicMap.NET.Core.csproj">
       <Project>{d0c39d9d-bed0-418b-9a5e-713176caf40c}</Project>
-      <Name>GMap.NET.Core</Name>
+      <Name>DynamicMap.NET.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GMap.NET\GMap.NET.WindowsPresentation\GMap.NET.WindowsPresentation.csproj">
+    <ProjectReference Include="..\GMap.NET\GMap.NET.WindowsPresentation\DynamicMap.NET.WindowsPresentation.csproj">
       <Project>{644fe7d4-0184-400f-b2d7-99cb41360658}</Project>
-      <Name>GMap.NET.WindowsPresentation</Name>
+      <Name>DynamicMap.NET.WindowsPresentation</Name>
     </ProjectReference>
     <ProjectReference Include="..\GpsInfoParser\GpsInfoParser.csproj">
       <Project>{08fd88c1-418b-4376-806d-f3ed46ba3c0c}</Project>

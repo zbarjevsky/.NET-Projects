@@ -1,13 +1,13 @@
 ﻿
-namespace GMap.NET.WindowsForms
+namespace DynamicMap.NET.WindowsForms
 {
    using System.Drawing;
    using System.IO;
    using System.Drawing.Imaging;
    using System;
    using System.Diagnostics;
-   using GMap.NET.Internals;
-   using GMap.NET.MapProviders;
+   using DynamicMap.NET.Internals;
+   using DynamicMap.NET.MapProviders;
 
    /// <summary>
    /// image abstraction
@@ -85,7 +85,7 @@ namespace GMap.NET.WindowsForms
          return ret;
       }
 
-      public override bool Save(Stream stream, GMap.NET.PureImage image)
+      public override bool Save(Stream stream, DynamicMap.NET.PureImage image)
       {
          GMapImage ret = image as GMapImage;
          bool ok = true;

@@ -1,5 +1,5 @@
 ﻿
-namespace GMap.NET.WindowsPresentation
+namespace DynamicMap.NET.WindowsPresentation
 {
    using System.Collections.Generic;
    using System.Collections.ObjectModel;
@@ -7,8 +7,8 @@ namespace GMap.NET.WindowsPresentation
    using System.Windows;
    using System.Windows.Media;
    using System.Windows.Media.Imaging;
-   using GMap.NET.Internals;
-   using GMap.NET.MapProviders;
+   using DynamicMap.NET.Internals;
+   using DynamicMap.NET.MapProviders;
 
    /// <summary>
    /// image abstraction

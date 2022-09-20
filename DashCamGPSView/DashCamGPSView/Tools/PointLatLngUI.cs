@@ -1,5 +1,5 @@
 ﻿
-using GMap.NET;
+using DynamicMap.NET;
 using System;
 using System.Globalization;
 

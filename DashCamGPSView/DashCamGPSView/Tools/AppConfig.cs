@@ -159,7 +159,7 @@ namespace DashCamGPSView.Tools
             {
                 try
                 {
-                    AppConfig settings = XmlHelper.Open<AppConfig>(_fileName);
+                    AppConfig settings = XmlHelper.Open<DashCamGPSView.Tools.AppConfig>(_fileName);
                     this.CopyFrom(settings);
                 }
                 catch (Exception err)

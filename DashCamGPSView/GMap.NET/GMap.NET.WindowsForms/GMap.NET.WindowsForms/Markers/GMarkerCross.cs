@@ -1,5 +1,5 @@
 ﻿
-namespace GMap.NET.WindowsForms.Markers
+namespace DynamicMap.NET.WindowsForms.Markers
 {
    using System.Drawing;
    using System.Runtime.Serialization;

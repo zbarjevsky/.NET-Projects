@@ -4,7 +4,7 @@ using System.Windows.Controls.Primitives;
 using System.Windows.Input;
 using System.Windows.Media;
 using DashCamGPSView;
-using GMap.NET.WindowsPresentation;
+using DynamicMap.NET.WindowsPresentation;
 
 namespace DashCamGPSView.CustomMarkers
 {

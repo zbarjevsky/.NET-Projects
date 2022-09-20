@@ -1,4 +1,4 @@
-﻿using GMap.NET.WindowsPresentation;
+﻿using DynamicMap.NET.WindowsPresentation;
 using System;
 using System.Collections.Generic;
 using System.Linq;

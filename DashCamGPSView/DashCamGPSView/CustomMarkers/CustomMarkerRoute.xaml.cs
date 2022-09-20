@@ -1,5 +1,5 @@
 ﻿using DashCamGPSView.Tools;
-using GMap.NET.WindowsPresentation;
+using DynamicMap.NET.WindowsPresentation;
 using GPSDataParser;
 using System;
 using System.Collections.Generic;
@@ -108,8 +108,8 @@ namespace DashCamGPSView.CustomMarkers
             if (_iCurrentPointIndex >= 0)
             {
 
-                GMap.NET.PointLatLng currentPosition = new GMap.NET.PointLatLng(RouteMain[_iCurrentPointIndex].Latitude, RouteMain[_iCurrentPointIndex].Longitude);
-                GMap.NET.GPoint pt0 = map.FromLatLngToLocal(currentPosition);
+                DynamicMap.NET.PointLatLng currentPosition = new DynamicMap.NET.PointLatLng(RouteMain[_iCurrentPointIndex].Latitude, RouteMain[_iCurrentPointIndex].Longitude);
+                DynamicMap.NET.GPoint pt0 = map.FromLatLngToLocal(currentPosition);
                 Point ptCar = new Point(pt0.X, pt0.Y);
 
                 if (RouteMain[_iCurrentPointIndex].SpeedMph > 1)
@@ -193,7 +193,7 @@ namespace DashCamGPSView.CustomMarkers
 
         private Point GetPoint(GpsPointData data, GMapControl map)
         {
-            GMap.NET.GPoint pt0 = map.FromLatLngToLocal(new GMap.NET.PointLatLng(data.Latitude, data.Longitude));
+            DynamicMap.NET.GPoint pt0 = map.FromLatLngToLocal(new DynamicMap.NET.PointLatLng(data.Latitude, data.Longitude));
             return new Point(pt0.X, pt0.Y);
         }
 

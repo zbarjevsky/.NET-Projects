@@ -1,31 +1,31 @@
-﻿namespace GMap.NET.WindowsPresentation
-{
-   using System;
-   using System.Collections.Generic;
-   using System.Collections.ObjectModel;
-   using System.ComponentModel;
-   using System.Globalization;
-   using System.Linq;
-   using System.Windows;
-   using System.Windows.Controls;
-   using System.Windows.Data;
-   using System.Windows.Input;
-   using System.Windows.Media;
-   using System.Windows.Media.Effects;
-   using System.Windows.Media.Imaging;
-   using System.Windows.Shapes;
-   using System.Windows.Threading;
-   using GMap.NET;
-   using GMap.NET.Internals;
-   using System.Diagnostics;
-   using GMap.NET.MapProviders;
-   using System.Windows.Media.Animation;
-   using GMap.NET.Projections;
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Globalization;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Effects;
+using System.Windows.Media.Imaging;
+using System.Windows.Shapes;
+using System.Windows.Threading;
+using DynamicMap.NET;
+using DynamicMap.NET.Internals;
+using System.Diagnostics;
+using DynamicMap.NET.MapProviders;
+using System.Windows.Media.Animation;
+using DynamicMap.NET.Projections;
 
+namespace DynamicMap.NET.WindowsPresentation
+{
    /// <summary>
    /// GMap.NET control for Windows Presentation
    /// </summary>
-   public partial class GMapControl : ItemsControl, IGMapInterface, IDisposable
+   public class GMapControl : ItemsControl, DynamicMap.NET.IGMapInterface, IDisposable
    {
       #region DependencyProperties and related stuff
 
@@ -51,7 +51,7 @@
       DependencyPropertyChangedEventArgs e)
       {
          Point temp = (Point)e.NewValue;
-         (source as GMapControl).Position = new PointLatLng(temp.X, temp.Y);
+         (source as GMapControl).Position = new DynamicMap.NET.PointLatLng(temp.X, temp.Y);
       }
 
       public static readonly DependencyProperty MapProviderProperty = DependencyProperty.Register("MapProvider", typeof(GMapProvider), typeof(GMapControl), new UIPropertyMetadata(EmptyProvider.Instance, new PropertyChangedCallback(MapProviderPropertyChanged)));
@@ -79,10 +79,10 @@
          {
             Debug.WriteLine("MapType: " + e.OldValue + " -> " + e.NewValue);
 
-            RectLatLng viewarea = map.SelectedArea;
+                DynamicMap.NET.RectLatLng viewarea = map.SelectedArea;
             if(viewarea != RectLatLng.Empty)
             {
-               map.Position = new PointLatLng(viewarea.Lat - viewarea.HeightLat / 2, viewarea.Lng + viewarea.WidthLng / 2);
+               map.Position = new DynamicMap.NET.PointLatLng(viewarea.Lat - viewarea.HeightLat / 2, viewarea.Lng + viewarea.WidthLng / 2);
             }
             else
             {
@@ -251,7 +251,7 @@
 
       #endregion
 
-      readonly GMap.NET.Internals.Core Core = new GMap.NET.Internals.Core();
+      readonly DynamicMap.NET.Internals.Core Core = new DynamicMap.NET.Internals.Core();
       //GRect region;
       delegate void MethodInvoker();
       PointLatLng selectionStart;
@@ -342,7 +342,7 @@
       /// </summary>
       [Category("GMap.NET")]
       [Description("map zooming type for mouse wheel")]
-      public MouseWheelZoomType MouseWheelZoomType
+      public DynamicMap.NET.MouseWheelZoomType MouseWheelZoomType
       {
          get
          {
@@ -470,10 +470,10 @@
       /// <summary>
       /// current selected area in map
       /// </summary>
-      private RectLatLng selectedArea;
+      private DynamicMap.NET.RectLatLng selectedArea;
 
       [Browsable(false)]
-      public RectLatLng SelectedArea
+      public DynamicMap.NET.RectLatLng SelectedArea
       {
          get
          {
@@ -630,7 +630,7 @@
 
             Core.SystemType = "WindowsPresentation";
 
-            Core.RenderMode = GMap.NET.RenderMode.WPF;
+            Core.RenderMode = DynamicMap.NET.RenderMode.WPF;
 
             Core.OnMapZoomChanged += new MapZoomChanged(ForceUpdateOverlays);
             Loaded += new RoutedEventHandler(GMapControl_Loaded);
@@ -731,19 +731,19 @@
 
             if(Application.Current != null)
             {
-               loadedApp = Application.Current;
+               _loadedApp = Application.Current;
 
-               loadedApp.Dispatcher.Invoke(DispatcherPriority.ApplicationIdle,
+               _loadedApp.Dispatcher.Invoke(DispatcherPriority.ApplicationIdle,
                   new Action(delegate ()
                   {
-                     loadedApp.SessionEnding += new SessionEndingCancelEventHandler(Current_SessionEnding);
+                     _loadedApp.SessionEnding += new SessionEndingCancelEventHandler(Current_SessionEnding);
                   }
                   ));
             }
          }
       }
 
-      Application loadedApp;
+      private Application _loadedApp;
 
       void Current_SessionEnding(object sender, SessionEndingCancelEventArgs e)
       {
@@ -936,7 +936,7 @@
                      while(!parentTile.NotEmpty && zoomOffset < Core.Zoom && zoomOffset <= LevelsKeepInMemmory)
                      {
                         Ix = (long)Math.Pow(2, zoomOffset);
-                        parentTile = Core.Matrix.GetTileWithNoLock(Core.Zoom - zoomOffset++, new GMap.NET.GPoint((int)(tilePoint.PosXY.X / Ix), (int)(tilePoint.PosXY.Y / Ix)));
+                        parentTile = Core.Matrix.GetTileWithNoLock(Core.Zoom - zoomOffset++, new DynamicMap.NET.GPoint((int)(tilePoint.PosXY.X / Ix), (int)(tilePoint.PosXY.Y / Ix)));
                      }
 
                      if(parentTile.NotEmpty)
@@ -1749,8 +1749,8 @@
                System.Windows.Point p = e.GetPosition(this);
                selectionEnd = FromLocalToLatLng((int)p.X, (int)p.Y);
                {
-                  GMap.NET.PointLatLng p1 = selectionStart;
-                  GMap.NET.PointLatLng p2 = selectionEnd;
+                  DynamicMap.NET.PointLatLng p1 = selectionStart;
+                  DynamicMap.NET.PointLatLng p2 = selectionEnd;
 
                   double x1 = Math.Min(p1.Lng, p2.Lng);
                   double y1 = Math.Max(p1.Lat, p2.Lat);
@@ -2237,7 +2237,7 @@
       /// current coordinates of the map center
       /// </summary>
       [Browsable(false)]
-      public PointLatLng Position
+      public DynamicMap.NET.PointLatLng Position
       {
          get
          {
@@ -2321,11 +2321,11 @@
          }
       }
 
-      public GMap.NET.RenderMode RenderMode
+      public DynamicMap.NET.RenderMode RenderMode
       {
          get
          {
-            return GMap.NET.RenderMode.WPF;
+            return DynamicMap.NET.RenderMode.WPF;
          }
       }
 
@@ -2434,9 +2434,9 @@
             Loaded -= new RoutedEventHandler(GMapControl_Loaded);
             Dispatcher.ShutdownStarted -= new EventHandler(Dispatcher_ShutdownStarted);
             SizeChanged -= new SizeChangedEventHandler(GMapControl_SizeChanged);
-            if(loadedApp != null)
+            if(_loadedApp != null)
             {
-               loadedApp.SessionEnding -= new SessionEndingCancelEventHandler(Current_SessionEnding);
+               _loadedApp.SessionEnding -= new SessionEndingCancelEventHandler(Current_SessionEnding);
             }
             Core.OnMapClose();
          }

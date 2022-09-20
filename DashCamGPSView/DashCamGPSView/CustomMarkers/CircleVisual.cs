@@ -9,7 +9,7 @@ using System.Windows.Media.Effects;
 using DashCamGPSView.Controls;
 //using Demo.WindowsPresentation.Controls;
 //using Demo.WindowsPresentation.Controls;
-using GMap.NET.WindowsPresentation;
+using DynamicMap.NET.WindowsPresentation;
 
 namespace DashCamGPSView.CustomMarkers
 {

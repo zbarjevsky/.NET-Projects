@@ -1,15 +1,15 @@
 ﻿
-namespace GMap.NET
+namespace DynamicMap.NET
 {
    using System.Collections.Generic;
    using System.ComponentModel;
    using System.Windows.Forms;
-   using GMap.NET.Internals;
+   using DynamicMap.NET.Internals;
    using System;
-   using GMap.NET.MapProviders;
+   using DynamicMap.NET.MapProviders;
    using System.Threading;
-   using GMap.NET.WindowsForms;
-   using GMap.NET.WindowsForms.Markers;
+   using DynamicMap.NET.WindowsForms;
+   using DynamicMap.NET.WindowsForms.Markers;
 using System.Drawing;
 
    /// <summary>
@@ -25,7 +25,7 @@ using System.Drawing;
       int all;
       public bool ShowCompleteMessage = false;
       RectLatLng area;
-      GMap.NET.GSize maxOfTiles;
+      DynamicMap.NET.GSize maxOfTiles;
       public GMapOverlay Overlay;
       int retry;
       public bool Shuffle = true;

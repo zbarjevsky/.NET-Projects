@@ -1,5 +1,5 @@
 ﻿using System.Windows.Controls;
-using GMap.NET;
+using DynamicMap.NET;
 //using Demo.WindowsForms;
 using DashCamGPSView;
 

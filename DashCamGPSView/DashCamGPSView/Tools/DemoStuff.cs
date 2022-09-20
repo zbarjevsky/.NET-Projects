@@ -4,9 +4,9 @@ using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Xml;
-using GMap.NET;
+using DynamicMap.NET;
 using System.Data.Common;
-using GMap.NET.MapProviders;
+using DynamicMap.NET.MapProviders;
 using System.Text;
 using System.Diagnostics;
 

@@ -1,11 +1,11 @@
 ﻿
-namespace GMap.NET.WindowsPresentation
+namespace DynamicMap.NET.WindowsPresentation
 {
    using System.Collections.Generic;
    using System.ComponentModel;
    using System.Windows;
    using System.Windows.Controls;
-   using GMap.NET;
+   using DynamicMap.NET;
    using System.Windows.Media;
    using System.Diagnostics;
    using System.Windows.Shapes;

@@ -1,4 +1,4 @@
-﻿namespace GMap.NET
+﻿namespace DynamicMap.NET
 {
    partial class TilePrefetcher
    {

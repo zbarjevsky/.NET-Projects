@@ -1,5 +1,5 @@
 ﻿
-namespace GMap.NET.WindowsForms
+namespace DynamicMap.NET.WindowsForms
 {
     using System;
     using System.Collections.Generic;
@@ -7,7 +7,7 @@ namespace GMap.NET.WindowsForms
     using System.Drawing.Drawing2D;
     using System.Runtime.Serialization;
     using System.Windows.Forms;
-    using GMap.NET;    
+    using DynamicMap.NET;    
 
     /// <summary>
     /// GMap.NET route

@@ -1,11 +1,11 @@
 ﻿
-namespace GMap.NET.WindowsForms.Markers
+namespace DynamicMap.NET.WindowsForms.Markers
 {
    using System.Drawing;
    using System.Collections.Generic;
 
 #if !PocketPC
-   using System.Windows.Forms.Properties;
+   //using System.Windows.Forms.Properties;
    using System;
    using System.Runtime.Serialization;
 #else
@@ -95,7 +95,7 @@ namespace GMap.NET.WindowsForms.Markers
 
                if(arrowshadow == null)
                {
-                  arrowshadow = Resources.arrowshadow;
+                  arrowshadow = DynamicMap.NET.Properties.Resources.arrowshadow;
                }
                BitmapShadow = arrowshadow;
             }
@@ -122,7 +122,7 @@ namespace GMap.NET.WindowsForms.Markers
 
                if(msmarker_shadow == null)
                {
-                  msmarker_shadow = Resources.msmarker_shadow;
+                  msmarker_shadow = DynamicMap.NET.Properties.Resources.msmarker_shadow;
                }
                BitmapShadow = msmarker_shadow;
             }
@@ -143,7 +143,7 @@ namespace GMap.NET.WindowsForms.Markers
 
                if(shadow_small == null)
                {
-                  shadow_small = Resources.shadow_small;
+                  shadow_small = DynamicMap.NET.Properties.Resources.shadow_small;
                }
                BitmapShadow = shadow_small;
             }
@@ -156,7 +156,7 @@ namespace GMap.NET.WindowsForms.Markers
                Offset = new Point(-Size.Width / 2, -Size.Height + 1);
                if(msmarker_shadow == null)
                {
-                  msmarker_shadow = Resources.msmarker_shadow;
+                  msmarker_shadow = DynamicMap.NET.Properties.Resources.msmarker_shadow;
                }
                BitmapShadow = msmarker_shadow;
             }
@@ -174,7 +174,7 @@ namespace GMap.NET.WindowsForms.Markers
 
                if(pushpin_shadow == null)
                {
-                  pushpin_shadow = Resources.pushpin_shadow;
+                  pushpin_shadow = DynamicMap.NET.Properties.Resources.pushpin_shadow;
                }
                BitmapShadow = pushpin_shadow;
             }
@@ -202,7 +202,7 @@ namespace GMap.NET.WindowsForms.Markers
          Bitmap ret;
          if(!iconCache.TryGetValue(name, out ret))
          {
-            ret = Resources.ResourceManager.GetObject(name, Resources.Culture) as Bitmap;
+            ret = DynamicMap.NET.Properties.Resources.ResourceManager.GetObject(name, DynamicMap.NET.Properties.Resources.Culture) as Bitmap;
             iconCache.Add(name, ret);
          }
          return ret;

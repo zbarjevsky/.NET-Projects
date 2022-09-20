@@ -17,9 +17,9 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 
-using GMap.NET;
-using GMap.NET.MapProviders;
-using GMap.NET.WindowsPresentation;
+using DynamicMap.NET;
+using DynamicMap.NET.MapProviders;
+using DynamicMap.NET.WindowsPresentation;
 using DashCamGPSView.CustomMarkers;
 using GPSDataParser;
 using DashCamGPSView.Tools;
@@ -120,14 +120,15 @@ namespace DashCamGPSView.Controls
             //cmbMapType.Items.Add(GMapProviders.NearSatelliteMap);
 
             // set cache mode only if no internet avaible
-            if (!Stuff.PingNetwork("www.google.com"))
+            if (!Stuff.PingNetwork("www.microsoft.com"))
             {
                 GMap.Manager.Mode = AccessMode.CacheOnly;
-                System.Windows.Forms.MessageBox.Show(
+                MessageBox.Show(
                     "No internet connection available, going to CacheOnly mode.", 
                     "GMap.NET - Demo.WindowsPresentation", 
-                    System.Windows.Forms.MessageBoxButtons.OK,
-                    System.Windows.Forms.MessageBoxIcon.Warning);
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning, 
+                    MessageBoxResult.OK, MessageBoxOptions.ServiceNotification);
             }
 
             //default config map

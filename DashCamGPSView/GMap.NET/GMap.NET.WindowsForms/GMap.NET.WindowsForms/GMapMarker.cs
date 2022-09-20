@@ -1,11 +1,11 @@
 ﻿
-namespace GMap.NET.WindowsForms
+namespace DynamicMap.NET.WindowsForms
 {
    using System;
    using System.Drawing;
    using System.Runtime.Serialization;
    using System.Windows.Forms;
-   using GMap.NET.WindowsForms.ToolTips;
+   using DynamicMap.NET.WindowsForms.ToolTips;
 
    /// <summary>
    /// GMap.NET marker
