@@ -435,7 +435,7 @@ namespace DashCamGPSView.Controls
 
             UpdateIconUri();
 
-            Description = string.Format(" ({0} {1}, {2:###,###.0} MB, {3} s)", 
+            Description = string.Format(" (({0}) {1}, {2:###,###.0} MB, {3} s)", 
                 count, cameras, size / (1024.0*1024.0), sDuration);
         }
 

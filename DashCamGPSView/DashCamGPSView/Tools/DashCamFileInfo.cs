@@ -79,6 +79,8 @@ namespace DashCamGPSView.Tools
         {
             if (fileName.EndsWith("_F") || fileName.EndsWith("_I") || fileName.EndsWith("_R"))
                 return fileName.Substring(0, fileName.Length - 2);
+            if (fileName.EndsWith("_PF") || fileName.EndsWith("_PI") || fileName.EndsWith("_PR"))
+                return fileName.Substring(0, fileName.Length - 2);
             return "";
         }
 
@@ -115,7 +117,7 @@ namespace DashCamGPSView.Tools
 
         public override string ToString()
         {
-            return $"File: {Date:s} - Created: {Info.CreationTime:s} - End: {Info.LastWriteTime:s} - Name: {Info.Name}";
+            return $"{Type} File: {Date:s} - Created: {Info.CreationTime:s} - End: {Info.LastWriteTime:s} - Name: {Info.Name}";
         }
     }
 
@@ -172,6 +174,7 @@ namespace DashCamGPSView.Tools
         public DashCamFileInfo(List<FileInfoWithDateFromFileName> allFiles, ref int idx, string speedUnits)
         {
             FileInfoWithDateFromFileName currentInfo = allFiles[idx];
+            Info = currentInfo;
 
             string fileName = currentInfo.Info.FullName;
             SpeedUnits = (SpeedUnits)Enum.Parse(typeof(SpeedUnits), speedUnits);

@@ -178,6 +178,18 @@ namespace DashCamGPSView.Controls
             return 3; //position of x1
         }
 
+        private void btnPrevFrame_Click(object sender, RoutedEventArgs e)
+        {
+            if (ExternalPlayer.MediaState == MediaState.Play)
+                ExternalPlayer.Pause();
+
+            TimeSpan pos = ExternalPlayer.Position;
+            pos -= TimeSpan.FromMilliseconds(21);
+            if (pos.TotalSeconds < 0)
+                pos = TimeSpan.FromMilliseconds(0);
+            ExternalPlayer.PositionSet(pos, notify: true);
+        }
+
         private void btnNextFrame_Click(object sender, RoutedEventArgs e)
         {
             if (ExternalPlayer.MediaState == MediaState.Play)
