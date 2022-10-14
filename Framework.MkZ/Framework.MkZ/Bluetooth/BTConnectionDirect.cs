@@ -11,6 +11,12 @@ using Windows.Devices.Enumeration;
 
 using MkZ.Tools;
 
+/// <summary>
+/// you could call Windows.Devices.Bluetooth APIs from your desktop app.
+/// You need to add reference to C:\Program Files(x86)\Windows Kits\10\UnionMetadata\Windows.winmd 
+/// and C:\Program Files(x86)\Reference Assemblies\Microsoft\Framework\.NETCore\v4.5\System.Runtime.WindowsRuntime.dll.
+/// https://stackoverflow.com/questions/53268156/is-universal-windows-platform-required-to-use-the-windows-devices-bluetooth-name
+/// </summary>
 namespace MkZ.Bluetooth
 {
     public class BTConnectionDirect : IDisposable
