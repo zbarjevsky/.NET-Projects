@@ -54,6 +54,18 @@ namespace GPSDataParser
             Altitude = 0;
         }
 
+        public GpsPointData(DateTime time, double latitude, double longitude)
+        {
+            FixTime = time;
+            Active = true;
+            Latitude = latitude;
+            Longitude = longitude;
+            GpsSpeed = 0;
+            Course = 0;
+            MagneticVariation = 0;
+            Altitude = 0;
+        }
+
         public GpsPointData(ViofoGpsPoint gps)
         {
             FixTime = gps.Date;

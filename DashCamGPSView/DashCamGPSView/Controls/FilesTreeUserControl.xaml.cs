@@ -411,11 +411,25 @@ namespace DashCamGPSView.Controls
                 size += fi2.Length;
                 count++;
             }
-            if (File.Exists(info.FileNameRear))
+            if (File.Exists(info.FileNameLeft))
             {
-                FileInfo fi3 = new FileInfo(info.FileNameRear);
-                cameras += "+RR";
+                FileInfo fi3 = new FileInfo(info.FileNameLeft);
+                cameras += "+LL";
                 size += fi3.Length;
+                count++;
+            }
+            if (File.Exists(info.FileNameRight))
+            {
+                FileInfo fi4 = new FileInfo(info.FileNameRight);
+                cameras += "+RR";
+                size += fi4.Length;
+                count++;
+            }
+            if (File.Exists(info.FileNameBack))
+            {
+                FileInfo fi5 = new FileInfo(info.FileNameBack);
+                cameras += "+BK";
+                size += fi5.Length;
                 count++;
             }
 
@@ -429,7 +443,7 @@ namespace DashCamGPSView.Controls
         {
             if (string.Compare(fileName, _dashCamFileInfo.FileNameFront, true) == 0)
                 return true;
-            if (string.Compare(fileName, _dashCamFileInfo.FileNameRear, true) == 0)
+            if (string.Compare(fileName, _dashCamFileInfo.FileNameBack, true) == 0)
                 return true;
             if (string.Compare(fileName, _dashCamFileInfo.FileNameInside, true) == 0)
                 return true;

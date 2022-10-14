@@ -63,7 +63,7 @@
             <GridSplitter x:Name="_splitterRear" Grid.Column="1" HorizontalAlignment="Stretch" />
             
             <Border x:Name="borderPlayerI" Grid.Row="0" Grid.Column="2" BorderThickness="2" BorderBrush="Gray" >
-                <controls:VideoPlayerControl x:Name="playerI" Title="Inner View" />
+                <controls:VideoPlayerControl x:Name="playerI" Title="Inside View" />
             </Border>
             
             <GridSplitter x:Name="_splitterMain" Grid.Row="1" Grid.ColumnSpan="3"

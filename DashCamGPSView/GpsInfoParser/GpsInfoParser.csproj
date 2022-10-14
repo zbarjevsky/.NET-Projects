@@ -52,6 +52,7 @@
     <Compile Include="FileFormats\KML\KmlPlacemarks.cs" />
     <Compile Include="FileFormats\KML\KmlStyles.cs" />
     <Compile Include="GpsPointData.cs" />
+    <Compile Include="Tesla\TeslaGPSParser.cs" />
     <Compile Include="Tools\IBufferReader.cs" />
     <Compile Include="Tools\IpInfo.cs" />
     <Compile Include="Tools\JsonParser.cs" />

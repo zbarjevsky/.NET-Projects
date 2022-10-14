@@ -153,14 +153,17 @@ namespace DashCamGPSView
             {
                 DashCamFileTree groups = new DashCamFileTree(AppConfig.LastSelectedFileName, AppConfig.SpeedUnits);
                 VideoFile v = treeGroups.LoadTree(groups, AppConfig.LastSelectedFileName);
-                if (v != null && v._dashCamFileInfo.HasGpsInfo) //initial location
+                if (v != null) //initial location
                 {
-                    MainMap.Position = v._dashCamFileInfo.Position(0);
-                    MainMap.Zoom = 16;
-                }
+                    if (v._dashCamFileInfo.HasGpsInfo)
+                    {
+                        MainMap.Position = v._dashCamFileInfo.Position(0);
+                        MainMap.Zoom = 16;
+                    }
 
-                PlayFile(v._dashCamFileInfo);
-                Pause();
+                    PlayFile(v._dashCamFileInfo);
+                    Pause();
+                }
             }
 
             waitScreen.Hide();
@@ -449,7 +452,7 @@ namespace DashCamGPSView
             double volume = Volume;
             
             playerF.Open(_dashCamFileInfo.FileNameFront);
-            playerR.Open(_dashCamFileInfo.FileNameRear);
+            playerR.Open(_dashCamFileInfo.FileNameBack);
             playerI.Open(_dashCamFileInfo.FileNameInside);
 
             graphSpeedInfo.SetInfo(_dashCamFileInfo, this);
@@ -484,7 +487,7 @@ namespace DashCamGPSView
                 }
             }
 
-            if(File.Exists(_dashCamFileInfo.FileNameRear))
+            if(File.Exists(_dashCamFileInfo.FileNameBack))
             {
                 if (_bRearViewWasCollapsed)
                 {

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using DashCam.Tools;
 using GPSDataParser;
+using GPSDataParser.Tesla;
 using Microsoft.WindowsAPICodePack.Shell;
 using Microsoft.WindowsAPICodePack.Shell.PropertySystem;
 using NmeaParser.Nmea;
@@ -20,6 +21,7 @@ namespace DashCamGPSView.Tools
     {
         DuDuBell,
         Viofo,
+        Tesla,
         Unkn
     }
 
@@ -34,6 +36,7 @@ namespace DashCamGPSView.Tools
     {
         public FileInfo Info { get; private set; }
         public DateTime Date { get; private set; }
+        public GpsFileFormat Type { get; private set; } = GpsFileFormat.Unkn;
 
         public FileInfoWithDateFromFileName(string fileName)
         {
@@ -43,23 +46,53 @@ namespace DashCamGPSView.Tools
         public void Create(string fileName)
         {
             Info = new FileInfo(fileName);
+            Date = Info.CreationTime;
 
+            string dateStr = "";
             fileName = Path.GetFileNameWithoutExtension(fileName);
+            if (!string.IsNullOrWhiteSpace(dateStr = CheckForTeslaFileName(fileName)))
+            {
+                Type = GpsFileFormat.Tesla;
 
-            if (fileName.Length >= 16 && fileName.Length <= 22)
-            {
-                string date_time = fileName.Substring(0, 16); //"2019_0624_075333_296P"
-                Date = DateTime.ParseExact(date_time, "yyyy_MMdd_HHmmss", CultureInfo.InvariantCulture);
+                //parse tesla file date
+                Date = DateTime.ParseExact(dateStr, "yyyy-MM-dd_HH-mm-ss", CultureInfo.InvariantCulture);
             }
-            else if (fileName.Length == 15)
+            else if (!string.IsNullOrWhiteSpace(dateStr = CheckForViofoFileName(fileName)))
             {
-                string date_time = fileName.Substring(0, 15); //"20190624_075333"
-                Date = DateTime.ParseExact(date_time, "yyyyMMdd_HHmmss", CultureInfo.InvariantCulture);
+                Type = GpsFileFormat.Viofo;
+
+                //parse viofo date
+                if (fileName.Length >= 16 && fileName.Length <= 22)
+                {
+                    string date_time = fileName.Substring(0, 16); //"2019_0624_075333_296P"
+                    Date = DateTime.ParseExact(date_time, "yyyy_MMdd_HHmmss", CultureInfo.InvariantCulture);
+                }
+                else if (fileName.Length == 15)
+                {
+                    string date_time = fileName.Substring(0, 15); //"20190624_075333"
+                    Date = DateTime.ParseExact(date_time, "yyyyMMdd_HHmmss", CultureInfo.InvariantCulture);
+                }
             }
-            else
+        }
+
+        private string CheckForViofoFileName(string fileName)
+        {
+            if (fileName.EndsWith("_F") || fileName.EndsWith("_I") || fileName.EndsWith("_R"))
+                return fileName.Substring(0, fileName.Length - 2);
+            return "";
+        }
+
+        public static readonly string[] TeslaSuffix = { "-back", "-front", "-left_repeater", "-right_repeater" };
+
+        private string CheckForTeslaFileName(string fileName)
+        {
+            foreach (string suffix in TeslaSuffix)
             {
-                Date = Info.CreationTime;
+                if (fileName.EndsWith(suffix, true, CultureInfo.InvariantCulture))
+                    return fileName.Substring(0, fileName.Length - suffix.Length);
             }
+
+            return "";
         }
 
         public void CopyFrom(FileInfoWithDateFromFileName info)
@@ -94,7 +127,7 @@ namespace DashCamGPSView.Tools
 
         public bool IsProtected { get; private set; } = false;
 
-        public string FileNameFront = "", FileNameRear = "", FileNameInside = "", FileNameNmea = "";
+        public string FileNameFront = "", FileNameBack = "", FileNameLeft = "", FileNameRight = "", FileNameInside = "", FileNameNmea = "";
 
         public string FileName => Info.Info.FullName;
 
@@ -143,45 +176,14 @@ namespace DashCamGPSView.Tools
             string fileName = currentInfo.Info.FullName;
             SpeedUnits = (SpeedUnits)Enum.Parse(typeof(SpeedUnits), speedUnits);
 
-            string name = Path.GetFileNameWithoutExtension(fileName);
-            name = name.Substring(0, name.Length - 1);
-            string dirParent = Path.GetDirectoryName(Path.GetDirectoryName(fileName));
-            string dirF = "", dirR = "";
-            if (!string.IsNullOrWhiteSpace(dirParent))
-            {
-                dirF = Path.Combine(dirParent, "F");
-                dirR = Path.Combine(dirParent, "R");
-            }
-
-            if (Directory.Exists(dirF) && Directory.Exists(dirR))
-            {
-                GpsFileFormat = GpsFileFormat.DuDuBell;
-                RecordingType = RecordingType.Driving;
-                IsProtected = false;
-                Info = currentInfo;
-                FileDateStart = FromDuDuBellFileName(fileName);
-                FileDateEnd = currentInfo.Info.LastWriteTime;
-
-                FileNameFront = Path.Combine(dirF, name + "F.MP4");
-                if (!File.Exists(FileNameFront))
-                    FileNameFront = null;
-                FileNameNmea = Path.Combine(dirF, name + "F.NMEA");
-                if (!File.Exists(FileNameNmea))
-                    FileNameNmea = null;
-                FileNameRear = Path.Combine(dirR, name + "R.MP4");
-                if (!File.Exists(FileNameRear))
-                    FileNameRear = null;
-
-                idx++;
-            }
-            else //viofo 2ch or 3ch format
+            if (currentInfo.Type == GpsFileFormat.Viofo) // viofo 3ch or 2 ch
             {
                 GpsFileFormat = GpsFileFormat.Viofo;
                 FileDateStart = currentInfo.Date;
                 FileDateEnd = currentInfo.Info.LastWriteTime;
 
                 //sometimes last write time is before create time
-                if(FileDateEnd < FileDateStart)
+                if (FileDateEnd < FileDateStart)
                 {
                     double minutes = FileDateEnd.Minute - FileDateStart.Minute;
                     double seconds = FileDateEnd.Second - FileDateStart.Second;
@@ -194,7 +196,7 @@ namespace DashCamGPSView.Tools
                     FileDateEnd = FileDateStart.AddMinutes(minutes);
                 }
 
-                if (!FromViofoFileName(allFiles, ref idx, ref RecordingType, ref FileNameFront, ref FileNameRear, ref FileNameInside))
+                if (!FromViofoFileName(allFiles, ref idx, this))
                 {
                     FileNameFront = currentInfo.Info.FullName;
                     Info = currentInfo;
@@ -203,6 +205,70 @@ namespace DashCamGPSView.Tools
 
                 string dir = Path.GetDirectoryName(Info.Info.FullName);
                 IsProtected = dir.EndsWith("RO");
+            }
+            else if (currentInfo.Type == GpsFileFormat.Tesla)
+            {
+                GpsFileFormat = GpsFileFormat.Tesla;
+                FileDateStart = currentInfo.Date;
+                FileDateEnd = currentInfo.Info.LastWriteTime;
+
+                //sometimes last write time is before create time
+                if (FileDateEnd < FileDateStart)
+                {
+                    double minutes = FileDateEnd.Minute - FileDateStart.Minute;
+                    double seconds = FileDateEnd.Second - FileDateStart.Second;
+                    if (minutes < 0)
+                        minutes += 60;
+                    if (seconds < 0)
+                        seconds += 60;
+                    if (minutes == 0 && seconds > 0)
+                        minutes = seconds / 60;
+                    FileDateEnd = FileDateStart.AddMinutes(minutes);
+                }
+
+                if (!FromTeslaFileName(allFiles, ref idx, this))
+                {
+                    FileNameFront = currentInfo.Info.FullName;
+                    Info = currentInfo;
+                    idx++;
+                }
+
+                string dir = Path.GetDirectoryName(Info.Info.FullName);
+                IsProtected = dir.EndsWith("RO");
+            }
+            else
+            {
+                string name = Path.GetFileNameWithoutExtension(fileName);
+                name = name.Substring(0, name.Length - 1);
+                string dirParent = Path.GetDirectoryName(Path.GetDirectoryName(fileName));
+                string dirF = "", dirR = "";
+                if (!string.IsNullOrWhiteSpace(dirParent))
+                {
+                    dirF = Path.Combine(dirParent, "F");
+                    dirR = Path.Combine(dirParent, "R");
+                }
+
+                if (Directory.Exists(dirF) && Directory.Exists(dirR))
+                {
+                    GpsFileFormat = GpsFileFormat.DuDuBell;
+                    RecordingType = RecordingType.Driving;
+                    IsProtected = false;
+                    Info = currentInfo;
+                    FileDateStart = FromDuDuBellFileName(fileName);
+                    FileDateEnd = currentInfo.Info.LastWriteTime;
+
+                    FileNameFront = Path.Combine(dirF, name + "F.MP4");
+                    if (!File.Exists(FileNameFront))
+                        FileNameFront = null;
+                    FileNameNmea = Path.Combine(dirF, name + "F.NMEA");
+                    if (!File.Exists(FileNameNmea))
+                        FileNameNmea = null;
+                    FileNameBack = Path.Combine(dirR, name + "R.MP4");
+                    if (!File.Exists(FileNameBack))
+                        FileNameBack = null;
+
+                    idx++;
+                }
             }
         }
 
@@ -215,7 +281,7 @@ namespace DashCamGPSView.Tools
             IsProtected = source.IsProtected;
 
             FileNameFront = source.FileNameFront;
-            FileNameRear = source.FileNameRear;
+            FileNameBack = source.FileNameBack;
             FileNameInside = source.FileNameInside;
             FileNameNmea = source.FileNameNmea;
 
@@ -255,6 +321,10 @@ namespace DashCamGPSView.Tools
                 else if (GpsFileFormat == GpsFileFormat.Viofo)
                 {
                     _gpsInfo = GpsPointData.Convert(NovatekViofoGPSParser.ViofoParser.ReadMP4FileGpsInfo(Info.Info.FullName));
+                }
+                else if (GpsFileFormat == GpsFileFormat.Tesla)
+                {
+                    _gpsInfo = TeslaGPSParser.FindGPSInfo(Info.Info.FullName);
                 }
                 else
                 {
@@ -298,10 +368,10 @@ namespace DashCamGPSView.Tools
 
                 MoveFile(ref FileNameFront, moveToDir, protect);
                 MoveFile(ref FileNameNmea, moveToDir, protect);
-                MoveFile(ref FileNameRear, moveToDir, protect);
+                MoveFile(ref FileNameBack, moveToDir, protect);
                 MoveFile(ref FileNameInside, moveToDir, protect);
 
-                Info.MoveInfo(FileNameFront, FileNameInside, FileNameRear);
+                Info.MoveInfo(FileNameFront, FileNameInside, FileNameBack);
 
                 IsProtected = protect;
             }
@@ -347,7 +417,7 @@ namespace DashCamGPSView.Tools
             {
                 deleteFile(FileNameFront);
                 deleteFile(FileNameNmea);
-                deleteFile(FileNameRear);
+                deleteFile(FileNameBack);
                 deleteFile(FileNameInside);
             }
             catch (Exception err)
@@ -374,13 +444,8 @@ namespace DashCamGPSView.Tools
             _dGpsDelaySeconds = delta.TotalSeconds;
         }
 
-        private bool FromViofoFileName(List<FileInfoWithDateFromFileName> allFiles, ref int idx,
-            ref RecordingType fileType, ref string frontFileName, ref string rearFileName, ref string insideFileName)
+        private static bool FromViofoFileName(List<FileInfoWithDateFromFileName> allFiles, ref int idx, DashCamFileInfo This)
         {
-            frontFileName = "";
-            rearFileName = "";
-            insideFileName = "";
-
             FileInfoWithDateFromFileName info1 = allFiles[idx];
             DateTime startDate1 = info1.Date;
             DateTime endDate1 = info1.Info.LastWriteTime;
@@ -398,52 +463,94 @@ namespace DashCamGPSView.Tools
                 {
                     if (info2.Info.Name.EndsWith("_F.MP4", true, CultureInfo.InvariantCulture))
                     {
-                        frontFileName = info2.Info.FullName;
-                        RecordingType = RecordingType.Driving;
-                        Info = info2;
+                        This.FileNameFront = info2.Info.FullName;
+                        This.RecordingType = RecordingType.Driving;
+                        This.Info = info2;
                         idx++;
                     }
                     else if (info2.Info.Name.EndsWith("_R.MP4", true, CultureInfo.InvariantCulture))
                     {
-                        rearFileName = info2.Info.FullName;
-                        RecordingType = RecordingType.Driving;
+                        This.FileNameBack = info2.Info.FullName;
+                        This.RecordingType = RecordingType.Driving;
                         idx++;
                     }
                     else if (info2.Info.Name.EndsWith("_I.MP4", true, CultureInfo.InvariantCulture))
                     {
-                        insideFileName = info2.Info.FullName;
-                        RecordingType = RecordingType.Driving;
+                        This.FileNameInside = info2.Info.FullName;
+                        This.RecordingType = RecordingType.Driving;
                         idx++;
                     }
                     else if (info2.Info.Name.EndsWith("_PF.MP4", true, CultureInfo.InvariantCulture))
                     {
-                        frontFileName = info2.Info.FullName;
-                        RecordingType = RecordingType.Parking;
-                        Info = info2;
+                        This.FileNameFront = info2.Info.FullName;
+                        This.RecordingType = RecordingType.Parking;
+                        This.Info = info2;
                         idx++;
                     }
                     else if (info2.Info.Name.EndsWith("_PR.MP4", true, CultureInfo.InvariantCulture))
                     {
-                        rearFileName = info2.Info.FullName;
-                        RecordingType = RecordingType.Parking;
+                        This.FileNameBack = info2.Info.FullName;
+                        This.RecordingType = RecordingType.Parking;
                         idx++;
                     }
                     else if (info2.Info.Name.EndsWith("_PI.MP4", true, CultureInfo.InvariantCulture))
                     {
-                        insideFileName = info2.Info.FullName;
-                        RecordingType = RecordingType.Parking;
+                        This.FileNameInside = info2.Info.FullName;
+                        This.RecordingType = RecordingType.Parking;
                         idx++;
                     }
 
-                    IsProtected = info2.Info.IsReadOnly;
+                    This.IsProtected = info2.Info.IsReadOnly;
                 }
             }
-            if (Info == null)
-                Info = info1;
+            if (This.Info == null)
+                This.Info = info1;
 
-            return  !string.IsNullOrWhiteSpace(frontFileName) || 
-                    !string.IsNullOrWhiteSpace(rearFileName) || 
-                    !string.IsNullOrWhiteSpace(insideFileName);
+            return  !string.IsNullOrWhiteSpace(This.FileNameFront) || 
+                    !string.IsNullOrWhiteSpace(This.FileNameBack) || 
+                    !string.IsNullOrWhiteSpace(This.FileNameInside);
+        }
+
+        private static  bool FromTeslaFileName(List<FileInfoWithDateFromFileName> allFiles, ref int idx, DashCamFileInfo This)
+        {
+            This.IsProtected = false;
+
+            int start = idx; int end = Math.Min(idx + 4, allFiles.Count);
+            for (int i = start; i < end; i++)
+            {
+                FileInfoWithDateFromFileName info2 = allFiles[i];
+
+                if (info2.Info.Name.EndsWith(FileInfoWithDateFromFileName.TeslaSuffix[1]+".MP4", true, CultureInfo.InvariantCulture))
+                {
+                    This.FileNameFront = info2.Info.FullName;
+                    This.RecordingType = RecordingType.Driving;
+                    This.Info = info2;
+                    idx++;
+                }
+                else if (info2.Info.Name.EndsWith(FileInfoWithDateFromFileName.TeslaSuffix[0] + ".MP4", true, CultureInfo.InvariantCulture))
+                {
+                    This.FileNameBack = info2.Info.FullName;
+                    This.RecordingType = RecordingType.Driving;
+                    idx++;
+                }
+                else if (info2.Info.Name.EndsWith(FileInfoWithDateFromFileName.TeslaSuffix[2] + ".MP4", true, CultureInfo.InvariantCulture))
+                {
+                    This.FileNameLeft = info2.Info.FullName;
+                    This.RecordingType = RecordingType.Driving;
+                    idx++;
+                }
+                else if (info2.Info.Name.EndsWith(FileInfoWithDateFromFileName.TeslaSuffix[3] + ".MP4", true, CultureInfo.InvariantCulture))
+                {
+                    This.FileNameRight = info2.Info.FullName;
+                    This.RecordingType = RecordingType.Driving;
+                    idx++;
+                }
+            }
+
+            return  !string.IsNullOrWhiteSpace(This.FileNameFront) ||
+                    !string.IsNullOrWhiteSpace(This.FileNameBack) ||
+                    !string.IsNullOrWhiteSpace(This.FileNameLeft) ||
+                    !string.IsNullOrWhiteSpace(This.FileNameRight);
         }
 
         private DateTime FromDuDuBellFileName(string fileName)
