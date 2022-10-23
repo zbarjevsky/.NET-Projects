@@ -111,8 +111,9 @@ namespace DashCamGPSView.Tools
         public PlayerControlSettings GpsInfo { get; set; } = new PlayerControlSettings();
 
         public PlayerControlSettings PlayerF { get; set; } = new PlayerControlSettings();
-        public PlayerControlSettings PlayerI { get; set; } = new PlayerControlSettings();
-        public PlayerControlSettings PlayerR { get; set; } = new PlayerControlSettings();
+        public PlayerControlSettings PlayerB { get; set; } = new PlayerControlSettings();
+        public PlayerControlSettings PlayerL { get; set; } = new PlayerControlSettings();
+        public PlayerControlSettings PlayerRi { get; set; } = new PlayerControlSettings();
 
         private void CopyFrom(AppConfig settings)
         {
@@ -128,8 +129,9 @@ namespace DashCamGPSView.Tools
             GpsInfo.CopyFrom(settings.GpsInfo);
 
             PlayerF.CopyFrom(settings.PlayerF);
-            PlayerI.CopyFrom(settings.PlayerI);
-            PlayerR.CopyFrom(settings.PlayerR);
+            PlayerB.CopyFrom(settings.PlayerB);
+            PlayerL.CopyFrom(settings.PlayerL);
+            PlayerRi.CopyFrom(settings.PlayerRi);
         }
 
         public AppConfig()

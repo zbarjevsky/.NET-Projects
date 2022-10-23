@@ -447,6 +447,10 @@ namespace DashCamGPSView.Controls
                 return true;
             if (string.Compare(fileName, _dashCamFileInfo.FileNameInside, true) == 0)
                 return true;
+            if (string.Compare(fileName, _dashCamFileInfo.FileNameLeft, true) == 0)
+                return true;
+            if (string.Compare(fileName, _dashCamFileInfo.FileNameRight, true) == 0)
+                return true;
 
             return false;
         }

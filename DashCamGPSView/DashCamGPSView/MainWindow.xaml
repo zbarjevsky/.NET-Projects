@@ -45,36 +45,44 @@
 
         <Grid x:Name="_gridPlayers" Grid.Row="1" Grid.Column="0" >
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*" x:Name="columnPlayerR"/>
+                <ColumnDefinition Width="*" x:Name="columnPlayerLeft"/>
                 <ColumnDefinition Width="5"/>
-                <ColumnDefinition Width="*" x:Name="columnPlayerI"/>
+                <ColumnDefinition Width="2*" x:Name="columnPlayerBack"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*" x:Name="columnPlayerRight"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="3*" x:Name="rowPlayerR" />
+                <RowDefinition Height="3*" x:Name="rowPlayerBack" />
                 <RowDefinition Height="5" />
-                <RowDefinition Height="5*" x:Name="rowPlayerF" />
+                <RowDefinition Height="5*" x:Name="rowPlayerFront" />
                 <RowDefinition Height="96" MaxHeight="96" MinHeight="96"/>
             </Grid.RowDefinitions>
-            
-            <Border x:Name="borderPlayerR" Grid.Row="0" BorderThickness="2" BorderBrush="Gray" >
-                <controls:VideoPlayerControl x:Name="playerR" Title="Rear View" />
+
+            <Border x:Name="borderPlayerLeft" Grid.Row="0" Grid.Column="0" BorderThickness="2" BorderBrush="Gray" >
+                <controls:VideoPlayerControl x:Name="playerLeft" Title="Left View" />
+            </Border>
+
+            <GridSplitter x:Name="_splitterLeft" Grid.Column="1" HorizontalAlignment="Stretch" />
+
+            <Border x:Name="borderPlayerBack" Grid.Row="0" Grid.Column="2" BorderThickness="2" BorderBrush="Gray" >
+                <controls:VideoPlayerControl x:Name="playerBack" Title="Rear View" />
+            </Border>
+
+            <GridSplitter x:Name="_splitterRight" Grid.Column="3" HorizontalAlignment="Stretch" />
+
+            <Border x:Name="borderPlayerRight" Grid.Row="0" Grid.Column="4" BorderThickness="2" BorderBrush="Gray" >
+                <controls:VideoPlayerControl x:Name="playerRight" Title="Inside View" />
             </Border>
             
-            <GridSplitter x:Name="_splitterRear" Grid.Column="1" HorizontalAlignment="Stretch" />
-            
-            <Border x:Name="borderPlayerI" Grid.Row="0" Grid.Column="2" BorderThickness="2" BorderBrush="Gray" >
-                <controls:VideoPlayerControl x:Name="playerI" Title="Inside View" />
-            </Border>
-            
-            <GridSplitter x:Name="_splitterMain" Grid.Row="1" Grid.ColumnSpan="3"
+            <GridSplitter x:Name="_splitterMain" Grid.Row="1" Grid.ColumnSpan="5"
                       HorizontalAlignment="Stretch"
                       DragCompleted="GridSplitter1_DragCompleted"/>
             
-            <Border x:Name="borderPlayerF" Grid.Row="2" Grid.ColumnSpan="3" BorderThickness="2" BorderBrush="Gray">
-                <controls:VideoPlayerControl x:Name="playerF" Title="Front View" />
+            <Border x:Name="borderPlayerF" Grid.Row="2" Grid.ColumnSpan="5" BorderThickness="2" BorderBrush="Gray">
+                <controls:VideoPlayerControl x:Name="playerFront" Title="Front View" />
             </Border>
 
-            <Grid x:Name="_gridControls" Grid.Row="3" Grid.ColumnSpan="3">
+            <Grid x:Name="_gridControls" Grid.Row="3" Grid.ColumnSpan="5">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
                     <RowDefinition/>
@@ -133,12 +141,12 @@
                     ExternalPlayer="{Binding MainPlayer, RelativeSource={RelativeSource FindAncestor, AncestorType=Window}}" />
             </Grid>
 
-            <speedGauge:Gauge180UserControl x:Name="speedGauge" Grid.RowSpan="3" Grid.ColumnSpan="3"
+            <speedGauge:Gauge180UserControl x:Name="speedGauge" Grid.RowSpan="3" Grid.ColumnSpan="5"
                  Width="180" Height="100" MaxSpeed="140" SpeedColor="Gold"
                  HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="40,0,40,20"/>
 
             <controls:CompassUserControl x:Name="compass" Direction="10" 
-                 Grid.RowSpan="3" Grid.ColumnSpan="3"
+                 Grid.RowSpan="3" Grid.ColumnSpan="5"
                  Width="280" Height="150" 
                  HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="40,0,40,20"/>
         </Grid>

@@ -52,8 +52,9 @@ namespace DashCamGPSView
 
             Volume = AppConfig.PlayerF.SoundVolume;
 
-            playerR.IsFlipHorizontally = true;
-            playerI.IsFlipHorizontally = true;
+            playerLeft.IsFlipHorizontally = true;
+            playerBack.IsFlipHorizontally = true;
+            playerRight.IsFlipHorizontally = true;
 
             treeGroups.TreeItemDoubleClickAction = (video) =>
             {
@@ -76,33 +77,40 @@ namespace DashCamGPSView
             };
 
             maxScreen.CloseAction = (position, state, volume) => CloseMaximizedPlayer(position, state, volume);
-            playerF.MaximizeAction = () => MaximizePlayer(playerF);
-            playerR.MaximizeAction = () => MaximizePlayer(playerR);
-            playerI.MaximizeAction = () => MaximizePlayer(playerI);
+            playerFront.MaximizeAction = () => MaximizePlayer(playerFront);
+            playerBack.MaximizeAction = () => MaximizePlayer(playerBack);
+            playerLeft.MaximizeAction = () => MaximizePlayer(playerLeft);
+            playerRight.MaximizeAction = () => MaximizePlayer(playerRight);
 
-            playerF.VideoStartedAction = (player) => OnVideoStarted(player, AppConfig.PlayerF);
-            playerR.VideoStartedAction = (player) => OnVideoStarted(player, AppConfig.PlayerR);
-            playerI.VideoStartedAction = (player) => OnVideoStarted(player, AppConfig.PlayerI);
+            playerFront.VideoStartedAction = (player) => OnVideoStarted(player, AppConfig.PlayerF);
+            playerBack.VideoStartedAction = (player) => OnVideoStarted(player, AppConfig.PlayerB);
+            playerLeft.VideoStartedAction = (player) => OnVideoStarted(player, AppConfig.PlayerL);
+            playerRight.VideoStartedAction = (player) => OnVideoStarted(player, AppConfig.PlayerRi);
 
-            playerF.VideoEnded = (player) => VideoEndedPostAction(player, AppConfig.PlayerF);
-            playerR.VideoEnded = (player) => VideoEndedPostAction(player, AppConfig.PlayerR);
-            playerI.VideoEnded = (player) => VideoEndedPostAction(player, AppConfig.PlayerI);
+            playerFront.VideoEnded = (player) => VideoEndedPostAction(player, AppConfig.PlayerF);
+            playerBack.VideoEnded = (player) => VideoEndedPostAction(player, AppConfig.PlayerB);
+            playerLeft.VideoEnded = (player) => VideoEndedPostAction(player, AppConfig.PlayerL);
+            playerRight.VideoEnded = (player) => VideoEndedPostAction(player, AppConfig.PlayerRi);
 
-            playerF.LeftButtonClick = TogglePlayPauseState;
-            playerR.LeftButtonClick = TogglePlayPauseState;
-            playerI.LeftButtonClick = TogglePlayPauseState;
+            playerFront.LeftButtonClick = TogglePlayPauseState;
+            playerBack.LeftButtonClick = TogglePlayPauseState;
+            playerLeft.LeftButtonClick = TogglePlayPauseState;
+            playerRight.LeftButtonClick = TogglePlayPauseState;
 
-            playerF.LeftButtonDoubleClick = () => MaximizePlayer(playerF);
-            playerR.LeftButtonDoubleClick = () => MaximizePlayer(playerR);
-            playerI.LeftButtonDoubleClick = () => MaximizePlayer(playerI);
+            playerFront.LeftButtonDoubleClick = () => MaximizePlayer(playerFront);
+            playerBack.LeftButtonDoubleClick = () => MaximizePlayer(playerBack);
+            playerLeft.LeftButtonDoubleClick = () => MaximizePlayer(playerLeft);
+            playerRight.LeftButtonDoubleClick = () => MaximizePlayer(playerRight);
 
-            playerF.VideoFailed = (e, player) => VideoFailed(e, player);
-            playerR.VideoFailed = (e, player) => VideoFailed(e, player);
-            playerI.VideoFailed = (e, player) => VideoFailed(e, player);
+            playerFront.VideoFailed = (e, player) => VideoFailed(e, player);
+            playerBack.VideoFailed = (e, player) => VideoFailed(e, player);
+            playerLeft.VideoFailed = (e, player) => VideoFailed(e, player);
+            playerRight.VideoFailed = (e, player) => VideoFailed(e, player);
 
-            playerF.PropertyChanged += Player_PropertyChanged; //delegate property changes from player
-            playerR.PropertyChanged += Player_PropertyChanged;
-            playerI.PropertyChanged += Player_PropertyChanged;
+            playerFront.PropertyChanged += Player_PropertyChanged; //delegate property changes from player
+            playerBack.PropertyChanged += Player_PropertyChanged;
+            playerLeft.PropertyChanged += Player_PropertyChanged;
+            playerRight.PropertyChanged += Player_PropertyChanged;
 
             statusBar.OnVideoPositionChanged = (position) => { UpdateGpsInfo(); };
         }
@@ -195,10 +203,16 @@ namespace DashCamGPSView
                 rowSpeedGraph.Height = AppConfig.SpeedChart.SplitterOffset.GetGridLength();
             //Main splitter
             if (AppConfig.PlayerF.SplitterOffset.Value != 0)
-                rowPlayerF.Height = AppConfig.PlayerF.SplitterOffset.GetGridLength();
+                rowPlayerFront.Height = AppConfig.PlayerF.SplitterOffset.GetGridLength();
             //Rear View
-            if (AppConfig.PlayerR.SplitterOffset.Value != 0)
-                columnPlayerR.Width = AppConfig.PlayerR.SplitterOffset.GetGridLength();
+            if (AppConfig.PlayerL.SplitterOffset.Value != 0)
+                columnPlayerLeft.Width = AppConfig.PlayerL.SplitterOffset.GetGridLength();
+            //Rear/Back View
+            if (AppConfig.PlayerB.SplitterOffset.Value != 0)
+                columnPlayerBack.Width = AppConfig.PlayerB.SplitterOffset.GetGridLength();
+            //Right/Inside View
+            if (AppConfig.PlayerRi.SplitterOffset.Value != 0)
+                columnPlayerRight.Width = AppConfig.PlayerRi.SplitterOffset.GetGridLength();
             //GPS Info
             if (AppConfig.GpsInfo.SplitterOffset.Value != 0)
                 columnGpsInfo.Width = AppConfig.GpsInfo.SplitterOffset.GetGridLength();
@@ -215,11 +229,13 @@ namespace DashCamGPSView
             //Speed Chart
             rowSpeedGraph.Height = new GridLength(1, GridUnitType.Star);
             //Main splitter
-            rowPlayerF.Height = new GridLength(5, GridUnitType.Star);
+            rowPlayerFront.Height = new GridLength(5, GridUnitType.Star);
+            //Left View
+            columnPlayerLeft.Width = new GridLength(1, GridUnitType.Star);
             //Rear View
-            columnPlayerR.Width = new GridLength(2, GridUnitType.Star);
+            columnPlayerBack.Width = new GridLength(2, GridUnitType.Star);
             //Rear View
-            columnPlayerI.Width = new GridLength(1, GridUnitType.Star);
+            columnPlayerRight.Width = new GridLength(1, GridUnitType.Star);
             //GPS Info
             columnGpsInfo.Width = new GridLength(520, GridUnitType.Pixel);
             //Map Info
@@ -228,9 +244,10 @@ namespace DashCamGPSView
 
         private void LoadPlayersState()
         {
-            AppConfig.PlayerF.RestoreTo(playerF, true);
-            AppConfig.PlayerI.RestoreTo(playerI, true);
-            AppConfig.PlayerR.RestoreTo(playerR, true);
+            AppConfig.PlayerF.RestoreTo(playerFront, true);
+            AppConfig.PlayerB.RestoreTo(playerBack, true);
+            AppConfig.PlayerRi.RestoreTo(playerRight, true);
+            AppConfig.PlayerL.RestoreTo(playerLeft, true);
         }
 
         private void SaveState()
@@ -247,9 +264,11 @@ namespace DashCamGPSView
             //Speed Chart
             AppConfig.SpeedChart.SplitterOffset.SetGridLength(rowSpeedGraph);
             //Main splitter
-            AppConfig.PlayerF.SplitterOffset.SetGridLength(rowPlayerF);
+            AppConfig.PlayerF.SplitterOffset.SetGridLength(rowPlayerFront);
             //Rear View
-            AppConfig.PlayerR.SplitterOffset.SetGridLength(columnPlayerR);
+            AppConfig.PlayerL.SplitterOffset.SetGridLength(columnPlayerLeft);
+            //Inside View
+            AppConfig.PlayerRi.SplitterOffset.SetGridLength(columnPlayerRight);
             //GPS Info
             AppConfig.GpsInfo.SplitterOffset.SetGridLength(columnGpsInfo);
             //Map Info
@@ -260,9 +279,10 @@ namespace DashCamGPSView
 
         private void SavePlayersState()
         {
-            AppConfig.PlayerF.CopyFrom(playerF);
-            AppConfig.PlayerI.CopyFrom(playerI);
-            AppConfig.PlayerR.CopyFrom(playerR);
+            AppConfig.PlayerF.CopyFrom(playerFront);
+            AppConfig.PlayerB.CopyFrom(playerBack);
+            AppConfig.PlayerL.CopyFrom(playerLeft);
+            AppConfig.PlayerRi.CopyFrom(playerRight);
         }
 
         private void Window_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -273,7 +293,7 @@ namespace DashCamGPSView
             }
             else
             {
-                ProcessKeyDown(statusBar.sliProgress, this.playerF, e, this.TogglePlayPauseState);
+                ProcessKeyDown(statusBar.sliProgress, this.playerFront, e, this.TogglePlayPauseState);
             }
         }
 
@@ -314,13 +334,15 @@ namespace DashCamGPSView
         { 
             get
             {
-                if (!string.IsNullOrWhiteSpace(playerF.FileName))
-                    return playerF;
-                if (!string.IsNullOrWhiteSpace(playerR.FileName))
-                    return playerR;
-                if (!string.IsNullOrWhiteSpace(playerI.FileName))
-                    return playerI;
-                return playerF;
+                if (!string.IsNullOrWhiteSpace(playerFront.FileName))
+                    return playerFront;
+                if (!string.IsNullOrWhiteSpace(playerBack.FileName))
+                    return playerBack;
+                if (!string.IsNullOrWhiteSpace(playerLeft.FileName))
+                    return playerLeft;
+                if (!string.IsNullOrWhiteSpace(playerRight.FileName))
+                    return playerRight;
+                return playerFront;
             }
         }
 
@@ -328,7 +350,10 @@ namespace DashCamGPSView
 
         public MediaState MediaState { get { return _player.MediaState; } }
         public string FileName { get { return _player.FileName; } }
-        public double SpeedRatio { get { return _player.SpeedRatio; } set { playerF.SpeedRatio = playerR.SpeedRatio = playerI.SpeedRatio = value; } }
+        public double SpeedRatio { 
+            get { return _player.SpeedRatio; } 
+            set { playerFront.SpeedRatio = playerBack.SpeedRatio = playerLeft.SpeedRatio = playerRight.SpeedRatio = value; } 
+        }
         
         public double Volume 
         { 
@@ -339,9 +364,10 @@ namespace DashCamGPSView
 
             set 
             {
-                playerF.Volume = 0;
-                playerR.Volume = 0;
-                playerI.Volume = 0;
+                playerFront.Volume = 0;
+                playerBack.Volume = 0;
+                playerLeft.Volume = 0;
+                playerRight.Volume = 0;
                 _player.Volume = value;
             }
         }
@@ -350,10 +376,11 @@ namespace DashCamGPSView
 
         public void PositionSet(TimeSpan position, bool notify) 
         {
-            playerF.PositionSet(position, notify);
-            playerR.PositionSet(position, notify);
-            playerI.PositionSet(position, notify);
-            
+            playerFront.PositionSet(position, notify);
+            playerBack.PositionSet(position, notify);
+            playerLeft.PositionSet(position, notify);
+            playerRight.PositionSet(position, notify);
+
             UpdateGpsInfo();
 
             OnPropertyChanged(nameof(Position));
@@ -364,36 +391,40 @@ namespace DashCamGPSView
 
         public void Play()
         {
-            playerF.Play();
-            playerR.Play();
-            playerI.Play();
+            playerFront.Play();
+            playerBack.Play();
+            playerLeft.Play();
+            playerRight.Play();
 
             OnPropertyChanged(nameof(MediaState));
         }
 
         public void Pause()
         {
-            playerF.Pause();
-            playerR.Pause();
-            playerI.Pause();
+            playerFront.Pause();
+            playerBack.Pause();
+            playerLeft.Pause();
+            playerRight.Pause();
 
             OnPropertyChanged(nameof(MediaState));
         }
 
         public void Stop()
         {
-            playerF.Stop();
-            playerR.Stop();
-            playerI.Stop();
+            playerFront.Stop();
+            playerBack.Stop();
+            playerLeft.Stop();
+            playerRight.Stop();
 
             OnPropertyChanged(nameof(MediaState));
         }
 
         private void ClosePayer()
         {
-            playerF.Close();
-            playerR.Close();
-            playerI.Close();
+            playerFront.Close();
+            playerBack.Close();
+            playerLeft.Close();
+            playerRight.Close();
 
             MainMap.SetRouteAndCar(null);
 
@@ -451,9 +482,20 @@ namespace DashCamGPSView
 
             double volume = Volume;
             
-            playerF.Open(_dashCamFileInfo.FileNameFront);
-            playerR.Open(_dashCamFileInfo.FileNameBack);
-            playerI.Open(_dashCamFileInfo.FileNameInside);
+            playerFront.Open(_dashCamFileInfo.FileNameFront);
+            playerBack.Open(_dashCamFileInfo.FileNameBack);
+            if(File.Exists(_dashCamFileInfo.FileNameLeft) && File.Exists(_dashCamFileInfo.FileNameRight))
+            {
+                playerLeft.Open(_dashCamFileInfo.FileNameLeft);
+                playerRight.Open(_dashCamFileInfo.FileNameRight);
+                playerRight.Title = "Right View";
+            }
+            else
+            {
+                playerLeft.Open(_dashCamFileInfo.FileNameInside);
+                playerRight.Open(_dashCamFileInfo.FileNameInside);
+                playerRight.Title = "Inside View";
+            }
 
             graphSpeedInfo.SetInfo(_dashCamFileInfo, this);
 
@@ -492,8 +534,8 @@ namespace DashCamGPSView
                 if (_bRearViewWasCollapsed)
                 {
                     _bRearViewWasCollapsed = false;
-                    GridLengthAnimation.AnimateRow(rowPlayerF, new GridLength(5, GridUnitType.Star));
-                    GridLengthAnimation.AnimateRow(rowPlayerR, new GridLength(3, GridUnitType.Star));
+                    GridLengthAnimation.AnimateRow(rowPlayerFront, new GridLength(5, GridUnitType.Star));
+                    GridLengthAnimation.AnimateRow(rowPlayerBack, new GridLength(3, GridUnitType.Star));
                 }
             }
             else
@@ -501,8 +543,8 @@ namespace DashCamGPSView
                 if(!_bRearViewWasCollapsed)
                 {
                     _bRearViewWasCollapsed = true;
-                    GridLengthAnimation.AnimateRow(rowPlayerF, new GridLength(5, GridUnitType.Star));
-                    GridLengthAnimation.AnimateRow(rowPlayerR, new GridLength(0));
+                    GridLengthAnimation.AnimateRow(rowPlayerFront, new GridLength(5, GridUnitType.Star));
+                    GridLengthAnimation.AnimateRow(rowPlayerBack, new GridLength(0));
                 }
             }
 
@@ -678,9 +720,10 @@ namespace DashCamGPSView
         {
             Volume = volume;
 
-            playerF.PositionSet(TimeSpan.FromSeconds(position), true);
-            playerR.PositionSet(TimeSpan.FromSeconds(position), true);
-            playerI.PositionSet(TimeSpan.FromSeconds(position), true);
+            playerFront.PositionSet(TimeSpan.FromSeconds(position), true);
+            playerBack.PositionSet(TimeSpan.FromSeconds(position), true);
+            playerLeft.PositionSet(TimeSpan.FromSeconds(position), true);
+            playerRight.PositionSet(TimeSpan.FromSeconds(position), true);
 
             //sliProgress.Value = position;
 
@@ -762,9 +805,10 @@ namespace DashCamGPSView
 
         private void GridSplitter1_DragCompleted(object sender, DragCompletedEventArgs e)
         {
-            playerF.ZoomState = playerF.ZoomState;
-            playerI.ZoomState = playerI.ZoomState;
-            playerR.ZoomState = playerR.ZoomState;
+            playerFront.ZoomState = playerFront.ZoomState;
+            playerBack.ZoomState = playerBack.ZoomState;
+            playerLeft.ZoomState = playerLeft.ZoomState;
+            playerRight.ZoomState = playerRight.ZoomState;
 
             SavePlayersState();
         }
@@ -799,9 +843,10 @@ namespace DashCamGPSView
             double position = statusBar.sliProgress.Value;
             AppConfig.PlayerF.SoundVolume = this.Volume;
 
-            playerF.RecreateMediaElement(playerF.IsFlipHorizontally);
-            playerR.RecreateMediaElement(playerR.IsFlipHorizontally);
-            playerI.RecreateMediaElement(playerI.IsFlipHorizontally);
+            playerFront.RecreateMediaElement(playerFront.IsFlipHorizontally);
+            playerBack.RecreateMediaElement(playerBack.IsFlipHorizontally);
+            playerLeft.RecreateMediaElement(playerLeft.IsFlipHorizontally);
+            playerRight.RecreateMediaElement(playerRight.IsFlipHorizontally);
 
             if (_dashCamFileInfo != null)
             {
@@ -824,7 +869,7 @@ namespace DashCamGPSView
             }
 
             MessageBox.Show("Media Failed: " + e.ErrorException.Message +
-                "\nMediaState: " + playerR.MediaState +
+                "\nMediaState: " + VideoPlayerControl.GetMediaState(player) +
                 "\nSource: " + player.Source +
                 "\n" + e.ErrorException,
                 "Media Failed", MessageBoxButton.OK, MessageBoxImage.Error);

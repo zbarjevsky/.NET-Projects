@@ -286,6 +286,8 @@ namespace DashCamGPSView.Tools
             FileNameFront = source.FileNameFront;
             FileNameBack = source.FileNameBack;
             FileNameInside = source.FileNameInside;
+            FileNameLeft = source.FileNameLeft;
+            FileNameRight = source.FileNameRight;
             FileNameNmea = source.FileNameNmea;
 
             FileDateStart = source.FileDateStart;

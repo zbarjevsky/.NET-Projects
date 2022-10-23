@@ -460,7 +460,7 @@ namespace DashCamGPSView.Controls
             element.RenderTransform = scaleTransform; // myTransformGroup;
         }
 
-        private MediaState GetMediaState(MediaElement myMedia)
+        public static MediaState GetMediaState(MediaElement myMedia)
         {
             FieldInfo hlp = typeof(MediaElement).GetField("_helper", BindingFlags.NonPublic | BindingFlags.Instance);
             object helperObject = hlp.GetValue(myMedia);
