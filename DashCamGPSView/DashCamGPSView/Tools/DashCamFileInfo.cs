@@ -73,6 +73,15 @@ namespace DashCamGPSView.Tools
                     Date = DateTime.ParseExact(date_time, "yyyyMMdd_HHmmss", CultureInfo.InvariantCulture);
                 }
             }
+            else
+            {
+                string strDate = fileName.Substring(0, fileName.Length - 4);
+                if(DateTime.TryParseExact(strDate, "yyyy_MMdd_HHmmss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateTime))
+                {
+                    Type = GpsFileFormat.Viofo;
+                    Date = dateTime;
+                }
+            }
         }
 
         private string CheckForViofoFileName(string fileName)
@@ -269,9 +278,13 @@ namespace DashCamGPSView.Tools
                     FileNameBack = Path.Combine(dirR, name + "R.MP4");
                     if (!File.Exists(FileNameBack))
                         FileNameBack = null;
-
-                    idx++;
                 }
+                else
+                {
+                    FileNameFront = fileName;
+                }
+
+                idx++;
             }
         }
 

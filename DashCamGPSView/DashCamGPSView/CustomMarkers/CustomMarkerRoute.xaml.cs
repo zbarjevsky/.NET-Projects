@@ -176,6 +176,8 @@ namespace DashCamGPSView.CustomMarkers
                 return;
 
             List<GpsPointData> cleanRoute = route.Where(p => p.Latitude != 0 && p.Longitude != 0).ToList();
+            if (cleanRoute.Count == 0)
+                return;
 
             figure.StartPoint = GetPoint(cleanRoute[0], map);
             for (int i = 0; i < cleanRoute.Count; i++)
