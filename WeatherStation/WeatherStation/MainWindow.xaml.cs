@@ -56,7 +56,8 @@ namespace MkZWeatherStation
         {
             BMDatabaseMap.INSTANCE.Load();
             WeatherDataManager.INSTANCE.Load();
-            WeatherDataManager.INSTANCE.Merge(BMDatabaseMap.INSTANCE.Databases[0]);
+            if(BMDatabaseMap.INSTANCE.Databases.Count > 0)
+                WeatherDataManager.INSTANCE.Merge(BMDatabaseMap.INSTANCE.Databases[0]);
             //add empty point at the end - to show disconnection
             WeatherDataManager.INSTANCE.weatherDB.RadiationDataPoints.Add(new RadiationDataPoint());
 
