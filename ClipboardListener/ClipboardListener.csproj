@@ -249,9 +249,6 @@
     <Compile Include="Zip\IZip.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Binaries\MZ.WPF.MessageBox.dll">
-      <Link>Depends\MZ.WPF.MessageBox.dll</Link>
-    </None>
     <Content Include="History32.ico" />
     <Content Include="Images\AdobeStockPhotos.ico" />
     <Content Include="Images\arrow-back_16.ico" />
@@ -332,6 +329,9 @@
       <Project>{768af4b8-5edd-4196-97ae-dbc1589dd426}</Project>
       <Name>Framework.MkZ</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Depends\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

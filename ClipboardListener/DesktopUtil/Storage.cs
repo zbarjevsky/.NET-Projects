@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.IsolatedStorage;
 using System.Linq;
+using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 
@@ -80,8 +81,9 @@ namespace ClipboardManager.DesktopUtil
 
         private string GetNewFileName()
         {
-            string userDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-            userDataFolder = Path.Combine(userDataFolder, "ClipboardMZ");
+            string userDataFolder = Path.GetDirectoryName(Application.LocalUserAppDataPath); //exclude version
+            //string userDataFolder = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+            userDataFolder = Path.Combine(userDataFolder, "DesktopIcons");
             Directory.CreateDirectory(userDataFolder);
             string fileName = string.Format("DesktopIcons_{0}.xml", DateTime.Now.ToString("yyyy_MM_dd-HH_mm_ss"));
             fileName = Path.Combine(userDataFolder, fileName);

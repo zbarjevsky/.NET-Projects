@@ -74,8 +74,8 @@ namespace ClipboardManager.Utils
             // 
             // columnHeader3
             // 
-            this.columnHeader3.Text = "Clipboard Histort";
-            this.columnHeader3.Width = 25;
+            this.columnHeader3.Text = "Clipboard History";
+            this.columnHeader3.Width = 164;
             // 
             // m_contextMenuStrip_ClipboardEntry
             // 
