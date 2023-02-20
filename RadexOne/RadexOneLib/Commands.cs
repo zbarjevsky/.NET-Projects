@@ -24,7 +24,7 @@ namespace MkZ.RadexOneLib
         public void AddCommand(RadexCommandBase cmd)
         {
             commands[cmd.cmdId] = cmd;
-            Log.i("?? " + cmd);
+            Log.i("AddCommand::?? " + cmd);
         }
 
         private byte [] responce = new byte[512];

@@ -147,7 +147,7 @@ namespace MkZ.RadexOneLib
                     }
                     catch (Exception err)
                     {
-                        Log.e("Open exception: " + err.Message);
+                        Log.e("RadexOneDeviceManager::ConnectToSelectedPort::exception: " + err.Message);
                     }
                 }
                 else

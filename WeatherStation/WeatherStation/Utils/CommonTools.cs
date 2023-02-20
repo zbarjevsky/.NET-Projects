@@ -58,7 +58,7 @@ namespace MkZ.WeatherStation.Utils
         public static void WriteInfoLine([CallerMemberName] string caller = "", [CallerFilePath] string file = "")
         {
             file = Path.GetFileName(file);
-            Log.i("=> Caller: " + caller + ", file: " + file);
+            Log.i("WriteInfoLine => Caller: " + caller + ", file: " + file);
         }
 
         public static bool AskForSucceded(string title)

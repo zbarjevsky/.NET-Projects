@@ -101,7 +101,7 @@ namespace BlueMaestro.Old.Bluetooth
             {
                 //Log.d("Utility", "Date parsing failed");
                 // TODO Auto-generated catch block
-                Log.e(e.ToString());
+                Log.e("convertNumberIntoDate: " + e.ToString());
             }
             return referenceDateString;
         }

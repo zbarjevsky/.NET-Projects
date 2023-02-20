@@ -169,7 +169,7 @@ namespace MkZ.Bluetooth
             }
             catch (Exception err)
             {
-                Log.e("ERROR: "+err);
+                Log.e("OnAdvertisementReceived::ERROR: " + err);
                 CommonTools.ErrorMessage(err.ToString(), "OnAdvertisementReceived");
             }
         }

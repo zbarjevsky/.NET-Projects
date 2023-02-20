@@ -343,7 +343,7 @@ namespace BlueMaestro.Old
             }
             catch (Exception err)
             {
-                Log.e("File: {0} Error: {1}", fileName, err);
+                Log.e("BMDatabase::Open - File: {0} Error: {1}", fileName, err);
                 return null;
             }
         }

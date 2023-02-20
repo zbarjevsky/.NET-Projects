@@ -197,7 +197,7 @@ namespace MkZ.RadexOneLib
         {
             StartConnectionThread(false);
             _radexPort.Close();
-            Log.i("Disconnected: " + message);
+            Log.i("RadexOneConnection::Disconnected: " + message);
             DisconnectEvent(message);
         }
     }

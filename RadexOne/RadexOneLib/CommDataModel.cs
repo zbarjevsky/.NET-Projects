@@ -333,7 +333,7 @@ namespace MkZ.RadexOneLib
 
         public override string ToString()
         {
-            return "-> " + cmdId.ToString("0000") + " -- ===>> -- " + CommDataModel.BytesToString(_data).Substring(0, Size*3);
+            return "ResponceBase -> " + cmdId.ToString("0000") + " ===>> " + CommDataModel.BytesToString(_data).Substring(0, Size*3);
         }
     }
 }
