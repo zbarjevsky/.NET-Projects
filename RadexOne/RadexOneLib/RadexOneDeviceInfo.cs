@@ -6,18 +6,20 @@ using System.Text;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 
-namespace RadexOneLib
+namespace MkZ.RadexOneLib
 {
-    public class RadexOneConfig : INotifyPropertyChanged
+    public class RadexOneDeviceInfo : INotifyPropertyChanged
     {
         [Category("1. Version"), ReadOnly(true)]
-        public RadexSerialNumber SerialNumber { get; set; }
+        public RadexOneSerialNumber SerialNumber { get; set; }
 
         [Category("2. Data"), ReadOnly(true)]
+        [Description("Accumulated DOSE in mRem")]
         public double Dose { get; set; }
 
         private bool _sound = false;
         [Category("3. Configuration")]
+        [Description("On/Off alarm sound")]
         public bool Sound
         {
             get { return _sound; }
@@ -26,6 +28,7 @@ namespace RadexOneLib
 
         private bool _vibrate = false;
         [Category("3. Configuration")]
+        [Description("On/Off alarm vibration")]
         public bool Vibrate
         {
             get { return _vibrate; }
@@ -34,6 +37,7 @@ namespace RadexOneLib
 
         private double _threshold = 0.6;
         [Category("3. Configuration")]
+        [Description("Alarm threshold")]
         public double Threshold
         {
             get { return _threshold; }
@@ -49,7 +53,7 @@ namespace RadexOneLib
 
         public void SetVersion(CommandGetVersion cmd)
         {
-            SerialNumber = cmd.SerialNumber;
+            SerialNumber = cmd.SerialNumber.Clone();
         }
 
         public string DoseToString()

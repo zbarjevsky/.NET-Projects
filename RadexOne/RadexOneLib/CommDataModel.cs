@@ -8,7 +8,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RadexOneLib
+namespace MkZ.RadexOneLib
 {
     public class CommDataModel
     {
@@ -336,83 +336,4 @@ namespace RadexOneLib
             return "-> " + cmdId.ToString("0000") + " -- ===>> -- " + CommDataModel.BytesToString(_data).Substring(0, Size*3);
         }
     }
-
-
-    public class RadexSerialNumber
-    {
-        public uint year { get; set; }
-        public uint month { get; set; }
-        public uint day { get; set; }
-
-        public uint verMajor { get; set; }
-        public uint verMinor { get; set; }
-
-        public uint snPart1 { get; set; }
-        public uint snPart2 { get; set; }
-
-        public static RadexSerialNumber ParseResponse(ResponceBase responce)
-        {
-            RadexSerialNumber sn = new RadexSerialNumber()
-            {
-                year = responce.GetUInt16(28),
-                month = responce.GetUInt8(30),
-                day = responce.GetUInt8(31),
-
-                verMajor = responce.GetUInt8(32),
-                verMinor = responce.GetUInt8(33),
-
-                snPart1 = responce.GetUInt16(34),
-                snPart2 = responce.GetUInt32(24)
-            };
-            return sn;
-        }
-
-        public static bool operator !=(RadexSerialNumber sn1, RadexSerialNumber sn2)
-        {
-            return !(sn1 == sn2);
-        }
-
-        public static bool operator ==(RadexSerialNumber sn1, RadexSerialNumber sn2)
-        {
-            if (IsNull(sn1) && IsNull(sn2))
-                return true;
-            if (IsNull(sn1) || IsNull(sn2))
-                return false;
-
-            return sn1.Equals(sn2);
-        }
-
-        public override string ToString()
-        {
-            string date = string.Format("{0:D2}{1:D2}{2:D2}", day, month, year);
-            return string.Format("S/N {0}-{1:D4}-{2:D6}  v. {3}.{4}", date, snPart1, snPart2, verMajor, verMinor);
-        }
-
-        public override bool Equals(object obj)
-        {
-            RadexSerialNumber sn2 = obj as RadexSerialNumber;
-            if (IsNull(sn2))
-                return false;
-
-            return
-                year     == sn2.year     &&
-                month    == sn2.month    &&
-                day      == sn2.day      &&
-                verMajor == sn2.verMajor &&
-                verMinor == sn2.verMinor &&
-                snPart1  == sn2.snPart1  &&
-                snPart2  == sn2.snPart2;
-        }
-
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
-        private static bool IsNull(object obj)
-        {
-            return (obj == null);
-        }
-    }
-
 }

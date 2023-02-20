@@ -15,12 +15,11 @@ using MkZ.WeatherStation.Utils;
 using MkZ.WPF.PropertyGrid;
 using MkZ.BlueMaestroLib;
 using MkZ.Bluetooth.Sample;
-using MkZ.Weather.RadexOne;
-using MkZ.RadexOne;
 using MkZ.Weather;
 using MkZ.Physics;
+using MkZ.RadexOneLib;
 
-namespace MkZWeatherStation
+namespace MkZ.WeatherStation
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -54,36 +53,41 @@ namespace MkZWeatherStation
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            BMDatabaseMap.INSTANCE.Load();
-            WeatherDataManager.INSTANCE.Load();
-            if(BMDatabaseMap.INSTANCE.Databases.Count > 0)
-                WeatherDataManager.INSTANCE.Merge(BMDatabaseMap.INSTANCE.Databases[0]);
+            WeatherDataManager.INSTANCE.Load(); //all DBs
+
+            //if (BMDatabaseMap.INSTANCE.Databases.Count > 0)
+            //    WeatherDataManager.INSTANCE.Merge(BMDatabaseMap.INSTANCE.Databases[0]);
+            //else if (WeatherDataManager.INSTANCE.weatherDB.BMRecords.Count > 0)
+            //    BMDatabaseMap.INSTANCE.Merge(WeatherDataManager.INSTANCE.weatherDB.BMRecords);
+
             //add empty point at the end - to show disconnection
-            WeatherDataManager.INSTANCE.weatherDB.RadiationDataPoints.Add(new RadiationDataPoint());
+            //WeatherDataManager.INSTANCE.weatherDB.RadiationDataPoints.Add(new RadiationDataPoint());
 
             UpdateDeviceList();
             UpdateChart();
 
             _btWatcher.OnBMDeviceMsgReceivedAction = (info) => { SetInfo(info); };
             _btWatcher.OnBMDeviceCheckAction = (elapsed) => { /*UpdateDeviceList();*/ };
-            _btWatcher.OnTimerSaveAction = (elapsed) => { BMDatabaseMap.INSTANCE.Save(); WeatherDataManager.INSTANCE.Save(); };
+            _btWatcher.OnTimerSaveAction = (elapsed) => { WeatherDataManager.INSTANCE.Save(); };
             _btWatcher.StartBluetoothSearch();
 
-            BMDatabaseMap.INSTANCE.OnRecordAddedAction = (device, record) => { UpdateAllAsync(device, record); };
+            WeatherDataManager.INSTANCE.OnBMRecordAddedAction = (device, record) => { UpdateAllAsync(device, record); };
 
             _radexDevice.Init();
+            _radexDevice.OnVerReceived = (dev) => { };
+            _radexDevice.OnCfgReceived = (dev) => { };
+            _radexDevice.OnDataReceived = (dev, pt) => { WeatherDataManager.INSTANCE.AddRadiationData(dev, pt); UpdateRadiationChart(); };
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
             _btWatcher.StopBluetoothSearch();
             _radexDevice.Dispose();
-
-            BMDatabaseMap.INSTANCE.Save();
-
+            
             //add empty point at the end - to show disconnection
-            WeatherDataManager.INSTANCE.weatherDB.RadiationDataPoints.Add(new RadiationDataPoint());
+
             WeatherDataManager.INSTANCE.Save();
+
         }
 
         private void _listDevices_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -107,8 +111,6 @@ namespace MkZWeatherStation
 
         public static void UpdateAllAsync(BluetoothDevice device, BMRecordCurrent record)
         {
-            WeatherDataManager.INSTANCE.weatherDB.BMRecords.Add(record);
-
             CommonTools.ExecuteOnUiThreadBeginInvoke(() =>
             {
                 MainWindow wnd = (Application.Current.MainWindow as MainWindow);
@@ -135,7 +137,7 @@ namespace MkZWeatherStation
         {
             CommonTools.ExecuteOnUiThreadInvoke(() => 
             { 
-                foreach (BMDatabase db in BMDatabaseMap.INSTANCE.Databases)
+                foreach (BMDatabase db in WeatherDataManager.INSTANCE.BMDatabaseMap.Databases)
                 {
                     UpdateOrAddBMDeviceRecordVM(db);
                 }
@@ -188,13 +190,15 @@ namespace MkZWeatherStation
 
         private void UpdateRadiationChart()
         {
-            List<RadiationDataPoint> points = _radexDevice.GetLog();
-            WeatherDataManager.INSTANCE.Merge(points);
+            if (WeatherDataManager.INSTANCE.RadexOneDatabaseMap.Databases.Count == 0)
+                return;
 
             double days = double.Parse(((ComboBoxItem)_cmbDays.SelectedItem).Tag.ToString());
             TimeSpan daysBack = TimeSpan.FromDays(days);
 
-            List<RadiationDataPoint> recordsIn = WeatherDataManager.INSTANCE.weatherDB.GetLastRecords(daysBack);
+            RadexOneDeviceInfo dev = WeatherDataManager.INSTANCE.RadexOneDatabaseMap.Databases[0].RadexOneDevice;
+            List<RadiationDataPoint> recordsIn = WeatherDataManager.INSTANCE.GetRadiationDataPoints(dev, daysBack);
+
             if(recordsIn == null || recordsIn.Count == 0)
             {
                 //_chart4?.Clea
@@ -314,11 +318,7 @@ namespace MkZWeatherStation
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             this.Cursor = Cursors.Wait;
-            foreach (BMDatabase db in BMDatabaseMap.INSTANCE.Databases)
-            {
-                db.SaveAs(db.GenerateFileName(), 1);
-            }
-            WeatherDataManager.INSTANCE.SaveAs(WeatherDataManager.GenerateFileName(), 1);
+            WeatherDataManager.INSTANCE.SaveAsBackup();
             this.Cursor = Cursors.Arrow;
         }
 
@@ -338,7 +338,7 @@ namespace MkZWeatherStation
             {
                 RestoreDirectory = true,
                 Filter = "All supported files|*.xml|All files (*.*)|*.*",
-                FileName = db.GenerateFileName()
+                FileName = db.GenerateFileName(WeatherDataManager.DataFolder)
                 //InitialDirectory = _openDirectory
             };
 
@@ -374,7 +374,7 @@ namespace MkZWeatherStation
                 {
                     BMDatabase db = BMDatabase.Open(fileNamesList[i]);
                     if (db != null)
-                        dbAll = BMDatabaseMap.INSTANCE.Merge(db);
+                        dbAll = WeatherDataManager.INSTANCE.BMDatabaseMap.Merge(db);
                     else
                         MessageBox.Show("Error open file: \n" + fileNamesList[i]);
                 }

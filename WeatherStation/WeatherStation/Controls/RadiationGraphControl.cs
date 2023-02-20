@@ -8,7 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
-using MkZ.RadexOne;
+
+
+using MkZ.RadexOneLib;
 
 namespace MkZ.WeatherStation.Controls
 {

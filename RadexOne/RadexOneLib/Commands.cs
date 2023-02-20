@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MkZ.Tools;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -6,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace RadexOneLib
+namespace MkZ.RadexOneLib
 {
     public class RadexCommands
     {
@@ -23,7 +24,7 @@ namespace RadexOneLib
         public void AddCommand(RadexCommandBase cmd)
         {
             commands[cmd.cmdId] = cmd;
-            Log.WriteLine("?? " + cmd);
+            Log.i("?? " + cmd);
         }
 
         private byte [] responce = new byte[512];
@@ -38,7 +39,7 @@ namespace RadexOneLib
                 ResponceBase r = new ResponceBase(responce);
                 if (!r.IsValid)
                 {
-                    Log.WriteLine("Error responce: "+r);
+                    Log.e("Error responce: "+r);
                     //Debug.Assert(r.IsValid, "Error in responce");
                     break;
                 }
@@ -48,7 +49,7 @@ namespace RadexOneLib
                     RadexCommandBase cmd = commands[r.cmdId];
                     offset += cmd.ResponseSizeExpected;
                     cmd.SetResponce(responce);
-                    Log.WriteLine(cmd.responce.ToString());
+                    Log.e(cmd.responce.ToString());
 
                     if (cmd is CommandGetData)
                     {
@@ -137,7 +138,7 @@ namespace RadexOneLib
             return cmdId.ToString("0000") + " --Version-- " + request.ToString();
         }
 
-        public RadexSerialNumber SerialNumber
+        public RadexOneSerialNumber SerialNumber
         {
             get
             {
@@ -154,7 +155,7 @@ namespace RadexOneLib
                 //uint sn3 = responce.GetUInt32(24);
 
                 //return string.Format("S/N {0}-{1:D4}-{2:D6}  v. {3}.{4}", sn1, sn2, sn3, verMajor, verMinor);
-                RadexSerialNumber sn = RadexSerialNumber.ParseResponse(responce);
+                RadexOneSerialNumber sn = RadexOneSerialNumber.ParseResponse(responce);
                 return sn;
             }
         }

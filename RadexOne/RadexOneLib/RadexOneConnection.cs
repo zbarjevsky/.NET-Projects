@@ -1,4 +1,6 @@
-﻿using System;
+﻿using MkZ.Tools;
+using MkZ.WPF;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO.Ports;
@@ -8,7 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace RadexOneLib
+namespace MkZ.RadexOneLib
 {
     public class RadexOneConnection
     {
@@ -149,7 +151,7 @@ namespace RadexOneLib
                             }
                             catch (Exception err)
                             {
-                                Log.WriteLine("Exception in StartConnectionThread: "+err.Message);
+                                Log.e("Exception in StartConnectionThread: "+err.Message);
                                 _cancel = true;
                                 break;
                             }
@@ -195,7 +197,7 @@ namespace RadexOneLib
         {
             StartConnectionThread(false);
             _radexPort.Close();
-            Log.WriteLine("Disconnected: " + message);
+            Log.i("Disconnected: " + message);
             DisconnectEvent(message);
         }
     }
@@ -231,39 +233,46 @@ namespace RadexOneLib
             return radex_names;
         }
 
-        private static string RadexPortInfo(int idx)
-        {
-            List<RadexComPortDesc> radexPorts = RadexPortInfos();
-            if (idx < radexPorts.Count)
-                return radexPorts[idx].Port;
-            return null;
-        }
+        //private static string RadexPortInfo(int idx)
+        //{
+        //    List<RadexComPortDesc> radexPorts = RadexPortInfos();
+        //    if (idx < radexPorts.Count)
+        //        return radexPorts[idx].Port;
+        //    return null;
+        //}
 
-        private static bool RadexPortExists(string comPort)
-        {
-            List<RadexComPortDesc> radexPorts = RadexPortInfos();
-            foreach (RadexComPortDesc radexPort in radexPorts)
-            {
-                if (radexPort.Port == comPort)
-                    return true;
-            }
-            return false;
-        }
+        //private static bool RadexPortExists(string comPort)
+        //{
+        //    List<RadexComPortDesc> radexPorts = RadexPortInfos();
+        //    foreach (RadexComPortDesc radexPort in radexPorts)
+        //    {
+        //        if (radexPort.Port == comPort)
+        //            return true;
+        //    }
+        //    return false;
+        //}
 
         private static List<string> PortNames(string name)
         {
             List<string> names = new List<string>();
 
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher(@"root\CIMV2", "SELECT * FROM Win32_PnPEntity");
-            var list = searcher.Get();
-            foreach (ManagementObject queryObj in list)
+            try
             {
-                object caption = queryObj["Caption"];
-                if(caption == null)
-                    continue;
-                names.Add(caption.ToString());
+                ManagementObjectSearcher searcher = new ManagementObjectSearcher(@"root\CIMV2", "SELECT * FROM Win32_PnPEntity");
+                var list = searcher.Get();
+                foreach (ManagementObject queryObj in list)
+                {
+                    object caption = queryObj["Caption"];
+                    if (caption == null)
+                        continue;
+                    names.Add(caption.ToString());
+                }
             }
-
+            catch (Exception ex)
+            {
+                string[] ports = SerialPort.GetPortNames();
+                Debug.WriteLine("PortNames: " + ex);
+            }
             return names.Where(n => n.Contains(name)).ToList();
         }
 
@@ -288,7 +297,7 @@ namespace RadexOneLib
                     //    throw new Exception("Device not connected: RADEX ONE");
 
                     //PortName = comPort;
-                    if (IsOpen)
+                    if (IsOpen || Port.IsOpen)
                     {
                         if (Port.PortName == comPortName)
                             return Port.PortName; //already open
@@ -302,6 +311,7 @@ namespace RadexOneLib
                     Port.StopBits = StopBits.One;
                     Port.Handshake = Handshake.None;
                     Port.Parity = Parity.None;
+                    Port.WriteTimeout = 100;
 
                     Port.Open();
 

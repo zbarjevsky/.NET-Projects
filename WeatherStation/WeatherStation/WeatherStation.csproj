@@ -90,8 +90,6 @@
     <Compile Include="Controls\RadiationGraphControl.designer.cs">
       <DependentUpon>RadiationGraphControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="RadexOne\RadexOneDeviceManager.cs" />
-    <Compile Include="RadexOne\RadiationLog.cs" />
     <Compile Include="Utils\BluetoothWatcher.cs" />
     <Compile Include="Controls\WeatherChartUserControl.cs">
       <SubType>UserControl</SubType>
@@ -108,7 +106,8 @@
     <Compile Include="BlueMaestro\BlueMaestro.Old\TextView.cs" />
     <Compile Include="BlueMaestro\BlueMaestro.Old\ViewGroup.cs" />
     <Compile Include="Utils\ListUtils.cs" />
-    <Compile Include="WeatherDB.cs" />
+    <Compile Include="OldCode\WeatherDB.cs" />
+    <Compile Include="WeatherDataManager.cs" />
     <Page Include="BlueMaestro\UX\BMDeviceRecordUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -173,6 +172,7 @@
     <Resource Include="Butterfly.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="RadexOne\" />
     <Folder Include="Styles\" />
   </ItemGroup>
   <ItemGroup>

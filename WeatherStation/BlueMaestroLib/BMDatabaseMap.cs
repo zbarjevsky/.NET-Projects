@@ -16,11 +16,7 @@ namespace MkZ.BlueMaestroLib
 
         private Dictionary<ulong, BMDatabase> _map { get; } = new Dictionary<ulong, BMDatabase>();
 
-
-        public static readonly BMDatabaseMap INSTANCE = new BMDatabaseMap();
-
-        //private constructor - to restrict instance
-        private BMDatabaseMap() { }
+        public BMDatabaseMap() { }
 
         public bool Contains(ulong address) { return _map.ContainsKey(address); }
         public List<BMDatabase> Databases { get { return _map.Values.ToList(); } }
@@ -73,10 +69,25 @@ namespace MkZ.BlueMaestroLib
             return _map[db.Device.Address];
         }
 
-        public void Load()
+        public void Merge(List<BMRecordCurrent> bMRecords, ulong address = 229243609899343)
+        {
+            if (bMRecords == null || bMRecords.Count == 0)
+                return;
+
+            BMDatabase db = new BMDatabase() { Device = new BluetoothDevice("unkn", address, "good") };
+            db.Records.AddRange(bMRecords);
+            Merge(db);
+        }
+
+        public void Clear()
+        {
+            _map.Clear();
+        }
+
+        public void Load(string dataFolder)
         {
             const string PATTERN = "BMDatabase_*_Main.xml";
-            List<string> files = new List<string>(Directory.GetFiles(BMDatabase.DataFolder, PATTERN));
+            List<string> files = new List<string>(Directory.GetFiles(dataFolder, PATTERN));
             files.Sort();
 
             foreach (string file in files)
@@ -87,11 +98,19 @@ namespace MkZ.BlueMaestroLib
             }
         }
 
-        public void Save()
+        public void Save(string dataFolder)
         {
             foreach (BMDatabase db in _map.Values)
             {
-                db.SaveMain();
+                db.SaveMain(dataFolder);
+            }
+        }
+
+        public void SaveAsBackup(string dataFolder)
+        {
+            foreach (BMDatabase db in _map.Values)
+            {
+                db.SaveAsBackup(dataFolder);
             }
         }
     }

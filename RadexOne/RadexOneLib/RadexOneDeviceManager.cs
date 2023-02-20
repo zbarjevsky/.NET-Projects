@@ -6,28 +6,25 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Win32;
-using MkZ.RadexOne;
+using MkZ.Tools;
 using MkZ.WPF;
-using RadexOneLib;
 
-namespace MkZ.Weather.RadexOne
+namespace MkZ.RadexOneLib
 {
     public class RadexOneDeviceManager : IDisposable
     {
         public const int CONNECTION_CHECK_TIMEOUT = 3000;
 
         private readonly RadexOneConnection _radexDevice = new RadexOneConnection();
-        private List<RadexComPortDesc> _radexPorts = new List<RadexComPortDesc>();
-        private readonly RadexOneConfig _radexConfig = new RadexOneConfig();
+        private List<RadexOneComPortFinder.PortInfo> _radexPorts = new List<RadexOneComPortFinder.PortInfo>();
+        private readonly RadexOneDeviceInfo _radexConfig = new RadexOneDeviceInfo();
         private Task _connectionCheckTask;
         private volatile bool _cancel = false;
 
-        private readonly RadiationLog _history = new RadiationLog();
-
-        public Action<RadiationDataPoint> OnDataReceived = (pt) => { };
-        public Action<string> OnDisconnect = (reason) => { };
-        public Action<RadexOneConfig> OnCfgReceived = (config) => { };
-        public Action<RadexSerialNumber> OnVerReceived = (serialNumber) => { };
+        public Action<RadexOneDeviceInfo, RadiationDataPoint> OnDataReceived = (dev, pt) => { };
+        public Action<RadexOneDeviceInfo, string> OnDisconnect = (dev, reason) => { };
+        public Action<RadexOneDeviceInfo> OnCfgReceived = (dev) => { };
+        public Action<RadexOneDeviceInfo> OnVerReceived = (dev) => { };
 
         public void Init()
         {
@@ -44,11 +41,9 @@ namespace MkZ.Weather.RadexOne
                     Threshold = 60 // (double)m_numMaxCPM.Value
                 };
 
-                AddPoint(pt);
-
                 WPFUtils.ExecuteOnUiThreadInvoke(() =>
                 {
-                    OnDataReceived(pt);
+                    OnDataReceived?.Invoke(_radexConfig, pt);
                 });
             };
 
@@ -57,7 +52,7 @@ namespace MkZ.Weather.RadexOne
                 WPFUtils.ExecuteOnUiThreadInvoke(() =>
                 {
                     _radexConfig.SetVersion(cmd);
-                    OnVerReceived?.Invoke(cmd.SerialNumber);
+                    OnVerReceived?.Invoke(_radexConfig);
                 });
             };
 
@@ -74,7 +69,7 @@ namespace MkZ.Weather.RadexOne
             {
                 WPFUtils.ExecuteOnUiThreadInvoke(() =>
                 {
-                    OnDisconnect?.Invoke(reason);
+                    OnDisconnect?.Invoke(_radexConfig, reason);
                 });
             };
 
@@ -86,11 +81,16 @@ namespace MkZ.Weather.RadexOne
                 {
                     try
                     {
-                        _radexPorts = RadexComPortDesc.RadexPortInfos();
+                        //_radexPorts = RadexComPortDesc.RadexPortInfos();
 
-                        bool autoConnect = true; // WPFUtils.ExecuteOnUiThreadInvoke(() => { return m_chkAutoConnect.Checked; });
-                        if (autoConnect)
-                            ConnectToSelectedPort(_radexPorts.FirstOrDefault());
+                        if (!_radexDevice.IsOpen)
+                        {
+                            _radexPorts = RadexOneComPortFinder.Find();
+
+                            bool autoConnect = true; // WPFUtils.ExecuteOnUiThreadInvoke(() => { return m_chkAutoConnect.Checked; });
+                            if (autoConnect)
+                                ConnectToSelectedPort(_radexPorts.FirstOrDefault());
+                        }
                     }
                     catch (Exception err)
                     {
@@ -115,52 +115,39 @@ namespace MkZ.Weather.RadexOne
             switch (e.Mode)
             {
                 case PowerModes.Resume:
-                    AddPoint(new RadiationDataPoint());// "Resume"));
+                    OnDataReceived?.Invoke(_radexConfig, new RadiationDataPoint());// "Resume"));
                     _radexDevice.Pause = false;
                     break;
                 case PowerModes.StatusChange:
                     break;
                 case PowerModes.Suspend:
                     _radexDevice.Pause = true;
-                    AddPoint(new RadiationDataPoint());// "Sleep"));
+                    OnDataReceived?.Invoke(_radexConfig, new RadiationDataPoint());// "Sleep"));
                     break;
                 default:
                     break;
             }
         }
 
-        public void AddPoint(RadiationDataPoint pt)
-        {
-            lock (_history)
-            {
-                _history.Log.Add(pt);
-                if (_history.Log.Count > 1024 * 1024) //max size 1M
-                    _history.Log.RemoveAt(0);
-            }
-        }
-
-        public List<RadiationDataPoint> GetLog()
-        {
-            return _history.Log;
-        }
-
-        private void ConnectToSelectedPort(RadexComPortDesc selectedDevice)
+        private void ConnectToSelectedPort(RadexOneComPortFinder.PortInfo selectedDevice)
         {
             WPFUtils.ExecuteOnUiThreadInvoke(() =>
             {
                 if (selectedDevice != null)
                 {
-                    if (_radexDevice.IsOpen && selectedDevice.Port == _radexDevice.PortName)
+                    if (_radexDevice.IsOpen && selectedDevice.PortName == _radexDevice.PortName)
                         return;
+
+                    _radexConfig.SerialNumber = selectedDevice.SerialNumber.Clone();
 
                     try
                     {
                         //connect to port and start sampling thread
-                        _radexDevice.Open(selectedDevice.Port);
+                        _radexDevice.Open(selectedDevice.PortName);
                     }
                     catch (Exception err)
                     {
-                        Log.WriteLine("Open exception: " + err.Message);
+                        Log.e("Open exception: " + err.Message);
                     }
                 }
                 else

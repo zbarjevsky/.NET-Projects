@@ -11,7 +11,7 @@ using System.Windows.Forms;
 using RadexOneDemo.Docs;
 using System.Threading;
 using System.Runtime.InteropServices;
-using RadexOneLib;
+using MkZ.RadexOneLib;
 
 namespace RadexOneDemo
 {
@@ -25,7 +25,7 @@ namespace RadexOneDemo
 
         private readonly RadexOneConnection _radexDevice = new RadexOneConnection();
         private List<RadexComPortDesc> _radexPorts = new List<RadexComPortDesc>();
-        private readonly RadexOneConfig _radexConfig = new RadexOneConfig();
+        private readonly RadexOneDeviceInfo _radexConfig = new RadexOneDeviceInfo();
 
         private readonly Image _radiationOn, _radiationOff, _radiationWarning, _connectUsb;
         private readonly PlaySound _player;

@@ -1,5 +1,4 @@
-﻿using RadexOneLib;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -8,6 +7,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+
+
+using MkZ.RadexOneLib;
 
 namespace RadexOneDemo
 {
@@ -21,13 +23,13 @@ namespace RadexOneDemo
         public string Dose { set { m_lblDose.Text = value; } get { return m_lblDose.Text; } }
         public string SerialNumber { get { return m_lblSN.Text; } set { m_lblSN.Text = value; } }
 
-        public static DialogResult ShowConfig(Form parent, RadexOneConnection radexDevice, RadexOneConfig radexConfig)
+        public static DialogResult ShowConfig(Form parent, RadexOneConnection radexDevice, RadexOneDeviceInfo radexConfig)
         {
             FormRadexOneConfig frm = new FormRadexOneConfig(radexDevice, radexConfig);
             return frm.ShowDialog(parent);
         }
 
-        public FormRadexOneConfig(RadexOneConnection radexDevice, RadexOneConfig radexConfig)
+        public FormRadexOneConfig(RadexOneConnection radexDevice, RadexOneDeviceInfo radexConfig)
         {
             _radexDevice = radexDevice;
 

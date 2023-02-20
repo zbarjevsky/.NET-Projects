@@ -7,7 +7,7 @@
     <ProjectGuid>{D69E1289-09E0-4473-A3F3-C00AE0557FB9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>RadexOneLib</RootNamespace>
+    <RootNamespace>MkZ.RadexOneLib</RootNamespace>
     <AssemblyName>RadexOneLib</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -41,15 +41,28 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Log.cs" />
     <Compile Include="RadexOneComm.cs" />
     <Compile Include="Commands.cs" />
     <Compile Include="CommDataModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="RadexOneConfig.cs" />
+    <Compile Include="RadexOneComPortFinder.cs" />
+    <Compile Include="RadexOneDeviceLog.cs" />
+    <Compile Include="RadexOneDatabaseMap.cs" />
+    <Compile Include="RadexOneDeviceInfo.cs" />
     <Compile Include="RadexOneConnection.cs" />
+    <Compile Include="RadexOneDeviceManager.cs" />
+    <Compile Include="RadexOneDeviceSettings.cs" />
+    <Compile Include="RadexOneSerialNumber.cs" />
+    <Compile Include="RadiationDataPoint.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Framework.MkZ\Framework.MkZ\Framework.MkZ.csproj">
+      <Project>{768af4b8-5edd-4196-97ae-dbc1589dd426}</Project>
+      <Name>Framework.MkZ</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

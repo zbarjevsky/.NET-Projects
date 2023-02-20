@@ -14,7 +14,6 @@ using System.Windows.Forms.DataVisualization.Charting;
 using MkZ.BlueMaestroLib;
 using MkZ.Bluetooth;
 using MkZ.Physics;
-using MkZ.RadexOne;
 
 namespace MkZ.WeatherStation.Controls
 {

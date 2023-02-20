@@ -25,19 +25,19 @@ namespace MkZ.BlueMaestroLib
         //[XmlIgnore]
         //public UnitsDescriptor Units { get; set; } = new UnitsDescriptor();
 
-        public static string DataFolder
-        {
-            get
-            {
-                return Log.DataFolder;
-            }
-        }
+        //public static string DataFolder
+        //{
+        //    get
+        //    {
+        //        return Log.DataFolder;
+        //    }
+        //}
 
-        public string GenerateFileName()
+        public string GenerateFileName(string dataFolder)
         {
             string date = DateTime.Now.ToString("yyyy_MM_dd-HH_mm_ss");
             string fileName = string.Format("BMDatabase_{0}_{1}_{2}.xml", Device.Name, Device.Address, date);
-            fileName = Path.Combine(DataFolder, fileName);
+            fileName = Path.Combine(dataFolder, fileName);
             return fileName;
         }
 
@@ -303,6 +303,11 @@ namespace MkZ.BlueMaestroLib
         //    return rec;
         //}
 
+        public void SaveAsBackup(string dataFolder)
+        {
+            SaveAs(GenerateFileName(dataFolder), 1);
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -317,10 +322,10 @@ namespace MkZ.BlueMaestroLib
             Save(fileName, db);
         }
 
-        public void SaveMain()
+        public void SaveMain(string dataFolder)
         {
             string fileName = string.Format("BMDatabase_{0}_{1}_Main.xml", Device.Name, Device.Address);
-            fileName = Path.Combine(DataFolder, fileName);
+            fileName = Path.Combine(dataFolder, fileName);
 
             const double DILLUTE_INTERVAL = 300.0;
             SaveAs(fileName, DILLUTE_INTERVAL);

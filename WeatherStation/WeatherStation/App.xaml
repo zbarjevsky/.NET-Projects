@@ -1,7 +1,7 @@
-﻿<Application x:Class="MkZWeatherStation.App"
+﻿<Application x:Class="MkZ.WeatherStation.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:MkZWeatherStation"
+             xmlns:local="clr-namespace:MkZ.WeatherStation"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
          

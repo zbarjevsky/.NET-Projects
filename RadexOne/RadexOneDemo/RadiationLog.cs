@@ -1,4 +1,4 @@
-﻿using RadexOneLib;
+﻿using MkZ.RadexOneLib;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,7 +26,7 @@ namespace RadexOneDemo
         private const string FILE_NAME = "C:\\Temp\\Radex\\RadiationLog.xml";
         private const string FILE_NAME_OLD = "C:\\Temp\\Radex\\RadiationLog_{0}.xml";
 
-        public RadexSerialNumber SerialNumber { get; set; }
+        public RadexOneSerialNumber SerialNumber { get; set; }
         public List<RadiationDataPoint> Log = new List<RadiationDataPoint>(1024);
 
         public RadiationLog()
@@ -36,7 +36,7 @@ namespace RadexOneDemo
                 Directory.CreateDirectory(dir);
         }
 
-        public void UpdateSerialNumber(RadexSerialNumber sn)
+        public void UpdateSerialNumber(RadexOneSerialNumber sn)
         {
             if (SerialNumber == null)
             {

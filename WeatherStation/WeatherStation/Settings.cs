@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using MkZ.Windows;
 
-namespace MkZWeatherStation
+namespace MkZ.WeatherStation
 {
     public class Settings : NotifyPropertyChangedImpl
     {

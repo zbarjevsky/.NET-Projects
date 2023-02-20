@@ -16,6 +16,7 @@ using MkZ.Tools;
 using MkZ.WPF.MessageBox;
 using MkZ.BlueMaestroLib;
 using MkZ.WeatherStation.Utils;
+using MkZ.Weather;
 
 namespace MkZ.Bluetooth
 {
@@ -219,22 +220,22 @@ namespace MkZ.Bluetooth
                             if (_current == null)
                                 _current = new BMRecordCurrent(dev, e.RawSignalStrengthInDBm, date, null);
 
-                            if (section.Buffer.Length == 14)
+                            if (section.Buffer.Length == 14) //current
                             {
-                                if (BMDatabaseMap.INSTANCE.Contains(dev.Address))
+                                if (WeatherDataManager.INSTANCE.BMDatabaseMap.Contains(dev.Address))
                                 {
-                                    int count = BMDatabaseMap.INSTANCE[dev.Address].Records.Count;
+                                    int count = WeatherDataManager.INSTANCE.BMDatabaseMap[dev.Address].Records.Count;
                                     if (count > 0)
                                     {
                                         //time between readings
-                                        TimeSpan tsElapsed = DateTime.Now - BMDatabaseMap.INSTANCE[dev.Address].Records.Last().Date;
+                                        TimeSpan tsElapsed = DateTime.Now - WeatherDataManager.INSTANCE.BMDatabaseMap[dev.Address].Records.Last().Date;
                                         _lastCurrent = ", Curr Updated: " + tsElapsed.TotalSeconds.ToString("0s");
                                     }
                                 }
                                     
-                                _current = BMDatabaseMap.INSTANCE.AddRecord(dev, e.RawSignalStrengthInDBm, date, section.Buffer);
+                                _current = WeatherDataManager.INSTANCE.AddMeteorologicalData(dev, e.RawSignalStrengthInDBm, date, section.Buffer);
                             }
-                            else if (section.Buffer.Length == 25)
+                            else if (section.Buffer.Length == 25) //24hr averages
                             {
                                 //just update time
                                 TimeSpan tsElapsed = DateTime.Now - _averages.Date;
@@ -248,9 +249,9 @@ namespace MkZ.Bluetooth
                             }
 
                             string recordsCount = "";
-                            if (BMDatabaseMap.INSTANCE.Contains(dev.Address))
+                            if (WeatherDataManager.INSTANCE.BMDatabaseMap.Contains(dev.Address))
                             {
-                                int count = BMDatabaseMap.INSTANCE[dev.Address].Records.Count;
+                                int count = WeatherDataManager.INSTANCE.BMDatabaseMap[dev.Address].Records.Count;
                                 recordsCount = "Records: " + count + " \n";
                             }
 
