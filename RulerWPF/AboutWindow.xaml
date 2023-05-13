@@ -33,7 +33,7 @@
                      Background="White" >
         </RichTextBox>
         <TextBlock x:Name="_version" Grid.ColumnSpan="3" Grid.Row="3" FontSize="24"
-                   TextAlignment="Center" Text="Version: 1.0" />
+                   TextAlignment="Center" Text="Version: 2.0 .NET Core 7.0" />
         <TextBlock x:Name="_link" Grid.ColumnSpan="3" Grid.Row="5" FontSize="24"
                    TextAlignment="Center" >
             <Hyperlink Click="Hyperlink_Click"
