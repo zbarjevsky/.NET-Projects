@@ -99,3 +99,5 @@ MessageBox/Binaries/MZ.WPF.MessageBox.dll
 /.gitignore
 /.gitignore
 /.gitignore
+*.vsidx
+*.wsuo
