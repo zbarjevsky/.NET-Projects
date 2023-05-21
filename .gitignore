@@ -88,3 +88,6 @@ MessageBox/Binaries/MZ.WPF.MessageBox.dll
 /RulerWPF/.vs/RulerWPF/FileContentIndex/read.lock
 /RulerWPF/.vs/RulerWPF/FileContentIndex/4ee5f15a-2f49-4aec-ac9f-7fa6507c9169.vsidx
 /.vs/.NET-Projects (.NET 7)/v17/.wsuo
+*.vsidx
+/RulerWPF/.vs/ProjectEvaluation/rulerwpf.projects.v7.bin
+/RulerWPF/.vs/ProjectEvaluation/rulerwpf.metadata.v7.bin
