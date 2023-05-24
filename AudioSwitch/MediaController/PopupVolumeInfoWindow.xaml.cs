@@ -22,7 +22,6 @@ using MkZ.Media.DeviceSwitch;
 using MkZ.Windows;
 using MkZ.WPF;
 using MkZ.WPF.Utils;
-using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
 
 namespace MkZ.Media.WPF
 {
