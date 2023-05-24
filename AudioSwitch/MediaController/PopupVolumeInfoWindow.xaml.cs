@@ -22,6 +22,7 @@ using MkZ.Media.DeviceSwitch;
 using MkZ.Windows;
 using MkZ.WPF;
 using MkZ.WPF.Utils;
+using static Microsoft.WindowsAPICodePack.Shell.PropertySystem.SystemProperties.System;
 
 namespace MkZ.Media.WPF
 {
@@ -269,6 +270,7 @@ namespace MkZ.Media.WPF
 
         private void _slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+            _progress.Value = _slider.Value;
             NotifyVolumeChanged();
         }
 
