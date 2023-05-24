@@ -101,3 +101,7 @@ MessageBox/Binaries/MZ.WPF.MessageBox.dll
 /.gitignore
 *.vsidx
 *.wsuo
+/.vs/.NET-Projects (.NET 7)/v17/.wsuo
+*.vsidx
+/RulerWPF/.vs/ProjectEvaluation/rulerwpf.projects.v7.bin
+/RulerWPF/.vs/ProjectEvaluation/rulerwpf.metadata.v7.bin
