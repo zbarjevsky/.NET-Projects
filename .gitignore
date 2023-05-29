@@ -105,3 +105,8 @@ MessageBox/Binaries/MZ.WPF.MessageBox.dll
 *.vsidx
 /RulerWPF/.vs/ProjectEvaluation/rulerwpf.projects.v7.bin
 /RulerWPF/.vs/ProjectEvaluation/rulerwpf.metadata.v7.bin
+/VideoCaptureWPF/.vs/ProjectEvaluation/videocapturewpf.metadata.v7.bin
+/VideoCaptureWPF/.vs/ProjectEvaluation/videocapturewpf.projects.v7.bin
+/VideoCaptureWPF/.vs/VideoCaptureWPF/DesignTimeBuild/.dtbcache.v2
+/VideoCaptureWPF/.vs/VideoCaptureWPF/FileContentIndex/read.lock
+/VideoCaptureWPF/.vs/VideoCaptureWPF/v17/.futdcache.v2
