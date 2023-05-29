@@ -251,7 +251,7 @@ namespace MkZ.WPF.VideoCapture
                     //        RECT rect;
                     //        GetClientRect(hWnd, out rect);
 
-                    //        int nRet = ExcludeClipRect(wParam, nXCaptureWindow, nYCaptureWindow, nWidthCaptureWindow + nXCaptureWindow, nHeightCaptureWindow + nYCaptureWindow);
+                    //        int nRet = ExcludeClipRect(wParam, _nXCaptureWindow, _nYCaptureWindow, _nWidthCaptureWindow + _nXCaptureWindow, _nHeightCaptureWindow + _nYCaptureWindow);
 
                     //        //IntPtr hBrush = CreateSolidBrush(System.Drawing.ColorTranslator.ToWin32(System.Drawing.Color.Red));
                     //        //IntPtr hBrush = CreateSolidBrush(System.Drawing.ColorTranslator.ToWin32(System.Drawing.Color.FromArgb(255, 32, 32, 32)));

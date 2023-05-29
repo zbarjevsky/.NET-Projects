@@ -12,7 +12,7 @@ using System.Windows.Controls;
 
 namespace MkZ.WPF.VideoCapture
 {
-    public class CaptureLogic
+    public class CaptureLogic : IDisposable
     {
         //IntPtr hWnd = IntPtr.Zero;
         //IntPtr hWndChild = IntPtr.Zero;
@@ -31,14 +31,17 @@ namespace MkZ.WPF.VideoCapture
 
         private Win32.SUBCLASSPROC SubClassDelegate;
 
-        private const int nXCaptureWindow = 10, nYCaptureWindow = 10, nWidthCaptureWindow = 640, nHeightCaptureWindow = 480;
+        private const int _nXCaptureWindow = 10, _nYCaptureWindow = 10, _nWidthCaptureWindow = 640, _nHeightCaptureWindow = 480;
         IVMRWindowlessControl9 g_pWC = null;
 
         //IntPtr m_hWndContainer = IntPtr.Zero;
-        ControlHost wndContainer = null;
+        ControlHost _wndContainer = null;
+        Grid _parent = null;
 
         public CaptureLogic(Grid parent, string deviceName)
         {
+            _parent = parent;
+
             //hWnd = WinRT.Interop.WindowNative.GetWindowHandle(this);
             //var wih = new WindowInteropHelper(this);
             //hWnd = wih.Handle;
@@ -46,29 +49,29 @@ namespace MkZ.WPF.VideoCapture
             // For 1.1.0 release (layered child)
             // hWndChild = FindWindowEx(hWnd, IntPtr.Zero, "Microsoft.UI.Content.ContentWindowSiteBridge", null);
             // hWnd = hWndChild;
-            // m_hWndContainer = CreateWindowEx(WS_EX_TRANSPARENT | WS_EX_LAYERED, "Static", "", WS_VISIBLE | WS_CHILD, nXCaptureWindow, nYCaptureWindow, nWidthCaptureWindow, nHeightCaptureWindow, hWnd, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
+            // m_hWndContainer = CreateWindowEx(WS_EX_TRANSPARENT | WS_EX_LAYERED, "Static", "", WS_VISIBLE | WS_CHILD, _nXCaptureWindow, _nYCaptureWindow, _nWidthCaptureWindow, _nHeightCaptureWindow, hWnd, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
             //m_hWndContainer = Win32.CreateWindowEx(Win32.WS_EX_LAYERED, "Static", "",
             //    Win32.WS_VISIBLE | Win32.WS_CHILD, 
-            //    nXCaptureWindow, nYCaptureWindow, nWidthCaptureWindow, nHeightCaptureWindow, 
+            //    _nXCaptureWindow, _nYCaptureWindow, _nWidthCaptureWindow, _nHeightCaptureWindow, 
             //    hWnd, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
 
             //uint error = Win32.GetLastError();
 
-            wndContainer = new ControlHost(640, 480);
-            parent.Children.Add(wndContainer);
+            _wndContainer = new ControlHost(_nWidthCaptureWindow, _nHeightCaptureWindow);
+            _parent.Children.Add(_wndContainer);
 
-            Win32.SetOpacity(wndContainer.Handle, 100);
-            RECT rect = new RECT(nXCaptureWindow, nYCaptureWindow, nWidthCaptureWindow, nHeightCaptureWindow);
+            Win32.SetOpacity(_wndContainer.Handle, 100);
+            //RECT rect = new RECT(_nXCaptureWindow, _nYCaptureWindow, _nWidthCaptureWindow, _nHeightCaptureWindow);
             //SetRegion(hWndChild, true, ref rect);
 
-            HRESULT hr = CaptureVideo(wndContainer.Handle, deviceName);
+            HRESULT hr = CaptureVideo(_wndContainer.Handle, deviceName);
 
             SubClassDelegate = new Win32.SUBCLASSPROC(Win32.WindowSubClass);
-            bool bRet = Win32.SetWindowSubclass(wndContainer.Handle, SubClassDelegate, 0, 0);
+            bool bRet = Win32.SetWindowSubclass(_wndContainer.Handle, SubClassDelegate, 0, 0);
 
             //Microsoft.UI.WindowId myWndId = Microsoft.UI.Win32Interop.GetWindowIdFromWindow(hWnd);
             //_apw = Microsoft.UI.Windowing.AppWindow.GetFromWindowId(myWndId);
-            //_apw.Resize(new Windows.Graphics.SizeInt32(nWidthCaptureWindow + 190, nHeightCaptureWindow * 2 + 60));
+            //_apw.Resize(new Windows.Graphics.SizeInt32(_nWidthCaptureWindow + 190, _nHeightCaptureWindow * 2 + 60));
             //CenterToScreen(hWnd);
         }
 
@@ -101,15 +104,18 @@ namespace MkZ.WPF.VideoCapture
                                 g_pWC = (IVMRWindowlessControl9)pVideoMixingRenderer9;
                                 if (g_pWC != null)
                                 {
-                                    hr = g_pWC.SetVideoClippingWindow(wndContainer.Handle);
+                                    hr = g_pWC.SetVideoClippingWindow(_wndContainer.Handle);
+
                                     //hr = pWC.SetBorderColor((uint)ColorTranslator.ToWin32(System.Drawing.Color.Red));
                                     //RECT rcSrc = new RECT(0, 0, 0, 0);
-                                    //RECT rcDest = new RECT(nXCaptureWindow, nYCaptureWindow, nWidthCaptureWindow + nXCaptureWindow, nHeightCaptureWindow + nYCaptureWindow);
-                                    RECT rcDest = new RECT(0, 0, nWidthCaptureWindow, nHeightCaptureWindow);
+                                    //RECT rcDest = new RECT(_nXCaptureWindow, _nYCaptureWindow, _nWidthCaptureWindow + _nXCaptureWindow, _nHeightCaptureWindow + _nYCaptureWindow);
+                                    RECT rcDest = new RECT(0, 0, _nWidthCaptureWindow, _nHeightCaptureWindow);
                                     //RECT rcDest = new RECT(0, 0, 0, 0);
                                     //hr = pWC.SetVideoPosition(ref rcSrc, ref rcDest);
                                     hr = g_pWC.SetVideoPosition(IntPtr.Zero, ref rcDest);
-                                    //hr = pWC.SetVideoPosition(IntPtr.Zero, IntPtr.Zero);                                   
+                                    //hr = pWC.SetVideoPosition(IntPtr.Zero, IntPtr.Zero);
+                                    //
+                                    //hr = g_pWC.GetNativeVideoSize(out int lpWidth, out int lpHeight, out int lpARWidth, out int lpARHeight);
                                 }
 
                                 g_pMP = (IVMRMixerBitmap9)pVideoMixingRenderer9;
@@ -305,15 +311,56 @@ namespace MkZ.WPF.VideoCapture
                 long start = pDIB.ToInt64() + bih.biSize;
                 Marshal.Copy(new IntPtr(start), pManagedArray, 0, nSize);
 
-                System.Windows.Media.Imaging.WriteableBitmap wb = 
+                System.Windows.Media.Imaging.WriteableBitmap wb =
                     new System.Windows.Media.Imaging.WriteableBitmap(bih.biWidth, bih.biHeight, 96, 96, PixelFormats.Bgr32, BitmapPalettes.WebPalette);
                 wb.WritePixels(new Int32Rect(0, 0, bih.biWidth, bih.biHeight), pManagedArray, bih.biWidth * 4, 0);
                 //await wb.PixelBuffer.AsStream().WriteAsync(pManagedArray, 0, pManagedArray.Length);
+
+                hr = g_pWC.GetNativeVideoSize(out int lpWidth, out int lpHeight, out int lpARWidth, out int lpARHeight);
+
 
                 return wb;
             }
 
             return null;
+        }
+
+        public Int32Rect GetVideoSize()
+        {
+            if (g_pWC == null)
+            {
+                return new Int32Rect();
+            }
+
+            IntPtr pDIB = IntPtr.Zero;
+            HRESULT hr = g_pWC.GetCurrentImage(out pDIB);
+            if (hr == HRESULT.S_OK)
+            {
+                Win32.BITMAPINFOHEADER bih = new Win32.BITMAPINFOHEADER();
+                Marshal.PtrToStructure(pDIB, bih);
+
+                int nSize = bih.biWidth * bih.biHeight * 4;
+
+                return new Int32Rect(0, 0, bih.biWidth, bih.biHeight);
+            }
+
+            return new Int32Rect();
+        }
+
+        public void Dispose()
+        {
+            g_pMC.Stop();
+            Marshal.ReleaseComObject(g_pCapture);
+            g_pCapture = null;
+            Marshal.ReleaseComObject(g_pWC);
+            g_pWC = null;
+
+            if (_parent != null && _wndContainer != null)
+            {
+                _parent.Children.Remove(_wndContainer);
+                _wndContainer.Dispose();
+                _wndContainer = null;
+            }
         }
     }
     

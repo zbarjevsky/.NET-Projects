@@ -33,11 +33,17 @@ namespace MkZ.WPF.VideoCapture
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             List<string> listDevices = CaptureLogic.EnumCaptureDevices();
+            _cmbVideoCameras.Items.Clear();
+            foreach (string device in listDevices)
+            {
+                _cmbVideoCameras.Items.Add(device);
+            }
 
-            Window wnd = Application.Current.MainWindow;
-            var wih = new WindowInteropHelper(wnd);
-            IntPtr hWnd = wih.Handle;
-            _captureLogic = new CaptureLogic(_mainGrid, listDevices[1]);
+            //Window wnd = Application.Current.MainWindow;
+            //var wih = new WindowInteropHelper(wnd);
+            //IntPtr hWnd = wih.Handle;
+            //_captureLogic = new CaptureLogic(_mainGrid, listDevices[1]);
+            _cmbVideoCameras.SelectedIndex = 1;
         }
 
         //private async void Click()
@@ -95,6 +101,21 @@ namespace MkZ.WPF.VideoCapture
         {
             bool bOverlay = _captureLogic.ToggleOverlay();
             btnOverlay.Content = bOverlay?"Set Overlay": "Remove Overlay";
+        }
+
+        private void _cmbVideoCameras_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(_captureLogic != null)
+            {
+                _captureLogic.Dispose();
+                _captureLogic = null;
+            }
+
+            string deviceName = _cmbVideoCameras.SelectedItem as string;
+            if(!string.IsNullOrEmpty(deviceName) )
+            {
+                _captureLogic = new CaptureLogic(_mainGrid, deviceName);
+            }
         }
     }
 }
