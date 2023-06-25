@@ -79,7 +79,7 @@ namespace ClipboardManager
 			Application.AddMessageFilter(new ClipboardMessageFilter(this));
 
             // Define the priority of the application (0x3FF = The higher priority)
-            Win32_Shutdown.SetProcessShutdownParameters(0x3FF, Win32_Shutdown.SHUTDOWN_NORETRY);
+            bool res = Win32_Shutdown.SetProcessShutdownParameters(0x3FF, Win32_Shutdown.SHUTDOWN_NORETRY);
         }//end constructor
 
         //private int count = 0;
