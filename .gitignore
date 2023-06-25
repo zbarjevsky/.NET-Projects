@@ -110,3 +110,4 @@ MessageBox/Binaries/MZ.WPF.MessageBox.dll
 /VideoCaptureWPF/.vs/VideoCaptureWPF/DesignTimeBuild/.dtbcache.v2
 /VideoCaptureWPF/.vs/VideoCaptureWPF/FileContentIndex/read.lock
 /VideoCaptureWPF/.vs/VideoCaptureWPF/v17/.futdcache.v2
+*.lock
