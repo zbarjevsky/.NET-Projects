@@ -29,9 +29,9 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             MkZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet1 = new MkZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
             MkZ.WinForms.ColorBarsProgressBar.ThemeColorSet themeColorSet2 = new MkZ.WinForms.ColorBarsProgressBar.ThemeColorSet();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.m_status1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.m_status2 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -39,17 +39,17 @@
             this.m_splitMain = new System.Windows.Forms.SplitContainer();
             this.panel1 = new System.Windows.Forms.Panel();
             this.m_chkTopMost = new System.Windows.Forms.CheckBox();
-            this.m_volumeControlSpk = new MkZ.Media.VolumeUserControl();
-            this.m_volumeControlMic = new MkZ.Media.VolumeUserControl();
             this.m_tabDevices = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.m_DeviceListPlayback = new MkZ.Media.MediaDeviceListUserControl();
             this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.m_DeviceListRecording = new MkZ.Media.MediaDeviceListUserControl();
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.m_imageListTabs = new System.Windows.Forms.ImageList(this.components);
             this.m_txtLog = new System.Windows.Forms.RichTextBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.m_volumeControlSpk = new MkZ.Media.VolumeUserControl();
+            this.m_volumeControlMic = new MkZ.Media.VolumeUserControl();
+            this.m_DeviceListPlayback = new MkZ.Media.MediaDeviceListUserControl();
+            this.m_DeviceListRecording = new MkZ.Media.MediaDeviceListUserControl();
             this.statusStrip1.SuspendLayout();
             this.m_pnlMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_splitMain)).BeginInit();
@@ -67,7 +67,7 @@
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.m_status1,
             this.m_status2});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 444);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 411);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Size = new System.Drawing.Size(743, 22);
             this.statusStrip1.TabIndex = 5;
@@ -93,7 +93,7 @@
             this.m_pnlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_pnlMain.Location = new System.Drawing.Point(0, 0);
             this.m_pnlMain.Name = "m_pnlMain";
-            this.m_pnlMain.Size = new System.Drawing.Size(743, 444);
+            this.m_pnlMain.Size = new System.Drawing.Size(743, 411);
             this.m_pnlMain.TabIndex = 7;
             // 
             // m_splitMain
@@ -117,78 +117,30 @@
             // 
             this.m_splitMain.Panel2.Controls.Add(this.m_txtLog);
             this.m_splitMain.Panel2MinSize = 20;
-            this.m_splitMain.Size = new System.Drawing.Size(743, 444);
-            this.m_splitMain.SplitterDistance = 402;
+            this.m_splitMain.Size = new System.Drawing.Size(743, 411);
+            this.m_splitMain.SplitterDistance = 372;
             this.m_splitMain.TabIndex = 7;
             // 
             // panel1
             // 
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.panel1.Location = new System.Drawing.Point(0, 371);
+            this.panel1.Location = new System.Drawing.Point(0, 343);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(741, 29);
+            this.panel1.Size = new System.Drawing.Size(741, 27);
             this.panel1.TabIndex = 12;
             // 
             // m_chkTopMost
             // 
             this.m_chkTopMost.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.m_chkTopMost.AutoSize = true;
-            this.m_chkTopMost.Location = new System.Drawing.Point(510, 3);
+            this.m_chkTopMost.Location = new System.Drawing.Point(509, 3);
             this.m_chkTopMost.Name = "m_chkTopMost";
             this.m_chkTopMost.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.m_chkTopMost.Size = new System.Drawing.Size(83, 18);
+            this.m_chkTopMost.Size = new System.Drawing.Size(84, 17);
             this.m_chkTopMost.TabIndex = 11;
             this.m_chkTopMost.Text = "Stay on Top";
             this.m_chkTopMost.UseVisualStyleBackColor = true;
             this.m_chkTopMost.CheckedChanged += new System.EventHandler(this.m_chkTopMost_CheckedChanged);
-            // 
-            // m_volumeControlSpk
-            // 
-            this.m_volumeControlSpk.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            themeColorSet1.Part1_ActiveColor = System.Drawing.Color.DarkTurquoise;
-            themeColorSet1.Part1_InactiveColor = System.Drawing.Color.AliceBlue;
-            themeColorSet1.Part2_ActiveColor = System.Drawing.Color.Orange;
-            themeColorSet1.Part2_InactiveColor = System.Drawing.Color.LightGoldenrodYellow;
-            themeColorSet1.Part3_ActiveColor = System.Drawing.Color.Red;
-            themeColorSet1.Part3_InactiveColor = System.Drawing.Color.MistyRose;
-            themeColorSet1.Theme = MkZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
-            themeColorSet1.Threshold1 = 60;
-            themeColorSet1.Threshold2 = 85;
-            this.m_volumeControlSpk.ColorTheme = themeColorSet1;
-            this.m_volumeControlSpk.Level = 0;
-            this.m_volumeControlSpk.Location = new System.Drawing.Point(601, 20);
-            this.m_volumeControlSpk.MaximumSize = new System.Drawing.Size(62, 646);
-            this.m_volumeControlSpk.MinimumSize = new System.Drawing.Size(58, 215);
-            this.m_volumeControlSpk.Name = "m_volumeControlSpk";
-            this.m_volumeControlSpk.Size = new System.Drawing.Size(62, 344);
-            this.m_volumeControlSpk.TabIndex = 10;
-            this.m_volumeControlSpk.Title = "Spk";
-            this.m_volumeControlSpk.Volume = 0;
-            // 
-            // m_volumeControlMic
-            // 
-            this.m_volumeControlMic.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            themeColorSet2.Part1_ActiveColor = System.Drawing.Color.Orange;
-            themeColorSet2.Part1_InactiveColor = System.Drawing.Color.LightGoldenrodYellow;
-            themeColorSet2.Part2_ActiveColor = System.Drawing.Color.LimeGreen;
-            themeColorSet2.Part2_InactiveColor = System.Drawing.Color.Honeydew;
-            themeColorSet2.Part3_ActiveColor = System.Drawing.Color.Red;
-            themeColorSet2.Part3_InactiveColor = System.Drawing.Color.MistyRose;
-            themeColorSet2.Theme = MkZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Microphone;
-            themeColorSet2.Threshold1 = 10;
-            themeColorSet2.Threshold2 = 85;
-            this.m_volumeControlMic.ColorTheme = themeColorSet2;
-            this.m_volumeControlMic.Level = 0;
-            this.m_volumeControlMic.Location = new System.Drawing.Point(669, 20);
-            this.m_volumeControlMic.MaximumSize = new System.Drawing.Size(62, 646);
-            this.m_volumeControlMic.MinimumSize = new System.Drawing.Size(58, 215);
-            this.m_volumeControlMic.Name = "m_volumeControlMic";
-            this.m_volumeControlMic.Size = new System.Drawing.Size(62, 344);
-            this.m_volumeControlMic.TabIndex = 9;
-            this.m_volumeControlMic.Title = "Mic";
-            this.m_volumeControlMic.Volume = 0;
             // 
             // m_tabDevices
             // 
@@ -202,7 +154,7 @@
             this.m_tabDevices.Location = new System.Drawing.Point(2, 3);
             this.m_tabDevices.Name = "m_tabDevices";
             this.m_tabDevices.SelectedIndex = 0;
-            this.m_tabDevices.Size = new System.Drawing.Size(592, 361);
+            this.m_tabDevices.Size = new System.Drawing.Size(592, 334);
             this.m_tabDevices.TabIndex = 8;
             // 
             // tabPage1
@@ -212,21 +164,10 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 23);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(584, 334);
+            this.tabPage1.Size = new System.Drawing.Size(584, 307);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Sound Playback Devices";
             this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // m_DeviceListPlayback
-            // 
-            this.m_DeviceListPlayback.AlternateColorPalette = MkZ.Tools.AlternateColorPalette.Cold;
-            this.m_DeviceListPlayback.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_DeviceListPlayback.Location = new System.Drawing.Point(3, 3);
-            this.m_DeviceListPlayback.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.m_DeviceListPlayback.Name = "m_DeviceListPlayback";
-            this.m_DeviceListPlayback.OnSortChanged = ((System.Action<System.Collections.Generic.List<System.Windows.Forms.ListViewItem>>)(resources.GetObject("m_DeviceListPlayback.OnSortChanged")));
-            this.m_DeviceListPlayback.Size = new System.Drawing.Size(578, 328);
-            this.m_DeviceListPlayback.TabIndex = 0;
             // 
             // tabPage2
             // 
@@ -235,28 +176,17 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 23);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(584, 334);
+            this.tabPage2.Size = new System.Drawing.Size(584, 307);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Sound Recording Devices";
             this.tabPage2.UseVisualStyleBackColor = true;
-            // 
-            // m_DeviceListRecording
-            // 
-            this.m_DeviceListRecording.AlternateColorPalette = MkZ.Tools.AlternateColorPalette.Cold;
-            this.m_DeviceListRecording.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_DeviceListRecording.Location = new System.Drawing.Point(3, 3);
-            this.m_DeviceListRecording.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.m_DeviceListRecording.Name = "m_DeviceListRecording";
-            this.m_DeviceListRecording.OnSortChanged = ((System.Action<System.Collections.Generic.List<System.Windows.Forms.ListViewItem>>)(resources.GetObject("m_DeviceListRecording.OnSortChanged")));
-            this.m_DeviceListRecording.Size = new System.Drawing.Size(578, 328);
-            this.m_DeviceListRecording.TabIndex = 0;
             // 
             // tabPage3
             // 
             this.tabPage3.ImageIndex = 2;
             this.tabPage3.Location = new System.Drawing.Point(4, 23);
             this.tabPage3.Name = "tabPage3";
-            this.tabPage3.Size = new System.Drawing.Size(584, 334);
+            this.tabPage3.Size = new System.Drawing.Size(584, 307);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Video Capturing";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -276,20 +206,90 @@
             this.m_txtLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.m_txtLog.Location = new System.Drawing.Point(0, 0);
             this.m_txtLog.Name = "m_txtLog";
-            this.m_txtLog.Size = new System.Drawing.Size(741, 36);
+            this.m_txtLog.Size = new System.Drawing.Size(741, 33);
             this.m_txtLog.TabIndex = 0;
             this.m_txtLog.Text = "";
             // 
+            // m_volumeControlSpk
+            // 
+            this.m_volumeControlSpk.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            themeColorSet1.Part1_ActiveColor = System.Drawing.Color.DarkTurquoise;
+            themeColorSet1.Part1_InactiveColor = System.Drawing.Color.AliceBlue;
+            themeColorSet1.Part2_ActiveColor = System.Drawing.Color.Orange;
+            themeColorSet1.Part2_InactiveColor = System.Drawing.Color.LightGoldenrodYellow;
+            themeColorSet1.Part3_ActiveColor = System.Drawing.Color.Red;
+            themeColorSet1.Part3_InactiveColor = System.Drawing.Color.MistyRose;
+            themeColorSet1.Theme = MkZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Custom;
+            themeColorSet1.Threshold1 = 60;
+            themeColorSet1.Threshold2 = 85;
+            this.m_volumeControlSpk.ColorTheme = themeColorSet1;
+            this.m_volumeControlSpk.Level = 0;
+            this.m_volumeControlSpk.Location = new System.Drawing.Point(601, 19);
+            this.m_volumeControlSpk.MaximumSize = new System.Drawing.Size(62, 600);
+            this.m_volumeControlSpk.MinimumSize = new System.Drawing.Size(58, 200);
+            this.m_volumeControlSpk.Name = "m_volumeControlSpk";
+            this.m_volumeControlSpk.Size = new System.Drawing.Size(62, 318);
+            this.m_volumeControlSpk.TabIndex = 10;
+            this.m_volumeControlSpk.Title = "Spk";
+            this.m_volumeControlSpk.Volume = 0;
+            // 
+            // m_volumeControlMic
+            // 
+            this.m_volumeControlMic.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            themeColorSet2.Part1_ActiveColor = System.Drawing.Color.Orange;
+            themeColorSet2.Part1_InactiveColor = System.Drawing.Color.LightGoldenrodYellow;
+            themeColorSet2.Part2_ActiveColor = System.Drawing.Color.LimeGreen;
+            themeColorSet2.Part2_InactiveColor = System.Drawing.Color.Honeydew;
+            themeColorSet2.Part3_ActiveColor = System.Drawing.Color.Red;
+            themeColorSet2.Part3_InactiveColor = System.Drawing.Color.MistyRose;
+            themeColorSet2.Theme = MkZ.WinForms.ColorBarsProgressBar.ColorsThemeType.Microphone;
+            themeColorSet2.Threshold1 = 10;
+            themeColorSet2.Threshold2 = 85;
+            this.m_volumeControlMic.ColorTheme = themeColorSet2;
+            this.m_volumeControlMic.Level = 0;
+            this.m_volumeControlMic.Location = new System.Drawing.Point(669, 19);
+            this.m_volumeControlMic.MaximumSize = new System.Drawing.Size(62, 600);
+            this.m_volumeControlMic.MinimumSize = new System.Drawing.Size(58, 200);
+            this.m_volumeControlMic.Name = "m_volumeControlMic";
+            this.m_volumeControlMic.Size = new System.Drawing.Size(62, 318);
+            this.m_volumeControlMic.TabIndex = 9;
+            this.m_volumeControlMic.Title = "Mic";
+            this.m_volumeControlMic.Volume = 0;
+            // 
+            // m_DeviceListPlayback
+            // 
+            this.m_DeviceListPlayback.AlternateColorPalette = MkZ.Tools.AlternateColorPalette.Cold;
+            this.m_DeviceListPlayback.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_DeviceListPlayback.Location = new System.Drawing.Point(3, 3);
+            this.m_DeviceListPlayback.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.m_DeviceListPlayback.Name = "m_DeviceListPlayback";
+            this.m_DeviceListPlayback.OnSortChanged = null;
+            this.m_DeviceListPlayback.Size = new System.Drawing.Size(578, 301);
+            this.m_DeviceListPlayback.TabIndex = 0;
+            // 
+            // m_DeviceListRecording
+            // 
+            this.m_DeviceListRecording.AlternateColorPalette = MkZ.Tools.AlternateColorPalette.Cold;
+            this.m_DeviceListRecording.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_DeviceListRecording.Location = new System.Drawing.Point(3, 3);
+            this.m_DeviceListRecording.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.m_DeviceListRecording.Name = "m_DeviceListRecording";
+            this.m_DeviceListRecording.OnSortChanged = null;
+            this.m_DeviceListRecording.Size = new System.Drawing.Size(578, 301);
+            this.m_DeviceListRecording.TabIndex = 0;
+            // 
             // FormMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 14F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDark;
-            this.ClientSize = new System.Drawing.Size(743, 466);
+            this.ClientSize = new System.Drawing.Size(743, 433);
             this.Controls.Add(this.m_pnlMain);
             this.Controls.Add(this.statusStrip1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MinimumSize = new System.Drawing.Size(660, 385);
+            this.MinimumSize = new System.Drawing.Size(660, 360);
             this.Name = "FormMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Select Active Audio End Point";
