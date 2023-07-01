@@ -13,7 +13,7 @@
         Closed="Window_Closed"
         Icon="/Butterfly.ico"
         Title="Barometer - Weather Station" 
-        Height="850" MinHeight="350" Width="1600" MinWidth="600">
+        Height="710" MinHeight="350" Width="1600" MinWidth="600">
     <Window.Resources>
         <utils:InvertBoolConverter x:Key="InvertBoolConverter"/>
     </Window.Resources>

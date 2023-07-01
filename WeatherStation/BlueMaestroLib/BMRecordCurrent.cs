@@ -23,13 +23,13 @@ namespace MkZ.BlueMaestroLib
         public byte _mode { get; set; } = 0;
 
         // Battery level
-        public int BatteryLevel { get; set; } = 0;
+        //public int BatteryLevel { get; set; } = 0;
 
         // Reference Date
         public int ReferenceDateRawNumber { get; set; }
 
         // Logging interval
-        public int LoggingInterval { get; set; }
+        //public int LoggingInterval { get; set; }
 
         // Number of threshold breaches
         public int numBreach { get; set; }
@@ -55,8 +55,8 @@ namespace MkZ.BlueMaestroLib
             if (r == null)
                 return;
 
-            BatteryLevel = r.BatteryLevel;
-            LoggingInterval = r.LoggingInterval;
+            //BatteryLevel = r.BatteryLevel;
+            //LoggingInterval = r.LoggingInterval;
             numBreach = r.numBreach;
             _mode = r._mode;
         }
@@ -132,6 +132,8 @@ namespace MkZ.BlueMaestroLib
             rec.Temperature += r1.Temperature;
             rec.AirHumidity += r1.AirHumidity;
             rec.AirPressure += r1.AirPressure;
+            rec.BatteryLevel += r1.BatteryLevel;
+            rec.LoggingInterval += r1.LoggingInterval;
             return rec;
         }
 
@@ -141,6 +143,8 @@ namespace MkZ.BlueMaestroLib
             rec.Temperature /= factor;
             rec.AirHumidity /= factor;
             rec.AirPressure /= factor;
+            rec.BatteryLevel /= factor;
+            rec.LoggingInterval /= factor;
             return rec;
         }
 

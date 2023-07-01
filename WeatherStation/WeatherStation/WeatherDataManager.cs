@@ -39,8 +39,11 @@ namespace MkZ.Weather
 
         public RadiationDataPoint AddRadiationData(RadexOneDeviceInfo dev, RadiationDataPoint pt)
         {
+            if(dev == null || dev.SerialNumber == null)
+                return null;
+
             RadiationDataPoint data = RadexOneDatabaseMap.AddRecord(dev, pt.Date, pt, DataFolder);
-            if (data.IsValid)
+            if (data != null && data.IsValid)
                 OnRORecordAddedAction?.Invoke(dev, data);
 
             return data;

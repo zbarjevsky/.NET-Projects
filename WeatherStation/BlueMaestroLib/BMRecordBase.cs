@@ -23,7 +23,7 @@ namespace MkZ.BlueMaestroLib
         public override DateTime Date { get; set; } = DateTime.Now;
 
         [XmlIgnore]
-        public override double[] Values { get; protected set; } = new double[3];
+        public override double[] Values { get; protected set; } = new double[5];
 
         [XmlIgnore]
         public byte[] Data { get; set; }
@@ -43,6 +43,9 @@ namespace MkZ.BlueMaestroLib
         public double Temperature { get { return Values[0]; } set { Values[0] = value; } }
         public double AirPressure { get { return Values[1]; } set { Values[1] = value; } }
         public double AirHumidity { get { return Values[2]; } set { Values[2] = value; } }
+
+        public double BatteryLevel { get { return Values[3]; } set { Values[3] = value; } }
+        public double LoggingInterval { get { return Values[4]; } set { Values[4] = value; } }
 
         public double GetTemperature(IUnitBase<eTemperatureUnits> measurementType) { return measurementType.Convert(Temperature); }
         public double GetAirHumidity() { return AirHumidity; }
@@ -97,6 +100,9 @@ namespace MkZ.BlueMaestroLib
             Temperature = r.Temperature;
             AirHumidity = r.AirHumidity;
             AirPressure = r.AirPressure;
+
+            BatteryLevel = r.BatteryLevel;
+            LoggingInterval = r.LoggingInterval;
         }
 
         public override string ToString()

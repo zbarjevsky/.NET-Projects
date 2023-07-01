@@ -39,6 +39,9 @@ namespace MkZ.RadexOneLib
 
         public RadiationDataPoint AddRecord(RadexOneDeviceInfo device, DateTime recordDate, RadiationDataPoint data, string dataFolder)
         {
+            if (device == null || device.SerialNumber == null)
+                return null;
+
             if (!_map.ContainsKey(device.SerialNumber.ToString()))
                 _map[device.SerialNumber.ToString()] = new RadexOneDeviceLog() { RadexOneDevice = device };
 

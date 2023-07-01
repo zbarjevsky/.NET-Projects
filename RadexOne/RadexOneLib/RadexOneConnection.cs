@@ -114,6 +114,7 @@ namespace MkZ.RadexOneLib
             SendRequest(new CommandTest());
         }
 
+        private int _iTimeoutCount = 0;
         private void SendRequest(RadexCommandBase cmd)
         {
             _commands.AddCommand(cmd);
@@ -122,11 +123,19 @@ namespace MkZ.RadexOneLib
             {
                 byte[] req = cmd.request.ToByteArray();
                 _radexPort.Write(req, 0, cmd.RequestSize);
+                _iTimeoutCount = 0;
             }
             catch (Exception err)
             {
-                OnDisconnected("Request error: " + err.Message);
-                throw;
+                if (err.Message == "The write timed out.")
+                {
+                    _iTimeoutCount++;
+                }
+                else 
+                {
+                    OnDisconnected("Request error: " + err.Message);
+                    throw;
+                }
             }
         }
 
@@ -202,83 +211,6 @@ namespace MkZ.RadexOneLib
         }
     }
 
-    public class RadexComPortDesc
-    {
-        public const string RADEX_ONE = "RADEX ONE";
-
-        public string Desc;
-        public string Port;
-
-        public RadexComPortDesc(string OS_desc)
-        {
-            Desc = OS_desc;
-            Port = OS_desc.Substring(RADEX_ONE.Length).Trim(')', '(', ' ');
-        }
-
-        public override string ToString()
-        {
-            return Desc;
-        }
-
-        #region Connected Port Info
-
-        public static List<RadexComPortDesc> RadexPortInfos()
-        {
-            List<string> descriptions = PortNames(RadexComPortDesc.RADEX_ONE);
-            List<RadexComPortDesc> radex_names = new List<RadexComPortDesc>();
-            foreach (string desc in descriptions)
-            {
-                radex_names.Add(new RadexComPortDesc(desc));
-            }
-            return radex_names;
-        }
-
-        //private static string RadexPortInfo(int idx)
-        //{
-        //    List<RadexComPortDesc> radexPorts = RadexPortInfos();
-        //    if (idx < radexPorts.Count)
-        //        return radexPorts[idx].Port;
-        //    return null;
-        //}
-
-        //private static bool RadexPortExists(string comPort)
-        //{
-        //    List<RadexComPortDesc> radexPorts = RadexPortInfos();
-        //    foreach (RadexComPortDesc radexPort in radexPorts)
-        //    {
-        //        if (radexPort.Port == comPort)
-        //            return true;
-        //    }
-        //    return false;
-        //}
-
-        private static List<string> PortNames(string name)
-        {
-            List<string> names = new List<string>();
-
-            try
-            {
-                ManagementObjectSearcher searcher = new ManagementObjectSearcher(@"root\CIMV2", "SELECT * FROM Win32_PnPEntity");
-                var list = searcher.Get();
-                foreach (ManagementObject queryObj in list)
-                {
-                    object caption = queryObj["Caption"];
-                    if (caption == null)
-                        continue;
-                    names.Add(caption.ToString());
-                }
-            }
-            catch (Exception ex)
-            {
-                string[] ports = SerialPort.GetPortNames();
-                Debug.WriteLine("PortNames: " + ex);
-            }
-            return names.Where(n => n.Contains(name)).ToList();
-        }
-
-        #endregion
-    }
-
     public class ComPortHelper
     {
         public readonly SerialPort Port = new SerialPort();
@@ -315,7 +247,7 @@ namespace MkZ.RadexOneLib
 
                     Port.Open();
 
-                    IsOpen = true;
+                    IsOpen = Port.IsOpen;
                     return comPortName;
                 }
                 catch (Exception err)

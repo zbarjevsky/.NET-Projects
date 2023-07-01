@@ -16,7 +16,7 @@ namespace MkZ.RadexOneLib
         public const int CONNECTION_CHECK_TIMEOUT = 3000;
 
         private readonly RadexOneConnection _radexDevice = new RadexOneConnection();
-        private List<RadexOneComPortFinder.PortInfo> _radexPorts = new List<RadexOneComPortFinder.PortInfo>();
+        private List<string> _radexPorts = new List<string>();
         private readonly RadexOneDeviceInfo _radexConfig = new RadexOneDeviceInfo();
         private Task _connectionCheckTask;
         private volatile bool _cancel = false;
@@ -81,8 +81,6 @@ namespace MkZ.RadexOneLib
                 {
                     try
                     {
-                        //_radexPorts = RadexComPortDesc.RadexPortInfos();
-
                         if (!_radexDevice.IsOpen)
                         {
                             _radexPorts = RadexOneComPortFinder.Find();
@@ -129,21 +127,23 @@ namespace MkZ.RadexOneLib
             }
         }
 
-        private void ConnectToSelectedPort(RadexOneComPortFinder.PortInfo selectedDevice)
+        private void ConnectToSelectedPort(string portName)
         {
             WPFUtils.ExecuteOnUiThreadInvoke(() =>
             {
-                if (selectedDevice != null)
+                if (!string.IsNullOrWhiteSpace(portName))
                 {
-                    if (_radexDevice.IsOpen && selectedDevice.PortName == _radexDevice.PortName)
+                    if (_radexDevice.IsOpen && portName == _radexDevice.PortName)
                         return;
 
-                    _radexConfig.SerialNumber = selectedDevice.SerialNumber.Clone();
+                    //_radexConfig.SerialNumber = selectedDevice.SerialNumber.Clone();
 
                     try
                     {
                         //connect to port and start sampling thread
-                        _radexDevice.Open(selectedDevice.PortName);
+                        _radexDevice.Open(portName);
+                        _radexDevice.SendRequestVer();
+                        _radexDevice.SendRequestGetSettings();
                     }
                     catch (Exception err)
                     {
