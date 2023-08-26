@@ -99,9 +99,6 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Framework.MkZ\AssemblyTools\DependenciesTool.cs">
-      <Link>Tools\DependenciesTool.cs</Link>
-    </Compile>
     <Compile Include="AnalogClock.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -348,6 +345,10 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Framework.MkZ\AssemblyTools\AssemblyTool\AssemblyTool.csproj">
+      <Project>{90c8154e-b8d0-4d29-8c07-1c6f3b418b15}</Project>
+      <Name>AssemblyTool</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Framework.MkZ\Framework.MkZ\Framework.MkZ.csproj">
       <Project>{768af4b8-5edd-4196-97ae-dbc1589dd426}</Project>
       <Name>Framework.MkZ</Name>

@@ -1,29 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Resources;
+using System.Windows.Interop;
 using Microsoft.Win32;
 
-
-using MkZ.MediaPlayer.Controls;
 using MkZ.MediaPlayer.Utils;
 using MkZ.Tools;
 using MkZ.Windows.Win32API;
 using MkZ.WPF;
-using MkZ.WPF.Controls;
 using MkZ.WPF.MessageBox;
 using MkZ.WPF.PropertyGrid;
 
@@ -118,6 +105,8 @@ namespace MkZ.MediaPlayer
             _cursorArrow.BindToColor(Context.AppConfig.Settings, "CursorColor.B");
 
             Application.Current.Dispatcher.BeginInvoke(new Action(() => SetPlayList(MediaDB.SelectedPlayList)));
+
+            InitThumbnailToolBarButtons();
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -175,6 +164,42 @@ namespace MkZ.MediaPlayer
             }
 
             return true;
+        }
+
+        private void InitThumbnailToolBarButtons()
+        {
+            TaskbarManagerHelper.Init(new WindowInteropHelper(this).Handle);
+            TaskbarManagerHelper.ShowButtons(
+                new List<string>() { "Full Screen", "Previous", "Play/Pause", "Next" },
+                new List<System.Drawing.Icon>() { Properties.Resources.RestoreFullScreen, Properties.Resources.previus_on, Properties.Resources.pause_on, Properties.Resources.next_on });
+            TaskbarManagerHelper.Button(0).DismissOnClick = true;
+            TaskbarManagerHelper.ButtonClicked = (index) =>
+            {
+                if (index == 0)
+                    FullScreenToggle();
+                if (index == 1)
+                    PreviousTrack_Executed(bResetPositionAndPlay: true);
+                if (index == 2)
+                    PlayerVM.TogglePlayPauseState();
+                if (index == 3)
+                    NextTrack_Executed(bResetPositionAndPlay: true); 
+            };
+
+            //FullScreenImageHelper.OnVisibleChanged = (form, isVisible) =>
+            //{
+            //    if (isVisible)
+            //    {
+            //        TaskbarManagerHelper.Button(0).Icon = Properties.Resources.FullScreen16_Restore_light;
+            //        m_btnFullScreen.Image = m_imageListFullScreen.Images[3];
+            //        m_mnuViewFullScreen.Image = m_imageListFullScreen.Images[3];
+            //    }
+            //    else
+            //    {
+            //        TaskbarManagerHelper.Button(0).Icon = Properties.Resources.FullScreen16_Light;
+            //        m_btnFullScreen.Image = m_imageListFullScreen.Images[2];
+            //        m_mnuViewFullScreen.Image = m_imageListFullScreen.Images[2];
+            //    }
+            //};
         }
 
         private void ConfigurationRestore(Configuration config)

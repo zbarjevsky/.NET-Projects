@@ -1,13 +1,17 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30320.27
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33717.318
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaPlayer.MkZ", "MediaPlayer.MkZ\MediaPlayer.MkZ.csproj", "{561B8D01-3848-40A7-BC2E-EBAA85F85724}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework.MkZ", "..\Framework.MkZ\Framework.MkZ\Framework.MkZ.csproj", "{768AF4B8-5EDD-4196-97AE-DBC1589DD426}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWpfCursor", "TestWpfCursor\TestWpfCursor.csproj", "{EF64D07E-8EF2-481C-A4D6-A5BA7691A59C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeditationStopWatch", "..\MeditationStopWatch\MeditationStopWatch.csproj", "{16302474-7E1D-49ED-A589-AC29F89EC40F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AssemblyTool", "..\Framework.MkZ\AssemblyTools\AssemblyTool\AssemblyTool.csproj", "{90C8154E-B8D0-4D29-8C07-1C6F3B418B15}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +31,14 @@ Global
 		{EF64D07E-8EF2-481C-A4D6-A5BA7691A59C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF64D07E-8EF2-481C-A4D6-A5BA7691A59C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF64D07E-8EF2-481C-A4D6-A5BA7691A59C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16302474-7E1D-49ED-A589-AC29F89EC40F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16302474-7E1D-49ED-A589-AC29F89EC40F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16302474-7E1D-49ED-A589-AC29F89EC40F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16302474-7E1D-49ED-A589-AC29F89EC40F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{90C8154E-B8D0-4D29-8C07-1C6F3B418B15}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{90C8154E-B8D0-4D29-8C07-1C6F3B418B15}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{90C8154E-B8D0-4D29-8C07-1C6F3B418B15}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{90C8154E-B8D0-4D29-8C07-1C6F3B418B15}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

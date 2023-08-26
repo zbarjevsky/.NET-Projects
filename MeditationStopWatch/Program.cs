@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MkZ.Framework.Tools;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
@@ -27,7 +28,7 @@ namespace MeditationStopWatch
 		{
             //MZ.Framework.Tools.DependenciesTool.LoadFrameworkMkZ_Dependency(Properties.Resources.Framework_MkZ);
 
-			if (MkZ.Framework.Tools.AssemblyTools.UpdateAssemblyInfoVersion(args))
+			if (AssemblyTools.UpdateAssemblyInfoVersion(args))
                 return;
 
             if (!SingleInstance())
