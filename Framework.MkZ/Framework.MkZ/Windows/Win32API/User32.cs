@@ -32,6 +32,7 @@ namespace MkZ.Windows.Win32API
         }
     }
 
+    //https://blog.magnusmontin.net/2015/03/31/implementing-global-hot-keys-in-wpf/
     public static class User32HotKey
     {
 

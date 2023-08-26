@@ -39,9 +39,9 @@ namespace MkZ.MediaPlayer.Utils
             MainWindow.Window.CommandBindings.Add(new CommandBinding(MediaCommands.NextTrack, NextTrack_Executed, NextTrack_CanExecute));
 
             MainWindow.Window.InputBindings.Clear();
-            MainWindow.Window.InputBindings.Add(new KeyBinding(MediaCommands.Play, new KeyGesture(Key.Play)));
-            MainWindow.Window.InputBindings.Add(new KeyBinding(MediaCommands.Pause, new KeyGesture(Key.Pause)));
-            MainWindow.Window.InputBindings.Add(new KeyBinding(MediaCommands.TogglePlayPause, new KeyGesture(Key.MediaPlayPause)));
+            //MainWindow.Window.InputBindings.Add(new KeyBinding(MediaCommands.Play, new KeyGesture(Key.Play)));
+            //MainWindow.Window.InputBindings.Add(new KeyBinding(MediaCommands.Pause, new KeyGesture(Key.Pause)));
+            //MainWindow.Window.InputBindings.Add(new KeyBinding(MediaCommands.TogglePlayPause, new KeyGesture(Key.MediaPlayPause)));
 
             //Full Screen
             F11Command = new RelayCommand(FullScreen_Execute, (o) => true);
