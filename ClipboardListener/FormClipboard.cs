@@ -67,7 +67,9 @@ namespace ClipboardManager
 			m_ClipboardListMain = new ClipboardList("Main", m_imageListClipboardTypes);
 			m_ClipboardListFavorites = new ClipboardList("Favorites", m_imageListClipboardTypes);
 
-            string appDataFolder = Path.GetDirectoryName(Application.LocalUserAppDataPath); //exclude version
+            string appDataFolder = Path.GetDirectoryName(Path.GetDirectoryName(Path.GetDirectoryName(Application.LocalUserAppDataPath))); //exclude version and user
+			appDataFolder = Path.Combine(appDataFolder, "MkZ", "ClipboardListener"); 
+			Directory.CreateDirectory(appDataFolder);
 
             m_sSettingsFileName = Path.Combine(appDataFolder, m_sSettingsFileName);
 			LogMethodEx(true, "FormClipboard", "C-tor", "Settings file: {0}", m_sSettingsFileName);
@@ -1448,8 +1450,15 @@ namespace ClipboardManager
 
         private void m_mnuToolsOpenLogFolder_Click(object sender, EventArgs e)
         {
-            if(!string.IsNullOrWhiteSpace(m_sHistoryFileName))
-                Process.Start(Path.GetDirectoryName(m_sHistoryFileName));
+			try
+			{
+				if (!string.IsNullOrWhiteSpace(m_sHistoryFileName))
+					Process.Start(Path.GetDirectoryName(m_sHistoryFileName));
+			}
+			catch (Exception err)
+			{
+                CenteredMessageBox.MsgBoxErr("OpenLogFolder error: " + err.Message);
+            }
         }
 
         private void m_mnuImportHistory_Click(object sender, EventArgs e)

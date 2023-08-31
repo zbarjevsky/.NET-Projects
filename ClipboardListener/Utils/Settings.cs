@@ -191,7 +191,14 @@ namespace ClipboardManager.Utils
             {
                 try
                 {
-                    DotNetZip.UnZipFiles(GetZipFilePath(sHistoryFileName), Path.GetDirectoryName(GetZipFilePath(sHistoryFileName)));
+                    string zipFileName = GetZipFilePath(sHistoryFileName);
+                    string zipDir = Path.GetDirectoryName(zipFileName);
+                    if(File.Exists(zipFileName))
+                    {
+                        //backup file
+                        File.Copy(zipFileName, zipFileName + ".bak", true);
+                        DotNetZip.UnZipFiles(zipFileName, zipDir);
+                    }
                 }//end try
                 catch (Exception err)
                 {
