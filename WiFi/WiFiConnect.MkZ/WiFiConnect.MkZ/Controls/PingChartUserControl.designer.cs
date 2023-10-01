@@ -37,9 +37,9 @@
             this.m_txtValue = new System.Windows.Forms.TextBox();
             this.m_chkAutoScale = new System.Windows.Forms.CheckBox();
             this.m_grpControls = new System.Windows.Forms.GroupBox();
+            this.m_numMaxPing = new System.Windows.Forms.NumericUpDown();
             this.m_btnReset = new System.Windows.Forms.Button();
             this._tooltip = new System.Windows.Forms.ToolTip(this.components);
-            this.m_numMaxPing = new System.Windows.Forms.NumericUpDown();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.m_grpControls.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.m_numMaxPing)).BeginInit();
@@ -101,8 +101,6 @@
             this.m_chkAutoScale.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.m_chkAutoScale.AutoSize = true;
             this.m_chkAutoScale.BackColor = System.Drawing.Color.White;
-            this.m_chkAutoScale.Checked = true;
-            this.m_chkAutoScale.CheckState = System.Windows.Forms.CheckState.Checked;
             this.m_chkAutoScale.ForeColor = System.Drawing.Color.Black;
             this.m_chkAutoScale.Location = new System.Drawing.Point(5, 79);
             this.m_chkAutoScale.Name = "m_chkAutoScale";
@@ -125,21 +123,6 @@
             this.m_grpControls.Size = new System.Drawing.Size(91, 132);
             this.m_grpControls.TabIndex = 31;
             this.m_grpControls.TabStop = false;
-            // 
-            // m_btnReset
-            // 
-            this.m_btnReset.BackColor = System.Drawing.Color.Gainsboro;
-            this.m_btnReset.Location = new System.Drawing.Point(4, 47);
-            this.m_btnReset.Name = "m_btnReset";
-            this.m_btnReset.Size = new System.Drawing.Size(78, 23);
-            this.m_btnReset.TabIndex = 31;
-            this.m_btnReset.Text = "Reset Zoom";
-            this.m_btnReset.UseVisualStyleBackColor = false;
-            this.m_btnReset.Click += new System.EventHandler(this.m_btnReset_Click);
-            // 
-            // _tooltip
-            // 
-            this._tooltip.IsBalloon = true;
             // 
             // m_numMaxPing
             // 
@@ -164,10 +147,25 @@
             this.m_numMaxPing.TabIndex = 32;
             this.m_numMaxPing.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.m_numMaxPing.Value = new decimal(new int[] {
-            300,
+            200,
             0,
             0,
             0});
+            // 
+            // m_btnReset
+            // 
+            this.m_btnReset.BackColor = System.Drawing.Color.Gainsboro;
+            this.m_btnReset.Location = new System.Drawing.Point(4, 47);
+            this.m_btnReset.Name = "m_btnReset";
+            this.m_btnReset.Size = new System.Drawing.Size(78, 23);
+            this.m_btnReset.TabIndex = 31;
+            this.m_btnReset.Text = "Reset Zoom";
+            this.m_btnReset.UseVisualStyleBackColor = false;
+            this.m_btnReset.Click += new System.EventHandler(this.m_btnReset_Click);
+            // 
+            // _tooltip
+            // 
+            this._tooltip.IsBalloon = true;
             // 
             // PingChartUserControl
             // 

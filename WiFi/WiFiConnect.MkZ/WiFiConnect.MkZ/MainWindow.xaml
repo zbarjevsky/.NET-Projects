@@ -12,7 +12,7 @@
         Loaded="Window_Loaded"
         Background="{Binding Source={x:Static SystemParameters.WindowGlassBrush}}"
         Foreground="{Binding Source={x:Static SystemColors.HighlightTextBrush}}"
-        Title="WiFi Connect" Height="800" Width="1600">
+        Title="WiFi Connect" Height="500" Width="1600">
     <Window.Resources>
         <DataTemplate x:Name="WifiInitialState" x:Key="WifiInitialState">
             <DockPanel HorizontalAlignment="Stretch" Background="{Binding Background, FallbackValue=Navy}">
@@ -178,7 +178,7 @@
             <RowDefinition Height="40"/>
             <RowDefinition/>
             <RowDefinition/>
-            <RowDefinition Height="40"/>
+            <RowDefinition Height="30"/>
         </Grid.RowDefinitions>
 
         <DockPanel Grid.ColumnSpan="3" >
@@ -211,7 +211,7 @@
                     <Button x:Name="btnReset" Content="Reset Graph" Margin="6" Width="Auto"
                         Click="btnReset_Click"/>
                     <Label Margin="6" Content="Buffer Size:" VerticalContentAlignment="Center" />
-                    <ComboBox x:Name="cmbBufferSize" SelectedIndex="1" Margin="6" 
+                    <ComboBox x:Name="cmbBufferSize" SelectedIndex="2" Margin="6" 
                           VerticalContentAlignment="Center"
                           SelectionChanged="ComboBoxBufferSize_SelectionChanged">
                         <ComboBoxItem Content="1h" />
@@ -224,7 +224,7 @@
                 </DockPanel>
                 <DockPanel>
                     <Label Content="Ping server: " VerticalContentAlignment="Center" />
-                    <ComboBox x:Name="cmbServerUrl" Margin="6" SelectedIndex="0"  
+                    <ComboBox x:Name="cmbServerUrl" Margin="6" SelectedIndex="2"  
                               IsEditable="True" TextBoxBase.TextChanged="cmbServerUrl_TextChanged" >
                         <ComboBoxItem Content="www.google.com" />
                         <ComboBoxItem Content="www.amazon.com" />
@@ -276,7 +276,7 @@
         <Border x:Name="_borderStatus" Grid.Row="3" Grid.ColumnSpan="3" Margin="2"
                 BorderBrush="Wheat" BorderThickness="1" CornerRadius="2">
             <TextBlock x:Name="_txtStatus" Text="Ready" Margin="6,0"
-                       VerticalAlignment="Center" FontSize="16" />
+                       VerticalAlignment="Center" FontSize="14" />
         </Border>
     </Grid>
 </Window>
