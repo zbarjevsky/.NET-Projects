@@ -49,7 +49,7 @@ namespace MkZ.RadexOneLib
                     RadexCommandBase cmd = commands[r.cmdId];
                     offset += cmd.ResponseSizeExpected;
                     cmd.SetResponce(responce);
-                    Log.e(cmd.responce.ToString());
+                    Log.i("Received id: "+cmd.ToString());
 
                     if (cmd is CommandGetData)
                     {

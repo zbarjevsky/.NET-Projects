@@ -269,7 +269,7 @@ namespace MkZ.Media.WPF
 
         private void _slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            _progress.Value = _slider.Value;
+            //_progress.Value = _slider.Value;
             NotifyVolumeChanged();
         }
 

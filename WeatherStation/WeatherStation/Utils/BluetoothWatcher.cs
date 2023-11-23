@@ -113,13 +113,17 @@ namespace MkZ.Bluetooth
                 try
                 {
                     Log.d("Watch Dog Elapsed: " + _watchDog);
-                    var result = CommonTools.ErrorMessage("Watcher is Stuck!\nRestarting...\n" + _watchDog);
+                    var result = CommonTools.ErrorMessage("Watcher is Stuck!\nOk to Restart?\n" + _watchDog);
                     if(result == MessageBoxResult.OK)
                     {
+                        _watchDog = 0;
                         StopBluetoothSearch();
                         StartBluetoothSearch();
                     }
-                    _watchDog = 0;
+                    else //wait 2 minutes
+                    {
+                        _watchDog = -60;
+                    }
                 }
                 catch (Exception err)
                 {
