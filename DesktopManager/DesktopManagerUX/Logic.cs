@@ -65,7 +65,7 @@ namespace DesktopManagerUX
         {
             if (hWnd != IntPtr.Zero)
             {
-                User32.ShowWindow(hWnd, User32.SWP_SHOWWINDOW);
+                User32.ShowWindow(hWnd, User32.eShowWindowCmd.SW_NORMAL);
                 User32.SetForegroundWindow(hWnd);
                 User32.MoveWindow(hWnd, (int)X, (int)Y, (int)nWidth, (int)nHeight, false);
             }

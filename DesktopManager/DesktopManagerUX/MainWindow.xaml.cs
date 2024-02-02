@@ -13,9 +13,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-
-
+using System.Windows.Threading;
 using DesktopManagerUX.Utils;
+using MkZ.Windows.DwmApi;
+using MkZ.Windows.Win32API;
 using MkZ.WPF.Utils;
 
 namespace DesktopManagerUX
@@ -25,6 +26,8 @@ namespace DesktopManagerUX
     /// </summary>
     public partial class MainWindow : Window
     {
+        private DispatcherTimer _timer = new DispatcherTimer(DispatcherPriority.Background);
+
         public MainWindow()
         {
             AppContext.Init(this);
@@ -42,6 +45,15 @@ namespace DesktopManagerUX
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             ResizeThisProportionallyToDesktopSize();
+
+            _timer.Interval = TimeSpan.FromSeconds(3);
+            _timer.Tick += _timer_Tick;
+            _timer.Start();
+        }
+
+        private void _timer_Tick(object sender, EventArgs e)
+        {
+            SaveAllOpenWindows();
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -63,6 +75,9 @@ namespace DesktopManagerUX
 
         private void SystemEvents_DisplaySettingsChanged(object sender, EventArgs e)
         {
+            //if display config changed - stop saving app positions
+            _timer.Stop();
+
             AppContext.Configuration.SmartDisplaysUpdate();
         }
 
@@ -187,6 +202,51 @@ namespace DesktopManagerUX
 
             this.Width = width;
             this.Height = height;
+        }
+
+        private List<WindowStatePosition> _windowStatePositions = new List<WindowStatePosition>();
+
+        private void SaveAllOpenWindows()
+        {
+            _timer.Stop();
+            _windowStatePositions.Clear();
+            List<WindowInfo> windows = EnumOpenWindows.GetOpenWindows();
+            for (int i = 0; i < windows.Count; i++)
+            {
+                WindowInfo info = windows[i];
+                System.Diagnostics.Debug.WriteLine("Save Window: " + info);
+                WindowStatePosition w = new WindowStatePosition(info);
+                w.CopyFrom(info);
+
+                _windowStatePositions.Add(w);
+            }
+            _timer.Start();
+        }
+
+        private void SaveAll_Click(object sender, RoutedEventArgs e)
+        {
+            SaveAllOpenWindows();
+        }
+
+        private void RestoreAll_Click(object sender, RoutedEventArgs e)
+        {
+            List<WindowInfo> windows = EnumOpenWindows.GetOpenWindows();
+            for (int i = windows.Count - 1; i >= 0; i--)
+            {
+                WindowInfo info = windows[i];
+                System.Diagnostics.Debug.WriteLine("Restore Window: " + info);
+
+                WindowStatePosition pos = _windowStatePositions.FirstOrDefault(w => w.hWnd == info.hWnd && w.Title == info.Title);
+                if (pos != null)
+                {
+                    WindowStatePosition.MoveWindow(info.hWnd, pos);
+                }
+            }
+        }
+
+        private void ExitApp_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

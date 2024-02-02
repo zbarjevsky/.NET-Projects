@@ -121,6 +121,7 @@
     <Compile Include="Windows\DwmApi\DwmApi.cs" />
     <Compile Include="Windows\DwmApi\Handles.cs" />
     <Compile Include="Windows\DwmApi\PinnedObject.cs" />
+    <Compile Include="Windows\DwmApi\WindowStatePosition.cs" />
     <Compile Include="Windows\Gdi32\WinGdi.Bitmap.cs" />
     <Compile Include="Windows\Gdi32\WinGdi.BITMAPINFO.cs" />
     <Compile Include="Windows\Gdi32\WinGdi.Brush.cs" />

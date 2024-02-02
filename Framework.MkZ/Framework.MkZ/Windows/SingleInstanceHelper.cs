@@ -18,7 +18,7 @@ namespace MkZ.Tools
             WindowInfo wnd = FindWindowContains(title_sub_string, includeInvisible);
             if (wnd != null)
             {
-                User32.ShowWindow(wnd.hWnd, User32.SW_RESTORE);
+                User32.ShowWindow(wnd.hWnd, User32.eShowWindowCmd.SW_RESTORE);
                 User32.SetForegroundWindow(wnd.hWnd);
                 MessageBox.Show(wnd.Win32Window, 
                     "Window: '" + wnd.Title + "'\nAlready Opened! \n\nShowing Running Instance...", 
@@ -49,7 +49,7 @@ namespace MkZ.Tools
                 Process otherProcess = processes[0];
                 if (otherProcess != null)
                 {
-                    User32.ShowWindow(otherProcess.MainWindowHandle, User32.SW_SHOW);
+                    User32.ShowWindow(otherProcess.MainWindowHandle, User32.eShowWindowCmd.SW_SHOW);
                     User32.SetForegroundWindow(otherProcess.MainWindowHandle);
                 }
             }

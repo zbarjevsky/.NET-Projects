@@ -13,13 +13,21 @@ namespace MkZ.Windows.Win32API
 
     public class WindowInfo
     {
+
         public HWND hWnd { get; set; }
         public string Title { get; set; }
+        public User32.WindowStylesEx StyleEx { get; set; }
+        
+        private User32.RECT _bounds;
+        public User32.RECT Bounds { get => _bounds; set => _bounds = value; }
 
-        public WindowInfo(IntPtr hWnd, string title)
+        public WindowInfo(IntPtr hWnd, string title, User32.WindowStylesEx styleEx)
         {
             Title = title;
             this.hWnd = hWnd;
+            StyleEx = styleEx;
+
+            User32.GetWindowRect(hWnd, out _bounds);
         }
 
         public System.Windows.Forms.IWin32Window Win32Window { get { return System.Windows.Forms.Control.FromHandle(hWnd); } }
@@ -204,18 +212,37 @@ namespace MkZ.Windows.Win32API
 
     public class User32
     {
-        public const uint SWP_SHOWWINDOW = 0x0001;
-        public const uint SW_SHOWNOACTIVATE = 0x04;
+        //public const uint SWP_SHOWWINDOW = 0x0001;
+        //public const uint SW_SHOWNOACTIVATE = 0x04;
         
-        public const uint SW_HIDE = 0;
-        public const uint SW_SHOW = 5;
-        public const uint SW_RESTORE = 0x09;
+        //public const uint SW_HIDE = 0;
+        //public const uint SW_SHOW = 5;
+        //public const uint SW_RESTORE = 0x09;
 
-        public const uint SW_MAXIMIZE = 3;
-        public const uint SW_MINIMIZE = 6;
-        public const uint SW_FORCEMINIMIZE = 11;
-        public const uint SW_SHOWMINNOACTIVE = 7;
-        public const uint SW_SHOWMINIMIZED = 2;
+        //public const uint SW_MAXIMIZE = 3;
+        //public const uint SW_MINIMIZE = 6;
+        //public const uint SW_FORCEMINIMIZE = 11;
+        //public const uint SW_SHOWMINNOACTIVE = 7;
+        //public const uint SW_SHOWMINIMIZED = 2;
+
+        //https://learn.microsoft.com/en-us/windows/win32/api/winuser/nf-winuser-showwindow
+        public enum eShowWindowCmd : uint
+        {
+            SW_HIDE                 = 0,  // Hides the window and activates another window.
+            SW_SHOWNORMAL           = 1,  
+            SW_NORMAL               = 1,  // Activates and displays a window. If the window is minimized, maximized, or arranged, the system restores it to its original size and position. An application should specify this flag when displaying the window for the first time.
+            SW_SHOWMINIMIZED        = 2,  // Activates the window and displays it as a minimized window.
+            SW_SHOWMAXIMIZED        = 3,  
+            SW_MAXIMIZE             = 3,  // Activates the window and displays it as a maximized window.
+            SW_SHOWNOACTIVATE       = 4,  // Displays a window in its most recent size and position. This value is similar to SW_SHOWNORMAL, except that the window is not activated.
+            SW_SHOW                 = 5,  // Activates the window and displays it in its current size and position.
+            SW_MINIMIZE             = 6,  // Minimizes the specified window and activates the next top-level window in the Z order.
+            SW_SHOWMINNOACTIVE      = 7,  // Displays the window as a minimized window. This value is similar to SW_SHOWMINIMIZED, except the window is not activated.
+            SW_SHOWNA               = 8,  // Displays the window in its current size and position. This value is similar to SW_SHOW, except that the window is not activated.
+            SW_RESTORE              = 9,  // Activates and displays the window. If the window is minimized, maximized, or arranged, the system restores it to its original size and position. An application should specify this flag when restoring a minimized window.
+            SW_SHOWDEFAULT          = 10, // Sets the show state based on the SW_ value specified in the STARTUPINFO structure passed to the CreateProcess function by the program that started the application.
+            SW_FORCEMINIMIZE        = 11, // Minimizes a window, even if the thread that owns the window is not responding. This flag should only be used when minimizing windows from a different thread.
+        }
 
         public const UInt32 WM_CLOSE = 0x0010;
 
@@ -233,6 +260,32 @@ namespace MkZ.Windows.Win32API
 
             public int Width { get { return Right - Left; } }
             public int Height { get { return Bottom - Top; } }
+
+            //public RECT()
+            //{
+            //    Left = Top = Right = Bottom = 0;
+            //}
+
+            public RECT(int left, int top, int width, int height)
+            {
+                Left = left;
+                Top = top;
+                Right = left + width;
+                Bottom = top + height;
+            }
+
+            public RECT(double left, double top, double width, double height)
+            {
+                Left = (int)left;
+                Top = (int)top;
+                Right = (int)(left + width);
+                Bottom = (int)(top + height);
+            }
+
+            public override string ToString()
+            {
+                return $"User32.RECT: l:{Left} t:{Top} w:{Width} h:{Height}";
+            }
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -344,7 +397,7 @@ namespace MkZ.Windows.Win32API
 
         [DllImport("user32.dll")]
         [return: MarshalAs(UnmanagedType.Bool)]
-        public static extern bool ShowWindow(IntPtr hWnd, uint nCmdShow);
+        public static extern bool ShowWindow(IntPtr hWnd, eShowWindowCmd nCmdShow);
 
         [DllImport("User32.dll")]
         public static extern bool SetForegroundWindow(IntPtr hWnd);
@@ -406,7 +459,7 @@ namespace MkZ.Windows.Win32API
 
         public static void MinimizeWindow(IntPtr hWnd)
         {
-            ShowWindow(hWnd, SW_MINIMIZE);
+            ShowWindow(hWnd, eShowWindowCmd.SW_MINIMIZE);
         }
 
         /// <summary>
@@ -474,29 +527,29 @@ namespace MkZ.Windows.Win32API
             if (!GetWindowPlacement(hWnd, out WinPlacement))
                 return true; //window not found
 
-            return (WinPlacement.showCmd == SW_FORCEMINIMIZE
-                || WinPlacement.showCmd == SW_SHOWMINIMIZED
-                || WinPlacement.showCmd == SW_SHOWMINNOACTIVE
-                || WinPlacement.showCmd == SW_MINIMIZE);
+            return (WinPlacement.showCmd == (uint)eShowWindowCmd.SW_FORCEMINIMIZE
+                || WinPlacement.showCmd == (uint)eShowWindowCmd.SW_SHOWMINIMIZED
+                || WinPlacement.showCmd == (uint)eShowWindowCmd.SW_SHOWMINNOACTIVE
+                || WinPlacement.showCmd == (uint)eShowWindowCmd.SW_MINIMIZE);
         }
 
         public static void RestoreWindow(IntPtr handle)
         {
             WINDOWPLACEMENT WinPlacement = new WINDOWPLACEMENT();
             GetWindowPlacement(handle, out WinPlacement);
-            if (WinPlacement.showCmd != SW_FORCEMINIMIZE 
-                && WinPlacement.showCmd != SW_SHOWMINIMIZED
-                && WinPlacement.showCmd != SW_SHOWMINNOACTIVE
-                && WinPlacement.showCmd != SW_MINIMIZE)
+            if (WinPlacement.showCmd != (uint)eShowWindowCmd.SW_FORCEMINIMIZE 
+                && WinPlacement.showCmd != (uint)eShowWindowCmd.SW_SHOWMINIMIZED
+                && WinPlacement.showCmd != (uint)eShowWindowCmd.SW_SHOWMINNOACTIVE
+                && WinPlacement.showCmd != (uint)eShowWindowCmd.SW_MINIMIZE)
                 return;
 
             if (WinPlacement.flags.HasFlag(WINDOWPLACEMENT.Flags.WPF_RESTORETOMAXIMIZED))
             {
-                ShowWindow(handle, SW_MAXIMIZE);
+                ShowWindow(handle, eShowWindowCmd.SW_MAXIMIZE);
             }
             else
             {
-                ShowWindow(handle, (int)SW_SHOWNOACTIVATE);// SW_RESTORE);
+                ShowWindow(handle, eShowWindowCmd.SW_SHOWNOACTIVATE);// SW_RESTORE);
             }
         }
 
@@ -890,7 +943,7 @@ namespace MkZ.Windows.Win32API
                 if (ex.HasFlag(User32.WindowStylesEx.WS_EX_TOOLWINDOW) || ex.HasFlag(User32.WindowStylesEx.WS_EX_NOREDIRECTIONBITMAP))
                     return true;
 
-                windows.Add(new WindowInfo(hWnd, title));
+                windows.Add(new WindowInfo(hWnd, title, ex));
                 return true;
             }, 0);
 

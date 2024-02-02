@@ -82,6 +82,18 @@
             </TabControl>
         </Grid>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Top">
+            <Button Margin="5" Padding="4" Click="SaveAll_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="S" Width="18" Background="Pink" Foreground="Black" VerticalAlignment="Bottom" TextAlignment="Center"/>
+                    <TextBlock Text="Save All" VerticalAlignment="Center" Margin="2"/>
+                </StackPanel>
+            </Button>
+            <Button Margin="5" Padding="4" Click="RestoreAll_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="R" Width="18" Background="Green" Foreground="Wheat" VerticalAlignment="Bottom" TextAlignment="Center"/>
+                    <TextBlock Text="Restore All" VerticalAlignment="Center" Margin="2"/>
+                </StackPanel>
+            </Button>
             <Button Margin="5" Padding="4" Click="Minimize_Click">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="_ " Width="18" Background="Navy" Foreground="Wheat" VerticalAlignment="Bottom" TextAlignment="Center"/>
@@ -90,8 +102,14 @@
             </Button>
             <Button Margin="10,5" Padding="4" Click="CloseSelected_Click">
                 <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="☒" Width="18" Background="Red" Foreground="Wheat" VerticalAlignment="Center" TextAlignment="Center"/>
+                    <TextBlock Text="☒" Width="18" Background="LightYellow" Foreground="Navy" VerticalAlignment="Center" TextAlignment="Center"/>
                     <TextBlock Text="Close All" VerticalAlignment="Center" Margin="2"/>
+                </StackPanel>
+            </Button>
+            <Button Margin="10,5" Padding="4" Click="ExitApp_Click">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="☒" Width="18" Background="Red" Foreground="Wheat" VerticalAlignment="Center" TextAlignment="Center"/>
+                    <TextBlock Text="Exit App" VerticalAlignment="Center" Margin="2"/>
                 </StackPanel>
             </Button>
         </StackPanel>
