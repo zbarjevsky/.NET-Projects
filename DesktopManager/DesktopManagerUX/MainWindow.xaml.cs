@@ -46,14 +46,15 @@ namespace DesktopManagerUX
         {
             ResizeThisProportionallyToDesktopSize();
 
-            _timer.Interval = TimeSpan.FromSeconds(3);
+            _timer.Interval = TimeSpan.FromSeconds(6);
             _timer.Tick += _timer_Tick;
             _timer.Start();
         }
 
         private void _timer_Tick(object sender, EventArgs e)
         {
-            SaveAllOpenWindows();
+            if(_chkAutoSaveAll.IsChecked.Value)
+                SaveAllOpenWindowsAsync();
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -76,7 +77,7 @@ namespace DesktopManagerUX
         private void SystemEvents_DisplaySettingsChanged(object sender, EventArgs e)
         {
             //if display config changed - stop saving app positions
-            _timer.Stop();
+            _chkAutoSaveAll.IsChecked = false;
 
             AppContext.Configuration.SmartDisplaysUpdate();
         }
@@ -206,40 +207,57 @@ namespace DesktopManagerUX
 
         private List<WindowStatePosition> _windowStatePositions = new List<WindowStatePosition>();
 
-        private void SaveAllOpenWindows()
+        private async Task SaveAllOpenWindowsAsync()
         {
             _timer.Stop();
-            _windowStatePositions.Clear();
-            List<WindowInfo> windows = EnumOpenWindows.GetOpenWindows();
-            for (int i = 0; i < windows.Count; i++)
-            {
-                WindowInfo info = windows[i];
-                System.Diagnostics.Debug.WriteLine("Save Window: " + info);
-                WindowStatePosition w = new WindowStatePosition(info);
-                w.CopyFrom(info);
 
-                _windowStatePositions.Add(w);
-            }
+            _txtAutoSaveAll.Text = "Saving...";
+
+            int count = 0;
+            await Task.Run(() =>
+            {
+                lock (_windowStatePositions)
+                {
+                    _windowStatePositions.Clear();
+                    List<WindowInfo> windows = EnumOpenWindows.GetOpenWindows();
+                    for (int i = 0; i < windows.Count; i++)
+                    {
+                        WindowInfo info = windows[i];
+                        System.Diagnostics.Debug.WriteLine("Save Window: " + info);
+                        WindowStatePosition w = new WindowStatePosition(info);
+                        w.CopyFrom(info);
+
+                        _windowStatePositions.Add(w);
+                    }
+                    count = windows.Count;
+                }
+            });
+
+            _txtAutoSaveAll.Text = $"(Saved: {count})";
+
             _timer.Start();
         }
 
         private void SaveAll_Click(object sender, RoutedEventArgs e)
         {
-            SaveAllOpenWindows();
+            SaveAllOpenWindowsAsync();
         }
 
         private void RestoreAll_Click(object sender, RoutedEventArgs e)
         {
-            List<WindowInfo> windows = EnumOpenWindows.GetOpenWindows();
-            for (int i = windows.Count - 1; i >= 0; i--)
+            lock (_windowStatePositions)
             {
-                WindowInfo info = windows[i];
-                System.Diagnostics.Debug.WriteLine("Restore Window: " + info);
-
-                WindowStatePosition pos = _windowStatePositions.FirstOrDefault(w => w.hWnd == info.hWnd && w.Title == info.Title);
-                if (pos != null)
+                List<WindowInfo> windows = EnumOpenWindows.GetOpenWindows();
+                for (int i = windows.Count - 1; i >= 0; i--)
                 {
-                    WindowStatePosition.MoveWindow(info.hWnd, pos);
+                    WindowInfo info = windows[i];
+                    System.Diagnostics.Debug.WriteLine("Restore Window: " + info);
+
+                    WindowStatePosition pos = _windowStatePositions.FirstOrDefault(w => w.hWnd == info.hWnd && w.Title == info.Title);
+                    if (pos != null)
+                    {
+                        WindowStatePosition.MoveWindow(info.hWnd, pos);
+                    }
                 }
             }
         }
@@ -247,6 +265,11 @@ namespace DesktopManagerUX
         private void ExitApp_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void AutoSaveAll_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
