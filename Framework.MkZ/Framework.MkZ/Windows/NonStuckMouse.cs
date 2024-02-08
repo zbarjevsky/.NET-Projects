@@ -16,6 +16,13 @@ using MkZ.WPF.Utils;
 
 namespace MkZ.Tools
 {
+    public enum eMouseCorrectionType
+    {
+        None,
+        Proportional,
+        NonStuck
+    }
+
     public class NonStuckMouse : IDisposable
     {
         private class BorderBetweenDisplays
@@ -38,6 +45,7 @@ namespace MkZ.Tools
         private bool _lBtnDown, _rBtnDown;
         private BorderBetweenDisplays[] _borders = null;
         private User32.POINT _prev = new User32.POINT();
+        private eMouseCorrectionType _correctionType = eMouseCorrectionType.None;
 
         private bool IsButtonDown {  get { return _lBtnDown || _rBtnDown; } }
 
@@ -144,6 +152,7 @@ namespace MkZ.Tools
                 return;
 
             User32.POINT ptCorrected = CorrectIntoOtherScreenProportionally(ptPrev, ptCurr, screenSrcIndex);
+
             if (ptCorrected.X != 0 || ptCorrected.Y != 0)
             {
                 _prev = ptCorrected; //already handled
@@ -180,8 +189,13 @@ namespace MkZ.Tools
                 return new User32.POINT();
             }
 
-            int dstY = CalcProportionalY(ptCurr, rFrom, rTo, delta);
-            //int dstY = CorrectYIfNeeded(ptCurr, rFrom, rTo, delta);
+            int dstY = ptCurr.Y;
+            if (_correctionType == eMouseCorrectionType.Proportional)
+                dstY = CalcProportionalY(ptCurr, rFrom, rTo, delta);
+            else if (_correctionType == eMouseCorrectionType.NonStuck)
+                dstY = CorrectYifNeeded(ptCurr, rFrom, rTo, delta);
+            else
+                return new User32.POINT();
 
             User32.POINT corrected = new User32.POINT(ptCurr.X + delta.X, dstY);
             Debug.WriteLine("Corrected Mouse Position: {0} Delta:{1}", corrected, delta);
@@ -218,9 +232,10 @@ namespace MkZ.Tools
         /// correct mouse movement if stuck between monitors
         /// </summary>
         /// <param name="enable"></param>
-        public void EnableMouseCorrection(bool enable)
+        public void EnableMouseCorrection(eMouseCorrectionType correctionType = eMouseCorrectionType.Proportional)
         {
-            MouseHook.Hook.Enabled = enable;
+            _correctionType = correctionType;
+            MouseHook.Hook.Enabled = correctionType != eMouseCorrectionType.None;
         }
     }
 }

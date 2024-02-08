@@ -34,9 +34,9 @@ namespace ClipboardManager.Utils
         public bool IsAutoUAC { get; set; } = false;
         public bool IsAbortShutdown { get; set; } = false;
 
-        private bool _isCorrectMouse = false;
+        private eMouseCorrectionType _isCorrectMouse = eMouseCorrectionType.None;
         [Description("Correct Mouse Pointer if Stuck Between Multiple Monitors")]
-        public bool IsCorrectMouse { get { return _isCorrectMouse; } set { _isCorrectMouse = value; UpdateMouseCorrection(_isCorrectMouse); } }
+        public eMouseCorrectionType CorrectMouseType { get { return _isCorrectMouse; } set { _isCorrectMouse = value; UpdateMouseCorrection(_isCorrectMouse); } }
 
         [TypeConverter(typeof(ExpandableObjectConverter))]
         public ServicesManipulatorSettings ServicesManipulatorSettings { get; set; } = new ServicesManipulatorSettings();
@@ -112,7 +112,7 @@ namespace ClipboardManager.Utils
             IsAutoReconnect = s.IsAutoReconnect;
             IsAutoUAC = s.IsAutoUAC;
             IsAbortShutdown = s.IsAbortShutdown;
-            IsCorrectMouse = s.IsCorrectMouse;
+            CorrectMouseType = s.CorrectMouseType;
             ServicesManipulatorSettings = s.ServicesManipulatorSettings;
             EncodingsList = s.EncodingsList;
         }
@@ -132,9 +132,9 @@ namespace ClipboardManager.Utils
             }
         }
 
-        public static void UpdateMouseCorrection(bool isCorrectMouse)
+        public static void UpdateMouseCorrection(eMouseCorrectionType correctionType)
         {
-            NonStuckMouse.Instance.EnableMouseCorrection(isCorrectMouse);
+            NonStuckMouse.Instance.EnableMouseCorrection(correctionType);
         }
     }
 

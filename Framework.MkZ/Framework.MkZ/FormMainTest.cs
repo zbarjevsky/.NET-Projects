@@ -200,7 +200,7 @@ namespace MkZ
 
         private void m_chkNonStickMouse_CheckedChanged(object sender, EventArgs e)
         {
-            NonStuckMouse.Instance.EnableMouseCorrection(m_chkNonStuckMouse.Checked);
+            NonStuckMouse.Instance.EnableMouseCorrection(m_chkNonStuckMouse.Checked ? eMouseCorrectionType.Proportional : eMouseCorrectionType.None);
         }
 
         private void m_btnEjectDrive_Click(object sender, EventArgs e)
