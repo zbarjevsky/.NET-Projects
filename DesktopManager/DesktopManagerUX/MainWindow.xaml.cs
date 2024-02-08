@@ -46,15 +46,22 @@ namespace DesktopManagerUX
         {
             ResizeThisProportionallyToDesktopSize();
 
-            _timer.Interval = TimeSpan.FromSeconds(6);
+            _timer.Interval = TimeSpan.FromSeconds(1);
             _timer.Tick += _timer_Tick;
             _timer.Start();
         }
 
+        private int _iTimerCounter = 0;
         private void _timer_Tick(object sender, EventArgs e)
         {
-            if(_chkAutoSaveAll.IsChecked.Value)
-                SaveAllOpenWindowsAsync();
+            if (_iTimerCounter++ % 6 == 0) //every 6 seconds
+            {
+                if (_chkAutoSaveAll.IsChecked.Value)
+                    _ = SaveAllOpenWindowsAsync();
+            }
+
+            if (_chkAutoSaveAll.IsChecked.Value)
+                _txtAutoSaveAll.Text += ".";
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -264,12 +271,14 @@ namespace DesktopManagerUX
 
         private void ExitApp_Click(object sender, RoutedEventArgs e)
         {
+            _timer.Stop();
             this.Close();
         }
 
         private void AutoSaveAll_Click(object sender, RoutedEventArgs e)
         {
-
+            if (_chkAutoSaveAll.IsChecked.Value)
+                _txtAutoSaveAll.Text = "Init.";
         }
     }
 }
