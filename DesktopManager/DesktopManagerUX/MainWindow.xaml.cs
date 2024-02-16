@@ -85,8 +85,11 @@ namespace DesktopManagerUX
         {
             //if display config changed - stop saving app positions
             _chkAutoSaveAll.IsChecked = false;
+            _timer.Stop();
 
             AppContext.Configuration.SmartDisplaysUpdate();
+
+            this.Activate();
         }
 
         private void Window_LocationChanged(object sender, EventArgs e)
@@ -232,8 +235,6 @@ namespace DesktopManagerUX
                         WindowInfo info = windows[i];
                         System.Diagnostics.Debug.WriteLine("Save Window: " + info);
                         WindowStatePosition w = new WindowStatePosition(info);
-                        w.CopyFrom(info);
-
                         _windowStatePositions.Add(w);
                     }
                     count = windows.Count;
@@ -254,23 +255,26 @@ namespace DesktopManagerUX
         {
             lock (_windowStatePositions)
             {
-                List<WindowInfo> windows = EnumOpenWindows.GetOpenWindows();
+                List<WindowInfo> windows = EnumOpenWindows.GetOpenWindows(includeInvisible:false);
                 for (int i = windows.Count - 1; i >= 0; i--)
                 {
                     WindowInfo info = windows[i];
                     System.Diagnostics.Debug.WriteLine("Restore Window: " + info);
 
                     WindowStatePosition pos = _windowStatePositions.FirstOrDefault(w => w.hWnd == info.hWnd && w.Title == info.Title);
-                    if (pos != null)
+                    if (pos != null && pos.IsValid())
                     {
-                        WindowStatePosition.MoveWindow(info.hWnd, pos);
+                        pos.SetWindowPlacement();
                     }
                 }
             }
+            //_chkAutoSaveAll.IsChecked = true;
+            _timer.Start();
         }
 
         private void ExitApp_Click(object sender, RoutedEventArgs e)
         {
+            _chkAutoSaveAll.IsChecked = false;
             _timer.Stop();
             this.Close();
         }
@@ -278,7 +282,10 @@ namespace DesktopManagerUX
         private void AutoSaveAll_Click(object sender, RoutedEventArgs e)
         {
             if (_chkAutoSaveAll.IsChecked.Value)
+            {
                 _txtAutoSaveAll.Text = "Init.";
+                _timer.Start();
+            }
         }
     }
 }

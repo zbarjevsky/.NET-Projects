@@ -516,10 +516,23 @@ namespace MkZ.Windows.Win32API
             /// The window's coordinates when the window is in the restored position.
             /// </summary>
             public RECT rcNormalPosition;
+
+            public WINDOWPLACEMENT(uint cmd)
+            {
+                length = (uint)Marshal.SizeOf(typeof(WINDOWPLACEMENT));
+                flags = 0;
+                showCmd = cmd;
+                ptMinPosition = new POINT();
+                ptMaxPosition = new POINT();
+                rcNormalPosition = new RECT();
+            }
         }
 
         [DllImport("user32.dll")]
         public static extern bool GetWindowPlacement(IntPtr hWnd, out WINDOWPLACEMENT lpwndpl);
+
+        [DllImport("user32.dll")]
+        public static extern bool SetWindowPlacement(IntPtr hWnd, [In] ref WINDOWPLACEMENT lpwndpl);
 
         public static bool IsMinimized(IntPtr hWnd)
         {

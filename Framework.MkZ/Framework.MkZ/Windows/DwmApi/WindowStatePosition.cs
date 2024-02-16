@@ -14,6 +14,8 @@ namespace MkZ.Windows.DwmApi
     {
         public User32.RECT Bounds { get; set; }
 
+        public WINDOWPLACEMENT _windowPlacement = new WINDOWPLACEMENT();
+
         public eShowWindowCmd WindowState { get; set; }
 
         public WindowStylesEx WindowStyle { get; set; }
@@ -41,7 +43,7 @@ namespace MkZ.Windows.DwmApi
             CopyFrom(info);
         }
 
-        public static void MoveWindow(IntPtr hWnd, WindowStatePosition pos)
+        private static void MoveWindow(IntPtr hWnd, WindowStatePosition pos)
         {
             if (hWnd != IntPtr.Zero)
             {
@@ -54,16 +56,32 @@ namespace MkZ.Windows.DwmApi
         public void CopyFrom(WindowInfo info)
         {
             User32.RECT rect = DesktopWindowManager.GetWindowRectangle(info.hWnd);
-            Bounds = info.Bounds;
+            //Bounds = info.Bounds;
 
             User32.WINDOWINFO info1 = User32.GetWindowInfo(info.hWnd);
-            User32.GetWindowPlacement(info.hWnd, out WINDOWPLACEMENT pos);
-            
-            WindowState = (eShowWindowCmd)pos.showCmd;
+            User32.GetWindowPlacement(info.hWnd, out _windowPlacement);
+            Bounds = _windowPlacement.rcNormalPosition;
+
+            WindowState = (eShowWindowCmd)_windowPlacement.showCmd;
             WindowStyle = info.StyleEx;
 
             hWnd = info.hWnd;
             Title = info.Title;
+        }
+
+        //https://stackoverflow.com/questions/25416267/setwindowplacement-doesnt-restore-to-the-same-monitor-when-maximized
+        public void SetWindowPlacement()
+        {
+            WINDOWPLACEMENT pos = _windowPlacement;
+            pos.flags = 0;
+            pos.showCmd = pos.showCmd == (uint)eShowWindowCmd.SW_SHOWMAXIMIZED ? (uint)eShowWindowCmd.SW_NORMAL : pos.showCmd;
+
+            User32.SetWindowPlacement(hWnd, ref pos);
+
+            if(_windowPlacement.showCmd == (uint)eShowWindowCmd.SW_SHOWMAXIMIZED)
+            {
+                User32.SetWindowPlacement(hWnd, ref _windowPlacement);
+            }
         }
 
         public void CopyFrom(WindowStatePosition state)
@@ -76,7 +94,12 @@ namespace MkZ.Windows.DwmApi
 
         public override string ToString()
         {
-            return string.Format("WindowStatePosition: {0}, Bounds: {1}", WindowState, Bounds);
+            return string.Format("WindowStatePosition: {0}, Bounds: {1}, Title: {2}", WindowState, Bounds, Title);
+        }
+
+        public bool IsValid()
+        {
+            return hWnd != IntPtr.Zero && Bounds.Left >= 0 && Bounds.Top >= 0;
         }
     }
 }
