@@ -59,7 +59,7 @@ namespace MkZ.Tools
 
         public NonStuckMouse()
         {
-            MouseHook.Hook.OnMouseMessage += mouseHook_OnMouseMessage;
+            //MouseHook.Hook.OnMouseMessage += mouseHook_OnMouseMessage;
             Microsoft.Win32.SystemEvents.DisplaySettingsChanged += SystemEvents_DisplaySettingsChanged;
         }
 
@@ -235,7 +235,22 @@ namespace MkZ.Tools
         public void EnableMouseCorrection(eMouseCorrectionType correctionType = eMouseCorrectionType.Proportional)
         {
             _correctionType = correctionType;
-            MouseHook.Hook.Enabled = correctionType != eMouseCorrectionType.None;
+            if (correctionType != eMouseCorrectionType.None)
+            {
+                if (MouseHook.Hook.Enabled == false)
+                {
+                    MouseHook.Hook.Enabled = true;
+                    MouseHook.Hook.OnMouseMessage += mouseHook_OnMouseMessage;
+                }
+            }
+            else //disable
+            {
+                if (MouseHook.Hook.Enabled == true)
+                {
+                    MouseHook.Hook.Enabled = false;
+                    MouseHook.Hook.OnMouseMessage -= mouseHook_OnMouseMessage;
+                }
+            }
         }
     }
 }
