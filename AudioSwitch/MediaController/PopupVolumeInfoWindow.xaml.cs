@@ -25,7 +25,7 @@ using MkZ.WPF.Utils;
 
 namespace MkZ.Media.WPF
 {
-    public class PopupVolumeInfoHelper
+    public class PopupVolumeInfoHelper : NotifyPropertyChangedImpl, IDisposable
     {
         private PopupVolumeInfoWindow _popupVolumeInfoWindow;
         private System.Windows.Point _location = new System.Windows.Point(100, 100);
@@ -38,7 +38,8 @@ namespace MkZ.Media.WPF
             set { _location = new System.Windows.Point(value.X, value.Y); }
         }
 
-        public string InfoText { get; set; } = "No Device (None)";
+        private string _infoText = "No Device (None)";
+        public string InfoText { get => _infoText; set => SetProperty(ref _infoText, value); }
 
         public PopupVolumeInfoHelper(System.Drawing.Point location, Action<int> onVolumeChangedAction)
         {
@@ -72,6 +73,11 @@ namespace MkZ.Media.WPF
             if (_popupVolumeInfoWindow != null)
                 _popupVolumeInfoWindow.Close();
         }
+
+        public void Dispose()
+        {
+            Close();
+        }
     }
 
     /// <summary>
@@ -98,6 +104,7 @@ namespace MkZ.Media.WPF
             { 
                 _enableVolumeChangeEvent = false; 
                 _slider.Value = value;
+                _progress.Value = value;
                 _enableVolumeChangeEvent = true;
             } 
         }
@@ -269,7 +276,8 @@ namespace MkZ.Media.WPF
 
         private void _slider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            //_progress.Value = _slider.Value;
+            _timer_count = 0;
+            _progress.Value = _slider.Value;
             NotifyVolumeChanged();
         }
 
