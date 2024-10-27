@@ -75,8 +75,13 @@ namespace DashCamGPSView.Tools
             }
             else
             {
-                string strDate = fileName.Substring(0, fileName.Length - 4);
-                if(DateTime.TryParseExact(strDate, "yyyy_MMdd_HHmmss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateTime))
+                string strDate = fileName;
+                if(DateTime.TryParseExact(strDate.Substring(0, "yyyy_MMdd_HHmmss".Length), "yyyy_MMdd_HHmmss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime dateTime))
+                {
+                    Type = GpsFileFormat.Viofo;
+                    Date = dateTime;
+                }
+                else if(DateTime.TryParseExact(strDate.Substring(0, "yyyyMMddHHmmss".Length), "yyyyMMddHHmmss", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateTime))
                 {
                     Type = GpsFileFormat.Viofo;
                     Date = dateTime;

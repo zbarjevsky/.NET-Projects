@@ -104,7 +104,7 @@ namespace NovatekViofoGPSParser
 
                 return gps;
             }
-            else if(c == 240)
+            else if(c == 240 || c == 44)
             {
                 reader.Position = start + OFFSET_V1_16;
 

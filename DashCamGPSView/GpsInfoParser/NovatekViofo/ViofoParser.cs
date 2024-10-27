@@ -2,6 +2,7 @@
 using GPSDataParser.Tools;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -31,6 +32,7 @@ namespace NovatekViofoGPSParser
                     if (size > reader.Length)
                         return null; //corrupt file
 
+                    Debug.WriteLine($"Kind: {kind}, Size: {size}");
                     if (kind == "moov")
                     {
                         long end = reader.Position + size - 8;
@@ -38,6 +40,7 @@ namespace NovatekViofoGPSParser
                         {
                             uint size1 = reader.ReadUintBE();
                             string kind1 = reader.ReadString(4);
+                            Debug.WriteLine($"Kind1: {kind1}, Size1: {size1}");
                             if (kind1 == "gps ")
                                 return ParseGpsCatalog(reader, size1 - 8); //gps catalog - position and size list
 
@@ -52,6 +55,13 @@ namespace NovatekViofoGPSParser
             }
 
             return null;
+        }
+
+        private static List<ViofoGpsPoint> ParseMovieHeaderCatalog(IBufferReader reader, long size)
+        {
+            List<ViofoGpsPoint> gpsPoints = new List<ViofoGpsPoint>();
+            LocationsList list = new LocationsList(reader, size);
+            return gpsPoints;
         }
 
         /// <summary>
