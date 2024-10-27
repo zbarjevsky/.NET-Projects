@@ -42,6 +42,7 @@ namespace NovatekViofoGPSParser
         public static ViofoGpsPoint Parse(IBufferReader reader, uint expectedSize)
         {
             const uint OFFSET_V2_48 = 48, OFFSET_V1_16 = 16;
+            const byte VIOFO_A119M2 = 44;
 
             long start = reader.Position;
 
@@ -104,7 +105,7 @@ namespace NovatekViofoGPSParser
 
                 return gps;
             }
-            else if(c == 240 || c == 44)
+            else if(c == 240 || c == VIOFO_A119M2)
             {
                 reader.Position = start + OFFSET_V1_16;
 

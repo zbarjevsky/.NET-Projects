@@ -29,9 +29,9 @@
                           MouseWheel="mePlayer_MouseWheel" />-->
         </ScrollViewer>
 
-        <Border Grid.Row="1" Margin="12" HorizontalAlignment="Left" VerticalAlignment="Top" CornerRadius="10">
+        <Border Grid.Row="1" Margin="12" HorizontalAlignment="Left" VerticalAlignment="Top" CornerRadius="10" BorderBrush="AliceBlue" BorderThickness="1">
                 <Border.Background>
-                    <SolidColorBrush Color="White" Opacity="0.2" />
+                    <SolidColorBrush Color="White" Opacity="0.5" />
                 </Border.Background>
             <StackPanel Margin="8" >
                 <RadioButton IsChecked="{Binding ZoomState, 
