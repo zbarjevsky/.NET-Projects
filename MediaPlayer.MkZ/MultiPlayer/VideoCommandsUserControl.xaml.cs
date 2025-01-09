@@ -1,7 +1,9 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -45,6 +47,9 @@ namespace MultiPlayer
             _position.Maximum = v.NaturalDuration;
             _position.Value = v.Position.TotalSeconds;
             _speed.SelectedIndex = SpeedRatio(v.SpeedRatio);
+            _fit.SelectedIndex = (int)v.ZoomState;
+            _timeLbl.Text = v.Position.ToString("mm':'ss");
+
             _isInUpdate = false;
         }
 
@@ -62,20 +67,27 @@ namespace MultiPlayer
 
         private void Open_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog()
+            string fileName = _videoPlayerUserControl.FileName;
+            string dir = System.IO.Path.GetDirectoryName(_videoPlayerUserControl.FileName);
+            OpenFileDialog ofd = new OpenFileDialog();
+            if (Directory.Exists(dir))
             {
-                FileName = _videoPlayerUserControl.FileName,
-                InitialDirectory = System.IO.Path.GetDirectoryName(_videoPlayerUserControl.FileName)
-            };
-
+                ofd.InitialDirectory = dir;
+                ofd.FileName = fileName;
+            }
+ 
             if (ofd.ShowDialog().Value)
             {
-                _videoPlayerUserControl.Open(ofd.FileName, _videoPlayerUserControl.Volume);
-                _position.Maximum = _videoPlayerUserControl.NaturalDuration;
-                _position.Value = 0;
-                _videoPlayerUserControl.Play();
-
+                Open(ofd.FileName);
             }
+        }
+
+        private void Open(string fileName)
+        {
+            _videoPlayerUserControl.Open(fileName, _videoPlayerUserControl.Volume);
+            _position.Maximum = _videoPlayerUserControl.NaturalDuration;
+            _position.Value = 0;
+            _videoPlayerUserControl.Play();
         }
 
         private void PlayPause_Click(object sender, RoutedEventArgs e)
@@ -89,20 +101,9 @@ namespace MultiPlayer
                 _videoPlayerUserControl.Volume = _volume.Value / 1000.0;
         }
 
-        private void Pos_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
-        {
-            if (_videoPlayerUserControl == null || _isInUpdate)
-                return;
-
-            MediaState state = _videoPlayerUserControl.MediaState;
-            if (state != MediaState.Pause)
-                _videoPlayerUserControl.Pause();
-
-        }
-
         double[] _speedRatios = { 0.1, 0.2, 0.5, 1.0, 1.5 };
 
-        private void Speed_Selected(object sender, RoutedEventArgs e)
+        private void Speed_Selected(object sender, SelectionChangedEventArgs e)
         {
             if (_videoPlayerUserControl == null || _isInUpdate)
                 return;
@@ -120,7 +121,7 @@ namespace MultiPlayer
             return 3;
         }
 
-        private void Fit_Selected(object sender, RoutedEventArgs e)
+        private void Fit_Selected(object sender, SelectionChangedEventArgs e)
         {
             if (_videoPlayerUserControl == null || _isInUpdate)
                 return;
@@ -128,8 +129,29 @@ namespace MultiPlayer
             _videoPlayerUserControl.ZoomState = (MkZ.WPF.eZoomState)_fit.SelectedIndex;
         }
 
+        private void Pos_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
+        {
+            if (_videoPlayerUserControl == null || _isInUpdate)
+                return;
+
+            MediaState state = _videoPlayerUserControl.MediaState;
+            if (state != MediaState.Pause)
+                _videoPlayerUserControl.Pause();
+
+        }
+
         private void Pos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+            if (_videoPlayerUserControl == null || _isInUpdate)
+                return;
+
+            MediaState state = _videoPlayerUserControl.MediaState;
+            if (state != MediaState.Pause)
+                _videoPlayerUserControl.Pause();
+
+            _videoPlayerUserControl.PositionSet(TimeSpan.FromSeconds(_position.Value), false);
+
+            _timeLbl.Text = _videoPlayerUserControl.Position.ToString("mm':'ss");
         }
 
         private void Pos_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
@@ -142,6 +164,31 @@ namespace MultiPlayer
                 _videoPlayerUserControl.Pause();
 
             _videoPlayerUserControl.PositionSet(TimeSpan.FromSeconds(_position.Value), false);
+        }
+
+        private void Prev_Click(object sender, RoutedEventArgs e)
+        {
+            List<string> fileNames = GetFileNames(_videoPlayerUserControl.FileName, out int idx);
+            if (idx > 0 && idx < fileNames.Count)
+                Open(fileNames[idx-1]);
+        }
+
+        private void Next_Click(object sender, RoutedEventArgs e)
+        {
+            List<string> fileNames = GetFileNames(_videoPlayerUserControl.FileName, out int idx);
+            if (idx >= 0 && idx < fileNames.Count - 1)
+                Open(fileNames[idx + 1]);
+        }
+
+        private List<string> GetFileNames(string fileName, out int idx)
+        {
+            string dir = System.IO.Path.GetDirectoryName(fileName);
+
+            List<string> fileNames = System.IO.Directory.EnumerateFiles(dir).ToList();
+            fileNames.Sort();
+            idx = fileNames.IndexOf(fileName);
+
+            return fileNames;
         }
     }
 }

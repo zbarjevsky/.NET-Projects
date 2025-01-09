@@ -22,8 +22,8 @@
             <RowDefinition Height="5"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <GridSplitter Grid.Column="1" Grid.RowSpan="3" Background="Red" Width="5" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
-        <GridSplitter Grid.Column="3" Grid.RowSpan="3" Background="Red" Width="5" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+        <GridSplitter Grid.Column="1" Grid.RowSpan="3" Background="Goldenrod" Width="5" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+        <GridSplitter Grid.Column="3" Grid.RowSpan="3" Background="Goldenrod" Width="5" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
         
         <GridSplitter Grid.ColumnSpan="5" Grid.Row="1" Background="Goldenrod" Height="5" HorizontalAlignment="Stretch" />
         

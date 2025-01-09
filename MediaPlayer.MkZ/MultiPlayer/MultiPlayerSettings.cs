@@ -32,7 +32,7 @@ namespace MultiPlayer
         {
             FileName = v.FileName;
             Position = v.Position.TotalSeconds;
-            ZoomState = eZoomState.FitHeight; // v.ZoomState;
+            ZoomState = v.ZoomState;
             Zoom = v.Zoom;
             MediaState = v.MediaState;
             Volume = v.Volume;

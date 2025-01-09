@@ -6,9 +6,10 @@
              xmlns:local="clr-namespace:MultiPlayer"
              mc:Ignorable="d" 
              d:DesignHeight="30" d:DesignWidth="800">
-    <Grid Margin="0">
-        <Grid Grid.Row="1" Background="AliceBlue" Margin="2">
+    <Border Margin="0" CornerRadius="0,0,5,5">
+        <Grid Grid.Row="1" Background="Gray" Margin="2">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
@@ -19,28 +20,33 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" Content="open" Click="Open_Click" />
-            <Button Grid.Column="1" Content="play/pause" Click="PlayPause_Click" />
-            <Button Grid.Column="2" Content="next" />
-            <Button Grid.Column="3" Content="prev" />
-            <ComboBox x:Name="_speed" Grid.Column="4" SelectedIndex="3" SelectionChanged="Speed_Selected" >
-                <ComboBoxItem Content=".12x" />
-                <ComboBoxItem Content=".25x" />
+            <Button Grid.Column="0" Margin="2" Content="open" Click="Open_Click" />
+            <Button Grid.Column="1" Margin="2" Content="play/pause" Click="PlayPause_Click" />
+            <Button Grid.Column="2" Margin="2" Content="prev" Click="Prev_Click" />
+            <Button Grid.Column="3" Margin="2" Content="next" Click="Next_Click"/>
+            <ComboBox x:Name="_speed" Grid.Column="4" Margin="2" SelectedIndex="3" SelectionChanged="Speed_Selected" >
+                <ComboBoxItem Content=".1x" />
+                <ComboBoxItem Content=".2x" />
                 <ComboBoxItem Content=".5x" />
                 <ComboBoxItem Content="1x" />
                 <ComboBoxItem Content="1.5x" />
             </ComboBox>
-            <ComboBox x:Name="_fit" Grid.Column="5" SelectedIndex="2" SelectionChanged="Fit_Selected" >
-                <ComboBoxItem Content="FitWindow" />
-                <ComboBoxItem Content="FitWidth" />
-                <ComboBoxItem Content="FitHeight" />
+            <ComboBox x:Name="_fit" Grid.Column="5" Margin="2" SelectedIndex="2" SelectionChanged="Fit_Selected" >
+                <ComboBoxItem Content="Custom" />
                 <ComboBoxItem Content="Original" />
+                <ComboBoxItem Content="FitWidth" />
+                <ComboBoxItem Content="FitWindow" />
+                <ComboBoxItem Content="FitHeight" />
             </ComboBox>
-            <Slider x:Name="_position" Grid.Column="6" Margin="2" 
+            <TextBlock x:Name="_timeLbl" Grid.Column="6" Margin="2,5" Text="0:00" />
+            <Slider x:Name="_position" Grid.Column="7" Margin="2,4" 
                     Value="33" Maximum="300" Minimum="0" IsMoveToPointEnabled="True" 
+                    ValueChanged="Pos_ValueChanged"
                     Thumb.DragStarted="Pos_DragStarted"
                     Thumb.DragCompleted="Pos_DragCompleted" />
-            <Slider x:Name="_volume" Grid.Column="7" Margin="2" Value="150" Maximum="1000" Minimum="0" Width="60" ValueChanged="Volume_ValueChanged"/>
+            <Slider x:Name="_volume" Grid.Column="8" Margin="2,4" 
+                    Value="150" Maximum="1000" Minimum="0" Width="60" 
+                    ValueChanged="Volume_ValueChanged"/>
         </Grid>
-    </Grid>
+    </Border>
 </UserControl>

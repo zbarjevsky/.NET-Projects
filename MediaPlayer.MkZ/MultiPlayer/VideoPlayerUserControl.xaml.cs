@@ -48,17 +48,17 @@ namespace MultiPlayer
             protected set { _mediaState = value; OnPropertyChanged(); }
         }
 
-        //private string _title;
-        //public string Title
-        //{
-        //    get { return _title; }
-        //    set
-        //    {
-        //        _title = value;
-        //        txtTitle.Text = value + (IsFlipHorizontally ? " (Flipped)" : "");
-        //        OnPropertyChanged();
-        //    }
-        //}
+        private string _title;
+        public string Title
+        {
+            get { return _title; }
+            set
+            {
+                _title = value;
+                //txtTitle.Text = value + (IsFlipHorizontally ? " (Flipped)" : "");
+                OnPropertyChanged();
+            }
+        }
 
         public string FileName { get; private set; }
 
@@ -74,7 +74,7 @@ namespace MultiPlayer
             {
                 if (VideoPlayerElement.RenderTransform is ScaleTransform scale)
                     scale.ScaleX = value ? -1 : 1; //Flip Horizontally
-                //Title = _title; //update flipped
+                Title = _title; //update flipped
                 OnPropertyChanged();
             }
         }
@@ -182,7 +182,7 @@ namespace MultiPlayer
 
             Volume = volume;
             MediaState = player.MediaState;
-            //Title = player.Title;
+            Title = player.Title;
             FileName = player.FileName;
             IsFlipHorizontally = player.IsFlipHorizontally;
             Zoom = player.Zoom;
@@ -281,18 +281,23 @@ namespace MultiPlayer
             VideoPlayerElement.Source = string.IsNullOrEmpty(fileName) ? null : new Uri(fileName);
             Volume = volume;
             MediaState = MediaState.Manual;
+            Title = fileName;
         }
 
         public void LoadSetting(OnePlayerSettings s)
         {
             Open(s.FileName, s.Volume);
 
-            ZoomState = s.ZoomState;
             PositionSet(TimeSpan.FromSeconds(s.Position), true);
             SpeedRatio = s.SpeedRatio;
+            ZoomStateSet(s.ZoomState, true);
 
-            if (s.MediaState == MediaState.Play) 
-                Play();
+            _commands.Update(this);
+
+            Play();
+            if (s.MediaState != MediaState.Play) 
+                Pause();
+
         }
 
         internal void Close()
