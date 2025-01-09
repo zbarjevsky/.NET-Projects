@@ -16,6 +16,7 @@ namespace MultiPlayer
     /// </summary>
     public partial class MainWindow : Window
     {
+        MultiPlayerSettings _settings = new MultiPlayerSettings();
         List<VideoPlayerUserControl> _videos = new List<VideoPlayerUserControl>();
 
         public MainWindow()
@@ -27,15 +28,32 @@ namespace MultiPlayer
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            _settings.Load();
 
-            foreach (VideoPlayerUserControl v in _videos)
+            if (_settings.Settings.Count == _videos.Count)
             {
-                v.Open(@"C:\Temp\YouTube\Music\20220916--По вашим просьбам вся песня  ＂Хочу назад в СССР＂.--2UGKOyH13Gc.mp4");
-                v.ZoomStateSet(MkZ.WPF.eZoomState.FitHeight, true);
-                v.Play();
+                for (int i = 0; i < _videos.Count; i++)
+                {
+                    VideoPlayerUserControl v = _videos[i];
+                    v.LoadSetting(_settings.Settings[i]);
+                }
             }
+            else
+            {
+                foreach (VideoPlayerUserControl v in _videos)
+                {
+                    v.Open(@"E:\Temp\YouTube\Music\20210315--＂The Lonely Shepherd''- James Last- pan flute cover-Karla Herescu--ITaj0qAehD8.mp4");
+                    v.ZoomStateSet(MkZ.WPF.eZoomState.FitHeight, true);
+                    v.Play();
+                }
+            }
+        }
 
-            _video00.Volume = 1;
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            _settings.Update(_videos);
+            _settings.Save();
+            e.Cancel = false;
         }
     }
 }

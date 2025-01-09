@@ -23,20 +23,23 @@
             <Button Grid.Column="1" Content="play/pause" Click="PlayPause_Click" />
             <Button Grid.Column="2" Content="next" />
             <Button Grid.Column="3" Content="prev" />
-            <ComboBox Grid.Column="4" SelectedIndex="3">
+            <ComboBox x:Name="_speed" Grid.Column="4" SelectedIndex="3" SelectionChanged="Speed_Selected" >
                 <ComboBoxItem Content=".12x" />
                 <ComboBoxItem Content=".25x" />
                 <ComboBoxItem Content=".5x" />
                 <ComboBoxItem Content="1x" />
                 <ComboBoxItem Content="1.5x" />
             </ComboBox>
-            <ComboBox Grid.Column="5" SelectedIndex="2" >
+            <ComboBox x:Name="_fit" Grid.Column="5" SelectedIndex="2" SelectionChanged="Fit_Selected" >
                 <ComboBoxItem Content="FitWindow" />
                 <ComboBoxItem Content="FitWidth" />
                 <ComboBoxItem Content="FitHeight" />
                 <ComboBoxItem Content="Original" />
             </ComboBox>
-            <Slider x:Name="_position" Grid.Column="6" Margin="2" Value="33" Maximum="300" Minimum="0" ValueChanged="Pos_ValueChanged" />
+            <Slider x:Name="_position" Grid.Column="6" Margin="2" 
+                    Value="33" Maximum="300" Minimum="0" IsMoveToPointEnabled="True" 
+                    Thumb.DragStarted="Pos_DragStarted"
+                    Thumb.DragCompleted="Pos_DragCompleted" />
             <Slider x:Name="_volume" Grid.Column="7" Margin="2" Value="150" Maximum="1000" Minimum="0" Width="60" ValueChanged="Volume_ValueChanged"/>
         </Grid>
     </Grid>

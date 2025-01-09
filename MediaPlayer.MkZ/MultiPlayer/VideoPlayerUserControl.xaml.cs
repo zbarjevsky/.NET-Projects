@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace MultiPlayer
 {
@@ -32,6 +33,11 @@ namespace MultiPlayer
         public Func<ExceptionRoutedEventArgs, MediaElement, bool> VideoFailed = (e, player) => true;
         public Action LeftButtonClick = () => { };
         public Action LeftButtonDoubleClick = () => { };
+
+        private DispatcherTimer _timer = new DispatcherTimer(DispatcherPriority.ContextIdle)
+        {
+            Interval = TimeSpan.FromSeconds(0.3),
+        };
 
         public MediaElement VideoPlayerElement { get; private set; } = null;
 
@@ -149,7 +155,14 @@ namespace MultiPlayer
 
             RecreateMediaElement(false);
 
+            _timer.Tick += _timer_Tick;
+
             _commands.Init(this);
+        }
+
+        private void _timer_Tick(object? sender, EventArgs e)
+        {
+            _commands.Update(this);
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -270,6 +283,18 @@ namespace MultiPlayer
             MediaState = MediaState.Manual;
         }
 
+        public void LoadSetting(OnePlayerSettings s)
+        {
+            Open(s.FileName, s.Volume);
+
+            ZoomState = s.ZoomState;
+            PositionSet(TimeSpan.FromSeconds(s.Position), true);
+            SpeedRatio = s.SpeedRatio;
+
+            if (s.MediaState == MediaState.Play) 
+                Play();
+        }
+
         internal void Close()
         {
             Stop();
@@ -286,10 +311,12 @@ namespace MultiPlayer
                 VideoPlayerElement.Play();
                 this.Background = Brushes.Black;
                 MediaState = MediaState.Play;
+                _timer.Start();
             }
             else
             {
                 Close();
+                _timer.Stop();
             }
         }
 
@@ -300,6 +327,7 @@ namespace MultiPlayer
                 VideoPlayerElement.Pause();
                 this.Background = Brushes.DarkGray;
                 MediaState = MediaState.Pause;
+                _timer.Stop();
             }
         }
 
@@ -310,12 +338,13 @@ namespace MultiPlayer
                 VideoPlayerElement.Stop();
                 this.Background = Brushes.DarkGray;
                 MediaState = MediaState.Stop;
+                _timer.Stop();
             }
         }
 
         public void TogglePlayPauseState()
         {
-            if (MediaState == MediaState.Pause)
+            if (MediaState == MediaState.Pause || MediaState == MediaState.Manual)
                 Play();
             else if (MediaState == MediaState.Play)
                 Pause();

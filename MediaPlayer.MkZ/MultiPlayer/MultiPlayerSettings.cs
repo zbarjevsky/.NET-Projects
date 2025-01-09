@@ -1,0 +1,118 @@
+﻿using MkZ.Tools;
+using MkZ.WPF;
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+
+namespace MultiPlayer
+{
+    [Serializable]
+    public class OnePlayerSettings
+    {
+        public string FileName { get; set; } = string.Empty;
+        public double Position { get; set; } = 0.0;
+        public eZoomState ZoomState {  get; set; } = eZoomState.FitHeight;
+        public double Zoom { get; set; } = 1.0;
+        public MediaState MediaState { get; set; } = MediaState.Play;
+        public double Volume { get; set; } = 0.0;
+        public double SpeedRatio { get; set; } = 1.0;
+
+        public OnePlayerSettings()
+        {
+            
+        }
+
+        public OnePlayerSettings(VideoPlayerUserControl v)
+        {
+            FileName = v.FileName;
+            Position = v.Position.TotalSeconds;
+            ZoomState = eZoomState.FitHeight; // v.ZoomState;
+            Zoom = v.Zoom;
+            MediaState = v.MediaState;
+            Volume = v.Volume;
+            SpeedRatio = v.SpeedRatio;
+        }
+
+        public void EnsureHasValues()
+        {
+        }
+    }
+
+    [Serializable]
+    public class MultiPlayerSettings
+    {
+        string _dataFolder;
+        string _fileName;
+
+        public List<OnePlayerSettings> Settings { get; set; }
+
+        public MultiPlayerSettings() 
+        {
+            var assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
+            string commonPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            _dataFolder = Path.Combine(commonPath, "MkZ", assemblyName);
+            Directory.CreateDirectory(_dataFolder);
+
+            string debug = "";
+#if DEBUG
+            debug = "_debug";
+#endif
+            string date = DateTime.Now.ToString("yyyy_MM_dd-HH_mm_ss");
+            string fileName = string.Format("{0}_{1}{2}.xml", assemblyName, "Files", debug);
+            _fileName = Path.Combine(_dataFolder, fileName);
+        }
+
+        public void Save()
+        {
+            XmlHelper.Save(_fileName, this);
+        }
+
+        public void Load()
+        {
+            if (File.Exists(_fileName))
+            {
+                try
+                {
+                    MultiPlayerSettings appConfig = XmlHelper.Open<MultiPlayerSettings>(_fileName);
+                    this.CopyFrom(appConfig);
+                }
+                catch (Exception err)
+                {
+                    MessageBox.Show(err.ToString(), "Cannot load Settings From File");
+                }
+            }
+            this.EnsureHasValues();
+        }
+
+        private void CopyFrom(MultiPlayerSettings appConfig)
+        {
+            this.Settings = appConfig.Settings;
+        }
+
+        private void EnsureHasValues()
+        {
+            if (Settings == null)
+                Settings = new List<OnePlayerSettings>();
+
+            foreach (OnePlayerSettings item in Settings)
+            {
+                item.EnsureHasValues();
+            }
+        }
+
+        public void Update(List<VideoPlayerUserControl> videos)
+        {
+            this.Settings = new List<OnePlayerSettings>();
+            foreach(VideoPlayerUserControl v in videos)
+            {
+                this.Settings.Add(new OnePlayerSettings(v));
+            }
+        }
+    }
+}

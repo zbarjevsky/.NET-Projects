@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:MultiPlayer"
         WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded"
+        Closing="Window_Closing"
         mc:Ignorable="d"
         Title="MultiMedia Player" Height="950" Width="1900">
     <Grid Background="Black">
