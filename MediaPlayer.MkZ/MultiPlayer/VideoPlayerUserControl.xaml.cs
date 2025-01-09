@@ -162,7 +162,7 @@ namespace MultiPlayer
 
         private void _timer_Tick(object? sender, EventArgs e)
         {
-            _commands.Update(this);
+            _commands.Update(this, 0.0);
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -239,8 +239,11 @@ namespace MultiPlayer
             //set { VideoPlayerElement.Position = value; OnPropertyChanged(); } 
         }
 
+        private TimeSpan LastPosition = TimeSpan.Zero;
+
         public void PositionSet(TimeSpan position, bool notify)
         {
+            LastPosition = position;
             VideoPlayerElement.Position = position;
             if (notify)
                 OnPropertyChanged(nameof(Position));
@@ -288,15 +291,16 @@ namespace MultiPlayer
         {
             Open(s.FileName, s.Volume);
 
-            PositionSet(TimeSpan.FromSeconds(s.Position), true);
+            PositionSet(TimeSpan.FromSeconds(s.Position), false);
             SpeedRatio = s.SpeedRatio;
             ZoomStateSet(s.ZoomState, true);
-
-            _commands.Update(this);
 
             Play();
             if (s.MediaState != MediaState.Play) 
                 Pause();
+
+            LastPosition = TimeSpan.FromSeconds(s.Position);
+            _commands.Update(this, s.Duration);
 
         }
 
@@ -316,6 +320,7 @@ namespace MultiPlayer
                 VideoPlayerElement.Play();
                 this.Background = Brushes.Black;
                 MediaState = MediaState.Play;
+                PositionSet(LastPosition, false);
                 _timer.Start();
             }
             else
@@ -329,6 +334,7 @@ namespace MultiPlayer
         {
             if (VideoPlayerElement.Source != null)
             {
+                LastPosition = VideoPlayerElement.Position;
                 VideoPlayerElement.Pause();
                 this.Background = Brushes.DarkGray;
                 MediaState = MediaState.Pause;
@@ -340,6 +346,7 @@ namespace MultiPlayer
         {
             if (VideoPlayerElement.Source != null)
             {
+                LastPosition = TimeSpan.Zero;
                 VideoPlayerElement.Stop();
                 this.Background = Brushes.DarkGray;
                 MediaState = MediaState.Stop;

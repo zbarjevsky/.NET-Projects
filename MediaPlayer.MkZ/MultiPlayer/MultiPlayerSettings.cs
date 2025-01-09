@@ -17,6 +17,7 @@ namespace MultiPlayer
     {
         public string FileName { get; set; } = string.Empty;
         public double Position { get; set; } = 0.0;
+        public double Duration { get; set; } = 0.0;
         public eZoomState ZoomState {  get; set; } = eZoomState.FitHeight;
         public double Zoom { get; set; } = 1.0;
         public MediaState MediaState { get; set; } = MediaState.Play;
@@ -31,6 +32,7 @@ namespace MultiPlayer
         public OnePlayerSettings(VideoPlayerUserControl v)
         {
             FileName = v.FileName;
+            Duration = v.NaturalDuration;
             Position = v.Position.TotalSeconds;
             ZoomState = v.ZoomState;
             Zoom = v.Zoom;

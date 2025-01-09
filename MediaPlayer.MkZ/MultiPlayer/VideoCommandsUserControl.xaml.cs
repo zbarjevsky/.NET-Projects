@@ -40,15 +40,18 @@ namespace MultiPlayer
         }
 
         bool _isInUpdate = false;
-        public void Update(VideoPlayerUserControl v)
+        public void Update(VideoPlayerUserControl v, double duration)
         {
             _isInUpdate = true;
+            
             _volume.Value = v.Volume * 1000.0;
-            _position.Maximum = v.NaturalDuration;
+            _position.Maximum = v.NaturalDuration == 0 ? duration : v.NaturalDuration;
             _position.Value = v.Position.TotalSeconds;
             _speed.SelectedIndex = SpeedRatio(v.SpeedRatio);
             _fit.SelectedIndex = (int)v.ZoomState;
             _timeLbl.Text = v.Position.ToString("mm':'ss");
+
+            System.Diagnostics.Debug.WriteLine("*** Position: " + _position.Value); 
 
             _isInUpdate = false;
         }
