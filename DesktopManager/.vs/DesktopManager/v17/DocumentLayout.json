@@ -1,0 +1,319 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Dev_Mark\\MkZ\\.NET_Projects\\DesktopManager\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{75DE9844-3908-4151-B792-9DDAAB84049E}|DesktopManagerUX\\DesktopManagerUX.csproj|C:\\Dev_Mark\\MkZ\\.NET_Projects\\DesktopManager\\desktopmanagerux\\layoutconfigurationusercontrol.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{75DE9844-3908-4151-B792-9DDAAB84049E}|DesktopManagerUX\\DesktopManagerUX.csproj|solutionrelative:desktopmanagerux\\layoutconfigurationusercontrol.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{75DE9844-3908-4151-B792-9DDAAB84049E}|DesktopManagerUX\\DesktopManagerUX.csproj|c:\\dev_mark\\mkz\\.net_projects\\desktopmanager\\desktopmanagerux\\appchooserusercontrol.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{75DE9844-3908-4151-B792-9DDAAB84049E}|DesktopManagerUX\\DesktopManagerUX.csproj|solutionrelative:desktopmanagerux\\appchooserusercontrol.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{75DE9844-3908-4151-B792-9DDAAB84049E}|DesktopManagerUX\\DesktopManagerUX.csproj|C:\\Dev_Mark\\MkZ\\.NET_Projects\\DesktopManager\\desktopmanagerux\\layoutconfigurationusercontrol.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{75DE9844-3908-4151-B792-9DDAAB84049E}|DesktopManagerUX\\DesktopManagerUX.csproj|solutionrelative:desktopmanagerux\\layoutconfigurationusercontrol.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{75DE9844-3908-4151-B792-9DDAAB84049E}|DesktopManagerUX\\DesktopManagerUX.csproj|C:\\Dev_Mark\\MkZ\\.NET_Projects\\DesktopManager\\desktopmanagerux\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{75DE9844-3908-4151-B792-9DDAAB84049E}|DesktopManagerUX\\DesktopManagerUX.csproj|solutionrelative:desktopmanagerux\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{75DE9844-3908-4151-B792-9DDAAB84049E}|DesktopManagerUX\\DesktopManagerUX.csproj|c:\\dev_mark\\mkz\\.net_projects\\desktopmanager\\desktopmanagerux\\mainwindow.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|",
+      "RelativeMoniker": "D:0:0:{75DE9844-3908-4151-B792-9DDAAB84049E}|DesktopManagerUX\\DesktopManagerUX.csproj|solutionrelative:desktopmanagerux\\mainwindow.xaml.cs||{8B382828-6202-11D1-8870-0000F87579D2}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{75DE9844-3908-4151-B792-9DDAAB84049E}|DesktopManagerUX\\DesktopManagerUX.csproj|C:\\Dev_Mark\\MkZ\\.NET_Projects\\DesktopManager\\desktopmanagerux\\logic.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{75DE9844-3908-4151-B792-9DDAAB84049E}|DesktopManagerUX\\DesktopManagerUX.csproj|solutionrelative:desktopmanagerux\\logic.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{75DE9844-3908-4151-B792-9DDAAB84049E}|DesktopManagerUX\\DesktopManagerUX.csproj|C:\\Dev_Mark\\MkZ\\.NET_Projects\\DesktopManager\\desktopmanagerux\\appchooserusercontrol.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{75DE9844-3908-4151-B792-9DDAAB84049E}|DesktopManagerUX\\DesktopManagerUX.csproj|solutionrelative:desktopmanagerux\\appchooserusercontrol.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{75DE9844-3908-4151-B792-9DDAAB84049E}|DesktopManagerUX\\DesktopManagerUX.csproj|C:\\Dev_Mark\\MkZ\\.NET_Projects\\DesktopManager\\desktopmanagerux\\datamodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{75DE9844-3908-4151-B792-9DDAAB84049E}|DesktopManagerUX\\DesktopManagerUX.csproj|solutionrelative:desktopmanagerux\\datamodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{768AF4B8-5EDD-4196-97AE-DBC1589DD426}|..\\Framework.MkZ\\Framework.MkZ\\Framework.MkZ.csproj|C:\\Dev_Mark\\MkZ\\.NET_Projects\\framework.mkz\\framework.mkz\\windows\\dwmapi\\windowstateposition.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{768AF4B8-5EDD-4196-97AE-DBC1589DD426}|..\\Framework.MkZ\\Framework.MkZ\\Framework.MkZ.csproj|C:\\Dev_Mark\\MkZ\\.NET_Projects\\framework.mkz\\framework.mkz\\windows\\win32api\\user32.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{768AF4B8-5EDD-4196-97AE-DBC1589DD426}|..\\Framework.MkZ\\Framework.MkZ\\Framework.MkZ.csproj|C:\\Dev_Mark\\MkZ\\.NET_Projects\\framework.mkz\\framework.mkz\\windows\\singleinstancehelper.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{768AF4B8-5EDD-4196-97AE-DBC1589DD426}|..\\Framework.MkZ\\Framework.MkZ\\Framework.MkZ.csproj|C:\\Dev_Mark\\MkZ\\.NET_Projects\\framework.mkz\\framework.mkz\\windows\\dwmapi\\desktopwindowmanager.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{768AF4B8-5EDD-4196-97AE-DBC1589DD426}|..\\Framework.MkZ\\Framework.MkZ\\Framework.MkZ.csproj|C:\\Dev_Mark\\MkZ\\.NET_Projects\\framework.mkz\\framework.mkz\\wpf\\wpfscreen.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{75DE9844-3908-4151-B792-9DDAAB84049E}|DesktopManagerUX\\DesktopManagerUX.csproj|C:\\Dev_Mark\\MkZ\\.NET_Projects\\DesktopManager\\desktopmanagerux\\appcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{75DE9844-3908-4151-B792-9DDAAB84049E}|DesktopManagerUX\\DesktopManagerUX.csproj|solutionrelative:desktopmanagerux\\appcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 30,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "MainWindow.xaml.cs",
+              "DocumentMoniker": "C:\\Dev_Mark\\MkZ\\.NET_Projects\\DesktopManager\\DesktopManagerUX\\MainWindow.xaml.cs",
+              "RelativeDocumentMoniker": "DesktopManagerUX\\MainWindow.xaml.cs",
+              "ToolTip": "C:\\Dev_Mark\\MkZ\\.NET_Projects\\DesktopManager\\DesktopManagerUX\\MainWindow.xaml.cs",
+              "RelativeToolTip": "DesktopManagerUX\\MainWindow.xaml.cs",
+              "ViewState": "AgIAAB8AAAAAAAAAAAAgwCkAAAA/AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-02T19:00:17.429Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\Dev_Mark\\MkZ\\.NET_Projects\\DesktopManager\\DesktopManagerUX\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "DesktopManagerUX\\MainWindow.xaml",
+              "ToolTip": "C:\\Dev_Mark\\MkZ\\.NET_Projects\\DesktopManager\\DesktopManagerUX\\MainWindow.xaml",
+              "RelativeToolTip": "DesktopManagerUX\\MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2024-02-02T18:58:47.293Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "WindowStatePosition.cs",
+              "DocumentMoniker": "C:\\Dev_Mark\\MkZ\\.NET_Projects\\Framework.MkZ\\Framework.MkZ\\Windows\\DwmApi\\WindowStatePosition.cs",
+              "RelativeDocumentMoniker": "..\\Framework.MkZ\\Framework.MkZ\\Windows\\DwmApi\\WindowStatePosition.cs",
+              "ToolTip": "C:\\Dev_Mark\\MkZ\\.NET_Projects\\Framework.MkZ\\Framework.MkZ\\Windows\\DwmApi\\WindowStatePosition.cs",
+              "RelativeToolTip": "..\\Framework.MkZ\\Framework.MkZ\\Windows\\DwmApi\\WindowStatePosition.cs",
+              "ViewState": "AQIAADUAAAAAAAAAAADwv1IAAABEAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-02T19:52:46.389Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "AppChooserUserControl.xaml",
+              "DocumentMoniker": "C:\\Dev_Mark\\MkZ\\.NET_Projects\\DesktopManager\\DesktopManagerUX\\AppChooserUserControl.xaml",
+              "RelativeDocumentMoniker": "DesktopManagerUX\\AppChooserUserControl.xaml",
+              "ToolTip": "C:\\Dev_Mark\\MkZ\\.NET_Projects\\DesktopManager\\DesktopManagerUX\\AppChooserUserControl.xaml",
+              "RelativeToolTip": "DesktopManagerUX\\AppChooserUserControl.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2025-01-09T10:02:28.949Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:134:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:137:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:136:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:135:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:134:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:131:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:130:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:138:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:139:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:137:0:{13b12e3e-c1b4-4539-9371-4fe9a0d523fc}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:141:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{6324226f-61b6-4f28-92ee-18d4b5fe1e48}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{aa2115a1-9712-457b-9047-dbb71ca2cdd2}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:139:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "SingleInstanceHelper.cs",
+              "DocumentMoniker": "C:\\Dev_Mark\\MkZ\\.NET_Projects\\Framework.MkZ\\Framework.MkZ\\Windows\\SingleInstanceHelper.cs",
+              "RelativeDocumentMoniker": "..\\Framework.MkZ\\Framework.MkZ\\Windows\\SingleInstanceHelper.cs",
+              "ToolTip": "C:\\Dev_Mark\\MkZ\\.NET_Projects\\Framework.MkZ\\Framework.MkZ\\Windows\\SingleInstanceHelper.cs",
+              "RelativeToolTip": "..\\Framework.MkZ\\Framework.MkZ\\Windows\\SingleInstanceHelper.cs",
+              "ViewState": "AQIAACEAAAAAAAAAAAAowDMAAAAfAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-02T21:15:32.869Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Logic.cs",
+              "DocumentMoniker": "C:\\Dev_Mark\\MkZ\\.NET_Projects\\DesktopManager\\DesktopManagerUX\\Logic.cs",
+              "RelativeDocumentMoniker": "DesktopManagerUX\\Logic.cs",
+              "ToolTip": "C:\\Dev_Mark\\MkZ\\.NET_Projects\\DesktopManager\\DesktopManagerUX\\Logic.cs",
+              "RelativeToolTip": "DesktopManagerUX\\Logic.cs",
+              "ViewState": "AQIAAI0AAAAAAAAAAAAlwGwAAAA1AAAA",
+              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADtSURBVDhPYxgFCHDh4YX/sQtj/6u3qP9XblL\u002BHzk/8j9UiuHtx7f/VZpVwHxkNggwgohLjy79D18SzmAua86QZJbEwM/Bz3D91XWGCNMIRpAGo34jsGJkwMrMynCn9g5YP0PK0pT/3tO9/3/58gVuMjLA5wImEHH68WkGN3U3Bh4eHoiJJACwAb/\u002B/gI7CRuAeeH3398M8g3ycDayKxjC5oX9D54TjNX5IIDPC2Ann7x78n/E4ggGDw0PhgiDCLBrLj2/xJBhl0HQS3AFe67t\u002BT/lyBSGO2/uMHCxcTHYK9szdAd2kxwmIw8wMAAAESl0qwYO77cAAAAASUVORK5CYII=",
+              "WhenOpened": "2024-02-02T20:35:05.807Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "User32.cs",
+              "DocumentMoniker": "C:\\Dev_Mark\\MkZ\\.NET_Projects\\Framework.MkZ\\Framework.MkZ\\Windows\\Win32API\\User32.cs",
+              "RelativeDocumentMoniker": "..\\Framework.MkZ\\Framework.MkZ\\Windows\\Win32API\\User32.cs",
+              "ToolTip": "C:\\Dev_Mark\\MkZ\\.NET_Projects\\Framework.MkZ\\Framework.MkZ\\Windows\\Win32API\\User32.cs",
+              "RelativeToolTip": "..\\Framework.MkZ\\Framework.MkZ\\Windows\\Win32API\\User32.cs",
+              "ViewState": "AQIAAPoBAAAAAAAAAAAgwBACAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-02T20:19:15.319Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "DesktopWindowManager.cs",
+              "DocumentMoniker": "C:\\Dev_Mark\\MkZ\\.NET_Projects\\Framework.MkZ\\Framework.MkZ\\Windows\\DwmApi\\DesktopWindowManager.cs",
+              "RelativeDocumentMoniker": "..\\Framework.MkZ\\Framework.MkZ\\Windows\\DwmApi\\DesktopWindowManager.cs",
+              "ToolTip": "C:\\Dev_Mark\\MkZ\\.NET_Projects\\Framework.MkZ\\Framework.MkZ\\Windows\\DwmApi\\DesktopWindowManager.cs",
+              "RelativeToolTip": "..\\Framework.MkZ\\Framework.MkZ\\Windows\\DwmApi\\DesktopWindowManager.cs",
+              "ViewState": "AQIAABsAAAAAAAAAAAAowC4AAAAhAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-02T19:50:08.605Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "LayoutConfigurationUserControl.xaml",
+              "DocumentMoniker": "C:\\Dev_Mark\\MkZ\\.NET_Projects\\DesktopManager\\DesktopManagerUX\\LayoutConfigurationUserControl.xaml",
+              "RelativeDocumentMoniker": "DesktopManagerUX\\LayoutConfigurationUserControl.xaml",
+              "ToolTip": "C:\\Dev_Mark\\MkZ\\.NET_Projects\\DesktopManager\\DesktopManagerUX\\LayoutConfigurationUserControl.xaml",
+              "RelativeToolTip": "DesktopManagerUX\\LayoutConfigurationUserControl.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2024-02-02T19:46:07.553Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "WpfScreen.cs",
+              "DocumentMoniker": "C:\\Dev_Mark\\MkZ\\.NET_Projects\\Framework.MkZ\\Framework.MkZ\\WPF\\WpfScreen.cs",
+              "RelativeDocumentMoniker": "..\\Framework.MkZ\\Framework.MkZ\\WPF\\WpfScreen.cs",
+              "ToolTip": "C:\\Dev_Mark\\MkZ\\.NET_Projects\\Framework.MkZ\\Framework.MkZ\\WPF\\WpfScreen.cs",
+              "RelativeToolTip": "..\\Framework.MkZ\\Framework.MkZ\\WPF\\WpfScreen.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-02T19:27:51.797Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "DataModel.cs",
+              "DocumentMoniker": "C:\\Dev_Mark\\MkZ\\.NET_Projects\\DesktopManager\\DesktopManagerUX\\DataModel.cs",
+              "RelativeDocumentMoniker": "DesktopManagerUX\\DataModel.cs",
+              "ToolTip": "C:\\Dev_Mark\\MkZ\\.NET_Projects\\DesktopManager\\DesktopManagerUX\\DataModel.cs",
+              "RelativeToolTip": "DesktopManagerUX\\DataModel.cs",
+              "ViewState": "AQIAAG0AAAAAAAAAAAAawG8AAAAbAAAA",
+              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADtSURBVDhPYxgFCHDh4YX/sQtj/6u3qP9XblL\u002BHzk/8j9UiuHtx7f/VZpVwHxkNggwgohLjy79D18SzmAua86QZJbEwM/Bz3D91XWGCNMIRpAGo34jsGJkwMrMynCn9g5YP0PK0pT/3tO9/3/58gVuMjLA5wImEHH68WkGN3U3Bh4eHoiJJACwAb/\u002B/gI7CRuAeeH3398M8g3ycDayKxjC5oX9D54TjNX5IIDPC2Ann7x78n/E4ggGDw0PhgiDCLBrLj2/xJBhl0HQS3AFe67t\u002BT/lyBSGO2/uMHCxcTHYK9szdAd2kxwmIw8wMAAAESl0qwYO77cAAAAASUVORK5CYII=",
+              "WhenOpened": "2024-02-02T19:23:47.413Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "AppChooserUserControl.xaml.cs",
+              "DocumentMoniker": "C:\\Dev_Mark\\MkZ\\.NET_Projects\\DesktopManager\\DesktopManagerUX\\AppChooserUserControl.xaml.cs",
+              "RelativeDocumentMoniker": "DesktopManagerUX\\AppChooserUserControl.xaml.cs",
+              "ToolTip": "C:\\Dev_Mark\\MkZ\\.NET_Projects\\DesktopManager\\DesktopManagerUX\\AppChooserUserControl.xaml.cs",
+              "RelativeToolTip": "DesktopManagerUX\\AppChooserUserControl.xaml.cs",
+              "ViewState": "AQIAAJAAAAAAAAAAAAAEwKEAAAA9AAAA",
+              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADjSURBVDhPY0AGretv/t9x7tl/KJd0sOfii/\u002Bimfv\u002Bbzv7lGhDGBlid2Eo1pTkZNiSLsVQWVkJFWFgYGdnZygoKGAwNjZmhAphgt0XnsFd8P79\u002B/9Pnz6F47CwsP/R0dH/z549i2IhE5QGg1P3PzMsTtVgsFTiYvj27RtUFAF\u002B//7N0NfXx4BsCIoBIVoMDOaKnFg1wwDIkAkTJkB5oDBAAnFxcf/b29uhPNygsLCQYdWqVWC9KC748eMHlEU8QDGAHDBqABUMQEkHmZmZ/9\u002B\u002BfQvl4QbCwsIM06dPx50niAcMDADfJl5g9BqhpwAAAABJRU5ErkJggg==",
+              "WhenOpened": "2024-02-02T19:22:32.043Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "LayoutConfigurationUserControl.xaml.cs",
+              "DocumentMoniker": "C:\\Dev_Mark\\MkZ\\.NET_Projects\\DesktopManager\\DesktopManagerUX\\LayoutConfigurationUserControl.xaml.cs",
+              "RelativeDocumentMoniker": "DesktopManagerUX\\LayoutConfigurationUserControl.xaml.cs",
+              "ToolTip": "C:\\Dev_Mark\\MkZ\\.NET_Projects\\DesktopManager\\DesktopManagerUX\\LayoutConfigurationUserControl.xaml.cs",
+              "RelativeToolTip": "DesktopManagerUX\\LayoutConfigurationUserControl.xaml.cs",
+              "ViewState": "AgIAAAwBAAAAAAAAAAArwBwBAAAcAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-02-02T19:21:20.323Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "AppContext.cs",
+              "DocumentMoniker": "C:\\Dev_Mark\\MkZ\\.NET_Projects\\DesktopManager\\DesktopManagerUX\\AppContext.cs",
+              "RelativeDocumentMoniker": "DesktopManagerUX\\AppContext.cs",
+              "ToolTip": "C:\\Dev_Mark\\MkZ\\.NET_Projects\\DesktopManager\\DesktopManagerUX\\AppContext.cs",
+              "RelativeToolTip": "DesktopManagerUX\\AppContext.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABQAAAAMAAAA",
+              "Icon": "00000000-0000-0000-0000-000000000000.000000|iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAADtSURBVDhPYxgFCHDh4YX/sQtj/6u3qP9XblL\u002BHzk/8j9UiuHtx7f/VZpVwHxkNggwgohLjy79D18SzmAua86QZJbEwM/Bz3D91XWGCNMIRpAGo34jsGJkwMrMynCn9g5YP0PK0pT/3tO9/3/58gVuMjLA5wImEHH68WkGN3U3Bh4eHoiJJACwAb/\u002B/gI7CRuAeeH3398M8g3ycDayKxjC5oX9D54TjNX5IIDPC2Ann7x78n/E4ggGDw0PhgiDCLBrLj2/xJBhl0HQS3AFe67t\u002BT/lyBSGO2/uMHCxcTHYK9szdAd2kxwmIw8wMAAAESl0qwYO77cAAAAASUVORK5CYII=",
+              "WhenOpened": "2024-02-02T18:56:05.351Z"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "FramesPinnedWhenTheyWereClosed": [
+    -999360863
+  ]
+}
