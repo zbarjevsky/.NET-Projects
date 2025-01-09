@@ -5,16 +5,28 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MultiPlayer"
              mc:Ignorable="d" 
+             Loaded="UserControl_Loaded"
+             SizeChanged="UserControl_SizeChanged"
+             MouseDoubleClick="UserControl_MouseDoubleClick"
+             PreviewMouseDown="UserControl_PreviewMouseButtonDown"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
         <Border BorderBrush="Black" BorderThickness="3" CornerRadius="10" >
-            <ScrollViewer Name="_scrollPlayerContainer" Grid.Row="0" Background="DarkGray"
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition />
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                
+                <ScrollViewer Name="_scrollPlayerContainer" Grid.Row="0"  Background="DarkGray"
                       HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" >
-                <!--<MediaElement Name="mePlayer" LoadedBehavior="Manual" Stretch="Uniform" 
+                    <!--<MediaElement Name="mePlayer" LoadedBehavior="Manual" Stretch="Uniform" 
                           Width="1920" Height="1080"
                           MouseWheel="mePlayer_MouseWheel" />-->
-            </ScrollViewer>
-
+                </ScrollViewer>
+                
+                <local:VideoCommandsUserControl x:Name="_commands" Grid.Row="1" />
+            </Grid>
         </Border>
     </Grid>
 </UserControl>

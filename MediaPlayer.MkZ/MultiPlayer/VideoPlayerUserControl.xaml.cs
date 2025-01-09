@@ -122,6 +122,9 @@ namespace MultiPlayer
                 case eZoomState.FitWidth:
                     FitWidth(adjustScroll);
                     break;
+                case eZoomState.FitHeight:
+                    FitHeight(adjustScroll);
+                    break;
                 case eZoomState.FitWindow:
                     FitWindow();
                     break;
@@ -145,6 +148,8 @@ namespace MultiPlayer
             _scrollDragger = new ScrollDragZoom(null, _scrollPlayerContainer);
 
             RecreateMediaElement(false);
+
+            _commands.Init(this);
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -328,6 +333,13 @@ namespace MultiPlayer
         public void FitWidth(bool adjustScroll)
         {
             _scrollDragger.FitWidth();
+            if (adjustScroll)
+                ScrollToCenter();
+        }
+
+        public void FitHeight(bool adjustScroll)
+        {
+            _scrollDragger.FitHeight();
             if (adjustScroll)
                 ScrollToCenter();
         }

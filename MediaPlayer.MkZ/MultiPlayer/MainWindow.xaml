@@ -6,9 +6,8 @@
         xmlns:local="clr-namespace:MultiPlayer"
         WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded"
-        SizeChanged="Window_SizeChanged"
         mc:Ignorable="d"
-        Title="MultiMedia Player" Height="450" Width="800">
+        Title="MultiMedia Player" Height="950" Width="1900">
     <Grid Background="Black">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" MinWidth="50"/>

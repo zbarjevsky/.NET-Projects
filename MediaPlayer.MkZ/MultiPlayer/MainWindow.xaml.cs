@@ -31,19 +31,11 @@ namespace MultiPlayer
             foreach (VideoPlayerUserControl v in _videos)
             {
                 v.Open(@"C:\Temp\YouTube\Music\20220916--По вашим просьбам вся песня  ＂Хочу назад в СССР＂.--2UGKOyH13Gc.mp4");
-                v.FitWidth(true);
+                v.ZoomStateSet(MkZ.WPF.eZoomState.FitHeight, true);
                 v.Play();
             }
 
             _video00.Volume = 1;
-        }
-
-        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            foreach (VideoPlayerUserControl v in _videos)
-            {
-                v.FitWidth(true);
-            }
         }
     }
 }

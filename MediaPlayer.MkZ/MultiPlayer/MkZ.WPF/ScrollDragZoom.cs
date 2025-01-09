@@ -14,7 +14,8 @@ namespace MkZ.WPF
         Custom = 0, //manual zoom
         Original = 1, // zoom 1:1
         FitWidth,
-        FitWindow
+        FitWindow,
+        FitHeight
     }
 
     /// <summary>
@@ -144,6 +145,24 @@ namespace MkZ.WPF
 
             //proportionally change height
             _content.Height = _content.Width * NaturalSize.Height / NaturalSize.Width;
+            _content.UpdateLayout();
+
+            InternalUpdateZoomFromContent();
+
+
+            SizeChangedAction();
+        }
+
+        public void FitHeight(double margin = 18)
+        {
+            ZoomState = eZoomState.FitHeight;
+            if (_scrollViewer.ActualHeight < margin)
+                return;
+
+            _content.Height = _scrollViewer.ActualHeight - margin;
+
+            //proportionally change width
+            _content.Width = _content.Height * NaturalSize.Width / NaturalSize.Height;
             _content.UpdateLayout();
 
             InternalUpdateZoomFromContent();
