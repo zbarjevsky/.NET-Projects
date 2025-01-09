@@ -76,7 +76,8 @@ namespace MultiPlayer
 
         private void Pos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-
+            if (_videoPlayerUserControl != null)
+                _videoPlayerUserControl.PositionSet(TimeSpan.FromSeconds(_position.Value), false);
         }
     }
 }
