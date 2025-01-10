@@ -24,25 +24,44 @@ namespace MultiPlayer
         public double Volume { get; set; } = 0.0;
         public double SpeedRatio { get; set; } = 1.0;
 
+        public string[] SupportedImageExtensions { get; set; } = new string[0];
+        public string[] SupportedAudioExtensions { get; set; } = new string[0];
+        public string[] SupportedVideoExtensions { get; set; } = new string[0];
+
         public OnePlayerSettings()
         {
-            
+            EnsureHasValues();
         }
 
         public OnePlayerSettings(VideoPlayerUserControl v)
         {
+            Update(v);
+        }
+
+        public void Update(VideoPlayerUserControl v, double duration = 0.0)
+        {
             FileName = v.FileName;
-            Duration = v.NaturalDuration;
+            Duration = v.Duration > 0 ? v.Duration : duration;
             Position = v.Position.TotalSeconds;
             ZoomState = v.ZoomState;
             Zoom = v.Zoom;
             MediaState = v.MediaState;
             Volume = v.Volume;
             SpeedRatio = v.SpeedRatio;
+
+            EnsureHasValues();
         }
 
         public void EnsureHasValues()
         {
+            if (SupportedImageExtensions == null || SupportedImageExtensions.Length == 0)
+                SupportedImageExtensions = new string[] { ".jpg", ".png", ".bmp", ".gif" };
+
+            if (SupportedAudioExtensions == null || SupportedAudioExtensions.Length == 0)
+                SupportedAudioExtensions = new string[] { ".mp3", ".wav", ".ogg" };
+
+            if (SupportedVideoExtensions == null || SupportedVideoExtensions.Length == 0)
+                SupportedVideoExtensions = new string[] { ".avi", ".mpg", ".mpeg", ".mkv", ".mp4", ".webm" };
         }
     }
 

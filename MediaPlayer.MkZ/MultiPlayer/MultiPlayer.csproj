@@ -7,6 +7,15 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <Platforms>AnyCPU;x86</Platforms>
+    <PackageIcon>camera_32px.png</PackageIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Yin-Yang.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Yin-Yang.ico" />
+  </ItemGroup>
 
 </Project>

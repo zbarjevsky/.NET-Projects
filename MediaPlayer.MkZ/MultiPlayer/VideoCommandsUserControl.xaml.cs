@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -23,6 +24,7 @@ namespace MultiPlayer
     /// </summary>
     public partial class VideoCommandsUserControl : UserControl
     {
+        OnePlayerSettings _videoPlayerSettings;
         VideoPlayerUserControl _videoPlayerUserControl;
 
         public VideoCommandsUserControl()
@@ -32,6 +34,8 @@ namespace MultiPlayer
 
         public void Init(VideoPlayerUserControl v)
         {
+            _videoPlayerSettings = new OnePlayerSettings();
+
             _videoPlayerUserControl = v;
             _videoPlayerUserControl.PropertyChanged += _videoPlayerUserControl_PropertyChanged;
 
@@ -40,20 +44,29 @@ namespace MultiPlayer
         }
 
         bool _isInUpdate = false;
-        public void Update(VideoPlayerUserControl v, double duration)
+        public void Update(VideoPlayerUserControl v, double duration = 0.0)
         {
             _isInUpdate = true;
+
+            _videoPlayerSettings.Update(v, duration);
             
-            _volume.Value = v.Volume * 1000.0;
-            _position.Maximum = v.NaturalDuration == 0 ? duration : v.NaturalDuration;
-            _position.Value = v.Position.TotalSeconds;
-            _speed.SelectedIndex = SpeedRatio(v.SpeedRatio);
-            _fit.SelectedIndex = (int)v.ZoomState;
+            _volume.Value = _videoPlayerSettings.Volume * 1000.0;
+            _position.Maximum = _videoPlayerSettings.Duration;
+            _position.Value = _videoPlayerSettings.Position;
+            _speed.SelectedIndex = SpeedRatio(_videoPlayerSettings.SpeedRatio);
+            _fit.SelectedIndex = (int)_videoPlayerSettings.ZoomState;
+            
             _timeLbl.Text = v.Position.ToString("mm':'ss");
 
             System.Diagnostics.Debug.WriteLine("*** Position: " + _position.Value); 
 
             _isInUpdate = false;
+        }
+
+        //sometimes if video was not opened yet - NaturalDuration is 0 - use saved in settings duration
+        public double GetDuration()
+        {
+            return _videoPlayerUserControl.NaturalDuration > 0.0 ? _videoPlayerUserControl.NaturalDuration : _videoPlayerSettings.Duration;
         }
 
         private void _videoPlayerUserControl_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -192,6 +205,35 @@ namespace MultiPlayer
             idx = fileNames.IndexOf(fileName);
 
             return fileNames;
+        }
+
+        private void Pos_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (sender is Slider slider)
+            {
+                Point currentPos = e.GetPosition(slider);
+                if (currentPos.Y < 30)
+                {
+                    if (!_popupSliderTooltip.IsOpen)
+                        _popupSliderTooltip.IsOpen = true;
+
+                    Track track = slider.Template.FindName("PART_Track", slider) as Track;
+
+                    _txtSliderTooltip.Text = TimeSpan.FromSeconds(track.ValueFromPoint(currentPos)).ToString("mm':'ss");
+
+                    _popupSliderTooltip.HorizontalOffset = currentPos.X - (_borderSliderTooltip.ActualWidth / 2);
+                    _popupSliderTooltip.VerticalOffset = -20;
+                }
+                else
+                {
+                    _popupSliderTooltip.IsOpen = false;
+                }
+            }
+        }
+
+        private void Pos_MouseLeave(object sender, MouseEventArgs e)
+        {
+            _popupSliderTooltip.IsOpen = false;
         }
     }
 }

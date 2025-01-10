@@ -43,7 +43,21 @@
                     Value="33" Maximum="300" Minimum="0" IsMoveToPointEnabled="True" 
                     ValueChanged="Pos_ValueChanged"
                     Thumb.DragStarted="Pos_DragStarted"
-                    Thumb.DragCompleted="Pos_DragCompleted" />
+                    Thumb.DragCompleted="Pos_DragCompleted"
+                    MouseMove="Pos_MouseMove" 
+                    MouseLeave="Pos_MouseLeave" />
+            <Popup x:Name="_popupSliderTooltip" AllowsTransparency="True"
+                       Placement="Relative"  PlacementTarget="{Binding ElementName=_position}">
+                <Border Name="_borderSliderTooltip" CornerRadius="4"
+                             BorderBrush="Black" BorderThickness="0" Padding="3,1">
+                    <Border.Background>
+                        <SolidColorBrush Color="Black" Opacity="0.5" />
+                    </Border.Background>
+                    <TextBlock x:Name="_txtSliderTooltip" Text="00:00" 
+                                   FontSize="14" FontWeight="Medium"
+                                   Foreground="White"/>
+                </Border>
+            </Popup>
             <Slider x:Name="_volume" Grid.Column="8" Margin="2,4" 
                     Value="150" Maximum="1000" Minimum="0" Width="60" 
                     ValueChanged="Volume_ValueChanged"/>

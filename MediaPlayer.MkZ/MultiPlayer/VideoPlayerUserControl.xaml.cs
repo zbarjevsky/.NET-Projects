@@ -162,7 +162,7 @@ namespace MultiPlayer
 
         private void _timer_Tick(object? sender, EventArgs e)
         {
-            _commands.Update(this, 0.0);
+            _commands.Update(this);
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -272,6 +272,9 @@ namespace MultiPlayer
                 return 0;
             }
         }
+
+        //sometimes if video was not opened yet - NaturalDuration is 0 - use saved in settings duration
+        public double Duration => _commands.GetDuration();
 
         public void ScrollToCenter()
         {
