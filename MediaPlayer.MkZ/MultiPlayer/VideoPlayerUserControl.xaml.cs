@@ -287,6 +287,18 @@ namespace MultiPlayer
             Title = fileName;
         }
 
+        private void UserControl_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                // Note that you can have more than one file.
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                // handling code you have defined.
+                _commands.Open(files[0]);
+            }
+        }
+
         public void LoadSetting(OnePlayerSettings s)
         {
             Open(s.FileName, s.Volume);
@@ -301,7 +313,6 @@ namespace MultiPlayer
 
             LastPosition = TimeSpan.FromSeconds(s.Position);
             _commands.Update(this, s.Duration);
-
         }
 
         internal void Close()

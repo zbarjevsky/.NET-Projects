@@ -85,7 +85,7 @@ namespace MultiPlayer
             }
         }
 
-        private void Open(string fileName)
+        public void Open(string fileName)
         {
             _videoPlayerUserControl.Open(fileName, _videoPlayerUserControl.Volume);
             _position.Maximum = _videoPlayerUserControl.NaturalDuration;
