@@ -34,6 +34,8 @@ namespace MultiPlayer
         public Action LeftButtonClick = () => { };
         public Action LeftButtonDoubleClick = () => { };
 
+        public OnePlayerSettings Settings {  get; set; } = new OnePlayerSettings();
+
         private DispatcherTimer _timer = new DispatcherTimer(DispatcherPriority.ContextIdle)
         {
             Interval = TimeSpan.FromSeconds(0.3),
@@ -162,7 +164,8 @@ namespace MultiPlayer
 
         private void _timer_Tick(object? sender, EventArgs e)
         {
-            _commands.Update(this);
+            Settings.Update(this);
+            _commands.Update(Settings);
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -244,6 +247,7 @@ namespace MultiPlayer
         public void PositionSet(TimeSpan position, bool notify)
         {
             LastPosition = position;
+            Settings.Position = LastPosition.TotalSeconds;
             VideoPlayerElement.Position = position;
             if (notify)
                 OnPropertyChanged(nameof(Position));
@@ -274,7 +278,7 @@ namespace MultiPlayer
         }
 
         //sometimes if video was not opened yet - NaturalDuration is 0 - use saved in settings duration
-        public double Duration => _commands.GetDuration();
+        public double Duration => NaturalDuration > 0.0 ? NaturalDuration : Settings.Duration;
 
         public void ScrollToCenter()
         {
@@ -315,7 +319,9 @@ namespace MultiPlayer
                 Pause();
 
             LastPosition = TimeSpan.FromSeconds(s.Position);
-            _commands.Update(this, s.Duration);
+
+            Settings = s;
+            _commands.Update(Settings);
         }
 
         internal void Close()

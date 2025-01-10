@@ -41,8 +41,10 @@ namespace MultiPlayer
         public void Update(VideoPlayerUserControl v, double duration = 0.0)
         {
             FileName = v.FileName;
+
             Duration = v.Duration > 0 ? v.Duration : duration;
-            Position = v.Position.TotalSeconds;
+            Position = v.Settings.Position;
+
             ZoomState = v.ZoomState;
             Zoom = v.Zoom;
             MediaState = v.MediaState;

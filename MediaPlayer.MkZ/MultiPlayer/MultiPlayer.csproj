@@ -8,6 +8,7 @@
     <UseWPF>true</UseWPF>
     <Platforms>AnyCPU;x86</Platforms>
     <PackageIcon>camera_32px.png</PackageIcon>
+    <ApplicationIcon>Yin-Yang.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>

@@ -24,7 +24,6 @@ namespace MultiPlayer
     /// </summary>
     public partial class VideoCommandsUserControl : UserControl
     {
-        OnePlayerSettings _videoPlayerSettings;
         VideoPlayerUserControl _videoPlayerUserControl;
 
         public VideoCommandsUserControl()
@@ -34,8 +33,6 @@ namespace MultiPlayer
 
         public void Init(VideoPlayerUserControl v)
         {
-            _videoPlayerSettings = new OnePlayerSettings();
-
             _videoPlayerUserControl = v;
             _videoPlayerUserControl.PropertyChanged += _videoPlayerUserControl_PropertyChanged;
 
@@ -44,29 +41,19 @@ namespace MultiPlayer
         }
 
         bool _isInUpdate = false;
-        public void Update(VideoPlayerUserControl v, double duration = 0.0)
+        public void Update(OnePlayerSettings s)
         {
             _isInUpdate = true;
-
-            _videoPlayerSettings.Update(v, duration);
             
-            _volume.Value = _videoPlayerSettings.Volume * 1000.0;
-            _position.Maximum = _videoPlayerSettings.Duration;
-            _position.Value = _videoPlayerSettings.Position;
-            _speed.SelectedIndex = SpeedRatio(_videoPlayerSettings.SpeedRatio);
-            _fit.SelectedIndex = (int)_videoPlayerSettings.ZoomState;
+            _volume.Value = s.Volume * 1000.0;
+            _position.Maximum = s.Duration;
+            _position.Value = s.Position;
+            _speed.SelectedIndex = SpeedRatio(s.SpeedRatio);
+            _fit.SelectedIndex = (int)s.ZoomState;
             
-            _timeLbl.Text = v.Position.ToString("mm':'ss");
-
-            System.Diagnostics.Debug.WriteLine("*** Position: " + _position.Value); 
+            _timeLbl.Text = TimeSpan.FromSeconds(s.Position).ToString("mm':'ss");
 
             _isInUpdate = false;
-        }
-
-        //sometimes if video was not opened yet - NaturalDuration is 0 - use saved in settings duration
-        public double GetDuration()
-        {
-            return _videoPlayerUserControl.NaturalDuration > 0.0 ? _videoPlayerUserControl.NaturalDuration : _videoPlayerSettings.Duration;
         }
 
         private void _videoPlayerUserControl_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -220,6 +207,8 @@ namespace MultiPlayer
                     Track track = slider.Template.FindName("PART_Track", slider) as Track;
 
                     _txtSliderTooltip.Text = TimeSpan.FromSeconds(track.ValueFromPoint(currentPos)).ToString("mm':'ss");
+                    string dur = TimeSpan.FromSeconds(_videoPlayerUserControl.Duration).ToString("mm':'ss");
+                    _txtSliderTooltip.Text += " / " + dur;
 
                     _popupSliderTooltip.HorizontalOffset = currentPos.X - (_borderSliderTooltip.ActualWidth / 2);
                     _popupSliderTooltip.VerticalOffset = -20;
