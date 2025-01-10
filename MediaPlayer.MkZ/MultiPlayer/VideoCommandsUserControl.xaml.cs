@@ -26,6 +26,35 @@ namespace MultiPlayer
     {
         VideoPlayerUserControl _videoPlayerUserControl;
 
+        public void TogglePlayPauseState()
+        {
+            _videoPlayerUserControl.TogglePlayPauseState();
+            if (_videoPlayerUserControl.MediaState == MediaState.Pause)
+                _btnPlayPause.Background = Brushes.LightBlue;
+            else if (_videoPlayerUserControl.MediaState == MediaState.Play)
+                _btnPlayPause.Background = Brushes.LightGreen;
+            else
+                _btnPlayPause.Background = Brushes.LightGray;
+        }
+
+        public void Play()
+        {
+            _videoPlayerUserControl.Play();
+            _btnPlayPause.Background = Brushes.LightGreen;
+        }
+
+        public void Pause()
+        {
+            _videoPlayerUserControl.Pause();
+            _btnPlayPause.Background = Brushes.LightBlue;
+        }
+
+        public void Stop()
+        {
+            _videoPlayerUserControl.Stop();
+            _btnPlayPause.Background = Brushes.LightGray;
+        }
+
         public VideoCommandsUserControl()
         {
             InitializeComponent();
@@ -36,8 +65,8 @@ namespace MultiPlayer
             _videoPlayerUserControl = v;
             _videoPlayerUserControl.PropertyChanged += _videoPlayerUserControl_PropertyChanged;
 
-            _videoPlayerUserControl.LeftButtonClick = () => { _videoPlayerUserControl.TogglePlayPauseState(); };
-            _videoPlayerUserControl.VideoEnded = (player) => { _videoPlayerUserControl.Stop(); _videoPlayerUserControl.Play(); }; 
+            _videoPlayerUserControl.LeftButtonClick = () => { TogglePlayPauseState(); };
+            _videoPlayerUserControl.VideoEnded = (player) => { Stop(); Play(); }; 
         }
 
         bool _isInUpdate = false;
@@ -90,12 +119,12 @@ namespace MultiPlayer
             _videoPlayerUserControl.Open(fileName, _videoPlayerUserControl.Volume);
             _position.Maximum = _videoPlayerUserControl.NaturalDuration;
             _position.Value = 0;
-            _videoPlayerUserControl.Play();
+            Play();
         }
 
         private void PlayPause_Click(object sender, RoutedEventArgs e)
         {
-            _videoPlayerUserControl.TogglePlayPauseState();
+            TogglePlayPauseState();
         }
 
         private void Volume_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -139,7 +168,7 @@ namespace MultiPlayer
 
             MediaState state = _videoPlayerUserControl.MediaState;
             if (state != MediaState.Pause)
-                _videoPlayerUserControl.Pause();
+                Pause();
 
         }
 
@@ -150,11 +179,14 @@ namespace MultiPlayer
 
             MediaState state = _videoPlayerUserControl.MediaState;
             if (state != MediaState.Pause)
-                _videoPlayerUserControl.Pause();
+                Pause();
 
+            _position.Value = e.NewValue;
             _videoPlayerUserControl.PositionSet(TimeSpan.FromSeconds(_position.Value), false);
 
             _timeLbl.Text = _videoPlayerUserControl.Position.ToString("mm':'ss");
+
+            e.Handled = true;
         }
 
         private void Pos_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
@@ -164,9 +196,11 @@ namespace MultiPlayer
 
             MediaState state = _videoPlayerUserControl.MediaState;
             if (state != MediaState.Pause)
-                _videoPlayerUserControl.Pause();
+                Pause();
 
             _videoPlayerUserControl.PositionSet(TimeSpan.FromSeconds(_position.Value), false);
+
+            e.Handled = true;
         }
 
         private void Prev_Click(object sender, RoutedEventArgs e)

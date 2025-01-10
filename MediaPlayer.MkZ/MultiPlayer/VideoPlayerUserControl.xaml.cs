@@ -164,8 +164,10 @@ namespace MultiPlayer
 
         private void _timer_Tick(object? sender, EventArgs e)
         {
+            _timer.Stop();
             Settings.Update(this);
             _commands.Update(Settings);
+            _timer.Start();
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -212,7 +214,7 @@ namespace MultiPlayer
 
         private void UserControl_PreviewMouseButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.ChangedButton == MouseButton.Left && (e.OriginalSource is MediaElement))
+            if (e.ChangedButton == MouseButton.Left && ((e.OriginalSource is MediaElement) || (e.OriginalSource is ScrollViewer)))
                 LeftButtonClick();
         }
 
@@ -242,12 +244,9 @@ namespace MultiPlayer
             //set { VideoPlayerElement.Position = value; OnPropertyChanged(); } 
         }
 
-        private TimeSpan LastPosition = TimeSpan.Zero;
-
         public void PositionSet(TimeSpan position, bool notify)
         {
-            LastPosition = position;
-            Settings.Position = LastPosition.TotalSeconds;
+            Settings.Position = position.TotalSeconds;
             VideoPlayerElement.Position = position;
             if (notify)
                 OnPropertyChanged(nameof(Position));
@@ -314,11 +313,9 @@ namespace MultiPlayer
             SpeedRatio = s.SpeedRatio;
             ZoomStateSet(s.ZoomState, true);
 
-            Play();
-            if (s.MediaState != MediaState.Play) 
-                Pause();
-
-            LastPosition = TimeSpan.FromSeconds(s.Position);
+            _commands.Play();
+            if (s.MediaState != MediaState.Play)
+                _commands.Pause();
 
             Settings = s;
             _commands.Update(Settings);
@@ -337,11 +334,11 @@ namespace MultiPlayer
         {
             if (VideoPlayerElement.Source != null)
             {
-                VideoPlayerElement.Play();
-                this.Background = Brushes.Black;
-                MediaState = MediaState.Play;
-                PositionSet(LastPosition, false);
                 _timer.Start();
+                VideoPlayerElement.Play();
+                this.Background = Brushes.DimGray;
+                MediaState = MediaState.Play;
+                PositionSet(TimeSpan.FromSeconds(Settings.Position), false);
             }
             else
             {
@@ -354,11 +351,14 @@ namespace MultiPlayer
         {
             if (VideoPlayerElement.Source != null)
             {
-                LastPosition = VideoPlayerElement.Position;
+                _timer.Stop();
+                Settings.Position = VideoPlayerElement.Position.TotalSeconds;
                 VideoPlayerElement.Pause();
                 this.Background = Brushes.DarkGray;
                 MediaState = MediaState.Pause;
-                _timer.Stop();
+
+                Settings.Update(this);
+                _commands.Update(Settings);
             }
         }
 
@@ -366,11 +366,14 @@ namespace MultiPlayer
         {
             if (VideoPlayerElement.Source != null)
             {
-                LastPosition = TimeSpan.Zero;
+                _timer.Stop();
+                Settings.Position = 0.0;
                 VideoPlayerElement.Stop();
                 this.Background = Brushes.DarkGray;
                 MediaState = MediaState.Stop;
-                _timer.Stop();
+                
+                Settings.Update(this);
+                _commands.Update(Settings);
             }
         }
 

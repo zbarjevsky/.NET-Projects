@@ -43,7 +43,7 @@ namespace MultiPlayer
             FileName = v.FileName;
 
             Duration = v.Duration > 0 ? v.Duration : duration;
-            Position = v.Settings.Position;
+            Position = v.Position.TotalSeconds > 0.5 ? v.Position.TotalSeconds : v.Settings.Position;
 
             ZoomState = v.ZoomState;
             Zoom = v.Zoom;
