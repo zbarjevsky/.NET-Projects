@@ -7,7 +7,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="30" d:DesignWidth="800">
     <Border Margin="0" CornerRadius="0,0,0,0" BorderThickness="1" BorderBrush="Transparent">
-        <DockPanel LastChildFill="True" Background="SlateGray">
+        <DockPanel LastChildFill="True" Height="36" >
+            <DockPanel.Background>
+                <SolidColorBrush Color="SlateGray" Opacity="0.8" />
+            </DockPanel.Background>
 
             <Button Margin="2" Click="Open_Click" >
                 <Label FontFamily="Segoe MDL2 Assets" Content="&#xE714;" FontSize="16" />
@@ -24,14 +27,14 @@
             <Button Margin="2" Click="Next_Click" >
                 <Label FontFamily="Segoe MDL2 Assets" Content="&#xE893;" FontSize="16" />
             </Button>
-            <ComboBox x:Name="_speed" Margin="2,6" SelectedIndex="3" SelectionChanged="Speed_Selected" >
+            <ComboBox x:Name="_speed" Margin="2,2" Padding="8" SelectedIndex="3" SelectionChanged="Speed_Selected" >
                 <ComboBoxItem Content="0.1x" />
                 <ComboBoxItem Content="0.2x" />
                 <ComboBoxItem Content="0.5x" />
                 <ComboBoxItem Content="1.0x" />
                 <ComboBoxItem Content="1.5x" />
             </ComboBox>
-            <ComboBox x:Name="_fit" Margin="2,6" SelectedIndex="2" SelectionChanged="Fit_Selected" >
+            <ComboBox x:Name="_fit" Margin="2,2" Padding="8" SelectedIndex="2" SelectionChanged="Fit_Selected" >
                 <ComboBoxItem Content="Custom" />
                 <ComboBoxItem Content="Original" />
                 <ComboBoxItem Content="FitWidth" />
@@ -41,7 +44,7 @@
             <Button Margin="2" Padding="2" Click="Pop_Click">
                 <Label FontFamily="Segoe MDL2 Assets" Content="&#xE740;" FontSize="16" />
             </Button>
-            <TextBlock x:Name="_timeLbl" Margin="2,10" Text="0:00" />
+            <TextBlock x:Name="_timeLbl" Margin="2,10" Text="0:00" FontWeight="Bold" Foreground="White" />
             <DockPanel LastChildFill="True" >
                 <Popup x:Name="_popupSliderTooltip" AllowsTransparency="True"
                        Placement="Relative"  PlacementTarget="{Binding ElementName=_position}">
@@ -58,7 +61,7 @@
                 <Slider x:Name="_volume" Margin="2,10" Width="60" DockPanel.Dock="Right" 
                     Value="150" Maximum="1000" Minimum="0" IsMoveToPointEnabled="True"
                     ValueChanged="Volume_ValueChanged"/>
-                <Slider x:Name="_position" Margin="2,10" 
+                <Slider x:Name="_position" Margin="2,10"
                     Value="33" Maximum="300" Minimum="0" IsMoveToPointEnabled="True" 
                     ValueChanged="Pos_ValueChanged"
                     Thumb.DragStarted="Pos_DragStarted"

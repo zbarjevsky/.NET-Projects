@@ -3,7 +3,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:MultiPlayer"
+             xmlns:local="clr-namespace:MultiPlayer" 
+             xmlns:sys="clr-namespace:System;assembly=netstandard"
              mc:Ignorable="d" 
              AllowDrop="True"
              Loaded="UserControl_Loaded"
@@ -24,6 +25,10 @@
                 <ScrollViewer Name="_scrollPlayerContainer" Grid.RowSpan="2"
                       HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
                       MouseMove="UserControl_MouseMove" >
+                    <ScrollViewer.Resources>
+                        <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">10</sys:Double>
+                        <sys:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeightKey}">10</sys:Double>
+                    </ScrollViewer.Resources>
                     <!--<MediaElement Name="mePlayer" LoadedBehavior="Manual" Stretch="Uniform" 
                           Width="1920" Height="1080"
                           MouseWheel="mePlayer_MouseWheel" />-->
@@ -37,7 +42,7 @@
                                Margin="6,3"/>
                 </Border>
 
-                <local:VideoCommandsUserControl x:Name="_commands" Grid.Row="1" Margin="0,0,0,20" />
+                <local:VideoCommandsUserControl x:Name="_commands" Grid.Row="1" Margin="0,0,0,12" />
             </Grid>
         </Border>
     </Grid>

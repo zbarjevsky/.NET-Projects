@@ -90,6 +90,8 @@ namespace MultiPlayer
                 _videoPlayerUserControl.Zoom = s.Zoom;
             
             _timeLbl.Text = TimeSpan.FromSeconds(s.Position).ToString("mm':'ss");
+            
+            AdjustMarginsForVisibleScrollBars();
 
             _isInUpdate = false;
         }
@@ -168,6 +170,14 @@ namespace MultiPlayer
                 return;
 
             _videoPlayerUserControl.ZoomState = (eZoomState)_fit.SelectedIndex;
+
+            AdjustMarginsForVisibleScrollBars();
+        }
+
+        private void AdjustMarginsForVisibleScrollBars()
+        {
+            double bottom = (_videoPlayerUserControl._scrollPlayerContainer.ComputedHorizontalScrollBarVisibility == Visibility.Visible) ? 12.0 : 0.0;
+            this.Margin = new Thickness(0, 0, 0, bottom);
         }
 
         private bool _resume = false;

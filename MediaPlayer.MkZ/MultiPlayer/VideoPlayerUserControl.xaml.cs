@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
@@ -572,13 +573,27 @@ namespace MultiPlayer
             IsFlipHorizontally = !IsFlipHorizontally;
         }
 
+        private bool _isDragging = false;
         private void UserControl_MouseMove(object sender, MouseEventArgs e)
         {
-            if (e.LeftButton == MouseButtonState.Pressed)
+            const double scrollBarWidth = 12.0;
+
+            if (e.LeftButton == MouseButtonState.Pressed && !_isDragging)
             {
+                Point pt = e.GetPosition(_scrollPlayerContainer);
+                if (pt.X > _scrollPlayerContainer.ActualWidth - scrollBarWidth ||
+                    pt.Y > _scrollPlayerContainer.ActualHeight - scrollBarWidth)
+                    return;
+
+                _isDragging = true;
                 DragDropSource = this;
                 DragDrop.DoDragDrop(this, Settings, DragDropEffects.Move);
                 e.Handled = true;
+            }
+
+            if (e.LeftButton != MouseButtonState.Pressed)
+            {
+                _isDragging = false;
             }
         }
 
