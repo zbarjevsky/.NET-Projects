@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MultiPlayer"
              mc:Ignorable="d" 
-             d:DesignHeight="30" d:DesignWidth="800">
+             d:DesignHeight="36" d:DesignWidth="800">
     <Border Margin="0" CornerRadius="0,0,0,0" BorderThickness="1" BorderBrush="Transparent">
         <DockPanel LastChildFill="True" Height="36" >
             <DockPanel.Background>
