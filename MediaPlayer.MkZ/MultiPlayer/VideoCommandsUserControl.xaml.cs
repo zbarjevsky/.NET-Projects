@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -229,6 +230,11 @@ namespace MultiPlayer
         }
 
         private void Pos_MouseMove(object sender, MouseEventArgs e)
+        {
+            ShowTimeToolTip(sender, e);
+        }
+
+        private void ShowTimeToolTip(object sender, MouseEventArgs e)
         {
             if (sender is Slider slider)
             {

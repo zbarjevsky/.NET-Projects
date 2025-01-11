@@ -28,6 +28,9 @@ namespace MultiPlayer
     {
         private ScrollDragZoom _scrollDragger;
 
+        private string DragDropDataFormat = "MultiPlayer.OnePlayerSettings";
+        private static VideoPlayerUserControl? DragDropSource = null;
+
         public Action MaximizeAction = () => { };
         public Action<IVideoPlayer> VideoEnded = (player) => { };
         public Action<IVideoPlayer> VideoStartedAction { get; set; } = (player) => { };
@@ -557,7 +560,7 @@ namespace MultiPlayer
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                DragDropData.Source = this;
+                DragDropSource = this;
                 DragDrop.DoDragDrop(this, Settings, DragDropEffects.Move);
                 e.Handled = true;
             }
@@ -573,9 +576,9 @@ namespace MultiPlayer
                 // handling code you have defined.
                 _commands.Open(files[0]);
             }
-            else if (e.Data.GetDataPresent(DragDropData.Format))
+            else if (e.Data.GetDataPresent(DragDropDataFormat))
             {
-                VideoPlayerUserControl vFrom = DragDropData.Source as VideoPlayerUserControl;
+                VideoPlayerUserControl vFrom = DragDropSource;
                 OnePlayerSettings setFrom = (OnePlayerSettings)(e.Data.GetData("MultiPlayer.OnePlayerSettings"));
                 OnePlayerSettings setTo = new OnePlayerSettings(this);
                 if (setFrom.FileName != setTo.FileName)
@@ -583,7 +586,7 @@ namespace MultiPlayer
                     this.LoadSetting(setFrom);
                     vFrom.LoadSetting(setTo);
                 }
-                DragDropData.Source = null;
+                DragDropSource = null;
             }
         }
     }

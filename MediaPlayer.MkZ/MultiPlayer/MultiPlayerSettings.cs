@@ -13,12 +13,6 @@ using System.Xml.Serialization;
 
 namespace MultiPlayer
 {
-    public static class DragDropData
-    {
-        public const string Format = "MultiPlayer.OnePlayerSettings";
-        public static VideoPlayerUserControl? Source { get; set; } = null;
-    }
-
     [Serializable]
     public class OnePlayerSettings
     {

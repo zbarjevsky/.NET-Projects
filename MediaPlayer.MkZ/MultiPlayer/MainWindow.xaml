@@ -32,10 +32,13 @@
             <Button Grid.Column="0" Content="Open..." ToolTip="Open..."
                     Click="Open_Click"
                     Margin="3" Padding="5,3"/>
-            <Button Grid.Column="1" Content="Save As..." ToolTip="SAve As..."
+            <Button Grid.Column="1" Content="Save As..." ToolTip="Save As..."
                     Click="SaveAs_Click"
                     Margin="3" Padding="5,3" />
-            <Button Grid.Column="2" Content="Exit" ToolTip="Exit"
+            <Button Grid.Column="2" Content="Close All" ToolTip="Close All"
+                    Click="CloseAll_Click"
+                    Margin="3" Padding="5,3" />
+            <Button Grid.Column="3" Content="Exit" ToolTip="Exit"
                     Click="Exit_Click"
                     Margin="3" Padding="5,3" />
         </Grid>
@@ -52,8 +55,8 @@
                 <RowDefinition Height="5"/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <GridSplitter Grid.Column="1" Grid.RowSpan="3" Background="LightGray" Width="5" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
-            <GridSplitter Grid.Column="3" Grid.RowSpan="3" Background="LightGray" Width="5" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+            <GridSplitter Grid.Column="1" Grid.RowSpan="3" Background="Gray" Width="5" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+            <GridSplitter Grid.Column="3" Grid.RowSpan="3" Background="Gray" Width="5" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
 
             <GridSplitter Grid.ColumnSpan="5" Grid.Row="1" Background="LightGray" Height="5" HorizontalAlignment="Stretch" />
 

@@ -91,5 +91,14 @@ namespace MultiPlayer
         {
             this.Close();
         }
+
+        private void CloseAll_Click(object sender, RoutedEventArgs e)
+        {
+            for (int i = 0; i < _videos.Count; i++)
+            {
+                VideoPlayerUserControl v = _videos[i];
+                v.LoadSetting(new OnePlayerSettings());
+            }
+        }
     }
 }
