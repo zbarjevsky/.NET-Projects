@@ -7,6 +7,9 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="PopUpWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="VideoCommandsUserControl.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -16,6 +19,9 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="PopUpWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="VideoCommandsUserControl.xaml">

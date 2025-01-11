@@ -234,6 +234,14 @@ namespace MultiPlayer
             return fileNames;
         }
 
+        private void Pop_Click(object sender, RoutedEventArgs e)
+        {
+            PopUpWindow wnd = new PopUpWindow();
+            wnd.Load(_videoPlayerUserControl.Settings);
+            Pause();
+            wnd.Show();
+        }
+
         private void Pos_MouseMove(object sender, MouseEventArgs e)
         {
             ShowTimeToolTip(sender, e);

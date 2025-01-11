@@ -16,6 +16,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
@@ -38,8 +39,9 @@
                 <ComboBoxItem Content="FitWindow" />
                 <ComboBoxItem Content="FitHeight" />
             </ComboBox>
-            <TextBlock x:Name="_timeLbl" Grid.Column="6" Margin="2,5" Text="0:00" />
-            <Slider x:Name="_position" Grid.Column="7" Margin="2,4" 
+            <Button Grid.Column="6" Margin="2" Content="pop" Click="Pop_Click"/>
+            <TextBlock x:Name="_timeLbl" Grid.Column="7" Margin="2,5" Text="0:00" />
+            <Slider x:Name="_position" Grid.Column="8" Margin="2,4" 
                     Value="33" Maximum="300" Minimum="0" IsMoveToPointEnabled="True" 
                     ValueChanged="Pos_ValueChanged"
                     Thumb.DragStarted="Pos_DragStarted"
@@ -58,7 +60,7 @@
                                    Foreground="White"/>
                 </Border>
             </Popup>
-            <Slider x:Name="_volume" Grid.Column="8" Margin="2,4" Width="60"  
+            <Slider x:Name="_volume" Grid.Column="9" Margin="2,4" Width="60"  
                     Value="150" Maximum="1000" Minimum="0" IsMoveToPointEnabled="True"
                     ValueChanged="Volume_ValueChanged"/>
         </Grid>
