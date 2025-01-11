@@ -216,9 +216,20 @@ namespace MultiPlayer
                 LeftButtonDoubleClick();
         }
 
+        private Point _mousePos = new Point();
         private void UserControl_PreviewMouseButtonDown(object sender, MouseButtonEventArgs e)
         {
-            if (e.ChangedButton == MouseButton.Left && ((e.OriginalSource is MediaElement) || (e.OriginalSource is ScrollViewer)))
+            _mousePos = e.GetPosition(this);
+        }
+
+        private void UserControl_PreviewMouseUp(object sender, MouseButtonEventArgs e)
+        {
+            Point pos = e.GetPosition(this);
+            if ((pos - _mousePos).Length > 3.0) //detect mouse move
+                return;
+
+            object s = e.OriginalSource;
+            if (e.ChangedButton == MouseButton.Left && ((s is MediaElement) || (s is ScrollViewer) || (s is Grid)))
                 LeftButtonClick();
         }
 

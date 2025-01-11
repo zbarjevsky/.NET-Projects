@@ -10,6 +10,7 @@
              SizeChanged="UserControl_SizeChanged"
              MouseDoubleClick="UserControl_MouseDoubleClick"
              PreviewMouseDown="UserControl_PreviewMouseButtonDown"
+             PreviewMouseUp="UserControl_PreviewMouseUp"
              Drop="UserControl_Drop"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
