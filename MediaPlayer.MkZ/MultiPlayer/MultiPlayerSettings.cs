@@ -9,16 +9,23 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Xml.Serialization;
 
 namespace MultiPlayer
 {
+    public static class DragDropData
+    {
+        public const string Format = "MultiPlayer.OnePlayerSettings";
+        public static VideoPlayerUserControl? Source { get; set; } = null;
+    }
+
     [Serializable]
     public class OnePlayerSettings
     {
         public string FileName { get; set; } = string.Empty;
         public double Position { get; set; } = 0.0;
         public double Duration { get; set; } = 0.0;
-        public eZoomState ZoomState {  get; set; } = eZoomState.FitHeight;
+        public eZoomState ZoomState {  get; set; } = eZoomState.FitWindow;
         public double Zoom { get; set; } = 1.0;
         public MediaState MediaState { get; set; } = MediaState.Play;
         public double Volume { get; set; } = 0.0;
@@ -70,8 +77,10 @@ namespace MultiPlayer
     [Serializable]
     public class MultiPlayerSettings
     {
-        string _dataFolder;
-        string _fileName;
+        [XmlIgnore]
+        public string DataFolder { get; private set; }
+        [XmlIgnore]
+        public string FileName { get; private set; }
 
         public List<OnePlayerSettings> Settings { get; set; }
 
@@ -79,8 +88,8 @@ namespace MultiPlayer
         {
             var assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
             string commonPath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
-            _dataFolder = Path.Combine(commonPath, "MkZ", assemblyName);
-            Directory.CreateDirectory(_dataFolder);
+            DataFolder = Path.Combine(commonPath, "MkZ", assemblyName);
+            Directory.CreateDirectory(DataFolder);
 
             string debug = "";
 #if DEBUG
@@ -88,21 +97,26 @@ namespace MultiPlayer
 #endif
             string date = DateTime.Now.ToString("yyyy_MM_dd-HH_mm_ss");
             string fileName = string.Format("{0}_{1}{2}.xml", assemblyName, "Files", debug);
-            _fileName = Path.Combine(_dataFolder, fileName);
+            FileName = Path.Combine(DataFolder, fileName);
         }
 
-        public void Save()
+        public void Save(string fileName)
         {
-            XmlHelper.Save(_fileName, this);
+            XmlHelper.Save(fileName, this);
         }
 
         public void Load()
         {
-            if (File.Exists(_fileName))
+            Load(FileName);
+        }
+
+        public void Load(string fileName)
+        {
+            if (File.Exists(fileName))
             {
                 try
                 {
-                    MultiPlayerSettings appConfig = XmlHelper.Open<MultiPlayerSettings>(_fileName);
+                    MultiPlayerSettings appConfig = XmlHelper.Open<MultiPlayerSettings>(fileName);
                     this.CopyFrom(appConfig);
                 }
                 catch (Exception err)

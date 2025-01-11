@@ -25,10 +25,10 @@
             <Button Grid.Column="2" Margin="2" Content="prev" Click="Prev_Click" />
             <Button Grid.Column="3" Margin="2" Content="next" Click="Next_Click"/>
             <ComboBox x:Name="_speed" Grid.Column="4" Margin="2" SelectedIndex="3" SelectionChanged="Speed_Selected" >
-                <ComboBoxItem Content=".1x" />
-                <ComboBoxItem Content=".2x" />
-                <ComboBoxItem Content=".5x" />
-                <ComboBoxItem Content="1x" />
+                <ComboBoxItem Content="0.1x" />
+                <ComboBoxItem Content="0.2x" />
+                <ComboBoxItem Content="0.5x" />
+                <ComboBoxItem Content="1.0x" />
                 <ComboBoxItem Content="1.5x" />
             </ComboBox>
             <ComboBox x:Name="_fit" Grid.Column="5" Margin="2" SelectedIndex="2" SelectionChanged="Fit_Selected" >

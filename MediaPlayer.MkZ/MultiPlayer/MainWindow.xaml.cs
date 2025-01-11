@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using Microsoft.Win32;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -28,7 +29,31 @@ namespace MultiPlayer
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            _settings.Load();
+            LoadSettings(_settings.FileName);
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            _settings.Update(_videos);
+            _settings.Save(_settings.FileName);
+            e.Cancel = false;
+        }
+
+        private void Open_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.InitialDirectory = _settings.DataFolder;
+            ofd.FileName = _settings.FileName;
+            ofd.Filter = "XML Files (*.xml)|*.xml";
+            if (ofd.ShowDialog(this).Value == true)
+            {
+                LoadSettings(ofd.FileName);
+            }
+        }
+
+        private void LoadSettings(string fileName)
+        {
+            _settings.Load(fileName);
 
             if (_settings.Settings.Count == _videos.Count)
             {
@@ -49,11 +74,22 @@ namespace MultiPlayer
             }
         }
 
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void SaveAs_Click(object sender, RoutedEventArgs e)
         {
-            _settings.Update(_videos);
-            _settings.Save();
-            e.Cancel = false;
+            SaveFileDialog sfd = new SaveFileDialog();
+            sfd.InitialDirectory = _settings.DataFolder;
+            sfd.FileName = _settings.FileName;
+            sfd.Filter = "XML Files (*.xml)|*.xml";
+            if (sfd.ShowDialog(this).Value == true)
+            {
+                _settings.Update(_videos);
+                _settings.Save(sfd.FileName);
+            }
+        }
+
+        private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

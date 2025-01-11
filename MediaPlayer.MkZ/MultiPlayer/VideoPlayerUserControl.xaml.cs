@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -293,18 +294,6 @@ namespace MultiPlayer
             Title = fileName;
         }
 
-        private void UserControl_Drop(object sender, DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                // Note that you can have more than one file.
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
-
-                // handling code you have defined.
-                _commands.Open(files[0]);
-            }
-        }
-
         public void LoadSetting(OnePlayerSettings s)
         {
             Open(s.FileName, s.Volume);
@@ -562,6 +551,40 @@ namespace MultiPlayer
         private void btnFlipHorizontally_Click(object sender, RoutedEventArgs e)
         {
             IsFlipHorizontally = !IsFlipHorizontally;
+        }
+
+        private void UserControl_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                DragDropData.Source = this;
+                DragDrop.DoDragDrop(this, Settings, DragDropEffects.Move);
+                e.Handled = true;
+            }
+        }
+
+        private void UserControl_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                // Note that you can have more than one file.
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                // handling code you have defined.
+                _commands.Open(files[0]);
+            }
+            else if (e.Data.GetDataPresent(DragDropData.Format))
+            {
+                VideoPlayerUserControl vFrom = DragDropData.Source as VideoPlayerUserControl;
+                OnePlayerSettings setFrom = (OnePlayerSettings)(e.Data.GetData("MultiPlayer.OnePlayerSettings"));
+                OnePlayerSettings setTo = new OnePlayerSettings(this);
+                if (setFrom.FileName != setTo.FileName)
+                {
+                    this.LoadSetting(setFrom);
+                    vFrom.LoadSetting(setTo);
+                }
+                DragDropData.Source = null;
+            }
         }
     }
 }

@@ -7,32 +7,62 @@
         WindowStartupLocation="CenterScreen"
         Loaded="Window_Loaded"
         Closing="Window_Closing"
+        Background="SlateGray"
         mc:Ignorable="d"
         Icon="Yin-Yang.ico"
         Title="Multi Media Player - 6x" Height="950" Width="1900">
-    <Grid Background="White">
+    <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" MinWidth="50"/>
-            <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="*" MinWidth="50"/>
-            <ColumnDefinition Width="5"/>
-            <ColumnDefinition Width="*" MinWidth="50"/>
+            <ColumnDefinition Width="35"/>
+            <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition/>
-            <RowDefinition Height="5"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <GridSplitter Grid.Column="1" Grid.RowSpan="3" Background="LightGray" Width="5" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
-        <GridSplitter Grid.Column="3" Grid.RowSpan="3" Background="LightGray" Width="5" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+        <Grid Margin="1" Background="Gray" HorizontalAlignment="Center" VerticalAlignment="Top">
+            <Grid.LayoutTransform>
+                <RotateTransform Angle="90" />
+            </Grid.LayoutTransform>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
 
-        <GridSplitter Grid.ColumnSpan="5" Grid.Row="1" Background="LightGray" Height="5" HorizontalAlignment="Stretch" />
-        
-        <local:VideoPlayerUserControl x:Name="_video00" Grid.Column="0" Grid.Row="0" Background="AliceBlue" />
-        <local:VideoPlayerUserControl x:Name="_video01" Grid.Column="2" Grid.Row="0" Background="Pink" />
-        <local:VideoPlayerUserControl x:Name="_video02" Grid.Column="4" Grid.Row="0" Background="Gold" />
-        <local:VideoPlayerUserControl x:Name="_video10" Grid.Column="0" Grid.Row="2" Background="LightYellow" />
-        <local:VideoPlayerUserControl x:Name="_video11" Grid.Column="2" Grid.Row="2" Background="LightGreen" />
-        <local:VideoPlayerUserControl x:Name="_video12" Grid.Column="4" Grid.Row="2" Background="LightGray" />
+            <Button Grid.Column="0" Content="Open..." ToolTip="Open..."
+                    Click="Open_Click"
+                    Margin="3" Padding="5,3"/>
+            <Button Grid.Column="1" Content="Save As..." ToolTip="SAve As..."
+                    Click="SaveAs_Click"
+                    Margin="3" Padding="5,3" />
+            <Button Grid.Column="2" Content="Exit" ToolTip="Exit"
+                    Click="Exit_Click"
+                    Margin="3" Padding="5,3" />
+        </Grid>
+        <Grid Grid.Column="1" Background="Gray">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MinWidth="50"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*" MinWidth="50"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*" MinWidth="50"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="5"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <GridSplitter Grid.Column="1" Grid.RowSpan="3" Background="LightGray" Width="5" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+            <GridSplitter Grid.Column="3" Grid.RowSpan="3" Background="LightGray" Width="5" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+
+            <GridSplitter Grid.ColumnSpan="5" Grid.Row="1" Background="LightGray" Height="5" HorizontalAlignment="Stretch" />
+
+            <local:VideoPlayerUserControl x:Name="_video00" Grid.Column="0" Grid.Row="0" Background="AliceBlue" />
+            <local:VideoPlayerUserControl x:Name="_video01" Grid.Column="2" Grid.Row="0" Background="Pink" />
+            <local:VideoPlayerUserControl x:Name="_video02" Grid.Column="4" Grid.Row="0" Background="Gold" />
+            <local:VideoPlayerUserControl x:Name="_video10" Grid.Column="0" Grid.Row="2" Background="LightYellow" />
+            <local:VideoPlayerUserControl x:Name="_video11" Grid.Column="2" Grid.Row="2" Background="LightGreen" />
+            <local:VideoPlayerUserControl x:Name="_video12" Grid.Column="4" Grid.Row="2" Background="LightGray" />
+        </Grid>
     </Grid>
 </Window>
