@@ -210,15 +210,18 @@ namespace MkZ.WPF
 
         private void content_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            e.Handled = true;
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) || Keyboard.IsKeyDown(Key.LeftShift))
+            {
+                e.Handled = true;
 
-            //Vector delta = MoveContentAndMouseToCenterBeforeZoom(e);
-            Point offsetOld = ScrollOffset;
+                //Vector delta = MoveContentAndMouseToCenterBeforeZoom(e);
+                Point offsetOld = ScrollOffset;
 
-            double deltaZoom = ((e.Delta > 0) ? 1.1 : 0.9);
-            Zoom = _zoom * deltaZoom;
+                double deltaZoom = ((e.Delta > 0) ? 1.1 : 0.9);
+                Zoom = _zoom * deltaZoom;
 
-            Vector delta = MoveContentAndMouseToCenterAfterZoom(deltaZoom, offsetOld, e); 
+                Vector delta = MoveContentAndMouseToCenterAfterZoom(deltaZoom, offsetOld, e);
+            }
         }
 
         private void content_MouseRightButtonDown(object sender, MouseButtonEventArgs e)

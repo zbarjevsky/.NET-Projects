@@ -144,6 +144,17 @@ namespace MultiPlayer
                 _videoPlayerUserControl.Volume = _volume.Value / 1000.0;
         }
 
+        public void VolumeUpdate(int delta)
+        {
+            double vol = _volume.Value;
+            if (delta > 0) vol += 100;
+            if (delta < 0) vol -= 100;
+            if (vol < 0) vol = 0;
+            if (vol > 1000) vol = 1000;
+
+            _volume.Value = vol;
+        }
+
         double[] _speedRatios = { 0.1, 0.2, 0.5, 1.0, 1.5 };
 
         private void Speed_Selected(object sender, SelectionChangedEventArgs e)

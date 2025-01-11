@@ -86,7 +86,8 @@ namespace MultiPlayer
 
         private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            this.Close();
+            if (e.Key == System.Windows.Input.Key.Escape)
+                this.Close();
         }
 
         private void CloseAll_Click(object sender, RoutedEventArgs e)

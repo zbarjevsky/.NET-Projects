@@ -23,8 +23,8 @@
                 </Grid.RowDefinitions>
                 
                 <ScrollViewer Name="_scrollPlayerContainer" Grid.RowSpan="2"
-                      HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
-                      MouseMove="UserControl_MouseMove" >
+                              HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                              MouseMove="UserControl_MouseMove" >
                     <ScrollViewer.Resources>
                         <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">10</sys:Double>
                         <sys:Double x:Key="{x:Static SystemParameters.HorizontalScrollBarHeightKey}">10</sys:Double>

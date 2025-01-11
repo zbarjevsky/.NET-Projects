@@ -170,6 +170,8 @@ namespace MultiPlayer
             _timer.Tick += _timer_Tick;
 
             _commands.Init(this);
+
+            VideoPlayerElement.MouseWheel += UserControl_MouseWheel;
         }
 
         private void _timer_Tick(object? sender, EventArgs e)
@@ -595,6 +597,14 @@ namespace MultiPlayer
             {
                 _isDragging = false;
             }
+        }
+
+        private void UserControl_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) || Keyboard.IsKeyDown(Key.LeftShift))
+                return;
+
+            _commands.VolumeUpdate(e.Delta);
         }
 
         private void UserControl_Drop(object sender, DragEventArgs e)
