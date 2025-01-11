@@ -162,15 +162,15 @@ namespace MultiPlayer
             _videoPlayerUserControl.ZoomState = (MkZ.WPF.eZoomState)_fit.SelectedIndex;
         }
 
+        private bool _resume = false;
         private void Pos_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
         {
             if (_videoPlayerUserControl == null || _isInUpdate)
                 return;
 
-            MediaState state = _videoPlayerUserControl.MediaState;
-            if (state != MediaState.Pause)
+            _resume = (_videoPlayerUserControl.MediaState == MediaState.Play);
+            if (_resume)
                 Pause();
-
         }
 
         private void Pos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -178,14 +178,17 @@ namespace MultiPlayer
             if (_videoPlayerUserControl == null || _isInUpdate)
                 return;
 
-            MediaState state = _videoPlayerUserControl.MediaState;
-            if (state != MediaState.Pause)
+            bool resume = (_videoPlayerUserControl.MediaState == MediaState.Play);
+            if (resume)
                 Pause();
 
             _position.Value = e.NewValue;
             _videoPlayerUserControl.PositionSet(TimeSpan.FromSeconds(_position.Value), false);
 
             _timeLbl.Text = _videoPlayerUserControl.Position.ToString("mm':'ss");
+
+            if (resume)
+                Play();
 
             e.Handled = true;
         }
@@ -195,11 +198,10 @@ namespace MultiPlayer
             if (_videoPlayerUserControl == null || _isInUpdate)
                 return;
 
-            MediaState state = _videoPlayerUserControl.MediaState;
-            if (state != MediaState.Pause)
-                Pause();
-
             _videoPlayerUserControl.PositionSet(TimeSpan.FromSeconds(_position.Value), false);
+
+            if (_resume)
+                Play();
 
             e.Handled = true;
         }
