@@ -6,76 +6,66 @@
              xmlns:local="clr-namespace:MultiPlayer"
              mc:Ignorable="d" 
              d:DesignHeight="30" d:DesignWidth="800">
-    <Border Margin="0" CornerRadius="0,0,5,5">
-        <Grid Grid.Row="1" Background="SlateGray" Margin="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
+    <Border Margin="0" CornerRadius="0,0,0,0" BorderThickness="1" BorderBrush="Transparent">
+        <DockPanel LastChildFill="True" Background="SlateGray">
 
-            <Button Grid.Column="0" Margin="2" Click="Open_Click" >
+            <Button Margin="2" Click="Open_Click" >
                 <Label FontFamily="Segoe MDL2 Assets" Content="&#xE714;" FontSize="16" />
             </Button>
-            <Button Grid.Column="1" Margin="2" x:Name="_btnPlayPause" Click="PlayPause_Click" >
+            <Button Margin="2" x:Name="_btnPlayPause" Click="PlayPause_Click" >
                 <StackPanel Orientation="Horizontal">
                     <Label FontFamily="Segoe MDL2 Assets" Content="&#xE768;" FontSize="16" />
                     <Label FontFamily="Segoe MDL2 Assets" Content="&#xE769;" FontSize="16" />
                 </StackPanel>
             </Button>
-            <Button Grid.Column="2" Margin="2" Click="Prev_Click" >
+            <Button Margin="2" Click="Prev_Click" >
                 <Label FontFamily="Segoe MDL2 Assets" Content="&#xE892;" FontSize="16" />
             </Button>
-            <Button Grid.Column="3" Margin="2" Click="Next_Click" >
+            <Button Margin="2" Click="Next_Click" >
                 <Label FontFamily="Segoe MDL2 Assets" Content="&#xE893;" FontSize="16" />
             </Button>
-            <ComboBox x:Name="_speed" Grid.Column="4" Margin="2,6" SelectedIndex="3" SelectionChanged="Speed_Selected" >
+            <ComboBox x:Name="_speed" Margin="2,6" SelectedIndex="3" SelectionChanged="Speed_Selected" >
                 <ComboBoxItem Content="0.1x" />
                 <ComboBoxItem Content="0.2x" />
                 <ComboBoxItem Content="0.5x" />
                 <ComboBoxItem Content="1.0x" />
                 <ComboBoxItem Content="1.5x" />
             </ComboBox>
-            <ComboBox x:Name="_fit" Grid.Column="5" Margin="2,6" SelectedIndex="2" SelectionChanged="Fit_Selected" >
+            <ComboBox x:Name="_fit" Margin="2,6" SelectedIndex="2" SelectionChanged="Fit_Selected" >
                 <ComboBoxItem Content="Custom" />
                 <ComboBoxItem Content="Original" />
                 <ComboBoxItem Content="FitWidth" />
                 <ComboBoxItem Content="FitWindow" />
                 <ComboBoxItem Content="FitHeight" />
             </ComboBox>
-            <Button Grid.Column="6" Margin="2" Padding="2" Click="Pop_Click">
+            <Button Margin="2" Padding="2" Click="Pop_Click">
                 <Label FontFamily="Segoe MDL2 Assets" Content="&#xE740;" FontSize="16" />
             </Button>
-            <TextBlock x:Name="_timeLbl" Grid.Column="7" Margin="2,10" Text="0:00" />
-            <Slider x:Name="_position" Grid.Column="8" Margin="2,10" 
+            <TextBlock x:Name="_timeLbl" Margin="2,10" Text="0:00" />
+            <DockPanel LastChildFill="True" >
+                <Popup x:Name="_popupSliderTooltip" AllowsTransparency="True"
+                       Placement="Relative"  PlacementTarget="{Binding ElementName=_position}">
+                    <Border Name="_borderSliderTooltip" CornerRadius="4"
+                             BorderBrush="Black" BorderThickness="0" Padding="3,1">
+                        <Border.Background>
+                            <SolidColorBrush Color="Black" Opacity="0.5" />
+                        </Border.Background>
+                        <TextBlock x:Name="_txtSliderTooltip" Text="00:00" 
+                                   FontSize="14" FontWeight="Medium"
+                                   Foreground="White"/>
+                    </Border>
+                </Popup>
+                <Slider x:Name="_volume" Margin="2,10" Width="60" DockPanel.Dock="Right" 
+                    Value="150" Maximum="1000" Minimum="0" IsMoveToPointEnabled="True"
+                    ValueChanged="Volume_ValueChanged"/>
+                <Slider x:Name="_position" Margin="2,10" 
                     Value="33" Maximum="300" Minimum="0" IsMoveToPointEnabled="True" 
                     ValueChanged="Pos_ValueChanged"
                     Thumb.DragStarted="Pos_DragStarted"
                     Thumb.DragCompleted="Pos_DragCompleted"
                     MouseMove="Pos_MouseMove" 
                     MouseLeave="Pos_MouseLeave" />
-            <Popup x:Name="_popupSliderTooltip" AllowsTransparency="True"
-                       Placement="Relative"  PlacementTarget="{Binding ElementName=_position}">
-                <Border Name="_borderSliderTooltip" CornerRadius="4"
-                             BorderBrush="Black" BorderThickness="0" Padding="3,1">
-                    <Border.Background>
-                        <SolidColorBrush Color="Black" Opacity="0.5" />
-                    </Border.Background>
-                    <TextBlock x:Name="_txtSliderTooltip" Text="00:00" 
-                                   FontSize="14" FontWeight="Medium"
-                                   Foreground="White"/>
-                </Border>
-            </Popup>
-            <Slider x:Name="_volume" Grid.Column="9" Margin="2,10" Width="60"  
-                    Value="150" Maximum="1000" Minimum="0" IsMoveToPointEnabled="True"
-                    ValueChanged="Volume_ValueChanged"/>
-        </Grid>
+            </DockPanel>
+        </DockPanel>
     </Border>
 </UserControl>
