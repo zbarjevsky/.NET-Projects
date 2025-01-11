@@ -256,7 +256,7 @@ namespace MultiPlayer
 
             PopUpWindow wnd = new PopUpWindow();
             wnd.Owner = Application.Current.MainWindow;
-            wnd.Load(_videoPlayerUserControl.Settings);
+            wnd.Load(new OnePlayerSettings(_videoPlayerUserControl));
             Pause();
             wnd.Show();
         }
