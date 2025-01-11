@@ -61,8 +61,9 @@
                 <Slider x:Name="_volume" Margin="2,10" Width="60" DockPanel.Dock="Right" 
                     Value="150" Maximum="1000" Minimum="0" IsMoveToPointEnabled="True"
                     ValueChanged="Volume_ValueChanged"/>
-                <Slider x:Name="_position" Margin="2,10"
-                    Value="33" Maximum="300" Minimum="0" IsMoveToPointEnabled="True" 
+                <Slider x:Name="_position" Margin="2,4"
+                    Value="33" Maximum="300" Minimum="0" TickFrequency="60" TickPlacement="TopLeft" 
+                    IsMoveToPointEnabled="True" 
                     ValueChanged="Pos_ValueChanged"
                     Thumb.DragStarted="Pos_DragStarted"
                     Thumb.DragCompleted="Pos_DragCompleted"
