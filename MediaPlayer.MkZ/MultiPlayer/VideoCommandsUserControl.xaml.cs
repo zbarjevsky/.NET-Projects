@@ -79,7 +79,10 @@ namespace MultiPlayer
             _position.Maximum = s.Duration;
             _position.Value = s.Position;
             _speed.SelectedIndex = SpeedRatio(s.SpeedRatio);
+
             _fit.SelectedIndex = (int)s.ZoomState;
+            if (s.ZoomState == MkZ.WPF.eZoomState.Custom)
+                _videoPlayerUserControl.Zoom = s.Zoom;
             
             _timeLbl.Text = TimeSpan.FromSeconds(s.Position).ToString("mm':'ss");
 

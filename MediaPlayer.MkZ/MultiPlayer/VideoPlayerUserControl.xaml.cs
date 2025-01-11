@@ -225,7 +225,7 @@ namespace MultiPlayer
         private void UserControl_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
             Point pos = e.GetPosition(this);
-            if ((pos - _mousePos).Length > 3.0) //detect mouse move
+            if ((pos - _mousePos).Length > 12.0) //detect mouse move
                 return;
 
             object s = e.OriginalSource;
@@ -305,7 +305,7 @@ namespace MultiPlayer
             VideoPlayerElement.Source = string.IsNullOrEmpty(fileName) ? null : new Uri(fileName);
             Volume = volume;
             MediaState = MediaState.Manual;
-            Title = fileName;
+            Title = System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(fileName)) + "/" + System.IO.Path.GetFileName(fileName);
         }
 
         public void LoadSetting(OnePlayerSettings s)
@@ -590,15 +590,15 @@ namespace MultiPlayer
             else if (e.Data.GetDataPresent(DragDropDataFormat))
             {
                 VideoPlayerUserControl vFrom = DragDropSource;
-                OnePlayerSettings setFrom = (OnePlayerSettings)(e.Data.GetData("MultiPlayer.OnePlayerSettings"));
+                OnePlayerSettings setFrom = (OnePlayerSettings)(e.Data.GetData(DragDropDataFormat));
                 OnePlayerSettings setTo = new OnePlayerSettings(this);
                 if (setFrom.FileName != setTo.FileName)
                 {
                     this.LoadSetting(setFrom);
                     vFrom.LoadSetting(setTo);
                 }
-                DragDropSource = null;
             }
-        }
+            DragDropSource = null;
+       }
     }
 }
