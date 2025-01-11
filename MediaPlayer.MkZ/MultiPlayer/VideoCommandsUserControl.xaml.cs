@@ -89,7 +89,7 @@ namespace MultiPlayer
             if (s.ZoomState == eZoomState.Custom)
                 _videoPlayerUserControl.Zoom = s.Zoom;
             
-            _timeLbl.Text = TimeSpan.FromSeconds(s.Position).ToString("mm':'ss");
+            _timeLbl.Text = SecondsToString(s.Position);
             
             AdjustMarginsForVisibleScrollBars();
 
@@ -214,12 +214,20 @@ namespace MultiPlayer
             _position.Value = e.NewValue;
             _videoPlayerUserControl.PositionSet(TimeSpan.FromSeconds(_position.Value), false);
 
-            _timeLbl.Text = _videoPlayerUserControl.Position.ToString("mm':'ss");
+            _timeLbl.Text = SecondsToString(_videoPlayerUserControl.Position.TotalSeconds);
 
             if (resume)
                 Play();
 
             e.Handled = true;
+        }
+
+        private string SecondsToString(double seconds)
+        {
+            if (seconds < 3600)
+                return TimeSpan.FromSeconds(seconds).ToString("m':'ss");
+            else
+                return TimeSpan.FromSeconds(seconds).ToString("h':'mm':'ss");
         }
 
         private void Pos_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
@@ -289,8 +297,8 @@ namespace MultiPlayer
 
                     Track track = slider.Template.FindName("PART_Track", slider) as Track;
 
-                    _txtSliderTooltip.Text = TimeSpan.FromSeconds(track.ValueFromPoint(currentPos)).ToString("mm':'ss");
-                    string dur = TimeSpan.FromSeconds(_videoPlayerUserControl.Duration).ToString("mm':'ss");
+                    _txtSliderTooltip.Text = SecondsToString(track.ValueFromPoint(currentPos));
+                    string dur = SecondsToString(_videoPlayerUserControl.Duration);
                     _txtSliderTooltip.Text += " / " + dur;
 
                     _popupSliderTooltip.HorizontalOffset = currentPos.X - (_borderSliderTooltip.ActualWidth / 2);
