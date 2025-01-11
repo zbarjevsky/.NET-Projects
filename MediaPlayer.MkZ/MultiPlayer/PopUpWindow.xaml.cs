@@ -1,6 +1,8 @@
-﻿using System;
+﻿using MultiPlayer.MkZ.WPF;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -26,7 +28,15 @@ namespace MultiPlayer
 
         public void Load(OnePlayerSettings settings)
         {
-            _video.LoadSetting(settings);
+            _video.LoadSetting(settings, true);
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (Keyboard.Modifiers == ModifierKeys.None && e.Key == Key.Escape)
+            {
+                this.Close();
+            }
         }
     }
 }

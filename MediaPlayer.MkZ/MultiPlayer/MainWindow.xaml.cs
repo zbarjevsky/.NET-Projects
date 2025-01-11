@@ -1,14 +1,6 @@
 ﻿using Microsoft.Win32;
-using System.Text;
+using MkZ.WPF;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace MultiPlayer
 {
@@ -68,7 +60,7 @@ namespace MultiPlayer
                 foreach (VideoPlayerUserControl v in _videos)
                 {
                     v.Open(@"E:\Temp\YouTube\Music\20210315--＂The Lonely Shepherd''- James Last- pan flute cover-Karla Herescu--ITaj0qAehD8.mp4");
-                    v.ZoomStateSet(MkZ.WPF.eZoomState.FitHeight, true);
+                    v.ZoomStateSet(eZoomState.FitHeight, true);
                     v.Play();
                 }
             }
@@ -88,6 +80,11 @@ namespace MultiPlayer
         }
 
         private void Exit_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             this.Close();
         }

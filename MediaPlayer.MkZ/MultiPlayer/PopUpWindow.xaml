@@ -5,9 +5,14 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MultiPlayer"
         WindowStartupLocation="CenterOwner"
+        WindowState="Normal"
+        KeyDown="Window_KeyDown"
         mc:Ignorable="d"
-        Title="PopUpWindow" Height="450" Width="800">
-    <Grid>
+        Title="PopUpWindow" Height="950" Width="1920">
+    <Window.InputBindings>
+        <KeyBinding Key="Esc" Command="{Binding CloseCommand}" />
+    </Window.InputBindings>
+    <Grid Background="Gray">
         <local:VideoPlayerUserControl x:Name="_video" />
     </Grid>
 </Window>

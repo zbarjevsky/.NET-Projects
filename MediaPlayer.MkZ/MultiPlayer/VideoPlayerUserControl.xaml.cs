@@ -31,6 +31,8 @@ namespace MultiPlayer
         private string DragDropDataFormat = "MultiPlayer.OnePlayerSettings";
         private static VideoPlayerUserControl? DragDropSource = null;
 
+        private readonly FadeAnimationHelper _controlsHideAndShow;
+
         public Action MaximizeAction = () => { };
         public Action<IVideoPlayer> VideoEnded = (player) => { };
         public Action<IVideoPlayer> VideoStartedAction { get; set; } = (player) => { };
@@ -159,6 +161,9 @@ namespace MultiPlayer
 
             _scrollDragger = new ScrollDragZoom(null, _scrollPlayerContainer);
 
+            _controlsHideAndShow = new FadeAnimationHelper(this, 2,
+                _borderTitle, _commands);
+
             RecreateMediaElement(false);
 
             _timer.Tick += _timer_Tick;
@@ -170,7 +175,7 @@ namespace MultiPlayer
         {
             _timer.Stop();
             Settings.Update(this);
-            _commands.Update(Settings);
+            _commands.Update(Settings, _commands.IsPopWindowMode);
             _timer.Start();
         }
 
@@ -308,7 +313,7 @@ namespace MultiPlayer
             Title = System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(fileName)) + "/" + System.IO.Path.GetFileName(fileName);
         }
 
-        public void LoadSetting(OnePlayerSettings s)
+        public void LoadSetting(OnePlayerSettings s, bool pop = false)
         {
             Open(s.FileName, s.Volume);
 
@@ -321,7 +326,7 @@ namespace MultiPlayer
                 _commands.Pause();
 
             Settings = s;
-            _commands.Update(Settings);
+            _commands.Update(Settings, pop);
         }
 
         internal void Close()
@@ -361,7 +366,7 @@ namespace MultiPlayer
                 MediaState = MediaState.Pause;
 
                 Settings.Update(this);
-                _commands.Update(Settings);
+                _commands.Update(Settings, _commands.IsPopWindowMode);
             }
         }
 
@@ -376,7 +381,7 @@ namespace MultiPlayer
                 MediaState = MediaState.Stop;
                 
                 Settings.Update(this);
-                _commands.Update(Settings);
+                _commands.Update(Settings, _commands.IsPopWindowMode);
             }
         }
 

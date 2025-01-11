@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using MkZ.WPF;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -26,6 +27,7 @@ namespace MultiPlayer
     public partial class VideoCommandsUserControl : UserControl
     {
         VideoPlayerUserControl _videoPlayerUserControl;
+        public bool IsPopWindowMode { get; private set; } = false;
 
         public void TogglePlayPauseState()
         {
@@ -67,12 +69,15 @@ namespace MultiPlayer
             _videoPlayerUserControl.PropertyChanged += _videoPlayerUserControl_PropertyChanged;
 
             _videoPlayerUserControl.LeftButtonClick = () => { TogglePlayPauseState(); };
+            _videoPlayerUserControl.LeftButtonDoubleClick = () => { Pop_Click(this, null); };
             _videoPlayerUserControl.VideoEnded = (player) => { Stop(); Play(); }; 
         }
 
         bool _isInUpdate = false;
-        public void Update(OnePlayerSettings s)
+        public void Update(OnePlayerSettings s, bool pop = false)
         {
+            IsPopWindowMode = pop;
+
             _isInUpdate = true;
             
             _volume.Value = s.Volume * 1000.0;
@@ -81,7 +86,7 @@ namespace MultiPlayer
             _speed.SelectedIndex = SpeedRatio(s.SpeedRatio);
 
             _fit.SelectedIndex = (int)s.ZoomState;
-            if (s.ZoomState == MkZ.WPF.eZoomState.Custom)
+            if (s.ZoomState == eZoomState.Custom)
                 _videoPlayerUserControl.Zoom = s.Zoom;
             
             _timeLbl.Text = TimeSpan.FromSeconds(s.Position).ToString("mm':'ss");
@@ -162,7 +167,7 @@ namespace MultiPlayer
             if (_videoPlayerUserControl == null || _isInUpdate)
                 return;
 
-            _videoPlayerUserControl.ZoomState = (MkZ.WPF.eZoomState)_fit.SelectedIndex;
+            _videoPlayerUserControl.ZoomState = (eZoomState)_fit.SelectedIndex;
         }
 
         private bool _resume = false;
@@ -236,7 +241,11 @@ namespace MultiPlayer
 
         private void Pop_Click(object sender, RoutedEventArgs e)
         {
+            if (IsPopWindowMode)
+                return; //do not open additional pop windows
+
             PopUpWindow wnd = new PopUpWindow();
+            wnd.Owner = Application.Current.MainWindow;
             wnd.Load(_videoPlayerUserControl.Settings);
             Pause();
             wnd.Show();
