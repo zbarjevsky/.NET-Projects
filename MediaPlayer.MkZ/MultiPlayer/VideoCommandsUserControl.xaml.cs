@@ -18,13 +18,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Brushes = System.Windows.Media.Brushes;
+using MouseEventArgs = System.Windows.Input.MouseEventArgs;
+using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+using Point = System.Windows.Point;
 
 namespace MultiPlayer
 {
     /// <summary>
     /// Interaction logic for VideoCommandsUserControl.xaml
     /// </summary>
-    public partial class VideoCommandsUserControl : UserControl
+    public partial class VideoCommandsUserControl : System.Windows.Controls.UserControl
     {
         VideoPlayerUserControl _videoPlayerUserControl;
         public bool IsPopWindowMode { get; private set; } = false;
@@ -274,7 +278,7 @@ namespace MultiPlayer
                 return; //do not open additional pop windows
 
             PopUpWindow wnd = new PopUpWindow();
-            wnd.Owner = Application.Current.MainWindow;
+            wnd.Owner = System.Windows.Application.Current.MainWindow;
             wnd.Load(new OnePlayerSettings(_videoPlayerUserControl));
             Pause();
             wnd.Show();

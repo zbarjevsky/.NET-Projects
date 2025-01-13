@@ -19,7 +19,7 @@ namespace MultiPlayer
         double Volume { get; set; }
         TimeSpan Position { get; }
         void PositionSet(TimeSpan position, bool notify);
-        Size NaturalSize { get; }
+        System.Windows.Size NaturalSize { get; }
         double NaturalDuration { get; }
 
         void Play();

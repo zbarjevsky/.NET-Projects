@@ -31,7 +31,7 @@ namespace MultiPlayer
             _video.LoadSetting(settings, true);
         }
 
-        private void Window_KeyDown(object sender, KeyEventArgs e)
+        private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (Keyboard.Modifiers == ModifierKeys.None && e.Key == Key.Escape)
             {

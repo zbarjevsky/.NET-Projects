@@ -115,7 +115,7 @@ namespace MultiPlayer
                 }
                 catch (Exception err)
                 {
-                    MessageBox.Show(err.ToString(), "Cannot load Settings From File");
+                    System.Windows.MessageBox.Show(err.ToString(), "Cannot load Settings From File");
                 }
             }
             this.EnsureHasValues();

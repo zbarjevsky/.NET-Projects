@@ -8,7 +8,7 @@
         WindowState="Normal"
         KeyDown="Window_KeyDown"
         mc:Ignorable="d"
-        Title="PopUpWindow" Height="950" Width="1920">
+        Title="Multi Player" Height="950" Width="1920">
     <Window.InputBindings>
         <KeyBinding Key="Esc" Command="{Binding CloseCommand}" />
     </Window.InputBindings>

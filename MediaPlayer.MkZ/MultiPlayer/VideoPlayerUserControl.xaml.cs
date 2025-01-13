@@ -19,13 +19,15 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Brushes = System.Windows.Media.Brushes;
+using Point = System.Windows.Point;
 
 namespace MultiPlayer
 {
     /// <summary>
     /// Interaction logic for VideoPlayerUserControl.xaml
     /// </summary>
-    public partial class VideoPlayerUserControl : UserControl, IVideoPlayer
+    public partial class VideoPlayerUserControl : System.Windows.Controls.UserControl, IVideoPlayer
     {
         private ScrollDragZoom _scrollDragger;
 
@@ -275,15 +277,15 @@ namespace MultiPlayer
                 OnPropertyChanged(nameof(Position));
         }
 
-        public Size NaturalSize
+        public System.Windows.Size NaturalSize
         {
             get
             {
                 if (VideoPlayerElement.Source != null)
                 {
-                    return new Size(VideoPlayerElement.NaturalVideoWidth, VideoPlayerElement.NaturalVideoHeight);
+                    return new System.Windows.Size(VideoPlayerElement.NaturalVideoWidth, VideoPlayerElement.NaturalVideoHeight);
                 }
-                return new Size(1920, 1080);
+                return new System.Windows.Size(1920, 1080);
             }
         }
 
@@ -495,7 +497,7 @@ namespace MultiPlayer
                 {
                     double zoom_save = _scrollDragger.Zoom;
                     eZoomState zoomState = _scrollDragger.ZoomState;
-                    _scrollDragger.NaturalSize = new Size(VideoPlayerElement.NaturalVideoWidth, VideoPlayerElement.NaturalVideoHeight);
+                    _scrollDragger.NaturalSize = new System.Windows.Size(VideoPlayerElement.NaturalVideoWidth, VideoPlayerElement.NaturalVideoHeight);
                     _scrollDragger.Zoom = zoom_save;
                     ZoomStateSet(zoomState, false);
                     MediaState = GetMediaState(VideoPlayerElement);
@@ -508,7 +510,7 @@ namespace MultiPlayer
             }
             catch (Exception err)
             {
-                MessageBox.Show(err.ToString());
+                System.Windows.MessageBox.Show(err.ToString());
             }
         }
 
@@ -576,7 +578,7 @@ namespace MultiPlayer
         }
 
         private bool _isDragging = false;
-        private void UserControl_MouseMove(object sender, MouseEventArgs e)
+        private void UserControl_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
             const double scrollBarWidth = 12.0;
 
@@ -589,7 +591,7 @@ namespace MultiPlayer
 
                 _isDragging = true;
                 DragDropSource = this;
-                DragDrop.DoDragDrop(this, Settings, DragDropEffects.Move);
+                DragDrop.DoDragDrop(this, Settings, System.Windows.DragDropEffects.Move);
                 e.Handled = true;
             }
 
@@ -607,12 +609,12 @@ namespace MultiPlayer
             _commands.VolumeUpdate(e.Delta);
         }
 
-        private void UserControl_Drop(object sender, DragEventArgs e)
+        private void UserControl_Drop(object sender, System.Windows.DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
             {
                 // Note that you can have more than one file.
-                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                string[] files = (string[])e.Data.GetData(System.Windows.DataFormats.FileDrop);
 
                 // handling code you have defined.
                 _commands.Open(files[0]);

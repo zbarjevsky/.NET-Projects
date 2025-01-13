@@ -11,6 +11,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Threading;
+using Application = System.Windows.Application;
+using Pen = System.Windows.Media.Pen;
 
 namespace MkZ.WPF
 {
@@ -37,7 +39,7 @@ namespace MkZ.WPF
             return false;
         }
 
-        public static void UpdateGridLinesStyle(Brush color)
+        public static void UpdateGridLinesStyle(System.Windows.Media.Brush color)
         {
             var tGridLinesRenderer = Type.GetType(
                 "System.Windows.Controls.Grid+GridLinesRenderer," +

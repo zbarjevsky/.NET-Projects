@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using Cursors = System.Windows.Input.Cursors;
+using Point = System.Windows.Point;
+using Size = System.Windows.Size;
 
 namespace MkZ.WPF
 {
@@ -233,7 +236,7 @@ namespace MkZ.WPF
             _hOff = _scrollViewer.HorizontalOffset;
         }
 
-        private void content_PreviewMouseMove(object sender, MouseEventArgs e)
+        private void content_PreviewMouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
             if (_content.IsMouseCaptured)
             {
@@ -248,7 +251,7 @@ namespace MkZ.WPF
         private void content_PreviewMouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
             _content.ReleaseMouseCapture();
-            _content.Cursor = Cursors.Arrow;
+            _content.Cursor = System.Windows.Input.Cursors.Arrow;
         }
 
         private Vector MoveContentAndMouseToCenterAfterZoom(double deltaZoom, Point offsetOld, MouseWheelEventArgs e)

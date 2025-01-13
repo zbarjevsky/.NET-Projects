@@ -17,7 +17,7 @@
             <ColumnDefinition Width="35"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Grid Margin="1" Background="Gray" HorizontalAlignment="Center" VerticalAlignment="Top">
+        <Grid Margin="1" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Stretch">
             <Grid.LayoutTransform>
                 <RotateTransform Angle="90" />
             </Grid.LayoutTransform>
@@ -42,6 +42,11 @@
             <Button Grid.Column="3" Content="Exit" ToolTip="Exit"
                     Click="Exit_Click"
                     Margin="3" Padding="5,3" />
+            <Button Grid.Column="5" ToolTip="Settings"
+                    Click="Settings_Click"
+                    Margin="1" Padding="0" >
+                <Label FontFamily="Segoe MDL2 Assets" Content="&#xE713;" FontSize="16" />
+            </Button>
         </Grid>
         <Grid Grid.Column="1" Background="Gray">
             <Grid.ColumnDefinitions>

@@ -1,6 +1,9 @@
 ﻿using Microsoft.Win32;
 using MkZ.WPF;
+using MkZ.WPF.PropertyGrid;
 using System.Windows;
+using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
+using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
 namespace MultiPlayer
 {
@@ -97,6 +100,11 @@ namespace MultiPlayer
                 VideoPlayerUserControl v = _videos[i];
                 v.LoadSetting(new OnePlayerSettings());
             }
+        }
+
+        private void Settings_Click(object sender, RoutedEventArgs e)
+        {
+            OptionsWindow.ShowOptions(this, _settings, "Settings", 650);
         }
     }
 }

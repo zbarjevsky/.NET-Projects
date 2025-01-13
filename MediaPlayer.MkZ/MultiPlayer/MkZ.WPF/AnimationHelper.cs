@@ -9,6 +9,8 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
+using Control = System.Windows.Controls.Control;
+using Point = System.Windows.Point;
 
 namespace MkZ.WPF
 {
@@ -169,7 +171,7 @@ namespace MkZ.WPF
 
         public Action<Control> PostAnimationAction = (ctrl) => { };
 
-        public GridLengthAnimationHelper(Control container, RowDefinition row)
+        public GridLengthAnimationHelper(System.Windows.Controls.Control container, RowDefinition row)
         {
             _container = container;
             InitialControlHeight = _container.Height;
@@ -204,7 +206,7 @@ namespace MkZ.WPF
             }
         }
 
-        private void _container_MouseMove(object sender, MouseEventArgs e)
+        private void _container_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
             Point pt = e.GetPosition(_row);
 
@@ -224,7 +226,7 @@ namespace MkZ.WPF
             }
         }
 
-        private void _container_MouseLeave(object sender, MouseEventArgs e)
+        private void _container_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             Point pt = e.GetPosition(_row);
             Debug.WriteLine("AnimationHelper::MouseLeave Pos: {0}, Source: {1}", pt, e.OriginalSource);
