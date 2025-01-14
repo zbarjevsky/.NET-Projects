@@ -13,7 +13,7 @@
             </DockPanel.Background>
 
             <Button Margin="2" Click="Open_Click" >
-                <Label FontFamily="Segoe MDL2 Assets" Content="&#xE714;" FontSize="16" />
+                <Label FontFamily="Segoe MDL2 Assets" Content="&#xE712;" FontSize="16" />
             </Button>
             <Button Margin="2" x:Name="_btnPlayPause" Click="PlayPause_Click" >
                 <StackPanel Orientation="Horizontal">
@@ -42,7 +42,7 @@
                 <ComboBoxItem Content="FitWindow" />
                 <ComboBoxItem Content="FitHeight" />
             </ComboBox>
-            <Button Margin="2" Padding="2" Click="Pop_Click">
+            <Button Margin="2" Padding="2" Click="Maximize_Click">
                 <Label FontFamily="Segoe MDL2 Assets" Content="&#xE740;" FontSize="16" />
             </Button>
             <TextBlock x:Name="_timeLbl" Margin="2,10" Text="0:00" FontWeight="Bold" Foreground="White" />

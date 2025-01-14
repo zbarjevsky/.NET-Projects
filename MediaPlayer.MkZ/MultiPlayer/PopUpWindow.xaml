@@ -7,6 +7,7 @@
         WindowStartupLocation="CenterOwner"
         WindowState="Normal"
         KeyDown="Window_KeyDown"
+        Closing="Window_Closing"
         mc:Ignorable="d"
         Title="Multi Player" Height="950" Width="1920">
     <Window.InputBindings>

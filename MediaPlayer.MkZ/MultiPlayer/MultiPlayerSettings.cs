@@ -2,6 +2,7 @@
 using MkZ.WPF;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -13,12 +14,28 @@ using System.Xml.Serialization;
 
 namespace MultiPlayer
 {
+    //directory tree style play list
+    public enum ePlayMode
+    {
+        [Description("Play One")]
+        PlayOne,
+        [Description("Play All")]
+        PlayAll,
+        [Description("Repeat One")]
+        RepeatOne,
+        [Description("Repeat All")]
+        RepeatAll,
+        [Description("Shuffle")]
+        Random
+    }
+
     [Serializable]
     public class OnePlayerSettings
     {
         public string FileName { get; set; } = string.Empty;
         public double Position { get; set; } = 0.0;
         public double Duration { get; set; } = 0.0;
+        public ePlayMode PlayMode { get; set; } = ePlayMode.RepeatOne;
         public eZoomState ZoomState {  get; set; } = eZoomState.FitWindow;
         public double Zoom { get; set; } = 1.0;
         public MediaState MediaState { get; set; } = MediaState.Play;

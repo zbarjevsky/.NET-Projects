@@ -73,8 +73,8 @@ namespace MultiPlayer
             _videoPlayerUserControl.PropertyChanged += _videoPlayerUserControl_PropertyChanged;
 
             _videoPlayerUserControl.LeftButtonClick = () => { TogglePlayPauseState(); };
-            _videoPlayerUserControl.LeftButtonDoubleClick = () => { Pop_Click(this, null); };
-            _videoPlayerUserControl.VideoEnded = (player) => { Stop(); Play(); }; 
+            _videoPlayerUserControl.LeftButtonDoubleClick = () => { Maximize_Click(this, null); };
+            _videoPlayerUserControl.VideoEnded = (player) => { MediaPlayEnded(player); }; 
         }
 
         bool _isInUpdate = false;
@@ -112,7 +112,7 @@ namespace MultiPlayer
             }
         }
 
-        private void Open_Click(object sender, RoutedEventArgs e)
+        internal void Open_Click(object sender, RoutedEventArgs e)
         {
             string fileName = _videoPlayerUserControl.FileName;
             string dir = System.IO.Path.GetDirectoryName(_videoPlayerUserControl.FileName);
@@ -140,6 +140,31 @@ namespace MultiPlayer
         private void PlayPause_Click(object sender, RoutedEventArgs e)
         {
             TogglePlayPauseState();
+        }
+
+        private void MediaPlayEnded(IVideoPlayer player)
+        {
+            Stop();
+            switch (_videoPlayerUserControl.Settings.PlayMode)
+            {
+                case ePlayMode.PlayOne:
+                    break;
+                case ePlayMode.PlayAll:
+                    PlayNext(random:false, loop:false);
+                    break;
+                case ePlayMode.RepeatOne:
+                    Play();
+                    break;
+                case ePlayMode.RepeatAll:
+                    PlayNext(random:false, loop:true);
+                    break;
+                case ePlayMode.Random:
+                    PlayNext(random:true, loop:true);
+                    break;
+                default:
+                    Play();
+                    break;
+            }
         }
 
         private void Volume_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -256,7 +281,23 @@ namespace MultiPlayer
 
         private void Next_Click(object sender, RoutedEventArgs e)
         {
+            PlayNext();
+        }
+
+        private Random _random = new Random();
+        private void PlayNext(bool random = false, bool loop = false)
+        {
             List<string> fileNames = GetFileNames(_videoPlayerUserControl.FileName, out int idx);
+            if (random)
+            {
+                idx = _random.Next(fileNames.Count - 1);
+            }
+            else
+            {
+                if (loop && (idx >= fileNames.Count || idx < 0))
+                    idx = 0; //loop
+            }
+
             if (idx >= 0 && idx < fileNames.Count - 1)
                 Open(fileNames[idx + 1]);
         }
@@ -272,16 +313,23 @@ namespace MultiPlayer
             return fileNames;
         }
 
-        private void Pop_Click(object sender, RoutedEventArgs e)
+        private static PopUpWindow _wndMax = new PopUpWindow();
+        internal void Maximize_Click(object sender, RoutedEventArgs e)
         {
             if (IsPopWindowMode)
-                return; //do not open additional pop windows
+            {
+                Pause();
+                _wndMax.Visibility = Visibility.Collapsed;
+                return; //if it is open - hide it
+            }
 
-            PopUpWindow wnd = new PopUpWindow();
-            wnd.Owner = System.Windows.Application.Current.MainWindow;
-            wnd.Load(new OnePlayerSettings(_videoPlayerUserControl));
-            Pause();
-            wnd.Show();
+            if (_wndMax.Visibility == Visibility.Collapsed)
+            {
+                _wndMax.Owner = System.Windows.Application.Current.MainWindow;
+                _wndMax.Load(new OnePlayerSettings(_videoPlayerUserControl));
+                Pause();
+                _wndMax.Show();
+            }
         }
 
         private void Pos_MouseMove(object sender, MouseEventArgs e)

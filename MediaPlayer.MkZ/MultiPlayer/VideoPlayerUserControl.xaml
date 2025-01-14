@@ -42,6 +42,20 @@
                                Margin="6,3"/>
                 </Border>
 
+                <StackPanel x:Name ="_commands1" Orientation="Horizontal" Margin="4,24"
+                            VerticalAlignment="Top" HorizontalAlignment="Right">
+                    <Button ToolTip="Open..." Margin="2" Click="Open_Click" >
+                        <Label FontFamily="Segoe MDL2 Assets" Content="&#xE712;" FontSize="16" />
+                    </Button>
+                    <Button ToolTip="Settings" Click="Settings_Click" Margin="2" Padding="0" >
+                        <Label FontFamily="Segoe MDL2 Assets" Content="&#xE713;" FontSize="16" />
+                    </Button>
+                    <Button ToolTip="Maximize" Margin="2" Padding="2" Click="Maximize_Click" >
+                        <Label FontFamily="Segoe MDL2 Assets" Content="&#xE740;" FontSize="16" />
+                    </Button>
+
+                </StackPanel>
+
                 <local:VideoCommandsUserControl x:Name="_commands" Grid.Row="1" Margin="0,0,0,12" />
             </Grid>
         </Border>

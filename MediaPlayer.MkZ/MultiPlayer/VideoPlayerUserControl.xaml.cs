@@ -1,4 +1,5 @@
 ﻿using MkZ.WPF;
+using MkZ.WPF.PropertyGrid;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,6 +20,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using Application = System.Windows.Application;
 using Brushes = System.Windows.Media.Brushes;
 using Point = System.Windows.Point;
 
@@ -165,7 +167,7 @@ namespace MultiPlayer
             _scrollDragger = new ScrollDragZoom(null, _scrollPlayerContainer);
 
             _controlsHideAndShow = new FadeAnimationHelper(this, 2,
-                _borderTitle, _commands);
+                _borderTitle, _commands, _commands1);
 
             RecreateMediaElement(false);
 
@@ -632,5 +634,20 @@ namespace MultiPlayer
             }
             DragDropSource = null;
        }
+
+        private void Open_Click(object sender, RoutedEventArgs e)
+        {
+            _commands.Open_Click(sender, e);
+        }
+
+        private void Settings_Click(object sender, RoutedEventArgs e)
+        {
+            OptionsWindow.ShowOptions(Application.Current.MainWindow, Settings, "Settings", 650);
+        }
+
+        private void Maximize_Click(object sender, RoutedEventArgs e)
+        {
+            _commands.Maximize_Click(sender, e);
+        }
     }
 }

@@ -38,5 +38,11 @@ namespace MultiPlayer
                 this.Close();
             }
         }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true; //do not close it - will reuse it
+            _video._commands.Maximize_Click(sender, null);
+        }
     }
 }
