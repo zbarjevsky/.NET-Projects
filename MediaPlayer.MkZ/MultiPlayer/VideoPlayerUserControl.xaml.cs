@@ -411,14 +411,14 @@ namespace MultiPlayer
 
         public void FitWidth(bool adjustScroll)
         {
-            _scrollDragger.FitWidth();
+            _scrollDragger.FitWidth(0);
             if (adjustScroll)
                 ScrollToCenter();
         }
 
         public void FitHeight(bool adjustScroll)
         {
-            _scrollDragger.FitHeight();
+            _scrollDragger.FitHeight(0);
             if (adjustScroll)
                 ScrollToCenter();
         }
@@ -432,7 +432,7 @@ namespace MultiPlayer
 
         internal void FitWindow()
         {
-            _scrollDragger.FitWindow();
+            _scrollDragger.FitWindow(0);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
