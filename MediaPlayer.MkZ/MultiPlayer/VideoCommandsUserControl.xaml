@@ -27,11 +27,12 @@
             <Button Margin="2" Click="Next_Click" >
                 <Label FontFamily="Segoe MDL2 Assets" Content="&#xE893;" FontSize="16" />
             </Button>
-            <ComboBox x:Name="_speed" Margin="2,2" Padding="8" SelectedIndex="3" SelectionChanged="Speed_Selected" >
+            <ComboBox x:Name="_speed" Margin="2,2" Padding="8" SelectedIndex="4" SelectionChanged="Speed_Selected" >
+                <ComboBoxItem Content="Min"/>
                 <ComboBoxItem Content="0.1x" />
                 <ComboBoxItem Content="0.2x" />
                 <ComboBoxItem Content="0.5x" />
-                <ComboBoxItem Content="1.0x" />
+                <ComboBoxItem Content="1.0x" FontWeight="Bold" />
                 <ComboBoxItem Content="1.5x" />
             </ComboBox>
             <ComboBox x:Name="_fit" Margin="2,2" Padding="8" SelectedIndex="2" SelectionChanged="Fit_Selected" >

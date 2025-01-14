@@ -159,7 +159,7 @@ namespace MultiPlayer
             _volume.Value = vol;
         }
 
-        double[] _speedRatios = { 0.1, 0.2, 0.5, 1.0, 1.5 };
+        double[] _speedRatios = { 0.01, 0.1, 0.2, 0.5, 1.0, 1.5 };
 
         private void Speed_Selected(object sender, SelectionChangedEventArgs e)
         {
@@ -176,7 +176,7 @@ namespace MultiPlayer
                 if (speed == _speedRatios[i])
                     return i;
             }
-            return 3;
+            return 4; //1.0x
         }
 
         private void Fit_Selected(object sender, SelectionChangedEventArgs e)
