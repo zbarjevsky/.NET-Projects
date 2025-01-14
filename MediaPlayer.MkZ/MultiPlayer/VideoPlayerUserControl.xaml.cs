@@ -628,8 +628,8 @@ namespace MultiPlayer
                 OnePlayerSettings setTo = new OnePlayerSettings(this);
                 if (setFrom.FileName != setTo.FileName)
                 {
-                    this.LoadSetting(setFrom);
-                    vFrom.LoadSetting(setTo);
+                    this.LoadSetting(setFrom, _commands.IsPopWindowMode);
+                    vFrom.LoadSetting(setTo, vFrom._commands.IsPopWindowMode);
                 }
             }
             DragDropSource = null;
