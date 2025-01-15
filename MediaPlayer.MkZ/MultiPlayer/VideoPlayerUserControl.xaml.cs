@@ -332,7 +332,7 @@ namespace MultiPlayer
             if (s.MediaState != MediaState.Play)
                 _commands.Pause();
 
-            Settings = s;
+            Settings.Update(s);
             _commands.Update(Settings, pop);
         }
 

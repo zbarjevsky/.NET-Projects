@@ -21,9 +21,17 @@ namespace MultiPlayer
     /// </summary>
     public partial class PopUpWindow : Window
     {
+        private bool AllowClose = false;
+
         public PopUpWindow()
         {
             InitializeComponent();
+        }
+
+        public void Exit()
+        {
+            AllowClose = true;
+            this.Close();
         }
 
         public void Load(OnePlayerSettings settings)
@@ -41,8 +49,11 @@ namespace MultiPlayer
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            e.Cancel = true; //do not close it - will reuse it
-            _video._commands.Maximize_Click(sender, null);
+            if (!AllowClose)
+            {
+                e.Cancel = true; //do not close it - will reuse it
+                _video._commands.Maximize_Click(sender, null);
+            }
         }
     }
 }

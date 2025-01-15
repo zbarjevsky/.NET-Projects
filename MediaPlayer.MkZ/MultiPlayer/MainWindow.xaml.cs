@@ -31,7 +31,7 @@ namespace MultiPlayer
         {
             _settings.Update(_videos);
             _settings.Save(_settings.FileName);
-            e.Cancel = false;
+            VideoCommandsUserControl.Exit();    
         }
 
         private void Open_Click(object sender, RoutedEventArgs e)

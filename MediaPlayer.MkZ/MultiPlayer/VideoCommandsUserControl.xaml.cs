@@ -313,23 +313,28 @@ namespace MultiPlayer
             return fileNames;
         }
 
-        private static PopUpWindow _wndMax = new PopUpWindow();
+        private static readonly PopUpWindow WndMax = new PopUpWindow();
         internal void Maximize_Click(object sender, RoutedEventArgs e)
         {
             if (IsPopWindowMode)
             {
                 Pause();
-                _wndMax.Visibility = Visibility.Collapsed;
+                WndMax.Visibility = Visibility.Collapsed;
                 return; //if it is open - hide it
             }
 
-            if (_wndMax.Visibility == Visibility.Collapsed)
+            if (WndMax.Visibility == Visibility.Collapsed)
             {
-                _wndMax.Owner = System.Windows.Application.Current.MainWindow;
-                _wndMax.Load(new OnePlayerSettings(_videoPlayerUserControl));
+                WndMax.Owner = System.Windows.Application.Current.MainWindow;
+                WndMax.Load(new OnePlayerSettings(_videoPlayerUserControl));
                 Pause();
-                _wndMax.Show();
+                WndMax.Show();
             }
+        }
+
+        internal static void Exit()
+        {
+            WndMax.Exit();
         }
 
         private void Pos_MouseMove(object sender, MouseEventArgs e)

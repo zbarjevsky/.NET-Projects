@@ -56,12 +56,30 @@ namespace MultiPlayer
             Update(v);
         }
 
+        public void Update(OnePlayerSettings s)
+        {
+            FileName = s.FileName;
+            Duration = s.Duration;
+            Position = s.Position;
+
+            PlayMode = s.PlayMode;
+            
+            Zoom = s.Zoom;
+            ZoomState = s.ZoomState;
+
+            MediaState = s.MediaState;
+            Volume = s.Volume;
+            SpeedRatio = s.SpeedRatio;
+        }
+
         public void Update(VideoPlayerUserControl v, double duration = 0.0)
         {
             FileName = v.FileName;
 
             Duration = v.Duration > 0 ? v.Duration : duration;
             Position = v.Position.TotalSeconds > 0.5 ? v.Position.TotalSeconds : v.Settings.Position;
+
+            PlayMode = v.Settings.PlayMode;
 
             ZoomState = v.ZoomState;
             Zoom = v.Zoom;
