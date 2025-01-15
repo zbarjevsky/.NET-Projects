@@ -176,8 +176,20 @@ namespace MultiPlayer
         public void VolumeUpdate(int delta)
         {
             double vol = _volume.Value;
-            if (delta > 0) vol += 100;
-            if (delta < 0) vol -= 100;
+            if (delta > 0)
+            {
+                if (vol < 100)
+                    vol += 20;
+                else
+                    vol += 100;
+            }
+            if (delta < 0)
+            {
+                if (vol > 200)
+                    vol -= 100;
+                else
+                    vol -= 20;
+            }
             if (vol < 0) vol = 0;
             if (vol > 1000) vol = 1000;
 
