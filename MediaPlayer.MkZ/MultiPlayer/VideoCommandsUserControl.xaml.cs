@@ -275,8 +275,10 @@ namespace MultiPlayer
         private void Prev_Click(object sender, RoutedEventArgs e)
         {
             List<string> fileNames = GetFileNames(_videoPlayerUserControl.FileName, out int idx);
-            if (idx > 0 && idx < fileNames.Count)
-                Open(fileNames[idx-1]);
+            idx--;
+            if (idx < 0) 
+                idx = fileNames.Count - 1;
+            Open(fileNames[idx]);
         }
 
         private void Next_Click(object sender, RoutedEventArgs e)
@@ -294,12 +296,13 @@ namespace MultiPlayer
             }
             else
             {
+                idx++;
                 if (loop && (idx >= fileNames.Count || idx < 0))
                     idx = 0; //loop
             }
 
-            if (idx >= 0 && idx < fileNames.Count - 1)
-                Open(fileNames[idx + 1]);
+            if (idx >= 0 && idx < fileNames.Count)
+                Open(fileNames[idx]);
         }
 
         private List<string> GetFileNames(string fileName, out int idx)

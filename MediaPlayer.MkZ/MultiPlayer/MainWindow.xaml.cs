@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using MkZ.Tools;
 using MkZ.WPF;
 using MkZ.WPF.PropertyGrid;
 using System.Windows;
@@ -20,6 +21,11 @@ namespace MultiPlayer
             InitializeComponent();
 
             _videos = new List<VideoPlayerUserControl> { _video00, _video01, _video02, _video10, _video11, _video12 };
+
+            if (!SingleInstanceHelper.IsSingleInstance(true))
+            {
+                this.Close();
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)

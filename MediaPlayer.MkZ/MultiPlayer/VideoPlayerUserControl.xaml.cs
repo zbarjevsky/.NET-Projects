@@ -394,10 +394,10 @@ namespace MultiPlayer
 
         public void TogglePlayPauseState()
         {
-            if (MediaState == MediaState.Pause || MediaState == MediaState.Manual)
-                Play();
-            else if (MediaState == MediaState.Play)
+            if (MediaState == MediaState.Play)
                 Pause();
+            else //if (MediaState == MediaState.Pause || MediaState == MediaState.Manual)
+                Play();
         }
 
         private void Grid_MouseWheel(object sender, MouseWheelEventArgs e)
