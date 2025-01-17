@@ -385,9 +385,14 @@ namespace MultiPlayer
             _popupSliderTooltip.IsOpen = false;
         }
 
-        private void PrevSecond_Click(object sender, RoutedEventArgs e)
+        private void PrevFrame_Click(object sender, RoutedEventArgs e)
         {
-            _position.Value -= 1;
+            _position.Value -= 0.1;
+        }
+
+        private void NextFrame_Click(object sender, RoutedEventArgs e)
+        {
+            _position.Value += 0.1;
         }
     }
 }
