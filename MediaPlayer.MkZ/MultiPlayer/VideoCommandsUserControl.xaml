@@ -39,12 +39,12 @@
                 <ComboBoxItem Content="FitWindow" />
                 <ComboBoxItem Content="FitHeight" />
             </ComboBox>
-            <Button ToolTip="Previus Frame" Margin="2" Padding="2" Click="PrevFrame_Click">
-                <Label FontFamily="Segoe MDL2 Assets" Content="&#xE8A0;" FontSize="16" />
-            </Button>
-            <Button ToolTip="Next Frame" Margin="2" Click="NextFrame_Click" >
+            <RepeatButton ToolTip="Back 1 sec" Margin="2" Padding="2" Click="PrevSecond_Click">
+                <Label FontFamily="Segoe MDL2 Assets" Content="&#xE8ED;" FontSize="16" />
+            </RepeatButton>
+            <!--<RepeatButton ToolTip="Next Frame" Margin="2" Click="NextFrame_Click" >
                 <Label FontFamily="Segoe MDL2 Assets" Content="&#xE89F;" FontSize="16" />
-            </Button>
+            </RepeatButton>-->
             <TextBlock x:Name="_timeLbl" Margin="2,10" Text="0:00" FontWeight="Bold" Foreground="White" />
             <DockPanel LastChildFill="True" >
                 <Popup x:Name="_popupSliderTooltip" AllowsTransparency="True"

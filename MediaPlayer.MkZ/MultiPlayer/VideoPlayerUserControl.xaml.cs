@@ -224,7 +224,7 @@ namespace MultiPlayer
 
         private void UserControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (e.ChangedButton == MouseButton.Left)
+            if (e.ChangedButton == MouseButton.Left && e.OriginalSource is MediaElement)
                 LeftButtonDoubleClick();
         }
 

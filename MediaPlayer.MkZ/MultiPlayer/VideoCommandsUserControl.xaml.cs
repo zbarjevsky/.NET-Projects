@@ -35,13 +35,10 @@ namespace MultiPlayer
 
         public void TogglePlayPauseState()
         {
-            _videoPlayerUserControl.TogglePlayPauseState();
-            if (_videoPlayerUserControl.MediaState == MediaState.Pause)
-                _btnPlayPause.Background = Brushes.LightBlue;
-            else if (_videoPlayerUserControl.MediaState == MediaState.Play)
-                _btnPlayPause.Background = Brushes.LightGreen;
-            else
-                _btnPlayPause.Background = Brushes.LightGray;
+            if (_videoPlayerUserControl.MediaState == MediaState.Play)
+                Pause();
+            else 
+                Play();
         }
 
         public void Play()
@@ -53,7 +50,7 @@ namespace MultiPlayer
         public void Pause()
         {
             _videoPlayerUserControl.Pause();
-            _btnPlayPause.Background = Brushes.LightBlue;
+            _btnPlayPause.Background = Brushes.LightGoldenrodYellow;
         }
 
         public void Stop()
@@ -388,15 +385,9 @@ namespace MultiPlayer
             _popupSliderTooltip.IsOpen = false;
         }
 
-        private TimeSpan _posDelta = TimeSpan.FromSeconds(0.033);
-        private void PrevFrame_Click(object sender, RoutedEventArgs e)
+        private void PrevSecond_Click(object sender, RoutedEventArgs e)
         {
-            _videoPlayerUserControl.PositionSet(_videoPlayerUserControl.Position - _posDelta, true);
-        }
-
-        private void NextFrame_Click(object sender, RoutedEventArgs e)
-        {
-            _videoPlayerUserControl.PositionSet(_videoPlayerUserControl.Position + _posDelta, true);
+            _position.Value -= 1;
         }
     }
 }
