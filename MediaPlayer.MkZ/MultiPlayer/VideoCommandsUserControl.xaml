@@ -12,9 +12,6 @@
                 <SolidColorBrush Color="SlateGray" Opacity="0.8" />
             </DockPanel.Background>
 
-            <Button Margin="2" Click="Open_Click" >
-                <Label FontFamily="Segoe MDL2 Assets" Content="&#xE712;" FontSize="16" />
-            </Button>
             <Button Margin="2" x:Name="_btnPlayPause" Click="PlayPause_Click" >
                 <StackPanel Orientation="Horizontal">
                     <Label FontFamily="Segoe MDL2 Assets" Content="&#xE768;" FontSize="16" />
@@ -42,8 +39,11 @@
                 <ComboBoxItem Content="FitWindow" />
                 <ComboBoxItem Content="FitHeight" />
             </ComboBox>
-            <Button Margin="2" Padding="2" Click="Maximize_Click">
-                <Label FontFamily="Segoe MDL2 Assets" Content="&#xE740;" FontSize="16" />
+            <Button ToolTip="Previus Frame" Margin="2" Padding="2" Click="PrevFrame_Click">
+                <Label FontFamily="Segoe MDL2 Assets" Content="&#xE8A0;" FontSize="16" />
+            </Button>
+            <Button ToolTip="Next Frame" Margin="2" Click="NextFrame_Click" >
+                <Label FontFamily="Segoe MDL2 Assets" Content="&#xE89F;" FontSize="16" />
             </Button>
             <TextBlock x:Name="_timeLbl" Margin="2,10" Text="0:00" FontWeight="Bold" Foreground="White" />
             <DockPanel LastChildFill="True" >

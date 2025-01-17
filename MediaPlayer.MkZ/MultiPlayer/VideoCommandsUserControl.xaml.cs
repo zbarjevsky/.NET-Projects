@@ -387,5 +387,16 @@ namespace MultiPlayer
         {
             _popupSliderTooltip.IsOpen = false;
         }
+
+        private TimeSpan _posDelta = TimeSpan.FromSeconds(0.033);
+        private void PrevFrame_Click(object sender, RoutedEventArgs e)
+        {
+            _videoPlayerUserControl.PositionSet(_videoPlayerUserControl.Position - _posDelta, true);
+        }
+
+        private void NextFrame_Click(object sender, RoutedEventArgs e)
+        {
+            _videoPlayerUserControl.PositionSet(_videoPlayerUserControl.Position + _posDelta, true);
+        }
     }
 }
