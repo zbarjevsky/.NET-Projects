@@ -326,29 +326,50 @@ namespace MultiPlayer
             return fileNames;
         }
 
+        private void Maximize_Click(object sender, RoutedEventArgs e)
+        {
+            MaximizeToggle(hide:false);
+        }
+
         private static readonly PopUpWindow WndMax = new PopUpWindow();
-        internal void Maximize_Click(object sender, RoutedEventArgs e)
+        public void MaximizeToggle(bool hide)
         {
             if (IsPopWindowMode)
             {
-                Pause();
-                WndMax.Visibility = Visibility.Collapsed;
+                if (!hide)
+                {
+                    if (WndMax.WindowState == WindowState.Maximized)
+                        WndMax.WindowState = WindowState.Normal;
+                    else
+                        WndMax.WindowState = WindowState.Maximized;
+                }
+                else
+                {
+                    Pause();
+                    WndMax.Visibility = Visibility.Collapsed;
+                }
+
                 return; //if it is open - hide it
             }
 
             if (WndMax.Visibility == Visibility.Collapsed)
             {
                 WndMax.Owner = System.Windows.Application.Current.MainWindow;
-                
+                WndMax.WindowState = WndMax.Owner.WindowState;
+
                 //position
-                WndMax.Width = WndMax.Owner.Width;
-                WndMax.Height = WndMax.Owner.Height;
-                WndMax.Left = WndMax.Owner.Left;
-                WndMax.Top = WndMax.Owner.Top;
+                if (WndMax.Owner.WindowState != WindowState.Maximized)
+                {
+                    WndMax.Width = WndMax.Owner.ActualWidth;
+                    WndMax.Height = WndMax.Owner.ActualHeight;
+                    WndMax.Left = WndMax.Owner.Left;
+                    WndMax.Top = WndMax.Owner.Top;
+                }
+
+                WndMax.Show();
 
                 WndMax.Load(new OnePlayerSettings(_videoPlayerUserControl));
                 Pause();
-                WndMax.Show();
             }
         }
 
@@ -413,17 +434,20 @@ namespace MultiPlayer
         private void AdjustSizeAndLayout()
         {
             _scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+            double windowWidth = this.ActualWidth;
+            if (windowWidth < 10)
+                windowWidth = 1920;
 
-            if (this.ActualWidth > _stackButtons.ActualWidth)
-                _wrapPanel.Width = this.ActualWidth;
+            if (windowWidth > _stackButtons.ActualWidth)
+                _wrapPanel.Width = windowWidth;
             else
                 _wrapPanel.Width = _stackButtons.ActualWidth;
 
-            double width = this.ActualWidth - _stackButtons.ActualWidth - _timeLbl.ActualWidth;
+            double width = windowWidth - _stackButtons.ActualWidth - _timeLbl.ActualWidth;
             if (width < _docSliders.MinWidth) //wrapped to two lines
             {
-                _docSliders.Width = this.ActualWidth - _timeLbl.ActualWidth - 4;
-                if (this.ActualWidth < _stackButtons.ActualWidth)
+                _docSliders.Width = windowWidth - _timeLbl.ActualWidth - 4;
+                if (windowWidth < _stackButtons.ActualWidth)
                     _scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
             }
             else //one line

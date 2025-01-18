@@ -328,12 +328,12 @@ namespace MultiPlayer
             SpeedRatio = s.SpeedRatio;
             ZoomStateSet(s.ZoomState, true);
 
+            Settings.Update(s);
+            _commands.Update(Settings, pop);
+
             _commands.Play();
             if (s.MediaState != MediaState.Play)
                 _commands.Pause();
-
-            Settings.Update(s);
-            _commands.Update(Settings, pop);
         }
 
         internal void Close()
@@ -647,7 +647,7 @@ namespace MultiPlayer
 
         private void Maximize_Click(object sender, RoutedEventArgs e)
         {
-            _commands.Maximize_Click(sender, e);
+            _commands.MaximizeToggle(hide: false);
         }
     }
 }
