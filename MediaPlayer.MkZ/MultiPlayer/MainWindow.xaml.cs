@@ -20,7 +20,7 @@ namespace MultiPlayer
         {
             InitializeComponent();
 
-            _videos = new List<VideoPlayerUserControl> { _video00, _video01, _video02, _video10, _video11, _video12 };
+            _videos = new List<VideoPlayerUserControl> { _video00, _video01, _video02, _video03, _video10, _video11, _video12, _video13 };
 
             if (!SingleInstanceHelper.IsSingleInstance(true))
             {
@@ -36,7 +36,8 @@ namespace MultiPlayer
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             _settings.Update(_videos);
-            _settings.Save(_settings.FileName);
+            if (_settings.HasData())
+                _settings.Save(_settings.FileName);
             VideoCommandsUserControl.Exit();    
         }
 
@@ -56,9 +57,9 @@ namespace MultiPlayer
         {
             _settings.Load(fileName);
 
-            if (_settings.Settings.Count == _videos.Count)
+            if (_settings.Settings.Count > 2)
             {
-                for (int i = 0; i < _videos.Count; i++)
+                for (int i = 0; i < _videos.Count && i < _settings.Settings.Count; i++)
                 {
                     VideoPlayerUserControl v = _videos[i];
                     v.LoadSetting(_settings.Settings[i]);

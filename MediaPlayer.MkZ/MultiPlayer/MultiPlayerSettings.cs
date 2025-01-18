@@ -129,6 +129,16 @@ namespace MultiPlayer
             FileName = Path.Combine(DataFolder, fileName);
         }
 
+        public bool HasData()
+        {
+            foreach (OnePlayerSettings item in Settings)
+            {
+                if (!string.IsNullOrWhiteSpace(item.FileName))
+                    return true;
+            }
+            return false;
+        }
+
         public void Save(string fileName)
         {
             XmlHelper.Save(fileName, this);

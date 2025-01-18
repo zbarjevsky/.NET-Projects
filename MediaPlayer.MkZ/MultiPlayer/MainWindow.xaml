@@ -55,6 +55,8 @@
                 <ColumnDefinition Width="*" MinWidth="50"/>
                 <ColumnDefinition Width="4"/>
                 <ColumnDefinition Width="*" MinWidth="50"/>
+                <ColumnDefinition Width="4"/>
+                <ColumnDefinition Width="*" MinWidth="12"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition/>
@@ -64,14 +66,17 @@
             <GridSplitter Grid.ColumnSpan="5" Grid.Row="1" Background="Gray" Height="4" HorizontalAlignment="Stretch" />
             <GridSplitter Grid.Column="1" Grid.RowSpan="3" Background="Gray" Width="4" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
             <GridSplitter Grid.Column="3" Grid.RowSpan="3" Background="Gray" Width="4" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+            <GridSplitter Grid.Column="5" Grid.RowSpan="3" Background="Gray" Width="4" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
 
 
             <local:VideoPlayerUserControl x:Name="_video00" Grid.Column="0" Grid.Row="0" Background="AliceBlue" />
             <local:VideoPlayerUserControl x:Name="_video01" Grid.Column="2" Grid.Row="0" Background="Pink" />
             <local:VideoPlayerUserControl x:Name="_video02" Grid.Column="4" Grid.Row="0" Background="Gold" />
+            <local:VideoPlayerUserControl x:Name="_video03" Grid.Column="6" Grid.Row="0" Background="Gold" />
             <local:VideoPlayerUserControl x:Name="_video10" Grid.Column="0" Grid.Row="2" Background="LightYellow" />
             <local:VideoPlayerUserControl x:Name="_video11" Grid.Column="2" Grid.Row="2" Background="LightGreen" />
             <local:VideoPlayerUserControl x:Name="_video12" Grid.Column="4" Grid.Row="2" Background="LightGray" />
+            <local:VideoPlayerUserControl x:Name="_video13" Grid.Column="6" Grid.Row="2" Background="LightGray" />
         </Grid>
     </Grid>
 </Window>

@@ -263,9 +263,9 @@ namespace MultiPlayer
         private string SecondsToString(double seconds)
         {
             if (seconds < 3600)
-                return TimeSpan.FromSeconds(seconds).ToString("m':'ss");
+                return TimeSpan.FromSeconds(seconds).ToString("m':'ss'.'f");
             else
-                return TimeSpan.FromSeconds(seconds).ToString("h':'mm':'ss");
+                return TimeSpan.FromSeconds(seconds).ToString("h':'mm':'ss'.'f");
         }
 
         private void Pos_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
@@ -338,6 +338,13 @@ namespace MultiPlayer
             if (WndMax.Visibility == Visibility.Collapsed)
             {
                 WndMax.Owner = System.Windows.Application.Current.MainWindow;
+                
+                //position
+                WndMax.Width = WndMax.Owner.Width;
+                WndMax.Height = WndMax.Owner.Height;
+                WndMax.Left = WndMax.Owner.Left;
+                WndMax.Top = WndMax.Owner.Top;
+
                 WndMax.Load(new OnePlayerSettings(_videoPlayerUserControl));
                 Pause();
                 WndMax.Show();
@@ -388,11 +395,13 @@ namespace MultiPlayer
         private void PrevFrame_Click(object sender, RoutedEventArgs e)
         {
             _position.Value -= 0.1;
+            _videoPlayerUserControl.Settings.Position = _position.Value;
         }
 
         private void NextFrame_Click(object sender, RoutedEventArgs e)
         {
             _position.Value += 0.1;
+            _videoPlayerUserControl.Settings.Position = _position.Value;
         }
     }
 }
