@@ -93,6 +93,7 @@ namespace MultiPlayer
             _timeLbl.Text = SecondsToString(s.Position);
             
             AdjustMarginsForVisibleScrollBars();
+            AdjustSizeAndLayout();
 
             _isInUpdate = false;
         }
@@ -402,6 +403,33 @@ namespace MultiPlayer
         {
             _position.Value += 0.1;
             _videoPlayerUserControl.Settings.Position = _position.Value;
+        }
+
+        private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            AdjustSizeAndLayout();  
+        }
+
+        private void AdjustSizeAndLayout()
+        {
+            _scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+
+            if (this.ActualWidth > _stackButtons.ActualWidth)
+                _wrapPanel.Width = this.ActualWidth;
+            else
+                _wrapPanel.Width = _stackButtons.ActualWidth;
+
+            double width = this.ActualWidth - _stackButtons.ActualWidth - _timeLbl.ActualWidth;
+            if (width < _docSliders.MinWidth) //wrapped to two lines
+            {
+                _docSliders.Width = this.ActualWidth - _timeLbl.ActualWidth - 4;
+                if (this.ActualWidth < _stackButtons.ActualWidth)
+                    _scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
+            }
+            else //one line
+            {
+                _docSliders.Width = width - 4;
+            }
         }
     }
 }

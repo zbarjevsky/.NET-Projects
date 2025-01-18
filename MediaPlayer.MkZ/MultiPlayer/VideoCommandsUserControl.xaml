@@ -4,73 +4,79 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MultiPlayer"
+             SizeChanged="UserControl_SizeChanged"
              mc:Ignorable="d" 
-             d:DesignHeight="36" d:DesignWidth="800">
-    <Border Margin="0" CornerRadius="0,0,0,0" BorderThickness="1" BorderBrush="Transparent">
-        <DockPanel LastChildFill="True" Height="36" >
-            <DockPanel.Background>
-                <SolidColorBrush Color="SlateGray" Opacity="0.8" />
-            </DockPanel.Background>
-
-            <Button Margin="2" x:Name="_btnPlayPause" Click="PlayPause_Click" >
-                <StackPanel Orientation="Horizontal">
-                    <Label FontFamily="Segoe MDL2 Assets" Content="&#xE768;" FontSize="16" />
-                    <Label FontFamily="Segoe MDL2 Assets" Content="&#xE769;" FontSize="16" />
+             d:DesignWidth="800">
+    <ScrollViewer x:Name="_scroll" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" MinWidth="100">
+        <Border Margin="0" CornerRadius="0,0,0,0" BorderThickness="1" BorderBrush="Transparent">
+            <WrapPanel x:Name="_wrapPanel" Orientation="Horizontal" >
+                <WrapPanel.Background>
+                    <SolidColorBrush Color="SlateGray" Opacity="0.8" />
+                </WrapPanel.Background>
+                <StackPanel x:Name="_stackButtons" Orientation="Horizontal">
+                    <Button Margin="2" x:Name="_btnPlayPause" Click="PlayPause_Click" >
+                        <StackPanel Orientation="Horizontal">
+                            <Label FontFamily="Segoe MDL2 Assets" Content="&#xE768;" FontSize="16" />
+                            <Label FontFamily="Segoe MDL2 Assets" Content="&#xE769;" FontSize="16" />
+                        </StackPanel>
+                    </Button>
+                    <Button Margin="2" Click="Prev_Click" >
+                        <Label FontFamily="Segoe MDL2 Assets" Content="&#xE892;" FontSize="16" />
+                    </Button>
+                    <Button Margin="2" Click="Next_Click" >
+                        <Label FontFamily="Segoe MDL2 Assets" Content="&#xE893;" FontSize="16" />
+                    </Button>
+                    <ComboBox x:Name="_speed" Margin="2,2" Padding="8" SelectedIndex="4" SelectionChanged="Speed_Selected" >
+                        <ComboBoxItem Content="Min"/>
+                        <ComboBoxItem Content="0.1x" />
+                        <ComboBoxItem Content="0.2x" />
+                        <ComboBoxItem Content="0.5x" />
+                        <ComboBoxItem Content="1.0x" FontWeight="Bold" />
+                        <ComboBoxItem Content="1.5x" />
+                    </ComboBox>
+                    <ComboBox x:Name="_fit" Margin="2,2" Padding="8" SelectedIndex="2" SelectionChanged="Fit_Selected" >
+                        <ComboBoxItem Content="Custom" />
+                        <ComboBoxItem Content="Original" />
+                        <ComboBoxItem Content="FitWidth" />
+                        <ComboBoxItem Content="FitWindow" />
+                        <ComboBoxItem Content="FitHeight" />
+                    </ComboBox>
+                    <RepeatButton ToolTip="Back 0.1 sec" Margin="2" Padding="2" Click="PrevFrame_Click">
+                        <Label FontFamily="Segoe MDL2 Assets" Content="&#xE8A0;" FontSize="16" />
+                    </RepeatButton>
+                    <RepeatButton ToolTip="Next Frame" Margin="2" Click="NextFrame_Click" >
+                        <Label FontFamily="Segoe MDL2 Assets" Content="&#xE89F;" FontSize="16" />
+                    </RepeatButton>
                 </StackPanel>
-            </Button>
-            <Button Margin="2" Click="Prev_Click" >
-                <Label FontFamily="Segoe MDL2 Assets" Content="&#xE892;" FontSize="16" />
-            </Button>
-            <Button Margin="2" Click="Next_Click" >
-                <Label FontFamily="Segoe MDL2 Assets" Content="&#xE893;" FontSize="16" />
-            </Button>
-            <ComboBox x:Name="_speed" Margin="2,2" Padding="8" SelectedIndex="4" SelectionChanged="Speed_Selected" >
-                <ComboBoxItem Content="Min"/>
-                <ComboBoxItem Content="0.1x" />
-                <ComboBoxItem Content="0.2x" />
-                <ComboBoxItem Content="0.5x" />
-                <ComboBoxItem Content="1.0x" FontWeight="Bold" />
-                <ComboBoxItem Content="1.5x" />
-            </ComboBox>
-            <ComboBox x:Name="_fit" Margin="2,2" Padding="8" SelectedIndex="2" SelectionChanged="Fit_Selected" >
-                <ComboBoxItem Content="Custom" />
-                <ComboBoxItem Content="Original" />
-                <ComboBoxItem Content="FitWidth" />
-                <ComboBoxItem Content="FitWindow" />
-                <ComboBoxItem Content="FitHeight" />
-            </ComboBox>
-            <RepeatButton ToolTip="Back 0.1 sec" Margin="2" Padding="2" Click="PrevFrame_Click">
-                <Label FontFamily="Segoe MDL2 Assets" Content="&#xE8A0;" FontSize="16" />
-            </RepeatButton>
-            <RepeatButton ToolTip="Next Frame" Margin="2" Click="NextFrame_Click" >
-                <Label FontFamily="Segoe MDL2 Assets" Content="&#xE89F;" FontSize="16" />
-            </RepeatButton>
-            <TextBlock x:Name="_timeLbl" Margin="2,10" Text="0:00" FontWeight="Bold" Foreground="White" />
-            <DockPanel LastChildFill="True" >
-                <Popup x:Name="_popupSliderTooltip" AllowsTransparency="True"
+                <DockPanel LastChildFill="True" Height="36" >
+                    <TextBlock x:Name="_timeLbl" Margin="2,10" Text="0:00" FontWeight="Bold" Foreground="White" />
+                    <DockPanel x:Name="_docSliders" LastChildFill="True" MinWidth="200" >
+                        <Popup x:Name="_popupSliderTooltip" AllowsTransparency="True"
                        Placement="Relative"  PlacementTarget="{Binding ElementName=_position}">
-                    <Border Name="_borderSliderTooltip" CornerRadius="4"
+                            <Border Name="_borderSliderTooltip" CornerRadius="4"
                              BorderBrush="Black" BorderThickness="0" Padding="3,1">
-                        <Border.Background>
-                            <SolidColorBrush Color="Black" Opacity="0.5" />
-                        </Border.Background>
-                        <TextBlock x:Name="_txtSliderTooltip" Text="00:00" 
+                                <Border.Background>
+                                    <SolidColorBrush Color="Black" Opacity="0.5" />
+                                </Border.Background>
+                                <TextBlock x:Name="_txtSliderTooltip" Text="00:00" 
                                    FontSize="14" FontWeight="Medium"
                                    Foreground="White"/>
-                    </Border>
-                </Popup>
-                <Slider x:Name="_volume" Margin="2,10" Width="60" DockPanel.Dock="Right" 
-                    Value="150" Maximum="1000" Minimum="0" IsMoveToPointEnabled="True"
-                    ValueChanged="Volume_ValueChanged"/>
-                <Slider x:Name="_position" Margin="2,4"
-                    Value="33" Maximum="300" Minimum="0" TickFrequency="60" TickPlacement="TopLeft" 
-                    IsMoveToPointEnabled="True" 
-                    ValueChanged="Pos_ValueChanged"
-                    Thumb.DragStarted="Pos_DragStarted"
-                    Thumb.DragCompleted="Pos_DragCompleted"
-                    MouseMove="Pos_MouseMove" 
-                    MouseLeave="Pos_MouseLeave" />
-            </DockPanel>
-        </DockPanel>
-    </Border>
+                            </Border>
+                        </Popup>
+                        <Slider x:Name="_volume" Margin="2,10" Width="60" DockPanel.Dock="Right" 
+                        Value="150" Maximum="1000" Minimum="0" IsMoveToPointEnabled="True"
+                        ValueChanged="Volume_ValueChanged"/>
+                        <Slider x:Name="_position" Margin="2,4"
+                        Value="33" Maximum="300" Minimum="0" TickFrequency="60" TickPlacement="TopLeft" 
+                        IsMoveToPointEnabled="True" 
+                        ValueChanged="Pos_ValueChanged"
+                        Thumb.DragStarted="Pos_DragStarted"
+                        Thumb.DragCompleted="Pos_DragCompleted"
+                        MouseMove="Pos_MouseMove" 
+                        MouseLeave="Pos_MouseLeave" />
+                    </DockPanel>
+                </DockPanel>
+            </WrapPanel>
+        </Border>
+    </ScrollViewer>
 </UserControl>
