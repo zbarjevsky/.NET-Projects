@@ -318,7 +318,11 @@ namespace MultiPlayer
             VideoPlayerElement.Source = string.IsNullOrEmpty(fileName) ? null : new Uri(fileName);
             Volume = volume;
             MediaState = MediaState.Manual;
+
             Title = System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(fileName)) + "/" + System.IO.Path.GetFileName(fileName);
+            List<string> fileNames = _commands.GetFileNames(fileName, out int idx);
+            if (idx >= 0)
+                Title = $"{idx}/{fileNames.Count} " + Title;
         }
 
         public void LoadSetting(OnePlayerSettings s, bool pop = false)

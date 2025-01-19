@@ -315,8 +315,12 @@ namespace MultiPlayer
                 Open(fileNames[idx]);
         }
 
-        private List<string> GetFileNames(string fileName, out int idx)
+        public List<string> GetFileNames(string fileName, out int idx)
         {
+            idx = -1;
+            if (string.IsNullOrWhiteSpace(fileName) || !File.Exists(fileName))
+                return new List<string>();
+
             string dir = System.IO.Path.GetDirectoryName(fileName);
 
             List<string> fileNames = System.IO.Directory.EnumerateFiles(dir).ToList();
