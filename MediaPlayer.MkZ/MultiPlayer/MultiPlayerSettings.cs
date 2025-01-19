@@ -30,6 +30,32 @@ namespace MultiPlayer
     }
 
     [Serializable]
+    public class SplitterPos
+    {
+        public double Length { get; set; }
+        public GridUnitType Type { get; set; }
+
+        public SplitterPos() { }
+
+        public SplitterPos(GridLength length)
+        {
+            Pos = length;
+        }
+
+        [XmlIgnore]
+        public GridLength Pos
+        {
+            get { return new GridLength(Length, Type); }
+            set { Length = value.Value; Type = value.GridUnitType; }
+        }
+
+        public override string ToString()
+        {
+            return Pos.ToString();
+        }
+    }
+
+    [Serializable]
     public class OnePlayerSettings
     {
         public string FileName { get; set; } = string.Empty;
@@ -101,6 +127,11 @@ namespace MultiPlayer
             if (SupportedVideoExtensions == null || SupportedVideoExtensions.Length == 0)
                 SupportedVideoExtensions = new string[] { ".avi", ".mpg", ".mpeg", ".mkv", ".mp4", ".webm" };
         }
+
+        public override string ToString()
+        {
+            return "OnePlayerSettings: " + FileName;
+        }
     }
 
     [Serializable]
@@ -111,7 +142,10 @@ namespace MultiPlayer
         [XmlIgnore]
         public string FileName { get; private set; }
 
-        public List<OnePlayerSettings> Settings { get; set; }
+        public List<SplitterPos> RowsSizes { get; set; }
+        public List<SplitterPos> ColsSizes { get; set; }
+
+        public List<OnePlayerSettings> PlayerSettings { get; set; }
 
         public MultiPlayerSettings() 
         {
@@ -131,7 +165,7 @@ namespace MultiPlayer
 
         public bool HasData()
         {
-            foreach (OnePlayerSettings item in Settings)
+            foreach (OnePlayerSettings item in PlayerSettings)
             {
                 if (!string.IsNullOrWhiteSpace(item.FileName))
                     return true;
@@ -168,15 +202,17 @@ namespace MultiPlayer
 
         private void CopyFrom(MultiPlayerSettings appConfig)
         {
-            this.Settings = appConfig.Settings;
+            this.RowsSizes = appConfig.RowsSizes;
+            this.ColsSizes = appConfig.ColsSizes;
+            this.PlayerSettings = appConfig.PlayerSettings;
         }
 
         private void EnsureHasValues()
         {
-            if (Settings == null)
-                Settings = new List<OnePlayerSettings>();
+            if (PlayerSettings == null)
+                PlayerSettings = new List<OnePlayerSettings>();
 
-            foreach (OnePlayerSettings item in Settings)
+            foreach (OnePlayerSettings item in PlayerSettings)
             {
                 item.EnsureHasValues();
             }
@@ -184,10 +220,10 @@ namespace MultiPlayer
 
         public void Update(List<VideoPlayerUserControl> videos)
         {
-            this.Settings = new List<OnePlayerSettings>();
+            this.PlayerSettings = new List<OnePlayerSettings>();
             foreach(VideoPlayerUserControl v in videos)
             {
-                this.Settings.Add(new OnePlayerSettings(v));
+                this.PlayerSettings.Add(new OnePlayerSettings(v));
             }
         }
     }

@@ -48,25 +48,25 @@
                 <Label FontFamily="Segoe MDL2 Assets" Content="&#xE713;" FontSize="16" />
             </Button>
         </Grid>
-        <Grid Grid.Column="1" Background="Gray">
+        <Grid x:Name="_gridMain" Grid.Column="1" Background="Gray">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" MinWidth="50"/>
-                <ColumnDefinition Width="4"/>
-                <ColumnDefinition Width="*" MinWidth="50"/>
-                <ColumnDefinition Width="4"/>
-                <ColumnDefinition Width="*" MinWidth="50"/>
-                <ColumnDefinition Width="4"/>
-                <ColumnDefinition Width="*" MinWidth="12"/>
+                <ColumnDefinition x:Name="_col0" Width="*" MinWidth="50"/>
+                <ColumnDefinition x:Name="_col1" Width="4"/>
+                <ColumnDefinition x:Name="_col2" Width="*" MinWidth="50"/>
+                <ColumnDefinition x:Name="_col3" Width="4"/>
+                <ColumnDefinition x:Name="_col4" Width="*" MinWidth="50"/>
+                <ColumnDefinition x:Name="_col5" Width="4"/>
+                <ColumnDefinition x:Name="_col6" Width="*" MinWidth="12"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition Height="5"/>
-                <RowDefinition/>
+                <RowDefinition x:Name="_row0"/>
+                <RowDefinition x:Name="_row1" Height="5"/>
+                <RowDefinition x:Name="_row2"/>
             </Grid.RowDefinitions>
-            <GridSplitter Grid.ColumnSpan="5" Grid.Row="1" Background="Gray" Height="4" HorizontalAlignment="Stretch" />
-            <GridSplitter Grid.Column="1" Grid.RowSpan="3" Background="Gray" Width="4" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
-            <GridSplitter Grid.Column="3" Grid.RowSpan="3" Background="Gray" Width="4" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
-            <GridSplitter Grid.Column="5" Grid.RowSpan="3" Background="Gray" Width="4" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+            <GridSplitter x:Name="_splitterH1" Grid.ColumnSpan="5" Grid.Row="1" Background="Gray" Height="4" HorizontalAlignment="Stretch" />
+            <GridSplitter x:Name="_splitterV1" Grid.Column="1" Grid.RowSpan="3" Background="Gray" Width="4" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+            <GridSplitter x:Name="_splitterV2" Grid.Column="3" Grid.RowSpan="3" Background="Gray" Width="4" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+            <GridSplitter x:Name="_splitterV3" Grid.Column="5" Grid.RowSpan="3" Background="Gray" Width="4" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
 
 
             <local:VideoPlayerUserControl x:Name="_video00" Grid.Column="0" Grid.Row="0" Background="AliceBlue" />

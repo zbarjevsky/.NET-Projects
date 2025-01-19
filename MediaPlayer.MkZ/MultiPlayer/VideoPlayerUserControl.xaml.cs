@@ -341,13 +341,14 @@ namespace MultiPlayer
                 _commands.Pause();
         }
 
-        internal void Close()
+        public void Clear()
         {
             Stop();
             VideoPlayerElement.Source = null;
             FileName = "";
             this.Background = Brushes.LightGray;
             MediaState = MediaState.Close;
+            _commands.Clear();
         }
 
         public void Play()
@@ -362,7 +363,7 @@ namespace MultiPlayer
             }
             else
             {
-                Close();
+                Clear();
                 _timer.Stop();
             }
         }
@@ -643,6 +644,11 @@ namespace MultiPlayer
         private void Open_Click(object sender, RoutedEventArgs e)
         {
             _commands.Open_Click(sender, e);
+        }
+
+        private void Clear_Click(object sender, RoutedEventArgs e)
+        {
+            Clear();
         }
 
         private void Settings_Click(object sender, RoutedEventArgs e)

@@ -31,7 +31,7 @@ namespace MultiPlayer
         public void Exit()
         {
             AllowClose = true;
-            _video.Close();
+            _video.Clear();
             this.Close();
         }
 

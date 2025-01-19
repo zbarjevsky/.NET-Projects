@@ -3,6 +3,7 @@ using MkZ.Tools;
 using MkZ.WPF;
 using MkZ.WPF.PropertyGrid;
 using System.Windows;
+using System.Windows.Controls;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
@@ -35,6 +36,8 @@ namespace MultiPlayer
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            SplittersSave(_gridMain.RowDefinitions, _gridMain.ColumnDefinitions);
+
             _settings.Update(_videos);
             if (_settings.HasData())
                 _settings.Save(_settings.FileName);
@@ -57,12 +60,14 @@ namespace MultiPlayer
         {
             _settings.Load(fileName);
 
-            if (_settings.Settings.Count > 2)
+            SplittersLoad(_gridMain.RowDefinitions, _gridMain.ColumnDefinitions);
+
+            if (_settings.PlayerSettings.Count > 2)
             {
-                for (int i = 0; i < _videos.Count && i < _settings.Settings.Count; i++)
+                for (int i = 0; i < _videos.Count && i < _settings.PlayerSettings.Count; i++)
                 {
                     VideoPlayerUserControl v = _videos[i];
-                    v.LoadSetting(_settings.Settings[i]);
+                    v.LoadSetting(_settings.PlayerSettings[i]);
                 }
             }
             else
@@ -74,6 +79,28 @@ namespace MultiPlayer
                     v.Play();
                 }
             }
+        }
+
+        private void SplittersLoad(RowDefinitionCollection rows, ColumnDefinitionCollection cols)
+        {
+            if (_settings.RowsSizes != null && _settings.RowsSizes.Count == rows.Count)
+            for (int i = 0; i < rows.Count; i++)
+                rows[i].Height = _settings.RowsSizes[i].Pos;
+
+            if (_settings.ColsSizes != null && _settings.ColsSizes.Count == cols.Count)
+                for (int i = 0; i < cols.Count; i++)
+                    cols[i].Width = _settings.ColsSizes[i].Pos;
+        }
+
+        private void SplittersSave(RowDefinitionCollection rows, ColumnDefinitionCollection cols)
+        {
+            _settings.RowsSizes = new List<SplitterPos>();
+            foreach (RowDefinition row in rows)
+                _settings.RowsSizes.Add(new SplitterPos(row.Height));
+
+            _settings.ColsSizes = new List<SplitterPos>();
+            foreach (ColumnDefinition col in cols)
+                _settings.ColsSizes.Add(new SplitterPos(col.Width));
         }
 
         private void SaveAs_Click(object sender, RoutedEventArgs e)

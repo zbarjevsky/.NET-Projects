@@ -59,6 +59,13 @@ namespace MultiPlayer
             _btnPlayPause.Background = Brushes.LightGray;
         }
 
+        public void Clear()
+        {
+            double volume = _volume.Value;
+            Update(new OnePlayerSettings(), IsPopWindowMode);
+            _volume.Value = volume;
+        }
+
         public VideoCommandsUserControl()
         {
             InitializeComponent();
@@ -446,7 +453,7 @@ namespace MultiPlayer
         {
             _scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
             double windowWidth = this.ActualWidth;
-            if (windowWidth < 10)
+            if (windowWidth < 300)
                 windowWidth = 1920;
 
             if (windowWidth > _stackButtons.ActualWidth)
