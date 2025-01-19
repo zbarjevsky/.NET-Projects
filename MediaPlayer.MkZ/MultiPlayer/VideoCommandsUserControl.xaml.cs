@@ -331,6 +331,13 @@ namespace MultiPlayer
             MaximizeToggle(hide:false);
         }
 
+        public bool IsMaximized()
+        {
+            if (IsPopWindowMode)
+                return WndMax.WindowState == WindowState.Maximized;
+            return false;
+        }
+
         private static readonly PopUpWindow WndMax = new PopUpWindow();
         public void MaximizeToggle(bool hide)
         {
@@ -348,28 +355,28 @@ namespace MultiPlayer
                     Pause();
                     WndMax.Visibility = Visibility.Collapsed;
                 }
-
-                return; //if it is open - hide it
             }
-
-            if (WndMax.Visibility == Visibility.Collapsed)
+            else
             {
-                WndMax.Owner = System.Windows.Application.Current.MainWindow;
-                WndMax.WindowState = WndMax.Owner.WindowState;
-
-                //position
-                if (WndMax.Owner.WindowState != WindowState.Maximized)
+                if (WndMax.Visibility == Visibility.Collapsed)
                 {
-                    WndMax.Width = WndMax.Owner.ActualWidth;
-                    WndMax.Height = WndMax.Owner.ActualHeight;
-                    WndMax.Left = WndMax.Owner.Left;
-                    WndMax.Top = WndMax.Owner.Top;
+                    WndMax.Owner = System.Windows.Application.Current.MainWindow;
+                    WndMax.WindowState = WndMax.Owner.WindowState;
+
+                    //position
+                    if (WndMax.Owner.WindowState != WindowState.Maximized)
+                    {
+                        WndMax.Width = WndMax.Owner.ActualWidth;
+                        WndMax.Height = WndMax.Owner.ActualHeight;
+                        WndMax.Left = WndMax.Owner.Left;
+                        WndMax.Top = WndMax.Owner.Top;
+                    }
+
+                    WndMax.Show();
+
+                    WndMax.Load(new OnePlayerSettings(_videoPlayerUserControl));
+                    Pause();
                 }
-
-                WndMax.Show();
-
-                WndMax.Load(new OnePlayerSettings(_videoPlayerUserControl));
-                Pause();
             }
         }
 

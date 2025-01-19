@@ -51,7 +51,10 @@
                         <Label FontFamily="Segoe MDL2 Assets" Content="&#xE713;" FontSize="16" />
                     </Button>
                     <Button ToolTip="Maximize" Margin="2" Padding="2" Click="Maximize_Click" >
-                        <Label FontFamily="Segoe MDL2 Assets" Content="&#xE740;" FontSize="16" />
+                        <StackPanel Orientation="Horizontal">
+                            <Label x:Name="_up" FontFamily="Segoe MDL2 Assets" Content="&#xE740;" FontSize="16" />
+                            <Label x:Name="_down" FontFamily="Segoe MDL2 Assets" Content="&#xE73F;" FontSize="16" Visibility="Collapsed" />
+                        </StackPanel>
                     </Button>
 
                 </StackPanel>

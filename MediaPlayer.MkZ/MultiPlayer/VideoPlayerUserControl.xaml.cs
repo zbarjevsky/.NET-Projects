@@ -194,6 +194,7 @@ namespace MultiPlayer
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             ZoomState = ZoomState; //update zoom
+            UpdateMaximizeButtonImage();
         }
 
         public void CopyState(VideoPlayerUserControl player, double volume, bool copySource)
@@ -648,6 +649,15 @@ namespace MultiPlayer
         private void Maximize_Click(object sender, RoutedEventArgs e)
         {
             _commands.MaximizeToggle(hide: false);
+            UpdateMaximizeButtonImage();
+        }
+
+        private void UpdateMaximizeButtonImage()
+        {
+            bool isMaximized = _commands.IsMaximized();
+
+            _down.Visibility = isMaximized ? Visibility.Visible : Visibility.Collapsed;
+            _up.Visibility = isMaximized ? Visibility.Collapsed : Visibility.Visible;
         }
     }
 }
