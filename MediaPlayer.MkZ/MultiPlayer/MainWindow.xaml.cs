@@ -136,6 +136,17 @@ namespace MultiPlayer
             }
         }
 
+        private void ResetLayout_Click(object sender, RoutedEventArgs e)
+        {
+            for (int i = 0; i < _gridMain.RowDefinitions.Count; i++)
+                if (_gridMain.RowDefinitions[i].Height.IsStar)
+                    _gridMain.RowDefinitions[i].Height = new GridLength(1, GridUnitType.Star);
+
+            for (int i = 0; i < _gridMain.ColumnDefinitions.Count; i++)
+                if (_gridMain.ColumnDefinitions[i].Width.IsStar)
+                    _gridMain.ColumnDefinitions[i].Width = new GridLength(1, GridUnitType.Star);
+        }
+
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
             OptionsWindow.ShowOptions(this, _settings, "Settings", 650);

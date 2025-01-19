@@ -39,6 +39,9 @@
             <Button Grid.Column="2" Content="Close All" ToolTip="Close All"
                     Click="CloseAll_Click"
                     Margin="3" Padding="5,3" />
+            <Button Grid.Column="2" Content="Reset Layout" ToolTip="Reset Layout"
+                    Click="ResetLayout_Click"
+                    Margin="3" Padding="5,3" />
             <Button Grid.Column="3" Content="Exit" ToolTip="Exit"
                     Click="Exit_Click"
                     Margin="3" Padding="5,3" />
@@ -50,18 +53,18 @@
         </Grid>
         <Grid x:Name="_gridMain" Grid.Column="1" Background="Gray">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition x:Name="_col0" Width="*" MinWidth="50"/>
-                <ColumnDefinition x:Name="_col1" Width="4"/>
-                <ColumnDefinition x:Name="_col2" Width="*" MinWidth="50"/>
-                <ColumnDefinition x:Name="_col3" Width="4"/>
-                <ColumnDefinition x:Name="_col4" Width="*" MinWidth="50"/>
-                <ColumnDefinition x:Name="_col5" Width="4"/>
-                <ColumnDefinition x:Name="_col6" Width="*" MinWidth="12"/>
+                <ColumnDefinition Width="*" MinWidth="50"/>
+                <ColumnDefinition Width="4"/>
+                <ColumnDefinition Width="*" MinWidth="50"/>
+                <ColumnDefinition Width="4"/>
+                <ColumnDefinition Width="*" MinWidth="50"/>
+                <ColumnDefinition Width="4"/>
+                <ColumnDefinition Width="*" MinWidth="12"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition x:Name="_row0"/>
-                <RowDefinition x:Name="_row1" Height="5"/>
-                <RowDefinition x:Name="_row2"/>
+                <RowDefinition />
+                <RowDefinition  Height="5"/>
+                <RowDefinition />
             </Grid.RowDefinitions>
             <GridSplitter x:Name="_splitterH1" Grid.ColumnSpan="5" Grid.Row="1" Background="Gray" Height="4" HorizontalAlignment="Stretch" />
             <GridSplitter x:Name="_splitterV1" Grid.Column="1" Grid.RowSpan="3" Background="Gray" Width="4" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
