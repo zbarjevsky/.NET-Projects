@@ -30,21 +30,23 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <Button Grid.Column="0" Content="Open..." ToolTip="Open..."
-                    Click="Open_Click"
-                    Margin="3" Padding="5,3"/>
-            <Button Grid.Column="1" Content="Save As..." ToolTip="Save As..."
-                    Click="SaveAs_Click"
-                    Margin="3" Padding="5,3" />
-            <Button Grid.Column="2" Content="Close All" ToolTip="Close All"
-                    Click="CloseAll_Click"
-                    Margin="3" Padding="5,3" />
-            <Button Grid.Column="2" Content="Reset Layout" ToolTip="Reset Layout"
-                    Click="ResetLayout_Click"
-                    Margin="3" Padding="5,3" />
-            <Button Grid.Column="3" Content="Exit" ToolTip="Exit"
-                    Click="Exit_Click"
-                    Margin="3" Padding="5,3" />
+            <StackPanel Orientation="Horizontal">
+                <Button Content="Open..." ToolTip="Open..."
+                        Click="Open_Click"
+                        Margin="3" Padding="5,3"/>
+                <Button Content="Save As..." ToolTip="Save As..."
+                        Click="SaveAs_Click"
+                        Margin="3" Padding="5,3" />
+                <Button Content="Reset Layout" ToolTip="Reset Layout"
+                        Click="ResetLayout_Click"
+                        Margin="3" Padding="5,3" />
+                <Button Content="Close All" ToolTip="Close All"
+                        Click="CloseAll_Click"
+                        Margin="3" Padding="5,3" />
+                <Button Content="Exit" ToolTip="Exit"
+                        Click="Exit_Click"
+                        Margin="3" Padding="5,3" />
+            </StackPanel>
             <Button Grid.Column="5" ToolTip="Settings"
                     Click="Settings_Click"
                     Margin="1" Padding="0" >
