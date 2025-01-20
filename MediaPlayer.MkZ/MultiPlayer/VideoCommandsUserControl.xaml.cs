@@ -354,39 +354,25 @@ namespace MultiPlayer
         {
             if (IsPopWindowMode)
             {
-                if (!hide)
+                if (hide)
                 {
-                    if (WndMax.WindowState == WindowState.Maximized)
-                        WndMax.WindowState = WindowState.Normal;
-                    else
-                        WndMax.WindowState = WindowState.Maximized;
+                    this.Pause();
+                    WndMax.Visibility = Visibility.Collapsed;
                 }
                 else
                 {
-                    Pause();
-                    WndMax.Visibility = Visibility.Collapsed;
+                    WndMax.MaximizeToggle();
                 }
             }
             else
             {
                 if (WndMax.Visibility == Visibility.Collapsed)
                 {
-                    WndMax.Owner = System.Windows.Application.Current.MainWindow;
-                    WndMax.WindowState = WndMax.Owner.WindowState;
-
-                    //position
-                    if (WndMax.Owner.WindowState != WindowState.Maximized)
-                    {
-                        WndMax.Width = WndMax.Owner.ActualWidth;
-                        WndMax.Height = WndMax.Owner.ActualHeight;
-                        WndMax.Left = WndMax.Owner.Left;
-                        WndMax.Top = WndMax.Owner.Top;
-                    }
-
+                    WndMax.InitWindow(System.Windows.Application.Current.MainWindow);
                     WndMax.Show();
-
-                    WndMax.Load(new OnePlayerSettings(_videoPlayerUserControl));
-                    Pause();
+                    WndMax.LoadSettings(new OnePlayerSettings(_videoPlayerUserControl));
+                    
+                    this.Pause();
                 }
             }
         }

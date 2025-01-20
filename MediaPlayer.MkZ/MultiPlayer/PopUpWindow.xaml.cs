@@ -23,9 +23,55 @@ namespace MultiPlayer
     {
         private bool AllowClose = false;
 
+        private bool IsFullScreen => (this.WindowState == WindowState.Maximized && this.WindowStyle == WindowStyle.None);
+
         public PopUpWindow()
         {
             InitializeComponent();
+        }
+
+        public void InitWindow(Window main)
+        {
+            this.WindowState = main.WindowState;
+            this.WindowStyle = WindowStyle.SingleBorderWindow;
+
+            //position
+            if (this.WindowState != WindowState.Maximized)
+            {
+                this.WindowState = WindowState.Normal;
+                this.ResizeMode = ResizeMode.CanResize;
+
+                this.Left = main.Left;
+                this.Top = main.Top;
+                this.Width = main.ActualWidth;
+                this.Height = main.ActualHeight;
+            }
+        }
+
+        public void LoadSettings(OnePlayerSettings settings)
+        {
+            _video.LoadSetting(settings, true);
+        }
+
+        public void MaximizeToggle()
+        {
+            Maximize(!IsFullScreen);
+        }
+
+        public void Maximize(bool maximize)
+        {
+            if (maximize)
+            {
+                this.WindowStyle = WindowStyle.None;
+                this.ResizeMode = ResizeMode.NoResize;
+                this.WindowState = WindowState.Maximized;
+            }
+            else
+            {
+                this.WindowState = WindowState.Normal;
+                this.WindowStyle = WindowStyle.SingleBorderWindow;
+                this.ResizeMode = ResizeMode.CanResize;
+            }
         }
 
         public void Exit()
@@ -35,16 +81,15 @@ namespace MultiPlayer
             this.Close();
         }
 
-        public void Load(OnePlayerSettings settings)
-        {
-            _video.LoadSetting(settings, true);
-        }
-
         private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (Keyboard.Modifiers == ModifierKeys.None && e.Key == Key.Escape)
             {
-                this.Close();
+                //if full screen - exit full screen on ESC
+                if (IsFullScreen)
+                    MaximizeToggle();
+                else
+                    this.Close();
             }
         }
 
