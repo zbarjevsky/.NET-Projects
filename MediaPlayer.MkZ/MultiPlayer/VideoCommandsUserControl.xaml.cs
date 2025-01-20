@@ -342,10 +342,10 @@ namespace MultiPlayer
             MaximizeToggle(hide:false);
         }
 
-        public bool IsMaximized()
+        public bool IsFullScreen()
         {
             if (IsPopWindowMode)
-                return WndMax.WindowState == WindowState.Maximized;
+                return WndMax.IsFullScreen;
             return false;
         }
 

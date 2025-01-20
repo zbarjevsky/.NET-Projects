@@ -23,7 +23,7 @@ namespace MultiPlayer
     {
         private bool AllowClose = false;
 
-        private bool IsFullScreen => (this.WindowState == WindowState.Maximized && this.WindowStyle == WindowStyle.None);
+        public bool IsFullScreen => (this.WindowState == WindowState.Maximized && this.WindowStyle == WindowStyle.None);
 
         public PopUpWindow()
         {

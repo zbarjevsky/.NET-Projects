@@ -664,7 +664,7 @@ namespace MultiPlayer
 
         private void UpdateMaximizeButtonImage()
         {
-            bool isMaximized = _commands.IsMaximized();
+            bool isMaximized = _commands.IsFullScreen();
 
             _down.Visibility = isMaximized ? Visibility.Visible : Visibility.Collapsed;
             _up.Visibility = isMaximized ? Visibility.Collapsed : Visibility.Visible;
