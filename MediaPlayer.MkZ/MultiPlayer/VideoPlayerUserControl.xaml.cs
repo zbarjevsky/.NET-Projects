@@ -614,6 +614,7 @@ namespace MultiPlayer
             if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) || Keyboard.IsKeyDown(Key.LeftShift))
                 return;
 
+            e.Handled = true;
             _commands.VolumeUpdate(e.Delta);
         }
 
@@ -668,6 +669,11 @@ namespace MultiPlayer
 
             _down.Visibility = isMaximized ? Visibility.Visible : Visibility.Collapsed;
             _up.Visibility = isMaximized ? Visibility.Collapsed : Visibility.Visible;
+        }
+
+        private void _scrollPlayerContainer_MouseWheel(object sender, MouseWheelEventArgs e)
+        {
+
         }
     }
 }

@@ -34,12 +34,18 @@
                           MouseWheel="mePlayer_MouseWheel" />-->
                 </ScrollViewer>
 
-                <Border x:Name="_borderTitle" VerticalAlignment="Top" CornerRadius="5">
+                <Border x:Name="_borderTitle" VerticalAlignment="Top" CornerRadius="5" BorderBrush="Transparent">
                     <Border.Background>
                         <SolidColorBrush Color="Black" Opacity="0.3" />
                     </Border.Background>
-                    <TextBlock Text="{Binding Title}" Foreground="AliceBlue"
-                               Margin="6,3"/>
+                    <TextBox Text="{Binding Title, FallbackValue='File Name'}" IsReadOnly="True" 
+                             Foreground="AliceBlue" Background="{Binding ElementName=_borderTitle}" 
+                             BorderBrush="Transparent" BorderThickness="0"
+                               Margin="6,3">
+                        <!--<TextBox.Background>
+                            <LinearGradientBrush StartPoint="0" EndPoint="1" Opacity="0.8"
+                        </TextBox.Background>-->
+                    </TextBox>
                 </Border>
 
                 <StackPanel x:Name ="_commands1" Orientation="Horizontal" Margin="4,24"
