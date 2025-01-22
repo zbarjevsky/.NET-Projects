@@ -81,6 +81,11 @@ namespace MultiPlayer
             this.Close();
         }
 
+        public void ClearVideoControl()
+        {
+            _video.Clear();
+        }
+
         private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (Keyboard.Modifiers == ModifierKeys.None && e.Key == Key.Escape)

@@ -127,13 +127,19 @@ namespace MultiPlayer
                 this.Close();
         }
 
-        private void CloseAll_Click(object sender, RoutedEventArgs e)
+        private void ClearAll_Click(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < _videos.Count; i++)
+            _ = ClearAllAsync();
+        }
+
+        private async Task ClearAllAsync()
+        {
+            foreach (VideoPlayerUserControl v in _videos)
             {
-                VideoPlayerUserControl v = _videos[i];
-                v.LoadSetting(new OnePlayerSettings());
+                v.Clear();
+                await Task.Delay(3);
             }
+            VideoCommandsUserControl.ClearPopUp();
         }
 
         private void ResetLayout_Click(object sender, RoutedEventArgs e)

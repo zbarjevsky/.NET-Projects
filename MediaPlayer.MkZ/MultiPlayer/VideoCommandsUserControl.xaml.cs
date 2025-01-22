@@ -349,6 +349,11 @@ namespace MultiPlayer
             return false;
         }
 
+        public static void ClearPopUp()
+        {
+            WndMax.ClearVideoControl();
+        }
+
         private static readonly PopUpWindow WndMax = new PopUpWindow();
         public void MaximizeToggle(bool hide)
         {

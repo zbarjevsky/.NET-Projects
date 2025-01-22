@@ -37,11 +37,11 @@
                 <Button Content="Save As..." ToolTip="Save As..."
                         Click="SaveAs_Click"
                         Margin="3" Padding="5,3" />
+                <Button Content="Clear All" ToolTip="Clear All"
+                        Click="ClearAll_Click"
+                        Margin="3" Padding="5,3" />
                 <Button Content="Reset Layout" ToolTip="Reset Layout"
                         Click="ResetLayout_Click"
-                        Margin="3" Padding="5,3" />
-                <Button Content="Close All" ToolTip="Close All"
-                        Click="CloseAll_Click"
                         Margin="3" Padding="5,3" />
                 <Button Content="Exit" ToolTip="Exit"
                         Click="Exit_Click"

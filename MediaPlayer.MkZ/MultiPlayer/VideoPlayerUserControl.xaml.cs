@@ -344,11 +344,14 @@ namespace MultiPlayer
         public void Clear()
         {
             Stop();
-            VideoPlayerElement.Source = null;
             FileName = "";
+            VideoPlayerElement.Source = null;
             this.Background = Brushes.LightGray;
             MediaState = MediaState.Close;
             _commands.Clear();
+
+            //clear window - sometimes it is not closed properly
+            RecreateMediaElement(false);
         }
 
         public void Play()
