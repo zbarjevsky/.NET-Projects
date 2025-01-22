@@ -636,7 +636,10 @@ namespace MultiPlayer
                 if (setFrom.FileName != setTo.FileName)
                 {
                     this.LoadSetting(setFrom, _commands.IsPopWindowMode);
-                    vFrom.LoadSetting(setTo, vFrom._commands.IsPopWindowMode);
+                    //if CTRL is pressed - "copy" the conthent
+                    //else - update vFrom - "exchange"
+                    if (!Keyboard.IsKeyDown(Key.LeftCtrl) && !Keyboard.IsKeyDown(Key.RightCtrl))
+                        vFrom.LoadSetting(setTo, vFrom._commands.IsPopWindowMode);
                 }
             }
             DragDropSource = null;
@@ -669,11 +672,6 @@ namespace MultiPlayer
 
             _down.Visibility = isMaximized ? Visibility.Visible : Visibility.Collapsed;
             _up.Visibility = isMaximized ? Visibility.Collapsed : Visibility.Visible;
-        }
-
-        private void _scrollPlayerContainer_MouseWheel(object sender, MouseWheelEventArgs e)
-        {
-
         }
     }
 }
