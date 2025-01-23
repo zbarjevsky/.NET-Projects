@@ -12,10 +12,12 @@
              MouseDoubleClick="UserControl_MouseDoubleClick"
              PreviewMouseDown="UserControl_PreviewMouseButtonDown"
              PreviewMouseUp="UserControl_PreviewMouseUp"
+             MouseEnter="UserControl_MouseEnter"
+             MouseLeave="UserControl_MouseLeave"
              Drop="UserControl_Drop"
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <Border BorderThickness="1" CornerRadius="3" >
+        <Border x:Name="_borderMain" BorderThickness="2" CornerRadius="1" Padding="1" >
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition />

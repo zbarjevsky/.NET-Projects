@@ -596,6 +596,19 @@ namespace MultiPlayer
             IsFlipHorizontally = !IsFlipHorizontally;
         }
 
+        private void UserControl_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            this.Focus();
+
+            if (!_commands.IsPopWindowMode)
+                _borderMain.BorderBrush = Brushes.Tan; // Brushes.DodgerBlue;
+        }
+
+        private void UserControl_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            _borderMain.BorderBrush = Brushes.Transparent;
+        }
+
         private bool _isDragging = false;
         private void UserControl_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
         {
