@@ -205,10 +205,7 @@ namespace MultiPlayer
 
         private void Speed_Selected(object sender, SelectionChangedEventArgs e)
         {
-            if (_videoPlayerUserControl == null || _isInUpdate)
-                return;
-
-            _videoPlayerUserControl.SpeedRatio = _speedRatios[_speed.SelectedIndex];
+            SetSpeed(_speed.SelectedIndex);
         }
 
         private int SpeedRatio(double speed)
@@ -221,12 +218,31 @@ namespace MultiPlayer
             return 4; //1.0x
         }
 
-        private void Fit_Selected(object sender, SelectionChangedEventArgs e)
+        internal void SetSpeed(int speedIndex, bool updateComboBox = false)
         {
             if (_videoPlayerUserControl == null || _isInUpdate)
                 return;
 
-            _videoPlayerUserControl.ZoomState = (eZoomState)_fit.SelectedIndex;
+            _videoPlayerUserControl.SpeedRatio = _speedRatios[speedIndex];
+
+            if (updateComboBox)
+                _speed.SelectedIndex = speedIndex;
+        }
+
+        private void Fit_Selected(object sender, SelectionChangedEventArgs e)
+        {
+            SetFit(_fit.SelectedIndex);
+        }
+
+        internal void SetFit(int fitIndex, bool updateComboBox = false)
+        {
+            if (_videoPlayerUserControl == null || _isInUpdate)
+                return;
+
+            _videoPlayerUserControl.ZoomState = (eZoomState)fitIndex;
+
+            if (updateComboBox)
+                _fit.SelectedIndex = fitIndex;
 
             AdjustMarginsForVisibleScrollBars();
         }

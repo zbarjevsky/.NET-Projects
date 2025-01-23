@@ -23,6 +23,34 @@
                     <RowDefinition />
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
+                <Grid.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Play/Pause Toggle" Click="PlayPauseToggle_Click" >
+                            <MenuItem.Icon>
+                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE768;" FontSize="16" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Speed" >
+                            <MenuItem Header="Min"  Click="Spped_Click" Tag="0" >
+                                <MenuItem.Icon>
+                                    <TextBlock Text="->" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="0.1x" Click="Spped_Click" Tag="1" />
+                            <MenuItem Header="0.2x" Click="Spped_Click" Tag="2" />
+                            <MenuItem Header="0.5x" Click="Spped_Click" Tag="3" />
+                            <MenuItem Header="1.0x" Click="Spped_Click" Tag="4" FontWeight="Bold" />
+                            <MenuItem Header="1.5x" Click="Spped_Click" Tag="5" />
+                         </MenuItem>
+                        <MenuItem Header="Fit" >
+                            <MenuItem Header="Custom" Click="Fit_Click" Tag="0" />
+                            <MenuItem Header="Original" Click="Fit_Click" Tag="1" />
+                            <MenuItem Header="FitWidth" Click="Fit_Click" Tag="2" />
+                            <MenuItem Header="FitWindow" Click="Fit_Click" Tag="3" />
+                            <MenuItem Header="FitHeight" Click="Fit_Click" Tag="4" />
+                         </MenuItem>
+                    </ContextMenu>
+                </Grid.ContextMenu>
                 
                 <ScrollViewer Name="_scrollPlayerContainer" Grid.RowSpan="2"
                               HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"

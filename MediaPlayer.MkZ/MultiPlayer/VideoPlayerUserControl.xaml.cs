@@ -688,5 +688,30 @@ namespace MultiPlayer
             _down.Visibility = isMaximized ? Visibility.Visible : Visibility.Collapsed;
             _up.Visibility = isMaximized ? Visibility.Collapsed : Visibility.Visible;
         }
+
+        private void PlayPauseToggle_Click(object sender, RoutedEventArgs e)
+        {
+            _commands.TogglePlayPauseState();
+        }
+
+        private void Spped_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem menuItem)
+            {
+                string parameter = menuItem.Tag as string;
+                if (int.TryParse(parameter, out int speedIndex))
+                    _commands.SetSpeed(speedIndex, true);
+            }
+        }
+
+        private void Fit_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem menuItem)
+            {
+                string parameter = menuItem.Tag as string;
+                if (int.TryParse(parameter, out int fit))
+                    _commands.SetFit(fit, true);
+            }
+        }
     }
 }
