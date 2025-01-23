@@ -133,6 +133,7 @@ namespace MultiPlayer
 
         public void ZoomStateSet(eZoomState zoom, bool adjustScroll)
         {
+            Settings.ZoomState = zoom;
             switch (zoom)
             {
                 case eZoomState.Original:
@@ -152,6 +153,7 @@ namespace MultiPlayer
                     Zoom = Zoom;
                     break;
             }
+            Settings.Zoom = Zoom;
             OnPropertyChanged(nameof(ZoomState));
         }
 
@@ -174,8 +176,6 @@ namespace MultiPlayer
             _timer.Tick += _timer_Tick;
 
             _commands.Init(this);
-
-            VideoPlayerElement.MouseWheel += UserControl_MouseWheel;
         }
 
         private void _timer_Tick(object? sender, EventArgs e)
@@ -416,6 +416,11 @@ namespace MultiPlayer
 
         private void mePlayer_MouseWheel(object sender, MouseWheelEventArgs e)
         {
+            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) || Keyboard.IsKeyDown(Key.LeftShift))
+                return;
+
+            e.Handled = true;
+            _commands.VolumeUpdate(e.Delta);
         }
 
         public void FitWidth(bool adjustScroll)
@@ -466,6 +471,7 @@ namespace MultiPlayer
                     VideoPlayerElement.Clock = null;
                     VideoPlayerElement.Source = null;
                     VideoPlayerElement.Volume = 0;
+                    VideoPlayerElement.MouseWheel -= mePlayer_MouseWheel;
                     VideoPlayerElement = null;
                     _scrollPlayerContainer.Content = null;
 
@@ -488,10 +494,12 @@ namespace MultiPlayer
 
                 double vOff = _scrollDragger.VerticalOffset;
                 double zoom = _scrollDragger.Zoom;
+                eZoomState zoomState = _scrollDragger.ZoomState;
 
                 _scrollDragger = new ScrollDragZoom(VideoPlayerElement, _scrollPlayerContainer);
                 _scrollDragger.Zoom = zoom;
                 _scrollDragger.VerticalOffset = vOff;
+                ZoomStateSet(zoomState, true);
 
                 _scrollDragger.SizeChangedAction = () =>
                 {
@@ -602,7 +610,7 @@ namespace MultiPlayer
 
                 _isDragging = true;
                 DragDropSource = this;
-                DragDrop.DoDragDrop(this, Settings, System.Windows.DragDropEffects.Move);
+                DragDrop.DoDragDrop(this, Settings, System.Windows.DragDropEffects.Move|System.Windows.DragDropEffects.Copy);
                 e.Handled = true;
             }
 
@@ -610,15 +618,6 @@ namespace MultiPlayer
             {
                 _isDragging = false;
             }
-        }
-
-        private void UserControl_MouseWheel(object sender, MouseWheelEventArgs e)
-        {
-            if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) || Keyboard.IsKeyDown(Key.LeftShift))
-                return;
-
-            e.Handled = true;
-            _commands.VolumeUpdate(e.Delta);
         }
 
         private void UserControl_Drop(object sender, System.Windows.DragEventArgs e)
