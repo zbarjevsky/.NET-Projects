@@ -50,11 +50,6 @@ namespace MultiPlayer
             VM.Update(s, pop);
         }
 
-        internal void Open_Click(object sender, RoutedEventArgs e)
-        {
-            VM.Open_Click(sender, e);
-        }
-
         private void PlayPause_Click(object sender, RoutedEventArgs e)
         {
             VM.TogglePlayPauseState();

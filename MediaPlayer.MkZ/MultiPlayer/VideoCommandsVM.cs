@@ -38,10 +38,12 @@ namespace MultiPlayer
         public bool IsPopWindowMode { get; private set; } = false;
 
         public RelayCommand TogglePlayPauseCommand { get; }
+        public RelayCommand OpenFileCommand { get; }
 
         public VideoCommandsVM()
         {
             TogglePlayPauseCommand = new RelayCommand(TogglePlayPauseCommandExecute, TogglePlayPauseCommandCanExecute);
+            OpenFileCommand = new RelayCommand(OpenFileCommandExecute);
         }
 
         private string _title;
@@ -98,6 +100,24 @@ namespace MultiPlayer
             Title = "";
             TogglePlayPauseCommand.RefreshBoundControls();
         }
+
+        private void OpenFileCommandExecute(object obj)
+        {
+            string fileName = _player.FileName;
+            string dir = System.IO.Path.GetDirectoryName(_player.FileName);
+            OpenFileDialog ofd = new OpenFileDialog();
+            if (Directory.Exists(dir))
+            {
+                ofd.InitialDirectory = dir;
+                ofd.FileName = fileName;
+            }
+
+            if (ofd.ShowDialog().Value)
+            {
+                Open(ofd.FileName);
+            }
+        }
+
 
         private void TogglePlayPauseCommandExecute(object parameter)
         {
@@ -156,23 +176,6 @@ namespace MultiPlayer
                     break;
                 default:
                     break;
-            }
-        }
-
-        internal void Open_Click(object sender, RoutedEventArgs e)
-        {
-            string fileName = _player.FileName;
-            string dir = System.IO.Path.GetDirectoryName(_player.FileName);
-            OpenFileDialog ofd = new OpenFileDialog();
-            if (Directory.Exists(dir))
-            {
-                ofd.InitialDirectory = dir;
-                ofd.FileName = fileName;
-            }
-
-            if (ofd.ShowDialog().Value)
-            {
-                Open(ofd.FileName);
             }
         }
 

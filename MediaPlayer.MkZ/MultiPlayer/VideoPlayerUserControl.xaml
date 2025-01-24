@@ -86,7 +86,7 @@
 
                 <StackPanel x:Name ="_commands1" Orientation="Horizontal" Margin="4,24"
                             VerticalAlignment="Top" HorizontalAlignment="Right">
-                    <Button ToolTip="Open..." Margin="2" Click="Open_Click" >
+                    <Button ToolTip="Open..." Margin="2" Command="{Binding OpenFileCommand}" >
                         <Label FontFamily="Segoe MDL2 Assets" Content="&#xE712;" FontSize="16" />
                     </Button>
                     <Button ToolTip="Clear..." Margin="2" Click="Clear_Click" >
