@@ -50,11 +50,6 @@ namespace MultiPlayer
             VM.Update(s, pop);
         }
 
-        private void PlayPause_Click(object sender, RoutedEventArgs e)
-        {
-            VM.TogglePlayPauseState();
-        }
-
         private void Volume_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             VM.Volume_ValueChanged(sender, e);
@@ -82,16 +77,6 @@ namespace MultiPlayer
         private void Pos_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
             VM.Pos_DragCompleted(sender, e);
-        }
-
-        private void Prev_Click(object sender, RoutedEventArgs e)
-        {
-            VM.Prev_Click(sender, e);
-        }
-
-        private void Next_Click(object sender, RoutedEventArgs e)
-        {
-            VM.Next_Click(sender, e);
         }
 
         private void Maximize_Click(object sender, RoutedEventArgs e)

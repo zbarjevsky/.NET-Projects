@@ -20,10 +20,10 @@
                             <!--<Label FontFamily="Segoe MDL2 Assets" Content="&#xE769;" FontSize="16" />-->
                         </StackPanel>
                     </Button>
-                    <Button Margin="2" Click="Prev_Click" >
+                    <Button Margin="2" Command="{Binding PrevFileCommand}" >
                         <Label FontFamily="Segoe MDL2 Assets" Content="&#xE892;" FontSize="16" />
                     </Button>
-                    <Button Margin="2" Click="Next_Click" >
+                    <Button Margin="2" Command="{Binding NextFileCommand}" >
                         <Label FontFamily="Segoe MDL2 Assets" Content="&#xE893;" FontSize="16" />
                     </Button>
                     <ComboBox x:Name="_speed" Margin="2,2" Padding="8" SelectedIndex="4" SelectionChanged="Speed_Selected" >

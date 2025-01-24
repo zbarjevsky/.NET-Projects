@@ -677,11 +677,6 @@ namespace MultiPlayer
             _up.Visibility = isMaximized ? Visibility.Collapsed : Visibility.Visible;
         }
 
-        private void PlayPauseToggle_Click(object sender, RoutedEventArgs e)
-        {
-            VM.TogglePlayPauseState();
-        }
-
         private void Spped_Click(object sender, RoutedEventArgs e)
         {
             if (sender is MenuItem menuItem)

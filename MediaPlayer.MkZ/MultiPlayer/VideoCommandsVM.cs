@@ -39,11 +39,15 @@ namespace MultiPlayer
 
         public RelayCommand TogglePlayPauseCommand { get; }
         public RelayCommand OpenFileCommand { get; }
+        public RelayCommand PrevFileCommand { get; }
+        public RelayCommand NextFileCommand { get; }
 
         public VideoCommandsVM()
         {
             TogglePlayPauseCommand = new RelayCommand(TogglePlayPauseCommandExecute, TogglePlayPauseCommandCanExecute);
             OpenFileCommand = new RelayCommand(OpenFileCommandExecute);
+            PrevFileCommand = new RelayCommand(PrevFileCommandExecute, PrevFileCommandCanExecute);
+            NextFileCommand = new RelayCommand(NextFileCommandExecute, NextFileCommandCanExecute);
         }
 
         private string _title;
@@ -58,14 +62,6 @@ namespace MultiPlayer
         {
             get { return _playPauseIconText; }
             set { SetProperty(ref _playPauseIconText, value); }
-        }
-
-        public void TogglePlayPauseState()
-        {
-            if (_player.MediaState == MediaState.Play)
-                Pause();
-            else
-                Play();
         }
 
         public void Play()
@@ -118,10 +114,12 @@ namespace MultiPlayer
             }
         }
 
-
         private void TogglePlayPauseCommandExecute(object parameter)
         {
-            TogglePlayPauseState();
+            if (_player.MediaState == MediaState.Play)
+                Pause();
+            else
+                Play();
         }
 
         private bool TogglePlayPauseCommandCanExecute(object parameter)
@@ -138,7 +136,7 @@ namespace MultiPlayer
             _player = v;
             _player.PropertyChanged += _videoPlayerUserControl_PropertyChanged;
 
-            _player.LeftButtonClick = () => { TogglePlayPauseState(); };
+            _player.LeftButtonClick = () => { TogglePlayPauseCommand.Execute(null); };
             _player.LeftButtonDoubleClick = () => { Maximize_Click(this, null); };
             _player.VideoEnded = (player) => { MediaPlayEnded(player); };
         }
@@ -189,11 +187,6 @@ namespace MultiPlayer
             Play();
 
             CommandManager.InvalidateRequerySuggested();
-        }
-
-        private void PlayPause_Click(object sender, RoutedEventArgs e)
-        {
-            TogglePlayPauseState();
         }
 
         private void MediaPlayEnded(IVideoPlayer player)
@@ -364,24 +357,36 @@ namespace MultiPlayer
             e.Handled = true;
         }
 
-        public void Prev_Click(object sender, RoutedEventArgs e)
+        private bool NextFileCommandCanExecute(object obj)
         {
-            List<string> fileNames = GetFileNames(_player.FileName, out int idx);
+            List<string> fileNames = GetFileNames(Settings.FileName, out int idx);
+            return idx >= 0 && idx < fileNames.Count - 1;
+        }
+
+        private void NextFileCommandExecute(object obj)
+        {
+            PlayNext();
+        }
+
+        private bool PrevFileCommandCanExecute(object obj)
+        {
+            List<string> fileNames = GetFileNames(Settings.FileName, out int idx);
+            return idx > 0;
+        }
+
+        private void PrevFileCommandExecute(object obj)
+        {
+            List<string> fileNames = GetFileNames(Settings.FileName, out int idx);
             idx--;
             if (idx < 0)
                 idx = fileNames.Count - 1;
             Open(fileNames[idx]);
         }
 
-        public void Next_Click(object sender, RoutedEventArgs e)
-        {
-            PlayNext();
-        }
-
         private Random _random = new Random();
         private void PlayNext(bool random = false, bool loop = false)
         {
-            List<string> fileNames = GetFileNames(_player.FileName, out int idx);
+            List<string> fileNames = GetFileNames(Settings.FileName, out int idx);
             if (random)
             {
                 idx = _random.Next(fileNames.Count - 1);
