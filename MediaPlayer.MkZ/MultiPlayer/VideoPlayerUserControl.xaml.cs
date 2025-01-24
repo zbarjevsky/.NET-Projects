@@ -38,6 +38,8 @@ namespace MultiPlayer
 
         private readonly FadeAnimationHelper _controlsHideAndShow;
 
+        private VideoCommandsVM VM => _commands.VM;
+
         public Action MaximizeAction = () => { };
         public Action<IVideoPlayer> VideoEnded = (player) => { };
         public Action<IVideoPlayer> VideoStartedAction { get; set; } = (player) => { };
@@ -46,6 +48,24 @@ namespace MultiPlayer
         public Action LeftButtonDoubleClick = () => { };
 
         public OnePlayerSettings Settings {  get; set; } = new OnePlayerSettings();
+
+        public VideoPlayerUserControl()
+        {
+            InitializeComponent();
+
+            this.DataContext = VM;
+
+            _scrollDragger = new ScrollDragZoom(null, _scrollPlayerContainer);
+
+            _controlsHideAndShow = new FadeAnimationHelper(this, 2,
+                _borderTitle, _commands, _commands1);
+
+            RecreateMediaElement(false);
+
+            _timer.Tick += _timer_Tick;
+
+            _commands.Init(this);
+        }
 
         private DispatcherTimer _timer = new DispatcherTimer(DispatcherPriority.ContextIdle)
         {
@@ -59,18 +79,6 @@ namespace MultiPlayer
         {
             get { return _mediaState; }
             protected set { _mediaState = value; OnPropertyChanged(); }
-        }
-
-        private string _title;
-        public string Title
-        {
-            get { return _title; }
-            set
-            {
-                _title = value;
-                //txtTitle.Text = value + (IsFlipHorizontally ? " (Flipped)" : "");
-                OnPropertyChanged();
-            }
         }
 
         public string FileName { get; private set; }
@@ -87,7 +95,7 @@ namespace MultiPlayer
             {
                 if (VideoPlayerElement.RenderTransform is ScaleTransform scale)
                     scale.ScaleX = value ? -1 : 1; //Flip Horizontally
-                Title = _title; //update flipped
+                //VM.Title = _title; //update flipped
                 OnPropertyChanged();
             }
         }
@@ -162,33 +170,17 @@ namespace MultiPlayer
             return _scrollDragger.ZoomState;
         }
 
-        public VideoPlayerUserControl()
-        {
-            InitializeComponent();
-
-            _scrollDragger = new ScrollDragZoom(null, _scrollPlayerContainer);
-
-            _controlsHideAndShow = new FadeAnimationHelper(this, 2,
-                _borderTitle, _commands, _commands1);
-
-            RecreateMediaElement(false);
-
-            _timer.Tick += _timer_Tick;
-
-            _commands.Init(this);
-        }
-
         private void _timer_Tick(object? sender, EventArgs e)
         {
             _timer.Stop();
             Settings.Update(this);
-            _commands.Update(Settings, _commands.IsPopWindowMode);
+            _commands.VM.Update(Settings, _commands.VM.IsPopWindowMode);
             _timer.Start();
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
-            DataContext = this;
+            DataContext = _commands.VM;
         }
 
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -204,7 +196,7 @@ namespace MultiPlayer
 
             Volume = volume;
             MediaState = player.MediaState;
-            Title = player.Title;
+            VM.Title = player.VM.Title;
             FileName = player.FileName;
             IsFlipHorizontally = player.IsFlipHorizontally;
             Zoom = player.Zoom;
@@ -319,10 +311,10 @@ namespace MultiPlayer
             Volume = volume;
             MediaState = MediaState.Manual;
 
-            Title = System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(fileName)) + "/" + System.IO.Path.GetFileName(fileName);
-            List<string> fileNames = _commands.GetFileNames(fileName, out int idx);
+            VM.Title = System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(fileName)) + "/" + System.IO.Path.GetFileName(fileName);
+            List<string> fileNames = _commands.VM.GetFileNames(fileName, out int idx);
             if (idx >= 0)
-                Title = $"{idx}/{fileNames.Count} " + Title;
+                VM.Title = $"{idx}/{fileNames.Count} " + VM.Title;
         }
 
         public void LoadSetting(OnePlayerSettings s, bool pop = false)
@@ -334,11 +326,13 @@ namespace MultiPlayer
             ZoomStateSet(s.ZoomState, true);
 
             Settings.Update(s);
-            _commands.Update(Settings, pop);
+            _commands.VM.Update(Settings, pop);
 
-            _commands.Play();
+            _commands.VM.Play();
             if (s.MediaState != MediaState.Play)
-                _commands.Pause();
+                _commands.VM.Pause();
+
+            _commands.VM.TogglePlayPauseCommand.RefreshBoundControls();
         }
 
         public void Clear()
@@ -348,7 +342,7 @@ namespace MultiPlayer
             VideoPlayerElement.Source = null;
             this.Background = Brushes.LightGray;
             MediaState = MediaState.Close;
-            _commands.Clear();
+            _commands.VM.Clear();
 
             //clear window - sometimes it is not closed properly
             RecreateMediaElement(false);
@@ -382,7 +376,7 @@ namespace MultiPlayer
                 MediaState = MediaState.Pause;
 
                 Settings.Update(this);
-                _commands.Update(Settings, _commands.IsPopWindowMode);
+                _commands.VM.Update(Settings, _commands.VM.IsPopWindowMode);
             }
         }
 
@@ -397,7 +391,7 @@ namespace MultiPlayer
                 MediaState = MediaState.Stop;
                 
                 Settings.Update(this);
-                _commands.Update(Settings, _commands.IsPopWindowMode);
+                _commands.VM.Update(Settings, _commands.VM.IsPopWindowMode);
             }
         }
 
@@ -420,7 +414,7 @@ namespace MultiPlayer
                 return;
 
             e.Handled = true;
-            _commands.VolumeUpdate(e.Delta);
+            _commands.VM.VolumeUpdate(e.Delta);
         }
 
         public void FitWidth(bool adjustScroll)
@@ -600,7 +594,7 @@ namespace MultiPlayer
         {
             this.Focus();
 
-            if (!_commands.IsPopWindowMode)
+            if (!_commands.VM.IsPopWindowMode)
                 _borderMain.BorderBrush = Brushes.Tan; // Brushes.DodgerBlue;
         }
 
@@ -641,20 +635,20 @@ namespace MultiPlayer
                 string[] files = (string[])e.Data.GetData(System.Windows.DataFormats.FileDrop);
 
                 // handling code you have defined.
-                _commands.Open(files[0]);
+                _commands.VM.Open(files[0]);
             }
             else if (e.Data.GetDataPresent(DragDropDataFormat))
             {
                 VideoPlayerUserControl vFrom = DragDropSource;
                 OnePlayerSettings setFrom = (OnePlayerSettings)(e.Data.GetData(DragDropDataFormat));
                 OnePlayerSettings setTo = new OnePlayerSettings(this);
-                if (setFrom.FileName != setTo.FileName)
+                if (!string.IsNullOrWhiteSpace(setFrom.FileName) && setFrom.FileName != setTo.FileName)
                 {
-                    this.LoadSetting(setFrom, _commands.IsPopWindowMode);
+                    this.LoadSetting(setFrom, _commands.VM.IsPopWindowMode);
                     //if CTRL is pressed - "copy" the conthent
                     //else - update vFrom - "exchange"
                     if (!Keyboard.IsKeyDown(Key.LeftCtrl) && !Keyboard.IsKeyDown(Key.RightCtrl))
-                        vFrom.LoadSetting(setTo, vFrom._commands.IsPopWindowMode);
+                        vFrom.LoadSetting(setTo, vFrom._commands.VM.IsPopWindowMode);
                 }
             }
             DragDropSource = null;
@@ -662,7 +656,7 @@ namespace MultiPlayer
 
         private void Open_Click(object sender, RoutedEventArgs e)
         {
-            _commands.Open_Click(sender, e);
+            _commands.VM.Open_Click(sender, e);
         }
 
         private void Clear_Click(object sender, RoutedEventArgs e)
@@ -677,13 +671,13 @@ namespace MultiPlayer
 
         private void Maximize_Click(object sender, RoutedEventArgs e)
         {
-            _commands.MaximizeToggle(hide: false);
+            _commands.VM.MaximizeToggle(hide: false);
             UpdateMaximizeButtonImage();
         }
 
         private void UpdateMaximizeButtonImage()
         {
-            bool isMaximized = _commands.IsFullScreen();
+            bool isMaximized = _commands.VM.IsFullScreen();
 
             _down.Visibility = isMaximized ? Visibility.Visible : Visibility.Collapsed;
             _up.Visibility = isMaximized ? Visibility.Collapsed : Visibility.Visible;
@@ -691,7 +685,7 @@ namespace MultiPlayer
 
         private void PlayPauseToggle_Click(object sender, RoutedEventArgs e)
         {
-            _commands.TogglePlayPauseState();
+            _commands.VM.TogglePlayPauseState();
         }
 
         private void Spped_Click(object sender, RoutedEventArgs e)
@@ -700,7 +694,7 @@ namespace MultiPlayer
             {
                 string parameter = menuItem.Tag as string;
                 if (int.TryParse(parameter, out int speedIndex))
-                    _commands.SetSpeed(speedIndex, true);
+                    _commands.VM.SetSpeed(speedIndex, true);
             }
         }
 
@@ -710,7 +704,7 @@ namespace MultiPlayer
             {
                 string parameter = menuItem.Tag as string;
                 if (int.TryParse(parameter, out int fit))
-                    _commands.SetFit(fit, true);
+                    _commands.VM.SetFit(fit, true);
             }
         }
     }

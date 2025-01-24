@@ -41,7 +41,7 @@ namespace MultiPlayer
             _settings.Update(_videos);
             if (_settings.HasData())
                 _settings.Save(_settings.FileName);
-            VideoCommandsUserControl.Exit();    
+            VideoCommandsVM.Exit();    
         }
 
         private void Open_Click(object sender, RoutedEventArgs e)
@@ -139,7 +139,7 @@ namespace MultiPlayer
                 v.Clear();
                 await Task.Delay(3);
             }
-            VideoCommandsUserControl.ClearPopUp();
+            VideoCommandsVM.ClearPopUp();
         }
 
         private void ResetLayout_Click(object sender, RoutedEventArgs e)

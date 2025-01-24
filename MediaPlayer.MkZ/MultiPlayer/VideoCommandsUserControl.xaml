@@ -14,10 +14,10 @@
                     <SolidColorBrush Color="SlateGray" Opacity="0.8" />
                 </WrapPanel.Background>
                 <StackPanel x:Name="_stackButtons" Orientation="Horizontal">
-                    <Button Margin="2" x:Name="_btnPlayPause" Click="PlayPause_Click" >
+                    <Button Margin="2" x:Name="_btnPlayPause" Command="{Binding TogglePlayPauseCommand}" >
                         <StackPanel Orientation="Horizontal">
-                            <Label FontFamily="Segoe MDL2 Assets" Content="&#xE768;" FontSize="16" />
-                            <Label FontFamily="Segoe MDL2 Assets" Content="&#xE769;" FontSize="16" />
+                            <Label FontFamily="Segoe MDL2 Assets" Content="{Binding PlayPauseIconText, FallbackValue='&#xE715;'}" FontSize="16" />
+                            <!--<Label FontFamily="Segoe MDL2 Assets" Content="&#xE769;" FontSize="16" />-->
                         </StackPanel>
                     </Button>
                     <Button Margin="2" Click="Prev_Click" >

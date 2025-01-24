@@ -1,5 +1,6 @@
 ﻿using Microsoft.Win32;
 using MkZ.WPF;
+using MultiPlayer.MkZ.WPF;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -30,455 +31,102 @@ namespace MultiPlayer
     /// </summary>
     public partial class VideoCommandsUserControl : System.Windows.Controls.UserControl
     {
-        VideoPlayerUserControl _videoPlayerUserControl;
-        public bool IsPopWindowMode { get; private set; } = false;
-
-        public void TogglePlayPauseState()
-        {
-            if (_videoPlayerUserControl.MediaState == MediaState.Play)
-                Pause();
-            else 
-                Play();
-        }
-
-        public void Play()
-        {
-            _videoPlayerUserControl.Play();
-            _btnPlayPause.Background = Brushes.LightGreen;
-        }
-
-        public void Pause()
-        {
-            _videoPlayerUserControl.Pause();
-            _btnPlayPause.Background = Brushes.LightGoldenrodYellow;
-        }
-
-        public void Stop()
-        {
-            _videoPlayerUserControl.Stop();
-            _btnPlayPause.Background = Brushes.LightGray;
-        }
-
-        public void Clear()
-        {
-            double volume = _volume.Value;
-            Update(new OnePlayerSettings(), IsPopWindowMode);
-            _volume.Value = volume;
-        }
+        public VideoCommandsVM VM { get; } = new VideoCommandsVM();
 
         public VideoCommandsUserControl()
         {
+            this.DataContext = VM;
+
             InitializeComponent();
         }
 
         public void Init(VideoPlayerUserControl v)
         {
-            _videoPlayerUserControl = v;
-            _videoPlayerUserControl.PropertyChanged += _videoPlayerUserControl_PropertyChanged;
-
-            _videoPlayerUserControl.LeftButtonClick = () => { TogglePlayPauseState(); };
-            _videoPlayerUserControl.LeftButtonDoubleClick = () => { Maximize_Click(this, null); };
-            _videoPlayerUserControl.VideoEnded = (player) => { MediaPlayEnded(player); }; 
+            VM.Init(v, this);
         }
 
-        bool _isInUpdate = false;
         public void Update(OnePlayerSettings s, bool pop = false)
         {
-            IsPopWindowMode = pop;
-
-            _isInUpdate = true;
-            
-            _volume.Value = s.Volume * 1000.0;
-            _position.Maximum = s.Duration;
-            _position.Value = s.Position;
-            _speed.SelectedIndex = SpeedRatio(s.SpeedRatio);
-
-            _fit.SelectedIndex = (int)s.ZoomState;
-            if (s.ZoomState == eZoomState.Custom)
-                _videoPlayerUserControl.Zoom = s.Zoom;
-            
-            _timeLbl.Text = SecondsToString(s.Position);
-            
-            AdjustMarginsForVisibleScrollBars();
-            AdjustSizeAndLayout();
-
-            _isInUpdate = false;
-        }
-
-        private void _videoPlayerUserControl_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            switch (e.PropertyName)
-            {
-                case "Position":
-                    _position.Value = _videoPlayerUserControl.Position.TotalSeconds;
-                    break;
-                default:
-                    break;
-            }
+            VM.Update(s, pop);
         }
 
         internal void Open_Click(object sender, RoutedEventArgs e)
         {
-            string fileName = _videoPlayerUserControl.FileName;
-            string dir = System.IO.Path.GetDirectoryName(_videoPlayerUserControl.FileName);
-            OpenFileDialog ofd = new OpenFileDialog();
-            if (Directory.Exists(dir))
-            {
-                ofd.InitialDirectory = dir;
-                ofd.FileName = fileName;
-            }
- 
-            if (ofd.ShowDialog().Value)
-            {
-                Open(ofd.FileName);
-            }
-        }
-
-        public void Open(string fileName)
-        {
-            _videoPlayerUserControl.Open(fileName, _videoPlayerUserControl.Volume);
-            _position.Maximum = _videoPlayerUserControl.NaturalDuration;
-            _position.Value = 0;
-            Play();
+            VM.Open_Click(sender, e);
         }
 
         private void PlayPause_Click(object sender, RoutedEventArgs e)
         {
-            TogglePlayPauseState();
-        }
-
-        private void MediaPlayEnded(IVideoPlayer player)
-        {
-            Stop();
-            switch (_videoPlayerUserControl.Settings.PlayMode)
-            {
-                case ePlayMode.PlayOne:
-                    break;
-                case ePlayMode.PlayAll:
-                    PlayNext(random:false, loop:false);
-                    break;
-                case ePlayMode.RepeatOne:
-                    Play();
-                    break;
-                case ePlayMode.RepeatAll:
-                    PlayNext(random:false, loop:true);
-                    break;
-                case ePlayMode.Random:
-                    PlayNext(random:true, loop:true);
-                    break;
-                default:
-                    Play();
-                    break;
-            }
+            VM.TogglePlayPauseState();
         }
 
         private void Volume_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (_videoPlayerUserControl != null)
-                _videoPlayerUserControl.Volume = _volume.Value / 1000.0;
+            VM.Volume_ValueChanged(sender, e);
         }
-
-        public void VolumeUpdate(int delta)
-        {
-            double vol = _volume.Value;
-            if (delta > 0)
-            {
-                if (vol < 100)
-                    vol += 20;
-                else
-                    vol += 100;
-            }
-            if (delta < 0)
-            {
-                if (vol > 200)
-                    vol -= 100;
-                else
-                    vol -= 20;
-            }
-            if (vol < 0) vol = 0;
-            if (vol > 1000) vol = 1000;
-
-            _volume.Value = vol;
-        }
-
-        double[] _speedRatios = { 0.01, 0.1, 0.2, 0.5, 1.0, 1.5 };
 
         private void Speed_Selected(object sender, SelectionChangedEventArgs e)
         {
-            SetSpeed(_speed.SelectedIndex);
-        }
-
-        private int SpeedRatio(double speed)
-        {
-            for (int i = 0; i < _speed.Items.Count; i++)
-            {
-                if (speed == _speedRatios[i])
-                    return i;
-            }
-            return 4; //1.0x
-        }
-
-        internal void SetSpeed(int speedIndex, bool updateComboBox = false)
-        {
-            if (_videoPlayerUserControl == null || _isInUpdate)
-                return;
-
-            _videoPlayerUserControl.SpeedRatio = _speedRatios[speedIndex];
-
-            if (updateComboBox)
-                _speed.SelectedIndex = speedIndex;
+            VM.SetSpeed(_speed.SelectedIndex);
         }
 
         private void Fit_Selected(object sender, SelectionChangedEventArgs e)
         {
-            SetFit(_fit.SelectedIndex);
+            VM.Fit_Selected(sender, e);
         }
-
-        internal void SetFit(int fitIndex, bool updateComboBox = false)
-        {
-            if (_videoPlayerUserControl == null || _isInUpdate)
-                return;
-
-            _videoPlayerUserControl.ZoomState = (eZoomState)fitIndex;
-
-            if (updateComboBox)
-                _fit.SelectedIndex = fitIndex;
-
-            AdjustMarginsForVisibleScrollBars();
-        }
-
-        private void AdjustMarginsForVisibleScrollBars()
-        {
-            double bottom = (_videoPlayerUserControl._scrollPlayerContainer.ComputedHorizontalScrollBarVisibility == Visibility.Visible) ? 12.0 : 0.0;
-            this.Margin = new Thickness(0, 0, 0, bottom);
-        }
-
-        private bool _resume = false;
         private void Pos_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
         {
-            if (_videoPlayerUserControl == null || _isInUpdate)
-                return;
-
-            _resume = (_videoPlayerUserControl.MediaState == MediaState.Play);
-            if (_resume)
-                Pause();
+            VM.Pos_DragStarted(sender, e);
         }
 
         private void Pos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (_videoPlayerUserControl == null || _isInUpdate)
-                return;
-
-            bool resume = (_videoPlayerUserControl.MediaState == MediaState.Play);
-            if (resume)
-                Pause();
-
-            _position.Value = e.NewValue;
-            _videoPlayerUserControl.PositionSet(TimeSpan.FromSeconds(_position.Value), false);
-
-            _timeLbl.Text = SecondsToString(_videoPlayerUserControl.Position.TotalSeconds);
-
-            if (resume)
-                Play();
-
-            e.Handled = true;
-        }
-
-        private string SecondsToString(double seconds)
-        {
-            if (seconds < 3600)
-                return TimeSpan.FromSeconds(seconds).ToString("m':'ss'.'f");
-            else
-                return TimeSpan.FromSeconds(seconds).ToString("h':'mm':'ss'.'f");
+            VM.Pos_ValueChanged(sender, e);
         }
 
         private void Pos_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
-            if (_videoPlayerUserControl == null || _isInUpdate)
-                return;
-
-            _videoPlayerUserControl.PositionSet(TimeSpan.FromSeconds(_position.Value), false);
-
-            if (_resume)
-                Play();
-
-            e.Handled = true;
+            VM.Pos_DragCompleted(sender, e);
         }
 
         private void Prev_Click(object sender, RoutedEventArgs e)
         {
-            List<string> fileNames = GetFileNames(_videoPlayerUserControl.FileName, out int idx);
-            idx--;
-            if (idx < 0) 
-                idx = fileNames.Count - 1;
-            Open(fileNames[idx]);
+            VM.Prev_Click(sender, e);
         }
 
         private void Next_Click(object sender, RoutedEventArgs e)
         {
-            PlayNext();
-        }
-
-        private Random _random = new Random();
-        private void PlayNext(bool random = false, bool loop = false)
-        {
-            List<string> fileNames = GetFileNames(_videoPlayerUserControl.FileName, out int idx);
-            if (random)
-            {
-                idx = _random.Next(fileNames.Count - 1);
-            }
-            else
-            {
-                idx++;
-                if (loop && (idx >= fileNames.Count || idx < 0))
-                    idx = 0; //loop
-            }
-
-            if (idx >= 0 && idx < fileNames.Count)
-                Open(fileNames[idx]);
-        }
-
-        public List<string> GetFileNames(string fileName, out int idx)
-        {
-            idx = -1;
-            if (string.IsNullOrWhiteSpace(fileName) || !File.Exists(fileName))
-                return new List<string>();
-
-            string dir = System.IO.Path.GetDirectoryName(fileName);
-
-            List<string> fileNames = System.IO.Directory.EnumerateFiles(dir).ToList();
-            fileNames.Sort();
-            idx = fileNames.IndexOf(fileName);
-
-            return fileNames;
+            VM.Next_Click(sender, e);
         }
 
         private void Maximize_Click(object sender, RoutedEventArgs e)
         {
-            MaximizeToggle(hide:false);
-        }
-
-        public bool IsFullScreen()
-        {
-            if (IsPopWindowMode)
-                return WndMax.IsFullScreen;
-            return false;
-        }
-
-        public static void ClearPopUp()
-        {
-            WndMax.ClearVideoControl();
-        }
-
-        private static readonly PopUpWindow WndMax = new PopUpWindow();
-        public void MaximizeToggle(bool hide)
-        {
-            if (IsPopWindowMode)
-            {
-                if (hide)
-                {
-                    this.Pause();
-                    WndMax.Visibility = Visibility.Collapsed;
-                }
-                else
-                {
-                    WndMax.MaximizeToggle();
-                }
-            }
-            else
-            {
-                if (WndMax.Visibility == Visibility.Collapsed)
-                {
-                    WndMax.InitWindow(System.Windows.Application.Current.MainWindow);
-                    WndMax.Show();
-                    WndMax.LoadSettings(new OnePlayerSettings(_videoPlayerUserControl));
-                    
-                    this.Pause();
-                }
-            }
-        }
-
-        internal static void Exit()
-        {
-            WndMax.Exit();
+            VM.Maximize_Click(sender, e);
         }
 
         private void Pos_MouseMove(object sender, MouseEventArgs e)
         {
-            ShowTimeToolTip(sender, e);
-        }
-
-        private void ShowTimeToolTip(object sender, MouseEventArgs e)
-        {
-            if (sender is Slider slider)
-            {
-                Point currentPos = e.GetPosition(slider);
-                if (currentPos.Y < 30)
-                {
-                    if (!_popupSliderTooltip.IsOpen)
-                        _popupSliderTooltip.IsOpen = true;
-
-                    Track track = slider.Template.FindName("PART_Track", slider) as Track;
-
-                    _txtSliderTooltip.Text = SecondsToString(track.ValueFromPoint(currentPos));
-                    string dur = SecondsToString(_videoPlayerUserControl.Duration);
-                    _txtSliderTooltip.Text += " / " + dur;
-
-                    _popupSliderTooltip.HorizontalOffset = currentPos.X - (_borderSliderTooltip.ActualWidth / 2);
-                    _popupSliderTooltip.VerticalOffset = -20;
-                }
-                else
-                {
-                    _popupSliderTooltip.IsOpen = false;
-                }
-            }
+            VM.Pos_MouseMove(sender, e);
         }
 
         private void Pos_MouseLeave(object sender, MouseEventArgs e)
         {
-            _popupSliderTooltip.IsOpen = false;
+            VM.Pos_MouseLeave(sender, e);
         }
 
         private void PrevFrame_Click(object sender, RoutedEventArgs e)
         {
-            _position.Value -= 0.1;
-            _videoPlayerUserControl.Settings.Position = _position.Value;
+            VM.PrevFrame_Click(sender, e);
         }
 
         private void NextFrame_Click(object sender, RoutedEventArgs e)
         {
-            _position.Value += 0.1;
-            _videoPlayerUserControl.Settings.Position = _position.Value;
+            VM.NextFrame_Click(sender, e);
         }
 
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            AdjustSizeAndLayout();  
-        }
-
-        private void AdjustSizeAndLayout()
-        {
-            _scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
-            double windowWidth = this.ActualWidth;
-            if (windowWidth < 300)
-                windowWidth = 1920;
-
-            if (windowWidth > _stackButtons.ActualWidth)
-                _wrapPanel.Width = windowWidth;
-            else
-                _wrapPanel.Width = _stackButtons.ActualWidth;
-
-            double width = windowWidth - _stackButtons.ActualWidth - _timeLbl.ActualWidth;
-            if (width < _docSliders.MinWidth) //wrapped to two lines
-            {
-                _docSliders.Width = windowWidth - _timeLbl.ActualWidth - 4;
-                if (windowWidth < _stackButtons.ActualWidth)
-                    _scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
-            }
-            else //one line
-            {
-                _docSliders.Width = width - 4;
-            }
+            VM.UserControl_SizeChanged(sender, e);
         }
     }
 }

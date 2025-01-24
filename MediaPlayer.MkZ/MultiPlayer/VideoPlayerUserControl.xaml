@@ -25,9 +25,9 @@
                 </Grid.RowDefinitions>
                 <Grid.ContextMenu>
                     <ContextMenu>
-                        <MenuItem Header="Play/Pause Toggle" Click="PlayPauseToggle_Click" >
+                        <MenuItem Header="Play/Pause Toggle" Command="{Binding TogglePlayPauseCommand}" >
                             <MenuItem.Icon>
-                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE768;" FontSize="16" />
+                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="{Binding PlayPauseIconText}" FontSize="16" />
                             </MenuItem.Icon>
                         </MenuItem>
                         <MenuItem Header="Speed" >
@@ -69,7 +69,7 @@
                         <SolidColorBrush Color="Black" Opacity="0.3" />
                     </Border.Background>
                     <TextBox Text="{Binding Title, FallbackValue='File Name'}" IsReadOnly="True" 
-                             Foreground="AliceBlue" Background="{Binding ElementName=_borderTitle}" 
+                             Foreground="AliceBlue" Background="{Binding Background, ElementName=_borderTitle}" 
                              BorderBrush="Transparent" BorderThickness="0"
                                Margin="6,3">
                         <!--<TextBox.Background>

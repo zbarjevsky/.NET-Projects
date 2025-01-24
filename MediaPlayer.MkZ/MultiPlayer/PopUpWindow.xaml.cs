@@ -103,7 +103,7 @@ namespace MultiPlayer
             if (!AllowClose)
             {
                 e.Cancel = true; //do not close it - will reuse it
-                _video._commands.MaximizeToggle(hide:true);
+                _video._commands.VM.MaximizeToggle(hide:true);
             }
         }
     }
