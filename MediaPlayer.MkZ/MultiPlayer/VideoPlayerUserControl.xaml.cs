@@ -38,7 +38,7 @@ namespace MultiPlayer
 
         private readonly FadeAnimationHelper _controlsHideAndShow;
 
-        private VideoCommandsVM VM => _commands.VM;
+        public VideoCommandsVM VM { get => _commands.VM; }
 
         public Action MaximizeAction = () => { };
         public Action<IVideoPlayer> VideoEnded = (player) => { };
@@ -46,8 +46,6 @@ namespace MultiPlayer
         public Func<ExceptionRoutedEventArgs, MediaElement, bool> VideoFailed = (e, player) => true;
         public Action LeftButtonClick = () => { };
         public Action LeftButtonDoubleClick = () => { };
-
-        public OnePlayerSettings Settings {  get; set; } = new OnePlayerSettings();
 
         public VideoPlayerUserControl()
         {
@@ -141,7 +139,7 @@ namespace MultiPlayer
 
         public void ZoomStateSet(eZoomState zoom, bool adjustScroll)
         {
-            Settings.ZoomState = zoom;
+            VM.Settings.ZoomState = zoom;
             switch (zoom)
             {
                 case eZoomState.Original:
@@ -161,7 +159,7 @@ namespace MultiPlayer
                     Zoom = Zoom;
                     break;
             }
-            Settings.Zoom = Zoom;
+            VM.Settings.Zoom = Zoom;
             OnPropertyChanged(nameof(ZoomState));
         }
 
@@ -173,8 +171,8 @@ namespace MultiPlayer
         private void _timer_Tick(object? sender, EventArgs e)
         {
             _timer.Stop();
-            Settings.Update(this);
-            _commands.VM.Update(Settings, _commands.VM.IsPopWindowMode);
+            VM.Settings.Update(this);
+            VM.Update(VM.Settings, VM.IsPopWindowMode);
             _timer.Start();
         }
 
@@ -266,7 +264,7 @@ namespace MultiPlayer
 
         public void PositionSet(TimeSpan position, bool notify)
         {
-            Settings.Position = position.TotalSeconds;
+            VM.Settings.Position = position.TotalSeconds;
             VideoPlayerElement.Position = position;
             if (notify)
                 OnPropertyChanged(nameof(Position));
@@ -297,7 +295,7 @@ namespace MultiPlayer
         }
 
         //sometimes if video was not opened yet - NaturalDuration is 0 - use saved in settings duration
-        public double Duration => NaturalDuration > 0.0 ? NaturalDuration : Settings.Duration;
+        public double Duration => NaturalDuration > 0.0 ? NaturalDuration : VM.Settings.Duration;
 
         public void ScrollToCenter()
         {
@@ -312,7 +310,7 @@ namespace MultiPlayer
             MediaState = MediaState.Manual;
 
             VM.Title = System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(fileName)) + "/" + System.IO.Path.GetFileName(fileName);
-            List<string> fileNames = _commands.VM.GetFileNames(fileName, out int idx);
+            List<string> fileNames = VM.GetFileNames(fileName, out int idx);
             if (idx >= 0)
                 VM.Title = $"{idx}/{fileNames.Count} " + VM.Title;
         }
@@ -325,14 +323,15 @@ namespace MultiPlayer
             SpeedRatio = s.SpeedRatio;
             ZoomStateSet(s.ZoomState, true);
 
-            Settings.Update(s);
-            _commands.VM.Update(Settings, pop);
+            VM.Settings.Update(s);
+            VM.Update(VM.Settings, pop);
 
-            _commands.VM.Play();
+            VM.Play();
             if (s.MediaState != MediaState.Play)
-                _commands.VM.Pause();
+                VM.Pause();
 
-            _commands.VM.TogglePlayPauseCommand.RefreshBoundControls();
+            VM.TogglePlayPauseCommand.RefreshBoundControls();
+            VM.AdjustSizeAndLayout();
         }
 
         public void Clear()
@@ -342,7 +341,7 @@ namespace MultiPlayer
             VideoPlayerElement.Source = null;
             this.Background = Brushes.LightGray;
             MediaState = MediaState.Close;
-            _commands.VM.Clear();
+            VM.Clear();
 
             //clear window - sometimes it is not closed properly
             RecreateMediaElement(false);
@@ -356,7 +355,7 @@ namespace MultiPlayer
                 VideoPlayerElement.Play();
                 this.Background = Brushes.DimGray;
                 MediaState = MediaState.Play;
-                PositionSet(TimeSpan.FromSeconds(Settings.Position), false);
+                PositionSet(TimeSpan.FromSeconds(VM.Settings.Position), false);
             }
             else
             {
@@ -370,13 +369,13 @@ namespace MultiPlayer
             if (VideoPlayerElement.Source != null)
             {
                 _timer.Stop();
-                Settings.Position = VideoPlayerElement.Position.TotalSeconds;
+                VM.Settings.Position = VideoPlayerElement.Position.TotalSeconds;
                 VideoPlayerElement.Pause();
                 this.Background = Brushes.DarkGray;
                 MediaState = MediaState.Pause;
 
-                Settings.Update(this);
-                _commands.VM.Update(Settings, _commands.VM.IsPopWindowMode);
+                VM.Settings.Update(this);
+                VM.Update(VM.Settings, VM.IsPopWindowMode);
             }
         }
 
@@ -385,13 +384,13 @@ namespace MultiPlayer
             if (VideoPlayerElement.Source != null)
             {
                 _timer.Stop();
-                Settings.Position = 0.0;
+                VM.Settings.Position = 0.0;
                 VideoPlayerElement.Stop();
                 this.Background = Brushes.DarkGray;
                 MediaState = MediaState.Stop;
                 
-                Settings.Update(this);
-                _commands.VM.Update(Settings, _commands.VM.IsPopWindowMode);
+                VM.Settings.Update(this);
+                VM.Update(VM.Settings, VM.IsPopWindowMode);
             }
         }
 
@@ -414,7 +413,7 @@ namespace MultiPlayer
                 return;
 
             e.Handled = true;
-            _commands.VM.VolumeUpdate(e.Delta);
+            VM.VolumeUpdate(e.Delta);
         }
 
         public void FitWidth(bool adjustScroll)
@@ -594,7 +593,7 @@ namespace MultiPlayer
         {
             this.Focus();
 
-            if (!_commands.VM.IsPopWindowMode)
+            if (!VM.IsPopWindowMode)
                 _borderMain.BorderBrush = Brushes.Tan; // Brushes.DodgerBlue;
         }
 
@@ -617,7 +616,7 @@ namespace MultiPlayer
 
                 _isDragging = true;
                 DragDropSource = this;
-                DragDrop.DoDragDrop(this, Settings, System.Windows.DragDropEffects.Move|System.Windows.DragDropEffects.Copy);
+                DragDrop.DoDragDrop(this, VM.Settings, System.Windows.DragDropEffects.Move|System.Windows.DragDropEffects.Copy);
                 e.Handled = true;
             }
 
@@ -635,7 +634,7 @@ namespace MultiPlayer
                 string[] files = (string[])e.Data.GetData(System.Windows.DataFormats.FileDrop);
 
                 // handling code you have defined.
-                _commands.VM.Open(files[0]);
+                VM.Open(files[0]);
             }
             else if (e.Data.GetDataPresent(DragDropDataFormat))
             {
@@ -644,11 +643,11 @@ namespace MultiPlayer
                 OnePlayerSettings setTo = new OnePlayerSettings(this);
                 if (!string.IsNullOrWhiteSpace(setFrom.FileName) && setFrom.FileName != setTo.FileName)
                 {
-                    this.LoadSetting(setFrom, _commands.VM.IsPopWindowMode);
+                    this.LoadSetting(setFrom, VM.IsPopWindowMode);
                     //if CTRL is pressed - "copy" the conthent
                     //else - update vFrom - "exchange"
                     if (!Keyboard.IsKeyDown(Key.LeftCtrl) && !Keyboard.IsKeyDown(Key.RightCtrl))
-                        vFrom.LoadSetting(setTo, vFrom._commands.VM.IsPopWindowMode);
+                        vFrom.LoadSetting(setTo, vFrom.VM.IsPopWindowMode);
                 }
             }
             DragDropSource = null;
@@ -656,7 +655,7 @@ namespace MultiPlayer
 
         private void Open_Click(object sender, RoutedEventArgs e)
         {
-            _commands.VM.Open_Click(sender, e);
+            VM.Open_Click(sender, e);
         }
 
         private void Clear_Click(object sender, RoutedEventArgs e)
@@ -666,18 +665,18 @@ namespace MultiPlayer
 
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
-            OptionsWindow.ShowOptions(Application.Current.MainWindow, Settings, "Settings", 650);
+            OptionsWindow.ShowOptions(Application.Current.MainWindow, VM.Settings, "Settings", 650);
         }
 
         private void Maximize_Click(object sender, RoutedEventArgs e)
         {
-            _commands.VM.MaximizeToggle(hide: false);
+            VM.MaximizeToggle(hide: false);
             UpdateMaximizeButtonImage();
         }
 
         private void UpdateMaximizeButtonImage()
         {
-            bool isMaximized = _commands.VM.IsFullScreen();
+            bool isMaximized = VM.IsFullScreen();
 
             _down.Visibility = isMaximized ? Visibility.Visible : Visibility.Collapsed;
             _up.Visibility = isMaximized ? Visibility.Collapsed : Visibility.Visible;
@@ -685,7 +684,7 @@ namespace MultiPlayer
 
         private void PlayPauseToggle_Click(object sender, RoutedEventArgs e)
         {
-            _commands.VM.TogglePlayPauseState();
+            VM.TogglePlayPauseState();
         }
 
         private void Spped_Click(object sender, RoutedEventArgs e)
@@ -694,7 +693,7 @@ namespace MultiPlayer
             {
                 string parameter = menuItem.Tag as string;
                 if (int.TryParse(parameter, out int speedIndex))
-                    _commands.VM.SetSpeed(speedIndex, true);
+                    VM.SetSpeed(speedIndex, true);
             }
         }
 
@@ -704,7 +703,7 @@ namespace MultiPlayer
             {
                 string parameter = menuItem.Tag as string;
                 if (int.TryParse(parameter, out int fit))
-                    _commands.VM.SetFit(fit, true);
+                    VM.SetFit(fit, true);
             }
         }
     }

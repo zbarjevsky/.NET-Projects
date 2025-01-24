@@ -33,6 +33,8 @@ namespace MultiPlayer
         VideoPlayerUserControl _player;
         VideoCommandsUserControl _cmd;
 
+        public OnePlayerSettings Settings { get; set; } = new OnePlayerSettings();
+
         public bool IsPopWindowMode { get; private set; } = false;
 
         public RelayCommand TogglePlayPauseCommand { get; }
@@ -88,10 +90,10 @@ namespace MultiPlayer
         public void Clear()
         {
             double volume = _cmd._volume.Value;
-            _player.Settings = new OnePlayerSettings();
-            Update(_player.Settings, IsPopWindowMode);
+            Settings = new OnePlayerSettings();
+            Update(Settings, IsPopWindowMode);
             _cmd._volume.Value = volume;
-            _player.Settings.Volume = volume;
+            Settings.Volume = volume;
 
             Title = "";
             TogglePlayPauseCommand.RefreshBoundControls();
@@ -104,7 +106,7 @@ namespace MultiPlayer
 
         private bool TogglePlayPauseCommandCanExecute(object parameter)
         {
-            bool res = !string.IsNullOrWhiteSpace(_player?.Settings.FileName);
+            bool res = !string.IsNullOrWhiteSpace(Settings.FileName);
             Debug.WriteLine("*** enabled: " + res);
             return res;
         }
@@ -176,7 +178,9 @@ namespace MultiPlayer
 
         public void Open(string fileName)
         {
-            _player.Open(fileName, _player.Settings.Volume);
+            Settings.FileName = fileName;
+
+            _player.Open(Settings.FileName, Settings.Volume);
             _cmd._position.Maximum = _player.NaturalDuration;
             _cmd._position.Value = 0;
             Play();
@@ -192,7 +196,7 @@ namespace MultiPlayer
         private void MediaPlayEnded(IVideoPlayer player)
         {
             Stop();
-            switch (_player.Settings.PlayMode)
+            switch (Settings.PlayMode)
             {
                 case ePlayMode.PlayOne:
                     break;
@@ -216,8 +220,11 @@ namespace MultiPlayer
 
         public void Volume_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            if (_player != null)
-                _player.Volume = _cmd._volume.Value / 1000.0;
+            if (_player != null && _cmd != null)
+            {
+                 Settings.Volume = _cmd._volume.Value / 1000.0;
+                _player.Volume = Settings.Volume;
+            }
         }
 
         public void VolumeUpdate(int delta)
@@ -265,7 +272,8 @@ namespace MultiPlayer
             if (_player == null || _isInUpdate)
                 return;
 
-            _player.SpeedRatio = _speedRatios[speedIndex];
+            Settings.SpeedRatio = _speedRatios[speedIndex];
+            _player.SpeedRatio = Settings.SpeedRatio;
 
             if (updateComboBox)
                 _cmd._speed.SelectedIndex = speedIndex;
@@ -284,7 +292,8 @@ namespace MultiPlayer
             if (_player == null || _isInUpdate)
                 return;
 
-            _player.ZoomState = (eZoomState)fitIndex;
+            Settings.ZoomState = (eZoomState)fitIndex;
+            _player.ZoomState = Settings.ZoomState;
 
             if (updateComboBox)
                 _cmd._fit.SelectedIndex = fitIndex;
@@ -318,8 +327,9 @@ namespace MultiPlayer
             if (resume)
                 Pause();
 
-            _cmd._position.Value = e.NewValue;
-            _player.PositionSet(TimeSpan.FromSeconds(_cmd._position.Value), false);
+            Settings.Position = e.NewValue;
+            _cmd._position.Value = Settings.Position;
+            _player.PositionSet(TimeSpan.FromSeconds(Settings.Position), false);
 
             _cmd._timeLbl.Text = SecondsToString(_player.Position.TotalSeconds);
 
@@ -342,7 +352,8 @@ namespace MultiPlayer
             if (_player == null || _isInUpdate)
                 return;
 
-            _player.PositionSet(TimeSpan.FromSeconds(_cmd._position.Value), false);
+            Settings.Position = _cmd._position.Value;
+            _player.PositionSet(TimeSpan.FromSeconds(Settings.Position), false);
 
             if (_resume)
                 Play();
@@ -487,13 +498,13 @@ namespace MultiPlayer
         public void PrevFrame_Click(object sender, RoutedEventArgs e)
         {
             _cmd._position.Value -= 0.1;
-            _player.Settings.Position = _cmd._position.Value;
+            Settings.Position = _cmd._position.Value;
         }
 
         public void NextFrame_Click(object sender, RoutedEventArgs e)
         {
             _cmd._position.Value += 0.1;
-            _player.Settings.Position = _cmd._position.Value;
+            Settings.Position = _cmd._position.Value;
         }
 
         public void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -501,12 +512,12 @@ namespace MultiPlayer
             AdjustSizeAndLayout();
         }
 
-        private void AdjustSizeAndLayout()
+        public void AdjustSizeAndLayout()
         {
             _cmd._scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
             double windowWidth = _cmd.ActualWidth;
-            if (windowWidth < 300)
-                windowWidth = 1920;
+            if (windowWidth < 30)
+                windowWidth = 620;
 
             if (windowWidth > _cmd._stackButtons.ActualWidth)
                 _cmd._wrapPanel.Width = windowWidth;

@@ -69,7 +69,7 @@
                         <SolidColorBrush Color="Black" Opacity="0.3" />
                     </Border.Background>
                     <TextBox Text="{Binding Title, FallbackValue='File Name'}" IsReadOnly="True" 
-                             Foreground="AliceBlue" Background="{Binding Background, ElementName=_borderTitle}" 
+                             Foreground="AliceBlue" Background="Transparent" 
                              BorderBrush="Transparent" BorderThickness="0"
                                Margin="6,3">
                         <!--<TextBox.Background>
