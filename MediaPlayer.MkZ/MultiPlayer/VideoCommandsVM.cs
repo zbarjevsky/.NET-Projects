@@ -99,8 +99,8 @@ namespace MultiPlayer
 
         private void OpenFileCommandExecute(object obj)
         {
-            string fileName = _player.FileName;
-            string dir = System.IO.Path.GetDirectoryName(_player.FileName);
+            string fileName = Settings.FileName;
+            string dir = System.IO.Path.GetDirectoryName(Settings.FileName);
             OpenFileDialog ofd = new OpenFileDialog();
             if (Directory.Exists(dir))
             {

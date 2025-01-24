@@ -79,7 +79,7 @@ namespace MultiPlayer
             protected set { _mediaState = value; OnPropertyChanged(); }
         }
 
-        public string FileName { get; private set; }
+        public string FileName => VM.Settings.FileName;
 
         public bool IsFlipHorizontally
         {
@@ -195,7 +195,7 @@ namespace MultiPlayer
             Volume = volume;
             MediaState = player.MediaState;
             VM.Title = player.VM.Title;
-            FileName = player.FileName;
+            VM.Settings.FileName = player.FileName;
             IsFlipHorizontally = player.IsFlipHorizontally;
             Zoom = player.Zoom;
             ZoomStateSet(player.ZoomStateGet(), true);
@@ -304,7 +304,7 @@ namespace MultiPlayer
 
         public void Open(string fileName, double volume = 0)
         {
-            FileName = fileName;
+            VM.Settings.FileName = fileName;
             VideoPlayerElement.Source = string.IsNullOrEmpty(fileName) ? null : new Uri(fileName);
             Volume = volume;
             MediaState = MediaState.Manual;
@@ -337,7 +337,7 @@ namespace MultiPlayer
         public void Clear()
         {
             Stop();
-            FileName = "";
+            VM.Settings.FileName = "";
             VideoPlayerElement.Source = null;
             this.Background = Brushes.LightGray;
             MediaState = MediaState.Close;
