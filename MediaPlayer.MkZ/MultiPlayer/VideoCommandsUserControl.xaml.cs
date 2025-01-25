@@ -108,5 +108,11 @@ namespace MultiPlayer
         {
             VM.UserControl_SizeChanged(sender, e);
         }
+
+        private void Replay_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is ToggleButton btn)
+                VM.Replay(btn.IsChecked);
+        }
     }
 }

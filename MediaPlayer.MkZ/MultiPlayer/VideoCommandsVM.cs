@@ -103,6 +103,8 @@ namespace MultiPlayer
             _cmd._volume.Value = volume;
             Settings.Volume = volume;
 
+            IsReplayChecked = false;
+
             Title = "";
             TogglePlayPauseCommand.RefreshBoundControls();
         }
@@ -135,7 +137,6 @@ namespace MultiPlayer
         private bool TogglePlayPauseCommandCanExecute(object parameter)
         {
             bool res = !string.IsNullOrWhiteSpace(Settings.FileName);
-            Debug.WriteLine("*** enabled: " + res);
             return res;
         }
 
@@ -161,6 +162,7 @@ namespace MultiPlayer
             _cmd._volume.Value = s.Volume * 1000.0;
             _cmd._position.Maximum = s.Duration;
             _cmd._position.Value = s.Position;
+
             _cmd._speed.SelectedIndex = SpeedRatio(s.SpeedRatio);
 
             _cmd._fit.SelectedIndex = (int)s.ZoomState;
@@ -196,6 +198,7 @@ namespace MultiPlayer
             _player.Open(Settings.FileName, Settings.Volume);
             _cmd._position.Maximum = _player.NaturalDuration;
             _cmd._position.Value = 0;
+            IsReplayChecked = false;
             Play();
 
             CommandManager.InvalidateRequerySuggested();
@@ -559,6 +562,38 @@ namespace MultiPlayer
             {
                 _cmd._docSliders.Width = width - 4;
             }
+        }
+
+        private bool _isReplayChecked = false;
+        public bool IsReplayChecked
+        {
+            get { return _isReplayChecked; }
+            set { SetProperty(ref _isReplayChecked, value); }
+        }
+
+        private double _replayEndPosition = 10;
+
+        public void Replay(bool? isChecked)
+        {
+            //Debug.WriteLine("### Replay: " + (isChecked == true));
+            //Debug.WriteLine("### Replay val: IsReplayChecked " + IsReplayChecked);
+            if (isChecked == true)
+            {
+                _replayEndPosition = Settings.Position;
+                ReplaySetStart();
+            }
+        }
+
+        private void ReplaySetStart()
+        {
+            _cmd._position.Value = _replayEndPosition - 10.0;
+            Settings.Position = _cmd._position.Value;
+        }
+
+        public void ReplayCheckAndUpdate()
+        {
+            if (IsReplayChecked && _cmd._position.Value > _replayEndPosition)
+                ReplaySetStart();
         }
     }
 }

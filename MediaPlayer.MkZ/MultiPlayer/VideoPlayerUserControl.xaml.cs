@@ -173,6 +173,7 @@ namespace MultiPlayer
             _timer.Stop();
             VM.Settings.Update(this);
             VM.Update(VM.Settings, VM.IsPopWindowMode);
+            VM.ReplayCheckAndUpdate();
             _timer.Start();
         }
 

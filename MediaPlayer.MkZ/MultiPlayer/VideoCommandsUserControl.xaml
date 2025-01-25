@@ -41,6 +41,11 @@
                         <ComboBoxItem Content="FitWindow" />
                         <ComboBoxItem Content="FitHeight" />
                     </ComboBox>
+                    <ToggleButton ToolTip="Replay Last N seconds" Margin="2" Padding="2" 
+                                  Click="Replay_Click" 
+                                  IsChecked="{Binding IsReplayChecked, Mode=TwoWay}">
+                        <Label FontFamily="Segoe MDL2 Assets" Content="&#xE8EE;" FontSize="16" />
+                    </ToggleButton>
                     <RepeatButton ToolTip="Back 0.1 sec" Margin="2" Padding="2" Click="PrevFrame_Click">
                         <Label FontFamily="Segoe MDL2 Assets" Content="&#xE8A0;" FontSize="16" />
                     </RepeatButton>
@@ -64,16 +69,17 @@
                             </Border>
                         </Popup>
                         <Slider x:Name="_volume" Margin="2,10" Width="60" DockPanel.Dock="Right" 
-                        Value="150" Maximum="1000" Minimum="0" IsMoveToPointEnabled="True"
-                        ValueChanged="Volume_ValueChanged"/>
+                                Value="150" Maximum="1000" Minimum="0" IsMoveToPointEnabled="True"
+                                ValueChanged="Volume_ValueChanged"/>
                         <Slider x:Name="_position" Margin="2,4"
-                        Value="33" Maximum="300" Minimum="0" TickFrequency="60" TickPlacement="TopLeft" 
-                        IsMoveToPointEnabled="True" 
-                        ValueChanged="Pos_ValueChanged"
-                        Thumb.DragStarted="Pos_DragStarted"
-                        Thumb.DragCompleted="Pos_DragCompleted"
-                        MouseMove="Pos_MouseMove" 
-                        MouseLeave="Pos_MouseLeave" />
+                                Value="33" Maximum="300" Minimum="0" TickFrequency="60" TickPlacement="TopLeft" 
+                                SmallChange="10" LargeChange="60"
+                                IsMoveToPointEnabled="True" 
+                                ValueChanged="Pos_ValueChanged"
+                                Thumb.DragStarted="Pos_DragStarted"
+                                Thumb.DragCompleted="Pos_DragCompleted"
+                                MouseMove="Pos_MouseMove" 
+                                MouseLeave="Pos_MouseLeave" />
                     </DockPanel>
                 </DockPanel>
             </WrapPanel>
