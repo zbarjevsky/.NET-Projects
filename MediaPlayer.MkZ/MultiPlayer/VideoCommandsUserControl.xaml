@@ -41,18 +41,11 @@
                         <ComboBoxItem Content="FitWindow" />
                         <ComboBoxItem Content="FitHeight" />
                     </ComboBox>
-                    <ComboBox x:Name="_comboReplayTime" SelectedIndex="{Binding Replay.ReplayDurationIndex, FallbackValue=4}" Margin="2" Padding="8" >
-                        <ComboBoxItem Content="1"  Tag="1" />
-                        <ComboBoxItem Content="3"  Tag="3"/>
-                        <ComboBoxItem Content="5"  Tag="5"/>
-                        <ComboBoxItem Content="7"  Tag="7"/>
-                        <ComboBoxItem Content="10" Tag="10" />
-                        <ComboBoxItem Content="15" Tag="15" />
-                        <ComboBoxItem Content="30" Tag="30" />
-                        <ComboBoxItem Content="60" Tag="60" />
-                    </ComboBox>
-                    <Button ToolTip="Set Replay End Position" Margin="2" Padding="0" Click="ReplaySetEnd_Click">
-                        <Label FontFamily="Segoe MDL2 Assets" Content="&#xE8B5;" FontSize="16" />
+                    <Button ToolTip="Set Replay Start(A) Position" Margin="2" Padding="0" Click="ReplaySetA_Click">
+                        <Label Content="A" FontSize="16" FontWeight="Normal" />
+                    </Button>
+                    <Button ToolTip="Set Replay End(B) Position" Margin="2" Padding="0" Click="ReplaySetB_Click">
+                        <Label Content="B" FontSize="16" FontWeight="Normal" />
                     </Button>
                     <ToggleButton ToolTip="{Binding Replay.ReplayToolTip, FallbackValue='Replay Last N seconds'}" Margin="2" Padding="2" 
                                   Click="ReplayToggle_Click" 

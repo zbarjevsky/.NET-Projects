@@ -115,10 +115,14 @@ namespace MultiPlayer
                 VM.Replay.ReplayToggle(btn.IsChecked == true);
         }
 
-        private void ReplaySetEnd_Click(object sender, RoutedEventArgs e)
+        private void ReplaySetA_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is System.Windows.Controls.Button btn)
-                VM.Replay.ReplaySetEndPosition();
+            VM.Replay.SetA();
+        }
+
+        private void ReplaySetB_Click(object sender, RoutedEventArgs e)
+        {
+            VM.Replay.SetB();
         }
     }
 }

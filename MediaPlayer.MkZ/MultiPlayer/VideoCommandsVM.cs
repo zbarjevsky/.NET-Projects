@@ -175,7 +175,7 @@ namespace MultiPlayer
 
             NotifyPropertyChanged(nameof(SelectedFitIndex));
 
-            Replay.UpdateReplay(s.ReplayEndTime, s.ReplayDuration);
+            Replay.UpdateReplay(s.ReplayPosA, s.ReplayPosB);
 
             AdjustMarginsForVisibleScrollBars();
             AdjustSizeAndLayout();
@@ -581,46 +581,24 @@ namespace MultiPlayer
                 set { SetProperty(ref _isReplayChecked, value); }
             }
 
-            private int _replayDurationIndex = 4;
-            public int ReplayDurationIndex //for ComboBox
-            {
-                get { return _replayDurationIndex; }
-                set 
-                { 
-                    SetProperty(ref _replayDurationIndex, value);
-                    VM.Settings.ReplayDuration = GetReplayDuration(_replayDurationIndex);
-                    NotifyPropertyChanged(nameof(ReplayToolTip)); }
-            }
-
             public string ReplayToolTip
             {
                 get
                 {
-                    return $"Replay {SecondsToString(VM.Settings.ReplayDuration)}, End: {SecondsToString(VM.Settings.ReplayEndTime)}";
-                }
-            }
-
-            private double ReplayEndPosition 
-            {  
-                get => VM.Settings.ReplayEndTime;
-                set
-                {
-                    VM.Settings.ReplayEndTime = value;
-                    NotifyPropertyChanged();
-                    NotifyPropertyChanged(nameof(ReplayToolTip));
+                    return $"Replay from: {SecondsToString(VM.Settings.ReplayPosA)} to: {SecondsToString(VM.Settings.ReplayPosB)}";
                 }
             }
 
             public ReplayLoop(VideoCommandsVM vm)
             {
                 VM = vm;
-                UpdateReplay(VM.Settings.ReplayEndTime, VM.Settings.ReplayDuration);
+                UpdateReplay(VM.Settings.ReplayPosA, VM.Settings.ReplayPosB);
             }
 
-            public void UpdateReplay(double end, double duration)
+            public void UpdateReplay(double a, double b)
             {
-                ReplayEndPosition = end;
-                ReplayDurationIndex = GetReplayDurationIndex(duration);
+                VM.Settings.ReplayPosA = a;
+                VM.Settings.ReplayPosB = b;
             }
 
             public void ReplayToggle(bool isChecked)
@@ -629,37 +607,51 @@ namespace MultiPlayer
                     ReplaySetStart();
             }
 
-            public void ReplaySetEndPosition()
+            public void SetA()
             {
-                UpdateReplay(VM.Settings.Position, GetReplayDuration(ReplayDurationIndex));
-            }
-
-            static double[] durations = { 1.0, 3.0, 5.0, 7.0, 10.0, 15.0, 30.0, 60.0 };
-            private static double GetReplayDuration(int idx)
-            {
-                return durations[idx];
-            }
-
-            private static int GetReplayDurationIndex(double duration)
-            {
-                for (int i = 0; i < durations.Length; i++)
+                double delta = VM.Settings.ReplayPosB - VM.Settings.ReplayPosA;
+                if (delta < 1.0) delta = 10.0;
+                
+                if (VM.Settings.Position < VM.Settings.ReplayPosB)
                 {
-                    if (durations[i] == duration)
-                        return i;
+                    VM.Settings.ReplayPosA = VM.Settings.Position;
                 }
-                return 4;
+                else //move B to A + delta
+                {
+                    VM.Settings.ReplayPosA = VM.Settings.Position;
+                    VM.Settings.ReplayPosB = VM.Settings.Position + delta;
+                }
+
+                NotifyPropertyChanged(nameof(ReplayToolTip));
+            }
+
+            public void SetB()
+            {
+                double delta = VM.Settings.ReplayPosB - VM.Settings.ReplayPosA;
+                if (delta < 1.0) delta = 10.0;
+
+                if (VM.Settings.Position > VM.Settings.ReplayPosA)
+                {
+                    VM.Settings.ReplayPosB = VM.Settings.Position;
+                }
+                else
+                {
+                    VM.Settings.ReplayPosB = VM.Settings.Position;
+                    VM.Settings.ReplayPosA = VM.Settings.Position - delta;
+                }
+
+                NotifyPropertyChanged(nameof(ReplayToolTip));
             }
 
             private void ReplaySetStart()
             {
-                double replayDuration = GetReplayDuration(ReplayDurationIndex);
-                VM._cmd._position.Value = ReplayEndPosition - replayDuration;
+                VM._cmd._position.Value = VM.Settings.ReplayPosA;
                 VM.Settings.Position = VM._cmd._position.Value;
             }
 
             public void ReplayCheckAndUpdate()
             {
-                if (IsReplayChecked && VM._cmd._position.Value > ReplayEndPosition)
+                if (IsReplayChecked && VM._cmd._position.Value > VM.Settings.ReplayPosB)
                     ReplaySetStart();
             }
         }
