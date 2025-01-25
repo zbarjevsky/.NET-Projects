@@ -623,12 +623,15 @@ namespace MultiPlayer
                 ReplayDurationIndex = GetReplayDurationIndex(duration);
             }
 
-            public void ReplaySet(bool? isChecked)
+            public void ReplayToggle(bool isChecked)
             {
-                if (isChecked == true)
-                {
-                    UpdateReplay(VM.Settings.Position, GetReplayDuration(ReplayDurationIndex));
-                }
+                if (isChecked) 
+                    ReplaySetStart();
+            }
+
+            public void ReplaySetEndPosition()
+            {
+                UpdateReplay(VM.Settings.Position, GetReplayDuration(ReplayDurationIndex));
             }
 
             static double[] durations = { 1.0, 3.0, 5.0, 7.0, 10.0, 15.0, 30.0, 60.0 };
