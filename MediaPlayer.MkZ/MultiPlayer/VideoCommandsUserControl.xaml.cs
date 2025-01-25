@@ -112,7 +112,7 @@ namespace MultiPlayer
         private void Replay_Click(object sender, RoutedEventArgs e)
         {
             if (sender is ToggleButton btn)
-                VM.Replay(btn.IsChecked);
+                VM.Replay.ReplaySet(btn.IsChecked);
         }
     }
 }

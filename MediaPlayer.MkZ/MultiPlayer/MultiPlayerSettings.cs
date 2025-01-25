@@ -67,6 +67,8 @@ namespace MultiPlayer
         public MediaState MediaState { get; set; } = MediaState.Play;
         public double Volume { get; set; } = 0.0;
         public double SpeedRatio { get; set; } = 1.0;
+        public double ReplayEndTime { get; set; } = 10.0;
+        public double ReplayDuration { get; set; } = 10.0;
 
         public string[] SupportedImageExtensions { get; set; } = new string[0];
         public string[] SupportedAudioExtensions { get; set; } = new string[0];
@@ -96,6 +98,9 @@ namespace MultiPlayer
             MediaState = s.MediaState;
             Volume = s.Volume;
             SpeedRatio = s.SpeedRatio;
+
+            ReplayEndTime = s.ReplayEndTime;    
+            ReplayDuration = s.ReplayDuration;
         }
 
         public void Update(VideoPlayerUserControl v, double duration = 0.0)
@@ -112,6 +117,9 @@ namespace MultiPlayer
             MediaState = v.MediaState;
             Volume = v.Volume;
             SpeedRatio = v.SpeedRatio;
+
+            ReplayEndTime = v.VM.Settings.ReplayEndTime;
+            ReplayDuration = v.VM.Settings.ReplayDuration;
 
             EnsureHasValues();
         }

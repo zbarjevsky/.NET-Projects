@@ -44,6 +44,8 @@ namespace MultiPlayer
 
         public VideoCommandsVM()
         {
+            Replay = new ReplayLoop(this);
+
             TogglePlayPauseCommand = new RelayCommand(TogglePlayPauseCommandExecute, TogglePlayPauseCommandCanExecute);
             OpenFileCommand = new RelayCommand(OpenFileCommandExecute);
             PrevFileCommand = new RelayCommand(PrevFileCommandExecute, PrevFileCommandCanExecute);
@@ -103,7 +105,7 @@ namespace MultiPlayer
             _cmd._volume.Value = volume;
             Settings.Volume = volume;
 
-            IsReplayChecked = false;
+            Replay.IsReplayChecked = false;
 
             Title = "";
             TogglePlayPauseCommand.RefreshBoundControls();
@@ -173,6 +175,8 @@ namespace MultiPlayer
 
             NotifyPropertyChanged(nameof(SelectedFitIndex));
 
+            Replay.UpdateReplay(s.ReplayEndTime, s.ReplayDuration);
+
             AdjustMarginsForVisibleScrollBars();
             AdjustSizeAndLayout();
 
@@ -198,7 +202,7 @@ namespace MultiPlayer
             _player.Open(Settings.FileName, Settings.Volume);
             _cmd._position.Maximum = _player.NaturalDuration;
             _cmd._position.Value = 0;
-            IsReplayChecked = false;
+            Replay.IsReplayChecked = false;
             Play();
 
             CommandManager.InvalidateRequerySuggested();
@@ -354,7 +358,7 @@ namespace MultiPlayer
             e.Handled = true;
         }
 
-        private string SecondsToString(double seconds)
+        public static string SecondsToString(double seconds)
         {
             if (seconds < 3600)
                 return TimeSpan.FromSeconds(seconds).ToString("m':'ss'.'f");
@@ -564,36 +568,97 @@ namespace MultiPlayer
             }
         }
 
-        private bool _isReplayChecked = false;
-        public bool IsReplayChecked
-        {
-            get { return _isReplayChecked; }
-            set { SetProperty(ref _isReplayChecked, value); }
-        }
+        public ReplayLoop Replay { get; }
 
-        private double _replayEndPosition = 10;
-
-        public void Replay(bool? isChecked)
+        public class ReplayLoop : NotifyPropertyChangedImpl
         {
-            //Debug.WriteLine("### Replay: " + (isChecked == true));
-            //Debug.WriteLine("### Replay val: IsReplayChecked " + IsReplayChecked);
-            if (isChecked == true)
+            VideoCommandsVM VM { get; }
+
+            private bool _isReplayChecked = false;
+            public bool IsReplayChecked
             {
-                _replayEndPosition = Settings.Position;
-                ReplaySetStart();
+                get { return _isReplayChecked; }
+                set { SetProperty(ref _isReplayChecked, value); }
             }
-        }
 
-        private void ReplaySetStart()
-        {
-            _cmd._position.Value = _replayEndPosition - 10.0;
-            Settings.Position = _cmd._position.Value;
-        }
+            private int _replayDurationIndex = 4;
+            public int ReplayDurationIndex //for ComboBox
+            {
+                get { return _replayDurationIndex; }
+                set 
+                { 
+                    SetProperty(ref _replayDurationIndex, value);
+                    VM.Settings.ReplayDuration = GetReplayDuration(_replayDurationIndex);
+                    NotifyPropertyChanged(nameof(ReplayToolTip)); }
+            }
 
-        public void ReplayCheckAndUpdate()
-        {
-            if (IsReplayChecked && _cmd._position.Value > _replayEndPosition)
-                ReplaySetStart();
+            public string ReplayToolTip
+            {
+                get
+                {
+                    return $"Replay {SecondsToString(VM.Settings.ReplayDuration)}, End: {SecondsToString(VM.Settings.ReplayEndTime)}";
+                }
+            }
+
+            private double ReplayEndPosition 
+            {  
+                get => VM.Settings.ReplayEndTime;
+                set
+                {
+                    VM.Settings.ReplayEndTime = value;
+                    NotifyPropertyChanged();
+                    NotifyPropertyChanged(nameof(ReplayToolTip));
+                }
+            }
+
+            public ReplayLoop(VideoCommandsVM vm)
+            {
+                VM = vm;
+                UpdateReplay(VM.Settings.ReplayEndTime, VM.Settings.ReplayDuration);
+            }
+
+            public void UpdateReplay(double end, double duration)
+            {
+                ReplayEndPosition = end;
+                ReplayDurationIndex = GetReplayDurationIndex(duration);
+            }
+
+            public void ReplaySet(bool? isChecked)
+            {
+                if (isChecked == true)
+                {
+                    UpdateReplay(VM.Settings.Position, GetReplayDuration(ReplayDurationIndex));
+                }
+            }
+
+            static double[] durations = { 1.0, 3.0, 5.0, 7.0, 10.0, 15.0, 30.0, 60.0 };
+            private static double GetReplayDuration(int idx)
+            {
+                return durations[idx];
+            }
+
+            private static int GetReplayDurationIndex(double duration)
+            {
+                for (int i = 0; i < durations.Length; i++)
+                {
+                    if (durations[i] == duration)
+                        return i;
+                }
+                return 4;
+            }
+
+            private void ReplaySetStart()
+            {
+                double replayDuration = GetReplayDuration(ReplayDurationIndex);
+                VM._cmd._position.Value = ReplayEndPosition - replayDuration;
+                VM.Settings.Position = VM._cmd._position.Value;
+            }
+
+            public void ReplayCheckAndUpdate()
+            {
+                if (IsReplayChecked && VM._cmd._position.Value > ReplayEndPosition)
+                    ReplaySetStart();
+            }
         }
     }
 }
