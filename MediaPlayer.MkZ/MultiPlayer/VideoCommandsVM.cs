@@ -202,7 +202,9 @@ namespace MultiPlayer
             _player.Open(Settings.FileName, Settings.Volume);
             _cmd._position.Maximum = _player.NaturalDuration;
             _cmd._position.Value = 0;
-            Replay.IsReplayChecked = false;
+            
+            Replay.Clear();
+            
             Play();
 
             CommandManager.InvalidateRequerySuggested();
@@ -598,6 +600,11 @@ namespace MultiPlayer
             public ReplayLoop(VideoCommandsVM vm)
             {
                 VM = vm;
+            }
+
+            public void Clear()
+            {
+                UpdateReplay(false, 0, 0);
             }
 
             public void UpdateReplay(bool on, double a, double b)
