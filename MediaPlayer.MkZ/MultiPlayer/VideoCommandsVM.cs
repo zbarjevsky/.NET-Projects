@@ -64,6 +64,16 @@ namespace MultiPlayer
             set { SetProperty(ref _playPauseIconText, value); }
         }
 
+        public int SelectedSpeedIndex
+        {
+            get { return _cmd._speed.SelectedIndex; }
+        }
+
+        public int SelectedFitIndex
+        {
+            get { return (int)Settings.ZoomState; }
+        }
+
         public void Play()
         {
             _player.Play();
@@ -158,6 +168,8 @@ namespace MultiPlayer
                 _player.Zoom = s.Zoom;
 
             _cmd._timeLbl.Text = SecondsToString(s.Position);
+
+            NotifyPropertyChanged(nameof(SelectedFitIndex));
 
             AdjustMarginsForVisibleScrollBars();
             AdjustSizeAndLayout();
@@ -273,6 +285,8 @@ namespace MultiPlayer
 
             if (updateComboBox)
                 _cmd._speed.SelectedIndex = speedIndex;
+
+            NotifyPropertyChanged(nameof(SelectedSpeedIndex));
         }
 
         public void Fit_Selected(object sender, SelectionChangedEventArgs e)
@@ -293,6 +307,8 @@ namespace MultiPlayer
 
             if (updateComboBox)
                 _cmd._fit.SelectedIndex = fitIndex;
+
+            NotifyPropertyChanged(nameof(SelectedFitIndex));
 
             AdjustMarginsForVisibleScrollBars();
         }
