@@ -175,7 +175,7 @@ namespace MultiPlayer
 
             NotifyPropertyChanged(nameof(SelectedFitIndex));
 
-            Replay.UpdateReplay(s.ReplayPosA, s.ReplayPosB);
+            Replay.UpdateReplay(s.ReplayIsOn, s.ReplayPosA, s.ReplayPosB);
 
             AdjustMarginsForVisibleScrollBars();
             AdjustSizeAndLayout();
@@ -566,25 +566,31 @@ namespace MultiPlayer
             {
                 _cmd._docSliders.Width = width - 4;
             }
+
+            Replay.UpdateTicks();
         }
 
         public ReplayLoop Replay { get; }
 
+        /// <summary>
+        /// Replay in loop between two points A-B
+        /// </summary>
         public class ReplayLoop : NotifyPropertyChangedImpl
         {
             VideoCommandsVM VM { get; }
 
-            private bool _isReplayChecked = false;
             public bool IsReplayChecked
             {
-                get { return _isReplayChecked; }
-                set { SetProperty(ref _isReplayChecked, value); }
+                get { return VM.Settings.ReplayIsOn; }
+                set { VM.Settings.ReplayIsOn = value; NotifyPropertyChanged(); }
             }
 
             public string ReplayToolTip
             {
                 get
                 {
+                    if (VM.Settings.ReplayPosA <= 0 || VM.Settings.ReplayPosB <= 0)
+                        return "Positions A-B not set";
                     return $"Replay from: {SecondsToString(VM.Settings.ReplayPosA)} to: {SecondsToString(VM.Settings.ReplayPosB)}";
                 }
             }
@@ -592,19 +598,24 @@ namespace MultiPlayer
             public ReplayLoop(VideoCommandsVM vm)
             {
                 VM = vm;
-                UpdateReplay(VM.Settings.ReplayPosA, VM.Settings.ReplayPosB);
             }
 
-            public void UpdateReplay(double a, double b)
+            public void UpdateReplay(bool on, double a, double b)
             {
+                VM.Settings.ReplayIsOn = on;
                 VM.Settings.ReplayPosA = a;
                 VM.Settings.ReplayPosB = b;
+
+                UpdateTicks();
+                NotifyPropertyChanged(nameof(IsReplayChecked));
+                NotifyPropertyChanged(nameof(ReplayToolTip));
             }
 
             public void ReplayToggle(bool isChecked)
             {
-                if (isChecked) 
+                if (isChecked && (VM.Settings.Position < VM.Settings.ReplayPosA || VM.Settings.Position > VM.Settings.ReplayPosB)) 
                     ReplaySetStart();
+                UpdateTicks();
             }
 
             public void SetA()
@@ -622,6 +633,7 @@ namespace MultiPlayer
                     VM.Settings.ReplayPosB = VM.Settings.Position + delta;
                 }
 
+                UpdateTicks();
                 NotifyPropertyChanged(nameof(ReplayToolTip));
             }
 
@@ -640,7 +652,30 @@ namespace MultiPlayer
                     VM.Settings.ReplayPosA = VM.Settings.Position - delta;
                 }
 
+                UpdateTicks();
                 NotifyPropertyChanged(nameof(ReplayToolTip));
+            }
+
+            //set ticks positions and color if active
+            public void UpdateTicks()
+            {
+                VM._cmd._lineA.X1 = VM._cmd._lineA.X2 = XfromTime(VM.Settings.ReplayPosA);
+                VM._cmd._lineB.X1 = VM._cmd._lineB.X2 = XfromTime(VM.Settings.ReplayPosB);
+
+                VM._cmd._lineA.Stroke = IsReplayChecked ? Brushes.Lime : Brushes.AliceBlue;
+                VM._cmd._lineB.Stroke = IsReplayChecked ? Brushes.Lime : Brushes.AliceBlue;
+            }
+
+            private double XfromTime(double time)
+            {
+                double width = VM._cmd._position.ActualWidth - 12;
+                double seconds = VM._cmd._position.Maximum;
+
+                double x = 8 + time * width / seconds;
+                
+                if (time > 0)
+                    return x;
+                return -1000;
             }
 
             private void ReplaySetStart()

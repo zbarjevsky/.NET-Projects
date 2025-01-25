@@ -69,6 +69,7 @@ namespace MultiPlayer
         public double SpeedRatio { get; set; } = 1.0;
         public double ReplayPosA { get; set; } = 0.0;
         public double ReplayPosB { get; set; } = 0.0;
+        public bool ReplayIsOn {  get; set; } = false;
 
         public string[] SupportedImageExtensions { get; set; } = new string[0];
         public string[] SupportedAudioExtensions { get; set; } = new string[0];
@@ -99,6 +100,7 @@ namespace MultiPlayer
             Volume = s.Volume;
             SpeedRatio = s.SpeedRatio;
 
+            ReplayIsOn = s.ReplayIsOn;
             ReplayPosA = s.ReplayPosA;    
             ReplayPosB = s.ReplayPosB;
         }
@@ -118,6 +120,7 @@ namespace MultiPlayer
             Volume = v.Volume;
             SpeedRatio = v.SpeedRatio;
 
+            ReplayIsOn = v.VM.Settings.ReplayIsOn;
             ReplayPosA = v.VM.Settings.ReplayPosA;
             ReplayPosB = v.VM.Settings.ReplayPosB;
 
