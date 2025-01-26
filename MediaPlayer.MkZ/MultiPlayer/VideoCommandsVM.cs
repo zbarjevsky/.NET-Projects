@@ -452,7 +452,10 @@ namespace MultiPlayer
 
             string dir = System.IO.Path.GetDirectoryName(fileName);
 
-            List<string> fileNames = System.IO.Directory.EnumerateFiles(dir).ToList();
+            List<string> fileNames = System.IO.Directory.EnumerateFiles(dir, "*.*", SearchOption.TopDirectoryOnly)
+                .Where(
+                    file => Settings.SupportedVideoExtensions.Contains(Path.GetExtension(file).ToLower()) || 
+                            Settings.SupportedAudioExtensions.Contains(Path.GetExtension(file).ToLower())).ToList();
             fileNames.Sort();
             idx = fileNames.IndexOf(fileName);
 
