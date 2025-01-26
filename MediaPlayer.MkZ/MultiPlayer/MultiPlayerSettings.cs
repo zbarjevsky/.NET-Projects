@@ -56,6 +56,33 @@ namespace MultiPlayer
     }
 
     [Serializable]
+    public class RecentFile
+    {
+        public string FileName { get; set; } = string.Empty;
+
+        [XmlAttribute]
+        public double Position { get; set; } = 0.0;
+        [XmlAttribute]
+        public double ReplayPosA { get; set; } = 0.0;
+        [XmlAttribute]
+        public double ReplayPosB { get; set; } = 0.0;
+
+        public void Update(OnePlayerSettings settings)
+        {
+            FileName = Path.GetFileName(settings.FileName);
+
+            Position = Math.Round(settings.Position, 3);
+            ReplayPosA = Math.Round(settings.ReplayPosA, 1);
+            ReplayPosB = Math.Round(settings.ReplayPosB, 1);
+        }
+
+        public override string ToString()
+        {
+            return $"RecentFile: Pos: {Position}, Name: {FileName}";
+        }
+    }
+
+    [Serializable]
     public class OnePlayerSettings
     {
         public string FileName { get; set; } = string.Empty;
@@ -158,6 +185,8 @@ namespace MultiPlayer
 
         public List<OnePlayerSettings> PlayerSettings { get; set; }
 
+        public List<RecentFile> RecentFiles { get; set; }
+
         public MultiPlayerSettings() 
         {
             var assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
@@ -216,12 +245,16 @@ namespace MultiPlayer
             this.RowsSizes = appConfig.RowsSizes;
             this.ColsSizes = appConfig.ColsSizes;
             this.PlayerSettings = appConfig.PlayerSettings;
+            this.RecentFiles = appConfig.RecentFiles;
         }
 
         private void EnsureHasValues()
         {
             if (PlayerSettings == null)
                 PlayerSettings = new List<OnePlayerSettings>();
+
+            if (RecentFiles == null)
+                RecentFiles = new List<RecentFile>();
 
             foreach (OnePlayerSettings item in PlayerSettings)
             {
@@ -234,7 +267,10 @@ namespace MultiPlayer
             this.PlayerSettings = new List<OnePlayerSettings>();
             foreach(VideoPlayerUserControl v in videos)
             {
-                this.PlayerSettings.Add(new OnePlayerSettings(v));
+                OnePlayerSettings s = new OnePlayerSettings(v);
+                RecentFile recentFile = MainWindow.FindOrCreateRecentFile(s.FileName);
+                recentFile.Update(s);
+                this.PlayerSettings.Add(s);
             }
         }
     }

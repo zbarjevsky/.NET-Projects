@@ -385,7 +385,6 @@ namespace MultiPlayer
             if (VideoPlayerElement.Source != null)
             {
                 _timer.Stop();
-                VM.Settings.Position = 0.0;
                 VideoPlayerElement.Stop();
                 this.Background = Brushes.DarkGray;
                 MediaState = MediaState.Stop;

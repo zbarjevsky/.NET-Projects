@@ -2,6 +2,7 @@
 using MkZ.Tools;
 using MkZ.WPF;
 using MkZ.WPF.PropertyGrid;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
@@ -16,6 +17,8 @@ namespace MultiPlayer
     {
         MultiPlayerSettings _settings = new MultiPlayerSettings();
         List<VideoPlayerUserControl> _videos = new List<VideoPlayerUserControl>();
+
+        public static Dictionary<string, RecentFile> RecentFiles { get; } = new Dictionary<string, RecentFile>();
 
         public MainWindow()
         {
@@ -36,11 +39,7 @@ namespace MultiPlayer
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            SplittersSave(_gridMain.RowDefinitions, _gridMain.ColumnDefinitions);
-
-            _settings.Update(_videos);
-            if (_settings.HasData())
-                _settings.Save(_settings.FileName);
+            SaveSettings(_settings.FileName);
             VideoCommandsVM.Exit();    
         }
 
@@ -59,6 +58,10 @@ namespace MultiPlayer
         private void LoadSettings(string fileName)
         {
             _settings.Load(fileName);
+
+            RecentFiles.Clear();
+            foreach (RecentFile f in _settings.RecentFiles)
+                RecentFiles.Add(f.FileName, f);
 
             SplittersLoad(_gridMain.RowDefinitions, _gridMain.ColumnDefinitions);
 
@@ -79,6 +82,20 @@ namespace MultiPlayer
                     v.Play();
                 }
             }
+        }
+
+        private void SaveSettings(string fileName)
+        {
+            SplittersSave(_gridMain.RowDefinitions, _gridMain.ColumnDefinitions);
+
+            _settings.Update(_videos);
+
+            _settings.RecentFiles.Clear();
+            foreach (var f in RecentFiles)
+                _settings.RecentFiles.Add(f.Value);
+
+            if (_settings.HasData())
+                _settings.Save(fileName);
         }
 
         private void SplittersLoad(RowDefinitionCollection rows, ColumnDefinitionCollection cols)
@@ -111,8 +128,7 @@ namespace MultiPlayer
             sfd.Filter = "XML Files (*.xml)|*.xml";
             if (sfd.ShowDialog(this).Value == true)
             {
-                _settings.Update(_videos);
-                _settings.Save(sfd.FileName);
+                SaveSettings(sfd.FileName);
             }
         }
 
@@ -156,6 +172,14 @@ namespace MultiPlayer
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
             OptionsWindow.ShowOptions(this, _settings, "Settings", 650);
+        }
+
+        public static RecentFile FindOrCreateRecentFile(string fileName)
+        {
+            string name = Path.GetFileName(fileName);
+            if (!RecentFiles.ContainsKey(name))
+                RecentFiles.Add(name, new RecentFile() { FileName = name });
+            return RecentFiles[name];
         }
     }
 }

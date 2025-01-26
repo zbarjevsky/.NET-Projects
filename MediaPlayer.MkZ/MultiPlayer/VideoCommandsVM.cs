@@ -33,6 +33,8 @@ namespace MultiPlayer
         VideoPlayerUserControl _player;
         VideoCommandsUserControl _cmd;
 
+        private RecentFile _recentFile = null;
+
         public OnePlayerSettings Settings { get; set; } = new OnePlayerSettings();
 
         public bool IsPopWindowMode { get; private set; } = false;
@@ -197,14 +199,21 @@ namespace MultiPlayer
 
         public void Open(string fileName)
         {
+            if (_recentFile != null) //update previous recent file
+                _recentFile.Update(Settings);
+            _player.Clear();
+
             Settings.FileName = fileName;
 
             _player.Open(Settings.FileName, Settings.Volume);
             _cmd._position.Maximum = _player.NaturalDuration;
-            _cmd._position.Value = 0;
-            
-            Replay.Clear();
-            
+
+            _recentFile = MainWindow.FindOrCreateRecentFile(fileName);
+
+            _cmd._position.Value = _recentFile.Position;
+
+            Replay.UpdateReplay(false, _recentFile.ReplayPosA, _recentFile.ReplayPosB);
+
             Play();
 
             CommandManager.InvalidateRequerySuggested();
@@ -213,6 +222,8 @@ namespace MultiPlayer
         private void MediaPlayEnded(IVideoPlayer player)
         {
             Stop();
+            _cmd._position.Value = 0;
+
             switch (Settings.PlayMode)
             {
                 case ePlayMode.PlayOne:
@@ -220,15 +231,13 @@ namespace MultiPlayer
                 case ePlayMode.PlayAll:
                     PlayNext(random: false, loop: false);
                     break;
-                case ePlayMode.RepeatOne:
-                    Play();
-                    break;
                 case ePlayMode.RepeatAll:
                     PlayNext(random: false, loop: true);
                     break;
                 case ePlayMode.Random:
                     PlayNext(random: true, loop: true);
                     break;
+                case ePlayMode.RepeatOne:
                 default:
                     Play();
                     break;
@@ -676,13 +685,14 @@ namespace MultiPlayer
             private double XfromTime(double time)
             {
                 double width = VM._cmd._position.ActualWidth - 12;
-                double seconds = VM._cmd._position.Maximum;
+                double seconds = VM.Settings.Duration;
+
+                if (seconds <= 0 || time <= 0)
+                    return -1000;
 
                 double x = 8 + time * width / seconds;
                 
-                if (time > 0)
-                    return x;
-                return -1000;
+                return x;
             }
 
             private void ReplaySetStart()
