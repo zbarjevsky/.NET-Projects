@@ -153,7 +153,7 @@ namespace MultiPlayer
             else if (e.Key == _settings.KeyLoadDefault)
                 this.LoadSettings(_settings.DefaultSettingsFileName);
             else if (e.Key == _settings.KeySaveAsDefault)
-                this.LoadSettings(_settings.DefaultSettingsFileName);
+                this.SaveSettings(_settings.DefaultSettingsFileName);
         }
 
         private void ClearAll_Click(object sender, RoutedEventArgs e)
