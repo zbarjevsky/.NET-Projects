@@ -105,7 +105,7 @@ namespace MultiPlayer
             Settings = new OnePlayerSettings();
             Update(Settings, IsPopWindowMode);
             _cmd._volume.Value = volume;
-            Settings.Volume = volume;
+            Settings.Volume = volume / 1000.0;
 
             Replay.IsReplayChecked = false;
 
@@ -126,7 +126,7 @@ namespace MultiPlayer
 
             if (ofd.ShowDialog().Value)
             {
-                Open(ofd.FileName);
+                OpenFile(ofd.FileName, startFrom0: true);
             }
         }
 
@@ -151,9 +151,10 @@ namespace MultiPlayer
             _player = v;
             _player.PropertyChanged += _videoPlayerUserControl_PropertyChanged;
 
-            _player.LeftButtonClick = () => { TogglePlayPauseCommand.Execute(null); };
-            _player.LeftButtonDoubleClick = () => { Maximize_Click(this, null); };
-            _player.VideoEnded = (player) => { MediaPlayEnded(player); };
+            _player.LeftButtonClick = () => TogglePlayPauseCommand.Execute(null);
+            _player.LeftButtonDoubleClick = () => Maximize_Click(this, null);
+            _player.VideoEnded = (player) => MediaPlayEnded(player); 
+            _player.VideoFailed = (e, player) => MediaPlayFailed(e, player); 
         }
 
         bool _isInUpdate = false;
@@ -197,7 +198,7 @@ namespace MultiPlayer
             }
         }
 
-        public void Open(string fileName)
+        public void OpenFile(string fileName, bool startFrom0)
         {
             if (_recentFile != null) //update previous recent file
                 _recentFile.Update(Settings);
@@ -210,7 +211,7 @@ namespace MultiPlayer
 
             _recentFile = MainWindow.FindOrCreateRecentFile(fileName);
 
-            _cmd._position.Value = _recentFile.Position;
+            Settings.Position = startFrom0 ? 0 : _recentFile.Position;
 
             Replay.UpdateReplay(false, _recentFile.ReplayPosA, _recentFile.ReplayPosB);
 
@@ -222,7 +223,7 @@ namespace MultiPlayer
         private void MediaPlayEnded(IVideoPlayer player)
         {
             Stop();
-            _cmd._position.Value = 0;
+            Settings.Position = 0;
 
             switch (Settings.PlayMode)
             {
@@ -242,6 +243,13 @@ namespace MultiPlayer
                     Play();
                     break;
             }
+        }
+
+        private bool MediaPlayFailed(ExceptionRoutedEventArgs e, MediaElement player)
+        {
+            System.Windows.MessageBox.Show(e.ErrorException.Message + "\n" + Settings.FileName, "MediaPlayFailed");
+            e.Handled = true;
+            return true;
         }
 
         public void Volume_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -414,7 +422,7 @@ namespace MultiPlayer
             idx--;
             if (idx < 0)
                 idx = fileNames.Count - 1;
-            Open(fileNames[idx]);
+            OpenFile(fileNames[idx], startFrom0: true);
         }
 
         private Random _random = new Random();
@@ -433,7 +441,7 @@ namespace MultiPlayer
             }
 
             if (idx >= 0 && idx < fileNames.Count)
-                Open(fileNames[idx]);
+                OpenFile(fileNames[idx], startFrom0: true);
         }
 
         public List<string> GetFileNames(string fileName, out int idx)

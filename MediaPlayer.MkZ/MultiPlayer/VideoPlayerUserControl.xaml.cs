@@ -634,7 +634,7 @@ namespace MultiPlayer
                 string[] files = (string[])e.Data.GetData(System.Windows.DataFormats.FileDrop);
 
                 // handling code you have defined.
-                VM.Open(files[0]);
+                VM.OpenFile(files[0], startFrom0: false);
             }
             else if (e.Data.GetDataPresent(DragDropDataFormat))
             {
