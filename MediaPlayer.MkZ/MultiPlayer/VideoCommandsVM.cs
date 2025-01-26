@@ -164,6 +164,8 @@ namespace MultiPlayer
 
             _isInUpdate = true;
 
+            Settings.Update(s);
+
             _cmd._volume.Value = s.Volume * 1000.0;
             _cmd._position.Maximum = s.Duration;
             _cmd._position.Value = s.Position;
@@ -184,6 +186,12 @@ namespace MultiPlayer
             AdjustSizeAndLayout();
 
             _isInUpdate = false;
+        }
+
+        public void UpdateRrecentFile(OnePlayerSettings s)
+        {
+            _recentFile = MainWindow.FindOrCreateRecentFile(s.FileName);
+            _recentFile.Update(s);
         }
 
         private void _videoPlayerUserControl_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)

@@ -1,6 +1,8 @@
-﻿using System;
+﻿using MkZ.WinForms;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -21,7 +23,9 @@ namespace MkZ.WPF.PropertyGrid
     /// </summary>
     public partial class OptionsWindow : Window
     {
-        public static bool? ShowOptions(Window owner, object options, string title, double height, params string[] expandNames)
+        private int _splitterPosition = 0;
+
+        public static bool? ShowOptions(Window owner, object options, string title, double height, int firstColumnWidth = -1, params string[] expandNames)
         {
             OptionsWindow wnd = new OptionsWindow();
             wnd.Owner = owner;
@@ -29,17 +33,19 @@ namespace MkZ.WPF.PropertyGrid
             wnd.Height = height;
             wnd.Title = title;
             wnd.SetPropertiesObject(options, expandNames);
+            wnd._splitterPosition = firstColumnWidth;
 
             return wnd.ShowDialog();
         }
 
-        public static bool? ShowOptionsEx(Window owner, object options, string title, Action<Grid> initAction, params string[] expandNames)
+        public static bool? ShowOptionsEx(Window owner, object options, string title, Action<Grid> initAction, int firstColumnWidth = -1, params string[] expandNames)
         {
             OptionsWindow wnd = new OptionsWindow();
             wnd.Owner = owner;
             wnd.WindowStartupLocation = WindowStartupLocation.CenterOwner;
             wnd.Title = title;
             wnd.SetPropertiesObject(options, expandNames);
+            wnd._splitterPosition = firstColumnWidth;
 
             initAction?.Invoke(wnd._gridMain);
 
@@ -54,7 +60,7 @@ namespace MkZ.WPF.PropertyGrid
         public void SetPropertiesObject(object o, params string [] expandNames)
         {
             _propertyGrid.SelectedObject = o;
-            _propertyGrid.PropertySort = PropertySort.NoSort;
+            _propertyGrid.PropertySort = PropertySort.Categorized;// PropertySort.NoSort;
 
             foreach (string name in expandNames)
             {
@@ -65,6 +71,11 @@ namespace MkZ.WPF.PropertyGrid
         public void ExpandAll()
         {
             _propertyGrid.ExpandAllGridItems();
+        }
+
+        public void MoveSplitterTo(int width)
+        {
+            _propertyGrid.MoveSplitterTo(width);
         }
 
         private void CloseCommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -98,6 +109,18 @@ namespace MkZ.WPF.PropertyGrid
                         g.Expanded = true;
                 }
             }
+        }
+
+        private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Escape)
+                this.Close();
+        }
+
+        private void PropertyGrid_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (_splitterPosition > 0)
+                MoveSplitterTo(_splitterPosition);
         }
     }
 }

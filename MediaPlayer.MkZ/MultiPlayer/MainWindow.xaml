@@ -34,6 +34,9 @@
                 <Button Content="Open..." ToolTip="Open..."
                         Click="Open_Click"
                         Margin="3" Padding="5,3"/>
+                <Button Content="Save" ToolTip="Save"
+                        Click="Save_Click"
+                        Margin="3" Padding="5,3" />
                 <Button Content="Save As..." ToolTip="Save As..."
                         Click="SaveAs_Click"
                         Margin="3" Padding="5,3" />

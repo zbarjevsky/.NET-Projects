@@ -6,6 +6,7 @@
         xmlns:swf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         xmlns:local="clr-namespace:MkZ.WPF.PropertyGrid"
         mc:Ignorable="d"
+        KeyDown="Window_KeyDown"
         Title="Options" 
         Height="700" Width="650">
     <Window.CommandBindings>
@@ -19,8 +20,8 @@
             <RowDefinition/>
             <RowDefinition Height="34" />
         </Grid.RowDefinitions>
-        <WindowsFormsHost>
-            <swf:PropertyGrid x:Name="_propertyGrid"/>
+        <WindowsFormsHost Loaded="PropertyGrid_Loaded">
+            <swf:PropertyGrid x:Name="_propertyGrid" />
         </WindowsFormsHost>
         <Grid x:Name="_gridMain" Grid.Row="0" Grid.RowSpan="2" Background="LightYellow" >
             <Button Content="Close" Margin="5" Padding="8,2"

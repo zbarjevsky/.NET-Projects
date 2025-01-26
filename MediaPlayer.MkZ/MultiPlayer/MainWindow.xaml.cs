@@ -34,12 +34,12 @@ namespace MultiPlayer
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            LoadSettings(_settings.FileName);
+            LoadSettings(_settings.DefaultSettingsFileName);
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            SaveSettings(_settings.FileName);
+            SaveSettings(_settings.DefaultSettingsFileName);
             VideoCommandsVM.Exit();    
         }
 
@@ -47,7 +47,7 @@ namespace MultiPlayer
         {
             OpenFileDialog ofd = new OpenFileDialog();
             ofd.InitialDirectory = _settings.DataFolder;
-            ofd.FileName = _settings.FileName;
+            ofd.FileName = _settings.DefaultSettingsFileName;
             ofd.Filter = "XML Files (*.xml)|*.xml";
             if (ofd.ShowDialog(this).Value == true)
             {
@@ -120,11 +120,16 @@ namespace MultiPlayer
                 _settings.ColsSizes.Add(new SplitterPos(col.Width));
         }
 
+        private void Save_Click(object sender, RoutedEventArgs e)
+        {
+            SaveSettings(_settings.DefaultSettingsFileName);
+        }
+
         private void SaveAs_Click(object sender, RoutedEventArgs e)
         {
             SaveFileDialog sfd = new SaveFileDialog();
             sfd.InitialDirectory = _settings.DataFolder;
-            sfd.FileName = _settings.FileName;
+            sfd.FileName = _settings.DefaultSettingsFileName;
             sfd.Filter = "XML Files (*.xml)|*.xml";
             if (sfd.ShowDialog(this).Value == true)
             {
@@ -139,8 +144,16 @@ namespace MultiPlayer
 
         private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            if (e.Key == System.Windows.Input.Key.Escape)
+            if (e.Key == _settings.KeyCloseApp)
                 this.Close();
+            else if (e.Key == _settings.KeyClearAll)
+                this.ClearAll_Click(sender, e);
+            else if (e.Key == _settings.KeySaveAsLast)
+                this.SaveSettings(_settings.LastSettingsFileName);
+            else if (e.Key == _settings.KeyLoadDefault)
+                this.LoadSettings(_settings.DefaultSettingsFileName);
+            else if (e.Key == _settings.KeySaveAsDefault)
+                this.LoadSettings(_settings.DefaultSettingsFileName);
         }
 
         private void ClearAll_Click(object sender, RoutedEventArgs e)
@@ -171,7 +184,7 @@ namespace MultiPlayer
 
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
-            OptionsWindow.ShowOptions(this, _settings, "Settings", 650);
+            OptionsWindow.ShowOptions(this, _settings, "Settings", 650, 170);
         }
 
         public static RecentFile FindOrCreateRecentFile(string fileName)

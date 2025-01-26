@@ -324,8 +324,9 @@ namespace MultiPlayer
             SpeedRatio = s.SpeedRatio;
             ZoomStateSet(s.ZoomState, true);
 
-            VM.Settings.Update(s);
-            VM.Update(VM.Settings, pop);
+            VM.Update(s, pop);
+
+            VM.UpdateRrecentFile(s);
 
             VM.Play();
             if (s.MediaState != MediaState.Play)

@@ -175,16 +175,37 @@ namespace MultiPlayer
     [Serializable]
     public class MultiPlayerSettings
     {
+        const string APP = "1. Application";
+        const string VID = "2. Video Player";
+
         [XmlIgnore]
         public string DataFolder { get; private set; }
         [XmlIgnore]
-        public string FileName { get; private set; }
+        public string DefaultSettingsFileName { get; private set; }
+        [XmlIgnore]
+        public string LastSettingsFileName { get; private set; }
 
+        [XmlIgnore]
+        [DisplayName("Close App Key"), Category(APP)]
+        public System.Windows.Input.Key KeyCloseApp { get; private set; } = System.Windows.Input.Key.Escape;
+        [DisplayName("Clear All Key"), Category(APP)]
+        public System.Windows.Input.Key KeyClearAll { get; set; } = System.Windows.Input.Key.F1;
+        [DisplayName("Save As Last Key"), Category(APP)]
+        public System.Windows.Input.Key KeySaveAsLast { get; set; } = System.Windows.Input.Key.F2;
+        [DisplayName("Load Default Key"), Category(APP)]
+        public System.Windows.Input.Key KeyLoadDefault { get; set; } = System.Windows.Input.Key.F3;
+        [DisplayName("Save as default Key"), Category(APP)]
+        public System.Windows.Input.Key KeySaveAsDefault { get; set; } = System.Windows.Input.Key.F5;
+
+        [Description("Rows Sizes"), Category(VID)]
         public List<SplitterPos> RowsSizes { get; set; }
+        [Description("Column Sizes"), Category(VID)]
         public List<SplitterPos> ColsSizes { get; set; }
 
+        [Description("Players Settings x8"), Category(VID)]
         public List<OnePlayerSettings> PlayerSettings { get; set; }
 
+        [Description("Recent Files"), Category(APP)]
         public List<RecentFile> RecentFiles { get; set; }
 
         public MultiPlayerSettings() 
@@ -200,7 +221,7 @@ namespace MultiPlayer
 #endif
             string date = DateTime.Now.ToString("yyyy_MM_dd-HH_mm_ss");
             string fileName = string.Format("{0}_{1}{2}.xml", assemblyName, "Files", debug);
-            FileName = Path.Combine(DataFolder, fileName);
+            DefaultSettingsFileName = Path.Combine(DataFolder, fileName);
         }
 
         public bool HasData()
@@ -215,12 +236,13 @@ namespace MultiPlayer
 
         public void Save(string fileName)
         {
+            LastSettingsFileName = fileName;
             XmlHelper.Save(fileName, this);
         }
 
         public void Load()
         {
-            Load(FileName);
+            Load(DefaultSettingsFileName);
         }
 
         public void Load(string fileName)
@@ -231,6 +253,7 @@ namespace MultiPlayer
                 {
                     MultiPlayerSettings appConfig = XmlHelper.Open<MultiPlayerSettings>(fileName);
                     this.CopyFrom(appConfig);
+                    LastSettingsFileName = fileName;
                 }
                 catch (Exception err)
                 {
@@ -242,6 +265,12 @@ namespace MultiPlayer
 
         private void CopyFrom(MultiPlayerSettings appConfig)
         {
+            KeyCloseApp = appConfig.KeyCloseApp;
+            KeyClearAll = appConfig.KeyClearAll;
+            KeySaveAsLast = appConfig.KeySaveAsLast;
+            KeyLoadDefault = appConfig.KeyLoadDefault;
+            KeySaveAsDefault = appConfig.KeySaveAsDefault;
+
             this.RowsSizes = appConfig.RowsSizes;
             this.ColsSizes = appConfig.ColsSizes;
             this.PlayerSettings = appConfig.PlayerSettings;
