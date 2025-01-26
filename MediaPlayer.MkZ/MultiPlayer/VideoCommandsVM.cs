@@ -248,7 +248,7 @@ namespace MultiPlayer
                     break;
                 case ePlayMode.RepeatOne:
                 default:
-                    Play();
+                    OpenFile(Settings.FileName, startFrom0: true);
                     break;
             }
         }

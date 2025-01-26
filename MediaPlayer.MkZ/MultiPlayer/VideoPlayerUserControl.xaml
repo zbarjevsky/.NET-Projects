@@ -106,6 +106,7 @@
                 
                 <ScrollViewer Name="_scrollPlayerContainer" Grid.RowSpan="2"
                               HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
+                              PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"
                               MouseMove="UserControl_MouseMove" >
                     <ScrollViewer.Resources>
                         <sys:Double x:Key="{x:Static SystemParameters.VerticalScrollBarWidthKey}">10</sys:Double>

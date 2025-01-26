@@ -344,9 +344,6 @@ namespace MultiPlayer
             this.Background = Brushes.LightGray;
             MediaState = MediaState.Close;
             VM.Clear();
-
-            //clear window - sometimes it is not closed properly
-            RecreateMediaElement(false);
         }
 
         public void Play()
@@ -392,6 +389,9 @@ namespace MultiPlayer
                 
                 VM.Settings.Update(this);
                 VM.Update(VM.Settings, VM.IsPopWindowMode);
+
+                //clear window - sometimes it is not closed properly
+                RecreateMediaElement(false);
             }
         }
 
@@ -403,12 +403,11 @@ namespace MultiPlayer
                 Play();
         }
 
-        private void Grid_MouseWheel(object sender, MouseWheelEventArgs e)
+        private void mePlayer_MouseWheel(object sender, MouseWheelEventArgs e)
         {
-            //mePlayer.Volume += (e.Delta > 0) ? 0.1 : -0.1;
         }
 
-        private void mePlayer_MouseWheel(object sender, MouseWheelEventArgs e)
+        private void ScrollViewer_PreviewMouseWheel(object sender, MouseWheelEventArgs e)
         {
             if (Keyboard.IsKeyDown(Key.LeftCtrl) || Keyboard.IsKeyDown(Key.RightCtrl) || Keyboard.IsKeyDown(Key.LeftShift))
                 return;
