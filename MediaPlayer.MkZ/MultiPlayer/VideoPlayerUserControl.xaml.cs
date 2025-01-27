@@ -303,12 +303,29 @@ namespace MultiPlayer
             _scrollDragger.ScrollToCenter();
         }
 
-        public void Open(string fileName, double volume = 0)
+        public async void Open(string fileName, double volume = 0)
         {
             VM.Settings.FileName = fileName;
-            VideoPlayerElement.Source = string.IsNullOrEmpty(fileName) ? null : new Uri(fileName);
+            VideoPlayerElement.Source = null;
+            if (!string.IsNullOrEmpty(fileName))
+                VideoPlayerElement.Source = new Uri(fileName);
             Volume = volume;
+            VideoPlayerElement.IsMuted = true; //load silently
             MediaState = MediaState.Manual;
+
+            //wait for source opened
+            for (int i = 0; i < 10; i++)
+            {
+                Debug.WriteLine("Check NaturalDuration, try {0} - {1:###,##0} sec", i, NaturalDuration);
+                if (NaturalDuration > 0)
+                    break;
+
+                VideoPlayerElement.ForceRender();
+                await Task.Delay(100);
+            }
+
+            if (NaturalDuration > 0)
+                VM.Settings.Duration = NaturalDuration;
 
             VM.Title = System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(fileName)) + "/" + System.IO.Path.GetFileName(fileName);
             List<string> fileNames = VM.GetFileNames(fileName, out int idx);
@@ -316,7 +333,7 @@ namespace MultiPlayer
                 VM.Title = $"{idx}/{fileNames.Count} " + VM.Title;
         }
 
-        public void LoadSetting(OnePlayerSettings s, bool pop = false)
+        public async Task LoadSetting(OnePlayerSettings s, bool pop = false)
         {
             Open(s.FileName, s.Volume);
 
@@ -325,13 +342,16 @@ namespace MultiPlayer
             ZoomStateSet(s.ZoomState, true);
 
             VM.Update(s, pop);
-
             VM.UpdateRrecentFile(s);
 
             VM.Play();
             if (s.MediaState != MediaState.Play)
+            {
+                //await VM.WaitForMediaOpened();
+                if (System.IO.Path.GetExtension(s.FileName) == ".mp3")
+                    await Task.Delay(120); //implement audio player instead
                 VM.Pause();
-
+            }
             VM.TogglePlayPauseCommand.RefreshBoundControls();
             VM.AdjustSizeAndLayout();
         }
@@ -513,6 +533,7 @@ namespace MultiPlayer
                     _scrollDragger.Zoom = zoom_save;
                     ZoomStateSet(zoomState, false);
                     MediaState = GetMediaState(VideoPlayerElement);
+                    VideoPlayerElement.IsMuted = false;
                     VideoStartedAction(this);
                 };
                 VideoPlayerElement.MediaEnded += (s, e) => { VideoEnded(this); };
@@ -626,7 +647,7 @@ namespace MultiPlayer
             }
         }
 
-        private void UserControl_Drop(object sender, System.Windows.DragEventArgs e)
+        private async void UserControl_Drop(object sender, System.Windows.DragEventArgs e)
         {
             if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
             {
@@ -656,6 +677,11 @@ namespace MultiPlayer
         private void Clear_Click(object sender, RoutedEventArgs e)
         {
             Clear();
+        }
+
+        private void Reload_Click(object sender, RoutedEventArgs e)
+        {
+            VM.OpenFile(VM.Settings.FileName, startFrom0:false);
         }
 
         private void Settings_Click(object sender, RoutedEventArgs e)

@@ -34,6 +34,7 @@ namespace MultiPlayer
         VideoCommandsUserControl _cmd;
 
         private RecentFile _recentFile = null;
+        private DateTime _playSartTime = DateTime.MinValue;
 
         public OnePlayerSettings Settings { get; set; } = new OnePlayerSettings();
 
@@ -80,6 +81,8 @@ namespace MultiPlayer
 
         public void Play()
         {
+            _playSartTime = DateTime.Now;
+
             _player.Play();
             _cmd._btnPlayPause.Background = Brushes.LightGreen;
             PlayPauseIconText = PAUSE_TEXT;
@@ -153,6 +156,8 @@ namespace MultiPlayer
 
             _player.LeftButtonClick = () => TogglePlayPauseCommand.Execute(null);
             _player.LeftButtonDoubleClick = () => Maximize_Click(this, null);
+
+            _player.VideoStartedAction = (player) => MediaPlayStarted(player);
             _player.VideoEnded = (player) => MediaPlayEnded(player); 
             _player.VideoFailed = (e, player) => MediaPlayFailed(e, player); 
         }
@@ -226,6 +231,13 @@ namespace MultiPlayer
             Play();
 
             CommandManager.InvalidateRequerySuggested();
+        }
+
+        private void MediaPlayStarted(IVideoPlayer player)
+        {
+            TimeSpan delta = DateTime.Now - _playSartTime;
+            Debug.WriteLine($"### MediaPlayStarted: {delta} -- {player.FileName}");
+            _waitMediaOpenedEvent.TriggerEvent();
         }
 
         private void MediaPlayEnded(IVideoPlayer player)
@@ -575,6 +587,9 @@ namespace MultiPlayer
 
         public void AdjustSizeAndLayout()
         {
+            if (_cmd == null || _player == null) 
+                return;
+
             _cmd._scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
             double windowWidth = _cmd.ActualWidth;
             if (windowWidth < 30)
@@ -598,6 +613,42 @@ namespace MultiPlayer
             }
 
             Replay.UpdateTicks();
+        }
+
+        private WaitForEventImpl _waitMediaOpenedEvent = new WaitForEventImpl();
+
+        public async Task WaitForMediaOpened()
+        {
+            await _waitMediaOpenedEvent.WaitForEvent();
+        }
+
+        public class WaitForEventImpl
+        {
+            public async Task WaitForEvent()
+            {
+                var tcs = new TaskCompletionSource<object>();
+
+                // Simulate an event
+                EventHandler handler = null;
+                handler = (sender, args) =>
+                {
+                    tcs.SetResult(null);
+                    Event -= handler; // Unsubscribe to prevent memory leaks
+                };
+
+                Event += handler;
+
+                // Await the task until the event is triggered
+                await tcs.Task;
+            }
+
+            public event EventHandler Event;
+
+            // Method to trigger the event (can be called externally)
+            public void TriggerEvent()
+            {
+                Event?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         public ReplayLoop Replay { get; }
