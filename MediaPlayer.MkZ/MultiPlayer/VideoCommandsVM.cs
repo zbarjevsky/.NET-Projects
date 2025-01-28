@@ -609,7 +609,7 @@ namespace MultiPlayer
             double width = windowWidth - _cmd._stackButtons.ActualWidth - _cmd._timeLbl.ActualWidth;
             if (width < _cmd._docSliders.MinWidth) //wrapped to two lines
             {
-                _cmd._docSliders.Width = windowWidth - _cmd._timeLbl.ActualWidth - 4;
+                _cmd._docSliders.Width = _cmd._stackButtons.ActualWidth; // windowWidth - _cmd._timeLbl.ActualWidth - 4;
                 if (windowWidth < _cmd._stackButtons.ActualWidth)
                     _cmd._scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
             }
