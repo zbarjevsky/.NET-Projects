@@ -21,6 +21,9 @@
     <Page Update="MainWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
+    <Page Update="MkZ.WPF\FadingZoomingLabelControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="MkZ.WPF\OptionsWindow.xaml">
       <SubType>Designer</SubType>
     </Page>

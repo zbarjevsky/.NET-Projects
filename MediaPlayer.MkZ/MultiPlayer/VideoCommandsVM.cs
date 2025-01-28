@@ -62,6 +62,11 @@ namespace MultiPlayer
             set { SetProperty(ref _title, value); }
         }
 
+        public double Volume
+        {
+            get { return _player != null ? _player.Volume : 0; }
+        }
+
         private string _playPauseIconText = PLAY_TEXT;
         public string PlayPauseIconText
         {
@@ -278,6 +283,7 @@ namespace MultiPlayer
             {
                  Settings.Volume = _cmd._volume.Value / 1000.0;
                 _player.Volume = Settings.Volume;
+                NotifyPropertyChanged(nameof(Volume));
             }
         }
 

@@ -4,7 +4,8 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MultiPlayer" 
-             xmlns:sys="clr-namespace:System;assembly=netstandard"
+             xmlns:sys="clr-namespace:System;assembly=netstandard" 
+             xmlns:controls="clr-namespace:MkZ.WPF.Controls"
              mc:Ignorable="d" 
              AllowDrop="True"
              Loaded="UserControl_Loaded"
@@ -155,6 +156,10 @@
                 </StackPanel>
 
                 <local:VideoCommandsUserControl x:Name="_commands" Grid.Row="1" Margin="0,0,0,12" />
+
+                <controls:FadingAutoZoomingLabelControl 
+                    Foreground="AliceBlue" Text="{Binding VM.Volume, ElementName=_commands, StringFormat=Volume: 0.#%, FallbackValue='Volume: 12%'}"
+                    Width="200" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,8,4"  />
             </Grid>
         </Border>
     </Grid>
