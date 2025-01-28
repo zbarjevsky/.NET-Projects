@@ -22,7 +22,7 @@
     </UserControl.Resources>
     <Grid>
         <Border x:Name="_borderMain" BorderThickness="2" CornerRadius="1" Padding="1" >
-            <Grid>
+            <Grid x:Name="_gridMain">
                 <Grid.RowDefinitions>
                     <RowDefinition />
                     <RowDefinition Height="Auto"/>
@@ -159,7 +159,7 @@
 
                 <controls:FadingAutoZoomingLabelControl 
                     Foreground="AliceBlue" Text="{Binding VM.Volume, ElementName=_commands, StringFormat=Volume: 0.#%, FallbackValue='Volume: 12%'}"
-                    Width="200" Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="0,0,8,4"  />
+                    Height="20" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="4,25,4,4"  />
             </Grid>
         </Border>
     </Grid>

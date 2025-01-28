@@ -72,7 +72,7 @@ namespace MkZ.WPF.Controls
 
             _bAllowShow = true;
 
-            this.Draggable(true, new Thickness(10));
+            this.Draggable(true, new Thickness(4));
         }
 
         private void _control_Loaded(object sender, RoutedEventArgs e)
