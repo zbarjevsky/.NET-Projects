@@ -301,6 +301,8 @@ namespace MultiPlayer
             {
                 if (vol > 200)
                     vol -= 100;
+                else if (vol > 100) 
+                    vol = 100;
                 else
                     vol -= 20;
             }
