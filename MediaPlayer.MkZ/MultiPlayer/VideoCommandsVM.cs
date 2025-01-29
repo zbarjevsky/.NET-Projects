@@ -289,27 +289,31 @@ namespace MultiPlayer
 
         public void VolumeUpdate(int delta)
         {
-            double vol = _cmd._volume.Value;
+            int idx = GetVolumeIndex();
             if (delta > 0)
-            {
-                if (vol < 100)
-                    vol += 20;
-                else
-                    vol += 100;
-            }
-            if (delta < 0)
-            {
-                if (vol > 200)
-                    vol -= 100;
-                else if (vol > 100) 
-                    vol = 100;
-                else
-                    vol -= 20;
-            }
-            if (vol < 0) vol = 0;
-            if (vol > 1000) vol = 1000;
+                idx++;
 
-            _cmd._volume.Value = vol;
+            if (delta < 0)
+                idx--;
+
+            
+            if (idx < 0) idx = 0;
+            if (idx >= _volumeLevels.Length - 1) idx = _volumeLevels.Length - 2;
+
+            _cmd._volume.Value = _volumeLevels[idx];
+        }
+
+        double [] _volumeLevels = { 0, 10, 20, 30, 50, 70, 100, 150, 200, 300, 400, 600, 800, 1000, 1001 };
+
+        private int GetVolumeIndex()
+        {
+            double vol = _cmd._volume.Value;
+            for (int i = 0; i < _volumeLevels.Length; i++)
+            {
+                if (_volumeLevels[i] <= vol && vol < _volumeLevels[i+1])
+                    return i;
+            }
+            return 100;
         }
 
         double[] _speedRatios = { 0.01, 0.1, 0.2, 0.5, 1.0, 1.5 };
