@@ -216,5 +216,13 @@ namespace MultiPlayer
                     v.VM.TogglePlayPauseCommand.Execute(null);
             }
         }
+
+        private void PauseAll_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (VideoPlayerUserControl v in _videos)
+            {
+                v.VM.Pause();
+            }
+        }
     }
 }
