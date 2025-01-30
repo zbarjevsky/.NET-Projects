@@ -298,6 +298,8 @@ namespace MultiPlayer
         //sometimes if video was not opened yet - NaturalDuration is 0 - use saved in settings duration
         public double Duration => NaturalDuration > 0.0 ? NaturalDuration : VM.Settings.Duration;
 
+        public bool IsInFocus { get; private set; } = false;
+
         public void ScrollToCenter()
         {
             _scrollDragger.ScrollToCenter();
@@ -613,6 +615,7 @@ namespace MultiPlayer
         private void UserControl_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
             this.Focus();
+            IsInFocus = true;
 
             if (!VM.IsPopWindowMode)
                 _borderMain.BorderBrush = Brushes.Tan; // Brushes.DodgerBlue;
@@ -620,6 +623,7 @@ namespace MultiPlayer
 
         private void UserControl_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
+            IsInFocus = false;
             _borderMain.BorderBrush = Brushes.Transparent;
         }
 

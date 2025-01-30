@@ -40,9 +40,6 @@
                 <Button Content="Save As..." ToolTip="Save As..."
                         Click="SaveAs_Click"
                         Margin="3" Padding="5,3" />
-                <Button Content="Clear All" ToolTip="Clear All"
-                        Click="ClearAll_Click"
-                        Margin="3" Padding="5,3" />
                 <Button Content="Reset Layout" ToolTip="Reset Layout"
                         Click="ResetLayout_Click"
                         Margin="3" Padding="5,3" />
@@ -50,11 +47,28 @@
                         Click="Exit_Click"
                         Margin="3" Padding="5,3" />
             </StackPanel>
-            <Button Grid.Column="5" ToolTip="Settings"
+            <StackPanel Grid.Column="5" Orientation="Horizontal">
+                <Button ToolTip="Clear All (F1)"
+                    Click="ClearAll_Click"
+                    Margin="1" Padding="0" >
+                    <Label FontFamily="Segoe MDL2 Assets" Content="&#xE74D;" FontSize="16" />
+                </Button>
+                <Button ToolTip="Save As Recent (F2)"
+                    Click="SaveAsRecent_Click"
+                    Margin="1" Padding="0" >
+                    <Label FontFamily="Segoe MDL2 Assets" Content="&#xE74E;" FontSize="16" />
+                </Button>
+                <Button ToolTip="Open Default (F3)"
+                    Click="OpenDefault_Click"
+                    Margin="1" Padding="0" >
+                    <Label FontFamily="Segoe MDL2 Assets" Content="&#xE80F;" FontSize="16" />
+                </Button>
+                <Button ToolTip="Settings"
                     Click="Settings_Click"
                     Margin="1" Padding="0" >
-                <Label FontFamily="Segoe MDL2 Assets" Content="&#xE713;" FontSize="16" />
-            </Button>
+                    <Label FontFamily="Segoe MDL2 Assets" Content="&#xE713;" FontSize="16" />
+                </Button>
+            </StackPanel>
         </Grid>
         <Grid x:Name="_gridMain" Grid.Column="1" Background="Gray">
             <Grid.ColumnDefinitions>

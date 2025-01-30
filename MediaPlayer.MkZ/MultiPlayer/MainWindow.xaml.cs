@@ -154,6 +154,9 @@ namespace MultiPlayer
                 this.LoadSettings(_settings.DefaultSettingsFileName);
             else if (e.Key == _settings.KeySaveAsDefault)
                 this.SaveSettings(_settings.DefaultSettingsFileName);
+            else if (e.Key == System.Windows.Input.Key.Space)
+                this.TogglePlayPauseForPlayerInFocus();
+
         }
 
         private void ClearAll_Click(object sender, RoutedEventArgs e)
@@ -182,6 +185,16 @@ namespace MultiPlayer
                     _gridMain.ColumnDefinitions[i].Width = new GridLength(1, GridUnitType.Star);
         }
 
+        private void SaveAsRecent_Click(object sender, RoutedEventArgs e)
+        {
+            this.SaveSettings(_settings.LastSettingsFileName);
+        }
+
+        private void OpenDefault_Click(object sender, RoutedEventArgs e)
+        {
+            this.LoadSettings(_settings.DefaultSettingsFileName);
+        }
+
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
             OptionsWindow.ShowOptions(this, _settings, "Settings", 650, 170);
@@ -193,6 +206,15 @@ namespace MultiPlayer
             if (!RecentFiles.ContainsKey(name))
                 RecentFiles.Add(name, new RecentFile() { FileName = name });
             return RecentFiles[name];
+        }
+
+        private void TogglePlayPauseForPlayerInFocus()
+        {
+            foreach (VideoPlayerUserControl v in _videos)
+            {
+                if (v.IsInFocus)
+                    v.VM.TogglePlayPauseCommand.Execute(null);
+            }
         }
     }
 }
