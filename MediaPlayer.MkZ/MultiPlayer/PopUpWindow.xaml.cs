@@ -96,7 +96,7 @@ namespace MultiPlayer
                 else
                     this.Close();
             }
-            else if (e.Key == System.Windows.Input.Key.Space)
+            else if (e.Key == System.Windows.Input.Key.Space || e.Key == System.Windows.Input.Key.MediaPlayPause)
             {
                 _video.VM.TogglePlayPauseCommand.Execute(null);
             }

@@ -154,7 +154,7 @@ namespace MultiPlayer
                 this.LoadSettings(_settings.DefaultSettingsFileName);
             else if (e.Key == _settings.KeySaveAsDefault)
                 this.SaveSettings(_settings.DefaultSettingsFileName);
-            else if (e.Key == System.Windows.Input.Key.Space)
+            else if (e.Key == System.Windows.Input.Key.Space || e.Key == System.Windows.Input.Key.MediaPlayPause)
                 this.TogglePlayPauseForPlayerInFocus();
 
         }

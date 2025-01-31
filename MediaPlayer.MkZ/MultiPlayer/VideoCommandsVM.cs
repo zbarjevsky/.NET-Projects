@@ -296,14 +296,13 @@ namespace MultiPlayer
             if (delta < 0)
                 idx--;
 
-            
             if (idx < 0) idx = 0;
             if (idx >= _volumeLevels.Length - 1) idx = _volumeLevels.Length - 2;
 
             _cmd._volume.Value = _volumeLevels[idx];
         }
 
-        double [] _volumeLevels = { 0, 10, 20, 30, 50, 70, 100, 150, 200, 300, 400, 600, 800, 1000, 1001 };
+        double [] _volumeLevels = { 0, 10, 20, 30, 50, 70, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1001 };
 
         private int GetVolumeIndex()
         {
