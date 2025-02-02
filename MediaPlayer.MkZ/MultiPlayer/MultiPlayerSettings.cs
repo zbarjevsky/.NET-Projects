@@ -15,10 +15,10 @@ using System.Xml.Serialization;
 namespace MultiPlayer
 {
     //directory tree style play list
-    public enum ePlayMode
+    public enum ePlayMode : int
     {
         [Description("Play One")]
-        PlayOne,
+        PlayOne = 0,
         [Description("Play All")]
         PlayAll,
         [Description("Repeat One")]

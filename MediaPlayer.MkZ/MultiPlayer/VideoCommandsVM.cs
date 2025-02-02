@@ -87,6 +87,11 @@ namespace MultiPlayer
             get { return (int)Settings.ZoomState; }
         }
 
+        public int SelectedPlayModeIndex
+        {
+            get { return (int)Settings.PlayMode; }
+        }
+
         public void Play()
         {
             _playSartTime = DateTime.Now;
@@ -224,7 +229,7 @@ namespace MultiPlayer
             }
         }
 
-        public void OpenFile(string fileName, bool startFrom0)
+        public async void OpenFile(string fileName, bool startFrom0)
         {
             if (_recentFile != null) //update previous recent file
                 _recentFile.Update(Settings);
@@ -232,7 +237,7 @@ namespace MultiPlayer
 
             Settings.FileName = fileName;
 
-            _player.Open(Settings.FileName, Settings.Volume);
+            await _player.Open(Settings.FileName, Settings.Volume);
             _cmd._position.Maximum = _player.NaturalDuration;
 
             _recentFile = MainWindow.FindOrCreateRecentFile(fileName);

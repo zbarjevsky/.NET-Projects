@@ -306,7 +306,7 @@ namespace MultiPlayer
             _scrollDragger.ScrollToCenter();
         }
 
-        public async void Open(string fileName, double volume = 0)
+        public async Task Open(string fileName, double volume = 0)
         {
             VM.Settings.FileName = fileName;
             VideoPlayerElement.Source = null;
@@ -314,21 +314,15 @@ namespace MultiPlayer
             {
                 VM.IsLoading = true;
                 VideoPlayerElement.Source = new Uri(fileName);
+                //await VM.WaitForMediaOpened();
             }
+
+            //wait for source opened
+            //await WaitForSourceOpened(fileName);
+
             Volume = volume;
             VideoPlayerElement.IsMuted = true; //load silently
             MediaState = MediaState.Manual;
-
-            //wait for source opened
-            for (int i = 0; i < 10; i++)
-            {
-                Debug.WriteLine("Check NaturalDuration, try {0} - {1:###,##0} sec", i, NaturalDuration);
-                if (NaturalDuration > 0)
-                    break;
-
-                VideoPlayerElement.ForceRender();
-                await Task.Delay(100);
-            }
 
             if (NaturalDuration > 0)
                 VM.Settings.Duration = NaturalDuration;
@@ -339,9 +333,28 @@ namespace MultiPlayer
                 VM.Title = $"{idx}/{fileNames.Count} " + VM.Title;
         }
 
+        private async Task WaitForSourceOpened(string fileName)
+        {
+            if (!string.IsNullOrEmpty(fileName) && File.Exists(fileName))
+            {
+                //wait for source opened
+                int i = 0;
+                for (; i < 10; i++)
+                {
+                    if (NaturalDuration > 0)
+                        break;
+
+                    VideoPlayerElement.ForceRender();
+                    await Task.Delay(333);
+                }
+
+                Debug.WriteLine("### Check NaturalDuration, tries {0} - Duration: {1:###,##0} sec", i, NaturalDuration);
+            }
+        }
+
         public async Task LoadSetting(OnePlayerSettings s, bool pop = false)
         {
-            Open(s.FileName, s.Volume);
+            await Open(s.FileName, s.Volume);
 
             PositionSet(TimeSpan.FromSeconds(s.Position), false);
             SpeedRatio = s.SpeedRatio;
@@ -695,6 +708,7 @@ namespace MultiPlayer
         private void Settings_Click(object sender, RoutedEventArgs e)
         {
             OptionsWindow.ShowOptions(Application.Current.MainWindow, VM.Settings, "Settings", 650);
+            VM.NotifyPropertyChangedAll();
         }
 
         private void Maximize_Click(object sender, RoutedEventArgs e)
@@ -728,6 +742,17 @@ namespace MultiPlayer
                 string parameter = menuItem.Tag as string;
                 if (int.TryParse(parameter, out int fit))
                     VM.SetFit(fit, true);
+            }
+        }
+
+        private void PlayMode_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is MenuItem menuItem)
+            {
+                string parameter = menuItem.Tag as string;
+                if (int.TryParse(parameter, out int mode))
+                    VM.Settings.PlayMode = (ePlayMode)mode;
+                VM.NotifyPropertyChanged(nameof(VM.SelectedPlayModeIndex));
             }
         }
     }

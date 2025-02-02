@@ -55,7 +55,7 @@ namespace MultiPlayer
             }
         }
 
-        private void LoadSettings(string fileName)
+        private async void LoadSettings(string fileName)
         {
             _settings.Load(fileName);
 
@@ -77,7 +77,7 @@ namespace MultiPlayer
             {
                 foreach (VideoPlayerUserControl v in _videos)
                 {
-                    v.Open(@"E:\Temp\YouTube\Music\20210315--＂The Lonely Shepherd''- James Last- pan flute cover-Karla Herescu--ITaj0qAehD8.mp4");
+                    await v.Open(@"E:\Temp\YouTube\Music\20210315--＂The Lonely Shepherd''- James Last- pan flute cover-Karla Herescu--ITaj0qAehD8.mp4");
                     v.ZoomStateSet(eZoomState.FitHeight, true);
                     v.Play();
                 }
