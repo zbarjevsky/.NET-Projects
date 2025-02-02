@@ -1,0 +1,61 @@
+﻿<UserControl x:Class="MultiPlayer.MkZ.WPF.WaitCircleUserControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MultiPlayer.MkZ.WPF"
+             IsVisibleChanged="UserControl_IsVisibleChanged"
+             mc:Ignorable="d" 
+             d:DesignHeight="200" d:DesignWidth="200">
+    <UserControl.Resources>
+        <Color x:Key="ControlColor" >Olive</Color>
+        <SolidColorBrush x:Key="ControlBrush" Color="{StaticResource ControlColor}" Opacity="0.5" />
+        <RadialGradientBrush x:Key="GradientBrush1" GradientOrigin="0.5,0.5" Center="0.5,0.5" RadiusX="0.5" RadiusY="0.5">
+            <GradientStop Color="Transparent" Offset="0" /> <!-- Center Color -->
+            <GradientStop Color="Gray" Offset="0.80" />
+            <GradientStop Color="Gray" Offset="0.80" />
+            <GradientStop Color="Transparent" Offset="1" />  <!-- Outer Color -->
+        </RadialGradientBrush>
+        <RadialGradientBrush x:Key="SphereBrush" GradientOrigin="0.3,0.3" Center="0.5,0.5" RadiusX="0.7" RadiusY="0.7">
+            <!-- Highlight (light source) -->
+            <GradientStop Color="#FFFFFF" Offset="0.0" /> <!-- White center for highlight -->
+
+            <!-- Mid-tone -->
+            <GradientStop Color="#6A9ED6" Offset="0.4" /> <!-- Light blue mid-tone -->
+
+            <!-- Shadow (edge) -->
+            <GradientStop Color="#0A2F5A" Offset="1.0" /> <!-- Dark blue shadow at the edges -->
+        </RadialGradientBrush>
+
+    </UserControl.Resources>
+    <Grid>
+        <Ellipse Width="120" Height="120" StrokeThickness="0.3" Stroke="Transparent" Fill="{StaticResource GradientBrush1}" />
+        <TextBlock x:Name="_text" Text="Loading..." VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"
+                   Foreground="Navy" FontWeight="SemiBold" />
+        <Canvas Width="100" Height="100">
+            <Ellipse Width="20" Height="20" Canvas.Left="40" Canvas.Top="0" Fill="{StaticResource SphereBrush}">
+                <Ellipse.RenderTransform>
+                    <RotateTransform x:Name="spinner" CenterX="10" CenterY="50" />
+                </Ellipse.RenderTransform>
+                <Ellipse.Triggers>
+                    <EventTrigger RoutedEvent="Loaded">
+                        <BeginStoryboard>
+                            <Storyboard RepeatBehavior="Forever">
+                                <DoubleAnimation 
+                                    Storyboard.TargetName="spinner"
+                                    Storyboard.TargetProperty="Angle"
+                                    From="0" To="360"
+                                    Duration="0:0:6" >
+                                    <DoubleAnimation.EasingFunction>
+                                        <!--<BounceEase Bounces="3" Bounciness="2" EasingMode="EaseOut" />-->
+                                        <SineEase EasingMode="EaseIn" />
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Ellipse.Triggers>
+            </Ellipse>
+        </Canvas>
+    </Grid>
+</UserControl>

@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MultiPlayer" 
              xmlns:sys="clr-namespace:System;assembly=netstandard" 
-             xmlns:controls="clr-namespace:MkZ.WPF.Controls"
+             xmlns:controls="clr-namespace:MkZ.WPF.Controls" 
+             xmlns:wpf="clr-namespace:MultiPlayer.MkZ.WPF"
              mc:Ignorable="d" 
              AllowDrop="True"
              Loaded="UserControl_Loaded"
@@ -19,6 +20,8 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <local:SelectedIndexToIconTextConverter x:Key="SelectedIndexToIconTextConverter"/>
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <wpf:InverseVisibilityConverter x:Key="InverseVisConverter" />
     </UserControl.Resources>
     <Grid>
         <Border x:Name="_borderMain" BorderThickness="2" CornerRadius="1" Padding="1" >
@@ -132,6 +135,8 @@
                     </TextBox>
                 </Border>
 
+                <wpf:WaitCircleUserControl Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}" />
+
                 <StackPanel x:Name ="_commands1" Orientation="Horizontal" Margin="4,24"
                             VerticalAlignment="Top" HorizontalAlignment="Right">
                     <Button ToolTip="Open..." Margin="2" Command="{Binding OpenFileCommand}" >
@@ -156,6 +161,9 @@
                 </StackPanel>
 
                 <local:VideoCommandsUserControl x:Name="_commands" Grid.Row="1" Margin="0,0,0,12" />
+
+                <ProgressBar x:Name="_progress" Grid.Row="1" VerticalAlignment="Bottom" Value="0" Minimum="0" Foreground="DodgerBlue"
+                             Visibility="{Binding Visibility, ElementName=_commands, Converter={StaticResource InverseVisConverter}}"/>
 
                 <controls:FadingAutoZoomingLabelControl 
                     Foreground="LightGreen" Text="{Binding VM.Volume, ElementName=_commands, StringFormat=Volume: 0.#%, FallbackValue='Volume: 12%'}"

@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
@@ -309,8 +310,11 @@ namespace MultiPlayer
         {
             VM.Settings.FileName = fileName;
             VideoPlayerElement.Source = null;
-            if (!string.IsNullOrEmpty(fileName))
+            if (!string.IsNullOrEmpty(fileName) && File.Exists(fileName))
+            {
+                VM.IsLoading = true;
                 VideoPlayerElement.Source = new Uri(fileName);
+            }
             Volume = volume;
             VideoPlayerElement.IsMuted = true; //load silently
             MediaState = MediaState.Manual;

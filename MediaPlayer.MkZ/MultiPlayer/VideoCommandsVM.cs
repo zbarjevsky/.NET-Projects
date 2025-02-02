@@ -36,6 +36,9 @@ namespace MultiPlayer
         private RecentFile _recentFile = null;
         private DateTime _playSartTime = DateTime.MinValue;
 
+        private bool _isLoading;
+        public bool IsLoading { get => _isLoading; set => SetProperty(ref _isLoading, value); }
+
         public OnePlayerSettings Settings { get; set; } = new OnePlayerSettings();
 
         public bool IsPopWindowMode { get; private set; } = false;
@@ -110,10 +113,12 @@ namespace MultiPlayer
         public void Clear()
         {
             double volume = _cmd._volume.Value;
+            ePlayMode playMode = Settings.PlayMode;
             Settings = new OnePlayerSettings();
             Update(Settings, IsPopWindowMode);
             _cmd._volume.Value = volume;
             Settings.Volume = volume / 1000.0;
+            Settings.PlayMode = playMode;
 
             Replay.IsReplayChecked = false;
 
@@ -180,6 +185,9 @@ namespace MultiPlayer
             _cmd._position.Maximum = s.Duration;
             _cmd._position.Value = s.Position;
 
+            _player._progress.Maximum = s.Duration;
+            _player._progress.Value = s.Position;
+
             _cmd._speed.SelectedIndex = SpeedRatio(s.SpeedRatio);
 
             _cmd._fit.SelectedIndex = (int)s.ZoomState;
@@ -240,6 +248,7 @@ namespace MultiPlayer
 
         private void MediaPlayStarted(IVideoPlayer player)
         {
+            IsLoading = false;
             TimeSpan delta = DateTime.Now - _playSartTime;
             Debug.WriteLine($"### MediaPlayStarted: {delta} -- {player.FileName}");
             _waitMediaOpenedEvent.TriggerEvent();
@@ -272,6 +281,7 @@ namespace MultiPlayer
 
         private bool MediaPlayFailed(ExceptionRoutedEventArgs e, MediaElement player)
         {
+            IsLoading = false;
             System.Windows.MessageBox.Show(e.ErrorException.Message + "\n" + Settings.FileName, "MediaPlayFailed");
             e.Handled = true;
             return true;
@@ -784,7 +794,7 @@ namespace MultiPlayer
 
             public void ReplayCheckAndUpdate()
             {
-                if (IsReplayChecked && VM._cmd._position.Value > VM.Settings.ReplayPosB)
+                if (IsReplayChecked && (VM._cmd._position.Value < VM.Settings.ReplayPosA || VM._cmd._position.Value > VM.Settings.ReplayPosB))
                     ReplaySetStart();
             }
         }
