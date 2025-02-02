@@ -189,31 +189,31 @@ namespace MultiPlayer
             UpdateMaximizeButtonImage();
         }
 
-        public void CopyState(VideoPlayerUserControl player, double volume, bool copySource)
-        {
-            if (copySource)
-                VideoPlayerElement.Source = player.VideoPlayerElement.Source;
+        //public void CopyState(VideoPlayerUserControl player, double volume, bool copySource)
+        //{
+        //    if (copySource)
+        //        VideoPlayerElement.Source = player.VideoPlayerElement.Source;
 
-            Volume = volume;
-            MediaState = player.MediaState;
-            VM.Title = player.VM.Title;
-            VM.Settings.FileName = player.FileName;
-            IsFlipHorizontally = player.IsFlipHorizontally;
-            Zoom = player.Zoom;
-            ZoomStateSet(player.ZoomStateGet(), true);
-            ScrollOffsetY = player.ScrollOffsetY;
-            PositionSet(player.Position, true);
-        }
+        //    Volume = volume;
+        //    MediaState = player.MediaState;
+        //    VM.Title = player.VM.Title;
+        //    VM.Settings.FileName = player.FileName;
+        //    IsFlipHorizontally = player.IsFlipHorizontally;
+        //    Zoom = player.Zoom;
+        //    ZoomStateSet(player.ZoomStateGet(), true);
+        //    ScrollOffsetY = player.ScrollOffsetY;
+        //    PositionSet(player.Position, true);
+        //}
 
-        public void RestoreMediaState(MediaState state, TimeSpan position)
-        {
-            Play();
-            PositionSet(position, true);
-            if (state == MediaState.Stop)
-                Stop();
-            if (state == MediaState.Pause)
-                Pause();
-        }
+        //public void RestoreMediaState(MediaState state, TimeSpan position)
+        //{
+        //    Play();
+        //    PositionSet(position, true);
+        //    if (state == MediaState.Stop)
+        //        Stop();
+        //    if (state == MediaState.Pause)
+        //        Pause();
+        //}
 
         private void UserControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
@@ -306,80 +306,40 @@ namespace MultiPlayer
             _scrollDragger.ScrollToCenter();
         }
 
-        public async Task Open(string fileName, double volume = 0)
-        {
-            VM.Settings.FileName = fileName;
-            VideoPlayerElement.Source = null;
-            if (!string.IsNullOrEmpty(fileName) && File.Exists(fileName))
-            {
-                VM.IsLoading = true;
-                VideoPlayerElement.Source = new Uri(fileName);
-                //await VM.WaitForMediaOpened();
-            }
+        //public async Task Open_OLD(string fileName, double volume = 0)
+        //{
+        //    VM.Settings.FileName = fileName;
+        //    VideoPlayerElement.Source = null;
+        //    if (!string.IsNullOrEmpty(fileName) && File.Exists(fileName))
+        //    {
+        //        VM.IsLoading = true;
+        //        VideoPlayerElement.Source = new Uri(fileName);
+        //        //await VM.WaitForMediaOpened();
+        //    }
 
-            //wait for source opened
-            //await WaitForSourceOpened(fileName);
+        //    //wait for source opened
+        //    //await WaitForSourceOpened(fileName);
 
-            Volume = volume;
-            VideoPlayerElement.IsMuted = true; //load silently
-            MediaState = MediaState.Manual;
+        //    Volume = volume;
+        //    VideoPlayerElement.IsMuted = true; //load silently
+        //    MediaState = MediaState.Manual;
 
-            if (NaturalDuration > 0)
-                VM.Settings.Duration = NaturalDuration;
+        //    if (NaturalDuration > 0)
+        //        VM.Settings.Duration = NaturalDuration;
 
-            VM.Title = System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(fileName)) + "/" + System.IO.Path.GetFileName(fileName);
-            List<string> fileNames = VM.GetFileNames(fileName, out int idx);
-            if (idx >= 0)
-                VM.Title = $"{idx}/{fileNames.Count} " + VM.Title;
-        }
-
-        private async Task WaitForSourceOpened(string fileName)
-        {
-            if (!string.IsNullOrEmpty(fileName) && File.Exists(fileName))
-            {
-                //wait for source opened
-                int i = 0;
-                for (; i < 10; i++)
-                {
-                    if (NaturalDuration > 0)
-                        break;
-
-                    VideoPlayerElement.ForceRender();
-                    await Task.Delay(333);
-                }
-
-                Debug.WriteLine("### Check NaturalDuration, tries {0} - Duration: {1:###,##0} sec", i, NaturalDuration);
-            }
-        }
+        //    VM.Title = System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(fileName)) + "/" + System.IO.Path.GetFileName(fileName);
+        //    List<string> fileNames = VM.GetFileNames(fileName, out int idx);
+        //    if (idx >= 0)
+        //        VM.Title = $"{idx}/{fileNames.Count} " + VM.Title;
+        //}
 
         public async Task LoadSetting(OnePlayerSettings s, bool pop = false)
         {
-            await Open(s.FileName, s.Volume);
-
-            PositionSet(TimeSpan.FromSeconds(s.Position), false);
-            SpeedRatio = s.SpeedRatio;
-            ZoomStateSet(s.ZoomState, true);
-
-            VM.Update(s, pop);
-            VM.UpdateRrecentFile(s);
-
-            VM.Play();
-            if (s.MediaState != MediaState.Play)
-            {
-                //await VM.WaitForMediaOpened();
-                if (System.IO.Path.GetExtension(s.FileName) == ".mp3")
-                    await Task.Delay(120); //implement audio player instead
-                VM.Pause();
-            }
-            VM.TogglePlayPauseCommand.RefreshBoundControls();
-            VM.AdjustSizeAndLayout();
+            await VM.OpenFromSettings(s, pop);
         }
 
         public void Clear()
         {
-            Stop();
-            VM.Settings.FileName = "";
-            VideoPlayerElement.Source = null;
             this.Background = Brushes.LightGray;
             MediaState = MediaState.Close;
             VM.Clear();
@@ -552,7 +512,6 @@ namespace MultiPlayer
                     _scrollDragger.Zoom = zoom_save;
                     ZoomStateSet(zoomState, false);
                     MediaState = GetMediaState(VideoPlayerElement);
-                    VideoPlayerElement.IsMuted = false;
                     VideoStartedAction(this);
                 };
                 VideoPlayerElement.MediaEnded += (s, e) => { VideoEnded(this); };
@@ -676,7 +635,7 @@ namespace MultiPlayer
                 string[] files = (string[])e.Data.GetData(System.Windows.DataFormats.FileDrop);
 
                 // handling code you have defined.
-                VM.OpenFile(files[0], startFrom0: false);
+                _ = VM.OpenFromFile(files[0], startFrom0: false);
             }
             else if (e.Data.GetDataPresent(DragDropDataFormat))
             {
@@ -685,11 +644,11 @@ namespace MultiPlayer
                 OnePlayerSettings setTo = new OnePlayerSettings(this);
                 if (!string.IsNullOrWhiteSpace(setFrom.FileName) && setFrom.FileName != setTo.FileName)
                 {
-                    this.LoadSetting(setFrom, VM.IsPopWindowMode);
+                    _ = this.LoadSetting(setFrom, VM.IsPopWindowMode);
                     //if CTRL is pressed - "copy" the conthent
                     //else - update vFrom - "exchange"
                     if (!Keyboard.IsKeyDown(Key.LeftCtrl) && !Keyboard.IsKeyDown(Key.RightCtrl))
-                        vFrom.LoadSetting(setTo, vFrom.VM.IsPopWindowMode);
+                        _ = vFrom?.LoadSetting(setTo, vFrom.VM.IsPopWindowMode);
                 }
             }
             DragDropSource = null;
@@ -702,7 +661,7 @@ namespace MultiPlayer
 
         private void Reload_Click(object sender, RoutedEventArgs e)
         {
-            VM.OpenFile(VM.Settings.FileName, startFrom0:false);
+            VM.OpenFromFile(VM.Settings.FileName, startFrom0:false);
         }
 
         private void Settings_Click(object sender, RoutedEventArgs e)

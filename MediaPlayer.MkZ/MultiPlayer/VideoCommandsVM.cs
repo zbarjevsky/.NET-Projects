@@ -34,7 +34,7 @@ namespace MultiPlayer
         VideoCommandsUserControl _cmd;
 
         private RecentFile _recentFile = null;
-        private DateTime _playSartTime = DateTime.MinValue;
+        private Stopwatch _playSartTime = Stopwatch.StartNew();
 
         private bool _isLoading;
         public bool IsLoading { get => _isLoading; set => SetProperty(ref _isLoading, value); }
@@ -70,6 +70,18 @@ namespace MultiPlayer
             get { return _player != null ? _player.Volume : 0; }
         }
 
+
+        public bool IsMuted
+        {
+            get { return _player.VideoPlayerElement.IsMuted; }
+            set { _player.VideoPlayerElement.IsMuted = value; NotifyPropertyChanged(); }
+        }
+
+        public TimeSpan Position
+        {
+            get { return _player.VideoPlayerElement.Position; }
+            set { _player.VideoPlayerElement.Position = value; Settings.Position = value.TotalSeconds; NotifyPropertyChanged(); }
+        }
         private string _playPauseIconText = PLAY_TEXT;
         public string PlayPauseIconText
         {
@@ -94,7 +106,9 @@ namespace MultiPlayer
 
         public void Play()
         {
-            _playSartTime = DateTime.Now;
+            //Debug.WriteLine($"### MediaPlayStarted - Requested, File: {Settings.FileName}");
+
+            _playSartTime.Restart();
 
             _player.Play();
             _cmd._btnPlayPause.Background = Brushes.LightGreen;
@@ -117,11 +131,19 @@ namespace MultiPlayer
 
         public void Clear()
         {
+            _player.Stop();
+            Settings.FileName = "";
+            _player.VideoPlayerElement.Source = null;
+
             double volume = _cmd._volume.Value;
             ePlayMode playMode = Settings.PlayMode;
+            int fitIndex = _cmd._fit.SelectedIndex;
+
             Settings = new OnePlayerSettings();
             Update(Settings, IsPopWindowMode);
+
             _cmd._volume.Value = volume;
+            _cmd._fit.SelectedIndex = fitIndex; //ZoomState;
             Settings.Volume = volume / 1000.0;
             Settings.PlayMode = playMode;
 
@@ -142,9 +164,18 @@ namespace MultiPlayer
                 ofd.FileName = fileName;
             }
 
+            MediaState state = _player.MediaState;
+            if (state == MediaState.Play)
+                Pause();
+
             if (ofd.ShowDialog().Value)
             {
-                OpenFile(ofd.FileName, startFrom0: true);
+                _ = OpenFromFile(ofd.FileName, startFrom0: true);
+            }
+            else // cancel - continue play if needed
+            {
+                if (state == MediaState.Play)
+                    Play();
             }
         }
 
@@ -229,7 +260,11 @@ namespace MultiPlayer
             }
         }
 
-        public async void OpenFile(string fileName, bool startFrom0)
+        //use settings from current player
+        // - volume
+        // - play mode
+        // - window fit
+        public async Task OpenFromFile(string fileName, bool startFrom0)
         {
             if (_recentFile != null) //update previous recent file
                 _recentFile.Update(Settings);
@@ -237,25 +272,100 @@ namespace MultiPlayer
 
             Settings.FileName = fileName;
 
-            await _player.Open(Settings.FileName, Settings.Volume);
-            _cmd._position.Maximum = _player.NaturalDuration;
-
             _recentFile = MainWindow.FindOrCreateRecentFile(fileName);
 
             Settings.Position = startFrom0 ? 0 : _recentFile.Position;
 
             Replay.UpdateReplay(false, _recentFile.ReplayPosA, _recentFile.ReplayPosB);
 
-            Play();
+            Settings.MediaState = MediaState.Play;
 
-            CommandManager.InvalidateRequerySuggested();
+            await OpenFromSettings(new OnePlayerSettings(Settings), IsPopWindowMode);
+
+            //CommandManager.InvalidateRequerySuggested();
+        }
+
+        public async Task OpenFromSettings(OnePlayerSettings s, bool pop = false)
+        {
+            IsPopWindowMode = pop;
+
+            Clear();
+            if (string.IsNullOrEmpty(s.FileName) || !File.Exists(s.FileName))
+            {
+                _player.VideoPlayerElement.ForceRender();
+                return;
+            }
+
+            this.IsLoading = true;
+            Settings.FileName = s.FileName;
+            Settings.Position = s.Position;
+            Settings.Volume = s.Volume;
+
+            _player.VideoPlayerElement.Source = new Uri(s.FileName);
+            _player.PositionSet(TimeSpan.FromSeconds(s.Position), false);
+            _player.Volume = s.Volume;
+
+            this.Title = System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(s.FileName)) + "/" + System.IO.Path.GetFileName(s.FileName);
+            List<string> fileNames = this.GetFileNames(s.FileName, out int idx);
+            if (idx >= 0)
+                this.Title = $"{idx}/{fileNames.Count} " + this.Title;
+
+            this.IsMuted = true; //load silently
+
+            this.Play();
+
+            //wait for source opened
+            await WaitForNaturalDurationUpdated(s.FileName);
+
+            if (_player.NaturalDuration > 0)
+                s.Duration = _player.NaturalDuration;
+
+            if (s.MediaState != MediaState.Play)
+            {
+                if (System.IO.Path.GetExtension(s.FileName) == ".mp3")
+                {
+                    await Task.Delay(33); //TODO: implement audio player instead
+                    //_player.VideoPlayerElement.ForceRender();
+                    //_player.Play();
+                }
+                this.Pause();
+            }
+
+            await WaitForMediaOpened();
+
+            this.IsMuted = false; //restore volume
+
+            this.Update(s, pop);
+            this.UpdateRrecentFile(s);
+
+            this.TogglePlayPauseCommand.RefreshBoundControls();
+            this.AdjustSizeAndLayout();
+        }
+
+        private async Task WaitForNaturalDurationUpdated(string fileName)
+        {
+            if (!string.IsNullOrEmpty(fileName) && File.Exists(fileName))
+            {
+                //wait for source opened
+                int i = 0;
+                for (; i < 10; i++)
+                {
+                    if (_player.NaturalDuration > 0)
+                        break;
+
+                    _player.VideoPlayerElement.ForceRender();
+                    await Task.Delay(333);
+                }
+
+                Debug.WriteLine("### Check NaturalDuration, tries {0} - Duration: {1:###,##0} sec, file: {2}", i, _player.NaturalDuration, fileName);
+            }
         }
 
         private void MediaPlayStarted(IVideoPlayer player)
         {
             IsLoading = false;
-            TimeSpan delta = DateTime.Now - _playSartTime;
-            Debug.WriteLine($"### MediaPlayStarted: {delta} -- {player.FileName}");
+            TimeSpan delta = _playSartTime.Elapsed;
+            Debug.WriteLine($"### MediaPlayStarted - Elapsed: {delta.TotalSeconds.ToString("0.000")}, File: {Settings.FileName}");
             _waitMediaOpenedEvent.TriggerEvent();
         }
 
@@ -279,7 +389,7 @@ namespace MultiPlayer
                     break;
                 case ePlayMode.RepeatOne:
                 default:
-                    OpenFile(Settings.FileName, startFrom0: true);
+                    OpenFromFile(Settings.FileName, startFrom0: true);
                     break;
             }
         }
@@ -296,7 +406,7 @@ namespace MultiPlayer
         {
             if (_player != null && _cmd != null)
             {
-                 Settings.Volume = _cmd._volume.Value / 1000.0;
+                Settings.Volume = _cmd._volume.Value / 1000.0;
                 _player.Volume = Settings.Volume;
                 NotifyPropertyChanged(nameof(Volume));
             }
@@ -468,7 +578,7 @@ namespace MultiPlayer
             idx--;
             if (idx < 0)
                 idx = fileNames.Count - 1;
-            OpenFile(fileNames[idx], startFrom0: true);
+            OpenFromFile(fileNames[idx], startFrom0: true);
         }
 
         private Random _random = new Random();
@@ -487,7 +597,7 @@ namespace MultiPlayer
             }
 
             if (idx >= 0 && idx < fileNames.Count)
-                OpenFile(fileNames[idx], startFrom0: true);
+                OpenFromFile(fileNames[idx], startFrom0: true);
         }
 
         public List<string> GetFileNames(string fileName, out int idx)
@@ -645,7 +755,16 @@ namespace MultiPlayer
 
         public async Task WaitForMediaOpened()
         {
+            if (IsLoading == false) //already loaded
+                return; 
+
+            Stopwatch sw = Stopwatch.StartNew();
+
             await _waitMediaOpenedEvent.WaitForEvent();
+            //await Task.Delay(100);
+
+            TimeSpan elapsed = sw.Elapsed;
+            Debug.WriteLine($"*** WaitForMediaOpened {elapsed.TotalSeconds.ToString("0.000")} sec - file: {Settings.FileName}");
         }
 
         public class WaitForEventImpl

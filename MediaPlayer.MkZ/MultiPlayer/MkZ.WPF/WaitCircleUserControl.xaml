@@ -48,7 +48,7 @@
                                     Duration="0:0:6" >
                                     <DoubleAnimation.EasingFunction>
                                         <!--<BounceEase Bounces="3" Bounciness="2" EasingMode="EaseOut" />-->
-                                        <SineEase EasingMode="EaseIn" />
+                                        <SineEase EasingMode="EaseInOut" />
                                     </DoubleAnimation.EasingFunction>
                                 </DoubleAnimation>
                             </Storyboard>

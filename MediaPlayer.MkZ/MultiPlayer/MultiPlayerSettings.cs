@@ -112,6 +112,11 @@ namespace MultiPlayer
             Update(v);
         }
 
+        public OnePlayerSettings(OnePlayerSettings s)
+        {
+            Update(s);
+        }
+
         public void Update(OnePlayerSettings s)
         {
             FileName = s.FileName;

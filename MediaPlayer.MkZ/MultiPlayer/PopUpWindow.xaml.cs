@@ -50,7 +50,7 @@ namespace MultiPlayer
 
         public void LoadSettings(OnePlayerSettings settings)
         {
-            _video.LoadSetting(settings, true);
+            _ = _video.LoadSetting(settings, true);
         }
 
         public void MaximizeToggle()
