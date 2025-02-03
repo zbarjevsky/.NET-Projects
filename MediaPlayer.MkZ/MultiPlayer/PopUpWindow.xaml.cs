@@ -86,6 +86,36 @@ namespace MultiPlayer
             _video.Clear();
         }
 
+        private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            e.Handled = true;
+
+            if (e.Key == System.Windows.Input.Key.Space || e.Key == System.Windows.Input.Key.MediaPlayPause)
+            {
+                _video.VM.TogglePlayPauseCommand.Execute(null);
+            }
+            else if (e.Key == System.Windows.Input.Key.Left || e.Key == System.Windows.Input.Key.Right)
+            {
+                _video.VM.Skip10SecondsCommand.Execute(e.Key == System.Windows.Input.Key.Right);
+            }
+            else if (e.Key == System.Windows.Input.Key.Up || e.Key == System.Windows.Input.Key.Down)
+            {
+                _video.VM.VolumeUpdate(e.Key == System.Windows.Input.Key.Up ? 120 : -120);
+            }
+            else if (e.Key == System.Windows.Input.Key.OemComma || e.Key == System.Windows.Input.Key.OemPeriod)
+            {
+                _video.VM.SkipOneFrameCommand.Execute(e.Key == System.Windows.Input.Key.OemPeriod);
+            }
+            else if (e.Key == System.Windows.Input.Key.F || e.Key == System.Windows.Input.Key.F11)
+            {
+                MaximizeToggle();
+            }
+            else
+            {
+                e.Handled = false;
+            }
+        }
+
         private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
             if (Keyboard.Modifiers == ModifierKeys.None && e.Key == Key.Escape)
@@ -95,10 +125,6 @@ namespace MultiPlayer
                     MaximizeToggle();
                 else
                     this.Close();
-            }
-            else if (e.Key == System.Windows.Input.Key.Space || e.Key == System.Windows.Input.Key.MediaPlayPause)
-            {
-                _video.VM.TogglePlayPauseCommand.Execute(null);
             }
         }
 

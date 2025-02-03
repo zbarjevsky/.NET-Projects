@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:MultiPlayer"
         WindowStartupLocation="CenterOwner"
         WindowState="Normal"
+        PreviewKeyDown="Window_PreviewKeyDown"
         KeyDown="Window_KeyDown"
         Closing="Window_Closing"
         mc:Ignorable="d"

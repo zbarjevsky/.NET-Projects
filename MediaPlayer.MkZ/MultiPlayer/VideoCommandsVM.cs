@@ -47,6 +47,8 @@ namespace MultiPlayer
         public RelayCommand OpenFileCommand { get; }
         public RelayCommand PrevFileCommand { get; }
         public RelayCommand NextFileCommand { get; }
+        public RelayCommand SkipOneFrameCommand { get; }
+        public RelayCommand Skip10SecondsCommand { get; }
 
         public VideoCommandsVM()
         {
@@ -55,7 +57,8 @@ namespace MultiPlayer
             TogglePlayPauseCommand = new RelayCommand(TogglePlayPauseCommandExecute, TogglePlayPauseCommandCanExecute);
             OpenFileCommand = new RelayCommand(OpenFileCommandExecute);
             PrevFileCommand = new RelayCommand(PrevFileCommandExecute, PrevFileCommandCanExecute);
-            NextFileCommand = new RelayCommand(NextFileCommandExecute, NextFileCommandCanExecute);
+            Skip10SecondsCommand = new RelayCommand(Skip10SecondsCommandExecute, (o) => true);
+            SkipOneFrameCommand = new RelayCommand(SkipOneFrameCommandExecute, (o) => true);
         }
 
         private string _title;
@@ -422,7 +425,7 @@ namespace MultiPlayer
             _cmd._volume.Value = _volumeLevels[idx];
         }
 
-        double [] _volumeLevels = { 0, 10, 20, 30, 50, 70, 100, 200, 300, 400, 500, 600, 700, 800, 900, 1000, 1001 };
+        double [] _volumeLevels = { 0, 10, 20, 30, 40, 50, 60, 80, 100, 200, 300, 400, 500, 600, 800, 1000, 1001 };
 
         private int GetVolumeIndex()
         {
@@ -512,6 +515,7 @@ namespace MultiPlayer
             if (_player == null || _isInUpdate)
                 return;
 
+            IsMuted = true;
             bool resume = (_player.MediaState == MediaState.Play);
             if (resume)
                 Pause();
@@ -525,6 +529,7 @@ namespace MultiPlayer
             if (resume)
                 Play();
 
+            IsMuted = false;
             e.Handled = true;
         }
 
@@ -699,15 +704,21 @@ namespace MultiPlayer
             _cmd._popupSliderTooltip.IsOpen = false;
         }
 
-        public void PrevFrame_Click(object sender, RoutedEventArgs e)
+        private void Skip10SecondsCommandExecute(object obj)
         {
-            _cmd._position.Value -= 0.1;
-            Settings.Position = _cmd._position.Value;
+            if (obj is bool nextFrame)
+                SkipPosition(nextFrame ? 10.0 : -10.0);
         }
 
-        public void NextFrame_Click(object sender, RoutedEventArgs e)
+        private void SkipOneFrameCommandExecute(object obj)
         {
-            _cmd._position.Value += 0.1;
+            if (obj is bool nextFrame)
+                SkipPosition(nextFrame ? 0.1 : -0.1);
+        }
+
+        public void SkipPosition(double seconds)
+        {
+            _cmd._position.Value += seconds;
             Settings.Position = _cmd._position.Value;
         }
 

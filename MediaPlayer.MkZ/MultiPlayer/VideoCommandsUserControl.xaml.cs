@@ -96,12 +96,12 @@ namespace MultiPlayer
 
         private void PrevFrame_Click(object sender, RoutedEventArgs e)
         {
-            VM.PrevFrame_Click(sender, e);
+            VM.SkipOneFrameCommand.Execute(false);
         }
 
         private void NextFrame_Click(object sender, RoutedEventArgs e)
         {
-            VM.NextFrame_Click(sender, e);
+            VM.SkipOneFrameCommand.Execute(true);
         }
 
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
