@@ -140,7 +140,7 @@ namespace MultiPlayer
             int fitIndex = _cmd._fit.SelectedIndex;
 
             Settings = new OnePlayerSettings();
-            Update(Settings, IsPopWindowMode);
+            Update(Settings, IsPopWindowMode, lockUpdate: false);
 
             _cmd._volume.Value = volume;
             _cmd._fit.SelectedIndex = fitIndex; //ZoomState;
@@ -209,11 +209,12 @@ namespace MultiPlayer
         }
 
         bool _isInUpdate = false;
-        public void Update(OnePlayerSettings s, bool pop = false)
+        public void Update(OnePlayerSettings s, bool pop = false, bool lockUpdate = true)
         {
             IsPopWindowMode = pop;
 
-            _isInUpdate = true;
+            if (lockUpdate)
+                _isInUpdate = true;
 
             Settings.Update(s);
 
@@ -322,12 +323,6 @@ namespace MultiPlayer
 
             if (s.MediaState != MediaState.Play)
             {
-                if (System.IO.Path.GetExtension(s.FileName) == ".mp3")
-                {
-                    await Task.Delay(33); //TODO: implement audio player instead
-                    //_player.VideoPlayerElement.ForceRender();
-                    //_player.Play();
-                }
                 this.Pause();
             }
 
@@ -335,7 +330,7 @@ namespace MultiPlayer
 
             this.IsMuted = false; //restore volume
 
-            this.Update(s, pop);
+            this.Update(s, pop, lockUpdate: false);
             this.UpdateRrecentFile(s);
 
             this.TogglePlayPauseCommand.RefreshBoundControls();

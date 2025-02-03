@@ -173,7 +173,7 @@ namespace MultiPlayer
         {
             _timer.Stop();
             VM.Settings.Update(this);
-            VM.Update(VM.Settings, VM.IsPopWindowMode);
+            VM.Update(VM.Settings, VM.IsPopWindowMode, lockUpdate: true);
             VM.Replay.ReplayCheckAndUpdate();
             _timer.Start();
         }
@@ -373,7 +373,7 @@ namespace MultiPlayer
                 MediaState = MediaState.Pause;
 
                 VM.Settings.Update(this);
-                VM.Update(VM.Settings, VM.IsPopWindowMode);
+                VM.Update(VM.Settings, VM.IsPopWindowMode, lockUpdate: false);
             }
         }
 
@@ -387,7 +387,7 @@ namespace MultiPlayer
                 MediaState = MediaState.Stop;
                 
                 VM.Settings.Update(this);
-                VM.Update(VM.Settings, VM.IsPopWindowMode);
+                VM.Update(VM.Settings, VM.IsPopWindowMode, lockUpdate: false);
 
                 //clear window - sometimes it is not closed properly
                 RecreateMediaElement(false);
@@ -640,7 +640,7 @@ namespace MultiPlayer
             else if (e.Data.GetDataPresent(DragDropDataFormat))
             {
                 VideoPlayerUserControl vFrom = DragDropSource;
-                OnePlayerSettings setFrom = (OnePlayerSettings)(e.Data.GetData(DragDropDataFormat));
+                OnePlayerSettings setFrom = new OnePlayerSettings((OnePlayerSettings)(e.Data.GetData(DragDropDataFormat)));
                 OnePlayerSettings setTo = new OnePlayerSettings(this);
                 if (!string.IsNullOrWhiteSpace(setFrom.FileName) && setFrom.FileName != setTo.FileName)
                 {
@@ -661,7 +661,7 @@ namespace MultiPlayer
 
         private void Reload_Click(object sender, RoutedEventArgs e)
         {
-            VM.OpenFromFile(VM.Settings.FileName, startFrom0:false);
+            _ = VM.OpenFromSettings(new OnePlayerSettings(VM.Settings), VM.IsPopWindowMode);
         }
 
         private void Settings_Click(object sender, RoutedEventArgs e)

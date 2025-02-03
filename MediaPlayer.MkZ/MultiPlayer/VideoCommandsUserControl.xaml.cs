@@ -45,10 +45,10 @@ namespace MultiPlayer
             VM.Init(v, this);
         }
 
-        public void Update(OnePlayerSettings s, bool pop = false)
-        {
-            VM.Update(s, pop);
-        }
+        //public void Update(OnePlayerSettings s, bool pop = false)
+        //{
+        //    VM.Update(s, pop);
+        //}
 
         private void Volume_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {

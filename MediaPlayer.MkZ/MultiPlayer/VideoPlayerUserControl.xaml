@@ -193,7 +193,8 @@
 
                 <local:VideoCommandsUserControl x:Name="_commands" Grid.Row="1" Margin="0,0,0,12" />
 
-                <ProgressBar x:Name="_progress" Grid.Row="1" VerticalAlignment="Bottom" Value="0" Minimum="0" Foreground="DodgerBlue"
+                <ProgressBar x:Name="_progress" Grid.Row="1" VerticalAlignment="Bottom" Value="0" Minimum="0" 
+                             Foreground="Navy" Background="Transparent"
                              Visibility="{Binding Visibility, ElementName=_commands, Converter={StaticResource InverseVisConverter}}"/>
 
                 <controls:FadingAutoZoomingLabelControl 

@@ -67,6 +67,8 @@ namespace MultiPlayer
 
             if (_settings.PlayerSettings.Count > 2)
             {
+                await InitFirstPlayerForMp3();
+
                 for (int i = 0; i < _videos.Count && i < _settings.PlayerSettings.Count; i++)
                 {
                     _ = _videos[i].LoadSetting(_settings.PlayerSettings[i]);
@@ -78,6 +80,25 @@ namespace MultiPlayer
                 {
                     _ = v.VM.OpenFromFile(@"E:\Temp\YouTube\Music\20210315--＂The Lonely Shepherd''- James Last- pan flute cover-Karla Herescu--ITaj0qAehD8.mp4", true);
                 }
+            }
+        }
+
+        /// <summary>
+        /// HACK
+        /// If the first player has MP3 file - it is stuck
+        /// pre-load it will work second time
+        /// </summary>
+        private async Task InitFirstPlayerForMp3()
+        {
+            string fileName = _settings.PlayerSettings[0].FileName.ToLower();
+            if (string.IsNullOrEmpty(fileName))
+                return;
+
+            if (System.IO.Path.GetExtension(fileName) == ".mp3")
+            {
+                //preload settings to init player control
+                _ = _videos[0].LoadSetting(_settings.PlayerSettings[0]);
+                await Task.Delay(333);
             }
         }
 
