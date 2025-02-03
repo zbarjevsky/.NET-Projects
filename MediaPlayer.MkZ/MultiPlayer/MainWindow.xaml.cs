@@ -160,8 +160,12 @@ namespace MultiPlayer
             this.Close();
         }
 
-        private void Window_KeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        private void Window_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
         {
+            var video = _videos.FirstOrDefault(v => v.IsInFocus);
+
+            e.Handled = true;
+
             if (e.Key == _settings.KeyCloseApp)
                 this.Close();
             else if (e.Key == _settings.KeyClearAll)
@@ -172,9 +176,8 @@ namespace MultiPlayer
                 this.LoadSettings(_settings.DefaultSettingsFileName);
             else if (e.Key == _settings.KeySaveAsDefault)
                 this.SaveSettings(_settings.DefaultSettingsFileName);
-            else if (e.Key == System.Windows.Input.Key.Space || e.Key == System.Windows.Input.Key.MediaPlayPause)
-                this.TogglePlayPauseForPlayerInFocus();
-
+            else
+                e.Handled = video?.VM.Control_KeyDown(e) == true;
         }
 
         private void ClearAll_Click(object sender, RoutedEventArgs e)
@@ -224,15 +227,6 @@ namespace MultiPlayer
             if (!RecentFiles.ContainsKey(name))
                 RecentFiles.Add(name, new RecentFile() { FileName = name });
             return RecentFiles[name];
-        }
-
-        private void TogglePlayPauseForPlayerInFocus()
-        {
-            foreach (VideoPlayerUserControl v in _videos)
-            {
-                if (v.IsInFocus)
-                    v.VM.TogglePlayPauseCommand.Execute(null);
-            }
         }
 
         private void PauseAll_Click(object sender, RoutedEventArgs e)

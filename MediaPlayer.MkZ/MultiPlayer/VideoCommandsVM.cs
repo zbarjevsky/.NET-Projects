@@ -704,6 +704,22 @@ namespace MultiPlayer
             _cmd._popupSliderTooltip.IsOpen = false;
         }
 
+        public bool Control_KeyDown(System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key == System.Windows.Input.Key.Space || e.Key == System.Windows.Input.Key.MediaPlayPause)
+                TogglePlayPauseCommand.Execute(null);
+            else if (e.Key == System.Windows.Input.Key.Up || e.Key == System.Windows.Input.Key.Down)
+                VolumeUpdate(e.Key == System.Windows.Input.Key.Up ? 120 : -120);
+            else if (e.Key == System.Windows.Input.Key.Left || e.Key == System.Windows.Input.Key.Right)
+                Skip10SecondsCommand.Execute(e.Key == System.Windows.Input.Key.Right);
+            else if (e.Key == System.Windows.Input.Key.OemComma || e.Key == System.Windows.Input.Key.OemPeriod)
+                SkipOneFrameCommand.Execute(e.Key == System.Windows.Input.Key.OemPeriod);
+            else
+                return false;
+
+            return true;
+        }
+
         private void Skip10SecondsCommandExecute(object obj)
         {
             if (obj is bool nextFrame)
