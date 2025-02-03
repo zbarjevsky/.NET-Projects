@@ -139,6 +139,8 @@
                     </ContextMenu>
                 </Grid.ContextMenu>
                 
+                <wpf:WaitCircleUserControl Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}" />
+
                 <ScrollViewer Name="_scrollPlayerContainer" Grid.RowSpan="2"
                               HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
                               PreviewMouseWheel="ScrollViewer_PreviewMouseWheel"
@@ -165,8 +167,6 @@
                         </TextBox.Background>-->
                     </TextBox>
                 </Border>
-
-                <wpf:WaitCircleUserControl Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}" />
 
                 <StackPanel x:Name ="_commands1" Orientation="Horizontal" Margin="4,24"
                             VerticalAlignment="Top" HorizontalAlignment="Right">
