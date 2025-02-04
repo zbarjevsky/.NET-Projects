@@ -10,6 +10,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
@@ -24,10 +25,13 @@ namespace MultiPlayer.MkZ.WPF
     {
         DispatcherTimer _timer;
         Stopwatch _stopwatch = new Stopwatch();
+        Style _style;
 
         public WaitCircleUserControl()
         {
             InitializeComponent();
+
+            _style = (Style)FindResource("EllipseAnimationStyle");
 
             _timer = new DispatcherTimer();
             _timer.Interval = TimeSpan.FromMilliseconds(33);
@@ -43,11 +47,13 @@ namespace MultiPlayer.MkZ.WPF
         {
             if (this.IsVisible)
             {
+                _ellipse.Style = _style;
                 _stopwatch.Restart();
                 _timer.Start();
             }
             else
             {
+                _ellipse.Style = null;
                 _stopwatch.Stop();
                 _timer.Stop();
             }

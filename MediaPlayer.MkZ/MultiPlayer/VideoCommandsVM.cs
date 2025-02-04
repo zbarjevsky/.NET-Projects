@@ -57,6 +57,7 @@ namespace MultiPlayer
             TogglePlayPauseCommand = new RelayCommand(TogglePlayPauseCommandExecute, TogglePlayPauseCommandCanExecute);
             OpenFileCommand = new RelayCommand(OpenFileCommandExecute);
             PrevFileCommand = new RelayCommand(PrevFileCommandExecute, PrevFileCommandCanExecute);
+            NextFileCommand = new RelayCommand(NextFileCommandExecute, NextFileCommandCanExecute);
             Skip10SecondsCommand = new RelayCommand(Skip10SecondsCommandExecute, (o) => true);
             SkipOneFrameCommand = new RelayCommand(SkipOneFrameCommandExecute, (o) => true);
         }

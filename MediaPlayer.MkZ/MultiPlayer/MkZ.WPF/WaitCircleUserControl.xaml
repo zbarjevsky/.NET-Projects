@@ -27,35 +27,47 @@
             <GradientStop Color="#0A2F5A" Offset="1.0" /> <!-- Dark blue shadow at the edges -->
         </RadialGradientBrush>
 
+        <Style x:Key="EllipseAnimationStyle" TargetType="Ellipse">
+            <Setter Property="RenderTransform">
+                <Setter.Value>
+                    <RotateTransform x:Name="spinner" CenterX="10" CenterY="50" />
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="Visibility" Value="Visible">
+                    <Trigger.EnterActions>
+                        <BeginStoryboard x:Name="SpinStoryboard">
+                            <Storyboard >
+                                <DoubleAnimation 
+                                                Storyboard.TargetProperty="RenderTransform.Angle"
+                                                From="0" To="360"
+                                                Duration="0:0:3" 
+                                                RepeatBehavior="Forever">
+                                    <DoubleAnimation.EasingFunction>
+                                        <!--<BounceEase Bounces="1" Bounciness="2" EasingMode="EaseInOut" />-->
+                                        <SineEase EasingMode="EaseInOut" />
+                                    </DoubleAnimation.EasingFunction>
+                                </DoubleAnimation>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </Trigger.EnterActions>
+                    <Trigger.ExitActions>
+                        <StopStoryboard BeginStoryboardName="SpinStoryboard"></StopStoryboard>
+                    </Trigger.ExitActions>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
     </UserControl.Resources>
     <Grid>
         <Ellipse Width="120" Height="120" StrokeThickness="0.3" Stroke="Transparent" Fill="{StaticResource GradientBrush1}" />
         <TextBlock x:Name="_text" Text="Loading..." VerticalAlignment="Center" HorizontalAlignment="Center" TextAlignment="Center"
                    Foreground="Navy" FontWeight="SemiBold" />
         <Canvas Width="100" Height="100">
-            <Ellipse Width="20" Height="20" Canvas.Left="40" Canvas.Top="0" Fill="{StaticResource SphereBrush}">
-                <Ellipse.RenderTransform>
-                    <RotateTransform x:Name="spinner" CenterX="10" CenterY="50" />
-                </Ellipse.RenderTransform>
-                <Ellipse.Triggers>
-                    <EventTrigger RoutedEvent="Loaded">
-                        <BeginStoryboard>
-                            <Storyboard RepeatBehavior="Forever">
-                                <DoubleAnimation 
-                                    Storyboard.TargetName="spinner"
-                                    Storyboard.TargetProperty="Angle"
-                                    From="0" To="360"
-                                    Duration="0:0:6" >
-                                    <DoubleAnimation.EasingFunction>
-                                        <!--<BounceEase Bounces="3" Bounciness="2" EasingMode="EaseOut" />-->
-                                        <SineEase EasingMode="EaseInOut" />
-                                    </DoubleAnimation.EasingFunction>
-                                </DoubleAnimation>
-                            </Storyboard>
-                        </BeginStoryboard>
-                    </EventTrigger>
-                </Ellipse.Triggers>
-            </Ellipse>
+            <Ellipse x:Name="_ellipse" Width="20" Height="20" Canvas.Left="40" Canvas.Top="0" 
+                     Style="{StaticResource EllipseAnimationStyle}"
+                     Fill="{StaticResource SphereBrush}">
+           </Ellipse>
         </Canvas>
     </Grid>
 </UserControl>
