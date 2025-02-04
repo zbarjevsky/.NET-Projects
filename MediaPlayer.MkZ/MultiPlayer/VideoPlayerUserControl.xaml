@@ -139,7 +139,8 @@
                     </ContextMenu>
                 </Grid.ContextMenu>
                 
-                <wpf:WaitCircleUserControl Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}" />
+                <wpf:WaitCircleUserControl HorizontalAlignment="Center" VerticalAlignment="Center"
+                    Visibility="{Binding IsLoading, Converter={StaticResource BoolToVisibilityConverter}}" />
 
                 <ScrollViewer Name="_scrollPlayerContainer" Grid.RowSpan="2"
                               HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto"
@@ -198,9 +199,9 @@
                              Foreground="Navy" Background="Transparent"
                              Visibility="{Binding Visibility, ElementName=_commands, Converter={StaticResource InverseVisConverter}}"/>
 
-                <controls:FadingAutoZoomingLabelControl 
+                <controls:FadingAutoZoomingLabelControl Height="20"
                     Foreground="LightGreen" Text="{Binding VM.Volume, ElementName=_commands, StringFormat=Volume: 0.#%, FallbackValue='Volume: 12%'}"
-                    Height="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="4"  />
+                    VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="4"  />
             </Grid>
         </Border>
     </Grid>

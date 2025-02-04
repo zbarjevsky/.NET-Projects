@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:MultiPlayer.MkZ.WPF"
              IsVisibleChanged="UserControl_IsVisibleChanged"
              mc:Ignorable="d" 
-             d:DesignHeight="200" d:DesignWidth="200">
+             Height="150" Width="150"
+             d:DesignHeight="150" d:DesignWidth="150">
     <UserControl.Resources>
         <Color x:Key="ControlColor" >Olive</Color>
         <SolidColorBrush x:Key="ControlBrush" Color="{StaticResource ControlColor}" Opacity="0.5" />
