@@ -714,5 +714,10 @@ namespace MultiPlayer
                 VM.NotifyPropertyChanged(nameof(VM.SelectedPlayModeIndex));
             }
         }
+
+        private void _commands_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            this.Cursor = _commands.IsVisible ? System.Windows.Input.Cursors.Arrow : System.Windows.Input.Cursors.None;
+        }
     }
 }

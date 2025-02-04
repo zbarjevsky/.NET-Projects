@@ -191,7 +191,8 @@
 
                 </StackPanel>
 
-                <local:VideoCommandsUserControl x:Name="_commands" Grid.Row="1" Margin="0,0,0,12" />
+                <local:VideoCommandsUserControl x:Name="_commands" Grid.Row="1" Margin="0,0,0,12"
+                                                IsVisibleChanged="_commands_IsVisibleChanged"/>
 
                 <ProgressBar x:Name="_progress" Grid.Row="1" VerticalAlignment="Bottom" Value="0" Minimum="0" 
                              Foreground="Navy" Background="Transparent"
