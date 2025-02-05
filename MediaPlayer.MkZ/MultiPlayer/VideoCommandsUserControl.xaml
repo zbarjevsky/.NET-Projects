@@ -52,6 +52,12 @@
                                   IsChecked="{Binding Replay.IsReplayChecked, Mode=TwoWay}">
                         <Label FontFamily="Segoe MDL2 Assets" Content="&#xE8EE;" FontSize="16" />
                     </ToggleButton>
+                    <Button ToolTip="Set Bookmark(C) Position" Margin="2" Padding="0" Click="ReplaySetC_Click">
+                        <Label Content="C" FontSize="16" FontWeight="Normal" />
+                    </Button>
+                    <Button ToolTip="Set Bookmark(D) Position" Margin="2" Padding="0" Click="ReplaySetD_Click">
+                        <Label Content="D" FontSize="16" FontWeight="Normal" />
+                    </Button>
                     <RepeatButton ToolTip="Back 0.1 sec" Margin="2" Padding="2" Click="PrevFrame_Click">
                         <Label FontFamily="Segoe MDL2 Assets" Content="&#xE8A0;" FontSize="16" />
                     </RepeatButton>
@@ -86,8 +92,11 @@
                                     </Style>
                                 </Canvas.Resources>
 
-                                <Line x:Name="_lineA" X1="50" X2="50" Y1="3" Y2="16" />
-                                <Line x:Name="_lineB" X1="100" X2="100" Y1="3" Y2="16" />
+                                <Line x:Name="_lineA" X1="20" X2="20" Y1="3" Y2="16" />
+                                <Line x:Name="_lineB" X1="40" X2="40" Y1="3" Y2="16" />
+                                
+                                <Line x:Name="_lineC" X1="60" X2="60" Y1="3" Y2="16" />
+                                <Line x:Name="_lineD" X1="80" X2="80" Y1="3" Y2="16" />
                             </Canvas>
                             <Slider x:Name="_position" Margin="2,4"
                                     Value="33" Maximum="300" Minimum="0" TickFrequency="60" TickPlacement="TopLeft" 

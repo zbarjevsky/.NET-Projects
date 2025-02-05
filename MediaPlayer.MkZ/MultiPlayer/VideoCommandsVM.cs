@@ -18,6 +18,7 @@ using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 using Point = System.Windows.Point;
 using System.Diagnostics;
+using System.Windows.Shapes;
 
 
 namespace MultiPlayer
@@ -239,7 +240,7 @@ namespace MultiPlayer
 
             NotifyPropertyChanged(nameof(SelectedFitIndex));
 
-            Replay.UpdateReplay(s.ReplayIsOn, s.ReplayPosA, s.ReplayPosB);
+            Replay.UpdateReplay(s.ReplayIsOn, s.ReplayPosA, s.ReplayPosB, s.ReplayPosC, s.ReplayPosD);
 
             AdjustMarginsForVisibleScrollBars();
             AdjustSizeAndLayout();
@@ -281,7 +282,7 @@ namespace MultiPlayer
 
             Settings.Position = startFrom0 ? 0 : _recentFile.Position;
 
-            Replay.UpdateReplay(false, _recentFile.ReplayPosA, _recentFile.ReplayPosB);
+            Replay.UpdateReplay(false, _recentFile.ReplayPosA, _recentFile.ReplayPosB, _recentFile.ReplayPosC, _recentFile.ReplayPosD);
 
             Settings.MediaState = MediaState.Play;
 
@@ -611,8 +612,8 @@ namespace MultiPlayer
 
             List<string> fileNames = System.IO.Directory.EnumerateFiles(dir, "*.*", SearchOption.TopDirectoryOnly)
                 .Where(
-                    file => Settings.SupportedVideoExtensions.Contains(Path.GetExtension(file).ToLower()) || 
-                            Settings.SupportedAudioExtensions.Contains(Path.GetExtension(file).ToLower())).ToList();
+                    file => Settings.SupportedVideoExtensions.Contains(System.IO.Path.GetExtension(file).ToLower()) || 
+                            Settings.SupportedAudioExtensions.Contains(System.IO.Path.GetExtension(file).ToLower())).ToList();
             fileNames.Sort();
             idx = fileNames.IndexOf(fileName);
 
@@ -856,14 +857,17 @@ namespace MultiPlayer
 
             public void Clear()
             {
-                UpdateReplay(false, 0, 0);
+                UpdateReplay(false, 0, 0, 0, 0);
             }
 
-            public void UpdateReplay(bool on, double a, double b)
+            public void UpdateReplay(bool on, double a, double b, double c, double d)
             {
                 VM.Settings.ReplayIsOn = on;
                 VM.Settings.ReplayPosA = a;
                 VM.Settings.ReplayPosB = b;
+
+                VM.Settings.ReplayPosC = c;
+                VM.Settings.ReplayPosD = d;
 
                 UpdateTicks();
                 NotifyPropertyChanged(nameof(IsReplayChecked));
@@ -915,14 +919,38 @@ namespace MultiPlayer
                 NotifyPropertyChanged(nameof(ReplayToolTip));
             }
 
+            public void SetC()
+            {
+                VM.Settings.ReplayPosC = VM.Settings.Position;
+                UpdateTicks();
+            }
+
+            public void SetD()
+            {
+                VM.Settings.ReplayPosD = VM.Settings.Position;
+                UpdateTicks();
+            }
+
             //set ticks positions and color if active
             public void UpdateTicks()
             {
-                VM._cmd._lineA.X1 = VM._cmd._lineA.X2 = XfromTime(VM.Settings.ReplayPosA);
-                VM._cmd._lineB.X1 = VM._cmd._lineB.X2 = XfromTime(VM.Settings.ReplayPosB);
+                UpdateTick(VM._cmd._lineA, VM.Settings.ReplayPosA, IsReplayChecked ? Brushes.Lime : Brushes.AliceBlue);
+                UpdateTick(VM._cmd._lineB, VM.Settings.ReplayPosB, IsReplayChecked ? Brushes.Lime : Brushes.AliceBlue);
 
-                VM._cmd._lineA.Stroke = IsReplayChecked ? Brushes.Lime : Brushes.AliceBlue;
-                VM._cmd._lineB.Stroke = IsReplayChecked ? Brushes.Lime : Brushes.AliceBlue;
+                UpdateTick(VM._cmd._lineC, VM.Settings.ReplayPosC, Brushes.Pink);
+                UpdateTick(VM._cmd._lineD, VM.Settings.ReplayPosD, Brushes.Pink);
+            }
+
+            private void UpdateTick(Line line, double position, System.Windows.Media.Brush stroke)
+            {
+                line.X1 = line.X2 = XfromTime(position);
+                line.Stroke = stroke;
+
+                //line.ToolTip = new System.Windows.Controls.ToolTip()
+                //{
+                //    Content = SecondsToString(position),
+                //    Background = Brushes.LightYellow
+                //};
             }
 
             private double XfromTime(double time)

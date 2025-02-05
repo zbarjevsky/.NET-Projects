@@ -124,5 +124,15 @@ namespace MultiPlayer
         {
             VM.Replay.SetB();
         }
+
+        private void ReplaySetC_Click(object sender, RoutedEventArgs e)
+        {
+            VM.Replay.SetC();
+        }
+
+        private void ReplaySetD_Click(object sender, RoutedEventArgs e)
+        {
+            VM.Replay.SetD();
+        }
     }
 }

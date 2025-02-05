@@ -66,6 +66,10 @@ namespace MultiPlayer
         public double ReplayPosA { get; set; } = 0.0;
         [XmlAttribute]
         public double ReplayPosB { get; set; } = 0.0;
+        [XmlAttribute]
+        public double ReplayPosC { get; set; } = 0.0;
+        [XmlAttribute]
+        public double ReplayPosD { get; set; } = 0.0;
 
         public void Update(OnePlayerSettings settings)
         {
@@ -74,6 +78,9 @@ namespace MultiPlayer
             Position = Math.Round(settings.Position, 3);
             ReplayPosA = Math.Round(settings.ReplayPosA, 1);
             ReplayPosB = Math.Round(settings.ReplayPosB, 1);
+
+            ReplayPosC = Math.Round(settings.ReplayPosC, 1);
+            ReplayPosD = Math.Round(settings.ReplayPosD, 1);
         }
 
         public override string ToString()
@@ -96,6 +103,8 @@ namespace MultiPlayer
         public double SpeedRatio { get; set; } = 1.0;
         public double ReplayPosA { get; set; } = 0.0;
         public double ReplayPosB { get; set; } = 0.0;
+        public double ReplayPosC { get; set; } = 0.0;
+        public double ReplayPosD { get; set; } = 0.0;
         public bool ReplayIsOn {  get; set; } = false;
 
         public string[] SupportedImageExtensions { get; set; } = new string[0];
@@ -133,8 +142,11 @@ namespace MultiPlayer
             SpeedRatio = s.SpeedRatio;
 
             ReplayIsOn = s.ReplayIsOn;
-            ReplayPosA = s.ReplayPosA;    
+            ReplayPosA = s.ReplayPosA;
             ReplayPosB = s.ReplayPosB;
+
+            ReplayPosC = s.ReplayPosC;
+            ReplayPosD = s.ReplayPosD;
         }
 
         public void Update(VideoPlayerUserControl v, double duration = 0.0)
@@ -155,6 +167,9 @@ namespace MultiPlayer
             ReplayIsOn = v.VM.Settings.ReplayIsOn;
             ReplayPosA = v.VM.Settings.ReplayPosA;
             ReplayPosB = v.VM.Settings.ReplayPosB;
+
+            ReplayPosC = v.VM.Settings.ReplayPosC;
+            ReplayPosD = v.VM.Settings.ReplayPosD;
 
             EnsureHasValues();
         }
