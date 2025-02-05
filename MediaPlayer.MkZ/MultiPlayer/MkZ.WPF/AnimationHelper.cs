@@ -96,7 +96,7 @@ namespace MkZ.WPF
             {
                 foreach (UIElement ctrl in _controlsToFade)
                 {
-                    VisibilityHideAnimation(ctrl, 0, Visibility.Hidden, OnHideCompleted);
+                    VisibilityHideAnimation(ctrl, 0, Visibility.Collapsed, OnHideCompleted);
                 }
 
                 return; //do not start timer
@@ -108,7 +108,7 @@ namespace MkZ.WPF
         {
             VisibilityShowAnimation(element, 0, (e) =>
             {
-                VisibilityHideAnimation(e, 3, Visibility.Hidden, null);
+                VisibilityHideAnimation(e, 3, Visibility.Collapsed, null);
             });
         }
 
