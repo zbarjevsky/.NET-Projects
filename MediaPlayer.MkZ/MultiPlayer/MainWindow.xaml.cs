@@ -73,6 +73,8 @@ namespace MultiPlayer
                 {
                     _ = _videos[i].LoadSetting(_settings.PlayerSettings[i]);
                 }
+
+                VideoCommandsVM.ClearPopUp();
             }
             else
             {
