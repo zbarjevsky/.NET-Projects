@@ -631,9 +631,15 @@ namespace MultiPlayer
             return false;
         }
 
-        public static void ClearPopUp()
+        public static void PopUpClear()
         {
             WndMax.ClearVideoControl();
+        }
+
+        public static void PopUpHide()
+        {
+            WndMax.ClearVideoControl();
+            WndMax.Visibility = Visibility.Collapsed;
         }
 
         private static readonly PopUpWindow WndMax = new PopUpWindow();
@@ -643,8 +649,7 @@ namespace MultiPlayer
             {
                 if (hide)
                 {
-                    this.Pause();
-                    WndMax.Visibility = Visibility.Collapsed;
+                    PopUpHide();
                 }
                 else
                 {

@@ -74,7 +74,7 @@ namespace MultiPlayer
                     _ = _videos[i].LoadSetting(_settings.PlayerSettings[i]);
                 }
 
-                VideoCommandsVM.ClearPopUp();
+                VideoCommandsVM.PopUpHide();
             }
             else
             {
@@ -194,7 +194,7 @@ namespace MultiPlayer
                 v.Clear();
                 await Task.Delay(3);
             }
-            VideoCommandsVM.ClearPopUp();
+            VideoCommandsVM.PopUpHide();
         }
 
         private void ResetLayout_Click(object sender, RoutedEventArgs e)
