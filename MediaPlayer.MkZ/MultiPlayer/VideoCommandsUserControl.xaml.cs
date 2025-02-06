@@ -115,24 +115,9 @@ namespace MultiPlayer
                 VM.Replay.ReplayToggle(btn.IsChecked == true);
         }
 
-        private void ReplaySetA_Click(object sender, RoutedEventArgs e)
-        {
-            VM.Replay.SetA();
-        }
-
-        private void ReplaySetB_Click(object sender, RoutedEventArgs e)
-        {
-            VM.Replay.SetB();
-        }
-
-        private void ReplaySetC_Click(object sender, RoutedEventArgs e)
-        {
-            VM.Replay.SetC();
-        }
-
         private void ReplaySetD_Click(object sender, RoutedEventArgs e)
         {
-            VM.Replay.SetD();
+            VM.Replay.BookmarkSet(eBookmarkName.D);
         }
 
         private void ReplayD_Menu_Click(object sender, RoutedEventArgs e)

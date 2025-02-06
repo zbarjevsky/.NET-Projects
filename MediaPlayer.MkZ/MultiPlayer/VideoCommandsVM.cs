@@ -908,56 +908,6 @@ namespace MultiPlayer
                 ReplayCheckAndUpdate();
             }
 
-            public void SetA()
-            {
-                double delta = VM.Settings.ReplayPosB - VM.Settings.ReplayPosA;
-                if (delta < 1.0) delta = 10.0;
-                
-                if (VM.Settings.Position < VM.Settings.ReplayPosB)
-                {
-                    VM.Settings.ReplayPosA = VM.Settings.Position;
-                }
-                else //move B to A + delta
-                {
-                    VM.Settings.ReplayPosA = VM.Settings.Position;
-                    VM.Settings.ReplayPosB = VM.Settings.Position + delta;
-                }
-
-                UpdateTicks();
-                NotifyPropertyChanged(nameof(ReplayToolTip));
-            }
-
-            public void SetB()
-            {
-                double delta = VM.Settings.ReplayPosB - VM.Settings.ReplayPosA;
-                if (delta < 1.0) delta = 10.0;
-
-                if (VM.Settings.Position > VM.Settings.ReplayPosA)
-                {
-                    VM.Settings.ReplayPosB = VM.Settings.Position;
-                }
-                else
-                {
-                    VM.Settings.ReplayPosB = VM.Settings.Position;
-                    VM.Settings.ReplayPosA = VM.Settings.Position - delta;
-                }
-
-                UpdateTicks();
-                NotifyPropertyChanged(nameof(ReplayToolTip));
-            }
-
-            public void SetC()
-            {
-                VM.Settings.ReplayPosC = VM.Settings.Position;
-                UpdateTicks();
-            }
-
-            public void SetD()
-            {
-                VM.Settings.ReplayPosD = VM.Settings.Position;
-                UpdateTicks();
-            }
-
             public void GoToPosition(double pos)
             {
                 VM._cmd._position.Value = pos;
@@ -1022,23 +972,19 @@ namespace MultiPlayer
 
             public void BookmarkSet(eBookmarkName name)
             {
-                switch (name)
-                {
-                    case eBookmarkName.A:
-                        SetA();
-                        break;
-                    case eBookmarkName.B:
-                        SetB();
-                        break;
-                    case eBookmarkName.C:
-                        SetC();
-                        break;
-                    case eBookmarkName.D:
-                        SetD();
-                        break;
-                    default:
-                        break;
-                }
+                double delta = VM.Settings.ReplayPosB - VM.Settings.ReplayPosA;
+                if (delta < 1.0) delta = 10.0;
+
+                VM.Settings.BookmarkPositionSet(name, VM.Settings.Position);
+
+                if (name == eBookmarkName.A && VM.Settings.ReplayPosB - VM.Settings.ReplayPosA < 1.0)
+                    VM.Settings.ReplayPosB = VM.Settings.ReplayPosA + delta;
+
+                if (name == eBookmarkName.B && VM.Settings.ReplayPosB - VM.Settings.ReplayPosA < 1.0)
+                    VM.Settings.ReplayPosA = VM.Settings.ReplayPosB - delta;
+
+                UpdateTicks();
+                NotifyPropertyChanged(nameof(ReplayToolTip));
             }
 
             public void BookmarkGo2(eBookmarkName name)
@@ -1049,19 +995,7 @@ namespace MultiPlayer
 
             public double BookmarkPositionGet(eBookmarkName name)
             {
-                switch (name)
-                {
-                    case eBookmarkName.A:
-                        return (VM.Settings.ReplayPosA);
-                    case eBookmarkName.B:
-                        return (VM.Settings.ReplayPosB);
-                    case eBookmarkName.C:
-                        return (VM.Settings.ReplayPosC);
-                    case eBookmarkName.D:
-                        return (VM.Settings.ReplayPosD);
-                    default:
-                        return -1;
-                }
+                return VM.Settings.BookmarkPositionGet(name);
             }
         }
     }

@@ -194,6 +194,44 @@ namespace MultiPlayer
                 SupportedVideoExtensions = new string[] { ".avi", ".mpg", ".mpeg", ".mkv", ".mp4", ".webm" };
         }
 
+        public void BookmarkPositionSet(eBookmarkName name, double pos)
+        {
+            switch (name)
+            {
+                case eBookmarkName.A:
+                    ReplayPosA = pos;
+                    break;
+                case eBookmarkName.B:
+                    ReplayPosB = pos;
+                    break;
+                case eBookmarkName.C:
+                    ReplayPosC = pos;
+                    break;
+                case eBookmarkName.D:
+                    ReplayPosD = pos;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        public double BookmarkPositionGet(eBookmarkName name)
+        {
+            switch (name)
+            {
+                case eBookmarkName.A:
+                    return (ReplayPosA);
+                case eBookmarkName.B:
+                    return (ReplayPosB);
+                case eBookmarkName.C:
+                    return (ReplayPosC);
+                case eBookmarkName.D:
+                    return (ReplayPosD);
+                default:
+                    return -1;
+            }
+        }
+
         public override string ToString()
         {
             return "OnePlayerSettings: " + FileName;
