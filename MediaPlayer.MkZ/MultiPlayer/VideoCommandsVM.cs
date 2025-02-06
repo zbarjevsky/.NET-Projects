@@ -757,24 +757,31 @@ namespace MultiPlayer
 
             _cmd._scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
             double windowWidth = _cmd.ActualWidth;
-            if (windowWidth < 30)
-                windowWidth = 620;
+            if (windowWidth < 50)
+                return; //too small
 
-            if (windowWidth > _cmd._stackButtons.ActualWidth)
+            double xMargin = 2 + 2;
+            double secondMinWidth = _cmd._timeLbl.ActualWidth + _cmd._docSliders.MinWidth;
+            if (windowWidth - _cmd._stackButtons.ActualWidth > secondMinWidth) //enough for one line
+            {
+                _cmd._docSliders.Width = windowWidth - _cmd._timeLbl.ActualWidth - _cmd._stackButtons.ActualWidth - xMargin;
                 _cmd._wrapPanel.Width = windowWidth;
-            else
-                _cmd._wrapPanel.Width = _cmd._stackButtons.ActualWidth;
-
-            double width = windowWidth - _cmd._stackButtons.ActualWidth - _cmd._timeLbl.ActualWidth;
-            if (width < _cmd._docSliders.MinWidth) //wrapped to two lines
-            {
-                _cmd._docSliders.Width = _cmd._stackButtons.ActualWidth; // windowWidth - _cmd._timeLbl.ActualWidth - 4;
-                if (windowWidth < _cmd._stackButtons.ActualWidth)
-                    _cmd._scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
             }
-            else //one line
+            else //two lines
             {
-                _cmd._docSliders.Width = width - 4;
+                if (windowWidth > _cmd._stackButtons.ActualWidth) //two lines - enough for buttons
+                {
+                    _cmd._docSliders.Width = windowWidth - _cmd._timeLbl.ActualWidth - 12;
+                    _cmd._wrapPanel.Width = windowWidth;
+                }
+                else //wrapped to two lines and need scroll
+                {
+                    double minWidth = _cmd._stackButtons.ActualWidth + 12;
+                    _cmd._docSliders.Width = minWidth - _cmd._timeLbl.ActualWidth;
+                    _cmd._wrapPanel.Width = minWidth;
+
+                    _cmd._scroll.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
+                }
             }
 
             Replay.UpdateTicks();
@@ -938,7 +945,7 @@ namespace MultiPlayer
                 UpdateTick(VM._cmd._lineB, VM.Settings.ReplayPosB, IsReplayChecked ? Brushes.Lime : Brushes.AliceBlue);
 
                 UpdateTick(VM._cmd._lineC, VM.Settings.ReplayPosC, Brushes.Pink);
-                UpdateTick(VM._cmd._lineD, VM.Settings.ReplayPosD, Brushes.Pink);
+                UpdateTick(VM._cmd._lineD, VM.Settings.ReplayPosD, Brushes.Yellow);
             }
 
             private void UpdateTick(Line line, double position, System.Windows.Media.Brush stroke)

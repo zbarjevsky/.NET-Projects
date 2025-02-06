@@ -7,9 +7,9 @@
              SizeChanged="UserControl_SizeChanged"
              mc:Ignorable="d" 
              d:DesignWidth="800">
-    <ScrollViewer x:Name="_scroll" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden" MinWidth="100">
-        <Border Margin="0" CornerRadius="0,0,0,0" BorderThickness="1" BorderBrush="Transparent">
-            <WrapPanel x:Name="_wrapPanel" Orientation="Horizontal" >
+    <ScrollViewer x:Name="_scroll" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
+        <Grid Margin="0">
+            <WrapPanel x:Name="_wrapPanel" Orientation="Horizontal" HorizontalAlignment="Stretch" >
                 <WrapPanel.Background>
                     <SolidColorBrush Color="SlateGray" Opacity="0.8" />
                 </WrapPanel.Background>
@@ -80,10 +80,11 @@
                                    Foreground="White"/>
                             </Border>
                         </Popup>
-                        <Slider x:Name="_volume" Margin="2,10" Width="60" DockPanel.Dock="Right" 
+                        <Slider x:Name="_volume" Margin="2,10" Width="60" MinWidth="60" 
+                                DockPanel.Dock="Right"
                                 Value="150" Maximum="1000" Minimum="0" IsMoveToPointEnabled="True"
                                 ValueChanged="Volume_ValueChanged"/>
-                        <Grid>
+                        <Grid Margin="2,4">
                             <Canvas Background="Transparent">
                                 <Canvas.Resources>
                                     <Style TargetType="Line">
@@ -98,7 +99,7 @@
                                 <Line x:Name="_lineC" X1="60" X2="60" Y1="3" Y2="16" />
                                 <Line x:Name="_lineD" X1="80" X2="80" Y1="3" Y2="16" />
                             </Canvas>
-                            <Slider x:Name="_position" Margin="2,4"
+                            <Slider x:Name="_position"
                                     Value="33" Maximum="300" Minimum="0" TickFrequency="60" TickPlacement="TopLeft" 
                                     SmallChange="10" LargeChange="60"
                                     IsMoveToPointEnabled="True" 
@@ -111,6 +112,6 @@
                     </DockPanel>
                 </DockPanel>
             </WrapPanel>
-        </Border>
+        </Grid>
     </ScrollViewer>
 </UserControl>
