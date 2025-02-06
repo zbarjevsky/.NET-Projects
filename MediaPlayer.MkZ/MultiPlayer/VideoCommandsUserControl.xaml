@@ -46,7 +46,7 @@
                                 Command="{Binding BookmarkSetCommand}" CommandParameter="A">
                             <Label Content="A" FontSize="10" FontWeight="Normal" />
                         </Button>
-                        <Button ToolTip="Go To Bookmark(A) Position" Margin="2,0,2,2" Padding="0,-8,0,-4" Height="12" 
+                        <Button x:Name="_btnA" ToolTip="Go To Bookmark(A) Position" Margin="2,0,2,2" Padding="0,-8,0,-4" Height="12" 
                                 Command="{Binding BookmarkGoToCommand}" CommandParameter="A">
                             <Label Content="⏷" FontSize="8" FontWeight="Normal" />
                         </Button>
@@ -56,7 +56,7 @@
                                 Command="{Binding BookmarkSetCommand}" CommandParameter="B">
                             <Label Content="B" FontSize="10" FontWeight="Normal" />
                         </Button>
-                        <Button ToolTip="Go To Bookmark(B) Position" Margin="2,0,2,2" Padding="0,-8,0,-4" Height="12" 
+                        <Button x:Name="_btnB" ToolTip="Go To Bookmark(B) Position" Margin="2,0,2,2" Padding="0,-8,0,-4" Height="12" 
                                 Command="{Binding BookmarkGoToCommand}" CommandParameter="B">
                             <Label Content="⏷" FontSize="8" FontWeight="Normal" />
                         </Button>
@@ -71,7 +71,7 @@
                                 Command="{Binding BookmarkSetCommand}" CommandParameter="C">
                             <Label Content="C" FontSize="10" FontWeight="Normal" />
                         </Button>
-                        <Button ToolTip="Go To Bookmark(C) Position" Margin="2,0,2,2" Padding="0,-8,0,-4" Height="12" 
+                        <Button x:Name="_btnC" ToolTip="Go To Bookmark(C) Position" Margin="2,0,2,2" Padding="0,-8,0,-4" Height="12" 
                                 Command="{Binding BookmarkGoToCommand}" CommandParameter="C">
                             <Label Content="⏷" FontSize="8" FontWeight="Normal" />
                         </Button>
@@ -81,7 +81,7 @@
                                 Command="{Binding BookmarkSetCommand}" CommandParameter="D">
                             <Label Content="D" FontSize="10" FontWeight="Normal" />
                         </Button>
-                        <Button ToolTip="Set Bookmark(D) Position" Margin="2,0,2,2" Padding="0,-8,0,-4" Height="12" 
+                        <Button x:Name="_btnD" ToolTip="Set Bookmark(D) Position" Margin="2,0,2,2" Padding="0,-8,0,-4" Height="12" 
                                 Command="{Binding BookmarkGoToCommand}" CommandParameter="D">
                             <Label Content="⏷" FontSize="8" FontWeight="Normal" />
                             <Button.ContextMenu>

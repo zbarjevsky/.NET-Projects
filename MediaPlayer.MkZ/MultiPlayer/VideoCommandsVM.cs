@@ -973,33 +973,31 @@ namespace MultiPlayer
             //set ticks positions and color if active
             public void UpdateTicks()
             {
-                UpdateTick(VM._cmd._lineA, VM.Settings.ReplayPosA, IsReplayChecked ? Brushes.Lime : Brushes.AliceBlue);
-                UpdateTick(VM._cmd._lineB, VM.Settings.ReplayPosB, IsReplayChecked ? Brushes.Lime : Brushes.AliceBlue);
+                UpdateTick(VM._cmd._lineA, VM._cmd._btnA, VM.Settings.ReplayPosA, IsReplayChecked ? Brushes.Lime : Brushes.AliceBlue);
+                UpdateTick(VM._cmd._lineB, VM._cmd._btnB, VM.Settings.ReplayPosB, IsReplayChecked ? Brushes.Lime : Brushes.AliceBlue);
 
-                UpdateTick(VM._cmd._lineC, VM.Settings.ReplayPosC, Brushes.Pink);
-                UpdateTick(VM._cmd._lineD, VM.Settings.ReplayPosD, Brushes.Yellow);
+                UpdateTick(VM._cmd._lineC, VM._cmd._btnC, VM.Settings.ReplayPosC, Brushes.Pink);
+                UpdateTick(VM._cmd._lineD, VM._cmd._btnD, VM.Settings.ReplayPosD, Brushes.Yellow);
             }
 
-            private void UpdateTick(Line line, double position, System.Windows.Media.Brush stroke)
+            private void UpdateTick(Line line, System.Windows.Controls.Button btn, double position, System.Windows.Media.Brush stroke)
             {
                 if (position > 0)
                 {
+                    btn.ToolTip = $"Set position to:{SecondsToString(position)}";
                     line.Visibility = Visibility.Visible;
 
                     double center = line.StrokeThickness / 2;
                     line.X1 = line.X2 = XfromTime(position) - center;
                     line.Stroke = stroke;
+
+                    line.ToolTip = SecondsToString(position); //tooltip is not visible because Canvas is BELOW slider
                 }
                 else
                 {
+                    btn.ToolTip = "Hello";
                     line.Visibility = Visibility.Collapsed;
                 }
-
-                //line.ToolTip = new System.Windows.Controls.ToolTip()
-                //{
-                //    Content = SecondsToString(position),
-                //    Background = Brushes.LightYellow
-                //};
             }
 
             private double XfromTime(double time)
