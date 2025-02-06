@@ -149,7 +149,7 @@ namespace MultiPlayer
 
         private void ReplayGoToD_Click(object sender, RoutedEventArgs e)
         {
-            VM.Replay.GoToD();
+            VM.Replay.GoToPosition(VM.Settings.ReplayPosD);
         }
     }
 }

@@ -50,6 +50,8 @@ namespace MultiPlayer
         public RelayCommand NextFileCommand { get; }
         public RelayCommand SkipOneFrameCommand { get; }
         public RelayCommand Skip10SecondsCommand { get; }
+        public RelayCommand BookmarkSetCommand { get; }
+        public RelayCommand BookmarkGoToCommand { get; }
 
         public VideoCommandsVM()
         {
@@ -61,6 +63,8 @@ namespace MultiPlayer
             NextFileCommand = new RelayCommand(NextFileCommandExecute, NextFileCommandCanExecute);
             Skip10SecondsCommand = new RelayCommand(Skip10SecondsCommandExecute, (o) => true);
             SkipOneFrameCommand = new RelayCommand(SkipOneFrameCommandExecute, (o) => true);
+            BookmarkSetCommand = new RelayCommand(BookmarkSetCommandExecute, (o) => true);
+            BookmarkGoToCommand = new RelayCommand(BookmarkGoToCommandExecute, BookmarkGoToCanCommandExecute);
         }
 
         private string _title;
@@ -74,7 +78,6 @@ namespace MultiPlayer
         {
             get { return _player != null ? _player.Volume : 0; }
         }
-
 
         public bool IsMuted
         {
@@ -832,6 +835,25 @@ namespace MultiPlayer
             }
         }
 
+        private void BookmarkSetCommandExecute(object bookMarkName)
+        {
+            eBookmarkName name = (eBookmarkName)Enum.Parse(typeof(eBookmarkName), (string)bookMarkName);
+            Replay.BookmarkSet(name);
+        }
+
+        private void BookmarkGoToCommandExecute(object bookMarkName)
+        {
+            eBookmarkName name = (eBookmarkName)Enum.Parse(typeof(eBookmarkName), (string)bookMarkName);
+            Replay.BookmarkGo2(name);
+        }
+
+        private bool BookmarkGoToCanCommandExecute(object bookMarkName)
+        {
+            eBookmarkName name = (eBookmarkName)Enum.Parse(typeof(eBookmarkName), (string)bookMarkName);
+            double position = Replay.BookmarkPositionGet(name);
+            return position > 0;
+        }
+
         public ReplayLoop Replay { get; }
 
         /// <summary>
@@ -883,9 +905,7 @@ namespace MultiPlayer
 
             public void ReplayToggle(bool isChecked)
             {
-                if (isChecked && (VM.Settings.Position < VM.Settings.ReplayPosA || VM.Settings.Position > VM.Settings.ReplayPosB)) 
-                    ReplaySetStart();
-                UpdateTicks();
+                ReplayCheckAndUpdate();
             }
 
             public void SetA()
@@ -938,9 +958,9 @@ namespace MultiPlayer
                 UpdateTicks();
             }
 
-            public void GoToD()
+            public void GoToPosition(double pos)
             {
-                VM._cmd._position.Value = VM.Settings.ReplayPosD;
+                VM._cmd._position.Value = pos;
                 VM.Settings.Position = VM._cmd._position.Value;
             }
 
@@ -962,9 +982,18 @@ namespace MultiPlayer
 
             private void UpdateTick(Line line, double position, System.Windows.Media.Brush stroke)
             {
-                double center = line.StrokeThickness / 2;
-                line.X1 = line.X2 = XfromTime(position) - center;
-                line.Stroke = stroke;
+                if (position > 0)
+                {
+                    line.Visibility = Visibility.Visible;
+
+                    double center = line.StrokeThickness / 2;
+                    line.X1 = line.X2 = XfromTime(position) - center;
+                    line.Stroke = stroke;
+                }
+                else
+                {
+                    line.Visibility = Visibility.Collapsed;
+                }
 
                 //line.ToolTip = new System.Windows.Controls.ToolTip()
                 //{
@@ -986,16 +1015,55 @@ namespace MultiPlayer
                 return x;
             }
 
-            private void ReplaySetStart()
-            {
-                VM._cmd._position.Value = VM.Settings.ReplayPosA;
-                VM.Settings.Position = VM._cmd._position.Value;
-            }
-
             public void ReplayCheckAndUpdate()
             {
                 if (IsReplayChecked && (VM._cmd._position.Value < VM.Settings.ReplayPosA || VM._cmd._position.Value > VM.Settings.ReplayPosB))
-                    ReplaySetStart();
+                    GoToPosition(VM.Settings.ReplayPosA);
+                UpdateTicks();
+            }
+
+            public void BookmarkSet(eBookmarkName name)
+            {
+                switch (name)
+                {
+                    case eBookmarkName.A:
+                        SetA();
+                        break;
+                    case eBookmarkName.B:
+                        SetB();
+                        break;
+                    case eBookmarkName.C:
+                        SetC();
+                        break;
+                    case eBookmarkName.D:
+                        SetD();
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            public void BookmarkGo2(eBookmarkName name)
+            {
+                double position = BookmarkPositionGet(name);
+                GoToPosition(position);
+            }
+
+            public double BookmarkPositionGet(eBookmarkName name)
+            {
+                switch (name)
+                {
+                    case eBookmarkName.A:
+                        return (VM.Settings.ReplayPosA);
+                    case eBookmarkName.B:
+                        return (VM.Settings.ReplayPosB);
+                    case eBookmarkName.C:
+                        return (VM.Settings.ReplayPosC);
+                    case eBookmarkName.D:
+                        return (VM.Settings.ReplayPosD);
+                    default:
+                        return -1;
+                }
             }
         }
     }
