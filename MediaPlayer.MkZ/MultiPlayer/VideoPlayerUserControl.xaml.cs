@@ -58,6 +58,7 @@ namespace MultiPlayer
 
             _controlsHideAndShow = new FadeAnimationHelper(this, 2,
                 _borderTitle, _commands, _commands1);
+            _controlsHideAndShow.CanHideControls = () => { return !_ctxMenu.IsOpen; };
 
             RecreateMediaElement(false);
 
@@ -718,6 +719,11 @@ namespace MultiPlayer
         private void _commands_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             this.Cursor = _commands.IsVisible ? System.Windows.Input.Cursors.Arrow : System.Windows.Input.Cursors.None;
+        }
+
+        private void BookmarksClear_Click(object sender, RoutedEventArgs e)
+        {
+            VM.Replay.BookmarksClear();
         }
     }
 }

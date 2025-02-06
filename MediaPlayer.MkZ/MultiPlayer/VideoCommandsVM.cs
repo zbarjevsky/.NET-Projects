@@ -52,6 +52,7 @@ namespace MultiPlayer
         public RelayCommand Skip10SecondsCommand { get; }
         public RelayCommand BookmarkSetCommand { get; }
         public RelayCommand BookmarkGoToCommand { get; }
+        public RelayCommand BookmarkClearCommand { get; }
 
         public VideoCommandsVM()
         {
@@ -65,6 +66,7 @@ namespace MultiPlayer
             SkipOneFrameCommand = new RelayCommand(SkipOneFrameCommandExecute, (o) => true);
             BookmarkSetCommand = new RelayCommand(BookmarkSetCommandExecute, (o) => true);
             BookmarkGoToCommand = new RelayCommand(BookmarkGoToCommandExecute, BookmarkGoToCanCommandExecute);
+            BookmarkClearCommand = new RelayCommand(BookmarkClearCommandExecute, (BookmarkGoToCanCommandExecute) => true);
         }
 
         private string _title;
@@ -342,6 +344,7 @@ namespace MultiPlayer
             this.UpdateRrecentFile(s);
 
             this.TogglePlayPauseCommand.RefreshBoundControls();
+            this.BookmarkGoToCommand.RefreshBoundControls();
             this.AdjustSizeAndLayout();
         }
 
@@ -854,6 +857,14 @@ namespace MultiPlayer
             return position > 0;
         }
 
+        private void BookmarkClearCommandExecute(object bookMarkName)
+        {
+            eBookmarkName name = (eBookmarkName)Enum.Parse(typeof(eBookmarkName), (string)bookMarkName);
+            Settings.BookmarkPositionSet(name, 0.0);
+            BookmarkGoToCommand.RefreshBoundControls();
+            Replay.UpdateTicks();
+        }
+
         public ReplayLoop Replay { get; }
 
         /// <summary>
@@ -996,6 +1007,18 @@ namespace MultiPlayer
             public double BookmarkPositionGet(eBookmarkName name)
             {
                 return VM.Settings.BookmarkPositionGet(name);
+            }
+
+            public void BookmarksClear()
+            {
+                VM.Settings.BookmarkPositionSet(eBookmarkName.A, 0.0);
+                VM.Settings.BookmarkPositionSet(eBookmarkName.B, 0.0);
+                VM.Settings.BookmarkPositionSet(eBookmarkName.C, 0.0);
+                VM.Settings.BookmarkPositionSet(eBookmarkName.D, 0.0);
+
+                UpdateTicks();
+                NotifyPropertyChanged(nameof(ReplayToolTip));
+                VM.BookmarkGoToCommand.RefreshBoundControls();
             }
         }
     }

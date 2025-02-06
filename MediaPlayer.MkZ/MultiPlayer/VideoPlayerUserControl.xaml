@@ -31,7 +31,7 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid.ContextMenu>
-                    <ContextMenu>
+                    <ContextMenu x:Name="_ctxMenu" >
                         <MenuItem Header="Play/Pause Toggle" Command="{Binding TogglePlayPauseCommand}" >
                             <MenuItem.Icon>
                                 <TextBlock FontFamily="Segoe MDL2 Assets" Text="{Binding PlayPauseIconText}" FontSize="16" />
@@ -134,6 +134,46 @@
                                 <MenuItem.Icon>
                                     <TextBlock Text="{Binding SelectedPlayModeIndex, Converter={StaticResource SelectedIndexToIconTextConverter}, ConverterParameter=4}" />
                                 </MenuItem.Icon>
+                            </MenuItem>
+                        </MenuItem>
+                        <Separator />
+                        <MenuItem Header="Bookmarks" Foreground="DarkBlue" >
+                            <MenuItem.Icon>
+                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE8AC;" FontSize="16" />
+                            </MenuItem.Icon>
+
+                            <MenuItem Header="Clear All Bookmarks" Click="BookmarksClear_Click" >
+                                <MenuItem.Icon>
+                                    <TextBlock Text="⍹" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <Separator />
+                            <MenuItem Header="GoTo Bookmark A" Command="{Binding BookmarkGoToCommand}" CommandParameter="A" >
+                                <MenuItem.Icon>
+                                    <TextBlock Text="A" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="GoTo Bookmark B" Command="{Binding BookmarkGoToCommand}" CommandParameter="B" >
+                                <MenuItem.Icon>
+                                    <TextBlock Text="B" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Header="GoTo Bookmark C" Command="{Binding BookmarkGoToCommand}" CommandParameter="C" >
+                                <MenuItem.Icon>
+                                    <TextBlock Text="C" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <MenuItem Command="{Binding BookmarkGoToCommand}" CommandParameter="D" >
+                                <MenuItem.Icon>
+                                    <TextBlock Text="D" />
+                                </MenuItem.Icon>
+                                <MenuItem.Header>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="GoTo Bookmark D" VerticalAlignment="Center" IsEnabled="False" />
+                                        <Button Content="Clear" Margin="12,2" Padding="2" VerticalAlignment="Center"
+                                                Command="{Binding BookmarkClearCommand}" CommandParameter="D" />
+                                    </StackPanel>
+                                </MenuItem.Header>
                             </MenuItem>
                         </MenuItem>
                     </ContextMenu>
