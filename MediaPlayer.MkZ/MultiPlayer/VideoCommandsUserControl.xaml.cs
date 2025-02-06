@@ -134,5 +134,22 @@ namespace MultiPlayer
         {
             VM.Replay.SetD();
         }
+
+        private void ReplayD_Menu_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is System.Windows.Controls.Button btn)
+                if (btn.ContextMenu != null)
+                    btn.ContextMenu.IsOpen = true;
+        }
+
+        private void ReplayClearD_Click(object sender, RoutedEventArgs e)
+        {
+            VM.Replay.ClearD();
+        }
+
+        private void ReplayGoToD_Click(object sender, RoutedEventArgs e)
+        {
+            VM.Replay.GoToD();
+        }
     }
 }

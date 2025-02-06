@@ -938,6 +938,18 @@ namespace MultiPlayer
                 UpdateTicks();
             }
 
+            public void GoToD()
+            {
+                VM._cmd._position.Value = VM.Settings.ReplayPosD;
+                VM.Settings.Position = VM._cmd._position.Value;
+            }
+
+            public void ClearD()
+            {
+                VM.Settings.ReplayPosD = 0;
+                UpdateTicks();
+            }
+
             //set ticks positions and color if active
             public void UpdateTicks()
             {
@@ -950,7 +962,8 @@ namespace MultiPlayer
 
             private void UpdateTick(Line line, double position, System.Windows.Media.Brush stroke)
             {
-                line.X1 = line.X2 = XfromTime(position);
+                double center = line.StrokeThickness / 2;
+                line.X1 = line.X2 = XfromTime(position) - center;
                 line.Stroke = stroke;
 
                 //line.ToolTip = new System.Windows.Controls.ToolTip()
@@ -962,7 +975,7 @@ namespace MultiPlayer
 
             private double XfromTime(double time)
             {
-                double width = VM._cmd._position.ActualWidth - 12;
+                double width = VM._cmd._position.ActualWidth - 11;
                 double seconds = VM.Settings.Duration;
 
                 if (seconds <= 0 || time <= 0)

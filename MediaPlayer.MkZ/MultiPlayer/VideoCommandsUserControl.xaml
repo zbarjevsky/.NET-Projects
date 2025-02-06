@@ -55,9 +55,23 @@
                     <Button ToolTip="Set Bookmark(C) Position" Margin="2" Padding="0" Click="ReplaySetC_Click">
                         <Label Content="C" FontSize="16" FontWeight="Normal" />
                     </Button>
-                    <Button ToolTip="Set Bookmark(D) Position" Margin="2" Padding="0" Click="ReplaySetD_Click">
-                        <Label Content="D" FontSize="16" FontWeight="Normal" />
-                    </Button>
+                    <StackPanel>
+                        <Button ToolTip="Set Bookmark(D) Position" Margin="2,2,2,0" Padding="-2" Height="20" Width="20" Click="ReplaySetD_Click">
+                            <Label Content="D" FontSize="10" FontWeight="Normal" />
+                        </Button>
+                        <Button ToolTip="Set Bookmark(D) Position" Margin="2,0,2,2" Padding="0,-8,0,-4" Height="12" Click="ReplayD_Menu_Click">
+                            <Label Content="⏷" FontSize="8" FontWeight="Normal" />
+                            <Button.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="GoTo Bookmark D" Click="ReplayGoToD_Click" Icon="⇸"/>
+                                    <Separator/>
+                                    <MenuItem Header="Clear Bookmark D" Click="ReplayClearD_Click" Icon="null"/>
+                                    <MenuItem Header="Set Bookmark D" Click="ReplaySetD_Click" Icon="null"/>
+                                </ContextMenu>
+                            </Button.ContextMenu>
+
+                        </Button>
+                    </StackPanel>
                     <RepeatButton ToolTip="Back 0.1 sec" Margin="2" Padding="2" Click="PrevFrame_Click">
                         <Label FontFamily="Segoe MDL2 Assets" Content="&#xE8A0;" FontSize="16" />
                     </RepeatButton>
@@ -69,9 +83,9 @@
                     <TextBlock x:Name="_timeLbl" Margin="2,10" Text="0:00" FontWeight="Bold" Foreground="White" />
                     <DockPanel x:Name="_docSliders" LastChildFill="True" MinWidth="200" >
                         <Popup x:Name="_popupSliderTooltip" AllowsTransparency="True"
-                       Placement="Relative"  PlacementTarget="{Binding ElementName=_position}">
+                            Placement="Relative"  PlacementTarget="{Binding ElementName=_position}">
                             <Border Name="_borderSliderTooltip" CornerRadius="4"
-                             BorderBrush="Black" BorderThickness="0" Padding="3,1">
+                                BorderBrush="Black" BorderThickness="0" Padding="3,1">
                                 <Border.Background>
                                     <SolidColorBrush Color="Black" Opacity="0.5" />
                                 </Border.Background>
