@@ -27,6 +27,7 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="150" />
                     <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
                 <Label Content="{Binding}" VerticalAlignment="Center"
@@ -46,7 +47,12 @@
                     </Label.Style>
                 </Label>
 
-                <Button Grid.Column="1" Content="Clear" Margin="12,0" Padding="2,0" VerticalAlignment="Center"
+                <Button Grid.Column="1" Content="Set ✎" Margin="12,0" Padding="2,0" VerticalAlignment="Center"
+                    Background="{Binding Tag, RelativeSource={RelativeSource AncestorType=MenuItem}}" IsEnabled="True"
+                    Command="{Binding DataContext.BookmarkSetCommand, RelativeSource={RelativeSource AncestorType=MenuItem}}" 
+                    CommandParameter="{Binding CommandParameter, RelativeSource={RelativeSource AncestorType=MenuItem}}" />
+
+                <Button Grid.Column="2" Content="Clear" Margin="12,0" Padding="2,0" VerticalAlignment="Center"
                     Background="{Binding Tag, RelativeSource={RelativeSource AncestorType=MenuItem}}"
                     Command="{Binding DataContext.BookmarkClearCommand, RelativeSource={RelativeSource AncestorType=MenuItem}}" 
                     CommandParameter="{Binding CommandParameter, RelativeSource={RelativeSource AncestorType=MenuItem}}" />
@@ -186,7 +192,7 @@
                                     <StaticResource ResourceKey="BookmarkHeaderTemplate"/>
                                 </MenuItem.HeaderTemplate>
                             </MenuItem>
-                            <MenuItem Header="GoTo Bookmark B (End)" Command="{Binding BookmarkGoToCommand}" CommandParameter="B" Tag="LightGreen" >
+                            <MenuItem Header="GoTo Bookmark B (End)" Command="{Binding BookmarkGoToCommand}" CommandParameter="B" Tag="LightBlue" >
                                 <MenuItem.Icon>
                                     <TextBlock Text="B" />
                                 </MenuItem.Icon>

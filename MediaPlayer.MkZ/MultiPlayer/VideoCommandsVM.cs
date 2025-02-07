@@ -862,15 +862,13 @@ namespace MultiPlayer
         {
             eBookmarkName name = (eBookmarkName)Enum.Parse(typeof(eBookmarkName), (string)bookMarkName);
             double position = Replay.BookmarkPositionGet(name);
-            return position > 0;
+            return true; // position > 0;
         }
 
         private void BookmarkClearCommandExecute(object bookMarkName)
         {
             eBookmarkName name = (eBookmarkName)Enum.Parse(typeof(eBookmarkName), (string)bookMarkName);
-            Settings.BookmarkPositionSet(name, 0.0);
-            BookmarkGoToCommand.RefreshBoundControls();
-            Replay.UpdateTicks();
+            Replay.BookmarkPositionClear(name);
         }
 
         public ReplayLoop Replay { get; }
@@ -1024,6 +1022,15 @@ namespace MultiPlayer
                 VM.Settings.BookmarkPositionSet(eBookmarkName.C, 0.0);
                 VM.Settings.BookmarkPositionSet(eBookmarkName.D, 0.0);
 
+                UpdateTicks();
+                NotifyPropertyChanged(nameof(ReplayToolTip));
+                VM.BookmarkGoToCommand.RefreshBoundControls();
+            }
+
+            public void BookmarkPositionClear(eBookmarkName name)
+            {
+                VM.Settings.BookmarkPositionSet(name, 0.0);
+                
                 UpdateTicks();
                 NotifyPropertyChanged(nameof(ReplayToolTip));
                 VM.BookmarkGoToCommand.RefreshBoundControls();
