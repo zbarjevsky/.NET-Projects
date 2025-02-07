@@ -64,7 +64,7 @@ namespace MultiPlayer
             NextFileCommand = new RelayCommand(NextFileCommandExecute, NextFileCommandCanExecute);
             Skip10SecondsCommand = new RelayCommand(Skip10SecondsCommandExecute, (o) => true);
             SkipOneFrameCommand = new RelayCommand(SkipOneFrameCommandExecute, (o) => true);
-            BookmarkSetCommand = new RelayCommand(BookmarkSetCommandExecute, (o) => true);
+            BookmarkSetCommand = new RelayCommand(BookmarkSetCommandExecute, (o) =>  Settings.Duration > 1.0);
             BookmarkGoToCommand = new RelayCommand(BookmarkGoToCommandExecute, BookmarkGoToCommandCanExecute);
             BookmarkClearCommand = new RelayCommand(BookmarkClearCommandExecute, BookmarkClearCommandCanExecute);
         }
@@ -850,29 +850,30 @@ namespace MultiPlayer
         {
             eBookmarkName name = (eBookmarkName)Enum.Parse(typeof(eBookmarkName), (string)bookMarkName);
             Replay.BookmarkSet(name);
+            _player._ctxMenu.IsOpen = false;
         }
 
         private void BookmarkGoToCommandExecute(object bookMarkName)
         {
             eBookmarkName name = (eBookmarkName)Enum.Parse(typeof(eBookmarkName), (string)bookMarkName);
             Replay.BookmarkGo2(name);
+            _player._ctxMenu.IsOpen = false;
         }
 
         private bool BookmarkGoToCommandCanExecute(object bookMarkName)
         {
             if (bookMarkName == null)
-                return true;
+                return false;
 
             eBookmarkName name = (eBookmarkName)Enum.Parse(typeof(eBookmarkName), (string)bookMarkName);
             double position = Replay.BookmarkPositionGet(name);
-            return position > 0;
+            return position > 0 && this.Settings.Duration > 1.0;
         }
 
         private void BookmarkClearCommandExecute(object bookMarkName)
         {
             eBookmarkName name = (eBookmarkName)Enum.Parse(typeof(eBookmarkName), (string)bookMarkName);
             Replay.BookmarkPositionClear(name);
-            _player._ctxMenu.IsOpen = false;
         }
 
         private bool BookmarkClearCommandCanExecute(object bookMarkName)
@@ -882,7 +883,7 @@ namespace MultiPlayer
 
             eBookmarkName name = (eBookmarkName)Enum.Parse(typeof(eBookmarkName), (string)bookMarkName);
             double position = Replay.BookmarkPositionGet(name);
-            return position > 0;
+            return position > 0 && this.Settings.Duration > 1.0;
         }
 
         public ReplayLoop Replay { get; }
