@@ -22,6 +22,36 @@
         <local:SelectedIndexToIconTextConverter x:Key="SelectedIndexToIconTextConverter"/>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <wpf:InverseVisibilityConverter x:Key="InverseVisConverter" />
+        <DataTemplate x:Key="BookmarkHeaderTemplate">
+            <Grid Height="18">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <Label Content="{Binding}" VerticalAlignment="Center"
+                   BorderThickness="0" Margin="-4" Background="Transparent"
+                   IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType=MenuItem}}">
+                    <Label.Style>
+                        <Style TargetType="Label">
+                            <Style.Triggers>
+                                <Trigger Property="IsEnabled" Value="False">
+                                    <Setter Property="Foreground" Value="Gray"/>
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="True">
+                                    <Setter Property="Foreground" Value="{Binding Foreground, RelativeSource={RelativeSource AncestorType=MenuItem}}"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </Label.Style>
+                </Label>
+
+                <Button Grid.Column="1" Content="Clear" Margin="12,0" Padding="2,0" VerticalAlignment="Center"
+                    Background="{Binding Tag, RelativeSource={RelativeSource AncestorType=MenuItem}}"
+                    Command="{Binding DataContext.BookmarkClearCommand, RelativeSource={RelativeSource AncestorType=MenuItem}}" 
+                    CommandParameter="{Binding CommandParameter, RelativeSource={RelativeSource AncestorType=MenuItem}}" />
+            </Grid>
+        </DataTemplate>
     </UserControl.Resources>
     <Grid>
         <Border x:Name="_borderMain" BorderThickness="2" CornerRadius="1" Padding="1" >
@@ -148,57 +178,37 @@
                                 </MenuItem.Icon>
                             </MenuItem>
                             <Separator />
-                            <MenuItem Header="GoTo Bookmark A (Start)" Command="{Binding BookmarkGoToCommand}" CommandParameter="A" >
+                            <MenuItem Header="GoTo Bookmark A (Start)" Command="{Binding BookmarkGoToCommand}" CommandParameter="A" Tag="LightGreen" >
                                 <MenuItem.Icon>
                                     <TextBlock Text="A" />
                                 </MenuItem.Icon>
+                                <MenuItem.HeaderTemplate>
+                                    <StaticResource ResourceKey="BookmarkHeaderTemplate"/>
+                                </MenuItem.HeaderTemplate>
                             </MenuItem>
-                            <MenuItem Header="GoTo Bookmark B (End)" Command="{Binding BookmarkGoToCommand}" CommandParameter="B" >
+                            <MenuItem Header="GoTo Bookmark B (End)" Command="{Binding BookmarkGoToCommand}" CommandParameter="B" Tag="LightGreen" >
                                 <MenuItem.Icon>
                                     <TextBlock Text="B" />
                                 </MenuItem.Icon>
+                                <MenuItem.HeaderTemplate>
+                                    <StaticResource ResourceKey="BookmarkHeaderTemplate"/>
+                                </MenuItem.HeaderTemplate>
                             </MenuItem>
-                            <MenuItem Command="{Binding BookmarkGoToCommand}" CommandParameter="C" >
+                            <MenuItem Header="GoTo Bookmark C" Command="{Binding BookmarkGoToCommand}" CommandParameter="C" Tag="Pink" >
                                 <MenuItem.Icon>
                                     <TextBlock Text="C" />
                                 </MenuItem.Icon>
-                                <MenuItem.Header>
-                                    <Grid Height="18">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="150" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <Label Content="GoTo Bookmark C" VerticalAlignment="Center" 
-                                               BorderThickness="0" Margin="-4" Background="Transparent" 
-                                               Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=MenuItem}}"
-                                               IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType=MenuItem}}">
-                                        </Label>
-                                        <Button Grid.Column="1" Content="Clear" Margin="12,0" Padding="2,0" VerticalAlignment="Center"
-                                                Background="Pink"
-                                                Command="{Binding BookmarkClearCommand}" CommandParameter="C" />
-                                    </Grid>
-                                </MenuItem.Header>
+                                <MenuItem.HeaderTemplate>
+                                    <StaticResource ResourceKey="BookmarkHeaderTemplate"/>
+                                </MenuItem.HeaderTemplate>
                             </MenuItem>
-                            <MenuItem Command="{Binding BookmarkGoToCommand}" CommandParameter="D" >
+                            <MenuItem Header="GoTo Bookmark D" Command="{Binding BookmarkGoToCommand}" CommandParameter="D" Tag="Yellow">
                                 <MenuItem.Icon>
                                     <TextBlock Text="D" />
                                 </MenuItem.Icon>
-                                <MenuItem.Header>
-                                    <Grid Height="18">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="150" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <Label Content="GoTo Bookmark D" VerticalAlignment="Center" 
-                                               BorderThickness="0" Margin="-4" Background="Transparent" 
-                                               Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=MenuItem}}"
-                                               IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType=MenuItem}}">
-                                        </Label>
-                                        <Button Grid.Column="1" Content="Clear" Margin="12,0" Padding="2,0" VerticalAlignment="Center"
-                                                Background="Yellow"
-                                                Command="{Binding BookmarkClearCommand}" CommandParameter="D" />
-                                    </Grid>
-                                </MenuItem.Header>
+                                <MenuItem.HeaderTemplate>
+                                    <StaticResource ResourceKey="BookmarkHeaderTemplate"/>
+                                </MenuItem.HeaderTemplate>
                             </MenuItem>
                         </MenuItem>
                     </ContextMenu>
