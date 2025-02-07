@@ -30,11 +30,12 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
 
-                <Label Content="{Binding}" VerticalAlignment="Center"
-                   BorderThickness="0" Margin="-4" Background="Transparent"
-                   IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType=MenuItem}}">
-                    <Label.Style>
-                        <Style TargetType="Label">
+                <Button Grid.Column="0" Content="{Binding}" Margin="0,0" Padding="2,0" BorderThickness="0" 
+                        VerticalAlignment="Center" HorizontalContentAlignment="Left" Background="Transparent"
+                        Command="{Binding DataContext.BookmarkGoToCommand, RelativeSource={RelativeSource AncestorType=MenuItem}}" 
+                        CommandParameter="{Binding (wpf:MenuItemHelper.Parameter1), RelativeSource={RelativeSource AncestorType=MenuItem}}" >
+                    <Button.Style>
+                        <Style TargetType="Button">
                             <Style.Triggers>
                                 <Trigger Property="IsEnabled" Value="False">
                                     <Setter Property="Foreground" Value="Gray"/>
@@ -44,18 +45,19 @@
                                 </Trigger>
                             </Style.Triggers>
                         </Style>
-                    </Label.Style>
-                </Label>
+                    </Button.Style>
 
-                <Button Grid.Column="1" Content="Set ✎" Margin="12,0" Padding="2,0" VerticalAlignment="Center"
-                    Background="{Binding Tag, RelativeSource={RelativeSource AncestorType=MenuItem}}" IsEnabled="True"
-                    Command="{Binding DataContext.BookmarkSetCommand, RelativeSource={RelativeSource AncestorType=MenuItem}}" 
-                    CommandParameter="{Binding CommandParameter, RelativeSource={RelativeSource AncestorType=MenuItem}}" />
+                </Button>
 
-                <Button Grid.Column="2" Content="Clear" Margin="12,0" Padding="2,0" VerticalAlignment="Center"
-                    Background="{Binding Tag, RelativeSource={RelativeSource AncestorType=MenuItem}}"
+                <Button Grid.Column="1" Content="Clear" Margin="4,0" Padding="2,0" VerticalAlignment="Center"
+                    Background="{Binding (wpf:MenuItemHelper.Parameter2), RelativeSource={RelativeSource AncestorType=MenuItem}}"
                     Command="{Binding DataContext.BookmarkClearCommand, RelativeSource={RelativeSource AncestorType=MenuItem}}" 
-                    CommandParameter="{Binding CommandParameter, RelativeSource={RelativeSource AncestorType=MenuItem}}" />
+                    CommandParameter="{Binding (wpf:MenuItemHelper.Parameter1), RelativeSource={RelativeSource AncestorType=MenuItem}}" />
+
+                <Button Grid.Column="2" Content="Set ✎" Margin="4,0" Padding="2,0" VerticalAlignment="Center"
+                    Background="{Binding (wpf:MenuItemHelper.Parameter2), RelativeSource={RelativeSource AncestorType=MenuItem}}"
+                    Command="{Binding DataContext.BookmarkSetCommand, RelativeSource={RelativeSource AncestorType=MenuItem}}" 
+                    CommandParameter="{Binding (wpf:MenuItemHelper.Parameter1), RelativeSource={RelativeSource AncestorType=MenuItem}}" />
             </Grid>
         </DataTemplate>
     </UserControl.Resources>
@@ -184,7 +186,7 @@
                                 </MenuItem.Icon>
                             </MenuItem>
                             <Separator />
-                            <MenuItem Header="GoTo Bookmark A (Start)" Command="{Binding BookmarkGoToCommand}" CommandParameter="A" Tag="LightGreen" >
+                            <MenuItem Header="GoTo Bookmark A (Start)" wpf:MenuItemHelper.Parameter1="A" wpf:MenuItemHelper.Parameter2="LightGreen" >
                                 <MenuItem.Icon>
                                     <TextBlock Text="A" />
                                 </MenuItem.Icon>
@@ -192,7 +194,7 @@
                                     <StaticResource ResourceKey="BookmarkHeaderTemplate"/>
                                 </MenuItem.HeaderTemplate>
                             </MenuItem>
-                            <MenuItem Header="GoTo Bookmark B (End)" Command="{Binding BookmarkGoToCommand}" CommandParameter="B" Tag="LightBlue" >
+                            <MenuItem Header="GoTo Bookmark B (End)" wpf:MenuItemHelper.Parameter1="B" wpf:MenuItemHelper.Parameter2="LightBlue" >
                                 <MenuItem.Icon>
                                     <TextBlock Text="B" />
                                 </MenuItem.Icon>
@@ -200,7 +202,7 @@
                                     <StaticResource ResourceKey="BookmarkHeaderTemplate"/>
                                 </MenuItem.HeaderTemplate>
                             </MenuItem>
-                            <MenuItem Header="GoTo Bookmark C" Command="{Binding BookmarkGoToCommand}" CommandParameter="C" Tag="Pink" >
+                            <MenuItem Header="GoTo Bookmark C" wpf:MenuItemHelper.Parameter1="C" wpf:MenuItemHelper.Parameter2="Pink" >
                                 <MenuItem.Icon>
                                     <TextBlock Text="C" />
                                 </MenuItem.Icon>
@@ -208,7 +210,7 @@
                                     <StaticResource ResourceKey="BookmarkHeaderTemplate"/>
                                 </MenuItem.HeaderTemplate>
                             </MenuItem>
-                            <MenuItem Header="GoTo Bookmark D" Command="{Binding BookmarkGoToCommand}" CommandParameter="D" Tag="Yellow">
+                            <MenuItem Header="GoTo Bookmark D" wpf:MenuItemHelper.Parameter1="D" wpf:MenuItemHelper.Parameter2="Yellow">
                                 <MenuItem.Icon>
                                     <TextBlock Text="D" />
                                 </MenuItem.Icon>

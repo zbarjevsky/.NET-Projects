@@ -65,8 +65,8 @@ namespace MultiPlayer
             Skip10SecondsCommand = new RelayCommand(Skip10SecondsCommandExecute, (o) => true);
             SkipOneFrameCommand = new RelayCommand(SkipOneFrameCommandExecute, (o) => true);
             BookmarkSetCommand = new RelayCommand(BookmarkSetCommandExecute, (o) => true);
-            BookmarkGoToCommand = new RelayCommand(BookmarkGoToCommandExecute, BookmarkGoToCanCommandExecute);
-            BookmarkClearCommand = new RelayCommand(BookmarkClearCommandExecute, (BookmarkGoToCanCommandExecute) => true);
+            BookmarkGoToCommand = new RelayCommand(BookmarkGoToCommandExecute, BookmarkGoToCommandCanExecute);
+            BookmarkClearCommand = new RelayCommand(BookmarkClearCommandExecute, BookmarkClearCommandCanExecute);
         }
 
         private string _title;
@@ -858,17 +858,31 @@ namespace MultiPlayer
             Replay.BookmarkGo2(name);
         }
 
-        private bool BookmarkGoToCanCommandExecute(object bookMarkName)
+        private bool BookmarkGoToCommandCanExecute(object bookMarkName)
         {
+            if (bookMarkName == null)
+                return true;
+
             eBookmarkName name = (eBookmarkName)Enum.Parse(typeof(eBookmarkName), (string)bookMarkName);
             double position = Replay.BookmarkPositionGet(name);
-            return true; // position > 0;
+            return position > 0;
         }
 
         private void BookmarkClearCommandExecute(object bookMarkName)
         {
             eBookmarkName name = (eBookmarkName)Enum.Parse(typeof(eBookmarkName), (string)bookMarkName);
             Replay.BookmarkPositionClear(name);
+            _player._ctxMenu.IsOpen = false;
+        }
+
+        private bool BookmarkClearCommandCanExecute(object bookMarkName)
+        {
+            if (bookMarkName == null)
+                return false;
+
+            eBookmarkName name = (eBookmarkName)Enum.Parse(typeof(eBookmarkName), (string)bookMarkName);
+            double position = Replay.BookmarkPositionGet(name);
+            return position > 0;
         }
 
         public ReplayLoop Replay { get; }
@@ -927,6 +941,9 @@ namespace MultiPlayer
 
             public void GoToPosition(double pos)
             {
+                if (pos <= 0) 
+                    return;
+
                 VM._cmd._position.Value = pos;
                 VM.Settings.Position = VM._cmd._position.Value;
             }
@@ -962,7 +979,7 @@ namespace MultiPlayer
                 }
                 else
                 {
-                    btn.ToolTip = "Hello";
+                    btn.ToolTip = "Not set";
                     line.Visibility = Visibility.Collapsed;
                 }
             }
