@@ -22,6 +22,10 @@
         <local:SelectedIndexToIconTextConverter x:Key="SelectedIndexToIconTextConverter"/>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <wpf:InverseVisibilityConverter x:Key="InverseVisConverter" />
+        <Style TargetType="ToolTip">
+            <Setter Property="Placement" Value="Top"/>
+        </Style>
+        
         <DataTemplate x:Key="BookmarkHeaderTemplate">
             <Grid Height="18">
                 <Grid.ColumnDefinitions>
@@ -202,17 +206,17 @@
                                     <StaticResource ResourceKey="BookmarkHeaderTemplate"/>
                                 </MenuItem.HeaderTemplate>
                             </MenuItem>
-                            <MenuItem Header="GoTo Bookmark C" wpf:MenuItemHelper.Parameter1="C" wpf:MenuItemHelper.Parameter2="Pink" >
+                            <MenuItem Header="GoTo Bookmark (1)" wpf:MenuItemHelper.Parameter1="C" wpf:MenuItemHelper.Parameter2="Pink" >
                                 <MenuItem.Icon>
-                                    <TextBlock Text="C" />
+                                    <TextBlock Text="1" />
                                 </MenuItem.Icon>
                                 <MenuItem.HeaderTemplate>
                                     <StaticResource ResourceKey="BookmarkHeaderTemplate"/>
                                 </MenuItem.HeaderTemplate>
                             </MenuItem>
-                            <MenuItem Header="GoTo Bookmark D" wpf:MenuItemHelper.Parameter1="D" wpf:MenuItemHelper.Parameter2="Yellow">
+                            <MenuItem Header="GoTo Bookmark (2)" wpf:MenuItemHelper.Parameter1="D" wpf:MenuItemHelper.Parameter2="Yellow">
                                 <MenuItem.Icon>
-                                    <TextBlock Text="D" />
+                                    <TextBlock Text="2" />
                                 </MenuItem.Icon>
                                 <MenuItem.HeaderTemplate>
                                     <StaticResource ResourceKey="BookmarkHeaderTemplate"/>

@@ -69,7 +69,7 @@
                     <StackPanel>
                         <Button ToolTip="Set Bookmark(C) Position"  Margin="2,2,2,0" Padding="-2" Height="20" Width="20"
                                 Command="{Binding BookmarkSetCommand}" CommandParameter="C">
-                            <Label Content="C" FontSize="10" FontWeight="Normal" />
+                            <Label Content="1" FontSize="10" FontWeight="Normal" />
                         </Button>
                         <Button x:Name="_btnC" ToolTip="Go To Bookmark(C) Position" Margin="2,0,2,2" Padding="0,-8,0,-4" Height="12" 
                                 Background="Pink"
@@ -80,7 +80,7 @@
                     <StackPanel>
                         <Button ToolTip="Set Bookmark(D) Position" Margin="2,2,2,0" Padding="-2" Height="20" Width="20" 
                                 Command="{Binding BookmarkSetCommand}" CommandParameter="D">
-                            <Label Content="D" FontSize="10" FontWeight="Normal" />
+                            <Label Content="2" FontSize="10" FontWeight="Normal" />
                         </Button>
                         <Button x:Name="_btnD" ToolTip="Set Bookmark(D) Position" Margin="2,0,2,2" Padding="0,-8,0,-4" Height="12" 
                                 Background="Yellow"
