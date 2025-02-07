@@ -727,6 +727,14 @@ namespace MultiPlayer
                 Skip10SecondsCommand.Execute(e.Key == System.Windows.Input.Key.Right);
             else if (e.Key == System.Windows.Input.Key.OemComma || e.Key == System.Windows.Input.Key.OemPeriod)
                 SkipOneFrameCommand.Execute(e.Key == System.Windows.Input.Key.OemPeriod);
+            else if (e.Key == System.Windows.Input.Key.A)
+                BookmarkGoToCommand.Execute(eBookmarkName.A.ToString());
+            else if (e.Key == System.Windows.Input.Key.B)
+                BookmarkGoToCommand.Execute(eBookmarkName.B.ToString());
+            else if (e.Key == System.Windows.Input.Key.C)
+                BookmarkGoToCommand.Execute(eBookmarkName.C.ToString());
+            else if (e.Key == System.Windows.Input.Key.D)
+                BookmarkGoToCommand.Execute(eBookmarkName.D.ToString());
             else
                 return false;
 

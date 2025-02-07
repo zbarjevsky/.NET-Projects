@@ -148,31 +148,56 @@
                                 </MenuItem.Icon>
                             </MenuItem>
                             <Separator />
-                            <MenuItem Header="GoTo Bookmark A" Command="{Binding BookmarkGoToCommand}" CommandParameter="A" >
+                            <MenuItem Header="GoTo Bookmark A (Start)" Command="{Binding BookmarkGoToCommand}" CommandParameter="A" >
                                 <MenuItem.Icon>
                                     <TextBlock Text="A" />
                                 </MenuItem.Icon>
                             </MenuItem>
-                            <MenuItem Header="GoTo Bookmark B" Command="{Binding BookmarkGoToCommand}" CommandParameter="B" >
+                            <MenuItem Header="GoTo Bookmark B (End)" Command="{Binding BookmarkGoToCommand}" CommandParameter="B" >
                                 <MenuItem.Icon>
                                     <TextBlock Text="B" />
                                 </MenuItem.Icon>
                             </MenuItem>
-                            <MenuItem Header="GoTo Bookmark C" Command="{Binding BookmarkGoToCommand}" CommandParameter="C" >
+                            <MenuItem Command="{Binding BookmarkGoToCommand}" CommandParameter="C" >
                                 <MenuItem.Icon>
                                     <TextBlock Text="C" />
                                 </MenuItem.Icon>
+                                <MenuItem.Header>
+                                    <Grid Height="18">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="150" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Label Content="GoTo Bookmark C" VerticalAlignment="Center" 
+                                               BorderThickness="0" Margin="-4" Background="Transparent" 
+                                               Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=MenuItem}}"
+                                               IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType=MenuItem}}">
+                                        </Label>
+                                        <Button Grid.Column="1" Content="Clear" Margin="12,0" Padding="2,0" VerticalAlignment="Center"
+                                                Background="Pink"
+                                                Command="{Binding BookmarkClearCommand}" CommandParameter="C" />
+                                    </Grid>
+                                </MenuItem.Header>
                             </MenuItem>
                             <MenuItem Command="{Binding BookmarkGoToCommand}" CommandParameter="D" >
                                 <MenuItem.Icon>
                                     <TextBlock Text="D" />
                                 </MenuItem.Icon>
                                 <MenuItem.Header>
-                                    <StackPanel Orientation="Horizontal">
-                                        <TextBlock Text="GoTo Bookmark D" VerticalAlignment="Center" IsEnabled="False" />
-                                        <Button Content="Clear" Margin="12,2" Padding="2" VerticalAlignment="Center"
+                                    <Grid Height="18">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="150" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Label Content="GoTo Bookmark D" VerticalAlignment="Center" 
+                                               BorderThickness="0" Margin="-4" Background="Transparent" 
+                                               Foreground="{Binding Foreground, RelativeSource={RelativeSource AncestorType=MenuItem}}"
+                                               IsEnabled="{Binding IsEnabled, RelativeSource={RelativeSource AncestorType=MenuItem}}">
+                                        </Label>
+                                        <Button Grid.Column="1" Content="Clear" Margin="12,0" Padding="2,0" VerticalAlignment="Center"
+                                                Background="Yellow"
                                                 Command="{Binding BookmarkClearCommand}" CommandParameter="D" />
-                                    </StackPanel>
+                                    </Grid>
                                 </MenuItem.Header>
                             </MenuItem>
                         </MenuItem>
