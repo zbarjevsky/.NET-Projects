@@ -122,7 +122,11 @@
                         <Slider x:Name="_volume" Margin="2,10" Width="60" MinWidth="60" 
                                 DockPanel.Dock="Right"
                                 Value="150" Maximum="1000" Minimum="0" IsMoveToPointEnabled="True"
-                                ValueChanged="Volume_ValueChanged"/>
+                                ValueChanged="Volume_ValueChanged" >
+                            <Slider.ToolTip>
+                                <TextBlock Text="{Binding Volume, StringFormat=Volume: 0.#%, FallbackValue='Volume: 12%'}" />
+                            </Slider.ToolTip>
+                        </Slider>
                         <Grid Margin="2,4">
                             <Canvas Background="Transparent">
                                 <Canvas.Resources>

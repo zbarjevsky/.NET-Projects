@@ -22,9 +22,6 @@
         <local:SelectedIndexToIconTextConverter x:Key="SelectedIndexToIconTextConverter"/>
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <wpf:InverseVisibilityConverter x:Key="InverseVisConverter" />
-        <Style TargetType="ToolTip">
-            <Setter Property="Placement" Value="Top"/>
-        </Style>
         
         <DataTemplate x:Key="BookmarkHeaderTemplate">
             <Grid Height="18">

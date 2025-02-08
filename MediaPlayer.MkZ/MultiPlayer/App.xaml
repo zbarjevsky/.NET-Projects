@@ -4,5 +4,28 @@
              xmlns:local="clr-namespace:MultiPlayer"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
+        <Style TargetType="ToolTip">
+            <Setter Property="Placement" Value="Top"/>
+            <Setter Property="Foreground" Value="DarkBlue" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="ToolTipService.ShowDuration" Value="8" />
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToolTip">
+                        <Border Background="LightYellow"
+                            BorderBrush="{Binding Foreground, RelativeSource={RelativeSource AncestorType=ToolTip}}"
+                            BorderThickness="1"
+                            CornerRadius="6"
+                            Padding="5">
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="10" ShadowDepth="4" Opacity="0.5"/>
+                            </Border.Effect>
+                            <ContentPresenter />
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Application.Resources>
 </Application>
