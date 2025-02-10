@@ -222,8 +222,8 @@ namespace DashCamGPSView.Controls
         }
 
         public TimeSpan Position 
-        { 
-            get { return VideoPlayerElement.Position; }
+        {
+            get { return WPFUtils.ExecuteOnUIThread(() => { return VideoPlayerElement.Position; }); }
             //set { VideoPlayerElement.Position = value; OnPropertyChanged(); } 
         }
 
@@ -238,11 +238,14 @@ namespace DashCamGPSView.Controls
         {
             get
             {
-                if (VideoPlayerElement.Source != null)
+                return WPFUtils.ExecuteOnUIThread(() =>
                 {
-                    return new Size(VideoPlayerElement.NaturalVideoWidth, VideoPlayerElement.NaturalVideoHeight);
-                }
-                return new Size(1920, 1080);
+                    if (VideoPlayerElement.Source != null)
+                    {
+                        return new Size(VideoPlayerElement.NaturalVideoWidth, VideoPlayerElement.NaturalVideoHeight);
+                    }
+                    return new Size(1920, 1080);
+                });
             }
         }
 
@@ -250,11 +253,14 @@ namespace DashCamGPSView.Controls
         {
             get
             {
-                if ((VideoPlayerElement.Source != null) && (VideoPlayerElement.NaturalDuration.HasTimeSpan))
+                return WPFUtils.ExecuteOnUIThread(() =>
                 {
-                    return VideoPlayerElement.NaturalDuration.TimeSpan.TotalSeconds;
-                }
-                return 0;
+                    if ((VideoPlayerElement.Source != null) && (VideoPlayerElement.NaturalDuration.HasTimeSpan))
+                    {
+                        return VideoPlayerElement.NaturalDuration.TimeSpan.TotalSeconds;
+                    }
+                    return 0;
+                });
             }
         }
 

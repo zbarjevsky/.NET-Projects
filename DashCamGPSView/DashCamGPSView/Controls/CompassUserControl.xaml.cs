@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MkZ.WPF;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -27,14 +28,14 @@ namespace DashCamGPSView.Controls
 
         public double Direction
         {
-            get { return arrowDirection.Angle; }
-            set { arrowDirection.Angle = value; }
+            get { return WPFUtils.ExecuteOnUIThread(() => { return arrowDirection.Angle; }); }
+            set { WPFUtils.ExecuteOnUIThread(() => { arrowDirection.Angle = value; }); }
         }
 
         public void SetDirection(double direction, bool bShowCar)
         {
             Direction = direction;
-            car.Visibility = bShowCar ? Visibility.Visible : Visibility.Collapsed;
+            WPFUtils.ExecuteOnUIThread(() => { car.Visibility = bShowCar ? Visibility.Visible : Visibility.Collapsed; });
         }
 
         public void SetDirection(double direction, double speed)

@@ -1,5 +1,6 @@
 ﻿using DashCamGPSView.Tools;
 using GPSDataParser;
+using MkZ.WPF;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -51,28 +52,31 @@ namespace DashCamGPSView.Controls
 
             double maxSpeed = FindMaxSpeed(RouteMain);
             UpdateRoute(_segmentMain, _canvasPoints, _figureMain, maxSpeed);
-            if (index >= 0 && index < RouteMain.Count)
+            WPFUtils.ExecuteOnUIThread(() =>
             {
-                TimeSpan interval = RouteMain.Last().FixTime - RouteMain.First().FixTime;
+                if (index >= 0 && index < RouteMain.Count)
+                {
+                    TimeSpan interval = RouteMain.Last().FixTime - RouteMain.First().FixTime;
 
-                Point car = GetPoint(index, maxSpeed, interval);
-                _carPosition.X = GetValidPosition(car.X - _car.Width * _car.RenderTransformOrigin.X, 0, _car.Width, this.ActualWidth);
-                _carPosition.Y = GetValidPosition(car.Y - _car.Height * _car.RenderTransformOrigin.Y, -10, -10, this.ActualHeight);
+                    Point car = GetPoint(index, maxSpeed, interval);
+                    _carPosition.X = GetValidPosition(car.X - _car.Width * _car.RenderTransformOrigin.X, 0, _car.Width, this.ActualWidth);
+                    _carPosition.Y = GetValidPosition(car.Y - _car.Height * _car.RenderTransformOrigin.Y, -10, -10, this.ActualHeight);
 
-                _txtInfo.Text = GetInfoText(index, maxSpeed);
+                    _txtInfo.Text = GetInfoText(index, maxSpeed);
 
-                _textPosition.X = GetValidPosition(car.X - _txtInfo.ActualWidth/2, 0, _txtInfo.ActualWidth, this.ActualWidth);
+                    _textPosition.X = GetValidPosition(car.X - _txtInfo.ActualWidth / 2, 0, _txtInfo.ActualWidth, this.ActualWidth);
 
-                _carDirection.Angle = RouteMain[index].Course;
+                    _carDirection.Angle = RouteMain[index].Course;
 
-                _car.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                _car.Visibility = Visibility.Collapsed;
-                _txtInfo.Text = "No GPS info";
-                _textPosition.X = 0;
-            }
+                    _car.Visibility = Visibility.Visible;
+                }
+                else
+                {
+                    _car.Visibility = Visibility.Collapsed;
+                    _txtInfo.Text = "No GPS info";
+                    _textPosition.X = 0;
+                }
+            });
         }
 
         private string GetInfoText(int index, double maxSpeed)
@@ -95,20 +99,23 @@ namespace DashCamGPSView.Controls
 
         private void UpdateRoute(PolyLineSegment segment, Canvas canvas, PathFigure figure, double maxSpeed)
         {
-            canvas.Children.Clear();
-            segment.Points.Clear();
-            if (RouteMain.Count == 0)
-                return;
-
-            TimeSpan interval = RouteMain.Last().FixTime - RouteMain.First().FixTime;
-
-            figure.StartPoint = GetPoint(0, maxSpeed, interval);
-            for (int i = 0; i < RouteMain.Count; i++)
+            WPFUtils.ExecuteOnUIThread(() =>
             {
-                Point pt = GetPoint(i, maxSpeed, interval);
-                segment.Points.Add(pt);
-                canvas.Children.Add(GetCircle(i, pt, RouteMain[i].GetSpeed(SpeedUnits.mph), maxSpeed));
-            }
+                canvas.Children.Clear();
+                segment.Points.Clear();
+                if (RouteMain.Count == 0)
+                    return;
+
+                TimeSpan interval = RouteMain.Last().FixTime - RouteMain.First().FixTime;
+
+                figure.StartPoint = GetPoint(0, maxSpeed, interval);
+                for (int i = 0; i < RouteMain.Count; i++)
+                {
+                    Point pt = GetPoint(i, maxSpeed, interval);
+                    segment.Points.Add(pt);
+                    canvas.Children.Add(GetCircle(i, pt, RouteMain[i].GetSpeed(SpeedUnits.mph), maxSpeed));
+                }
+            });
         }
 
         private Ellipse GetCircle(int idx, Point pt, double speed, double maxSpeed, double radius = 8)

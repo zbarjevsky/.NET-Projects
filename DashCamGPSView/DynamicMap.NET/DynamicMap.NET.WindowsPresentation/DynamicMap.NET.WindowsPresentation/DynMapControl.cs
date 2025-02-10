@@ -823,24 +823,27 @@ namespace DynamicMap.NET.WindowsPresentation
 
       void ForceUpdateOverlays(System.Collections.IEnumerable items)
       {
-         using(Dispatcher.DisableProcessing())
-         {
-            UpdateMarkersOffset();
-
-            foreach(DynMapMarker i in items)
+            Application.Current.Dispatcher.Invoke(() =>
             {
-               if(i != null)
-               {
-                  i.ForceUpdateLocalPosition(this);
+                using (Dispatcher.DisableProcessing())
+                {
+                    UpdateMarkersOffset();
 
-                  if(i is IShapable)
-                  {
-                     RegenerateShape(i as IShapable);
-                  }
-               }
-            }
-         }
-         InvalidateVisual();
+                    foreach (DynMapMarker i in items)
+                    {
+                        if (i != null)
+                        {
+                            i.ForceUpdateLocalPosition(this);
+
+                            if (i is IShapable)
+                            {
+                                RegenerateShape(i as IShapable);
+                            }
+                        }
+                    }
+                }
+                InvalidateVisual();
+            });
       }
 
       /// <summary>

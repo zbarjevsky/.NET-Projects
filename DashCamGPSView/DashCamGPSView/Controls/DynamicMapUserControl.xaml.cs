@@ -25,6 +25,7 @@ using DashCamGPSView.Tools;
 using DashCam.Tools;
 using System.Diagnostics;
 using DynamicMap.NET.MapProviders;
+using MkZ.WPF;
 
 namespace DashCamGPSView.Controls
 {
@@ -66,10 +67,16 @@ namespace DashCamGPSView.Controls
             get { return new PointLatLngUI(DynMap.Position.Lat, DynMap.Position.Lng); }
             set 
             { 
+                if (DynMap.Position.Lat == value.Lat && DynMap.Position.Lng == value.Lng)
+                    return;
+
                 DynMap.Position = new PointLatLng(value.Lat, value.Lng);
-                _txtLattitude.Text = value.Lat.ToString("0.00000");
-                _txtLongtitude.Text = value.Lng.ToString("0.00000");
-                OnPropertyChanged(); 
+                WPFUtils.ExecuteOnUIThread(() =>
+                {
+                    _txtLattitude.Text = value.Lat.ToString("0.00000");
+                    _txtLongtitude.Text = value.Lng.ToString("0.00000");
+                    OnPropertyChanged();
+                });
             }
         }
 
@@ -80,6 +87,9 @@ namespace DashCamGPSView.Controls
 
         public void UpdateRouteAndCar(PointLatLngUI currentPosition, int idx)
         {
+            if (Position == currentPosition) 
+                return;
+
             Position = currentPosition;
             _route.UpdateRouteAndCar(idx, DynMap);
         }

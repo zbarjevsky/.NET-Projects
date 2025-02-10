@@ -216,6 +216,7 @@ namespace DashCamGPSView.Tools
                 if (!FromViofoFileName(allFiles, ref idx, this))
                 {
                     FileNameFront = currentInfo.Info.FullName;
+                    Info = null; //add this line to unstuck the code
                     Info = currentInfo;
                     idx++;
                 }
@@ -529,7 +530,7 @@ namespace DashCamGPSView.Tools
             if (This.Info == null)
                 This.Info = info1;
 
-            return  !string.IsNullOrWhiteSpace(This.FileNameFront) || 
+            return !string.IsNullOrWhiteSpace(This.FileNameFront) || 
                     !string.IsNullOrWhiteSpace(This.FileNameBack) || 
                     !string.IsNullOrWhiteSpace(This.FileNameInside);
         }

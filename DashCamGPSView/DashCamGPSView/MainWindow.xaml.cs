@@ -112,7 +112,7 @@ namespace DashCamGPSView
             playerLeft.PropertyChanged += Player_PropertyChanged;
             playerRight.PropertyChanged += Player_PropertyChanged;
 
-            statusBar.OnVideoPositionChanged = (position) => { UpdateGpsInfo(); };
+            statusBar.OnVideoPositionChanged = (position) => { _ = UpdateGpsInfoAsync(); };
         }
 
         private void Player_PropertyChanged(object sender, PropertyChangedEventArgs e)
@@ -131,7 +131,7 @@ namespace DashCamGPSView
                     MainMap.Zoom = 16;
                 }
 
-                UpdateGpsInfo();
+                _ = UpdateGpsInfoAsync();
                 //bool isFrontPlayerOnly = string.IsNullOrWhiteSpace(playerR.FileName);
                 //VideoStartedPostAction(player, AppConfig.PlayerF, isFrontPlayerOnly); //reset now if there is no R player
                 VideoStartedAction(player);
@@ -738,19 +738,34 @@ namespace DashCamGPSView
 
         private int[] FpsFromComboIndex = { 1, 2, 3, 5, 10, 15, 30 };
         private PointLatLngUI _lastValidPosition;
+        private async Task UpdateGpsInfoAsync()
+        {
+            await Task.Run(() => 
+            {
+                UpdateGpsInfo();
+            });
+        }
+
         private void UpdateGpsInfo()
         {
-            if (_dashCamFileInfo == null || !chkSyncGps.IsChecked.Value)
+            bool syncGPS = WPFUtils.ExecuteOnUIThread(() => { return chkSyncGps.IsChecked.Value; });
+            if (_dashCamFileInfo == null || !syncGPS)
                 return;
 
             int idx = -1;
             if (_dashCamFileInfo.HasGpsInfo)
             {
-                int fps = FpsFromComboIndex[_cmbFPS.SelectedIndex];
+                int fpsIndex = WPFUtils.ExecuteOnUIThread(() => { return _cmbFPS.SelectedIndex; });
+                int fps = FpsFromComboIndex[fpsIndex];
                 double seconds = this.Position.TotalSeconds;
-                idx = _dashCamFileInfo.FindGpsInfoIdx(seconds, this.NaturalDuration, chkTimeLapse.IsChecked.Value, fps, SpeedRatio);
-                speedGauge.Visibility = Visibility.Visible;
-                compass.Visibility = Visibility.Visible;
+                bool isTimeLapse = WPFUtils.ExecuteOnUIThread(() => { return chkTimeLapse.IsChecked.Value; });
+                idx = _dashCamFileInfo.FindGpsInfoIdx(seconds, this.NaturalDuration, isTimeLapse, fps, SpeedRatio);
+
+                WPFUtils.ExecuteOnUIThread(() =>
+                {
+                    speedGauge.Visibility = Visibility.Visible;
+                    compass.Visibility = Visibility.Visible;
+                });
 
                 if (idx >= 0 && idx < _dashCamFileInfo.GpsInfo.Count)
                 {
@@ -763,14 +778,17 @@ namespace DashCamGPSView
                     DateTime end = TimeZoneCorrect(_dashCamFileInfo.GpsInfo[_dashCamFileInfo.GpsInfo.Count - 1].FixTime);
                     TimeSpan duration = end - start;
 
-                    _txtGpsInfo.Text = 
-                        $"Point {idx} of {_dashCamFileInfo.GpsInfo.Count}\n"+
-                        $"Speed: {_dashCamFileInfo.GetSpeed(idx):0.0} {speedGauge.SpeedUnits}\n"+
-                        $"Course: {_dashCamFileInfo[idx].Course:0.0}°\n"+
-                        $"Duration: {duration}\n"+
-                        $"Start: {start.TimeOfDay}\n"+
-                        $" Curr: {curr.TimeOfDay}\n"+
-                        $" Last: {end.TimeOfDay}";
+                    WPFUtils.ExecuteOnUIThread(() =>
+                    {
+                        _txtGpsInfo.Text =
+                            $"Point {idx} of {_dashCamFileInfo.GpsInfo.Count}\n" +
+                            $"Speed: {_dashCamFileInfo.GetSpeed(idx):0.0} {speedGauge.SpeedUnits}\n" +
+                            $"Course: {_dashCamFileInfo[idx].Course:0.0}°\n" +
+                            $"Duration: {duration}\n" +
+                            $"Start: {start.TimeOfDay}\n" +
+                            $" Curr: {curr.TimeOfDay}\n" +
+                            $" Last: {end.TimeOfDay}";
+                    });
 
                     _lastValidPosition = _dashCamFileInfo.Position(idx);
                 }
@@ -787,11 +805,14 @@ namespace DashCamGPSView
             }
             else
             {
-                //speedGauge.DialText = "Speed Mph";
-                speedGauge.Speed = "?";
-                _txtGpsInfo.Text = "No GPS info";
-                speedGauge.Visibility = Visibility.Hidden;
-                compass.Visibility = Visibility.Hidden;
+                WPFUtils.ExecuteOnUIThread(() =>
+                {
+                    //speedGauge.DialText = "Speed Mph";
+                    speedGauge.Speed = "?";
+                    _txtGpsInfo.Text = "No GPS info";
+                    speedGauge.Visibility = Visibility.Hidden;
+                    compass.Visibility = Visibility.Hidden;
+                });
             }
 
             graphSpeedInfo.SetCarPosition(idx);

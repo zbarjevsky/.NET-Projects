@@ -145,7 +145,7 @@
                  Width="180" Height="100" MaxSpeed="140" SpeedColor="Gold"
                  HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="40,0,40,20"/>
 
-            <controls:CompassUserControl x:Name="compass" Direction="10" 
+            <controls:CompassUserControl x:Name="compass" Direction="10"
                  Grid.RowSpan="3" Grid.ColumnSpan="5"
                  Width="280" Height="150" 
                  HorizontalAlignment="Right" VerticalAlignment="Bottom" Margin="40,0,40,20"/>
