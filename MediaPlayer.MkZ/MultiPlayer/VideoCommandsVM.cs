@@ -19,6 +19,7 @@ using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 using Point = System.Windows.Point;
 using System.Diagnostics;
 using System.Windows.Shapes;
+using MultiPlayer.Properties;
 
 
 namespace MultiPlayer
@@ -221,6 +222,9 @@ namespace MultiPlayer
         bool _isInUpdate = false;
         public void Update(OnePlayerSettings s, bool pop = false, bool lockUpdate = true)
         {
+            if (_isInUpdate)
+                return;
+
             IsPopWindowMode = pop;
 
             if (lockUpdate)
@@ -300,6 +304,9 @@ namespace MultiPlayer
         {
             IsPopWindowMode = pop;
 
+            if (IsLoading)
+                return;
+
             Clear();
             if (string.IsNullOrEmpty(s.FileName) || !File.Exists(s.FileName))
             {
@@ -308,9 +315,8 @@ namespace MultiPlayer
             }
 
             this.IsLoading = true;
-            Settings.FileName = s.FileName;
-            Settings.Position = s.Position;
-            Settings.Volume = s.Volume;
+
+            Settings.Update(s);
 
             _player.VideoPlayerElement.Source = new Uri(s.FileName);
             _player.PositionSet(TimeSpan.FromSeconds(s.Position), false);
@@ -345,6 +351,8 @@ namespace MultiPlayer
 
             this.TogglePlayPauseCommand.RefreshBoundControls();
             this.BookmarkGoToCommand.RefreshBoundControls();
+            this.NotifyPropertyChanged(nameof(SelectedPlayModeIndex));
+
             this.AdjustSizeAndLayout();
         }
 
