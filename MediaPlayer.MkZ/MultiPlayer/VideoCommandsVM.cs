@@ -259,6 +259,9 @@ namespace MultiPlayer
 
         public void UpdateRrecentFile(OnePlayerSettings s)
         {
+            if (string.IsNullOrWhiteSpace(s.FileName))
+                return;
+
             _recentFile = MainWindow.FindOrCreateRecentFile(s.FileName);
             _recentFile.Update(s);
         }
@@ -281,8 +284,8 @@ namespace MultiPlayer
         // - window fit
         public async Task OpenFromFile(string fileName, bool startFrom0)
         {
-            if (_recentFile != null) //update previous recent file
-                _recentFile.Update(Settings);
+            UpdateRrecentFile(Settings); //update previous recent file
+
             _player.Clear();
 
             Settings.FileName = fileName;

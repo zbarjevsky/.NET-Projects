@@ -79,8 +79,12 @@ namespace MultiPlayer
         [XmlAttribute]
         public double ReplayPosD { get; set; } = 0.0;
 
+        private DateTime _lastUpdate = DateTime.Now;
+
         public void Update(OnePlayerSettings settings)
         {
+            _lastUpdate = DateTime.Now;
+
             FileName = Path.GetFileName(settings.FileName);
 
             Position = Math.Round(settings.Position, 3);
