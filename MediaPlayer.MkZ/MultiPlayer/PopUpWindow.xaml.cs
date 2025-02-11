@@ -78,13 +78,17 @@ namespace MultiPlayer
         {
             if (maximize)
             {
+
                 this.WindowStyle = WindowStyle.None;
                 this.ResizeMode = ResizeMode.NoResize;
+
+                WindowState oldState = this.WindowState;
                 this.WindowState = WindowState.Maximized;
+                _previousState = oldState;
             }
             else
             {
-                this.WindowState = WindowState.Normal;
+                this.WindowState = _previousState;
                 this.WindowStyle = WindowStyle.SingleBorderWindow;
                 this.ResizeMode = ResizeMode.CanResize;
             }
