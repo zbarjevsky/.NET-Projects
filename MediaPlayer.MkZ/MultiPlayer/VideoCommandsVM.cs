@@ -673,6 +673,13 @@ namespace MultiPlayer
 
                     this.Pause();
                 }
+                else
+                {
+                    WndMax.LoadSettings(new OnePlayerSettings(_player));
+                    WndMax.BringToFront();
+
+                    this.Pause();
+                }
             }
         }
 

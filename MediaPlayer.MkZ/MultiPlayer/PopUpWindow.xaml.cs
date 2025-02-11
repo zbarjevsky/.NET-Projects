@@ -22,12 +22,22 @@ namespace MultiPlayer
     public partial class PopUpWindow : Window
     {
         private bool AllowClose = false;
+        private WindowState _previousState = WindowState.Normal;
 
         public bool IsFullScreen => (this.WindowState == WindowState.Maximized && this.WindowStyle == WindowStyle.None);
 
         public PopUpWindow()
         {
             InitializeComponent();
+
+            _previousState = this.WindowState;
+            this.StateChanged += PopUpWindow_StateChanged;
+        }
+
+        private void PopUpWindow_StateChanged(object? sender, EventArgs e)
+        {
+            if (this.WindowState != WindowState.Minimized)
+                _previousState = this.WindowState;
         }
 
         public void InitWindow(Window main)
@@ -51,6 +61,12 @@ namespace MultiPlayer
         public void LoadSettings(OnePlayerSettings settings)
         {
             _ = _video.LoadSetting(settings, true);
+        }
+
+        public void BringToFront()
+        {
+            this.WindowState = _previousState;
+            this.Activate();
         }
 
         public void MaximizeToggle()
