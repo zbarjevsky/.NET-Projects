@@ -654,8 +654,8 @@
             this.m_cmbEngine.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.m_cmbEngine.FormattingEnabled = true;
             this.m_cmbEngine.Items.AddRange(new object[] {
-            "youtube-dl\\youtube-dl.exe",
-            "yt-dlp\\yt-dlp.exe"});
+            "yt-dlp\\yt-dlp.exe",
+            "youtube-dl\\youtube-dl.exe"});
             this.m_cmbEngine.Location = new System.Drawing.Point(553, 7);
             this.m_cmbEngine.Name = "m_cmbEngine";
             this.m_cmbEngine.Size = new System.Drawing.Size(269, 28);

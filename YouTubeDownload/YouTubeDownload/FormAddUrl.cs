@@ -26,6 +26,8 @@ namespace YouTubeDownload
             Data.OutputFolder = outputFolder;
             Data.NoPlayList = true; // Properties.Settings.Default.NoPlayList;
 
+            m_cmbAdditionalParameters.SelectedIndex = 0;
+
             try { Data.Url = (string)Clipboard.GetData(DataFormats.UnicodeText.ToString()); }
             catch { }
             
