@@ -46,6 +46,7 @@
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.m_cmbEngine = new System.Windows.Forms.ComboBox();
             this.m_lblEngine = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.m_errorProvider)).BeginInit();
             this.m_pnlButtons.SuspendLayout();
             this.SuspendLayout();
@@ -222,6 +223,7 @@
             this.linkLabel1.TabIndex = 15;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "Additional Parameters:";
+            this.toolTip1.SetToolTip(this.linkLabel1, "Open Help Link");
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.m_lnkOutputFileName_LinkClicked);
             // 
             // m_cmbEngine
@@ -302,5 +304,6 @@
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.ComboBox m_cmbEngine;
         private System.Windows.Forms.Label m_lblEngine;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

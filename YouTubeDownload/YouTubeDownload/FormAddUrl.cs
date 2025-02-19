@@ -86,6 +86,7 @@ namespace YouTubeDownload
         private void m_lnkOutputFileName_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             Process.Start("https://github.com/ytdl-org/youtube-dl/blob/master/README.md#output-template-examples");
+            Process.Start("https://github.com/yt-dlp/yt-dlp?tab=readme-ov-file#download-options");
         }
 
         private void UpdateData(bool fromData)
