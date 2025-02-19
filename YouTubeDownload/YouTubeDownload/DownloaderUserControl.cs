@@ -116,7 +116,7 @@ namespace YouTubeDownload
 
         private void DL_Process_OutputDataReceived(string line)
         {
-            lock (this)
+            //lock (this)
             {
                 this.BeginInvoke(new MethodInvoker(() =>
                 {
@@ -126,16 +126,21 @@ namespace YouTubeDownload
                     OutputDataReceived(line);
                 }));
             }
-            Thread.Sleep(10);
+            Task.Delay(1).Wait();
         }
 
+        private bool _isInUpdate = false;
         private void UpdateOutput(string line)
         {
+            if (_isInUpdate)
+                return;
+            _isInUpdate = true;
+
             _stopwatch.Restart();
             m_lblTime.Text = "Downloading... ";
 
             if (m_txtOutput.Text.Length > 4000)
-                m_txtOutput.Text = m_txtOutput.Text.Substring(0, 4000);
+                m_txtOutput.Text = m_txtOutput.Text.Substring(0, 3000);
 
             m_txtOutput.Text = (line + "\n") + m_txtOutput.Text;
 
@@ -166,6 +171,8 @@ namespace YouTubeDownload
             }
 
             m_lblPlayListStatus.Text = _engine.Data.PlayListProgress;
+
+            _isInUpdate = false;
         }
 
         private void timer1_Tick(object sender, EventArgs e)
