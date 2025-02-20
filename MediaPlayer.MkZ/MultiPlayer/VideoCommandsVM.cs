@@ -126,9 +126,9 @@ namespace MultiPlayer
             PlayPauseIconText = PAUSE_TEXT;
         }
 
-        public void Pause()
+        public void Pause(bool updateUI)
         {
-            _player.Pause();
+            _player.Pause(updateUI);
             _cmd._btnPlayPause.Background = Brushes.LightGoldenrodYellow;
             PlayPauseIconText = PLAY_TEXT;
         }
@@ -177,7 +177,7 @@ namespace MultiPlayer
 
             MediaState state = _player.MediaState;
             if (state == MediaState.Play)
-                Pause();
+                Pause(updateUI: false);
 
             if (ofd.ShowDialog().Value)
             {
@@ -193,7 +193,7 @@ namespace MultiPlayer
         private void TogglePlayPauseCommandExecute(object parameter)
         {
             if (_player.MediaState == MediaState.Play)
-                Pause();
+                Pause(updateUI: true);
             else
                 Play();
         }
@@ -342,7 +342,7 @@ namespace MultiPlayer
 
             if (s.MediaState != MediaState.Play)
             {
-                this.Pause();
+                this.Pause(updateUI: true);
             }
 
             await WaitForMediaOpened();
@@ -526,7 +526,7 @@ namespace MultiPlayer
 
             _resume = (_player.MediaState == MediaState.Play);
             if (_resume)
-                Pause();
+                Pause(updateUI: false);
         }
 
         public void Pos_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -537,13 +537,19 @@ namespace MultiPlayer
             IsMuted = true;
             bool resume = (_player.MediaState == MediaState.Play);
             if (resume)
-                Pause();
+                Pause(updateUI: false);
 
             Settings.Position = e.NewValue;
             _cmd._position.Value = Settings.Position;
             _player.PositionSet(TimeSpan.FromSeconds(Settings.Position), false);
 
             _cmd._timeLbl.Text = SecondsToString(_player.Position.TotalSeconds);
+
+            if (Replay.IsReplayChecked && (Settings.Position < Settings.ReplayPosA || Settings.Position > Settings.ReplayPosB))
+            {
+                Replay.IsReplayChecked = false; //uncheck REPLAY if clicked out of replay range
+                Replay.UpdateTicks();
+            }
 
             if (resume)
                 Play();
@@ -682,14 +688,14 @@ namespace MultiPlayer
                     WndMax.Show();
                     WndMax.LoadSettings(new OnePlayerSettings(_player));
 
-                    this.Pause();
+                    this.Pause(updateUI: true);
                 }
                 else
                 {
                     WndMax.LoadSettings(new OnePlayerSettings(_player));
                     WndMax.BringToFront();
 
-                    this.Pause();
+                    this.Pause(updateUI: true);
                 }
             }
         }
@@ -987,7 +993,7 @@ namespace MultiPlayer
             {
                 if (position > 0)
                 {
-                    btn.ToolTip = $"Set position to:{SecondsToString(position)}";
+                    btn.ToolTip = $"Set position to: {SecondsToString(position)}";
                     line.Visibility = Visibility.Visible;
 
                     double center = line.StrokeThickness / 2;

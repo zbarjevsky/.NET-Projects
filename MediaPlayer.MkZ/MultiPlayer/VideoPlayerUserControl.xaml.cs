@@ -30,7 +30,7 @@ namespace MultiPlayer
     /// <summary>
     /// Interaction logic for VideoPlayerUserControl.xaml
     /// </summary>
-    public partial class VideoPlayerUserControl : System.Windows.Controls.UserControl, IVideoPlayer
+    public partial class VideoPlayerUserControl : System.Windows.Controls.UserControl //, IVideoPlayer
     {
         private ScrollDragZoom _scrollDragger;
 
@@ -363,18 +363,21 @@ namespace MultiPlayer
             }
         }
 
-        public void Pause()
+        public void Pause(bool updateUI)
         {
             if (VideoPlayerElement.Source != null)
             {
                 _timer.Stop();
-                VM.Settings.Position = VideoPlayerElement.Position.TotalSeconds;
+
                 VideoPlayerElement.Pause();
                 this.Background = Brushes.DarkGray;
                 MediaState = MediaState.Pause;
 
-                VM.Settings.Update(this);
-                VM.Update(VM.Settings, VM.IsPopWindowMode, lockUpdate: false);
+                if (updateUI)
+                {
+                    VM.Settings.Update(this);
+                    VM.Update(VM.Settings, VM.IsPopWindowMode, lockUpdate: false);
+                }
             }
         }
 
@@ -398,7 +401,7 @@ namespace MultiPlayer
         public void TogglePlayPauseState()
         {
             if (MediaState == MediaState.Play)
-                Pause();
+                Pause(updateUI: true);
             else //if (MediaState == MediaState.Pause || MediaState == MediaState.Manual)
                 Play();
         }
@@ -513,9 +516,9 @@ namespace MultiPlayer
                     _scrollDragger.Zoom = zoom_save;
                     ZoomStateSet(zoomState, false);
                     MediaState = GetMediaState(VideoPlayerElement);
-                    VideoStartedAction(this);
+                    VideoStartedAction(null);
                 };
-                VideoPlayerElement.MediaEnded += (s, e) => { VideoEnded(this); };
+                VideoPlayerElement.MediaEnded += (s, e) => { VideoEnded(null); };
                 VideoPlayerElement.MediaFailed += (s, e) => { e.Handled = VideoFailed(e, VideoPlayerElement); };
 
                 UpdateResolutionText();

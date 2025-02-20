@@ -42,11 +42,48 @@
                         <ComboBoxItem Content="FitHeight" />
                     </ComboBox>
                     <StackPanel>
+                        <Button ToolTip="Set Bookmark(1) Position"  Margin="2,2,2,0" Padding="-2" Height="20" Width="20"
+                                Command="{Binding BookmarkSetCommand}" CommandParameter="C">
+                            <Label Content="1" FontSize="10" FontWeight="Normal" />
+                        </Button>
+                        <Button x:Name="_btnC" ToolTip="Go To Bookmark(1) Position" Margin="2,0,2,2" Padding="0,-8,0,-4" Height="12" 
+                                Background="Pink"
+                                Command="{Binding BookmarkGoToCommand}" CommandParameter="C">
+                            <Label Content="⏷" FontSize="8" FontWeight="Normal" />
+                        </Button>
+                    </StackPanel>
+                    <StackPanel>
+                        <Button ToolTip="Set Bookmark(2) Position" Margin="2,2,2,0" Padding="-2" Height="20" Width="20" 
+                                Command="{Binding BookmarkSetCommand}" CommandParameter="D">
+                            <Label Content="2" FontSize="10" FontWeight="Normal" />
+                        </Button>
+                        <Button x:Name="_btnD" ToolTip="Set Bookmark(2) Position" Margin="2,0,2,2" Padding="0,-8,0,-4" Height="12" 
+                                Background="Yellow"
+                                Command="{Binding BookmarkGoToCommand}" CommandParameter="D">
+                            <Label Content="⏷" FontSize="8" FontWeight="Normal" />
+                            <Button.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="GoTo Bookmark 2" Click="ReplayGoToD_Click" Icon="⇸"/>
+                                    <Separator/>
+                                    <MenuItem Header="Clear Bookmark 2" Click="ReplayClearD_Click" Icon="null"/>
+                                    <MenuItem Header="Set Bookmark 2" Click="ReplaySetD_Click" Icon="null"/>
+                                </ContextMenu>
+                            </Button.ContextMenu>
+
+                        </Button>
+                    </StackPanel>
+                     <ToggleButton ToolTip="{Binding Replay.ReplayToolTip, FallbackValue='Replay Last N seconds'}" Margin="2" Padding="2" 
+                                  Click="ReplayToggle_Click" 
+                                  IsChecked="{Binding Replay.IsReplayChecked, Mode=TwoWay}">
+                        <Label FontFamily="Segoe MDL2 Assets" Content="&#xE8EE;" FontSize="16" />
+                    </ToggleButton>
+                    <StackPanel>
                         <Button ToolTip="Set Replay Start(A) Position"  Margin="2,2,2,0" Padding="-2" Height="20" Width="20"
                                 Command="{Binding BookmarkSetCommand}" CommandParameter="A">
                             <Label Content="A" FontSize="10" FontWeight="Normal" />
                         </Button>
                         <Button x:Name="_btnA" ToolTip="Go To Bookmark(A) Position" Margin="2,0,2,2" Padding="0,-8,0,-4" Height="12" 
+                                Background="LightGreen"
                                 Command="{Binding BookmarkGoToCommand}" CommandParameter="A">
                             <Label Content="⏷" FontSize="8" FontWeight="Normal" />
                         </Button>
@@ -57,47 +94,12 @@
                             <Label Content="B" FontSize="10" FontWeight="Normal" />
                         </Button>
                         <Button x:Name="_btnB" ToolTip="Go To Bookmark(B) Position" Margin="2,0,2,2" Padding="0,-8,0,-4" Height="12" 
+                                Background="LightGreen"
                                 Command="{Binding BookmarkGoToCommand}" CommandParameter="B">
                             <Label Content="⏷" FontSize="8" FontWeight="Normal" />
                         </Button>
                     </StackPanel>
-                    <ToggleButton ToolTip="{Binding Replay.ReplayToolTip, FallbackValue='Replay Last N seconds'}" Margin="2" Padding="2" 
-                                  Click="ReplayToggle_Click" 
-                                  IsChecked="{Binding Replay.IsReplayChecked, Mode=TwoWay}">
-                        <Label FontFamily="Segoe MDL2 Assets" Content="&#xE8EE;" FontSize="16" />
-                    </ToggleButton>
-                    <StackPanel>
-                        <Button ToolTip="Set Bookmark(C) Position"  Margin="2,2,2,0" Padding="-2" Height="20" Width="20"
-                                Command="{Binding BookmarkSetCommand}" CommandParameter="C">
-                            <Label Content="1" FontSize="10" FontWeight="Normal" />
-                        </Button>
-                        <Button x:Name="_btnC" ToolTip="Go To Bookmark(C) Position" Margin="2,0,2,2" Padding="0,-8,0,-4" Height="12" 
-                                Background="Pink"
-                                Command="{Binding BookmarkGoToCommand}" CommandParameter="C">
-                            <Label Content="⏷" FontSize="8" FontWeight="Normal" />
-                        </Button>
-                    </StackPanel>
-                    <StackPanel>
-                        <Button ToolTip="Set Bookmark(D) Position" Margin="2,2,2,0" Padding="-2" Height="20" Width="20" 
-                                Command="{Binding BookmarkSetCommand}" CommandParameter="D">
-                            <Label Content="2" FontSize="10" FontWeight="Normal" />
-                        </Button>
-                        <Button x:Name="_btnD" ToolTip="Set Bookmark(D) Position" Margin="2,0,2,2" Padding="0,-8,0,-4" Height="12" 
-                                Background="Yellow"
-                                Command="{Binding BookmarkGoToCommand}" CommandParameter="D">
-                            <Label Content="⏷" FontSize="8" FontWeight="Normal" />
-                            <Button.ContextMenu>
-                                <ContextMenu>
-                                    <MenuItem Header="GoTo Bookmark D" Click="ReplayGoToD_Click" Icon="⇸"/>
-                                    <Separator/>
-                                    <MenuItem Header="Clear Bookmark D" Click="ReplayClearD_Click" Icon="null"/>
-                                    <MenuItem Header="Set Bookmark D" Click="ReplaySetD_Click" Icon="null"/>
-                                </ContextMenu>
-                            </Button.ContextMenu>
-
-                        </Button>
-                    </StackPanel>
-                    <RepeatButton ToolTip="Back 0.1 sec" Margin="2" Padding="2" Click="PrevFrame_Click">
+                   <RepeatButton ToolTip="Back 0.1 sec" Margin="2" Padding="2" Click="PrevFrame_Click">
                         <Label FontFamily="Segoe MDL2 Assets" Content="&#xE8A0;" FontSize="16" />
                     </RepeatButton>
                     <RepeatButton ToolTip="Next Frame" Margin="2" Click="NextFrame_Click" >

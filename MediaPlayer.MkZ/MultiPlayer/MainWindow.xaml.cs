@@ -235,7 +235,7 @@ namespace MultiPlayer
         {
             foreach (VideoPlayerUserControl v in _videos)
             {
-                v.VM.Pause();
+                v.VM.Pause(updateUI: true);
             }
         }
     }
