@@ -993,7 +993,7 @@ namespace MultiPlayer
             {
                 if (position > 0)
                 {
-                    btn.ToolTip = $"Set position to: {SecondsToString(position)}";
+                    btn.ToolTip = $"GoTo: {SecondsToString(position)}";
                     line.Visibility = Visibility.Visible;
 
                     double center = line.StrokeThickness / 2;
