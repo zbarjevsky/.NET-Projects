@@ -328,7 +328,7 @@ namespace MultiPlayer
             this.Title = System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(s.FileName)) + "/" + System.IO.Path.GetFileName(s.FileName);
             List<string> fileNames = this.GetFileNames(s.FileName, out int idx);
             if (idx >= 0)
-                this.Title = $"{idx}/{fileNames.Count} " + this.Title;
+                this.Title = $"{(idx+1)}/{fileNames.Count} " + this.Title;
 
             this.IsMuted = true; //load silently
 
