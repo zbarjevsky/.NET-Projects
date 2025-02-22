@@ -756,20 +756,20 @@ namespace MultiPlayer
             else if (e.Key == System.Windows.Input.Key.OemComma || e.Key == System.Windows.Input.Key.OemPeriod)
                 SkipOneFrameCommand.Execute(e.Key == System.Windows.Input.Key.OemPeriod);
             else if (e.Key == System.Windows.Input.Key.A)
-                BookmarkGoToCommandKeyDown(eBookmarkName.A.ToString());
+                BookmarkKeyDown(eBookmarkName.A.ToString());
             else if (e.Key == System.Windows.Input.Key.B)
-                BookmarkGoToCommandKeyDown(eBookmarkName.B.ToString());
-            else if (e.Key == System.Windows.Input.Key.C || e.Key == System.Windows.Input.Key.D1)
-                BookmarkGoToCommandKeyDown(eBookmarkName.C.ToString());
-            else if (e.Key == System.Windows.Input.Key.D || e.Key == System.Windows.Input.Key.D2)
-                BookmarkGoToCommandKeyDown(eBookmarkName.D.ToString());
+                BookmarkKeyDown(eBookmarkName.B.ToString());
+            else if (e.Key == System.Windows.Input.Key.D1)
+                BookmarkKeyDown(eBookmarkName.C.ToString());
+            else if (e.Key == System.Windows.Input.Key.D2)
+                BookmarkKeyDown(eBookmarkName.D.ToString());
             else
                 return false;
 
             return true;
         }
 
-        private void BookmarkGoToCommandKeyDown(string bookmarkName)
+        private void BookmarkKeyDown(string bookmarkName)
         {
             if ((Keyboard.Modifiers & ModifierKeys.Control) != 0)
                 BookmarkSetCommandExecute(bookmarkName);
