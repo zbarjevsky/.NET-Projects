@@ -59,6 +59,7 @@ namespace MultiPlayer
             _controlsHideAndShow = new FadeAnimationHelper(this, 2,
                 _borderTitle, _commands, _commands1);
             _controlsHideAndShow.CanHideControls = () => { return !_ctxMenu.IsOpen; };
+            _controlsHideAndShow.OnShowCompleted = (ctrl) => { if (ctrl is VideoCommandsUserControl) VM.AdjustSizeAndLayout(); };
 
             RecreateMediaElement(false);
 

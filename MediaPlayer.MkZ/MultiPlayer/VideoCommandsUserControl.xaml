@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MultiPlayer"
              SizeChanged="UserControl_SizeChanged"
+             IsVisibleChanged="UserControl_IsVisibleChanged"
              mc:Ignorable="d" 
              d:DesignWidth="800">
     <ScrollViewer x:Name="_scroll" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">

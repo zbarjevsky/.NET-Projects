@@ -144,6 +144,8 @@ namespace MultiPlayer
 
         public void Clear()
         {
+            UpdateRrecentFile(Settings);
+
             _player.Stop();
             Settings.FileName = "";
             _player.VideoPlayerElement.Source = null;
@@ -251,7 +253,7 @@ namespace MultiPlayer
 
             NotifyPropertyChanged(nameof(SelectedFitIndex));
 
-            Replay.UpdateReplay(s.ReplayIsOn, s.ReplayPosA, s.ReplayPosB, s.ReplayPosC, s.ReplayPosD);
+            Settings.UpdateBookmarks(s);
 
             AdjustMarginsForVisibleScrollBars();
             AdjustSizeAndLayout();
@@ -294,9 +296,9 @@ namespace MultiPlayer
 
             _recentFile = MainWindow.FindOrCreateRecentFile(fileName);
 
-            Settings.Position = startFrom0 ? 0 : _recentFile.Position;
+            Settings.UpdateBookmarks(false, _recentFile);
 
-            Replay.UpdateReplay(false, _recentFile.ReplayPosA, _recentFile.ReplayPosB, _recentFile.ReplayPosC, _recentFile.ReplayPosD);
+            Settings.Position = startFrom0 ? 0 : _recentFile.Position;
 
             Settings.MediaState = MediaState.Play;
 
@@ -550,7 +552,7 @@ namespace MultiPlayer
             if (Replay.IsReplayChecked && (Settings.Position < Settings.ReplayPosA || Settings.Position > Settings.ReplayPosB))
             {
                 Replay.IsReplayChecked = false; //uncheck REPLAY if clicked out of replay range
-                Replay.UpdateTicks();
+                Replay.UpdateReplayUI();
             }
 
             if (resume)
@@ -786,11 +788,6 @@ namespace MultiPlayer
             Settings.Position = _cmd._position.Value;
         }
 
-        public void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            AdjustSizeAndLayout();
-        }
-
         public void AdjustSizeAndLayout()
         {
             if (_cmd == null || _player == null) 
@@ -825,7 +822,7 @@ namespace MultiPlayer
                 }
             }
 
-            Replay.UpdateTicks();
+            Replay.UpdateReplayUI();
         }
 
         private WaitForEventImpl _waitMediaOpenedEvent = new WaitForEventImpl();
@@ -943,20 +940,8 @@ namespace MultiPlayer
                 VM = vm;
             }
 
-            public void Clear()
+            public void UpdateReplayUI()
             {
-                UpdateReplay(false, 0, 0, 0, 0);
-            }
-
-            public void UpdateReplay(bool on, double a, double b, double c, double d)
-            {
-                VM.Settings.ReplayIsOn = on;
-                VM.Settings.ReplayPosA = a;
-                VM.Settings.ReplayPosB = b;
-
-                VM.Settings.ReplayPosC = c;
-                VM.Settings.ReplayPosD = d;
-
                 UpdateTicks();
                 NotifyPropertyChanged(nameof(IsReplayChecked));
                 NotifyPropertyChanged(nameof(ReplayToolTip));
@@ -979,11 +964,11 @@ namespace MultiPlayer
             public void ClearD()
             {
                 VM.Settings.ReplayPosD = 0;
-                UpdateTicks();
+                UpdateReplayUI();
             }
 
             //set ticks positions and color if active
-            public void UpdateTicks()
+            private void UpdateTicks()
             {
                 UpdateTick(VM._cmd._lineA, VM._cmd._btnA, VM.Settings.ReplayPosA, IsReplayChecked ? Brushes.Lime : Brushes.AliceBlue);
                 UpdateTick(VM._cmd._lineB, VM._cmd._btnB, VM.Settings.ReplayPosB, IsReplayChecked ? Brushes.Lime : Brushes.AliceBlue);
@@ -1029,7 +1014,7 @@ namespace MultiPlayer
             {
                 if (IsReplayChecked && (VM._cmd._position.Value < VM.Settings.ReplayPosA || VM._cmd._position.Value > VM.Settings.ReplayPosB))
                     GoToPosition(VM.Settings.ReplayPosA);
-                UpdateTicks();
+                UpdateReplayUI();
             }
 
             public void BookmarkSet(eBookmarkName name)
@@ -1045,8 +1030,7 @@ namespace MultiPlayer
                 if (name == eBookmarkName.B && VM.Settings.ReplayPosB - VM.Settings.ReplayPosA < 1.0)
                     VM.Settings.ReplayPosA = VM.Settings.ReplayPosB - delta;
 
-                UpdateTicks();
-                NotifyPropertyChanged(nameof(ReplayToolTip));
+                UpdateReplayUI();
             }
 
             public void BookmarkGo2(eBookmarkName name)
@@ -1067,8 +1051,7 @@ namespace MultiPlayer
                 VM.Settings.BookmarkPositionSet(eBookmarkName.C, 0.0);
                 VM.Settings.BookmarkPositionSet(eBookmarkName.D, 0.0);
 
-                UpdateTicks();
-                NotifyPropertyChanged(nameof(ReplayToolTip));
+                UpdateReplayUI();
                 VM.BookmarkGoToCommand.RefreshBoundControls();
             }
 
@@ -1076,8 +1059,7 @@ namespace MultiPlayer
             {
                 VM.Settings.BookmarkPositionSet(name, 0.0);
                 
-                UpdateTicks();
-                NotifyPropertyChanged(nameof(ReplayToolTip));
+                UpdateReplayUI();
                 VM.BookmarkGoToCommand.RefreshBoundControls();
             }
         }

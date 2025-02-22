@@ -104,9 +104,16 @@ namespace MultiPlayer
             VM.SkipOneFrameCommand.Execute(true);
         }
 
+        private void UserControl_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (IsVisible)
+                VM.AdjustSizeAndLayout();
+        }
+
         private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            VM.UserControl_SizeChanged(sender, e);
+            if (IsVisible)
+                VM.AdjustSizeAndLayout();
         }
 
         private void ReplayToggle_Click(object sender, RoutedEventArgs e)

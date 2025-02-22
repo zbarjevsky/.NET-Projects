@@ -22,6 +22,7 @@ namespace MkZ.WPF
         private readonly List<UIElement> _controlsToFade = new List<UIElement>();
         private readonly double _hideTimeOutSeconds = 2;
 
+        public Action<UIElement> OnShowCompleted = (element) => { };
         public Action<UIElement> OnHideCompleted = (element) => { };
         //do not hide - can be usefull for media files with no video
         public Func<bool> CanHideControls = () => true;
@@ -60,7 +61,7 @@ namespace MkZ.WPF
             {
                 if (ctrl.Visibility != Visibility.Visible)
                 {
-                    VisibilityShowAnimation(ctrl, 0, null);
+                    VisibilityShowAnimation(ctrl, 0, OnShowCompleted);
                 }
             }
         }

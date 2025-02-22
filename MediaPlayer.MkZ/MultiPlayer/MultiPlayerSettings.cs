@@ -1,5 +1,6 @@
 ﻿using MkZ.Tools;
 using MkZ.WPF;
+using MultiPlayer.Properties;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -79,15 +80,21 @@ namespace MultiPlayer
         [XmlAttribute]
         public double ReplayPosD { get; set; } = 0.0;
 
-        private DateTime _lastUpdate = DateTime.Now;
+        [XmlIgnore]
+        public DateTime LastUpdate { get; private set; } = DateTime.MinValue;
 
         public void Update(OnePlayerSettings settings)
         {
-            _lastUpdate = DateTime.Now;
+            //if it was updated after this setting was updated
+            if (LastUpdate >= settings.LastUpdate)
+                return;
+
+            LastUpdate = settings.LastUpdate;
 
             FileName = Path.GetFileName(settings.FileName);
 
             Position = Math.Round(settings.Position, 3);
+
             ReplayPosA = Math.Round(settings.ReplayPosA, 1);
             ReplayPosB = Math.Round(settings.ReplayPosB, 1);
 
@@ -123,6 +130,9 @@ namespace MultiPlayer
         public string[] SupportedAudioExtensions { get; set; } = new string[0];
         public string[] SupportedVideoExtensions { get; set; } = new string[0];
 
+        [XmlIgnore]
+        public DateTime LastUpdate { get; private set; } = DateTime.MinValue;
+
         public OnePlayerSettings()
         {
             EnsureHasValues();
@@ -140,6 +150,8 @@ namespace MultiPlayer
 
         public void Update(OnePlayerSettings s)
         {
+            LastUpdate = s.LastUpdate;
+
             FileName = s.FileName;
             Duration = s.Duration;
             Position = s.Position;
@@ -153,16 +165,13 @@ namespace MultiPlayer
             Volume = s.Volume;
             SpeedRatio = s.SpeedRatio;
 
-            ReplayIsOn = s.ReplayIsOn;
-            ReplayPosA = s.ReplayPosA;
-            ReplayPosB = s.ReplayPosB;
-
-            ReplayPosC = s.ReplayPosC;
-            ReplayPosD = s.ReplayPosD;
+            UpdateBookmarks(s);
         }
 
         public void Update(VideoPlayerUserControl v, double duration = 0.0)
         {
+            LastUpdate = v.VM.Settings.LastUpdate;
+
             FileName = v.FileName;
 
             Duration = v.Duration > 0 ? v.Duration : duration;
@@ -176,14 +185,35 @@ namespace MultiPlayer
             Volume = v.Volume;
             SpeedRatio = v.SpeedRatio;
 
-            ReplayIsOn = v.VM.Settings.ReplayIsOn;
-            ReplayPosA = v.VM.Settings.ReplayPosA;
-            ReplayPosB = v.VM.Settings.ReplayPosB;
-
-            ReplayPosC = v.VM.Settings.ReplayPosC;
-            ReplayPosD = v.VM.Settings.ReplayPosD;
+            UpdateBookmarks(v.VM.Settings);
 
             EnsureHasValues();
+        }
+
+        public void UpdateBookmarks(OnePlayerSettings s)
+        {
+            Position = s.Position;
+
+            ReplayIsOn = s.ReplayIsOn;
+
+            ReplayPosA = s.ReplayPosA;
+            ReplayPosB = s.ReplayPosB;
+
+            ReplayPosC = s.ReplayPosC;
+            ReplayPosD = s.ReplayPosD;
+        }
+
+        public void UpdateBookmarks(bool on, RecentFile f)
+        {
+            ReplayIsOn = on;
+
+            Position = f.Position;
+
+            ReplayPosA = f.ReplayPosA;
+            ReplayPosB = f.ReplayPosB;
+
+            ReplayPosC = f.ReplayPosC;
+            ReplayPosD = f.ReplayPosD;
         }
 
         public void EnsureHasValues()
@@ -200,6 +230,8 @@ namespace MultiPlayer
 
         public void BookmarkPositionSet(eBookmarkName name, double pos)
         {
+            LastUpdate = DateTime.Now;
+
             switch (name)
             {
                 case eBookmarkName.A:
@@ -369,6 +401,11 @@ namespace MultiPlayer
                 OnePlayerSettings s = new OnePlayerSettings(v);
                 RecentFile recentFile = MainWindow.FindOrCreateRecentFile(s.FileName);
                 recentFile.Update(s);
+
+                //experimental - reset settings bookmarks if recent file is more recent than settings
+                s.Position = recentFile.Position;
+                s.UpdateBookmarks(s.ReplayIsOn, recentFile);
+
                 this.PlayerSettings.Add(s);
             }
         }
