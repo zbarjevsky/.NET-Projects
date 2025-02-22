@@ -226,18 +226,91 @@ namespace MultiPlayer
         private Point _mousePos = new Point();
         private void UserControl_PreviewMouseButtonDown(object sender, MouseButtonEventArgs e)
         {
-            _mousePos = e.GetPosition(this);
+            if (e.ChangedButton == MouseButton.Left)
+                _mousePos = e.GetPosition(this);
         }
 
         private void UserControl_PreviewMouseUp(object sender, MouseButtonEventArgs e)
         {
             Point pos = e.GetPosition(this);
-            if ((pos - _mousePos).Length > 12.0) //detect mouse move
+            if ((pos - _mousePos).Length > 12.0) //detect mouse moved more than 12 points
                 return;
 
             object s = e.OriginalSource;
             if (e.ChangedButton == MouseButton.Left && ((s is MediaElement) || (s is ScrollViewer) || (s is Grid)))
                 LeftButtonClick();
+        }
+
+        private void UserControl_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            if ((VM.IsPopWindowMode && VM.IsPopUpWindowActive) || (!VM.IsPopWindowMode && Application.Current.MainWindow.IsActive))
+            {
+                this.Focus();
+                IsInFocus = true;
+                _borderMain.BorderBrush = Brushes.Tan; // Brushes.DodgerBlue;
+            }
+        }
+
+        private void UserControl_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            IsInFocus = false;
+            _borderMain.BorderBrush = Brushes.Transparent;
+        }
+
+        private bool _isDragging = false;
+        private void UserControl_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
+        {
+            const double scrollBarWidth = 12.0;
+            Point pt = e.GetPosition(_scrollPlayerContainer);
+
+            if (e.LeftButton == MouseButtonState.Pressed && !_isDragging)
+            {
+                //if drag start point is out of view
+                if (pt.X > _scrollPlayerContainer.ActualWidth - scrollBarWidth ||
+                    pt.Y > _scrollPlayerContainer.ActualHeight - scrollBarWidth)
+                    return;
+
+                //not moved enough to start drag
+                if (Math.Abs((_mousePos - pt).Length) < scrollBarWidth)
+                    return;
+
+                _isDragging = true;
+                DragDropSource = this;
+                DragDrop.DoDragDrop(this, VM.Settings, System.Windows.DragDropEffects.Move | System.Windows.DragDropEffects.Copy);
+                e.Handled = true;
+            }
+
+            if (e.LeftButton != MouseButtonState.Pressed)
+            {
+                _isDragging = false;
+            }
+        }
+
+        private async void UserControl_Drop(object sender, System.Windows.DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
+            {
+                // Note that you can have more than one file.
+                string[] files = (string[])e.Data.GetData(System.Windows.DataFormats.FileDrop);
+
+                // handling code you have defined.
+                _ = VM.OpenFromFile(files[0], startFrom0: false);
+            }
+            else if (e.Data.GetDataPresent(DragDropDataFormat))
+            {
+                VideoPlayerUserControl vFrom = DragDropSource;
+                OnePlayerSettings setFrom = new OnePlayerSettings((OnePlayerSettings)(e.Data.GetData(DragDropDataFormat)));
+                OnePlayerSettings setTo = new OnePlayerSettings(this);
+                if (!string.IsNullOrWhiteSpace(setFrom.FileName) && setFrom.FileName != setTo.FileName)
+                {
+                    _ = this.LoadSetting(setFrom, VM.IsPopWindowMode);
+                    //if CTRL is pressed - "copy" the conthent
+                    //else - update vFrom - "exchange"
+                    if (!Keyboard.IsKeyDown(Key.LeftCtrl) && !Keyboard.IsKeyDown(Key.RightCtrl))
+                        _ = vFrom?.LoadSetting(setTo, vFrom.VM.IsPopWindowMode);
+                }
+            }
+            DragDropSource = null;
         }
 
         public bool Play_CanExecute
@@ -591,73 +664,6 @@ namespace MultiPlayer
         private void btnFlipHorizontally_Click(object sender, RoutedEventArgs e)
         {
             IsFlipHorizontally = !IsFlipHorizontally;
-        }
-
-        private void UserControl_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            if ((VM.IsPopWindowMode && VM.IsPopUpWindowActive) || (!VM.IsPopWindowMode && Application.Current.MainWindow.IsActive))
-            {
-                this.Focus();
-                IsInFocus = true;
-                _borderMain.BorderBrush = Brushes.Tan; // Brushes.DodgerBlue;
-            }
-        }
-
-        private void UserControl_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            IsInFocus = false;
-            _borderMain.BorderBrush = Brushes.Transparent;
-        }
-
-        private bool _isDragging = false;
-        private void UserControl_MouseMove(object sender, System.Windows.Input.MouseEventArgs e)
-        {
-            const double scrollBarWidth = 12.0;
-
-            if (e.LeftButton == MouseButtonState.Pressed && !_isDragging)
-            {
-                Point pt = e.GetPosition(_scrollPlayerContainer);
-                if (pt.X > _scrollPlayerContainer.ActualWidth - scrollBarWidth ||
-                    pt.Y > _scrollPlayerContainer.ActualHeight - scrollBarWidth)
-                    return;
-
-                _isDragging = true;
-                DragDropSource = this;
-                DragDrop.DoDragDrop(this, VM.Settings, System.Windows.DragDropEffects.Move|System.Windows.DragDropEffects.Copy);
-                e.Handled = true;
-            }
-
-            if (e.LeftButton != MouseButtonState.Pressed)
-            {
-                _isDragging = false;
-            }
-        }
-
-        private async void UserControl_Drop(object sender, System.Windows.DragEventArgs e)
-        {
-            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
-            {
-                // Note that you can have more than one file.
-                string[] files = (string[])e.Data.GetData(System.Windows.DataFormats.FileDrop);
-
-                // handling code you have defined.
-                _ = VM.OpenFromFile(files[0], startFrom0: false);
-            }
-            else if (e.Data.GetDataPresent(DragDropDataFormat))
-            {
-                VideoPlayerUserControl vFrom = DragDropSource;
-                OnePlayerSettings setFrom = new OnePlayerSettings((OnePlayerSettings)(e.Data.GetData(DragDropDataFormat)));
-                OnePlayerSettings setTo = new OnePlayerSettings(this);
-                if (!string.IsNullOrWhiteSpace(setFrom.FileName) && setFrom.FileName != setTo.FileName)
-                {
-                    _ = this.LoadSetting(setFrom, VM.IsPopWindowMode);
-                    //if CTRL is pressed - "copy" the conthent
-                    //else - update vFrom - "exchange"
-                    if (!Keyboard.IsKeyDown(Key.LeftCtrl) && !Keyboard.IsKeyDown(Key.RightCtrl))
-                        _ = vFrom?.LoadSetting(setTo, vFrom.VM.IsPopWindowMode);
-                }
-            }
-            DragDropSource = null;
         }
 
         private void Clear_Click(object sender, RoutedEventArgs e)
