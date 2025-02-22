@@ -594,11 +594,12 @@ namespace MultiPlayer
 
         private void UserControl_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            this.Focus();
-            IsInFocus = true;
-
-            if (!VM.IsPopWindowMode)
+            if ((VM.IsPopWindowMode && VM.IsPopUpWindowActive) || (!VM.IsPopWindowMode && Application.Current.MainWindow.IsActive))
+            {
+                this.Focus();
+                IsInFocus = true;
                 _borderMain.BorderBrush = Brushes.Tan; // Brushes.DodgerBlue;
+            }
         }
 
         private void UserControl_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)

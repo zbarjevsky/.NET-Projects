@@ -45,12 +45,14 @@ namespace MultiPlayer
 
         public bool IsPopWindowMode { get; private set; } = false;
 
+        public bool IsPopUpWindowActive => WndMax.IsActive;
+
         public RelayCommand TogglePlayPauseCommand { get; }
         public RelayCommand OpenFileCommand { get; }
         public RelayCommand PrevFileCommand { get; }
         public RelayCommand NextFileCommand { get; }
         public RelayCommand SkipOneFrameCommand { get; }
-        public RelayCommand Skip10SecondsCommand { get; }
+        public RelayCommand SkipXSecondsCommand { get; }
         public RelayCommand BookmarkSetCommand { get; }
         public RelayCommand BookmarkGoToCommand { get; }
         public RelayCommand BookmarkClearCommand { get; }
@@ -63,7 +65,7 @@ namespace MultiPlayer
             OpenFileCommand = new RelayCommand(OpenFileCommandExecute);
             PrevFileCommand = new RelayCommand(PrevFileCommandExecute, PrevFileCommandCanExecute);
             NextFileCommand = new RelayCommand(NextFileCommandExecute, NextFileCommandCanExecute);
-            Skip10SecondsCommand = new RelayCommand(Skip10SecondsCommandExecute, (o) => true);
+            SkipXSecondsCommand = new RelayCommand(SkipXSecondsCommandExecute, (o) => true);
             SkipOneFrameCommand = new RelayCommand(SkipOneFrameCommandExecute, (o) => true);
             BookmarkSetCommand = new RelayCommand(BookmarkSetCommandExecute, (o) =>  Settings.Duration > 1.0);
             BookmarkGoToCommand = new RelayCommand(BookmarkGoToCommandExecute, BookmarkGoToCommandCanExecute);
@@ -748,7 +750,7 @@ namespace MultiPlayer
             else if (e.Key == System.Windows.Input.Key.Up || e.Key == System.Windows.Input.Key.Down)
                 VolumeUpdate(e.Key == System.Windows.Input.Key.Up ? 120 : -120);
             else if (e.Key == System.Windows.Input.Key.Left || e.Key == System.Windows.Input.Key.Right)
-                Skip10SecondsCommand.Execute(e.Key == System.Windows.Input.Key.Right);
+                SkipXSecondsCommand.Execute(e.Key == System.Windows.Input.Key.Right);
             else if (e.Key == System.Windows.Input.Key.OemComma || e.Key == System.Windows.Input.Key.OemPeriod)
                 SkipOneFrameCommand.Execute(e.Key == System.Windows.Input.Key.OemPeriod);
             else if (e.Key == System.Windows.Input.Key.A)
@@ -765,10 +767,11 @@ namespace MultiPlayer
             return true;
         }
 
-        private void Skip10SecondsCommandExecute(object obj)
+        private void SkipXSecondsCommandExecute(object obj)
         {
+            const double X = 5.0;
             if (obj is bool nextFrame)
-                SkipPosition(nextFrame ? 10.0 : -10.0);
+                SkipPosition(nextFrame ? X : -X);
         }
 
         private void SkipOneFrameCommandExecute(object obj)
