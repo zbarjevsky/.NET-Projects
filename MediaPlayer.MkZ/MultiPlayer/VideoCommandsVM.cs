@@ -288,6 +288,9 @@ namespace MultiPlayer
         // - window fit
         public async Task OpenFromFile(string fileName, bool startFrom0)
         {
+            if (IsLoading)
+                return;
+
             UpdateRrecentFile(Settings); //update previous recent file
 
             _player.Clear();
@@ -371,7 +374,7 @@ namespace MultiPlayer
                 int i = 0;
                 for (; i < 10; i++)
                 {
-                    if (_player.NaturalDuration > 0)
+                    if (_player.NaturalDuration > 0 || !IsLoading)
                         break;
 
                     _player.VideoPlayerElement.ForceRender();
@@ -392,6 +395,8 @@ namespace MultiPlayer
 
         private void MediaPlayEnded(IVideoPlayer player)
         {
+            IsLoading = false;
+            
             Stop();
             Settings.Position = 0;
 
@@ -446,6 +451,8 @@ namespace MultiPlayer
             if (idx >= _volumeLevels.Length - 1) idx = _volumeLevels.Length - 2;
 
             _cmd._volume.Value = _volumeLevels[idx];
+
+            NotifyPropertyChanged(nameof(Volume));
         }
 
         double [] _volumeLevels = { 0, 10, 20, 30, 40, 50, 60, 80, 100, 200, 300, 400, 500, 600, 800, 1000, 1001 };

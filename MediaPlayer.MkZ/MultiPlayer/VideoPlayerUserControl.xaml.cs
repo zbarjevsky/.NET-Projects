@@ -243,7 +243,8 @@ namespace MultiPlayer
 
         private void UserControl_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            if ((VM.IsPopWindowMode && VM.IsPopUpWindowActive) || (!VM.IsPopWindowMode && Application.Current.MainWindow.IsActive))
+            if ((VM.IsPopWindowMode && VM.IsPopUpWindowActive && VM.IsFullScreen()) || 
+                (!VM.IsPopWindowMode && Application.Current.MainWindow.IsActive))
             {
                 this.Focus();
                 IsInFocus = true;

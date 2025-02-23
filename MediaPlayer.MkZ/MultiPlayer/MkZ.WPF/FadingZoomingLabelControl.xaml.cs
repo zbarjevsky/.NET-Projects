@@ -81,8 +81,10 @@ namespace MkZ.WPF.Controls
             {
                 _parent = parent;
                 _parentSize = new Size(_parent.ActualWidth, _parent.ActualHeight);
-                _initialSize = new Size(this.Width, this.Height);
+                _initialSize = new Size(this.ActualWidth, this.ActualHeight);
                 _initialMargin = this.Margin;
+
+                Resize(_parentSize);
 
                 _parent.SizeChanged += Parent_SizeChanged;
             }
@@ -101,14 +103,24 @@ namespace MkZ.WPF.Controls
             Size newSize = e.NewSize;
             Size zoom = new Size(e.NewSize.Width / _parentSize.Width, e.NewSize.Height / _parentSize.Height);
 
-            this.Width = zoom.Width * _initialSize.Width;
-            this.Height = zoom.Height * _initialSize.Height;
+            //this.Width = 0.1 * _parentSize.Width; // zoom.Width * _initialSize.Width;
+            //this.Height = 0.05 * newSize.Height; // zoom.Height * _initialSize.Height;
+            //if (this.MinHeight > this.Height)
+            //    this.Height = this.MinHeight;
+            Resize(newSize);
 
-            this.Margin = new Thickness(
-                _initialMargin.Left * zoom.Width,
-                _initialMargin.Top * zoom.Height,
-                _initialMargin.Right * zoom.Width,
-                _initialMargin.Bottom * zoom.Height);
+            //this.Margin = new Thickness(
+            //    _initialMargin.Left * zoom.Width,
+            //    _initialMargin.Top * zoom.Height,
+            //    _initialMargin.Right * zoom.Width,
+            //    _initialMargin.Bottom * zoom.Height);
+        }
+
+        private void Resize(Size newSize)
+        {
+            this.Height = 0.05 * newSize.Height; // zoom.Height * _initialSize.Height;
+            if (this.MinHeight > this.Height)
+                this.Height = this.MinHeight;
         }
 
         private void timer_Tick(object sender, EventArgs e)

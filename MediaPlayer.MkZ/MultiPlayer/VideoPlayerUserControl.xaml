@@ -283,7 +283,7 @@
                              Foreground="Gray" Background="Transparent"
                              Visibility="{Binding Visibility, ElementName=_commands, Converter={StaticResource InverseVisConverter}}"/>
 
-                <controls:FadingAutoZoomingLabelControl Height="20"
+                <controls:FadingAutoZoomingLabelControl MinWidth="90" MinHeight="30"
                     Foreground="LightGreen" Text="{Binding VM.Volume, ElementName=_commands, StringFormat=Volume: 0.#%, FallbackValue='Volume: 12%'}"
                     VerticalAlignment="Bottom" HorizontalAlignment="Right" Margin="4"  />
             </Grid>
