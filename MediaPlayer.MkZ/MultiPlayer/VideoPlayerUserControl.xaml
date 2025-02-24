@@ -280,7 +280,7 @@
                                                 IsVisibleChanged="_commands_IsVisibleChanged"/>
 
                 <ProgressBar x:Name="_progress" Grid.Row="1" VerticalAlignment="Bottom" Value="0" Minimum="0" 
-                             Foreground="Gray" Background="Transparent"
+                             Foreground="White" Background="Transparent"
                              Visibility="{Binding Visibility, ElementName=_commands, Converter={StaticResource InverseVisConverter}}"/>
 
                 <controls:FadingAutoZoomingLabelControl MinWidth="90" MinHeight="30"

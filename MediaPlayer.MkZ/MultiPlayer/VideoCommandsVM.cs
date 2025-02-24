@@ -365,7 +365,7 @@ namespace MultiPlayer
 
             this.AdjustSizeAndLayout();
 
-            _player.Background = await ColorUtils.CalculateAverageColor(_player.VideoPlayerElement); // Brushes.DarkGray;
+            await _player.SetBackColor(bActive: s.MediaState == MediaState.Play);
         }
 
         private async Task WaitForNaturalDurationUpdated(string fileName)

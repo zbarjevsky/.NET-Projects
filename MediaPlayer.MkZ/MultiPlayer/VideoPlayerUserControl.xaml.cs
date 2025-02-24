@@ -23,6 +23,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using Application = System.Windows.Application;
+using Brush = System.Windows.Media.Brush;
 using Brushes = System.Windows.Media.Brushes;
 using Point = System.Windows.Point;
 
@@ -422,15 +423,21 @@ namespace MultiPlayer
             VM.Clear();
         }
 
-        public void Play()
+        public async Task Play()
         {
             if (VideoPlayerElement.Source != null)
             {
+                bool isMuted = VideoPlayerElement.IsMuted;
+                VideoPlayerElement.IsMuted = true;
+
                 _timer.Start();
                 VideoPlayerElement.Play();
-                this.Background = Brushes.DimGray;
+                VideoPlayerElement.IsMuted = true;
+                await SetBackColor(bActive: true);
                 MediaState = MediaState.Play;
                 PositionSet(TimeSpan.FromSeconds(VM.Settings.Position), false);
+                
+                VideoPlayerElement.IsMuted = isMuted;
             }
             else
             {
@@ -452,18 +459,40 @@ namespace MultiPlayer
                 {
                     VM.Settings.Update(this);
                     VM.Update(VM.Settings, VM.IsPopWindowMode, lockUpdate: false);
-                    this.Background = await ColorUtils.CalculateAverageColor(VideoPlayerElement); // Brushes.DarkGray;
+                    await SetBackColor(bActive: false);
                 }
             }
         }
 
-        public void Stop()
+        public async Task SetBackColor(bool bActive, bool averageOfVideo = false)
+        {
+            Brush color = bActive ? Brushes.Black : Brushes.LightGray;
+
+            if (VideoPlayerElement.Source != null)
+            {
+                //if (averageOfVideo || color == null)
+                //{
+                //    this.Background = await ColorUtils.CalculateAverageColor(VideoPlayerElement); // Brushes.DarkGray;
+                //    ScrollToCenter();
+                //}
+                //else
+                {
+                    this.Background = color;
+                }
+            }
+            else
+            {
+                this.Background = Brushes.Gray;
+            }
+        }
+
+        public async Task Stop()
         {
             if (VideoPlayerElement.Source != null)
             {
                 _timer.Stop();
                 VideoPlayerElement.Stop();
-                this.Background = Brushes.DarkGray;
+                await SetBackColor(bActive: false);
                 MediaState = MediaState.Stop;
                 
                 VM.Settings.Update(this);
