@@ -10,6 +10,7 @@
     <PackageIcon>camera_32px.png</PackageIcon>
     <ApplicationIcon>Yin-Yang.ico</ApplicationIcon>
     <UseWindowsForms>True</UseWindowsForms>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>

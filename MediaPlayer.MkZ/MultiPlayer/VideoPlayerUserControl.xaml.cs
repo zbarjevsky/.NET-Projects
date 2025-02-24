@@ -1,5 +1,6 @@
 ﻿using MkZ.WPF;
 using MkZ.WPF.PropertyGrid;
+using MultiPlayer.MkZ.WPF;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -438,20 +439,20 @@ namespace MultiPlayer
             }
         }
 
-        public void Pause(bool updateUI)
+        public async void Pause(bool updateUI)
         {
             if (VideoPlayerElement.Source != null)
             {
                 _timer.Stop();
 
                 VideoPlayerElement.Pause();
-                this.Background = Brushes.DarkGray;
                 MediaState = MediaState.Pause;
 
                 if (updateUI)
                 {
                     VM.Settings.Update(this);
                     VM.Update(VM.Settings, VM.IsPopWindowMode, lockUpdate: false);
+                    this.Background = await ColorUtils.CalculateAverageColor(VideoPlayerElement); // Brushes.DarkGray;
                 }
             }
         }
