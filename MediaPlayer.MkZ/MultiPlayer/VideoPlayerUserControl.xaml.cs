@@ -60,7 +60,7 @@ namespace MultiPlayer
 
             _controlsHideAndShow = new FadeAnimationHelper(this, 2,
                 _borderTitle, _commands, _commands1);
-            _controlsHideAndShow.CanHideControls = () => { return !_ctxMenu.IsOpen; };
+            _controlsHideAndShow.CanHideControls = () => { return !(_ctxMenu.IsOpen || _btnFileList.ContextMenu.IsOpen); };
             _controlsHideAndShow.OnShowCompleted = (ctrl) => { if (ctrl is VideoCommandsUserControl) VM.AdjustSizeAndLayout(); };
 
             RecreateMediaElement(false);
@@ -767,6 +767,41 @@ namespace MultiPlayer
         private void BookmarksClear_Click(object sender, RoutedEventArgs e)
         {
             VM.Replay.BookmarksClear();
+        }
+
+        private void FileListMenu_OpenMenu(object sender, RoutedEventArgs e)
+        {
+            if (sender is System.Windows.Controls.Button button && button.ContextMenu != null)
+            {
+                if (button.ContextMenu.IsOpen)
+                {
+                    button.ContextMenu.IsOpen = false;
+                }
+                else
+                {
+                    button.ContextMenu.PlacementTarget = button;
+                    button.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+                    button.ContextMenu.Items.Clear();
+
+                    List<string> fileNames = VM.GetFileNames(FileName, out int idx);
+                    for (int i = 0; i < fileNames.Count; i++)
+                    {
+                        MenuItem item = new MenuItem();
+
+                        FontWeight fontWeight = i == idx ? FontWeights.Bold : FontWeights.Normal;
+
+                        item.Icon = new TextBlock { Text = (i + 1).ToString(), FontSize = 12, FontWeight = fontWeight };
+                        item.Header = new TextBlock { Text = System.IO.Path.GetFileName(fileNames[i]), FontWeight = fontWeight };
+
+                        item.Command = VM.OpenFileByNameCommand;
+                        item.CommandParameter = fileNames[i];
+                        
+                        button.ContextMenu.Items.Add(item);
+                    }
+
+                    button.ContextMenu.IsOpen = true;
+                }
+            }
         }
     }
 }

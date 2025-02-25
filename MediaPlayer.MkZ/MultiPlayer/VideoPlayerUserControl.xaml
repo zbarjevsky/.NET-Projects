@@ -23,6 +23,33 @@
         <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <wpf:InverseVisibilityConverter x:Key="InverseVisConverter" />
         
+        <Style TargetType="Button" x:Key="SpecialButton" >
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="AliceBlue"/>
+            <Setter Property="FontSize" Value="12"/>
+            <Setter Property="Padding" Value="1"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                            CornerRadius="3" 
+                            Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="DarkGreen"/>
+                </Trigger>
+                <Trigger Property="IsPressed" Value="True">
+                    <Setter Property="Background" Value="Green"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
         <DataTemplate x:Key="BookmarkHeaderTemplate">
             <Grid Height="18">
                 <Grid.ColumnDefinitions>
@@ -243,14 +270,25 @@
                     <Border.Background>
                         <SolidColorBrush Color="Black" Opacity="0.3" />
                     </Border.Background>
-                    <TextBox Text="{Binding Title, FallbackValue='File Name'}" IsReadOnly="True" 
+                    <StackPanel Orientation="Horizontal">
+                        <Button x:Name="_btnFileList" Content="{Binding FileIndex}" Margin="3,2,0,2" 
+                                Style="{StaticResource SpecialButton}"
+                                ToolTip="Select File..."
+                                Click="FileListMenu_OpenMenu" >
+                            <Button.ContextMenu>
+                                <ContextMenu>
+                                </ContextMenu>
+                            </Button.ContextMenu>
+                        </Button>
+                        <TextBox Text="{Binding Title, FallbackValue='File Name'}" IsReadOnly="True" 
                              Foreground="AliceBlue" Background="Transparent" 
                              BorderBrush="Transparent" BorderThickness="0"
-                               Margin="6,3">
-                        <!--<TextBox.Background>
+                               Margin="3,3">
+                            <!--<TextBox.Background>
                             <LinearGradientBrush StartPoint="0" EndPoint="1" Opacity="0.8"
                         </TextBox.Background>-->
-                    </TextBox>
+                        </TextBox>
+                    </StackPanel>
                 </Border>
 
                 <StackPanel x:Name ="_commands1" Orientation="Horizontal" Margin="4,24"

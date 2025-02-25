@@ -49,6 +49,7 @@ namespace MultiPlayer
 
         public RelayCommand TogglePlayPauseCommand { get; }
         public RelayCommand OpenFileCommand { get; }
+        public RelayCommand OpenFileByNameCommand { get; }
         public RelayCommand PrevFileCommand { get; }
         public RelayCommand NextFileCommand { get; }
         public RelayCommand SkipOneFrameCommand { get; }
@@ -63,6 +64,7 @@ namespace MultiPlayer
 
             TogglePlayPauseCommand = new RelayCommand(TogglePlayPauseCommandExecute, TogglePlayPauseCommandCanExecute);
             OpenFileCommand = new RelayCommand(OpenFileCommandExecute);
+            OpenFileByNameCommand = new RelayCommand(OpenFileByIndexCommandExecute);
             PrevFileCommand = new RelayCommand(PrevFileCommandExecute, PrevFileCommandCanExecute);
             NextFileCommand = new RelayCommand(NextFileCommandExecute, NextFileCommandCanExecute);
             SkipXSecondsCommand = new RelayCommand(SkipXSecondsCommandExecute, (o) => true);
@@ -72,11 +74,18 @@ namespace MultiPlayer
             BookmarkClearCommand = new RelayCommand(BookmarkClearCommandExecute, BookmarkClearCommandCanExecute);
         }
 
-        private string _title;
+        private string _title = "File Name";
         public string Title
         {
             get { return _title; }
             set { SetProperty(ref _title, value); }
+        }
+
+        private string _fileIndex = "0/0";
+        public string FileIndex
+        {
+            get { return _fileIndex; }
+            set { SetProperty(ref _fileIndex, value); }
         }
 
         public double Volume
@@ -165,6 +174,7 @@ namespace MultiPlayer
             Replay.IsReplayChecked = false;
 
             Title = "";
+            FileIndex = "0/0";
             TogglePlayPauseCommand.RefreshBoundControls();
         }
 
@@ -192,6 +202,12 @@ namespace MultiPlayer
                 if (state == MediaState.Play)
                     Play();
             }
+        }
+
+        private void OpenFileByIndexCommandExecute(object parameter)
+        {
+            string fileName = parameter as string;
+            OpenFromFile(fileName, startFrom0: true);
         }
 
         private void TogglePlayPauseCommandExecute(object parameter)
@@ -336,8 +352,7 @@ namespace MultiPlayer
 
             this.Title = System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(s.FileName)) + "/" + System.IO.Path.GetFileName(s.FileName);
             List<string> fileNames = this.GetFileNames(s.FileName, out int idx);
-            if (idx >= 0)
-                this.Title = $"{(idx+1)}/{fileNames.Count} " + this.Title;
+            this.FileIndex = $"{(idx+1)}/{fileNames.Count} ";
 
             this.Play();
 
