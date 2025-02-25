@@ -31,22 +31,29 @@ namespace MultiPlayer.MkZ.WPF
         {
             Stopwatch sw = Stopwatch.StartNew();
 
-            Bitmap bmp = ScreenshotHelper.CaptureScreenArea(element); //, new System.Windows.Size(320, 240));
-
-            //Color c = await Task.Run(() =>
-            //{
-                string dir = "C:\\Temp\\1";
-                Directory.CreateDirectory(dir);
-
-                string fileName = string.Format("{0}\\Bitmap_{1}.jpg", dir, DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss.fff"));
-                if (bmp.Width > 30)
-                    bmp.Save(fileName, ImageFormat.Jpeg);
-                Color c = CalculateAverageColor(bmp);
-            //});
+            Bitmap bmp = ScreenshotHelper.CaptureScreenArea(element); 
+            Color c = CalculateAverageColor(bmp);
+            
+            SaveBitmapToTempFile(bmp);
 
             Debug.WriteLine("Color calculated time (from UI): " + sw.Elapsed);
 
             return new SolidColorBrush(System.Windows.Media.Color.FromRgb(c.R, c.G, c.B));
+        }
+
+        private static void SaveBitmapToTempFile(Bitmap bmp)
+        {
+            //Color c = await Task.Run(() =>
+            //{
+            string dir = "C:\\Temp\\1";
+            Directory.CreateDirectory(dir);
+
+            string fileName = string.Format("{0}\\Bitmap_{1}.jpg", dir, DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss.fff"));
+            if (bmp.Width > 30)
+                bmp.Save(fileName, ImageFormat.Jpeg);
+
+            //c = Color.Pink;
+            //});
         }
 
         //https://stackoverflow.com/questions/6177499/how-to-determine-the-background-color-of-document-when-there-are-3-options-usin/6185448#6185448

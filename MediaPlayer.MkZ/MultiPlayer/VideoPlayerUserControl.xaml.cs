@@ -473,7 +473,7 @@ namespace MultiPlayer
                 if (!bActive)
                 {
                     this.Background = color;
-                    //this.Background = ColorUtils.CalculateAverageColor(VideoPlayerElement); // Brushes.DarkGray;
+                    this.Background = ColorUtils.CalculateAverageColor(VideoPlayerElement); // Brushes.DarkGray;
                     //ScrollToCenter();
                 }
                 else

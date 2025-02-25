@@ -326,18 +326,18 @@ namespace MultiPlayer
 
             this.IsLoading = true;
 
-            Settings.Update(s);
+            this.IsMuted = true; //load silently
+            _player.Volume = 0;
+            
+            //Settings.Update(s);
 
             _player.VideoPlayerElement.Source = new Uri(s.FileName);
             _player.PositionSet(TimeSpan.FromSeconds(s.Position), false);
-            _player.Volume = s.Volume;
 
             this.Title = System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(s.FileName)) + "/" + System.IO.Path.GetFileName(s.FileName);
             List<string> fileNames = this.GetFileNames(s.FileName, out int idx);
             if (idx >= 0)
                 this.Title = $"{(idx+1)}/{fileNames.Count} " + this.Title;
-
-            this.IsMuted = true; //load silently
 
             this.Play();
 
@@ -354,18 +354,23 @@ namespace MultiPlayer
 
             await WaitForMediaOpened();
 
-            this.IsMuted = false; //restore volume
-
             this.Update(s, pop, lockUpdate: false);
             this.UpdateRrecentFile(s);
 
+            //_player.Volume = s.Volume;
+            this.IsMuted = false; //restore volume
+
             this.TogglePlayPauseCommand.RefreshBoundControls();
             this.BookmarkGoToCommand.RefreshBoundControls();
+            this.BookmarkSetCommand.RefreshBoundControls();
+            this.NextFileCommand.RefreshBoundControls();
+            this.PrevFileCommand.RefreshBoundControls();
+
             this.NotifyPropertyChanged(nameof(SelectedPlayModeIndex));
 
             this.AdjustSizeAndLayout();
 
-            _player.SetBackColor(bActive: s.MediaState == MediaState.Play);
+            //_player.SetBackColor(bActive: false);
         }
 
         private async Task WaitForNaturalDurationUpdated(string fileName)
