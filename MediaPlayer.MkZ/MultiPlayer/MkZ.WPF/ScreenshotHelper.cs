@@ -56,5 +56,32 @@ namespace MultiPlayer.MkZ.WPF
                 return new Bitmap(memoryStream);
             }
         }
+
+        public static Bitmap CaptureScreenArea(FrameworkElement element)
+        {
+            if (element.ActualWidth == 0 || element.ActualHeight == 0)
+            {
+                return new Bitmap(10, 10);
+            }
+
+            System.Windows.Point topLeft = element.PointToScreen(new System.Windows.Point(0, 0));
+
+            // Get the bottom-right corner in screen coordinates
+            System.Windows.Point bottomRight = element.PointToScreen(new System.Windows.Point(element.ActualWidth, element.ActualHeight));
+
+            Rectangle area = new Rectangle((int)topLeft.X, (int)topLeft.Y, (int)element.ActualWidth, (int)element.ActualHeight);
+
+            return CaptureScreenArea(area);
+        }
+
+        public static Bitmap CaptureScreenArea(Rectangle area)
+        {
+            Bitmap bitmap = new Bitmap(area.Width, area.Height);
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                g.CopyFromScreen(area.Location, System.Drawing.Point.Empty, area.Size);
+            }
+            return bitmap;
+        }
     }
 }

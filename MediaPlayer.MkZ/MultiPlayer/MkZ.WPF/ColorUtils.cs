@@ -27,19 +27,22 @@ namespace MultiPlayer.MkZ.WPF
             return new SolidColorBrush(System.Windows.Media.Color.FromRgb(c.R, c.G, c.B));
         }
 
-        public static async Task<SolidColorBrush> CalculateAverageColor(FrameworkElement element)
+        public static SolidColorBrush CalculateAverageColor(FrameworkElement element)
         {
             Stopwatch sw = Stopwatch.StartNew();
 
-            Bitmap bmp = await ScreenshotHelper.CaptureElementAsync(element); //, new System.Windows.Size(320, 240));
+            Bitmap bmp = ScreenshotHelper.CaptureScreenArea(element); //, new System.Windows.Size(320, 240));
 
-            Color c = await Task.Run(() =>
-            {
-                string fileName = string.Format("E:\\Temp\\1\\Bitmap_{0}.jpg", DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss.fff"));
+            //Color c = await Task.Run(() =>
+            //{
+                string dir = "C:\\Temp\\1";
+                Directory.CreateDirectory(dir);
+
+                string fileName = string.Format("{0}\\Bitmap_{1}.jpg", dir, DateTime.Now.ToString("yyyy-MM-dd_HH-mm-ss.fff"));
                 if (bmp.Width > 30)
                     bmp.Save(fileName, ImageFormat.Jpeg);
-                return CalculateAverageColor(bmp);
-            });
+                Color c = CalculateAverageColor(bmp);
+            //});
 
             Debug.WriteLine("Color calculated time (from UI): " + sw.Elapsed);
 

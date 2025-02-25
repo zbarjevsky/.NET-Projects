@@ -433,7 +433,7 @@ namespace MultiPlayer
                 _timer.Start();
                 VideoPlayerElement.Play();
                 VideoPlayerElement.IsMuted = true;
-                await SetBackColor(bActive: true);
+                SetBackColor(bActive: true);
                 MediaState = MediaState.Play;
                 PositionSet(TimeSpan.FromSeconds(VM.Settings.Position), false);
                 
@@ -446,7 +446,7 @@ namespace MultiPlayer
             }
         }
 
-        public async void Pause(bool updateUI)
+        public void Pause(bool updateUI)
         {
             if (VideoPlayerElement.Source != null)
             {
@@ -459,23 +459,24 @@ namespace MultiPlayer
                 {
                     VM.Settings.Update(this);
                     VM.Update(VM.Settings, VM.IsPopWindowMode, lockUpdate: false);
-                    await SetBackColor(bActive: false);
+                    SetBackColor(bActive: false);
                 }
             }
         }
 
-        public async Task SetBackColor(bool bActive, bool averageOfVideo = false)
+        public void SetBackColor(bool bActive)
         {
             Brush color = bActive ? Brushes.Black : Brushes.LightGray;
 
             if (VideoPlayerElement.Source != null)
             {
-                //if (averageOfVideo || color == null)
-                //{
-                //    this.Background = await ColorUtils.CalculateAverageColor(VideoPlayerElement); // Brushes.DarkGray;
-                //    ScrollToCenter();
-                //}
-                //else
+                if (!bActive)
+                {
+                    this.Background = color;
+                    //this.Background = ColorUtils.CalculateAverageColor(VideoPlayerElement); // Brushes.DarkGray;
+                    //ScrollToCenter();
+                }
+                else
                 {
                     this.Background = color;
                 }
@@ -492,7 +493,7 @@ namespace MultiPlayer
             {
                 _timer.Stop();
                 VideoPlayerElement.Stop();
-                await SetBackColor(bActive: false);
+                SetBackColor(bActive: false);
                 MediaState = MediaState.Stop;
                 
                 VM.Settings.Update(this);
