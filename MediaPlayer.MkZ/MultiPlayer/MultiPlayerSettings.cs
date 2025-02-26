@@ -86,7 +86,7 @@ namespace MultiPlayer
         public void Update(OnePlayerSettings settings)
         {
             //if it was updated after this setting was updated
-            if (LastUpdate >= settings.LastUpdate)
+            if (LastUpdate > settings.LastUpdate)
                 return;
 
             LastUpdate = settings.LastUpdate;
@@ -401,9 +401,6 @@ namespace MultiPlayer
                 OnePlayerSettings s = new OnePlayerSettings(v);
                 RecentFile recentFile = MainWindow.FindOrCreateRecentFile(s.FileName);
                 recentFile.Update(s);
-
-                //experimental - reset settings bookmarks if recent file is more recent than settings
-                s.Position = recentFile.Position;
                 s.UpdateBookmarks(s.ReplayIsOn, recentFile);
 
                 this.PlayerSettings.Add(s);
