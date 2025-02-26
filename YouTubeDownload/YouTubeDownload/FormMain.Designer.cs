@@ -72,7 +72,6 @@
             this.m_ctxmnuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.m_btnAddUrl = new System.Windows.Forms.Button();
             this.m_spliMain = new System.Windows.Forms.SplitContainer();
-            this.m_DownloaderUserControl = new YouTubeDownload.DownloaderUserControl();
             this.m_btnClearList = new System.Windows.Forms.Button();
             this.m_lnkOutputFolder = new System.Windows.Forms.LinkLabel();
             this.m_btnPause = new System.Windows.Forms.Button();
@@ -92,6 +91,7 @@
             this.m_pnlTools = new System.Windows.Forms.Panel();
             this.m_cmbEngine = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
+            this.m_DownloaderUserControl = new YouTubeDownload.DownloaderUserControl();
             this.m_statusStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.m_ContextMenuList.SuspendLayout();
@@ -319,7 +319,7 @@
             this.toolStripMenuItem4,
             this.m_ctxmnuExit});
             this.m_ContextMenuList.Name = "contextMenuStrip1";
-            this.m_ContextMenuList.Size = new System.Drawing.Size(220, 360);
+            this.m_ContextMenuList.Size = new System.Drawing.Size(220, 382);
             // 
             // m_ctxmnuAddUrl
             // 
@@ -343,6 +343,7 @@
             // 
             // m_ctxmnuEdit
             // 
+            this.m_ctxmnuEdit.Image = ((System.Drawing.Image)(resources.GetObject("m_ctxmnuEdit.Image")));
             this.m_ctxmnuEdit.Name = "m_ctxmnuEdit";
             this.m_ctxmnuEdit.Size = new System.Drawing.Size(219, 26);
             this.m_ctxmnuEdit.Text = "Edit Entry Settings";
@@ -466,15 +467,6 @@
             this.m_spliMain.Size = new System.Drawing.Size(984, 501);
             this.m_spliMain.SplitterDistance = 239;
             this.m_spliMain.TabIndex = 7;
-            // 
-            // m_DownloaderUserControl
-            // 
-            this.m_DownloaderUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_DownloaderUserControl.Location = new System.Drawing.Point(0, 0);
-            this.m_DownloaderUserControl.Margin = new System.Windows.Forms.Padding(4);
-            this.m_DownloaderUserControl.Name = "m_DownloaderUserControl";
-            this.m_DownloaderUserControl.Size = new System.Drawing.Size(980, 254);
-            this.m_DownloaderUserControl.TabIndex = 0;
             // 
             // m_btnClearList
             // 
@@ -670,6 +662,15 @@
             this.label1.Size = new System.Drawing.Size(63, 20);
             this.label1.TabIndex = 7;
             this.label1.Text = "Engine:";
+            // 
+            // m_DownloaderUserControl
+            // 
+            this.m_DownloaderUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_DownloaderUserControl.Location = new System.Drawing.Point(0, 0);
+            this.m_DownloaderUserControl.Margin = new System.Windows.Forms.Padding(4);
+            this.m_DownloaderUserControl.Name = "m_DownloaderUserControl";
+            this.m_DownloaderUserControl.Size = new System.Drawing.Size(980, 254);
+            this.m_DownloaderUserControl.TabIndex = 0;
             // 
             // FormMain
             // 

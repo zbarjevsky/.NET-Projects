@@ -96,7 +96,10 @@ namespace YouTubeDownload
                 m_txtUrl.Text = Data.Url;
                 m_chkNoPlayList.Checked = Data.NoPlayList;
                 m_chkAudioOnly.Checked = Data.AudioOnly;
-                m_cmbAdditionalParameters.Text = Data.AdditionalParameters;
+                if (!string.IsNullOrWhiteSpace(Data.AdditionalParameters))
+                    m_cmbAdditionalParameters.Text = Data.AdditionalParameters;
+                else
+                    m_cmbAdditionalParameters.SelectedIndex = 0;
                 m_cmbEngine.SelectedIndex = Data.SelectedEngineIndex;
                 UpdateFileName(Data.FileNameTemplate);
             }

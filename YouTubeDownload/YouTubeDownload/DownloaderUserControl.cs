@@ -139,8 +139,8 @@ namespace YouTubeDownload
             _stopwatch.Restart();
             m_lblTime.Text = "Downloading... ";
 
-            if (m_txtOutput.Text.Length > 4000)
-                m_txtOutput.Text = m_txtOutput.Text.Substring(0, 3000);
+            if (m_txtOutput.Text.Length > 12000)
+                m_txtOutput.Text = m_txtOutput.Text.Substring(0, 10000);
 
             m_txtOutput.Text = (line + "\n") + m_txtOutput.Text;
 
