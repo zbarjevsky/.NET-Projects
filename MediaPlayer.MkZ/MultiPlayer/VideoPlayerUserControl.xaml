@@ -271,12 +271,12 @@
                         <SolidColorBrush Color="Black" Opacity="0.3" />
                     </Border.Background>
                     <StackPanel Orientation="Horizontal">
-                        <Button x:Name="_btnFileList" Content="{Binding FileIndex}" Margin="3,2,0,2" 
+                        <Button x:Name="_btnFileList" Content="{Binding FileIndex, FallbackValue=0/0}" Margin="3,2,0,2" 
                                 Style="{StaticResource SpecialButton}"
                                 ToolTip="Select File..."
                                 Click="FileListMenu_OpenMenu" >
                             <Button.ContextMenu>
-                                <ContextMenu>
+                                <ContextMenu MaxHeight="850">
                                 </ContextMenu>
                             </Button.ContextMenu>
                         </Button>
