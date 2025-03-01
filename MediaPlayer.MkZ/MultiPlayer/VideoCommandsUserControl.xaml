@@ -117,7 +117,7 @@
                     </RepeatButton>
                 </StackPanel>
                 <DockPanel LastChildFill="True" Height="36" >
-                    <TextBlock x:Name="_timeLbl" Margin="2,10" Text="0:00" FontWeight="Bold" Foreground="White" />
+                    <TextBlock x:Name="_timeLbl" Margin="2,10" Text="0:00" FontWeight="Bold" MinWidth="44" TextAlignment="Right" Foreground="White" />
                     <DockPanel x:Name="_docSliders" LastChildFill="True" MinWidth="200" >
                         <Popup x:Name="_popupSliderTooltip" AllowsTransparency="True"
                             Placement="Relative"  PlacementTarget="{Binding ElementName=_position}">
