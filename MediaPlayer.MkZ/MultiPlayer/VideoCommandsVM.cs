@@ -979,6 +979,15 @@ namespace MultiPlayer
 
             public void UpdateReplayUI()
             {
+                if (IsReplayChecked && VM.Settings.ReplayPosA > 0 && VM.Settings.ReplayPosB > 0)
+                {
+                    VM._cmd._lblReplay.Background = Brushes.Chartreuse;
+                }
+                else
+                {
+                    VM._cmd._lblReplay.Background = Brushes.Gainsboro;
+                }
+
                 UpdateTicks();
                 NotifyPropertyChanged(nameof(IsReplayChecked));
                 NotifyPropertyChanged(nameof(ReplayToolTip));
@@ -1007,18 +1016,19 @@ namespace MultiPlayer
             //set ticks positions and color if active
             private void UpdateTicks()
             {
-                UpdateTick(VM._cmd._lineA, VM._cmd._btnA, VM.Settings.ReplayPosA, IsReplayChecked ? Brushes.Lime : Brushes.AliceBlue);
-                UpdateTick(VM._cmd._lineB, VM._cmd._btnB, VM.Settings.ReplayPosB, IsReplayChecked ? Brushes.Lime : Brushes.AliceBlue);
+                UpdateTick(VM._cmd._lineA, VM._cmd._btnA_Go, VM.Settings.ReplayPosA, IsReplayChecked ? Brushes.Lime : Brushes.AliceBlue);
+                UpdateTick(VM._cmd._lineB, VM._cmd._btnB_Go, VM.Settings.ReplayPosB, IsReplayChecked ? Brushes.Lime : Brushes.AliceBlue);
 
-                UpdateTick(VM._cmd._lineC, VM._cmd._btnC, VM.Settings.ReplayPosC, Brushes.Pink);
-                UpdateTick(VM._cmd._lineD, VM._cmd._btnD, VM.Settings.ReplayPosD, Brushes.Yellow);
+                UpdateTick(VM._cmd._lineC, VM._cmd._btnC_Go, VM.Settings.ReplayPosC, Brushes.Pink);
+                UpdateTick(VM._cmd._lineD, VM._cmd._btnD_Go, VM.Settings.ReplayPosD, Brushes.Yellow);
             }
 
-            private void UpdateTick(Line line, System.Windows.Controls.Button btn, double position, System.Windows.Media.Brush stroke)
+            private void UpdateTick(Line line, System.Windows.Controls.Button btn_Go, double position, System.Windows.Media.Brush stroke)
             {
                 if (position > 0)
                 {
-                    btn.ToolTip = $"GoTo: {SecondsToString(position)}";
+                    btn_Go.ToolTip = $"GoTo: {SecondsToString(position)}";
+
                     line.Visibility = Visibility.Visible;
 
                     double center = line.StrokeThickness / 2;
@@ -1029,7 +1039,7 @@ namespace MultiPlayer
                 }
                 else
                 {
-                    btn.ToolTip = "Not set";
+                    btn_Go.ToolTip = "Not set";
                     line.Visibility = Visibility.Collapsed;
                 }
             }
@@ -1050,7 +1060,7 @@ namespace MultiPlayer
             public void ReplayCheckAndUpdate()
             {
                 if (IsReplayChecked && (VM._cmd._position.Value < VM.Settings.ReplayPosA || VM._cmd._position.Value > VM.Settings.ReplayPosB))
-                    GoToPosition(VM.Settings.ReplayPosA);
+                        GoToPosition(VM.Settings.ReplayPosA);
                 UpdateReplayUI();
             }
 
