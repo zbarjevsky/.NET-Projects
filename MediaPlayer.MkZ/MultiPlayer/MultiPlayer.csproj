@@ -14,10 +14,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Icons\Cancel.ico" />
     <None Remove="Yin-Yang.ico" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Icons\Cancel.ico" />
     <Resource Include="Yin-Yang.ico" />
   </ItemGroup>
 

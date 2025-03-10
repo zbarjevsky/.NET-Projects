@@ -250,7 +250,7 @@
                         <Separator />
                         <MenuItem Header="Delete Video File" Click="DeleteFile_Click">
                             <MenuItem.Icon>
-                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE740;" FontSize="16" />
+                                <Image Source="Icons/Cancel.ico" Width="16" Height="16"/>
                             </MenuItem.Icon>
                         </MenuItem>
                     </ContextMenu>

@@ -639,6 +639,9 @@ namespace MultiPlayer
         private void PlayPrev(string fileName)
         {
             List<string> fileNames = GetFileNames(fileName, out int idx);
+            if (fileNames.Count == 0)
+                return;
+
             idx--;
             if (idx < 0)
                 idx = fileNames.Count - 1;
@@ -667,10 +670,12 @@ namespace MultiPlayer
         public List<string> GetFileNames(string fileName, out int idx)
         {
             idx = -1;
-            if (string.IsNullOrWhiteSpace(fileName) || !File.Exists(fileName))
+            if (string.IsNullOrWhiteSpace(fileName))
                 return new List<string>();
 
             string dir = System.IO.Path.GetDirectoryName(fileName);
+            if (!Directory.Exists(dir))
+                return new List<string>();
 
             List<string> fileNames = System.IO.Directory.EnumerateFiles(dir, "*.*", SearchOption.TopDirectoryOnly)
                 .Where(
@@ -958,9 +963,18 @@ namespace MultiPlayer
             string fileName = Settings.FileName;
             if (File.Exists(fileName))
             {
+                List<string> fileNames = GetFileNames(fileName, out int idx);
                 Clear();
                 File.Delete(fileName);
-                PlayPrev(fileName);
+
+                fileNames = GetFileNames(fileName, out int idxDummy);
+                if (fileNames.Count > 0)
+                {
+                    if (idx < 0) idx = 0;
+                    if (idx >= fileNames.Count) idx = fileNames.Count - 1;
+                        
+                    OpenFromFile(fileNames[idx], startFrom0: true);
+                }
             }
             else
             {
