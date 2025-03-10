@@ -158,6 +158,7 @@ namespace MultiPlayer
             _player.Stop();
             Settings.FileName = "";
             _player.VideoPlayerElement.Source = null;
+            _player.SetBackColor(bActive: false);
 
             double volume = _cmd._volume.Value;
             ePlayMode playMode = Settings.PlayMode;
@@ -632,7 +633,12 @@ namespace MultiPlayer
 
         private void PrevFileCommandExecute(object obj)
         {
-            List<string> fileNames = GetFileNames(Settings.FileName, out int idx);
+            PlayPrev(Settings.FileName);
+        }
+
+        private void PlayPrev(string fileName)
+        {
+            List<string> fileNames = GetFileNames(fileName, out int idx);
             idx--;
             if (idx < 0)
                 idx = fileNames.Count - 1;
@@ -945,6 +951,21 @@ namespace MultiPlayer
             eBookmarkName name = (eBookmarkName)Enum.Parse(typeof(eBookmarkName), (string)bookMarkName);
             double position = Replay.BookmarkPositionGet(name);
             return position > 0 && this.Settings.Duration > 1.0;
+        }
+
+        public void DeleteFile(bool bPrev)
+        {
+            string fileName = Settings.FileName;
+            if (File.Exists(fileName))
+            {
+                Clear();
+                File.Delete(fileName);
+                PlayPrev(fileName);
+            }
+            else
+            {
+                Clear();
+            }
         }
 
         public ReplayLoop Replay { get; }

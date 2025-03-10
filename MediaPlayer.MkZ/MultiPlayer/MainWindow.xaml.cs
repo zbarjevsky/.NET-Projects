@@ -226,9 +226,15 @@ namespace MultiPlayer
         public static RecentFile FindOrCreateRecentFile(string fileName)
         {
             string name = Path.GetFileName(fileName);
-            if (!RecentFiles.ContainsKey(name))
-                RecentFiles.Add(name, new RecentFile() { FileName = name });
-            return RecentFiles[name];
+            if (RecentFiles.ContainsKey(name))
+                return RecentFiles[name];
+
+            string shortName = name.TrimStart('_');
+            if (RecentFiles.ContainsKey(shortName))
+                return RecentFiles[shortName];
+
+            RecentFiles.Add(shortName, new RecentFile() { FileName = shortName });
+            return RecentFiles[shortName];
         }
 
         private void PauseAll_Click(object sender, RoutedEventArgs e)

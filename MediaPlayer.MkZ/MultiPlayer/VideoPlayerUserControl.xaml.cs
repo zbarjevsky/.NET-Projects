@@ -803,5 +803,10 @@ namespace MultiPlayer
                 }
             }
         }
+
+        private void DeleteFile_Click(object sender, RoutedEventArgs e)
+        {
+            VM.DeleteFile(bPrev: true);
+        }
     }
 }
