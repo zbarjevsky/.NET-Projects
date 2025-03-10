@@ -248,7 +248,12 @@
                             </MenuItem>
                         </MenuItem>
                         <Separator />
-                        <MenuItem Header="Delete Video File" Click="DeleteFile_Click">
+                        <MenuItem Header="Clear" Click="Clear_Click" >
+                            <MenuItem.Icon>
+                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE74D;" FontSize="16" />
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Delete Media File" Click="DeleteFile_Click">
                             <MenuItem.Icon>
                                 <Image Source="Icons/Cancel.ico" Width="16" Height="16"/>
                             </MenuItem.Icon>
@@ -306,7 +311,7 @@
                         <Label FontFamily="Segoe MDL2 Assets" Content="&#xE895;" FontSize="16" />
                     </Button>
                     <Button ToolTip="Clear" Margin="2" Click="Clear_Click" >
-                        <Label FontFamily="Segoe MDL2 Assets" Content="&#xE8D8;" FontSize="16" />
+                        <Label FontFamily="Segoe MDL2 Assets" Content="&#xE74D;" FontSize="16" />
                     </Button>
                     <Button ToolTip="Settings" Click="Settings_Click" Margin="2" Padding="0" >
                         <Label FontFamily="Segoe MDL2 Assets" Content="&#xE713;" FontSize="16" />
