@@ -70,6 +70,9 @@ namespace MultiPlayer
         public string FileName { get; set; } = string.Empty;
 
         [XmlAttribute]
+        public bool  IsFavorite { get; set; } = false;
+
+        [XmlAttribute]
         public double Position { get; set; } = 0.0;
         [XmlAttribute]
         public double ReplayPosA { get; set; } = 0.0;
@@ -92,6 +95,8 @@ namespace MultiPlayer
             LastUpdate = settings.LastUpdate;
 
             FileName = Path.GetFileName(settings.FileName);
+            
+            IsFavorite = settings.IsFavorite;
 
             Position = Math.Round(settings.Position, 3);
 
@@ -104,13 +109,16 @@ namespace MultiPlayer
 
         public override string ToString()
         {
-            return $"RecentFile: Pos: {Position}, Name: {FileName}";
+            string favorite = IsFavorite?"*":"";
+            return $"{favorite}RecentFile: Pos: {Position}, Name: {FileName}";
         }
     }
 
     [Serializable]
     public class OnePlayerSettings
     {
+        [XmlAttribute]
+        public bool IsFavorite { get; set; } = false;
         public string FileName { get; set; } = string.Empty;
         public double Position { get; set; } = 0.0;
         public double Duration { get; set; } = 0.0;
@@ -153,6 +161,7 @@ namespace MultiPlayer
             LastUpdate = s.LastUpdate;
 
             FileName = s.FileName;
+            IsFavorite = s.IsFavorite;
             Duration = s.Duration;
             Position = s.Position;
 
@@ -173,6 +182,7 @@ namespace MultiPlayer
             LastUpdate = v.VM.Settings.LastUpdate;
 
             FileName = v.FileName;
+            IsFavorite = v.VM.Settings.IsFavorite;
 
             Duration = v.Duration > 0 ? v.Duration : duration;
             Position = v.Position.TotalSeconds > 0.5 ? v.Position.TotalSeconds : v.VM.Settings.Position;

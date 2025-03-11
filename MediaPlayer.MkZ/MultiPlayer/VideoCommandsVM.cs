@@ -41,6 +41,17 @@ namespace MultiPlayer
         private bool _isLoading;
         public bool IsLoading { get => _isLoading; set => SetProperty(ref _isLoading, value); }
 
+        public bool IsFavorite 
+        { 
+            get => Settings.IsFavorite; 
+            set 
+            {  
+                Settings.IsFavorite = value;
+                MainWindow.UpdateRecentFile(Settings.FileName, Settings.IsFavorite);
+                NotifyPropertyChanged(); 
+            } 
+        }
+
         public OnePlayerSettings Settings { get; set; } = new OnePlayerSettings();
 
         public bool IsPopWindowMode { get; private set; } = false;
@@ -383,6 +394,7 @@ namespace MultiPlayer
             this.PrevFileCommand.RefreshBoundControls();
 
             this.NotifyPropertyChanged(nameof(SelectedPlayModeIndex));
+            this.NotifyPropertyChanged(nameof(IsFavorite));
 
             this.AdjustSizeAndLayout();
 

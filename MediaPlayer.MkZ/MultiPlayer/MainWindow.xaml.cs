@@ -223,8 +223,11 @@ namespace MultiPlayer
             OptionsWindow.ShowOptions(this, _settings, "Settings", 650, 170);
         }
 
-        public static RecentFile FindOrCreateRecentFile(string fileName)
+        public static RecentFile FindRecentFile(string fileName)
         {
+            if (string.IsNullOrWhiteSpace(fileName))
+                return null;
+
             string name = Path.GetFileName(fileName);
             if (RecentFiles.ContainsKey(name))
                 return RecentFiles[name];
@@ -233,8 +236,36 @@ namespace MultiPlayer
             if (RecentFiles.ContainsKey(shortName))
                 return RecentFiles[shortName];
 
+            return null;
+        }
+
+        public static RecentFile FindOrCreateRecentFile(string fileName)
+        {
+            RecentFile recentFile = FindRecentFile(fileName);
+            if (recentFile != null)
+                return recentFile;
+
+            string name = Path.GetFileName(fileName);
+            string shortName = name.TrimStart('_');
+
             RecentFiles.Add(shortName, new RecentFile() { FileName = shortName });
             return RecentFiles[shortName];
+        }
+
+        public static bool IsFavorite(string fileName)
+        {
+            RecentFile recentFile = FindRecentFile(fileName);
+            if (recentFile != null)
+                return recentFile.IsFavorite;
+
+            return false;
+        }
+
+        public static void UpdateRecentFile(string fileName, bool isFavorite)
+        {
+            RecentFile recentFile = FindRecentFile(fileName);
+            if (recentFile != null)
+                recentFile.IsFavorite = isFavorite;
         }
 
         private void PauseAll_Click(object sender, RoutedEventArgs e)

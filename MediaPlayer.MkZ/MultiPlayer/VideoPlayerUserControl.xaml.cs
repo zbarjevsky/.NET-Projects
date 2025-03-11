@@ -788,10 +788,12 @@ namespace MultiPlayer
                     {
                         MenuItem item = new MenuItem();
 
-                        FontWeight fontWeight = i == idx ? FontWeights.Bold : FontWeights.Normal;
+                        bool isFavorite = MainWindow.IsFavorite(fileNames[i]);
+                        FontWeight fontWeight = (i == idx || isFavorite) ? FontWeights.Bold : FontWeights.Normal;
+                        Brush foreground = (isFavorite && i != idx) ? Brushes.SaddleBrown : Brushes.Navy;
 
-                        item.Icon = new TextBlock { Text = (i + 1).ToString(), FontSize = 12, FontWeight = fontWeight };
-                        item.Header = new TextBlock { Text = System.IO.Path.GetFileName(fileNames[i]), FontWeight = fontWeight };
+                        item.Icon = new TextBlock { Text = (i + 1).ToString(), FontSize = 12, FontWeight = fontWeight, Foreground = foreground };
+                        item.Header = new TextBlock { Text = System.IO.Path.GetFileName(fileNames[i]), FontWeight = fontWeight, Foreground = foreground };
 
                         item.Command = VM.OpenFileByNameCommand;
                         item.CommandParameter = fileNames[i];

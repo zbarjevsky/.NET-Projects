@@ -287,7 +287,7 @@
                                 ToolTip="Select File..."
                                 Click="FileListMenu_OpenMenu" >
                             <Button.ContextMenu>
-                                <ContextMenu MaxHeight="850">
+                                <ContextMenu x:Name="_ctxMnuFiles" MaxHeight="850">
                                 </ContextMenu>
                             </Button.ContextMenu>
                         </Button>
@@ -307,6 +307,31 @@
                     <Button ToolTip="Open..." Margin="2" Command="{Binding OpenFileCommand}" >
                         <Label FontFamily="Segoe MDL2 Assets" Content="&#xE712;" FontSize="16" />
                     </Button>
+                    <ToggleButton ToolTip="Favorite" Margin="2"
+                                  IsChecked="{Binding IsFavorite, Mode=TwoWay}">
+                        <ToggleButton.ContentTemplate>
+                            <DataTemplate>
+                                <Border>
+                                    <TextBlock  FontFamily="Segoe MDL2 Assets" Text="&#xE735;" FontSize="16" />
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Margin" Value="2" />
+                                            <Setter Property="Padding" Value="5" />
+                                            <Setter Property="Background" Value="LightGray"/>
+                                            <Setter Property="TextBlock.Foreground" Value="Gray"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=ToggleButton}}" Value="True">
+                                                    <Setter Property="TextBlock.Foreground" Value="SaddleBrown"/>
+                                                    <Setter Property="Background" Value="Gold"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+
+                                </Border>
+                            </DataTemplate>
+                        </ToggleButton.ContentTemplate>
+                    </ToggleButton>
                     <Button ToolTip="Reload" Margin="2" Click="Reload_Click" >
                         <Label FontFamily="Segoe MDL2 Assets" Content="&#xE895;" FontSize="16" />
                     </Button>
