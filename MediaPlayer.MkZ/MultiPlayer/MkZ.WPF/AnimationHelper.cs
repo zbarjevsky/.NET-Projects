@@ -95,14 +95,19 @@ namespace MkZ.WPF
             _timer.Stop();
             if(_stopwatch.ElapsedMilliseconds > 1000 * _hideTimeOutSeconds)
             {
-                foreach (UIElement ctrl in _controlsToFade)
-                {
-                    VisibilityHideAnimation(ctrl, 0, Visibility.Collapsed, OnHideCompleted);
-                }
+                HideControls();
 
                 return; //do not start timer
             }
             _timer.Start();
+        }
+
+        public void HideControls()
+        {
+            foreach (UIElement ctrl in _controlsToFade)
+            {
+                VisibilityHideAnimation(ctrl, 0, Visibility.Collapsed, OnHideCompleted);
+            }
         }
 
         public static void FadeInOutAnimation(UIElement element, double showSeconds = 3)
@@ -115,6 +120,9 @@ namespace MkZ.WPF
 
         public static void VisibilityShowAnimation(UIElement element, double delaySeconds, Action<UIElement> OnShowCompleted)
         {
+            //if (element.Visibility == Visibility.Visible)
+            //    return;
+
             var animation = new DoubleAnimation
             {
                 To = 1,
@@ -139,6 +147,9 @@ namespace MkZ.WPF
 
         public static void VisibilityHideAnimation(UIElement element, double delaySeconds, Visibility finalVisibility, Action<UIElement> OnHideCompleted)
         {
+            if (element.Visibility == finalVisibility)
+                return;
+
             var animation = new DoubleAnimation
             {
                 To = 0,

@@ -258,6 +258,7 @@ namespace MultiPlayer
         {
             IsInFocus = false;
             _borderMain.BorderBrush = Brushes.Transparent;
+            _controlsHideAndShow.HideControls();
         }
 
         private bool _isDragging = false;
