@@ -716,6 +716,11 @@ namespace MultiPlayer
             WndMax.ClearVideoControl();
         }
 
+        public static void PopUpPause()
+        {
+            WndMax.Pause();
+        }
+
         public static void PopUpHide()
         {
             WndMax.ClearVideoControl();
@@ -740,7 +745,7 @@ namespace MultiPlayer
             {
                 if (WndMax.Visibility == Visibility.Collapsed)
                 {
-                    WndMax.InitWindow(System.Windows.Application.Current.MainWindow);
+                    WndMax.InitWindow(System.Windows.Application.Current.MainWindow, matchMainWindow: false);
                     WndMax.Show();
                     WndMax.LoadSettings(new OnePlayerSettings(_player));
 

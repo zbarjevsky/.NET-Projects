@@ -270,6 +270,8 @@ namespace MultiPlayer
 
         private void PauseAll_Click(object sender, RoutedEventArgs e)
         {
+            VideoCommandsVM.PopUpPause();
+
             foreach (VideoPlayerUserControl v in _videos)
             {
                 v.VM.Pause(updateUI: true);

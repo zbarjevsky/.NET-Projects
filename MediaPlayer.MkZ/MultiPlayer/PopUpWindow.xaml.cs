@@ -40,21 +40,31 @@ namespace MultiPlayer
                 _previousState = this.WindowState;
         }
 
-        public void InitWindow(Window main)
+        public void InitWindow(Window main, bool matchMainWindow)
         {
-            this.WindowState = main.WindowState;
-            this.WindowStyle = WindowStyle.SingleBorderWindow;
+            if (matchMainWindow)
+            {
+                this.WindowState = main.WindowState;
+                this.WindowStyle = WindowStyle.SingleBorderWindow;
 
-            //position
-            if (this.WindowState != WindowState.Maximized)
+                //position
+                if (this.WindowState != WindowState.Maximized)
+                {
+                    this.WindowState = WindowState.Normal;
+                    this.ResizeMode = ResizeMode.CanResize;
+
+                    this.Left = main.Left;
+                    this.Top = main.Top;
+                    this.Width = main.ActualWidth;
+                    this.Height = main.ActualHeight;
+                }
+            }
+            else
             {
                 this.WindowState = WindowState.Normal;
                 this.ResizeMode = ResizeMode.CanResize;
 
-                this.Left = main.Left;
-                this.Top = main.Top;
-                this.Width = main.ActualWidth;
-                this.Height = main.ActualHeight;
+                this.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             }
         }
 
@@ -139,6 +149,11 @@ namespace MultiPlayer
                 e.Cancel = true; //do not close it - will reuse it
                 _video._commands.VM.MaximizeToggle(hide:true);
             }
+        }
+
+        public void Pause()
+        {
+            _video.VM.Pause(true);
         }
     }
 }
