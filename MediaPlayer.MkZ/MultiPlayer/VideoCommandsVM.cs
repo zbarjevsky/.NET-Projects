@@ -321,12 +321,13 @@ namespace MultiPlayer
 
             UpdateRrecentFile(Settings); //update previous recent file
 
-            _player.Clear();
+            _player.Clear(); //reset all settings, retain volume, fit, playMode
 
             Settings.FileName = fileName;
 
             _recentFile = MainWindow.FindOrCreateRecentFile(fileName);
 
+            Settings.IsFavorite = _recentFile.IsFavorite;
             Settings.UpdateBookmarks(false, _recentFile);
 
             Settings.Position = startFrom0 ? 0 : _recentFile.Position;
