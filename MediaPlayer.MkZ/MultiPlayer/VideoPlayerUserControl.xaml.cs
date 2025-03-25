@@ -258,7 +258,9 @@ namespace MultiPlayer
         {
             IsInFocus = false;
             _borderMain.BorderBrush = Brushes.Transparent;
-            _controlsHideAndShow.HideControls();
+
+            if (!_btnFileList.ContextMenu.IsOpen)
+                _controlsHideAndShow.HideControls();
         }
 
         private bool _isDragging = false;
@@ -467,14 +469,14 @@ namespace MultiPlayer
 
         public void SetBackColor(bool bActive)
         {
-            Brush color = bActive ? Brushes.Black : Brushes.LightGray;
+            Brush color = bActive ? Brushes.Black : Brushes.DarkSlateBlue;
 
             if (VideoPlayerElement.Source != null)
             {
                 if (!bActive)
                 {
                     this.Background = color;
-                    this.Background = ColorUtils.CalculateAverageColor(VideoPlayerElement); // Brushes.DarkGray;
+                    //this.Background = ColorUtils.CalculateAverageColor(VideoPlayerElement); // Brushes.DarkGray;
                     //ScrollToCenter();
                 }
                 else
@@ -793,7 +795,12 @@ namespace MultiPlayer
                         FontWeight fontWeight = (i == idx || isFavorite) ? FontWeights.Bold : FontWeights.Normal;
                         Brush foreground = (isFavorite && i != idx) ? Brushes.SaddleBrown : Brushes.Navy;
 
-                        item.Icon = new TextBlock { Text = (i + 1).ToString(), FontSize = 12, FontWeight = fontWeight, Foreground = foreground };
+                        item.Icon = new TextBlock 
+                        { 
+                            Text = (i + 1).ToString(), Foreground = foreground, TextAlignment = TextAlignment.Right, 
+                            FontSize = 12, FontWeight = fontWeight, 
+                            Margin = new Thickness(-2,0,-2,-2) 
+                        };
                         item.Header = new TextBlock { Text = System.IO.Path.GetFileName(fileNames[i]), FontWeight = fontWeight, Foreground = foreground };
 
                         item.Command = VM.OpenFileByNameCommand;
