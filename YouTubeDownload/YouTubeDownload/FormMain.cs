@@ -189,6 +189,7 @@ namespace YouTubeDownload
             m_btnNewDownload.Enabled = m_btnAddUrl.Enabled;
             m_ctxmnuOpenOutputFolder.Enabled = bHasSelection;
             m_ctxmnuOpenSelectedFile.Enabled = bHasSelection;
+            m_ctxmnuDeleteSelectedFile.Enabled = bHasSelection;
             m_ctxmnuRemoveSelected.Enabled = bHasSelection;
             m_ctxmnuMoveUP.Enabled = bHasSelection;
             m_ctxmnuMoveDOWN.Enabled = bHasSelection;
@@ -391,6 +392,25 @@ namespace YouTubeDownload
             catch (Exception err)
             {
                 MessageBox.Show(err.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+            }
+        }
+
+        private void m_ctxmnuDeleteSelectedFile_Click(object sender, EventArgs e)
+        {
+            if (m_listUrls.SelectedItems.Count == 0)
+                return;
+
+            ListViewItem selected = m_listUrls.SelectedItems[0];
+            DownloadData data = selected.Tag as DownloadData;
+            if (data != null && data.State != eDownloadState.Failed)
+            {
+                string fileName = data.Description.Trim('"');
+                if (File.Exists(fileName))
+                {
+                    if (MessageBox.Show("Are you sure delete:\n"+fileName, "Delete File", 
+                        MessageBoxButtons.YesNo, MessageBoxIcon.Warning)  == DialogResult.Yes)
+                        File.Delete(data.Url);
+                }
             }
         }
 

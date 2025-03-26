@@ -72,6 +72,7 @@
             this.m_ctxmnuExit = new System.Windows.Forms.ToolStripMenuItem();
             this.m_btnAddUrl = new System.Windows.Forms.Button();
             this.m_spliMain = new System.Windows.Forms.SplitContainer();
+            this.m_DownloaderUserControl = new YouTubeDownload.DownloaderUserControl();
             this.m_btnClearList = new System.Windows.Forms.Button();
             this.m_lnkOutputFolder = new System.Windows.Forms.LinkLabel();
             this.m_btnPause = new System.Windows.Forms.Button();
@@ -91,7 +92,7 @@
             this.m_pnlTools = new System.Windows.Forms.Panel();
             this.m_cmbEngine = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.m_DownloaderUserControl = new YouTubeDownload.DownloaderUserControl();
+            this.m_ctxmnuDeleteSelectedFile = new System.Windows.Forms.ToolStripMenuItem();
             this.m_statusStrip.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.m_ContextMenuList.SuspendLayout();
@@ -202,7 +203,7 @@
             this.m_mnuSaveList,
             this.m_mnuLoadList});
             this.m_mnuTools.Name = "m_mnuTools";
-            this.m_mnuTools.Size = new System.Drawing.Size(46, 20);
+            this.m_mnuTools.Size = new System.Drawing.Size(47, 20);
             this.m_mnuTools.Text = "&Tools";
             // 
             // m_mnuToolsSettings
@@ -313,13 +314,14 @@
             this.toolStripMenuItem5,
             this.m_ctxmnuOpenSelectedFile,
             this.m_ctxmnuOpenOutputFolder,
+            this.m_ctxmnuDeleteSelectedFile,
             this.m_ctxmnuCopyFileName,
             this.m_ctxmnuCopyURL,
             this.m_ctxmnuCopyCommandLine,
             this.toolStripMenuItem4,
             this.m_ctxmnuExit});
             this.m_ContextMenuList.Name = "contextMenuStrip1";
-            this.m_ContextMenuList.Size = new System.Drawing.Size(220, 382);
+            this.m_ContextMenuList.Size = new System.Drawing.Size(220, 408);
             // 
             // m_ctxmnuAddUrl
             // 
@@ -467,6 +469,15 @@
             this.m_spliMain.Size = new System.Drawing.Size(984, 501);
             this.m_spliMain.SplitterDistance = 239;
             this.m_spliMain.TabIndex = 7;
+            // 
+            // m_DownloaderUserControl
+            // 
+            this.m_DownloaderUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.m_DownloaderUserControl.Location = new System.Drawing.Point(0, 0);
+            this.m_DownloaderUserControl.Margin = new System.Windows.Forms.Padding(4);
+            this.m_DownloaderUserControl.Name = "m_DownloaderUserControl";
+            this.m_DownloaderUserControl.Size = new System.Drawing.Size(980, 254);
+            this.m_DownloaderUserControl.TabIndex = 0;
             // 
             // m_btnClearList
             // 
@@ -663,14 +674,13 @@
             this.label1.TabIndex = 7;
             this.label1.Text = "Engine:";
             // 
-            // m_DownloaderUserControl
+            // m_ctxmnuDeleteSelectedFile
             // 
-            this.m_DownloaderUserControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.m_DownloaderUserControl.Location = new System.Drawing.Point(0, 0);
-            this.m_DownloaderUserControl.Margin = new System.Windows.Forms.Padding(4);
-            this.m_DownloaderUserControl.Name = "m_DownloaderUserControl";
-            this.m_DownloaderUserControl.Size = new System.Drawing.Size(980, 254);
-            this.m_DownloaderUserControl.TabIndex = 0;
+            this.m_ctxmnuDeleteSelectedFile.Image = ((System.Drawing.Image)(resources.GetObject("m_ctxmnuDeleteSelectedFile.Image")));
+            this.m_ctxmnuDeleteSelectedFile.Name = "m_ctxmnuDeleteSelectedFile";
+            this.m_ctxmnuDeleteSelectedFile.Size = new System.Drawing.Size(219, 26);
+            this.m_ctxmnuDeleteSelectedFile.Text = "Delete File";
+            this.m_ctxmnuDeleteSelectedFile.Click += new System.EventHandler(this.m_ctxmnuDeleteSelectedFile_Click);
             // 
             // FormMain
             // 
@@ -774,6 +784,7 @@
         private System.Windows.Forms.ToolStripButton m_btnRenameFIles;
         private System.Windows.Forms.ComboBox m_cmbEngine;
         private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ToolStripMenuItem m_ctxmnuDeleteSelectedFile;
     }
 }
 
