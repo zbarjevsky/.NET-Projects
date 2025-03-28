@@ -10,6 +10,52 @@
              Background="Transparent"
              FocusManager.FocusedElement="{Binding RelativeSource={x:Static RelativeSource.Self}, Mode=OneTime}"
              d:DesignHeight="60" d:DesignWidth="400">
+    <UserControl.Resources>
+        <Style  x:Key="TransparentToggleButtonStyle" TargetType="ToggleButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderBrush" Value="Transparent"/>
+            <Setter Property="Content">
+                <Setter.Value>
+                    <TextBlock Text="🔕" />
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ToggleButton">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="0" Padding="0" CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="Transparent"/>
+                                <Setter TargetName="border" Property="BorderBrush" Value="Transparent"/>
+                                <Setter Property="Content">
+                                    <Setter.Value>
+                                        <TextBlock Text="🔔"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsChecked" Value="False">
+                                <Setter Property="Content">
+                                    <Setter.Value>
+                                        <TextBlock Text="🔕" />
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <!-- Hover: Semi-Transparent Background -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#30D3D3D3"/>
+                                <!-- 50% Transparent Gray -->
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </UserControl.Resources>
     <Grid>
         <Border x:Name="_rcColor" CornerRadius="8">
             <Border.Background>
@@ -30,10 +76,25 @@
         <Canvas x:Name="_canvas" />
 
         <Viewbox HorizontalAlignment="Right" VerticalAlignment="Center" >
-            <CheckBox x:Name="chk" Margin="4" Opacity="0.8" Width="16" Height="15"
+            <!--<CheckBox x:Name="chk" Margin="4" Opacity="0.8" Width="16" Height="15"
                       ToolTip="{Binding CheckBoxToolTip, ElementName=_gradientProgressBar}"
                       Visibility="{Binding CheckBoxVisibility, ElementName=_gradientProgressBar}"
-                      Checked="chk_Clicked" Unchecked="chk_Clicked" />
+                      Checked="chk_Clicked" Unchecked="chk_Clicked" />-->
+            <ToggleButton x:Name="chk" Margin="2" Opacity="1.0" Width="20" Height="20" 
+                          FontSize="12" FontWeight="Bold" Foreground="Gold"
+                          IsChecked="False" Style="{StaticResource TransparentToggleButtonStyle}"
+                          ToolTip="{Binding CheckBoxToolTip, ElementName=_gradientProgressBar}"
+                          Visibility="{Binding CheckBoxVisibility, ElementName=_gradientProgressBar}"
+                          Checked="chk_Clicked" Unchecked="chk_Clicked" >
+                <!--<ToggleButton.Content>
+                    <TextBlock x:Name="ToggleText" Text="🔕" />
+                </ToggleButton.Content>-->
+                <!--<StackPanel Orientation="Horizontal">
+                    <TextBlock Text="🔕🔔" FontSize="12" FontWeight="Bold" Foreground="Gold" Width="16" />
+                    --><!--<Label FontFamily="Segoe MDL2 Assets" Content="&#xE769;" FontSize="16" />--><!--
+                </StackPanel>-->
+
+            </ToggleButton>
         </Viewbox>
     </Grid>
 </UserControl>

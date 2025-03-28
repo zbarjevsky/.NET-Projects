@@ -307,7 +307,7 @@
             </Grid.RowDefinitions>
             <wpf:SimpleClockControl x:Name="_clock" Grid.RowSpan="3" Grid.ColumnSpan="3" Width="300" Height="300"
                                     IsClockVisible="{Binding IsChecked, ElementName=_btnToggleClock, Mode=TwoWay}" />
-            <Viewbox x:Name="_imagesNavigation" Grid.Row="1" MinHeight="40" MinWidth="120" ClipToBounds="False" >
+            <Viewbox x:Name="_imagesNavigation" Grid.Row="1" MinHeight="40" MinWidth="120" ClipToBounds="False" Grid.ColumnSpan="2" Height="76" Margin="0,0,1138,0" Grid.RowSpan="2" VerticalAlignment="Top" >
                 <Border Margin="10" Padding="1" CornerRadius="10" Height="40" HorizontalAlignment="Right" VerticalAlignment="Top">
                     <Border.Background>
                         <SolidColorBrush Color="Black" Opacity="0.5" />

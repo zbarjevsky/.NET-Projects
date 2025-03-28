@@ -90,7 +90,7 @@
                             Background="Transparent"
                             TickColor="{Binding Foreground, ElementName=_control}"
                             Minimum="0" Maximum="360" Value="60" 
-                            CheckBoxToolTip="Bell On"  CheckBoxVisibility="Visible">
+                            CheckBoxVisibility="Visible">
                             <local:GradientProgressBar.LayoutTransform>
                                 <RotateTransform CenterX="0.5" CenterY="0.5" Angle="0"/>
                             </local:GradientProgressBar.LayoutTransform>

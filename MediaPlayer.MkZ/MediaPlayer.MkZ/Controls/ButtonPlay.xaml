@@ -16,7 +16,7 @@
                 <Style TargetType="Path">
                     <Setter Property="Fill" Value="Transparent"/>
                     <Setter Property="Stroke" Value="DarkGray"/>
-                    <Setter Property="StrokeThickness" Value="1.5"/>
+                    <Setter Property="StrokeThickness" Value="0.5"/>
                 </Style>
             </ControlTemplate.Resources>
             <Viewbox >

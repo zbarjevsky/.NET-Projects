@@ -215,6 +215,7 @@ namespace MkZ.WPF
 
         private void chk_Clicked(object sender, RoutedEventArgs e)
         {
+            CheckBoxToolTip = chk.IsChecked.Value ? "Bell On" : "Bell Off";
             OnCheckClicked(chk.IsChecked.Value);
         }
     }
