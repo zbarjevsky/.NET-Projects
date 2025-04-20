@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 using System.Xml.Serialization;
 
 namespace MultiPlayer
@@ -75,6 +76,8 @@ namespace MultiPlayer
         [XmlAttribute]
         public double Position { get; set; } = 0.0;
         [XmlAttribute]
+        public bool ReplayIsOn { get; set; } = false;
+        [XmlAttribute]
         public double ReplayPosA { get; set; } = 0.0;
         [XmlAttribute]
         public double ReplayPosB { get; set; } = 0.0;
@@ -99,6 +102,8 @@ namespace MultiPlayer
             IsFavorite = settings.IsFavorite;
 
             Position = Math.Round(settings.Position, 3);
+
+            ReplayIsOn = settings.ReplayIsOn;
 
             ReplayPosA = Math.Round(settings.ReplayPosA, 1);
             ReplayPosB = Math.Round(settings.ReplayPosB, 1);
@@ -306,6 +311,8 @@ namespace MultiPlayer
         public System.Windows.Input.Key KeySaveAsLast { get; set; } = System.Windows.Input.Key.F2;
         [DisplayName("Load Default Key"), Category(APP)]
         public System.Windows.Input.Key KeyLoadDefault { get; set; } = System.Windows.Input.Key.F3;
+        [DisplayName("Execute Batch Operation"), Category(APP)]
+        public System.Windows.Input.Key KeyBatchOp { get; set; } = System.Windows.Input.Key.F4;
         [DisplayName("Save as default Key"), Category(APP)]
         public System.Windows.Input.Key KeySaveAsDefault { get; set; } = System.Windows.Input.Key.F5;
 
@@ -381,6 +388,7 @@ namespace MultiPlayer
             KeyClearAll = appConfig.KeyClearAll;
             KeySaveAsLast = appConfig.KeySaveAsLast;
             KeyLoadDefault = appConfig.KeyLoadDefault;
+            KeyBatchOp = appConfig.KeyBatchOp;
             KeySaveAsDefault = appConfig.KeySaveAsDefault;
 
             this.RowsSizes = appConfig.RowsSizes;

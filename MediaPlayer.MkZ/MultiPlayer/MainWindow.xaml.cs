@@ -178,6 +178,8 @@ namespace MultiPlayer
                 this.LoadSettings(_settings.DefaultSettingsFileName);
             else if (e.Key == _settings.KeySaveAsDefault)
                 this.SaveSettings(_settings.DefaultSettingsFileName);
+            else if (e.Key == _settings.KeyBatchOp)
+                this.Magic_Click(sender, e);
             else
                 e.Handled = video?.VM.Control_KeyDown(e) == true;
         }
@@ -276,6 +278,24 @@ namespace MultiPlayer
             {
                 v.VM.Pause(updateUI: true);
             }
+        }
+
+        //Pause -> Save Recent -> Clear -> Load Default
+        private void Magic_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                PauseAll_Click(sender, e);
+                SaveAsRecent_Click(sender, e);
+                ClearAll_Click(sender, e);
+                OpenDefault_Click(sender, e);
+
+                System.Windows.MessageBox.Show(this, "Magic Done!", this.Title);
+            }
+            catch (Exception ex)
+            {
+                System.Windows.MessageBox.Show(this, ex.Message, this.Title);
+            }        
         }
     }
 }

@@ -42,6 +42,8 @@ namespace MultiPlayer
 
         public void InitWindow(Window main, bool matchMainWindow)
         {
+            this.Owner = main;
+
             if (matchMainWindow)
             {
                 this.WindowState = main.WindowState;

@@ -53,15 +53,20 @@
                 </Button>
             </StackPanel>
             <StackPanel Grid.Column="5" Orientation="Horizontal">
+                <Button ToolTip="Clear All (F1)"
+                    Click="ClearAll_Click"
+                    Margin="1" Padding="0" >
+                    <Label FontFamily="Segoe MDL2 Assets" Content="&#xE74D;" FontSize="16" />
+                </Button>
                 <Button ToolTip="Pause All "
                     Click="PauseAll_Click"
                     Margin="1" Padding="0" >
                     <Label FontFamily="Segoe MDL2 Assets" Content="&#xE769;" FontSize="16" />
                 </Button>
-                <Button ToolTip="Clear All (F1)"
-                    Click="ClearAll_Click"
-                    Margin="1" Padding="0" >
-                    <Label FontFamily="Segoe MDL2 Assets" Content="&#xE74D;" FontSize="16" />
+                <Button ToolTip="Magic (F4) [Pause -> F2 -> F1 -> F3]"
+                    Click="Magic_Click"
+                    Margin="1" Padding="0" Width="30" >
+                    <TextBlock Text="🪄" FontFamily="Segoe UI Emoji" FontSize="16" />
                 </Button>
                 <Button ToolTip="Save As Recent (F2)"
                     Click="SaveAsRecent_Click"

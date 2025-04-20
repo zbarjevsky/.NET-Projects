@@ -328,7 +328,7 @@ namespace MultiPlayer
             _recentFile = MainWindow.FindOrCreateRecentFile(fileName);
 
             Settings.IsFavorite = _recentFile.IsFavorite;
-            Settings.UpdateBookmarks(false, _recentFile);
+            Settings.UpdateBookmarks(_recentFile.ReplayIsOn, _recentFile);
 
             Settings.Position = startFrom0 ? 0 : _recentFile.Position;
 
