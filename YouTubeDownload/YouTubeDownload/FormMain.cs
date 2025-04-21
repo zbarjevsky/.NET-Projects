@@ -400,18 +400,25 @@ namespace YouTubeDownload
             if (m_listUrls.SelectedItems.Count == 0)
                 return;
 
-            ListViewItem selected = m_listUrls.SelectedItems[0];
-            DownloadData data = selected.Tag as DownloadData;
-            if (data != null && data.State != eDownloadState.Failed)
+            try
             {
-                string fileName = data.Description.Trim('"');
-                if (File.Exists(fileName))
+                ListViewItem selected = m_listUrls.SelectedItems[0];
+                DownloadData data = selected.Tag as DownloadData;
+                if (data != null && data.State != eDownloadState.Failed)
                 {
-                    if (MessageBox.Show("Are you sure delete:\n"+fileName, "Delete File", 
-                        MessageBoxButtons.YesNo, MessageBoxIcon.Warning)  == DialogResult.Yes)
-                        File.Delete(data.Url);
+                    string fileName = data.Description.Trim('"');
+                    if (File.Exists(fileName))
+                    {
+                        if (MessageBox.Show(this, "Are you sure delete:\n" + fileName, "Delete File",
+                            MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
+                            File.Delete(fileName);
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(this, ex.Message, this.Text + " - Delete File");
+            }        
         }
 
         private void m_mnuOpenOutputFolder_Click(object sender, EventArgs e)
