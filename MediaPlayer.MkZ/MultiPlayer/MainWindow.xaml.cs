@@ -290,7 +290,7 @@ namespace MultiPlayer
                 ClearAll_Click(sender, e);
                 OpenDefault_Click(sender, e);
 
-                System.Windows.MessageBox.Show(this, "Magic Done!", this.Title);
+                //System.Windows.MessageBox.Show(this, "Magic Done!", this.Title);
             }
             catch (Exception ex)
             {
