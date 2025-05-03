@@ -170,7 +170,15 @@ namespace MultiPlayer
 
             if (e.Key == _settings.KeyCloseApp)
                 this.Close();
-            else if (e.Key == _settings.KeyClearAll)
+            else
+                e.Handled = MainWindow_PreviewKeyDown(video, sender, e);
+        }
+
+        public bool MainWindow_PreviewKeyDown(VideoPlayerUserControl? video, object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            bool handled = true;
+
+            if (e.Key == _settings.KeyClearAll)
                 this.ClearAll_Click(sender, e);
             else if (e.Key == _settings.KeySaveAsLast)
                 this.SaveSettings(_settings.LastSettingsFileName);
@@ -181,7 +189,9 @@ namespace MultiPlayer
             else if (e.Key == _settings.KeyBatchOp)
                 this.Magic_Click(sender, e);
             else
-                e.Handled = video?.VM.Control_KeyDown(e) == true;
+                handled = video?.VM.Control_KeyDown(e) == true;
+
+            return handled;
         }
 
         private void ClearAll_Click(object sender, RoutedEventArgs e)

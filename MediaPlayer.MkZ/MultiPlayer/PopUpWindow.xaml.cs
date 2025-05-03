@@ -128,7 +128,8 @@ namespace MultiPlayer
             }
             else
             {
-                e.Handled = _video.VM.Control_KeyDown(e);
+                MainWindow mainWindow = this.Owner as MainWindow;
+                e.Handled = mainWindow.MainWindow_PreviewKeyDown(_video, sender, e);
             }
         }
 
