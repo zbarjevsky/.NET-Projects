@@ -441,13 +441,13 @@ namespace MultiPlayer
                 case ePlayMode.PlayOne:
                     break;
                 case ePlayMode.PlayAll:
-                    PlayNext(random: false, loop: false);
+                    PlayNext(random: false, loop: false, startFrom0: true);
                     break;
                 case ePlayMode.RepeatAll:
-                    PlayNext(random: false, loop: true);
+                    PlayNext(random: false, loop: true, startFrom0: true);
                     break;
                 case ePlayMode.Random:
-                    PlayNext(random: true, loop: true);
+                    PlayNext(random: true, loop: true, startFrom0: true);
                     break;
                 case ePlayMode.RepeatOne:
                 default:
@@ -635,7 +635,7 @@ namespace MultiPlayer
 
         private void NextFileCommandExecute(object obj)
         {
-            PlayNext();
+            PlayNext(random: false, loop: true, startFrom0: false);
         }
 
         private bool PrevFileCommandCanExecute(object obj)
@@ -663,7 +663,7 @@ namespace MultiPlayer
         }
 
         private Random _random = new Random();
-        private void PlayNext(bool random = false, bool loop = false)
+        private void PlayNext(bool random = false, bool loop = false, bool startFrom0 = false)
         {
             List<string> fileNames = GetFileNames(Settings.FileName, out int idx);
             if (random)
@@ -678,7 +678,7 @@ namespace MultiPlayer
             }
 
             if (idx >= 0 && idx < fileNames.Count)
-                _ = OpenFromFile(fileNames[idx], startFrom0: false);
+                _ = OpenFromFile(fileNames[idx], startFrom0: startFrom0);
         }
 
         public List<string> GetFileNames(string fileName, out int idx)
