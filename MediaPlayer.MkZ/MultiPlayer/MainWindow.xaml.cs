@@ -253,6 +253,9 @@ namespace MultiPlayer
 
         public static RecentFile FindOrCreateRecentFile(string fileName)
         {
+            if (string.IsNullOrWhiteSpace(fileName))
+                return null;
+
             RecentFile recentFile = FindRecentFile(fileName);
             if (recentFile != null)
                 return recentFile;

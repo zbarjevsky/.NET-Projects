@@ -294,15 +294,12 @@ namespace MultiPlayer
 
         private async void UserControl_Drop(object sender, System.Windows.DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop))
+            if (e.Data.GetDataPresent(System.Windows.DataFormats.FileDrop)) //drop from another application
             {
-                // Note that you can have more than one file.
                 string[] files = (string[])e.Data.GetData(System.Windows.DataFormats.FileDrop);
-
-                // handling code you have defined.
                 _ = VM.OpenFromFile(files[0], startFrom0: false);
             }
-            else if (e.Data.GetDataPresent(DragDropDataFormat))
+            else if (e.Data.GetDataPresent(DragDropDataFormat)) //drag-drop from this
             {
                 VideoPlayerUserControl vFrom = DragDropSource;
                 OnePlayerSettings setFrom = new OnePlayerSettings((OnePlayerSettings)(e.Data.GetData(DragDropDataFormat)));

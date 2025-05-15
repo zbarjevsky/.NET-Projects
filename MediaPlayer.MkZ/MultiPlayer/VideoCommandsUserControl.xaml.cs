@@ -124,7 +124,7 @@ namespace MultiPlayer
 
         private void ReplaySetD_Click(object sender, RoutedEventArgs e)
         {
-            VM.Replay.BookmarkSet(eBookmarkName.D);
+            VM.Replay.BookmarkSet(eBookmarkName.D, _position.Maximum);
         }
 
         private void ReplayD_Menu_Click(object sender, RoutedEventArgs e)

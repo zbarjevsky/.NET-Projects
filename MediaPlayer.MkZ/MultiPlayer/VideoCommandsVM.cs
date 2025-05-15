@@ -219,7 +219,7 @@ namespace MultiPlayer
         private void OpenFileByIndexCommandExecute(object parameter)
         {
             string fileName = parameter as string;
-            OpenFromFile(fileName, startFrom0: true);
+            _ = OpenFromFile(fileName, startFrom0: false);
         }
 
         private void TogglePlayPauseCommandExecute(object parameter)
@@ -451,7 +451,7 @@ namespace MultiPlayer
                     break;
                 case ePlayMode.RepeatOne:
                 default:
-                    OpenFromFile(Settings.FileName, startFrom0: true);
+                    _ = OpenFromFile(Settings.FileName, startFrom0: true);
                     break;
             }
         }
@@ -658,7 +658,8 @@ namespace MultiPlayer
             idx--;
             if (idx < 0)
                 idx = fileNames.Count - 1;
-            OpenFromFile(fileNames[idx], startFrom0: true);
+
+            _ = OpenFromFile(fileNames[idx], startFrom0: false);
         }
 
         private Random _random = new Random();
@@ -677,7 +678,7 @@ namespace MultiPlayer
             }
 
             if (idx >= 0 && idx < fileNames.Count)
-                OpenFromFile(fileNames[idx], startFrom0: true);
+                _ = OpenFromFile(fileNames[idx], startFrom0: false);
         }
 
         public List<string> GetFileNames(string fileName, out int idx)
@@ -939,7 +940,7 @@ namespace MultiPlayer
         private void BookmarkSetCommandExecute(object bookMarkName)
         {
             eBookmarkName name = (eBookmarkName)Enum.Parse(typeof(eBookmarkName), (string)bookMarkName);
-            Replay.BookmarkSet(name);
+            Replay.BookmarkSet(name, _player.Duration);
             _player._ctxMenu.IsOpen = false;
         }
 
@@ -991,7 +992,7 @@ namespace MultiPlayer
                     if (idx < 0) idx = 0;
                     if (idx >= fileNames.Count) idx = fileNames.Count - 1;
                         
-                    OpenFromFile(fileNames[idx], startFrom0: true);
+                    _ = OpenFromFile(fileNames[idx], startFrom0: false);
                 }
             }
             else
@@ -1117,15 +1118,20 @@ namespace MultiPlayer
                 UpdateReplayUI();
             }
 
-            public void BookmarkSet(eBookmarkName name)
+            public void BookmarkSet(eBookmarkName name, double duration)
             {
                 double delta = VM.Settings.ReplayPosB - VM.Settings.ReplayPosA;
                 if (delta < 1.0) delta = 10.0;
 
                 VM.Settings.BookmarkPositionSet(name, VM.Settings.Position);
 
-                if (name == eBookmarkName.A && VM.Settings.ReplayPosB - VM.Settings.ReplayPosA < 1.0)
-                    VM.Settings.ReplayPosB = VM.Settings.ReplayPosA + delta;
+                if (name == eBookmarkName.A)
+                {
+                    if (VM.Settings.ReplayPosB < 1.0) //not set yet
+                        VM.Settings.ReplayPosB = duration - 1.0; //end of file
+                    else if (VM.Settings.ReplayPosB - VM.Settings.ReplayPosA < 1.0)
+                        VM.Settings.ReplayPosB = duration - 1.0; //end of file
+                }
 
                 if (name == eBookmarkName.B && VM.Settings.ReplayPosB - VM.Settings.ReplayPosA < 1.0)
                     VM.Settings.ReplayPosA = VM.Settings.ReplayPosB - delta;

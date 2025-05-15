@@ -105,11 +105,11 @@ namespace MultiPlayer
 
             ReplayIsOn = settings.ReplayIsOn;
 
-            ReplayPosA = Math.Round(settings.ReplayPosA, 1);
-            ReplayPosB = Math.Round(settings.ReplayPosB, 1);
+            ReplayPosA = Math.Round(settings.ReplayPosA, 3);
+            ReplayPosB = Math.Round(settings.ReplayPosB, 3);
 
-            ReplayPosC = Math.Round(settings.ReplayPosC, 1);
-            ReplayPosD = Math.Round(settings.ReplayPosD, 1);
+            ReplayPosC = Math.Round(settings.ReplayPosC, 3);
+            ReplayPosD = Math.Round(settings.ReplayPosD, 3);
         }
 
         public override string ToString()
@@ -416,6 +416,9 @@ namespace MultiPlayer
             this.PlayerSettings = new List<OnePlayerSettings>();
             foreach(VideoPlayerUserControl v in videos)
             {
+                if (string.IsNullOrWhiteSpace(v.FileName))
+                    continue;
+
                 OnePlayerSettings s = new OnePlayerSettings(v);
                 RecentFile recentFile = MainWindow.FindOrCreateRecentFile(s.FileName);
                 recentFile.Update(s);
