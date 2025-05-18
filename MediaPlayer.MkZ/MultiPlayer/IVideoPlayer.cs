@@ -11,7 +11,7 @@ namespace MultiPlayer
 {
     public interface IVideoPlayer : INotifyPropertyChanged
     {
-        Action<IVideoPlayer> VideoStartedAction { get; set; }
+        Action<MediaElement> VideoStartedAction { get; set; }
 
         MediaState MediaState { get; }
         string FileName { get; }

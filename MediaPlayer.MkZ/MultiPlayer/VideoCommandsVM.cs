@@ -247,7 +247,7 @@ namespace MultiPlayer
             _player.LeftButtonDoubleClick = () => Maximize_Click(this, null);
 
             _player.VideoStartedAction = (player) => MediaPlayStarted(player);
-            _player.VideoEnded = (player) => MediaPlayEnded(player); 
+            _player.VideoEnded = (player) => MediaPlayEndedAsync(player); 
             _player.VideoFailed = (e, player) => MediaPlayFailed(e, player); 
         }
 
@@ -319,7 +319,13 @@ namespace MultiPlayer
             if (IsLoading)
                 return;
 
-            if (string.IsNullOrWhiteSpace(fileName) || !File.Exists(fileName))
+            if (string.IsNullOrWhiteSpace(fileName))
+                return;
+
+            if (fileName.StartsWith("file:///"))
+                fileName = fileName.Substring("file:///".Length).Replace('/', '\\');
+
+            if (!File.Exists(fileName))
                 return;
 
             UpdateRrecentFile(Settings); //update previous recent file
@@ -369,6 +375,8 @@ namespace MultiPlayer
             this.Title = System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(s.FileName)) + "/" + System.IO.Path.GetFileName(s.FileName);
             List<string> fileNames = this.GetFileNames(s.FileName, out int idx);
             this.FileIndex = $"{(idx+1)}/{fileNames.Count} ";
+
+            this.Update(s, pop, lockUpdate: false); //update settings before play()
 
             this.Play();
 
@@ -424,7 +432,7 @@ namespace MultiPlayer
             }
         }
 
-        private void MediaPlayStarted(IVideoPlayer player)
+        private void MediaPlayStarted(MediaElement player)
         {
             IsLoading = false;
             TimeSpan delta = _playSartTime.Elapsed;
@@ -432,14 +440,17 @@ namespace MultiPlayer
             _waitMediaOpenedEvent.TriggerEvent();
         }
 
-        private void MediaPlayEnded(MediaElement me)
+        private async Task MediaPlayEndedAsync(MediaElement player)
         {
             IsLoading = false;
 
-            string fileName = string.IsNullOrWhiteSpace(Settings.FileName) ? me.Source.ToString() : Settings.FileName;
-            
+            //when song is empty it is ended after next song started - ignore it
+            if (string.IsNullOrEmpty(player?.Source?.ToString()))
+                return;
+
             Stop();
             Settings.Position = 0;
+            await Task.Delay(100);
 
             switch (Settings.PlayMode)
             {
@@ -456,7 +467,7 @@ namespace MultiPlayer
                     break;
                 case ePlayMode.RepeatOne:
                 default:
-                    _ = OpenFromFile(fileName, startFrom0: true);
+                    _ = OpenFromFile(Settings.FileName, startFrom0: true);
                     break;
             }
         }
@@ -656,6 +667,8 @@ namespace MultiPlayer
 
         private void PlayPrev(string fileName)
         {
+            IsLoading = false; //reset 
+
             List<string> fileNames = GetFileNames(fileName, out int idx);
             if (fileNames.Count == 0)
                 return;
@@ -670,6 +683,9 @@ namespace MultiPlayer
         private Random _random = new Random();
         private void PlayNext(bool random = false, bool loop = false, bool startFrom0 = false)
         {
+            IsLoading = false; //reset 
+            Pause(true);
+
             List<string> fileNames = GetFileNames(Settings.FileName, out int idx);
             if (random)
             {
@@ -701,7 +717,7 @@ namespace MultiPlayer
                     file => Settings.SupportedVideoExtensions.Contains(System.IO.Path.GetExtension(file).ToLower()) || 
                             Settings.SupportedAudioExtensions.Contains(System.IO.Path.GetExtension(file).ToLower())).ToList();
             fileNames.Sort();
-            idx = fileNames.IndexOf(fileName);
+            idx = fileNames.IndexOf(fileName.Replace('/', '\\'));
 
             return fileNames;
         }
