@@ -5,6 +5,7 @@ using MkZ.WPF.PropertyGrid;
 using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
@@ -15,7 +16,7 @@ namespace MultiPlayer
     /// </summary>
     public partial class MainWindow : Window
     {
-        MultiPlayerSettings _settings = new MultiPlayerSettings();
+        static MultiPlayerSettings _settings = new MultiPlayerSettings();
         List<VideoPlayerUserControl> _videos = new List<VideoPlayerUserControl>();
 
         public static Dictionary<string, RecentFile> RecentFiles { get; } = new Dictionary<string, RecentFile>();
@@ -274,6 +275,13 @@ namespace MultiPlayer
                 return recentFile.IsFavorite;
 
             return false;
+        }
+
+        public static System.Windows.Media.Brush InactiveBackgroundBrush => GetBrush(_settings.InactiveBackgroundColor);
+
+        private static System.Windows.Media.Brush GetBrush(System.Drawing.Color c)
+        {
+            return new System.Windows.Media.SolidColorBrush(new System.Windows.Media.Color() { A = 255, R = c.R, G = c.G, B = c.B });
         }
 
         public static void UpdateRecentFile(string fileName, bool isFavorite)

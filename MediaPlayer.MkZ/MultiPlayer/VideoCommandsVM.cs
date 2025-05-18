@@ -319,6 +319,9 @@ namespace MultiPlayer
             if (IsLoading)
                 return;
 
+            if (string.IsNullOrWhiteSpace(fileName) || !File.Exists(fileName))
+                return;
+
             UpdateRrecentFile(Settings); //update previous recent file
 
             _player.Clear(); //reset all settings, retain volume, fit, playMode
@@ -429,9 +432,11 @@ namespace MultiPlayer
             _waitMediaOpenedEvent.TriggerEvent();
         }
 
-        private void MediaPlayEnded(IVideoPlayer player)
+        private void MediaPlayEnded(MediaElement me)
         {
             IsLoading = false;
+
+            string fileName = string.IsNullOrWhiteSpace(Settings.FileName) ? me.Source.ToString() : Settings.FileName;
             
             Stop();
             Settings.Position = 0;
@@ -451,7 +456,7 @@ namespace MultiPlayer
                     break;
                 case ePlayMode.RepeatOne:
                 default:
-                    _ = OpenFromFile(Settings.FileName, startFrom0: true);
+                    _ = OpenFromFile(fileName, startFrom0: true);
                     break;
             }
         }

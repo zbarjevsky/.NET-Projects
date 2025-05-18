@@ -466,7 +466,7 @@ namespace MultiPlayer
 
         public void SetBackColor(bool bActive)
         {
-            Brush color = bActive ? Brushes.Black : Brushes.DarkSlateBlue;
+            Brush color = bActive ? Brushes.Black : MainWindow.InactiveBackgroundBrush;
 
             if (VideoPlayerElement.Source != null)
             {

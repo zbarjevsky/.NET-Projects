@@ -320,6 +320,8 @@ namespace MultiPlayer
         public List<SplitterPos> RowsSizes { get; set; }
         [Description("Column Sizes"), Category(VID)]
         public List<SplitterPos> ColsSizes { get; set; }
+        [Description("Inactive Background Color"), Category(VID)]
+        public Color InactiveBackgroundColor { get; set; } = Color.DarkGray;
 
         [Description("Players Settings x8"), Category(VID)]
         public List<OnePlayerSettings> PlayerSettings { get; set; }
