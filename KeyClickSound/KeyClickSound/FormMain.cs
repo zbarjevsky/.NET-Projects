@@ -1,4 +1,5 @@
 using MkZ.Tools;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Media;
 using System.Reflection;
@@ -10,6 +11,10 @@ namespace KeyClickSound
     {
         string _settingsFileName = "KeySoundSettings.xml";
         public Settings Settings = new Settings();
+        private Dictionary<string, SoundPlayer> _players = new Dictionary<string, SoundPlayer>();
+        ConcurrentQueue<int> _keysQueue = new ConcurrentQueue<int>();
+        bool _isWorking = false;
+        private int _lastKeyCode = 0;
 
         public FormMain()
         {
@@ -26,6 +31,27 @@ namespace KeyClickSound
 
             if (Settings == null)
                 Settings = new Settings();
+
+            _isWorking = true;
+            Task.Factory.StartNew(async () => 
+            {
+                while (_isWorking)
+                {
+                    while (_keysQueue.Count > 3)
+                        _keysQueue.TryDequeue(out int vkDummyCode);
+
+                    if (_keysQueue.TryDequeue(out int vkCode))
+                    {
+                        Debug.WriteLine($"<-- Queue size: {_keysQueue.Count},  Code from queue: {(Keys)vkCode}");
+                        PlaySoundForKey(vkCode);
+                    }
+                    else
+                    {
+                        _lastKeyCode = 0;
+                        await Task.Delay(33);
+                    }
+                }
+            });
         }
 
         private void FormMain_Load(object sender, EventArgs e)
@@ -50,16 +76,34 @@ namespace KeyClickSound
                 m_listKeys.Items.Add(item);
             }
 
+            UpdateSettings();
+
             EnableButtons(false);
 
             KeyboardHook.Connect();
-            KeyboardHook.OnKeyPressed = (vkCode) => { Debug.WriteLine("Code: " + vkCode); PlaySoundForKey(vkCode); };
+            KeyboardHook.OnKeyPressed = (vkCode) => 
+            { 
+                Debug.WriteLine($"--> Queue Size: {_keysQueue.Count}, Key Code: {(Keys)vkCode}" );
+                if (vkCode != _lastKeyCode || _keysQueue.Count == 0)
+                {
+                    _lastKeyCode = vkCode;
+                    _keysQueue.Enqueue(vkCode);
+                }
+            };
         }
 
         private void FormMain_FormClosed(object sender, FormClosedEventArgs e)
         {
+            _isWorking = false;
+
             KeyboardHook.Disconnect();
 
+            UpdateSettings();
+            XmlHelper.Save(_settingsFileName, Settings);
+        }
+
+        private void UpdateSettings()
+        {
             Settings.Keys.Clear();
             for (int i = 0; i < m_listKeys.Items.Count; i++)
             {
@@ -68,8 +112,6 @@ namespace KeyClickSound
 
                 Settings.Keys.Add(new KeyPath() { Key = key, Path = path });
             }
-
-            XmlHelper.Save(_settingsFileName, Settings);
         }
 
         private void m_chkSoundOn_CheckedChanged(object sender, EventArgs e)
@@ -85,6 +127,7 @@ namespace KeyClickSound
                 string fileName = ofd.FileName;
                 ListViewItem item = m_listKeys.SelectedItems[0];
                 item.SubItems[1].Text = fileName;
+                UpdateSettings();
             }
         }
 
@@ -92,18 +135,7 @@ namespace KeyClickSound
         {
             ListViewItem item = m_listKeys.SelectedItems[0];
             string fileName = item.SubItems[1].Text;
-            if (!string.IsNullOrEmpty(fileName) && File.Exists(fileName))
-            {
-                try
-                {
-                    SoundPlayer snd = new SoundPlayer(fileName);
-                    snd.Play();
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Hand);
-                }
-            }
+            PlaySound(m_listKeys.SelectedIndices[0]);
         }
 
         private void m_btnClear_Click(object sender, EventArgs e)
@@ -165,6 +197,8 @@ namespace KeyClickSound
                     item.SubItems[subItemIndex].Text = files[0];
                 }
             }
+
+            UpdateSettings();
         }
         private int GetSubItemIndex(ListViewItem item, Point point)
         {
@@ -188,9 +222,9 @@ namespace KeyClickSound
         {
             System.Windows.Forms.Keys key = (System.Windows.Forms.Keys)vkCode;
 
-            for (int i = 0; i <= m_listKeys.Items.Count; i++)
+            for (int i = 0; i <= Settings.Keys.Count; i++)
             {
-                string keyText = m_listKeys.Items[i].SubItems[0].Text;
+                string keyText = Settings.Keys[i].Key;
                 if (keyText == key.ToString())
                 { 
                     return i; 
@@ -210,16 +244,18 @@ namespace KeyClickSound
 
         private void PlaySound(int listIndex)
         {
-            if (listIndex < 0 || listIndex >= m_listKeys.Items.Count) { return; }
+            if (listIndex < 0 || listIndex >= Settings.Keys.Count) { return; }
 
-            ListViewItem item = m_listKeys.Items[listIndex];
-            string fileName = item.SubItems[1].Text;
+            string fileName = Settings.Keys[listIndex].Path;
             if (!string.IsNullOrEmpty(fileName) && File.Exists(fileName))
             {
                 try
                 {
-                    SoundPlayer snd = new SoundPlayer(fileName);
-                    snd.Play();
+                    if (!_players.ContainsKey(fileName))
+                    {
+                        _players[fileName] = new SoundPlayer(fileName);
+                    }
+                    _players[fileName].Play();
                 }
                 catch (Exception ex)
                 {

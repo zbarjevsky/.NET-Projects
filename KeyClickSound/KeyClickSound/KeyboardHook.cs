@@ -44,7 +44,7 @@ namespace KeyClickSound
             if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN)
             {
                 int vkCode = Marshal.ReadInt32(lParam);
-                Console.WriteLine((Keys)vkCode);
+                Debug.WriteLine("Keybord Click: "+(Keys)vkCode);
                 OnKeyPressed(vkCode);
             }
             return CallNextHookEx(_hookID, nCode, wParam, lParam);
