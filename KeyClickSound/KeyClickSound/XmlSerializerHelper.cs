@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -14,14 +15,22 @@ namespace MkZ.Tools
 
         public static T Open<T>(string fileName) where T : class, new()
         {
-            using (StreamReader reader = new StreamReader(fileName, Encoding.UTF8, true, BUFFER_SIZE))
+            try
             {
-                using (TextReader txt = new StringReader(reader.ReadToEnd()))
+                using (StreamReader reader = new StreamReader(fileName, Encoding.UTF8, true, BUFFER_SIZE))
                 {
-                    XmlSerializer serializer = new XmlSerializer(typeof(T));
-                    return (T)serializer.Deserialize(txt);
+                    using (TextReader txt = new StringReader(reader.ReadToEnd()))
+                    {
+                        XmlSerializer serializer = new XmlSerializer(typeof(T));
+                        return (T)serializer.Deserialize(txt);
+                    }
                 }
             }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Error opening: {fileName}, Error: {ex.Message}");
+                return null;
+            }        
         }
 
         public static void Save<T>(string fileName, T o) where T : class, new()

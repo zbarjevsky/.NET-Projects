@@ -1,13 +1,31 @@
+using MkZ.Tools;
 using System.Diagnostics;
 using System.Media;
+using System.Reflection;
+using System.Windows.Forms;
 
 namespace KeyClickSound
 {
     public partial class FormMain : Form
     {
+        string _settingsFileName = "KeySoundSettings.xml";
+        public Settings Settings = new Settings();
+
         public FormMain()
         {
             InitializeComponent();
+
+            var assemblyName = Assembly.GetExecutingAssembly().GetName().Name;
+            var assemblyPath = Assembly.GetExecutingAssembly().Location;
+
+            _settingsFileName = Path.Combine(Path.GetDirectoryName(assemblyPath), _settingsFileName);
+            if (File.Exists(_settingsFileName))
+            {
+                Settings = XmlHelper.Open<Settings>(_settingsFileName);
+            }
+
+            if (Settings == null)
+                Settings = new Settings();
         }
 
         private void FormMain_Load(object sender, EventArgs e)
@@ -22,7 +40,13 @@ namespace KeyClickSound
             foreach (string key in keyNames)
             {
                 ListViewItem item = new ListViewItem(key);
-                item.SubItems.Add("");
+
+                var keySetting = Settings.Keys.FirstOrDefault(k => k.Key == key);
+                if (keySetting != null)
+                    item.SubItems.Add(keySetting.Path);
+                else
+                    item.SubItems.Add("");
+
                 m_listKeys.Items.Add(item);
             }
 
@@ -35,6 +59,17 @@ namespace KeyClickSound
         private void FormMain_FormClosed(object sender, FormClosedEventArgs e)
         {
             KeyboardHook.Disconnect();
+
+            Settings.Keys.Clear();
+            for (int i = 0; i < m_listKeys.Items.Count; i++)
+            {
+                string key = m_listKeys.Items[i].SubItems[0].Text;
+                string path = m_listKeys.Items[i].SubItems[1].Text;
+
+                Settings.Keys.Add(new KeyPath() { Key = key, Path = path });
+            }
+
+            XmlHelper.Save(_settingsFileName, Settings);
         }
 
         private void m_chkSoundOn_CheckedChanged(object sender, EventArgs e)
@@ -166,8 +201,11 @@ namespace KeyClickSound
 
         private void PlaySoundForKey(int vkCode)
         {
-            int listIndex = GetListIndexForKey(vkCode);
-            PlaySound(listIndex);
+            if (m_chkSoundOn.Checked)
+            {
+                int listIndex = GetListIndexForKey(vkCode);
+                PlaySound(listIndex);
+            }
         }
 
         private void PlaySound(int listIndex)

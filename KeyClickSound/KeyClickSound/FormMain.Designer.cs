@@ -46,6 +46,8 @@
             // m_chkSoundOn
             // 
             m_chkSoundOn.AutoSize = true;
+            m_chkSoundOn.Checked = true;
+            m_chkSoundOn.CheckState = CheckState.Checked;
             m_chkSoundOn.Location = new Point(24, 15);
             m_chkSoundOn.Name = "m_chkSoundOn";
             m_chkSoundOn.Size = new Size(108, 19);
