@@ -266,8 +266,11 @@ namespace ClipboardManager
 				LogMethodEx(true, "FormClipboard", "MoveMouseIfInactive",
 					$"*** User Idle Time: {idleTime}");
 
-				User32.SimulateMouseMove(3);
-				User32.SimulateMouseMove(-3);
+				User32.MouseInput.SimulateMouseMove(3);
+				User32.MouseInput.SimulateMouseMove(-3);
+				//User32.KeyboardInput.PressKey(User32.KeyboardInput.VK_CONTROL);
+				//User32.KeyboardInput.SendKeyScanCode(User32.KeyboardInput.SCANCODE_LCTRL, keyUp: false); // Key down
+				//User32.KeyboardInput.SendKeyScanCode(User32.KeyboardInput.SCANCODE_LCTRL, keyUp: true);  // Key up
 			}
         }
 

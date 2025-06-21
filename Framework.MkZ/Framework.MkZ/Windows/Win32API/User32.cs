@@ -371,10 +371,6 @@ namespace MkZ.Windows.Win32API
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern int SendMessage(HWND hwnd, int wMsg, int wParam, StringBuilder lParam);
 
-
-        [DllImport("user32.dll", SetLastError = true)]
-        public static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
-
         [DllImport("User32.dll")]
         public static extern int GetClassName(HWND hWnd, StringBuilder lpClassName, int nMaxCount);
 
@@ -789,35 +785,135 @@ namespace MkZ.Windows.Win32API
         [DllImport("user32.dll")]
         public static extern int SetWindowLong(IntPtr hWnd, WindowLongIndex nIndex, WindowStylesEx dwNewLong);
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct INPUT
+        public class MouseInput
         {
-            public uint type;
-            public MOUSEINPUT mi;
+            [StructLayout(LayoutKind.Sequential)]
+            struct INPUT
+            {
+                public uint type;
+                public MOUSEINPUT mi;
+            }
+
+            [StructLayout(LayoutKind.Sequential)]
+            struct MOUSEINPUT
+            {
+                public int dx;
+                public int dy;
+                public uint mouseData;
+                public uint dwFlags;
+                public uint time;
+                public IntPtr dwExtraInfo;
+            }
+
+            [DllImport("user32.dll", SetLastError = true)]
+            static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
+
+            const int INPUT_MOUSE = 0;
+            const uint MOUSEEVENTF_MOVE = 0x0001;
+            public static void SimulateMouseMove(int deltaX = 12)
+            {
+                INPUT[] inputs = new INPUT[1];
+                inputs[0].type = INPUT_MOUSE;
+                inputs[0].mi.dx = deltaX; // small move
+                inputs[0].mi.dy = 0;
+                inputs[0].mi.dwFlags = MOUSEEVENTF_MOVE;
+
+                SendInput(1, inputs, Marshal.SizeOf(typeof(INPUT)));
+            }
         }
 
-        [StructLayout(LayoutKind.Sequential)]
-        public struct MOUSEINPUT
+        public class KeyboardInput
         {
-            public int dx;
-            public int dy;
-            public uint mouseData;
-            public uint dwFlags;
-            public uint time;
-            public IntPtr dwExtraInfo;
-        }
+            [StructLayout(LayoutKind.Sequential)]
+            struct INPUT
+            {
+                public uint type;
+                public InputUnion U;
+            }
 
-        const int INPUT_MOUSE = 0;
-        const uint MOUSEEVENTF_MOVE = 0x0001;
-        public static void SimulateMouseMove(int deltaX = 12)
-        {
-            INPUT[] inputs = new INPUT[1];
-            inputs[0].type = INPUT_MOUSE;
-            inputs[0].mi.dx = deltaX; // small move
-            inputs[0].mi.dy = 0;
-            inputs[0].mi.dwFlags = MOUSEEVENTF_MOVE;
+            [StructLayout(LayoutKind.Explicit)]
+            struct InputUnion
+            {
+                [FieldOffset(0)] public KEYBDINPUT ki;
+            }
 
-            SendInput(1, inputs, Marshal.SizeOf(typeof(INPUT)));
+            [StructLayout(LayoutKind.Sequential)]
+            struct KEYBDINPUT
+            {
+                public ushort wVk;
+                public ushort wScan;
+                public uint dwFlags;
+                public uint time;
+                public IntPtr dwExtraInfo;
+            }
+
+            const uint INPUT_KEYBOARD = 1;
+            const uint KEYEVENTF_KEYUP = 0x0002;
+            const uint KEYEVENTF_SCANCODE = 0x0008;
+
+            public const ushort VK_CONTROL = 0x11;
+            public const ushort VK_LALT = 0xA4;
+            public const ushort VK_RALT = 0xA5;
+
+            // Scan code for Left Ctrl is 0x1D
+            public const ushort SCANCODE_LCTRL = 0x1D;
+            public const ushort SCANCODE_LALT = 0x38;
+            public const ushort SCANCODE_RALT = 0x38 + 0xE0;
+
+            [DllImport("user32.dll", SetLastError = true)]
+            static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
+
+            public static void SendKeyScanCode(ushort scanCode, bool keyUp = false)
+            {
+                INPUT input = new INPUT
+                {
+                    type = INPUT_KEYBOARD,
+                    U = new InputUnion
+                    {
+                        ki = new KEYBDINPUT
+                        {
+                            wVk = 0,
+                            wScan = scanCode,
+                            dwFlags = KEYEVENTF_SCANCODE | (keyUp ? KEYEVENTF_KEYUP : 0),
+                            dwExtraInfo = IntPtr.Zero
+                        }
+                    }
+                };
+
+                SendInput(1, new INPUT[] { input }, Marshal.SizeOf(typeof(INPUT)));
+            }
+
+            public static void PressKey(ushort keyCode)
+            {
+                INPUT inputDown = new INPUT
+                {
+                    type = INPUT_KEYBOARD,
+                    U = new InputUnion
+                    {
+                        ki = new KEYBDINPUT
+                        {
+                            wVk = keyCode,
+                            dwFlags = 0
+                        }
+                    }
+                };
+
+                INPUT inputUp = new INPUT
+                {
+                    type = INPUT_KEYBOARD,
+                    U = new InputUnion
+                    {
+                        ki = new KEYBDINPUT
+                        {
+                            wVk = keyCode,
+                            dwFlags = KEYEVENTF_KEYUP
+                        }
+                    }
+                };
+
+                INPUT[] inputs = new INPUT[] { inputDown, inputUp };
+                SendInput((uint)inputs.Length, inputs, Marshal.SizeOf(typeof(INPUT)));
+            }
         }
 
         [Flags]
