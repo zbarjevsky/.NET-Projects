@@ -139,6 +139,7 @@
     <Compile Include="Windows\MouseHook.cs" />
     <Compile Include="Windows\NETSoundPlayer.cs" />
     <Compile Include="Windows\ObservableRangeCollection.cs" />
+    <Compile Include="Windows\UserActivityDetector.cs" />
     <Compile Include="Windows\Win32API\COLORREF.cs" />
     <Compile Include="Windows\Win32API\FieldValueHash.cs" />
     <Compile Include="Windows\Win32API\HRESULT.cs" />

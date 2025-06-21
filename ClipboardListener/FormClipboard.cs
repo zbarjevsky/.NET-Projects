@@ -14,6 +14,8 @@ using ClipboardManager.Utils;
 using MkZ.WPF.MessageBox;
 using MkZ.Windows.Win32API;
 using MkZ.Tools;
+using MkZ.Windows;
+using System.Threading.Tasks;
 
 namespace ClipboardManager
 {
@@ -156,7 +158,7 @@ namespace ClipboardManager
             RebuildEncodingsMenu();
 
 			m_TimerReconnect.Tick += new EventHandler(m_TimerReconnect_Tick);
-			m_TimerReconnect.Interval = TIMEOUT; //~15 min
+			m_TimerReconnect.Interval = 3000; 
 			if ( m_Settings.globalSettings.IsAutoReconnect ) 
 				m_TimerReconnect.Start();
 
@@ -189,7 +191,7 @@ namespace ClipboardManager
 			NonStuckMouse.Instance.Dispose();
             User32Clipboard.ChangeClipboardChain(this.Handle, m_NextClipboardViewer);
 
-			Save();
+			Save(m_ToolStripMenuItem_View_SnapShot.Checked, m_ToolStripMenuItem_View_Debug.Checked);
 		}//end FormClipboard_FormClosing
 
 		private Bitmap m_bmpExit, m_bmpClose, m_bmpAbout;
@@ -230,23 +232,19 @@ namespace ClipboardManager
 			{
 				TimeSpan sp = DateTime.Now - m_TimeStamp;
                 bool bReconnect = (sp.TotalMilliseconds > 1.5*TIMEOUT);
-
-                if ( bReconnect )
+				if (bReconnect)
+				{
+                    LogMethodEx(true, "FormClipboard", "m_TimerReconnect_Tick", 
+						$"*** Reconnect is Reconnect == true, Timeout: {sp}");
+                    
 					m_contextMenuStripTrayIcon_Reconnect_Click(sender, e);
+				}
+
+				MoveMouseIfInactive();
 
                 m_contextMenuStripTrayIcon_UAC_Click(null, e);
 
-                if ( m_bModified )
-				{
-                    LogMethodEx(true, "FormClipboard", "m_TimerReconnect_Tick", "SaveInThread()");
-					m_Settings.globalSettings.ShowSnapShot = m_ToolStripMenuItem_View_SnapShot.Checked;
-					Thread thr = new Thread(new ThreadStart(Save));
-                    thr.IsBackground = false;
-					thr.Start();
-				}//end if
-                
-				LogMethodEx(true, "FormClipboard", "m_TimerReconnect_Tick", "*** Reconnect is Active == {0}, Timeout: {1}",
-                    bReconnect, sp.ToString());
+                SaveAsync();
 
 				GC.Collect();
 			}//end try
@@ -257,16 +255,45 @@ namespace ClipboardManager
 			}//end catch		
 		}//end m_TimerReconnect_Tick
 
-		private void Save()
+        private void MoveMouseIfInactive()
+        {
+            if(!m_Settings.globalSettings.MouseMoveIfInactive)
+				return;
+
+			TimeSpan idleTime = UserInactivityDetector.GetIdleTime();
+			if (idleTime.TotalMinutes > 5)
+			{
+				LogMethodEx(true, "FormClipboard", "MoveMouseIfInactive",
+					$"*** User Idle Time: {idleTime}");
+
+				User32.SimulateMouseMove(3);
+				User32.SimulateMouseMove(-3);
+			}
+        }
+
+		private DateTime _savedTime = DateTime.MinValue;
+		private void SaveAsync()
 		{
-			m_Settings.globalSettings.ShowSnapShot = m_ToolStripMenuItem_View_SnapShot.Checked;
-			m_Settings.globalSettings.ShowDebug = m_ToolStripMenuItem_View_Debug.Checked;
+			TimeSpan elapsed = DateTime.Now - _savedTime;
+            if (m_bModified && elapsed.TotalMinutes > 15)
+            {
+                LogMethodEx(true, "FormClipboard", "SaveAsync", "SaveInThread()");
+                m_Settings.globalSettings.ShowSnapShot = m_ToolStripMenuItem_View_SnapShot.Checked;
+                Task.Run(() => Save(m_ToolStripMenuItem_View_SnapShot.Checked, m_ToolStripMenuItem_View_Debug.Checked));
+            }//end if
+        }
+
+        private void Save(bool showSnapshot, bool showDebugPane)
+		{
+			m_Settings.globalSettings.ShowSnapShot = showSnapshot;
+			m_Settings.globalSettings.ShowDebug = showDebugPane;
 
 			try
 			{
                 LogMethod("Save", "Saving: {0}", m_sHistoryFileName);
 				m_Settings.Save(m_sHistoryFileName, m_sSettingsFileName, 
                     m_ClipboardListMain, m_ClipboardListFavorites);
+				_savedTime = DateTime.Now;
 				m_bModified = false;
 			}//end try
 			catch ( Exception err )

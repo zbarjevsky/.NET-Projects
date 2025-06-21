@@ -371,6 +371,10 @@ namespace MkZ.Windows.Win32API
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         public static extern int SendMessage(HWND hwnd, int wMsg, int wParam, StringBuilder lParam);
 
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern uint SendInput(uint nInputs, INPUT[] pInputs, int cbSize);
+
         [DllImport("User32.dll")]
         public static extern int GetClassName(HWND hWnd, StringBuilder lpClassName, int nMaxCount);
 
@@ -688,6 +692,10 @@ namespace MkZ.Windows.Win32API
         public static extern bool SetCursorPos(int X, int Y);
 
         [DllImport("user32.dll")]
+        [return: MarshalAs(UnmanagedType.Bool)]
+        public static extern bool GetCursorPos(out POINT lpPoint);
+
+        [DllImport("user32.dll")]
         public static extern IntPtr MonitorFromWindow(HandleRef handle, int flags);
 
         [StructLayout(LayoutKind.Sequential, Pack = 4, CharSet = CharSet.Auto)]
@@ -780,6 +788,37 @@ namespace MkZ.Windows.Win32API
 
         [DllImport("user32.dll")]
         public static extern int SetWindowLong(IntPtr hWnd, WindowLongIndex nIndex, WindowStylesEx dwNewLong);
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct INPUT
+        {
+            public uint type;
+            public MOUSEINPUT mi;
+        }
+
+        [StructLayout(LayoutKind.Sequential)]
+        public struct MOUSEINPUT
+        {
+            public int dx;
+            public int dy;
+            public uint mouseData;
+            public uint dwFlags;
+            public uint time;
+            public IntPtr dwExtraInfo;
+        }
+
+        const int INPUT_MOUSE = 0;
+        const uint MOUSEEVENTF_MOVE = 0x0001;
+        public static void SimulateMouseMove(int deltaX = 12)
+        {
+            INPUT[] inputs = new INPUT[1];
+            inputs[0].type = INPUT_MOUSE;
+            inputs[0].mi.dx = deltaX; // small move
+            inputs[0].mi.dy = 0;
+            inputs[0].mi.dwFlags = MOUSEEVENTF_MOVE;
+
+            SendInput(1, inputs, Marshal.SizeOf(typeof(INPUT)));
+        }
 
         [Flags]
         public enum WindowStylesEx : uint
