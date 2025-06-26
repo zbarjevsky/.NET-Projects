@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("MouseMoverMkZ")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Veeva")]
+[assembly: AssemblyCompany("MkZ")]
 [assembly: AssemblyProduct("MouseMoverMkZ")]
-[assembly: AssemblyCopyright("Copyright © Veeva 2025")]
+[assembly: AssemblyCopyright("Copyright © MkZ 2025")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
