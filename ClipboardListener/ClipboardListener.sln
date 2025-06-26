@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30128.74
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.36105.23 d17.13
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ClipboardListener", "ClipboardListener.csproj", "{C5C9C052-8924-42E9-9658-8380640F0464}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Framework.MkZ", "..\Framework.MkZ\Framework.MkZ\Framework.MkZ.csproj", "{768AF4B8-5EDD-4196-97AE-DBC1589DD426}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MouseMoverMkZ", "..\MouseMoverMkZ\MouseMoverMkZ.csproj", "{EE6050D1-CBFC-4311-80C2-C7C87E6CC5F8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{768AF4B8-5EDD-4196-97AE-DBC1589DD426}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{768AF4B8-5EDD-4196-97AE-DBC1589DD426}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{768AF4B8-5EDD-4196-97AE-DBC1589DD426}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EE6050D1-CBFC-4311-80C2-C7C87E6CC5F8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EE6050D1-CBFC-4311-80C2-C7C87E6CC5F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EE6050D1-CBFC-4311-80C2-C7C87E6CC5F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EE6050D1-CBFC-4311-80C2-C7C87E6CC5F8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
