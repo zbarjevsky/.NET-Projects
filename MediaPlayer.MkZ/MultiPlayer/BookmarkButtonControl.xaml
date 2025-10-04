@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="MultiPlayer.BookmarkButtonControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MultiPlayer"
+             mc:Ignorable="d" 
+             x:Name="root">
+    <Grid Background="Transparent">
+        <StackPanel>
+            <Button x:Name="_btn_Go"
+                    Margin="0" Padding="-2" Height="20" Width="20" 
+                    Background="{Binding ActiveBrush, ElementName=root, FallbackValue=White}" 
+                    Command="{Binding GotoCommand, ElementName=root}" CommandParameter="{Binding CommandParameter, ElementName=root}"
+                    ToolTip="{Binding TooltipText_GO, ElementName=root, FallbackValue='Bookmark Tooltip'}">
+                <Label Content="{Binding Text, ElementName=root, FallbackValue='0'}" FontSize="10" FontWeight="Normal" />
+            </Button>
+            <Button x:Name="_btn_Set" Margin="0" Padding="0,-8,0,-4" Height="12" 
+                    Command="{Binding SetCommand, ElementName=root}" CommandParameter="{Binding CommandParameter, ElementName=root}"
+                    ToolTip="{Binding TooltipText_SET, ElementName=root, FallbackValue='Bookmark Tooltip'}">
+                <StackPanel Orientation="Horizontal" ClipToBounds="True">
+                    <Label Content="⏷" FontSize="8" FontWeight="Normal" IsHitTestVisible="False"/>
+                </StackPanel>
+                <Button.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="GoTo Bookmark 2" Icon="2" 
+                                  Command="{Binding GotoCommand, ElementName=root}" CommandParameter="{Binding CommandParameter, ElementName=root}"/>
+                        <Separator/>
+                        <MenuItem Header="Clear Bookmark 2" Click="ReplayClear_Click" Icon="null"/>
+                        <MenuItem Header="Set Bookmark 2" Icon="2" 
+                                  Command="{Binding SetCommand, ElementName=root}" CommandParameter="{Binding CommandParameter, ElementName=root}"/>
+                    </ContextMenu>
+                </Button.ContextMenu>
+            </Button>
+        </StackPanel>
+
+    </Grid>
+</UserControl>

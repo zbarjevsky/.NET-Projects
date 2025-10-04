@@ -20,7 +20,6 @@
              d:DesignHeight="450" d:DesignWidth="800">
     <UserControl.Resources>
         <local:SelectedIndexToIconTextConverter x:Key="SelectedIndexToIconTextConverter"/>
-        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
         <wpf:InverseVisibilityConverter x:Key="InverseVisConverter" />
         
         <Style TargetType="Button" x:Key="SpecialButton" >

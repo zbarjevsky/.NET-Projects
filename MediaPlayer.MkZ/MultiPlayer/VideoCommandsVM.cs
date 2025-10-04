@@ -263,6 +263,7 @@ namespace MultiPlayer
                 _isInUpdate = true;
 
             Settings.Update(s);
+            NotifyPropertyChanged(nameof(Settings));
 
             _cmd._volume.Value = s.Volume * 1000.0;
             _cmd._position.Maximum = s.Duration;
@@ -963,6 +964,7 @@ namespace MultiPlayer
             eBookmarkName name = (eBookmarkName)Enum.Parse(typeof(eBookmarkName), (string)bookMarkName);
             Replay.BookmarkSet(name, _player.Duration);
             _player._ctxMenu.IsOpen = false;
+            NotifyPropertyChanged(nameof(Settings));
         }
 
         private void BookmarkGoToCommandExecute(object bookMarkName)
@@ -1091,19 +1093,24 @@ namespace MultiPlayer
             //set ticks positions and color if active
             private void UpdateTicks()
             {
-                UpdateTick(VM._cmd._lineA, VM._cmd._btnA_Go, VM.Settings.ReplayPosA, IsReplayChecked ? Brushes.Lime : Brushes.AliceBlue);
-                UpdateTick(VM._cmd._lineB, VM._cmd._btnB_Go, VM.Settings.ReplayPosB, IsReplayChecked ? Brushes.Lime : Brushes.AliceBlue);
+                UpdateTick(VM._cmd._lineA, VM.Settings.ReplayPosA, IsReplayChecked ? Brushes.Lime : Brushes.AliceBlue);
+                UpdateTick(VM._cmd._lineB, VM.Settings.ReplayPosB, IsReplayChecked ? Brushes.Lime : Brushes.AliceBlue);
 
-                UpdateTick(VM._cmd._lineC, VM._cmd._btnC_Go, VM.Settings.ReplayPosC, Brushes.Pink);
-                UpdateTick(VM._cmd._lineD, VM._cmd._btnD_Go, VM.Settings.ReplayPosD, Brushes.Yellow);
+                UpdateTick(VM._cmd._lineC, VM.Settings.ReplayPosC, BookmarkColors.BookmarkBrush1);
+                UpdateTick(VM._cmd._lineD, VM.Settings.ReplayPosD, BookmarkColors.BookmarkBrush2);
+                UpdateTick(VM._cmd._lineE, VM.Settings.ReplayPosE, BookmarkColors.BookmarkBrush3);
+                UpdateTick(VM._cmd._lineF, VM.Settings.ReplayPosF, BookmarkColors.BookmarkBrush4);
+                UpdateTick(VM._cmd._lineG, VM.Settings.ReplayPosG, BookmarkColors.BookmarkBrush5);
+                UpdateTick(VM._cmd._lineH, VM.Settings.ReplayPosH, BookmarkColors.BookmarkBrush6);
+                UpdateTick(VM._cmd._lineI, VM.Settings.ReplayPosI, BookmarkColors.BookmarkBrush7);
+                UpdateTick(VM._cmd._lineJ, VM.Settings.ReplayPosJ, BookmarkColors.BookmarkBrush8);
+                UpdateTick(VM._cmd._lineK, VM.Settings.ReplayPosK, BookmarkColors.BookmarkBrush9);
             }
 
-            private void UpdateTick(Line line, System.Windows.Controls.Button btn_Go, double position, System.Windows.Media.Brush stroke)
+            private void UpdateTick(Line line, double position, System.Windows.Media.Brush stroke)
             {
                 if (position > 0)
                 {
-                    btn_Go.ToolTip = $"GoTo: {SecondsToString(position)}";
-
                     line.Visibility = Visibility.Visible;
 
                     double center = line.StrokeThickness / 2;
@@ -1114,7 +1121,6 @@ namespace MultiPlayer
                 }
                 else
                 {
-                    btn_Go.ToolTip = "Not set";
                     line.Visibility = Visibility.Collapsed;
                 }
             }
@@ -1177,6 +1183,13 @@ namespace MultiPlayer
                 VM.Settings.BookmarkPositionSet(eBookmarkName.B, 0.0);
                 VM.Settings.BookmarkPositionSet(eBookmarkName.C, 0.0);
                 VM.Settings.BookmarkPositionSet(eBookmarkName.D, 0.0);
+                VM.Settings.BookmarkPositionSet(eBookmarkName.E, 0.0);
+                VM.Settings.BookmarkPositionSet(eBookmarkName.F, 0.0);
+                VM.Settings.BookmarkPositionSet(eBookmarkName.G, 0.0);
+                VM.Settings.BookmarkPositionSet(eBookmarkName.H, 0.0);
+                VM.Settings.BookmarkPositionSet(eBookmarkName.I, 0.0);
+                VM.Settings.BookmarkPositionSet(eBookmarkName.J, 0.0);
+                VM.Settings.BookmarkPositionSet(eBookmarkName.K, 0.0);
 
                 UpdateReplayUI();
                 VM.BookmarkGoToCommand.RefreshBoundControls();

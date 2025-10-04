@@ -27,5 +27,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
     </Application.Resources>
 </Application>

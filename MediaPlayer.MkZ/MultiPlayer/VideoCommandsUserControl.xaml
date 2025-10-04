@@ -8,9 +8,49 @@
              IsVisibleChanged="UserControl_IsVisibleChanged"
              mc:Ignorable="d" 
              d:DesignWidth="800">
+    <UserControl.Resources>
+        <local:BookmarkColors x:Key="BookmarkColors" />
+    </UserControl.Resources>
     <ScrollViewer x:Name="_scroll" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
         <Grid Margin="0">
-            <WrapPanel x:Name="_wrapPanel" Orientation="Horizontal" HorizontalAlignment="Stretch" >
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center"
+                        Visibility="{Binding IsChecked, ElementName=btnMoreBookmarks, Converter={StaticResource BoolToVisibilityConverter}}">
+                <StackPanel.Background>
+                    <SolidColorBrush Color="SlateGray" Opacity="0.8" />
+                </StackPanel.Background>
+                <local:BookmarkButtonControl Margin="2" Text="1" ActiveBrush="{Binding BookmarkBrush1, Source={StaticResource BookmarkColors}}"
+                                             Position="{Binding Settings.ReplayPosC}"
+                                             CommandParameter="C" GotoCommand="{Binding BookmarkGoToCommand}" SetCommand="{Binding BookmarkSetCommand}" />
+                <local:BookmarkButtonControl Margin="2" Text="2" ActiveBrush="{Binding BookmarkBrush2, Source={StaticResource BookmarkColors}}" 
+                                             Position="{Binding Settings.ReplayPosD}"
+                                             CommandParameter="D" GotoCommand="{Binding BookmarkGoToCommand}" SetCommand="{Binding BookmarkSetCommand}" />
+                <local:BookmarkButtonControl Margin="2" Text="3" ActiveBrush="{Binding BookmarkBrush3, Source={StaticResource BookmarkColors}}" 
+                                             Position="{Binding Settings.ReplayPosE}"
+                                             CommandParameter="E" GotoCommand="{Binding BookmarkGoToCommand}" SetCommand="{Binding BookmarkSetCommand}" />
+                <local:BookmarkButtonControl Margin="2" Text="4" ActiveBrush="{Binding BookmarkBrush4, Source={StaticResource BookmarkColors}}" 
+                                             Position="{Binding Settings.ReplayPosF}"
+                                             CommandParameter="F" GotoCommand="{Binding BookmarkGoToCommand}" SetCommand="{Binding BookmarkSetCommand}" />
+                <local:BookmarkButtonControl Margin="2" Text="5" ActiveBrush="{Binding BookmarkBrush5, Source={StaticResource BookmarkColors}}" 
+                                             Position="{Binding Settings.ReplayPosG}"
+                                             CommandParameter="G" GotoCommand="{Binding BookmarkGoToCommand}" SetCommand="{Binding BookmarkSetCommand}" />
+                <local:BookmarkButtonControl Margin="2" Text="6" ActiveBrush="{Binding BookmarkBrush6, Source={StaticResource BookmarkColors}}" 
+                                             Position="{Binding Settings.ReplayPosH}"
+                                             CommandParameter="H" GotoCommand="{Binding BookmarkGoToCommand}" SetCommand="{Binding BookmarkSetCommand}" />
+                <local:BookmarkButtonControl Margin="2" Text="7" ActiveBrush="{Binding BookmarkBrush7, Source={StaticResource BookmarkColors}}" 
+                                             Position="{Binding Settings.ReplayPosI}"
+                                             CommandParameter="I" GotoCommand="{Binding BookmarkGoToCommand}" SetCommand="{Binding BookmarkSetCommand}" />
+                <local:BookmarkButtonControl Margin="2" Text="8" ActiveBrush="{Binding BookmarkBrush8, Source={StaticResource BookmarkColors}}" 
+                                             Position="{Binding Settings.ReplayPosJ}"
+                                             CommandParameter="J" GotoCommand="{Binding BookmarkGoToCommand}" SetCommand="{Binding BookmarkSetCommand}" />
+                <local:BookmarkButtonControl Margin="2" Text="9" ActiveBrush="{Binding BookmarkBrush9, Source={StaticResource BookmarkColors}}" 
+                                             Position="{Binding Settings.ReplayPosK}"
+                                             CommandParameter="K" GotoCommand="{Binding BookmarkGoToCommand}" SetCommand="{Binding BookmarkSetCommand}" />
+            </StackPanel>
+            <WrapPanel Grid.Row="1" x:Name="_wrapPanel" Orientation="Horizontal" HorizontalAlignment="Stretch" >
                 <WrapPanel.Background>
                     <SolidColorBrush Color="SlateGray" Opacity="0.8" />
                 </WrapPanel.Background>
@@ -42,69 +82,26 @@
                         <ComboBoxItem Content="FitWindow" />
                         <ComboBoxItem Content="FitHeight" />
                     </ComboBox>
-                    <StackPanel>
-                        <Button x:Name="_btnC_Go" ToolTip="Go To Bookmark(1) Position&#x0a;Keyboard Set:&#x09;Ctrl+1&#x0a;Keyboard GoTo:&#x09;1"  
-                                Margin="2,2,2,0" Padding="-2" Height="20" Width="20"
-                                Background="MistyRose"
-                                Command="{Binding BookmarkGoToCommand}" CommandParameter="C">
-                            <Label Content="1" FontSize="10" FontWeight="Normal" />
-                        </Button>
-                        <Button x:Name="_btnC_Set" ToolTip="Set Bookmark(1) Position&#x09;Ctrl+1" 
-                                Margin="2,0,2,2" Padding="0,-8,0,-4" Height="12" 
-                                Command="{Binding BookmarkSetCommand}" CommandParameter="C">
-                            <Label Content="⏷" FontSize="8" FontWeight="Normal" />
-                        </Button>
-                    </StackPanel>
-                    <StackPanel>
-                        <Button x:Name="_btnD_Go" ToolTip="GoTo Bookmark(2) Position&#x0a;Keyboard Set:&#x09;Ctrl+2&#x0a;Keyboard GoTo:&#x09;2" 
-                                Margin="2,2,2,0" Padding="-2" Height="20" Width="20" 
-                                Background="LightYellow"
-                                Command="{Binding BookmarkGoToCommand}" CommandParameter="D">
-                            <Label Content="2" FontSize="10" FontWeight="Normal" />
-                        </Button>
-                        <Button x:Name="_btnD_Set" ToolTip="Set Bookmark(2) Position&#x09;Ctrl+2" Margin="2,0,2,2" Padding="0,-8,0,-4" Height="12" 
-                                Command="{Binding BookmarkSetCommand}" CommandParameter="D">
-                            <Label Content="⏷" FontSize="8" FontWeight="Normal" />
-                            <Button.ContextMenu>
-                                <ContextMenu>
-                                    <MenuItem Header="GoTo Bookmark 2" Icon="2" Command="{Binding BookmarkGoToCommand}" CommandParameter="D"/>
-                                    <Separator/>
-                                    <MenuItem Header="Clear Bookmark 2" Click="ReplayClearD_Click" Icon="null"/>
-                                    <MenuItem Header="Set Bookmark 2" Icon="2" Command="{Binding BookmarkSetCommand}" CommandParameter="D"/>
-                                </ContextMenu>
-                            </Button.ContextMenu>
-
-                        </Button>
-                    </StackPanel>
-                     <ToggleButton ToolTip="{Binding Replay.ReplayToolTip, FallbackValue='Replay Last N seconds'}" Margin="2" Padding="2" 
+                   <local:BookmarkButtonControl Margin="2" Text="1" ActiveBrush="{Binding BookmarkBrush1, Source={StaticResource BookmarkColors}}"
+                                             Position="{Binding Settings.ReplayPosC}"
+                                             CommandParameter="C" GotoCommand="{Binding BookmarkGoToCommand}" SetCommand="{Binding BookmarkSetCommand}" />
+                    <local:BookmarkButtonControl Margin="2" Text="2" ActiveBrush="{Binding BookmarkBrush2, Source={StaticResource BookmarkColors}}" 
+                                             Position="{Binding Settings.ReplayPosD}"
+                                             CommandParameter="D" GotoCommand="{Binding BookmarkGoToCommand}" SetCommand="{Binding BookmarkSetCommand}" />
+                    <ToggleButton x:Name="btnMoreBookmarks" Margin="2" IsChecked="False">
+                        <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE97B;"/>
+                    </ToggleButton>
+                    <ToggleButton ToolTip="{Binding Replay.ReplayToolTip, FallbackValue='Replay Last N seconds'}" Margin="2" Padding="2" 
                                   Click="ReplayToggle_Click" 
                                   IsChecked="{Binding Replay.IsReplayChecked, Mode=TwoWay}">
                         <Label x:Name="_lblReplay" FontFamily="Segoe MDL2 Assets" Content="&#xE8EE;" FontSize="16" />
                     </ToggleButton>
-                    <StackPanel>
-                        <Button x:Name="_btnA_Go" ToolTip="GoTo Replay Start(A) Position&#x0a;Keyboard Set:&#x09;Ctrl+A&#x0a;Keyboard GoTo:&#x09;A"  
-                                Margin="2,2,2,0" Padding="-2" Height="20" Width="20"
-                                Background="PaleGreen"
-                                Command="{Binding BookmarkGoToCommand}" CommandParameter="A">
-                            <Label Content="A" FontSize="10" FontWeight="Normal" />
-                        </Button>
-                        <Button x:Name="_btnA_Set" ToolTip="Set Bookmark(A) Position&#x09;Ctrl+A" Margin="2,0,2,2" Padding="0,-8,0,-4" Height="12" 
-                                Command="{Binding BookmarkSetCommand}" CommandParameter="A">
-                            <Label Content="⏷" FontSize="8" FontWeight="Normal" />
-                        </Button>
-                    </StackPanel>
-                    <StackPanel>
-                        <Button x:Name="_btnB_Go" ToolTip="GoTo Replay End(B) Position&#x0a;Keyboard Set:&#x09;Ctrl+B&#x0a;Keyboard GoTo:&#x09;B"  
-                                Margin="2,2,2,0" Padding="-2" Height="20" Width="20"
-                                Background="PaleGreen"
-                                Command="{Binding BookmarkGoToCommand}" CommandParameter="B">
-                            <Label Content="B" FontSize="10" FontWeight="Normal" />
-                        </Button>
-                        <Button x:Name="_btnB_Set" ToolTip="Set Bookmark(B) Position&#x09;Ctrl+B" Margin="2,0,2,2" Padding="0,-8,0,-4" Height="12" 
-                                Command="{Binding BookmarkSetCommand}" CommandParameter="B">
-                            <Label Content="⏷" FontSize="8" FontWeight="Normal" />
-                        </Button>
-                    </StackPanel>
+                    <local:BookmarkButtonControl Margin="2" Text="A" ActiveBrush="{Binding BookmarkBrushA, Source={StaticResource BookmarkColors}}"
+                                             Position="{Binding Settings.ReplayPosA}"
+                                             CommandParameter="C" GotoCommand="{Binding BookmarkGoToCommand}" SetCommand="{Binding BookmarkSetCommand}" />
+                    <local:BookmarkButtonControl Margin="2" Text="B" ActiveBrush="{Binding BookmarkBrushA, Source={StaticResource BookmarkColors}}" 
+                                             Position="{Binding Settings.ReplayPosB}"
+                                             CommandParameter="D" GotoCommand="{Binding BookmarkGoToCommand}" SetCommand="{Binding BookmarkSetCommand}" />
                    <RepeatButton ToolTip="Back 0.1 sec" Margin="2" Padding="2" Click="PrevFrame_Click">
                         <Label FontFamily="Segoe MDL2 Assets" Content="&#xE8A0;" FontSize="16" />
                     </RepeatButton>
@@ -146,9 +143,16 @@
 
                                 <Line x:Name="_lineA" X1="20" X2="20" Y1="3" Y2="16" />
                                 <Line x:Name="_lineB" X1="40" X2="40" Y1="3" Y2="16" />
-                                
+
                                 <Line x:Name="_lineC" X1="60" X2="60" Y1="3" Y2="16" />
-                                <Line x:Name="_lineD" X1="80" X2="80" Y1="3" Y2="16" />
+                                <Line x:Name="_lineD" X1="61" X2="61" Y1="3" Y2="16" />
+                                <Line x:Name="_lineE" X1="62" X2="62" Y1="3" Y2="16" />
+                                <Line x:Name="_lineF" X1="63" X2="63" Y1="3" Y2="16" />
+                                <Line x:Name="_lineG" X1="64" X2="64" Y1="3" Y2="16" />
+                                <Line x:Name="_lineH" X1="65" X2="65" Y1="3" Y2="16" />
+                                <Line x:Name="_lineI" X1="66" X2="66" Y1="3" Y2="16" />
+                                <Line x:Name="_lineJ" X1="67" X2="67" Y1="3" Y2="16" />
+                                <Line x:Name="_lineK" X1="68" X2="68" Y1="3" Y2="16" />
                             </Canvas>
                             <Slider x:Name="_position"
                                     Value="33" Maximum="300" Minimum="0" TickFrequency="60" TickPlacement="TopLeft" 
