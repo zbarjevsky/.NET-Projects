@@ -28,6 +28,20 @@ namespace MultiPlayer
         };
     }
 
+    public class BindingProxy : Freezable
+    {
+        protected override Freezable CreateInstanceCore() => new BindingProxy();
+
+        public object Data
+        {
+            get => GetValue(DataProperty);
+            set => SetValue(DataProperty, value);
+        }
+
+        public static readonly DependencyProperty DataProperty =
+            DependencyProperty.Register(nameof(Data), typeof(object), typeof(BindingProxy), new UIPropertyMetadata(null));
+    }
+
     /// <summary>
     /// Interaction logic for BookmarkButtonControl.xaml
     /// </summary>
@@ -91,6 +105,16 @@ namespace MultiPlayer
         // Using a DependencyProperty as the backing store for GotoCommand.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty SetCommandProperty =
             DependencyProperty.Register(nameof(SetCommand), typeof(ICommand), typeof(BookmarkButtonControl), new PropertyMetadata());
+
+        public ICommand ClearCommand
+        {
+            get { return (ICommand)GetValue(ClearCommandProperty); }
+            set { SetValue(ClearCommandProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for GotoCommand.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty ClearCommandProperty =
+            DependencyProperty.Register(nameof(ClearCommand), typeof(ICommand), typeof(BookmarkButtonControl), new PropertyMetadata());
 
         public string Text
         {

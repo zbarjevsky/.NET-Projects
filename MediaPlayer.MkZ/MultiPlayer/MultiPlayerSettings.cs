@@ -154,6 +154,9 @@ namespace MultiPlayer
         public double Volume { get; set; } = 0.0;
         public double SpeedRatio { get; set; } = 1.0;
 
+        private bool _isMoreBookmarksOpen = false;
+        public bool IsMoreBookmarksOpen { get => _isMoreBookmarksOpen; set => SetProperty(ref _isMoreBookmarksOpen, value); }
+
         private double _replayPosA = 0.0;
         public double ReplayPosA { get => _replayPosA; set => SetProperty(ref _replayPosA, value); }
         
@@ -184,6 +187,7 @@ namespace MultiPlayer
         public double ReplayPosJ { get => _replayPosJ; set => SetProperty(ref _replayPosJ, value); }
         
         private double _replayPosK = 0.0;
+
         public double ReplayPosK { get => _replayPosK; set => SetProperty(ref _replayPosK, value); }
 
         public bool ReplayIsOn {  get; set; } = false;
@@ -228,6 +232,8 @@ namespace MultiPlayer
             Volume = s.Volume;
             SpeedRatio = s.SpeedRatio;
 
+            IsMoreBookmarksOpen = s.IsMoreBookmarksOpen;
+
             UpdateBookmarks(s);
         }
 
@@ -248,6 +254,8 @@ namespace MultiPlayer
             MediaState = v.MediaState;
             Volume = v.Volume;
             SpeedRatio = v.SpeedRatio;
+
+            IsMoreBookmarksOpen = v.VM.Settings.IsMoreBookmarksOpen;
 
             UpdateBookmarks(v.VM.Settings);
 

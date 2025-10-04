@@ -6,6 +6,25 @@
              xmlns:local="clr-namespace:MultiPlayer"
              mc:Ignorable="d" 
              x:Name="root">
+    <UserControl.Resources>
+    </UserControl.Resources>
+    <UserControl.ContextMenu>
+        <ContextMenu DataContext="{Binding PlacementTarget, RelativeSource={RelativeSource Self}}">
+            <MenuItem Header="GoTo Bookmark 2"
+                  Icon="{Binding Text}"
+                  Command="{Binding GotoCommand}"
+                  CommandParameter="{Binding CommandParameter}"/>
+            <Separator/>
+            <MenuItem Header="Clear Bookmark 2" 
+                  Icon="{Binding Text}"
+                      Command="{Binding ClearCommand}" 
+                      CommandParameter="{Binding CommandParameter}"/>
+            <MenuItem Header="Set Bookmark 2" 
+                  Icon="{Binding Text}"
+                      Command="{Binding SetCommand}" 
+                      CommandParameter="{Binding CommandParameter}"/>
+        </ContextMenu>
+    </UserControl.ContextMenu>
     <Grid Background="Transparent">
         <StackPanel>
             <Button x:Name="_btn_Go"
@@ -21,16 +40,6 @@
                 <StackPanel Orientation="Horizontal" ClipToBounds="True">
                     <Label Content="⏷" FontSize="8" FontWeight="Normal" IsHitTestVisible="False"/>
                 </StackPanel>
-                <Button.ContextMenu>
-                    <ContextMenu>
-                        <MenuItem Header="GoTo Bookmark 2" Icon="2" 
-                                  Command="{Binding GotoCommand, ElementName=root}" CommandParameter="{Binding CommandParameter, ElementName=root}"/>
-                        <Separator/>
-                        <MenuItem Header="Clear Bookmark 2" Click="ReplayClear_Click" Icon="null"/>
-                        <MenuItem Header="Set Bookmark 2" Icon="2" 
-                                  Command="{Binding SetCommand, ElementName=root}" CommandParameter="{Binding CommandParameter, ElementName=root}"/>
-                    </ContextMenu>
-                </Button.ContextMenu>
             </Button>
         </StackPanel>
 
