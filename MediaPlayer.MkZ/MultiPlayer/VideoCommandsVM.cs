@@ -715,9 +715,7 @@ namespace MultiPlayer
                 return new List<string>();
 
             List<string> fileNames = System.IO.Directory.EnumerateFiles(dir, "*.*", SearchOption.TopDirectoryOnly)
-                .Where(
-                    file => Settings.SupportedVideoExtensions.Contains(System.IO.Path.GetExtension(file).ToLower()) || 
-                            Settings.SupportedAudioExtensions.Contains(System.IO.Path.GetExtension(file).ToLower())).ToList();
+                .Where(file => MainWindow.IsSupportedFileExtension(file)).ToList();
             fileNames.Sort();
             idx = fileNames.IndexOf(fileName.Replace('/', '\\'));
 

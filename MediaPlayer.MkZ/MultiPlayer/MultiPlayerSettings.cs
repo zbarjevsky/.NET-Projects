@@ -8,6 +8,7 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -197,16 +198,17 @@ namespace MultiPlayer
 
         public bool ReplayIsOn {  get; set; } = false;
 
-        public string[] SupportedImageExtensions { get; set; } = new string[0];
-        public string[] SupportedAudioExtensions { get; set; } = new string[0];
-        public string[] SupportedVideoExtensions { get; set; } = new string[0];
-
         [XmlIgnore]
         public DateTime LastUpdate { get; private set; } = DateTime.MinValue;
 
         public OnePlayerSettings()
         {
             EnsureHasValues();
+        }
+
+        public void EnsureHasValues()
+        {
+            
         }
 
         public OnePlayerSettings(VideoPlayerUserControl v)
@@ -311,18 +313,6 @@ namespace MultiPlayer
             ReplayPosK = f.ReplayPosK;
         }
 
-        public void EnsureHasValues()
-        {
-            if (SupportedImageExtensions == null || SupportedImageExtensions.Length == 0)
-                SupportedImageExtensions = new string[] { ".jpg", ".png", ".bmp", ".gif" };
-
-            if (SupportedAudioExtensions == null || SupportedAudioExtensions.Length == 0)
-                SupportedAudioExtensions = new string[] { ".mp3", ".wav", ".ogg" };
-
-            if (SupportedVideoExtensions == null || SupportedVideoExtensions.Length == 0)
-                SupportedVideoExtensions = new string[] { ".avi", ".mpg", ".mpeg", ".mkv", ".mp4", ".webm" };
-        }
-
         public void BookmarkPositionSet(eBookmarkName name, double pos)
         {
             LastUpdate = DateTime.Now;
@@ -368,6 +358,31 @@ namespace MultiPlayer
         public override string ToString()
         {
             return "OnePlayerSettings: " + FileName;
+        }
+    }
+
+    public class SupportedFileExtensions
+    {
+        public string[] SupportedImageExtensions { get; set; } = new string[0];
+        public string[] SupportedAudioExtensions { get; set; } = new string[0];
+        public string[] SupportedVideoExtensions { get; set; } = new string[0];
+
+        public void EnsureHasValues()
+        {
+            if (SupportedImageExtensions == null || SupportedImageExtensions.Length == 0)
+                SupportedImageExtensions = new string[] { ".jpg", ".png", ".bmp", ".gif" };
+
+            if (SupportedAudioExtensions == null || SupportedAudioExtensions.Length == 0)
+                SupportedAudioExtensions = new string[] { ".mp3", ".wav", ".ogg" };
+
+            if (SupportedVideoExtensions == null || SupportedVideoExtensions.Length == 0)
+                SupportedVideoExtensions = new string[] { ".avi", ".mpg", ".mpeg", ".mkv", ".mp4", ".webm" };
+        }
+
+        public bool IsSupportedFileExtension(string fileName)
+        {
+            string ext = Path.GetExtension(fileName).ToLower();
+            return SupportedVideoExtensions.Contains(ext) || SupportedAudioExtensions.Contains(ext);
         }
     }
 
@@ -492,6 +507,8 @@ namespace MultiPlayer
         [Description("Inactive Background Color"), Category(VID)]
         public Color InactiveBackgroundColor { get; set; } = Color.DarkGray;
 
+        public SupportedFileExtensions SupportedFileExtensions { get; set; } = new ();
+
         [Description("PopUp Player Settings"), Category(VID)]
         public OnePlayerSettings PopUpPlayerSettings { get; set; }
 
@@ -571,6 +588,8 @@ namespace MultiPlayer
             this.RowsSizes = appConfig.RowsSizes;
             this.ColsSizes = appConfig.ColsSizes;
 
+            this.SupportedFileExtensions = appConfig.SupportedFileExtensions;
+
             this.PlayerSettings = appConfig.PlayerSettings;
             this.PopUpPlayerSettings = appConfig.PopUpPlayerSettings;
             
@@ -585,10 +604,10 @@ namespace MultiPlayer
             if (RecentFiles == null)
                 RecentFiles = new List<RecentFile>();
 
+            SupportedFileExtensions.EnsureHasValues();
+
             foreach (OnePlayerSettings item in PlayerSettings)
-            {
                 item.EnsureHasValues();
-            }
         }
 
         public void Update(List<VideoPlayerUserControl> videos)

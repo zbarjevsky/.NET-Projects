@@ -279,6 +279,11 @@ namespace MultiPlayer
             return RecentFiles[shortName];
         }
 
+        public static bool IsSupportedFileExtension(string fileName)
+        {
+            return _settings.SupportedFileExtensions.IsSupportedFileExtension(fileName);
+        }
+
         public static bool IsFavorite(string fileName)
         {
             RecentFile recentFile = FindRecentFile(fileName);
