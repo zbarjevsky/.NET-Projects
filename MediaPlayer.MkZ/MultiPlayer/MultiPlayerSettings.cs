@@ -103,6 +103,16 @@ namespace MultiPlayer
         [XmlAttribute]
         public double ReplayPosK { get; set; } = 0.0;
 
+        public bool ShouldSerializeReplayPosC() => ReplayPosC > 0.0;
+        public bool ShouldSerializeReplayPosD() => ReplayPosD > 0.0;
+        public bool ShouldSerializeReplayPosE() => ReplayPosE > 0.0;
+        public bool ShouldSerializeReplayPosF() => ReplayPosF > 0.0;
+        public bool ShouldSerializeReplayPosG() => ReplayPosG > 0.0;
+        public bool ShouldSerializeReplayPosH() => ReplayPosH > 0.0;
+        public bool ShouldSerializeReplayPosI() => ReplayPosI > 0.0;
+        public bool ShouldSerializeReplayPosJ() => ReplayPosJ > 0.0;
+        public bool ShouldSerializeReplayPosK() => ReplayPosK > 0.0;
+                                                   
         [XmlIgnore]
         public DateTime LastUpdate { get; private set; } = DateTime.MinValue;
 
@@ -193,6 +203,16 @@ namespace MultiPlayer
         public double ReplayPosJ { get => _replayPosJ; set => SetProperty(ref _replayPosJ, value); }
         
         private double _replayPosK = 0.0;
+
+        public bool ShouldSerializeReplayPosC() => ReplayPosC > 0.0;
+        public bool ShouldSerializeReplayPosD() => ReplayPosD > 0.0;
+        public bool ShouldSerializeReplayPosE() => ReplayPosE > 0.0;
+        public bool ShouldSerializeReplayPosF() => ReplayPosF > 0.0;
+        public bool ShouldSerializeReplayPosG() => ReplayPosG > 0.0;
+        public bool ShouldSerializeReplayPosH() => ReplayPosH > 0.0;
+        public bool ShouldSerializeReplayPosI() => ReplayPosI > 0.0;
+        public bool ShouldSerializeReplayPosJ() => ReplayPosJ > 0.0;
+        public bool ShouldSerializeReplayPosK() => ReplayPosK > 0.0;
 
         public double ReplayPosK { get => _replayPosK; set => SetProperty(ref _replayPosK, value); }
 
