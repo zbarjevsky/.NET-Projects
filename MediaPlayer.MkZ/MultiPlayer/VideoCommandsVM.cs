@@ -20,6 +20,7 @@ using Point = System.Windows.Point;
 using System.Diagnostics;
 using System.Windows.Shapes;
 using MultiPlayer.Properties;
+using System.Runtime;
 
 
 namespace MultiPlayer
@@ -55,8 +56,6 @@ namespace MultiPlayer
         public OnePlayerSettings Settings { get; set; } = new OnePlayerSettings();
 
         public bool IsPopWindowMode { get; private set; } = false;
-
-        public bool IsPopUpWindowActive => WndMax.IsActive;
 
         public RelayCommand TogglePlayPauseCommand { get; }
         public RelayCommand OpenFileCommand { get; }
@@ -248,7 +247,7 @@ namespace MultiPlayer
 
             _player.VideoStartedAction = (player) => MediaPlayStarted(player);
             _player.VideoEnded = (player) => MediaPlayEndedAsync(player); 
-            _player.VideoFailed = (e, player) => MediaPlayFailed(e, player); 
+            _player.VideoFailed = (e, player) => MediaPlayFailed(e, player);
         }
 
         bool _isInUpdate = false;
@@ -727,70 +726,10 @@ namespace MultiPlayer
 
         public void Maximize_Click(object sender, RoutedEventArgs e)
         {
-            MaximizeToggle(hide: false);
+            PopUpVM.MaximizeToggle(hide: false, this);
         }
 
-        public bool IsFullScreen()
-        {
-            if (IsPopWindowMode)
-                return WndMax.IsFullScreen;
-            return false;
-        }
-
-        public static void PopUpClear()
-        {
-            WndMax.ClearVideoControl();
-        }
-
-        public static void PopUpPause()
-        {
-            WndMax.Pause();
-        }
-
-        public static void PopUpHide()
-        {
-            WndMax.ClearVideoControl();
-            WndMax.Visibility = Visibility.Collapsed;
-        }
-
-        private static readonly PopUpWindow WndMax = new PopUpWindow();
-        public void MaximizeToggle(bool hide)
-        {
-            if (IsPopWindowMode)
-            {
-                if (hide)
-                {
-                    PopUpHide();
-                }
-                else
-                {
-                    WndMax.MaximizeToggle();
-                }
-            }
-            else
-            {
-                if (WndMax.Visibility == Visibility.Collapsed)
-                {
-                    WndMax.InitWindow(System.Windows.Application.Current.MainWindow, matchMainWindow: false);
-                    WndMax.Show();
-                    WndMax.LoadSettings(new OnePlayerSettings(_player));
-
-                    this.Pause(updateUI: true);
-                }
-                else
-                {
-                    WndMax.LoadSettings(new OnePlayerSettings(_player));
-                    WndMax.BringToFront();
-
-                    this.Pause(updateUI: true);
-                }
-            }
-        }
-
-        internal static void Exit()
-        {
-            WndMax.Exit();
-        }
+        public static PopUpWindowVM PopUpVM { get; set; } = new PopUpWindowVM();
 
         public void Pos_MouseMove(object sender, MouseEventArgs e)
         {

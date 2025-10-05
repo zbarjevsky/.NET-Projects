@@ -245,7 +245,7 @@ namespace MultiPlayer
 
         private void UserControl_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            if ((VM.IsPopWindowMode && VM.IsPopUpWindowActive && VM.IsFullScreen()) || 
+            if ((VM.IsPopWindowMode && VideoCommandsVM.PopUpVM.IsPopUpWindowActive && VideoCommandsVM.PopUpVM.IsFullScreen(VM.IsPopWindowMode)) || 
                 (!VM.IsPopWindowMode && Application.Current.MainWindow.IsActive))
             {
                 this.Focus();
@@ -721,13 +721,13 @@ namespace MultiPlayer
 
         private void Maximize_Click(object sender, RoutedEventArgs e)
         {
-            VM.MaximizeToggle(hide: false);
+            VideoCommandsVM.PopUpVM.MaximizeToggle(hide: false, VM);
             UpdateMaximizeButtonImage();
         }
 
         private void UpdateMaximizeButtonImage()
         {
-            bool isMaximized = VM.IsFullScreen();
+            bool isMaximized = VideoCommandsVM.PopUpVM.IsFullScreen(VM.IsPopWindowMode);
 
             _down.Visibility = isMaximized ? Visibility.Visible : Visibility.Collapsed;
             _up.Visibility = isMaximized ? Visibility.Collapsed : Visibility.Visible;

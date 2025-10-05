@@ -482,12 +482,18 @@ namespace MultiPlayer
         [Category("Location")]
         public MainWindowState MainWindowState { get; set; } = new MainWindowState();
 
+        [Category("Location")]
+        public MainWindowState PopupWindowState { get; set; } = new MainWindowState();
+
         [Description("Rows Sizes"), Category(VID)]
         public List<SplitterPos> RowsSizes { get; set; }
         [Description("Column Sizes"), Category(VID)]
         public List<SplitterPos> ColsSizes { get; set; }
         [Description("Inactive Background Color"), Category(VID)]
         public Color InactiveBackgroundColor { get; set; } = Color.DarkGray;
+
+        [Description("PopUp Player Settings"), Category(VID)]
+        public OnePlayerSettings PopUpPlayerSettings { get; set; }
 
         [Description("Players Settings x8"), Category(VID)]
         public List<OnePlayerSettings> PlayerSettings { get; set; }
@@ -553,6 +559,7 @@ namespace MultiPlayer
         private void CopyFrom(MultiPlayerSettings appConfig)
         {
             MainWindowState = appConfig.MainWindowState;
+            PopupWindowState = appConfig.PopupWindowState;
 
             KeyCloseApp = appConfig.KeyCloseApp;
             KeyClearAll = appConfig.KeyClearAll;
@@ -563,7 +570,10 @@ namespace MultiPlayer
 
             this.RowsSizes = appConfig.RowsSizes;
             this.ColsSizes = appConfig.ColsSizes;
+
             this.PlayerSettings = appConfig.PlayerSettings;
+            this.PopUpPlayerSettings = appConfig.PopUpPlayerSettings;
+            
             this.RecentFiles = appConfig.RecentFiles;
         }
 
@@ -596,6 +606,8 @@ namespace MultiPlayer
 
                 this.PlayerSettings.Add(s);
             }
+                
+            this.PopUpPlayerSettings = VideoCommandsVM.PopUpVM.GetSettings(PopupWindowState);
         }
     }
 }

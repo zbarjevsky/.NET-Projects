@@ -41,7 +41,7 @@ namespace MultiPlayer
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             SaveSettings(_settings.DefaultSettingsFileName);
-            VideoCommandsVM.Exit();    
+            VideoCommandsVM.PopUpVM.Exit();    
         }
 
         private void Open_Click(object sender, RoutedEventArgs e)
@@ -77,7 +77,14 @@ namespace MultiPlayer
                     _ = _videos[i].LoadSetting(_settings.PlayerSettings[i]);
                 }
 
-                VideoCommandsVM.PopUpHide();
+                if (_settings.PopUpPlayerSettings != null && File.Exists(_settings.PopUpPlayerSettings.FileName))
+                {
+                     VideoCommandsVM.PopUpVM.LoadSettings(_settings.PopupWindowState,  _settings.PopUpPlayerSettings);
+                }
+                else
+                {
+                    VideoCommandsVM.PopUpVM.PopUpHide();
+                }
             }
             else
             {
@@ -211,7 +218,7 @@ namespace MultiPlayer
                 v.Clear();
                 await Task.Delay(3);
             }
-            VideoCommandsVM.PopUpHide();
+            VideoCommandsVM.PopUpVM.PopUpHide();
         }
 
         private void ResetLayout_Click(object sender, RoutedEventArgs e)
@@ -297,7 +304,7 @@ namespace MultiPlayer
 
         private void PauseAll_Click(object sender, RoutedEventArgs e)
         {
-            VideoCommandsVM.PopUpPause();
+            VideoCommandsVM.PopUpVM.PopUpPause();
 
             foreach (VideoPlayerUserControl v in _videos)
             {
