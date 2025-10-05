@@ -60,6 +60,8 @@ namespace MultiPlayer
         {
             _settings.Load(fileName);
 
+            _settings.MainWindowState.RestoreTo(this);
+
             RecentFiles.Clear();
             foreach (RecentFile f in _settings.RecentFiles)
                 RecentFiles.Add(f.FileName, f);
@@ -110,6 +112,8 @@ namespace MultiPlayer
             SplittersSave(_gridMain.RowDefinitions, _gridMain.ColumnDefinitions);
 
             _settings.Update(_videos);
+
+            _settings.MainWindowState.CopyFrom(this);
 
             _settings.RecentFiles.Clear();
             foreach (var f in RecentFiles)
