@@ -9,7 +9,6 @@
              mc:Ignorable="d" 
              d:DesignWidth="800">
     <UserControl.Resources>
-        <local:BookmarkColors x:Key="BookmarkColors" />
     </UserControl.Resources>
     <ScrollViewer x:Name="_scroll" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
         <Grid Margin="0">
@@ -17,7 +16,7 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <StackPanel Grid.Row="0" Orientation="Horizontal" HorizontalAlignment="Center"
+            <StackPanel Grid.Row="0" Margin="255,0,0,0" Orientation="Horizontal" HorizontalAlignment="Left"
                         Visibility="{Binding IsChecked, ElementName=btnMoreBookmarks, Converter={StaticResource BoolToVisibilityConverter}}">
                 <StackPanel.Background>
                     <SolidColorBrush Color="SlateGray" Opacity="0.8" />
@@ -88,7 +87,7 @@
                     <local:BookmarkButtonControl Margin="2" Text="2" ActiveBrush="{Binding BookmarkBrush2, Source={StaticResource BookmarkColors}}" 
                                              Position="{Binding Settings.ReplayPosD}" ClearCommand="{Binding BookmarkClearCommand}"
                                              CommandParameter="D" GotoCommand="{Binding BookmarkGoToCommand}" SetCommand="{Binding BookmarkSetCommand}" />
-                    <ToggleButton x:Name="btnMoreBookmarks" Margin="2" IsChecked="{Binding Settings.IsMoreBookmarksOpen, Mode=TwoWay}">
+                    <ToggleButton x:Name="btnMoreBookmarks" Margin="2" IsChecked="{Binding Settings.IsMoreBookmarksOpen, Mode=TwoWay, FallbackValue=true}">
                         <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE97B;"/>
                     </ToggleButton>
                     <ToggleButton ToolTip="{Binding Replay.ReplayToolTip, FallbackValue='Replay Last N seconds'}" Margin="2" Padding="2" 

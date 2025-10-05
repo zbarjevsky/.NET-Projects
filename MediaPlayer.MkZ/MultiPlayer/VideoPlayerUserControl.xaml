@@ -213,7 +213,8 @@
                                 </MenuItem.Icon>
                             </MenuItem>
                             <Separator />
-                            <MenuItem Header="GoTo Bookmark A (Start)" wpf:MenuItemHelper.Parameter1="A" wpf:MenuItemHelper.Parameter2="LightGreen" >
+                            <MenuItem Header="GoTo Bookmark A (Start)" wpf:MenuItemHelper.Parameter1="A" 
+                                      wpf:MenuItemHelper.Parameter2="{Binding BookmarkBrushA, Source={StaticResource BookmarkColors}}" >
                                 <MenuItem.Icon>
                                     <TextBlock Text="A" />
                                 </MenuItem.Icon>
@@ -221,7 +222,8 @@
                                     <StaticResource ResourceKey="BookmarkHeaderTemplate"/>
                                 </MenuItem.HeaderTemplate>
                             </MenuItem>
-                            <MenuItem Header="GoTo Bookmark B (End)" wpf:MenuItemHelper.Parameter1="B" wpf:MenuItemHelper.Parameter2="LightBlue" >
+                            <MenuItem Header="GoTo Bookmark B (End)" wpf:MenuItemHelper.Parameter1="B" 
+                                      wpf:MenuItemHelper.Parameter2="{Binding BookmarkBrushA, Source={StaticResource BookmarkColors}}" >
                                 <MenuItem.Icon>
                                     <TextBlock Text="B" />
                                 </MenuItem.Icon>
@@ -229,7 +231,8 @@
                                     <StaticResource ResourceKey="BookmarkHeaderTemplate"/>
                                 </MenuItem.HeaderTemplate>
                             </MenuItem>
-                            <MenuItem Header="GoTo Bookmark (1)" wpf:MenuItemHelper.Parameter1="C" wpf:MenuItemHelper.Parameter2="Pink" >
+                            <MenuItem Header="GoTo Bookmark (1)" wpf:MenuItemHelper.Parameter1="C" 
+                                      wpf:MenuItemHelper.Parameter2="{Binding BookmarkBrush1, Source={StaticResource BookmarkColors}}" >
                                 <MenuItem.Icon>
                                     <TextBlock Text="1" />
                                 </MenuItem.Icon>
@@ -237,9 +240,73 @@
                                     <StaticResource ResourceKey="BookmarkHeaderTemplate"/>
                                 </MenuItem.HeaderTemplate>
                             </MenuItem>
-                            <MenuItem Header="GoTo Bookmark (2)" wpf:MenuItemHelper.Parameter1="D" wpf:MenuItemHelper.Parameter2="Yellow">
+                            <MenuItem Header="GoTo Bookmark (2)" wpf:MenuItemHelper.Parameter1="D" 
+                                      wpf:MenuItemHelper.Parameter2="{Binding BookmarkBrush2, Source={StaticResource BookmarkColors}}">
                                 <MenuItem.Icon>
                                     <TextBlock Text="2" />
+                                </MenuItem.Icon>
+                                <MenuItem.HeaderTemplate>
+                                    <StaticResource ResourceKey="BookmarkHeaderTemplate"/>
+                                </MenuItem.HeaderTemplate>
+                            </MenuItem>
+                            <MenuItem Header="GoTo Bookmark (3)" wpf:MenuItemHelper.Parameter1="E" 
+                                      wpf:MenuItemHelper.Parameter2="{Binding BookmarkBrush3, Source={StaticResource BookmarkColors}}">
+                                <MenuItem.Icon>
+                                    <TextBlock Text="3" />
+                                </MenuItem.Icon>
+                                <MenuItem.HeaderTemplate>
+                                    <StaticResource ResourceKey="BookmarkHeaderTemplate"/>
+                                </MenuItem.HeaderTemplate>
+                            </MenuItem>
+                            <MenuItem Header="GoTo Bookmark (4)" wpf:MenuItemHelper.Parameter1="F" 
+                                      wpf:MenuItemHelper.Parameter2="{Binding BookmarkBrush4, Source={StaticResource BookmarkColors}}">
+                                <MenuItem.Icon>
+                                    <TextBlock Text="4" />
+                                </MenuItem.Icon>
+                                <MenuItem.HeaderTemplate>
+                                    <StaticResource ResourceKey="BookmarkHeaderTemplate"/>
+                                </MenuItem.HeaderTemplate>
+                            </MenuItem>
+                            <MenuItem Header="GoTo Bookmark (5)" wpf:MenuItemHelper.Parameter1="G" 
+                                      wpf:MenuItemHelper.Parameter2="{Binding BookmarkBrush5, Source={StaticResource BookmarkColors}}">
+                                <MenuItem.Icon>
+                                    <TextBlock Text="5" />
+                                </MenuItem.Icon>
+                                <MenuItem.HeaderTemplate>
+                                    <StaticResource ResourceKey="BookmarkHeaderTemplate"/>
+                                </MenuItem.HeaderTemplate>
+                            </MenuItem>
+                            <MenuItem Header="GoTo Bookmark (6)" wpf:MenuItemHelper.Parameter1="H" 
+                                      wpf:MenuItemHelper.Parameter2="{Binding BookmarkBrush6, Source={StaticResource BookmarkColors}}">
+                                <MenuItem.Icon>
+                                    <TextBlock Text="6" />
+                                </MenuItem.Icon>
+                                <MenuItem.HeaderTemplate>
+                                    <StaticResource ResourceKey="BookmarkHeaderTemplate"/>
+                                </MenuItem.HeaderTemplate>
+                            </MenuItem>
+                            <MenuItem Header="GoTo Bookmark (7)" wpf:MenuItemHelper.Parameter1="I" 
+                                      wpf:MenuItemHelper.Parameter2="{Binding BookmarkBrush7, Source={StaticResource BookmarkColors}}">
+                                <MenuItem.Icon>
+                                    <TextBlock Text="7" />
+                                </MenuItem.Icon>
+                                <MenuItem.HeaderTemplate>
+                                    <StaticResource ResourceKey="BookmarkHeaderTemplate"/>
+                                </MenuItem.HeaderTemplate>
+                            </MenuItem>
+                            <MenuItem Header="GoTo Bookmark (8)" wpf:MenuItemHelper.Parameter1="J" 
+                                      wpf:MenuItemHelper.Parameter2="{Binding BookmarkBrush8, Source={StaticResource BookmarkColors}}">
+                                <MenuItem.Icon>
+                                    <TextBlock Text="8" />
+                                </MenuItem.Icon>
+                                <MenuItem.HeaderTemplate>
+                                    <StaticResource ResourceKey="BookmarkHeaderTemplate"/>
+                                </MenuItem.HeaderTemplate>
+                            </MenuItem>
+                            <MenuItem Header="GoTo Bookmark (9)" wpf:MenuItemHelper.Parameter1="K" 
+                                      wpf:MenuItemHelper.Parameter2="{Binding BookmarkBrush9, Source={StaticResource BookmarkColors}}">
+                                <MenuItem.Icon>
+                                    <TextBlock Text="9" />
                                 </MenuItem.Icon>
                                 <MenuItem.HeaderTemplate>
                                     <StaticResource ResourceKey="BookmarkHeaderTemplate"/>

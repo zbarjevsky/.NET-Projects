@@ -77,6 +77,9 @@ namespace MultiPlayer
         public bool ReplayIsOn { get; set; } = false;
 
         [XmlAttribute]
+        public bool IsMoreBookmarksOpen { get; set; } = false;
+
+        [XmlAttribute]
         public double ReplayPosA { get; set; } = 0.0;
         [XmlAttribute]
         public double ReplayPosB { get; set; } = 0.0;
@@ -118,6 +121,8 @@ namespace MultiPlayer
 
             ReplayIsOn = settings.ReplayIsOn;
 
+            IsMoreBookmarksOpen = settings.IsMoreBookmarksOpen;
+
             ReplayPosA = Math.Round(settings.ReplayPosA, 3);
             ReplayPosB = Math.Round(settings.ReplayPosB, 3);
 
@@ -155,7 +160,7 @@ namespace MultiPlayer
         public double SpeedRatio { get; set; } = 1.0;
 
         private bool _isMoreBookmarksOpen = false;
-        public bool IsMoreBookmarksOpen { get => _isMoreBookmarksOpen; set => SetProperty(ref _isMoreBookmarksOpen, value); }
+        public bool IsMoreBookmarksOpen { get => _isMoreBookmarksOpen; set { if (SetProperty(ref _isMoreBookmarksOpen, value)) LastUpdate = DateTime.Now; } }
 
         private double _replayPosA = 0.0;
         public double ReplayPosA { get => _replayPosA; set => SetProperty(ref _replayPosA, value); }
@@ -268,6 +273,8 @@ namespace MultiPlayer
 
             ReplayIsOn = s.ReplayIsOn;
 
+            IsMoreBookmarksOpen = s.IsMoreBookmarksOpen;
+
             ReplayPosA = s.ReplayPosA;
             ReplayPosB = s.ReplayPosB;
 
@@ -287,6 +294,8 @@ namespace MultiPlayer
             ReplayIsOn = on;
 
             Position = f.Position;
+
+            IsMoreBookmarksOpen = f.IsMoreBookmarksOpen;
 
             ReplayPosA = f.ReplayPosA;
             ReplayPosB = f.ReplayPosB;

@@ -338,6 +338,8 @@ namespace MultiPlayer
             _recentFile = MainWindow.FindOrCreateRecentFile(fileName);
 
             Settings.IsFavorite = _recentFile.IsFavorite;
+            Settings.IsMoreBookmarksOpen = _recentFile.IsMoreBookmarksOpen;
+
             Settings.UpdateBookmarks(_recentFile.ReplayIsOn, _recentFile);
 
             Settings.Position = startFrom0 ? 0 : _recentFile.Position;
@@ -840,10 +842,24 @@ namespace MultiPlayer
                 BookmarkKeyDown(eBookmarkName.A.ToString());
             else if (e.Key == System.Windows.Input.Key.B)
                 BookmarkKeyDown(eBookmarkName.B.ToString());
-            else if (e.Key == System.Windows.Input.Key.D1)
+            else if (e.Key == System.Windows.Input.Key.D1 || e.Key == Key.NumPad1)
                 BookmarkKeyDown(eBookmarkName.C.ToString());
-            else if (e.Key == System.Windows.Input.Key.D2)
+            else if (e.Key == System.Windows.Input.Key.D2 || e.Key == Key.NumPad2)
                 BookmarkKeyDown(eBookmarkName.D.ToString());
+            else if (e.Key == System.Windows.Input.Key.D3 || e.Key == Key.NumPad3)
+                BookmarkKeyDown(eBookmarkName.E.ToString());
+            else if (e.Key == System.Windows.Input.Key.D4 || e.Key == Key.NumPad4)
+                BookmarkKeyDown(eBookmarkName.F.ToString());
+            else if (e.Key == System.Windows.Input.Key.D5 || e.Key == Key.NumPad5)
+                BookmarkKeyDown(eBookmarkName.G.ToString());
+            else if (e.Key == System.Windows.Input.Key.D6 || e.Key == Key.NumPad6)
+                BookmarkKeyDown(eBookmarkName.H.ToString());
+            else if (e.Key == System.Windows.Input.Key.D7 || e.Key == Key.NumPad7)
+                BookmarkKeyDown(eBookmarkName.I.ToString());
+            else if (e.Key == System.Windows.Input.Key.D8 || e.Key == Key.NumPad8)
+                BookmarkKeyDown(eBookmarkName.J.ToString());
+            else if (e.Key == System.Windows.Input.Key.D9 || e.Key == Key.NumPad9)
+                BookmarkKeyDown(eBookmarkName.K.ToString());
             else
                 return false;
 
