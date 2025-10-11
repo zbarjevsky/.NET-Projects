@@ -25,7 +25,7 @@ namespace MultiPlayer
         {
             InitializeComponent();
 
-            _videos = new List<VideoPlayerUserControl> { _video00, _video01, _video02, _video03, _video10, _video11, _video12, _video13 };
+            _videos = new List<VideoPlayerUserControl> { _videoA, _videoB, _video00, _video01, _video02, _video03, _video10, _video11, _video12, _video13 };
 
             if (!SingleInstanceHelper.IsSingleInstance(true))
             {
@@ -66,7 +66,9 @@ namespace MultiPlayer
             foreach (RecentFile f in _settings.RecentFiles)
                 RecentFiles.Add(f.FileName, f);
 
-            SplittersLoad(_gridMain.RowDefinitions, _gridMain.ColumnDefinitions);
+            SplittersLoad(_settings.GridSplitterPositionsMain, _gridMain);
+            SplittersLoad(_settings.GridSplitterPositionsTop, _gridTop);
+            SplittersLoad(_settings.GridSplitterPositionsBottom, _gridBottom);
 
             if (_settings.PlayerSettings.Count > 2)
             {
@@ -116,7 +118,9 @@ namespace MultiPlayer
 
         private void SaveSettings(string fileName)
         {
-            SplittersSave(_gridMain.RowDefinitions, _gridMain.ColumnDefinitions);
+            SplittersSave(_settings.GridSplitterPositionsMain, _gridMain);
+            SplittersSave(_settings.GridSplitterPositionsTop, _gridTop);
+            SplittersSave(_settings.GridSplitterPositionsBottom, _gridBottom);
 
             _settings.Update(_videos);
 
@@ -130,26 +134,32 @@ namespace MultiPlayer
                 _settings.Save(fileName);
         }
 
-        private void SplittersLoad(RowDefinitionCollection rows, ColumnDefinitionCollection cols)
+        private static void SplittersLoad(GridSplitterPositions pos, Grid grid)
         {
-            if (_settings.RowsSizes != null && _settings.RowsSizes.Count == rows.Count)
-            for (int i = 0; i < rows.Count; i++)
-                rows[i].Height = _settings.RowsSizes[i].Pos;
+            RowDefinitionCollection rows = grid.RowDefinitions;
+            ColumnDefinitionCollection cols = grid.ColumnDefinitions;
 
-            if (_settings.ColsSizes != null && _settings.ColsSizes.Count == cols.Count)
+            if (pos.RowsSizes != null && pos.RowsSizes.Count == rows.Count)
+            for (int i = 0; i < rows.Count; i++)
+                rows[i].Height = pos.RowsSizes[i].Pos;
+
+            if (pos.ColsSizes != null && pos.ColsSizes.Count == cols.Count)
                 for (int i = 0; i < cols.Count; i++)
-                    cols[i].Width = _settings.ColsSizes[i].Pos;
+                    cols[i].Width = pos.ColsSizes[i].Pos;
         }
 
-        private void SplittersSave(RowDefinitionCollection rows, ColumnDefinitionCollection cols)
+        private static void SplittersSave(GridSplitterPositions pos, Grid grid)
         {
-            _settings.RowsSizes = new List<SplitterPos>();
-            foreach (RowDefinition row in rows)
-                _settings.RowsSizes.Add(new SplitterPos(row.Height));
+            RowDefinitionCollection rows = grid.RowDefinitions;
+            ColumnDefinitionCollection cols = grid.ColumnDefinitions;
 
-            _settings.ColsSizes = new List<SplitterPos>();
+            pos.RowsSizes = new List<SplitterPos>();
+            foreach (RowDefinition row in rows)
+                pos.RowsSizes.Add(new SplitterPos(row.Height));
+
+            pos.ColsSizes = new List<SplitterPos>();
             foreach (ColumnDefinition col in cols)
-                _settings.ColsSizes.Add(new SplitterPos(col.Width));
+                pos.ColsSizes.Add(new SplitterPos(col.Width));
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
@@ -223,13 +233,22 @@ namespace MultiPlayer
 
         private void ResetLayout_Click(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < _gridMain.RowDefinitions.Count; i++)
-                if (_gridMain.RowDefinitions[i].Height.IsStar)
-                    _gridMain.RowDefinitions[i].Height = new GridLength(1, GridUnitType.Star);
+            ResetLayout(_gridMain);
+            ResetLayout(_gridTop);
+            ResetLayout(_gridBottom);
+        }
 
-            for (int i = 0; i < _gridMain.ColumnDefinitions.Count; i++)
-                if (_gridMain.ColumnDefinitions[i].Width.IsStar)
-                    _gridMain.ColumnDefinitions[i].Width = new GridLength(1, GridUnitType.Star);
+        private static void ResetLayout(Grid grid)
+        {
+            if (grid.RowDefinitions.Count > 1)
+                for (int i = 0; i < grid.RowDefinitions.Count; i++)
+                    if (grid.RowDefinitions[i].Height.IsStar)
+                        grid.RowDefinitions[i].Height = new GridLength(1, GridUnitType.Star);
+
+            if (grid.ColumnDefinitions.Count > 1)
+                for (int i = 0; i < grid.ColumnDefinitions.Count; i++)
+                    if (grid.ColumnDefinitions[i].Width.IsStar)
+                        grid.ColumnDefinitions[i].Width = new GridLength(1, GridUnitType.Star);
         }
 
         private void SaveAsRecent_Click(object sender, RoutedEventArgs e)

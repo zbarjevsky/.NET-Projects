@@ -487,11 +487,25 @@ namespace MultiPlayer
         }
     }
 
+    public class GridSplitterPositions
+    {
+        [Description("Rows Sizes"), Category(MultiPlayerSettings.VID)]
+        public List<SplitterPos> RowsSizes { get; set; } = new List<SplitterPos>();
+        [Description("Column Sizes"), Category(MultiPlayerSettings.VID)]
+        public List<SplitterPos> ColsSizes { get; set; } = new List<SplitterPos>();
+
+        public void CopyFrom(GridSplitterPositions pos)
+        {
+            RowsSizes = new List<SplitterPos>(pos.RowsSizes);
+            ColsSizes = new List<SplitterPos>(pos.ColsSizes);
+        }
+    }
+
     [Serializable]
     public class MultiPlayerSettings
     {
-        const string APP = "1. Application";
-        const string VID = "2. Video Player";
+        public const string APP = "1. Application";
+        public const string VID = "2. Video Player";
 
         [XmlIgnore]
         public string DataFolder { get; private set; }
@@ -520,10 +534,13 @@ namespace MultiPlayer
         [Category("Location")]
         public MainWindowState PopupWindowState { get; set; } = new MainWindowState();
 
-        [Description("Rows Sizes"), Category(VID)]
-        public List<SplitterPos> RowsSizes { get; set; }
-        [Description("Column Sizes"), Category(VID)]
-        public List<SplitterPos> ColsSizes { get; set; }
+        [Description("Splitter Positions Main"), Category(VID)]
+        public GridSplitterPositions GridSplitterPositionsMain { get; set; } = new GridSplitterPositions();
+        [Description("Splitter Positions Top"), Category(VID)]
+        public GridSplitterPositions GridSplitterPositionsTop { get; set; } = new GridSplitterPositions();
+        [Description("Splitter Positions Bottom"), Category(VID)]
+        public GridSplitterPositions GridSplitterPositionsBottom { get; set; } = new GridSplitterPositions();
+
         [Description("Inactive Background Color"), Category(VID)]
         public Color InactiveBackgroundColor { get; set; } = Color.DarkGray;
 
@@ -605,8 +622,9 @@ namespace MultiPlayer
             KeyBatchOp = appConfig.KeyBatchOp;
             KeySaveAsDefault = appConfig.KeySaveAsDefault;
 
-            this.RowsSizes = appConfig.RowsSizes;
-            this.ColsSizes = appConfig.ColsSizes;
+            this.GridSplitterPositionsMain.CopyFrom(appConfig.GridSplitterPositionsMain);
+            this.GridSplitterPositionsTop.CopyFrom(appConfig.GridSplitterPositionsTop);
+            this.GridSplitterPositionsBottom.CopyFrom(appConfig.GridSplitterPositionsBottom);
 
             this.SupportedFileExtensions = appConfig.SupportedFileExtensions;
 

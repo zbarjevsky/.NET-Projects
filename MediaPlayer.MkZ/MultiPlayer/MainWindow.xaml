@@ -11,13 +11,18 @@
         Background="SlateGray"
         mc:Ignorable="d"
         Icon="Yin-Yang.ico"
-        Title="Multi Media Player - 6x" Height="950" Width="1920">
-    <Grid>
+        Title="Multi Media Player - 10x" Height="1950" Width="1920">
+    <Grid x:Name="_gridMain" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="35"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Grid Margin="1" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="1.5*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.RowSpan="3" Margin="1" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Stretch">
             <Grid.LayoutTransform>
                 <RotateTransform Angle="90" />
             </Grid.LayoutTransform>
@@ -85,7 +90,24 @@
                 </Button>
             </StackPanel>
         </Grid>
-        <Grid x:Name="_gridMain" Grid.Column="1" Background="Gray">
+        
+        <!-- Top Grid with 2 videos -->
+        <Grid x:Name="_gridTop" Grid.Column="1" Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MinWidth="50"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*" MinWidth="50"/>
+            </Grid.ColumnDefinitions>
+            <GridSplitter x:Name="_splitterV0" Grid.Column="1" Grid.RowSpan="1" Background="Gray" Width="4" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+
+            <local:VideoPlayerUserControl x:Name="_videoA" Grid.Column="0" Grid.Row="0" Background="Khaki" />
+            <local:VideoPlayerUserControl x:Name="_videoB" Grid.Column="2" Grid.Row="0" Background="Lime" />
+        </Grid>
+        
+        <GridSplitter x:Name="_splitterH0" Grid.ColumnSpan="1" Grid.Column="1" Grid.Row="1" Background="Gray" Height="4" HorizontalAlignment="Stretch" />
+
+        <!-- Main Grid with 8 videos -->
+        <Grid x:Name="_gridBottom" Grid.Column="1" Grid.Row="2" Background="Gray">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" MinWidth="50"/>
                 <ColumnDefinition Width="4"/>
