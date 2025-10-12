@@ -760,8 +760,17 @@ namespace MultiPlayer
             {
                 string parameter = menuItem.Tag as string;
                 if (int.TryParse(parameter, out int mode))
-                    VM.Settings.PlayMode = (ePlayMode)mode;
-                VM.NotifyPropertyChanged(nameof(VM.SelectedPlayModeIndex));
+                {
+                    if (mode == 5) //global play mode
+                    {
+                        MainWindow.Instance.IsGlobalRepeatAllMode = !MainWindow.Instance.IsGlobalRepeatAllMode; //toggle
+                    }
+                    else //control specific play mode
+                    {
+                        VM.Settings.PlayMode = (ePlayMode)mode;
+                    }
+                    VM.NotifyPropertyChanged(nameof(VM.SelectedPlayModeIndex));
+                }
             }
         }
 

@@ -21,16 +21,49 @@ namespace MultiPlayer
 
         public static Dictionary<string, RecentFile> RecentFiles { get; } = new Dictionary<string, RecentFile>();
 
+        /// <summary>
+        /// If true - play all players one after another
+        /// </summary>
+        public bool IsGlobalRepeatAllMode
+        {
+            get { return (bool)GetValue(IsGlobalRepeatAllModeProperty); }
+            set { SetValue(IsGlobalRepeatAllModeProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsGlobalRepeatAllMode.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsGlobalRepeatAllModeProperty =
+            DependencyProperty.Register(nameof(IsGlobalRepeatAllMode), typeof(bool), typeof(MainWindow), 
+                new PropertyMetadata(false, OnGlobalRepeatAllModeChanged));
+
+        private static void OnGlobalRepeatAllModeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var wnd = (MainWindow)d;
+            bool newValue = (bool)e.NewValue;
+
+            //notify all player controls of this change
+            foreach (var video in wnd._videos)
+            {
+                video.VM.NotifyPropertyChanged(nameof(video.VM.SelectedPlayModeIndex));
+            }
+        }
+
+        public static MainWindow Instance { get; private set; } = null;
+
         public MainWindow()
         {
             InitializeComponent();
 
-            _videos = new List<VideoPlayerUserControl> { _videoA, _videoB, _videoC, _video00, _video01, _video02, _video03, _video10, _video11, _video12, _video13 };
+            _videos = new List<VideoPlayerUserControl> { 
+                _videoA, _videoB, _videoC, 
+                _video00, _video01, _video02, _video03, 
+                _video10, _video11, _video12, _video13 };
 
             if (!SingleInstanceHelper.IsSingleInstance(true))
             {
                 this.Close();
             }
+
+            Instance = this;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -329,6 +362,49 @@ namespace MultiPlayer
             RecentFile recentFile = FindRecentFile(fileName);
             if (recentFile != null)
                 recentFile.IsFavorite = isFavorite;
+        }
+
+        public void PlayNext(VideoPlayerUserControl player)
+        {
+            if ( IsGlobalRepeatAllMode == false)
+                return;
+
+            for (int i = 0; i < _videos.Count; i++)
+            {
+                if ( _videos[i] == player )
+                {
+                    //stop current
+                    //_videos[i].VM.Stop();
+
+                    int next = FindNext(i);
+                    if (next != -1)
+                    {
+                        //play next
+                        _videos[next].VM.Position = TimeSpan.FromSeconds(0);
+                        _videos[next].VM.Play();
+                    }
+                }
+            }       
+        }
+
+        private int FindNext(int i)
+        {
+            //find next
+            i++;
+            if (i >= _videos.Count)
+                i = 0;
+
+            for (int j = 0; j < _videos.Count; j++)
+            {
+                if (File.Exists(_videos[i].FileName))
+                    return i;
+
+                i++;
+                if (i >= _videos.Count)
+                    i = 0;
+            }
+            
+            return -1;
         }
 
         private void PauseAll_Click(object sender, RoutedEventArgs e)

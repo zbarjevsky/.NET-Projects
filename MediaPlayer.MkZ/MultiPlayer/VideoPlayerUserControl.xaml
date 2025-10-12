@@ -21,6 +21,12 @@
     <UserControl.Resources>
         <local:SelectedIndexToIconTextConverter x:Key="SelectedIndexToIconTextConverter"/>
         <wpf:InverseVisibilityConverter x:Key="InverseVisConverter" />
+
+        <Style TargetType="TextBlock" x:Key="MenuItemIconTextStyle">
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Margin" Value="0,0,2,0"/>
+        </Style>
         
         <Style TargetType="Button" x:Key="SpecialButton" >
             <Setter Property="Background" Value="Transparent"/>
@@ -177,27 +183,33 @@
 
                             <MenuItem Header="Play One" Click="PlayMode_Click" Tag="0" >
                                 <MenuItem.Icon>
-                                    <TextBlock Text="{Binding SelectedPlayModeIndex, Converter={StaticResource SelectedIndexToIconTextConverter}, ConverterParameter=0}" />
+                                    <TextBlock Style="{StaticResource MenuItemIconTextStyle}" Text="{Binding SelectedPlayModeIndex, Converter={StaticResource SelectedIndexToIconTextConverter}, ConverterParameter=0}" />
                                 </MenuItem.Icon>
                             </MenuItem>
                             <MenuItem Header="Play All" Click="PlayMode_Click" Tag="1" >
                                 <MenuItem.Icon>
-                                    <TextBlock Text="{Binding SelectedPlayModeIndex, Converter={StaticResource SelectedIndexToIconTextConverter}, ConverterParameter=1}" />
+                                    <TextBlock Style="{StaticResource MenuItemIconTextStyle}" Text="{Binding SelectedPlayModeIndex, Converter={StaticResource SelectedIndexToIconTextConverter}, ConverterParameter=1}" />
                                 </MenuItem.Icon>
                             </MenuItem>
                             <MenuItem Header="Repeat One" Click="PlayMode_Click" Tag="2" >
                                 <MenuItem.Icon>
-                                    <TextBlock Text="{Binding SelectedPlayModeIndex, Converter={StaticResource SelectedIndexToIconTextConverter}, ConverterParameter=2}" />
+                                    <TextBlock Style="{StaticResource MenuItemIconTextStyle}" Text="{Binding SelectedPlayModeIndex, Converter={StaticResource SelectedIndexToIconTextConverter}, ConverterParameter=2}" />
                                 </MenuItem.Icon>
                             </MenuItem>
                             <MenuItem Header="Repeat All" Click="PlayMode_Click" Tag="3" >
                                 <MenuItem.Icon>
-                                    <TextBlock Text="{Binding SelectedPlayModeIndex, Converter={StaticResource SelectedIndexToIconTextConverter}, ConverterParameter=3}" />
+                                    <TextBlock Style="{StaticResource MenuItemIconTextStyle}" Text="{Binding SelectedPlayModeIndex, Converter={StaticResource SelectedIndexToIconTextConverter}, ConverterParameter=3}" />
                                 </MenuItem.Icon>
                             </MenuItem>
                             <MenuItem Header="Random" Click="PlayMode_Click" Tag="4" >
                                 <MenuItem.Icon>
-                                    <TextBlock Text="{Binding SelectedPlayModeIndex, Converter={StaticResource SelectedIndexToIconTextConverter}, ConverterParameter=4}" />
+                                    <TextBlock Style="{StaticResource MenuItemIconTextStyle}" Text="{Binding SelectedPlayModeIndex, Converter={StaticResource SelectedIndexToIconTextConverter}, ConverterParameter=4}" />
+                                </MenuItem.Icon>
+                            </MenuItem>
+                            <Separator/>
+                            <MenuItem Header="Global Repeat All" Click="PlayMode_Click" Tag="5" >
+                                <MenuItem.Icon>
+                                    <TextBlock Style="{StaticResource MenuItemIconTextStyle}" Text="{Binding SelectedPlayModeIndex, Converter={StaticResource SelectedIndexToIconTextConverter}, ConverterParameter=5}" />
                                 </MenuItem.Icon>
                             </MenuItem>
                         </MenuItem>

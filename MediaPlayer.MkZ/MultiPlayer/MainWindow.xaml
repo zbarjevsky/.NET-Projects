@@ -11,7 +11,9 @@
         Background="SlateGray"
         mc:Ignorable="d"
         Icon="Yin-Yang.ico"
-        Title="Multi Media Player - 10x" Height="950" Width="1920">
+        Title="Multi Media Player - 10x" 
+        x:Name="_mainWindow"
+        Height="950" Width="1920">
     <Grid x:Name="_gridMain" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="35"/>
@@ -56,6 +58,9 @@
                         <Label Content="Exit" FontSize="12" Margin="3,0" />
                     </StackPanel>
                 </Button>
+                <Separator/>
+                <CheckBox Content="Global Repeat All" VerticalAlignment="Center" Margin="8,0" Foreground="White"
+                          IsChecked="{Binding IsGlobalRepeatAllMode, ElementName=_mainWindow, Mode=TwoWay}"/>
             </StackPanel>
             <StackPanel Grid.Column="5" Orientation="Horizontal">
                 <Button ToolTip="Clear All (F1)"

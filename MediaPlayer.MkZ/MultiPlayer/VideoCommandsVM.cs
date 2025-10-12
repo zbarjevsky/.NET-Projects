@@ -465,23 +465,32 @@ namespace MultiPlayer
             Settings.Position = 0;
             await Task.Delay(100);
 
-            switch (Settings.PlayMode)
+            if (MainWindow.Instance.IsGlobalRepeatAllMode)
             {
-                case ePlayMode.PlayOne:
-                    break;
-                case ePlayMode.PlayAll:
-                    PlayNext(random: false, loop: false, startFrom0: true);
-                    break;
-                case ePlayMode.RepeatAll:
-                    PlayNext(random: false, loop: true, startFrom0: true);
-                    break;
-                case ePlayMode.Random:
-                    PlayNext(random: true, loop: true, startFrom0: true);
-                    break;
-                case ePlayMode.RepeatOne:
-                default:
-                    _ = OpenFromFile(Settings.FileName, startFrom0: true);
-                    break;
+                Settings.MediaState = MediaState.Pause;
+                _ = OpenFromSettings(new OnePlayerSettings(Settings), IsPopWindowMode);
+                MainWindow.Instance.PlayNext(_player);
+            }
+            else
+            {
+                switch (Settings.PlayMode)
+                {
+                    case ePlayMode.PlayOne:
+                        break;
+                    case ePlayMode.PlayAll:
+                        PlayNext(random: false, loop: false, startFrom0: true);
+                        break;
+                    case ePlayMode.RepeatAll:
+                        PlayNext(random: false, loop: true, startFrom0: true);
+                        break;
+                    case ePlayMode.Random:
+                        PlayNext(random: true, loop: true, startFrom0: true);
+                        break;
+                    case ePlayMode.RepeatOne:
+                    default:
+                        _ = OpenFromFile(Settings.FileName, startFrom0: true);
+                        break;
+                }
             }
         }
 
