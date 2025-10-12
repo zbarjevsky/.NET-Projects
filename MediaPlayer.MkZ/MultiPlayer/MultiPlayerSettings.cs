@@ -65,6 +65,22 @@ namespace MultiPlayer
     }
 
     [Serializable]
+    public class RecentFiles
+    {
+        public List<RecentFile> RecentFilesList { get; set; } = new List<RecentFile>();
+
+        public void CopyFrom(RecentFiles list)
+        {
+            RecentFilesList = new List<RecentFile>(list.RecentFilesList);
+        }
+
+        public void Clear()
+        {
+            RecentFilesList.Clear();
+        }
+    }
+        
+    [Serializable]
     public class RecentFile
     {
         public string FileName { get; set; } = string.Empty;
@@ -513,6 +529,8 @@ namespace MultiPlayer
         public string DefaultSettingsFileName { get; private set; }
         [XmlIgnore]
         public string LastSettingsFileName { get; private set; }
+        [XmlIgnore]
+        public string RecentFilesFileName { get; private set; }
 
         [XmlIgnore]
         [DisplayName("Close App Key"), Category(APP)]
@@ -553,7 +571,8 @@ namespace MultiPlayer
         public List<OnePlayerSettings> PlayerSettings { get; set; }
 
         [Description("Recent Files"), Category(APP)]
-        public List<RecentFile> RecentFiles { get; set; }
+        [XmlIgnore] //save it to separate file
+        public RecentFiles RecentFiles { get; set; } = new RecentFiles();
 
         public MultiPlayerSettings() 
         {
@@ -567,8 +586,12 @@ namespace MultiPlayer
             debug = "_debug";
 #endif
             string date = DateTime.Now.ToString("yyyy_MM_dd-HH_mm_ss");
+
             string fileName = string.Format("{0}_{1}{2}.xml", assemblyName, "Files", debug);
             DefaultSettingsFileName = Path.Combine(DataFolder, fileName);
+            
+            fileName = string.Format("{0}_{1}{2}.xml", assemblyName, "RecentFiles", debug);
+            RecentFilesFileName = Path.Combine(DataFolder, fileName);
         }
 
         public bool HasData()
@@ -585,6 +608,7 @@ namespace MultiPlayer
         {
             LastSettingsFileName = fileName;
             XmlHelper.Save(fileName, this);
+            XmlHelper.Save(RecentFilesFileName, RecentFiles);
         }
 
         public void Load()
@@ -600,6 +624,7 @@ namespace MultiPlayer
                 {
                     MultiPlayerSettings appConfig = XmlHelper.Open<MultiPlayerSettings>(fileName);
                     this.CopyFrom(appConfig);
+                    this.LoadRecentFiles();
                     LastSettingsFileName = fileName;
                 }
                 catch (Exception err)
@@ -608,6 +633,21 @@ namespace MultiPlayer
                 }
             }
             this.EnsureHasValues();
+        }
+
+        private void LoadRecentFiles()
+        {
+            if (File.Exists(RecentFilesFileName))
+            {
+                try
+                {
+                    RecentFiles = XmlHelper.Open<RecentFiles>(RecentFilesFileName);
+                }
+                catch (Exception err)
+                {
+                    System.Windows.MessageBox.Show(err.ToString(), "Cannot load Recent files From: \n"+RecentFilesFileName);
+                }
+            }
         }
 
         private void CopyFrom(MultiPlayerSettings appConfig)
@@ -640,7 +680,7 @@ namespace MultiPlayer
                 PlayerSettings = new List<OnePlayerSettings>();
 
             if (RecentFiles == null)
-                RecentFiles = new List<RecentFile>();
+                RecentFiles = new RecentFiles();
 
             SupportedFileExtensions.EnsureHasValues();
 

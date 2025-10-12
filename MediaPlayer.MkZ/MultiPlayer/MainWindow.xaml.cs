@@ -62,9 +62,14 @@ namespace MultiPlayer
 
             _settings.MainWindowState.RestoreTo(this);
 
-            RecentFiles.Clear();
-            foreach (RecentFile f in _settings.RecentFiles)
-                RecentFiles.Add(f.FileName, f);
+            //RecentFiles.Clear();
+            foreach (RecentFile f in _settings.RecentFiles.RecentFilesList)
+            {
+                if (!RecentFiles.ContainsKey(f.FileName)) 
+                    RecentFiles.Add(f.FileName, f);
+                else
+                    RecentFiles[f.FileName] = f;
+            }
 
             SplittersLoad(_settings.GridSplitterPositionsMain, _gridMain);
             SplittersLoad(_settings.GridSplitterPositionsTop, _gridTop);
@@ -128,7 +133,7 @@ namespace MultiPlayer
 
             _settings.RecentFiles.Clear();
             foreach (var f in RecentFiles)
-                _settings.RecentFiles.Add(f.Value);
+                _settings.RecentFiles.RecentFilesList.Add(f.Value);
 
             if (_settings.HasData())
                 _settings.Save(fileName);
