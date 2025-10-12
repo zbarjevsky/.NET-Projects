@@ -364,6 +364,16 @@ namespace MultiPlayer
                 recentFile.IsFavorite = isFavorite;
         }
 
+        public void PauseAll()
+        {
+            VideoCommandsVM.PopUpVM.PopUpPause();
+
+            foreach (VideoPlayerUserControl v in _videos)
+            {
+                v.VM.Pause(updateUI: true);
+            }
+        }
+
         public void PlayNext(VideoPlayerUserControl player)
         {
             if ( IsGlobalRepeatAllMode == false)
@@ -409,12 +419,7 @@ namespace MultiPlayer
 
         private void PauseAll_Click(object sender, RoutedEventArgs e)
         {
-            VideoCommandsVM.PopUpVM.PopUpPause();
-
-            foreach (VideoPlayerUserControl v in _videos)
-            {
-                v.VM.Pause(updateUI: true);
-            }
+            PauseAll();
         }
 
         //Pause -> Save Recent -> Clear -> Load Default

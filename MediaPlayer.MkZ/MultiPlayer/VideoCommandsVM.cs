@@ -140,6 +140,9 @@ namespace MultiPlayer
         {
             //Debug.WriteLine($"### MediaPlayStarted - Requested, File: {Settings.FileName}");
 
+            if (MainWindow.Instance.IsGlobalRepeatAllMode)
+                MainWindow.Instance.PauseAll();
+
             _playSartTime.Restart();
 
             _player.Play();
@@ -288,7 +291,7 @@ namespace MultiPlayer
             if (s.ZoomState == eZoomState.Custom)
                 _player.Zoom = s.Zoom;
 
-            _cmd._timeLbl.Text = SecondsToString(s.Position);
+            _cmd._timeLbl.Text = SecondsToString(s.Position, s.Duration);
 
             NotifyPropertyChanged(nameof(SelectedFitIndex));
 
@@ -399,7 +402,7 @@ namespace MultiPlayer
             if (_player.NaturalDuration > 0)
                 s.Duration = _player.NaturalDuration;
 
-            if (s.MediaState != MediaState.Play)
+            if (s.MediaState != MediaState.Play || s.Duration < 1)
             {
                 this.Pause(updateUI: true);
             }
@@ -424,6 +427,7 @@ namespace MultiPlayer
             this.AdjustSizeAndLayout();
 
             //_player.SetBackColor(bActive: false);
+            this.IsLoading = false;
         }
 
         private async Task WaitForNaturalDurationUpdated(string fileName)
@@ -455,11 +459,16 @@ namespace MultiPlayer
 
         private async Task MediaPlayEndedAsync(MediaElement player)
         {
-            IsLoading = false;
+            await WaitForLoadingComplete();
+
+            bool isEmpty = !player.NaturalDuration.HasTimeSpan || player.NaturalDuration.TimeSpan.TotalSeconds < 1.0;
 
             //when song is empty it is ended after next song started - ignore it
             if (string.IsNullOrEmpty(player?.Source?.ToString()))
+            {
+                Settings.MediaState = MediaState.Stop;
                 return;
+            }
 
             Stop();
             Settings.Position = 0;
@@ -468,7 +477,8 @@ namespace MultiPlayer
             if (MainWindow.Instance.IsGlobalRepeatAllMode)
             {
                 Settings.MediaState = MediaState.Pause;
-                _ = OpenFromSettings(new OnePlayerSettings(Settings), IsPopWindowMode);
+                if (!isEmpty)
+                    await OpenFromSettings(new OnePlayerSettings(Settings), IsPopWindowMode);
                 MainWindow.Instance.PlayNext(_player);
             }
             else
@@ -488,6 +498,7 @@ namespace MultiPlayer
                         break;
                     case ePlayMode.RepeatOne:
                     default:
+                        if (!isEmpty)
                         _ = OpenFromFile(Settings.FileName, startFrom0: true);
                         break;
                 }
@@ -628,7 +639,7 @@ namespace MultiPlayer
             _cmd._position.Value = Settings.Position;
             _player.PositionSet(TimeSpan.FromSeconds(Settings.Position), false);
 
-            _cmd._timeLbl.Text = SecondsToString(_player.Position.TotalSeconds);
+            _cmd._timeLbl.Text = SecondsToString(_player.Position.TotalSeconds, _player.Duration);
 
             if (Replay.IsReplayChecked && (Settings.Position < Settings.ReplayPosA || Settings.Position > Settings.ReplayPosB))
             {
@@ -641,6 +652,11 @@ namespace MultiPlayer
 
             IsMuted = false;
             e.Handled = true;
+        }
+
+        public static string SecondsToString(double seconds, double total)
+        {
+            return SecondsToString(seconds) + "\n" + SecondsToString(total);
         }
 
         public static string SecondsToString(double seconds)
@@ -885,6 +901,22 @@ namespace MultiPlayer
             }
 
             Replay.UpdateReplayUI();
+        }
+
+        private async Task WaitForLoadingComplete(int ms = 33)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                if (!IsLoading)
+                    break;
+
+                await Task.Delay(ms);
+            }
+
+            if (IsLoading)
+                Debug.WriteLine("*** Still loading: " + Settings.FileName);
+
+            IsLoading = false;
         }
 
         private WaitForEventImpl _waitMediaOpenedEvent = new WaitForEventImpl();

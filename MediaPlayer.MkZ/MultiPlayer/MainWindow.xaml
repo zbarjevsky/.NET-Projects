@@ -58,7 +58,7 @@
                         <Label Content="Exit" FontSize="12" Margin="3,0" />
                     </StackPanel>
                 </Button>
-                <Separator/>
+                <Separator Margin="8,0" Foreground="Pink"/>
                 <CheckBox Content="Global Repeat All" VerticalAlignment="Center" Margin="8,0" Foreground="White"
                           IsChecked="{Binding IsGlobalRepeatAllMode, ElementName=_mainWindow, Mode=TwoWay}"/>
             </StackPanel>
