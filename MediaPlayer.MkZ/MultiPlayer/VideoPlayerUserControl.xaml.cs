@@ -2,6 +2,7 @@
 using MkZ.WPF.PropertyGrid;
 using MultiPlayer.MkZ.WPF;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -774,6 +775,43 @@ namespace MultiPlayer
             VM.Replay.BookmarksClear();
         }
 
+        private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string query = SearchBox.Text.Trim().ToLower();
+            _ = UpdateMenuItems(query);
+        }
+
+        private void SearchBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            MyContextMenu.StaysOpen = true;
+        }
+
+        private void SearchBox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            // Optional: close when clicking outside
+            if (!SearchBox.IsKeyboardFocused)
+                MyContextMenu.StaysOpen = false;
+        }
+
+        private async Task UpdateMenuItems(string filter)
+        {
+            Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
+
+            await Task.Delay(33); //refresh UI
+
+            IEnumerable<MenuItem> items = BuildFileList(filter);
+
+            // Keep only first two items (TextBox + Separator)
+            while (MyContextMenu.Items.Count > 2)
+                MyContextMenu.Items.RemoveAt(2);
+
+            foreach (var item in items)
+                MyContextMenu.Items.Add(item);
+
+            Mouse.OverrideCursor = null;
+        }
+
+
         private void FileListMenu_OpenMenu(object sender, RoutedEventArgs e)
         {
             if (sender is System.Windows.Controls.Button button && button.ContextMenu != null)
@@ -784,36 +822,71 @@ namespace MultiPlayer
                 }
                 else
                 {
-                    button.ContextMenu.PlacementTarget = button;
-                    button.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
-                    button.ContextMenu.Items.Clear();
-
-                    List<string> fileNames = VM.GetFileNames(FileName, out int idx);
-                    for (int i = 0; i < fileNames.Count; i++)
-                    {
-                        MenuItem item = new MenuItem();
-
-                        bool isFavorite = MainWindow.IsFavorite(fileNames[i]);
-                        FontWeight fontWeight = (i == idx || isFavorite) ? FontWeights.Bold : FontWeights.Normal;
-                        Brush foreground = (isFavorite && i != idx) ? Brushes.SaddleBrown : Brushes.Navy;
-
-                        item.Icon = new TextBlock 
-                        { 
-                            Text = (i + 1).ToString(), Foreground = foreground, TextAlignment = TextAlignment.Right, 
-                            FontSize = 12, FontWeight = fontWeight, 
-                            Margin = new Thickness(-2,0,-2,-2) 
-                        };
-                        item.Header = new TextBlock { Text = System.IO.Path.GetFileName(fileNames[i]), FontWeight = fontWeight, Foreground = foreground };
-
-                        item.Command = VM.OpenFileByNameCommand;
-                        item.CommandParameter = fileNames[i];
-                        
-                        button.ContextMenu.Items.Add(item);
-                    }
+                    SearchBox.Text = "";
+                    _ = UpdateMenuItems(SearchBox.Text);
 
                     button.ContextMenu.IsOpen = true;
                 }
             }
+        }
+
+        private List<MenuItem> BuildFileList(string filter)
+        {
+            List<MenuItem> menuItems = new List<MenuItem>();
+
+            //first menu item - is BROWSE
+            MenuItem itemBrowse = new MenuItem();
+            itemBrowse.Icon = BuildGlyphIcon("\xE838");
+            itemBrowse.Header = "(..) Browse UP";
+            itemBrowse.Foreground = Brushes.Navy;
+            itemBrowse.Command = VM.OpenFileCommand;
+            itemBrowse.CommandParameter = "(..)";
+            menuItems.Add(itemBrowse);
+
+            List<string> fileNames = VM.GetFileNames(FileName, out int idx);
+            for (int i = 0; i < fileNames.Count; i++)
+            {
+                if (!string.IsNullOrEmpty(filter) && !fileNames[i].ToLower().Contains(filter))
+                    continue;
+
+                MenuItem item = new MenuItem();
+
+                bool isFavorite = MainWindow.IsFavorite(fileNames[i]);
+                FontWeight fontWeight = (i == idx || isFavorite) ? FontWeights.Bold : FontWeights.Normal;
+                Brush foreground = (isFavorite && i != idx) ? Brushes.SaddleBrown : Brushes.Navy;
+
+                item.Icon = new TextBlock
+                {
+                    Text = (i + 1).ToString(),
+                    Foreground = foreground,
+                    TextAlignment = TextAlignment.Right,
+                    FontSize = 12,
+                    FontWeight = fontWeight,
+                    Margin = new Thickness(-2, 0, -2, -2)
+                };
+                item.Header = new TextBlock { Text = System.IO.Path.GetFileName(fileNames[i]), FontWeight = fontWeight, Foreground = foreground };
+
+                item.Command = VM.OpenFileByNameCommand;
+                item.CommandParameter = fileNames[i];
+
+                menuItems.Add(item);
+            }
+
+            return menuItems;
+        }
+
+        private TextBlock BuildGlyphIcon(string code) //folder: "\xE838"
+        {
+            return new TextBlock
+            {
+                Text = code,
+                FontFamily = new System.Windows.Media.FontFamily("Segoe MDL2 Assets"),
+                Foreground = Brushes.SaddleBrown,
+                TextAlignment = TextAlignment.Right,
+                FontSize = 16,
+                FontWeight = FontWeights.Bold,
+                Margin = new Thickness(-2, 0, -2, -2)
+            };
         }
 
         private void DeleteFile_Click(object sender, RoutedEventArgs e)

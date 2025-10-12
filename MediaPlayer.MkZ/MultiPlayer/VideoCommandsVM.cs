@@ -193,11 +193,20 @@ namespace MultiPlayer
         {
             string fileName = Settings.FileName;
             string dir = System.IO.Path.GetDirectoryName(Settings.FileName);
+            string dirUP = string.Empty;
+            if (obj is string parameter && parameter == "(..)")
+                dirUP = System.IO.Path.GetDirectoryName(dir); //go one UP
+
             OpenFileDialog ofd = new OpenFileDialog();
-            if (Directory.Exists(dir))
+            if (string.IsNullOrWhiteSpace(dirUP) && Directory.Exists(dir))
             {
                 ofd.InitialDirectory = dir;
                 ofd.FileName = fileName;
+            }
+            else if (Directory.Exists(dirUP)) //open dirUP
+            {
+                ofd.InitialDirectory = dirUP;
+                ofd.FileName = System.IO.Path.GetFileName(dir);
             }
 
             MediaState state = _player.MediaState;
@@ -217,8 +226,10 @@ namespace MultiPlayer
 
         private void OpenFileByIndexCommandExecute(object parameter)
         {
-            string fileName = parameter as string;
-            _ = OpenFromFile(fileName, startFrom0: false);
+            if (parameter is string fileName)
+            {
+                _ = OpenFromFile(fileName, startFrom0: false);
+            }
         }
 
         private void TogglePlayPauseCommandExecute(object parameter)

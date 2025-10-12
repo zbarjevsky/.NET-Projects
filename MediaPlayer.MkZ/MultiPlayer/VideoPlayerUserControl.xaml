@@ -353,7 +353,32 @@
                                 ToolTip="Select File..."
                                 Click="FileListMenu_OpenMenu" >
                             <Button.ContextMenu>
-                                <ContextMenu x:Name="_ctxMnuFiles" MaxHeight="850">
+                                <ContextMenu x:Name="MyContextMenu"
+                                             StaysOpen="True" MaxHeight="850">
+                                    <!-- ✅ TextBox as first menu item -->
+                                    <MenuItem StaysOpenOnClick="True" Focusable="False">
+                                        <MenuItem.Icon>
+                                            <!-- magnifying glass -->
+                                            <TextBlock FontFamily="Segoe MDL2 Assets"
+                                                       Text="&#xE721;"
+                                                       FontSize="16"
+                                                       Margin="0"
+                                                       Foreground="Blue"/>
+                                        </MenuItem.Icon>
+                                        <MenuItem.Header>
+                                            <TextBox x:Name="SearchBox" Width="Auto" MinWidth="250"
+                                                    Margin="0,5"
+                                                    VerticalAlignment="Center"
+                                                    ToolTip="Type to search..."
+                                                    TextChanged="SearchBox_TextChanged"
+                                                    GotKeyboardFocus="SearchBox_GotKeyboardFocus"
+                                                    LostKeyboardFocus="SearchBox_LostKeyboardFocus"/>
+                                        </MenuItem.Header>
+                                    </MenuItem>
+
+                                    <Separator/>
+
+                                <!-- Items will be added dynamically -->
                                 </ContextMenu>
                             </Button.ContextMenu>
                         </Button>

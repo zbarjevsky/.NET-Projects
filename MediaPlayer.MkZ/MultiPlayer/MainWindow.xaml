@@ -11,7 +11,7 @@
         Background="SlateGray"
         mc:Ignorable="d"
         Icon="Yin-Yang.ico"
-        Title="Multi Media Player - 10x" Height="1950" Width="1920">
+        Title="Multi Media Player - 10x" Height="950" Width="1920">
     <Grid x:Name="_gridMain" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="35"/>
