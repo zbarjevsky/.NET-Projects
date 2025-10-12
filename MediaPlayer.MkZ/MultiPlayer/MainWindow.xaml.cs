@@ -25,7 +25,7 @@ namespace MultiPlayer
         {
             InitializeComponent();
 
-            _videos = new List<VideoPlayerUserControl> { _videoA, _videoB, _video00, _video01, _video02, _video03, _video10, _video11, _video12, _video13 };
+            _videos = new List<VideoPlayerUserControl> { _videoA, _videoB, _videoC, _video00, _video01, _video02, _video03, _video10, _video11, _video12, _video13 };
 
             if (!SingleInstanceHelper.IsSingleInstance(true))
             {

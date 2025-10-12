@@ -97,24 +97,28 @@
                 <ColumnDefinition Width="*" MinWidth="50"/>
                 <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="*" MinWidth="50"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*" MinWidth="50"/>
             </Grid.ColumnDefinitions>
-            <GridSplitter x:Name="_splitterV0" Grid.Column="1" Grid.RowSpan="1" Background="Gray" Width="4" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+            <GridSplitter x:Name="_splitterV01" Grid.Column="1" Grid.RowSpan="1" Background="Gray" Width="5" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+            <GridSplitter x:Name="_splitterV02" Grid.Column="3" Grid.RowSpan="1" Background="Gray" Width="5" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
 
             <local:VideoPlayerUserControl x:Name="_videoA" Grid.Column="0" Grid.Row="0" Background="Khaki" />
             <local:VideoPlayerUserControl x:Name="_videoB" Grid.Column="2" Grid.Row="0" Background="Lime" />
+            <local:VideoPlayerUserControl x:Name="_videoC" Grid.Column="4" Grid.Row="0" Background="Lime" />
         </Grid>
         
-        <GridSplitter x:Name="_splitterH0" Grid.ColumnSpan="1" Grid.Column="1" Grid.Row="1" Background="Gray" Height="4" HorizontalAlignment="Stretch" />
+        <GridSplitter x:Name="_splitterH0" Grid.ColumnSpan="1" Grid.Column="1" Grid.Row="1" Background="Gray" Height="5" HorizontalAlignment="Stretch" />
 
         <!-- Main Grid with 8 videos -->
         <Grid x:Name="_gridBottom" Grid.Column="1" Grid.Row="2" Background="Gray">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" MinWidth="50"/>
-                <ColumnDefinition Width="4"/>
+                <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="*" MinWidth="50"/>
-                <ColumnDefinition Width="4"/>
+                <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="*" MinWidth="50"/>
-                <ColumnDefinition Width="4"/>
+                <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="*" MinWidth="50"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -122,10 +126,10 @@
                 <RowDefinition  Height="5"/>
                 <RowDefinition />
             </Grid.RowDefinitions>
-            <GridSplitter x:Name="_splitterH1" Grid.ColumnSpan="5" Grid.Row="1" Background="Gray" Height="4" HorizontalAlignment="Stretch" />
-            <GridSplitter x:Name="_splitterV1" Grid.Column="1" Grid.RowSpan="3" Background="Gray" Width="4" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
-            <GridSplitter x:Name="_splitterV2" Grid.Column="3" Grid.RowSpan="3" Background="Gray" Width="4" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
-            <GridSplitter x:Name="_splitterV3" Grid.Column="5" Grid.RowSpan="3" Background="Gray" Width="4" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+            <GridSplitter x:Name="_splitterH1" Grid.ColumnSpan="5" Grid.Row="1" Background="Gray" Height="5" HorizontalAlignment="Stretch" />
+            <GridSplitter x:Name="_splitterV1" Grid.Column="1" Grid.RowSpan="3" Background="Gray" Width="5" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+            <GridSplitter x:Name="_splitterV2" Grid.Column="3" Grid.RowSpan="3" Background="Gray" Width="5" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+            <GridSplitter x:Name="_splitterV3" Grid.Column="5" Grid.RowSpan="3" Background="Gray" Width="5" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
 
 
             <local:VideoPlayerUserControl x:Name="_video00" Grid.Column="0" Grid.Row="0" Background="AliceBlue" />
