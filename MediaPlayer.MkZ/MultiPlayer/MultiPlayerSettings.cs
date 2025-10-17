@@ -1,19 +1,12 @@
 ﻿using MkZ.Tools;
 using MkZ.Windows;
 using MkZ.WPF;
-using MultiPlayer.Properties;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Runtime;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Input;
+using System.Windows.Media;
 using System.Xml.Serialization;
 
 namespace MultiPlayer
@@ -546,6 +539,30 @@ namespace MultiPlayer
         [DisplayName("Save as default Key"), Category(APP)]
         public System.Windows.Input.Key KeySaveAsDefault { get; set; } = System.Windows.Input.Key.F5;
 
+        //play one after another
+        [Description("Global Repeat All Mode - as Play List"), Category(VID)]
+        public bool IsGlobalRepeatAllMode { get; set; } = false;
+
+        [XmlIgnore]
+        [Description("Inactive Background Color"), Category(VID)]
+        public SolidColorBrush InactiveBackgroundColor { get; set; } = System.Windows.Media.Brushes.DarkGray;
+
+        [XmlElement("InactiveBackgroundColor")]
+        public string InactiveBackgroundColorHtml
+        {
+            get
+            {
+                if (InactiveBackgroundColor is SolidColorBrush scb)
+                    return scb.Color.ToString(); // "#FFFF0000" for Red
+                return "";
+            }
+            set
+            {
+                if (!string.IsNullOrEmpty(value))
+                    InactiveBackgroundColor = new SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString(value));
+            }
+        }
+
         [Category("Location")]
         public MainWindowState MainWindowState { get; set; } = new MainWindowState();
 
@@ -558,9 +575,6 @@ namespace MultiPlayer
         public GridSplitterPositions GridSplitterPositionsTop { get; set; } = new GridSplitterPositions();
         [Description("Splitter Positions Bottom"), Category(VID)]
         public GridSplitterPositions GridSplitterPositionsBottom { get; set; } = new GridSplitterPositions();
-
-        [Description("Inactive Background Color"), Category(VID)]
-        public Color InactiveBackgroundColor { get; set; } = Color.DarkGray;
 
         public SupportedFileExtensions SupportedFileExtensions { get; set; } = new ();
 
@@ -608,7 +622,7 @@ namespace MultiPlayer
         {
             LastSettingsFileName = fileName;
             XmlHelper.Save(fileName, this);
-            XmlHelper.Save(RecentFilesFileName, RecentFiles);
+            XmlHelper.Save(RecentFilesFileName, this.RecentFiles);
         }
 
         public void Load()
@@ -618,7 +632,7 @@ namespace MultiPlayer
 
         public void Load(string fileName)
         {
-            if (File.Exists(fileName))
+            if (System.IO.File.Exists(fileName))
             {
                 try
                 {
@@ -637,7 +651,7 @@ namespace MultiPlayer
 
         private void LoadRecentFiles()
         {
-            if (File.Exists(RecentFilesFileName))
+            if (System.IO.File.Exists(RecentFilesFileName))
             {
                 try
                 {
@@ -665,6 +679,9 @@ namespace MultiPlayer
             this.GridSplitterPositionsMain.CopyFrom(appConfig.GridSplitterPositionsMain);
             this.GridSplitterPositionsTop.CopyFrom(appConfig.GridSplitterPositionsTop);
             this.GridSplitterPositionsBottom.CopyFrom(appConfig.GridSplitterPositionsBottom);
+
+            this.InactiveBackgroundColorHtml = appConfig.InactiveBackgroundColorHtml;
+            this.IsGlobalRepeatAllMode = appConfig.IsGlobalRepeatAllMode;
 
             this.SupportedFileExtensions = appConfig.SupportedFileExtensions;
 

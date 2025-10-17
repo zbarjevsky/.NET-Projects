@@ -58,9 +58,12 @@
                         <Label Content="Exit" FontSize="12" Margin="3,0" />
                     </StackPanel>
                 </Button>
-                <Separator Margin="8,0" Foreground="Pink"/>
-                <CheckBox Content="Global Repeat All" VerticalAlignment="Center" Margin="8,0" Foreground="White"
-                          IsChecked="{Binding IsGlobalRepeatAllMode, ElementName=_mainWindow, Mode=TwoWay}"/>
+                <Rectangle Width="2" Height="20" Fill="LightBlue" Margin="8,0" />
+                <Viewbox Stretch="Uniform" Width="150" Height="26" Margin="0,0">
+                    <CheckBox Content="Global Repeat All" VerticalAlignment="Center" 
+                              Foreground="White" FontSize="8" VerticalContentAlignment="Center"
+                              IsChecked="{Binding IsGlobalRepeatAllMode, ElementName=_mainWindow, Mode=TwoWay}"/>
+                </Viewbox>
             </StackPanel>
             <StackPanel Grid.Column="5" Orientation="Horizontal">
                 <Button ToolTip="Clear All (F1)"

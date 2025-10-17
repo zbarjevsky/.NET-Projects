@@ -108,6 +108,8 @@ namespace MultiPlayer
             SplittersLoad(_settings.GridSplitterPositionsTop, _gridTop);
             SplittersLoad(_settings.GridSplitterPositionsBottom, _gridBottom);
 
+            this.IsGlobalRepeatAllMode = _settings.IsGlobalRepeatAllMode;
+
             if (_settings.PlayerSettings.Count > 2)
             {
                 await InitFirstPlayerForMp3();
@@ -159,6 +161,8 @@ namespace MultiPlayer
             SplittersSave(_settings.GridSplitterPositionsMain, _gridMain);
             SplittersSave(_settings.GridSplitterPositionsTop, _gridTop);
             SplittersSave(_settings.GridSplitterPositionsBottom, _gridBottom);
+
+            _settings.IsGlobalRepeatAllMode = this.IsGlobalRepeatAllMode;
 
             _settings.Update(_videos);
 
@@ -350,12 +354,12 @@ namespace MultiPlayer
             return false;
         }
 
-        public static System.Windows.Media.Brush InactiveBackgroundBrush => GetBrush(_settings.InactiveBackgroundColor);
+        public System.Windows.Media.Brush InactiveBackgroundBrush => _settings.InactiveBackgroundColor;
 
-        private static System.Windows.Media.Brush GetBrush(System.Drawing.Color c)
-        {
-            return new System.Windows.Media.SolidColorBrush(new System.Windows.Media.Color() { A = 255, R = c.R, G = c.G, B = c.B });
-        }
+        //private static System.Windows.Media.Brush GetBrush(System.Drawing.Color c)
+        //{
+        //    return new System.Windows.Media.SolidColorBrush(new System.Windows.Media.Color() { A = 255, R = c.R, G = c.G, B = c.B });
+        //}
 
         public static void UpdateRecentFile(string fileName, bool isFavorite)
         {
