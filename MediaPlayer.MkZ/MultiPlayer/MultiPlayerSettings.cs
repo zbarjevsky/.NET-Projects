@@ -71,6 +71,18 @@ namespace MultiPlayer
         {
             RecentFilesList.Clear();
         }
+
+        public void Merge(RecentFiles recentFiles)
+        {
+            foreach (RecentFile file in recentFiles.RecentFilesList)
+            {
+                int idx = RecentFilesList.FindIndex(f => f.FileName == file.FileName);
+                if (idx < 0) //new file
+                    RecentFilesList.Add(file);
+                else if (RecentFilesList[idx].LastUpdate < file.LastUpdate)
+                    RecentFilesList[idx] = file;
+            }
+        }
     }
         
     [Serializable]
@@ -122,8 +134,8 @@ namespace MultiPlayer
         public bool ShouldSerializeReplayPosJ() => ReplayPosJ > 0.0;
         public bool ShouldSerializeReplayPosK() => ReplayPosK > 0.0;
                                                    
-        [XmlIgnore]
-        public DateTime LastUpdate { get; private set; } = DateTime.MinValue;
+        [XmlAttribute]
+        public DateTime LastUpdate { get; set; } = DateTime.MinValue;
 
         public void Update(OnePlayerSettings settings)
         {
@@ -212,6 +224,7 @@ namespace MultiPlayer
         public double ReplayPosJ { get => _replayPosJ; set => SetProperty(ref _replayPosJ, value); }
         
         private double _replayPosK = 0.0;
+        public double ReplayPosK { get => _replayPosK; set => SetProperty(ref _replayPosK, value); }
 
         public bool ShouldSerializeReplayPosC() => ReplayPosC > 0.0;
         public bool ShouldSerializeReplayPosD() => ReplayPosD > 0.0;
@@ -223,12 +236,9 @@ namespace MultiPlayer
         public bool ShouldSerializeReplayPosJ() => ReplayPosJ > 0.0;
         public bool ShouldSerializeReplayPosK() => ReplayPosK > 0.0;
 
-        public double ReplayPosK { get => _replayPosK; set => SetProperty(ref _replayPosK, value); }
-
         public bool ReplayIsOn {  get; set; } = false;
 
-        [XmlIgnore]
-        public DateTime LastUpdate { get; private set; } = DateTime.MinValue;
+        public DateTime LastUpdate { get; set; } = DateTime.MinValue;
 
         public OnePlayerSettings()
         {
@@ -301,7 +311,7 @@ namespace MultiPlayer
         public void UpdateBookmarks(OnePlayerSettings s)
         {
             Position = s.Position;
-
+            LastUpdate = s.LastUpdate;
             ReplayIsOn = s.ReplayIsOn;
 
             IsMoreBookmarksOpen = s.IsMoreBookmarksOpen;
@@ -323,7 +333,7 @@ namespace MultiPlayer
         public void UpdateBookmarks(bool on, RecentFile f)
         {
             ReplayIsOn = on;
-
+            LastUpdate = f.LastUpdate;
             Position = f.Position;
 
             IsMoreBookmarksOpen = f.IsMoreBookmarksOpen;
@@ -651,16 +661,34 @@ namespace MultiPlayer
 
         private void LoadRecentFiles()
         {
-            if (System.IO.File.Exists(RecentFilesFileName))
+            RecentFiles = LoadRecentFiles(RecentFilesFileName);
+            if (RecentFiles == null)
+                RecentFiles = new();
+        }
+
+        private static RecentFiles LoadRecentFiles(string recentFilesFileName)
+        {
+            if (System.IO.File.Exists(recentFilesFileName))
             {
                 try
                 {
-                    RecentFiles = XmlHelper.Open<RecentFiles>(RecentFilesFileName);
+                    RecentFiles recentFiles = XmlHelper.Open<RecentFiles>(recentFilesFileName);
+                    return recentFiles;
                 }
                 catch (Exception err)
                 {
-                    System.Windows.MessageBox.Show(err.ToString(), "Cannot load Recent files From: \n"+RecentFilesFileName);
+                    System.Windows.MessageBox.Show(err.ToString(), "Cannot load Recent files From: \n"+recentFilesFileName);
                 }
+            }
+            return null;
+        }
+
+        public void UpdateRecentFiles(string recentFilesFileName)
+        {
+            RecentFiles recentFiles = LoadRecentFiles(recentFilesFileName);
+            if(recentFiles != null)
+            {
+                RecentFiles.Merge(recentFiles);
             }
         }
 

@@ -89,6 +89,18 @@ namespace MultiPlayer
             }
         }
 
+        private void OpenRecent_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.InitialDirectory = _settings.DataFolder;
+            ofd.FileName = _settings.RecentFilesFileName;
+            ofd.Filter = "XML Files (*.xml)|*.xml";
+            if (ofd.ShowDialog(this).Value == true)
+            {
+                _settings.UpdateRecentFiles(ofd.FileName);
+            }
+        }
+
         private async void LoadSettings(string fileName)
         {
             _settings.Load(fileName);
