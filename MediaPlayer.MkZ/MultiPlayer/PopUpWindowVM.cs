@@ -24,7 +24,7 @@ namespace MultiPlayer
 
         public void LoadSettings(MainWindowState popupWindowState, OnePlayerSettings popUpPlayerSettings)
         {
-            if (!File.Exists(popUpPlayerSettings?.FileName))
+            if (!File.Exists(popUpPlayerSettings?.FullFileName))
                 return;
 
             OpenPopUpWindowFromSettings(popUpPlayerSettings);
@@ -42,9 +42,9 @@ namespace MultiPlayer
                 return null;
 
             OnePlayerSettings s = new OnePlayerSettings(_player);
-            RecentFile recentFile = MainWindow.FindOrCreateRecentFile(s.FileName);
-            recentFile.Update(s);
-            s.UpdateBookmarks(s.ReplayIsOn, recentFile);
+            BookmarkSettings recentFile = MainWindow.Instance.RecentFilesCache.FindOrCreateRecentFile(s.FullFileName);
+            recentFile.UpdateFrom(s.BookmarkSettings, force: false);
+            s.UpdateBookmarks(recentFile);
 
             return s;
         }

@@ -22,31 +22,31 @@
                     <SolidColorBrush Color="SlateGray" Opacity="0.8" />
                 </StackPanel.Background>
                 <local:BookmarkButtonControl Margin="2" Text="1" ActiveBrush="{Binding BookmarkBrush1, Source={StaticResource BookmarkColors}}"
-                                             Position="{Binding Settings.ReplayPosC}" ClearCommand="{Binding BookmarkClearCommand}"
+                                             Position="{Binding Settings.BookmarkSettings.ReplayPosC}" ClearCommand="{Binding BookmarkClearCommand}"
                                              CommandParameter="C" GotoCommand="{Binding BookmarkGoToCommand}" SetCommand="{Binding BookmarkSetCommand}" />
                 <local:BookmarkButtonControl Margin="2" Text="2" ActiveBrush="{Binding BookmarkBrush2, Source={StaticResource BookmarkColors}}" 
-                                             Position="{Binding Settings.ReplayPosD}" ClearCommand="{Binding BookmarkClearCommand}"
+                                             Position="{Binding Settings.BookmarkSettings.ReplayPosD}" ClearCommand="{Binding BookmarkClearCommand}"
                                              CommandParameter="D" GotoCommand="{Binding BookmarkGoToCommand}" SetCommand="{Binding BookmarkSetCommand}" />
                 <local:BookmarkButtonControl Margin="2" Text="3" ActiveBrush="{Binding BookmarkBrush3, Source={StaticResource BookmarkColors}}" 
-                                             Position="{Binding Settings.ReplayPosE}" ClearCommand="{Binding BookmarkClearCommand}"
+                                             Position="{Binding Settings.BookmarkSettings.ReplayPosE}" ClearCommand="{Binding BookmarkClearCommand}"
                                              CommandParameter="E" GotoCommand="{Binding BookmarkGoToCommand}" SetCommand="{Binding BookmarkSetCommand}" />
                 <local:BookmarkButtonControl Margin="2" Text="4" ActiveBrush="{Binding BookmarkBrush4, Source={StaticResource BookmarkColors}}" 
-                                             Position="{Binding Settings.ReplayPosF}" ClearCommand="{Binding BookmarkClearCommand}"
+                                             Position="{Binding Settings.BookmarkSettings.ReplayPosF}" ClearCommand="{Binding BookmarkClearCommand}"
                                              CommandParameter="F" GotoCommand="{Binding BookmarkGoToCommand}" SetCommand="{Binding BookmarkSetCommand}" />
                 <local:BookmarkButtonControl Margin="2" Text="5" ActiveBrush="{Binding BookmarkBrush5, Source={StaticResource BookmarkColors}}" 
-                                             Position="{Binding Settings.ReplayPosG}" ClearCommand="{Binding BookmarkClearCommand}"
+                                             Position="{Binding Settings.BookmarkSettings.ReplayPosG}" ClearCommand="{Binding BookmarkClearCommand}"
                                              CommandParameter="G" GotoCommand="{Binding BookmarkGoToCommand}" SetCommand="{Binding BookmarkSetCommand}" />
                 <local:BookmarkButtonControl Margin="2" Text="6" ActiveBrush="{Binding BookmarkBrush6, Source={StaticResource BookmarkColors}}" 
-                                             Position="{Binding Settings.ReplayPosH}" ClearCommand="{Binding BookmarkClearCommand}"
+                                             Position="{Binding Settings.BookmarkSettings.ReplayPosH}" ClearCommand="{Binding BookmarkClearCommand}"
                                              CommandParameter="H" GotoCommand="{Binding BookmarkGoToCommand}" SetCommand="{Binding BookmarkSetCommand}" />
                 <local:BookmarkButtonControl Margin="2" Text="7" ActiveBrush="{Binding BookmarkBrush7, Source={StaticResource BookmarkColors}}" 
-                                             Position="{Binding Settings.ReplayPosI}" ClearCommand="{Binding BookmarkClearCommand}"
+                                             Position="{Binding Settings.BookmarkSettings.ReplayPosI}" ClearCommand="{Binding BookmarkClearCommand}"
                                              CommandParameter="I" GotoCommand="{Binding BookmarkGoToCommand}" SetCommand="{Binding BookmarkSetCommand}" />
                 <local:BookmarkButtonControl Margin="2" Text="8" ActiveBrush="{Binding BookmarkBrush8, Source={StaticResource BookmarkColors}}" 
-                                             Position="{Binding Settings.ReplayPosJ}" ClearCommand="{Binding BookmarkClearCommand}"
+                                             Position="{Binding Settings.BookmarkSettings.ReplayPosJ}" ClearCommand="{Binding BookmarkClearCommand}"
                                              CommandParameter="J" GotoCommand="{Binding BookmarkGoToCommand}" SetCommand="{Binding BookmarkSetCommand}" />
                 <local:BookmarkButtonControl Margin="2" Text="9" ActiveBrush="{Binding BookmarkBrush9, Source={StaticResource BookmarkColors}}" 
-                                             Position="{Binding Settings.ReplayPosK}" ClearCommand="{Binding BookmarkClearCommand}"
+                                             Position="{Binding Settings.BookmarkSettings.ReplayPosK}" ClearCommand="{Binding BookmarkClearCommand}"
                                              CommandParameter="K" GotoCommand="{Binding BookmarkGoToCommand}" SetCommand="{Binding BookmarkSetCommand}" />
             </StackPanel>
             <WrapPanel Grid.Row="1" x:Name="_wrapPanel" Orientation="Horizontal" HorizontalAlignment="Stretch" >
@@ -82,12 +82,12 @@
                         <ComboBoxItem Content="FitHeight" />
                     </ComboBox>
                    <local:BookmarkButtonControl Margin="2" Text="1" ActiveBrush="{Binding BookmarkBrush1, Source={StaticResource BookmarkColors}}"
-                                             Position="{Binding Settings.ReplayPosC}" ClearCommand="{Binding BookmarkClearCommand}"
+                                             Position="{Binding Settings.BookmarkSettings.ReplayPosC}" ClearCommand="{Binding BookmarkClearCommand}"
                                              CommandParameter="C" GotoCommand="{Binding BookmarkGoToCommand}" SetCommand="{Binding BookmarkSetCommand}" />
                     <local:BookmarkButtonControl Margin="2" Text="2" ActiveBrush="{Binding BookmarkBrush2, Source={StaticResource BookmarkColors}}" 
-                                             Position="{Binding Settings.ReplayPosD}" ClearCommand="{Binding BookmarkClearCommand}"
+                                             Position="{Binding Settings.BookmarkSettings.ReplayPosD}" ClearCommand="{Binding BookmarkClearCommand}"
                                              CommandParameter="D" GotoCommand="{Binding BookmarkGoToCommand}" SetCommand="{Binding BookmarkSetCommand}" />
-                    <ToggleButton x:Name="btnMoreBookmarks" Margin="2" IsChecked="{Binding Settings.IsMoreBookmarksOpen, Mode=TwoWay, FallbackValue=true}">
+                    <ToggleButton x:Name="btnMoreBookmarks" Margin="2" IsChecked="{Binding Settings.BookmarkSettings.IsMoreBookmarksOpen, Mode=TwoWay, FallbackValue=true}">
                         <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE97B;"/>
                     </ToggleButton>
                     <ToggleButton ToolTip="{Binding Replay.ReplayToolTip, FallbackValue='Replay Last N seconds'}" Margin="2" Padding="2" 
@@ -96,10 +96,10 @@
                         <Label x:Name="_lblReplay" FontFamily="Segoe MDL2 Assets" Content="&#xE8EE;" FontSize="16" />
                     </ToggleButton>
                     <local:BookmarkButtonControl Margin="2" Text="A" ActiveBrush="{Binding BookmarkBrushA, Source={StaticResource BookmarkColors}}"
-                                             Position="{Binding Settings.ReplayPosA}" ClearCommand="{Binding BookmarkClearCommand}"
+                                             Position="{Binding Settings.BookmarkSettings.ReplayPosA}" ClearCommand="{Binding BookmarkClearCommand}"
                                              CommandParameter="A" GotoCommand="{Binding BookmarkGoToCommand}" SetCommand="{Binding BookmarkSetCommand}" />
                     <local:BookmarkButtonControl Margin="2" Text="B" ActiveBrush="{Binding BookmarkBrushA, Source={StaticResource BookmarkColors}}" 
-                                             Position="{Binding Settings.ReplayPosB}" ClearCommand="{Binding BookmarkClearCommand}"
+                                             Position="{Binding Settings.BookmarkSettings.ReplayPosB}" ClearCommand="{Binding BookmarkClearCommand}"
                                              CommandParameter="B" GotoCommand="{Binding BookmarkGoToCommand}" SetCommand="{Binding BookmarkSetCommand}" />
                    <RepeatButton ToolTip="Back 0.1 sec" Margin="2" Padding="2" Click="PrevFrame_Click">
                         <Label FontFamily="Segoe MDL2 Assets" Content="&#xE8A0;" FontSize="16" />

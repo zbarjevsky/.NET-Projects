@@ -85,7 +85,7 @@ namespace MultiPlayer
             protected set { _mediaState = value; OnPropertyChanged(); }
         }
 
-        public string FileName => VM.Settings.FileName;
+        public string FileName => VM.Settings.FullFileName;
 
         public bool IsFlipHorizontally
         {
@@ -305,7 +305,7 @@ namespace MultiPlayer
                 VideoPlayerUserControl vFrom = DragDropSource;
                 OnePlayerSettings setFrom = new OnePlayerSettings((OnePlayerSettings)(e.Data.GetData(DragDropDataFormat)));
                 OnePlayerSettings setTo = new OnePlayerSettings(this);
-                if (!string.IsNullOrWhiteSpace(setFrom.FileName) && setFrom.FileName != setTo.FileName)
+                if (!string.IsNullOrWhiteSpace(setFrom.FullFileName) && setFrom.FullFileName != setTo.FullFileName)
                 {
                     _ = this.LoadSetting(setFrom, VM.IsPopWindowMode);
                     //if CTRL is pressed - "copy" the conthent
@@ -860,7 +860,7 @@ namespace MultiPlayer
 
                 MenuItem item = new MenuItem();
 
-                bool isFavorite = MainWindow.IsFavorite(fileNames[i]);
+                bool isFavorite = MainWindow.Instance.RecentFilesCache.IsFavorite(fileNames[i]);
                 FontWeight fontWeight = (i == idx || isFavorite) ? FontWeights.Bold : FontWeights.Normal;
                 Brush foreground = (isFavorite && i != idx) ? Brushes.SaddleBrown : Brushes.Navy;
 

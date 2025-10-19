@@ -3,6 +3,7 @@ using MkZ.Tools;
 using MkZ.WPF;
 using MkZ.WPF.PropertyGrid;
 using System.IO;
+using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -19,7 +20,9 @@ namespace MultiPlayer
         static MultiPlayerSettings _settings = new MultiPlayerSettings();
         List<VideoPlayerUserControl> _videos = new List<VideoPlayerUserControl>();
 
-        public static Dictionary<string, RecentFile> RecentFiles { get; } = new Dictionary<string, RecentFile>();
+        public RecentFilesDictionary RecentFilesCache { get; } = new ();
+
+        public System.Windows.Media.Brush InactiveBackgroundBrush => _settings.InactiveBackgroundColor;
 
         /// <summary>
         /// If true - play all players one after another
@@ -98,6 +101,16 @@ namespace MultiPlayer
             if (ofd.ShowDialog(this).Value == true)
             {
                 _settings.UpdateRecentFiles(ofd.FileName);
+                RecentFilesCache.UpdateRecentFilesCache(_settings.RecentFiles);
+                UpdateOpenedPlayersBookmarksFromCache();
+            }
+        }
+
+        private void UpdateOpenedPlayersBookmarksFromCache()
+        {
+            foreach (VideoPlayerUserControl v in _videos)
+            {
+                v.VM.UpdateBookmarksFromCache(RecentFilesCache);
             }
         }
 
@@ -107,20 +120,15 @@ namespace MultiPlayer
 
             _settings.MainWindowState.RestoreTo(this);
 
-            //RecentFiles.Clear();
-            foreach (RecentFile f in _settings.RecentFiles.RecentFilesList)
-            {
-                if (!RecentFiles.ContainsKey(f.FileName)) 
-                    RecentFiles.Add(f.FileName, f);
-                else
-                    RecentFiles[f.FileName] = f;
-            }
+            RecentFilesCache.UpdateRecentFilesCache(_settings.RecentFiles);
 
             SplittersLoad(_settings.GridSplitterPositionsMain, _gridMain);
             SplittersLoad(_settings.GridSplitterPositionsTop, _gridTop);
             SplittersLoad(_settings.GridSplitterPositionsBottom, _gridBottom);
 
             this.IsGlobalRepeatAllMode = _settings.IsGlobalRepeatAllMode;
+
+            await ClearAllAsync();
 
             if (_settings.PlayerSettings.Count > 2)
             {
@@ -131,7 +139,7 @@ namespace MultiPlayer
                     _ = _videos[i].LoadSetting(_settings.PlayerSettings[i]);
                 }
 
-                if (_settings.PopUpPlayerSettings != null && File.Exists(_settings.PopUpPlayerSettings.FileName))
+                if (_settings.PopUpPlayerSettings != null && File.Exists(_settings.PopUpPlayerSettings.BookmarkSettings.FileName))
                 {
                      VideoCommandsVM.PopUpVM.LoadSettings(_settings.PopupWindowState,  _settings.PopUpPlayerSettings);
                 }
@@ -156,7 +164,7 @@ namespace MultiPlayer
         /// </summary>
         private async Task InitFirstPlayerForMp3()
         {
-            string fileName = _settings.PlayerSettings[0].FileName.ToLower();
+            string fileName = _settings.PlayerSettings[0].BookmarkSettings.FileName.ToLower();
             if (string.IsNullOrEmpty(fileName))
                 return;
 
@@ -181,7 +189,7 @@ namespace MultiPlayer
             _settings.MainWindowState.CopyFrom(this);
 
             _settings.RecentFiles.Clear();
-            foreach (var f in RecentFiles)
+            foreach (var f in RecentFilesCache.RecentFiles)
                 _settings.RecentFiles.RecentFilesList.Add(f.Value);
 
             if (_settings.HasData())
@@ -320,64 +328,74 @@ namespace MultiPlayer
             OptionsWindow.ShowOptions(this, _settings, "Settings", 650, 170);
         }
 
-        public static RecentFile FindRecentFile(string fileName)
+        public class RecentFilesDictionary
         {
-            if (string.IsNullOrWhiteSpace(fileName))
+            public Dictionary<string, BookmarkSettings> RecentFiles { get; } = new();
+
+            public BookmarkSettings FindRecentFile(string fileName)
+            {
+                if (string.IsNullOrWhiteSpace(fileName))
+                    return null;
+
+                string name = Path.GetFileName(fileName);
+                if (RecentFiles.ContainsKey(name))
+                    return RecentFiles[name];
+
+                string shortName = name.TrimStart('_');
+                if (RecentFiles.ContainsKey(shortName))
+                    return RecentFiles[shortName];
+
                 return null;
+            }
 
-            string name = Path.GetFileName(fileName);
-            if (RecentFiles.ContainsKey(name))
-                return RecentFiles[name];
+            public BookmarkSettings FindOrCreateRecentFile(string fileName)
+            {
+                if (string.IsNullOrWhiteSpace(fileName))
+                    return null;
 
-            string shortName = name.TrimStart('_');
-            if (RecentFiles.ContainsKey(shortName))
+                BookmarkSettings recentFile = FindRecentFile(fileName);
+                if (recentFile != null)
+                    return recentFile;
+
+                string shortName = BookmarkSettings.GetShortFileName(fileName);
+
+                RecentFiles.Add(shortName, new BookmarkSettings() { FileName = shortName });
                 return RecentFiles[shortName];
+            }
 
-            return null;
-        }
+            public bool IsFavorite(string fileName)
+            {
+                BookmarkSettings recentFile = FindRecentFile(fileName);
+                if (recentFile != null)
+                    return recentFile.IsFavorite;
 
-        public static RecentFile FindOrCreateRecentFile(string fileName)
-        {
-            if (string.IsNullOrWhiteSpace(fileName))
-                return null;
+                return false;
+            }
 
-            RecentFile recentFile = FindRecentFile(fileName);
-            if (recentFile != null)
-                return recentFile;
+            public void UpdateRecentFile(OnePlayerSettings settings)
+            {
+                BookmarkSettings recentFile = FindRecentFile(settings.BookmarkSettings.FileName);
+                if (recentFile != null)
+                {
+                    recentFile.UpdateFrom(settings.BookmarkSettings, force:false);
+                }
+            }
 
-            string name = Path.GetFileName(fileName);
-            string shortName = name.TrimStart('_');
+            public void UpdateRecentFilesCache(RecentFiles recentFiles)
+            {
+                foreach (BookmarkSettings f in recentFiles.RecentFilesList)
+                {
+                    if (!RecentFiles.ContainsKey(f.FileName))
+                        RecentFiles.Add(f.FileName, f);
+                    else
+                        RecentFiles[f.FileName].UpdateFrom(f, force: false);
+                }
+            }
+        }//end RecentFilesDictionary
 
-            RecentFiles.Add(shortName, new RecentFile() { FileName = shortName });
-            return RecentFiles[shortName];
-        }
-
-        public static bool IsSupportedFileExtension(string fileName)
+        public bool IsSupportedFileExtension(string fileName)
         {
             return _settings.SupportedFileExtensions.IsSupportedFileExtension(fileName);
-        }
-
-        public static bool IsFavorite(string fileName)
-        {
-            RecentFile recentFile = FindRecentFile(fileName);
-            if (recentFile != null)
-                return recentFile.IsFavorite;
-
-            return false;
-        }
-
-        public System.Windows.Media.Brush InactiveBackgroundBrush => _settings.InactiveBackgroundColor;
-
-        //private static System.Windows.Media.Brush GetBrush(System.Drawing.Color c)
-        //{
-        //    return new System.Windows.Media.SolidColorBrush(new System.Windows.Media.Color() { A = 255, R = c.R, G = c.G, B = c.B });
-        //}
-
-        public static void UpdateRecentFile(string fileName, bool isFavorite)
-        {
-            RecentFile recentFile = FindRecentFile(fileName);
-            if (recentFile != null)
-                recentFile.IsFavorite = isFavorite;
         }
 
         public void PauseAll()
@@ -441,11 +459,16 @@ namespace MultiPlayer
         //Pause -> Save Recent -> Clear -> Load Default
         private void Magic_Click(object sender, RoutedEventArgs e)
         {
+            _ = Magic(sender, e);
+        }
+
+        private async Task Magic(object sender, RoutedEventArgs e)
+        {
             try
             {
                 PauseAll_Click(sender, e);
                 SaveAsRecent_Click(sender, e);
-                ClearAll_Click(sender, e);
+                await ClearAllAsync();
                 OpenDefault_Click(sender, e);
 
                 //System.Windows.MessageBox.Show(this, "Magic Done!", this.Title);
@@ -453,7 +476,7 @@ namespace MultiPlayer
             catch (Exception ex)
             {
                 System.Windows.MessageBox.Show(this, ex.Message, this.Title);
-            }        
+            }
         }
     }
 }

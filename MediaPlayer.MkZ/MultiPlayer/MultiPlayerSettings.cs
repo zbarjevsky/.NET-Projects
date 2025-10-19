@@ -4,6 +4,7 @@ using MkZ.WPF;
 using System.ComponentModel;
 using System.IO;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -58,173 +59,77 @@ namespace MultiPlayer
     }
 
     [Serializable]
-    public class RecentFiles
+    public class BookmarkSettings : NotifyPropertyChangedImpl
     {
-        public List<RecentFile> RecentFilesList { get; set; } = new List<RecentFile>();
+        //when loading from XML disable updating 'LastUpdate'
+        [XmlIgnore]
+        public static  bool PauseLastUpdateForXmlSerialization = true;
 
-        public void CopyFrom(RecentFiles list)
-        {
-            RecentFilesList = new List<RecentFile>(list.RecentFilesList);
-        }
+        private double _position = 0.0;
+        public double Position { get => _position; set => SetProperty(ref _position, value); }
 
-        public void Clear()
-        {
-            RecentFilesList.Clear();
-        }
-
-        public void Merge(RecentFiles recentFiles)
-        {
-            foreach (RecentFile file in recentFiles.RecentFilesList)
-            {
-                int idx = RecentFilesList.FindIndex(f => f.FileName == file.FileName);
-                if (idx < 0) //new file
-                    RecentFilesList.Add(file);
-                else if (RecentFilesList[idx].LastUpdate < file.LastUpdate)
-                    RecentFilesList[idx] = file;
-            }
-        }
-    }
+        private DateTime _lastUpdate = DateTime.MinValue;
+        public DateTime LastUpdate { get => _lastUpdate; set => SetProperty(ref _lastUpdate, value); }
         
-    [Serializable]
-    public class RecentFile
-    {
-        public string FileName { get; set; } = string.Empty;
+        private string _fileName = string.Empty;
+        public string FileName { get => _fileName; set => SetProperty(ref _fileName, value); }
 
+        private bool _isFavorite = false;
         [XmlAttribute]
-        public bool  IsFavorite { get; set; } = false;
+        public bool IsFavorite { get => _isFavorite; set => UpdatePropertyAndTime(ref _isFavorite, value); }
 
+        private bool _replayIsOn = false;
         [XmlAttribute]
-        public double Position { get; set; } = 0.0;
-        [XmlAttribute]
-        public bool ReplayIsOn { get; set; } = false;
-
-        [XmlAttribute]
-        public bool IsMoreBookmarksOpen { get; set; } = false;
-
-        [XmlAttribute]
-        public double ReplayPosA { get; set; } = 0.0;
-        [XmlAttribute]
-        public double ReplayPosB { get; set; } = 0.0;
-        [XmlAttribute]
-        public double ReplayPosC { get; set; } = 0.0;
-        [XmlAttribute]
-        public double ReplayPosD { get; set; } = 0.0;
-        [XmlAttribute]
-        public double ReplayPosE { get; set; } = 0.0;
-        [XmlAttribute]
-        public double ReplayPosF { get; set; } = 0.0;
-        [XmlAttribute]
-        public double ReplayPosG { get; set; } = 0.0;
-        [XmlAttribute]
-        public double ReplayPosH { get; set; } = 0.0;
-        [XmlAttribute]
-        public double ReplayPosI { get; set; } = 0.0;
-        [XmlAttribute]
-        public double ReplayPosJ { get; set; } = 0.0;
-        [XmlAttribute]
-        public double ReplayPosK { get; set; } = 0.0;
-
-        public bool ShouldSerializeReplayPosC() => ReplayPosC > 0.0;
-        public bool ShouldSerializeReplayPosD() => ReplayPosD > 0.0;
-        public bool ShouldSerializeReplayPosE() => ReplayPosE > 0.0;
-        public bool ShouldSerializeReplayPosF() => ReplayPosF > 0.0;
-        public bool ShouldSerializeReplayPosG() => ReplayPosG > 0.0;
-        public bool ShouldSerializeReplayPosH() => ReplayPosH > 0.0;
-        public bool ShouldSerializeReplayPosI() => ReplayPosI > 0.0;
-        public bool ShouldSerializeReplayPosJ() => ReplayPosJ > 0.0;
-        public bool ShouldSerializeReplayPosK() => ReplayPosK > 0.0;
-                                                   
-        [XmlAttribute]
-        public DateTime LastUpdate { get; set; } = DateTime.MinValue;
-
-        public void Update(OnePlayerSettings settings)
-        {
-            //if it was updated after this setting was updated
-            if (LastUpdate > settings.LastUpdate)
-                return;
-
-            LastUpdate = settings.LastUpdate;
-
-            FileName = Path.GetFileName(settings.FileName);
-            
-            IsFavorite = settings.IsFavorite;
-
-            Position = Math.Round(settings.Position, 3);
-
-            ReplayIsOn = settings.ReplayIsOn;
-
-            IsMoreBookmarksOpen = settings.IsMoreBookmarksOpen;
-
-            ReplayPosA = Math.Round(settings.ReplayPosA, 3);
-            ReplayPosB = Math.Round(settings.ReplayPosB, 3);
-
-            ReplayPosC = Math.Round(settings.ReplayPosC, 3);
-            ReplayPosD = Math.Round(settings.ReplayPosD, 3);
-            ReplayPosE = Math.Round(settings.ReplayPosE, 3);
-            ReplayPosF = Math.Round(settings.ReplayPosF, 3);
-            ReplayPosG = Math.Round(settings.ReplayPosG, 3);
-            ReplayPosH = Math.Round(settings.ReplayPosH, 3);
-            ReplayPosI = Math.Round(settings.ReplayPosI, 3);
-            ReplayPosJ = Math.Round(settings.ReplayPosJ, 3);
-            ReplayPosK = Math.Round(settings.ReplayPosK, 3);
-        }
-
-        public override string ToString()
-        {
-            string favorite = IsFavorite?"*":"";
-            return $"{favorite}RecentFile: Pos: {Position}, Name: {FileName}";
-        }
-    }
-
-    [Serializable]
-    public class OnePlayerSettings : NotifyPropertyChangedImpl
-    {
-        [XmlAttribute]
-        public bool IsFavorite { get; set; } = false;
-        public string FileName { get; set; } = string.Empty;
-        public double Position { get; set; } = 0.0;
-        public double Duration { get; set; } = 0.0;
-        public ePlayMode PlayMode { get; set; } = ePlayMode.RepeatOne;
-        public eZoomState ZoomState {  get; set; } = eZoomState.FitWindow;
-        public double Zoom { get; set; } = 1.0;
-        public MediaState MediaState { get; set; } = MediaState.Play;
-        public double Volume { get; set; } = 0.0;
-        public double SpeedRatio { get; set; } = 1.0;
+        public bool ReplayIsOn { get => _replayIsOn; set => UpdatePropertyAndTime(ref _replayIsOn, value); }
 
         private bool _isMoreBookmarksOpen = false;
-        public bool IsMoreBookmarksOpen { get => _isMoreBookmarksOpen; set { if (SetProperty(ref _isMoreBookmarksOpen, value)) LastUpdate = DateTime.Now; } }
+        [XmlAttribute]
+        public bool IsMoreBookmarksOpen { get => _isMoreBookmarksOpen; set => UpdatePropertyAndTime(ref _isMoreBookmarksOpen, value); }
 
         private double _replayPosA = 0.0;
-        public double ReplayPosA { get => _replayPosA; set => SetProperty(ref _replayPosA, value); }
-        
+        [XmlAttribute]
+        public double ReplayPosA { get => _replayPosA; set => UpdatePropertyAndTime(ref _replayPosA, value); }
+
         private double _replayPosB = 0.0;
-        public double ReplayPosB { get => _replayPosB; set => SetProperty(ref _replayPosB, value); }
-        
-        private double _replayPosC = 0.0;                  
-        public double ReplayPosC { get => _replayPosC; set => SetProperty(ref _replayPosC, value); }
-        
-        private double _replayPosD = 0.0;                  
-        public double ReplayPosD { get => _replayPosD; set => SetProperty(ref _replayPosD, value); }
-        
-        private double _replayPosE = 0.0;                   
-        public double ReplayPosE { get => _replayPosE; set => SetProperty(ref _replayPosE, value); }
-        private double _replayPosF = 0.0;                  
-        public double ReplayPosF { get => _replayPosF; set => SetProperty(ref _replayPosF, value); }
-                                                           
-        private double _replayPosG = 0.0;                  
-        public double ReplayPosG { get => _replayPosG; set => SetProperty(ref _replayPosG, value); }
-                                                           
-        private double _replayPosH = 0.0;                  
-        public double ReplayPosH { get => _replayPosH; set => SetProperty(ref _replayPosH, value); }
-                                                           
-        private double _replayPosI = 0.0;                  
-        public double ReplayPosI { get => _replayPosI; set => SetProperty(ref _replayPosI, value); }
-        
+        [XmlAttribute]
+        public double ReplayPosB { get => _replayPosB; set => UpdatePropertyAndTime(ref _replayPosB, value); }
+
+        private double _replayPosC = 0.0;
+        [XmlAttribute]
+        public double ReplayPosC { get => _replayPosC; set => UpdatePropertyAndTime(ref _replayPosC, value); }
+
+        private double _replayPosD = 0.0;
+        [XmlAttribute]
+        public double ReplayPosD { get => _replayPosD; set => UpdatePropertyAndTime(ref _replayPosD, value); }
+
+        private double _replayPosE = 0.0;
+        [XmlAttribute]
+        public double ReplayPosE { get => _replayPosE; set => UpdatePropertyAndTime(ref _replayPosE, value); }
+
+        private double _replayPosF = 0.0;
+        [XmlAttribute]
+        public double ReplayPosF { get => _replayPosF; set => UpdatePropertyAndTime(ref _replayPosF, value); }
+
+        private double _replayPosG = 0.0;
+        [XmlAttribute]
+        public double ReplayPosG { get => _replayPosG; set => UpdatePropertyAndTime(ref _replayPosG, value); }
+
+        private double _replayPosH = 0.0;
+        [XmlAttribute]
+        public double ReplayPosH { get => _replayPosH; set => UpdatePropertyAndTime(ref _replayPosH, value); }
+
+        private double _replayPosI = 0.0;
+        [XmlAttribute]
+        public double ReplayPosI { get => _replayPosI; set => UpdatePropertyAndTime(ref _replayPosI, value); }
+
         private double _replayPosJ = 0.0;
-        public double ReplayPosJ { get => _replayPosJ; set => SetProperty(ref _replayPosJ, value); }
-        
+        [XmlAttribute]
+        public double ReplayPosJ { get => _replayPosJ; set => UpdatePropertyAndTime(ref _replayPosJ, value); }
+
         private double _replayPosK = 0.0;
-        public double ReplayPosK { get => _replayPosK; set => SetProperty(ref _replayPosK, value); }
+
+        [XmlAttribute]
+        public double ReplayPosK { get => _replayPosK; set => UpdatePropertyAndTime(ref _replayPosK, value); }
 
         public bool ShouldSerializeReplayPosC() => ReplayPosC > 0.0;
         public bool ShouldSerializeReplayPosD() => ReplayPosD > 0.0;
@@ -236,120 +141,46 @@ namespace MultiPlayer
         public bool ShouldSerializeReplayPosJ() => ReplayPosJ > 0.0;
         public bool ShouldSerializeReplayPosK() => ReplayPosK > 0.0;
 
-        public bool ReplayIsOn {  get; set; } = false;
-
-        public DateTime LastUpdate { get; set; } = DateTime.MinValue;
-
-        public OnePlayerSettings()
+        private bool UpdatePropertyAndTime<T>(ref T prop, T val, [CallerMemberName] string propertyName = null)
         {
-            EnsureHasValues();
+            bool res = SetProperty(ref prop, val, propertyName);
+            if (res && !PauseLastUpdateForXmlSerialization)
+                LastUpdate = DateTime.Now;
+            return res;
         }
 
-        public void EnsureHasValues()
+        public void UpdateFrom(BookmarkSettings settings, bool force)
         {
-            
-        }
+            //if it was updated after this setting was updated
+            if (!force && LastUpdate > DateTime.MinValue && LastUpdate > settings.LastUpdate)
+                return;
 
-        public OnePlayerSettings(VideoPlayerUserControl v)
-        {
-            Update(v);
-        }
+            const int POS = 3;
 
-        public OnePlayerSettings(OnePlayerSettings s)
-        {
-            Update(s);
-        }
+            _lastUpdate = settings.LastUpdate;
 
-        public void Update(OnePlayerSettings s)
-        {
-            LastUpdate = s.LastUpdate;
+            _fileName = settings.FileName;
 
-            FileName = s.FileName;
-            IsFavorite = s.IsFavorite;
-            Duration = s.Duration;
-            Position = s.Position;
+            _isFavorite = settings.IsFavorite;
 
-            PlayMode = s.PlayMode;
-            
-            Zoom = s.Zoom;
-            ZoomState = s.ZoomState;
+            _position = Math.Round(settings.Position, 3);
 
-            MediaState = s.MediaState;
-            Volume = s.Volume;
-            SpeedRatio = s.SpeedRatio;
+            _replayIsOn = settings.ReplayIsOn;
 
-            IsMoreBookmarksOpen = s.IsMoreBookmarksOpen;
+            _isMoreBookmarksOpen = settings.IsMoreBookmarksOpen;
 
-            UpdateBookmarks(s);
-        }
+            _replayPosA = Math.Round(settings.ReplayPosA, POS);
+            _replayPosB = Math.Round(settings.ReplayPosB, POS);
 
-        public void Update(VideoPlayerUserControl v, double duration = 0.0)
-        {
-            LastUpdate = v.VM.Settings.LastUpdate;
-
-            FileName = v.FileName;
-            IsFavorite = v.VM.Settings.IsFavorite;
-
-            Duration = v.Duration > 0 ? v.Duration : duration;
-            Position = v.Position.TotalSeconds > 0.5 ? v.Position.TotalSeconds : v.VM.Settings.Position;
-
-            PlayMode = v.VM.Settings.PlayMode;
-
-            ZoomState = v.ZoomState;
-            Zoom = v.Zoom;
-            MediaState = v.MediaState;
-            Volume = v.Volume;
-            SpeedRatio = v.SpeedRatio;
-
-            IsMoreBookmarksOpen = v.VM.Settings.IsMoreBookmarksOpen;
-
-            UpdateBookmarks(v.VM.Settings);
-
-            EnsureHasValues();
-        }
-
-        public void UpdateBookmarks(OnePlayerSettings s)
-        {
-            Position = s.Position;
-            LastUpdate = s.LastUpdate;
-            ReplayIsOn = s.ReplayIsOn;
-
-            IsMoreBookmarksOpen = s.IsMoreBookmarksOpen;
-
-            ReplayPosA = s.ReplayPosA;
-            ReplayPosB = s.ReplayPosB;
-
-            ReplayPosC = s.ReplayPosC;
-            ReplayPosD = s.ReplayPosD;
-            ReplayPosE = s.ReplayPosE;
-            ReplayPosF = s.ReplayPosF;
-            ReplayPosG = s.ReplayPosG;
-            ReplayPosH = s.ReplayPosH;
-            ReplayPosI = s.ReplayPosI;
-            ReplayPosJ = s.ReplayPosJ;
-            ReplayPosK = s.ReplayPosK;
-        }
-
-        public void UpdateBookmarks(bool on, RecentFile f)
-        {
-            ReplayIsOn = on;
-            LastUpdate = f.LastUpdate;
-            Position = f.Position;
-
-            IsMoreBookmarksOpen = f.IsMoreBookmarksOpen;
-
-            ReplayPosA = f.ReplayPosA;
-            ReplayPosB = f.ReplayPosB;
-
-            ReplayPosC = f.ReplayPosC;
-            ReplayPosD = f.ReplayPosD;
-            ReplayPosE = f.ReplayPosE;
-            ReplayPosF = f.ReplayPosF;
-            ReplayPosG = f.ReplayPosG;
-            ReplayPosH = f.ReplayPosH;
-            ReplayPosI = f.ReplayPosI;
-            ReplayPosJ = f.ReplayPosJ;
-            ReplayPosK = f.ReplayPosK;
+            _replayPosC = Math.Round(settings.ReplayPosC, POS);
+            _replayPosD = Math.Round(settings.ReplayPosD, POS);
+            _replayPosE = Math.Round(settings.ReplayPosE, POS);
+            _replayPosF = Math.Round(settings.ReplayPosF, POS);
+            _replayPosG = Math.Round(settings.ReplayPosG, POS);
+            _replayPosH = Math.Round(settings.ReplayPosH, POS);
+            _replayPosI = Math.Round(settings.ReplayPosI, POS);
+            _replayPosJ = Math.Round(settings.ReplayPosJ, POS);
+            _replayPosK = Math.Round(settings.ReplayPosK, POS);
         }
 
         public void BookmarkPositionSet(eBookmarkName name, double pos)
@@ -394,9 +225,153 @@ namespace MultiPlayer
             }
         }
 
+        public void SetFileName(string fullFileName)
+        {
+            FileName = GetShortFileName(fullFileName);
+        }
+
+        public static string GetShortFileName(string fileName)
+        {
+            if (string.IsNullOrWhiteSpace(fileName))
+                return string.Empty;
+
+            string name = Path.GetFileName(fileName);
+            string shortName = name.TrimStart('_');
+            return shortName;
+        }
+
         public override string ToString()
         {
-            return "OnePlayerSettings: " + FileName;
+            string favorite = IsFavorite ? "*" : "";
+            return $"{favorite}BookmarkSettings: Pos: {Position}, Name: {FileName}";
+        }
+    }
+
+    [Serializable]
+    public class RecentFiles
+    {
+        [XmlArray("RecentFilesList")]              // <RecentFilesList>...</RecentFilesList>
+        [XmlArrayItem("RecentFile")]               // each item will be <RecentFile>
+        public List<BookmarkSettings> RecentFilesList { get; set; } = new();
+
+        public void CopyFrom(RecentFiles list)
+        {
+            RecentFilesList = new List<BookmarkSettings>(list.RecentFilesList);
+        }
+
+        public void Clear()
+        {
+            RecentFilesList.Clear();
+        }
+
+        public void Merge(RecentFiles recentFiles)
+        {
+            foreach (BookmarkSettings file in recentFiles.RecentFilesList)
+            {
+                if (string.IsNullOrWhiteSpace(file?.FileName))
+                    continue;
+
+                int idx = RecentFilesList.FindIndex(f => f.FileName == file.FileName);
+                if (idx < 0) //new file
+                    RecentFilesList.Add(file);
+                else if (file.LastUpdate == DateTime.MinValue || RecentFilesList[idx].LastUpdate < file.LastUpdate)
+                    RecentFilesList[idx] = file;
+            }
+        }
+    }
+
+    [Serializable]
+    public class OnePlayerSettings : NotifyPropertyChangedImpl
+    {
+        public BookmarkSettings BookmarkSettings { get; set; } = new();
+
+        private string _fullFileName = string.Empty;
+        [XmlElement("FileName")]
+        public string FullFileName { get => _fullFileName; set { _fullFileName = value; BookmarkSettings.SetFileName(value); } }
+        
+        [XmlIgnore]
+        public double Position { get => BookmarkSettings.Position; set => BookmarkSettings.Position = value; }
+        public double Duration { get; set; } = 0.0;
+        public ePlayMode PlayMode { get; set; } = ePlayMode.RepeatOne;
+        public eZoomState ZoomState {  get; set; } = eZoomState.FitWindow;
+        public double Zoom { get; set; } = 1.0;
+        public MediaState MediaState { get; set; } = MediaState.Play;
+        public double Volume { get; set; } = 0.0;
+        public double SpeedRatio { get; set; } = 1.0;
+
+        public void EnsureHasValues()
+        {
+
+        }
+
+        //default constructor for serialization
+        public OnePlayerSettings() { }
+
+        public OnePlayerSettings(VideoPlayerUserControl v)
+        {
+            Update(v);
+        }
+
+        public OnePlayerSettings(OnePlayerSettings s)
+        {
+            Update(s, true);
+        }
+
+        public void Update(OnePlayerSettings s, bool force)
+        {
+            BookmarkSettings.UpdateFrom(s.BookmarkSettings, force);
+
+            FullFileName = s.FullFileName;
+
+            Duration = s.Duration;
+            PlayMode = s.PlayMode;
+            
+            Zoom = s.Zoom;
+            ZoomState = s.ZoomState;
+
+            MediaState = s.MediaState;
+            Volume = s.Volume;
+            SpeedRatio = s.SpeedRatio;
+        }
+
+        public void Update(VideoPlayerUserControl v, double duration = 0.0)
+        {
+            BookmarkSettings.UpdateFrom(v.VM.Settings.BookmarkSettings, force: true);
+
+            FullFileName = v.VM.Settings.FullFileName;
+
+            Duration = v.Duration > 0 ? v.Duration : duration;
+            BookmarkSettings.Position = v.Position.TotalSeconds > 0.5 ? v.Position.TotalSeconds : v.VM.Settings.BookmarkSettings.Position;
+
+            PlayMode = v.VM.Settings.PlayMode;
+
+            ZoomState = v.ZoomState;
+            Zoom = v.Zoom;
+            MediaState = v.MediaState;
+            Volume = v.Volume;
+            SpeedRatio = v.SpeedRatio;
+
+            EnsureHasValues();
+        }
+
+        public void UpdateBookmarks(BookmarkSettings f)
+        {
+            BookmarkSettings.UpdateFrom(f, true);
+        }
+
+        public void BookmarkPositionSet(eBookmarkName name, double pos)
+        {
+            BookmarkSettings.BookmarkPositionSet(name, pos);
+        }
+
+        public double BookmarkPositionGet(eBookmarkName name)
+        {
+            return BookmarkSettings.BookmarkPositionGet(name);
+        }
+
+        public override string ToString()
+        {
+            return "OnePlayerSettings: " + BookmarkSettings.FileName;
         }
     }
 
@@ -622,7 +597,7 @@ namespace MultiPlayer
         {
             foreach (OnePlayerSettings item in PlayerSettings)
             {
-                if (!string.IsNullOrWhiteSpace(item.FileName))
+                if (!string.IsNullOrWhiteSpace(item.BookmarkSettings.FileName))
                     return true;
             }
             return false;
@@ -646,6 +621,7 @@ namespace MultiPlayer
             {
                 try
                 {
+                    BookmarkSettings.PauseLastUpdateForXmlSerialization = true;
                     MultiPlayerSettings appConfig = XmlHelper.Open<MultiPlayerSettings>(fileName);
                     this.CopyFrom(appConfig);
                     this.LoadRecentFiles();
@@ -655,7 +631,12 @@ namespace MultiPlayer
                 {
                     System.Windows.MessageBox.Show(err.ToString(), "Cannot load Settings From File");
                 }
+                finally
+                {
+                    BookmarkSettings.PauseLastUpdateForXmlSerialization = false;
+                }
             }
+             
             this.EnsureHasValues();
         }
 
@@ -672,12 +653,17 @@ namespace MultiPlayer
             {
                 try
                 {
+                    BookmarkSettings.PauseLastUpdateForXmlSerialization = true;
                     RecentFiles recentFiles = XmlHelper.Open<RecentFiles>(recentFilesFileName);
                     return recentFiles;
                 }
                 catch (Exception err)
                 {
-                    System.Windows.MessageBox.Show(err.ToString(), "Cannot load Recent files From: \n"+recentFilesFileName);
+                    System.Windows.MessageBox.Show("Cannot load Recent files From: \n" + recentFilesFileName + "\n\n" + err.ToString(), "Error loading recent files");
+                }
+                finally
+                {
+                    BookmarkSettings.PauseLastUpdateForXmlSerialization = false;
                 }
             }
             return null;
@@ -742,9 +728,9 @@ namespace MultiPlayer
                     continue;
 
                 OnePlayerSettings s = new OnePlayerSettings(v);
-                RecentFile recentFile = MainWindow.FindOrCreateRecentFile(s.FileName);
-                recentFile.Update(s);
-                s.UpdateBookmarks(s.ReplayIsOn, recentFile);
+                BookmarkSettings recentFile = MainWindow.Instance.RecentFilesCache.FindOrCreateRecentFile(s.FullFileName);
+                recentFile.UpdateFrom(s.BookmarkSettings, force: false);
+                s.UpdateBookmarks(recentFile);
 
                 this.PlayerSettings.Add(s);
             }
