@@ -380,8 +380,8 @@ namespace MultiPlayer
 
             this.IsLoading = true;
 
-            this.IsMuted = true; //load silently
             _player.Volume = 0;
+            this.IsMuted = true; //load silently
             
             //Settings.Update(s);
 
@@ -393,6 +393,9 @@ namespace MultiPlayer
             this.FileIndex = $"{(idx+1)}/{fileNames.Count} ";
 
             this.Update(s, pop, lockUpdate: false); //update settings before play()
+
+            _player.Volume = 0;
+            this.IsMuted = true; //load silently
 
             this.Play();
 

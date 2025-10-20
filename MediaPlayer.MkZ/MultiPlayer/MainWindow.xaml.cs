@@ -7,6 +7,7 @@ using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using static System.Net.Mime.MediaTypeNames;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
@@ -134,8 +135,12 @@ namespace MultiPlayer
             {
                 await InitFirstPlayerForMp3();
 
+                VideoCommandsVM vmCurrent = null;
                 for (int i = 0; i < _videos.Count && i < _settings.PlayerSettings.Count; i++)
                 {
+                    if (_settings.PlayerSettings[i].MediaState == MediaState.Play)
+                        vmCurrent = _videos[i].VM;
+
                     _ = _videos[i].LoadSetting(_settings.PlayerSettings[i]);
                 }
 
@@ -146,6 +151,13 @@ namespace MultiPlayer
                 else
                 {
                     VideoCommandsVM.PopUpVM.PopUpHide();
+                }
+
+                if (IsGlobalRepeatAllMode && vmCurrent != null)
+                {
+                    await vmCurrent.WaitForMediaOpened();
+                    vmCurrent.Position = TimeSpan.FromSeconds(0);
+                    vmCurrent.Play();
                 }
             }
             else
