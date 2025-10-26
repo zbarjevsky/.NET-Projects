@@ -6,10 +6,12 @@
         xmlns:local="clr-namespace:PdfMetadataEditor"
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
+        Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}"
         Icon="pack://application:,,,/Assets/Picture.ico"
-        Title="PDF Metadata Editor" MinWidth="600" MaxWidth="700" Height="350" MinHeight="300">
+        Title="PDF Metadata Editor" MinWidth="600" Width="700" MaxWidth="1700" Height="500" MinHeight="500">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -18,29 +20,46 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="0">
-            <Label Content="Select PDF File:" VerticalAlignment="Center"/>
-            <TextBox x:Name="PdfFilePathTextBox" Width="400" Margin="5,0"/>
-            <Button Content="Browse..." Click="BrowseButton_Click"/>
+        <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="0" Grid.ColumnSpan="2">
+            <Label Content="Selected PDF Files:" VerticalAlignment="Top" MinWidth="150"/>
+            <ListBox x:Name="PdfFilesListBox" MinWidth="400" Height="150" Margin="5,0"
+                     SelectionChanged="PdfFilesListBox_SelectionChanged"/>
+            <Button Content="Browse..." VerticalAlignment="Top" Margin="8,4" Padding="4" Click="BrowseButton_Click"/>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="1">
-            <Label Content="Title:" VerticalAlignment="Center"/>
-            <TextBox x:Name="TitleTextBox" Width="300" Margin="5,0"/>
+        <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="1" Grid.ColumnSpan="2">
+            <Label Content="Selected PDF File:" VerticalAlignment="Center" MinWidth="150"/>
+            <TextBox x:Name="PdfFilePathTextBox" IsReadOnly="True" VerticalContentAlignment="Center" MinWidth="400" Margin="5,0"/>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="2">
-            <Label Content="Author:" VerticalAlignment="Center"/>
-            <TextBox x:Name="AuthorTextBox" Width="300" Margin="5,0"/>
+        <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="2" Grid.ColumnSpan="2">
+            <Label Content="Title:" VerticalAlignment="Center" MinWidth="150"/>
+            <TextBox x:Name="TitleTextBox" MinWidth="400" Margin="5,0" VerticalContentAlignment="Center"/>
+            <CheckBox x:Name="TitleCheckBox" Content="Use" IsChecked="True" Margin="10,0" VerticalAlignment="Center"/>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="3">
-            <Label Content="Subject:" VerticalAlignment="Center"/>
-            <TextBox x:Name="SubjectTextBox" Width="300" Margin="5,0"/>
+        <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="3" Grid.ColumnSpan="2">
+            <Label Content="Author:" VerticalAlignment="Center" MinWidth="150"/>
+            <TextBox x:Name="AuthorTextBox" MinWidth="400" Margin="5,0" VerticalContentAlignment="Center"/>
+            <CheckBox x:Name="AuthorCheckBox" Content="Use" IsChecked="True" Margin="10,0" VerticalAlignment="Center"/>
         </StackPanel>
-        <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="4">
-            <Label Content="Keywords:" VerticalAlignment="Center"/>
-            <TextBox x:Name="KeywordsTextBox" Width="300" Margin="5,0"/>
+        <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="4" Grid.ColumnSpan="2">
+            <Label Content="Subject:" VerticalAlignment="Center" MinWidth="150"/>
+            <TextBox x:Name="SubjectTextBox" MinWidth="400" Margin="5,0" VerticalContentAlignment="Center"/>
+            <CheckBox x:Name="SubjectCheckBox" Content="Use" IsChecked="True" Margin="10,0" VerticalAlignment="Center"/>
         </StackPanel>
-        <Button Content="Update Metadata" Width="150" Height="30" Margin="10" Grid.Row="5" 
-                VerticalAlignment="Top" 
-                Click="UpdateMetadataButton_Click"/>
+        <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="5" Grid.ColumnSpan="2">
+            <Label Content="Keywords:" VerticalAlignment="Center" MinWidth="150"/>
+            <TextBox x:Name="KeywordsTextBox" MinWidth="400" Margin="5,0" VerticalContentAlignment="Center"/>
+            <CheckBox x:Name="KeywordsCheckBox" Content="Use" IsChecked="True" Margin="10,0" VerticalAlignment="Center"/>
+        </StackPanel>
+        <StackPanel Grid.Row="6"  Grid.ColumnSpan="2">
+            <Border BorderBrush="Green" BorderThickness="0,1,0,0"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="Update Selected File" Width="150" Height="30" Margin="10"
+                    VerticalAlignment="Top" 
+                    Click="UpdateSelectedButton_Click" />
+                <Button Content="Update All Files" Width="150" Height="30" Margin="10"
+                    VerticalAlignment="Top" 
+                    Click="UpdateAllButton_Click"/>
+            </StackPanel>
+        </StackPanel>
     </Grid>
 </Window>

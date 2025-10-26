@@ -27,28 +27,77 @@ namespace PdfMetadataEditor
         private void BrowseButton_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new OpenFileDialog();
+            openFileDialog.Filter = "PDF files (*.pdf)|*.pdf|All files (*.*)|*.*";
+            openFileDialog.Multiselect = true;
             if (openFileDialog.ShowDialog() == true)
             {
-                var input = openFileDialog.FileName;
-                PdfFilePathTextBox.Text = input;
+                PdfFilesListBox.Items.Clear();
+                foreach (var file in openFileDialog.FileNames)  
+                    PdfFilesListBox.Items.Add(file);
 
-                PdfDocument document = PdfReader.Open(PdfFilePathTextBox.Text, PdfDocumentOpenMode.Modify);
-                AuthorTextBox.Text = document.Info.Author;
-                TitleTextBox.Text = document.Info.Title;
-                SubjectTextBox.Text = document.Info.Subject;
-                KeywordsTextBox.Text = document.Info.Keywords;
+                PdfFilesListBox.SelectedItem = openFileDialog.FileName;
+            }
+        }
+
+        private void PdfFilesListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string selectedFile = PdfFilesListBox.SelectedItem as string;
+            if (selectedFile != null)
+            {
+                try
+                {
+                    PdfFilePathTextBox.Text = selectedFile;
+                    PdfDocument document = PdfReader.Open(PdfFilePathTextBox.Text, PdfDocumentOpenMode.Import);
+                    AuthorTextBox.Text = document.Info.Author;
+                    TitleTextBox.Text = document.Info.Title;
+                    SubjectTextBox.Text = document.Info.Subject;
+                    KeywordsTextBox.Text = document.Info.Keywords;
+                    document.Close();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show("Error reading PDF metadata: " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }            
             }
         }
 
         private void UpdateMetadataButton_Click(object sender, RoutedEventArgs e)
         {
-            PdfDocument document = PdfReader.Open(PdfFilePathTextBox.Text, PdfDocumentOpenMode.Modify);
-            document.Info.Author = AuthorTextBox.Text;
-            document.Info.Title = TitleTextBox.Text;
-            document.Info.Subject = SubjectTextBox.Text;
-            document.Info.Keywords = KeywordsTextBox.Text;
-            document.Save(PdfFilePathTextBox.Text);
-            MessageBox.Show("Metadata updated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void UpdateAllButton_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (var file in PdfFilesListBox.Items)
+                UpdateMetadata(file.ToString());
+        }
+
+        private void UpdateSelectedButton_Click(object sender, RoutedEventArgs e)
+        {
+            UpdateMetadata(PdfFilePathTextBox.Text);
+        }
+
+        private void UpdateMetadata(string filePath)
+        {
+            try
+            {
+                PdfDocument document = PdfReader.Open(filePath, PdfDocumentOpenMode.Modify);
+                
+                if (AuthorCheckBox.IsChecked == true)
+                    document.Info.Author = AuthorTextBox.Text;
+                if (TitleCheckBox.IsChecked == true)
+                    document.Info.Title = TitleTextBox.Text;
+                if (SubjectCheckBox.IsChecked == true)
+                    document.Info.Subject = SubjectTextBox.Text;
+                if (KeywordsCheckBox.IsChecked == true)
+                    document.Info.Keywords = KeywordsTextBox.Text;
+                
+                document.Save(filePath);
+                document.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error updating PDF metadata for file " + filePath + ": " + ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }
