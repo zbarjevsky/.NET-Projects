@@ -7,7 +7,7 @@
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
         Icon="pack://application:,,,/Assets/Picture.ico"
-        Title="MainWindow" MinWidth="600" MaxWidth="700" Height="350" MinHeight="300">
+        Title="PDF Metadata Editor" MinWidth="600" MaxWidth="700" Height="350" MinHeight="300">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
