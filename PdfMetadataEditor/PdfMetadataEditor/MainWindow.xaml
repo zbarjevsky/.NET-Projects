@@ -1,0 +1,33 @@
+﻿<Window x:Class="PdfMetadataEditor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:PdfMetadataEditor"
+        WindowStartupLocation="CenterScreen"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="450" Width="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="0">
+            <Label Content="Select PDF File:" VerticalAlignment="Center"/>
+            <TextBox x:Name="PdfFilePathTextBox" Width="400" Margin="5,0"/>
+            <Button Content="Browse..." Click="BrowseButton_Click"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="1">
+            <Label Content="Title:" VerticalAlignment="Center"/>
+            <TextBox x:Name="TitleTextBox" Width="300" Margin="5,0"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="2">
+            <Label Content="Author:" VerticalAlignment="Center"/>
+            <TextBox x:Name="AuthorTextBox" Width="300" Margin="5,0"/>
+        </StackPanel>
+        <Button Content="Update Metadata" Width="150" Height="30" Margin="10" Grid.Row="3" VerticalAlignment="Top" Click="UpdateMetadataButton_Click"/>
+    </Grid>
+</Window>
