@@ -31,6 +31,12 @@ namespace PdfMetadataEditor
             {
                 var input = openFileDialog.FileName;
                 PdfFilePathTextBox.Text = input;
+
+                PdfDocument document = PdfReader.Open(PdfFilePathTextBox.Text, PdfDocumentOpenMode.Modify);
+                AuthorTextBox.Text = document.Info.Author;
+                TitleTextBox.Text = document.Info.Title;
+                SubjectTextBox.Text = document.Info.Subject;
+                KeywordsTextBox.Text = document.Info.Keywords;
             }
         }
 
@@ -39,7 +45,10 @@ namespace PdfMetadataEditor
             PdfDocument document = PdfReader.Open(PdfFilePathTextBox.Text, PdfDocumentOpenMode.Modify);
             document.Info.Author = AuthorTextBox.Text;
             document.Info.Title = TitleTextBox.Text;
+            document.Info.Subject = SubjectTextBox.Text;
+            document.Info.Keywords = KeywordsTextBox.Text;
             document.Save(PdfFilePathTextBox.Text);
+            MessageBox.Show("Metadata updated successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

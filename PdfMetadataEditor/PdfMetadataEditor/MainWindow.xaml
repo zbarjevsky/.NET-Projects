@@ -6,9 +6,12 @@
         xmlns:local="clr-namespace:PdfMetadataEditor"
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Icon="/Save20x20.ico"
+        Title="MainWindow" MinWidth="600" MaxWidth="700" Height="350" MinHeight="300">
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -28,6 +31,16 @@
             <Label Content="Author:" VerticalAlignment="Center"/>
             <TextBox x:Name="AuthorTextBox" Width="300" Margin="5,0"/>
         </StackPanel>
-        <Button Content="Update Metadata" Width="150" Height="30" Margin="10" Grid.Row="3" VerticalAlignment="Top" Click="UpdateMetadataButton_Click"/>
+        <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="3">
+            <Label Content="Subject:" VerticalAlignment="Center"/>
+            <TextBox x:Name="SubjectTextBox" Width="300" Margin="5,0"/>
+        </StackPanel>
+        <StackPanel Orientation="Horizontal" Margin="10" Grid.Row="4">
+            <Label Content="Keywords:" VerticalAlignment="Center"/>
+            <TextBox x:Name="KeywordsTextBox" Width="300" Margin="5,0"/>
+        </StackPanel>
+        <Button Content="Update Metadata" Width="150" Height="30" Margin="10" Grid.Row="5" 
+                VerticalAlignment="Top" 
+                Click="UpdateMetadataButton_Click"/>
     </Grid>
 </Window>
