@@ -305,6 +305,15 @@ namespace MultiPlayer
             VideoCommandsVM.PopUpVM.PopUpHide();
         }
 
+        private void SwapGrids_Click(object sender, RoutedEventArgs e)
+        {
+            int row1 = Grid.GetRow(_gridTop);
+            int row2 = Grid.GetRow(_gridBottom);
+
+            Grid.SetRow(_gridTop, row2);
+            Grid.SetRow(_gridBottom, row1);
+        }
+
         private void ResetLayout_Click(object sender, RoutedEventArgs e)
         {
             ResetLayout(_gridMain);

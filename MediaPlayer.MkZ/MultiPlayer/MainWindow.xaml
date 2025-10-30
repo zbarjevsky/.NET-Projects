@@ -53,6 +53,14 @@
                 <Button Content="Reset Layout" ToolTip="Reset Layout"
                         Click="ResetLayout_Click"
                         Margin="3" Padding="5,3" />
+                <Button ToolTip="Swap top/bottom panels"
+                        Click="SwapGrids_Click"
+                        Margin="3" Padding="0" >
+                    <StackPanel Orientation="Horizontal">
+                        <Label FontFamily="Segoe MDL2 Assets" Content="&#xE7FD;" FontSize="10" Margin="0,3" />
+                        <Label Content="Swap" FontSize="12" Margin="3,0" />
+                    </StackPanel>
+                </Button>
                 <Button ToolTip="Exit (Esc)"
                         Click="Exit_Click"
                         Margin="3" Padding="0" >
