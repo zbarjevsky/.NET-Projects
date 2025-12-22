@@ -447,6 +447,7 @@ namespace MultiPlayer
                         //play next
                         _videos[next].VM.Position = TimeSpan.FromSeconds(0);
                         _videos[next].VM.Play();
+                        _videos[next].Volume = player.Volume; //use same volume from current player
                     }
                 }
             }       
