@@ -444,8 +444,11 @@ namespace MultiPlayer
                     int next = FindNext(i);
                     if (next != -1)
                     {
+                        //if replay mode is ON - start from posA
+                        double pos = _videos[next].VM.Replay.IsReplayChecked ? _videos[next].VM.Settings.BookmarkSettings.ReplayPosA : 0;
+
                         //play next
-                        _videos[next].VM.Position = TimeSpan.FromSeconds(0);
+                        _videos[next].VM.Position = TimeSpan.FromSeconds(pos);
                         _videos[next].VM.Play();
                         _videos[next].Volume = player.Volume; //use same volume from current player
                     }

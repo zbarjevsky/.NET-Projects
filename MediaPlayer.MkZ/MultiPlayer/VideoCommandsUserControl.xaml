@@ -142,18 +142,18 @@
                                     </Style>
                                 </Canvas.Resources>
 
+                                <Line x:Name="_lineK" X1="68" X2="68" Y1="3" Y2="16" />
+                                <Line x:Name="_lineJ" X1="67" X2="67" Y1="3" Y2="16" />
+                                <Line x:Name="_lineI" X1="66" X2="66" Y1="3" Y2="16" />
+                                <Line x:Name="_lineH" X1="65" X2="65" Y1="3" Y2="16" />
+                                <Line x:Name="_lineG" X1="64" X2="64" Y1="3" Y2="16" />
+                                <Line x:Name="_lineF" X1="63" X2="63" Y1="3" Y2="16" />
+                                <Line x:Name="_lineE" X1="62" X2="62" Y1="3" Y2="16" />
+                                <Line x:Name="_lineD" X1="61" X2="61" Y1="3" Y2="16" />
+                                <Line x:Name="_lineC" X1="60" X2="60" Y1="3" Y2="16" />
+
                                 <Line x:Name="_lineA" X1="20" X2="20" Y1="3" Y2="16" />
                                 <Line x:Name="_lineB" X1="40" X2="40" Y1="3" Y2="16" />
-
-                                <Line x:Name="_lineC" X1="60" X2="60" Y1="3" Y2="16" />
-                                <Line x:Name="_lineD" X1="61" X2="61" Y1="3" Y2="16" />
-                                <Line x:Name="_lineE" X1="62" X2="62" Y1="3" Y2="16" />
-                                <Line x:Name="_lineF" X1="63" X2="63" Y1="3" Y2="16" />
-                                <Line x:Name="_lineG" X1="64" X2="64" Y1="3" Y2="16" />
-                                <Line x:Name="_lineH" X1="65" X2="65" Y1="3" Y2="16" />
-                                <Line x:Name="_lineI" X1="66" X2="66" Y1="3" Y2="16" />
-                                <Line x:Name="_lineJ" X1="67" X2="67" Y1="3" Y2="16" />
-                                <Line x:Name="_lineK" X1="68" X2="68" Y1="3" Y2="16" />
                             </Canvas>
                             <Slider x:Name="_position"
                                     Value="33" Maximum="300" Minimum="0" TickFrequency="60" TickPlacement="TopLeft" 

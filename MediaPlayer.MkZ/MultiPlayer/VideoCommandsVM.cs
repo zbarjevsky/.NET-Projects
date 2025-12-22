@@ -1105,8 +1105,8 @@ namespace MultiPlayer
             //set ticks positions and color if active
             private void UpdateTicks()
             {
-                UpdateTick(VM._cmd._lineA, VM.ReplayPosA, IsReplayChecked ? Brushes.Lime : Brushes.AliceBlue);
-                UpdateTick(VM._cmd._lineB, VM.ReplayPosB, IsReplayChecked ? Brushes.Lime : Brushes.AliceBlue);
+                UpdateTick(VM._cmd._lineA, VM.ReplayPosA, IsReplayChecked ? BookmarkColors.BookmarkBrushA : Brushes.AliceBlue);
+                UpdateTick(VM._cmd._lineB, VM.ReplayPosB, IsReplayChecked ? BookmarkColors.BookmarkBrushA : Brushes.AliceBlue);
 
                 UpdateTick(VM._cmd._lineC, VM.Settings.BookmarkSettings.ReplayPosC, BookmarkColors.BookmarkBrush1);
                 UpdateTick(VM._cmd._lineD, VM.Settings.BookmarkSettings.ReplayPosD, BookmarkColors.BookmarkBrush2);
@@ -1152,8 +1152,10 @@ namespace MultiPlayer
 
             public void ReplayCheckAndUpdate()
             {
-                if (IsReplayChecked && (VM._cmd._position.Value < VM.ReplayPosA || VM._cmd._position.Value > VM.ReplayPosB))
-                        GoToPosition(VM.ReplayPosA);
+                bool isOutOfRange = (VM._cmd._position.Value < VM.ReplayPosA || VM._cmd._position.Value > VM.ReplayPosB);
+                //do not use replay in global repeat all mode
+                if (!MainWindow.Instance.IsGlobalRepeatAllMode && IsReplayChecked && isOutOfRange)
+                    GoToPosition(VM.ReplayPosA);
                 UpdateReplayUI();
             }
 

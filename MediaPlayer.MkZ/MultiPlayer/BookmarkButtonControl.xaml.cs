@@ -11,13 +11,13 @@ namespace MultiPlayer
 
     public class BookmarkColors
     {
-        public static SolidColorBrush BookmarkBrushA { get; } = System.Windows.Media.Brushes.PaleGreen;
-        public static SolidColorBrush BookmarkBrush1 { get; } = System.Windows.Media.Brushes.MistyRose;
-        public static SolidColorBrush BookmarkBrush2 { get; } = System.Windows.Media.Brushes.LightYellow;
+        public static SolidColorBrush BookmarkBrushA { get; } = System.Windows.Media.Brushes.Lime;
+        public static SolidColorBrush BookmarkBrush1 { get; } = System.Windows.Media.Brushes.Fuchsia;
+        public static SolidColorBrush BookmarkBrush2 { get; } = System.Windows.Media.Brushes.Yellow;
         public static SolidColorBrush BookmarkBrush3 { get; } = System.Windows.Media.Brushes.Plum;
         public static SolidColorBrush BookmarkBrush4 { get; } = System.Windows.Media.Brushes.DeepSkyBlue;
-        public static SolidColorBrush BookmarkBrush5 { get; } = System.Windows.Media.Brushes.RosyBrown;
-        public static SolidColorBrush BookmarkBrush6 { get; } = System.Windows.Media.Brushes.Olive;
+        public static SolidColorBrush BookmarkBrush5 { get; } = System.Windows.Media.Brushes.Crimson;
+        public static SolidColorBrush BookmarkBrush6 { get; } = System.Windows.Media.Brushes.Aqua;
         public static SolidColorBrush BookmarkBrush7 { get; } = System.Windows.Media.Brushes.Coral;
         public static SolidColorBrush BookmarkBrush8 { get; } = System.Windows.Media.Brushes.Khaki;
         public static SolidColorBrush BookmarkBrush9 { get; } = System.Windows.Media.Brushes.Peru;
