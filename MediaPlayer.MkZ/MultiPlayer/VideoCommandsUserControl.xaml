@@ -9,6 +9,38 @@
              mc:Ignorable="d" 
              d:DesignWidth="800">
     <UserControl.Resources>
+        <!-- Gradient used for volume -->
+        <LinearGradientBrush x:Key="VolumeGradient" StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="Green" Offset="0.0"/>
+            <GradientStop Color="Yellow" Offset="0.7"/>
+            <GradientStop Color="Gold" Offset="0.9"/>
+            <GradientStop Color="Red" Offset="1.0"/>
+        </LinearGradientBrush>
+
+        <Style x:Key="VolumeSliderStyle" TargetType="Slider">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Slider">
+                        <Grid>
+
+                            <!-- Triangle / wedge background -->
+                            <Path Margin="0,4,0,0"
+                                Data="M 0,0.85 L 0,0.9 L 0.9,0.85 L 0.9,0 Z"
+                                Fill="{StaticResource VolumeGradient}"
+                                Stretch="Fill"/>
+
+                            <!-- Track (invisible, drives thumb position) -->
+                            <Track x:Name="PART_Track">
+                                <Track.Thumb>
+                                    <Thumb Width="8" Background="Navy" Opacity=".5"/>
+                                </Track.Thumb>
+                            </Track>
+
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </UserControl.Resources>
     <ScrollViewer x:Name="_scroll" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Hidden">
         <Grid Margin="0">
@@ -125,9 +157,10 @@
                                    Foreground="White"/>
                             </Border>
                         </Popup>
-                        <Slider x:Name="_volume" Margin="2,10" Width="60" MinWidth="60" 
+                        <Slider x:Name="_volume" Margin="2,8" Width="60" MinWidth="60"
                                 DockPanel.Dock="Right"
                                 Value="150" Maximum="1000" Minimum="0" IsMoveToPointEnabled="True"
+                                Style="{StaticResource VolumeSliderStyle}"
                                 ValueChanged="Volume_ValueChanged" >
                             <Slider.ToolTip>
                                 <TextBlock Text="{Binding Volume, StringFormat=Volume: 0.#%, FallbackValue='Volume: 12%'}" />
