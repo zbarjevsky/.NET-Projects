@@ -139,11 +139,11 @@ namespace MultiPlayer
             get { return (int)Settings.PlayMode; }
         }
 
-        public void Play()
+        public void Play(bool pauseAll)
         {
             //Debug.WriteLine($"### MediaPlayStarted - Requested, File: {Settings.FileName}");
 
-            if (MainWindow.Instance.IsGlobalRepeatAllMode)
+            if (pauseAll && MainWindow.Instance.IsGlobalRepeatAllMode)
                 MainWindow.Instance.PauseAll();
 
             _playSartTime.Restart();
@@ -226,7 +226,7 @@ namespace MultiPlayer
             else // cancel - continue play if needed
             {
                 if (state == MediaState.Play)
-                    Play();
+                    Play(MainWindow.Instance.IsGlobalRepeatAllMode);
             }
         }
 
@@ -243,7 +243,7 @@ namespace MultiPlayer
             if (_player.MediaState == MediaState.Play)
                 Pause(updateUI: true);
             else
-                Play();
+                Play(MainWindow.Instance.IsGlobalRepeatAllMode);
         }
 
         private bool TogglePlayPauseCommandCanExecute(object parameter)
@@ -397,7 +397,7 @@ namespace MultiPlayer
             _player.Volume = 0;
             this.IsMuted = true; //load silently
 
-            this.Play();
+            this.Play(false);
 
             //wait for source opened
             await WaitForNaturalDurationUpdated(s.FullFileName);
@@ -651,7 +651,7 @@ namespace MultiPlayer
             }
 
             if (resume)
-                Play();
+                Play(MainWindow.Instance.IsGlobalRepeatAllMode);
 
             IsMuted = false;
             e.Handled = true;
@@ -679,7 +679,7 @@ namespace MultiPlayer
             _player.PositionSet(TimeSpan.FromSeconds(Settings.Position), false);
 
             if (_resume)
-                Play();
+                Play(MainWindow.Instance.IsGlobalRepeatAllMode);
 
             e.Handled = true;
         }

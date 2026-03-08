@@ -157,7 +157,7 @@ namespace MultiPlayer
                 {
                     await vmCurrent.WaitForMediaOpened();
                     vmCurrent.Position = TimeSpan.FromSeconds(0);
-                    vmCurrent.Play();
+                    vmCurrent.Play(IsGlobalRepeatAllMode);
                 }
             }
             else
@@ -449,7 +449,7 @@ namespace MultiPlayer
 
                         //play next
                         _videos[next].VM.Position = TimeSpan.FromSeconds(pos);
-                        _videos[next].VM.Play();
+                        _videos[next].VM.Play(IsGlobalRepeatAllMode);
                         _videos[next].Volume = player.Volume; //use same volume from current player
                     }
                 }

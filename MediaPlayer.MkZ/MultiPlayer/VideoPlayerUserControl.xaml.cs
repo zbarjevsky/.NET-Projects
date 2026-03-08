@@ -231,6 +231,7 @@ namespace MultiPlayer
         {
             if (e.ChangedButton == MouseButton.Left)
                 _mousePos = e.GetPosition(this);
+            IsInFocus = true;
         }
 
         private void UserControl_PreviewMouseUp(object sender, MouseButtonEventArgs e)
@@ -251,14 +252,12 @@ namespace MultiPlayer
             {
                 this.Focus();
                 IsInFocus = true;
-                _borderMain.BorderBrush = Brushes.Tan; // Brushes.DodgerBlue;
             }
         }
 
         private void UserControl_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             IsInFocus = false;
-            _borderMain.BorderBrush = Brushes.Transparent;
 
             if (!_btnFileList.ContextMenu.IsOpen)
                 _controlsHideAndShow.HideControls();
@@ -378,7 +377,16 @@ namespace MultiPlayer
         //sometimes if video was not opened yet - NaturalDuration is 0 - use saved in settings duration
         public double Duration => NaturalDuration > 0.0 ? NaturalDuration : VM.Settings.Duration;
 
-        public bool IsInFocus { get; private set; } = false;
+        private bool _isInFocus = false;
+        public bool IsInFocus 
+        { 
+            get => _isInFocus;
+            private set
+            {
+                _isInFocus = value;
+                _borderMain.BorderBrush = _isInFocus ? Brushes.Tan : Brushes.Transparent;
+            }
+        }
 
         public void ScrollToCenter()
         {
@@ -533,14 +541,14 @@ namespace MultiPlayer
 
         public void FitWidth(bool adjustScroll)
         {
-            _scrollDragger.FitWidth(0);
+            _scrollDragger.FitWidth(4);
             if (adjustScroll)
                 ScrollToCenter();
         }
 
         public void FitHeight(bool adjustScroll)
         {
-            _scrollDragger.FitHeight(0);
+            _scrollDragger.FitHeight(12);
             if (adjustScroll)
                 ScrollToCenter();
         }
@@ -554,7 +562,7 @@ namespace MultiPlayer
 
         internal void FitWindow()
         {
-            _scrollDragger.FitWindow(0);
+            _scrollDragger.FitWindow(4);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
