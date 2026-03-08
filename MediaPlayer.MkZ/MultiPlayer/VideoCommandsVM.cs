@@ -1,26 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows;
-using System.Windows.Controls.Primitives;
-
+﻿using Microsoft.Win32;
 using MkZ.Windows;
 using MkZ.WPF;
 using MultiPlayer.MkZ.WPF;
-
+using MultiPlayer.Properties;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Runtime;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
+using System.Windows.Shapes;
 using Brushes = System.Windows.Media.Brushes;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 using Point = System.Windows.Point;
-using System.Diagnostics;
-using System.Windows.Shapes;
-using MultiPlayer.Properties;
-using System.Runtime;
 
 
 namespace MultiPlayer
@@ -1023,6 +1022,10 @@ namespace MultiPlayer
             string fileName = Settings.FullFileName;
             if (File.Exists(fileName))
             {
+                MessageBoxResult res = System.Windows.MessageBox.Show("Are you sure delete?\n" + fileName, "Delete File", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                if (res != MessageBoxResult.OK)
+                    return;
+
                 List<string> fileNames = GetFileNames(fileName, out int idx);
                 Clear();
                 File.Delete(fileName);
@@ -1039,6 +1042,38 @@ namespace MultiPlayer
             else
             {
                 Clear();
+            }
+        }
+
+        public void MoveFile()
+        {
+            string originalFile = Settings.FullFileName;
+
+            // 1. Setup the Folder Dialog
+            OpenFolderDialog folderDialog = new OpenFolderDialog();
+            folderDialog.Title = "New folder for: " + originalFile;
+            folderDialog.InitialDirectory = System.IO.Path.GetDirectoryName(originalFile);
+
+            if (folderDialog.ShowDialog() == true)
+            {
+                string selectedPath = folderDialog.FolderName;
+                string fileName = System.IO.Path.GetFileName(originalFile);
+                string destinationPath = System.IO.Path.Combine(selectedPath, fileName);
+
+                try
+                {
+                    this.Clear();
+
+                    // 2. Move the file
+                    File.Move(originalFile, destinationPath);
+
+                    _ = this.OpenFromFile(destinationPath, startFrom0: false);
+                    //System.Windows.MessageBox.Show("File moved successfully!");
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.MessageBox.Show($"Error moving file: {ex.Message}");
+                }
             }
         }
 

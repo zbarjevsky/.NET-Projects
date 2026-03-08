@@ -17,11 +17,19 @@
     <None Remove="Houses.jpg" />
     <None Remove="Houses.png" />
     <None Remove="Icons\Cancel.ico" />
+    <None Remove="Icons\RightArrow.ico" />
+    <None Remove="Icons\screen.ico" />
+    <None Remove="Icons\Undo.ico" />
+    <None Remove="Icons\Wrap.ico" />
     <None Remove="Yin-Yang.ico" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Icons\Cancel.ico" />
+    <Resource Include="Icons\RightArrow.ico" />
+    <Resource Include="Icons\screen.ico" />
+    <Resource Include="Icons\Undo.ico" />
+    <Resource Include="Icons\Wrap.ico" />
     <Resource Include="Yin-Yang.ico" />
   </ItemGroup>
 

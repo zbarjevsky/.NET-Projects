@@ -910,5 +910,10 @@ namespace MultiPlayer
         {
             VM.DeleteFile(bPrev: true);
         }
+
+        private void MoveFile_Click(object sender, RoutedEventArgs e)
+        {
+            VM.MoveFile();
+        }
     }
 }

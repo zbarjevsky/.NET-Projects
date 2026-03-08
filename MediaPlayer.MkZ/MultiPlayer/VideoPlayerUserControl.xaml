@@ -326,11 +326,19 @@
                             </MenuItem>
                         </MenuItem>
                         <Separator />
-                        <MenuItem Header="Clear" Click="Clear_Click" >
+                        <MenuItem Header="Move Media File..." Click="MoveFile_Click">
                             <MenuItem.Icon>
-                                <TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE74D;" FontSize="16" />
+                                <Image Source="Icons/Wrap.ico" Width="16" Height="16"/>
                             </MenuItem.Icon>
                         </MenuItem>
+                        <MenuItem Header="Close Media File" Click="Clear_Click" >
+                            <MenuItem.Icon>
+                                <!--Recycle Bin-->
+                                <!--<TextBlock FontFamily="Segoe MDL2 Assets" Text="&#xE74D;" FontSize="16" />-->
+                                <Image Source="Icons/screen.ico" Width="16" Height="16"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <Separator/>
                         <MenuItem Header="Delete Media File" Click="DeleteFile_Click">
                             <MenuItem.Icon>
                                 <Image Source="Icons/Cancel.ico" Width="16" Height="16"/>
