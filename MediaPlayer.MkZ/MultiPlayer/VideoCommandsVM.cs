@@ -24,6 +24,12 @@ using Point = System.Windows.Point;
 
 namespace MultiPlayer
 {
+    public enum eMoveFileType
+    {
+        PlayNext, //move file and play next
+        PlayIt, //move file and open it from new place
+    }
+
     public class VideoCommandsVM : NotifyPropertyChangedImpl
     {
         public const string PLAY_TEXT  = "\xE768";
@@ -1045,7 +1051,7 @@ namespace MultiPlayer
             }
         }
 
-        public void MoveFile()
+        public void MoveFile(eMoveFileType moveType)
         {
             string originalFile = Settings.FullFileName;
 
@@ -1067,7 +1073,15 @@ namespace MultiPlayer
                     // 2. Move the file
                     File.Move(originalFile, destinationPath);
 
-                    _ = this.OpenFromFile(destinationPath, startFrom0: false);
+                    if (moveType == eMoveFileType.PlayIt)
+                    {
+                        _ = this.OpenFromFile(destinationPath, startFrom0: false);
+                    }
+                    else if (moveType == eMoveFileType.PlayNext)
+                    {
+                        Settings.FullFileName = originalFile; //reset working folder
+                        PlayNext(random: false, loop: false, startFrom0: false); //play next file in current folder
+                    }
                     //System.Windows.MessageBox.Show("File moved successfully!");
                 }
                 catch (Exception ex)
