@@ -326,7 +326,12 @@
                             </MenuItem>
                         </MenuItem>
                         <Separator />
-                        <MenuItem Header="Move Media File..." Click="MoveFile_Click">
+                        <MenuItem Header="Move Media File and Next..." Click="MoveFilePlayNext_Click">
+                            <MenuItem.Icon>
+                                <Image Source="Icons/Wrap.ico" Width="16" Height="16"/>
+                            </MenuItem.Icon>
+                        </MenuItem>
+                        <MenuItem Header="Move Media File and Play..." Click="MoveFilePlayIt_Click">
                             <MenuItem.Icon>
                                 <Image Source="Icons/Wrap.ico" Width="16" Height="16"/>
                             </MenuItem.Icon>

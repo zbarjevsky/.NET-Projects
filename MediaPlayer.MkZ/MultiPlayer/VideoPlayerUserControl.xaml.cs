@@ -911,9 +911,16 @@ namespace MultiPlayer
             VM.DeleteFile(bPrev: true);
         }
 
-        private void MoveFile_Click(object sender, RoutedEventArgs e)
+        //move file and play next
+        private void MoveFilePlayNext_Click(object sender, RoutedEventArgs e)
         {
-            VM.MoveFile();
+            VM.MoveFile(eMoveFileType.PlayNext);
+        }
+
+        //move file and open it from new place
+        private void MoveFilePlayIt_Click(object sender, RoutedEventArgs e)
+        {
+            VM.MoveFile(eMoveFileType.PlayIt);
         }
     }
 }
