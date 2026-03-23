@@ -1061,6 +1061,11 @@ namespace MultiPlayer
             folderDialog.InitialDirectory = System.IO.Path.GetDirectoryName(originalFile);
 
             List<string> fileNames = GetFileNames(originalFile, out int idx);
+            string nextFileName = "";
+            if (fileNames.Count > 1)
+                nextFileName = idx + 1 < fileNames.Count ? fileNames[idx + 1] : fileNames[0];
+            else
+                moveType = eMoveFileType.PlayIt; //last file in folder - play it after move
 
             if (folderDialog.ShowDialog() == true)
             {
@@ -1081,7 +1086,6 @@ namespace MultiPlayer
                     }
                     else if (moveType == eMoveFileType.PlayNext)
                     {
-                        string nextFileName = idx + 1 < fileNames.Count ? fileNames[idx + 1] : fileNames[0];
                         _ = OpenFromFile(nextFileName, startFrom0: false);
                     }
                     //System.Windows.MessageBox.Show("File moved successfully!");
