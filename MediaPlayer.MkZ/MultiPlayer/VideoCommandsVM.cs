@@ -1060,6 +1060,8 @@ namespace MultiPlayer
             folderDialog.Title = "New folder for: " + originalFile;
             folderDialog.InitialDirectory = System.IO.Path.GetDirectoryName(originalFile);
 
+            List<string> fileNames = GetFileNames(originalFile, out int idx);
+
             if (folderDialog.ShowDialog() == true)
             {
                 string selectedPath = folderDialog.FolderName;
@@ -1079,8 +1081,8 @@ namespace MultiPlayer
                     }
                     else if (moveType == eMoveFileType.PlayNext)
                     {
-                        Settings.FullFileName = originalFile; //reset working folder
-                        PlayNext(random: false, loop: false, startFrom0: false); //play next file in current folder
+                        string nextFileName = idx + 1 < fileNames.Count ? fileNames[idx + 1] : fileNames[0];
+                        _ = OpenFromFile(nextFileName, startFrom0: false);
                     }
                     //System.Windows.MessageBox.Show("File moved successfully!");
                 }
