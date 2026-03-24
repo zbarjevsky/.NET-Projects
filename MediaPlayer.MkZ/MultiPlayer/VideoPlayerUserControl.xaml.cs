@@ -2,6 +2,7 @@
 using MkZ.WPF.PropertyGrid;
 using MultiPlayer.MkZ.WPF;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -84,7 +85,7 @@ namespace MultiPlayer
             protected set { _mediaState = value; OnPropertyChanged(); }
         }
 
-        public string FileName => VM.Settings.FileName;
+        public string FileName => VM.Settings.FullFileName;
 
         public bool IsFlipHorizontally
         {
@@ -230,6 +231,7 @@ namespace MultiPlayer
         {
             if (e.ChangedButton == MouseButton.Left)
                 _mousePos = e.GetPosition(this);
+            IsInFocus = true;
         }
 
         private void UserControl_PreviewMouseUp(object sender, MouseButtonEventArgs e)
@@ -245,19 +247,17 @@ namespace MultiPlayer
 
         private void UserControl_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
         {
-            if ((VM.IsPopWindowMode && VM.IsPopUpWindowActive && VM.IsFullScreen()) || 
+            if ((VM.IsPopWindowMode && VideoCommandsVM.PopUpVM.IsPopUpWindowActive && VideoCommandsVM.PopUpVM.IsFullScreen(VM.IsPopWindowMode)) || 
                 (!VM.IsPopWindowMode && Application.Current.MainWindow.IsActive))
             {
                 this.Focus();
                 IsInFocus = true;
-                _borderMain.BorderBrush = Brushes.Tan; // Brushes.DodgerBlue;
             }
         }
 
         private void UserControl_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
         {
             IsInFocus = false;
-            _borderMain.BorderBrush = Brushes.Transparent;
 
             if (!_btnFileList.ContextMenu.IsOpen)
                 _controlsHideAndShow.HideControls();
@@ -304,7 +304,7 @@ namespace MultiPlayer
                 VideoPlayerUserControl vFrom = DragDropSource;
                 OnePlayerSettings setFrom = new OnePlayerSettings((OnePlayerSettings)(e.Data.GetData(DragDropDataFormat)));
                 OnePlayerSettings setTo = new OnePlayerSettings(this);
-                if (!string.IsNullOrWhiteSpace(setFrom.FileName) && setFrom.FileName != setTo.FileName)
+                if (!string.IsNullOrWhiteSpace(setFrom.FullFileName) && setFrom.FullFileName != setTo.FullFileName)
                 {
                     _ = this.LoadSetting(setFrom, VM.IsPopWindowMode);
                     //if CTRL is pressed - "copy" the conthent
@@ -377,7 +377,16 @@ namespace MultiPlayer
         //sometimes if video was not opened yet - NaturalDuration is 0 - use saved in settings duration
         public double Duration => NaturalDuration > 0.0 ? NaturalDuration : VM.Settings.Duration;
 
-        public bool IsInFocus { get; private set; } = false;
+        private bool _isInFocus = false;
+        public bool IsInFocus 
+        { 
+            get => _isInFocus;
+            private set
+            {
+                _isInFocus = value;
+                _borderMain.BorderBrush = _isInFocus ? Brushes.Tan : Brushes.Transparent;
+            }
+        }
 
         public void ScrollToCenter()
         {
@@ -471,7 +480,7 @@ namespace MultiPlayer
 
         public void SetBackColor(bool bActive)
         {
-            Brush color = bActive ? Brushes.Black : MainWindow.InactiveBackgroundBrush;
+            Brush color = bActive ? Brushes.Black : MainWindow.Instance.InactiveBackgroundBrush;
 
             if (VideoPlayerElement.Source != null)
             {
@@ -532,14 +541,14 @@ namespace MultiPlayer
 
         public void FitWidth(bool adjustScroll)
         {
-            _scrollDragger.FitWidth(0);
+            _scrollDragger.FitWidth(4);
             if (adjustScroll)
                 ScrollToCenter();
         }
 
         public void FitHeight(bool adjustScroll)
         {
-            _scrollDragger.FitHeight(0);
+            _scrollDragger.FitHeight(12);
             if (adjustScroll)
                 ScrollToCenter();
         }
@@ -553,7 +562,7 @@ namespace MultiPlayer
 
         internal void FitWindow()
         {
-            _scrollDragger.FitWindow(0);
+            _scrollDragger.FitWindow(4);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -721,13 +730,13 @@ namespace MultiPlayer
 
         private void Maximize_Click(object sender, RoutedEventArgs e)
         {
-            VM.MaximizeToggle(hide: false);
+            VideoCommandsVM.PopUpVM.MaximizeToggle(hide: false, VM);
             UpdateMaximizeButtonImage();
         }
 
         private void UpdateMaximizeButtonImage()
         {
-            bool isMaximized = VM.IsFullScreen();
+            bool isMaximized = VideoCommandsVM.PopUpVM.IsFullScreen(VM.IsPopWindowMode);
 
             _down.Visibility = isMaximized ? Visibility.Visible : Visibility.Collapsed;
             _up.Visibility = isMaximized ? Visibility.Collapsed : Visibility.Visible;
@@ -759,8 +768,17 @@ namespace MultiPlayer
             {
                 string parameter = menuItem.Tag as string;
                 if (int.TryParse(parameter, out int mode))
-                    VM.Settings.PlayMode = (ePlayMode)mode;
-                VM.NotifyPropertyChanged(nameof(VM.SelectedPlayModeIndex));
+                {
+                    if (mode == 5) //global play mode
+                    {
+                        MainWindow.Instance.IsGlobalRepeatAllMode = !MainWindow.Instance.IsGlobalRepeatAllMode; //toggle
+                    }
+                    else //control specific play mode
+                    {
+                        VM.Settings.PlayMode = (ePlayMode)mode;
+                    }
+                    VM.NotifyPropertyChanged(nameof(VM.SelectedPlayModeIndex));
+                }
             }
         }
 
@@ -774,6 +792,43 @@ namespace MultiPlayer
             VM.Replay.BookmarksClear();
         }
 
+        private void SearchBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            string query = SearchBox.Text.Trim().ToLower();
+            _ = UpdateMenuItems(query);
+        }
+
+        private void SearchBox_GotKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            MyContextMenu.StaysOpen = true;
+        }
+
+        private void SearchBox_LostKeyboardFocus(object sender, KeyboardFocusChangedEventArgs e)
+        {
+            // Optional: close when clicking outside
+            if (!SearchBox.IsKeyboardFocused)
+                MyContextMenu.StaysOpen = false;
+        }
+
+        private async Task UpdateMenuItems(string filter)
+        {
+            Mouse.OverrideCursor = System.Windows.Input.Cursors.Wait;
+
+            await Task.Delay(33); //refresh UI
+
+            IEnumerable<MenuItem> items = BuildFileList(filter);
+
+            // Keep only first two items (TextBox + Separator)
+            while (MyContextMenu.Items.Count > 2)
+                MyContextMenu.Items.RemoveAt(2);
+
+            foreach (var item in items)
+                MyContextMenu.Items.Add(item);
+
+            Mouse.OverrideCursor = null;
+        }
+
+
         private void FileListMenu_OpenMenu(object sender, RoutedEventArgs e)
         {
             if (sender is System.Windows.Controls.Button button && button.ContextMenu != null)
@@ -784,41 +839,88 @@ namespace MultiPlayer
                 }
                 else
                 {
-                    button.ContextMenu.PlacementTarget = button;
-                    button.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
-                    button.ContextMenu.Items.Clear();
-
-                    List<string> fileNames = VM.GetFileNames(FileName, out int idx);
-                    for (int i = 0; i < fileNames.Count; i++)
-                    {
-                        MenuItem item = new MenuItem();
-
-                        bool isFavorite = MainWindow.IsFavorite(fileNames[i]);
-                        FontWeight fontWeight = (i == idx || isFavorite) ? FontWeights.Bold : FontWeights.Normal;
-                        Brush foreground = (isFavorite && i != idx) ? Brushes.SaddleBrown : Brushes.Navy;
-
-                        item.Icon = new TextBlock 
-                        { 
-                            Text = (i + 1).ToString(), Foreground = foreground, TextAlignment = TextAlignment.Right, 
-                            FontSize = 12, FontWeight = fontWeight, 
-                            Margin = new Thickness(-2,0,-2,-2) 
-                        };
-                        item.Header = new TextBlock { Text = System.IO.Path.GetFileName(fileNames[i]), FontWeight = fontWeight, Foreground = foreground };
-
-                        item.Command = VM.OpenFileByNameCommand;
-                        item.CommandParameter = fileNames[i];
-                        
-                        button.ContextMenu.Items.Add(item);
-                    }
+                    SearchBox.Text = "";
+                    _ = UpdateMenuItems(SearchBox.Text);
 
                     button.ContextMenu.IsOpen = true;
                 }
             }
         }
 
+        private List<MenuItem> BuildFileList(string filter)
+        {
+            List<MenuItem> menuItems = new List<MenuItem>();
+
+            //first menu item - is BROWSE
+            MenuItem itemBrowse = new MenuItem();
+            itemBrowse.Icon = BuildGlyphIcon("\xE838");
+            itemBrowse.Header = "(..) Browse UP";
+            itemBrowse.Foreground = Brushes.Navy;
+            itemBrowse.Command = VM.OpenFileCommand;
+            itemBrowse.CommandParameter = "(..)";
+            menuItems.Add(itemBrowse);
+
+            List<string> fileNames = VM.GetFileNames(FileName, out int idx);
+            for (int i = 0; i < fileNames.Count; i++)
+            {
+                if (!string.IsNullOrEmpty(filter) && !fileNames[i].ToLower().Contains(filter))
+                    continue;
+
+                MenuItem item = new MenuItem();
+
+                bool isFavorite = MainWindow.Instance.RecentFilesCache.IsFavorite(fileNames[i]);
+                FontWeight fontWeight = (i == idx || isFavorite) ? FontWeights.Bold : FontWeights.Normal;
+                Brush foreground = (isFavorite && i != idx) ? Brushes.SaddleBrown : Brushes.Navy;
+
+                item.Icon = new TextBlock
+                {
+                    Text = (i + 1).ToString(),
+                    Foreground = foreground,
+                    TextAlignment = TextAlignment.Right,
+                    FontSize = 12,
+                    FontWeight = fontWeight,
+                    Margin = new Thickness(-2, 0, -2, -2)
+                };
+                item.Header = new TextBlock { Text = System.IO.Path.GetFileName(fileNames[i]), FontWeight = fontWeight, Foreground = foreground };
+
+                item.Command = VM.OpenFileByNameCommand;
+                item.CommandParameter = fileNames[i];
+
+                menuItems.Add(item);
+            }
+
+            return menuItems;
+        }
+
+        private TextBlock BuildGlyphIcon(string code) //folder: "\xE838"
+        {
+            return new TextBlock
+            {
+                Text = code,
+                FontFamily = new System.Windows.Media.FontFamily("Segoe MDL2 Assets"),
+                Foreground = Brushes.SaddleBrown,
+                TextAlignment = TextAlignment.Right,
+                FontSize = 16,
+                FontWeight = FontWeights.Bold,
+                Margin = new Thickness(-2, 0, -2, -2)
+            };
+        }
+
         private void DeleteFile_Click(object sender, RoutedEventArgs e)
         {
             VM.DeleteFile(bPrev: true);
+        }
+
+        //move file and play next
+        private void MoveFilePlayNext_Click(object sender, RoutedEventArgs e)
+        {
+            VM.MoveFile(eMoveFileType.PlayNext);
+        }
+
+        //move file and open it from new place
+        private void MoveFilePlayIt_Click(object sender, RoutedEventArgs e)
+        {
+            VM.MoveFile(eMoveFileType.PlayIt);
         }
     }
 }

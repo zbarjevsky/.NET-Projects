@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.13.36105.23 d17.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PdfMetadataEditor", "PdfMetadataEditor\PdfMetadataEditor.csproj", "{33E71A06-4F26-4C61-927C-442A0700E760}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{33E71A06-4F26-4C61-927C-442A0700E760}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33E71A06-4F26-4C61-927C-442A0700E760}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33E71A06-4F26-4C61-927C-442A0700E760}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33E71A06-4F26-4C61-927C-442A0700E760}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {99B2AE0C-64AF-4313-8376-BB8FD50C2542}
+	EndGlobalSection
+EndGlobal

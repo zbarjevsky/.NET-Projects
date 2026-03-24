@@ -38,6 +38,9 @@ namespace ClipboardManager.Utils
         [Description("Correct Mouse Pointer if Stuck Between Multiple Monitors")]
         public eMouseCorrectionType CorrectMouseType { get { return _isCorrectMouse; } set { _isCorrectMouse = value; UpdateMouseCorrection(_isCorrectMouse); } }
 
+        [Description("Move Mouse Pointer if no user activity detected")]
+        public bool MouseMoveIfInactive { get; set; } = false;
+
         [TypeConverter(typeof(ExpandableObjectConverter))]
         public ServicesManipulatorSettings ServicesManipulatorSettings { get; set; } = new ServicesManipulatorSettings();
         [TypeConverter(typeof(ExpandableObjectConverter))]
@@ -113,6 +116,7 @@ namespace ClipboardManager.Utils
             IsAutoUAC = s.IsAutoUAC;
             IsAbortShutdown = s.IsAbortShutdown;
             CorrectMouseType = s.CorrectMouseType;
+            MouseMoveIfInactive = s.MouseMoveIfInactive;
             ServicesManipulatorSettings = s.ServicesManipulatorSettings;
             EncodingsList = s.EncodingsList;
         }

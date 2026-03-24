@@ -27,5 +27,10 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <BooleanToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+
+        <local:BookmarkColors x:Key="BookmarkColors" />
+
     </Application.Resources>
 </Application>

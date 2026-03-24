@@ -42,7 +42,7 @@ namespace MkZ.Tools
         /// <summary>
         /// Use this to hook/unhook mose messages
         /// </summary>
-        public bool Enabled
+        public bool IsEnabled
         {
             get { return _hookID != IntPtr.Zero; }
             set

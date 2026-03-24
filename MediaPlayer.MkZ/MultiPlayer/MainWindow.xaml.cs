@@ -3,9 +3,11 @@ using MkZ.Tools;
 using MkZ.WPF;
 using MkZ.WPF.PropertyGrid;
 using System.IO;
+using System.Security.Cryptography;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using static System.Net.Mime.MediaTypeNames;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 using SaveFileDialog = Microsoft.Win32.SaveFileDialog;
 
@@ -19,18 +21,53 @@ namespace MultiPlayer
         static MultiPlayerSettings _settings = new MultiPlayerSettings();
         List<VideoPlayerUserControl> _videos = new List<VideoPlayerUserControl>();
 
-        public static Dictionary<string, RecentFile> RecentFiles { get; } = new Dictionary<string, RecentFile>();
+        public RecentFilesDictionary RecentFilesCache { get; } = new ();
+
+        public System.Windows.Media.Brush InactiveBackgroundBrush => _settings.InactiveBackgroundColor;
+
+        /// <summary>
+        /// If true - play all players one after another
+        /// </summary>
+        public bool IsGlobalRepeatAllMode
+        {
+            get { return (bool)GetValue(IsGlobalRepeatAllModeProperty); }
+            set { SetValue(IsGlobalRepeatAllModeProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsGlobalRepeatAllMode.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsGlobalRepeatAllModeProperty =
+            DependencyProperty.Register(nameof(IsGlobalRepeatAllMode), typeof(bool), typeof(MainWindow), 
+                new PropertyMetadata(false, OnGlobalRepeatAllModeChanged));
+
+        private static void OnGlobalRepeatAllModeChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var wnd = (MainWindow)d;
+            bool newValue = (bool)e.NewValue;
+
+            //notify all player controls of this change
+            foreach (var video in wnd._videos)
+            {
+                video.VM.NotifyPropertyChanged(nameof(video.VM.SelectedPlayModeIndex));
+            }
+        }
+
+        public static MainWindow Instance { get; private set; } = null;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            _videos = new List<VideoPlayerUserControl> { _video00, _video01, _video02, _video03, _video10, _video11, _video12, _video13 };
+            _videos = new List<VideoPlayerUserControl> { 
+                _videoA, _videoB, _videoC, 
+                _video00, _video01, _video02, _video03, 
+                _video10, _video11, _video12, _video13 };
 
             if (!SingleInstanceHelper.IsSingleInstance(true))
             {
                 this.Close();
             }
+
+            Instance = this;
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -41,7 +78,7 @@ namespace MultiPlayer
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             SaveSettings(_settings.DefaultSettingsFileName);
-            VideoCommandsVM.Exit();    
+            VideoCommandsVM.PopUpVM.Exit();    
         }
 
         private void Open_Click(object sender, RoutedEventArgs e)
@@ -56,26 +93,72 @@ namespace MultiPlayer
             }
         }
 
+        private void OpenRecent_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog ofd = new OpenFileDialog();
+            ofd.InitialDirectory = _settings.DataFolder;
+            ofd.FileName = _settings.RecentFilesFileName;
+            ofd.Filter = "XML Files (*.xml)|*.xml";
+            if (ofd.ShowDialog(this).Value == true)
+            {
+                _settings.UpdateRecentFiles(ofd.FileName);
+                RecentFilesCache.UpdateRecentFilesCache(_settings.RecentFiles);
+                UpdateOpenedPlayersBookmarksFromCache();
+            }
+        }
+
+        private void UpdateOpenedPlayersBookmarksFromCache()
+        {
+            foreach (VideoPlayerUserControl v in _videos)
+            {
+                v.VM.UpdateBookmarksFromCache(RecentFilesCache);
+            }
+        }
+
         private async void LoadSettings(string fileName)
         {
             _settings.Load(fileName);
 
-            RecentFiles.Clear();
-            foreach (RecentFile f in _settings.RecentFiles)
-                RecentFiles.Add(f.FileName, f);
+            _settings.MainWindowState.RestoreTo(this);
 
-            SplittersLoad(_gridMain.RowDefinitions, _gridMain.ColumnDefinitions);
+            RecentFilesCache.UpdateRecentFilesCache(_settings.RecentFiles);
+
+            SplittersLoad(_settings.GridSplitterPositionsMain, _gridMain);
+            SplittersLoad(_settings.GridSplitterPositionsTop, _gridTop);
+            SplittersLoad(_settings.GridSplitterPositionsBottom, _gridBottom);
+
+            this.IsGlobalRepeatAllMode = _settings.IsGlobalRepeatAllMode;
+
+            await ClearAllAsync();
 
             if (_settings.PlayerSettings.Count > 2)
             {
                 await InitFirstPlayerForMp3();
 
+                VideoCommandsVM vmCurrent = null;
                 for (int i = 0; i < _videos.Count && i < _settings.PlayerSettings.Count; i++)
                 {
+                    if (_settings.PlayerSettings[i].MediaState == MediaState.Play)
+                        vmCurrent = _videos[i].VM;
+
                     _ = _videos[i].LoadSetting(_settings.PlayerSettings[i]);
                 }
 
-                VideoCommandsVM.PopUpHide();
+                if (_settings.PopUpPlayerSettings != null && File.Exists(_settings.PopUpPlayerSettings.BookmarkSettings.FileName))
+                {
+                     VideoCommandsVM.PopUpVM.LoadSettings(_settings.PopupWindowState,  _settings.PopUpPlayerSettings);
+                }
+                else
+                {
+                    VideoCommandsVM.PopUpVM.PopUpHide();
+                }
+
+                if (IsGlobalRepeatAllMode && vmCurrent != null)
+                {
+                    await vmCurrent.WaitForMediaOpened();
+                    vmCurrent.Position = TimeSpan.FromSeconds(0);
+                    vmCurrent.Play(IsGlobalRepeatAllMode);
+                }
             }
             else
             {
@@ -93,7 +176,7 @@ namespace MultiPlayer
         /// </summary>
         private async Task InitFirstPlayerForMp3()
         {
-            string fileName = _settings.PlayerSettings[0].FileName.ToLower();
+            string fileName = _settings.PlayerSettings[0].BookmarkSettings.FileName.ToLower();
             if (string.IsNullOrEmpty(fileName))
                 return;
 
@@ -107,38 +190,50 @@ namespace MultiPlayer
 
         private void SaveSettings(string fileName)
         {
-            SplittersSave(_gridMain.RowDefinitions, _gridMain.ColumnDefinitions);
+            SplittersSave(_settings.GridSplitterPositionsMain, _gridMain);
+            SplittersSave(_settings.GridSplitterPositionsTop, _gridTop);
+            SplittersSave(_settings.GridSplitterPositionsBottom, _gridBottom);
+
+            _settings.IsGlobalRepeatAllMode = this.IsGlobalRepeatAllMode;
 
             _settings.Update(_videos);
 
+            _settings.MainWindowState.CopyFrom(this);
+
             _settings.RecentFiles.Clear();
-            foreach (var f in RecentFiles)
-                _settings.RecentFiles.Add(f.Value);
+            foreach (var f in RecentFilesCache.RecentFiles)
+                _settings.RecentFiles.RecentFilesList.Add(f.Value);
 
             if (_settings.HasData())
                 _settings.Save(fileName);
         }
 
-        private void SplittersLoad(RowDefinitionCollection rows, ColumnDefinitionCollection cols)
+        private static void SplittersLoad(GridSplitterPositions pos, Grid grid)
         {
-            if (_settings.RowsSizes != null && _settings.RowsSizes.Count == rows.Count)
-            for (int i = 0; i < rows.Count; i++)
-                rows[i].Height = _settings.RowsSizes[i].Pos;
+            RowDefinitionCollection rows = grid.RowDefinitions;
+            ColumnDefinitionCollection cols = grid.ColumnDefinitions;
 
-            if (_settings.ColsSizes != null && _settings.ColsSizes.Count == cols.Count)
+            if (pos.RowsSizes != null && pos.RowsSizes.Count == rows.Count)
+            for (int i = 0; i < rows.Count; i++)
+                rows[i].Height = pos.RowsSizes[i].Pos;
+
+            if (pos.ColsSizes != null && pos.ColsSizes.Count == cols.Count)
                 for (int i = 0; i < cols.Count; i++)
-                    cols[i].Width = _settings.ColsSizes[i].Pos;
+                    cols[i].Width = pos.ColsSizes[i].Pos;
         }
 
-        private void SplittersSave(RowDefinitionCollection rows, ColumnDefinitionCollection cols)
+        private static void SplittersSave(GridSplitterPositions pos, Grid grid)
         {
-            _settings.RowsSizes = new List<SplitterPos>();
-            foreach (RowDefinition row in rows)
-                _settings.RowsSizes.Add(new SplitterPos(row.Height));
+            RowDefinitionCollection rows = grid.RowDefinitions;
+            ColumnDefinitionCollection cols = grid.ColumnDefinitions;
 
-            _settings.ColsSizes = new List<SplitterPos>();
+            pos.RowsSizes = new List<SplitterPos>();
+            foreach (RowDefinition row in rows)
+                pos.RowsSizes.Add(new SplitterPos(row.Height));
+
+            pos.ColsSizes = new List<SplitterPos>();
             foreach (ColumnDefinition col in cols)
-                _settings.ColsSizes.Add(new SplitterPos(col.Width));
+                pos.ColsSizes.Add(new SplitterPos(col.Width));
         }
 
         private void Save_Click(object sender, RoutedEventArgs e)
@@ -207,18 +302,36 @@ namespace MultiPlayer
                 v.Clear();
                 await Task.Delay(3);
             }
-            VideoCommandsVM.PopUpHide();
+            VideoCommandsVM.PopUpVM.PopUpHide();
+        }
+
+        private void SwapGrids_Click(object sender, RoutedEventArgs e)
+        {
+            int row1 = Grid.GetRow(_gridTop);
+            int row2 = Grid.GetRow(_gridBottom);
+
+            Grid.SetRow(_gridTop, row2);
+            Grid.SetRow(_gridBottom, row1);
         }
 
         private void ResetLayout_Click(object sender, RoutedEventArgs e)
         {
-            for (int i = 0; i < _gridMain.RowDefinitions.Count; i++)
-                if (_gridMain.RowDefinitions[i].Height.IsStar)
-                    _gridMain.RowDefinitions[i].Height = new GridLength(1, GridUnitType.Star);
+            ResetLayout(_gridMain);
+            ResetLayout(_gridTop);
+            ResetLayout(_gridBottom);
+        }
 
-            for (int i = 0; i < _gridMain.ColumnDefinitions.Count; i++)
-                if (_gridMain.ColumnDefinitions[i].Width.IsStar)
-                    _gridMain.ColumnDefinitions[i].Width = new GridLength(1, GridUnitType.Star);
+        private static void ResetLayout(Grid grid)
+        {
+            if (grid.RowDefinitions.Count > 1)
+                for (int i = 0; i < grid.RowDefinitions.Count; i++)
+                    if (grid.RowDefinitions[i].Height.IsStar)
+                        grid.RowDefinitions[i].Height = new GridLength(1, GridUnitType.Star);
+
+            if (grid.ColumnDefinitions.Count > 1)
+                for (int i = 0; i < grid.ColumnDefinitions.Count; i++)
+                    if (grid.ColumnDefinitions[i].Width.IsStar)
+                        grid.ColumnDefinitions[i].Width = new GridLength(1, GridUnitType.Star);
         }
 
         private void SaveAsRecent_Click(object sender, RoutedEventArgs e)
@@ -236,64 +349,79 @@ namespace MultiPlayer
             OptionsWindow.ShowOptions(this, _settings, "Settings", 650, 170);
         }
 
-        public static RecentFile FindRecentFile(string fileName)
+        public class RecentFilesDictionary
         {
-            if (string.IsNullOrWhiteSpace(fileName))
+            public Dictionary<string, BookmarkSettings> RecentFiles { get; } = new();
+
+            public BookmarkSettings FindRecentFile(string fileName)
+            {
+                if (string.IsNullOrWhiteSpace(fileName))
+                    return null;
+
+                string name = Path.GetFileName(fileName);
+                if (RecentFiles.ContainsKey(name))
+                    return RecentFiles[name];
+
+                string shortName = name.TrimStart('_');
+                if (RecentFiles.ContainsKey(shortName))
+                    return RecentFiles[shortName];
+
                 return null;
+            }
 
-            string name = Path.GetFileName(fileName);
-            if (RecentFiles.ContainsKey(name))
-                return RecentFiles[name];
+            public BookmarkSettings FindOrCreateRecentFile(string fileName)
+            {
+                if (string.IsNullOrWhiteSpace(fileName))
+                    return null;
 
-            string shortName = name.TrimStart('_');
-            if (RecentFiles.ContainsKey(shortName))
+                BookmarkSettings recentFile = FindRecentFile(fileName);
+                if (recentFile != null)
+                    return recentFile;
+
+                string shortName = BookmarkSettings.GetShortFileName(fileName);
+
+                RecentFiles.Add(shortName, new BookmarkSettings() { FileName = shortName });
                 return RecentFiles[shortName];
+            }
 
-            return null;
+            public bool IsFavorite(string fileName)
+            {
+                BookmarkSettings recentFile = FindRecentFile(fileName);
+                if (recentFile != null)
+                    return recentFile.IsFavorite;
+
+                return false;
+            }
+
+            public void UpdateRecentFile(OnePlayerSettings settings)
+            {
+                BookmarkSettings recentFile = FindRecentFile(settings.BookmarkSettings.FileName);
+                if (recentFile != null)
+                {
+                    recentFile.UpdateFrom(settings.BookmarkSettings, force:false);
+                }
+            }
+
+            public void UpdateRecentFilesCache(RecentFiles recentFiles)
+            {
+                foreach (BookmarkSettings f in recentFiles.RecentFilesList)
+                {
+                    if (!RecentFiles.ContainsKey(f.FileName))
+                        RecentFiles.Add(f.FileName, f);
+                    else
+                        RecentFiles[f.FileName].UpdateFrom(f, force: false);
+                }
+            }
+        }//end RecentFilesDictionary
+
+        public bool IsSupportedFileExtension(string fileName)
+        {
+            return _settings.SupportedFileExtensions.IsSupportedFileExtension(fileName);
         }
 
-        public static RecentFile FindOrCreateRecentFile(string fileName)
+        public void PauseAll()
         {
-            if (string.IsNullOrWhiteSpace(fileName))
-                return null;
-
-            RecentFile recentFile = FindRecentFile(fileName);
-            if (recentFile != null)
-                return recentFile;
-
-            string name = Path.GetFileName(fileName);
-            string shortName = name.TrimStart('_');
-
-            RecentFiles.Add(shortName, new RecentFile() { FileName = shortName });
-            return RecentFiles[shortName];
-        }
-
-        public static bool IsFavorite(string fileName)
-        {
-            RecentFile recentFile = FindRecentFile(fileName);
-            if (recentFile != null)
-                return recentFile.IsFavorite;
-
-            return false;
-        }
-
-        public static System.Windows.Media.Brush InactiveBackgroundBrush => GetBrush(_settings.InactiveBackgroundColor);
-
-        private static System.Windows.Media.Brush GetBrush(System.Drawing.Color c)
-        {
-            return new System.Windows.Media.SolidColorBrush(new System.Windows.Media.Color() { A = 255, R = c.R, G = c.G, B = c.B });
-        }
-
-        public static void UpdateRecentFile(string fileName, bool isFavorite)
-        {
-            RecentFile recentFile = FindRecentFile(fileName);
-            if (recentFile != null)
-                recentFile.IsFavorite = isFavorite;
-        }
-
-        private void PauseAll_Click(object sender, RoutedEventArgs e)
-        {
-            VideoCommandsVM.PopUpPause();
+            VideoCommandsVM.PopUpVM.PopUpPause();
 
             foreach (VideoPlayerUserControl v in _videos)
             {
@@ -301,14 +429,71 @@ namespace MultiPlayer
             }
         }
 
+        public void PlayNext(VideoPlayerUserControl player)
+        {
+            if ( IsGlobalRepeatAllMode == false)
+                return;
+
+            for (int i = 0; i < _videos.Count; i++)
+            {
+                if ( _videos[i] == player )
+                {
+                    //stop current
+                    //_videos[i].VM.Stop();
+
+                    int next = FindNext(i);
+                    if (next != -1)
+                    {
+                        //if replay mode is ON - start from posA
+                        double pos = _videos[next].VM.Replay.IsReplayChecked ? _videos[next].VM.Settings.BookmarkSettings.ReplayPosA : 0;
+
+                        //play next
+                        _videos[next].VM.Position = TimeSpan.FromSeconds(pos);
+                        _videos[next].VM.Play(IsGlobalRepeatAllMode);
+                        _videos[next].Volume = player.Volume; //use same volume from current player
+                    }
+                }
+            }       
+        }
+
+        private int FindNext(int i)
+        {
+            //find next
+            i++;
+            if (i >= _videos.Count)
+                i = 0;
+
+            for (int j = 0; j < _videos.Count; j++)
+            {
+                if (File.Exists(_videos[i].FileName))
+                    return i;
+
+                i++;
+                if (i >= _videos.Count)
+                    i = 0;
+            }
+            
+            return -1;
+        }
+
+        private void PauseAll_Click(object sender, RoutedEventArgs e)
+        {
+            PauseAll();
+        }
+
         //Pause -> Save Recent -> Clear -> Load Default
         private void Magic_Click(object sender, RoutedEventArgs e)
+        {
+            _ = Magic(sender, e);
+        }
+
+        private async Task Magic(object sender, RoutedEventArgs e)
         {
             try
             {
                 PauseAll_Click(sender, e);
                 SaveAsRecent_Click(sender, e);
-                ClearAll_Click(sender, e);
+                await ClearAllAsync();
                 OpenDefault_Click(sender, e);
 
                 //System.Windows.MessageBox.Show(this, "Magic Done!", this.Title);
@@ -316,7 +501,7 @@ namespace MultiPlayer
             catch (Exception ex)
             {
                 System.Windows.MessageBox.Show(this, ex.Message, this.Title);
-            }        
+            }
         }
     }
 }

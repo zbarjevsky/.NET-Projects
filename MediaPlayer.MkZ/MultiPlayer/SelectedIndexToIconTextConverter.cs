@@ -15,7 +15,16 @@ namespace MultiPlayer
             if (value is int selectedIndex)
             {
                 if (int.TryParse(parameter as string, out int currentIndex))
-                    return selectedIndex == currentIndex ? "⚫" : ""; // ⁕ ₿ ⏺ Ო ● ☯ ⚫
+                {
+                    if (currentIndex == 5)
+                    {
+                        return MainWindow.Instance.IsGlobalRepeatAllMode ? "✓" : "";
+                    }
+                    else
+                    {
+                        return selectedIndex == currentIndex ? (MainWindow.Instance.IsGlobalRepeatAllMode ? "○" : "⬤") : ""; // ⁕ ₿ ⏺ Ო ● ☯ ⚫
+                    }
+                }
             }
             return "--"; // Fallback for non-int values
         }

@@ -1,29 +1,35 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
-using System.Windows.Input;
-using System.Windows;
-using System.Windows.Controls.Primitives;
-
+﻿using Microsoft.Win32;
 using MkZ.Windows;
 using MkZ.WPF;
 using MultiPlayer.MkZ.WPF;
-
+using MultiPlayer.Properties;
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Runtime;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
+using System.Windows.Input;
+using System.Windows.Shapes;
 using Brushes = System.Windows.Media.Brushes;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using OpenFileDialog = Microsoft.Win32.OpenFileDialog;
 using Point = System.Windows.Point;
-using System.Diagnostics;
-using System.Windows.Shapes;
-using MultiPlayer.Properties;
 
 
 namespace MultiPlayer
 {
+    public enum eMoveFileType
+    {
+        PlayNext, //move file and play next
+        PlayIt, //move file and open it from new place
+    }
+
     public class VideoCommandsVM : NotifyPropertyChangedImpl
     {
         public const string PLAY_TEXT  = "\xE768";
@@ -35,7 +41,7 @@ namespace MultiPlayer
         VideoPlayerUserControl _player;
         VideoCommandsUserControl _cmd;
 
-        private RecentFile _recentFile = null;
+        private BookmarkSettings _recentFile = null;
         private Stopwatch _playSartTime = Stopwatch.StartNew();
 
         private bool _isLoading;
@@ -43,20 +49,21 @@ namespace MultiPlayer
 
         public bool IsFavorite 
         { 
-            get => Settings.IsFavorite; 
+            get => Settings.BookmarkSettings.IsFavorite; 
             set 
             {  
-                Settings.IsFavorite = value;
-                MainWindow.UpdateRecentFile(Settings.FileName, Settings.IsFavorite);
+                Settings.BookmarkSettings.IsFavorite = value;
+                MainWindow.Instance.RecentFilesCache.UpdateRecentFile(Settings);
                 NotifyPropertyChanged(); 
             } 
         }
 
         public OnePlayerSettings Settings { get; set; } = new OnePlayerSettings();
 
-        public bool IsPopWindowMode { get; private set; } = false;
+        public double ReplayPosA { get => Settings.BookmarkSettings.ReplayPosA; set => Settings.BookmarkSettings.ReplayPosA = value; }
+        public double ReplayPosB { get => Settings.BookmarkSettings.ReplayPosB; set => Settings.BookmarkSettings.ReplayPosB = value; }
 
-        public bool IsPopUpWindowActive => WndMax.IsActive;
+        public bool IsPopWindowMode { get; private set; } = false;
 
         public RelayCommand TogglePlayPauseCommand { get; }
         public RelayCommand OpenFileCommand { get; }
@@ -137,9 +144,12 @@ namespace MultiPlayer
             get { return (int)Settings.PlayMode; }
         }
 
-        public void Play()
+        public void Play(bool pauseAll)
         {
             //Debug.WriteLine($"### MediaPlayStarted - Requested, File: {Settings.FileName}");
+
+            if (pauseAll && MainWindow.Instance.IsGlobalRepeatAllMode)
+                MainWindow.Instance.PauseAll();
 
             _playSartTime.Restart();
 
@@ -167,7 +177,7 @@ namespace MultiPlayer
             UpdateRrecentFile(Settings);
 
             _player.Stop();
-            Settings.FileName = "";
+            Settings.FullFileName = "";
             _player.VideoPlayerElement.Source = null;
             _player.SetBackColor(bActive: false);
 
@@ -192,13 +202,22 @@ namespace MultiPlayer
 
         private void OpenFileCommandExecute(object obj)
         {
-            string fileName = Settings.FileName;
-            string dir = System.IO.Path.GetDirectoryName(Settings.FileName);
+            string fileName = Settings.FullFileName;
+            string dir = System.IO.Path.GetDirectoryName(Settings.FullFileName);
+            string dirUP = string.Empty;
+            if (obj is string parameter && parameter == "(..)")
+                dirUP = System.IO.Path.GetDirectoryName(dir); //go one UP
+
             OpenFileDialog ofd = new OpenFileDialog();
-            if (Directory.Exists(dir))
+            if (string.IsNullOrWhiteSpace(dirUP) && Directory.Exists(dir))
             {
                 ofd.InitialDirectory = dir;
                 ofd.FileName = fileName;
+            }
+            else if (Directory.Exists(dirUP)) //open dirUP
+            {
+                ofd.InitialDirectory = dirUP;
+                ofd.FileName = System.IO.Path.GetFileName(dir);
             }
 
             MediaState state = _player.MediaState;
@@ -212,14 +231,16 @@ namespace MultiPlayer
             else // cancel - continue play if needed
             {
                 if (state == MediaState.Play)
-                    Play();
+                    Play(MainWindow.Instance.IsGlobalRepeatAllMode);
             }
         }
 
         private void OpenFileByIndexCommandExecute(object parameter)
         {
-            string fileName = parameter as string;
-            _ = OpenFromFile(fileName, startFrom0: false);
+            if (parameter is string fileName)
+            {
+                _ = OpenFromFile(fileName, startFrom0: false);
+            }
         }
 
         private void TogglePlayPauseCommandExecute(object parameter)
@@ -227,12 +248,12 @@ namespace MultiPlayer
             if (_player.MediaState == MediaState.Play)
                 Pause(updateUI: true);
             else
-                Play();
+                Play(MainWindow.Instance.IsGlobalRepeatAllMode);
         }
 
         private bool TogglePlayPauseCommandCanExecute(object parameter)
         {
-            bool res = !string.IsNullOrWhiteSpace(Settings.FileName);
+            bool res = !string.IsNullOrWhiteSpace(Settings.FullFileName);
             return res;
         }
 
@@ -248,7 +269,7 @@ namespace MultiPlayer
 
             _player.VideoStartedAction = (player) => MediaPlayStarted(player);
             _player.VideoEnded = (player) => MediaPlayEndedAsync(player); 
-            _player.VideoFailed = (e, player) => MediaPlayFailed(e, player); 
+            _player.VideoFailed = (e, player) => MediaPlayFailed(e, player);
         }
 
         bool _isInUpdate = false;
@@ -262,7 +283,8 @@ namespace MultiPlayer
             if (lockUpdate)
                 _isInUpdate = true;
 
-            Settings.Update(s);
+            Settings.Update(s, force: true);
+            NotifyPropertyChanged(nameof(Settings));
 
             _cmd._volume.Value = s.Volume * 1000.0;
             _cmd._position.Maximum = s.Duration;
@@ -277,11 +299,11 @@ namespace MultiPlayer
             if (s.ZoomState == eZoomState.Custom)
                 _player.Zoom = s.Zoom;
 
-            _cmd._timeLbl.Text = SecondsToString(s.Position);
+            _cmd._timeLbl.Text = SecondsToString(s.Position, s.Duration);
 
             NotifyPropertyChanged(nameof(SelectedFitIndex));
 
-            Settings.UpdateBookmarks(s);
+            Settings.UpdateBookmarks(s.BookmarkSettings);
 
             AdjustMarginsForVisibleScrollBars();
             AdjustSizeAndLayout();
@@ -291,11 +313,11 @@ namespace MultiPlayer
 
         public void UpdateRrecentFile(OnePlayerSettings s)
         {
-            if (string.IsNullOrWhiteSpace(s.FileName))
+            if (string.IsNullOrWhiteSpace(s.FullFileName))
                 return;
 
-            _recentFile = MainWindow.FindOrCreateRecentFile(s.FileName);
-            _recentFile.Update(s);
+            _recentFile = MainWindow.Instance.RecentFilesCache.FindOrCreateRecentFile(s.FullFileName);
+            _recentFile.UpdateFrom(s.BookmarkSettings, force: false);
         }
 
         private void _videoPlayerUserControl_PropertyChanged(object? sender, System.ComponentModel.PropertyChangedEventArgs e)
@@ -332,12 +354,11 @@ namespace MultiPlayer
 
             _player.Clear(); //reset all settings, retain volume, fit, playMode
 
-            Settings.FileName = fileName;
+            Settings.FullFileName = fileName;
 
-            _recentFile = MainWindow.FindOrCreateRecentFile(fileName);
+            _recentFile = MainWindow.Instance.RecentFilesCache.FindOrCreateRecentFile(fileName);
 
-            Settings.IsFavorite = _recentFile.IsFavorite;
-            Settings.UpdateBookmarks(_recentFile.ReplayIsOn, _recentFile);
+            Settings.UpdateBookmarks(_recentFile);
 
             Settings.Position = startFrom0 ? 0 : _recentFile.Position;
 
@@ -356,7 +377,7 @@ namespace MultiPlayer
                 return;
 
             Clear();
-            if (string.IsNullOrEmpty(s.FileName) || !File.Exists(s.FileName))
+            if (string.IsNullOrEmpty(s.FullFileName) || !File.Exists(s.FullFileName))
             {
                 _player.VideoPlayerElement.ForceRender();
                 return;
@@ -364,29 +385,32 @@ namespace MultiPlayer
 
             this.IsLoading = true;
 
-            this.IsMuted = true; //load silently
             _player.Volume = 0;
+            this.IsMuted = true; //load silently
             
             //Settings.Update(s);
 
-            _player.VideoPlayerElement.Source = new Uri(s.FileName);
+            _player.VideoPlayerElement.Source = new Uri(s.FullFileName);
             _player.PositionSet(TimeSpan.FromSeconds(s.Position), false);
 
-            this.Title = System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(s.FileName)) + "/" + System.IO.Path.GetFileName(s.FileName);
-            List<string> fileNames = this.GetFileNames(s.FileName, out int idx);
+            this.Title = System.IO.Path.GetFileName(System.IO.Path.GetDirectoryName(s.FullFileName)) + "/" + System.IO.Path.GetFileName(s.FullFileName);
+            List<string> fileNames = this.GetFileNames(s.FullFileName, out int idx);
             this.FileIndex = $"{(idx+1)}/{fileNames.Count} ";
 
             this.Update(s, pop, lockUpdate: false); //update settings before play()
 
-            this.Play();
+            _player.Volume = 0;
+            this.IsMuted = true; //load silently
+
+            this.Play(false);
 
             //wait for source opened
-            await WaitForNaturalDurationUpdated(s.FileName);
+            await WaitForNaturalDurationUpdated(s.FullFileName);
 
             if (_player.NaturalDuration > 0)
                 s.Duration = _player.NaturalDuration;
 
-            if (s.MediaState != MediaState.Play)
+            if (s.MediaState != MediaState.Play || s.Duration < 1)
             {
                 this.Pause(updateUI: true);
             }
@@ -411,6 +435,7 @@ namespace MultiPlayer
             this.AdjustSizeAndLayout();
 
             //_player.SetBackColor(bActive: false);
+            this.IsLoading = false;
         }
 
         private async Task WaitForNaturalDurationUpdated(string fileName)
@@ -436,46 +461,62 @@ namespace MultiPlayer
         {
             IsLoading = false;
             TimeSpan delta = _playSartTime.Elapsed;
-            Debug.WriteLine($"### MediaPlayStarted - Elapsed: {delta.TotalSeconds.ToString("0.000")}, File: {Settings.FileName}");
+            Debug.WriteLine($"### MediaPlayStarted - Elapsed: {delta.TotalSeconds.ToString("0.000")}, File: {Settings.FullFileName}");
             _waitMediaOpenedEvent.TriggerEvent();
         }
 
         private async Task MediaPlayEndedAsync(MediaElement player)
         {
-            IsLoading = false;
+            await WaitForLoadingComplete();
+
+            bool isEmpty = !player.NaturalDuration.HasTimeSpan || player.NaturalDuration.TimeSpan.TotalSeconds < 1.0;
 
             //when song is empty it is ended after next song started - ignore it
             if (string.IsNullOrEmpty(player?.Source?.ToString()))
+            {
+                Settings.MediaState = MediaState.Stop;
                 return;
+            }
 
             Stop();
             Settings.Position = 0;
             await Task.Delay(100);
 
-            switch (Settings.PlayMode)
+            if (MainWindow.Instance.IsGlobalRepeatAllMode)
             {
-                case ePlayMode.PlayOne:
-                    break;
-                case ePlayMode.PlayAll:
-                    PlayNext(random: false, loop: false, startFrom0: true);
-                    break;
-                case ePlayMode.RepeatAll:
-                    PlayNext(random: false, loop: true, startFrom0: true);
-                    break;
-                case ePlayMode.Random:
-                    PlayNext(random: true, loop: true, startFrom0: true);
-                    break;
-                case ePlayMode.RepeatOne:
-                default:
-                    _ = OpenFromFile(Settings.FileName, startFrom0: true);
-                    break;
+                Settings.MediaState = MediaState.Pause;
+                if (!isEmpty)
+                    await OpenFromSettings(new OnePlayerSettings(Settings), IsPopWindowMode);
+                MainWindow.Instance.PlayNext(_player);
+            }
+            else
+            {
+                switch (Settings.PlayMode)
+                {
+                    case ePlayMode.PlayOne:
+                        break;
+                    case ePlayMode.PlayAll:
+                        PlayNext(random: false, loop: false, startFrom0: true);
+                        break;
+                    case ePlayMode.RepeatAll:
+                        PlayNext(random: false, loop: true, startFrom0: true);
+                        break;
+                    case ePlayMode.Random:
+                        PlayNext(random: true, loop: true, startFrom0: true);
+                        break;
+                    case ePlayMode.RepeatOne:
+                    default:
+                        if (!isEmpty)
+                        _ = OpenFromFile(Settings.FullFileName, startFrom0: true);
+                        break;
+                }
             }
         }
 
         private bool MediaPlayFailed(ExceptionRoutedEventArgs e, MediaElement player)
         {
             IsLoading = false;
-            System.Windows.MessageBox.Show(e.ErrorException.Message + "\n" + Settings.FileName, "MediaPlayFailed");
+            System.Windows.MessageBox.Show(e.ErrorException.Message + "\n" + Settings.FullFileName, "MediaPlayFailed");
             e.Handled = true;
             return true;
         }
@@ -606,19 +647,24 @@ namespace MultiPlayer
             _cmd._position.Value = Settings.Position;
             _player.PositionSet(TimeSpan.FromSeconds(Settings.Position), false);
 
-            _cmd._timeLbl.Text = SecondsToString(_player.Position.TotalSeconds);
+            _cmd._timeLbl.Text = SecondsToString(_player.Position.TotalSeconds, _player.Duration);
 
-            if (Replay.IsReplayChecked && (Settings.Position < Settings.ReplayPosA || Settings.Position > Settings.ReplayPosB))
+            if (Replay.IsReplayChecked && (Settings.Position < ReplayPosA || Settings.Position > ReplayPosB))
             {
                 Replay.IsReplayChecked = false; //uncheck REPLAY if clicked out of replay range
                 Replay.UpdateReplayUI();
             }
 
             if (resume)
-                Play();
+                Play(MainWindow.Instance.IsGlobalRepeatAllMode);
 
             IsMuted = false;
             e.Handled = true;
+        }
+
+        public static string SecondsToString(double seconds, double total)
+        {
+            return SecondsToString(seconds) + "\n" + SecondsToString(total);
         }
 
         public static string SecondsToString(double seconds)
@@ -638,14 +684,14 @@ namespace MultiPlayer
             _player.PositionSet(TimeSpan.FromSeconds(Settings.Position), false);
 
             if (_resume)
-                Play();
+                Play(MainWindow.Instance.IsGlobalRepeatAllMode);
 
             e.Handled = true;
         }
 
         private bool NextFileCommandCanExecute(object obj)
         {
-            List<string> fileNames = GetFileNames(Settings.FileName, out int idx);
+            List<string> fileNames = GetFileNames(Settings.FullFileName, out int idx);
             return idx >= 0 && idx < fileNames.Count - 1;
         }
 
@@ -656,13 +702,13 @@ namespace MultiPlayer
 
         private bool PrevFileCommandCanExecute(object obj)
         {
-            List<string> fileNames = GetFileNames(Settings.FileName, out int idx);
+            List<string> fileNames = GetFileNames(Settings.FullFileName, out int idx);
             return idx > 0;
         }
 
         private void PrevFileCommandExecute(object obj)
         {
-            PlayPrev(Settings.FileName);
+            PlayPrev(Settings.FullFileName);
         }
 
         private void PlayPrev(string fileName)
@@ -686,7 +732,7 @@ namespace MultiPlayer
             IsLoading = false; //reset 
             Pause(true);
 
-            List<string> fileNames = GetFileNames(Settings.FileName, out int idx);
+            List<string> fileNames = GetFileNames(Settings.FullFileName, out int idx);
             if (random)
             {
                 idx = _random.Next(fileNames.Count - 1);
@@ -713,9 +759,7 @@ namespace MultiPlayer
                 return new List<string>();
 
             List<string> fileNames = System.IO.Directory.EnumerateFiles(dir, "*.*", SearchOption.TopDirectoryOnly)
-                .Where(
-                    file => Settings.SupportedVideoExtensions.Contains(System.IO.Path.GetExtension(file).ToLower()) || 
-                            Settings.SupportedAudioExtensions.Contains(System.IO.Path.GetExtension(file).ToLower())).ToList();
+                .Where(file => MainWindow.Instance.IsSupportedFileExtension(file)).ToList();
             fileNames.Sort();
             idx = fileNames.IndexOf(fileName.Replace('/', '\\'));
 
@@ -724,70 +768,10 @@ namespace MultiPlayer
 
         public void Maximize_Click(object sender, RoutedEventArgs e)
         {
-            MaximizeToggle(hide: false);
+            PopUpVM.MaximizeToggle(hide: false, this);
         }
 
-        public bool IsFullScreen()
-        {
-            if (IsPopWindowMode)
-                return WndMax.IsFullScreen;
-            return false;
-        }
-
-        public static void PopUpClear()
-        {
-            WndMax.ClearVideoControl();
-        }
-
-        public static void PopUpPause()
-        {
-            WndMax.Pause();
-        }
-
-        public static void PopUpHide()
-        {
-            WndMax.ClearVideoControl();
-            WndMax.Visibility = Visibility.Collapsed;
-        }
-
-        private static readonly PopUpWindow WndMax = new PopUpWindow();
-        public void MaximizeToggle(bool hide)
-        {
-            if (IsPopWindowMode)
-            {
-                if (hide)
-                {
-                    PopUpHide();
-                }
-                else
-                {
-                    WndMax.MaximizeToggle();
-                }
-            }
-            else
-            {
-                if (WndMax.Visibility == Visibility.Collapsed)
-                {
-                    WndMax.InitWindow(System.Windows.Application.Current.MainWindow, matchMainWindow: false);
-                    WndMax.Show();
-                    WndMax.LoadSettings(new OnePlayerSettings(_player));
-
-                    this.Pause(updateUI: true);
-                }
-                else
-                {
-                    WndMax.LoadSettings(new OnePlayerSettings(_player));
-                    WndMax.BringToFront();
-
-                    this.Pause(updateUI: true);
-                }
-            }
-        }
-
-        internal static void Exit()
-        {
-            WndMax.Exit();
-        }
+        public static PopUpWindowVM PopUpVM { get; set; } = new PopUpWindowVM();
 
         public void Pos_MouseMove(object sender, MouseEventArgs e)
         {
@@ -839,10 +823,24 @@ namespace MultiPlayer
                 BookmarkKeyDown(eBookmarkName.A.ToString());
             else if (e.Key == System.Windows.Input.Key.B)
                 BookmarkKeyDown(eBookmarkName.B.ToString());
-            else if (e.Key == System.Windows.Input.Key.D1)
+            else if (e.Key == System.Windows.Input.Key.D1 || e.Key == Key.NumPad1)
                 BookmarkKeyDown(eBookmarkName.C.ToString());
-            else if (e.Key == System.Windows.Input.Key.D2)
+            else if (e.Key == System.Windows.Input.Key.D2 || e.Key == Key.NumPad2)
                 BookmarkKeyDown(eBookmarkName.D.ToString());
+            else if (e.Key == System.Windows.Input.Key.D3 || e.Key == Key.NumPad3)
+                BookmarkKeyDown(eBookmarkName.E.ToString());
+            else if (e.Key == System.Windows.Input.Key.D4 || e.Key == Key.NumPad4)
+                BookmarkKeyDown(eBookmarkName.F.ToString());
+            else if (e.Key == System.Windows.Input.Key.D5 || e.Key == Key.NumPad5)
+                BookmarkKeyDown(eBookmarkName.G.ToString());
+            else if (e.Key == System.Windows.Input.Key.D6 || e.Key == Key.NumPad6)
+                BookmarkKeyDown(eBookmarkName.H.ToString());
+            else if (e.Key == System.Windows.Input.Key.D7 || e.Key == Key.NumPad7)
+                BookmarkKeyDown(eBookmarkName.I.ToString());
+            else if (e.Key == System.Windows.Input.Key.D8 || e.Key == Key.NumPad8)
+                BookmarkKeyDown(eBookmarkName.J.ToString());
+            else if (e.Key == System.Windows.Input.Key.D9 || e.Key == Key.NumPad9)
+                BookmarkKeyDown(eBookmarkName.K.ToString());
             else
                 return false;
 
@@ -913,6 +911,22 @@ namespace MultiPlayer
             Replay.UpdateReplayUI();
         }
 
+        private async Task WaitForLoadingComplete(int ms = 33)
+        {
+            for (int i = 0; i < 10; i++)
+            {
+                if (!IsLoading)
+                    break;
+
+                await Task.Delay(ms);
+            }
+
+            if (IsLoading)
+                Debug.WriteLine("*** Still loading: " + Settings.FullFileName);
+
+            IsLoading = false;
+        }
+
         private WaitForEventImpl _waitMediaOpenedEvent = new WaitForEventImpl();
 
         public async Task WaitForMediaOpened()
@@ -926,7 +940,7 @@ namespace MultiPlayer
             //await Task.Delay(100);
 
             TimeSpan elapsed = sw.Elapsed;
-            Debug.WriteLine($"*** WaitForMediaOpened {elapsed.TotalSeconds.ToString("0.000")} sec - file: {Settings.FileName}");
+            Debug.WriteLine($"*** WaitForMediaOpened {elapsed.TotalSeconds.ToString("0.000")} sec - file: {Settings.FullFileName}");
         }
 
         public class WaitForEventImpl
@@ -958,11 +972,22 @@ namespace MultiPlayer
             }
         }
 
+        public void UpdateBookmarksFromCache(MainWindow.RecentFilesDictionary recentFilesCache)
+        {
+            BookmarkSettings bookmarkSettings = recentFilesCache.FindRecentFile(Settings.FullFileName);
+            if (bookmarkSettings == null)
+                return;
+
+            Settings.BookmarkSettings.UpdateFrom(bookmarkSettings, force: true);
+            NotifyPropertyChanged(nameof(Settings));
+        }
+
         private void BookmarkSetCommandExecute(object bookMarkName)
         {
             eBookmarkName name = (eBookmarkName)Enum.Parse(typeof(eBookmarkName), (string)bookMarkName);
             Replay.BookmarkSet(name, _player.Duration);
             _player._ctxMenu.IsOpen = false;
+            NotifyPropertyChanged(nameof(Settings));
         }
 
         private void BookmarkGoToCommandExecute(object bookMarkName)
@@ -1000,9 +1025,13 @@ namespace MultiPlayer
 
         public void DeleteFile(bool bPrev)
         {
-            string fileName = Settings.FileName;
+            string fileName = Settings.FullFileName;
             if (File.Exists(fileName))
             {
+                MessageBoxResult res = System.Windows.MessageBox.Show("Are you sure delete?\n" + fileName, "Delete File", MessageBoxButton.OKCancel, MessageBoxImage.Warning);
+                if (res != MessageBoxResult.OK)
+                    return;
+
                 List<string> fileNames = GetFileNames(fileName, out int idx);
                 Clear();
                 File.Delete(fileName);
@@ -1022,6 +1051,52 @@ namespace MultiPlayer
             }
         }
 
+        public void MoveFile(eMoveFileType moveType)
+        {
+            string originalFile = Settings.FullFileName;
+
+            // 1. Setup the Folder Dialog
+            OpenFolderDialog folderDialog = new OpenFolderDialog();
+            folderDialog.Title = "New folder for: " + originalFile;
+            folderDialog.InitialDirectory = System.IO.Path.GetDirectoryName(originalFile);
+
+            List<string> fileNames = GetFileNames(originalFile, out int idx);
+            string nextFileName = "";
+            if (fileNames.Count > 1)
+                nextFileName = idx + 1 < fileNames.Count ? fileNames[idx + 1] : fileNames[0];
+            else
+                moveType = eMoveFileType.PlayIt; //last file in folder - play it after move
+
+            if (folderDialog.ShowDialog() == true)
+            {
+                string selectedPath = folderDialog.FolderName;
+                string fileName = System.IO.Path.GetFileName(originalFile);
+                string destinationPath = System.IO.Path.Combine(selectedPath, fileName);
+
+                try
+                {
+                    this.Clear();
+
+                    // 2. Move the file
+                    File.Move(originalFile, destinationPath);
+
+                    if (moveType == eMoveFileType.PlayIt)
+                    {
+                        _ = this.OpenFromFile(destinationPath, startFrom0: false);
+                    }
+                    else if (moveType == eMoveFileType.PlayNext)
+                    {
+                        _ = OpenFromFile(nextFileName, startFrom0: false);
+                    }
+                    //System.Windows.MessageBox.Show("File moved successfully!");
+                }
+                catch (Exception ex)
+                {
+                    System.Windows.MessageBox.Show($"Error moving file: {ex.Message}");
+                }
+            }
+        }
+
         public ReplayLoop Replay { get; }
 
         /// <summary>
@@ -1033,17 +1108,17 @@ namespace MultiPlayer
 
             public bool IsReplayChecked
             {
-                get { return VM.Settings.ReplayIsOn; }
-                set { VM.Settings.ReplayIsOn = value; NotifyPropertyChanged(); }
+                get { return VM.Settings.BookmarkSettings.ReplayIsOn; }
+                set { VM.Settings.BookmarkSettings.ReplayIsOn = value; NotifyPropertyChanged(); }
             }
 
             public string ReplayToolTip
             {
                 get
                 {
-                    if (VM.Settings.ReplayPosA <= 0 || VM.Settings.ReplayPosB <= 0)
+                    if (VM.ReplayPosA <= 0 || VM.ReplayPosB <= 0)
                         return "Positions A-B not set";
-                    return $"Replay from: {SecondsToString(VM.Settings.ReplayPosA)} to: {SecondsToString(VM.Settings.ReplayPosB)}";
+                    return $"Replay from: {SecondsToString(VM.ReplayPosA)} to: {SecondsToString(VM.ReplayPosB)}";
                 }
             }
 
@@ -1054,7 +1129,7 @@ namespace MultiPlayer
 
             public void UpdateReplayUI()
             {
-                if (IsReplayChecked && VM.Settings.ReplayPosA > 0 && VM.Settings.ReplayPosB > 0)
+                if (IsReplayChecked && VM.ReplayPosA > 0 && VM.ReplayPosB > 0)
                 {
                     VM._cmd._lblReplay.Background = Brushes.Chartreuse;
                 }
@@ -1082,28 +1157,27 @@ namespace MultiPlayer
                 VM.Settings.Position = VM._cmd._position.Value;
             }
 
-            public void ClearD()
-            {
-                VM.Settings.ReplayPosD = 0;
-                UpdateReplayUI();
-            }
-
             //set ticks positions and color if active
             private void UpdateTicks()
             {
-                UpdateTick(VM._cmd._lineA, VM._cmd._btnA_Go, VM.Settings.ReplayPosA, IsReplayChecked ? Brushes.Lime : Brushes.AliceBlue);
-                UpdateTick(VM._cmd._lineB, VM._cmd._btnB_Go, VM.Settings.ReplayPosB, IsReplayChecked ? Brushes.Lime : Brushes.AliceBlue);
+                UpdateTick(VM._cmd._lineA, VM.ReplayPosA, IsReplayChecked ? BookmarkColors.BookmarkBrushA : Brushes.AliceBlue);
+                UpdateTick(VM._cmd._lineB, VM.ReplayPosB, IsReplayChecked ? BookmarkColors.BookmarkBrushA : Brushes.AliceBlue);
 
-                UpdateTick(VM._cmd._lineC, VM._cmd._btnC_Go, VM.Settings.ReplayPosC, Brushes.Pink);
-                UpdateTick(VM._cmd._lineD, VM._cmd._btnD_Go, VM.Settings.ReplayPosD, Brushes.Yellow);
+                UpdateTick(VM._cmd._lineC, VM.Settings.BookmarkSettings.ReplayPosC, BookmarkColors.BookmarkBrush1);
+                UpdateTick(VM._cmd._lineD, VM.Settings.BookmarkSettings.ReplayPosD, BookmarkColors.BookmarkBrush2);
+                UpdateTick(VM._cmd._lineE, VM.Settings.BookmarkSettings.ReplayPosE, BookmarkColors.BookmarkBrush3);
+                UpdateTick(VM._cmd._lineF, VM.Settings.BookmarkSettings.ReplayPosF, BookmarkColors.BookmarkBrush4);
+                UpdateTick(VM._cmd._lineG, VM.Settings.BookmarkSettings.ReplayPosG, BookmarkColors.BookmarkBrush5);
+                UpdateTick(VM._cmd._lineH, VM.Settings.BookmarkSettings.ReplayPosH, BookmarkColors.BookmarkBrush6);
+                UpdateTick(VM._cmd._lineI, VM.Settings.BookmarkSettings.ReplayPosI, BookmarkColors.BookmarkBrush7);
+                UpdateTick(VM._cmd._lineJ, VM.Settings.BookmarkSettings.ReplayPosJ, BookmarkColors.BookmarkBrush8);
+                UpdateTick(VM._cmd._lineK, VM.Settings.BookmarkSettings.ReplayPosK, BookmarkColors.BookmarkBrush9);
             }
 
-            private void UpdateTick(Line line, System.Windows.Controls.Button btn_Go, double position, System.Windows.Media.Brush stroke)
+            private void UpdateTick(Line line, double position, System.Windows.Media.Brush stroke)
             {
                 if (position > 0)
                 {
-                    btn_Go.ToolTip = $"GoTo: {SecondsToString(position)}";
-
                     line.Visibility = Visibility.Visible;
 
                     double center = line.StrokeThickness / 2;
@@ -1114,7 +1188,6 @@ namespace MultiPlayer
                 }
                 else
                 {
-                    btn_Go.ToolTip = "Not set";
                     line.Visibility = Visibility.Collapsed;
                 }
             }
@@ -1134,28 +1207,30 @@ namespace MultiPlayer
 
             public void ReplayCheckAndUpdate()
             {
-                if (IsReplayChecked && (VM._cmd._position.Value < VM.Settings.ReplayPosA || VM._cmd._position.Value > VM.Settings.ReplayPosB))
-                        GoToPosition(VM.Settings.ReplayPosA);
+                bool isOutOfRange = (VM._cmd._position.Value < VM.ReplayPosA || VM._cmd._position.Value > VM.ReplayPosB);
+                //do not use replay in global repeat all mode
+                if (!MainWindow.Instance.IsGlobalRepeatAllMode && IsReplayChecked && isOutOfRange)
+                    GoToPosition(VM.ReplayPosA);
                 UpdateReplayUI();
             }
 
             public void BookmarkSet(eBookmarkName name, double duration)
             {
-                double delta = VM.Settings.ReplayPosB - VM.Settings.ReplayPosA;
+                double delta = VM.ReplayPosB - VM.ReplayPosA;
                 if (delta < 1.0) delta = 10.0;
 
                 VM.Settings.BookmarkPositionSet(name, VM.Settings.Position);
 
                 if (name == eBookmarkName.A)
                 {
-                    if (VM.Settings.ReplayPosB < 1.0) //not set yet
-                        VM.Settings.ReplayPosB = duration - 1.0; //end of file
-                    else if (VM.Settings.ReplayPosB - VM.Settings.ReplayPosA < 1.0)
-                        VM.Settings.ReplayPosB = duration - 1.0; //end of file
+                    if (VM.ReplayPosB < 1.0) //not set yet
+                        VM.ReplayPosB = duration - 1.0; //end of file
+                    else if (VM.ReplayPosB - VM.ReplayPosA < 1.0)
+                        VM.ReplayPosB = duration - 1.0; //end of file
                 }
 
-                if (name == eBookmarkName.B && VM.Settings.ReplayPosB - VM.Settings.ReplayPosA < 1.0)
-                    VM.Settings.ReplayPosA = VM.Settings.ReplayPosB - delta;
+                if (name == eBookmarkName.B && VM.ReplayPosB - VM.ReplayPosA < 1.0)
+                    VM.ReplayPosA = VM.ReplayPosB - delta;
 
                 UpdateReplayUI();
             }
@@ -1177,6 +1252,13 @@ namespace MultiPlayer
                 VM.Settings.BookmarkPositionSet(eBookmarkName.B, 0.0);
                 VM.Settings.BookmarkPositionSet(eBookmarkName.C, 0.0);
                 VM.Settings.BookmarkPositionSet(eBookmarkName.D, 0.0);
+                VM.Settings.BookmarkPositionSet(eBookmarkName.E, 0.0);
+                VM.Settings.BookmarkPositionSet(eBookmarkName.F, 0.0);
+                VM.Settings.BookmarkPositionSet(eBookmarkName.G, 0.0);
+                VM.Settings.BookmarkPositionSet(eBookmarkName.H, 0.0);
+                VM.Settings.BookmarkPositionSet(eBookmarkName.I, 0.0);
+                VM.Settings.BookmarkPositionSet(eBookmarkName.J, 0.0);
+                VM.Settings.BookmarkPositionSet(eBookmarkName.K, 0.0);
 
                 UpdateReplayUI();
                 VM.BookmarkGoToCommand.RefreshBoundControls();

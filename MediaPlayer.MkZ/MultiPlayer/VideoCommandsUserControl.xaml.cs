@@ -121,27 +121,5 @@ namespace MultiPlayer
             if (sender is ToggleButton btn)
                 VM.Replay.ReplayToggle(btn.IsChecked == true);
         }
-
-        private void ReplaySetD_Click(object sender, RoutedEventArgs e)
-        {
-            VM.Replay.BookmarkSet(eBookmarkName.D, _position.Maximum);
-        }
-
-        private void ReplayD_Menu_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is System.Windows.Controls.Button btn)
-                if (btn.ContextMenu != null)
-                    btn.ContextMenu.IsOpen = true;
-        }
-
-        private void ReplayClearD_Click(object sender, RoutedEventArgs e)
-        {
-            VM.Replay.ClearD();
-        }
-
-        private void ReplayGoToD_Click(object sender, RoutedEventArgs e)
-        {
-            VM.Replay.GoToPosition(VM.Settings.ReplayPosD);
-        }
     }
 }

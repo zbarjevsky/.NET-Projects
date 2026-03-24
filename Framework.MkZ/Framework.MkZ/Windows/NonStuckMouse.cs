@@ -65,7 +65,7 @@ namespace MkZ.Tools
 
         public void Dispose()
         {
-            MouseHook.Hook.Enabled = false;
+            MouseHook.Hook.IsEnabled = false;
             MouseHook.Hook.OnMouseMessage -= mouseHook_OnMouseMessage;
             Microsoft.Win32.SystemEvents.DisplaySettingsChanged -= SystemEvents_DisplaySettingsChanged;
             Instance = null;
@@ -140,7 +140,7 @@ namespace MkZ.Tools
             User32.POINT ptPrev = _prev;
             _prev = e.MessageData.pt;
 
-            if (IsButtonDown || _screens.Count == 1 || !MouseHook.Hook.Enabled)
+            if (IsButtonDown || _screens.Count == 1 || !MouseHook.Hook.IsEnabled)
                 return; //ignore dragging or if one sceen only or if not enabled
 
             int screenSrcIndex = WpfScreen.ScreenIndexFromPoint(ptPrev.X, ptPrev.Y, _screens);
@@ -237,17 +237,17 @@ namespace MkZ.Tools
             _correctionType = correctionType;
             if (correctionType != eMouseCorrectionType.None)
             {
-                if (MouseHook.Hook.Enabled == false)
+                if (MouseHook.Hook.IsEnabled == false)
                 {
-                    MouseHook.Hook.Enabled = true;
+                    MouseHook.Hook.IsEnabled = true;
                     MouseHook.Hook.OnMouseMessage += mouseHook_OnMouseMessage;
                 }
             }
             else //disable
             {
-                if (MouseHook.Hook.Enabled == true)
+                if (MouseHook.Hook.IsEnabled == true)
                 {
-                    MouseHook.Hook.Enabled = false;
+                    MouseHook.Hook.IsEnabled = false;
                     MouseHook.Hook.OnMouseMessage -= mouseHook_OnMouseMessage;
                 }
             }

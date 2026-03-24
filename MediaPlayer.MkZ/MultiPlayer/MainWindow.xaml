@@ -11,13 +11,20 @@
         Background="SlateGray"
         mc:Ignorable="d"
         Icon="Yin-Yang.ico"
-        Title="Multi Media Player - 6x" Height="950" Width="1920">
-    <Grid>
+        Title="Multi Media Player - 10x" 
+        x:Name="_mainWindow"
+        Height="950" Width="1920">
+    <Grid x:Name="_gridMain" >
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="35"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <Grid Margin="1" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="5"/>
+            <RowDefinition Height="1.5*"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.RowSpan="3" Margin="1" Background="Transparent" HorizontalAlignment="Center" VerticalAlignment="Stretch">
             <Grid.LayoutTransform>
                 <RotateTransform Angle="90" />
             </Grid.LayoutTransform>
@@ -40,9 +47,20 @@
                 <Button Content="Save As..." ToolTip="Save As..."
                         Click="SaveAs_Click"
                         Margin="3" Padding="5,3" />
+                <Button Content="Merge Recent..." ToolTip="Open Recent Files and Merge..."
+                        Click="OpenRecent_Click"
+                        Margin="3" Padding="5,3" />
                 <Button Content="Reset Layout" ToolTip="Reset Layout"
                         Click="ResetLayout_Click"
                         Margin="3" Padding="5,3" />
+                <Button ToolTip="Swap top/bottom panels"
+                        Click="SwapGrids_Click"
+                        Margin="3" Padding="0" >
+                    <StackPanel Orientation="Horizontal">
+                        <Label FontFamily="Segoe MDL2 Assets" Content="&#xE7FD;" FontSize="10" Margin="0,3" />
+                        <Label Content="Swap" FontSize="12" Margin="3,0" />
+                    </StackPanel>
+                </Button>
                 <Button ToolTip="Exit (Esc)"
                         Click="Exit_Click"
                         Margin="3" Padding="0" >
@@ -51,6 +69,12 @@
                         <Label Content="Exit" FontSize="12" Margin="3,0" />
                     </StackPanel>
                 </Button>
+                <Rectangle Width="2" Height="20" Fill="LightBlue" Margin="8,0" />
+                <Viewbox Stretch="Uniform" Width="150" Height="26" Margin="0,0">
+                    <CheckBox Content="Global Repeat All" VerticalAlignment="Center" 
+                              Foreground="White" FontSize="8" VerticalContentAlignment="Center"
+                              IsChecked="{Binding IsGlobalRepeatAllMode, ElementName=_mainWindow, Mode=TwoWay}"/>
+                </Viewbox>
             </StackPanel>
             <StackPanel Grid.Column="5" Orientation="Horizontal">
                 <Button ToolTip="Clear All (F1)"
@@ -85,14 +109,35 @@
                 </Button>
             </StackPanel>
         </Grid>
-        <Grid x:Name="_gridMain" Grid.Column="1" Background="Gray">
+        
+        <!-- Top Grid with 2 videos -->
+        <Grid x:Name="_gridTop" Grid.Column="1" Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" MinWidth="50"/>
-                <ColumnDefinition Width="4"/>
+                <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="*" MinWidth="50"/>
-                <ColumnDefinition Width="4"/>
+                <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="*" MinWidth="50"/>
-                <ColumnDefinition Width="4"/>
+            </Grid.ColumnDefinitions>
+            <GridSplitter x:Name="_splitterV01" Grid.Column="1" Grid.RowSpan="1" Background="Gray" Width="5" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+            <GridSplitter x:Name="_splitterV02" Grid.Column="3" Grid.RowSpan="1" Background="Gray" Width="5" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+
+            <local:VideoPlayerUserControl x:Name="_videoA" Grid.Column="0" Grid.Row="0" Background="Khaki" />
+            <local:VideoPlayerUserControl x:Name="_videoB" Grid.Column="2" Grid.Row="0" Background="Lime" />
+            <local:VideoPlayerUserControl x:Name="_videoC" Grid.Column="4" Grid.Row="0" Background="Lime" />
+        </Grid>
+        
+        <GridSplitter x:Name="_splitterH0" Grid.ColumnSpan="1" Grid.Column="1" Grid.Row="1" Background="Gray" Height="5" HorizontalAlignment="Stretch" />
+
+        <!-- Main Grid with 8 videos -->
+        <Grid x:Name="_gridBottom" Grid.Column="1" Grid.Row="2" Background="Gray">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" MinWidth="50"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*" MinWidth="50"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*" MinWidth="50"/>
+                <ColumnDefinition Width="5"/>
                 <ColumnDefinition Width="*" MinWidth="50"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
@@ -100,10 +145,10 @@
                 <RowDefinition  Height="5"/>
                 <RowDefinition />
             </Grid.RowDefinitions>
-            <GridSplitter x:Name="_splitterH1" Grid.ColumnSpan="5" Grid.Row="1" Background="Gray" Height="4" HorizontalAlignment="Stretch" />
-            <GridSplitter x:Name="_splitterV1" Grid.Column="1" Grid.RowSpan="3" Background="Gray" Width="4" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
-            <GridSplitter x:Name="_splitterV2" Grid.Column="3" Grid.RowSpan="3" Background="Gray" Width="4" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
-            <GridSplitter x:Name="_splitterV3" Grid.Column="5" Grid.RowSpan="3" Background="Gray" Width="4" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+            <GridSplitter x:Name="_splitterH1" Grid.ColumnSpan="5" Grid.Row="1" Background="Gray" Height="5" HorizontalAlignment="Stretch" />
+            <GridSplitter x:Name="_splitterV1" Grid.Column="1" Grid.RowSpan="3" Background="Gray" Width="5" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+            <GridSplitter x:Name="_splitterV2" Grid.Column="3" Grid.RowSpan="3" Background="Gray" Width="5" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
+            <GridSplitter x:Name="_splitterV3" Grid.Column="5" Grid.RowSpan="3" Background="Gray" Width="5" ResizeDirection="Columns" ResizeBehavior="PreviousAndNext" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>
 
 
             <local:VideoPlayerUserControl x:Name="_video00" Grid.Column="0" Grid.Row="0" Background="AliceBlue" />
