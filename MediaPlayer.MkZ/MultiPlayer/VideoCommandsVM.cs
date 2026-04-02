@@ -205,8 +205,14 @@ namespace MultiPlayer
             string fileName = Settings.FullFileName;
             string dir = System.IO.Path.GetDirectoryName(Settings.FullFileName);
             string dirUP = string.Empty;
-            if (obj is string parameter && parameter == "(..)")
-                dirUP = System.IO.Path.GetDirectoryName(dir); //go one UP
+            string fileNameUp = System.IO.Path.GetFileName(dir);
+            if (obj is string parameter)
+            {
+                if (parameter == "(up)")
+                    dirUP = System.IO.Path.GetDirectoryName(dir); //go one UP
+                else if (parameter == "(next)")
+                    dirUP = FindNextDir(dir, ref fileNameUp);   
+            }
 
             OpenFileDialog ofd = new OpenFileDialog();
             if (string.IsNullOrWhiteSpace(dirUP) && Directory.Exists(dir))
@@ -217,7 +223,7 @@ namespace MultiPlayer
             else if (Directory.Exists(dirUP)) //open dirUP
             {
                 ofd.InitialDirectory = dirUP;
-                ofd.FileName = System.IO.Path.GetFileName(dir);
+                ofd.FileName = fileNameUp;
             }
 
             MediaState state = _player.MediaState;
@@ -233,6 +239,23 @@ namespace MultiPlayer
                 if (state == MediaState.Play)
                     Play(MainWindow.Instance.IsGlobalRepeatAllMode);
             }
+        }
+
+        private string FindNextDir(string? dir, ref string? fileNameUp)
+        {
+            string outDir = System.IO.Path.GetDirectoryName(dir);
+            string[] dirs = Directory.GetDirectories(outDir);
+            Array.Sort(dirs);
+            for (int i = 0; i < dirs.Length; i++)
+            {
+                if (dirs[i] == dir && i < dirs.Length - 1)
+                { 
+                    outDir = dirs[i + 1]; 
+                    break; 
+                }
+            }
+            fileNameUp = System.IO.Path.GetFileName(outDir);
+            return outDir;
         }
 
         private void OpenFileByIndexCommandExecute(object parameter)

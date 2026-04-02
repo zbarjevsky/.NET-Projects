@@ -852,13 +852,21 @@ namespace MultiPlayer
             List<MenuItem> menuItems = new List<MenuItem>();
 
             //first menu item - is BROWSE
-            MenuItem itemBrowse = new MenuItem();
-            itemBrowse.Icon = BuildGlyphIcon("\xE838");
-            itemBrowse.Header = "(..) Browse UP";
-            itemBrowse.Foreground = Brushes.Navy;
-            itemBrowse.Command = VM.OpenFileCommand;
-            itemBrowse.CommandParameter = "(..)";
-            menuItems.Add(itemBrowse);
+            MenuItem itemBrowseUp = new MenuItem();
+            itemBrowseUp.Icon = BuildGlyphIcon("\xE78B");
+            itemBrowseUp.Header = "(.../...) Browse UP";
+            itemBrowseUp.Foreground = Brushes.Navy;
+            itemBrowseUp.Command = VM.OpenFileCommand;
+            itemBrowseUp.CommandParameter = "(up)";
+            menuItems.Add(itemBrowseUp);
+
+            MenuItem itemBrowseNext = new MenuItem();
+            itemBrowseNext.Icon = BuildGlyphIcon("\xEA4E");
+            itemBrowseNext.Header = "(.../->) Browse Next";
+            itemBrowseNext.Foreground = Brushes.Navy;
+            itemBrowseNext.Command = VM.OpenFileCommand;
+            itemBrowseNext.CommandParameter = "(next)";
+            menuItems.Add(itemBrowseNext);
 
             List<string> fileNames = VM.GetFileNames(FileName, out int idx);
             for (int i = 0; i < fileNames.Count; i++)
